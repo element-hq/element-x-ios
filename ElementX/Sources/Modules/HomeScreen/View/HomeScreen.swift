@@ -26,22 +26,6 @@ struct HomeScreen: View {
     var body: some View {
         NavigationView {
             VStack(spacing: 16.0) {
-                HStack {
-                    if let avatar = context.viewState.userAvatar {
-                        Image(uiImage: avatar)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 40, alignment: .center)
-                            .mask(Circle())
-                    } else {
-                        let _ = context.send(viewAction: .loadUserAvatar)
-                    }
-                    Text("Hello, \(context.viewState.userDisplayName)!")
-                        .font(.subheadline)
-                        .fontWeight(.bold)
-                }
-                .padding(.vertical, 32.0)
-                
                 if context.viewState.isLoadingRooms {
                     VStack {
                         Text("Loading rooms")
@@ -81,14 +65,30 @@ struct HomeScreen: View {
                             }
                         }
                     }
-                    .headerProminence(.increased)
                     .listStyle(.plain)
                 }
                 
                 Spacer()
             }
+            .ignoresSafeArea(.all, edges: .bottom)
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    HStack {
+                        if let avatar = context.viewState.userAvatar {
+                            Image(uiImage: avatar)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40, alignment: .center)
+                                .mask(Circle())
+                        } else {
+                            let _ = context.send(viewAction: .loadUserAvatar)
+                        }
+                        Text("Hello, \(context.viewState.userDisplayName)!")
+                            .font(.subheadline)
+                            .fontWeight(.bold)
+                    }
+                }
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Logout") {
                         context.send(viewAction: .logout)

@@ -27,11 +27,11 @@ struct LoginScreen: View {
                     .textFieldStyle(.roundedBorder)
                     .disableAutocorrection(true)
                     .autocapitalization(.none)
-                SecureField("Enter a password", text: $context.password)
+                SecureField("Password", text: $context.password)
                     .textFieldStyle(.roundedBorder)
                 
-                Button { context.send(viewAction: .login) } label: {
-                    Text("Login")
+                Button("Login") {
+                    context.send(viewAction: .login)
                 }
                 .buttonStyle(.borderedProminent)
                 .padding(.horizontal, 50)
@@ -39,6 +39,9 @@ struct LoginScreen: View {
             .padding(.horizontal, 8.0)
             .navigationTitle("Login")
             .navigationBarTitleDisplayMode(.inline)
+            .onSubmit {
+                context.send(viewAction: .login)
+            }
         }
         .navigationViewStyle(StackNavigationViewStyle())
     }
