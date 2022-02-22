@@ -15,9 +15,14 @@
 //
 
 import SwiftUI
+import Combine
 
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSession
+}
+
+enum HomeScreenCoordinatorResult {
+    case logout
 }
 
 final class HomeScreenCoordinator: Coordinator, Presentable {
@@ -27,30 +32,52 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     // MARK: Private
     
     private let parameters: HomeScreenCoordinatorParameters
-    private let homeScreenHostingController: UIViewController
-    private var homeScreenViewModel: HomeScreenViewModelProtocol
+    private let hostingController: UIViewController
+    private var viewModel: HomeScreenViewModelProtocol
+    
+    private var cancellables = Set<AnyCancellable>()
     
     // MARK: Public
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var completion: ((HomeScreenViewModelResult) -> Void)?
+    var completion: ((HomeScreenCoordinatorResult) -> Void)?
     
     // MARK: - Setup
     
-    @available(iOS 14.0, *)
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = HomeScreenViewModel(username: self.parameters.userSession.displayName ?? "💥")
-        let view = HomeScreen(context: viewModel.context)
-        homeScreenViewModel = viewModel
-        homeScreenHostingController = UIHostingController(rootView: view)
+        let userDisplayName = self.parameters.userSession.userDisplayName ?? self.parameters.userSession.userIdentifier
+        viewModel = HomeScreenViewModel(userDisplayName: userDisplayName)
         
-        homeScreenViewModel.completion = { [weak self] result in
+        let view = HomeScreen(context: viewModel.context)
+        hostingController = UIHostingController(rootView: view)
+        
+        viewModel.completion = { [weak self] result in
             guard let self = self else { return }
-            self.completion?(result)
+            
+            switch result {
+            case .logout:
+                self.completion?(.logout)
+            case .loadUserAvatar:
+                self.parameters.userSession.getUserAvatar({ result in
+                    switch result {
+                    case .success(let avatar):
+                        self.viewModel.updateWithUserAvatar(avatar)
+                    default:
+                        break
+                    }
+                })
+            }
         }
+        
+        parameters.userSession.callbacks.sink { [weak self] result in
+            switch result {
+            case .updatedData:
+                self?.updateRoomsList()
+            }
+        }.store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -59,6 +86,14 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        return self.homeScreenHostingController
+        return self.hostingController
+    }
+    
+    // MARK: - Private
+    
+    func updateRoomsList() {
+        parameters.userSession.getRoomList { [weak self] rooms in
+            self?.viewModel.updateWithRoomList(rooms)
+        }
     }
 }

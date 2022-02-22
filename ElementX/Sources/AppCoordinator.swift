@@ -23,7 +23,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     init() {
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
-        mainNavigationController.setNavigationBarHidden(true, animated: false)
+        mainNavigationController.navigationBar.isHidden = true
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         
@@ -46,6 +46,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     // MARK: - AuthenticationCoordinatorDelegate
     
+    func authenticationCoordinatorDidStartLoading(_ authenticationCoordinator: AuthenticationCoordinator) {
+        
+    }
+    
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didFailWithError error: AuthenticationCoordinatorError) {
         
     }
@@ -55,7 +59,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     func authenticationCoordinatorDidTearDownUserSession(_ authenticationCoordinator: AuthenticationCoordinator) {
-        
+        mainNavigationController.setViewControllers([splashViewController], animated: false)
+        authenticationCoordinator.start()
     }
     
     // MARK: - Private
@@ -67,6 +72,13 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
+        
+        coordinator.completion = { [weak self] result in
+            switch result {
+            case .logout:
+                self?.authenticationCoordinator.logout()
+            }
+        }
         
         add(childCoordinator: coordinator)
         navigationRouter.setRootModule(coordinator)

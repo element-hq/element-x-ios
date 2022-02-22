@@ -15,10 +15,14 @@
 //
 
 import Foundation
+import UIKit
 
 protocol HomeScreenViewModelProtocol {
-    
     var completion: ((HomeScreenViewModelResult) -> Void)? { get set }
-    @available(iOS 14, *)
+    
     var context: HomeScreenViewModelType.Context { get }
+    
+    func updateWithRoomList(_ roomList: [RoomModelProtocol])
+    
+    func updateWithUserAvatar(_ avatar: UIImage?)
 }

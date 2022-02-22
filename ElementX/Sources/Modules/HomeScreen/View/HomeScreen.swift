@@ -16,7 +16,6 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct HomeScreen: View {
     
     @ObservedObject var context: HomeScreenViewModel.Context
@@ -24,18 +23,110 @@ struct HomeScreen: View {
     // MARK: Views
     
     var body: some View {
-        VStack {
-            Text("Hello, \(context.viewState.username)!")
+        NavigationView {
+            VStack(spacing: 16.0) {
+                HStack {
+                    if let avatar = context.viewState.userAvatar {
+                        Image(uiImage: avatar)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40, alignment: .center)
+                    } else {
+                        let _ = context.send(viewAction: .loadUserAvatar)
+                    }
+                    Text("Hello, \(context.viewState.userDisplayName)!")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                }
+                .padding(.vertical, 32.0)
+                
+                List {
+                    Section("People") {
+                        ForEach(context.viewState.directRooms) { room in
+                            RoomCell(room: room, context: context)
+                        }
+                    }
+                    
+                    Section("Rooms") {
+                        ForEach(context.viewState.nondirectRooms) { room in
+                            RoomCell(room: room, context: context)
+                        }
+                    }
+                }
+                .headerProminence(.increased)
+                .listStyle(.plain)
+            }
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationViewStyle(StackNavigationViewStyle())
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button("Logout") {
+                        context.send(viewAction: .logout)
+                    }
+                }
+            }
         }
+    }
+}
+
+struct RoomCell: View {
+    
+    let room: HomeScreenRoom
+    let context: HomeScreenViewModel.Context
+    
+    var body: some View {
+        HStack(spacing: 16.0) {
+            if let avatar = room.avatar {
+                Image(uiImage: avatar)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 40, height: 40)
+            } else {
+                let _ = context.send(viewAction: .loadRoomAvatar(roomId: room.id))
+                Image(systemName: "person.3")
+                    .frame(width: 40, height: 40)
+            }
+            
+            VStack(alignment: .leading, spacing: 4.0) {
+                Text(roomName(room))
+                    .font(.headline)
+                    .fontWeight(.regular)
+                
+                if let roomTopic = room.topic, roomTopic.count > 0 {
+                    Text(roomTopic)
+                        .font(.footnote)
+                        .fontWeight(.bold)
+                        .lineLimit(1)
+                }
+                
+                if let lastMessage = room.lastMessage {
+                    Text(lastMessage)
+                        .font(.footnote)
+                        .fontWeight(.medium)
+                        .lineLimit(1)
+                }
+            }
+        }
+        .frame(minHeight: 60.0)
+    }
+    
+    private func roomName(_ room: HomeScreenRoom) -> String {
+        room.displayName + (room.isEncrypted ? "🛡": "")
     }
 }
 
 // MARK: - Previews
 
-@available(iOS 14.0, *)
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = HomeScreenViewModel(username: "Johnny Appleseed")
-        HomeScreen(context: viewModel.context)
+        let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed")
+        
+        let rooms = [MockRoomModel(displayName: "Alfa"),
+                     MockRoomModel(displayName: "Beta"),
+                     MockRoomModel(displayName: "Omega")]
+        
+        viewModel.updateWithRoomList(rooms)
+        
+        return HomeScreen(context: viewModel.context)
     }
 }

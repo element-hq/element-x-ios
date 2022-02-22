@@ -38,6 +38,7 @@ struct LoginScreen: View {
             .padding(.horizontal, 8.0)
             .navigationTitle("Login")
             .navigationBarTitleDisplayMode(.inline)
+            .navigationViewStyle(StackNavigationViewStyle())
         }
     }
 }

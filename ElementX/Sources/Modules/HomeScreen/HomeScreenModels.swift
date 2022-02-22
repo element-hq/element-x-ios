@@ -15,17 +15,43 @@
 //
 
 import Foundation
+import UIKit
 
 enum HomeScreenViewModelResult {
     case logout
-}
-
-// MARK: View
-
-struct HomeScreenViewState: BindableState {
-    let username: String
+    case loadUserAvatar
 }
 
 enum HomeScreenViewAction {
     case logout
+    case loadUserAvatar
+    case loadRoomAvatar(roomId: String)
+}
+
+struct HomeScreenViewState: BindableState {
+    let userDisplayName: String
+    var userAvatar: UIImage?
+    
+    var rooms: [HomeScreenRoom] = []
+    
+    var directRooms: [HomeScreenRoom] {
+        rooms.filter { $0.isDirect }
+    }
+    
+    var nondirectRooms: [HomeScreenRoom] {
+        rooms.filter { !$0.isDirect }
+    }
+}
+
+struct HomeScreenRoom: Identifiable {
+    let id: String
+    let displayName: String
+    
+    let topic: String?
+    let lastMessage: String?
+    
+    var avatar: UIImage?
+    
+    let isDirect: Bool
+    let isEncrypted: Bool
 }

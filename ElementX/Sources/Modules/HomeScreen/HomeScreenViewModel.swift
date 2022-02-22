@@ -18,28 +18,70 @@ import SwiftUI
 
 @available(iOS 14, *)
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
-                                                                  Never,
-                                                                  HomeScreenViewAction>
+                                                        Never,
+                                                        HomeScreenViewAction>
 @available(iOS 14, *)
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
-
+    
     // MARK: - Properties
-
+    
     // MARK: Private
+    
+    private var roomList: [RoomModelProtocol]?
 
     // MARK: Public
 
     var completion: ((HomeScreenViewModelResult) -> Void)?
-
+    
     // MARK: - Setup
-
-    init(username: String) {
-        super.init(initialViewState: HomeScreenViewState(username: username))
+    
+    init(userDisplayName: String) {
+        super.init(initialViewState: HomeScreenViewState(userDisplayName: userDisplayName))
     }
-
+    
     // MARK: - Public
-
+    
     override func process(viewAction: HomeScreenViewAction) {
-        
+        switch viewAction {
+        case .logout:
+            self.completion?(.logout)
+        case .loadRoomAvatar(let roomId):
+            guard let room = roomList?.filter({ $0.identifier == roomId }).first else {
+                break
+            }
+            
+            room.getAvatar { [weak self] result in
+                guard let self = self else { return }
+                
+                switch result {
+                case .success(let image):
+                    guard let index = self.state.rooms.firstIndex(where: { $0.id == roomId }) else {
+                        return
+                    }
+                    
+                    self.state.rooms[index].avatar = image
+                default:
+                    break
+                }
+            }
+        case .loadUserAvatar:
+            self.completion?(.loadUserAvatar)
+        }
+    }
+    
+    func updateWithRoomList(_ roomList: [RoomModelProtocol]) {
+        self.roomList = roomList
+        state.rooms = roomList.map { roomModel in
+            HomeScreenRoom(id: roomModel.identifier,
+                           displayName: roomModel.displayName,
+                           topic: roomModel.topic,
+                           lastMessage: roomModel.lastMessage,
+                           isDirect: roomModel.isDirect,
+                           isEncrypted: roomModel.isEncrypted)
+        }
+    }
+    
+    func updateWithUserAvatar(_ avatar: UIImage?) {
+        self.state.userAvatar = avatar
     }
 }

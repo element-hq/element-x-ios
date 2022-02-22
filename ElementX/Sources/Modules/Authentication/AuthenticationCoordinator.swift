@@ -15,6 +15,9 @@ enum AuthenticationCoordinatorError: Error {
 }
 
 protocol AuthenticationCoordinatorDelegate: AnyObject {
+    
+    func authenticationCoordinatorDidStartLoading(_ authenticationCoordinator: AuthenticationCoordinator)
+    
     func authenticationCoordinatorDidSetupUserSession(_ authenticationCoordinator: AuthenticationCoordinator)
     
     func authenticationCoordinatorDidTearDownUserSession(_ authenticationCoordinator: AuthenticationCoordinator)
@@ -40,19 +43,46 @@ class AuthenticationCoordinator: Coordinator {
     }
     
     func start() {
+        
+        delegate?.authenticationCoordinatorDidStartLoading(self)
+        
         let availableRestoreTokens = keychainController.restoreTokens()
         
         guard let usernameTokenTuple = availableRestoreTokens.first else {
-            startNewLoginFlow()
+            startNewLoginFlow { result in
+                switch result {
+                case .success:
+                    self.delegate?.authenticationCoordinatorDidSetupUserSession(self)
+                case .failure(let error):
+                    self.delegate?.authenticationCoordinator(self, didFailWithError: error)
+                    MXLog.error("Failed logging in user with error: \(error)")
+                }
+            }
             return
         }
         
-        restorePreviousLogin(usernameTokenTuple)
+        restorePreviousLogin(usernameTokenTuple) { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success:
+                self.delegate?.authenticationCoordinatorDidSetupUserSession(self)
+            case .failure(let error):
+                self.delegate?.authenticationCoordinator(self, didFailWithError: error)
+                MXLog.error("Failed restoring login with error: \(error)")
+            }
+        }
+    }
+    
+    func logout() {
+        keychainController.removeAllTokens()
+        userSession = nil
+        delegate?.authenticationCoordinatorDidTearDownUserSession(self)
     }
     
     // MARK: - Private
     
-    private func startNewLoginFlow() {
+    private func startNewLoginFlow(_ completion: @escaping (Result<(), AuthenticationCoordinatorError>) -> Void) {
         let parameters = LoginScreenCoordinatorParameters()
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
@@ -63,16 +93,18 @@ class AuthenticationCoordinator: Coordinator {
             
             switch result {
             case .login(let result):
-                do {
-                    self.setupUserSessionForClient(try loginNewClient(basePath: self.baseDirectoryPathForUsername(result.username),
-                                                                      username: result.username,
-                                                                      password: result.password))
+                self.login(username: result.username, password: result.password) { [weak self] result in
+                    guard let self = self else { return }
+                    
+                    switch result {
+                    case .success:
+                        completion(.success(()))
+                    case .failure(let error):
+                        completion(.failure(error))
+                    }
                     
                     self.remove(childCoordinator: coordinator)
                     self.navigationRouter.dismissModule()
-                } catch {
-                    self.delegate?.authenticationCoordinator(self, didFailWithError: .failedLoggingIn)
-                    MXLog.error("Failed logging in user with error: \(error)")
                 }
             }
         }
@@ -83,13 +115,42 @@ class AuthenticationCoordinator: Coordinator {
         coordinator.start()
     }
     
-    private func restorePreviousLogin(_ usernameTokenTuple: (username: String, token: String)) {
-        do {
-            setupUserSessionForClient(try loginWithToken(basePath: baseDirectoryPathForUsername(usernameTokenTuple.username),
-                                                         restoreToken: usernameTokenTuple.token))
-        } catch {
-            delegate?.authenticationCoordinator(self, didFailWithError: .failedRestoringLogin)
-            MXLog.error("Failed restoring login with error: \(error)")
+    private func login(username: String, password: String, completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                self.setupUserSessionForClient(try loginNewClient(basePath: self.baseDirectoryPathForUsername(username),
+                                                                  username: username,
+                                                                  password: password))
+                
+                DispatchQueue.main.async {
+                    completion(.success(()))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(.failedLoggingIn))
+                }
+            }
+        }
+    }
+    
+    private func restorePreviousLogin(_ usernameTokenTuple: (username: String, token: String), completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            guard let self = self else { return }
+            
+            do {
+                self.setupUserSessionForClient(try loginWithToken(basePath: self.baseDirectoryPathForUsername(usernameTokenTuple.username),
+                                                                  restoreToken: usernameTokenTuple.token))
+                
+                DispatchQueue.main.async {
+                    completion(.success(()))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(.failedRestoringLogin))
+                }
+            }
         }
     }
     
@@ -106,7 +167,6 @@ class AuthenticationCoordinator: Coordinator {
         }
         
         userSession = UserSession(client: client)
-        delegate?.authenticationCoordinatorDidSetupUserSession(self)
     }
     
     private func baseDirectoryPathForUsername(_ username: String) -> String {

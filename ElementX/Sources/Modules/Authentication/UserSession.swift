@@ -7,38 +7,84 @@
 
 import Foundation
 import MatrixRustSDK
+import Combine
+import UIKit
 
-class UserSession {
+enum UserSessionCallback {
+    case updatedData
+}
+
+enum UserSessionError: Error {
+    case failedRetrievingAvatar
+}
+
+class UserSession: ClientDelegate {
     
     private let client: Client
+    
+    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
     
     init(client: Client) {
         self.client = client
         
         if !client.hasFirstSynced() {
-            MXLog.info("Started initial sync")
-            client.startSync()
-            MXLog.info("Finished intial sync")
+            client.startSync(delegate: self)
         }
     }
     
-    func roomList() -> [RoomModel] {
-        client.conversations().compactMap { room in
-            do {
-                return RoomModel(displayName: try room.displayName())
-            } catch {
-                MXLog.error("Failed retrieving room info with error: \(error)")
-                return nil
-            }
+    var userIdentifier: String {
+        do {
+            return try client.userId()
+        } catch {
+            MXLog.error("Failed retrieving room info with error: \(error)")
+            return "Unknown user identifier"
         }
     }
     
-    var displayName: String? {
+    var userDisplayName: String? {
         do {
             return try client.displayName()
         } catch {
             MXLog.error("Failed retrieving room info with error: \(error)")
             return nil
+        }
+    }
+    
+    func getUserAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let avatarData = try self.client.avatar()
+                DispatchQueue.main.async {
+                    completion(.success(UIImage(data: Data(bytes: avatarData, count: avatarData.count))))
+                }
+            } catch {
+                MXLog.error("Failed retrieving room name with error: \(error)")
+                DispatchQueue.main.async {
+                    completion(.failure(UserSessionError.failedRetrievingAvatar))
+                }
+            }
+        }
+    }
+    
+    func getRoomList(_ completion: @escaping ([RoomModel]) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            let conversations = self.client.conversations()
+            
+            let rooms = conversations.map {
+                return RoomModel(room: $0)
+            }
+            
+            DispatchQueue.main.async {
+                completion(rooms)
+            }
+        }
+    }
+    
+    // MARK: ClientDelegate
+    
+    func didReceiveSyncUpdate() {
+        DispatchQueue.main.async {
+            self.callbacks.send(.updatedData)
         }
     }
 }
