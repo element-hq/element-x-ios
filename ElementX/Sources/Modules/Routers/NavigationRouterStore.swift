@@ -25,7 +25,7 @@ class NavigationRouterStore: NavigationRouterStoreProtocol {
     
     // MARK: - Properties
 
-     // FIXME: WeakDictionary does not work with protocol
+     // WeakDictionary does not work with protocol
     // Find a way to use NavigationRouterType as value
     private var navigationRouters = WeakDictionary<UINavigationController, NavigationRouter>()
     
@@ -74,7 +74,7 @@ class NavigationRouterStore: NavigationRouterStoreProtocol {
         if let existingNavigationRouter = self.findNavigationRouter(for: navigationController) {
             fatalError("\(existingNavigationRouter) is already tied to the same navigation controller as \(navigationRouter). We should have only one NavigationRouter per navigation controller")
         } else {
-            // FIXME: WeakDictionary does not work with protocol
+            // WeakDictionary does not work with protocol
             // Find a way to avoid this cast
             self.navigationRouters[navigationController] = navigationRouter as? NavigationRouter
         }

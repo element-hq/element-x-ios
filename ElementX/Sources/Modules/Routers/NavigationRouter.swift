@@ -356,7 +356,7 @@ extension NavigationRouter: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         
-        // TODO: Try to post `NavigationRouter.willPopModule` notification here
+        // Try to post `NavigationRouter.willPopModule` notification here
     }
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {

@@ -38,7 +38,6 @@ final class LoginScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Setup
     
-    @available(iOS 14.0, *)
     init(parameters: LoginScreenCoordinatorParameters) {
         self.parameters = parameters
         

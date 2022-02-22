@@ -15,31 +15,3 @@
 //
 
 import XCTest
-import RiotSwiftUI
-
-@available(iOS 14.0, *)
-class LoginScreenUITests: MockScreenTest {
-
-    override class var screenType: MockScreenState.Type {
-        return MockLoginScreenScreenState.self
-    }
-
-    override class func createTest() -> MockScreenTest {
-        return LoginScreenUITests(selector: #selector(verifyLoginScreenScreen))
-    }
-
-    func verifyLoginScreenScreen() throws {
-        guard let screenState = screenState as? MockLoginScreenScreenState else { fatalError("no screen") }
-        switch screenState {
-        case .promptType(let promptType):
-            verifyLoginScreenPromptType(promptType: promptType)
-        }
-    }
-    
-    func verifyLoginScreenPromptType(promptType: LoginScreenPromptType) {
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        XCTAssertEqual(title.label, promptType.title)
-    }
-
-}

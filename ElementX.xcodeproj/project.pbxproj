@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		182BC42027BE667200A30C33 /* RoomModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC41F27BE667200A30C33 /* RoomModelProtocol.swift */; };
+		182BC42227BE6C6900A30C33 /* MockRoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC42127BE6C6900A30C33 /* MockRoomModel.swift */; };
 		1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850253E27B6918D002E6B18 /* ElementXTests.swift */; };
 		1850254927B6918D002E6B18 /* ElementXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254827B6918D002E6B18 /* ElementXUITests.swift */; };
 		1850254B27B6918D002E6B18 /* ElementXUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254A27B6918D002E6B18 /* ElementXUITestsLaunchTests.swift */; };
@@ -74,6 +76,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		182BC41F27BE667200A30C33 /* RoomModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModelProtocol.swift; sourceTree = "<group>"; };
+		182BC42127BE6C6900A30C33 /* MockRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRoomModel.swift; sourceTree = "<group>"; };
+		184230FE27BD080000033771 /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253A27B6918D002E6B18 /* ElementXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElementXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253E27B6918D002E6B18 /* ElementXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementXTests.swift; sourceTree = "<group>"; };
@@ -155,6 +160,7 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
+				184230FE27BD080000033771 /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
@@ -402,6 +408,8 @@
 			isa = PBXGroup;
 			children = (
 				1863A49327BAAA6700B52E4D /* RoomModel.swift */,
+				182BC41F27BE667200A30C33 /* RoomModelProtocol.swift */,
+				182BC42127BE6C6900A30C33 /* MockRoomModel.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -585,6 +593,7 @@
 				1863A45727BA7A7800B52E4D /* WeakDictionaryReference.swift in Sources */,
 				1863A48927BAA8A900B52E4D /* HomeScreenModels.swift in Sources */,
 				1863A45027BA79FF00B52E4D /* NavigationRouterType.swift in Sources */,
+				182BC42027BE667200A30C33 /* RoomModelProtocol.swift in Sources */,
 				1863A45627BA7A7800B52E4D /* WeakDictionaryKeyReference.swift in Sources */,
 				1863A49427BAAA6700B52E4D /* RoomModel.swift in Sources */,
 				1850256F27B6A135002E6B18 /* AppDelegate.swift in Sources */,
@@ -597,6 +606,7 @@
 				1863A43F27BA790000B52E4D /* Coordinator.swift in Sources */,
 				1863A41C27BA76B900B52E4D /* MXLog.swift in Sources */,
 				1863A44E27BA79FF00B52E4D /* Presentable.swift in Sources */,
+				182BC42227BE6C6900A30C33 /* MockRoomModel.swift in Sources */,
 				1850256C27B6A135002E6B18 /* AppCoordinator.swift in Sources */,
 				1863A43127BA784300B52E4D /* LoginScreenModels.swift in Sources */,
 				1863A44A27BA79FF00B52E4D /* NavigationRouter.swift in Sources */,

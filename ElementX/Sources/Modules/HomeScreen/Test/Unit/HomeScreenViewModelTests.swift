@@ -18,7 +18,6 @@ import XCTest
 
 @testable import ElementX
 
-@available(iOS 14.0, *)
 class HomeScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
 

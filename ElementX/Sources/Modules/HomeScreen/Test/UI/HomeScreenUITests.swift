@@ -15,31 +15,3 @@
 //
 
 import XCTest
-import ElementX
-
-@available(iOS 14.0, *)
-class HomeScreenUITests: MockScreenTest {
-
-    override class var screenType: MockScreenState.Type {
-        return MockHomeScreenScreenState.self
-    }
-
-    override class func createTest() -> MockScreenTest {
-        return HomeScreenUITests(selector: #selector(verifyHomeScreenScreen))
-    }
-
-    func verifyHomeScreenScreen() throws {
-        guard let screenState = screenState as? MockHomeScreenScreenState else { fatalError("no screen") }
-        switch screenState {
-        case .promptType(let promptType):
-            verifyHomeScreenPromptType(promptType: promptType)
-        }
-    }
-    
-    func verifyHomeScreenPromptType(promptType: HomeScreenPromptType) {
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        XCTAssertEqual(title.label, promptType.title)
-    }
-
-}
