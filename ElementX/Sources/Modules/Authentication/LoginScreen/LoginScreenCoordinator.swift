@@ -48,7 +48,7 @@ final class LoginScreenCoordinator: Coordinator, Presentable {
         loginScreenHostingController.isModalInPresentation = true
         
         loginScreenViewModel.completion = { [weak self] result in
-            MXLog.debug("[LoginScreenCoordinator] LoginScreenViewModel did complete with result: \(result).")
+            MXLog.debug("[LoginScreenCoordinator] LoginScreenViewModel did complete.")
             guard let self = self else { return }
             self.completion?(result)
         }

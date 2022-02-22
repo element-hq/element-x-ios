@@ -36,19 +36,19 @@ struct HomeScreenViewState: BindableState {
     var isLoadingRooms: Bool = false
     
     var firstDirectRooms: [HomeScreenRoom] {
-        Array(rooms.filter { $0.isDirect }.prefix(upTo: 5))
+        Array(rooms.filter { $0.isDirect }.prefix(5))
     }
     
     var otherDirectRooms: [HomeScreenRoom] {
-        Array(rooms.filter { $0.isDirect }.suffix(from: 5))
+        Array(rooms.filter { $0.isDirect }.dropFirst(5))
     }
     
     var firstNondirectRooms: [HomeScreenRoom] {
-        Array(rooms.filter { !$0.isDirect }.prefix(upTo: 5))
+        Array(rooms.filter { !$0.isDirect }.prefix(5))
     }
     
     var otherNondirectRooms: [HomeScreenRoom] {
-        Array(rooms.filter { !$0.isDirect }.suffix(from: 5))
+        Array(rooms.filter { !$0.isDirect }.dropFirst(5))
     }
 }
 
