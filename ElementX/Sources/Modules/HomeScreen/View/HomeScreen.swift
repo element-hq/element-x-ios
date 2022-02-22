@@ -50,14 +50,34 @@ struct HomeScreen: View {
                 } else {
                     List {
                         Section("People") {
-                            ForEach(context.viewState.directRooms) { room in
+                            ForEach(context.viewState.firstDirectRooms) { room in
                                 RoomCell(room: room, context: context)
+                            }
+                            
+                            let other = context.viewState.otherDirectRooms
+                            
+                            if other.count > 0 {
+                                DisclosureGroup("See more") {
+                                    ForEach(other) { room in
+                                        RoomCell(room: room, context: context)
+                                    }
+                                }
                             }
                         }
                         
                         Section("Rooms") {
-                            ForEach(context.viewState.nondirectRooms) { room in
+                            ForEach(context.viewState.firstNondirectRooms) { room in
                                 RoomCell(room: room, context: context)
+                            }
+                            
+                            let other = context.viewState.otherNondirectRooms
+                            
+                            if other.count > 0 {
+                                DisclosureGroup("See more") {
+                                    ForEach(other) { room in
+                                        RoomCell(room: room, context: context)
+                                    }
+                                }
                             }
                         }
                     }
