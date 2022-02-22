@@ -25,6 +25,8 @@ struct LoginScreen: View {
             VStack {
                 TextField("Username", text: $context.username)
                     .textFieldStyle(.roundedBorder)
+                    .disableAutocorrection(true)
+                    .autocapitalization(.none)
                 SecureField("Enter a password", text: $context.password)
                     .textFieldStyle(.roundedBorder)
                 

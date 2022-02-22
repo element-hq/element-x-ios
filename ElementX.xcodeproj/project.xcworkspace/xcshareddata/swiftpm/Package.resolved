@@ -20,6 +20,15 @@
         }
       },
       {
+        "package": "MatrixRustSDK",
+        "repositoryURL": "https://github.com/matrix-org/matrix-rust-components-swift.git",
+        "state": {
+          "branch": "main",
+          "revision": "6c12bce335811dd50679bbdb950a1cb0b43bec08",
+          "version": null
+        }
+      },
+      {
         "package": "SwiftyBeaver",
         "repositoryURL": "https://github.com/SwiftyBeaver/SwiftyBeaver",
         "state": {

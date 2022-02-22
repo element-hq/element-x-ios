@@ -99,7 +99,6 @@
 		182BC46E27C4CD6D00A30C33 /* ActivityDismissal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityDismissal.swift; sourceTree = "<group>"; };
 		182BC47827C4CE2200A30C33 /* LabelledActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelledActivityIndicatorView.swift; sourceTree = "<group>"; };
 		182BC47A27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullscreenLoadingActivityPresenter.swift; sourceTree = "<group>"; };
-		184230FE27BD080000033771 /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253A27B6918D002E6B18 /* ElementXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElementXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253E27B6918D002E6B18 /* ElementXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementXTests.swift; sourceTree = "<group>"; };
@@ -215,7 +214,6 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
-				184230FE27BD080000033771 /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,

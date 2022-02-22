@@ -34,8 +34,8 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     // MARK: - Setup
 
     init() {
-        super.init(initialViewState: LoginScreenViewState(bindings: LoginScreenViewStateBindings(username: "@stefan.ceriu-element01:matrix.org",
-                                                                                                 password: "radeon")))
+        super.init(initialViewState: LoginScreenViewState(bindings: LoginScreenViewStateBindings(username: "",
+                                                                                                 password: "")))
     }
 
     // MARK: - Public
