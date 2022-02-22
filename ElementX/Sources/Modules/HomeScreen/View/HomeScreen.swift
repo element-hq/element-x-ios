@@ -57,7 +57,6 @@ struct HomeScreen: View {
                 .listStyle(.plain)
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationViewStyle(StackNavigationViewStyle())
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("Logout") {
@@ -66,6 +65,7 @@ struct HomeScreen: View {
                 }
             }
         }
+        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

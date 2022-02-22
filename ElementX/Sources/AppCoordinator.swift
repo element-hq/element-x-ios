@@ -18,6 +18,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let keychainController: KeychainControllerProtocol
     private let authenticationCoordinator: AuthenticationCoordinator!
     
+    private var loadingActivity: Activity?
+    
     var childCoordinators: [Coordinator] = []
     
     init() {
@@ -47,11 +49,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     // MARK: - AuthenticationCoordinatorDelegate
     
     func authenticationCoordinatorDidStartLoading(_ authenticationCoordinator: AuthenticationCoordinator) {
-        
+        showLoadingIndicator()
     }
     
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didFailWithError error: AuthenticationCoordinatorError) {
-        
+        hideLoadingIndicator()
     }
     
     func authenticationCoordinatorDidSetupUserSession(_ authenticationCoordinator: AuthenticationCoordinator) {
@@ -66,6 +68,9 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     // MARK: - Private
     
     private func presentHomeScreen() {
+        
+        hideLoadingIndicator()
+        
         guard let userSession = authenticationCoordinator.userSession else {
             fatalError("User session should be already setup at this point")
         }
@@ -84,7 +89,18 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         navigationRouter.setRootModule(coordinator)
     }
     
-    private func restart() {
+    private func showLoadingIndicator() {
+        let presenter = FullscreenLoadingActivityPresenter(label: "Loading", on: self.mainNavigationController)
         
+        let request = ActivityRequest(
+            presenter: presenter,
+            dismissal: .manual
+        )
+        
+        loadingActivity = ActivityCenter.shared.add(request)
+    }
+    
+    private func hideLoadingIndicator() {
+        loadingActivity = nil
     }
 }

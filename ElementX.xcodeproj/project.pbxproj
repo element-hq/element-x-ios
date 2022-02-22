@@ -9,6 +9,16 @@
 /* Begin PBXBuildFile section */
 		182BC42027BE667200A30C33 /* RoomModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC41F27BE667200A30C33 /* RoomModelProtocol.swift */; };
 		182BC42227BE6C6900A30C33 /* MockRoomModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC42127BE6C6900A30C33 /* MockRoomModel.swift */; };
+		182BC46F27C4CD6D00A30C33 /* RoundedToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46527C4CD6D00A30C33 /* RoundedToastView.swift */; };
+		182BC47027C4CD6D00A30C33 /* RectangleToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46627C4CD6D00A30C33 /* RectangleToastView.swift */; };
+		182BC47127C4CD6D00A30C33 /* ActivityPresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46727C4CD6D00A30C33 /* ActivityPresentable.swift */; };
+		182BC47227C4CD6D00A30C33 /* ActivityCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46827C4CD6D00A30C33 /* ActivityCenter.swift */; };
+		182BC47327C4CD6D00A30C33 /* ToastActivityPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46A27C4CD6D00A30C33 /* ToastActivityPresenter.swift */; };
+		182BC47527C4CD6D00A30C33 /* Activity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46C27C4CD6D00A30C33 /* Activity.swift */; };
+		182BC47627C4CD6D00A30C33 /* ActivityRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46D27C4CD6D00A30C33 /* ActivityRequest.swift */; };
+		182BC47727C4CD6D00A30C33 /* ActivityDismissal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46E27C4CD6D00A30C33 /* ActivityDismissal.swift */; };
+		182BC47927C4CE2200A30C33 /* LabelledActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC47827C4CE2200A30C33 /* LabelledActivityIndicatorView.swift */; };
+		182BC47B27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC47A27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift */; };
 		1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850253E27B6918D002E6B18 /* ElementXTests.swift */; };
 		1850254927B6918D002E6B18 /* ElementXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254827B6918D002E6B18 /* ElementXUITests.swift */; };
 		1850254B27B6918D002E6B18 /* ElementXUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254A27B6918D002E6B18 /* ElementXUITestsLaunchTests.swift */; };
@@ -78,6 +88,16 @@
 /* Begin PBXFileReference section */
 		182BC41F27BE667200A30C33 /* RoomModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomModelProtocol.swift; sourceTree = "<group>"; };
 		182BC42127BE6C6900A30C33 /* MockRoomModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRoomModel.swift; sourceTree = "<group>"; };
+		182BC46527C4CD6D00A30C33 /* RoundedToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoundedToastView.swift; sourceTree = "<group>"; };
+		182BC46627C4CD6D00A30C33 /* RectangleToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RectangleToastView.swift; sourceTree = "<group>"; };
+		182BC46727C4CD6D00A30C33 /* ActivityPresentable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityPresentable.swift; sourceTree = "<group>"; };
+		182BC46827C4CD6D00A30C33 /* ActivityCenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityCenter.swift; sourceTree = "<group>"; };
+		182BC46A27C4CD6D00A30C33 /* ToastActivityPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToastActivityPresenter.swift; sourceTree = "<group>"; };
+		182BC46C27C4CD6D00A30C33 /* Activity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Activity.swift; sourceTree = "<group>"; };
+		182BC46D27C4CD6D00A30C33 /* ActivityRequest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityRequest.swift; sourceTree = "<group>"; };
+		182BC46E27C4CD6D00A30C33 /* ActivityDismissal.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ActivityDismissal.swift; sourceTree = "<group>"; };
+		182BC47827C4CE2200A30C33 /* LabelledActivityIndicatorView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LabelledActivityIndicatorView.swift; sourceTree = "<group>"; };
+		182BC47A27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullscreenLoadingActivityPresenter.swift; sourceTree = "<group>"; };
 		184230FE27BD080000033771 /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253A27B6918D002E6B18 /* ElementXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElementXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -157,6 +177,39 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		182BC46327C4CD6D00A30C33 /* Activity */ = {
+			isa = PBXGroup;
+			children = (
+				182BC47827C4CE2200A30C33 /* LabelledActivityIndicatorView.swift */,
+				182BC46427C4CD6D00A30C33 /* Toasts */,
+				182BC46727C4CD6D00A30C33 /* ActivityPresentable.swift */,
+				182BC46827C4CD6D00A30C33 /* ActivityCenter.swift */,
+				182BC46927C4CD6D00A30C33 /* ActivityPresenters */,
+				182BC46C27C4CD6D00A30C33 /* Activity.swift */,
+				182BC46D27C4CD6D00A30C33 /* ActivityRequest.swift */,
+				182BC46E27C4CD6D00A30C33 /* ActivityDismissal.swift */,
+			);
+			path = Activity;
+			sourceTree = "<group>";
+		};
+		182BC46427C4CD6D00A30C33 /* Toasts */ = {
+			isa = PBXGroup;
+			children = (
+				182BC46527C4CD6D00A30C33 /* RoundedToastView.swift */,
+				182BC46627C4CD6D00A30C33 /* RectangleToastView.swift */,
+			);
+			path = Toasts;
+			sourceTree = "<group>";
+		};
+		182BC46927C4CD6D00A30C33 /* ActivityPresenters */ = {
+			isa = PBXGroup;
+			children = (
+				182BC47A27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift */,
+				182BC46A27C4CD6D00A30C33 /* ToastActivityPresenter.swift */,
+			);
+			path = ActivityPresenters;
+			sourceTree = "<group>";
+		};
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
@@ -252,6 +305,7 @@
 		1863A41A27BA76B900B52E4D /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				182BC46327C4CD6D00A30C33 /* Activity */,
 				1863A43D27BA790000B52E4D /* Coordinator.swift */,
 				1863A41B27BA76B900B52E4D /* MXLog.swift */,
 				1863A43627BA789800B52E4D /* SwiftUI */,
@@ -577,16 +631,20 @@
 			buildActionMask = 2147483647;
 			files = (
 				1863A44B27BA79FF00B52E4D /* RootRouterType.swift in Sources */,
+				182BC47327C4CD6D00A30C33 /* ToastActivityPresenter.swift in Sources */,
 				1863A48C27BAA8A900B52E4D /* HomeScreenViewModel.swift in Sources */,
 				1863A41727BA716A00B52E4D /* KeychainControllerProtocol.swift in Sources */,
 				1863A45B27BA7B4700B52E4D /* LoginScreenCoordinator.swift in Sources */,
+				182BC47127C4CD6D00A30C33 /* ActivityPresentable.swift in Sources */,
 				1863A41427BA716A00B52E4D /* AuthenticationCoordinator.swift in Sources */,
 				1863A43B27BA789800B52E4D /* BindableState.swift in Sources */,
+				182BC47027C4CD6D00A30C33 /* RectangleToastView.swift in Sources */,
 				1863A42C27BA784300B52E4D /* LoginScreenViewModel.swift in Sources */,
 				1863A44F27BA79FF00B52E4D /* NavigationModule.swift in Sources */,
 				1863A43027BA784300B52E4D /* LoginScreenViewModelProtocol.swift in Sources */,
 				1863A48827BAA8A900B52E4D /* HomeScreenViewModelProtocol.swift in Sources */,
 				1863A44D27BA79FF00B52E4D /* RootRouter.swift in Sources */,
+				182BC47627C4CD6D00A30C33 /* ActivityRequest.swift in Sources */,
 				1863A45F27BAA60300B52E4D /* SplashViewController.swift in Sources */,
 				1863A48A27BAA8A900B52E4D /* HomeScreen.swift in Sources */,
 				1863A44927BA79FF00B52E4D /* NavigationRouterStore.swift in Sources */,
@@ -595,8 +653,10 @@
 				1863A45027BA79FF00B52E4D /* NavigationRouterType.swift in Sources */,
 				182BC42027BE667200A30C33 /* RoomModelProtocol.swift in Sources */,
 				1863A45627BA7A7800B52E4D /* WeakDictionaryKeyReference.swift in Sources */,
+				182BC47927C4CE2200A30C33 /* LabelledActivityIndicatorView.swift in Sources */,
 				1863A49427BAAA6700B52E4D /* RoomModel.swift in Sources */,
 				1850256F27B6A135002E6B18 /* AppDelegate.swift in Sources */,
+				182BC47727C4CD6D00A30C33 /* ActivityDismissal.swift in Sources */,
 				1863A41627BA716A00B52E4D /* KeychainController.swift in Sources */,
 				1863A41527BA716A00B52E4D /* UserSession.swift in Sources */,
 				1863A43A27BA789800B52E4D /* StateStoreViewModel.swift in Sources */,
@@ -605,11 +665,15 @@
 				1863A48527BAA8A900B52E4D /* HomeScreenCoordinator.swift in Sources */,
 				1863A43F27BA790000B52E4D /* Coordinator.swift in Sources */,
 				1863A41C27BA76B900B52E4D /* MXLog.swift in Sources */,
+				182BC46F27C4CD6D00A30C33 /* RoundedToastView.swift in Sources */,
+				182BC47527C4CD6D00A30C33 /* Activity.swift in Sources */,
+				182BC47B27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift in Sources */,
 				1863A44E27BA79FF00B52E4D /* Presentable.swift in Sources */,
 				182BC42227BE6C6900A30C33 /* MockRoomModel.swift in Sources */,
 				1850256C27B6A135002E6B18 /* AppCoordinator.swift in Sources */,
 				1863A43127BA784300B52E4D /* LoginScreenModels.swift in Sources */,
 				1863A44A27BA79FF00B52E4D /* NavigationRouter.swift in Sources */,
+				182BC47227C4CD6D00A30C33 /* ActivityCenter.swift in Sources */,
 				1863A45927BA7A7800B52E4D /* WeakKeyDictionary.swift in Sources */,
 				1863A44C27BA79FF00B52E4D /* NavigationRouterStoreProtocol.swift in Sources */,
 			);

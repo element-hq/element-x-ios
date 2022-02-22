@@ -44,8 +44,6 @@ class AuthenticationCoordinator: Coordinator {
     
     func start() {
         
-        delegate?.authenticationCoordinatorDidStartLoading(self)
-        
         let availableRestoreTokens = keychainController.restoreTokens()
         
         guard let usernameTokenTuple = availableRestoreTokens.first else {
@@ -116,6 +114,9 @@ class AuthenticationCoordinator: Coordinator {
     }
     
     private func login(username: String, password: String, completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+        
+        delegate?.authenticationCoordinatorDidStartLoading(self)
+        
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
             
@@ -136,6 +137,9 @@ class AuthenticationCoordinator: Coordinator {
     }
     
     private func restorePreviousLogin(_ usernameTokenTuple: (username: String, token: String), completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+        
+        delegate?.authenticationCoordinatorDidStartLoading(self)
+        
         DispatchQueue.global(qos: .background).async { [weak self] in
             guard let self = self else { return }
             
