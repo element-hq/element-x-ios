@@ -23,7 +23,7 @@ struct MockRoomModel: RoomModelProtocol {
     let isPublic = Bool.random()
     let isEncrypted = Bool.random()
     
-    func getAvatar(_ completion: (Result<UIImage?, Error>) -> Void) {
+    func loadAvatar(_ completion: (Result<UIImage?, Error>) -> Void) {
         completion(.success(UIImage(systemName: "wand.and.stars")))
     }
 }

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let window: UIWindow
@@ -76,7 +77,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         }
         
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession)
-        let coordinator = HomeScreenCoordinator(parameters: parameters)
+        let coordinator = HomeScreenCoordinator(parameters: parameters, imageCache: ImageCache.default)
         
         coordinator.completion = { [weak self] result in
             switch result {

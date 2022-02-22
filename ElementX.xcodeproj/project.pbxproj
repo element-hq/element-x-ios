@@ -19,6 +19,7 @@
 		182BC47727C4CD6D00A30C33 /* ActivityDismissal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC46E27C4CD6D00A30C33 /* ActivityDismissal.swift */; };
 		182BC47927C4CE2200A30C33 /* LabelledActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC47827C4CE2200A30C33 /* LabelledActivityIndicatorView.swift */; };
 		182BC47B27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 182BC47A27C4D05200A30C33 /* FullscreenLoadingActivityPresenter.swift */; };
+		182BC48127C4EBBB00A30C33 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 182BC48027C4EBBB00A30C33 /* Kingfisher */; };
 		1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850253E27B6918D002E6B18 /* ElementXTests.swift */; };
 		1850254927B6918D002E6B18 /* ElementXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254827B6918D002E6B18 /* ElementXUITests.swift */; };
 		1850254B27B6918D002E6B18 /* ElementXUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254A27B6918D002E6B18 /* ElementXUITestsLaunchTests.swift */; };
@@ -154,6 +155,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				182BC48127C4EBBB00A30C33 /* Kingfisher in Frameworks */,
 				1863A3FC27BA5A9100B52E4D /* KeychainAccess in Frameworks */,
 				1850255927B69388002E6B18 /* MatrixRustSDK in Frameworks */,
 				1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */,
@@ -489,6 +491,7 @@
 				1850255827B69388002E6B18 /* MatrixRustSDK */,
 				1863A3FB27BA5A9100B52E4D /* KeychainAccess */,
 				1863A40527BA6DFC00B52E4D /* SwiftyBeaver */,
+				182BC48027C4EBBB00A30C33 /* Kingfisher */,
 			);
 			productName = ElementX;
 			productReference = 1850252427B6918C002E6B18 /* ElementX.app */;
@@ -566,6 +569,7 @@
 				1850255727B69388002E6B18 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
 				1863A3FA27BA5A9100B52E4D /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				1863A40427BA6DFC00B52E4D /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
+				182BC47F27C4EBBB00A30C33 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			productRefGroup = 1850252527B6918C002E6B18 /* Products */;
 			projectDirPath = "";
@@ -1021,6 +1025,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		182BC47F27C4EBBB00A30C33 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.0.0;
+			};
+		};
 		1850255727B69388002E6B18 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift.git";
@@ -1048,6 +1060,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		182BC48027C4EBBB00A30C33 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 182BC47F27C4EBBB00A30C33 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
 		1850255827B69388002E6B18 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 1850255727B69388002E6B18 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;

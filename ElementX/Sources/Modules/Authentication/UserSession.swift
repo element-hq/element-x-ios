@@ -50,7 +50,7 @@ class UserSession: ClientDelegate {
         }
     }
     
-    func getUserAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {
+    func loadUserAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
                 let avatarData = try self.client.avatar()

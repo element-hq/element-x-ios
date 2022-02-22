@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct HomeScreen: View {
     
@@ -31,6 +32,7 @@ struct HomeScreen: View {
                             .resizable()
                             .scaledToFill()
                             .frame(width: 40, height: 40, alignment: .center)
+                            .mask(Circle())
                     } else {
                         let _ = context.send(viewAction: .loadUserAvatar)
                     }
@@ -40,21 +42,30 @@ struct HomeScreen: View {
                 }
                 .padding(.vertical, 32.0)
                 
-                List {
-                    Section("People") {
-                        ForEach(context.viewState.directRooms) { room in
-                            RoomCell(room: room, context: context)
+                if context.viewState.isLoadingRooms {
+                    VStack {
+                        Text("Loading rooms")
+                        ProgressView()
+                    }
+                } else {
+                    List {
+                        Section("People") {
+                            ForEach(context.viewState.directRooms) { room in
+                                RoomCell(room: room, context: context)
+                            }
+                        }
+                        
+                        Section("Rooms") {
+                            ForEach(context.viewState.nondirectRooms) { room in
+                                RoomCell(room: room, context: context)
+                            }
                         }
                     }
-                    
-                    Section("Rooms") {
-                        ForEach(context.viewState.nondirectRooms) { room in
-                            RoomCell(room: room, context: context)
-                        }
-                    }
+                    .headerProminence(.increased)
+                    .listStyle(.plain)
                 }
-                .headerProminence(.increased)
-                .listStyle(.plain)
+                
+                Spacer()
             }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
@@ -81,6 +92,7 @@ struct RoomCell: View {
                     .resizable()
                     .scaledToFill()
                     .frame(width: 40, height: 40)
+                    .mask(Circle())
             } else {
                 let _ = context.send(viewAction: .loadRoomAvatar(roomId: room.id))
                 Image(systemName: "person.3")
@@ -119,13 +131,15 @@ struct RoomCell: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed")
+        let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed", imageCache: ImageCache.default)
         
         let rooms = [MockRoomModel(displayName: "Alfa"),
                      MockRoomModel(displayName: "Beta"),
                      MockRoomModel(displayName: "Omega")]
         
         viewModel.updateWithRoomList(rooms)
+        
+        viewModel.updateWithUserAvatar(UIImage(systemName: "person.fill.questionmark"))
         
         return HomeScreen(context: viewModel.context)
     }

@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 @available(iOS 14, *)
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
@@ -27,7 +28,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: Private
     
-    private var roomList: [RoomModelProtocol]?
+    private var roomList: [RoomModelProtocol]? {
+        didSet {
+            self.state.isLoadingRooms = (roomList == nil)
+        }
+    }
+    private let imageCache: ImageCache
 
     // MARK: Public
 
@@ -35,8 +41,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
-    init(userDisplayName: String) {
-        super.init(initialViewState: HomeScreenViewState(userDisplayName: userDisplayName))
+    init(userDisplayName: String, imageCache: Kingfisher.ImageCache) {
+        self.imageCache = imageCache
+        super.init(initialViewState: HomeScreenViewState(userDisplayName: userDisplayName, isLoadingRooms: true))
     }
     
     // MARK: - Public
@@ -46,24 +53,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .logout:
             self.completion?(.logout)
         case .loadRoomAvatar(let roomId):
-            guard let room = roomList?.filter({ $0.identifier == roomId }).first else {
-                break
-            }
-            
-            room.getAvatar { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let image):
-                    guard let index = self.state.rooms.firstIndex(where: { $0.id == roomId }) else {
-                        return
-                    }
-                    
-                    self.state.rooms[index].avatar = image
-                default:
-                    break
-                }
-            }
+            self.loadAvatarForRoomWithIdentifier(roomId)
         case .loadUserAvatar:
             self.completion?(.loadUserAvatar)
         }
@@ -83,5 +73,52 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     func updateWithUserAvatar(_ avatar: UIImage?) {
         self.state.userAvatar = avatar
+    }
+    
+    // MARK: - Private
+    
+    private func loadAvatarForRoomWithIdentifier(_ roomIdentifier: String) {
+        guard let room = roomList?.filter({ $0.identifier == roomIdentifier }).first,
+              let cacheKey = room.avatarURL?.path else {
+                  return
+              }
+        
+        if imageCache.isCached(forKey: cacheKey) {
+            imageCache.retrieveImage(forKey: cacheKey) { [weak self] result in
+                guard let self = self else { return }
+                switch result {
+                case .success(let value):
+                    self.updateAvatar(value.image, forRoomWithIdentifier: roomIdentifier)
+                case .failure(let error):
+                    MXLog.error("Failed retrieving avatar from cache with error: \(error)")
+                }
+            }
+            
+            return
+        }
+        
+        room.loadAvatar { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let avatar):
+                guard let avatar = avatar else {
+                    return
+                }
+                
+                self.imageCache.store(avatar, forKey: cacheKey)
+                self.updateAvatar(avatar, forRoomWithIdentifier: roomIdentifier)
+            default:
+                break
+            }
+        }
+    }
+    
+    private func updateAvatar(_ avatar: UIImage?, forRoomWithIdentifier roomIdentifier: String) {
+        guard let index = self.state.rooms.firstIndex(where: { $0.id == roomIdentifier }) else {
+            return
+        }
+        
+        self.state.rooms[index].avatar = avatar
     }
 }

@@ -22,5 +22,5 @@ protocol RoomModelProtocol {
     
     var avatarURL: URL? { get }
     
-    func getAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void)
+    func loadAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void)
 }

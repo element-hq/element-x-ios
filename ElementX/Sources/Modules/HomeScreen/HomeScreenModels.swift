@@ -33,6 +33,7 @@ struct HomeScreenViewState: BindableState {
     var userAvatar: UIImage?
     
     var rooms: [HomeScreenRoom] = []
+    var isLoadingRooms: Bool = false
     
     var directRooms: [HomeScreenRoom] {
         rooms.filter { $0.isDirect }

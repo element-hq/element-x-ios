@@ -74,7 +74,7 @@ struct RoomModel: RoomModelProtocol {
         return URL(string: urlString)
     }
     
-    func getAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {
+    func loadAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
                 let avatarData = try room.avatar()
