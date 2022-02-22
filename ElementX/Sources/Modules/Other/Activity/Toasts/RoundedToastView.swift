@@ -48,6 +48,7 @@ class RoundedToastView: UIView {
     private let stackView: UIStackView = {
         let stack = UIStackView()
         stack.axis = .horizontal
+        stack.alignment = .center
         stack.spacing = 5
         return stack
     }()
@@ -66,6 +67,9 @@ class RoundedToastView: UIView {
     }
 
     private func setup(viewState: ViewState) {
+        
+        backgroundColor = .gray.withAlphaComponent(0.75)
+        
         setupLayer()
         setupStackView()
         stackView.addArrangedSubview(toastView(for: viewState.style))

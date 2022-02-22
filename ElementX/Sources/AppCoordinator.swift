@@ -20,6 +20,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let authenticationCoordinator: AuthenticationCoordinator!
     
     private var loadingActivity: Activity?
+    private var errorActivity: Activity?
     
     var childCoordinators: [Coordinator] = []
     
@@ -55,6 +56,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didFailWithError error: AuthenticationCoordinatorError) {
         hideLoadingIndicator()
+        showLoginErrorToast()
     }
     
     func authenticationCoordinatorDidSetupUserSession(_ authenticationCoordinator: AuthenticationCoordinator) {
@@ -91,7 +93,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoadingIndicator() {
-        let presenter = FullscreenLoadingActivityPresenter(label: "Loading", on: self.mainNavigationController)
+        let presenter = FullscreenLoadingActivityPresenter(label: "Loading",
+                                                           on: mainNavigationController)
         
         let request = ActivityRequest(
             presenter: presenter,
@@ -103,5 +106,17 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private func hideLoadingIndicator() {
         loadingActivity = nil
+    }
+    
+    private func showLoginErrorToast() {
+        let presenter = ToastActivityPresenter(viewState: .init(style: .success, label: "Failed logging in"),
+                                               navigationController: mainNavigationController)
+        
+        let request = ActivityRequest(
+            presenter: presenter,
+            dismissal: .timeout(3.0)
+        )
+        
+        errorActivity = ActivityCenter.shared.add(request)
     }
 }

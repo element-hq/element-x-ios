@@ -97,12 +97,11 @@ class AuthenticationCoordinator: Coordinator {
                     switch result {
                     case .success:
                         completion(.success(()))
+                        self.remove(childCoordinator: coordinator)
+                        self.navigationRouter.dismissModule()
                     case .failure(let error):
                         completion(.failure(error))
                     }
-                    
-                    self.remove(childCoordinator: coordinator)
-                    self.navigationRouter.dismissModule()
                 }
             }
         }

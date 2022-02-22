@@ -28,9 +28,10 @@ class ToastActivityPresenter: ActivityPresentable {
         self.viewState = viewState
         self.navigationController = navigationController
     }
-
+    
     func present() {
-        guard let navigationController = navigationController else {
+        guard let navigationController = navigationController,
+        let window = navigationController.view.window else {
             return
         }
         
@@ -38,7 +39,7 @@ class ToastActivityPresenter: ActivityPresentable {
         self.view = view
         
         view.translatesAutoresizingMaskIntoConstraints = false
-        navigationController.view.addSubview(view)
+        window.addSubview(view)
         NSLayoutConstraint.activate([
             view.centerXAnchor.constraint(equalTo: navigationController.navigationBar.centerXAnchor),
             view.topAnchor.constraint(equalTo: navigationController.navigationBar.bottomAnchor)
