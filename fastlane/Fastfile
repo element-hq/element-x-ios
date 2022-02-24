@@ -1,0 +1,79 @@
+lane :build_and_publish_on_github do
+  ios_adhoc()
+
+  upload_to_diawi()
+
+  mac_adhoc()
+
+  release_to_github()
+
+end
+
+lane :ios_adhoc do
+  build_ios_app(
+      scheme: "ElementX",
+      export_method: "ad-hoc",
+      output_directory: "build",
+      export_options: {
+        provisioningProfiles: { 
+          "io.element.elementx" => "ElementX Ad Hoc",
+        }
+      }
+    )
+end
+
+lane :mac_adhoc do
+  build_mac_app(
+    scheme: "ElementX",
+    export_method: "mac-application",
+    output_directory: "build"
+  )
+
+  zip(
+    path: "build/ElementX.app",
+    output_path: "build/ElementX.app.zip"
+  )
+end
+
+desc "Upload IPA to Diawi"
+private_lane :upload_to_diawi do
+  api_token = "" #ENV["DIAWI_API_TOKEN"]
+  UI.user_error!("Invalid Diawi API token.") unless !api_token.to_s.empty?
+
+  # Upload to Diawi
+  diawi(
+    token: api_token,
+    wall_of_apps: false,
+    file: lane_context[SharedValues::IPA_OUTPUT_PATH]
+  )
+
+  # Get the Diawi link from Diawi action shared value
+  diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
+  UI.command_output("Diawi link: " + diawi_link.to_s)
+end
+
+desc "Create GitHub Release"
+private_lane :release_to_github do
+  api_token = "" #ENV["GITHUB_TOKEN"]
+  UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
+
+  # Get the Diawi link from Diawi action shared value
+  diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
+
+  # Generate the Diawi QR code file link
+  diawi_app_id = URI(diawi_link).path.split('/').last
+  diawi_qr_code_link = "https://www.diawi.com/qrcode/link/#{diawi_app_id}"
+
+  release_version = "v#{get_version_number()}.#{Time.now.strftime("%Y%m%d%H%M")}"
+
+  github_release = set_github_release(
+    repository_name: "vector-im/element-x-ios",
+    api_token: api_token,
+    name: release_version,
+    tag_name: release_version,
+    is_generate_release_notes: true,
+    description: "[iOS AdHoc Release - Diawi Link](#{diawi_link})
+    ![QR code](#{diawi_qr_code_link})",
+    upload_assets: ["build/ElementX.app.zip"]
+  )
+end
