@@ -10,6 +10,7 @@ import UIKit
 import MatrixRustSDK
 
 enum RoomModelError: Error {
+    case failedRetrievingDisplayName
     case failedRetrievingAvatar
 }
 
@@ -72,6 +73,22 @@ struct RoomModel: RoomModelProtocol {
         }
         
         return URL(string: urlString)
+    }
+    
+    func loadDisplayName(_ completion: @escaping (Result<String, Error>) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            do {
+                let displayName = try room.displayName()
+                
+                DispatchQueue.main.async {
+                    completion(.success(displayName))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(RoomModelError.failedRetrievingDisplayName))
+                }
+            }
+        }
     }
     
     func loadAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {

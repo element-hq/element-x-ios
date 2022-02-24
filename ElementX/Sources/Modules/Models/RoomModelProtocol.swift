@@ -14,7 +14,6 @@ protocol RoomModelProtocol {
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
     
-    var displayName: String { get }
     var name: String? { get }
     
     var topic: String? { get }
@@ -22,5 +21,6 @@ protocol RoomModelProtocol {
     
     var avatarURL: URL? { get }
     
+    func loadDisplayName(_ completion: @escaping (Result<String, Error>) -> Void)
     func loadAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void)
 }

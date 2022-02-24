@@ -52,8 +52,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch viewAction {
         case .logout:
             self.completion?(.logout)
-        case .loadRoomAvatar(let roomId):
+        case .loadRoomData(let roomId):
             self.loadAvatarForRoomWithIdentifier(roomId)
+            self.loadRoomDisplayNameForRoomWithIdentifier(roomId)
         case .loadUserAvatar:
             self.completion?(.loadUserAvatar)
         }
@@ -63,7 +64,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.roomList = roomList
         state.rooms = roomList.map { roomModel in
             HomeScreenRoom(id: roomModel.identifier,
-                           displayName: roomModel.displayName,
+                           displayName: roomModel.name,
                            topic: roomModel.topic,
                            lastMessage: roomModel.lastMessage,
                            isDirect: roomModel.isDirect,
@@ -112,6 +113,31 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 break
             }
         }
+    }
+    
+    private func loadRoomDisplayNameForRoomWithIdentifier(_ roomIdentifier: String) {
+        guard let room = roomList?.filter({ $0.identifier == roomIdentifier }).first else {
+            return
+        }
+        
+        room.loadDisplayName { [weak self] result in
+            guard let self = self else { return }
+            
+            switch result {
+            case .success(let displayName):
+                self.updateDisplayName(displayName, forRoomWithIdentifier: roomIdentifier)
+            default:
+                break
+            }
+        }
+    }
+    
+    private func updateDisplayName(_ displayName: String, forRoomWithIdentifier roomIdentifier: String) {
+        guard let index = self.state.rooms.firstIndex(where: { $0.id == roomIdentifier }) else {
+            return
+        }
+        
+        self.state.rooms[index].displayName = displayName
     }
     
     private func updateAvatar(_ avatar: UIImage?, forRoomWithIdentifier roomIdentifier: String) {

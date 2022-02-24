@@ -25,7 +25,7 @@ enum HomeScreenViewModelResult {
 enum HomeScreenViewAction {
     case logout
     case loadUserAvatar
-    case loadRoomAvatar(roomId: String)
+    case loadRoomData(roomId: String)
 }
 
 struct HomeScreenViewState: BindableState {
@@ -54,7 +54,8 @@ struct HomeScreenViewState: BindableState {
 
 struct HomeScreenRoom: Identifiable {
     let id: String
-    let displayName: String
+    
+    var displayName: String?
     
     let topic: String?
     let lastMessage: String?

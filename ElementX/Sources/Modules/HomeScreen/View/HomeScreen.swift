@@ -114,7 +114,7 @@ struct RoomCell: View {
                     .frame(width: 40, height: 40)
                     .mask(Circle())
             } else {
-                let _ = context.send(viewAction: .loadRoomAvatar(roomId: room.id))
+                let _ = context.send(viewAction: .loadRoomData(roomId: room.id))
                 Image(systemName: "person.3")
                     .frame(width: 40, height: 40)
             }
@@ -143,7 +143,7 @@ struct RoomCell: View {
     }
     
     private func roomName(_ room: HomeScreenRoom) -> String {
-        room.displayName + (room.isEncrypted ? "🛡": "")
+        room.displayName ?? room.id + (room.isEncrypted ? "🛡": "")
     }
 }
 
