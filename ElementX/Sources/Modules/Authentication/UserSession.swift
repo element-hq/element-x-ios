@@ -18,18 +18,33 @@ enum UserSessionError: Error {
     case failedRetrievingAvatar
 }
 
+private class WeakUserSessionWrapper: ClientDelegate {
+    weak var userSession: UserSession?
+    
+    init(userSession: UserSession) {
+        self.userSession = userSession
+    }
+    
+    func didReceiveSyncUpdate() {
+        userSession?.didReceiveSyncUpdate()
+    }
+}
+
 class UserSession: ClientDelegate {
     
     private let client: Client
+    
+    deinit {
+        client.setDelegate(delegate: nil)
+    }
     
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
     
     init(client: Client) {
         self.client = client
         
-        if !client.hasFirstSynced() {
-            client.startSync(delegate: self)
-        }
+        client.setDelegate(delegate: WeakUserSessionWrapper(userSession: self))
+        client.startSync()
     }
     
     var userIdentifier: String {

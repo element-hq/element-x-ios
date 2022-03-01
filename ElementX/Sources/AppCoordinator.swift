@@ -64,6 +64,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     func authenticationCoordinatorDidTearDownUserSession(_ authenticationCoordinator: AuthenticationCoordinator) {
+        if let presentedCoordinator = childCoordinators.first {
+            remove(childCoordinator: presentedCoordinator)
+        }
+
         mainNavigationController.setViewControllers([splashViewController], animated: false)
         authenticationCoordinator.start()
     }

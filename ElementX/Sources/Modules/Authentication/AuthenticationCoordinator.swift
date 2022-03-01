@@ -74,7 +74,13 @@ class AuthenticationCoordinator: Coordinator {
     
     func logout() {
         keychainController.removeAllTokens()
+        
+        if let userIdentifier = userSession?.userIdentifier {
+            deleteBaseDirectoryForUsername(userIdentifier)
+        }
+        
         userSession = nil
+        
         delegate?.authenticationCoordinatorDidTearDownUserSession(self)
     }
     
@@ -182,5 +188,15 @@ class AuthenticationCoordinator: Coordinator {
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         
         return url.path
+    }
+    
+    private func deleteBaseDirectoryForUsername(_ username: String) {
+        guard var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+            fatalError("Should always be able to retrieve the caches directory")
+        }
+        
+        url = url.appendingPathComponent(username)
+
+        try? FileManager.default.removeItem(at: url)
     }
 }
