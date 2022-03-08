@@ -52,6 +52,7 @@ struct RoomScreen: View {
                         Text(message.text)
                     }
                     .listRowSeparator(.hidden)
+                    .id(message.id)
                 }
                 
                 Divider()
@@ -64,6 +65,7 @@ struct RoomScreen: View {
             }
             .onChange(of: context.viewState.messages) { _ in
                 if backPaginationMessageIdentifier != nil {
+                    reader.scrollTo(backPaginationMessageIdentifier, anchor: .bottom)
                     self.backPaginationMessageIdentifier = nil
                     return
                 }
