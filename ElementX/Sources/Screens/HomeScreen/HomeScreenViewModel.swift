@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import Combine
 import Kingfisher
 
 @available(iOS 14, *)
@@ -24,18 +25,14 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
 @available(iOS 14, *)
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     
-    // MARK: - Properties
-    
-    // MARK: Private
-    
-    private var roomList: [RoomModelProtocol]? {
+    private var roomUpdateListeners = Set<AnyCancellable>()
+    private var roomList: [RoomProxyProtocol]? {
         didSet {
             self.state.isLoadingRooms = (roomList == nil)
         }
     }
+    
     private let imageCache: ImageCache
-
-    // MARK: Public
 
     var completion: ((HomeScreenViewModelResult) -> Void)?
     
@@ -52,23 +49,38 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         switch viewAction {
         case .logout:
             self.completion?(.logout)
-        case .loadRoomData(let roomId):
-            self.loadAvatarForRoomWithIdentifier(roomId)
-            self.loadRoomDisplayNameForRoomWithIdentifier(roomId)
+        case .loadRoomData(let roomIdentifier):
+            self.loadAvatarForRoomWithIdentifier(roomIdentifier)
+            self.loadRoomDisplayNameForRoomWithIdentifier(roomIdentifier)
         case .loadUserAvatar:
             self.completion?(.loadUserAvatar)
+        case .selectRoom(let roomIdentifier):
+            self.completion?(.selectRoom(roomIdentifier: roomIdentifier))
         }
     }
     
-    func updateWithRoomList(_ roomList: [RoomModelProtocol]) {
+    func updateWithRoomList(_ roomList: [RoomProxyProtocol]) {
+        
+        roomUpdateListeners.removeAll()
+        
         self.roomList = roomList
-        state.rooms = roomList.map { roomModel in
-            HomeScreenRoom(id: roomModel.identifier,
-                           displayName: roomModel.name,
-                           topic: roomModel.topic,
-                           lastMessage: roomModel.lastMessage,
-                           isDirect: roomModel.isDirect,
-                           isEncrypted: roomModel.isEncrypted)
+        
+        roomList.forEach({ roomProxy  in
+            roomProxy.paginateBackwards(start: 0, finish: 1)
+            roomProxy.startLiveEventListener()
+            roomProxy.callbacks.sink { [weak self] callback in
+                switch callback {
+                case .updatedLastMessage:
+                    self?.updateRoomForProxy(roomProxy)
+                default:
+                    break
+                }
+            }
+            .store(in: &roomUpdateListeners)
+        })
+        
+        state.rooms = roomList.map { roomProxy in
+            roomFromProxy(roomProxy)
         }
     }
     
@@ -79,7 +91,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadAvatarForRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let room = roomList?.filter({ $0.identifier == roomIdentifier }).first,
+        guard let room = roomList?.filter({ $0.id == roomIdentifier }).first,
               let cacheKey = room.avatarURL?.path else {
                   return
               }
@@ -116,7 +128,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func loadRoomDisplayNameForRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let room = roomList?.filter({ $0.identifier == roomIdentifier }).first else {
+        guard let room = roomList?.filter({ $0.id == roomIdentifier }).first else {
             return
         }
         
@@ -146,5 +158,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         self.state.rooms[index].avatar = avatar
+    }
+    
+    private func updateRoomForProxy(_ roomProxy: RoomProxyProtocol) {
+        state.rooms.updateEach { room in
+            if room.id != roomProxy.id {
+                return
+            }
+            
+            room = roomFromProxy(roomProxy)
+        }
+    }
+    
+    private func roomFromProxy(_ roomProxy: RoomProxyProtocol) -> HomeScreenRoom {
+        HomeScreenRoom(id: roomProxy.id,
+                       displayName: roomProxy.name,
+                       topic: roomProxy.topic,
+                       lastMessage: roomProxy.lastMessage,
+                       isDirect: roomProxy.isDirect,
+                       isEncrypted: roomProxy.isEncrypted)
     }
 }

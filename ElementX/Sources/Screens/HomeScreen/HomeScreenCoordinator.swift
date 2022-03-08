@@ -24,6 +24,7 @@ struct HomeScreenCoordinatorParameters {
 
 enum HomeScreenCoordinatorResult {
     case logout
+    case selectRoom(roomIdentifier: String)
 }
 
 final class HomeScreenCoordinator: Coordinator, Presentable {
@@ -70,12 +71,14 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
                         break
                     }
                 })
+            case .selectRoom(let roomIdentifier):
+                self.completion?(.selectRoom(roomIdentifier: roomIdentifier))
             }
         }
         
         parameters.userSession.callbacks.sink { [weak self] result in
             switch result {
-            case .updatedData:
+            case .updatedRoomsList:
                 self?.updateRoomsList()
             }
         }.store(in: &cancellables)

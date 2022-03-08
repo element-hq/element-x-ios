@@ -27,7 +27,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     init() {
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
-        mainNavigationController.navigationBar.isHidden = true
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         
@@ -89,11 +88,42 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             switch result {
             case .logout:
                 self?.authenticationCoordinator.logout()
+            case .selectRoom(let roomIdentifier):
+                self?.presentRoomWithIdentifier(roomIdentifier)
             }
         }
         
         add(childCoordinator: coordinator)
         navigationRouter.setRootModule(coordinator)
+    }
+    
+    private func presentRoomWithIdentifier(_ roomIdentifier: String) {
+        guard let userSession = authenticationCoordinator.userSession else {
+            fatalError("User session should be already setup at this point")
+        }
+        
+        showLoadingIndicator()
+        
+        userSession.getRoomList { [weak self] rooms in
+            guard let self = self else { return }
+            
+            self.hideLoadingIndicator()
+            
+            guard let roomProxy = rooms.filter({ $0.id == roomIdentifier}).first else {
+                MXLog.error("Invalid room identifier: \(roomIdentifier)")
+                return
+            }
+            
+            let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            
+            coordinator.completion = { [weak self] result in
+                
+            }
+            
+            self.add(childCoordinator: coordinator)
+            self.navigationRouter.push(coordinator)
+        }
     }
     
     private func showLoadingIndicator() {

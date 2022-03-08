@@ -12,6 +12,7 @@ end
 lane :ios_adhoc do
   build_ios_app(
       scheme: "ElementX",
+      clean: true,
       export_method: "ad-hoc",
       output_directory: "build",
       export_options: {
@@ -25,6 +26,7 @@ end
 lane :mac_adhoc do
   build_mac_app(
     scheme: "ElementX",
+    clean: true,
     export_method: "mac-application",
     output_directory: "build"
   )

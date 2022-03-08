@@ -5,7 +5,7 @@ if [ ! $# -eq 2 ]; then
     exit 1
 fi
 
-MODULE_DIR="../ElementX/Sources/Modules"
+MODULE_DIR="../ElementX/Sources/Modules/Screens"
 OUTPUT_DIR=$MODULE_DIR/$1
 SCREEN_NAME=$2
 SCREEN_VAR_NAME=`echo $SCREEN_NAME | awk '{ print tolower(substr($0, 1, 1)) substr($0, 2) }'`

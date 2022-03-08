@@ -1,14 +1,22 @@
 //
-//  RoomModelProtocol.swift
+//  RoomProxyProtocol.swift
 //  ElementX
 //
 //  Created by Stefan Ceriu on 17.02.2022.
 //
 
 import UIKit
+import Combine
+import MatrixRustSDK
 
-protocol RoomModelProtocol {
-    var identifier: String { get }
+enum RoomProxyCallback {
+    case prependedMessages([Message])
+    case addedMessage(Message)
+    case updatedLastMessage
+}
+
+protocol RoomProxyProtocol {
+    var id: String { get }
     var isDirect: Bool { get }
     var isPublic: Bool { get }
     var isSpace: Bool { get }
@@ -23,4 +31,9 @@ protocol RoomModelProtocol {
     
     func loadDisplayName(_ completion: @escaping (Result<String, Error>) -> Void)
     func loadAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void)
+    
+    func startLiveEventListener()
+    func paginateBackwards(start: UInt, finish: UInt)
+    
+    var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
 }

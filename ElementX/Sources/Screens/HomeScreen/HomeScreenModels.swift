@@ -20,12 +20,14 @@ import UIKit
 enum HomeScreenViewModelResult {
     case logout
     case loadUserAvatar
+    case selectRoom(roomIdentifier: String)
 }
 
 enum HomeScreenViewAction {
     case logout
     case loadUserAvatar
-    case loadRoomData(roomId: String)
+    case loadRoomData(roomIdentifier: String)
+    case selectRoom(roomIdentifier: String)
 }
 
 struct HomeScreenViewState: BindableState {
@@ -64,4 +66,12 @@ struct HomeScreenRoom: Identifiable {
     
     let isDirect: Bool
     let isEncrypted: Bool
+}
+
+extension MutableCollection where Element == HomeScreenRoom {
+    mutating func updateEach(_ update: (inout Element) -> Void) {
+        for index in indices {
+            update(&self[index])
+        }
+    }
 }

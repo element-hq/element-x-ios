@@ -106,40 +106,44 @@ struct RoomCell: View {
     let context: HomeScreenViewModel.Context
     
     var body: some View {
-        HStack(spacing: 16.0) {
-            if let avatar = room.avatar {
-                Image(uiImage: avatar)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 40)
-                    .mask(Circle())
-            } else {
-                let _ = context.send(viewAction: .loadRoomData(roomId: room.id))
-                Image(systemName: "person.3")
-                    .frame(width: 40, height: 40)
-            }
-            
-            VStack(alignment: .leading, spacing: 4.0) {
-                Text(roomName(room))
-                    .font(.headline)
-                    .fontWeight(.regular)
-                
-                if let roomTopic = room.topic, roomTopic.count > 0 {
-                    Text(roomTopic)
-                        .font(.footnote)
-                        .fontWeight(.bold)
-                        .lineLimit(1)
+        Button {
+            context.send(viewAction: .selectRoom(roomIdentifier: room.id))
+        } label: {
+            HStack(spacing: 16.0) {
+                if let avatar = room.avatar {
+                    Image(uiImage: avatar)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .mask(Circle())
+                } else {
+                    let _ = context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
+                    Image(systemName: "person.3")
+                        .frame(width: 40, height: 40)
                 }
                 
-                if let lastMessage = room.lastMessage {
-                    Text(lastMessage)
-                        .font(.footnote)
-                        .fontWeight(.medium)
-                        .lineLimit(1)
+                VStack(alignment: .leading, spacing: 4.0) {
+                    Text(roomName(room))
+                        .font(.headline)
+                        .fontWeight(.regular)
+                    
+                    if let roomTopic = room.topic, roomTopic.count > 0 {
+                        Text(roomTopic)
+                            .font(.footnote)
+                            .fontWeight(.bold)
+                            .lineLimit(1)
+                    }
+                    
+                    if let lastMessage = room.lastMessage {
+                        Text(lastMessage)
+                            .font(.footnote)
+                            .fontWeight(.medium)
+                            .lineLimit(1)
+                    }
                 }
             }
+            .frame(minHeight: 60.0)
         }
-        .frame(minHeight: 60.0)
     }
     
     private func roomName(_ room: HomeScreenRoom) -> String {
@@ -153,9 +157,9 @@ struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed", imageCache: ImageCache.default)
         
-        let rooms = [MockRoomModel(displayName: "Alfa"),
-                     MockRoomModel(displayName: "Beta"),
-                     MockRoomModel(displayName: "Omega")]
+        let rooms = [MockRoomProxy(displayName: "Alfa"),
+                     MockRoomProxy(displayName: "Beta"),
+                     MockRoomProxy(displayName: "Omega")]
         
         viewModel.updateWithRoomList(rooms)
         

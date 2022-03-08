@@ -11,7 +11,7 @@ import Combine
 import UIKit
 
 enum UserSessionCallback {
-    case updatedData
+    case updatedRoomsList
 }
 
 enum UserSessionError: Error {
@@ -19,20 +19,27 @@ enum UserSessionError: Error {
 }
 
 private class WeakUserSessionWrapper: ClientDelegate {
-    weak var userSession: UserSession?
+    private weak var userSession: UserSession?
     
     init(userSession: UserSession) {
         self.userSession = userSession
     }
     
     func didReceiveSyncUpdate() {
-        userSession?.didReceiveSyncUpdate()
+        DispatchQueue.main.async {
+            self.userSession?.didReceiveSyncUpdate()
+        }
     }
 }
 
 class UserSession: ClientDelegate {
     
     private let client: Client
+    private var rooms: [RoomProxy] = [] {
+        didSet {
+            self.callbacks.send(.updatedRoomsList)
+        }
+    }
     
     deinit {
         client.setDelegate(delegate: nil)
@@ -81,25 +88,32 @@ class UserSession: ClientDelegate {
         }
     }
     
-    func getRoomList(_ completion: @escaping ([RoomModel]) -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            let conversations = self.client.conversations()
-            
-            let rooms = conversations.map {
-                return RoomModel(room: $0)
-            }
-            
-            DispatchQueue.main.async {
-                completion(rooms)
-            }
-        }
+    func getRoomList(_ completion: @escaping ([RoomProxyProtocol]) -> Void) {
+        fetchRoomList(completion)
     }
     
     // MARK: ClientDelegate
     
     func didReceiveSyncUpdate() {
-        DispatchQueue.main.async {
-            self.callbacks.send(.updatedData)
+        fetchRoomList { [weak self] rooms in
+            guard let self = self else { return }
+            if self.rooms != rooms {
+                self.rooms = rooms
+            }
+        }
+    }
+    
+    // MARK: Private
+    
+    func fetchRoomList(_ completion: @escaping ([RoomProxy]) -> Void) {
+        DispatchQueue.global(qos: .background).async {
+            let rooms = self.client.conversations().map {
+                return RoomProxy(room: $0)
+            }
+            
+            DispatchQueue.main.async {
+                completion(rooms)
+            }
         }
     }
 }
