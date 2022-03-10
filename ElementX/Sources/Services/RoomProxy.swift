@@ -14,6 +14,7 @@ import MatrixRustSDK
 enum RoomProxyError: Error {
     case failedRetrievingDisplayName
     case failedRetrievingAvatar
+    case backwardStreamNotAvailable
 }
 
 private class WeakRoomProxyWrapper: RoomDelegate {
@@ -23,27 +24,32 @@ private class WeakRoomProxyWrapper: RoomDelegate {
         self.roomProxy = roomProxy
     }
     
+    // MARK: - RoomDelegate
+    
     func didReceiveMessage(message: Message) {
         DispatchQueue.main.async {
             self.roomProxy?.appendMessage(message)
-        }
-    }
-    
-    func didPaginateBackwards(messages: [Message]) {
-        DispatchQueue.main.async {
-            self.roomProxy?.preprendMessages(messages)
         }
     }
 }
 
 class RoomProxy: RoomProxyProtocol, Equatable {
     private let room: Room
+    private let processingQueue: DispatchQueue
+    
+    private var backwardStream: BackwardsStreamProtocol?
     
     let callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
     init(room: Room) {
         self.room = room
-        self.room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
+        processingQueue = DispatchQueue(label: "RoomProxyProcessingQueue")
+        
+        processingQueue.async {
+            self.backwardStream = room.startLiveEventListener()
+        }
+        
+        room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
     }
     
     var id: String {
@@ -119,13 +125,26 @@ class RoomProxy: RoomProxyProtocol, Equatable {
             }
         }
     }
-    
-    func startLiveEventListener() {
-        room.startLiveEventListener()
-    }
-    
-    func paginateBackwards(start: UInt, finish: UInt) {
-        room.paginateBackwards(from: UInt8(start), to: UInt8(finish))
+        
+    func paginateBackwards(count: UInt, callback: ((Result<[Message], Error>) -> Void)?) {
+        processingQueue.async {
+            guard let backwardStream = self.backwardStream else {
+                DispatchQueue.main.async {
+                    callback?(.failure(RoomProxyError.backwardStreamNotAvailable))
+                }
+                return
+            }
+            
+            let messages = backwardStream.paginateBackwards(count: UInt64(count))
+            
+            DispatchQueue.main.async {                
+                callback?(.success(messages))
+                
+                if self.lastMessage == nil {
+                    self.lastMessage = messages.last?.content()
+                }
+            }
+        }
     }
     
     // MARK: - Equatable
@@ -137,11 +156,7 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     // MARK: - Private
     
     fileprivate func preprendMessages(_ messages: [Message]) {
-        if lastMessage == nil {
-            lastMessage = messages.last?.content()
-        }
         
-        callbacks.send(.prependedMessages(messages))
     }
     
     fileprivate func appendMessage(_ message: Message) {

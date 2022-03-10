@@ -50,8 +50,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 self.state.messages = self.buildRoomScreenMessages(timelineController.timelineItems)
             }
         }.store(in: &cancellables)
-        
-        timelineController.paginateBackwards(Constants.backPaginationPageSize)
     }
 
     // MARK: - Public

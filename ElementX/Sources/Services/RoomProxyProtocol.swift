@@ -10,7 +10,6 @@ import Combine
 import MatrixRustSDK
 
 enum RoomProxyCallback {
-    case prependedMessages([Message])
     case addedMessage(Message)
     case updatedLastMessage
 }
@@ -32,8 +31,7 @@ protocol RoomProxyProtocol {
     func loadDisplayName(_ completion: @escaping (Result<String, Error>) -> Void)
     func loadAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void)
     
-    func startLiveEventListener()
-    func paginateBackwards(start: UInt, finish: UInt)
+    func paginateBackwards(count: UInt, callback: ((Result<[Message], Error>) -> Void)?)
     
     var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
 }

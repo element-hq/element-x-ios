@@ -32,7 +32,6 @@ private var dateFormatter: DateFormatter = {
 }()
 
 struct RoomScreenMessage: Identifiable, Equatable {
-    
     let id: String
     let sender: String
     let text: String
@@ -45,6 +44,5 @@ struct RoomScreenMessage: Identifiable, Equatable {
 
 struct RoomScreenViewState: BindableState {
     var roomTitle: String?
-    var isLoading: Bool = false
     var messages: [RoomScreenMessage] = []
 }

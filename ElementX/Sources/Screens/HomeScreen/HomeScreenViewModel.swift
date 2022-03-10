@@ -66,8 +66,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.roomList = roomList
         
         roomList.forEach({ roomProxy  in
-            roomProxy.paginateBackwards(start: 0, finish: 1)
-            roomProxy.startLiveEventListener()
+            roomProxy.paginateBackwards(count: 1, callback: nil)
             roomProxy.callbacks.sink { [weak self] callback in
                 switch callback {
                 case .updatedLastMessage:

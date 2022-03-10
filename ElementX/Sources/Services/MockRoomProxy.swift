@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import Combine
+import MatrixRustSDK
 
 struct MockRoomProxy: RoomProxyProtocol {
     let id = UUID().uuidString
@@ -38,7 +39,7 @@ struct MockRoomProxy: RoomProxyProtocol {
         
     }
     
-    func paginateBackwards(start: UInt, finish: UInt) {
+    func paginateBackwards(count: UInt, callback: ((Result<[Message], Error>) -> Void)?) {
         
     }
 }

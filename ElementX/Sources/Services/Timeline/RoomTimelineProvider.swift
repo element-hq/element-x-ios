@@ -19,7 +19,6 @@ class RoomTimelineProvider {
     private var cancellables = Set<AnyCancellable>()
     
     private var paginationCounter: UInt = 0
-    private var isWaitingPaginationResponse = false
     
     let callbacks = PassthroughSubject<RoomTimelineCallback, Never>()
     private(set) var messages = [Message]()
@@ -27,17 +26,12 @@ class RoomTimelineProvider {
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         
-        self.roomProxy.startLiveEventListener()
-        
         self.roomProxy.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
             
             switch callback {
             case .addedMessage(let message):
                 self.messages.append(message)
-            case .prependedMessages(let messages):
-                self.messages.insert(contentsOf: messages.reversed(), at: 0)
-                self.isWaitingPaginationResponse = false
             case .updatedLastMessage:
                 break
             }
@@ -48,14 +42,15 @@ class RoomTimelineProvider {
     }
     
     func paginateBackwards(_ count: UInt) {
-        if isWaitingPaginationResponse {
-            return
+        self.roomProxy.paginateBackwards(count: count) { result in
+            switch result {
+            case .success(let messages):
+                self.messages.insert(contentsOf: messages.reversed(), at: 0)
+                self.callbacks.send(.updatedMessages)
+            case .failure(let error):
+                MXLog.debug("Failed paginating backwards with error: \(error)")
+                self.callbacks.send(.updatedMessages)
+            }
         }
-        
-        self.roomProxy.paginateBackwards(start: paginationCounter, finish: count)
-        isWaitingPaginationResponse = true
-        
-        // This is not in any way correct but it will do for now.
-        self.paginationCounter += count
     }
 }
