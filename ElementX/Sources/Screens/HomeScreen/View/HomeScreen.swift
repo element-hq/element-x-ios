@@ -33,15 +33,15 @@ struct HomeScreen: View {
                     }
                 } else {
                     List {
-                        Section("People") {
-                            ForEach(context.viewState.firstDirectRooms) { room in
+                        Section("Rooms") {
+                            ForEach(context.viewState.unencryptedRooms) { room in
                                 RoomCell(room: room, context: context)
                             }
                             
-                            let other = context.viewState.otherDirectRooms
+                            let other = context.viewState.encryptedRooms
                             
                             if other.count > 0 {
-                                DisclosureGroup("See more") {
+                                DisclosureGroup("Encrypted") {
                                     ForEach(other) { room in
                                         RoomCell(room: room, context: context)
                                     }
@@ -49,15 +49,15 @@ struct HomeScreen: View {
                             }
                         }
                         
-                        Section("Rooms") {
-                            ForEach(context.viewState.firstNondirectRooms) { room in
+                        Section("People") {
+                            ForEach(context.viewState.unencryptedDMs) { room in
                                 RoomCell(room: room, context: context)
                             }
                             
-                            let other = context.viewState.otherNondirectRooms
+                            let other = context.viewState.encryptedDMs
                             
                             if other.count > 0 {
-                                DisclosureGroup("See more") {
+                                DisclosureGroup("Encrypted") {
                                     ForEach(other) { room in
                                         RoomCell(room: room, context: context)
                                     }
