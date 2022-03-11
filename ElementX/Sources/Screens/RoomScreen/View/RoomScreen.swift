@@ -21,7 +21,7 @@ import Combine
 struct RoomScreen: View {
     
     @State private var scrollViewObserver: ScrollViewObserver = ScrollViewObserver()
-    @State private var messages: [RoomTimelineItem] = []
+    @State private var timelineItems: [RoomTimelineViewProvider] = []
     
     @State private var didRequestBackPagination = false
     @State private var hasPendingMessages = false
@@ -58,8 +58,15 @@ struct RoomScreen: View {
                     }
                 }
                 
-                ForEach(messages) { message in
-                    message.body
+                ForEach(timelineItems) { timelineItem in
+                    timelineItem
+                        .listRowSeparator(.hidden)
+                        .onAppear {
+                            context.send(viewAction: .itemAppeared(id: timelineItem.id))
+                        }
+                        .onDisappear {
+                            context.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                        }
                 }
                 
                 Color.clear
@@ -85,8 +92,8 @@ struct RoomScreen: View {
             // When the view state changes check whether the user is interacting with the scroll view.
             // Updating in that case causes undesired scrolling. Delay until the scroll view stops scrolling.
             // Also store previous top most message identifier to have something to scroll to after the update.
-            .onChange(of: context.viewState.messages) { newValue in
-                previousTopMostMessageIdentifier = messages.first?.id
+            .onChange(of: context.viewState.timelineItems) { newValue in
+                previousTopMostMessageIdentifier = timelineItems.first?.id
                 wasBottomVisible = scrollViewObserver.isBottomVisible
                 
                 if scrollViewObserver.isTracking == true {
@@ -94,17 +101,17 @@ struct RoomScreen: View {
                     return
                 }
                 
-                messages = newValue
+                timelineItems = newValue
             }
             // Check if we have pending messages to apply and apply them when the scroll finishes scrolling
             .onReceive(scrollViewObserver.didEndScrolling, perform: {
                 if hasPendingMessages {
-                    messages = context.viewState.messages
+                    timelineItems = context.viewState.timelineItems
                     hasPendingMessages = false
                 }
             })
             // Process timeline updates
-            .onChange(of: messages, perform: { _ in
+            .onChange(of: timelineItems, perform: { _ in
                 if didRequestBackPagination && wasBottomVisible {
                     scrollViewProxy.scrollTo(timelineBottomAnchor, anchor: .bottom)
                 } else if didRequestBackPagination == false {

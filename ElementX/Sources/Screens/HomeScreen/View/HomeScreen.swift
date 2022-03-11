@@ -24,79 +24,76 @@ struct HomeScreen: View {
     // MARK: Views
     
     var body: some View {
-        NavigationView {
-            VStack(spacing: 16.0) {
-                if context.viewState.isLoadingRooms {
-                    VStack {
-                        Text("Loading rooms")
-                        ProgressView()
-                    }
-                } else {
-                    List {
-                        Section("Rooms") {
-                            ForEach(context.viewState.unencryptedRooms) { room in
-                                RoomCell(room: room, context: context)
-                            }
-                            
-                            let other = context.viewState.encryptedRooms
-                            
-                            if other.count > 0 {
-                                DisclosureGroup("Encrypted") {
-                                    ForEach(other) { room in
-                                        RoomCell(room: room, context: context)
-                                    }
-                                }
-                            }
+        VStack(spacing: 16.0) {
+            if context.viewState.isLoadingRooms {
+                VStack {
+                    Text("Loading rooms")
+                    ProgressView()
+                }
+            } else {
+                List {
+                    Section("Rooms") {
+                        ForEach(context.viewState.unencryptedRooms) { room in
+                            RoomCell(room: room, context: context)
                         }
                         
-                        Section("People") {
-                            ForEach(context.viewState.unencryptedDMs) { room in
-                                RoomCell(room: room, context: context)
-                            }
-                            
-                            let other = context.viewState.encryptedDMs
-                            
-                            if other.count > 0 {
-                                DisclosureGroup("Encrypted") {
-                                    ForEach(other) { room in
-                                        RoomCell(room: room, context: context)
-                                    }
+                        let other = context.viewState.encryptedRooms
+                        
+                        if other.count > 0 {
+                            DisclosureGroup("Encrypted") {
+                                ForEach(other) { room in
+                                    RoomCell(room: room, context: context)
                                 }
                             }
                         }
                     }
-                    .listStyle(.plain)
-                }
-                
-                Spacer()
-            }
-            .ignoresSafeArea(.all, edges: .bottom)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    HStack {
-                        if let avatar = context.viewState.userAvatar {
-                            Image(uiImage: avatar)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40, alignment: .center)
-                                .mask(Circle())
-                        } else {
-                            let _ = context.send(viewAction: .loadUserAvatar)
+                    
+                    Section("People") {
+                        ForEach(context.viewState.unencryptedDMs) { room in
+                            RoomCell(room: room, context: context)
                         }
-                        Text("Hello, \(context.viewState.userDisplayName)!")
-                            .font(.subheadline)
-                            .fontWeight(.bold)
+                        
+                        let other = context.viewState.encryptedDMs
+                        
+                        if other.count > 0 {
+                            DisclosureGroup("Encrypted") {
+                                ForEach(other) { room in
+                                    RoomCell(room: room, context: context)
+                                }
+                            }
+                        }
                     }
                 }
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button("Logout") {
-                        context.send(viewAction: .logout)
+                .listStyle(.plain)
+            }
+            
+            Spacer()
+        }
+        .ignoresSafeArea(.all, edges: .bottom)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                HStack {
+                    if let avatar = context.viewState.userAvatar {
+                        Image(uiImage: avatar)
+                            .resizable()
+                            .scaledToFill()
+                            .frame(width: 40, height: 40, alignment: .center)
+                            .mask(Circle())
+                    } else {
+                        let _ = context.send(viewAction: .loadUserAvatar)
                     }
+                    Text("Hello, \(context.viewState.userDisplayName)!")
+                        .font(.subheadline)
+                        .fontWeight(.bold)
+                }
+            }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("Logout") {
+                    context.send(viewAction: .logout)
                 }
             }
         }
-        .navigationViewStyle(StackNavigationViewStyle())
     }
 }
 

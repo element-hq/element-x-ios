@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 protocol RoomTimelineControllerProtocol {
-    var timelineItems: [RoomTimelineItem] { get }
+    var timelineItems: [RoomTimelineViewProvider] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
     
     func paginateBackwards(_ count: UInt)

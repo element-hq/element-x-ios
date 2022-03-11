@@ -41,24 +41,28 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: RoomScreenViewState())
         
         state.roomTitle = roomProxy.name ?? ""
-        state.messages = timelineController.timelineItems
+        state.timelineItems = timelineController.timelineItems
         
         timelineController.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
             
             switch callback {
             case .updatedTimelineItems:
-                self.state.messages = timelineController.timelineItems
+                self.state.timelineItems = timelineController.timelineItems
             }
         }.store(in: &cancellables)
     }
-
+    
     // MARK: - Public
-
+    
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .loadPreviousPage:
             timelineController.paginateBackwards(Constants.backPaginationPageSize)
+        case .itemAppeared:
+            break
+        case .itemDisappeared:
+            break
         }
     }
 }

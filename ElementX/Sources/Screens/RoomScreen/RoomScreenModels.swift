@@ -22,9 +22,11 @@ enum RoomScreenViewModelResult {
 
 enum RoomScreenViewAction {
     case loadPreviousPage
+    case itemAppeared(id: String)
+    case itemDisappeared(id: String)
 }
 
 struct RoomScreenViewState: BindableState {
     var roomTitle: String = ""
-    var messages: [RoomTimelineItem] = []
+    var timelineItems: [RoomTimelineViewProvider] = []
 }

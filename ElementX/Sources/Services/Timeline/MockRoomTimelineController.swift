@@ -10,11 +10,15 @@ import Foundation
 import Combine
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
-    let timelineItems: [RoomTimelineItem] = [RoomTimelineItem.text(id: UUID().uuidString, senderDisplayName: "Anne", text: "You rock!", originServerTs: .now, shouldShowSenderDetails: true),
-                                             RoomTimelineItem.text(id: UUID().uuidString, senderDisplayName: "Anne", text: "Some other message from Anne", originServerTs: .now, shouldShowSenderDetails: false),
-                                             RoomTimelineItem.sectionTitle(id: UUID().uuidString, text: "The next day"),
-                                             RoomTimelineItem.text(id: UUID().uuidString, senderDisplayName: "Bob", text: "You rule!", originServerTs: .now, shouldShowSenderDetails: true)]
+    
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
+    
+    let timelineItems: [RoomTimelineViewProvider] =
+    [RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Yesterday")),
+     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You rock!", timestamp: "10:10 AM", shouldShowSenderDetails: true)),
+     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You also rule!", timestamp: "10:11 AM", shouldShowSenderDetails: false)),
+     RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Today")),
+     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Bob", text: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true))]
     
     func paginateBackwards(_ count: UInt) {
         
