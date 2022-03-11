@@ -24,25 +24,7 @@ enum RoomScreenViewAction {
     case loadPreviousPage
 }
 
-private var dateFormatter: DateFormatter = {
-    let dateFormatter = DateFormatter()
-    dateFormatter.dateStyle = .short
-    dateFormatter.timeStyle = .short
-    return dateFormatter
-}()
-
-struct RoomScreenMessage: Identifiable, Equatable {
-    let id: String
-    let sender: String
-    let text: String
-    let originServerTs: Date
-    
-    var timestamp: String {
-        dateFormatter.string(from: originServerTs)
-    }
-}
-
 struct RoomScreenViewState: BindableState {
-    var roomTitle: String?
-    var messages: [RoomScreenMessage] = []
+    var roomTitle: String = ""
+    var messages: [RoomTimelineItem] = []
 }

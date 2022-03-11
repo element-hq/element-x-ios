@@ -40,14 +40,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         super.init(initialViewState: RoomScreenViewState())
         
-        state.messages = buildRoomScreenMessages(timelineController.timelineItems)
+        state.roomTitle = roomProxy.name ?? ""
+        state.messages = timelineController.timelineItems
         
         timelineController.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
             
             switch callback {
             case .updatedTimelineItems:
-                self.state.messages = self.buildRoomScreenMessages(timelineController.timelineItems)
+                self.state.messages = timelineController.timelineItems
             }
         }.store(in: &cancellables)
     }
@@ -59,14 +60,5 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .loadPreviousPage:
             timelineController.paginateBackwards(Constants.backPaginationPageSize)
         }
-    }
-    
-    // MARK: - Private
-    
-    private func buildRoomScreenMessages(_ timelineItems: [RoomTimelineItemProtocol]) -> [RoomScreenMessage] {
-        timelineItems.map { RoomScreenMessage(id: $0.id,
-                                              sender: $0.senderDisplayName,
-                                              text: $0.text,
-                                              originServerTs: $0.originServerTs) }
     }
 }

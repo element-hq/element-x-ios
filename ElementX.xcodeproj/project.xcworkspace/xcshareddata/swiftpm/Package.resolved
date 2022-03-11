@@ -15,8 +15,8 @@
         "repositoryURL": "https://github.com/onevcat/Kingfisher",
         "state": {
           "branch": null,
-          "revision": "0c02c46cfdc0656ce74fd0963a75e5000a0b7f23",
-          "version": "7.1.2"
+          "revision": "32e4acdf6971f58f5ad552389cf2d7d016334eaf",
+          "version": "7.2.0"
         }
       },
       {
@@ -24,7 +24,16 @@
         "repositoryURL": "https://github.com/matrix-org/matrix-rust-components-swift.git",
         "state": {
           "branch": "main",
-          "revision": "497122432c79488e370df2164ae5637f32f82ca3",
+          "revision": "6741f728fedbceb53154c043486dc1790ed37811",
+          "version": null
+        }
+      },
+      {
+        "package": "Introspect",
+        "repositoryURL": "https://github.com/siteline/SwiftUI-Introspect.git",
+        "state": {
+          "branch": "master",
+          "revision": "72a509c93166540c0adf8323fd2652daade7f9f6",
           "version": null
         }
       },

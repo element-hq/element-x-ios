@@ -19,8 +19,7 @@
 		1859CF5527D7A6FF00E86E4E /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 1859CF5427D7A6FF00E86E4E /* MatrixRustSDK */; };
 		1863A3FC27BA5A9100B52E4D /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A3FB27BA5A9100B52E4D /* KeychainAccess */; };
 		1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A40527BA6DFC00B52E4D /* SwiftyBeaver */; };
-		18A318DC27DA42C9000867CD /* RoomTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A318DA27DA42C9000867CD /* RoomTimelineItemProtocol.swift */; };
-		18A318DD27DA42C9000867CD /* TextRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A318DB27DA42C9000867CD /* TextRoomTimelineItem.swift */; };
+		18A318DD27DA42C9000867CD /* RoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A318DB27DA42C9000867CD /* RoomTimelineItem.swift */; };
 		18F2BAD727D25B4000DD1988 /* RoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7327D25B4000DD1988 /* RoomProxyProtocol.swift */; };
 		18F2BAD827D25B4000DD1988 /* RoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7427D25B4000DD1988 /* RoomProxy.swift */; };
 		18F2BAD927D25B4000DD1988 /* MockRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7527D25B4000DD1988 /* MockRoomProxy.swift */; };
@@ -112,9 +111,7 @@
 		1850256727B6A135002E6B18 /* ElementX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ElementX.entitlements; sourceTree = "<group>"; };
 		1850256827B6A135002E6B18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1850256A27B6A135002E6B18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		18A318D827D9E7AD000867CD /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
-		18A318DA27DA42C9000867CD /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
-		18A318DB27DA42C9000867CD /* TextRoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRoomTimelineItem.swift; sourceTree = "<group>"; };
+		18A318DB27DA42C9000867CD /* RoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineItem.swift; sourceTree = "<group>"; };
 		18F2BA7327D25B4000DD1988 /* RoomProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxyProtocol.swift; sourceTree = "<group>"; };
 		18F2BA7427D25B4000DD1988 /* RoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		18F2BA7527D25B4000DD1988 /* MockRoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomProxy.swift; sourceTree = "<group>"; };
@@ -211,7 +208,6 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
-				18A318D827D9E7AD000867CD /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
@@ -281,8 +277,7 @@
 		18A318D927DA42C9000867CD /* TimelineItems */ = {
 			isa = PBXGroup;
 			children = (
-				18A318DA27DA42C9000867CD /* RoomTimelineItemProtocol.swift */,
-				18A318DB27DA42C9000867CD /* TextRoomTimelineItem.swift */,
+				18A318DB27DA42C9000867CD /* RoomTimelineItem.swift */,
 			);
 			path = TimelineItems;
 			sourceTree = "<group>";
@@ -742,7 +737,6 @@
 				18F2BAFF27D25B4000DD1988 /* HomeScreenModels.swift in Sources */,
 				18F2BB1527D25B4000DD1988 /* LoginScreenViewModelProtocol.swift in Sources */,
 				18F2BAEB27D25B4000DD1988 /* LabelledActivityIndicatorView.swift in Sources */,
-				18A318DC27DA42C9000867CD /* RoomTimelineItemProtocol.swift in Sources */,
 				18F2BAE427D25B4000DD1988 /* Presentable.swift in Sources */,
 				18F2BAF927D25B4000DD1988 /* SplashViewController.swift in Sources */,
 				18F2BAE327D25B4000DD1988 /* RootRouter.swift in Sources */,
@@ -782,7 +776,7 @@
 				18F2BB0127D25B4000DD1988 /* HomeScreenViewModel.swift in Sources */,
 				18F2BAF027D25B4000DD1988 /* ActivityDismissal.swift in Sources */,
 				18F2BADD27D25B4000DD1988 /* KeychainController.swift in Sources */,
-				18A318DD27DA42C9000867CD /* TextRoomTimelineItem.swift in Sources */,
+				18A318DD27DA42C9000867CD /* RoomTimelineItem.swift in Sources */,
 				18F2BAFB27D25B4000DD1988 /* HomeScreenCoordinator.swift in Sources */,
 				18F2BB0C27D25B4000DD1988 /* RoomScreenCoordinator.swift in Sources */,
 				18F2BB0E27D25B4000DD1988 /* RoomScreenViewModelProtocol.swift in Sources */,

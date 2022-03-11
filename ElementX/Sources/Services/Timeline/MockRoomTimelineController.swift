@@ -10,8 +10,10 @@ import Foundation
 import Combine
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
-    let timelineItems: [RoomTimelineItemProtocol] = [TextRoomTimelineItem(id: UUID().uuidString, senderDisplayName: "Anne", text: "You rock!", originServerTs: .now),
-                                                     TextRoomTimelineItem(id: UUID().uuidString, senderDisplayName: "Bob", text: "You rule!", originServerTs: .now)]
+    let timelineItems: [RoomTimelineItem] = [RoomTimelineItem.text(id: UUID().uuidString, senderDisplayName: "Anne", text: "You rock!", originServerTs: .now, shouldShowSenderDetails: true),
+                                             RoomTimelineItem.text(id: UUID().uuidString, senderDisplayName: "Anne", text: "Some other message from Anne", originServerTs: .now, shouldShowSenderDetails: false),
+                                             RoomTimelineItem.sectionTitle(id: UUID().uuidString, text: "The next day"),
+                                             RoomTimelineItem.text(id: UUID().uuidString, senderDisplayName: "Bob", text: "You rule!", originServerTs: .now, shouldShowSenderDetails: true)]
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     func paginateBackwards(_ count: UInt) {

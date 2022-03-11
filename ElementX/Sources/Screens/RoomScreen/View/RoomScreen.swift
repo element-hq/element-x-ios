@@ -21,7 +21,7 @@ import Combine
 struct RoomScreen: View {
     
     @State private var scrollViewObserver: ScrollViewObserver = ScrollViewObserver()
-    @State private var messages: [RoomScreenMessage] = []
+    @State private var messages: [RoomTimelineItem] = []
     
     @State private var didRequestBackPagination = false
     @State private var hasPendingMessages = false
@@ -37,16 +37,19 @@ struct RoomScreen: View {
         ScrollViewReader { scrollViewProxy in
             List {
                 if didRequestBackPagination == false {
-                    Color
-                        .clear
-                        .onAppear {
-                            guard didRequestBackPagination == false else {
-                                return
-                            }
-
-                            didRequestBackPagination = true
-                            context.send(viewAction: .loadPreviousPage)
+                    HStack {
+                        Spacer()
+                        ProgressView()
+                        Spacer()
+                    }
+                    .onAppear {
+                        guard didRequestBackPagination == false else {
+                            return
                         }
+                        
+                        didRequestBackPagination = true
+                        context.send(viewAction: .loadPreviousPage)
+                    }
                 } else {
                     HStack {
                         Spacer()
@@ -56,17 +59,7 @@ struct RoomScreen: View {
                 }
                 
                 ForEach(messages) { message in
-                    VStack(alignment: .leading) {
-                        HStack {
-                            Text(message.sender)
-                            Spacer()
-                            Text(message.timestamp)
-                        }
-                        .font(.footnote)
-                        Text(message.text)
-                    }
-                    .listRowSeparator(.hidden)
-                    .id(message.id)
+                    message.body
                 }
                 
                 Color.clear
@@ -74,6 +67,7 @@ struct RoomScreen: View {
                     .id(timelineBottomAnchor)
             }
             .listStyle(.plain)
+            .navigationTitle(context.viewState.roomTitle)
             .environment(\.defaultMinListRowHeight, 0.0)
             .navigationBarTitleDisplayMode(.inline)
             // Fetch the underlying UIScrollView and start observing it
