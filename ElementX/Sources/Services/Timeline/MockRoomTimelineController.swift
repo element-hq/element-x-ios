@@ -13,14 +13,13 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
-    let timelineItems: [RoomTimelineViewProvider] =
-    [RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Yesterday")),
-     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You rock!", timestamp: "10:10 AM", shouldShowSenderDetails: true)),
-     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You also rule!", timestamp: "10:11 AM", shouldShowSenderDetails: false)),
-     RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Today")),
-     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Bob", text: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true))]
+    var timelineItems: [RoomTimelineViewProvider] = [RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Yesterday")),
+                                                     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You rock!", timestamp: "10:10 AM", shouldShowSenderDetails: true)),
+                                                     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You also rule!", timestamp: "10:11 AM", shouldShowSenderDetails: false)),
+                                                     RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Today")),
+                                                     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Bob", text: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true))]
     
-    func paginateBackwards(_ count: UInt) {
-        
+    func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineControllerError>) -> Void)) {
+        callbacks.send(.updatedTimelineItems)
     }
 }

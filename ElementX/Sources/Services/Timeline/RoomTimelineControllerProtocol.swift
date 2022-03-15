@@ -9,9 +9,17 @@
 import Foundation
 import Combine
 
+enum RoomTimelineControllerCallback {
+    case updatedTimelineItems
+}
+
+enum RoomTimelineControllerError: Error {
+    case generic
+}
+
 protocol RoomTimelineControllerProtocol {
     var timelineItems: [RoomTimelineViewProvider] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
     
-    func paginateBackwards(_ count: UInt)
+    func paginateBackwards(_ count: UInt, callback: @escaping ((Result<Void, RoomTimelineControllerError>) -> Void))
 }

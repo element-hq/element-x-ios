@@ -10,10 +10,6 @@ import Foundation
 import Combine
 import MatrixRustSDK
 
-enum RoomTimelineControllerCallback {
-    case updatedTimelineItems
-}
-
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProvider
     private var cancellables = Set<AnyCancellable>()
@@ -29,49 +25,61 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             guard let self = self else { return }
             
             switch callback {
-            case .updatedMessages:
-                var newTimelineItems = [RoomTimelineViewProvider]()
-                
-                var previousMessage: Message?
-                for message in self.timelineProvider.messages {
-                    let timestamp = Date(timeIntervalSince1970: TimeInterval(message.originServerTs()))
-                    
-                    let areMessagesFromTheSameDay = self.haveSameDay(lhs: previousMessage, rhs: message)
-                    let shouldAddSectionHeader = !areMessagesFromTheSameDay
-                    
-                    if shouldAddSectionHeader {
-                        let item = SeparatorRoomTimelineItem(id: timestamp.ISO8601Format(),
-                                                             text: timestamp.formatted(date: .long, time: .omitted))
-                        
-                        newTimelineItems.append(RoomTimelineViewProvider.separator(item))
-                    }
-                    
-                    let areMessagesFromTheSameSender = (previousMessage?.sender() == message.sender())
-                    let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
-                    
-                    let item = TextRoomTimelineItem(id: message.id(),
-                                                    senderDisplayName: message.sender(),
-                                                    text: message.content(),
-                                                    timestamp: timestamp.formatted(date: .omitted, time: .shortened),
-                                                    shouldShowSenderDetails: shouldShowSenderDetails)
-                    
-                    newTimelineItems.append(RoomTimelineViewProvider.text(item))
-                    
-                    previousMessage = message
-                }
-                
-                self.timelineItems = newTimelineItems
-                
-                self.callbacks.send(.updatedTimelineItems)
+            case .addedMessage:
+                self.rebuildTimeline()
             }
         }.store(in: &cancellables)
     }
     
-    func paginateBackwards(_ count: UInt) {
-        timelineProvider.paginateBackwards(count)
+    func paginateBackwards(_ count: UInt, callback: @escaping ((Result<Void, RoomTimelineControllerError>) -> Void)) {
+        timelineProvider.paginateBackwards(count) { [weak self] result in
+            switch result {
+            case .success:
+                callback(.success(()))
+                self?.rebuildTimeline()
+            case .failure:
+                callback(.failure(.generic))
+            }
+        }
     }
     
     // MARK: - Private
+    
+    private func rebuildTimeline() {
+        var newTimelineItems = [RoomTimelineViewProvider]()
+        
+        var previousMessage: Message?
+        for message in self.timelineProvider.messages {
+            let timestamp = Date(timeIntervalSince1970: TimeInterval(message.originServerTs()))
+            
+            let areMessagesFromTheSameDay = self.haveSameDay(lhs: previousMessage, rhs: message)
+            let shouldAddSectionHeader = !areMessagesFromTheSameDay
+            
+            if shouldAddSectionHeader {
+                let item = SeparatorRoomTimelineItem(id: timestamp.ISO8601Format(),
+                                                     text: timestamp.formatted(date: .long, time: .omitted))
+                
+                newTimelineItems.append(RoomTimelineViewProvider.separator(item))
+            }
+            
+            let areMessagesFromTheSameSender = (previousMessage?.sender() == message.sender())
+            let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
+            
+            let item = TextRoomTimelineItem(id: message.id(),
+                                            senderDisplayName: message.sender(),
+                                            text: message.content(),
+                                            timestamp: timestamp.formatted(date: .omitted, time: .shortened),
+                                            shouldShowSenderDetails: shouldShowSenderDetails)
+            
+            newTimelineItems.append(RoomTimelineViewProvider.text(item))
+            
+            previousMessage = message
+        }
+        
+        self.timelineItems = newTimelineItems
+        
+        self.callbacks.send(.updatedTimelineItems)
+    }
     
     private func haveSameDay(lhs: Message?, rhs: Message?) -> Bool {
         guard let lhs = lhs, let rhs = rhs else {

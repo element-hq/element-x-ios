@@ -29,4 +29,5 @@ enum RoomScreenViewAction {
 struct RoomScreenViewState: BindableState {
     var roomTitle: String = ""
     var timelineItems: [RoomTimelineViewProvider] = []
+    var isBackPaginating = false
 }

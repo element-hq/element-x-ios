@@ -20,47 +20,32 @@ import Combine
 
 struct RoomScreen: View {
     
-    @State private var scrollViewObserver: ScrollViewObserver = ScrollViewObserver()
+    @State private var tableViewObserver: TableViewObserver = TableViewObserver()
     @State private var timelineItems: [RoomTimelineViewProvider] = []
-    
-    @State private var didRequestBackPagination = false
-    @State private var hasPendingMessages = false
-    @State private var wasBottomVisible = false
-    
-    @State private var previousTopMostMessageIdentifier: String?
-    
-    private let timelineBottomAnchor = "TimelineBottomAnchor"
+    @State private var hasPendingChanges = false
+    @State private var text: String = ""
     
     @ObservedObject var context: RoomScreenViewModel.Context
     
     var body: some View {
-        ScrollViewReader { scrollViewProxy in
+        // The observer behaves differently when not in an reader
+        ScrollViewReader { _ in
             List {
-                if didRequestBackPagination == false {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
-                    .onAppear {
-                        guard didRequestBackPagination == false else {
-                            return
-                        }
-                        
-                        didRequestBackPagination = true
-                        context.send(viewAction: .loadPreviousPage)
-                    }
-                } else {
-                    HStack {
-                        Spacer()
-                        ProgressView()
-                        Spacer()
-                    }
+                HStack {
+                    Spacer()
+                    ProgressView()
+                        .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
+                        .animation(.default, value: context.viewState.isBackPaginating)
+                    Spacer()
                 }
                 
-                ForEach(timelineItems) { timelineItem in
+                // No idea why previews don't work otherwise
+                ForEach(isPreview ? context.viewState.timelineItems : timelineItems) { timelineItem in
                     timelineItem
                         .listRowSeparator(.hidden)
+                        .task {
+                            
+                        }
                         .onAppear {
                             context.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
@@ -68,120 +53,189 @@ struct RoomScreen: View {
                             context.send(viewAction: .itemDisappeared(id: timelineItem.id))
                         }
                 }
-                
-                Color.clear
-                    .listRowSeparator(.hidden)
-                    .id(timelineBottomAnchor)
             }
             .listStyle(.plain)
             .navigationTitle(context.viewState.roomTitle)
             .environment(\.defaultMinListRowHeight, 0.0)
             .navigationBarTitleDisplayMode(.inline)
-            // Fetch the underlying UIScrollView and start observing it
-            .introspectTableView { scrollView in
-                if scrollView == scrollViewObserver.scrollView {
+            .introspectTableView { tableView in
+                if tableView == tableViewObserver.tableView {
                     return
                 }
                 
-                scrollViewObserver = ScrollViewObserver(scrollView: scrollView)
-            }
-            // Scroll to the bottom when the timeline first appears
-            .onAppear {
-                scrollViewProxy.scrollTo(timelineBottomAnchor, anchor: .bottom)
-            }
-            // When the view state changes check whether the user is interacting with the scroll view.
-            // Updating in that case causes undesired scrolling. Delay until the scroll view stops scrolling.
-            // Also store previous top most message identifier to have something to scroll to after the update.
-            .onChange(of: context.viewState.timelineItems) { newValue in
-                previousTopMostMessageIdentifier = timelineItems.first?.id
-                wasBottomVisible = scrollViewObserver.isBottomVisible
+                tableViewObserver = TableViewObserver(tableView: tableView)
                 
-                if scrollViewObserver.isTracking == true {
-                    hasPendingMessages = true
+                // Check if there are enough items. Otherwise ask for more
+                attemptBackPagination()
+            }
+            .onReceive(tableViewObserver.scrollViewDidReachTop, perform: {
+                if context.viewState.isBackPaginating {
                     return
                 }
                 
-                timelineItems = newValue
-            }
-            // Check if we have pending messages to apply and apply them when the scroll finishes scrolling
-            .onReceive(scrollViewObserver.didEndScrolling, perform: {
-                if hasPendingMessages {
-                    timelineItems = context.viewState.timelineItems
-                    hasPendingMessages = false
-                }
+                attemptBackPagination()
             })
-            // Process timeline updates
-            .onChange(of: timelineItems, perform: { _ in
-                if didRequestBackPagination && wasBottomVisible {
-                    scrollViewProxy.scrollTo(timelineBottomAnchor, anchor: .bottom)
-                } else if didRequestBackPagination == false {
-                    if wasBottomVisible {
-                        scrollViewProxy.scrollTo(timelineBottomAnchor, anchor: .bottom)
-                    }
-                } else {
-                    // Manual scrolling breaks inertia. Don't do it if the scroll view is decelerating
-                    if scrollViewObserver.isDecelerating == false {
-                        scrollViewProxy.scrollTo(previousTopMostMessageIdentifier, anchor: .top)
-                    }
+            .onChange(of: context.viewState.timelineItems) { _ in
+                // Don't update the list while moving
+                if tableViewObserver.isDecelerating || tableViewObserver.isTracking {
+                    hasPendingChanges = true
+                    return
                 }
                 
-                didRequestBackPagination = false
+                tableViewObserver.saveCurrentOffset()
+                timelineItems = context.viewState.timelineItems
+            }
+            .onReceive(tableViewObserver.scrollViewDidRest, perform: {
+                if hasPendingChanges == false {
+                    return
+                }
+                
+                tableViewObserver.saveCurrentOffset()
+                timelineItems = context.viewState.timelineItems
+                hasPendingChanges = false
+            })
+            .onChange(of: timelineItems, perform: { _ in
+                tableViewObserver.restoreSavedOffset()
+                
+                // Check if there are enough items. Otherwise ask for more
+                attemptBackPagination()
             })
         }
     }
+    
+    private func attemptBackPagination() {
+        if context.viewState.isBackPaginating {
+            return
+        }
+        
+        if tableViewObserver.isTopVisible == false {
+            return
+        }
+        context.send(viewAction: .loadPreviousPage)
+    }
+    
+    private var isPreview: Bool {
+#if DEBUG
+        return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
+#else
+        return false
+#endif
+    }
 }
 
-/// Simple wrapper around an UIScrollView that publishes when it finishes scrolling
-class ScrollViewObserver: NSObject, UIScrollViewDelegate {
-    private(set) var scrollView: UIScrollView?
+private class TableViewObserver: NSObject, UITableViewDelegate {
     
-    let didEndScrolling = PassthroughSubject<Void, Never>()
+    private enum ContentOffsetDetails {
+        case topOffset(previousVisibleIndexPath: IndexPath, previousItemCount: Int)
+        case bottomOffset
+    }
+    
+    private let topTriggerHeight = 50.0
+    private var isAtTop: Bool = false
+    private var offsetDetails: ContentOffsetDetails?
+    
+    private(set) var tableView: UITableView?
+    
+    let scrollViewDidRest = PassthroughSubject<Void, Never>()
+    let scrollViewDidReachTop = PassthroughSubject<Void, Never>()
     
     override init() {
         
     }
     
-    init(scrollView: UIScrollView) {
-        self.scrollView = scrollView
+    init(tableView: UITableView) {
+        self.tableView = tableView
         super.init()
         
-        scrollView.delegate = self
+        tableView.delegate = self
+    }
+    
+    func saveCurrentOffset() {
+        guard let tableView = tableView,
+              tableView.numberOfSections > 0 else {
+            return
+        }
+    
+        if isBottomVisible {
+            offsetDetails = .bottomOffset
+        } else if isTopVisible {
+            if let topIndexPath = tableView.indexPathsForVisibleRows?.first {
+                offsetDetails = .topOffset(previousVisibleIndexPath: topIndexPath,
+                                           previousItemCount: tableView.numberOfRows(inSection: 0))
+            }
+        }
+    }
+    
+    func restoreSavedOffset() {
+        defer {
+            offsetDetails = nil
+        }
+        
+        guard let tableView = tableView,
+              tableView.numberOfSections > 0  else {
+                  return
+        }
+        
+        let currentItemCount = tableView.numberOfRows(inSection: 0)
+        
+        switch offsetDetails {
+        case .bottomOffset:
+            tableView.scrollToRow(at: .init(row: max(0, currentItemCount - 1), section: 0), at: .bottom, animated: false)
+        case .topOffset(let indexPath, let previousItemCount):
+            let row = indexPath.row + max(0, (currentItemCount - previousItemCount))
+            if row < currentItemCount {
+                tableView.scrollToRow(at: .init(row: row, section: 0), at: .top, animated: false)
+            }
+        case .none:
+            break
+        }
     }
     
     var isTracking: Bool {
-        self.scrollView?.isTracking == true
+        self.tableView?.isTracking == true
     }
     
     var isDecelerating: Bool {
-        self.scrollView?.isDecelerating == true
+        self.tableView?.isDecelerating == true
     }
     
     var isTopVisible: Bool {
-        guard let scrollView = scrollView else {
+        guard let scrollView = tableView else {
             return false
         }
 
-        return (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) <= 0.0
-    }
-    
-    var isBottomVisible: Bool {
-        guard let scrollView = scrollView else {
-            return false
-        }
-
-        return (scrollView.contentOffset.y) >= (scrollView.contentSize.height - scrollView.frame.size.height)
+        return (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) <= topTriggerHeight
     }
     
     // MARK: - UIScrollViewDelegate
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let isTopVisible = isTopVisible
+        if isTopVisible && isAtTop != isTopVisible {
+            scrollViewDidReachTop.send(())
+        }
+        
+        isAtTop = isTopVisible
+    }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        didEndScrolling.send(())
+        scrollViewDidRest.send(())
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerating: Bool) {
         if decelerating == false {
-            didEndScrolling.send(())
+            scrollViewDidRest.send(())
         }
+    }
+    
+    // MARK: - Private
+    
+    private var isBottomVisible: Bool {
+        guard let scrollView = tableView else {
+            return false
+        }
+
+        return (scrollView.contentOffset.y) >= (scrollView.contentSize.height - scrollView.frame.size.height)
     }
 }
 
@@ -191,6 +245,7 @@ struct RoomScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = RoomScreenViewModel(roomProxy: MockRoomProxy(displayName: "Test"),
                                             timelineController: MockRoomTimelineController())
+        
         RoomScreen(context: viewModel.context)
     }
 }

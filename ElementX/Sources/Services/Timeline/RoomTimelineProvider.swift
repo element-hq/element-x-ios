@@ -11,14 +11,16 @@ import Combine
 import MatrixRustSDK
 
 enum RoomTimelineCallback {
-    case updatedMessages
+    case addedMessage
+}
+
+enum RoomTimelineError: Error {
+    case generic
 }
 
 class RoomTimelineProvider {
     private let roomProxy: RoomProxyProtocol
     private var cancellables = Set<AnyCancellable>()
-    
-    private var paginationCounter: UInt = 0
     
     let callbacks = PassthroughSubject<RoomTimelineCallback, Never>()
     private(set) var messages = [Message]()
@@ -32,24 +34,21 @@ class RoomTimelineProvider {
             switch callback {
             case .addedMessage(let message):
                 self.messages.append(message)
+                self.callbacks.send(.addedMessage)
             case .updatedLastMessage:
                 break
             }
-            
-            self.callbacks.send(.updatedMessages)
-            
         }.store(in: &cancellables)
     }
     
-    func paginateBackwards(_ count: UInt) {
+    func paginateBackwards(_ count: UInt, callback: ((Result<([Message]), RoomTimelineError>) -> Void)?) {
         self.roomProxy.paginateBackwards(count: count) { result in
             switch result {
             case .success(let messages):
                 self.messages.insert(contentsOf: messages.reversed(), at: 0)
-                self.callbacks.send(.updatedMessages)
-            case .failure(let error):
-                MXLog.debug("Failed paginating backwards with error: \(error)")
-                self.callbacks.send(.updatedMessages)
+                callback?(.success((self.messages)))
+            case .failure:
+                callback?(.failure(.generic))
             }
         }
     }

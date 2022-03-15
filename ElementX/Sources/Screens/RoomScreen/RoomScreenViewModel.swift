@@ -24,7 +24,7 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState,
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     
     private struct Constants {
-        static let backPaginationPageSize: UInt = 20
+        static let backPaginationPageSize: UInt = 30
     }
 
     private let roomProxy: RoomProxyProtocol
@@ -58,7 +58,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .loadPreviousPage:
-            timelineController.paginateBackwards(Constants.backPaginationPageSize)
+            state.isBackPaginating = true
+            timelineController.paginateBackwards(Constants.backPaginationPageSize) { [weak self] _ in
+                self?.state.isBackPaginating = false
+            }
         case .itemAppeared:
             break
         case .itemDisappeared:
