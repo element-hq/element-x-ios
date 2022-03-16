@@ -17,8 +17,5 @@
 import Foundation
 
 protocol RoomScreenViewModelProtocol {
-    
-    var completion: ((RoomScreenViewModelResult) -> Void)? { get set }
-    @available(iOS 14, *)
     var context: RoomScreenViewModelType.Context { get }
 }

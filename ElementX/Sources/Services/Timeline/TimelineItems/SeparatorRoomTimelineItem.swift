@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct SeparatorRoomTimelineItem: Identifiable, Equatable {
+struct SeparatorRoomTimelineItem: TimelineItemProtocol, Identifiable, Equatable {
     let id: String
     let text: String
 }

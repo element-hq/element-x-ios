@@ -8,7 +8,10 @@
 
 import Foundation
 
-struct ImageRoomTimelineItem: Identifiable, Equatable {
+struct ImageRoomTimelineItem: TimelineItemProtocol, Identifiable, Equatable {
     let id: String
+    let senderDisplayName: String
     let text: String
+    let timestamp: String
+    let shouldShowSenderDetails: Bool
 }

@@ -117,10 +117,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
-            coordinator.completion = { _ in
-                
-            }
-            
             self.add(childCoordinator: coordinator)
             self.navigationRouter.push(coordinator) { [weak self] in
                 guard let self = self else { return }

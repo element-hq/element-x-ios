@@ -17,7 +17,10 @@ struct ImageRoomTimelineView: View {
         if let loadedImage = loadedImage {
             Image(uiImage: loadedImage)
         } else {
-            ProgressView()
+            VStack {
+                Image(systemName: "photo")
+                ProgressView()
+            }
         }
     }
 }

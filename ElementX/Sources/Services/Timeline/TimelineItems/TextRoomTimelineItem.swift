@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct TextRoomTimelineItem: Identifiable, Equatable {
+struct TextRoomTimelineItem: TimelineItemProtocol, Identifiable, Equatable {
     let id: String
     let senderDisplayName: String
     let text: String

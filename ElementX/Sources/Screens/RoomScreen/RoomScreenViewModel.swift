@@ -30,8 +30,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
 
-    var completion: ((RoomScreenViewModelResult) -> Void)?
-
     // MARK: - Setup
 
     init(roomProxy: RoomProxyProtocol, timelineController: RoomTimelineControllerProtocol) {

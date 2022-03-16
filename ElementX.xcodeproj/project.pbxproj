@@ -28,6 +28,8 @@
 		18C5745427E1D88E00D70937 /* TextRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745327E1D88E00D70937 /* TextRoomMessage.swift */; };
 		18C5745627E1DCA800D70937 /* RoomMessageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */; };
 		18C5745827E1EB6E00D70937 /* TimelineItemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745727E1EB6E00D70937 /* TimelineItemFactory.swift */; };
+		18DF7C2A27E23E3A00291672 /* TimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C2927E23E3A00291672 /* TimelineItemProtocol.swift */; };
+		18DF7C2C27E23EC000291672 /* TimelineViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C2B27E23EC000291672 /* TimelineViewFactory.swift */; };
 		18F2BADA27D25B4000DD1988 /* RoomTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7727D25B4000DD1988 /* RoomTimelineProvider.swift */; };
 		18F2BADB27D25B4000DD1988 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7927D25B4000DD1988 /* AuthenticationCoordinator.swift */; };
 		18F2BADC27D25B4000DD1988 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7A27D25B4000DD1988 /* UserSession.swift */; };
@@ -132,6 +134,8 @@
 		18C5745327E1D88E00D70937 /* TextRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRoomMessage.swift; sourceTree = "<group>"; };
 		18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMessageFactory.swift; sourceTree = "<group>"; };
 		18C5745727E1EB6E00D70937 /* TimelineItemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemFactory.swift; sourceTree = "<group>"; };
+		18DF7C2927E23E3A00291672 /* TimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemProtocol.swift; sourceTree = "<group>"; };
+		18DF7C2B27E23EC000291672 /* TimelineViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineViewFactory.swift; sourceTree = "<group>"; };
 		18F2BA7727D25B4000DD1988 /* RoomTimelineProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineProvider.swift; sourceTree = "<group>"; };
 		18F2BA7927D25B4000DD1988 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		18F2BA7A27D25B4000DD1988 /* UserSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
@@ -303,6 +307,8 @@
 			isa = PBXGroup;
 			children = (
 				18C5745727E1EB6E00D70937 /* TimelineItemFactory.swift */,
+				18DF7C2927E23E3A00291672 /* TimelineItemProtocol.swift */,
+				18DF7C2B27E23EC000291672 /* TimelineViewFactory.swift */,
 				18A318DB27DA42C9000867CD /* RoomTimelineViewProvider.swift */,
 				18F9889727DB7473002F48B4 /* ImageRoomTimelineItem.swift */,
 				18F9889D27DB752B002F48B4 /* ImageRoomTimelineView.swift */,
@@ -798,6 +804,7 @@
 				18F2BB1527D25B4000DD1988 /* LoginScreenViewModelProtocol.swift in Sources */,
 				18F2BAEB27D25B4000DD1988 /* LabelledActivityIndicatorView.swift in Sources */,
 				18F2BAE427D25B4000DD1988 /* Presentable.swift in Sources */,
+				18DF7C2A27E23E3A00291672 /* TimelineItemProtocol.swift in Sources */,
 				18F2BAF927D25B4000DD1988 /* SplashViewController.swift in Sources */,
 				18F2BAE327D25B4000DD1988 /* RootRouter.swift in Sources */,
 				18F2BAE527D25B4000DD1988 /* NavigationModule.swift in Sources */,
@@ -853,6 +860,7 @@
 				18C5744E27E1D84000D70937 /* MockRoomProxy.swift in Sources */,
 				18F2BADC27D25B4000DD1988 /* UserSession.swift in Sources */,
 				18F2BAEF27D25B4000DD1988 /* ActivityRequest.swift in Sources */,
+				18DF7C2C27E23EC000291672 /* TimelineViewFactory.swift in Sources */,
 				18C5745827E1EB6E00D70937 /* TimelineItemFactory.swift in Sources */,
 				18F2BAEE27D25B4000DD1988 /* Activity.swift in Sources */,
 				18F2BAEC27D25B4000DD1988 /* ToastActivityPresenter.swift in Sources */,

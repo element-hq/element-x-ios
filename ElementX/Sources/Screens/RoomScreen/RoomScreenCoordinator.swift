@@ -34,7 +34,6 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var completion: ((RoomScreenViewModelResult) -> Void)?
     
     // MARK: - Setup
     
@@ -43,7 +42,9 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
         self.parameters = parameters
         
         let timelineProvider = RoomTimelineProvider(roomProxy: parameters.roomProxy)
-        let timelineController = RoomTimelineController(timelineProvider: timelineProvider)
+        let timelineController = RoomTimelineController(timelineProvider: timelineProvider,
+                                                        timelineItemFactory: TimelineItemFactory(),
+                                                        timelineViewFactory: TimelineViewFactory())
         
         let viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy, timelineController: timelineController)
         let view = RoomScreen(context: viewModel.context)
@@ -53,12 +54,7 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Public
     func start() {
-        MXLog.debug("[RoomScreenCoordinator] did start.")
-        roomScreenViewModel.completion = { [weak self] result in
-            MXLog.debug("[RoomScreenCoordinator] RoomScreenViewModel did complete with result: \(result).")
-            guard let self = self else { return }
-            self.completion?(result)
-        }
+        
     }
     
     func toPresentable() -> UIViewController {

@@ -12,14 +12,20 @@ import MatrixRustSDK
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProvider
+    private let timelineItemFactory: TimelineItemFactory
+    private let timelineViewFactory: TimelineViewFactory
     private var cancellables = Set<AnyCancellable>()
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private(set) var timelineItems = [RoomTimelineViewProvider]()
     
-    init(timelineProvider: RoomTimelineProvider) {
+    init(timelineProvider: RoomTimelineProvider,
+         timelineItemFactory: TimelineItemFactory,
+         timelineViewFactory: TimelineViewFactory) {
         self.timelineProvider = timelineProvider
+        self.timelineItemFactory = timelineItemFactory
+        self.timelineViewFactory = timelineViewFactory
         
         self.timelineProvider.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
@@ -63,13 +69,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
             let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
             
-            let item = TextRoomTimelineItem(id: message.id,
-                                            senderDisplayName: message.sender,
-                                            text: message.content,
-                                            timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
-                                            shouldShowSenderDetails: shouldShowSenderDetails)
-            
-            newTimelineItems.append(RoomTimelineViewProvider.text(item))
+            let timelineItem = timelineItemFactory.buildTimelineItemFor(message, showSenderDetails: shouldShowSenderDetails)
+            newTimelineItems.append(timelineViewFactory.buildTimelineViewFor(timelineItem))
             
             previousMessage = message
         }
