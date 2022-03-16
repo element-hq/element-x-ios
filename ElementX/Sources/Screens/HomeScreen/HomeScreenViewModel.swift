@@ -28,7 +28,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private var roomUpdateListeners = Set<AnyCancellable>()
     private var roomList: [RoomProxyProtocol]? {
         didSet {
-            self.state.isLoadingRooms = (roomList == nil)
+            self.state.isLoadingRooms = (roomList?.count ?? 0 == 0)
         }
     }
     
@@ -50,8 +50,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .logout:
             self.completion?(.logout)
         case .loadRoomData(let roomIdentifier):
-            self.loadAvatarForRoomWithIdentifier(roomIdentifier)
-            self.loadRoomDisplayNameForRoomWithIdentifier(roomIdentifier)
+            self.loadRoomDataForIdentifier(roomIdentifier)
         case .loadUserAvatar:
             self.completion?(.loadUserAvatar)
         case .selectRoom(let roomIdentifier):
@@ -60,27 +59,25 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     func updateWithRoomList(_ roomList: [RoomProxyProtocol]) {
+        self.roomList = roomList
+        
+        state.rooms = roomList.map { roomProxy in
+            roomFromProxy(roomProxy)
+        }
         
         roomUpdateListeners.removeAll()
         
-        self.roomList = roomList
-        
         roomList.forEach({ roomProxy  in
-            roomProxy.paginateBackwards(count: 1, callback: nil)
             roomProxy.callbacks.sink { [weak self] callback in
                 switch callback {
                 case .updatedLastMessage:
-                    self?.updateRoomForProxy(roomProxy)
+                    self?.loadLastMessageForRoomWithIdentifier(roomProxy.id)
                 default:
                     break
                 }
             }
             .store(in: &roomUpdateListeners)
         })
-        
-        state.rooms = roomList.map { roomProxy in
-            roomFromProxy(roomProxy)
-        }
     }
     
     func updateWithUserAvatar(_ avatar: UIImage?) {
@@ -88,6 +85,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func loadRoomDataForIdentifier(_ roomIdentifier: String) {
+        loadAvatarForRoomWithIdentifier(roomIdentifier)
+        loadRoomDisplayNameForRoomWithIdentifier(roomIdentifier)
+        loadLastMessageForRoomWithIdentifier(roomIdentifier)
+    }
     
     private func loadAvatarForRoomWithIdentifier(_ roomIdentifier: String) {
         guard let room = roomList?.filter({ $0.id == roomIdentifier }).first,
@@ -126,6 +129,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
+    private func updateAvatar(_ avatar: UIImage?, forRoomWithIdentifier roomIdentifier: String) {
+        guard let index = self.state.rooms.firstIndex(where: { $0.id == roomIdentifier }) else {
+            return
+        }
+        
+        self.state.rooms[index].avatar = avatar
+    }
+    
     private func loadRoomDisplayNameForRoomWithIdentifier(_ roomIdentifier: String) {
         guard let room = roomList?.filter({ $0.id == roomIdentifier }).first else {
             return
@@ -151,24 +162,37 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.state.rooms[index].displayName = displayName
     }
     
-    private func updateAvatar(_ avatar: UIImage?, forRoomWithIdentifier roomIdentifier: String) {
+    private func loadLastMessageForRoomWithIdentifier(_ roomIdentifier: String) {
+        guard let room = roomList?.filter({ $0.id == roomIdentifier }).first else {
+            return
+        }
+        
+        if let lastMessage = room.lastMessage {
+            self.updateLastMessage(lastMessage, forRoomWithIdentifier: roomIdentifier)
+        } else {
+            room.paginateBackwards(count: 1) { result in
+                switch result {
+                case .success(let messages):
+                    guard let lastMessage = messages.last else {
+                        return
+                    }
+                    
+                    self.updateLastMessage(lastMessage.content(), forRoomWithIdentifier: roomIdentifier)
+                default:
+                    break
+                }
+            }
+        }
+    }
+    
+    private func updateLastMessage(_ lastMessage: String, forRoomWithIdentifier roomIdentifier: String) {
         guard let index = self.state.rooms.firstIndex(where: { $0.id == roomIdentifier }) else {
             return
         }
         
-        self.state.rooms[index].avatar = avatar
+        self.state.rooms[index].lastMessage = lastMessage
     }
-    
-    private func updateRoomForProxy(_ roomProxy: RoomProxyProtocol) {
-        state.rooms.updateEach { room in
-            if room.id != roomProxy.id {
-                return
-            }
-            
-            room = roomFromProxy(roomProxy)
-        }
-    }
-    
+        
     private func roomFromProxy(_ roomProxy: RoomProxyProtocol) -> HomeScreenRoom {
         HomeScreenRoom(id: roomProxy.id,
                        displayName: roomProxy.name,

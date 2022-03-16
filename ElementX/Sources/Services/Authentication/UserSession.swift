@@ -101,6 +101,8 @@ class UserSession: ClientDelegate {
                 self.rooms = rooms
             }
         }
+        
+        client.setDelegate(delegate: nil)
     }
     
     // MARK: Private

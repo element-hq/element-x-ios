@@ -64,7 +64,7 @@ struct HomeScreenRoom: Identifiable {
     var displayName: String?
     
     let topic: String?
-    let lastMessage: String?
+    var lastMessage: String?
     
     var avatar: UIImage?
     

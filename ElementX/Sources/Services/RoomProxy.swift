@@ -82,6 +82,10 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     
     var lastMessage: String? {
         didSet {
+            if lastMessage == oldValue {
+                return
+            }
+            
             callbacks.send(.updatedLastMessage)
         }
     }
@@ -141,7 +145,7 @@ class RoomProxy: RoomProxyProtocol, Equatable {
                 callback?(.success(messages))
                 
                 if self.lastMessage == nil {
-                    self.lastMessage = messages.last?.content()
+                    self.lastMessage = messages.last?.content() ?? ""
                 }
             }
         }

@@ -114,7 +114,6 @@ struct RoomCell: View {
                         .frame(width: 40, height: 40)
                         .mask(Circle())
                 } else {
-                    let _ = context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
                     Image(systemName: "person.3")
                         .frame(width: 40, height: 40)
                 }
@@ -140,6 +139,9 @@ struct RoomCell: View {
                 }
             }
             .frame(minHeight: 60.0)
+            .onAppear {
+                context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
+            }
         }
     }
     

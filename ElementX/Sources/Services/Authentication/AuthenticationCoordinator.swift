@@ -134,6 +134,8 @@ class AuthenticationCoordinator: Coordinator {
                     completion(.success(()))
                 }
             } catch {
+                MXLog.error("Failed logging in with error: \(error)")
+                
                 DispatchQueue.main.async {
                     completion(.failure(.failedLoggingIn))
                 }
@@ -156,6 +158,8 @@ class AuthenticationCoordinator: Coordinator {
                     completion(.success(()))
                 }
             } catch {
+                MXLog.error("Failed restoring login with error: \(error)")
+                
                 DispatchQueue.main.async {
                     completion(.failure(.failedRestoringLogin))
                 }
