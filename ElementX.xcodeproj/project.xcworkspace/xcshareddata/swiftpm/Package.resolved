@@ -20,15 +20,6 @@
         }
       },
       {
-        "package": "MatrixRustSDK",
-        "repositoryURL": "https://github.com/matrix-org/matrix-rust-components-swift.git",
-        "state": {
-          "branch": "main",
-          "revision": "6741f728fedbceb53154c043486dc1790ed37811",
-          "version": null
-        }
-      },
-      {
         "package": "Introspect",
         "repositoryURL": "https://github.com/siteline/SwiftUI-Introspect.git",
         "state": {

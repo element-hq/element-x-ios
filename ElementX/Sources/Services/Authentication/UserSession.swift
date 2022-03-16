@@ -110,7 +110,7 @@ class UserSession: ClientDelegate {
     func fetchRoomList(_ completion: @escaping ([RoomProxy]) -> Void) {
         DispatchQueue.global(qos: .background).async {
             let rooms = self.client.conversations().map {
-                return RoomProxy(room: $0)
+                return RoomProxy(room: $0, messageFactory: RoomMessageFactory())
             }
             
             DispatchQueue.main.async {

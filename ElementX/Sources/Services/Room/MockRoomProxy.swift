@@ -39,7 +39,7 @@ struct MockRoomProxy: RoomProxyProtocol {
         
     }
     
-    func paginateBackwards(count: UInt, callback: ((Result<[Message], Error>) -> Void)?) {
+    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], Error>) -> Void)?) {
         
     }
 }

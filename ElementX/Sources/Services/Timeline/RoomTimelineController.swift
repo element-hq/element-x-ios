@@ -48,27 +48,25 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func rebuildTimeline() {
         var newTimelineItems = [RoomTimelineViewProvider]()
         
-        var previousMessage: Message?
+        var previousMessage: RoomMessageProtocol?
         for message in self.timelineProvider.messages {
-            let timestamp = Date(timeIntervalSince1970: TimeInterval(message.originServerTs()))
-            
             let areMessagesFromTheSameDay = self.haveSameDay(lhs: previousMessage, rhs: message)
             let shouldAddSectionHeader = !areMessagesFromTheSameDay
             
             if shouldAddSectionHeader {
-                let item = SeparatorRoomTimelineItem(id: timestamp.ISO8601Format(),
-                                                     text: timestamp.formatted(date: .long, time: .omitted))
+                let item = SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
+                                                     text: message.originServerTs.formatted(date: .long, time: .omitted))
                 
                 newTimelineItems.append(RoomTimelineViewProvider.separator(item))
             }
             
-            let areMessagesFromTheSameSender = (previousMessage?.sender() == message.sender())
+            let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
             let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
             
-            let item = TextRoomTimelineItem(id: message.id(),
-                                            senderDisplayName: message.sender(),
-                                            text: message.content(),
-                                            timestamp: timestamp.formatted(date: .omitted, time: .shortened),
+            let item = TextRoomTimelineItem(id: message.id,
+                                            senderDisplayName: message.sender,
+                                            text: message.content,
+                                            timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                             shouldShowSenderDetails: shouldShowSenderDetails)
             
             newTimelineItems.append(RoomTimelineViewProvider.text(item))
@@ -81,15 +79,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         self.callbacks.send(.updatedTimelineItems)
     }
     
-    private func haveSameDay(lhs: Message?, rhs: Message?) -> Bool {
+    private func haveSameDay(lhs: RoomMessageProtocol?, rhs: RoomMessageProtocol?) -> Bool {
         guard let lhs = lhs, let rhs = rhs else {
             return false
         }
         
-        let lhsTimestamp = Date(timeIntervalSince1970: TimeInterval(lhs.originServerTs()))
-        let rhsTimestamp = Date(timeIntervalSince1970: TimeInterval(rhs.originServerTs()))
-        
-        return Calendar.current.isDate(lhsTimestamp, inSameDayAs: rhsTimestamp)
-        
+        return Calendar.current.isDate(lhs.originServerTs, inSameDayAs: rhs.originServerTs)
     }
 }

@@ -26,7 +26,7 @@ private class WeakRoomProxyWrapper: RoomDelegate {
     
     // MARK: - RoomDelegate
     
-    func didReceiveMessage(message: Message) {
+    func didReceiveMessage(message: AnyMessage) {
         DispatchQueue.main.async {
             self.roomProxy?.appendMessage(message)
         }
@@ -35,14 +35,16 @@ private class WeakRoomProxyWrapper: RoomDelegate {
 
 class RoomProxy: RoomProxyProtocol, Equatable {
     private let room: Room
+    private let messageFactory: RoomMessageFactory
     private let processingQueue: DispatchQueue
     
     private var backwardStream: BackwardsStreamProtocol?
     
     let callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
-    init(room: Room) {
+    init(room: Room, messageFactory: RoomMessageFactory) {
         self.room = room
+        self.messageFactory = messageFactory
         processingQueue = DispatchQueue(label: "RoomProxyProcessingQueue")
         
         processingQueue.async {
@@ -130,7 +132,8 @@ class RoomProxy: RoomProxyProtocol, Equatable {
         }
     }
         
-    func paginateBackwards(count: UInt, callback: ((Result<[Message], Error>) -> Void)?) {
+    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], Error>) -> Void)?) {
+        MXLog.debug("Started backpaginating")
         processingQueue.async {
             guard let backwardStream = self.backwardStream else {
                 DispatchQueue.main.async {
@@ -139,13 +142,16 @@ class RoomProxy: RoomProxyProtocol, Equatable {
                 return
             }
             
-            let messages = backwardStream.paginateBackwards(count: UInt64(count))
+            let messages = backwardStream.paginateBackwards(count: UInt64(count)).map { message in
+                self.messageFactory.buildRoomMessageFrom(message)
+            }
+            
+            MXLog.debug("Finished backpaginating")
             
             DispatchQueue.main.async {                
                 callback?(.success(messages))
-                
                 if self.lastMessage == nil {
-                    self.lastMessage = messages.last?.content() ?? ""
+                    self.lastMessage = messages.last?.content ?? ""
                 }
             }
         }
@@ -159,12 +165,9 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     
     // MARK: - Private
     
-    fileprivate func preprendMessages(_ messages: [Message]) {
-        
-    }
-    
-    fileprivate func appendMessage(_ message: Message) {
-        lastMessage = message.content()
+    fileprivate func appendMessage(_ message: AnyMessage) {
+        let message = self.messageFactory.buildRoomMessageFrom(message)
+        lastMessage = message.content
         
         callbacks.send(.addedMessage(message))
     }
