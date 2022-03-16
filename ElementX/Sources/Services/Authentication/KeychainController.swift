@@ -24,7 +24,7 @@ class KeychainController: KeychainControllerProtocol {
         do {
             try keychain.set(token, key: username)
         } catch {
-            MXLog.error("Failed storing user restore token")
+            MXLog.error("Failed storing user restore token with error: \(error)")
         }
     }
     
