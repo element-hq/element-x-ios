@@ -82,6 +82,8 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
                 self?.updateRoomsList()
             }
         }.store(in: &cancellables)
+        
+        updateRoomsList()
     }
     
     // MARK: - Public
