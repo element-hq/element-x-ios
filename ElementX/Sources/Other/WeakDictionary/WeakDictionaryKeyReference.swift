@@ -26,8 +26,12 @@ public struct WeakDictionaryKey<Key: AnyObject & Hashable, Value: AnyObject> : H
             || lhs.hashValue == rhs.hashValue
     }
 
-    public var hashValue: Int {
-        return baseKey != nil ? hash : nilKeyHash
+    public func hash(into hasher: inout Hasher) {
+        if baseKey == nil {
+            hasher.combine(nilKeyHash)
+        } else {
+            hasher.combine(baseKey)
+        }
     }
 
     public var key: Key? {
