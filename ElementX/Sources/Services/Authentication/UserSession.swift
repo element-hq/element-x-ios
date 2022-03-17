@@ -9,13 +9,10 @@ import Foundation
 import MatrixRustSDK
 import Combine
 import UIKit
+import Kingfisher
 
 enum UserSessionCallback {
     case updatedRoomsList
-}
-
-enum UserSessionError: Error {
-    case failedRetrievingAvatar
 }
 
 private class WeakUserSessionWrapper: ClientDelegate {
@@ -41,6 +38,8 @@ class UserSession: ClientDelegate {
         }
     }
     
+    let mediaProvider: MediaProviderProtocol
+    
     deinit {
         client.setDelegate(delegate: nil)
     }
@@ -49,6 +48,7 @@ class UserSession: ClientDelegate {
     
     init(client: Client) {
         self.client = client
+        self.mediaProvider = MediaProvider(client: client, imageCache: ImageCache.default)
         
         client.setDelegate(delegate: WeakUserSessionWrapper(userSession: self))
         client.startSync()
@@ -69,22 +69,6 @@ class UserSession: ClientDelegate {
         } catch {
             MXLog.error("Failed retrieving room info with error: \(error)")
             return nil
-        }
-    }
-    
-    func loadUserAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            do {
-                let avatarData = try self.client.avatar()
-                DispatchQueue.main.async {
-                    completion(.success(UIImage(data: Data(bytes: avatarData, count: avatarData.count))))
-                }
-            } catch {
-                MXLog.error("Failed retrieving room name with error: \(error)")
-                DispatchQueue.main.async {
-                    completion(.failure(UserSessionError.failedRetrievingAvatar))
-                }
-            }
         }
     }
     

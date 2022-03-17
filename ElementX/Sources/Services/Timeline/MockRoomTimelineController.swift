@@ -13,13 +13,21 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
-    var timelineItems: [RoomTimelineViewProvider] = [RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Yesterday")),
-                                                     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You rock!", timestamp: "10:10 AM", shouldShowSenderDetails: true)),
-                                                     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Alice", text: "You also rule!", timestamp: "10:11 AM", shouldShowSenderDetails: false)),
-                                                     RoomTimelineViewProvider.separator(.init(id: UUID().uuidString, text: "Today")),
-                                                     RoomTimelineViewProvider.text(.init(id: UUID().uuidString, senderDisplayName: "Bob", text: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true))]
+    var timelineItems: [RoomTimelineItemProtocol] = [SeparatorRoomTimelineItem(id: UUID().uuidString, text: "Yesterday"),
+                                                     TextRoomTimelineItem(id: UUID().uuidString, text: "You rock!", timestamp: "10:10 AM", shouldShowSenderDetails: true, sender: "Alice"),
+                                                     TextRoomTimelineItem(id: UUID().uuidString, text: "You also rule!", timestamp: "10:11 AM", shouldShowSenderDetails: false, sender: "Alice"),
+                                                     SeparatorRoomTimelineItem(id: UUID().uuidString, text: "Today"),
+                                                     TextRoomTimelineItem(id: UUID().uuidString, text: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true, sender: "Bob")]
     
     func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineControllerError>) -> Void)) {
         callbacks.send(.updatedTimelineItems)
+    }
+    
+    func processItemAppearance(_ itemId: String) {
+        
+    }
+    
+    func processItemDisappearance(_ itemId: String) {
+        
     }
 }

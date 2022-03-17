@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let window: UIWindow
@@ -81,8 +80,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("User session should be already setup at this point")
         }
         
-        let parameters = HomeScreenCoordinatorParameters(userSession: userSession)
-        let coordinator = HomeScreenCoordinator(parameters: parameters, imageCache: ImageCache.default)
+        let parameters = HomeScreenCoordinatorParameters(userSession: userSession, mediaProvider: userSession.mediaProvider)
+        let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.completion = { [weak self] result in
             switch result {
@@ -114,7 +113,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 return
             }
             
-            let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy)
+            let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy, mediaProvider: userSession.mediaProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             self.add(childCoordinator: coordinator)

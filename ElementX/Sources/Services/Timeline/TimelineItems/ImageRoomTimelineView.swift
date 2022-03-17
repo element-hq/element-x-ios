@@ -11,16 +11,50 @@ import SwiftUI
 
 struct ImageRoomTimelineView: View {
     let timelineItem: ImageRoomTimelineItem
-    var loadedImage: UIImage?
     
     var body: some View {
-        if let loadedImage = loadedImage {
-            Image(uiImage: loadedImage)
-        } else {
+        if let image = timelineItem.image {
             VStack {
-                Image(systemName: "photo")
-                ProgressView()
+                HStack {
+                    Text(timelineItem.text)
+                    Spacer()
+                }
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFit()
             }
+        } else {
+            VStack(alignment: .center) {
+                HStack {
+                    Text(timelineItem.text)
+                    Spacer()
+                }
+                ProgressView("Loading")
+            }
+        }
+    }
+}
+
+struct ImageRoomTimelineView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack {
+            let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
+                                                     text: "Some image",
+                                                     timestamp: "Now",
+                                                     shouldShowSenderDetails: false,
+                                                     sender: "Bob",
+                                                     url: nil,
+                                                     image: UIImage(systemName: "photo"))
+            ImageRoomTimelineView(timelineItem: timelineItem)
+            
+            let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
+                                                     text: "Some other image",
+                                                     timestamp: "Now",
+                                                     shouldShowSenderDetails: false,
+                                                     sender: "Bob",
+                                                     url: nil,
+                                                     image: nil)
+            ImageRoomTimelineView(timelineItem: timelineItem)
         }
     }
 }

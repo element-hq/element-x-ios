@@ -29,24 +29,35 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
+    private let timelineViewFactory: RoomTimelineViewFactory
 
     // MARK: - Setup
 
-    init(roomProxy: RoomProxyProtocol, timelineController: RoomTimelineControllerProtocol) {
+    init(roomProxy: RoomProxyProtocol,
+         timelineController: RoomTimelineControllerProtocol,
+         timelineViewFactory: RoomTimelineViewFactory) {
         self.roomProxy = roomProxy
         self.timelineController = timelineController
+        self.timelineViewFactory = timelineViewFactory
         
         super.init(initialViewState: RoomScreenViewState())
         
         state.roomTitle = roomProxy.name ?? ""
-        state.timelineItems = timelineController.timelineItems
+        buildTimelineViews()
         
         timelineController.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
             
             switch callback {
             case .updatedTimelineItems:
-                self.state.timelineItems = timelineController.timelineItems
+                self.buildTimelineViews()
+            case .updatedTimelineItem(let itemId):
+                guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
+                      let viewIndex = self.state.items.firstIndex(where: { $0.id == itemId }) else {
+                          return
+                      }
+                
+                self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem)
             }
         }.store(in: &cancellables)
     }
@@ -60,10 +71,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             timelineController.paginateBackwards(Constants.backPaginationPageSize) { [weak self] _ in
                 self?.state.isBackPaginating = false
             }
-        case .itemAppeared:
-            break
-        case .itemDisappeared:
-            break
+        case .itemAppeared(let id):
+            timelineController.processItemAppearance(id)
+        case .itemDisappeared(let id):
+            timelineController.processItemDisappearance(id)
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func buildTimelineViews() {
+        state.items = timelineController.timelineItems.map { item  in
+            timelineViewFactory.buildTimelineViewFor(item)
         }
     }
 }

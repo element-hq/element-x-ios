@@ -16,7 +16,6 @@
 
 import SwiftUI
 import Combine
-import Kingfisher
 
 @available(iOS 14, *)
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
@@ -25,21 +24,21 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
 @available(iOS 14, *)
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     
+    private let mediaProvider: MediaProviderProtocol
+    
     private var roomUpdateListeners = Set<AnyCancellable>()
     private var roomList: [RoomProxyProtocol]? {
         didSet {
             self.state.isLoadingRooms = (roomList?.count ?? 0 == 0)
         }
     }
-    
-    private let imageCache: ImageCache
 
     var completion: ((HomeScreenViewModelResult) -> Void)?
     
     // MARK: - Setup
     
-    init(userDisplayName: String, imageCache: Kingfisher.ImageCache) {
-        self.imageCache = imageCache
+    init(userDisplayName: String, mediaProvider: MediaProviderProtocol) {
+        self.mediaProvider = mediaProvider
         super.init(initialViewState: HomeScreenViewState(userDisplayName: userDisplayName, isLoadingRooms: true))
     }
     
@@ -94,37 +93,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func loadAvatarForRoomWithIdentifier(_ roomIdentifier: String) {
         guard let room = roomList?.filter({ $0.id == roomIdentifier }).first,
-              let cacheKey = room.avatarURL?.path else {
+              let avatarURLString = room.avatarURL else {
                   return
               }
         
-        if imageCache.isCached(forKey: cacheKey) {
-            imageCache.retrieveImage(forKey: cacheKey) { [weak self] result in
-                guard let self = self else { return }
-                switch result {
-                case .success(let value):
-                    self.updateAvatar(value.image, forRoomWithIdentifier: roomIdentifier)
-                case .failure(let error):
-                    MXLog.error("Failed retrieving avatar from cache with error: \(error)")
-                }
-            }
-            
-            return
-        }
-        
-        room.loadAvatar { [weak self] result in
+        mediaProvider.loadImageFromURL(avatarURLString) { [weak self] result in
             guard let self = self else { return }
-            
-            switch result {
-            case .success(let avatar):
-                guard let avatar = avatar else {
-                    return
-                }
-                
-                self.imageCache.store(avatar, forKey: cacheKey)
-                self.updateAvatar(avatar, forRoomWithIdentifier: roomIdentifier)
-            default:
-                break
+            if case let .success(image) = result {
+                self.updateAvatar(image, forRoomWithIdentifier: roomIdentifier)
             }
         }
     }

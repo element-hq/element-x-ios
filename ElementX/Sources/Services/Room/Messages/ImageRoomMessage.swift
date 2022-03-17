@@ -31,4 +31,8 @@ struct ImageRoomMessage: RoomMessageProtocol {
     var originServerTs: Date {
         Date(timeIntervalSince1970: TimeInterval(message.baseMessage().originServerTs()))
     }
+    
+    var url: String? {
+        message.url()
+    }
 }

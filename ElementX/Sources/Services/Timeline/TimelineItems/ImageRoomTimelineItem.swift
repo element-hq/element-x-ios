@@ -7,11 +7,17 @@
 //
 
 import Foundation
+import UIKit
 
-struct ImageRoomTimelineItem: TimelineItemProtocol, Identifiable, Equatable {
+struct ImageRoomTimelineItem: BaseRoomTimelineItemProtocol, Identifiable, Equatable {
     let id: String
-    let senderDisplayName: String
     let text: String
     let timestamp: String
     let shouldShowSenderDetails: Bool
+    
+    let sender: String
+    var senderAvatar: UIImage?
+    
+    let url: String?
+    var image: UIImage?
 }

@@ -15,7 +15,6 @@
 //
 
 import SwiftUI
-import Kingfisher
 
 struct HomeScreen: View {
     
@@ -154,7 +153,8 @@ struct RoomCell: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed", imageCache: ImageCache.default)
+        let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed",
+                                            mediaProvider: MockMediaProvider())
         
         let rooms = [MockRoomProxy(displayName: "Alfa"),
                      MockRoomProxy(displayName: "Beta"),

@@ -11,6 +11,7 @@ import Combine
 
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems
+    case updatedTimelineItem(_ itemId: String)
 }
 
 enum RoomTimelineControllerError: Error {
@@ -18,8 +19,12 @@ enum RoomTimelineControllerError: Error {
 }
 
 protocol RoomTimelineControllerProtocol {
-    var timelineItems: [RoomTimelineViewProvider] { get }
+    var timelineItems: [RoomTimelineItemProtocol] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
-    
+
     func paginateBackwards(_ count: UInt, callback: @escaping ((Result<Void, RoomTimelineControllerError>) -> Void))
+    
+    func processItemAppearance(_ itemId: String)
+    
+    func processItemDisappearance(_ itemId: String)
 }

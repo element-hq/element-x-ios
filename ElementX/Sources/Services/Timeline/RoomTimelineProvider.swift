@@ -8,7 +8,6 @@
 
 import Foundation
 import Combine
-import MatrixRustSDK
 
 enum RoomTimelineCallback {
     case addedMessage
@@ -49,6 +48,18 @@ class RoomTimelineProvider {
                 callback?(.success((self.messages)))
             case .failure:
                 callback?(.failure(.generic))
+            }
+        }
+    }
+    
+    // This is probably not the right place for this method. We need a RoomMemberProvider or something
+    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomTimelineError>) -> Void) {
+        self.roomProxy.avatarURLForUserId(userId) { result in
+            switch result {
+            case .success(let avatarURL):
+                completion(.success(avatarURL))
+            case .failure:
+                completion(.failure(.generic))
             }
         }
     }

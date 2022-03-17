@@ -16,10 +16,10 @@
 
 import SwiftUI
 import Combine
-import Kingfisher
 
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSession
+    let mediaProvider: MediaProviderProtocol
 }
 
 enum HomeScreenCoordinatorResult {
@@ -47,11 +47,11 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Setup
     
-    init(parameters: HomeScreenCoordinatorParameters, imageCache: Kingfisher.ImageCache) {
+    init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
         let userDisplayName = self.parameters.userSession.userDisplayName ?? self.parameters.userSession.userIdentifier
-        viewModel = HomeScreenViewModel(userDisplayName: userDisplayName, imageCache: imageCache)
+        viewModel = HomeScreenViewModel(userDisplayName: userDisplayName, mediaProvider: self.parameters.mediaProvider)
         
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)
@@ -63,7 +63,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
             case .logout:
                 self.completion?(.logout)
             case .loadUserAvatar:
-                self.parameters.userSession.loadUserAvatar({ result in
+                self.parameters.mediaProvider.loadCurrentUserAvatar({ result in
                     switch result {
                     case .success(let avatar):
                         self.viewModel.updateWithUserAvatar(avatar)

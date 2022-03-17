@@ -40,12 +40,9 @@ struct RoomScreen: View {
                 }
                 
                 // No idea why previews don't work otherwise
-                ForEach(isPreview ? context.viewState.timelineItems : timelineItems) { timelineItem in
+                ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in
                     timelineItem
                         .listRowSeparator(.hidden)
-                        .task {
-                            
-                        }
                         .onAppear {
                             context.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
@@ -75,7 +72,7 @@ struct RoomScreen: View {
                 
                 attemptBackPagination()
             })
-            .onChange(of: context.viewState.timelineItems) { _ in
+            .onChange(of: context.viewState.items) { _ in
                 // Don't update the list while moving
                 if tableViewObserver.isDecelerating || tableViewObserver.isTracking {
                     hasPendingChanges = true
@@ -83,7 +80,7 @@ struct RoomScreen: View {
                 }
                 
                 tableViewObserver.saveCurrentOffset()
-                timelineItems = context.viewState.timelineItems
+                timelineItems = context.viewState.items
             }
             .onReceive(tableViewObserver.scrollViewDidRest, perform: {
                 if hasPendingChanges == false {
@@ -91,7 +88,7 @@ struct RoomScreen: View {
                 }
                 
                 tableViewObserver.saveCurrentOffset()
-                timelineItems = context.viewState.timelineItems
+                timelineItems = context.viewState.items
                 hasPendingChanges = false
             })
             .onChange(of: timelineItems, perform: { _ in
@@ -244,7 +241,8 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
 struct RoomScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = RoomScreenViewModel(roomProxy: MockRoomProxy(displayName: "Test"),
-                                            timelineController: MockRoomTimelineController())
+                                            timelineController: MockRoomTimelineController(),
+                                            timelineViewFactory: RoomTimelineViewFactory())
         
         RoomScreen(context: viewModel.context)
     }

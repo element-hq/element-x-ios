@@ -11,12 +11,6 @@ import Combine
 
 import MatrixRustSDK
 
-enum RoomProxyError: Error {
-    case failedRetrievingDisplayName
-    case failedRetrievingAvatar
-    case backwardStreamNotAvailable
-}
-
 private class WeakRoomProxyWrapper: RoomDelegate {
     private weak var roomProxy: RoomProxy?
     
@@ -92,21 +86,17 @@ class RoomProxy: RoomProxyProtocol, Equatable {
         }
     }
     
-    var avatarURL: URL? {
-        guard let urlString = room.avatarUrl() else {
-            return nil
-        }
-        
-        return URL(string: urlString)
+    var avatarURL: String? {
+        room.avatarUrl()
     }
     
-    func loadDisplayName(_ completion: @escaping (Result<String, Error>) -> Void) {
+    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
-                let displayName = try self.room.displayName()
+                let avatarURL = try self.room.memberAvatarUrl(userId: userId)
                 
                 DispatchQueue.main.async {
-                    completion(.success(displayName))
+                    completion(.success(avatarURL))
                 }
             } catch {
                 DispatchQueue.main.async {
@@ -116,28 +106,28 @@ class RoomProxy: RoomProxyProtocol, Equatable {
         }
     }
     
-    func loadAvatar(_ completion: @escaping (Result<UIImage?, Error>) -> Void) {
+    func loadDisplayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
         DispatchQueue.global(qos: .background).async {
             do {
-                let avatarData = try self.room.avatar()
+                let displayName = try self.room.displayName()
                 
                 DispatchQueue.main.async {
-                    completion(.success(UIImage(data: Data(bytes: avatarData, count: avatarData.count))))
+                    completion(.success(displayName))
                 }
             } catch {
                 DispatchQueue.main.async {
-                    completion(.failure(RoomProxyError.failedRetrievingAvatar))
+                    completion(.failure(.failedRetrievingDisplayName))
                 }
             }
         }
     }
-        
-    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], Error>) -> Void)?) {
+            
+    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], RoomProxyError>) -> Void)?) {
         MXLog.debug("Started backpaginating")
         processingQueue.async {
             guard let backwardStream = self.backwardStream else {
                 DispatchQueue.main.async {
-                    callback?(.failure(RoomProxyError.backwardStreamNotAvailable))
+                    callback?(.failure(.backwardStreamNotAvailable))
                 }
                 return
             }

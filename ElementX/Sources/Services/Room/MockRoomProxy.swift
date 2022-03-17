@@ -8,7 +8,6 @@
 import Foundation
 import UIKit
 import Combine
-import MatrixRustSDK
 
 struct MockRoomProxy: RoomProxyProtocol {
     let id = UUID().uuidString
@@ -18,7 +17,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     let topic: String? = nil
     let lastMessage: String? = "Last message" 
     
-    let avatarURL: URL? = nil
+    let avatarURL: String? = nil
     
     let isDirect = Bool.random()
     let isSpace = Bool.random()
@@ -27,19 +26,19 @@ struct MockRoomProxy: RoomProxyProtocol {
     
     var callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
-    func loadDisplayName(_ completion: @escaping (Result<String, Error>) -> Void) {
+    func loadDisplayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
         completion(.success(displayName))
-    }
-    
-    func loadAvatar(_ completion: (Result<UIImage?, Error>) -> Void) {
-        completion(.success(UIImage(systemName: "wand.and.stars")))
     }
     
     func startLiveEventListener() {
         
     }
     
-    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], Error>) -> Void)?) {
+    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], RoomProxyError>) -> Void)?) {
+        
+    }
+    
+    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
         
     }
 }
