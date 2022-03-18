@@ -11,39 +11,36 @@ import UIKit
 
 struct RoomTimelineItemFactory {
     private let mediaProvider: MediaProviderProtocol
+    private let memberDetailsProvider: MemberDetailsProvider
     
-    init(mediaProvider: MediaProviderProtocol) {
+    init(mediaProvider: MediaProviderProtocol,
+         memberDetailsProvider: MemberDetailsProvider) {
         self.mediaProvider = mediaProvider
+        self.memberDetailsProvider = memberDetailsProvider
     }
     
     func buildTimelineItemFor(_ roomMessage: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
+        
+        let avatarURL = memberDetailsProvider.avatarURLForUserId(roomMessage.sender)
+        let avatarImage = mediaProvider.imageForURL(avatarURL)
+        
         switch roomMessage {
         case let message as TextRoomMessage:
             return TextRoomTimelineItem(id: message.id,
                                         text: message.content,
                                         timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                         shouldShowSenderDetails: showSenderDetails,
-                                        sender: message.sender)
+                                        sender: message.sender,
+                                        senderAvatar: avatarImage)
         case let message as ImageRoomMessage:
-            var image: UIImage?
-            
-            if let url = message.url {
-                if mediaProvider.hasImageCachedForURL(url) {
-                    mediaProvider.loadImageFromURL(url, { result in
-                        if case let .success(cachedImage) = result {
-                            image = cachedImage
-                        }
-                    })
-                }
-            }
-            
             return ImageRoomTimelineItem(id: message.id,
                                          text: message.content,
                                          timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                          shouldShowSenderDetails: showSenderDetails,
                                          sender: message.sender,
+                                         senderAvatar: avatarImage,
                                          url: message.url,
-                                         image: image)
+                                         image: mediaProvider.imageForURL(message.url))
         default:
             fatalError("Unknown room message.")
         }

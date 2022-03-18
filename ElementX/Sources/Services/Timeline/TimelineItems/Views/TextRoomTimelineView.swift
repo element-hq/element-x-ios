@@ -14,40 +14,13 @@ struct TextRoomTimelineView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            if timelineItem.shouldShowSenderDetails {
-                HStack {
-                    avatar
-                    Text(timelineItem.sender)
-                        .font(.footnote)
-                        .bold()
-                    Spacer()
-                    Text(timelineItem.timestamp)
-                        .font(.footnote)
-                }
-                Divider()
-            }
+            EventBasedTimelineView(timelineItem: timelineItem)
             Text(timelineItem.text)
+                .fixedSize(horizontal: false, vertical: true)
         }
         .id(timelineItem.id)
     }
-    
-    @ViewBuilder var avatar: some View {
-        ZStack(alignment: .center) {
-            Circle()
-                .fill(Color(.sRGB, red: 0.05, green: 0.74, blue: 0.55, opacity: 1.0))
-            if let avatar = timelineItem.senderAvatar {
-                Image(uiImage: avatar)
-                    .resizable()
-                    .clipShape(Circle())
-            } else {
-                Text(timelineItem.sender.prefix(2).suffix(1))
-                    .foregroundColor(.white)
-                    .font(.title)
-                    .bold()
-            }
-        }
-        .frame(width: 44.0, height: 44.0)
-    }
+
 }
 
 struct TextRoomTimelineView_Previews: PreviewProvider {

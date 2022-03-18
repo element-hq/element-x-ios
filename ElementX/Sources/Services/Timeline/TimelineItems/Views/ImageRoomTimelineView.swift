@@ -14,11 +14,9 @@ struct ImageRoomTimelineView: View {
     
     var body: some View {
         if let image = timelineItem.image {
-            VStack {
-                HStack {
-                    Text(timelineItem.text)
-                    Spacer()
-                }
+            VStack(alignment: .leading) {
+                EventBasedTimelineView(timelineItem: timelineItem)
+                Text(timelineItem.text)
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()

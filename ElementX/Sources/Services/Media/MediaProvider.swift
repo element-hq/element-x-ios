@@ -13,16 +13,18 @@ import Kingfisher
 struct MediaProvider: MediaProviderProtocol {
     private let client: Client
     private let imageCache: Kingfisher.ImageCache
+    private let processingQueue: DispatchQueue
     
     init(client: Client, imageCache: Kingfisher.ImageCache) {
         self.client = client
         self.imageCache = imageCache
+        self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue")
     }
     
     func loadCurrentUserAvatar(_ completion: @escaping (Result<UIImage?, MediaProviderError>) -> Void) {
-        DispatchQueue.global(qos: .background).async {
+        processingQueue.async {
             do {
-                let imageData = try self.client.avatar()
+                let imageData = try client.avatar()
                 DispatchQueue.main.async {
                     completion(.success(UIImage(data: Data(bytes: imageData, count: imageData.count))))
                 }
@@ -35,21 +37,25 @@ struct MediaProvider: MediaProviderProtocol {
         }
     }
     
-    func hasImageCachedForURL(_ url: String) -> Bool {
-        self.imageCache.imageCachedType(forKey: url) == .memory
+    func imageForURL(_ url: String?) -> UIImage? {
+        guard let url = url else {
+            return nil
+        }
+        
+        return imageCache.retrieveImageInMemoryCache(forKey: url, options: nil)
     }
     
     func loadImageFromURL(_ url: String, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
-        self.imageCache.retrieveImage(forKey: url) { result in
+        imageCache.retrieveImage(forKey: url) { result in
             if case let .success(cacheResult) = result,
                let image = cacheResult.image {
                 completion(.success(image))
             }
         }
         
-        DispatchQueue.global(qos: .background).async {
+        processingQueue.async {
             do {
-                let imageData = try self.client.loadImage(url: url)
+                let imageData = try client.loadImage(url: url)
                 
                 guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
                     MXLog.error("Invalid image data")
@@ -59,7 +65,7 @@ struct MediaProvider: MediaProviderProtocol {
                     return
                 }
                 
-                self.imageCache.store(image, forKey: url)
+                imageCache.store(image, forKey: url)
                 
                 DispatchQueue.main.async {
                     completion(.success(image))

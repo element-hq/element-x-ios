@@ -18,8 +18,8 @@ import SwiftUI
 
 @available(iOS 14, *)
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState,
-                                                                  Never,
-                                                                  RoomScreenViewAction>
+                                                        Never,
+                                                        RoomScreenViewAction>
 @available(iOS 14, *)
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     
@@ -27,22 +27,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         static let backPaginationPageSize: UInt = 30
     }
 
-    private let roomProxy: RoomProxyProtocol
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactory
 
     // MARK: - Setup
-
-    init(roomProxy: RoomProxyProtocol,
-         timelineController: RoomTimelineControllerProtocol,
-         timelineViewFactory: RoomTimelineViewFactory) {
-        self.roomProxy = roomProxy
+    
+    init(timelineController: RoomTimelineControllerProtocol,
+         timelineViewFactory: RoomTimelineViewFactory,
+         roomName: String?) {
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         
-        super.init(initialViewState: RoomScreenViewState())
+        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "💥"))
         
-        state.roomTitle = roomProxy.name ?? ""
         buildTimelineViews()
         
         timelineController.callbacks.sink { [weak self] callback in

@@ -16,6 +16,8 @@ enum MediaProviderError: Error {
 
 protocol MediaProviderProtocol {
     func loadCurrentUserAvatar(_ completion: @escaping (Result<UIImage?, MediaProviderError>) -> Void)
-    func hasImageCachedForURL(_ url: String) -> Bool
+    
+    func imageForURL(_ url: String?) -> UIImage?
+    
     func loadImageFromURL(_ url: String, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void)
 }

@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-struct ImageRoomTimelineItem: BaseRoomTimelineItemProtocol, Identifiable, Equatable {
+struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
     let id: String
     let text: String
     let timestamp: String

@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		182BC48127C4EBBB00A30C33 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 182BC48027C4EBBB00A30C33 /* Kingfisher */; };
+		183E023227E4A3CF00903BED /* PlaceholderAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023127E4A3CF00903BED /* PlaceholderAvatarImage.swift */; };
 		184B31DF27D898960075A669 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 184B31DE27D898960075A669 /* Introspect */; };
 		1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850253E27B6918D002E6B18 /* ElementXTests.swift */; };
 		1850254927B6918D002E6B18 /* ElementXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254827B6918D002E6B18 /* ElementXUITests.swift */; };
@@ -18,7 +19,6 @@
 		1850257127B6A135002E6B18 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1850256927B6A135002E6B18 /* LaunchScreen.storyboard */; };
 		1863A3FC27BA5A9100B52E4D /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A3FB27BA5A9100B52E4D /* KeychainAccess */; };
 		1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A40527BA6DFC00B52E4D /* SwiftyBeaver */; };
-		18A318DD27DA42C9000867CD /* RoomTimelineViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18A318DB27DA42C9000867CD /* RoomTimelineViewProvider.swift */; };
 		18C5744627E11F1900D70937 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 18C5744527E11F1900D70937 /* MatrixRustSDK */; };
 		18C5744C27E1D84000D70937 /* RoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */; };
 		18C5744D27E1D84000D70937 /* RoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744A27E1D84000D70937 /* RoomProxy.swift */; };
@@ -27,12 +27,23 @@
 		18C5745227E1D88600D70937 /* ImageRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745127E1D88600D70937 /* ImageRoomMessage.swift */; };
 		18C5745427E1D88E00D70937 /* TextRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745327E1D88E00D70937 /* TextRoomMessage.swift */; };
 		18C5745627E1DCA800D70937 /* RoomMessageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */; };
-		18C5745827E1EB6E00D70937 /* RoomTimelineItemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745727E1EB6E00D70937 /* RoomTimelineItemFactory.swift */; };
-		18DF7C2A27E23E3A00291672 /* RoomTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C2927E23E3A00291672 /* RoomTimelineItemProtocol.swift */; };
-		18DF7C2C27E23EC000291672 /* RoomTimelineViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C2B27E23EC000291672 /* RoomTimelineViewFactory.swift */; };
 		18DF7C2F27E264FC00291672 /* MediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C2E27E264FC00291672 /* MediaProvider.swift */; };
 		18DF7C3127E3608100291672 /* MediaProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */; };
 		18DF7C3327E3608800291672 /* MockMediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3227E3608800291672 /* MockMediaProvider.swift */; };
+		18DF7C4127E4670600291672 /* RoomTimelineViewProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3527E4670600291672 /* RoomTimelineViewProvider.swift */; };
+		18DF7C4227E4670600291672 /* RoomTimelineItemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3627E4670600291672 /* RoomTimelineItemFactory.swift */; };
+		18DF7C4327E4670600291672 /* RoomTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3727E4670600291672 /* RoomTimelineItemProtocol.swift */; };
+		18DF7C4427E4670600291672 /* RoomTimelineViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3827E4670600291672 /* RoomTimelineViewFactory.swift */; };
+		18DF7C4527E4670600291672 /* SeparatorRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3A27E4670600291672 /* SeparatorRoomTimelineItem.swift */; };
+		18DF7C4627E4670600291672 /* ImageRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3B27E4670600291672 /* ImageRoomTimelineItem.swift */; };
+		18DF7C4727E4670600291672 /* TextRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3C27E4670600291672 /* TextRoomTimelineItem.swift */; };
+		18DF7C4827E4670600291672 /* ImageRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3E27E4670600291672 /* ImageRoomTimelineView.swift */; };
+		18DF7C4927E4670600291672 /* SeparatorRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3F27E4670600291672 /* SeparatorRoomTimelineView.swift */; };
+		18DF7C4A27E4670600291672 /* TextRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C4027E4670600291672 /* TextRoomTimelineView.swift */; };
+		18DF7C4C27E4672C00291672 /* EventBasedTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C4B27E4672C00291672 /* EventBasedTimelineItemProtocol.swift */; };
+		18DF7C4E27E4673E00291672 /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C4D27E4673E00291672 /* DecorationTimelineItemProtocol.swift */; };
+		18DF7C5027E46A7A00291672 /* EventBasedTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C4F27E46A7A00291672 /* EventBasedTimelineView.swift */; };
+		18DF7C5327E4754500291672 /* MemberDetailsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C5227E4754500291672 /* MemberDetailsProvider.swift */; };
 		18F2BADA27D25B4000DD1988 /* RoomTimelineProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7727D25B4000DD1988 /* RoomTimelineProvider.swift */; };
 		18F2BADB27D25B4000DD1988 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7927D25B4000DD1988 /* AuthenticationCoordinator.swift */; };
 		18F2BADC27D25B4000DD1988 /* UserSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BA7A27D25B4000DD1988 /* UserSession.swift */; };
@@ -90,12 +101,6 @@
 		18F2BB2227D25D4600DD1988 /* LoginScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BACF27D25B4000DD1988 /* LoginScreenUITests.swift */; };
 		18F2BB2827D2647A00DD1988 /* MockRoomTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BB2727D2647A00DD1988 /* MockRoomTimelineController.swift */; };
 		18F2BB2A27D2648900DD1988 /* RoomTimelineControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BB2927D2648900DD1988 /* RoomTimelineControllerProtocol.swift */; };
-		18F9889827DB7473002F48B4 /* ImageRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9889727DB7473002F48B4 /* ImageRoomTimelineItem.swift */; };
-		18F9889A27DB747B002F48B4 /* TextRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9889927DB747B002F48B4 /* TextRoomTimelineItem.swift */; };
-		18F9889C27DB7491002F48B4 /* SeparatorRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9889B27DB7491002F48B4 /* SeparatorRoomTimelineItem.swift */; };
-		18F9889E27DB752B002F48B4 /* ImageRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9889D27DB752B002F48B4 /* ImageRoomTimelineView.swift */; };
-		18F988A027DB7532002F48B4 /* TextRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F9889F27DB7532002F48B4 /* TextRoomTimelineView.swift */; };
-		18F988A227DB753B002F48B4 /* SeparatorRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F988A127DB753B002F48B4 /* SeparatorRoomTimelineView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +122,7 @@
 
 /* Begin PBXFileReference section */
 		181716DC27E11EF1002B8E3F /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
+		183E023127E4A3CF00903BED /* PlaceholderAvatarImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceholderAvatarImage.swift; path = ../../../../../../../../Desktop/PlaceholderAvatarImage.swift; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253A27B6918D002E6B18 /* ElementXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElementXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253E27B6918D002E6B18 /* ElementXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementXTests.swift; sourceTree = "<group>"; };
@@ -128,7 +134,6 @@
 		1850256727B6A135002E6B18 /* ElementX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ElementX.entitlements; sourceTree = "<group>"; };
 		1850256827B6A135002E6B18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1850256A27B6A135002E6B18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		18A318DB27DA42C9000867CD /* RoomTimelineViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineViewProvider.swift; sourceTree = "<group>"; };
 		18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxyProtocol.swift; sourceTree = "<group>"; };
 		18C5744A27E1D84000D70937 /* RoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		18C5744B27E1D84000D70937 /* MockRoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomProxy.swift; sourceTree = "<group>"; };
@@ -136,12 +141,23 @@
 		18C5745127E1D88600D70937 /* ImageRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRoomMessage.swift; sourceTree = "<group>"; };
 		18C5745327E1D88E00D70937 /* TextRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRoomMessage.swift; sourceTree = "<group>"; };
 		18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMessageFactory.swift; sourceTree = "<group>"; };
-		18C5745727E1EB6E00D70937 /* RoomTimelineItemFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemFactory.swift; sourceTree = "<group>"; };
-		18DF7C2927E23E3A00291672 /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
-		18DF7C2B27E23EC000291672 /* RoomTimelineViewFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineViewFactory.swift; sourceTree = "<group>"; };
 		18DF7C2E27E264FC00291672 /* MediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProvider.swift; sourceTree = "<group>"; };
 		18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProviderProtocol.swift; sourceTree = "<group>"; };
 		18DF7C3227E3608800291672 /* MockMediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMediaProvider.swift; sourceTree = "<group>"; };
+		18DF7C3527E4670600291672 /* RoomTimelineViewProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineViewProvider.swift; sourceTree = "<group>"; };
+		18DF7C3627E4670600291672 /* RoomTimelineItemFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemFactory.swift; sourceTree = "<group>"; };
+		18DF7C3727E4670600291672 /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
+		18DF7C3827E4670600291672 /* RoomTimelineViewFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineViewFactory.swift; sourceTree = "<group>"; };
+		18DF7C3A27E4670600291672 /* SeparatorRoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorRoomTimelineItem.swift; sourceTree = "<group>"; };
+		18DF7C3B27E4670600291672 /* ImageRoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRoomTimelineItem.swift; sourceTree = "<group>"; };
+		18DF7C3C27E4670600291672 /* TextRoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRoomTimelineItem.swift; sourceTree = "<group>"; };
+		18DF7C3E27E4670600291672 /* ImageRoomTimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageRoomTimelineView.swift; sourceTree = "<group>"; };
+		18DF7C3F27E4670600291672 /* SeparatorRoomTimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SeparatorRoomTimelineView.swift; sourceTree = "<group>"; };
+		18DF7C4027E4670600291672 /* TextRoomTimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextRoomTimelineView.swift; sourceTree = "<group>"; };
+		18DF7C4B27E4672C00291672 /* EventBasedTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBasedTimelineItemProtocol.swift; sourceTree = "<group>"; };
+		18DF7C4D27E4673E00291672 /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
+		18DF7C4F27E46A7A00291672 /* EventBasedTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBasedTimelineView.swift; sourceTree = "<group>"; };
+		18DF7C5227E4754500291672 /* MemberDetailsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailsProvider.swift; sourceTree = "<group>"; };
 		18F2BA7727D25B4000DD1988 /* RoomTimelineProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomTimelineProvider.swift; sourceTree = "<group>"; };
 		18F2BA7927D25B4000DD1988 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		18F2BA7A27D25B4000DD1988 /* UserSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserSession.swift; sourceTree = "<group>"; };
@@ -199,12 +215,6 @@
 		18F2BB1927D25BE800DD1988 /* RoomTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineController.swift; sourceTree = "<group>"; };
 		18F2BB2727D2647A00DD1988 /* MockRoomTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRoomTimelineController.swift; sourceTree = "<group>"; };
 		18F2BB2927D2648900DD1988 /* RoomTimelineControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineControllerProtocol.swift; sourceTree = "<group>"; };
-		18F9889727DB7473002F48B4 /* ImageRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRoomTimelineItem.swift; sourceTree = "<group>"; };
-		18F9889927DB747B002F48B4 /* TextRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRoomTimelineItem.swift; sourceTree = "<group>"; };
-		18F9889B27DB7491002F48B4 /* SeparatorRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorRoomTimelineItem.swift; sourceTree = "<group>"; };
-		18F9889D27DB752B002F48B4 /* ImageRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRoomTimelineView.swift; sourceTree = "<group>"; };
-		18F9889F27DB7532002F48B4 /* TextRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRoomTimelineView.swift; sourceTree = "<group>"; };
-		18F988A127DB753B002F48B4 /* SeparatorRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeparatorRoomTimelineView.swift; sourceTree = "<group>"; };
 		18FE279627C7B85300016375 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -309,23 +319,6 @@
 			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
-		18A318D927DA42C9000867CD /* TimelineItems */ = {
-			isa = PBXGroup;
-			children = (
-				18DF7C2927E23E3A00291672 /* RoomTimelineItemProtocol.swift */,
-				18C5745727E1EB6E00D70937 /* RoomTimelineItemFactory.swift */,
-				18DF7C2B27E23EC000291672 /* RoomTimelineViewFactory.swift */,
-				18A318DB27DA42C9000867CD /* RoomTimelineViewProvider.swift */,
-				18F9889727DB7473002F48B4 /* ImageRoomTimelineItem.swift */,
-				18F9889D27DB752B002F48B4 /* ImageRoomTimelineView.swift */,
-				18F9889927DB747B002F48B4 /* TextRoomTimelineItem.swift */,
-				18F9889F27DB7532002F48B4 /* TextRoomTimelineView.swift */,
-				18F9889B27DB7491002F48B4 /* SeparatorRoomTimelineItem.swift */,
-				18F988A127DB753B002F48B4 /* SeparatorRoomTimelineView.swift */,
-			);
-			path = TimelineItems;
-			sourceTree = "<group>";
-		};
 		18C5744427E11F1900D70937 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -336,6 +329,7 @@
 		18C5744727E1D84000D70937 /* Room */ = {
 			isa = PBXGroup;
 			children = (
+				18DF7C5127E4753A00291672 /* Members */,
 				18C5744927E1D84000D70937 /* Messages */,
 				18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */,
 				18C5744A27E1D84000D70937 /* RoomProxy.swift */,
@@ -365,6 +359,51 @@
 			path = Media;
 			sourceTree = "<group>";
 		};
+		18DF7C3427E4670600291672 /* TimelineItems */ = {
+			isa = PBXGroup;
+			children = (
+				18DF7C3627E4670600291672 /* RoomTimelineItemFactory.swift */,
+				18DF7C3827E4670600291672 /* RoomTimelineViewFactory.swift */,
+				18DF7C3527E4670600291672 /* RoomTimelineViewProvider.swift */,
+				18DF7C3727E4670600291672 /* RoomTimelineItemProtocol.swift */,
+				18DF7C4B27E4672C00291672 /* EventBasedTimelineItemProtocol.swift */,
+				18DF7C4D27E4673E00291672 /* DecorationTimelineItemProtocol.swift */,
+				18DF7C3927E4670600291672 /* Items */,
+				18DF7C3D27E4670600291672 /* Views */,
+			);
+			path = TimelineItems;
+			sourceTree = "<group>";
+		};
+		18DF7C3927E4670600291672 /* Items */ = {
+			isa = PBXGroup;
+			children = (
+				18DF7C3A27E4670600291672 /* SeparatorRoomTimelineItem.swift */,
+				18DF7C3B27E4670600291672 /* ImageRoomTimelineItem.swift */,
+				18DF7C3C27E4670600291672 /* TextRoomTimelineItem.swift */,
+			);
+			path = Items;
+			sourceTree = "<group>";
+		};
+		18DF7C3D27E4670600291672 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				183E023127E4A3CF00903BED /* PlaceholderAvatarImage.swift */,
+				18DF7C4F27E46A7A00291672 /* EventBasedTimelineView.swift */,
+				18DF7C4027E4670600291672 /* TextRoomTimelineView.swift */,
+				18DF7C3E27E4670600291672 /* ImageRoomTimelineView.swift */,
+				18DF7C3F27E4670600291672 /* SeparatorRoomTimelineView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		18DF7C5127E4753A00291672 /* Members */ = {
+			isa = PBXGroup;
+			children = (
+				18DF7C5227E4754500291672 /* MemberDetailsProvider.swift */,
+			);
+			path = Members;
+			sourceTree = "<group>";
+		};
 		18F2BA7227D25B4000DD1988 /* Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -383,7 +422,7 @@
 				18F2BB1927D25BE800DD1988 /* RoomTimelineController.swift */,
 				18F2BB2727D2647A00DD1988 /* MockRoomTimelineController.swift */,
 				18F2BA7727D25B4000DD1988 /* RoomTimelineProvider.swift */,
-				18A318D927DA42C9000867CD /* TimelineItems */,
+				18DF7C3427E4670600291672 /* TimelineItems */,
 			);
 			path = Timeline;
 			sourceTree = "<group>";
@@ -814,24 +853,28 @@
 			files = (
 				18F2BADE27D25B4000DD1988 /* KeychainControllerProtocol.swift in Sources */,
 				18C5745027E1D87800D70937 /* RoomMessageProtocol.swift in Sources */,
+				18DF7C4C27E4672C00291672 /* EventBasedTimelineItemProtocol.swift in Sources */,
 				18F2BAED27D25B4000DD1988 /* FullscreenLoadingActivityPresenter.swift in Sources */,
+				18DF7C4127E4670600291672 /* RoomTimelineViewProvider.swift in Sources */,
 				18F2BB0F27D25B4000DD1988 /* RoomScreen.swift in Sources */,
 				18F2BAFF27D25B4000DD1988 /* HomeScreenModels.swift in Sources */,
-				18F9889C27DB7491002F48B4 /* SeparatorRoomTimelineItem.swift in Sources */,
+				18DF7C4E27E4673E00291672 /* DecorationTimelineItemProtocol.swift in Sources */,
 				18F2BB1527D25B4000DD1988 /* LoginScreenViewModelProtocol.swift in Sources */,
 				18F2BAEB27D25B4000DD1988 /* LabelledActivityIndicatorView.swift in Sources */,
 				18F2BAE427D25B4000DD1988 /* Presentable.swift in Sources */,
-				18DF7C2A27E23E3A00291672 /* RoomTimelineItemProtocol.swift in Sources */,
+				18DF7C4427E4670600291672 /* RoomTimelineViewFactory.swift in Sources */,
+				183E023227E4A3CF00903BED /* PlaceholderAvatarImage.swift in Sources */,
 				18F2BAF927D25B4000DD1988 /* SplashViewController.swift in Sources */,
 				18F2BAE327D25B4000DD1988 /* RootRouter.swift in Sources */,
 				18F2BAE527D25B4000DD1988 /* NavigationModule.swift in Sources */,
 				18F2BB1227D25B4000DD1988 /* LoginScreenViewModel.swift in Sources */,
 				18F2BAE727D25B4000DD1988 /* RoundedToastView.swift in Sources */,
 				18F2BAF227D25B4000DD1988 /* WeakDictionaryKeyReference.swift in Sources */,
-				18F988A027DB7532002F48B4 /* TextRoomTimelineView.swift in Sources */,
+				18DF7C4727E4670600291672 /* TextRoomTimelineItem.swift in Sources */,
 				18F2BAE027D25B4000DD1988 /* NavigationRouter.swift in Sources */,
 				18F2BAF627D25B4000DD1988 /* Coordinator.swift in Sources */,
 				18F2BAEA27D25B4000DD1988 /* ActivityCenter.swift in Sources */,
+				18DF7C4827E4670600291672 /* ImageRoomTimelineView.swift in Sources */,
 				18F2BB1A27D25BE800DD1988 /* RoomTimelineController.swift in Sources */,
 				18F2BAF327D25B4000DD1988 /* WeakDictionaryReference.swift in Sources */,
 				18F2BB2A27D2648900DD1988 /* RoomTimelineControllerProtocol.swift in Sources */,
@@ -842,46 +885,47 @@
 				18F2BB1127D25B4000DD1988 /* RoomScreenModels.swift in Sources */,
 				18F2BADB27D25B4000DD1988 /* AuthenticationCoordinator.swift in Sources */,
 				1850256F27B6A135002E6B18 /* AppDelegate.swift in Sources */,
+				18DF7C4927E4670600291672 /* SeparatorRoomTimelineView.swift in Sources */,
 				18F2BAE627D25B4000DD1988 /* NavigationRouterType.swift in Sources */,
 				18F2BAE927D25B4000DD1988 /* ActivityPresentable.swift in Sources */,
+				18DF7C4327E4670600291672 /* RoomTimelineItemProtocol.swift in Sources */,
 				18F2BAF827D25B4000DD1988 /* BindableState.swift in Sources */,
 				18F2BB1827D25B4000DD1988 /* LoginScreen.swift in Sources */,
+				18DF7C5327E4754500291672 /* MemberDetailsProvider.swift in Sources */,
 				18F2BAE227D25B4000DD1988 /* NavigationRouterStoreProtocol.swift in Sources */,
 				18F2BB1727D25B4000DD1988 /* LoginScreenCoordinator.swift in Sources */,
 				18F2BAF527D25B4000DD1988 /* WeakKeyDictionary.swift in Sources */,
 				18F2BADF27D25B4000DD1988 /* NavigationRouterStore.swift in Sources */,
 				18F2BAFE27D25B4000DD1988 /* HomeScreenViewModelProtocol.swift in Sources */,
 				18DF7C3327E3608800291672 /* MockMediaProvider.swift in Sources */,
+				18DF7C4627E4670600291672 /* ImageRoomTimelineItem.swift in Sources */,
 				18F2BAE827D25B4000DD1988 /* RectangleToastView.swift in Sources */,
 				18F2BB1627D25B4000DD1988 /* LoginScreenModels.swift in Sources */,
-				18F9889E27DB752B002F48B4 /* ImageRoomTimelineView.swift in Sources */,
 				18F2BADA27D25B4000DD1988 /* RoomTimelineProvider.swift in Sources */,
 				18DF7C2F27E264FC00291672 /* MediaProvider.swift in Sources */,
 				18C5744D27E1D84000D70937 /* RoomProxy.swift in Sources */,
-				18F9889827DB7473002F48B4 /* ImageRoomTimelineItem.swift in Sources */,
 				18F2BB0027D25B4000DD1988 /* HomeScreen.swift in Sources */,
 				18F2BB2827D2647A00DD1988 /* MockRoomTimelineController.swift in Sources */,
 				18DF7C3127E3608100291672 /* MediaProviderProtocol.swift in Sources */,
 				18F2BB0127D25B4000DD1988 /* HomeScreenViewModel.swift in Sources */,
 				18F2BAF027D25B4000DD1988 /* ActivityDismissal.swift in Sources */,
 				18F2BADD27D25B4000DD1988 /* KeychainController.swift in Sources */,
-				18A318DD27DA42C9000867CD /* RoomTimelineViewProvider.swift in Sources */,
 				18F2BAFB27D25B4000DD1988 /* HomeScreenCoordinator.swift in Sources */,
 				18F2BB0C27D25B4000DD1988 /* RoomScreenCoordinator.swift in Sources */,
+				18DF7C5027E46A7A00291672 /* EventBasedTimelineView.swift in Sources */,
+				18DF7C4A27E4670600291672 /* TextRoomTimelineView.swift in Sources */,
+				18DF7C4527E4670600291672 /* SeparatorRoomTimelineItem.swift in Sources */,
+				18DF7C4227E4670600291672 /* RoomTimelineItemFactory.swift in Sources */,
 				18F2BB0E27D25B4000DD1988 /* RoomScreenViewModelProtocol.swift in Sources */,
 				18F2BB0D27D25B4000DD1988 /* RoomScreenViewModel.swift in Sources */,
-				18F988A227DB753B002F48B4 /* SeparatorRoomTimelineView.swift in Sources */,
 				18C5745427E1D88E00D70937 /* TextRoomMessage.swift in Sources */,
 				18C5745227E1D88600D70937 /* ImageRoomMessage.swift in Sources */,
 				18F2BAE127D25B4000DD1988 /* RootRouterType.swift in Sources */,
 				1850256C27B6A135002E6B18 /* AppCoordinator.swift in Sources */,
-				18F9889A27DB747B002F48B4 /* TextRoomTimelineItem.swift in Sources */,
 				18C5744C27E1D84000D70937 /* RoomProxyProtocol.swift in Sources */,
 				18C5744E27E1D84000D70937 /* MockRoomProxy.swift in Sources */,
 				18F2BADC27D25B4000DD1988 /* UserSession.swift in Sources */,
 				18F2BAEF27D25B4000DD1988 /* ActivityRequest.swift in Sources */,
-				18DF7C2C27E23EC000291672 /* RoomTimelineViewFactory.swift in Sources */,
-				18C5745827E1EB6E00D70937 /* RoomTimelineItemFactory.swift in Sources */,
 				18F2BAEE27D25B4000DD1988 /* Activity.swift in Sources */,
 				18F2BAEC27D25B4000DD1988 /* ToastActivityPresenter.swift in Sources */,
 			);

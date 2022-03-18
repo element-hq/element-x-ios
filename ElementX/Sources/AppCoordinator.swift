@@ -113,7 +113,18 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 return
             }
             
-            let parameters = RoomScreenCoordinatorParameters(roomProxy: roomProxy, mediaProvider: userSession.mediaProvider)
+            let memberDetailsProvider = MemberDetailsProvider(roomProxy: roomProxy)
+            
+            let timelineItemFactory = RoomTimelineItemFactory(mediaProvider: userSession.mediaProvider,
+                                                              memberDetailsProvider: memberDetailsProvider)
+            
+            let timelineController = RoomTimelineController(timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
+                                                            timelineItemFactory: timelineItemFactory,
+                                                            mediaProvider: userSession.mediaProvider,
+                                                            memberDetailsProvider: memberDetailsProvider)
+            
+            let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
+                                                             roomName: roomProxy.name)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             self.add(childCoordinator: coordinator)

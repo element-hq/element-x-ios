@@ -12,12 +12,3 @@ import UIKit
 protocol RoomTimelineItemProtocol {
     var id: String { get }
 }
-
-protocol BaseRoomTimelineItemProtocol: RoomTimelineItemProtocol {
-    var text: String { get }
-    var timestamp: String { get }
-    var shouldShowSenderDetails: Bool { get }
-    
-    var sender: String { get }
-    var senderAvatar: UIImage? { get set }
-}

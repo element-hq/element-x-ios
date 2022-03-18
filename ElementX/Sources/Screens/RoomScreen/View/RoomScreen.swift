@@ -240,9 +240,9 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
 
 struct RoomScreen_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = RoomScreenViewModel(roomProxy: MockRoomProxy(displayName: "Test"),
-                                            timelineController: MockRoomTimelineController(),
-                                            timelineViewFactory: RoomTimelineViewFactory())
+        let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                            timelineViewFactory: RoomTimelineViewFactory(),
+                                            roomName: "Preview room")
         
         RoomScreen(context: viewModel.context)
     }

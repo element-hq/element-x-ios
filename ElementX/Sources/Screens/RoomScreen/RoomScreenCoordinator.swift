@@ -17,8 +17,8 @@
 import SwiftUI
 
 struct RoomScreenCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    let timelineController: RoomTimelineControllerProtocol
+    let roomName: String?
 }
 
 final class RoomScreenCoordinator: Coordinator, Presentable {
@@ -42,14 +42,10 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        let timelineProvider = RoomTimelineProvider(roomProxy: parameters.roomProxy)
-        let timelineController = RoomTimelineController(timelineProvider: timelineProvider,
-                                                        timelineItemFactory: RoomTimelineItemFactory(mediaProvider: parameters.mediaProvider),
-                                                        mediaProvider: parameters.mediaProvider)
+        let viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
+                                            timelineViewFactory: RoomTimelineViewFactory(),
+                                            roomName: parameters.roomName)
         
-        let viewModel = RoomScreenViewModel(roomProxy: parameters.roomProxy,
-                                            timelineController: timelineController,
-                                            timelineViewFactory: RoomTimelineViewFactory())
         let view = RoomScreen(context: viewModel.context)
         roomScreenViewModel = viewModel
         roomScreenHostingController = UIHostingController(rootView: view)

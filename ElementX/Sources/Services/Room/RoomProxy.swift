@@ -91,7 +91,7 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     }
     
     func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
-        DispatchQueue.global(qos: .background).async {
+        processingQueue.async {
             do {
                 let avatarURL = try self.room.memberAvatarUrl(userId: userId)
                 
@@ -107,7 +107,7 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     }
     
     func loadDisplayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
-        DispatchQueue.global(qos: .background).async {
+        processingQueue.async {
             do {
                 let displayName = try self.room.displayName()
                 
@@ -123,7 +123,6 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     }
             
     func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], RoomProxyError>) -> Void)?) {
-        MXLog.debug("Started backpaginating")
         processingQueue.async {
             guard let backwardStream = self.backwardStream else {
                 DispatchQueue.main.async {
@@ -135,8 +134,6 @@ class RoomProxy: RoomProxyProtocol, Equatable {
             let messages = backwardStream.paginateBackwards(count: UInt64(count)).map { message in
                 self.messageFactory.buildRoomMessageFrom(message)
             }
-            
-            MXLog.debug("Finished backpaginating")
             
             DispatchQueue.main.async {                
                 callback?(.success(messages))
