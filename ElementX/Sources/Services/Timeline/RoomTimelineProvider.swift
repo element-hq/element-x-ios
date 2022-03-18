@@ -9,15 +9,7 @@
 import Foundation
 import Combine
 
-enum RoomTimelineCallback {
-    case addedMessage
-}
-
-enum RoomTimelineError: Error {
-    case generic
-}
-
-class RoomTimelineProvider {
+class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
     private var cancellables = Set<AnyCancellable>()
     
@@ -48,18 +40,6 @@ class RoomTimelineProvider {
                 callback?(.success((self.messages)))
             case .failure:
                 callback?(.failure(.generic))
-            }
-        }
-    }
-    
-    // This is probably not the right place for this method. We need a RoomMemberProvider or something
-    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomTimelineError>) -> Void) {
-        self.roomProxy.avatarURLForUserId(userId) { result in
-            switch result {
-            case .success(let avatarURL):
-                completion(.success(avatarURL))
-            case .failure:
-                completion(.failure(.generic))
             }
         }
     }

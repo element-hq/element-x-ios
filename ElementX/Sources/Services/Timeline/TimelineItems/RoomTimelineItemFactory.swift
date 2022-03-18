@@ -11,10 +11,10 @@ import UIKit
 
 struct RoomTimelineItemFactory {
     private let mediaProvider: MediaProviderProtocol
-    private let memberDetailsProvider: MemberDetailsProvider
+    private let memberDetailsProvider: MemberDetailsProviderProtocol
     
     init(mediaProvider: MediaProviderProtocol,
-         memberDetailsProvider: MemberDetailsProvider) {
+         memberDetailsProvider: MemberDetailsProviderProtocol) {
         self.mediaProvider = mediaProvider
         self.memberDetailsProvider = memberDetailsProvider
     }

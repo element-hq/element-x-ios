@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		182BC48127C4EBBB00A30C33 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 182BC48027C4EBBB00A30C33 /* Kingfisher */; };
 		183E023227E4A3CF00903BED /* PlaceholderAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023127E4A3CF00903BED /* PlaceholderAvatarImage.swift */; };
+		183E023427E4A73C00903BED /* MemberDetailsProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */; };
+		183E023627E4A79D00903BED /* RoomTimelineProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */; };
 		184B31DF27D898960075A669 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 184B31DE27D898960075A669 /* Introspect */; };
 		1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850253E27B6918D002E6B18 /* ElementXTests.swift */; };
 		1850254927B6918D002E6B18 /* ElementXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254827B6918D002E6B18 /* ElementXUITests.swift */; };
@@ -123,6 +125,8 @@
 /* Begin PBXFileReference section */
 		181716DC27E11EF1002B8E3F /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		183E023127E4A3CF00903BED /* PlaceholderAvatarImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PlaceholderAvatarImage.swift; path = ../../../../../../../../Desktop/PlaceholderAvatarImage.swift; sourceTree = "<group>"; };
+		183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailsProviderProtocol.swift; sourceTree = "<group>"; };
+		183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineProviderProtocol.swift; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253A27B6918D002E6B18 /* ElementXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElementXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253E27B6918D002E6B18 /* ElementXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementXTests.swift; sourceTree = "<group>"; };
@@ -399,6 +403,7 @@
 		18DF7C5127E4753A00291672 /* Members */ = {
 			isa = PBXGroup;
 			children = (
+				183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */,
 				18DF7C5227E4754500291672 /* MemberDetailsProvider.swift */,
 			);
 			path = Members;
@@ -418,10 +423,11 @@
 		18F2BA7627D25B4000DD1988 /* Timeline */ = {
 			isa = PBXGroup;
 			children = (
+				183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */,
+				18F2BA7727D25B4000DD1988 /* RoomTimelineProvider.swift */,
 				18F2BB2927D2648900DD1988 /* RoomTimelineControllerProtocol.swift */,
 				18F2BB1927D25BE800DD1988 /* RoomTimelineController.swift */,
 				18F2BB2727D2647A00DD1988 /* MockRoomTimelineController.swift */,
-				18F2BA7727D25B4000DD1988 /* RoomTimelineProvider.swift */,
 				18DF7C3427E4670600291672 /* TimelineItems */,
 			);
 			path = Timeline;
@@ -858,6 +864,7 @@
 				18DF7C4127E4670600291672 /* RoomTimelineViewProvider.swift in Sources */,
 				18F2BB0F27D25B4000DD1988 /* RoomScreen.swift in Sources */,
 				18F2BAFF27D25B4000DD1988 /* HomeScreenModels.swift in Sources */,
+				183E023427E4A73C00903BED /* MemberDetailsProviderProtocol.swift in Sources */,
 				18DF7C4E27E4673E00291672 /* DecorationTimelineItemProtocol.swift in Sources */,
 				18F2BB1527D25B4000DD1988 /* LoginScreenViewModelProtocol.swift in Sources */,
 				18F2BAEB27D25B4000DD1988 /* LabelledActivityIndicatorView.swift in Sources */,
@@ -870,6 +877,7 @@
 				18F2BB1227D25B4000DD1988 /* LoginScreenViewModel.swift in Sources */,
 				18F2BAE727D25B4000DD1988 /* RoundedToastView.swift in Sources */,
 				18F2BAF227D25B4000DD1988 /* WeakDictionaryKeyReference.swift in Sources */,
+				183E023627E4A79D00903BED /* RoomTimelineProviderProtocol.swift in Sources */,
 				18DF7C4727E4670600291672 /* TextRoomTimelineItem.swift in Sources */,
 				18F2BAE027D25B4000DD1988 /* NavigationRouter.swift in Sources */,
 				18F2BAF627D25B4000DD1988 /* Coordinator.swift in Sources */,

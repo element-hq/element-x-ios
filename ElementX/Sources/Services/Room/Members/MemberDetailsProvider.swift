@@ -8,12 +8,7 @@
 
 import Foundation
 
-enum MemberDetailsProviderError: Error {
-    case invalidRoomProxy
-    case failedRetrievingUserAvatarURL
-}
-
-class MemberDetailsProvider {
+class MemberDetailsProvider: MemberDetailsProviderProtocol {
     private let roomProxy: RoomProxyProtocol?
     private let processingQueue = DispatchQueue(label: "MemberDetailsProviderProcessingQueue")
     private var memberAvatars = [String: String]()

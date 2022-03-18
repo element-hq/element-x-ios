@@ -10,10 +10,10 @@ import Foundation
 import Combine
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
-    private let timelineProvider: RoomTimelineProvider
+    private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactory
     private let mediaProvider: MediaProviderProtocol
-    private let memberDetailsProvider: MemberDetailsProvider
+    private let memberDetailsProvider: MemberDetailsProviderProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -21,10 +21,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
     
-    init(timelineProvider: RoomTimelineProvider,
+    init(timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactory,
          mediaProvider: MediaProviderProtocol,
-         memberDetailsProvider: MemberDetailsProvider) {
+         memberDetailsProvider: MemberDetailsProviderProtocol) {
         self.timelineProvider = timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
