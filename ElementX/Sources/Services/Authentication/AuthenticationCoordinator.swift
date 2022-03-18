@@ -113,7 +113,7 @@ class AuthenticationCoordinator: Coordinator {
         }
         
         add(childCoordinator: coordinator)
-        navigationRouter.present(coordinator)
+        navigationRouter.setRootModule(coordinator)
         
         coordinator.start()
     }
