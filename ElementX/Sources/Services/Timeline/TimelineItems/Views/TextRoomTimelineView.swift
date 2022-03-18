@@ -15,12 +15,16 @@ struct TextRoomTimelineView: View {
     var body: some View {
         VStack(alignment: .leading) {
             EventBasedTimelineView(timelineItem: timelineItem)
-            Text(timelineItem.text)
-                .fixedSize(horizontal: false, vertical: true)
+            if let attributedString = try? AttributedString(markdown: timelineItem.text) {
+                Text(attributedString)
+                    .fixedSize(horizontal: false, vertical: true)
+            } else {
+                Text(timelineItem.text)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
         }
         .id(timelineItem.id)
     }
-
 }
 
 struct TextRoomTimelineView_Previews: PreviewProvider {
