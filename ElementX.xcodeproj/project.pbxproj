@@ -21,7 +21,7 @@
 		1863A3FC27BA5A9100B52E4D /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A3FB27BA5A9100B52E4D /* KeychainAccess */; };
 		1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A40527BA6DFC00B52E4D /* SwiftyBeaver */; };
 		18ADC7D527E4B20300A8C953 /* PlaceholderAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7D427E4B20300A8C953 /* PlaceholderAvatarImage.swift */; };
-		18C5744627E11F1900D70937 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 18C5744527E11F1900D70937 /* MatrixRustSDK */; };
+		18ADC7D827E4B63C00A8C953 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 18ADC7D727E4B63C00A8C953 /* MatrixRustSDK */; };
 		18C5744C27E1D84000D70937 /* RoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */; };
 		18C5744D27E1D84000D70937 /* RoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744A27E1D84000D70937 /* RoomProxy.swift */; };
 		18C5744E27E1D84000D70937 /* MockRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744B27E1D84000D70937 /* MockRoomProxy.swift */; };
@@ -123,7 +123,6 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		181716DC27E11EF1002B8E3F /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailsProviderProtocol.swift; sourceTree = "<group>"; };
 		183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineProviderProtocol.swift; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -229,7 +228,7 @@
 			files = (
 				182BC48127C4EBBB00A30C33 /* Kingfisher in Frameworks */,
 				1863A3FC27BA5A9100B52E4D /* KeychainAccess in Frameworks */,
-				18C5744627E11F1900D70937 /* MatrixRustSDK in Frameworks */,
+				18ADC7D827E4B63C00A8C953 /* MatrixRustSDK in Frameworks */,
 				184B31DF27D898960075A669 /* Introspect in Frameworks */,
 				1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */,
 			);
@@ -255,7 +254,6 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
-				181716DC27E11EF1002B8E3F /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
@@ -713,7 +711,7 @@
 				1863A40527BA6DFC00B52E4D /* SwiftyBeaver */,
 				182BC48027C4EBBB00A30C33 /* Kingfisher */,
 				184B31DE27D898960075A669 /* Introspect */,
-				18C5744527E11F1900D70937 /* MatrixRustSDK */,
+				18ADC7D727E4B63C00A8C953 /* MatrixRustSDK */,
 			);
 			productName = ElementX;
 			productReference = 1850252427B6918C002E6B18 /* ElementX.app */;
@@ -793,6 +791,7 @@
 				1863A40427BA6DFC00B52E4D /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
 				182BC47F27C4EBBB00A30C33 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				184B31DD27D898960075A669 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				18ADC7D627E4B63C00A8C953 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
 			);
 			productRefGroup = 1850252527B6918C002E6B18 /* Products */;
 			projectDirPath = "";
@@ -1317,6 +1316,14 @@
 				minimumVersion = 1.0.0;
 			};
 		};
+		18ADC7D627E4B63C00A8C953 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1340,8 +1347,9 @@
 			package = 1863A40427BA6DFC00B52E4D /* XCRemoteSwiftPackageReference "SwiftyBeaver" */;
 			productName = SwiftyBeaver;
 		};
-		18C5744527E11F1900D70937 /* MatrixRustSDK */ = {
+		18ADC7D727E4B63C00A8C953 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 18ADC7D627E4B63C00A8C953 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 /* End XCSwiftPackageProductDependency section */
