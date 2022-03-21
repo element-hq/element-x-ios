@@ -12,6 +12,7 @@ class MemberDetailsProvider: MemberDetailsProviderProtocol {
     private let roomProxy: RoomProxyProtocol?
     private let processingQueue = DispatchQueue(label: "MemberDetailsProviderProcessingQueue")
     private var memberAvatars = [String: String]()
+    private var memberDisplayNames = [String: String]()
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
@@ -45,6 +46,40 @@ class MemberDetailsProvider: MemberDetailsProviderProtocol {
                 case .failure:
                     DispatchQueue.main.async {
                         completion(.failure(.failedRetrievingUserAvatarURL))
+                    }
+                }
+            })
+        }
+    }
+    
+    func displayNameForUserId(_ userId: String) -> String? {
+        self.memberDisplayNames[userId]
+    }
+    
+    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailsProviderError>) -> Void) {
+        guard let roomProxy = roomProxy else {
+            return
+        }
+        
+        if let avatarURL = displayNameForUserId(userId) {
+            completion(.success(avatarURL))
+        }
+        
+        processingQueue.async {
+            roomProxy.displayNameForUserId(userId, completion: { [weak self] result in
+                guard let self = self else {
+                    return
+                }
+                
+                switch result {
+                case .success(let displayName):
+                    DispatchQueue.main.async {
+                        self.memberDisplayNames[userId] = displayName
+                        completion(.success(displayName))
+                    }
+                case .failure:
+                    DispatchQueue.main.async {
+                        completion(.failure(.failedRetrievingUserDisplayName))
                     }
                 }
             })

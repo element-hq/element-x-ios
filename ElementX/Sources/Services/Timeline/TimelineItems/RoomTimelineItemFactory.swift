@@ -21,6 +21,7 @@ struct RoomTimelineItemFactory {
     
     func buildTimelineItemFor(_ roomMessage: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
         
+        let displayName = memberDetailsProvider.displayNameForUserId(roomMessage.sender)
         let avatarURL = memberDetailsProvider.avatarURLForUserId(roomMessage.sender)
         let avatarImage = mediaProvider.imageForURL(avatarURL)
         
@@ -30,14 +31,16 @@ struct RoomTimelineItemFactory {
                                         text: message.content,
                                         timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                         shouldShowSenderDetails: showSenderDetails,
-                                        sender: message.sender,
+                                        senderId: message.sender,
+                                        senderDisplayName: displayName,
                                         senderAvatar: avatarImage)
         case let message as ImageRoomMessage:
             return ImageRoomTimelineItem(id: message.id,
                                          text: message.content,
                                          timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                          shouldShowSenderDetails: showSenderDetails,
-                                         sender: message.sender,
+                                         senderId: message.sender,
+                                         senderDisplayName: displayName,
                                          senderAvatar: avatarImage,
                                          url: message.url,
                                          image: mediaProvider.imageForURL(message.url))

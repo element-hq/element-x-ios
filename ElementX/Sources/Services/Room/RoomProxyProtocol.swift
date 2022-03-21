@@ -12,6 +12,8 @@ enum RoomProxyError: Error {
     case failedRetrievingDisplayName
     case failedRetrievingAvatar
     case backwardStreamNotAvailable
+    case failedRetrievingMemberAvatarURL
+    case failedRetrievingMemberDisplayName
 }
 
 enum RoomProxyCallback {
@@ -33,9 +35,11 @@ protocol RoomProxyProtocol {
     
     var avatarURL: String? { get }
     
+    func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void)
+    
     func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void)
     
-    func loadDisplayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void)
+    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void)
     
     func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], RoomProxyError>) -> Void)?)
     

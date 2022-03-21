@@ -67,7 +67,16 @@ class UserSession: ClientDelegate {
         do {
             return try client.displayName()
         } catch {
-            MXLog.error("Failed retrieving room info with error: \(error)")
+            MXLog.error("Failed retrieving the user's display name with error: \(error)")
+            return nil
+        }
+    }
+    
+    var userAvatarURL: String? {
+        do {
+            return try client.avatarUrl()
+        } catch {
+            MXLog.error("Failed retrieving the user's avatar URL with error: \(error)")
             return nil
         }
     }
@@ -93,7 +102,7 @@ class UserSession: ClientDelegate {
     
     func fetchRoomList(_ completion: @escaping ([RoomProxy]) -> Void) {
         DispatchQueue.global(qos: .background).async {
-            let rooms = self.client.conversations().map {
+            let rooms = self.client.rooms().map {
                 return RoomProxy(room: $0, messageFactory: RoomMessageFactory())
             }
             

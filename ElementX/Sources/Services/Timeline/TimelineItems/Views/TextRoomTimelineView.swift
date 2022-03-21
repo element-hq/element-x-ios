@@ -34,14 +34,14 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                                                     text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
                                                     timestamp: "Now",
                                                     shouldShowSenderDetails: true,
-                                                    sender: "Bob")
+                                                    senderId: "Bob")
             TextRoomTimelineView(timelineItem: timelineItem)
             
             let timelineItem = TextRoomTimelineItem(id: UUID().uuidString,
                                                     text: "Some other text",
                                                     timestamp: "Later",
                                                     shouldShowSenderDetails: true,
-                                                    sender: "Anne")
+                                                    senderId: "Anne")
             TextRoomTimelineView(timelineItem: timelineItem)
         }
         .padding()

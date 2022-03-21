@@ -26,7 +26,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     
     var callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
-    func loadDisplayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
+    func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
         completion(.success(displayName))
     }
     
@@ -39,6 +39,10 @@ struct MockRoomProxy: RoomProxyProtocol {
     }
     
     func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
+        
+    }
+    
+    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
         
     }
 }

@@ -15,7 +15,8 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equa
     let timestamp: String
     let shouldShowSenderDetails: Bool
     
-    let sender: String
+    let senderId: String
+    var senderDisplayName: String?
     var senderAvatar: UIImage?
     
     let url: String?

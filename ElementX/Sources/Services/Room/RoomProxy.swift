@@ -100,13 +100,29 @@ class RoomProxy: RoomProxyProtocol, Equatable {
                 }
             } catch {
                 DispatchQueue.main.async {
-                    completion(.failure(RoomProxyError.failedRetrievingDisplayName))
+                    completion(.failure(RoomProxyError.failedRetrievingMemberAvatarURL))
                 }
             }
         }
     }
     
-    func loadDisplayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
+    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
+        processingQueue.async {
+            do {
+                let displayName = try self.room.memberDisplayName(userId: userId)
+                
+                DispatchQueue.main.async {
+                    completion(.success(displayName))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(RoomProxyError.failedRetrievingMemberDisplayName))
+                }
+            }
+        }
+    }
+    
+    func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
         processingQueue.async {
             do {
                 let displayName = try self.room.displayName()

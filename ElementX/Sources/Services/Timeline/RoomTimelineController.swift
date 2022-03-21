@@ -58,7 +58,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         if let item = timelineItem as? EventBasedTimelineItemProtocol {
-            loadAvatarForTimelineItem(item)
+            loadUserAvatarForTimelineItem(item)
+            loadUserDisplayNameForTimelineItem(item)
         }
                 
         switch timelineItem {
@@ -110,13 +111,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func loadImageForTimelineItem(_ timelineItem: ImageRoomTimelineItem) {
-        var item = timelineItem
-        
-        if item.image != nil {
+        if timelineItem.image != nil {
             return
         }
         
-        guard let url = item.url else {
+        guard let url = timelineItem.url else {
             return
         }
         
@@ -126,7 +125,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             
             if case let .success(image) = result {
-                guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }) else {
+                guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                      var item = self.timelineItems[index] as? ImageRoomTimelineItem else {
                     return
                 }
                 
@@ -137,19 +137,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    private func loadAvatarForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) {
-        var item = timelineItem
-        
-        if item.shouldShowSenderDetails == false {
+    private func loadUserAvatarForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) {
+        if timelineItem.shouldShowSenderDetails == false {
             return
         }
         
-        memberDetailsProvider.avatarURLForUserId(timelineItem.sender) { result in
+        memberDetailsProvider.avatarURLForUserId(timelineItem.senderId) { result in
             if case let .success(avatarURL) = result,
                let avatarURL = avatarURL {
                 self.mediaProvider.loadImageFromURL(avatarURL) { result in
                     if case let .success(image) = result {
-                        guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }) else {
+                        guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                              var item = self.timelineItems[index] as? EventBasedTimelineItemProtocol else {
                             return
                         }
                         
@@ -158,6 +157,26 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                         self.callbacks.send(.updatedTimelineItem(timelineItem.id))
                     }
                 }
+            }
+        }
+    }
+    
+    private func loadUserDisplayNameForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) {
+        if timelineItem.shouldShowSenderDetails == false {
+            return
+        }
+        
+        memberDetailsProvider.displayNameForUserId(timelineItem.senderId) { result in
+            if case let .success(displayName) = result,
+               let displayName = displayName {
+                guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                      var item = self.timelineItems[index] as? EventBasedTimelineItemProtocol else {
+                          return
+                      }
+                
+                item.senderDisplayName = displayName
+                self.timelineItems[index] = item
+                self.callbacks.send(.updatedTimelineItem(timelineItem.id))
             }
         }
     }

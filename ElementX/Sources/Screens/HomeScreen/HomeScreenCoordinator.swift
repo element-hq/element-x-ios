@@ -51,7 +51,9 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         self.parameters = parameters
         
         let userDisplayName = self.parameters.userSession.userDisplayName ?? self.parameters.userSession.userIdentifier
-        viewModel = HomeScreenViewModel(userDisplayName: userDisplayName, mediaProvider: self.parameters.mediaProvider)
+        viewModel = HomeScreenViewModel(userDisplayName: userDisplayName,
+                                        userAvatarURL: self.parameters.userSession.userAvatarURL,
+                                        mediaProvider: self.parameters.mediaProvider)
         
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)
@@ -62,15 +64,6 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
             switch result {
             case .logout:
                 self.completion?(.logout)
-            case .loadUserAvatar:
-                self.parameters.mediaProvider.loadCurrentUserAvatar({ result in
-                    switch result {
-                    case .success(let avatar):
-                        self.viewModel.updateWithUserAvatar(avatar)
-                    default:
-                        break
-                    }
-                })
             case .selectRoom(let roomIdentifier):
                 self.completion?(.selectRoom(roomIdentifier: roomIdentifier))
             }

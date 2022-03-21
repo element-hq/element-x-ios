@@ -11,9 +11,13 @@ import Foundation
 enum MemberDetailsProviderError: Error {
     case invalidRoomProxy
     case failedRetrievingUserAvatarURL
+    case failedRetrievingUserDisplayName
 }
 
 protocol MemberDetailsProviderProtocol {
     func avatarURLForUserId(_ userId: String) -> String?
     func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailsProviderError>) -> Void)
+    
+    func displayNameForUserId(_ userId: String) -> String?
+    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailsProviderError>) -> Void)
 }

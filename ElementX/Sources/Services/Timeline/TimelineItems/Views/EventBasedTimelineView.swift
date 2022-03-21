@@ -16,7 +16,7 @@ struct EventBasedTimelineView: View {
         if timelineItem.shouldShowSenderDetails {
             HStack {
                 avatar
-                Text(timelineItem.sender)
+                Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
                     .font(.footnote)
                     .bold()
                 Spacer()
@@ -35,10 +35,18 @@ struct EventBasedTimelineView: View {
                     .scaledToFill()
                     .overlay(Circle().stroke(Color(.sRGB, red: 0.05, green: 0.74, blue: 0.55, opacity: 1.0)))
             } else {
-                PlaceholderAvatarImage(firstCharacter: String(timelineItem.sender.prefix(2).suffix(1)).uppercased())
+                PlaceholderAvatarImage(firstCharacter: String(firstLetter))
             }
         }
         .clipShape(Circle())
         .frame(width: 44.0, height: 44.0)
+    }
+    
+    private var firstLetter: String {
+        if let senderDisplayName = timelineItem.senderDisplayName {
+            return senderDisplayName.prefix(1).uppercased()
+        } else {
+            return timelineItem.senderId.prefix(2).suffix(1).uppercased()
+        }
     }
 }

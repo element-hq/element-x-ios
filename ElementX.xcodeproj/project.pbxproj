@@ -554,8 +554,8 @@
 		18F2BAA327D25B4000DD1988 /* HomeScreen */ = {
 			isa = PBXGroup;
 			children = (
-				18F2BAAB27D25B4000DD1988 /* HomeScreenModels.swift */,
 				18F2BAA427D25B4000DD1988 /* HomeScreenCoordinator.swift */,
+				18F2BAAB27D25B4000DD1988 /* HomeScreenModels.swift */,
 				18F2BAAA27D25B4000DD1988 /* HomeScreenViewModelProtocol.swift */,
 				18F2BAAE27D25B4000DD1988 /* HomeScreenViewModel.swift */,
 				18F2BAAC27D25B4000DD1988 /* View */,

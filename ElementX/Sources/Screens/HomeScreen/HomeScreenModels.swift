@@ -19,13 +19,11 @@ import UIKit
 
 enum HomeScreenViewModelResult {
     case logout
-    case loadUserAvatar
     case selectRoom(roomIdentifier: String)
 }
 
 enum HomeScreenViewAction {
     case logout
-    case loadUserAvatar
     case loadRoomData(roomIdentifier: String)
     case selectRoom(roomIdentifier: String)
 }

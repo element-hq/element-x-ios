@@ -37,9 +37,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
-    init(userDisplayName: String, mediaProvider: MediaProviderProtocol) {
+    init(userDisplayName: String, userAvatarURL: String?, mediaProvider: MediaProviderProtocol) {
         self.mediaProvider = mediaProvider
         super.init(initialViewState: HomeScreenViewState(userDisplayName: userDisplayName, isLoadingRooms: true))
+        
+        if let userAvatarURL = userAvatarURL {
+            mediaProvider.loadImageFromURL(userAvatarURL) { [weak self] result in
+                if case let .success(avatar) =  result {
+                    self?.state.userAvatar = avatar
+                }
+            }
+        }
     }
     
     // MARK: - Public
@@ -50,8 +58,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             self.completion?(.logout)
         case .loadRoomData(let roomIdentifier):
             self.loadRoomDataForIdentifier(roomIdentifier)
-        case .loadUserAvatar:
-            self.completion?(.loadUserAvatar)
         case .selectRoom(let roomIdentifier):
             self.completion?(.selectRoom(roomIdentifier: roomIdentifier))
         }
@@ -118,7 +124,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        room.loadDisplayName { [weak self] result in
+        room.displayName { [weak self] result in
             guard let self = self else { return }
             
             switch result {

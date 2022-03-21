@@ -21,22 +21,6 @@ struct MediaProvider: MediaProviderProtocol {
         self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue")
     }
     
-    func loadCurrentUserAvatar(_ completion: @escaping (Result<UIImage?, MediaProviderError>) -> Void) {
-        processingQueue.async {
-            do {
-                let imageData = try client.avatar()
-                DispatchQueue.main.async {
-                    completion(.success(UIImage(data: Data(bytes: imageData, count: imageData.count))))
-                }
-            } catch {
-                MXLog.error("Failed retrieving image with error: \(error)")
-                DispatchQueue.main.async {
-                    completion(.failure(.failedRetrievingImage))
-                }
-            }
-        }
-    }
-    
     func imageForURL(_ url: String?) -> UIImage? {
         guard let url = url else {
             return nil

@@ -79,8 +79,6 @@ struct HomeScreen: View {
                             .scaledToFill()
                             .frame(width: 40, height: 40, alignment: .center)
                             .mask(Circle())
-                    } else {
-                        let _ = context.send(viewAction: .loadUserAvatar)
                     }
                     Text("Hello, \(context.viewState.userDisplayName)!")
                         .font(.subheadline)
@@ -154,6 +152,7 @@ struct RoomCell: View {
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed",
+                                            userAvatarURL: nil,
                                             mediaProvider: MockMediaProvider())
         
         let rooms = [MockRoomProxy(displayName: "Alfa"),

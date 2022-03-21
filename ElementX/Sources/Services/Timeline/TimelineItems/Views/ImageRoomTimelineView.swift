@@ -40,7 +40,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                      text: "Some image",
                                                      timestamp: "Now",
                                                      shouldShowSenderDetails: false,
-                                                     sender: "Bob",
+                                                     senderId: "Bob",
                                                      url: nil,
                                                      image: UIImage(systemName: "photo"))
             ImageRoomTimelineView(timelineItem: timelineItem)
@@ -49,7 +49,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                      text: "Some other image",
                                                      timestamp: "Now",
                                                      shouldShowSenderDetails: false,
-                                                     sender: "Bob",
+                                                     senderId: "Bob",
                                                      url: nil,
                                                      image: nil)
             ImageRoomTimelineView(timelineItem: timelineItem)
