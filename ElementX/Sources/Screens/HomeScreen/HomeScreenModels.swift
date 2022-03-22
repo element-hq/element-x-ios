@@ -35,10 +35,6 @@ struct HomeScreenViewState: BindableState {
     var rooms: [HomeScreenRoom] = []
     var isLoadingRooms: Bool = false
     
-    var sortedRooms: [HomeScreenRoom] {
-        rooms.sorted(by: { ($0.displayName ?? $0.id).lowercased() < ($1.displayName ?? $1.id).lowercased() })
-    }
-    
     var unencryptedDMs: [HomeScreenRoom] {
         Array(sortedRooms.filter { $0.isDirect && !$0.isEncrypted })
     }
@@ -54,6 +50,14 @@ struct HomeScreenViewState: BindableState {
     var encryptedRooms: [HomeScreenRoom] {
         Array(sortedRooms.filter { !$0.isDirect && $0.isEncrypted })
     }
+    
+    private var filteredRooms: [HomeScreenRoom] {
+        rooms.filter { !$0.isSpace && !$0.isTombstoned }
+    }
+    
+    private var sortedRooms: [HomeScreenRoom] {
+        filteredRooms.sorted(by: { ($0.displayName ?? $0.id).lowercased() < ($1.displayName ?? $1.id).lowercased() })
+    }
 }
 
 struct HomeScreenRoom: Identifiable {
@@ -68,6 +72,8 @@ struct HomeScreenRoom: Identifiable {
     
     let isDirect: Bool
     let isEncrypted: Bool
+    let isSpace: Bool
+    let isTombstoned: Bool
 }
 
 extension MutableCollection where Element == HomeScreenRoom {

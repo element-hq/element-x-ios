@@ -181,6 +181,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                        topic: roomProxy.topic,
                        lastMessage: roomProxy.lastMessage,
                        isDirect: roomProxy.isDirect,
-                       isEncrypted: roomProxy.isEncrypted)
+                       isEncrypted: roomProxy.isEncrypted,
+                       isSpace: roomProxy.isSpace,
+                       isTombstoned: roomProxy.isTombstoned)
     }
 }

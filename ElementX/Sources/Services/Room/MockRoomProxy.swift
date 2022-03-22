@@ -23,6 +23,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     let isSpace = Bool.random()
     let isPublic = Bool.random()
     let isEncrypted = Bool.random()
+    let isTombstoned = Bool.random()
     
     var callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     

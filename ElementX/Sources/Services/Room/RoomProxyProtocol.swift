@@ -27,6 +27,7 @@ protocol RoomProxyProtocol {
     var isPublic: Bool { get }
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
+    var isTombstoned: Bool { get }
     
     var name: String? { get }
     
