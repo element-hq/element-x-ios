@@ -10,7 +10,7 @@ import Foundation
 
 protocol RoomMessageProtocol {
     var id: String { get }
-    var content: String { get }
+    var body: String { get }
     var sender: String { get }
     var originServerTs: Date { get }
 }

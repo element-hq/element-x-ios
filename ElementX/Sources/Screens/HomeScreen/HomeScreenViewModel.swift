@@ -159,7 +159,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                         return
                     }
                     
-                    self.updateLastMessage(lastMessage.content, forRoomWithIdentifier: roomIdentifier)
+                    self.updateLastMessage(lastMessage.body, forRoomWithIdentifier: roomIdentifier)
                 default:
                     break
                 }

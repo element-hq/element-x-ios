@@ -11,7 +11,8 @@ import UIKit
 
 struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
     let id: String
-    let text: String
+    let body: String
+    var htmlBody: String?
     let timestamp: String
     let shouldShowSenderDetails: Bool
     

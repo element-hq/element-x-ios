@@ -14,10 +14,10 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     var timelineItems: [RoomTimelineItemProtocol] = [SeparatorRoomTimelineItem(id: UUID().uuidString, text: "Yesterday"),
-                                                     TextRoomTimelineItem(id: UUID().uuidString, text: "You rock!", timestamp: "10:10 AM", shouldShowSenderDetails: true, senderId: "Alice"),
-                                                     TextRoomTimelineItem(id: UUID().uuidString, text: "You also rule!", timestamp: "10:11 AM", shouldShowSenderDetails: false, senderId: "Alice"),
+                                                     TextRoomTimelineItem(id: UUID().uuidString, body: "You rock!", timestamp: "10:10 AM", shouldShowSenderDetails: true, senderId: "Alice"),
+                                                     TextRoomTimelineItem(id: UUID().uuidString, body: "You also rule!", timestamp: "10:11 AM", shouldShowSenderDetails: false, senderId: "Alice"),
                                                      SeparatorRoomTimelineItem(id: UUID().uuidString, text: "Today"),
-                                                     TextRoomTimelineItem(id: UUID().uuidString, text: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true, senderId: "Bob")]
+                                                     TextRoomTimelineItem(id: UUID().uuidString, body: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true, senderId: "Bob")]
     
     func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineControllerError>) -> Void)) {
         callbacks.send(.updatedTimelineItems)

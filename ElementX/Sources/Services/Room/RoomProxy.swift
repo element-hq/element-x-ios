@@ -49,31 +49,35 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     }
     
     var id: String {
-        return room.id()
-    }
-    
-    var isDirect: Bool {
-        return room.isDirect()
-    }
-    
-    var isPublic: Bool {
-        return room.isPublic()
-    }
-    
-    var isSpace: Bool {
-        return room.isSpace()
-    }
-    
-    var isEncrypted: Bool {
-        return room.isEncrypted()
+        room.id()
     }
     
     var name: String? {
-        return room.name()
+        room.name()
     }
         
     var topic: String? {
-        return room.topic()
+        room.topic()
+    }
+    
+    var isDirect: Bool {
+        room.isDirect()
+    }
+    
+    var isPublic: Bool {
+        room.isPublic()
+    }
+    
+    var isSpace: Bool {
+        room.isSpace()
+    }
+    
+    var isEncrypted: Bool {
+        room.isEncrypted()
+    }
+    
+    var isTombstoned: Bool {
+        room.isTombstoned()
     }
     
     var lastMessage: String? {
@@ -154,7 +158,7 @@ class RoomProxy: RoomProxyProtocol, Equatable {
             DispatchQueue.main.async {                
                 callback?(.success(messages))
                 if self.lastMessage == nil {
-                    self.lastMessage = messages.last?.content ?? ""
+                    self.lastMessage = messages.last?.body ?? ""
                 }
             }
         }
@@ -170,7 +174,7 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     
     fileprivate func appendMessage(_ message: AnyMessage) {
         let message = self.messageFactory.buildRoomMessageFrom(message)
-        lastMessage = message.content
+        lastMessage = message.body
         
         callbacks.send(.addedMessage(message))
     }

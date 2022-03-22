@@ -16,7 +16,7 @@ struct ImageRoomTimelineView: View {
         if let image = timelineItem.image {
             VStack(alignment: .leading) {
                 EventBasedTimelineView(timelineItem: timelineItem)
-                Text(timelineItem.text)
+                Text(timelineItem.body)
                 Image(uiImage: image)
                     .resizable()
                     .scaledToFit()
@@ -24,7 +24,7 @@ struct ImageRoomTimelineView: View {
         } else {
             VStack(alignment: .center) {
                 HStack {
-                    Text(timelineItem.text)
+                    Text(timelineItem.body)
                     Spacer()
                 }
                 ProgressView("Loading")
@@ -37,7 +37,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
-                                                     text: "Some image",
+                                                     body: "Some image",
                                                      timestamp: "Now",
                                                      shouldShowSenderDetails: false,
                                                      senderId: "Bob",
@@ -46,7 +46,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
             ImageRoomTimelineView(timelineItem: timelineItem)
             
             let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
-                                                     text: "Some other image",
+                                                     body: "Some other image",
                                                      timestamp: "Now",
                                                      shouldShowSenderDetails: false,
                                                      senderId: "Bob",

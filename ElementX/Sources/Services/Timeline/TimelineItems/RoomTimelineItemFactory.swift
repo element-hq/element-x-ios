@@ -28,7 +28,8 @@ struct RoomTimelineItemFactory {
         switch roomMessage {
         case let message as TextRoomMessage:
             return TextRoomTimelineItem(id: message.id,
-                                        text: message.content,
+                                        body: message.body,
+                                        htmlBody: message.htmlBody,
                                         timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                         shouldShowSenderDetails: showSenderDetails,
                                         senderId: message.sender,
@@ -36,7 +37,7 @@ struct RoomTimelineItemFactory {
                                         senderAvatar: avatarImage)
         case let message as ImageRoomMessage:
             return ImageRoomTimelineItem(id: message.id,
-                                         text: message.content,
+                                         body: message.body,
                                          timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                          shouldShowSenderDetails: showSenderDetails,
                                          senderId: message.sender,

@@ -21,8 +21,12 @@ struct TextRoomMessage: RoomMessageProtocol {
         message.baseMessage().id()
     }
     
-    var content: String {
-        message.baseMessage().content()
+    var body: String {
+        message.baseMessage().body()
+    }
+    
+    var htmlBody: String? {
+        message.htmlBody()
     }
     
     var sender: String {
