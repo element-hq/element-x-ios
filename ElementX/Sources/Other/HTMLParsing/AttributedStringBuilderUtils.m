@@ -15,7 +15,56 @@
 // Attribute in an NSAttributeString that marks a blockquote block that was in the original HTML string.
 NSString *const kMXKToolsBlockquoteMarkAttribute = @"kMXKToolsBlockquoteMarkAttribute";
 
+static NSRegularExpression *userIdRegex;
+static NSRegularExpression *roomIdRegex;
+static NSRegularExpression *roomAliasRegex;
+static NSRegularExpression *eventIdRegex;
+static NSRegularExpression *groupIdRegex;
+static NSRegularExpression *httpLinksRegex;
+static NSRegularExpression *htmlTagsRegex;
+
+#define MATRIX_HOMESERVER_DOMAIN_REGEX                            @"[A-Z0-9]+((\\.|\\-)[A-Z0-9]+){0,}(:[0-9]{2,5})?"
+
+NSString *const kMXToolsRegexStringForMatrixUserIdentifier      = @"@[\\x21-\\x39\\x3B-\\x7F]+:" MATRIX_HOMESERVER_DOMAIN_REGEX;
+NSString *const kMXToolsRegexStringForMatrixRoomAlias           = @"#[A-Z0-9._%#@=+-]+:" MATRIX_HOMESERVER_DOMAIN_REGEX;
+NSString *const kMXToolsRegexStringForMatrixRoomIdentifier      = @"![A-Z0-9]+:" MATRIX_HOMESERVER_DOMAIN_REGEX;
+NSString *const kMXToolsRegexStringForMatrixEventIdentifier     = @"\\$[A-Z0-9]+:" MATRIX_HOMESERVER_DOMAIN_REGEX;
+NSString *const kMXToolsRegexStringForMatrixEventIdentifierV3   = @"\\$[A-Z0-9\\/+]+";
+NSString *const kMXToolsRegexStringForMatrixGroupIdentifier     = @"\\+[A-Z0-9=_\\-./]+:" MATRIX_HOMESERVER_DOMAIN_REGEX;
+
 @implementation AttributedStringBuilderUtils
+
++ (void)initialize
+{
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        
+        userIdRegex = [NSRegularExpression regularExpressionWithPattern:kMXToolsRegexStringForMatrixUserIdentifier options:NSRegularExpressionCaseInsensitive error:nil];
+        roomIdRegex = [NSRegularExpression regularExpressionWithPattern:kMXToolsRegexStringForMatrixRoomIdentifier options:NSRegularExpressionCaseInsensitive error:nil];
+        roomAliasRegex = [NSRegularExpression regularExpressionWithPattern:kMXToolsRegexStringForMatrixRoomAlias options:NSRegularExpressionCaseInsensitive error:nil];
+        eventIdRegex = [NSRegularExpression regularExpressionWithPattern:kMXToolsRegexStringForMatrixEventIdentifier options:NSRegularExpressionCaseInsensitive error:nil];
+        groupIdRegex = [NSRegularExpression regularExpressionWithPattern:kMXToolsRegexStringForMatrixGroupIdentifier options:NSRegularExpressionCaseInsensitive error:nil];
+        
+        httpLinksRegex = [NSRegularExpression regularExpressionWithPattern:@"(?i)\\b(https?://.*)\\b" options:NSRegularExpressionCaseInsensitive error:nil];
+        htmlTagsRegex  = [NSRegularExpression regularExpressionWithPattern:@"<(\\w+)[^>]*>" options:NSRegularExpressionCaseInsensitive error:nil];
+    });
+}
+
++ (NSString*)cssToMarkBlockquotes
+{
+    return [NSString stringWithFormat:@"blockquote {background: #%lX; display: block;}", (unsigned long)[[self class] rgbValueWithColor:kMXKToolsBlockquoteMarkColor]];
+}
+
++ (NSUInteger)rgbValueWithColor:(UIColor*)color
+{
+    CGFloat red, green, blue, alpha;
+    
+    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    
+    NSUInteger rgbValue = ((int)(red * 255) << 16) + ((int)(green * 255) << 8) + (blue * 255);
+    
+    return rgbValue;
+}
 
 + (NSAttributedString *)removeDTCoreTextArtifacts:(NSAttributedString *)attributedString
 {
@@ -89,11 +138,6 @@ NSString *const kMXKToolsBlockquoteMarkAttribute = @"kMXKToolsBlockquoteMarkAttr
                                      }];
     
     return mutableAttributedString;
-}
-
-+ (NSString*)cssToMarkBlockquotes
-{
-    return [NSString stringWithFormat:@"blockquote {background: #%lX; display: block;}", (unsigned long)[[self class] rgbValueWithColor:kMXKToolsBlockquoteMarkColor]];
 }
 
 + (NSAttributedString*)removeMarkedBlockquotesArtifacts:(NSAttributedString*)attributedString
@@ -172,29 +216,125 @@ NSString *const kMXKToolsBlockquoteMarkAttribute = @"kMXKToolsBlockquoteMarkAttr
     return mutableAttributedString;
 }
 
-+ (NSUInteger)rgbValueWithColor:(UIColor*)color
++ (NSAttributedString*)createLinks:(NSAttributedString*)attributedString
 {
-    CGFloat red, green, blue, alpha;
+    if (!attributedString)
+    {
+        return nil;
+    }
     
-    [color getRed:&red green:&green blue:&blue alpha:&alpha];
+    NSMutableAttributedString *postRenderAttributedString;
     
-    NSUInteger rgbValue = ((int)(red * 255) << 16) + ((int)(green * 255) << 8) + (blue * 255);
+    [[self class] createHTTPLinksInAttributedString:attributedString withWorkingAttributedString:&postRenderAttributedString];
+    [[self class] createLinksInAttributedString:attributedString matchingRegex:userIdRegex withWorkingAttributedString:&postRenderAttributedString];
+    [[self class] createLinksInAttributedString:attributedString matchingRegex:roomIdRegex withWorkingAttributedString:&postRenderAttributedString];
+    [[self class] createLinksInAttributedString:attributedString matchingRegex:roomAliasRegex withWorkingAttributedString:&postRenderAttributedString];
+    [[self class] createLinksInAttributedString:attributedString matchingRegex:eventIdRegex withWorkingAttributedString:&postRenderAttributedString];
+    [[self class] createLinksInAttributedString:attributedString matchingRegex:groupIdRegex withWorkingAttributedString:&postRenderAttributedString];
     
-    return rgbValue;
+    return postRenderAttributedString ? postRenderAttributedString : attributedString;
 }
 
-+ (void)enumerateMarkedBlockquotesInAttributedString:(NSAttributedString*)attributedString usingBlock:(void (^)(NSRange range, BOOL *stop))block
++ (void)createHTTPLinksInAttributedString:(NSAttributedString*)attributedString
+              withWorkingAttributedString:(NSMutableAttributedString* __autoreleasing *)mutableAttributedString
 {
-    [attributedString enumerateAttribute:kMXKToolsBlockquoteMarkAttribute
-                                 inRange:NSMakeRange(0, attributedString.length)
-                                 options:0
-                              usingBlock:^(id  _Nullable value, NSRange range, BOOL * _Nonnull stop)
-     {
-         if ([value isKindOfClass:NSNumber.class] && ((NSNumber*)value).boolValue)
-         {
-             block(range, stop);
-         }
-     }];
+    // Enumerate each string matching the regex
+    [httpLinksRegex enumerateMatchesInString:attributedString.string options:0 range:NSMakeRange(0, attributedString.length) usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop) {
+        
+        // Do not create a link if there is already one on the found match
+        __block BOOL hasAlreadyLink = NO;
+        [attributedString enumerateAttributesInRange:match.range options:0 usingBlock:^(NSDictionary<NSString *,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+            
+            if (attrs[NSLinkAttributeName])
+            {
+                hasAlreadyLink = YES;
+                *stop = YES;
+            }
+        }];
+        
+        if (!hasAlreadyLink)
+        {
+            // Create the output string only if it is necessary because attributed strings cost CPU
+            if (!*mutableAttributedString)
+            {
+                *mutableAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
+            }
+            
+            // Make the link clickable
+            // Caution: We need here to escape the non-ASCII characters (like '#' in room alias)
+            // to convert the link into a legal URL string.
+            NSString *link = [attributedString.string substringWithRange:match.range];
+            link = [link stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            [*mutableAttributedString addAttribute:NSLinkAttributeName value:link range:match.range];
+            [*mutableAttributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blueColor range:match.range];
+        }
+    }];
+}
+
++ (void)createLinksInAttributedString:(NSAttributedString*)attributedString
+                        matchingRegex:(NSRegularExpression*)regex
+          withWorkingAttributedString:(NSMutableAttributedString* __autoreleasing *)mutableAttributedString
+{
+    __block NSArray *linkMatches;
+    
+    // Enumerate each string matching the regex
+    [regex enumerateMatchesInString:attributedString.string options:0 range:NSMakeRange(0, attributedString.length) usingBlock:^(NSTextCheckingResult *match, NSMatchingFlags flags, BOOL *stop) {
+        
+        // Do not create a link if there is already one on the found match
+        __block BOOL hasAlreadyLink = NO;
+        [attributedString enumerateAttributesInRange:match.range options:0 usingBlock:^(NSDictionary<NSString *,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
+            
+            if (attrs[NSLinkAttributeName])
+            {
+                hasAlreadyLink = YES;
+                *stop = YES;
+            }
+        }];
+        
+        // Do not create a link if the match is part of an http link.
+        // The http link will be automatically generated by the UI afterwards.
+        // So, do not break it now by adding a link on a subset of this http link.
+        if (!hasAlreadyLink)
+        {
+            if (!linkMatches)
+            {
+                // Search for the links in the string only once
+                // Do not use NSDataDetector with NSTextCheckingTypeLink because is not able to
+                // manage URLs with 2 hashes like "https://matrix.to/#/#matrix:matrix.org"
+                // Such URL is not valid but web browsers can open them and users C+P them...
+                // NSDataDetector does not support it but UITextView and UIDataDetectorTypeLink
+                // detect them when they are displayed. So let the UI create the link at display.
+                linkMatches = [httpLinksRegex matchesInString:attributedString.string options:0 range:NSMakeRange(0, attributedString.length)];
+            }
+            
+            for (NSTextCheckingResult *linkMatch in linkMatches)
+            {
+                // If the match is fully in the link, skip it
+                if (NSIntersectionRange(match.range, linkMatch.range).length == match.range.length)
+                {
+                    hasAlreadyLink = YES;
+                    break;
+                }
+            }
+        }
+        
+        if (!hasAlreadyLink)
+        {
+            // Create the output string only if it is necessary because attributed strings cost CPU
+            if (!*mutableAttributedString)
+            {
+                *mutableAttributedString = [[NSMutableAttributedString alloc] initWithAttributedString:attributedString];
+            }
+            
+            // Make the link clickable
+            // Caution: We need here to escape the non-ASCII characters (like '#' in room alias)
+            // to convert the link into a legal URL string.
+            NSString *link = [attributedString.string substringWithRange:match.range];
+            link = [link stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+            [*mutableAttributedString addAttribute:NSLinkAttributeName value:link range:match.range];
+            [*mutableAttributedString addAttribute:NSForegroundColorAttributeName value:UIColor.blueColor range:match.range];
+        }
+    }];
 }
 
 @end

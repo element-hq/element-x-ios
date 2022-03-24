@@ -72,6 +72,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):
             timelineController.processItemDisappearance(id)
+        case .linkClicked(let url):
+            MXLog.warning("Link clicked: \(url)")
         }
     }
     

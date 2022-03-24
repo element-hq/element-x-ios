@@ -49,7 +49,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             DTDefaultFontName: defaultFont.fontName,
             DTDefaultFontSize: defaultFont.pointSize,
             DTDefaultTextColor: defaultColor,
-            DTDefaultLinkDecoration: false,
             DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: self.defaultCSS) as Any
         ]
         
@@ -68,6 +67,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         nsAttributedString = AttributedStringBuilderUtils.removeDTCoreTextArtifacts(nsAttributedString)
         
         nsAttributedString = AttributedStringBuilderUtils.removeMarkedBlockquotesArtifacts(nsAttributedString)
+        
+        nsAttributedString = AttributedStringBuilderUtils.createLinks(nsAttributedString)
         
         return try? AttributedString(nsAttributedString, including: \.elementX)
     }

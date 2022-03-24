@@ -14,13 +14,13 @@ FOUNDATION_EXPORT NSString *const kMXKToolsBlockquoteMarkAttribute;
 
 @interface AttributedStringBuilderUtils : NSObject
 
++ (NSString*)cssToMarkBlockquotes;
+
 + (NSAttributedString *)removeDTCoreTextArtifacts:(NSAttributedString *)attributedString;
 
 + (NSAttributedString*)removeMarkedBlockquotesArtifacts:(NSAttributedString*)attributedString;
 
-+ (NSString*)cssToMarkBlockquotes;
-
-+ (void)enumerateMarkedBlockquotesInAttributedString:(NSAttributedString*)attributedString usingBlock:(void (^)(NSRange range, BOOL *stop))block;
++ (NSAttributedString*)createLinks:(NSAttributedString*)attributedString;
 
 @end
 

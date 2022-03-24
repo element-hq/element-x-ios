@@ -24,6 +24,7 @@ enum RoomScreenViewAction {
     case loadPreviousPage
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
+    case linkClicked(url: URL)
 }
 
 struct RoomScreenViewState: BindableState {

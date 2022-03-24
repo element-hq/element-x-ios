@@ -49,6 +49,10 @@ struct RoomScreen: View {
                         .onDisappear {
                             context.send(viewAction: .itemDisappeared(id: timelineItem.id))
                         }
+                        .environment(\.openURL, OpenURLAction { url in
+                            context.send(viewAction: .linkClicked(url: url))
+                            return .systemAction
+                        })
                 }
             }
             .listStyle(.plain)

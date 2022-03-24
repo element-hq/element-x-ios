@@ -15,8 +15,8 @@ struct TextRoomTimelineView: View {
     var body: some View {
         VStack(alignment: .leading) {
             EventBasedTimelineView(timelineItem: timelineItem)
-            if let components = timelineItem.attributedComponents {
-                FormattedBodyText(attributedComponents: components)
+            if let attributedComponents = timelineItem.attributedComponents {
+                FormattedBodyText(attributedComponents: attributedComponents)
             } else {
                 Text(timelineItem.text)
             }
