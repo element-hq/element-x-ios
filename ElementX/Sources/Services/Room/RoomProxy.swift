@@ -151,9 +151,12 @@ class RoomProxy: RoomProxyProtocol, Equatable {
                 return
             }
             
-            let messages = backwardStream.paginateBackwards(count: UInt64(count)).map { message in
+            var messages = backwardStream.paginateBackwards(count: UInt64(count)).map { message in
                 self.messageFactory.buildRoomMessageFrom(message)
             }
+            
+            // FIXME: Something wrong on the Rust side and these come in out of order sometimes.
+            messages = messages.sorted(by: { $0.originServerTs < $1.originServerTs })
             
             DispatchQueue.main.async {                
                 callback?(.success(messages))

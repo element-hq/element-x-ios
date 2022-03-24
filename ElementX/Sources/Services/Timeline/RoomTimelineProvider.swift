@@ -36,7 +36,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         self.roomProxy.paginateBackwards(count: count) { result in
             switch result {
             case .success(let messages):
-                self.messages.insert(contentsOf: messages.reversed(), at: 0)
+                self.messages.insert(contentsOf: messages, at: 0)
                 callback?(.success((self.messages)))
             case .failure:
                 callback?(.failure(.generic))
