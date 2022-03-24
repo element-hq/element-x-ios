@@ -2,6 +2,24 @@
   "object": {
     "pins": [
       {
+        "package": "DTCoreText",
+        "repositoryURL": "https://github.com/Cocoanetics/DTCoreText",
+        "state": {
+          "branch": "develop",
+          "revision": "9f515155c6fcb5d9c39150aa048685aa65b4904f",
+          "version": null
+        }
+      },
+      {
+        "package": "DTFoundation",
+        "repositoryURL": "https://github.com/Cocoanetics/DTFoundation.git",
+        "state": {
+          "branch": null,
+          "revision": "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
+          "version": "1.7.18"
+        }
+      },
+      {
         "package": "KeychainAccess",
         "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess",
         "state": {

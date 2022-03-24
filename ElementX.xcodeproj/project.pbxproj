@@ -22,6 +22,10 @@
 		1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A40527BA6DFC00B52E4D /* SwiftyBeaver */; };
 		18ADC7D527E4B20300A8C953 /* PlaceholderAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7D427E4B20300A8C953 /* PlaceholderAvatarImage.swift */; };
 		18ADC7D827E4B63C00A8C953 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 18ADC7D727E4B63C00A8C953 /* MatrixRustSDK */; };
+		18ADC7FA27EB02D900A8C953 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */; };
+		18ADC7FE27EB033400A8C953 /* DTCoreText in Frameworks */ = {isa = PBXBuildFile; productRef = 18ADC7FD27EB033400A8C953 /* DTCoreText */; };
+		18ADC80627EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */; };
+		18ADC80A27EB1F8B00A8C953 /* AttributedStringBuilderUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC80927EB1F8B00A8C953 /* AttributedStringBuilderUtils.m */; };
 		18C5744C27E1D84000D70937 /* RoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */; };
 		18C5744D27E1D84000D70937 /* RoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744A27E1D84000D70937 /* RoomProxy.swift */; };
 		18C5744E27E1D84000D70937 /* MockRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744B27E1D84000D70937 /* MockRoomProxy.swift */; };
@@ -29,6 +33,10 @@
 		18C5745227E1D88600D70937 /* ImageRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745127E1D88600D70937 /* ImageRoomMessage.swift */; };
 		18C5745427E1D88E00D70937 /* TextRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745327E1D88E00D70937 /* TextRoomMessage.swift */; };
 		18C5745627E1DCA800D70937 /* RoomMessageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */; };
+		18DDB72127EB9D57000F1ABF /* ElementXAttributeScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72027EB9D57000F1ABF /* ElementXAttributeScope.swift */; };
+		18DDB72327EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72227EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift */; };
+		18DDB72527EC784E000F1ABF /* FormattedBodyText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72427EC784E000F1ABF /* FormattedBodyText.swift */; };
+		18DDB72727EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72627EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift */; };
 		18DF7C2F27E264FC00291672 /* MediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C2E27E264FC00291672 /* MediaProvider.swift */; };
 		18DF7C3127E3608100291672 /* MediaProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */; };
 		18DF7C3327E3608800291672 /* MockMediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3227E3608800291672 /* MockMediaProvider.swift */; };
@@ -137,6 +145,12 @@
 		1850256827B6A135002E6B18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1850256A27B6A135002E6B18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		18ADC7D427E4B20300A8C953 /* PlaceholderAvatarImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderAvatarImage.swift; sourceTree = "<group>"; };
+		18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilder.swift; sourceTree = "<group>"; };
+		18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
+		18ADC80527EB1ED100A8C953 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
+		18ADC80727EB1EE200A8C953 /* ElementX-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ElementX-Bridging-Header.h"; sourceTree = "<group>"; };
+		18ADC80827EB1F8B00A8C953 /* AttributedStringBuilderUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedStringBuilderUtils.h; sourceTree = "<group>"; };
+		18ADC80927EB1F8B00A8C953 /* AttributedStringBuilderUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributedStringBuilderUtils.m; sourceTree = "<group>"; };
 		18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxyProtocol.swift; sourceTree = "<group>"; };
 		18C5744A27E1D84000D70937 /* RoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		18C5744B27E1D84000D70937 /* MockRoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomProxy.swift; sourceTree = "<group>"; };
@@ -144,6 +158,11 @@
 		18C5745127E1D88600D70937 /* ImageRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRoomMessage.swift; sourceTree = "<group>"; };
 		18C5745327E1D88E00D70937 /* TextRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRoomMessage.swift; sourceTree = "<group>"; };
 		18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMessageFactory.swift; sourceTree = "<group>"; };
+		18DDB72027EB9D57000F1ABF /* ElementXAttributeScope.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementXAttributeScope.swift; sourceTree = "<group>"; };
+		18DDB72227EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DTHTMLElement+AttributedStringBuilder.swift"; sourceTree = "<group>"; };
+		18DDB72427EC784E000F1ABF /* FormattedBodyText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedBodyText.swift; sourceTree = "<group>"; };
+		18DDB72627EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilderProtocol.swift; sourceTree = "<group>"; };
+		18DDB72827EC9F49000F1ABF /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		18DF7C2E27E264FC00291672 /* MediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProvider.swift; sourceTree = "<group>"; };
 		18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProviderProtocol.swift; sourceTree = "<group>"; };
 		18DF7C3227E3608800291672 /* MockMediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMediaProvider.swift; sourceTree = "<group>"; };
@@ -230,6 +249,7 @@
 				1863A3FC27BA5A9100B52E4D /* KeychainAccess in Frameworks */,
 				18ADC7D827E4B63C00A8C953 /* MatrixRustSDK in Frameworks */,
 				184B31DF27D898960075A669 /* Introspect in Frameworks */,
+				18ADC7FE27EB033400A8C953 /* DTCoreText in Frameworks */,
 				1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,6 +274,7 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
+				18DDB72827EC9F49000F1ABF /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
@@ -313,12 +334,28 @@
 		1850256627B6A135002E6B18 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				1850256727B6A135002E6B18 /* ElementX.entitlements */,
 				1850256827B6A135002E6B18 /* Assets.xcassets */,
-				1850256927B6A135002E6B18 /* LaunchScreen.storyboard */,
+				18ADC80727EB1EE200A8C953 /* ElementX-Bridging-Header.h */,
+				1850256727B6A135002E6B18 /* ElementX.entitlements */,
 				18FE279627C7B85300016375 /* Info.plist */,
+				1850256927B6A135002E6B18 /* LaunchScreen.storyboard */,
 			);
 			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		18ADC7F827EB02D900A8C953 /* HTMLParsing */ = {
+			isa = PBXGroup;
+			children = (
+				18DDB72627EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift */,
+				18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */,
+				18ADC80527EB1ED100A8C953 /* UIFont+AttributedStringBuilder.h */,
+				18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */,
+				18ADC80827EB1F8B00A8C953 /* AttributedStringBuilderUtils.h */,
+				18ADC80927EB1F8B00A8C953 /* AttributedStringBuilderUtils.m */,
+				18DDB72027EB9D57000F1ABF /* ElementXAttributeScope.swift */,
+				18DDB72227EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift */,
+			);
+			path = HTMLParsing;
 			sourceTree = "<group>";
 		};
 		18C5744427E11F1900D70937 /* Frameworks */ = {
@@ -394,6 +431,7 @@
 				18DF7C4027E4670600291672 /* TextRoomTimelineView.swift */,
 				18DF7C3E27E4670600291672 /* ImageRoomTimelineView.swift */,
 				18DF7C3F27E4670600291672 /* SeparatorRoomTimelineView.swift */,
+				18DDB72427EC784E000F1ABF /* FormattedBodyText.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -445,12 +483,13 @@
 		18F2BA7D27D25B4000DD1988 /* Other */ = {
 			isa = PBXGroup;
 			children = (
-				18F2BA7E27D25B4000DD1988 /* Routers */,
-				18F2BA8727D25B4000DD1988 /* Activity */,
-				18F2BA9427D25B4000DD1988 /* MXLog.swift */,
-				18F2BA9527D25B4000DD1988 /* WeakDictionary */,
 				18F2BA9A27D25B4000DD1988 /* Coordinator.swift */,
+				18F2BA9427D25B4000DD1988 /* MXLog.swift */,
+				18F2BA8727D25B4000DD1988 /* Activity */,
+				18ADC7F827EB02D900A8C953 /* HTMLParsing */,
+				18F2BA7E27D25B4000DD1988 /* Routers */,
 				18F2BA9B27D25B4000DD1988 /* SwiftUI */,
+				18F2BA9527D25B4000DD1988 /* WeakDictionary */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -712,6 +751,7 @@
 				182BC48027C4EBBB00A30C33 /* Kingfisher */,
 				184B31DE27D898960075A669 /* Introspect */,
 				18ADC7D727E4B63C00A8C953 /* MatrixRustSDK */,
+				18ADC7FD27EB033400A8C953 /* DTCoreText */,
 			);
 			productName = ElementX;
 			productReference = 1850252427B6918C002E6B18 /* ElementX.app */;
@@ -766,6 +806,7 @@
 				TargetAttributes = {
 					1850252327B6918C002E6B18 = {
 						CreatedOnToolsVersion = 13.2.1;
+						LastSwiftMigration = 1320;
 					};
 					1850253927B6918D002E6B18 = {
 						CreatedOnToolsVersion = 13.2.1;
@@ -792,6 +833,7 @@
 				182BC47F27C4EBBB00A30C33 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				184B31DD27D898960075A669 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				18ADC7D627E4B63C00A8C953 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
+				18ADC7FC27EB033400A8C953 /* XCRemoteSwiftPackageReference "DTCoreText" */,
 			);
 			productRefGroup = 1850252527B6918C002E6B18 /* Products */;
 			projectDirPath = "";
@@ -879,6 +921,7 @@
 				183E023627E4A79D00903BED /* RoomTimelineProviderProtocol.swift in Sources */,
 				18DF7C4727E4670600291672 /* TextRoomTimelineItem.swift in Sources */,
 				18F2BAE027D25B4000DD1988 /* NavigationRouter.swift in Sources */,
+				18ADC80627EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m in Sources */,
 				18F2BAF627D25B4000DD1988 /* Coordinator.swift in Sources */,
 				18F2BAEA27D25B4000DD1988 /* ActivityCenter.swift in Sources */,
 				18DF7C4827E4670600291672 /* ImageRoomTimelineView.swift in Sources */,
@@ -886,8 +929,10 @@
 				18F2BAF327D25B4000DD1988 /* WeakDictionaryReference.swift in Sources */,
 				18F2BB2A27D2648900DD1988 /* RoomTimelineControllerProtocol.swift in Sources */,
 				18F2BAF127D25B4000DD1988 /* MXLog.swift in Sources */,
+				18ADC7FA27EB02D900A8C953 /* AttributedStringBuilder.swift in Sources */,
 				18F2BAF727D25B4000DD1988 /* StateStoreViewModel.swift in Sources */,
 				18F2BAF427D25B4000DD1988 /* WeakDictionary.swift in Sources */,
+				18DDB72327EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				18C5745627E1DCA800D70937 /* RoomMessageFactory.swift in Sources */,
 				18F2BB1127D25B4000DD1988 /* RoomScreenModels.swift in Sources */,
 				18F2BADB27D25B4000DD1988 /* AuthenticationCoordinator.swift in Sources */,
@@ -895,11 +940,13 @@
 				18DF7C4927E4670600291672 /* SeparatorRoomTimelineView.swift in Sources */,
 				18F2BAE627D25B4000DD1988 /* NavigationRouterType.swift in Sources */,
 				18F2BAE927D25B4000DD1988 /* ActivityPresentable.swift in Sources */,
+				18DDB72727EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift in Sources */,
 				18DF7C4327E4670600291672 /* RoomTimelineItemProtocol.swift in Sources */,
 				18F2BAF827D25B4000DD1988 /* BindableState.swift in Sources */,
 				18F2BB1827D25B4000DD1988 /* LoginScreen.swift in Sources */,
 				18DF7C5327E4754500291672 /* MemberDetailsProvider.swift in Sources */,
 				18F2BAE227D25B4000DD1988 /* NavigationRouterStoreProtocol.swift in Sources */,
+				18DDB72527EC784E000F1ABF /* FormattedBodyText.swift in Sources */,
 				18F2BB1727D25B4000DD1988 /* LoginScreenCoordinator.swift in Sources */,
 				18F2BAF527D25B4000DD1988 /* WeakKeyDictionary.swift in Sources */,
 				18F2BADF27D25B4000DD1988 /* NavigationRouterStore.swift in Sources */,
@@ -921,11 +968,13 @@
 				18F2BB0C27D25B4000DD1988 /* RoomScreenCoordinator.swift in Sources */,
 				18DF7C5027E46A7A00291672 /* EventBasedTimelineView.swift in Sources */,
 				18DF7C4A27E4670600291672 /* TextRoomTimelineView.swift in Sources */,
+				18DDB72127EB9D57000F1ABF /* ElementXAttributeScope.swift in Sources */,
 				18DF7C4527E4670600291672 /* SeparatorRoomTimelineItem.swift in Sources */,
 				18DF7C4227E4670600291672 /* RoomTimelineItemFactory.swift in Sources */,
 				18F2BB0E27D25B4000DD1988 /* RoomScreenViewModelProtocol.swift in Sources */,
 				18F2BB0D27D25B4000DD1988 /* RoomScreenViewModel.swift in Sources */,
 				18C5745427E1D88E00D70937 /* TextRoomMessage.swift in Sources */,
+				18ADC80A27EB1F8B00A8C953 /* AttributedStringBuilderUtils.m in Sources */,
 				18C5745227E1D88600D70937 /* ImageRoomMessage.swift in Sources */,
 				18F2BAE127D25B4000DD1988 /* RootRouterType.swift in Sources */,
 				1850256C27B6A135002E6B18 /* AppCoordinator.swift in Sources */,
@@ -1113,6 +1162,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "ElementX/Supporting Files/ElementX.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1132,6 +1182,8 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/Supporting Files/ElementX-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1142,6 +1194,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = "ElementX/Supporting Files/ElementX.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1161,6 +1214,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SUPPORTS_MACCATALYST = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OBJC_BRIDGING_HEADER = "ElementX/Supporting Files/ElementX-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -1324,6 +1378,14 @@
 				kind = branch;
 			};
 		};
+		18ADC7FC27EB033400A8C953 /* XCRemoteSwiftPackageReference "DTCoreText" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Cocoanetics/DTCoreText";
+			requirement = {
+				branch = develop;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -1351,6 +1413,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 18ADC7D627E4B63C00A8C953 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
+		};
+		18ADC7FD27EB033400A8C953 /* DTCoreText */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 18ADC7FC27EB033400A8C953 /* XCRemoteSwiftPackageReference "DTCoreText" */;
+			productName = DTCoreText;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

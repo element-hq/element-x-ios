@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 
 protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
-    var body: String { get }
+    var text: String { get }
     var timestamp: String { get }
     var shouldShowSenderDetails: Bool { get }
     

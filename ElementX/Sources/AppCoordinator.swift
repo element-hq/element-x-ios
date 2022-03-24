@@ -116,7 +116,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             let memberDetailsProvider = MemberDetailsProvider(roomProxy: roomProxy)
             
             let timelineItemFactory = RoomTimelineItemFactory(mediaProvider: userSession.mediaProvider,
-                                                              memberDetailsProvider: memberDetailsProvider)
+                                                              memberDetailsProvider: memberDetailsProvider,
+                                                              attributedStringBuilder: AttributedStringBuilder())
             
             let timelineController = RoomTimelineController(timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                             timelineItemFactory: timelineItemFactory,

@@ -11,7 +11,7 @@ import UIKit
 
 struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
     let id: String
-    let body: String
+    let text: String
     let timestamp: String
     let shouldShowSenderDetails: Bool
     

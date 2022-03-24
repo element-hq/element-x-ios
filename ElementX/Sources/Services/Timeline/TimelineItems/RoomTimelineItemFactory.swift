@@ -12,11 +12,14 @@ import UIKit
 struct RoomTimelineItemFactory {
     private let mediaProvider: MediaProviderProtocol
     private let memberDetailsProvider: MemberDetailsProviderProtocol
+    private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     init(mediaProvider: MediaProviderProtocol,
-         memberDetailsProvider: MemberDetailsProviderProtocol) {
+         memberDetailsProvider: MemberDetailsProviderProtocol,
+         attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.mediaProvider = mediaProvider
         self.memberDetailsProvider = memberDetailsProvider
+        self.attributedStringBuilder = attributedStringBuilder
     }
     
     func buildTimelineItemFor(_ roomMessage: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
@@ -27,9 +30,12 @@ struct RoomTimelineItemFactory {
         
         switch roomMessage {
         case let message as TextRoomMessage:
+            let attributedText = attributedStringBuilder.fromHTML(message.htmlBody)
+            let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+            
             return TextRoomTimelineItem(id: message.id,
-                                        body: message.body,
-                                        htmlBody: message.htmlBody,
+                                        text: message.body,
+                                        attributedComponents: attributedComponents,
                                         timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                         shouldShowSenderDetails: showSenderDetails,
                                         senderId: message.sender,
@@ -37,7 +43,7 @@ struct RoomTimelineItemFactory {
                                         senderAvatar: avatarImage)
         case let message as ImageRoomMessage:
             return ImageRoomTimelineItem(id: message.id,
-                                         body: message.body,
+                                         text: message.body,
                                          timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                          shouldShowSenderDetails: showSenderDetails,
                                          senderId: message.sender,
