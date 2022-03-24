@@ -8,6 +8,7 @@
 
 import Foundation
 import Combine
+import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
@@ -38,6 +39,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 self.updateTimelineItems()
             }
         }.store(in: &cancellables)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
     func paginateBackwards(_ count: UInt, callback: @escaping ((Result<Void, RoomTimelineControllerError>) -> Void)) {
@@ -75,6 +78,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     // MARK: - Private
+    
+    @objc private func contentSizeCategoryDidChange() {
+        // Recompute all attributed strings on content size changes -> DynamicType support
+        updateTimelineItems()
+    }
     
     private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
