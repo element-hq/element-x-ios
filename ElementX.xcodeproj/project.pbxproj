@@ -162,7 +162,6 @@
 		18DDB72227EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DTHTMLElement+AttributedStringBuilder.swift"; sourceTree = "<group>"; };
 		18DDB72427EC784E000F1ABF /* FormattedBodyText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedBodyText.swift; sourceTree = "<group>"; };
 		18DDB72627EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilderProtocol.swift; sourceTree = "<group>"; };
-		18DDB72827EC9F49000F1ABF /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		18DF7C2E27E264FC00291672 /* MediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProvider.swift; sourceTree = "<group>"; };
 		18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProviderProtocol.swift; sourceTree = "<group>"; };
 		18DF7C3227E3608800291672 /* MockMediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMediaProvider.swift; sourceTree = "<group>"; };
@@ -274,7 +273,6 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
-				18DDB72827EC9F49000F1ABF /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
