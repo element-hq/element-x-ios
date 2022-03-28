@@ -10,7 +10,7 @@ import Foundation
 
 enum BlockquoteAttribute: AttributedStringKey {
     typealias Value = Bool
-    public static var name = kMXKToolsBlockquoteMarkAttribute
+    public static var name = "MXBlockquoteAttribute"
 }
 
 extension AttributeScopes {

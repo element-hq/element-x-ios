@@ -25,7 +25,6 @@
 		18ADC7FA27EB02D900A8C953 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */; };
 		18ADC7FE27EB033400A8C953 /* DTCoreText in Frameworks */ = {isa = PBXBuildFile; productRef = 18ADC7FD27EB033400A8C953 /* DTCoreText */; };
 		18ADC80627EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */; };
-		18ADC80A27EB1F8B00A8C953 /* AttributedStringBuilderUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC80927EB1F8B00A8C953 /* AttributedStringBuilderUtils.m */; };
 		18C5744C27E1D84000D70937 /* RoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */; };
 		18C5744D27E1D84000D70937 /* RoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744A27E1D84000D70937 /* RoomProxy.swift */; };
 		18C5744E27E1D84000D70937 /* MockRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744B27E1D84000D70937 /* MockRoomProxy.swift */; };
@@ -37,6 +36,8 @@
 		18DDB72327EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72227EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift */; };
 		18DDB72527EC784E000F1ABF /* FormattedBodyText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72427EC784E000F1ABF /* FormattedBodyText.swift */; };
 		18DDB72727EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72627EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift */; };
+		18DDB72E27EF936D000F1ABF /* MatrixEntitityRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72D27EF936D000F1ABF /* MatrixEntitityRegex.swift */; };
+		18DDB73227F19F82000F1ABF /* AttributedStringBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB73127F19F82000F1ABF /* AttributedStringBuilderTests.swift */; };
 		18DF7C2F27E264FC00291672 /* MediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C2E27E264FC00291672 /* MediaProvider.swift */; };
 		18DF7C3127E3608100291672 /* MediaProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */; };
 		18DF7C3327E3608800291672 /* MockMediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DF7C3227E3608800291672 /* MockMediaProvider.swift */; };
@@ -149,8 +150,6 @@
 		18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		18ADC80527EB1ED100A8C953 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		18ADC80727EB1EE200A8C953 /* ElementX-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ElementX-Bridging-Header.h"; sourceTree = "<group>"; };
-		18ADC80827EB1F8B00A8C953 /* AttributedStringBuilderUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AttributedStringBuilderUtils.h; sourceTree = "<group>"; };
-		18ADC80927EB1F8B00A8C953 /* AttributedStringBuilderUtils.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AttributedStringBuilderUtils.m; sourceTree = "<group>"; };
 		18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxyProtocol.swift; sourceTree = "<group>"; };
 		18C5744A27E1D84000D70937 /* RoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		18C5744B27E1D84000D70937 /* MockRoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomProxy.swift; sourceTree = "<group>"; };
@@ -162,6 +161,8 @@
 		18DDB72227EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DTHTMLElement+AttributedStringBuilder.swift"; sourceTree = "<group>"; };
 		18DDB72427EC784E000F1ABF /* FormattedBodyText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormattedBodyText.swift; sourceTree = "<group>"; };
 		18DDB72627EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilderProtocol.swift; sourceTree = "<group>"; };
+		18DDB72D27EF936D000F1ABF /* MatrixEntitityRegex.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MatrixEntitityRegex.swift; sourceTree = "<group>"; };
+		18DDB73127F19F82000F1ABF /* AttributedStringBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilderTests.swift; sourceTree = "<group>"; };
 		18DF7C2E27E264FC00291672 /* MediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProvider.swift; sourceTree = "<group>"; };
 		18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProviderProtocol.swift; sourceTree = "<group>"; };
 		18DF7C3227E3608800291672 /* MockMediaProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockMediaProvider.swift; sourceTree = "<group>"; };
@@ -304,6 +305,7 @@
 			isa = PBXGroup;
 			children = (
 				1850253E27B6918D002E6B18 /* ElementXTests.swift */,
+				18DDB73127F19F82000F1ABF /* AttributedStringBuilderTests.swift */,
 			);
 			path = ElementXTests;
 			sourceTree = "<group>";
@@ -348,8 +350,6 @@
 				18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */,
 				18ADC80527EB1ED100A8C953 /* UIFont+AttributedStringBuilder.h */,
 				18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */,
-				18ADC80827EB1F8B00A8C953 /* AttributedStringBuilderUtils.h */,
-				18ADC80927EB1F8B00A8C953 /* AttributedStringBuilderUtils.m */,
 				18DDB72027EB9D57000F1ABF /* ElementXAttributeScope.swift */,
 				18DDB72227EC7702000F1ABF /* DTHTMLElement+AttributedStringBuilder.swift */,
 			);
@@ -483,6 +483,7 @@
 			children = (
 				18F2BA9A27D25B4000DD1988 /* Coordinator.swift */,
 				18F2BA9427D25B4000DD1988 /* MXLog.swift */,
+				18DDB72D27EF936D000F1ABF /* MatrixEntitityRegex.swift */,
 				18F2BA8727D25B4000DD1988 /* Activity */,
 				18ADC7F827EB02D900A8C953 /* HTMLParsing */,
 				18F2BA7E27D25B4000DD1988 /* Routers */,
@@ -945,6 +946,7 @@
 				18DF7C5327E4754500291672 /* MemberDetailsProvider.swift in Sources */,
 				18F2BAE227D25B4000DD1988 /* NavigationRouterStoreProtocol.swift in Sources */,
 				18DDB72527EC784E000F1ABF /* FormattedBodyText.swift in Sources */,
+				18DDB72E27EF936D000F1ABF /* MatrixEntitityRegex.swift in Sources */,
 				18F2BB1727D25B4000DD1988 /* LoginScreenCoordinator.swift in Sources */,
 				18F2BAF527D25B4000DD1988 /* WeakKeyDictionary.swift in Sources */,
 				18F2BADF27D25B4000DD1988 /* NavigationRouterStore.swift in Sources */,
@@ -972,7 +974,6 @@
 				18F2BB0E27D25B4000DD1988 /* RoomScreenViewModelProtocol.swift in Sources */,
 				18F2BB0D27D25B4000DD1988 /* RoomScreenViewModel.swift in Sources */,
 				18C5745427E1D88E00D70937 /* TextRoomMessage.swift in Sources */,
-				18ADC80A27EB1F8B00A8C953 /* AttributedStringBuilderUtils.m in Sources */,
 				18C5745227E1D88600D70937 /* ImageRoomMessage.swift in Sources */,
 				18F2BAE127D25B4000DD1988 /* RootRouterType.swift in Sources */,
 				1850256C27B6A135002E6B18 /* AppCoordinator.swift in Sources */,
@@ -990,6 +991,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				18F2BB2027D25D3400DD1988 /* RoomScreenUITests.swift in Sources */,
+				18DDB73227F19F82000F1ABF /* AttributedStringBuilderTests.swift in Sources */,
 				18F2BB1E27D25D2200DD1988 /* HomeScreenViewModelTests.swift in Sources */,
 				18F2BB1D27D25D1C00DD1988 /* LoginScreenViewModelTests.swift in Sources */,
 				1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */,

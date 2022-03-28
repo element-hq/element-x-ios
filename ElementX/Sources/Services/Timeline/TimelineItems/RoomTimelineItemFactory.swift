@@ -30,7 +30,8 @@ struct RoomTimelineItemFactory {
         
         switch roomMessage {
         case let message as TextRoomMessage:
-            let attributedText = attributedStringBuilder.fromHTML(message.htmlBody ?? message.body)
+            
+            let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
             let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
             
             return TextRoomTimelineItem(id: message.id,
