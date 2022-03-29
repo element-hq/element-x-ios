@@ -19,11 +19,9 @@ struct EventBasedTimelineView: View {
                 Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
                     .font(.footnote)
                     .bold()
-                Spacer()
                 Text(timelineItem.timestamp)
                     .font(.footnote)
             }
-            Divider()
         }
     }
     
@@ -39,7 +37,7 @@ struct EventBasedTimelineView: View {
             }
         }
         .clipShape(Circle())
-        .frame(width: 44.0, height: 44.0)
+        .frame(width: 24.0, height: 24.0)
     }
     
     private var firstLetter: String {
@@ -48,5 +46,26 @@ struct EventBasedTimelineView: View {
         } else {
             return timelineItem.senderId.prefix(2).suffix(1).uppercased()
         }
+    }
+}
+
+struct EventBasedTimelineView_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(spacing: 20.0) {
+            let timelineItem = TextRoomTimelineItem(id: UUID().uuidString,
+                                                    text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
+                                                    timestamp: "Now",
+                                                    shouldShowSenderDetails: true,
+                                                    senderId: "Bob")
+            EventBasedTimelineView(timelineItem: timelineItem)
+            
+            let timelineItem = TextRoomTimelineItem(id: UUID().uuidString,
+                                                    text: "Some other text",
+                                                    timestamp: "Later",
+                                                    shouldShowSenderDetails: true,
+                                                    senderId: "Anne")
+            EventBasedTimelineView(timelineItem: timelineItem)
+        }
+        .padding()
     }
 }
