@@ -64,7 +64,8 @@ struct RoomScreen: View {
                     return
                 }
                 
-                tableViewObserver = TableViewObserver(tableView: tableView)
+                tableViewObserver = TableViewObserver(tableView: tableView,
+                                                      topDetectionOffset: (tableView.bounds.size.height / 3.0))
                 
                 // Check if there are enough items. Otherwise ask for more
                 attemptBackPagination()
@@ -131,7 +132,7 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
         case bottomOffset
     }
     
-    private let topTriggerHeight = 50.0
+    private let topDetectionOffset: CGFloat
     private var isAtTop: Bool = false
     private var offsetDetails: ContentOffsetDetails?
     
@@ -141,11 +142,12 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
     let scrollViewDidReachTop = PassthroughSubject<Void, Never>()
     
     override init() {
-        
+        self.topDetectionOffset = 0.0
     }
     
-    init(tableView: UITableView) {
+    init(tableView: UITableView, topDetectionOffset: CGFloat) {
         self.tableView = tableView
+        self.topDetectionOffset = topDetectionOffset
         super.init()
         
         tableView.delegate = self
@@ -205,7 +207,7 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
             return false
         }
 
-        return (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) <= topTriggerHeight
+        return (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) <= topDetectionOffset
     }
     
     // MARK: - UIScrollViewDelegate
