@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import SwiftUI
 
-//TODO: Switch this to SwiftGen
+// TODO: Switch this to SwiftGen
 
 extension Color {
     static let elementGreen = Color(ColorNames.elementGreen.rawValue)
