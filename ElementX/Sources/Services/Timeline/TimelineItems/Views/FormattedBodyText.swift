@@ -29,5 +29,6 @@ struct FormattedBodyText: View {
                 }
             }
         }
+        .tint(.elementGreen)
     }
 }

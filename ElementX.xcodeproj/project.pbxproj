@@ -26,6 +26,7 @@
 		18920C1327F2347600A717B5 /* EmoteRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1127F2347600A717B5 /* EmoteRoomTimelineItem.swift */; };
 		18920C1627F2E3F400A717B5 /* NoticeRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1427F2E3F400A717B5 /* NoticeRoomTimelineView.swift */; };
 		18920C1727F2E3F400A717B5 /* EmoteRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1527F2E3F400A717B5 /* EmoteRoomTimelineView.swift */; };
+		18920C1927F3222E00A717B5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1827F3222E00A717B5 /* Colors.swift */; };
 		18ADC7D527E4B20300A8C953 /* PlaceholderAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7D427E4B20300A8C953 /* PlaceholderAvatarImage.swift */; };
 		18ADC7D827E4B63C00A8C953 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 18ADC7D727E4B63C00A8C953 /* MatrixRustSDK */; };
 		18ADC7FA27EB02D900A8C953 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */; };
@@ -158,6 +159,7 @@
 		18920C1127F2347600A717B5 /* EmoteRoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmoteRoomTimelineItem.swift; sourceTree = "<group>"; };
 		18920C1427F2E3F400A717B5 /* NoticeRoomTimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeRoomTimelineView.swift; sourceTree = "<group>"; };
 		18920C1527F2E3F400A717B5 /* EmoteRoomTimelineView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmoteRoomTimelineView.swift; sourceTree = "<group>"; };
+		18920C1827F3222E00A717B5 /* Colors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Colors.swift; sourceTree = "<group>"; };
 		18ADC7D427E4B20300A8C953 /* PlaceholderAvatarImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlaceholderAvatarImage.swift; sourceTree = "<group>"; };
 		18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilder.swift; sourceTree = "<group>"; };
 		18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
@@ -509,6 +511,7 @@
 				18F2BA7E27D25B4000DD1988 /* Routers */,
 				18F2BA9B27D25B4000DD1988 /* SwiftUI */,
 				18F2BA9527D25B4000DD1988 /* WeakDictionary */,
+				18920C1827F3222E00A717B5 /* Colors.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -984,6 +987,7 @@
 				18DF7C3127E3608100291672 /* MediaProviderProtocol.swift in Sources */,
 				18F2BB0127D25B4000DD1988 /* HomeScreenViewModel.swift in Sources */,
 				18F2BAF027D25B4000DD1988 /* ActivityDismissal.swift in Sources */,
+				18920C1927F3222E00A717B5 /* Colors.swift in Sources */,
 				18F2BADD27D25B4000DD1988 /* KeychainController.swift in Sources */,
 				18920C1227F2347600A717B5 /* NoticeRoomTimelineItem.swift in Sources */,
 				18920C1727F2E3F400A717B5 /* EmoteRoomTimelineView.swift in Sources */,

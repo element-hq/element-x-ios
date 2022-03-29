@@ -12,6 +12,7 @@ import DTCoreText
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
+    private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
     
     private let userIdDetector: NSRegularExpression
@@ -40,22 +41,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
 
         let mutableAttributedString = NSMutableAttributedString(string: string)
-        
-        addLinkAttributesToAttributedString(mutableAttributedString)
-        
-        return try? AttributedString(mutableAttributedString, including: \.elementX)
-    }
-    
-    func fromMarkdown(_ string: String?) -> AttributedString? {
-        guard let string = string else {
-            return nil
-        }
-
-        guard let mutableAttributedString = try? NSMutableAttributedString(markdown: string) else {
-            return nil
-        }
-        
-        addLinkAttributesToAttributedString(mutableAttributedString)
+        addLinks(mutableAttributedString)
+        removeLinkColors(mutableAttributedString)
         
         return try? AttributedString(mutableAttributedString, including: \.elementX)
     }
@@ -74,15 +61,13 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
               }
         
         let defaultFont = UIFont.preferredFont(forTextStyle: .body)
-        let defaultColor = UIColor.black
         
         let parsingOptions: [String: Any] = [
             DTUseiOS6Attributes: true,
             DTDefaultFontFamily: defaultFont.familyName,
             DTDefaultFontName: defaultFont.fontName,
             DTDefaultFontSize: defaultFont.pointSize,
-            DTDefaultTextColor: defaultColor,
-            DTDefaultLinkColor: linkColor,
+            DTDefaultLinkDecoration: false,
             DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: self.defaultCSS) as Any
         ]
         
@@ -99,12 +84,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
-        
-        removeDTCoreTextArtifactsFromAttributedString(mutableAttributedString)
-        
+        addLinks(mutableAttributedString)
+        removeLinkColors(mutableAttributedString)
+        removeDTCoreTextArtifacts(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
-        
-        addLinkAttributesToAttributedString(mutableAttributedString)
+        replaceMarkedCodeBlocks(mutableAttributedString)
         
         return try? AttributedString(mutableAttributedString, including: \.elementX)
     }
@@ -123,13 +107,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // MARK: - Private
     
     private func replaceMarkedBlockquotes(_ attributedString: NSMutableAttributedString) {
-        // Enumerate all sections marked thanks to `cssToMarkBlockquotes`
-        // and apply our own attribute instead.
-        
         // According to blockquotes in the string, DTCoreText can apply 2 policies:
         //     - define a `DTTextBlocksAttribute` attribute on a <blockquote> block
         //     - or, just define a `NSBackgroundColorAttributeName` attribute
-        
         attributedString.enumerateAttribute(.DTTextBlocks, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             guard let value = value as? NSArray,
                   let dtTextBlock = value.firstObject as? DTTextBlock,
@@ -151,7 +131,16 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    private func removeDTCoreTextArtifactsFromAttributedString(_ attributedString: NSMutableAttributedString) {
+    func replaceMarkedCodeBlocks(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if let value = value as? UIColor,
+               value == temporaryCodeBlockMarkingColor {
+                attributedString.addAttribute(.backgroundColor, value: UIColor.codeBlockBackgroundColor as Any, range: range)
+            }
+        }
+    }
+    
+    private func removeDTCoreTextArtifacts(_ attributedString: NSMutableAttributedString) {
         guard attributedString.length > 0 else {
             return
         }
@@ -164,7 +153,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
-    private func addLinkAttributesToAttributedString(_ attributedString: NSMutableAttributedString) {
+    private func addLinks(_ attributedString: NSMutableAttributedString) {
         
         let string = attributedString.string
         let range = NSRange(location: 0, length: attributedString.string.count)
@@ -186,21 +175,24 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
             
             let link = string[matchRange].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-            attributedString.addAttributes([NSAttributedString.Key.link: link as Any,
-                                                   NSAttributedString.Key.foregroundColor: linkColor],
-                                                  range: match.range)
+            attributedString.addAttribute(.link, value: link as Any, range: match.range)
         }
     }
     
-    private var cssToMarkBlockquotes: String {
-        return "blockquote {background: \(temporaryBlockquoteMarkingColor.toHexString()); display: block;}"
+    private func removeLinkColors(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { _, range, _ in
+            attributedString.removeAttribute(.foregroundColor, range: range)
+        }
     }
     
     private var defaultCSS: String {
-        cssToMarkBlockquotes +
 """
+        blockquote {
+            background: \(temporaryBlockquoteMarkingColor.toHexString());
+            display: block;
+        }
         pre,code {
-            background-color: #F5F7FA;
+            background-color: \(temporaryCodeBlockMarkingColor.toHexString());
             display: inline;
             font-family: monospace;
             white-space: pre;
