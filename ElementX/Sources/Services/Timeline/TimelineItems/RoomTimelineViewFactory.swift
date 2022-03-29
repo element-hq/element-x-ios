@@ -17,6 +17,10 @@ struct RoomTimelineViewFactory {
             return .image(item)
         case let item as SeparatorRoomTimelineItem:
             return .separator(item)
+        case let item as NoticeRoomTimelineItem:
+            return .notice(item)
+        case let item as EmoteRoomTimelineItem:
+            return .emote(item)
         default:
             fatalError("Unknown timeline item")
         }
