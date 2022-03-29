@@ -152,7 +152,6 @@
 		1850256727B6A135002E6B18 /* ElementX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ElementX.entitlements; sourceTree = "<group>"; };
 		1850256827B6A135002E6B18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1850256A27B6A135002E6B18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		18920C0B27F2335000A717B5 /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		18920C0C27F233FF00A717B5 /* NoticeRoomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeRoomMessage.swift; sourceTree = "<group>"; };
 		18920C0D27F233FF00A717B5 /* EmoteRoomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmoteRoomMessage.swift; sourceTree = "<group>"; };
 		18920C1027F2347600A717B5 /* NoticeRoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -289,7 +288,6 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
-				18920C0B27F2335000A717B5 /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
