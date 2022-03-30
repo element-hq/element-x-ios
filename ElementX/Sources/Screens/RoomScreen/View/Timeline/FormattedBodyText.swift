@@ -32,3 +32,25 @@ struct FormattedBodyText: View {
         .tint(.elementGreen)
     }
 }
+
+struct FormattedBodyText_Previews: PreviewProvider {
+    static var previews: some View {
+        let htmlString = """
+Text before blockquote
+<blockquote>
+<b>bold</b> <i>italic</i>
+</blockquote>
+Text after blockquote
+"""
+        
+        let attributedStringBuilder = AttributedStringBuilder()
+        let attributedString = attributedStringBuilder.fromHTML(htmlString)
+        
+        if let components = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) {
+            VStack {
+                FormattedBodyText(attributedComponents: components)
+                    .fixedSize()
+            }
+        }
+    }
+}

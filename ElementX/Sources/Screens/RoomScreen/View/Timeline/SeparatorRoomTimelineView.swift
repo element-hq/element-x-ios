@@ -41,3 +41,11 @@ struct LabelledDivider: View {
         VStack { Divider().background(color) }
     }
 }
+
+struct SeparatorRoomTimelineView_Previews: PreviewProvider {
+    static var previews: some View {
+        let item = SeparatorRoomTimelineItem(id: UUID().uuidString, text: "This is a separator")
+        
+        SeparatorRoomTimelineView(timelineItem: item)
+    }
+}
