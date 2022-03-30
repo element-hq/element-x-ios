@@ -27,6 +27,9 @@
 		18920C1627F2E3F400A717B5 /* NoticeRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1427F2E3F400A717B5 /* NoticeRoomTimelineView.swift */; };
 		18920C1727F2E3F400A717B5 /* EmoteRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1527F2E3F400A717B5 /* EmoteRoomTimelineView.swift */; };
 		18920C1927F3222E00A717B5 /* Colors.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1827F3222E00A717B5 /* Colors.swift */; };
+		189E495227F43BCD00D86BA3 /* ElementXAttributeScope.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18DDB72027EB9D57000F1ABF /* ElementXAttributeScope.swift */; };
+		189E495327F474A200D86BA3 /* RoomScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BAC127D25B4000DD1988 /* RoomScreenUITests.swift */; };
+		189E495427F474A500D86BA3 /* RoomScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BAC327D25B4000DD1988 /* RoomScreenViewModelTests.swift */; };
 		18ADC7D527E4B20300A8C953 /* PlaceholderAvatarImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7D427E4B20300A8C953 /* PlaceholderAvatarImage.swift */; };
 		18ADC7D827E4B63C00A8C953 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = 18ADC7D727E4B63C00A8C953 /* MatrixRustSDK */; };
 		18ADC7FA27EB02D900A8C953 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */; };
@@ -113,8 +116,6 @@
 		18F2BB1A27D25BE800DD1988 /* RoomTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BB1927D25BE800DD1988 /* RoomTimelineController.swift */; };
 		18F2BB1D27D25D1C00DD1988 /* LoginScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BAD127D25B4000DD1988 /* LoginScreenViewModelTests.swift */; };
 		18F2BB1E27D25D2200DD1988 /* HomeScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BAA927D25B4000DD1988 /* HomeScreenViewModelTests.swift */; };
-		18F2BB1F27D25D3100DD1988 /* RoomScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BAC327D25B4000DD1988 /* RoomScreenViewModelTests.swift */; };
-		18F2BB2027D25D3400DD1988 /* RoomScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BAC127D25B4000DD1988 /* RoomScreenUITests.swift */; };
 		18F2BB2127D25D3C00DD1988 /* HomeScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BAA727D25B4000DD1988 /* HomeScreenUITests.swift */; };
 		18F2BB2227D25D4600DD1988 /* LoginScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BACF27D25B4000DD1988 /* LoginScreenUITests.swift */; };
 		18F2BB2827D2647A00DD1988 /* MockRoomTimelineController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2BB2727D2647A00DD1988 /* MockRoomTimelineController.swift */; };
@@ -501,15 +502,15 @@
 		18F2BA7D27D25B4000DD1988 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				18920C1827F3222E00A717B5 /* Colors.swift */,
 				18F2BA9A27D25B4000DD1988 /* Coordinator.swift */,
-				18F2BA9427D25B4000DD1988 /* MXLog.swift */,
 				18DDB72D27EF936D000F1ABF /* MatrixEntitityRegex.swift */,
+				18F2BA9427D25B4000DD1988 /* MXLog.swift */,
 				18F2BA8727D25B4000DD1988 /* Activity */,
 				18ADC7F827EB02D900A8C953 /* HTMLParsing */,
 				18F2BA7E27D25B4000DD1988 /* Routers */,
 				18F2BA9B27D25B4000DD1988 /* SwiftUI */,
 				18F2BA9527D25B4000DD1988 /* WeakDictionary */,
-				18920C1827F3222E00A717B5 /* Colors.swift */,
 			);
 			path = Other;
 			sourceTree = "<group>";
@@ -1018,11 +1019,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				18F2BB2027D25D3400DD1988 /* RoomScreenUITests.swift in Sources */,
+				189E495227F43BCD00D86BA3 /* ElementXAttributeScope.swift in Sources */,
 				18DDB73227F19F82000F1ABF /* AttributedStringBuilderTests.swift in Sources */,
 				18F2BB1E27D25D2200DD1988 /* HomeScreenViewModelTests.swift in Sources */,
 				18F2BB1D27D25D1C00DD1988 /* LoginScreenViewModelTests.swift in Sources */,
 				1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */,
+				189E495427F474A500D86BA3 /* RoomScreenViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1032,9 +1034,9 @@
 			files = (
 				18F2BB2127D25D3C00DD1988 /* HomeScreenUITests.swift in Sources */,
 				1850254B27B6918D002E6B18 /* ElementXUITestsLaunchTests.swift in Sources */,
+				189E495327F474A200D86BA3 /* RoomScreenUITests.swift in Sources */,
 				1850254927B6918D002E6B18 /* ElementXUITests.swift in Sources */,
 				18F2BB2227D25D4600DD1988 /* LoginScreenUITests.swift in Sources */,
-				18F2BB1F27D25D3100DD1988 /* RoomScreenViewModelTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

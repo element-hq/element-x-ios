@@ -18,7 +18,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let userIdDetector: NSRegularExpression
     private let roomIdDetector: NSRegularExpression
     private let eventIdDetector: NSRegularExpression
-    private let groupIdDetector: NSRegularExpression
     private let roomAliasDetector: NSRegularExpression
     private let linkDetector: NSDataDetector
     
@@ -27,7 +26,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             userIdDetector = try NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
             roomIdDetector = try NSRegularExpression(pattern: MatrixEntityRegex.roomId.rawValue, options: .caseInsensitive)
             eventIdDetector = try NSRegularExpression(pattern: MatrixEntityRegex.eventId.rawValue, options: .caseInsensitive)
-            groupIdDetector = try NSRegularExpression(pattern: MatrixEntityRegex.groupId.rawValue, options: .caseInsensitive)
             roomAliasDetector = try NSRegularExpression(pattern: MatrixEntityRegex.roomAlias.rawValue, options: .caseInsensitive)
             linkDetector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
         } catch {
@@ -67,7 +65,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             DTDefaultFontFamily: defaultFont.familyName,
             DTDefaultFontName: defaultFont.fontName,
             DTDefaultFontSize: defaultFont.pointSize,
-            DTDefaultLinkDecoration: false,
             DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: self.defaultCSS) as Any
         ]
         
@@ -84,6 +81,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
         
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
+        removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
@@ -161,7 +159,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         var matches = userIdDetector.matches(in: string, options: [], range: range)
         matches.append(contentsOf: roomIdDetector.matches(in: string, options: [], range: range))
         matches.append(contentsOf: eventIdDetector.matches(in: string, options: [], range: range))
-        matches.append(contentsOf: groupIdDetector.matches(in: string, options: [], range: range))
         matches.append(contentsOf: roomAliasDetector.matches(in: string, options: [], range: range))
         matches.append(contentsOf: linkDetector.matches(in: string, options: [], range: range))
         
@@ -174,14 +171,36 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return
             }
             
+            var hasLink = false
+            attributedString.enumerateAttribute(.link, in: match.range, options: []) { value, _, stop in
+                if value != nil {
+                    hasLink = true
+                    stop.pointee = true
+                }
+            }
+            
+            if hasLink {
+                return
+            }
+            
             let link = string[matchRange].addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
             attributedString.addAttribute(.link, value: link as Any, range: match.range)
         }
     }
     
+    private func removeDefaultForegroundColor(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.foregroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if value as? UIColor == UIColor.black {
+                attributedString.removeAttribute(.foregroundColor, range: range)
+            }
+        }
+    }
+    
     private func removeLinkColors(_ attributedString: NSMutableAttributedString) {
-        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { _, range, _ in
-            attributedString.removeAttribute(.foregroundColor, range: range)
+        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if value != nil {
+                attributedString.removeAttribute(.foregroundColor, range: range)
+            }
         }
     }
     

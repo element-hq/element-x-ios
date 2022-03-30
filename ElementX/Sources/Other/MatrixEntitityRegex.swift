@@ -14,7 +14,6 @@ enum MatrixEntityRegex: String {
     case roomAlias
     case roomId
     case eventId
-    case groupId
     
     var rawValue: String {
         switch self {
@@ -28,8 +27,6 @@ enum MatrixEntityRegex: String {
             return "![A-Z0-9]+:" + MatrixEntityRegex.homeserver.rawValue
         case .eventId:
             return "\\$[A-Z0-9]+:" + MatrixEntityRegex.homeserver.rawValue
-        case .groupId:
-            return "\\+[A-Z0-9=_\\-./]+:" + MatrixEntityRegex.homeserver.rawValue
         }
     }
 }
