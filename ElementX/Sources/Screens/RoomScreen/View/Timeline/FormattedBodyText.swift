@@ -13,7 +13,7 @@ struct FormattedBodyText: View {
     let attributedComponents: [AttributedStringBuilderComponent]
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 0.0) {
+        VStack(alignment: .leading, spacing: 8.0) {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
                     HStack(spacing: 4.0) {

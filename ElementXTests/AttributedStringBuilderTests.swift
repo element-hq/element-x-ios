@@ -223,10 +223,31 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertTrue(foundLink)
     }
     
-    func testBlockquotes() {
+    func testSingleBlockquote() {
+        let htmlString = "<blockquote>Blockquote</blockquote>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(attributedString.runs.count, 1)
+        
+        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
+        
+        for run in attributedString.runs {
+            if run.elementX.blockquote != nil {
+                return
+            }
+        }
+        
+        XCTFail("Couldn't find blockquote")
+    }
+    
+    func testBlockquoteWithinText() {
         let htmlString = """
 The text before the blockquote
-<blockquote cite="http://www.worldwildlife.org/who/index.html"> For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.</blockquote>
+<blockquote> For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.</blockquote>
 The text after the blockquote
 """
         
@@ -237,6 +258,8 @@ The text after the blockquote
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
+        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 3)
+        
         for run in attributedString.runs {
             if run.elementX.blockquote != nil {
                 return
@@ -244,8 +267,6 @@ The text after the blockquote
         }
         
         XCTFail("Couldn't find blockquote")
-        
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 3)
     }
     
     // MARK: - Private

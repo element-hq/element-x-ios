@@ -84,9 +84,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
-        removeDTCoreTextArtifacts(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
+        removeDTCoreTextArtifacts(mutableAttributedString)
         
         return try? AttributedString(mutableAttributedString, including: \.elementX)
     }
@@ -95,10 +95,17 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         guard let attributedString = attributedString else {
             return nil
         }
-
+        
         return attributedString.runs[\.blockquote].map { (value, range) in
-            AttributedStringBuilderComponent(attributedString: AttributedString(attributedString[range]),
-                                             isBlockquote: value != nil)
+            var attributedString = AttributedString(attributedString[range])
+            
+            // Remove trailing new lines if any
+            if let lastCharacter = attributedString.characters.last,
+               lastCharacter.isNewline {
+                attributedString = AttributedString(attributedString.characters.dropLast())
+            }
+            
+            return AttributedStringBuilderComponent(attributedString: attributedString, isBlockquote: value != nil)
         }
     }
     
