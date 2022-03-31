@@ -100,9 +100,9 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             var attributedString = AttributedString(attributedString[range])
             
             // Remove trailing new lines if any
-            if let lastCharacter = attributedString.characters.last,
-               lastCharacter.isNewline {
-                attributedString = AttributedString(attributedString.characters.dropLast())
+            if attributedString.characters.last?.isNewline ?? false,
+               let range = attributedString.range(of: "\n", options: .backwards, locale: nil) {
+                attributedString.removeSubrange(range)
             }
             
             return AttributedStringBuilderComponent(attributedString: attributedString, isBlockquote: value != nil)

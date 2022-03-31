@@ -269,6 +269,89 @@ The text after the blockquote
         XCTFail("Couldn't find blockquote")
     }
     
+    func testBlockquoteWithLink() {
+        let htmlString = "<blockquote>Blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(attributedString.runs.count, 3)
+        
+        guard let coalescedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) else {
+            XCTFail("Could not build the attributed string components")
+            return
+        }
+        XCTAssertEqual(coalescedComponents.count, 1)
+        
+        XCTAssertEqual(coalescedComponents.first?.attributedString.runs.count, 3, "Link not present in the component")
+        
+        var foundBlockquoteAndLink = false
+        for run in attributedString.runs {
+            if run.elementX.blockquote != nil && run.link != nil {
+                foundBlockquoteAndLink = true
+            }
+        }
+        
+        XCTAssertNotNil(foundBlockquoteAndLink, "Couldn't find blockquote or link")
+    }
+    
+    func testMultipleGroupedBlockquotes() {
+        let htmlString = """
+<blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+<blockquote>Second blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+<blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+"""
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(attributedString.runs.count, 7)
+        
+        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
+        
+        var numberOfBlockquotes = 0
+        for run in attributedString.runs {
+            if run.elementX.blockquote != nil && run.link != nil {
+                numberOfBlockquotes += 1
+            }
+        }
+        
+        XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
+    }
+    
+    func testMultipleSeparatedBlockquotes() {
+        let htmlString = """
+First
+<blockquote>blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+Second
+<blockquote>blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+Third
+<blockquote>blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+"""
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        XCTAssertEqual(attributedString.runs.count, 12)
+        
+        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 6)
+        
+        var numberOfBlockquotes = 0
+        for run in attributedString.runs {
+            if run.elementX.blockquote != nil && run.link != nil {
+                numberOfBlockquotes += 1
+            }
+        }
+        
+        XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
+    }
+    
     // MARK: - Private
     
     private func checkMatrixEntityLinkIn(attributedString: AttributedString?, expected: String) {
