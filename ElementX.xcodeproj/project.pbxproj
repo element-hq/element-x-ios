@@ -398,11 +398,12 @@
 		18C5744727E1D84000D70937 /* Room */ = {
 			isa = PBXGroup;
 			children = (
-				18DF7C5127E4753A00291672 /* Members */,
-				18C5744927E1D84000D70937 /* Messages */,
 				18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */,
 				18C5744A27E1D84000D70937 /* RoomProxy.swift */,
 				18C5744B27E1D84000D70937 /* MockRoomProxy.swift */,
+				18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */,
+				18DF7C5127E4753A00291672 /* Members */,
+				18C5744927E1D84000D70937 /* Messages */,
 			);
 			path = Room;
 			sourceTree = "<group>";
@@ -410,12 +411,11 @@
 		18C5744927E1D84000D70937 /* Messages */ = {
 			isa = PBXGroup;
 			children = (
-				18920C0D27F233FF00A717B5 /* EmoteRoomMessage.swift */,
-				18C5745127E1D88600D70937 /* ImageRoomMessage.swift */,
-				18920C0C27F233FF00A717B5 /* NoticeRoomMessage.swift */,
-				18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */,
 				18C5744F27E1D87800D70937 /* RoomMessageProtocol.swift */,
 				18C5745327E1D88E00D70937 /* TextRoomMessage.swift */,
+				18C5745127E1D88600D70937 /* ImageRoomMessage.swift */,
+				18920C0D27F233FF00A717B5 /* EmoteRoomMessage.swift */,
+				18920C0C27F233FF00A717B5 /* NoticeRoomMessage.swift */,
 			);
 			path = Messages;
 			sourceTree = "<group>";
@@ -437,8 +437,8 @@
 				18DF7C3827E4670600291672 /* RoomTimelineViewFactory.swift */,
 				18DF7C3527E4670600291672 /* RoomTimelineViewProvider.swift */,
 				18DF7C3727E4670600291672 /* RoomTimelineItemProtocol.swift */,
-				18DF7C4B27E4672C00291672 /* EventBasedTimelineItemProtocol.swift */,
 				18DF7C4D27E4673E00291672 /* DecorationTimelineItemProtocol.swift */,
+				18DF7C4B27E4672C00291672 /* EventBasedTimelineItemProtocol.swift */,
 				18DF7C3927E4670600291672 /* Items */,
 			);
 			path = TimelineItems;

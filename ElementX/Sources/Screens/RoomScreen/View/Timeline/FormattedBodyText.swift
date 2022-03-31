@@ -35,21 +35,43 @@ struct FormattedBodyText: View {
 
 struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
-        let htmlString = """
+        body
+        body.preferredColorScheme(.dark)
+        
+    }
+    
+    @ViewBuilder
+    static var body: some View {
+        let htmlStrings = [
+"""
 Text before blockquote
 <blockquote>
 <b>bold</b> <i>italic</i>
 </blockquote>
 Text after blockquote
+""",
 """
+<blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+<blockquote>Second blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+<blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
+""",
+"""
+<code>Hello world</code>
+<p>Text</p>
+<code><b>Hello</b> <i>world</i></code>
+<p>Text</p>
+<code>Hello world</code>
+"""]
         
         let attributedStringBuilder = AttributedStringBuilder()
-        let attributedString = attributedStringBuilder.fromHTML(htmlString)
-        
-        if let components = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) {
-            VStack {
-                FormattedBodyText(attributedComponents: components)
-                    .fixedSize()
+        VStack(alignment: .leading, spacing: 24.0) {
+            ForEach(htmlStrings, id: \.self) { htmlString in
+                let attributedString = attributedStringBuilder.fromHTML(htmlString)
+                
+                if let components = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) {
+                    FormattedBodyText(attributedComponents: components)
+                        .fixedSize()
+                }
             }
         }
     }

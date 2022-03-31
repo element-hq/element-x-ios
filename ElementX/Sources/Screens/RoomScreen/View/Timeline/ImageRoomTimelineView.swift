@@ -35,7 +35,13 @@ struct ImageRoomTimelineView: View {
 
 struct ImageRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
+        body
+        body.preferredColorScheme(.dark)
+    }
+     
+    @ViewBuilder
+    static var body: some View {
+        VStack(spacing: 20.0) {
             let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
                                                      text: "Some image",
                                                      timestamp: "Now",

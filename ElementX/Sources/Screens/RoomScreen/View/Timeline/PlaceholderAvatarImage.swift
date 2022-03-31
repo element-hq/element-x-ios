@@ -36,6 +36,12 @@ struct PlaceholderAvatarImage: View {
 
 struct PlaceholderAvatarImage_Previews: PreviewProvider {
     static var previews: some View {
+        body
+        body.preferredColorScheme(.dark)
+    }
+    
+    @ViewBuilder
+    static var body: some View {
         PlaceholderAvatarImage(firstCharacter: "X")
             .clipShape(Circle())
             .frame(width: 150, height: 100)

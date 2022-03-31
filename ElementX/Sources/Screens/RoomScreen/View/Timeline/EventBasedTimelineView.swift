@@ -51,7 +51,13 @@ struct EventBasedTimelineView: View {
 
 struct EventBasedTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack(spacing: 20.0) {
+        body
+        body.preferredColorScheme(.dark)
+    }
+    
+    @ViewBuilder
+    static var body: some View {
+        VStack(alignment: .leading, spacing: 20.0) {
             let timelineItem = TextRoomTimelineItem(id: UUID().uuidString,
                                                     text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
                                                     timestamp: "Now",
@@ -66,6 +72,5 @@ struct EventBasedTimelineView_Previews: PreviewProvider {
                                                     senderId: "Anne")
             EventBasedTimelineView(timelineItem: timelineItem)
         }
-        .padding()
     }
 }
