@@ -94,7 +94,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             
             if shouldAddSectionHeader {
                 newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
-                                                                  text: message.originServerTs.formatted(date: .long, time: .omitted)))
+                                                                  text: message.originServerTs.formatted(date: .complete, time: .omitted)))
             }
             
             let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
