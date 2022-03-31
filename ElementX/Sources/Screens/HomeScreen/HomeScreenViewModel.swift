@@ -67,7 +67,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.roomList = roomList
         
         state.rooms = roomList.map { roomProxy in
-            roomFromProxy(roomProxy)
+            buildRoomFromProxy(roomProxy)
         }
         
         roomUpdateListeners.removeAll()
@@ -75,10 +75,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomList.forEach({ roomProxy  in
             roomProxy.callbacks.sink { [weak self] callback in
                 switch callback {
-                case .updatedLastMessage:
+                case .updatedMessages:
                     self?.loadLastMessageForRoomWithIdentifier(roomProxy.id)
-                default:
-                    break
                 }
             }
             .store(in: &roomUpdateListeners)
@@ -92,9 +90,19 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadRoomDataForIdentifier(_ roomIdentifier: String) {
-        loadAvatarForRoomWithIdentifier(roomIdentifier)
-        loadRoomDisplayNameForRoomWithIdentifier(roomIdentifier)
-        loadLastMessageForRoomWithIdentifier(roomIdentifier)
+        let room = state.rooms.first(where: { $0.id == roomIdentifier })
+        
+        if room?.avatar == nil {
+            loadAvatarForRoomWithIdentifier(roomIdentifier)
+        }
+        
+        if room?.displayName == nil {
+            loadRoomDisplayNameForRoomWithIdentifier(roomIdentifier)
+        }
+        
+        if room?.lastMessage == nil {
+            loadLastMessageForRoomWithIdentifier(roomIdentifier)
+        }
     }
     
     private func loadAvatarForRoomWithIdentifier(_ roomIdentifier: String) {
@@ -149,22 +157,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        if let lastMessage = room.lastMessage {
-            self.updateLastMessage(lastMessage, forRoomWithIdentifier: roomIdentifier)
-        } else {
-            room.paginateBackwards(count: 1) { result in
-                switch result {
-                case .success(let messages):
-                    guard let lastMessage = messages.last else {
-                        return
-                    }
-                    
-                    self.updateLastMessage(lastMessage.body, forRoomWithIdentifier: roomIdentifier)
-                default:
-                    break
-                }
-            }
+        if let lastMessage = room.messages.last {
+            self.updateLastMessage(lastMessage.body, forRoomWithIdentifier: roomIdentifier)
+            return
         }
+        
+        room.paginateBackwards(count: 1, callback: nil)
     }
     
     private func updateLastMessage(_ lastMessage: String, forRoomWithIdentifier roomIdentifier: String) {
@@ -174,15 +172,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         self.state.rooms[index].lastMessage = lastMessage
     }
+    
+    private func buildRoomFromProxy(_ roomProxy: RoomProxyProtocol) -> HomeScreenRoom {
+        let avatar = mediaProvider.imageForURL(roomProxy.avatarURL)
         
-    private func roomFromProxy(_ roomProxy: RoomProxyProtocol) -> HomeScreenRoom {
-        HomeScreenRoom(id: roomProxy.id,
-                       displayName: roomProxy.name,
-                       topic: roomProxy.topic,
-                       lastMessage: roomProxy.lastMessage,
-                       isDirect: roomProxy.isDirect,
-                       isEncrypted: roomProxy.isEncrypted,
-                       isSpace: roomProxy.isSpace,
-                       isTombstoned: roomProxy.isTombstoned)
+        return HomeScreenRoom(id: roomProxy.id,
+                              displayName: roomProxy.name,
+                              topic: roomProxy.topic,
+                              lastMessage: roomProxy.messages.last?.body,
+                              avatar: avatar,
+                              isDirect: roomProxy.isDirect,
+                              isEncrypted: roomProxy.isEncrypted,
+                              isSpace: roomProxy.isSpace,
+                              isTombstoned: roomProxy.isTombstoned)
     }
 }

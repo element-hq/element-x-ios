@@ -38,9 +38,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         
-        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "💥"))
-        
-        buildTimelineViews()
+        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥"))
         
         timelineController.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
@@ -57,6 +55,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem)
             }
         }.store(in: &cancellables)
+        
+        buildTimelineViews()
     }
     
     // MARK: - Public
@@ -80,8 +80,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func buildTimelineViews() {
-        state.items = timelineController.timelineItems.map { item  in
+        let stateItems = timelineController.timelineItems.map { item  in
             timelineViewFactory.buildTimelineViewFor(item)
         }
+        
+        state.items = stateItems
     }
 }

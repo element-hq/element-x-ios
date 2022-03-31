@@ -30,7 +30,7 @@ struct EmoteRoomTimelineView: View {
 
 struct EmoteRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body
+        body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
     }
     

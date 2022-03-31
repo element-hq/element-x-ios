@@ -35,7 +35,7 @@ struct FormattedBodyText: View {
 
 struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
-        body
+        body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
         
     }

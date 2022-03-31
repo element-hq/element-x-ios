@@ -59,9 +59,16 @@ struct TimelineView: View {
                 tableViewObserver = TableViewObserver(tableView: tableView,
                                                       topDetectionOffset: (tableView.bounds.size.height / 3.0))
                 
+                tableViewObserver.scrollToBottom()
+                
                 // Check if there are enough items. Otherwise ask for more
                 attemptBackPagination()
             }
+            .onAppear(perform: {
+                if timelineItems != context.viewState.items {
+                    timelineItems = context.viewState.items
+                }
+            })
             .onReceive(tableViewObserver.scrollViewDidReachTop, perform: {
                 if context.viewState.isBackPaginating {
                     return
@@ -200,6 +207,20 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
         }
 
         return (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) <= topDetectionOffset
+    }
+    
+    func scrollToBottom() {
+        guard let tableView = tableView,
+              tableView.numberOfSections > 0  else {
+                  return
+        }
+        
+        let currentItemCount = tableView.numberOfRows(inSection: 0)
+        guard currentItemCount > 1 else {
+            return
+        }
+        
+        tableView.scrollToRow(at: .init(row: currentItemCount - 1, section: 0), at: .bottom, animated: false)
     }
     
     // MARK: - UIScrollViewDelegate

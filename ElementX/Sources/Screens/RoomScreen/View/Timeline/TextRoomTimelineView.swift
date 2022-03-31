@@ -27,7 +27,7 @@ struct TextRoomTimelineView: View {
 
 struct TextRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body
+        body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
     }
     

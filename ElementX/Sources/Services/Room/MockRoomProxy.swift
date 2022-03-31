@@ -15,7 +15,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     let displayName: String
     
     let topic: String? = nil
-    let lastMessage: String? = "Last message" 
+    let messages: [RoomMessageProtocol] = []
     
     let avatarURL: String? = nil
     
@@ -35,7 +35,7 @@ struct MockRoomProxy: RoomProxyProtocol {
         
     }
     
-    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], RoomProxyError>) -> Void)?) {
+    func paginateBackwards(count: UInt, callback: ((Result<Void, RoomProxyError>) -> Void)?) {
         
     }
     

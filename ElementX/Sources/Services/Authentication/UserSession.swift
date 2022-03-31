@@ -32,7 +32,9 @@ private class WeakUserSessionWrapper: ClientDelegate {
 class UserSession: ClientDelegate {
     
     private let client: Client
-    private var rooms: [RoomProxy] = [] {
+    private let processingQueue: DispatchQueue
+    
+    private(set) var rooms: [RoomProxy] = [] {
         didSet {
             self.callbacks.send(.updatedRoomsList)
         }
@@ -48,10 +50,13 @@ class UserSession: ClientDelegate {
     
     init(client: Client) {
         self.client = client
+        self.processingQueue = DispatchQueue(label: "UserSessionProcessingQueue")
         self.mediaProvider = MediaProvider(client: client, imageCache: ImageCache.default)
         
         client.setDelegate(delegate: WeakUserSessionWrapper(userSession: self))
         client.startSync()
+        
+        updateRooms()
     }
     
     var userIdentifier: String {
@@ -81,33 +86,39 @@ class UserSession: ClientDelegate {
         }
     }
     
-    func getRoomList(_ completion: @escaping ([RoomProxyProtocol]) -> Void) {
-        fetchRoomList(completion)
-    }
-    
     // MARK: ClientDelegate
     
     func didReceiveSyncUpdate() {
-        fetchRoomList { [weak self] rooms in
-            guard let self = self else { return }
-            if self.rooms != rooms {
-                self.rooms = rooms
-            }
-        }
-        
-        client.setDelegate(delegate: nil)
+        updateRooms()
     }
     
     // MARK: Private
     
-    func fetchRoomList(_ completion: @escaping ([RoomProxy]) -> Void) {
-        DispatchQueue.global(qos: .background).async {
-            let rooms = self.client.rooms().map {
-                return RoomProxy(room: $0, messageFactory: RoomMessageFactory())
+    func updateRooms() {
+        var currentRooms = self.rooms
+        self.processingQueue.async { [weak self] in
+            guard let self = self else {
+                return
+            }
+            
+            let sdkRooms = self.client.rooms()
+            let diff = sdkRooms.map({ $0.id()}).difference(from: currentRooms.map({ $0.id }))
+            
+            for change in diff {
+                switch change {
+                case .insert(_, let id, _):
+                    guard let sdkRoom = sdkRooms.first(where: { $0.id() == id }) else {
+                        MXLog.error("Failed retrieving sdk room with id: \(id)")
+                        break
+                    }
+                    currentRooms.append(RoomProxy(room: sdkRoom, messageFactory: RoomMessageFactory()))
+                case .remove(_, let id, _):
+                    currentRooms.removeAll { $0.id == id }
+                }
             }
             
             DispatchQueue.main.async {
-                completion(rooms)
+                self.rooms = currentRooms
             }
         }
     }

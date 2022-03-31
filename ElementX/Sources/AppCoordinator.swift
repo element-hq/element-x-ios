@@ -101,39 +101,31 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("User session should be already setup at this point")
         }
         
-        showLoadingIndicator()
+        guard let roomProxy = userSession.rooms.first(where: { $0.id == roomIdentifier }) else {
+            MXLog.error("Invalid room identifier: \(roomIdentifier)")
+            return
+        }
         
-        userSession.getRoomList { [weak self] rooms in
+        let memberDetailsProvider = MemberDetailsProvider(roomProxy: roomProxy)
+        
+        let timelineItemFactory = RoomTimelineItemFactory(mediaProvider: userSession.mediaProvider,
+                                                          memberDetailsProvider: memberDetailsProvider,
+                                                          attributedStringBuilder: AttributedStringBuilder())
+        
+        let timelineController = RoomTimelineController(timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
+                                                        timelineItemFactory: timelineItemFactory,
+                                                        mediaProvider: userSession.mediaProvider,
+                                                        memberDetailsProvider: memberDetailsProvider)
+        
+        let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
+                                                         roomName: roomProxy.name)
+        let coordinator = RoomScreenCoordinator(parameters: parameters)
+        
+        self.add(childCoordinator: coordinator)
+        self.navigationRouter.push(coordinator) { [weak self] in
             guard let self = self else { return }
             
-            self.hideLoadingIndicator()
-            
-            guard let roomProxy = rooms.filter({ $0.id == roomIdentifier}).first else {
-                MXLog.error("Invalid room identifier: \(roomIdentifier)")
-                return
-            }
-            
-            let memberDetailsProvider = MemberDetailsProvider(roomProxy: roomProxy)
-            
-            let timelineItemFactory = RoomTimelineItemFactory(mediaProvider: userSession.mediaProvider,
-                                                              memberDetailsProvider: memberDetailsProvider,
-                                                              attributedStringBuilder: AttributedStringBuilder())
-            
-            let timelineController = RoomTimelineController(timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
-                                                            timelineItemFactory: timelineItemFactory,
-                                                            mediaProvider: userSession.mediaProvider,
-                                                            memberDetailsProvider: memberDetailsProvider)
-            
-            let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
-                                                             roomName: roomProxy.name)
-            let coordinator = RoomScreenCoordinator(parameters: parameters)
-            
-            self.add(childCoordinator: coordinator)
-            self.navigationRouter.push(coordinator) { [weak self] in
-                guard let self = self else { return }
-                
-                self.remove(childCoordinator: coordinator)
-            }
+            self.remove(childCoordinator: coordinator)
         }
     }
     

@@ -18,7 +18,7 @@ struct MediaProvider: MediaProviderProtocol {
     init(client: Client, imageCache: Kingfisher.ImageCache) {
         self.client = client
         self.imageCache = imageCache
-        self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue")
+        self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue", attributes: .concurrent)
     }
     
     func imageForURL(_ url: String?) -> UIImage? {

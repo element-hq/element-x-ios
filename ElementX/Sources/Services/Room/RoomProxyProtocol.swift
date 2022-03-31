@@ -17,8 +17,7 @@ enum RoomProxyError: Error {
 }
 
 enum RoomProxyCallback {
-    case addedMessage(RoomMessageProtocol)
-    case updatedLastMessage
+    case updatedMessages
 }
 
 protocol RoomProxyProtocol {
@@ -32,7 +31,7 @@ protocol RoomProxyProtocol {
     var name: String? { get }
     
     var topic: String? { get }
-    var lastMessage: String? { get }
+    var messages: [RoomMessageProtocol] { get }
     
     var avatarURL: String? { get }
     
@@ -42,7 +41,7 @@ protocol RoomProxyProtocol {
     
     func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void)
     
-    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], RoomProxyError>) -> Void)?)
+    func paginateBackwards(count: UInt, callback: ((Result<Void, RoomProxyError>) -> Void)?)
     
     var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
 }

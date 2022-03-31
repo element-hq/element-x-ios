@@ -27,22 +27,31 @@ private class WeakRoomProxyWrapper: RoomDelegate {
     }
 }
 
-class RoomProxy: RoomProxyProtocol, Equatable {
+class RoomProxy: RoomProxyProtocol {
     private let room: Room
     private let messageFactory: RoomMessageFactory
-    private let processingQueue: DispatchQueue
+    
+    private let generalProcessingQueue: DispatchQueue
+    private let messageProcessingQueue: DispatchQueue
     
     private var backwardStream: BackwardsStreamProtocol?
     
     let callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
+    private(set) var messages: [RoomMessageProtocol]
+    
     init(room: Room, messageFactory: RoomMessageFactory) {
         self.room = room
         self.messageFactory = messageFactory
-        processingQueue = DispatchQueue(label: "RoomProxyProcessingQueue")
+        generalProcessingQueue = DispatchQueue(label: "RoomProxyGeneralProcessingQueue")
+        messageProcessingQueue = DispatchQueue(label: "RoomProxyMessageProcessingQueue")
+        messages = []
         
-        processingQueue.async {
-            self.backwardStream = room.startLiveEventListener()
+        messageProcessingQueue.async {
+            let backwardStream = room.startLiveEventListener()
+            DispatchQueue.main.async {
+                self.backwardStream = backwardStream
+            }
         }
         
         room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
@@ -80,22 +89,12 @@ class RoomProxy: RoomProxyProtocol, Equatable {
         room.isTombstoned()
     }
     
-    var lastMessage: String? {
-        didSet {
-            if lastMessage == oldValue {
-                return
-            }
-            
-            callbacks.send(.updatedLastMessage)
-        }
-    }
-    
     var avatarURL: String? {
         room.avatarUrl()
     }
     
     func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
-        processingQueue.async {
+        generalProcessingQueue.async {
             do {
                 let avatarURL = try self.room.memberAvatarUrl(userId: userId)
                 
@@ -111,10 +110,10 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     }
     
     func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
-        processingQueue.async {
+        generalProcessingQueue.async {
             do {
                 let displayName = try self.room.memberDisplayName(userId: userId)
-                
+
                 DispatchQueue.main.async {
                     completion(.success(displayName))
                 }
@@ -127,10 +126,10 @@ class RoomProxy: RoomProxyProtocol, Equatable {
     }
     
     func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
-        processingQueue.async {
+        generalProcessingQueue.async {
             do {
                 let displayName = try self.room.displayName()
-                
+
                 DispatchQueue.main.async {
                     completion(.success(displayName))
                 }
@@ -142,8 +141,8 @@ class RoomProxy: RoomProxyProtocol, Equatable {
         }
     }
             
-    func paginateBackwards(count: UInt, callback: ((Result<[RoomMessageProtocol], RoomProxyError>) -> Void)?) {
-        processingQueue.async {
+    func paginateBackwards(count: UInt, callback: ((Result<Void, RoomProxyError>) -> Void)?) {
+        messageProcessingQueue.async {
             guard let backwardStream = self.backwardStream else {
                 DispatchQueue.main.async {
                     callback?(.failure(.backwardStreamNotAvailable))
@@ -153,29 +152,20 @@ class RoomProxy: RoomProxyProtocol, Equatable {
             
             let messages = backwardStream.paginateBackwards(count: UInt64(count)).map { message in
                 self.messageFactory.buildRoomMessageFrom(message)
-            }
+            }.reversed()
             
             DispatchQueue.main.async {
-                callback?(.success(messages))
-                if self.lastMessage == nil {
-                    self.lastMessage = messages.last?.body ?? ""
-                }
+                self.messages.insert(contentsOf: messages, at: 0)
+                callback?(.success(()))
             }
         }
-    }
-    
-    // MARK: - Equatable
-    
-    static func == (lhs: RoomProxy, rhs: RoomProxy) -> Bool {
-        lhs.id == rhs.id
     }
     
     // MARK: - Private
     
     fileprivate func appendMessage(_ message: AnyMessage) {
         let message = self.messageFactory.buildRoomMessageFrom(message)
-        lastMessage = message.body
-        
-        callbacks.send(.addedMessage(message))
+        messages.append(message)
+        callbacks.send(.updatedMessages)
     }
 }

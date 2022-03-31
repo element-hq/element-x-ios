@@ -10,7 +10,7 @@ import Foundation
 import Combine
 
 enum RoomTimelineCallback {
-    case addedMessage
+    case updatedMessages
 }
 
 enum RoomTimelineError: Error {
@@ -22,5 +22,5 @@ protocol RoomTimelineProviderProtocol {
     
     var messages: [RoomMessageProtocol] { get }
     
-    func paginateBackwards(_ count: UInt, callback: ((Result<([RoomMessageProtocol]), RoomTimelineError>) -> Void)?)
+    func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineError>) -> Void)?)
 }

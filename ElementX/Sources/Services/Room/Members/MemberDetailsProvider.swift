@@ -10,7 +10,6 @@ import Foundation
 
 class MemberDetailsProvider: MemberDetailsProviderProtocol {
     private let roomProxy: RoomProxyProtocol?
-    private let processingQueue = DispatchQueue(label: "MemberDetailsProviderProcessingQueue")
     private var memberAvatars = [String: String]()
     private var memberDisplayNames = [String: String]()
     
@@ -31,25 +30,19 @@ class MemberDetailsProvider: MemberDetailsProviderProtocol {
             completion(.success(avatarURL))
         }
         
-        processingQueue.async {
-            roomProxy.avatarURLForUserId(userId, completion: { [weak self] result in
-                guard let self = self else {
-                    return
-                }
-                
-                switch result {
-                case .success(let avatarURL):
-                    DispatchQueue.main.async {
-                        self.memberAvatars[userId] = avatarURL
-                        completion(.success(avatarURL))
-                    }
-                case .failure:
-                    DispatchQueue.main.async {
-                        completion(.failure(.failedRetrievingUserAvatarURL))
-                    }
-                }
-            })
-        }
+        roomProxy.avatarURLForUserId(userId, completion: { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            
+            switch result {
+            case .success(let avatarURL):
+                self.memberAvatars[userId] = avatarURL
+                completion(.success(avatarURL))
+            case .failure:
+                completion(.failure(.failedRetrievingUserAvatarURL))
+            }
+        })
     }
     
     func displayNameForUserId(_ userId: String) -> String? {
@@ -65,24 +58,18 @@ class MemberDetailsProvider: MemberDetailsProviderProtocol {
             completion(.success(avatarURL))
         }
         
-        processingQueue.async {
-            roomProxy.displayNameForUserId(userId, completion: { [weak self] result in
-                guard let self = self else {
-                    return
-                }
-                
-                switch result {
-                case .success(let displayName):
-                    DispatchQueue.main.async {
-                        self.memberDisplayNames[userId] = displayName
-                        completion(.success(displayName))
-                    }
-                case .failure:
-                    DispatchQueue.main.async {
-                        completion(.failure(.failedRetrievingUserDisplayName))
-                    }
-                }
-            })
-        }
+        roomProxy.displayNameForUserId(userId, completion: { [weak self] result in
+            guard let self = self else {
+                return
+            }
+            
+            switch result {
+            case .success(let displayName):
+                self.memberDisplayNames[userId] = displayName
+                completion(.success(displayName))
+            case .failure:
+                completion(.failure(.failedRetrievingUserDisplayName))
+            }
+        })
     }
 }

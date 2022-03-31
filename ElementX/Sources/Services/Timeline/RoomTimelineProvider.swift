@@ -14,7 +14,6 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     let callbacks = PassthroughSubject<RoomTimelineCallback, Never>()
-    private(set) var messages = [RoomMessageProtocol]()
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
@@ -23,24 +22,24 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             guard let self = self else { return }
             
             switch callback {
-            case .addedMessage(let message):
-                self.messages.append(message)
-                self.callbacks.send(.addedMessage)
-            case .updatedLastMessage:
-                break
+            case .updatedMessages:
+                self.callbacks.send(.updatedMessages)
             }
         }.store(in: &cancellables)
     }
     
-    func paginateBackwards(_ count: UInt, callback: ((Result<([RoomMessageProtocol]), RoomTimelineError>) -> Void)?) {
+    func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineError>) -> Void)?) {
         self.roomProxy.paginateBackwards(count: count) { result in
             switch result {
-            case .success(let messages):
-                self.messages.insert(contentsOf: messages.reversed(), at: 0)
-                callback?(.success((self.messages)))
+            case .success:
+                callback?(.success(()))
             case .failure:
                 callback?(.failure(.generic))
             }
         }
+    }
+    
+    var messages: [RoomMessageProtocol] {
+        roomProxy.messages
     }
 }

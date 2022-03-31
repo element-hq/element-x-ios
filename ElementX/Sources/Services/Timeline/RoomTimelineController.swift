@@ -35,10 +35,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             guard let self = self else { return }
             
             switch callback {
-            case .addedMessage:
+            case .updatedMessages:
                 self.updateTimelineItems()
             }
         }.store(in: &cancellables)
+        
+        updateTimelineItems()
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }

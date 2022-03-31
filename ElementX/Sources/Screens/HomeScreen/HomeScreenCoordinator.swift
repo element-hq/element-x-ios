@@ -91,8 +91,6 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     // MARK: - Private
     
     func updateRoomsList() {
-        parameters.userSession.getRoomList { [weak self] rooms in
-            self?.viewModel.updateWithRoomList(rooms)
-        }
+        self.viewModel.updateWithRoomList(parameters.userSession.rooms)
     }
 }
