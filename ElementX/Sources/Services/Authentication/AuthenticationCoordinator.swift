@@ -68,6 +68,10 @@ class AuthenticationCoordinator: Coordinator {
             case .failure(let error):
                 self.delegate?.authenticationCoordinator(self, didFailWithError: error)
                 MXLog.error("Failed restoring login with error: \(error)")
+                
+                // On any restoration failure reset the token and restart
+                self.keychainController.removeAllTokens()
+                self.start()
             }
         }
     }
