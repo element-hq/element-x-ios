@@ -80,7 +80,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("User session should be already setup at this point")
         }
         
-        let parameters = HomeScreenCoordinatorParameters(userSession: userSession, mediaProvider: userSession.mediaProvider)
+        let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
+                                                         mediaProvider: userSession.mediaProvider,
+                                                         eventBriefFactory: EventBriefFactory(),
+                                                         attributedStringBuilder: AttributedStringBuilder())
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.completion = { [weak self] result in

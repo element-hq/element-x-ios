@@ -20,6 +20,8 @@ import Combine
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSession
     let mediaProvider: MediaProviderProtocol
+    let eventBriefFactory: EventBriefFactoryProtocol
+    let attributedStringBuilder: AttributedStringBuilderProtocol
 }
 
 enum HomeScreenCoordinatorResult {
@@ -37,6 +39,8 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     private let hostingController: UIViewController
     private var viewModel: HomeScreenViewModelProtocol
     
+    private var roomSummaries: [RoomSummary] = []
+    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: Public
@@ -50,10 +54,11 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        let userDisplayName = self.parameters.userSession.userDisplayName ?? self.parameters.userSession.userIdentifier
+        let userDisplayName = parameters.userSession.userDisplayName ?? parameters.userSession.userIdentifier
         viewModel = HomeScreenViewModel(userDisplayName: userDisplayName,
-                                        userAvatarURL: self.parameters.userSession.userAvatarURL,
-                                        mediaProvider: self.parameters.mediaProvider)
+                                        userAvatarURL: parameters.userSession.userAvatarURL,
+                                        mediaProvider: parameters.mediaProvider,
+                                        attributedStringBuilder: parameters.attributedStringBuilder)
         
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)
@@ -91,6 +96,16 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     // MARK: - Private
     
     func updateRoomsList() {
-        self.viewModel.updateWithRoomList(parameters.userSession.rooms)
+        self.roomSummaries = parameters.userSession.rooms.map { roomProxy in
+            if let summary = self.roomSummaries.first(where: { $0.id == roomProxy.id }) {
+                return summary
+            }
+            
+            return RoomSummary(roomProxy: roomProxy,
+                               mediaProvider: parameters.mediaProvider,
+                               eventBriefFactory: parameters.eventBriefFactory)
+        }
+        
+        self.viewModel.updateWithRoomList(roomSummaries)
     }
 }

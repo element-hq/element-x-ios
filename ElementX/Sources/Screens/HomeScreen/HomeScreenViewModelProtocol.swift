@@ -22,5 +22,5 @@ protocol HomeScreenViewModelProtocol {
     
     var context: HomeScreenViewModelType.Context { get }
     
-    func updateWithRoomList(_ roomList: [RoomProxyProtocol])
+    func updateWithRoomList(_ roomList: [RoomSummaryProtocol])
 }

@@ -153,11 +153,12 @@ struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed",
                                             userAvatarURL: nil,
-                                            mediaProvider: MockMediaProvider())
+                                            mediaProvider: MockMediaProvider(),
+                                            attributedStringBuilder: AttributedStringBuilder())
         
-        let rooms = [MockRoomProxy(displayName: "Alfa"),
-                     MockRoomProxy(displayName: "Beta"),
-                     MockRoomProxy(displayName: "Omega")]
+        let rooms = [MockRoomSummary(displayName: "Alpha"),
+                     MockRoomSummary(displayName: "Beta"),
+                     MockRoomSummary(displayName: "Omega")]
         
         viewModel.updateWithRoomList(rooms)
         

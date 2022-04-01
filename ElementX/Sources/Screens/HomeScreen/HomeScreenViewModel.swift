@@ -25,9 +25,11 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     
     private let mediaProvider: MediaProviderProtocol
+    private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var roomUpdateListeners = Set<AnyCancellable>()
-    private var roomList: [RoomProxyProtocol]? {
+
+    private var roomList: [RoomSummaryProtocol]? {
         didSet {
             self.state.isLoadingRooms = (roomList?.count ?? 0 == 0)
         }
@@ -37,8 +39,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
-    init(userDisplayName: String, userAvatarURL: String?, mediaProvider: MediaProviderProtocol) {
+    init(userDisplayName: String,
+         userAvatarURL: String?,
+         mediaProvider: MediaProviderProtocol,
+         attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.mediaProvider = mediaProvider
+        self.attributedStringBuilder = attributedStringBuilder
+        
         super.init(initialViewState: HomeScreenViewState(userDisplayName: userDisplayName, isLoadingRooms: true))
         
         if let userAvatarURL = userAvatarURL {
@@ -63,24 +70,31 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
-    func updateWithRoomList(_ roomList: [RoomProxyProtocol]) {
+    func updateWithRoomList(_ roomList: [RoomSummaryProtocol]) {
         self.roomList = roomList
         
-        state.rooms = roomList.map { roomProxy in
-            buildRoomFromProxy(roomProxy)
+        state.rooms = roomList.map { roomSummary in
+            buildOrUpdateRoomFromSummary(roomSummary)
         }
         
         roomUpdateListeners.removeAll()
         
-        roomList.forEach({ roomProxy  in
-            roomProxy.callbacks.sink { [weak self] callback in
+        roomList.forEach({ roomSummary  in
+            roomSummary.callbacks.sink { [weak self] callback in
+                guard let self = self else {
+                    return
+                }
+                
                 switch callback {
-                case .updatedMessages:
-                    self?.loadLastMessageForRoomWithIdentifier(roomProxy.id)
+                case .updatedData:
+                    if let index = self.state.rooms.firstIndex(where: { $0.id == roomSummary.id }) {
+                        self.state.rooms[index] = self.buildOrUpdateRoomFromSummary(roomSummary)
+                    }
                 }
             }
             .store(in: &roomUpdateListeners)
         })
+        
     }
     
     func updateWithUserAvatar(_ avatar: UIImage?) {
@@ -90,100 +104,47 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadRoomDataForIdentifier(_ roomIdentifier: String) {
-        let room = state.rooms.first(where: { $0.id == roomIdentifier })
-        
-        if room?.avatar == nil {
-            loadAvatarForRoomWithIdentifier(roomIdentifier)
-        }
-        
-        if room?.displayName == nil {
-            loadRoomDisplayNameForRoomWithIdentifier(roomIdentifier)
-        }
-        
-        if room?.lastMessage == nil {
-            loadLastMessageForRoomWithIdentifier(roomIdentifier)
-        }
-    }
-    
-    private func loadAvatarForRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let room = roomList?.filter({ $0.id == roomIdentifier }).first,
-              let avatarURLString = room.avatarURL else {
-                  return
-              }
-        
-        mediaProvider.loadImageFromURL(avatarURLString) { [weak self] result in
-            guard let self = self else { return }
-            if case let .success(image) = result {
-                self.updateAvatar(image, forRoomWithIdentifier: roomIdentifier)
-            }
-        }
-    }
-    
-    private func updateAvatar(_ avatar: UIImage?, forRoomWithIdentifier roomIdentifier: String) {
-        guard let index = self.state.rooms.firstIndex(where: { $0.id == roomIdentifier }) else {
+        guard let roomSummary = roomList?.first(where: { $0.id == roomIdentifier }) else {
+            MXLog.error("Invalid room identifier")
             return
         }
         
-        self.state.rooms[index].avatar = avatar
+        roomSummary.loadData()
     }
     
-    private func loadRoomDisplayNameForRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let room = roomList?.filter({ $0.id == roomIdentifier }).first else {
-            return
+    private func buildOrUpdateRoomFromSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {
+        
+        let lastMessage = lastMessageFromEventBrief(roomSummary.lastMessage)
+        
+        guard var room = self.state.rooms.first(where: { $0.id == roomSummary.id }) else {
+            return HomeScreenRoom(id: roomSummary.id,
+                                  displayName: roomSummary.name,
+                                  topic: roomSummary.topic,
+                                  lastMessage: lastMessage,
+                                  avatar: roomSummary.avatar,
+                                  isDirect: roomSummary.isDirect,
+                                  isEncrypted: roomSummary.isEncrypted,
+                                  isSpace: roomSummary.isSpace,
+                                  isTombstoned: roomSummary.isTombstoned)
         }
         
-        room.displayName { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let displayName):
-                self.updateDisplayName(displayName, forRoomWithIdentifier: roomIdentifier)
-            default:
-                break
-            }
-        }
+        room.avatar = roomSummary.avatar
+        room.displayName = roomSummary.displayName
+        room.lastMessage = lastMessage
+        
+        return room
     }
     
-    private func updateDisplayName(_ displayName: String, forRoomWithIdentifier roomIdentifier: String) {
-        guard let index = self.state.rooms.firstIndex(where: { $0.id == roomIdentifier }) else {
-            return
+    private func lastMessageFromEventBrief(_ eventBrief: EventBrief?) -> String? {
+        guard let eventBrief = eventBrief else {
+            return nil
         }
         
-        self.state.rooms[index].displayName = displayName
-    }
-    
-    private func loadLastMessageForRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let room = roomList?.filter({ $0.id == roomIdentifier }).first else {
-            return
+        if let htmlBody = eventBrief.htmlBody,
+           let lastMessageAttributedString = attributedStringBuilder.fromHTML(htmlBody) {
+            return "\(eventBrief.senderName): \(String(lastMessageAttributedString.characters))"
+        } else {
+            return "\(eventBrief.senderName): \(eventBrief.body)"
         }
-        
-        if let lastMessage = room.messages.last {
-            self.updateLastMessage(lastMessage.body, forRoomWithIdentifier: roomIdentifier)
-            return
-        }
-        
-        room.paginateBackwards(count: 1, callback: nil)
-    }
-    
-    private func updateLastMessage(_ lastMessage: String, forRoomWithIdentifier roomIdentifier: String) {
-        guard let index = self.state.rooms.firstIndex(where: { $0.id == roomIdentifier }) else {
-            return
-        }
-        
-        self.state.rooms[index].lastMessage = lastMessage
-    }
-    
-    private func buildRoomFromProxy(_ roomProxy: RoomProxyProtocol) -> HomeScreenRoom {
-        let avatar = mediaProvider.imageForURL(roomProxy.avatarURL)
-        
-        return HomeScreenRoom(id: roomProxy.id,
-                              displayName: roomProxy.name,
-                              topic: roomProxy.topic,
-                              lastMessage: roomProxy.messages.last?.body,
-                              avatar: avatar,
-                              isDirect: roomProxy.isDirect,
-                              isEncrypted: roomProxy.isEncrypted,
-                              isSpace: roomProxy.isSpace,
-                              isTombstoned: roomProxy.isTombstoned)
     }
 }

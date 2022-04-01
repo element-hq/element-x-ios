@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		181A317727F703E300B8305B /* RoomSummaryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317427F703E300B8305B /* RoomSummaryProtocol.swift */; };
+		181A317827F703E300B8305B /* RoomSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317527F703E300B8305B /* RoomSummary.swift */; };
+		181A317927F703E300B8305B /* MockRoomSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317627F703E300B8305B /* MockRoomSummary.swift */; };
+		181A317B27F70AEB00B8305B /* EventBrief.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317A27F70AEB00B8305B /* EventBrief.swift */; };
+		181A317D27F70B1E00B8305B /* EventBriefFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317C27F70B1E00B8305B /* EventBriefFactory.swift */; };
+		181A317F27F70CCA00B8305B /* EventBriefFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317E27F70CCA00B8305B /* EventBriefFactoryProtocol.swift */; };
 		182BC48127C4EBBB00A30C33 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 182BC48027C4EBBB00A30C33 /* Kingfisher */; };
 		183E023427E4A73C00903BED /* MemberDetailsProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */; };
 		183E023627E4A79D00903BED /* RoomTimelineProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */; };
@@ -141,6 +147,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		181A317427F703E300B8305B /* RoomSummaryProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomSummaryProtocol.swift; sourceTree = "<group>"; };
+		181A317527F703E300B8305B /* RoomSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomSummary.swift; sourceTree = "<group>"; };
+		181A317627F703E300B8305B /* MockRoomSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomSummary.swift; sourceTree = "<group>"; };
+		181A317A27F70AEB00B8305B /* EventBrief.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBrief.swift; sourceTree = "<group>"; };
+		181A317C27F70B1E00B8305B /* EventBriefFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBriefFactory.swift; sourceTree = "<group>"; };
+		181A317E27F70CCA00B8305B /* EventBriefFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBriefFactoryProtocol.swift; sourceTree = "<group>"; };
 		183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailsProviderProtocol.swift; sourceTree = "<group>"; };
 		183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineProviderProtocol.swift; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -288,6 +300,19 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		181A317327F703E300B8305B /* RoomSummary */ = {
+			isa = PBXGroup;
+			children = (
+				181A317427F703E300B8305B /* RoomSummaryProtocol.swift */,
+				181A317527F703E300B8305B /* RoomSummary.swift */,
+				181A317627F703E300B8305B /* MockRoomSummary.swift */,
+				181A317E27F70CCA00B8305B /* EventBriefFactoryProtocol.swift */,
+				181A317C27F70B1E00B8305B /* EventBriefFactory.swift */,
+				181A317A27F70AEB00B8305B /* EventBrief.swift */,
+			);
+			path = RoomSummary;
+			sourceTree = "<group>";
+		};
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
@@ -398,12 +423,13 @@
 		18C5744727E1D84000D70937 /* Room */ = {
 			isa = PBXGroup;
 			children = (
-				18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */,
-				18C5744A27E1D84000D70937 /* RoomProxy.swift */,
 				18C5744B27E1D84000D70937 /* MockRoomProxy.swift */,
 				18C5745527E1DCA800D70937 /* RoomMessageFactory.swift */,
+				18C5744A27E1D84000D70937 /* RoomProxy.swift */,
+				18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */,
 				18DF7C5127E4753A00291672 /* Members */,
 				18C5744927E1D84000D70937 /* Messages */,
+				181A317327F703E300B8305B /* RoomSummary */,
 			);
 			path = Room;
 			sourceTree = "<group>";
@@ -924,6 +950,7 @@
 			files = (
 				18F2BADE27D25B4000DD1988 /* KeychainControllerProtocol.swift in Sources */,
 				18C5745027E1D87800D70937 /* RoomMessageProtocol.swift in Sources */,
+				181A317727F703E300B8305B /* RoomSummaryProtocol.swift in Sources */,
 				18DF7C4C27E4672C00291672 /* EventBasedTimelineItemProtocol.swift in Sources */,
 				189E496527F4777400D86BA3 /* NoticeRoomTimelineView.swift in Sources */,
 				18F2BAED27D25B4000DD1988 /* FullscreenLoadingActivityPresenter.swift in Sources */,
@@ -944,6 +971,7 @@
 				18F2BB1227D25B4000DD1988 /* LoginScreenViewModel.swift in Sources */,
 				18F2BAE727D25B4000DD1988 /* RoundedToastView.swift in Sources */,
 				18F2BAF227D25B4000DD1988 /* WeakDictionaryKeyReference.swift in Sources */,
+				181A317827F703E300B8305B /* RoomSummary.swift in Sources */,
 				183E023627E4A79D00903BED /* RoomTimelineProviderProtocol.swift in Sources */,
 				18DF7C4727E4670600291672 /* TextRoomTimelineItem.swift in Sources */,
 				18F2BAE027D25B4000DD1988 /* NavigationRouter.swift in Sources */,
@@ -963,6 +991,8 @@
 				18C5745627E1DCA800D70937 /* RoomMessageFactory.swift in Sources */,
 				18F2BB1127D25B4000DD1988 /* RoomScreenModels.swift in Sources */,
 				18F2BADB27D25B4000DD1988 /* AuthenticationCoordinator.swift in Sources */,
+				181A317B27F70AEB00B8305B /* EventBrief.swift in Sources */,
+				181A317927F703E300B8305B /* MockRoomSummary.swift in Sources */,
 				1850256F27B6A135002E6B18 /* AppDelegate.swift in Sources */,
 				18F2BAE627D25B4000DD1988 /* NavigationRouterType.swift in Sources */,
 				18F2BAE927D25B4000DD1988 /* ActivityPresentable.swift in Sources */,
@@ -974,6 +1004,7 @@
 				18DF7C5327E4754500291672 /* MemberDetailsProvider.swift in Sources */,
 				18F2BAE227D25B4000DD1988 /* NavigationRouterStoreProtocol.swift in Sources */,
 				18DDB72E27EF936D000F1ABF /* MatrixEntitityRegex.swift in Sources */,
+				181A317D27F70B1E00B8305B /* EventBriefFactory.swift in Sources */,
 				18F2BB1727D25B4000DD1988 /* LoginScreenCoordinator.swift in Sources */,
 				18F2BAF527D25B4000DD1988 /* WeakKeyDictionary.swift in Sources */,
 				18F2BADF27D25B4000DD1988 /* NavigationRouterStore.swift in Sources */,
@@ -995,6 +1026,7 @@
 				18F2BADD27D25B4000DD1988 /* KeychainController.swift in Sources */,
 				18920C1227F2347600A717B5 /* NoticeRoomTimelineItem.swift in Sources */,
 				18920C0E27F233FF00A717B5 /* NoticeRoomMessage.swift in Sources */,
+				181A317F27F70CCA00B8305B /* EventBriefFactoryProtocol.swift in Sources */,
 				18F2BAFB27D25B4000DD1988 /* HomeScreenCoordinator.swift in Sources */,
 				18F2BB0C27D25B4000DD1988 /* RoomScreenCoordinator.swift in Sources */,
 				18DDB72127EB9D57000F1ABF /* ElementXAttributeScope.swift in Sources */,
