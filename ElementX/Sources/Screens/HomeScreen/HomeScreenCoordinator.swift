@@ -20,8 +20,8 @@ import Combine
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSession
     let mediaProvider: MediaProviderProtocol
-    let eventBriefFactory: EventBriefFactoryProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
+    let memberDetailProviderManager: MemberDetailProviderManager
 }
 
 enum HomeScreenCoordinatorResult {
@@ -96,14 +96,20 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     // MARK: - Private
     
     func updateRoomsList() {
-        self.roomSummaries = parameters.userSession.rooms.map { roomProxy in
+        self.roomSummaries = parameters.userSession.rooms.compactMap { roomProxy in
+            guard !roomProxy.isSpace, !roomProxy.isTombstoned else {
+                return nil
+            }
+            
             if let summary = self.roomSummaries.first(where: { $0.id == roomProxy.id }) {
                 return summary
             }
             
+            let memberDetailProvider = parameters.memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
+            
             return RoomSummary(roomProxy: roomProxy,
                                mediaProvider: parameters.mediaProvider,
-                               eventBriefFactory: parameters.eventBriefFactory)
+                               eventBriefFactory: EventBriefFactory(memberDetailProvider: memberDetailProvider))
         }
         
         self.viewModel.updateWithRoomList(roomSummaries)

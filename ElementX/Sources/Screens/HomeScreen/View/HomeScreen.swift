@@ -115,23 +115,23 @@ struct RoomCell: View {
                         .frame(width: 40, height: 40)
                 }
                 
-                VStack(alignment: .leading, spacing: 4.0) {
+                VStack(alignment: .leading, spacing: 2.0) {
                     Text(roomName(room))
-                        .font(.headline)
-                        .fontWeight(.regular)
+                        .foregroundStyle(.primary)
                     
                     if let roomTopic = room.topic, roomTopic.count > 0 {
                         Text(roomTopic)
-                            .font(.footnote)
-                            .fontWeight(.bold)
+                            .font(.footnote.weight(.semibold))
                             .lineLimit(1)
+                            .foregroundStyle(.secondary)
                     }
                     
                     if let lastMessage = room.lastMessage {
                         Text(lastMessage)
-                            .font(.footnote)
-                            .fontWeight(.medium)
+                            .font(.callout)
                             .lineLimit(1)
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 2)
                     }
                 }
             }
@@ -156,9 +156,16 @@ struct HomeScreen_Previews: PreviewProvider {
                                             mediaProvider: MockMediaProvider(),
                                             attributedStringBuilder: AttributedStringBuilder())
         
-        let rooms = [MockRoomSummary(displayName: "Alpha"),
+        let eventBrief = EventBrief(eventId: "id",
+                                    senderId: "senderId",
+                                    senderDisplayName: "Sender",
+                                    body: "Some message",
+                                    htmlBody: nil,
+                                    date: .now)
+        
+        let rooms = [MockRoomSummary(topic: "Topic", displayName: "Alpha"),
                      MockRoomSummary(displayName: "Beta"),
-                     MockRoomSummary(displayName: "Omega")]
+                     MockRoomSummary(displayName: "Omega", lastMessage: eventBrief)]
         
         viewModel.updateWithRoomList(rooms)
         

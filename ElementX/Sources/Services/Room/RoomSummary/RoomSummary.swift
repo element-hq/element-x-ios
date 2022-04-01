@@ -71,7 +71,9 @@ class RoomSummary: RoomSummaryProtocol {
         self.mediaProvider = mediaProvider
         self.eventBriefFactory = eventBriefFactory
         
-        lastMessage = eventBriefFactory.eventBriefForMessage(roomProxy.messages.last)
+        eventBriefFactory.eventBriefForMessage(roomProxy.messages.last) { [weak self] result in
+            self?.lastMessage = result
+        }
         
         roomProxy.callbacks.sink { [weak self] callback in
             guard let self = self else {
@@ -80,7 +82,9 @@ class RoomSummary: RoomSummaryProtocol {
             
             switch callback {
             case .updatedMessages:
-                self.lastMessage = self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last)
+                self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last) { [weak self] result in
+                    self?.lastMessage = result
+                }
             }
         }
         .store(in: &roomUpdateListeners)
@@ -120,7 +124,9 @@ class RoomSummary: RoomSummaryProtocol {
                 
                 switch result {
                 case .success:
-                    self.lastMessage = self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last)
+                    self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last) { [weak self] result in
+                        self?.lastMessage = result
+                    }
                 case .failure(let error):
                     MXLog.error("Failed back paginating with error: \(error)")
                 }

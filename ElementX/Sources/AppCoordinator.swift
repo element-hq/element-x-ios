@@ -18,6 +18,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let keychainController: KeychainControllerProtocol
     private let authenticationCoordinator: AuthenticationCoordinator!
     
+    private let memberDetailProviderManager: MemberDetailProviderManager
+    
     private var loadingActivity: Activity?
     private var errorActivity: Activity?
     
@@ -30,6 +32,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         window.rootViewController = mainNavigationController
         
         navigationRouter = NavigationRouter(navigationController: mainNavigationController)
+        
+        memberDetailProviderManager = MemberDetailProviderManager()
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
@@ -82,8 +86,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          mediaProvider: userSession.mediaProvider,
-                                                         eventBriefFactory: EventBriefFactory(),
-                                                         attributedStringBuilder: AttributedStringBuilder())
+                                                         attributedStringBuilder: AttributedStringBuilder(),
+                                                         memberDetailProviderManager: memberDetailProviderManager)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.completion = { [weak self] result in
@@ -109,16 +113,16 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             return
         }
         
-        let memberDetailsProvider = MemberDetailsProvider(roomProxy: roomProxy)
+        let memberDetailProvider = memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
         
         let timelineItemFactory = RoomTimelineItemFactory(mediaProvider: userSession.mediaProvider,
-                                                          memberDetailsProvider: memberDetailsProvider,
+                                                          memberDetailProvider: memberDetailProvider,
                                                           attributedStringBuilder: AttributedStringBuilder())
         
         let timelineController = RoomTimelineController(timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
-                                                        memberDetailsProvider: memberDetailsProvider)
+                                                        memberDetailProvider: memberDetailProvider)
         
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
                                                          roomName: roomProxy.name)

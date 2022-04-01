@@ -11,20 +11,20 @@ import UIKit
 
 struct RoomTimelineItemFactory {
     private let mediaProvider: MediaProviderProtocol
-    private let memberDetailsProvider: MemberDetailsProviderProtocol
+    private let memberDetailProvider: MemberDetailProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     init(mediaProvider: MediaProviderProtocol,
-         memberDetailsProvider: MemberDetailsProviderProtocol,
+         memberDetailProvider: MemberDetailProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.mediaProvider = mediaProvider
-        self.memberDetailsProvider = memberDetailsProvider
+        self.memberDetailProvider = memberDetailProvider
         self.attributedStringBuilder = attributedStringBuilder
     }
     
     func buildTimelineItemFor(_ roomMessage: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
-        let displayName = memberDetailsProvider.displayNameForUserId(roomMessage.sender)
-        let avatarURL = memberDetailsProvider.avatarURLForUserId(roomMessage.sender)
+        let displayName = memberDetailProvider.displayNameForUserId(roomMessage.sender)
+        let avatarURL = memberDetailProvider.avatarURLForUserId(roomMessage.sender)
         let avatarImage = mediaProvider.imageForURL(avatarURL)
         
         switch roomMessage {

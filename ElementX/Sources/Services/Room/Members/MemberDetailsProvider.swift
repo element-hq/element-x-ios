@@ -1,5 +1,5 @@
 //
-//  MemberDetailsProvider.swift
+//  MemberDetailProvider.swift
 //  ElementX
 //
 //  Created by Stefan Ceriu on 18/03/2022.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-class MemberDetailsProvider: MemberDetailsProviderProtocol {
+class MemberDetailProvider: MemberDetailProviderProtocol {
     private let roomProxy: RoomProxyProtocol?
     private var memberAvatars = [String: String]()
     private var memberDisplayNames = [String: String]()
@@ -21,7 +21,7 @@ class MemberDetailsProvider: MemberDetailsProviderProtocol {
         self.memberAvatars[userId]
     }
     
-    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailsProviderError>) -> Void) {
+    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailProviderError>) -> Void) {
         guard let roomProxy = roomProxy else {
             return
         }
@@ -49,7 +49,7 @@ class MemberDetailsProvider: MemberDetailsProviderProtocol {
         self.memberDisplayNames[userId]
     }
     
-    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailsProviderError>) -> Void) {
+    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailProviderError>) -> Void) {
         guard let roomProxy = roomProxy else {
             return
         }

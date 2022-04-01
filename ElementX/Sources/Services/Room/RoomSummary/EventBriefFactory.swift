@@ -10,20 +10,27 @@ import Foundation
 
 struct EventBriefFactory: EventBriefFactoryProtocol {
     
-    func eventBriefForMessage(_ message: RoomMessageProtocol?) -> EventBrief? {
+    private let memberDetailProvider: MemberDetailProviderProtocol
+    
+    init(memberDetailProvider: MemberDetailProviderProtocol) {
+        self.memberDetailProvider = memberDetailProvider
+    }
+    
+    func eventBriefForMessage(_ message: RoomMessageProtocol?, completion: @escaping ((EventBrief?) -> Void)) {
         guard let message = message else {
-            return nil
+            completion(nil)
+            return
         }
         
         switch message {
         case is ImageRoomMessage:
-            return nil
+            completion(nil)
         case let message as TextRoomMessage:
-            return buildEventBrief(message: message, htmlBody: message.htmlBody)
+            buildEventBrief(message: message, htmlBody: message.htmlBody, completion: completion)
         case let message as NoticeRoomMessage:
-            return buildEventBrief(message: message, htmlBody: message.htmlBody)
+            buildEventBrief(message: message, htmlBody: message.htmlBody, completion: completion)
         case let message as EmoteRoomMessage:
-            return buildEventBrief(message: message, htmlBody: message.htmlBody)
+            buildEventBrief(message: message, htmlBody: message.htmlBody, completion: completion)
         default:
             fatalError("Unknown room message.")
         }
@@ -31,11 +38,26 @@ struct EventBriefFactory: EventBriefFactoryProtocol {
     
     // MARK: - Private
     
-    private func buildEventBrief(message: RoomMessageProtocol, htmlBody: String?) -> EventBrief {
-        return EventBrief(id: message.id,
-                          senderName: message.sender,
-                          body: message.body,
-                          htmlBody: htmlBody,
-                          date: message.originServerTs)
+    private func buildEventBrief(message: RoomMessageProtocol, htmlBody: String?, completion: @escaping ((EventBrief?) -> Void)) {
+        memberDetailProvider.displayNameForUserId(message.sender) { result in
+            switch result {
+            case .success(let displayName):
+                completion(EventBrief(eventId: message.id,
+                                      senderId: message.sender,
+                                      senderDisplayName: displayName,
+                                      body: message.body,
+                                      htmlBody: htmlBody,
+                                      date: message.originServerTs))
+            case .failure(let error):
+                MXLog.error("Failed fetching sender display name with error: \(error)")
+                
+                completion(EventBrief(eventId: message.id,
+                                      senderId: message.sender,
+                                      senderDisplayName: nil,
+                                      body: message.body,
+                                      htmlBody: htmlBody,
+                                      date: message.originServerTs))
+            }
+        }
     }
 }

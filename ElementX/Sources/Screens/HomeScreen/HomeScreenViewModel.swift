@@ -113,12 +113,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func buildOrUpdateRoomFromSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {
-        
         let lastMessage = lastMessageFromEventBrief(roomSummary.lastMessage)
         
         guard var room = self.state.rooms.first(where: { $0.id == roomSummary.id }) else {
             return HomeScreenRoom(id: roomSummary.id,
-                                  displayName: roomSummary.name,
+                                  displayName: roomSummary.displayName ?? roomSummary.name,
                                   topic: roomSummary.topic,
                                   lastMessage: lastMessage,
                                   avatar: roomSummary.avatar,
@@ -140,11 +139,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return nil
         }
         
+        let senderDisplayName = senderDisplayNameForBrief(eventBrief)
+        
         if let htmlBody = eventBrief.htmlBody,
            let lastMessageAttributedString = attributedStringBuilder.fromHTML(htmlBody) {
-            return "\(eventBrief.senderName): \(String(lastMessageAttributedString.characters))"
+            return "\(senderDisplayName): \(String(lastMessageAttributedString.characters))"
         } else {
-            return "\(eventBrief.senderName): \(eventBrief.body)"
+            return "\(senderDisplayName): \(eventBrief.body)"
         }
+    }
+    
+    private func senderDisplayNameForBrief(_ brief: EventBrief) -> String {
+        brief.senderDisplayName ?? brief.senderId
     }
 }

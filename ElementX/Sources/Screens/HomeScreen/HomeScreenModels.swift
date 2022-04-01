@@ -36,27 +36,19 @@ struct HomeScreenViewState: BindableState {
     var isLoadingRooms: Bool = false
     
     var unencryptedDMs: [HomeScreenRoom] {
-        Array(sortedRooms.filter { $0.isDirect && !$0.isEncrypted })
+        Array(rooms.filter { $0.isDirect && !$0.isEncrypted })
     }
     
     var encryptedDMs: [HomeScreenRoom] {
-        Array(sortedRooms.filter { $0.isDirect && $0.isEncrypted})
+        Array(rooms.filter { $0.isDirect && $0.isEncrypted})
     }
     
     var unencryptedRooms: [HomeScreenRoom] {
-        Array(sortedRooms.filter { !$0.isDirect && !$0.isEncrypted })
+        Array(rooms.filter { !$0.isDirect && !$0.isEncrypted })
     }
     
     var encryptedRooms: [HomeScreenRoom] {
-        Array(sortedRooms.filter { !$0.isDirect && $0.isEncrypted })
-    }
-    
-    private var filteredRooms: [HomeScreenRoom] {
-        rooms.filter { !$0.isSpace && !$0.isTombstoned }
-    }
-    
-    private var sortedRooms: [HomeScreenRoom] {
-        filteredRooms.sorted(by: { ($0.displayName ?? $0.id).lowercased() < ($1.displayName ?? $1.id).lowercased() })
+        Array(rooms.filter { !$0.isDirect && $0.isEncrypted })
     }
 }
 

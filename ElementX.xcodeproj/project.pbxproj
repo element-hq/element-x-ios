@@ -26,6 +26,7 @@
 		1850257127B6A135002E6B18 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 1850256927B6A135002E6B18 /* LaunchScreen.storyboard */; };
 		1863A3FC27BA5A9100B52E4D /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A3FB27BA5A9100B52E4D /* KeychainAccess */; };
 		1863A40627BA6DFC00B52E4D /* SwiftyBeaver in Frameworks */ = {isa = PBXBuildFile; productRef = 1863A40527BA6DFC00B52E4D /* SwiftyBeaver */; };
+		186AD17D27F72E5200048C8E /* MemberDetailProviderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 186AD17C27F72E5200048C8E /* MemberDetailProviderManager.swift */; };
 		18920C0E27F233FF00A717B5 /* NoticeRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C0C27F233FF00A717B5 /* NoticeRoomMessage.swift */; };
 		18920C0F27F233FF00A717B5 /* EmoteRoomMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C0D27F233FF00A717B5 /* EmoteRoomMessage.swift */; };
 		18920C1227F2347600A717B5 /* NoticeRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18920C1027F2347600A717B5 /* NoticeRoomTimelineItem.swift */; };
@@ -166,6 +167,7 @@
 		1850256727B6A135002E6B18 /* ElementX.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = ElementX.entitlements; sourceTree = "<group>"; };
 		1850256827B6A135002E6B18 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		1850256A27B6A135002E6B18 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		186AD17C27F72E5200048C8E /* MemberDetailProviderManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailProviderManager.swift; sourceTree = "<group>"; };
 		18920C0C27F233FF00A717B5 /* NoticeRoomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeRoomMessage.swift; sourceTree = "<group>"; };
 		18920C0D27F233FF00A717B5 /* EmoteRoomMessage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EmoteRoomMessage.swift; sourceTree = "<group>"; };
 		18920C1027F2347600A717B5 /* NoticeRoomTimelineItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NoticeRoomTimelineItem.swift; sourceTree = "<group>"; };
@@ -487,6 +489,7 @@
 			children = (
 				183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */,
 				18DF7C5227E4754500291672 /* MemberDetailsProvider.swift */,
+				186AD17C27F72E5200048C8E /* MemberDetailProviderManager.swift */,
 			);
 			path = Members;
 			sourceTree = "<group>";
@@ -955,6 +958,7 @@
 				189E496527F4777400D86BA3 /* NoticeRoomTimelineView.swift in Sources */,
 				18F2BAED27D25B4000DD1988 /* FullscreenLoadingActivityPresenter.swift in Sources */,
 				18DF7C4127E4670600291672 /* RoomTimelineViewProvider.swift in Sources */,
+				186AD17D27F72E5200048C8E /* MemberDetailProviderManager.swift in Sources */,
 				18F2BB0F27D25B4000DD1988 /* RoomScreen.swift in Sources */,
 				18F2BAFF27D25B4000DD1988 /* HomeScreenModels.swift in Sources */,
 				183E023427E4A73C00903BED /* MemberDetailsProviderProtocol.swift in Sources */,

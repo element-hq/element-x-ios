@@ -9,8 +9,9 @@
 import Foundation
 
 struct EventBrief {
-    let id: String
-    let senderName: String
+    let eventId: String
+    let senderId: String
+    let senderDisplayName: String?
     let body: String
     let htmlBody: String?
     let date: Date

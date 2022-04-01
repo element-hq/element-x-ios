@@ -14,7 +14,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactory
     private let mediaProvider: MediaProviderProtocol
-    private let memberDetailsProvider: MemberDetailsProviderProtocol
+    private let memberDetailProvider: MemberDetailProviderProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -25,11 +25,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     init(timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactory,
          mediaProvider: MediaProviderProtocol,
-         memberDetailsProvider: MemberDetailsProviderProtocol) {
+         memberDetailProvider: MemberDetailProviderProtocol) {
         self.timelineProvider = timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
-        self.memberDetailsProvider = memberDetailsProvider
+        self.memberDetailProvider = memberDetailProvider
         
         self.timelineProvider.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
@@ -152,7 +152,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        memberDetailsProvider.avatarURLForUserId(timelineItem.senderId) { result in
+        memberDetailProvider.avatarURLForUserId(timelineItem.senderId) { result in
             if case let .success(avatarURL) = result,
                let avatarURL = avatarURL {
                 self.mediaProvider.loadImageFromURL(avatarURL) { result in
@@ -176,7 +176,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        memberDetailsProvider.displayNameForUserId(timelineItem.senderId) { result in
+        memberDetailProvider.displayNameForUserId(timelineItem.senderId) { result in
             if case let .success(displayName) = result,
                let displayName = displayName {
                 guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
