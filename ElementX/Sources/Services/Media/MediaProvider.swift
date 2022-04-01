@@ -30,34 +30,40 @@ struct MediaProvider: MediaProviderProtocol {
     }
     
     func loadImageFromURL(_ url: String, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
+        if let image = imageForURL(url) {
+            completion(.success(image))
+            return
+        }
+        
         imageCache.retrieveImage(forKey: url) { result in
             if case let .success(cacheResult) = result,
                let image = cacheResult.image {
                 completion(.success(image))
+                return
             }
-        }
-        
-        processingQueue.async {
-            do {
-                let imageData = try client.loadImage(url: url)
-                
-                guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
-                    MXLog.error("Invalid image data")
-                    DispatchQueue.main.async {
-                        completion(.failure(.invalidImageData))
+            
+            processingQueue.async {
+                do {
+                    let imageData = try client.loadImage(url: url)
+                    
+                    guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
+                        MXLog.error("Invalid image data")
+                        DispatchQueue.main.async {
+                            completion(.failure(.invalidImageData))
+                        }
+                        return
                     }
-                    return
-                }
-                
-                imageCache.store(image, forKey: url)
-                
-                DispatchQueue.main.async {
-                    completion(.success(image))
-                }
-            } catch {
-                MXLog.error("Failed retrieving image with error: \(error)")
-                DispatchQueue.main.async {
-                    completion(.failure(.failedRetrievingImage))
+                    
+                    imageCache.store(image, forKey: url)
+                    
+                    DispatchQueue.main.async {
+                        completion(.success(image))
+                    }
+                } catch {
+                    MXLog.error("Failed retrieving image with error: \(error)")
+                    DispatchQueue.main.async {
+                        completion(.failure(.failedRetrievingImage))
+                    }
                 }
             }
         }
