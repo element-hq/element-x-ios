@@ -43,6 +43,12 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         authenticationCoordinator = AuthenticationCoordinator(keychainController: keychainController,
                                                               navigationRouter: navigationRouter)
         authenticationCoordinator.delegate = self
+        
+        let loggerConfiguration = MXLogConfiguration()
+        loggerConfiguration.logLevel = .verbose
+        MXLog.configure(loggerConfiguration)
+        
+        // Benchmark.trackingEnabled = true
     }
     
     func start() {

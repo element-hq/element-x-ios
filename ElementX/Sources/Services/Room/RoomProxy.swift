@@ -150,7 +150,11 @@ class RoomProxy: RoomProxyProtocol {
                 return
             }
             
-            let messages = backwardStream.paginateBackwards(count: UInt64(count)).map { message in
+            Benchmark.startTrackingForIdentifier("BackPagination \(self.id)", message: "Backpaginating \(count) message(s) in room \(self.id)")
+            let sdkMessages = backwardStream.paginateBackwards(count: UInt64(count))
+            Benchmark.endTrackingForIdentifier("BackPagination \(self.id)", message: "Finished backpaginating \(count) message(s) in room \(self.id)")
+            
+            let messages = sdkMessages.map { message in
                 self.messageFactory.buildRoomMessageFrom(message)
             }.reversed()
             

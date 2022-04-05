@@ -54,6 +54,8 @@ class UserSession: ClientDelegate {
         self.mediaProvider = MediaProvider(client: client, imageCache: ImageCache.default)
         
         client.setDelegate(delegate: WeakUserSessionWrapper(userSession: self))
+        
+        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
         client.startSync()
         
         updateRooms()
@@ -89,6 +91,7 @@ class UserSession: ClientDelegate {
     // MARK: ClientDelegate
     
     func didReceiveSyncUpdate() {
+        Benchmark.logElapsedDurationForIdentifier("ClientSync", message: "Received sync update")
         updateRooms()
     }
     
@@ -101,7 +104,11 @@ class UserSession: ClientDelegate {
                 return
             }
             
+            Benchmark.startTrackingForIdentifier("ClientRooms", message: "Fetching available rooms")
             let sdkRooms = self.client.rooms()
+            Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")
+            
+            Benchmark.startTrackingForIdentifier("ProcessingRooms", message: "Started processing \(sdkRooms.count) rooms")
             let diff = sdkRooms.map({ $0.id()}).difference(from: currentRooms.map({ $0.id }))
             
             for change in diff {
@@ -116,6 +123,8 @@ class UserSession: ClientDelegate {
                     currentRooms.removeAll { $0.id == id }
                 }
             }
+            
+            Benchmark.endTrackingForIdentifier("ProcessingRooms", message: "Finished processing \(sdkRooms.count) rooms")
             
             DispatchQueue.main.async {
                 self.rooms = currentRooms

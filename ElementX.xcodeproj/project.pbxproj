@@ -16,6 +16,7 @@
 		182BC48127C4EBBB00A30C33 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 182BC48027C4EBBB00A30C33 /* Kingfisher */; };
 		183E023427E4A73C00903BED /* MemberDetailsProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */; };
 		183E023627E4A79D00903BED /* RoomTimelineProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */; };
+		184858EB27FAF6D300B8AC7B /* Benchmark.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184858EA27FAF6D300B8AC7B /* Benchmark.swift */; };
 		184B31DF27D898960075A669 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 184B31DE27D898960075A669 /* Introspect */; };
 		1850253F27B6918D002E6B18 /* ElementXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850253E27B6918D002E6B18 /* ElementXTests.swift */; };
 		1850254927B6918D002E6B18 /* ElementXUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1850254827B6918D002E6B18 /* ElementXUITests.swift */; };
@@ -156,6 +157,7 @@
 		181A317E27F70CCA00B8305B /* EventBriefFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBriefFactoryProtocol.swift; sourceTree = "<group>"; };
 		183E023327E4A73C00903BED /* MemberDetailsProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MemberDetailsProviderProtocol.swift; sourceTree = "<group>"; };
 		183E023527E4A79D00903BED /* RoomTimelineProviderProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineProviderProtocol.swift; sourceTree = "<group>"; };
+		184858EA27FAF6D300B8AC7B /* Benchmark.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Benchmark.swift; sourceTree = "<group>"; };
 		1850252427B6918C002E6B18 /* ElementX.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ElementX.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253A27B6918D002E6B18 /* ElementXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ElementXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		1850253E27B6918D002E6B18 /* ElementXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementXTests.swift; sourceTree = "<group>"; };
@@ -186,6 +188,7 @@
 		18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		18ADC80527EB1ED100A8C953 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		18ADC80727EB1EE200A8C953 /* ElementX-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ElementX-Bridging-Header.h"; sourceTree = "<group>"; };
+		18BB170627FB74B30074CBD6 /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxyProtocol.swift; sourceTree = "<group>"; };
 		18C5744A27E1D84000D70937 /* RoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		18C5744B27E1D84000D70937 /* MockRoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomProxy.swift; sourceTree = "<group>"; };
@@ -318,6 +321,7 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
+				18BB170627FB74B30074CBD6 /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
@@ -532,6 +536,7 @@
 		18F2BA7D27D25B4000DD1988 /* Other */ = {
 			isa = PBXGroup;
 			children = (
+				184858EA27FAF6D300B8AC7B /* Benchmark.swift */,
 				18920C1827F3222E00A717B5 /* Colors.swift */,
 				18F2BA9A27D25B4000DD1988 /* Coordinator.swift */,
 				18DDB72D27EF936D000F1ABF /* MatrixEntitityRegex.swift */,
@@ -999,6 +1004,7 @@
 				181A317927F703E300B8305B /* MockRoomSummary.swift in Sources */,
 				1850256F27B6A135002E6B18 /* AppDelegate.swift in Sources */,
 				18F2BAE627D25B4000DD1988 /* NavigationRouterType.swift in Sources */,
+				184858EB27FAF6D300B8AC7B /* Benchmark.swift in Sources */,
 				18F2BAE927D25B4000DD1988 /* ActivityPresentable.swift in Sources */,
 				18DDB72727EC78B8000F1ABF /* AttributedStringBuilderProtocol.swift in Sources */,
 				18DF7C4327E4670600291672 /* RoomTimelineItemProtocol.swift in Sources */,

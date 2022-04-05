@@ -123,6 +123,7 @@ class AuthenticationCoordinator: Coordinator {
     }
     
     private func login(username: String, password: String, completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+        Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
         delegate?.authenticationCoordinatorDidStartLoading(self)
         
@@ -148,6 +149,7 @@ class AuthenticationCoordinator: Coordinator {
     }
     
     private func restorePreviousLogin(_ usernameTokenTuple: (username: String, token: String), completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+        Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
         
         delegate?.authenticationCoordinatorDidStartLoading(self)
         
@@ -172,6 +174,7 @@ class AuthenticationCoordinator: Coordinator {
     }
     
     private func setupUserSessionForClient(_ client: Client) {
+        Benchmark.endTrackingForIdentifier("Login", message: "Finished login")
         
         do {
             let restoreToken = try client.restoreToken()
