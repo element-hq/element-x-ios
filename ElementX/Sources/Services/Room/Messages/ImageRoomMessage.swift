@@ -6,7 +6,7 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
+import UIKit
 import MatrixRustSDK
 
 struct ImageRoomMessage: RoomMessageProtocol {
@@ -34,5 +34,25 @@ struct ImageRoomMessage: RoomMessageProtocol {
     
     var url: String? {
         message.url()
+    }
+    
+    var width: CGFloat? {
+        guard let width = message.width() else {
+            return nil
+        }
+        
+        return CGFloat(width)
+    }
+    
+    var height: CGFloat? {
+        guard let height = message.height() else {
+            return nil
+        }
+        
+        return CGFloat(height)
+    }
+    
+    var blurhash: String? {
+        message.blurhash()
     }
 }

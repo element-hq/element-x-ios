@@ -49,6 +49,7 @@
 		18ADC7FA27EB02D900A8C953 /* AttributedStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC7F927EB02D900A8C953 /* AttributedStringBuilder.swift */; };
 		18ADC7FE27EB033400A8C953 /* DTCoreText in Frameworks */ = {isa = PBXBuildFile; productRef = 18ADC7FD27EB033400A8C953 /* DTCoreText */; };
 		18ADC80627EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m in Sources */ = {isa = PBXBuildFile; fileRef = 18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */; };
+		18BB170A27FC20D20074CBD6 /* BlurHashDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18BB170927FC20D20074CBD6 /* BlurHashDecode.swift */; };
 		18C5744C27E1D84000D70937 /* RoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */; };
 		18C5744D27E1D84000D70937 /* RoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744A27E1D84000D70937 /* RoomProxy.swift */; };
 		18C5744E27E1D84000D70937 /* MockRoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18C5744B27E1D84000D70937 /* MockRoomProxy.swift */; };
@@ -189,6 +190,7 @@
 		18ADC80527EB1ED100A8C953 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		18ADC80727EB1EE200A8C953 /* ElementX-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ElementX-Bridging-Header.h"; sourceTree = "<group>"; };
 		18BB170627FB74B30074CBD6 /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
+		18BB170927FC20D20074CBD6 /* BlurHashDecode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurHashDecode.swift; sourceTree = "<group>"; };
 		18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxyProtocol.swift; sourceTree = "<group>"; };
 		18C5744A27E1D84000D70937 /* RoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
 		18C5744B27E1D84000D70937 /* MockRoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomProxy.swift; sourceTree = "<group>"; };
@@ -537,6 +539,7 @@
 			isa = PBXGroup;
 			children = (
 				184858EA27FAF6D300B8AC7B /* Benchmark.swift */,
+				18BB170927FC20D20074CBD6 /* BlurHashDecode.swift */,
 				18920C1827F3222E00A717B5 /* Colors.swift */,
 				18F2BA9A27D25B4000DD1988 /* Coordinator.swift */,
 				18DDB72D27EF936D000F1ABF /* MatrixEntitityRegex.swift */,
@@ -1003,6 +1006,7 @@
 				181A317B27F70AEB00B8305B /* EventBrief.swift in Sources */,
 				181A317927F703E300B8305B /* MockRoomSummary.swift in Sources */,
 				1850256F27B6A135002E6B18 /* AppDelegate.swift in Sources */,
+				18BB170A27FC20D20074CBD6 /* BlurHashDecode.swift in Sources */,
 				18F2BAE627D25B4000DD1988 /* NavigationRouterType.swift in Sources */,
 				184858EB27FAF6D300B8AC7B /* Benchmark.swift in Sources */,
 				18F2BAE927D25B4000DD1988 /* ActivityPresentable.swift in Sources */,

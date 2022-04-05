@@ -13,21 +13,39 @@ struct ImageRoomTimelineView: View {
     let timelineItem: ImageRoomTimelineItem
     
     var body: some View {
-        if let image = timelineItem.image {
+        if timelineItem.image != nil || timelineItem.blurhash != nil { // Fixes view heights after loading finishes
             VStack(alignment: .leading) {
                 EventBasedTimelineView(timelineItem: timelineItem)
                 Text(timelineItem.text)
-                Image(uiImage: image)
-                    .resizable()
-                    .scaledToFit()
+                if let image = timelineItem.image {
+                    if let aspectRatio = timelineItem.aspectRatio {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(aspectRatio, contentMode: .fit)
+                    } else {
+                        Image(uiImage: image)
+                            .resizable()
+                            .scaledToFit()
+                    }
+                } else if let blurhash = timelineItem.blurhash,
+                          // Build a small blurhash image so that it's fast
+                          let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+                }
             }
+            .animation(.easeInOut, value: timelineItem.image)
+            .frame(maxHeight: 1000.0)
         } else {
-            VStack(alignment: .center) {
+            VStack(alignment: .leading) {
+                EventBasedTimelineView(timelineItem: timelineItem)
+                Text(timelineItem.text)
                 HStack {
-                    Text(timelineItem.text)
+                    Spacer()
+                    ProgressView("Loading")
                     Spacer()
                 }
-                ProgressView("Loading")
             }
         }
     }
@@ -50,7 +68,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                      url: nil,
                                                      image: UIImage(systemName: "photo"))
             ImageRoomTimelineView(timelineItem: timelineItem)
-            
+
             let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
                                                      text: "Some other image",
                                                      timestamp: "Now",
@@ -58,6 +76,17 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                      senderId: "Bob",
                                                      url: nil,
                                                      image: nil)
+            ImageRoomTimelineView(timelineItem: timelineItem)
+            
+            let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
+                                                     text: "Blurhashed image",
+                                                     timestamp: "Now",
+                                                     shouldShowSenderDetails: false,
+                                                     senderId: "Bob",
+                                                     url: nil,
+                                                     image: nil,
+                                                     aspectRatio: 0.7,
+                                                     blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")
             ImageRoomTimelineView(timelineItem: timelineItem)
         }
     }

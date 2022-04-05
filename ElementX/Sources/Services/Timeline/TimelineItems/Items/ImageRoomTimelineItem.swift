@@ -21,4 +21,9 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equa
     
     let url: String?
     var image: UIImage?
+    
+    var width: CGFloat?
+    var height: CGFloat?
+    var aspectRatio: CGFloat?
+    var blurhash: String?
 }

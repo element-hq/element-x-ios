@@ -63,6 +63,13 @@ struct RoomTimelineItemFactory {
                                                    _ showSenderDetails: Bool,
                                                    _ displayName: String?,
                                                    _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        
+        var aspectRatio: CGFloat?
+        if let width = message.width,
+           let height = message.height {
+            aspectRatio = width / height
+        }
+        
         return ImageRoomTimelineItem(id: message.id,
                                      text: message.body,
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
@@ -71,7 +78,11 @@ struct RoomTimelineItemFactory {
                                      senderDisplayName: displayName,
                                      senderAvatar: avatarImage,
                                      url: message.url,
-                                     image: mediaProvider.imageForURL(message.url))
+                                     image: mediaProvider.imageForURL(message.url),
+                                     width: message.width,
+                                     height: message.height,
+                                     aspectRatio: aspectRatio,
+                                     blurhash: message.blurhash)
     }
     
     private func buildNoticeTimelineItemFromMessage(_ message: NoticeRoomMessage,

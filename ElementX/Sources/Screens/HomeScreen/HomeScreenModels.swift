@@ -52,7 +52,7 @@ struct HomeScreenViewState: BindableState {
     }
 }
 
-struct HomeScreenRoom: Identifiable {
+struct HomeScreenRoom: Identifiable, Equatable {
     let id: String
     
     var displayName: String?

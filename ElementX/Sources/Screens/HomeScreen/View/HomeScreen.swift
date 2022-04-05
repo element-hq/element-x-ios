@@ -84,6 +84,7 @@ struct HomeScreen: View {
                         .font(.subheadline)
                         .fontWeight(.bold)
                 }
+                .animation(.easeInOut, value: context.viewState.userAvatar)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Logout") {
@@ -135,6 +136,7 @@ struct RoomCell: View {
                     }
                 }
             }
+            .animation(.easeInOut, value: room)
             .frame(minHeight: 60.0)
             .onAppear {
                 context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
