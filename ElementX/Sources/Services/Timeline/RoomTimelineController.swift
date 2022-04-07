@@ -125,11 +125,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        guard let url = timelineItem.url else {
+        guard let source = timelineItem.source else {
             return
         }
         
-        mediaProvider.loadImageFromURL(url) { [weak self] result in
+        mediaProvider.loadImageFromSource(source) { [weak self] result in
             guard let self = self else {
                 return
             }

@@ -32,8 +32,8 @@ struct ImageRoomMessage: RoomMessageProtocol {
         Date(timeIntervalSince1970: TimeInterval(message.baseMessage().originServerTs()))
     }
     
-    var url: String? {
-        message.url()
+    var source: MediaSource? {
+        MediaSource(source: message.source())
     }
     
     var width: CGFloat? {

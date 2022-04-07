@@ -42,7 +42,7 @@
         "repositoryURL": "https://github.com/matrix-org/matrix-rust-components-swift.git",
         "state": {
           "branch": "main",
-          "revision": "a69956b5724cc969ea47acf5eabbacdfecc712b7",
+          "revision": "f6682cf02eec087f921c53526895996cba169378",
           "version": null
         }
       },

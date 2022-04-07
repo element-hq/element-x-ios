@@ -65,7 +65,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                      timestamp: "Now",
                                                      shouldShowSenderDetails: false,
                                                      senderId: "Bob",
-                                                     url: nil,
+                                                     source: nil,
                                                      image: UIImage(systemName: "photo"))
             ImageRoomTimelineView(timelineItem: timelineItem)
 
@@ -74,7 +74,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                      timestamp: "Now",
                                                      shouldShowSenderDetails: false,
                                                      senderId: "Bob",
-                                                     url: nil,
+                                                     source: nil,
                                                      image: nil)
             ImageRoomTimelineView(timelineItem: timelineItem)
             
@@ -83,7 +83,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                      timestamp: "Now",
                                                      shouldShowSenderDetails: false,
                                                      senderId: "Bob",
-                                                     url: nil,
+                                                     source: nil,
                                                      image: nil,
                                                      aspectRatio: 0.7,
                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")

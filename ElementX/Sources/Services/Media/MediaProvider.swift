@@ -21,21 +21,21 @@ struct MediaProvider: MediaProviderProtocol {
         self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue", attributes: .concurrent)
     }
     
-    func imageForURL(_ url: String?) -> UIImage? {
-        guard let url = url else {
+    func imageFromSource(_ source: MediaSource?) -> UIImage? {
+        guard let source = source else {
             return nil
         }
-        
-        return imageCache.retrieveImageInMemoryCache(forKey: url, options: nil)
+
+        return imageCache.retrieveImageInMemoryCache(forKey: source.underlyingSource.url(), options: nil)
     }
     
-    func loadImageFromURL(_ url: String, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
-        if let image = imageForURL(url) {
+    func loadImageFromSource(_ source: MediaSource, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
+        if let image = imageFromSource(source) {
             completion(.success(image))
             return
         }
         
-        imageCache.retrieveImage(forKey: url) { result in
+        imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
             if case let .success(cacheResult) = result,
                let image = cacheResult.image {
                 completion(.success(image))
@@ -44,7 +44,7 @@ struct MediaProvider: MediaProviderProtocol {
             
             processingQueue.async {
                 do {
-                    let imageData = try client.loadImage(url: url)
+                    let imageData = try client.loadImage(source: source.underlyingSource)
                     
                     guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
                         MXLog.error("Invalid image data")
@@ -54,7 +54,7 @@ struct MediaProvider: MediaProviderProtocol {
                         return
                     }
                     
-                    imageCache.store(image, forKey: url)
+                    imageCache.store(image, forKey: source.underlyingSource.url())
                     
                     DispatchQueue.main.async {
                         completion(.success(image))
@@ -67,5 +67,17 @@ struct MediaProvider: MediaProviderProtocol {
                 }
             }
         }
+    }
+    
+    func imageFromURL(_ url: String?) -> UIImage? {
+        guard let url = url else {
+            return nil
+        }
+        
+        return imageFromSource(MediaSource(source: mediaSourceFromUrl(url: url)))
+    }
+    
+    func loadImageFromURL(_ url: String, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
+        return loadImageFromSource(MediaSource(source: mediaSourceFromUrl(url: url)), completion)
     }
 }

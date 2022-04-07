@@ -15,7 +15,15 @@ struct MockMediaProvider: MediaProviderProtocol {
         
     }
     
-    func imageForURL(_ url: String?) -> UIImage? {
+    func imageFromSource(_ source: MediaSource?) -> UIImage? {
+        return nil
+    }
+    
+    func loadImageFromSource(_ source: MediaSource, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
+        
+    }
+    
+    func imageFromURL(_ url: String?) -> UIImage? {
         return nil
     }
     

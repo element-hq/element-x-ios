@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1803C82027FDE17B00795848 /* MediaSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1803C81F27FDE17B00795848 /* MediaSource.swift */; };
 		181A317727F703E300B8305B /* RoomSummaryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317427F703E300B8305B /* RoomSummaryProtocol.swift */; };
 		181A317827F703E300B8305B /* RoomSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317527F703E300B8305B /* RoomSummary.swift */; };
 		181A317927F703E300B8305B /* MockRoomSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 181A317627F703E300B8305B /* MockRoomSummary.swift */; };
@@ -150,6 +151,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		1803C81F27FDE17B00795848 /* MediaSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaSource.swift; sourceTree = "<group>"; };
 		181A317427F703E300B8305B /* RoomSummaryProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomSummaryProtocol.swift; sourceTree = "<group>"; };
 		181A317527F703E300B8305B /* RoomSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomSummary.swift; sourceTree = "<group>"; };
 		181A317627F703E300B8305B /* MockRoomSummary.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MockRoomSummary.swift; sourceTree = "<group>"; };
@@ -189,7 +191,6 @@
 		18ADC80427EB1ED100A8C953 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		18ADC80527EB1ED100A8C953 /* UIFont+AttributedStringBuilder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIFont+AttributedStringBuilder.h"; sourceTree = "<group>"; };
 		18ADC80727EB1EE200A8C953 /* ElementX-Bridging-Header.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ElementX-Bridging-Header.h"; sourceTree = "<group>"; };
-		18BB170627FB74B30074CBD6 /* matrix-rust-components-swift */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = "matrix-rust-components-swift"; path = "../matrix-rust-components-swift"; sourceTree = "<group>"; };
 		18BB170927FC20D20074CBD6 /* BlurHashDecode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BlurHashDecode.swift; sourceTree = "<group>"; };
 		18C5744827E1D84000D70937 /* RoomProxyProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxyProtocol.swift; sourceTree = "<group>"; };
 		18C5744A27E1D84000D70937 /* RoomProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProxy.swift; sourceTree = "<group>"; };
@@ -323,7 +324,6 @@
 		1850251B27B6918C002E6B18 = {
 			isa = PBXGroup;
 			children = (
-				18BB170627FB74B30074CBD6 /* matrix-rust-components-swift */,
 				1850252627B6918C002E6B18 /* ElementX */,
 				1850253D27B6918D002E6B18 /* ElementXTests */,
 				1850254727B6918D002E6B18 /* ElementXUITests */,
@@ -460,6 +460,7 @@
 				18DF7C3027E3608100291672 /* MediaProviderProtocol.swift */,
 				18DF7C2E27E264FC00291672 /* MediaProvider.swift */,
 				18DF7C3227E3608800291672 /* MockMediaProvider.swift */,
+				1803C81F27FDE17B00795848 /* MediaSource.swift */,
 			);
 			path = Media;
 			sourceTree = "<group>";
@@ -1044,6 +1045,7 @@
 				18F2BAFB27D25B4000DD1988 /* HomeScreenCoordinator.swift in Sources */,
 				18F2BB0C27D25B4000DD1988 /* RoomScreenCoordinator.swift in Sources */,
 				18DDB72127EB9D57000F1ABF /* ElementXAttributeScope.swift in Sources */,
+				1803C82027FDE17B00795848 /* MediaSource.swift in Sources */,
 				18DF7C4527E4670600291672 /* SeparatorRoomTimelineItem.swift in Sources */,
 				18DF7C4227E4670600291672 /* RoomTimelineItemFactory.swift in Sources */,
 				18F2BB0E27D25B4000DD1988 /* RoomScreenViewModelProtocol.swift in Sources */,
