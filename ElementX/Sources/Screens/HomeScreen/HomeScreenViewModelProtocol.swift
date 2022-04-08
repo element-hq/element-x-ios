@@ -22,5 +22,7 @@ protocol HomeScreenViewModelProtocol {
     
     var context: HomeScreenViewModelType.Context { get }
     
+    func updateWithUserAvatar(_ avatar: UIImage)
+    func updateWithUserDisplayName(_ displayName: String)
     func updateWithRoomList(_ roomList: [RoomSummaryProtocol])
 }

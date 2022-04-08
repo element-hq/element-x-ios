@@ -29,7 +29,7 @@ enum HomeScreenViewAction {
 }
 
 struct HomeScreenViewState: BindableState {
-    let userDisplayName: String
+    var userDisplayName: String?
     var userAvatar: UIImage?
     
     var rooms: [HomeScreenRoom] = []

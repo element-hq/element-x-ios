@@ -73,18 +73,32 @@ struct HomeScreen: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 HStack {
-                    if let avatar = context.viewState.userAvatar {
-                        Image(uiImage: avatar)
-                            .resizable()
-                            .scaledToFill()
-                            .frame(width: 40, height: 40, alignment: .center)
-                            .mask(Circle())
+                    ZStack {
+                        if let avatar = context.viewState.userAvatar {
+                            Image(uiImage: avatar)
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 40, height: 40, alignment: .center)
+                                .mask(Circle())
+                        } else {
+                            EmptyView()
+                        }
                     }
-                    Text("Hello, \(context.viewState.userDisplayName)!")
-                        .font(.subheadline)
-                        .fontWeight(.bold)
+                    .animation(.easeInOut, value: context.viewState.userAvatar)
+                    .transition(.opacity)
+                    
+                    ZStack {
+                        if let displayName = context.viewState.userDisplayName {
+                            Text("Hello, \(displayName)!")
+                                .font(.subheadline)
+                                .fontWeight(.bold)
+                        } else {
+                            EmptyView()
+                        }
+                    }
+                    .animation(.easeInOut, value: context.viewState.userDisplayName)
+                    .transition(.opacity)
                 }
-                .animation(.easeInOut, value: context.viewState.userAvatar)
             }
             ToolbarItem(placement: .navigationBarTrailing) {
                 Button("Logout") {
@@ -153,10 +167,7 @@ struct RoomCell: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = HomeScreenViewModel(userDisplayName: "Johnny Appleseed",
-                                            userAvatarURL: nil,
-                                            mediaProvider: MockMediaProvider(),
-                                            attributedStringBuilder: AttributedStringBuilder())
+        let viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
         
         let eventBrief = EventBrief(eventId: "id",
                                     senderId: "senderId",
@@ -171,7 +182,9 @@ struct HomeScreen_Previews: PreviewProvider {
         
         viewModel.updateWithRoomList(rooms)
         
-        viewModel.updateWithUserAvatar(UIImage(systemName: "person.fill.questionmark"))
+        if let avatarImage = UIImage(systemName: "person.fill.questionmark") {
+            viewModel.updateWithUserAvatar(avatarImage)
+        }
         
         return HomeScreen(context: viewModel.context)
     }

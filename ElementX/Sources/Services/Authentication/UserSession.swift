@@ -15,6 +15,11 @@ enum UserSessionCallback {
     case updatedRoomsList
 }
 
+enum UserSessionError: Error {
+    case failedRetrievingAvatarURL
+    case failedRetrievingDisplayName
+}
+
 private class WeakUserSessionWrapper: ClientDelegate {
     private weak var userSession: UserSession?
     
@@ -70,21 +75,35 @@ class UserSession: ClientDelegate {
         }
     }
     
-    var userDisplayName: String? {
-        do {
-            return try client.displayName()
-        } catch {
-            MXLog.error("Failed retrieving the user's display name with error: \(error)")
-            return nil
+    func userDisplayName(_ completion: @escaping (Result<String, UserSessionError>) -> Void) {
+        processingQueue.async {
+            do {
+                let displayName = try self.client.displayName()
+                
+                DispatchQueue.main.async {
+                    completion(.success(displayName))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(UserSessionError.failedRetrievingDisplayName))
+                }
+            }
         }
     }
     
-    var userAvatarURL: String? {
-        do {
-            return try client.avatarUrl()
-        } catch {
-            MXLog.error("Failed retrieving the user's avatar URL with error: \(error)")
-            return nil
+    func userAvatarURL(_ completion: @escaping (Result<String, UserSessionError>) -> Void) {
+        processingQueue.async {
+            do {
+                let displayName = try self.client.avatarUrl()
+                
+                DispatchQueue.main.async {
+                    completion(.success(displayName))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    completion(.failure(UserSessionError.failedRetrievingDisplayName))
+                }
+            }
         }
     }
     

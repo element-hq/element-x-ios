@@ -54,11 +54,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        let userDisplayName = parameters.userSession.userDisplayName ?? parameters.userSession.userIdentifier
-        viewModel = HomeScreenViewModel(userDisplayName: userDisplayName,
-                                        userAvatarURL: parameters.userSession.userAvatarURL,
-                                        mediaProvider: parameters.mediaProvider,
-                                        attributedStringBuilder: parameters.attributedStringBuilder)
+        viewModel = HomeScreenViewModel(attributedStringBuilder: parameters.attributedStringBuilder)
         
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)
@@ -82,6 +78,22 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         }.store(in: &cancellables)
         
         updateRoomsList()
+        
+        parameters.userSession.userAvatarURL { [weak self] result in
+            if case let .success(avatarURL) = result {
+                self?.parameters.mediaProvider.loadImageFromURL(avatarURL) { result in
+                    if case let .success(avatar) = result {
+                        self?.viewModel.updateWithUserAvatar(avatar)
+                    }
+                }
+            }
+        }
+        
+        parameters.userSession.userDisplayName { [weak self] result in
+            if case let .success(displayName) = result {
+                self?.viewModel.updateWithUserDisplayName(displayName)
+            }
+        }
     }
     
     // MARK: - Public

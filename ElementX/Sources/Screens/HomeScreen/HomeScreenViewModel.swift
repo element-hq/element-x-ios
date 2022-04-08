@@ -24,7 +24,6 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
 @available(iOS 14, *)
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     
-    private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var roomUpdateListeners = Set<AnyCancellable>()
@@ -34,27 +33,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             self.state.isLoadingRooms = (roomList?.count ?? 0 == 0)
         }
     }
-
+    
     var completion: ((HomeScreenViewModelResult) -> Void)?
     
     // MARK: - Setup
     
-    init(userDisplayName: String,
-         userAvatarURL: String?,
-         mediaProvider: MediaProviderProtocol,
-         attributedStringBuilder: AttributedStringBuilderProtocol) {
-        self.mediaProvider = mediaProvider
+    init(attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.attributedStringBuilder = attributedStringBuilder
         
-        super.init(initialViewState: HomeScreenViewState(userDisplayName: userDisplayName, isLoadingRooms: true))
-        
-        if let userAvatarURL = userAvatarURL {
-            mediaProvider.loadImageFromURL(userAvatarURL) { [weak self] result in
-                if case let .success(avatar) =  result {
-                    self?.state.userAvatar = avatar
-                }
-            }
-        }
+        super.init(initialViewState: HomeScreenViewState(isLoadingRooms: true))
     }
     
     // MARK: - Public
@@ -97,8 +84,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
     }
     
-    func updateWithUserAvatar(_ avatar: UIImage?) {
+    func updateWithUserAvatar(_ avatar: UIImage) {
         self.state.userAvatar = avatar
+    }
+    
+    func updateWithUserDisplayName(_ displayName: String) {
+        self.state.userDisplayName = displayName
     }
     
     // MARK: - Private
