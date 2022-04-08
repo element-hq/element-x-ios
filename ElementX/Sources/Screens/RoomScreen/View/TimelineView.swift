@@ -132,8 +132,12 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
     }
     
     private let topDetectionOffset: CGFloat
+    
+    private var contentOffsetObserverToken: NSKeyValueObservation?
+    
     private var isAtTop: Bool = false
     private var offsetDetails: ContentOffsetDetails?
+    private var draggingInitiated = false
     
     private(set) var tableView: UITableView?
     
@@ -149,7 +153,13 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
         self.topDetectionOffset = topDetectionOffset
         super.init()
         
-        tableView.delegate = self
+        // Don't attempt stealing the UITableView delegate away from the List.
+        // Doing so results in undefined behavior e.g. context menus not working
+        contentOffsetObserverToken = tableView.observe(\.contentOffset, options: .new, changeHandler: { [weak self] _, _ in
+            self?.handleScrollViewScroll()
+        })
+        
+        tableView.panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
     
     func saveCurrentOffset() {
@@ -223,28 +233,39 @@ private class TableViewObserver: NSObject, UITableViewDelegate {
         tableView.scrollToRow(at: .init(row: currentItemCount - 1, section: 0), at: .bottom, animated: false)
     }
     
-    // MARK: - UIScrollViewDelegate
-
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let isTopVisible = isTopVisible
-        if isTopVisible && isAtTop != isTopVisible {
-            scrollViewDidReachTop.send(())
+    // MARK: - Private
+    
+    private func handleScrollViewScroll() {
+        guard let tableView = self.tableView else {
+            return
         }
         
-        isAtTop = isTopVisible
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        scrollViewDidRest.send(())
-    }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerating: Bool) {
-        if decelerating == false {
-            scrollViewDidRest.send(())
+        let isTopVisible = self.isTopVisible
+        if self.isTopVisible && self.isAtTop != isTopVisible {
+            self.scrollViewDidReachTop.send(())
+        }
+        
+        self.isAtTop = isTopVisible
+        
+        if !self.draggingInitiated && tableView.isDragging {
+            self.draggingInitiated = true
+        } else if self.draggingInitiated && !tableView.isDragging {
+            self.draggingInitiated = false
+            self.scrollViewDidRest.send(())
         }
     }
     
-    // MARK: - Private
+    @objc private func handlePanGesture(_ sender: UIPanGestureRecognizer) {
+        guard let tableView = self.tableView,
+              sender.state == .ended,
+              draggingInitiated == true,
+              !tableView.isDecelerating else {
+                  return
+        }
+        
+        self.draggingInitiated = false
+        self.scrollViewDidRest.send(())
+    }
     
     private var isBottomVisible: Bool {
         guard let scrollView = tableView else {
