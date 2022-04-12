@@ -1,0 +1,31 @@
+name: ElementX
+attributes:
+  ORGANIZATIONNAME: element.io
+
+options:
+  groupSortPosition: bottom
+  createIntermediateGroups: true
+
+include:
+  - path: ElementX/target.yml
+  - path: UnitTests/target.yml
+
+packages:
+  MatrixRustSDK:
+    url: https://github.com/matrix-org/matrix-rust-components-swift.git
+    branch: main
+  DTCoreText:
+    url: https://github.com/Cocoanetics/DTCoreText
+    branch: develop
+  KeychainAccess:
+    url: https://github.com/kishikawakatsumi/KeychainAccess
+    branch: master
+  Kingfisher:
+    url: https://github.com/onevcat/Kingfisher
+    exactVersion: 7.2.0
+  Introspect:
+    url: https://github.com/siteline/SwiftUI-Introspect.git
+    branch: master
+  SwiftyBeaver:
+    url: https://github.com/SwiftyBeaver/SwiftyBeaver
+    exactVersion: 1.9.5

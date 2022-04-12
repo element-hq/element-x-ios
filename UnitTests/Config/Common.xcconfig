@@ -1,5 +1,5 @@
 // 
-// Copyright 2021 New Vector Ltd
+// Copyright 2020 Vector Creations Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
 
-protocol TemplateSimpleScreenViewModelProtocol {
-    
-    var completion: ((TemplateSimpleScreenViewModelResult) -> Void)? { get set }
-    @available(iOS 14, *)
-    var context: TemplateSimpleScreenViewModelType.Context { get }
-}
+PRODUCT_NAME = UnitTests
+PRODUCT_BUNDLE_IDENTIFIER = io.element.elementx.unittests
+

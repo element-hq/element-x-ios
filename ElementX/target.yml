@@ -1,0 +1,37 @@
+name: ElementX
+
+targets:
+  ElementX:
+    type: application
+    platform: iOS
+
+    info:
+      path: SupportingFiles/Info.plist
+      properties:
+        UILaunchStoryboardName: LaunchScreen
+
+    settings:
+      SUPPORTS_MACCATALYST: YES
+
+    configFiles:
+      Debug: Config/Debug.xcconfig
+      Release: Config/Release.xcconfig
+
+    scheme:
+      testTargets:
+      - UnitTests
+      
+    dependencies:
+    - package: MatrixRustSDK
+    - package: DTCoreText
+    - package: KeychainAccess
+    - package: Kingfisher
+    - package: Introspect
+    - package: SwiftyBeaver
+
+    sources:
+    - path: Config
+    - path: Sources
+      excludes:
+        - Screens/Templates
+    - path: SupportingFiles
