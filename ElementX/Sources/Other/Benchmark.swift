@@ -22,9 +22,7 @@ struct Benchmark {
         trackingIdentifiers[identifier] = startTime
         
         if let message = message {
-            MXLog.verbose("⏰ Tracking \(identifier). \(message).")
-        } else {
-            MXLog.verbose("⏰ Tracking \(identifier).")
+            MXLog.verbose("⏰ \(message).")
         }
     }
     
@@ -40,9 +38,9 @@ struct Benchmark {
         
         let elapsedTime = CFAbsoluteTimeGetCurrent() - start
         if let message = message {
-            MXLog.verbose("⏰ Tracking \(identifier). \(message). Elapsed time: \(elapsedTime.round(to: 4)) seconds.")
+            MXLog.verbose("⏰ \(message). Elapsed time: \(elapsedTime.round(to: 4)) seconds.")
         } else {
-            MXLog.verbose("⏰ Tracking \(identifier). Elapsed time: \(elapsedTime.round(to: 4)) seconds.")
+            MXLog.verbose("⏰ Elapsed time: \(elapsedTime.round(to: 4)) seconds.")
         }
     }
     
