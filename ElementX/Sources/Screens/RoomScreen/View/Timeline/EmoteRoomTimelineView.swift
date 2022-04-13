@@ -37,21 +37,19 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
-            EmoteRoomTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
-                                                         timestamp: "Now",
-                                                         senderId: "Bob"))
+            let timelineItem = EmoteRoomTimelineItem(id: UUID().uuidString,
+                                                     text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
+                                                     timestamp: "Now",
+                                                     shouldShowSenderDetails: true,
+                                                     senderId: "Bob")
+            EmoteRoomTimelineView(timelineItem: timelineItem)
             
-            EmoteRoomTimelineView(timelineItem: itemWith(text: "Some other text",
-                                                         timestamp: "Later",
-                                                         senderId: "Anne"))
+            let timelineItem = EmoteRoomTimelineItem(id: UUID().uuidString,
+                                                     text: "Some other text",
+                                                     timestamp: "Later",
+                                                     shouldShowSenderDetails: true,
+                                                     senderId: "Anne")
+            EmoteRoomTimelineView(timelineItem: timelineItem)
         }
-    }
-    
-    private static func itemWith(text: String, timestamp: String, senderId: String) -> EmoteRoomTimelineItem {
-        return EmoteRoomTimelineItem(id: UUID().uuidString,
-                                     text: text,
-                                     timestamp: timestamp,
-                                     shouldShowSenderDetails: true,
-                                     senderId: senderId)
     }
 }

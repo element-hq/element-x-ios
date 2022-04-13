@@ -1,68 +1,70 @@
 {
-  "pins" : [
-    {
-      "identity" : "dtcoretext",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Cocoanetics/DTCoreText",
-      "state" : {
-        "branch" : "develop",
-        "revision" : "9f515155c6fcb5d9c39150aa048685aa65b4904f"
+  "object": {
+    "pins": [
+      {
+        "package": "DTCoreText",
+        "repositoryURL": "https://github.com/Cocoanetics/DTCoreText",
+        "state": {
+          "branch": "develop",
+          "revision": "9f515155c6fcb5d9c39150aa048685aa65b4904f",
+          "version": null
+        }
+      },
+      {
+        "package": "DTFoundation",
+        "repositoryURL": "https://github.com/Cocoanetics/DTFoundation.git",
+        "state": {
+          "branch": null,
+          "revision": "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
+          "version": "1.7.18"
+        }
+      },
+      {
+        "package": "KeychainAccess",
+        "repositoryURL": "https://github.com/kishikawakatsumi/KeychainAccess",
+        "state": {
+          "branch": "master",
+          "revision": "6299daec1d74be12164fec090faf9ed14d0da9d6",
+          "version": null
+        }
+      },
+      {
+        "package": "Kingfisher",
+        "repositoryURL": "https://github.com/onevcat/Kingfisher",
+        "state": {
+          "branch": null,
+          "revision": "32e4acdf6971f58f5ad552389cf2d7d016334eaf",
+          "version": "7.2.0"
+        }
+      },
+      {
+        "package": "MatrixRustSDK",
+        "repositoryURL": "https://github.com/matrix-org/matrix-rust-components-swift.git",
+        "state": {
+          "branch": "main",
+          "revision": "f6682cf02eec087f921c53526895996cba169378",
+          "version": null
+        }
+      },
+      {
+        "package": "Introspect",
+        "repositoryURL": "https://github.com/siteline/SwiftUI-Introspect.git",
+        "state": {
+          "branch": "master",
+          "revision": "72a509c93166540c0adf8323fd2652daade7f9f6",
+          "version": null
+        }
+      },
+      {
+        "package": "SwiftyBeaver",
+        "repositoryURL": "https://github.com/SwiftyBeaver/SwiftyBeaver",
+        "state": {
+          "branch": null,
+          "revision": "2c039501d6eeb4d4cd4aec4a8d884ad28862e044",
+          "version": "1.9.5"
+        }
       }
-    },
-    {
-      "identity" : "dtfoundation",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Cocoanetics/DTFoundation.git",
-      "state" : {
-        "revision" : "76062513434421cb6c8a1ae1d4f8368a7ebc2da3",
-        "version" : "1.7.18"
-      }
-    },
-    {
-      "identity" : "keychainaccess",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
-      "state" : {
-        "branch" : "master",
-        "revision" : "6299daec1d74be12164fec090faf9ed14d0da9d6"
-      }
-    },
-    {
-      "identity" : "kingfisher",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/onevcat/Kingfisher",
-      "state" : {
-        "revision" : "1a7b5480eb750a8e171654b9b1cb0a2cbeb27a55",
-        "version" : "7.2.1"
-      }
-    },
-    {
-      "identity" : "matrix-rust-components-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/matrix-org/matrix-rust-components-swift.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "f6682cf02eec087f921c53526895996cba169378"
-      }
-    },
-    {
-      "identity" : "swiftui-introspect",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
-      "state" : {
-        "branch" : "master",
-        "revision" : "72a509c93166540c0adf8323fd2652daade7f9f6"
-      }
-    },
-    {
-      "identity" : "swiftybeaver",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/SwiftyBeaver/SwiftyBeaver",
-      "state" : {
-        "revision" : "12b5acf96d98f91d50de447369bd18df74600f1a",
-        "version" : "1.9.6"
-      }
-    }
-  ],
-  "version" : 2
+    ]
+  },
+  "version": 1
 }
