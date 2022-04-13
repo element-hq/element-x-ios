@@ -199,6 +199,7 @@
 		5B4238D6EB22C0F9D7A2EEC9 /* RoundedToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedToastView.swift; sourceTree = "<group>"; };
 		5B9D5F812E5AD6DC786DBC9B /* NavigationRouterStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouterStoreProtocol.swift; sourceTree = "<group>"; };
 		5CB7F9D6FC121204D59E18DF /* Presentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Presentable.swift; sourceTree = "<group>"; };
+		5D26A086A8278D39B5756D6F /* project.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = project.yml; sourceTree = "<group>"; };
 		5F77E8010D41AA3F5F9A1FCA /* NavigationModule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationModule.swift; sourceTree = "<group>"; };
 		607974D08BD2AF83725D817A /* RoomMessageProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomMessageProtocol.swift; sourceTree = "<group>"; };
 		61ADFB893DEF81E58DF3FAB9 /* MockRoomTimelineController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRoomTimelineController.swift; sourceTree = "<group>"; };
@@ -384,6 +385,7 @@
 		405B00F139AEE3994601B36A = {
 			isa = PBXGroup;
 			children = (
+				5D26A086A8278D39B5756D6F /* project.yml */,
 				99B9B46F2D621380428E68F7 /* ElementX */,
 				C0FAC17D4DD7D3A502822550 /* UITests */,
 				A4852B57D55D71EEBFCD931D /* UnitTests */,
@@ -1346,8 +1348,8 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SwiftyBeaver/SwiftyBeaver";
 			requirement = {
-				kind = exactVersion;
-				version = 1.9.5;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.9.5;
 			};
 		};
 		4FCDA8D25C7415C8FB33490D /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
@@ -1362,32 +1364,32 @@
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.2.2;
 			};
 		};
 		A24ABD6F9CEE4D0749A6173E /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
 			requirement = {
-				branch = master;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.1.4;
 			};
 		};
 		C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Cocoanetics/DTCoreText";
 			requirement = {
-				branch = develop;
-				kind = branch;
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.26;
 			};
 		};
 		D283517192CAC3E2E6920765 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/onevcat/Kingfisher";
 			requirement = {
-				kind = exactVersion;
-				version = 7.2.0;
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.2.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */

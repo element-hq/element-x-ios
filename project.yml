@@ -2,6 +2,9 @@ name: ElementX
 attributes:
   ORGANIZATIONNAME: element.io
 
+fileGroups:
+    - project.yml
+
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
@@ -17,16 +20,16 @@ packages:
     branch: main
   DTCoreText:
     url: https://github.com/Cocoanetics/DTCoreText
-    branch: develop
+    majorVersion: 1.6.26
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
-    branch: master
+    majorVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    exactVersion: 7.2.0
+    majorVersion: 7.2.0
   Introspect:
     url: https://github.com/siteline/SwiftUI-Introspect.git
-    branch: master
+    majorVersion: 0.1.4
   SwiftyBeaver:
     url: https://github.com/SwiftyBeaver/SwiftyBeaver
-    exactVersion: 1.9.5
+    majorVersion: 1.9.5
