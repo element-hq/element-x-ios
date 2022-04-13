@@ -1,0 +1,23 @@
+name: UnitTests
+
+targets:
+  UnitTests:
+    type: bundle.unit-test
+    platform: iOS
+
+    dependencies:
+    - target: ElementX
+
+    info:
+      path: ../SupportingFiles/Info.plist
+
+    settings:
+      base:
+        PRODUCT_NAME: UnitTests
+        PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx.unit.tests
+      debug:
+      release:
+
+    sources:
+    - path: ../Sources
+    - path: ../SupportingFiles

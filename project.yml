@@ -7,8 +7,9 @@ options:
   createIntermediateGroups: true
 
 include:
-  - path: ElementX/target.yml
-  - path: UnitTests/target.yml
+  - path: ElementX/SupportingFiles/target.yml
+  - path: UnitTests/SupportingFiles/target.yml
+  - path: UITests/SupportingFiles/target.yml
 
 packages:
   MatrixRustSDK:

@@ -1,0 +1,21 @@
+name: UITests
+
+targets:
+  UITests:
+    type: bundle.ui-testing
+    platform: iOS
+
+    dependencies:
+    - target: ElementX
+
+    info:
+      path: ../SupportingFiles/Info.plist
+
+    settings:
+      base:
+        PRODUCT_NAME: UITests
+        PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx.ui.tests
+
+    sources:
+    - path: ../Sources
+    - path: ../SupportingFiles
