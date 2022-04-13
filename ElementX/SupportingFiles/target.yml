@@ -1,5 +1,31 @@
 name: ElementX
 
+schemes:
+  ElementX:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        ElementX:
+          - running
+          - testing
+          - profiling
+          - analyzing
+          - archiving
+    profile:
+      config: Release
+    run:
+      config: Debug
+    test:
+      config: Debug
+      environmentVariables:
+        IS_RUNNING_UNIT_TESTS: "1"
+      targets:
+        - UnitTests
+        - UITests
+
 targets:
   ElementX:
     type: application
@@ -34,12 +60,6 @@ targets:
         else
             echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
         fi
-
-    scheme:
-      gatherCoverageData: true
-      testTargets:
-      - UnitTests
-      - UITests
       
     dependencies:
     - package: MatrixRustSDK
