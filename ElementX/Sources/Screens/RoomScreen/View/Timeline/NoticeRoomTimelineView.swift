@@ -37,20 +37,22 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
-            let timelineItem = NoticeRoomTimelineItem(id: UUID().uuidString,
-                                                      text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
-                                                      timestamp: "Now",
-                                                      shouldShowSenderDetails: true,
-                                                      senderId: "Bob")
-            NoticeRoomTimelineView(timelineItem: timelineItem)
+            NoticeRoomTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
+                                                          timestamp: "Now",
+                                                          senderId: "Bob"))
             
-            let timelineItem = NoticeRoomTimelineItem(id: UUID().uuidString,
-                                                      text: "Some other text",
-                                                      timestamp: "Later",
-                                                      shouldShowSenderDetails: true,
-                                                      senderId: "Anne")
-            NoticeRoomTimelineView(timelineItem: timelineItem)
+            NoticeRoomTimelineView(timelineItem: itemWith(text: "Some other text",
+                                                          timestamp: "Later",
+                                                          senderId: "Anne"))
         }
         .padding()
+    }
+    
+    private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {
+        return NoticeRoomTimelineItem(id: UUID().uuidString,
+                                     text: text,
+                                     timestamp: timestamp,
+                                     shouldShowSenderDetails: true,
+                                     senderId: senderId)
     }
 }

@@ -60,34 +60,31 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(spacing: 20.0) {
-            let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
-                                                     text: "Some image",
-                                                     timestamp: "Now",
-                                                     shouldShowSenderDetails: false,
-                                                     senderId: "Bob",
-                                                     source: nil,
-                                                     image: UIImage(systemName: "photo"))
-            ImageRoomTimelineView(timelineItem: timelineItem)
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
+                                                                      text: "Some image",
+                                                                      timestamp: "Now",
+                                                                      shouldShowSenderDetails: false,
+                                                                      senderId: "Bob",
+                                                                      source: nil,
+                                                                      image: UIImage(systemName: "photo")))
 
-            let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
-                                                     text: "Some other image",
-                                                     timestamp: "Now",
-                                                     shouldShowSenderDetails: false,
-                                                     senderId: "Bob",
-                                                     source: nil,
-                                                     image: nil)
-            ImageRoomTimelineView(timelineItem: timelineItem)
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
+                                                                      text: "Some other image",
+                                                                      timestamp: "Now",
+                                                                      shouldShowSenderDetails: false,
+                                                                      senderId: "Bob",
+                                                                      source: nil,
+                                                                      image: nil))
             
-            let timelineItem = ImageRoomTimelineItem(id: UUID().uuidString,
-                                                     text: "Blurhashed image",
-                                                     timestamp: "Now",
-                                                     shouldShowSenderDetails: false,
-                                                     senderId: "Bob",
-                                                     source: nil,
-                                                     image: nil,
-                                                     aspectRatio: 0.7,
-                                                     blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW")
-            ImageRoomTimelineView(timelineItem: timelineItem)
+            ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
+                                                                      text: "Blurhashed image",
+                                                                      timestamp: "Now",
+                                                                      shouldShowSenderDetails: false,
+                                                                      senderId: "Bob",
+                                                                      source: nil,
+                                                                      image: nil,
+                                                                      aspectRatio: 0.7,
+                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }
     }
 }
