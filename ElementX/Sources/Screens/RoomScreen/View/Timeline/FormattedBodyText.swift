@@ -29,7 +29,7 @@ struct FormattedBodyText: View {
                 }
             }
         }
-        .tint(.elementGreen)
+        .tint(Color(uiColor: Asset.Colors.elementGreen.color))
     }
 }
 
