@@ -2,7 +2,22 @@ input_dir: ../../ElementX/
 output_dir: ../../ElementX/Sources/Generated/
 xcassets:  
   inputs:
-    - SupportingFiles/Assets.xcassets
+    - Assets/Assets.xcassets
   outputs:
     templateName: swift5
     output: Assets.swift
+strings:
+  - inputs: Assets/Localizations/en.lproj/Element.strings
+    outputs:
+      templatePath: Templates/Strings/flat-swift4-vector.stencil
+      output: Strings.swift
+      params:
+        className: ElementL10n
+        publicAccess: true
+  - inputs: Assets/Localizations/en.lproj/Untranslated.strings
+    outputs:
+      templatePath: Templates/Strings/flat-swift4-vector-untranslated.stencil
+      output: UntranslatedStrings.swift
+      params:
+        className: ElementL10n
+        publicAccess: true
