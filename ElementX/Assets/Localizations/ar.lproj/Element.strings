@@ -1,0 +1,834 @@
+"notice_room_invite_no_invitee" = "دعوة من ⁨%@⁩";
+"notice_room_invite" = "دعا ⁨%1$@⁩ ⁨%2$@⁩";
+"notice_room_invite_you" = "دعاكَ ⁨%1$@⁩";
+"notice_room_join" = "انضمّ ⁨%1$@⁩ إلى الغرفة";
+"notice_room_leave" = "غادرَ ⁨%1$@⁩ الغرفة";
+"notice_room_reject" = "رفضَ ⁨%1$@⁩ الدعوة";
+"notice_room_remove" = "طردَ ⁨%1$@⁩ ⁨%2$@⁩";
+"notice_room_unban" = "رفعَ ⁨%1$@⁩ الحظر عن ⁨%2$@⁩";
+"notice_room_ban" = "حظرَ ⁨%1$@⁩ ⁨%2$@⁩";
+"notice_avatar_url_changed" = "غيّر ⁨%1$@⁩ صورته الشخصية";
+"notice_display_name_changed_from" = "غيّر %1$@ اسمه العلنيّ من %2$@ إلى %3$@";
+"notice_display_name_removed" = "أزال %1$@ اسمه العلنيّ(كان %2$@)";
+"notice_room_topic_changed" = "غيّر %1$@ الموضوع إلى: %2$@";
+"notice_room_name_changed" = "غيّر %1$@ اسم الغُرفة إلى: %2$@";
+"notice_answered_call" = "أجابَ %@ على المُكالمة.";
+"notice_ended_call" = "أنهى %@ المُكالمة.";
+"notice_made_future_room_visibility" = "جعلَ %1$@ التأريخ المُستقبلي للغُرفة مرئيًا لـ %2$@";
+"notice_room_visibility_invited" = "جميع أعضاء الغُرفة، مِنَ اللَّحظة التي تمَّت دعوتهم.";
+"notice_room_visibility_joined" = "جميع أعضاء الغُرفة، مِن لحظة إنضمامهم.";
+"notice_room_visibility_shared" = "جميع أعضاء الغُرفة.";
+"notice_room_visibility_world_readable" = "أيُّ شخص.";
+"notice_room_name_removed" = "أزالَ %1$@ اسم الغُرفة";
+"notice_room_topic_removed" = "أزالَ %1$@ موضوع الغُرفة";
+"notice_room_third_party_invite" = "أرسلَ %1$@ دعوة إلى %2$@ للإنضمام إلى الغُرفة";
+"notice_crypto_unable_to_decrypt" = "** يتعذَّر فك التشفير: ⁨%@⁩ **";
+"notice_crypto_error_unknown_inbound_session_id" = "لم يُرسل جِهاز المُرسل مفاتيحًا لهذه الرِّسالة.";
+"unable_to_send_message" = "تعذَّر إرسال الرِّسالة";
+"matrix_error" = "خطأ في مايتركس";
+"medium_email" = "عُنوان البريد الإلكتروني";
+"medium_phone_number" = "رقم الهاتف";
+"notice_room_withdraw" = "سحبَ ⁨%1$@⁩ الدعوة الموجّهة إلى ⁨%2$@";
+"notice_placed_video_call" = "أجرى %@ مُكالمة مرئية.";
+"notice_placed_voice_call" = "أجرى %@ مُكالمة صوتية.";
+"notice_room_third_party_registered_invite" = "قَبِل %1$@ دعوة %2$@";
+"notice_avatar_changed_too" = "(غُيرت الصُّورة أيضًا)";
+"room_displayname_empty_room" = "غُرفة فارِغة";
+"room_displayname_two_members" = "%1$@ وَ %2$@";
+"room_displayname_room_invite" = "دَعوة لغُرفة";
+"notice_room_invite_no_invitee_by_you" = "دعوتك";
+"notice_room_created" = "أنشأ ⁨%1$@⁩ الغرفة";
+"notice_room_created_by_you" = "أنشأتَ الغرفة";
+"notice_room_invite_by_you" = "دعوتَ ⁨%1$@⁩";
+"notice_room_join_by_you" = "انضممتَ إلى الغرفة";
+"notice_room_leave_by_you" = "غادرتَ الغرفة";
+"notice_room_reject_by_you" = "رفضتَ الدعوة";
+"notice_room_remove_by_you" = "طردتَ ⁨%1$@⁩";
+"notice_room_unban_by_you" = "رفعتَ الحظر عن ⁨%1$@⁩";
+"notice_room_ban_by_you" = "حظرتَ ⁨%1$@⁩";
+"notice_room_withdraw_by_you" = "سحبتَ الدعوة الموجّهة إلى ⁨%1$@⁩";
+"notice_avatar_url_changed_by_you" = "غيّرتَ صورتك الشخصية";
+"notice_display_name_set_by_you" = "عيَّنتَ اسمك العلنيّ إلى %1$@";
+"notice_display_name_changed_from_by_you" = "غيّرتَ اسمك العلنيّ من ⁨%1$@⁩ إلى ⁨%2$@⁩";
+"notice_display_name_removed_by_you" = "أزلتَ اسمك العلنيّ (كان ⁨%1$@⁩)";
+"notice_room_topic_changed_by_you" = "غيَّرتَ الموضوع إلى: ⁨%1$@⁩";
+"notice_room_avatar_changed" = "غيَّرَ %1$@ صورة الغُرفة";
+"notice_room_avatar_changed_by_you" = "غيَّرتَ صورة الغُرفة";
+"notice_room_name_changed_by_you" = "غيَّرتَ اسم الغُرفة إلى: %1$@";
+"notice_placed_video_call_by_you" = "جريتَ مُكالمة مرئية.";
+"notice_placed_voice_call_by_you" = "أجريتَ مُكالمة صوتية.";
+"notice_call_candidates" = "أرسلَ %@ بيانات لإعداد مُكالمة.";
+"notice_call_candidates_by_you" = "أرسلتَ بيانات لإعداد مُكالمة.";
+"notice_answered_call_by_you" = "أجبتَ على المُكالمة.";
+"notice_ended_call_by_you" = "أنهيتَ المُكالمة.";
+"notice_made_future_room_visibility_by_you" = "جعلتَ التأريخ المُستقبلي للغُرفة مرئيًا لـ %1$@";
+"notice_room_update" = "رقّى %@ هذه الغرفة.";
+"notice_room_update_by_you" = "رقَّيتَ هذه الغرفة.";
+"notice_room_name_removed_by_you" = "أزلتَ اسم الغُرفة";
+"notice_room_topic_removed_by_you" = "أزلتَ موضوع الغُرفة";
+"notice_room_avatar_removed" = "أزالَ %1$@ صورة الغُرفة";
+"notice_room_avatar_removed_by_you" = "أزلتَ صورة الغُرفة";
+"notice_room_third_party_invite_by_you" = "أرسلتَ دعوة إلى %1$@ للإنضمام إلى الغُرفة";
+"notice_room_third_party_revoked_invite" = "سحب %1$@ دعوة %2$@ للإنضمام إلى الغُرفة";
+"notice_room_third_party_revoked_invite_by_you" = "سحبت دعوة %1$@ للإنضمام إلى الغُرفة";
+"notice_room_third_party_registered_invite_by_you" = "قبلتَ دعوة %1$@";
+"notice_widget_added" = "أضافَ %1$@ ودجة %2$@";
+"notice_widget_added_by_you" = "أضفتَ ودجة %1$@";
+"notice_widget_removed" = "أزال %1$@ ودجة %2$@";
+"notice_widget_removed_by_you" = "أزلتَ ودجة %1$@";
+"notice_widget_modified" = "عدَّلَ %1$@ ودجة %2$@";
+"notice_widget_modified_by_you" = "عدَّلتَ ودجة %1$@";
+"power_level_admin" = "مدير";
+"power_level_default" = "الاِفتراضي";
+"power_level_custom" = "مُخصَّص (⁨%1$d⁩)";
+"power_level_custom_no_value" = "مخصَّص";
+"notice_power_level_changed_by_you" = "غيَّرتَ مُستوى سلطة %1$@.";
+"notice_power_level_changed" = "غيَّرَ %1$@ مُستوى سلطة %2$@.";
+"notice_power_level_diff" = "%1$@ مِن %2$@ إلى %3$@";
+"initial_sync_start_importing_account" = "المُزامنة الأولية:
+\nيستورد الحِساب…";
+"notice_room_server_acl_allow_is_empty" = "🎉 جميع الخوادِم محظورة مِنَ المُشاركة! لم يعُد من المُمكِن استخدام هذه الغُرفة.";
+"notice_room_server_acl_updated_no_change" = "لا تغيير.";
+"notice_room_server_acl_updated_ip_literals_not_allowed" = "• خوادِم مُطابقة IP الحرفية محظورة الآن.";
+"notice_room_server_acl_updated_was_allowed" = "• الخوادِم المُطابقة لـ %@ أُزيلت مِن قائمة السماح.";
+"notice_room_server_acl_updated_allowed" = "• الخوادِم المُطابقة لـ %@ مسموحة الآن.";
+"notice_room_server_acl_updated_was_banned" = "• الخوادِم المُطابقة لـ %@ أُزيلت مِن قائمة الحظر.";
+"notice_room_server_acl_updated_banned" = "• الخوادِم المُطابقة لـ %@ محظورة الآن.";
+"notice_room_server_acl_updated_ip_literals_allowed" = "• خوادِم مُطابقة IP الحرفية مسموحة الآن.";
+"notice_room_server_acl_updated_title_by_you" = "يَّرتَ خادِم الـACLs لهذه الغُرفة.";
+"notice_room_server_acl_updated_title" = "غيَّرَ %@ خادِم الـACLs لهذه الغُرفة.";
+"notice_room_server_acl_set_ip_literals_not_allowed" = "• الخوادِم المطابقة للقيم الحرفية للـIP محظورة.";
+"notice_room_server_acl_set_allowed" = "• الخوادِم المُطابقة لـ %@ مسموحة.";
+"notice_room_server_acl_set_banned" = "• الخوادِم المُطابقة لـ %@ محظورة.";
+"notice_room_server_acl_set_ip_literals_allowed" = "• الخوادِم المطابقة للقيم الحرفية للـIP مسموحة.";
+"notice_room_server_acl_set_title_by_you" = "عيَّنتَ خادِم الـACLs لهذه الغُرفة.";
+"notice_room_server_acl_set_title" = "عيَّنَ %@ خادِم الـACLs لهذه الغُرفة.";
+"notice_direct_room_update_by_you" = "رقيتَ هُنا.";
+"notice_direct_room_update" = "رقّى %@ هُنا.";
+"notice_made_future_direct_room_visibility_by_you" = "جعلتَ الرسائل المُستقبلية مرئية لـ %1$@";
+"notice_made_future_direct_room_visibility" = "جعلَ %1$@ الرسائل المُستقبلية مرئية لـ %2$@";
+"notice_direct_room_leave_by_you" = "غادرتَ الغرفة";
+"notice_direct_room_leave" = "غادرَ ⁨%1$@⁩ الغرفة";
+"notice_direct_room_join_by_you" = "انضممت";
+"notice_direct_room_join" = "انضمّ ⁨%1$@⁩";
+"notice_direct_room_created_by_you" = "أنشأتَ النقاش";
+"notice_direct_room_created" = "أنشأ ⁨%1$@⁩ النقاش";
+"notice_room_withdraw_with_reason_by_you" = "سحبتَ دعوة %1$@. السبب: %2$@";
+"notice_room_withdraw_with_reason" = "سحبَ %1$@ دعوة %2$@. السبب: %3$@";
+"notice_room_third_party_registered_invite_with_reason_by_you" = "قبلتَ دعوة %1$@. السبب: %2$@";
+"notice_room_third_party_registered_invite_with_reason" = "قبلَ %1$@ دعوة %2$@. السبب: %3$@";
+"notice_room_ban_with_reason_by_you" = "حظرتَ %1$@. السبب: %2$@";
+"notice_room_ban_with_reason" = "حظر %1$@ %2$@. السبب: %3$@";
+"notice_room_unban_with_reason_by_you" = "رفعتَ الحظر عن %1$@. السبب: %2$@";
+"notice_room_unban_with_reason" = "رفع %1$@ الحظر عن %2$@. السبب: %3$@";
+"notice_room_remove_with_reason_by_you" = "طردتَ %1$@. السبب: %2$@";
+"notice_room_remove_with_reason" = "طرد %1$@ %2$@. السبب: %3$@";
+"notice_room_reject_with_reason_by_you" = "رفضتَ الدعوة. السبب: %1$@";
+"notice_room_reject_with_reason" = "رفض %1$@ الدعوة. السبب: %2$@";
+"notice_direct_room_leave_with_reason_by_you" = "غادرتَ. السبب: %1$@";
+"notice_direct_room_leave_with_reason" = "غادر %1$@. السبب: %2$@";
+"notice_room_leave_with_reason_by_you" = "غادرتَ الغُرفة. السبب: %1$@";
+"notice_room_leave_with_reason" = "غادر %1$@ الغُرفة. السبب: %2$@";
+"notice_direct_room_join_with_reason_by_you" = "انضممتَ. السبب: %1$@";
+"notice_direct_room_join_with_reason" = "انضم %1$@. السبب: %2$@";
+"notice_room_join_with_reason_by_you" = "انضممتَ إلى الغُرفة. السبب: %1$@";
+"notice_room_join_with_reason" = "انضم %1$@ إلى الغُرفة. السبب: %2$@";
+"notice_room_invite_you_with_reason" = "دعاك %1$@. السبب: %2$@";
+"notice_room_invite_with_reason_by_you" = "دعوتَ %1$@. السبب: %2$@";
+"notice_room_invite_with_reason" = "دعا %1$@ %2$@. السبب: %3$@";
+"notice_room_invite_no_invitee_with_reason_by_you" = "دعوتُكَ أنت. السبب: %1$@";
+"notice_room_invite_no_invitee_with_reason" = "دعوة %1$@. السبب: %2$@";
+"event_status_sending_message" = "يُرسل الرِّسالة…";
+"initial_sync_start_importing_account_data" = "المُزامنة الأولية:
+\nيستورد بيانات الحِساب";
+"initial_sync_start_importing_account_groups" = "المُزامنة الأولية:
+\nيستورد المُجتمعات";
+"initial_sync_start_importing_account_left_rooms" = "المُزامنة الأولية:
+\nيستورد الغُرف المُغادَر مِنها";
+"initial_sync_start_importing_account_invited_rooms" = "المُزامنة الأولية:
+\nيستورد الغُرف المَدعو إليها";
+"initial_sync_start_importing_account_joined_rooms" = "المُزامنة الأولية:
+\nيستورد المحادثات
+\nهذا قد يستغرق بعض الوقت حسب عدد الغرف المنضم إليها";
+"initial_sync_start_importing_account_rooms" = "المُزامنة الأولية:
+\nيستورد الغُرف";
+"initial_sync_start_importing_account_crypto" = "المُزامنة الأولية:
+\nيستورد التَعمية";
+"room_displayname_empty_room_was" = "غُرفة فارِغة (كانت %@)";
+"room_displayname_4_members" = "الأعضاء %1$@، %2$@، %3$@ و %4$@";
+"room_displayname_3_members" = "الأعضاء %1$@، %2$@ و %3$@";
+"power_level_moderator" = "مُشرِف";
+"notice_direct_room_third_party_revoked_invite_by_you" = "سحبتَ دعوة %1$@";
+"notice_direct_room_third_party_revoked_invite" = "سحب %1$@ دعوة %2$@";
+"notice_direct_room_third_party_invite_by_you" = "دعوتَ %1$@";
+"notice_direct_room_third_party_invite" = "دعى %1$@ %2$@";
+"light_theme" = "السمة الفاتحة";
+"dark_theme" = "السمة الداكنة";
+"black_theme" = "السمة السوداء";
+"notification_listening_for_events" = "يستمع للأحداث";
+"title_activity_settings" = "الإعدادات";
+"title_activity_bug_report" = "أبلِغ عن علة";
+"ok" = "حسنا";
+"action_cancel" = "ألغِ";
+"action_save" = "احفظ";
+"action_leave" = "اترك";
+"action_send" = "أرسِل";
+"action_quote" = "اقتبس";
+"action_share" = "شارِك";
+"permalink" = "رابط دائم";
+"view_source" = "اعرض المصدر";
+"view_decrypted_source" = "اعرض المصدر بلا تعمية";
+"action_delete" = "احذف";
+"action_rename" = "غيّر الاسم";
+"report_content" = "أبلِغ عن المحتوى";
+"action_sign_out" = "اخرج";
+"action_voice_call" = "مكالمة صوتية";
+"action_video_call" = "مكالمة صورية";
+"action_mark_all_as_read" = "علّمها كلّها كمقروءة";
+"action_open" = "افتح";
+"action_close" = "أغلِق";
+"copied_to_clipboard" = "نُسخ إلى الحافظة";
+"dialog_title_confirmation" = "أكّد";
+"dialog_title_warning" = "تحذير";
+"bottom_action_favourites" = "المفضلة";
+"bottom_action_rooms" = "الغرف";
+"invitations_header" = "الدعوات";
+"direct_chats_header" = "المحادثات";
+"matrix_only_filter" = "متراسلو «ماترِكس» فقط";
+"no_result_placeholder" = "لا نتائج";
+"rooms_header" = "الغرف";
+"send_bug_report_include_logs" = "أرسِل السجلات";
+"send_bug_report_include_crash_logs" = "أرسِل سجلات الانهيار";
+"send_bug_report_include_screenshot" = "أرسِل لقطة شاشة";
+"send_bug_report_description" = "رجاءً صِف المشكلة. ما الذي فعلته؟ ما الذي توقعت حدوثه؟ ما الذي حدث؟";
+"send_bug_report_placeholder" = "صِف المشكلة هنا";
+"send_bug_report_logs_description" = "لنقدر على تحليل المشاكل، ستُرسل السجلات من هذا العميل مع بلاغ العلة هذا. سوف لن يُنشر بلاغ العلة (وذلك يشمل السجلات ولقطات الشاشة) لعموم الناس. إن أردت إرسال النص أعلاه فقط، رجاءً أزل تأشير:";
+"send_bug_report_app_crashed" = "انهار التطبيق في آخر مرة. أتريد إرسال بلاغ انهيار؟";
+"send_bug_report_sent" = "أُرسل بلاغ العلة بنجاح";
+"send_bug_report_failed" = "فشل إرسال بلاغ العلة (%@)";
+"username" = "اسم المستخدم";
+"logout" = "اخرج";
+"start_voice_call" = "ابدأ مكالمة صوتية";
+"start_video_call" = "ابدأ مكالمة صورية";
+"option_send_files" = "أرسِل ملفات";
+"option_take_photo_video" = "خُذ صورة أو ڤديو";
+"option_take_photo" = "خُذ صورة";
+"option_take_video" = "خُذ ڤديو";
+"auth_login" = "لِج";
+"auth_submit" = "أرسِل";
+"auth_invalid_login_param" = "اسم المستخدم و/أو كلمة السر خاطئة";
+"auth_invalid_email" = "لا يبدو هذا وكأنه بريد إلكتروني صالح";
+"auth_forgot_password" = "أنسيت كلمة السر؟";
+"auth_reset_password_missing_email" = "يجب إدخال عنوان البريد الإلكتروني المرتبط بحسابك.";
+"auth_reset_password_error_unauthorized" = "فشل تأكيد عنوان البريد: تحقق من نقر الرابط في البريد";
+"login_error_invalid_home_server" = "أدخِل مسارا صالحا";
+"login_error_not_json" = "لم يحتوي JSON صالح";
+"login_error_limit_exceeded" = "أُرسلت الكثير من الطلبات";
+"call_ended" = "انتهت المكالمة";
+"incoming_video_call" = "مكالمة صورية واردة";
+"incoming_voice_call" = "مكالمة صوتية واردة";
+"call_in_progress" = "المكالمة جارية";
+"permissions_rationale_popup_title" = "معلومات";
+"yes" = "نعم";
+"no" = "لا";
+"_continue" = "تابع";
+"action_remove" = "أزِل";
+"action_join" = "انضم";
+"action_reject" = "ارفض";
+"room_jump_to_first_unread" = "انتقل إلى أول رسالة غير مقروءة.";
+"room_participants_leave_prompt_title" = "ترك الغرفة";
+"room_participants_leave_prompt_msg" = "أمتأكّد من ترك الغرفة؟";
+"room_participants_action_ban" = "امنع";
+"room_participants_action_unban" = "ارفع المنع";
+"room_participants_action_ignore" = "أخفِ كل رسائل هذا المستخدم";
+"room_participants_action_unignore" = "اعرض كل رسائل هذا المستخدم";
+"room_one_user_is_typing" = "‏⁨%1$@⁩ يكتب…";
+"room_do_not_have_permission_to_post" = "لا تصريح لديك للنشر في هذه الغرفة";
+"ssl_logout_account" = "اخرج";
+"ssl_fingerprint_hash" = "البصمة (⁨%@⁩):";
+"ssl_could_not_verify" = "تعذّر التحقق من معرّف الخادوم البعيد.";
+"search_no_results" = "لا نتائج";
+"settings_profile_picture" = "صورة اللاحة";
+"settings_display_name" = "اسم العرض";
+"settings_add_email_address" = "أضِف بريدا إلكترونيا";
+"settings_add_phone_number" = "أضِف رقم هاتف";
+"settings_app_info_link_title" = "معلومات التطبيق";
+"settings_notification_ringtone" = "صوت الإخطارات";
+"settings_containing_my_display_name" = "الرسائل التي فيها اسم العرض";
+"settings_containing_my_user_name" = "الرسائل التي فيها اسم المستخدم";
+"settings_messages_in_one_to_one" = "الرسائل في محادثات الطرفين";
+"settings_messages_in_group_chat" = "الرسائل في دردشات المجموعات";
+"settings_invited_to_room" = "عندما أُدعى إلى غرفة ما";
+"settings_background_sync" = "المزامنة الخلفية";
+"settings_copyright" = "حقوق النسخ";
+"settings_privacy_policy" = "سياسة الخصوصية";
+"settings_clear_cache" = "امسح الخبيئة";
+"settings_clear_media_cache" = "امسح خبيئة الوسائط";
+"settings_user_settings" = "إعدادات المستخدم";
+"settings_notifications" = "الإخطارات";
+"settings_advanced" = "متقدم";
+"settings_contact" = "المتراسلون المحليون";
+"settings_contacts_app_permission" = "تصاريح المتراسلون";
+"settings_contacts_phonebook_country" = "دولة دفتر العناوين";
+"settings_always_show_timestamps" = "اعرض أختام الرسائل الزمنية دائما";
+"settings_12_24_timestamps" = "اعرض الأختام الزمنية بنسق ١٢ ساعة (مثلا ٢:٣٠م)";
+"devices_details_id_title" = "المعرّف";
+"devices_details_name_title" = "الاسم";
+"devices_details_device_name" = "اسم الجهاز";
+"devices_details_last_seen_title" = "آخر ظهور";
+"settings_user_interface" = "واجهة المستخدم";
+"settings_interface_language" = "لغة الواجهة";
+"settings_select_language" = "اختر لغة";
+"settings_change_password" = "غيّر كلمة السر";
+"settings_old_password" = "كلمة السر القديمة";
+"settings_new_password" = "كلمة السر الجديدة";
+"settings_fail_to_update_password" = "فشل تحديث كلمة السر";
+"settings_password_updated" = "حُدّثت كلمة السر";
+"settings_unignore_user" = "أأعرض كل رسائل ⁨%@⁩؟
+سيُعيد هذا الإجراء تشغيل التطبيق وقد يأخذ بعض الوقت.";
+"settings_select_country" = "اختر دولة";
+"media_saving_period_3_days" = "٣ أيام";
+"media_saving_period_1_week" = "أسبوع واحد";
+"media_saving_period_1_month" = "شهر واحد";
+"media_saving_period_forever" = "للأبد";
+"room_settings_topic" = "الموضوع";
+"room_settings_room_read_history_rules_pref_title" = "إمكانيّة قراءة تأريخ الغرفة";
+"room_settings_room_read_history_rules_pref_dialog_title" = "من يمكنه قراءة التأريخ؟";
+"room_settings_read_history_entry_anyone" = "الكل";
+"room_settings_read_history_entry_members_only_option_time_shared" = "الأعضاء فقط (من لحظة اختيار هذا الخيار)";
+"room_settings_read_history_entry_members_only_invited" = "الأعضاء فقط (من لحظة دعوتهم)";
+"room_settings_read_history_entry_members_only_joined" = "الأعضاء فقط (من لحظة انضمامهم)";
+"room_settings_banned_users_title" = "المستخدمون الممنوعون";
+"room_settings_category_advanced_title" = "متقدم";
+"room_settings_labs_pref_title" = "مختبرات";
+"widget_delete_message_confirmation" = "أمتأكد من حذف الودجة؟";
+"widget_integration_unable_to_create" = "تعذّر إنشاء الودجة.";
+"widget_integration_failed_to_send_request" = "فشل إرسال الطلب.";
+"widget_integration_must_be_in_room" = "لست في هذه الغرفة.";
+"widget_integration_no_permission_in_room" = "ليس لديك تصريح لفعل هذا في هذه الغرفة.";
+"settings_labs_native_camera" = "استخدم الكمرة الأصيلة";
+"room_settings_set_main_address" = "اضبطه كعنوان رئيسي";
+"room_settings_unset_main_address" = "ألغِ ضبطه كعنوان رئيسي";
+"settings_theme" = "السمة";
+"encryption_information_decryption_error" = "خطأ في فكّ التعمية";
+"encryption_information_device_name" = "اسم الجهاز";
+"encryption_information_device_id" = "معرّف الجهاز";
+"encryption_information_device_key" = "مفتاح الجهاز";
+"encryption_export_room_keys" = "صدّر مفاتيح الغرفة";
+"encryption_export_room_keys_summary" = "صدّر المفاتيح إلى ملف محلي";
+"passphrase_enter_passphrase" = "أدخِل عبارة المرور";
+"passphrase_confirm_passphrase" = "أكّد عبارة المرور";
+"encryption_import_e2e_room_keys" = "استورد مفاتيح الطرفين لغرفة";
+"encryption_import_room_keys" = "استورد مفاتيح الغرفة";
+"encryption_import_room_keys_summary" = "استورد المفاتيح من ملف محلي";
+"directory_server_placeholder" = "مسار خادوم المنزل";
+"directory_server_all_rooms_on_server" = "كل الغرف في خادوم ⁨%@⁩";
+"directory_server_native_rooms" = "كل غرف ⁨%@⁩ الأصيلة";
+"font_size" = "حجم الخط";
+"tiny" = "ضئيل";
+"small" = "صغير";
+"normal" = "متوسط";
+"large" = "كبير";
+"larger" = "كبير جدا";
+"largest" = "ضخم";
+"huge" = "ضخم جدا";
+"widget_integration_missing_room_id" = "المعرّف room_id ناقص في الطلب.";
+"widget_integration_missing_user_id" = "المعرّف user_id ناقص في الطلب.";
+"widget_integration_room_not_visible" = "الغرفة ⁨%@⁩ غير ظاهرة.";
+"you_added_a_new_device" = "لقد أضفت جهازا جديدا ’⁨%@⁩‘ يطلب مفاتيح التعمية.";
+"command_error" = "خطأ في الأمر";
+"unrecognized_command" = "لم يُفهم الأمر: ⁨%@⁩";
+"or" = "أو";
+"action_quick_reply" = "ردّ سريع";
+"bottom_action_people" = "الأشخاص";
+"home_filter_placeholder_home" = "ابحث في الغرف";
+"send_bug_report" = "بلاغ علة";
+"send_bug_report_alert_message" = "يبدو أنك تهزّ الهاتف وأنت مُحبط. أتريد إرسال بلاغ علة؟";
+"send_bug_report_progress" = "التقدم (%@٪)";
+"loading" = "يحمّل…";
+"room_two_users_are_typing" = "‏⁨%1$@⁩ و ⁨%2$@⁩ يكتبون…";
+"room_many_users_are_typing" = "‏⁨%1$@⁩ و ⁨%2$@⁩ وغيرهم يكتبون…";
+"low_priority_header" = "أولوية منخفضة";
+"groups_header" = "المجتمعات";
+"send_bug_report_rage_shake" = "هزّ الجهاز بجنون يُرسل بلاغًا بعلة";
+"notification_noisy_notifications" = "الإخطارات المزعجة";
+"notification_silent_notifications" = "الإخطارات الصامتة";
+"later" = "لاحقا";
+"hs_url" = "عنوان خادوم المنزل";
+"search" = "ابحث";
+"start_voice_call_prompt_msg" = "أمتأكد من بدء محادثة صوتية؟";
+"start_video_call_prompt_msg" = "أمتأكد من بدء محادثة صورية؟";
+"auth_email_already_defined" = "عنوان البريد مُعرّف بالفعل.";
+"auth_recaptcha_message" = "يريد خادوم المنزل هذا التأكد من أنك لست أحد الآليين";
+"login_error_bad_json" = "JSON‏ معطوب";
+"permissions_rationale_msg_record_audio" = "يحتاج Element تصريحا منك للوصول إلى المِكرفون لإجراء المكالمات الصوتية.";
+"permissions_rationale_msg_camera_and_audio" = "يحتاج Element تصريحا منك للوصول إلى الكمرة والمِكرفون لإجراء المكالمات الصورية.
+رجاءً اسمح بالوصول في المنبثقة التالية لتقدر على إرسال إجراء المكالمات الصورية.";
+"action_invite" = "ادعُ";
+"join_room" = "انضم إلى الغرفة";
+"compression_opt_list_original" = "الأصلي";
+"call_error_user_not_responding" = "لم يُجب الطرف البعيد.";
+"room_participants_header_direct_chats" = "الدردشات المباشرة";
+"room_participants_action_mention" = "أشِر إليه";
+"room_participants_power_level_prompt" = "لن تستطيع العودة عن هذا التغيير إذ أنك تمنح المستخدم نفس مستوى السلطة الذي لك.
+أمتأكد؟";
+"room_participants_ban_prompt_msg" = "أمتأكد من منع هذا المستخدم من هذه الدردشة؟";
+"ssl_trust" = "ثِق";
+"ssl_do_not_trust" = "لا تثق";
+"ssl_remain_offline" = "تجاهل";
+"ssl_unexpected_existing_expl" = "تغيّرت الشهادة من تلك التي كنت تثق بها على هاتفك. هذا <b>غير طبيعي أبدا<b/>. من المستحسن <b>ألا تقبل<b/> الشهادة الجديدة.";
+"ssl_only_accept.b_0" = "فقط";
+"search_hint" = "ابحث";
+"search_members_hint" = "رشّح أعضاء الغرفة";
+"room_settings_all_messages" = "كل الرسائل";
+"settings_enable_all_notif" = "فعّل الإخطارات لهذا الحساب";
+"settings_enable_this_device" = "فعّل الإخطارات لهذا الجهاز";
+"room_settings_room_internal_id" = "معرّف الغرفة الداخلي";
+"room_settings_labs_warning_message" = "هذه مزايا اختبارية قد تعطب وبشكل غير متوقع. احتط وأنت تستخدمها.";
+"encryption_information_verify_device_warning" = "للتحقق فيما إذا كان يمكن الوثوق بالجهاز أم لا، رجاءً راسل مالكه مستخدما طريقة أخرى (وجها لوجه أو عبر مكالمة هاتفية) واسأله فيما إذا كان المفتاح في صفحة ”إعدادات المستخدم“ على جهازه يطابق المفتاح أدناه أم لا:";
+"encryption_information_verify_device_warning2" = "إن كان يتطابق، فانقر زر التأكيد أدناه.
+وإلا فناك من يعترض هذا الجهاز وأغلب الظن أنه من الأفضل منعه.
+ستتحسن عملية التأكيد في المستقبل وتصبح أفضل وأرقى.";
+"select_room_directory" = "اختر دليل غرف";
+"room_add_matrix_apps" = "أضِف تطبيقات ماترِكس";
+"your_unverified_device_requesting" = "يطلب جهازك غير المؤكّد ”‏⁨%@⁩“ مفاتيح التعمية.";
+"start_verification" = "ابدأ التأكيد";
+"encrypted_message" = "رسالة معمّاة";
+"create" = "أنشئ";
+"group_details_home" = "المنزل";
+"rooms" = "الغرف";
+"invited" = "المدعوّون";
+"has_been_removed" = "لقد طُردت من ⁨%1$@⁩ على يد ⁨%2$@⁩";
+"has_been_banned" = "لقد مُنعت من ⁨%1$@⁩ على يد ⁨%2$@⁩";
+"reason_colon" = "السبب: ⁨%1$@⁩";
+"compression_opt_list_large" = "كبير";
+"compression_opt_list_medium" = "متوسط";
+"compression_opt_list_small" = "صغير";
+"call" = "مكالمة";
+"settings_set_sync_delay" = "التأخير بين كل طلبي مزامنة";
+"settings_version" = "الإصدارة";
+"settings_olm_version" = "إصدارة Olm";
+"settings_app_term_conditions" = "الأحكام والشروط";
+"settings_third_party_notices" = "إشعارات الأطراف الثالثة";
+"settings_keep_media" = "أبقِ الوسائط";
+"settings_ignored_users" = "المستخدمون المتجاهلون";
+"settings_other" = "أخرى";
+"settings_cryptography" = "التعمية";
+"settings_notifications_targets" = "أهداف الإخطارات";
+"settings_home_display" = "عرض الرئيسية";
+"settings_pin_missed_notifications" = "ثبّت الغرف التي فيها إخطارات فائتة";
+"settings_pin_unread_messages" = "ثبّت الغرف التي فيها رسائل غير مقروءة";
+"settings_inline_url_preview" = "فعّل معاينات العناوين ضمن السياق مبدئيا";
+"settings_vibrate_on_mention" = "هُزّ الجهاز عند الإشارة إليّ";
+"settings_analytics" = "التحاليل";
+"devices_details_last_seen_format" = "‏⁨%1$@⁩ في ⁨%2$@⁩";
+"devices_delete_dialog_title" = "تخويل";
+"settings_logged_in" = "والج كَ‍";
+"settings_home_server" = "خادوم المنزل";
+"settings_identity_server" = "خادوم التعريف";
+"account_email_validation_message" = "رجاءً افحص بريدك وانقر على الرابط في الرسالة. ما إن تفعل انقر ”تابع“.";
+"account_email_already_used_error" = "عنوان البريد مستخدم بالفعل";
+"account_phone_number_already_used_error" = "رقم الهاتف مستخدم بالفعل";
+"settings_flair" = "الميل";
+"notification_off" = "معطّل";
+"notification_noisy" = "مزعج";
+"encryption_never_send_to_unverified_devices_summary" = "لا ترسل من هذا الجهاز الرسائل المعمّاة إلى الأجهزة غير المؤكّدة";
+"encryption_never_send_to_unverified_devices_title" = "عمِّ إلى الأجهزة المؤكّدة فقط";
+"encryption_information_not_verified" = "<b>غير<b/> مؤكّدة";
+"encryption_information_verified" = "مؤكّدة";
+"encryption_information_verify" = "أكّد";
+"list_members" = "اسرد الأعضاء";
+"room_participants_action_invite" = "ادعُ";
+"ssl_cert_not_trust" = "قد يعني هذا بأن أحدهم يعترض الاتصال بعدوانية، أو أن هاتفك لا يثق بالشهادة التي قدّمها الخادوم البعيد.";
+"ssl_cert_new_account_expl" = "إن قال مدير الخادوم بأن هذا متوقع، فتأكد من أن البصمة أدناه تطابق البصمة التي وفّرها.";
+"ssl_expected_existing_expl" = "تغيّرت الشهادة من شهادة كنت تثق بها إلى شهادة لا تثق بها. لربما جدّد الخادوم شهادته. راسل إدارة الخادوم واسألهم عن البصمة المتوقعة.";
+"room_settings_add_homescreen_shortcut" = "أضِف اختصارا إلى الشاشة الرئيسية";
+"settings_app_info_link_summary" = "شاشة معلومات التطبيق في النظام";
+"settings_call_invitations" = "دعوات المكالمات";
+"settings_start_on_boot" = "ابدأ عن الإقلاع";
+"encryption_export_e2e_room_keys" = "صدّر مفاتيح تعمية الطرفين لغرفة";
+"encryption_export_export" = "صدّر";
+"encryption_import_import" = "استورد";
+"notification_unread_notified_messages_in_room" = "‏⁨%1$@⁩ في ‏⁨%2$@⁩";
+"widget_integration_positive_power_level" = "يجب أن يكون مستوى السلطة عددا صحيحا موجبا.";
+"title_activity_choose_sticker" = "أرسِل ملصقا";
+"action_download" = "نزِّل";
+"option_send_voice" = "أرسِل صوتًا";
+"option_send_sticker" = "أرسِل ملصقًا";
+"no_sticker_application_dialog_content" = "ليس ثمة أية حزمة ملصقات مفعّلة حاليًا.
+أتريد إضافة حزمة الآن؟";
+"error_no_external_application_found" = "نأسف، لم نجد أي تطبيق خارجي لإكمال هذا الإجراء.";
+"e2e_re_request_encryption_key.u_0" = "أعِد طلب مفاتيح التعمية";
+"e2e_re_request_encryption_key_dialog_content" = "رجاءً أطلِق Element في جهاز آخر يقدر على فك تعمية الرسالة ليُرسل المفاتيح إلى هذا الجهاز.";
+"settings_messages_sent_by_bot" = "الرسائل التي أرسلها بوت";
+"settings_set_sync_timeout" = "انتهت مهلة طلب المزامنة";
+"settings_deactivate_account_section" = "ألغِ تنشيط الحساب";
+"settings_deactivate_my_account" = "ألغِ تنشيط حسابي";
+"settings_opt_in_of_analytics" = "أرسِل بيانات التحاليل";
+"settings_opt_in_of_analytics_summary" = "يجمع Element التحاليل بشكل مجهّل فيتيح لنا ذلك تحسين التطبيق.";
+"widget_integration_missing_parameter" = "ثمة معامل مطلوب ناقص.";
+"dialog_user_consent_content" = "لمتابعة استخدام خادوم المنزل ⁨%1$@⁩ عليك مراجعة الشروط والقوانين والموافقة عليها.";
+"dialog_user_consent_submit" = "سأراجعها الآن";
+"deactivate_account_title" = "ألغِ تفعيل الحساب";
+"error_empty_field_your_password" = "رجاءً اكتب كلمة السر.";
+"send_bug_report_description_in_english" = "رجاءً اكتب الوصف بالإنجليزية إن أمكن.";
+"system_alerts_header" = "تنبيهات النظام";
+"settings_preview_media_before_sending" = "عايِن الوسيط قبل إرساله";
+"command_description_ban_user" = "يمنع المستخدم حسب المعرّف المعطى";
+"command_description_unban_user" = "يُلغي المنع عن المستخدم حسب المعرّف المعطى";
+"command_description_op_user" = "يُحدّد مستوى قدرة المستخدم";
+"command_description_invite_user" = "يدعو المستخدم حسب المعرّف المعطى إلى الغرفة الحالية";
+"command_description_markdown" = "شغّل/عطّل مارك‌داون";
+"deactivate_account_submit" = "ألغِ تفعيل الحساب";
+"room_tombstone_versioned_description" = "استُبدلت هذه الغرفة ولم تعد نشطة بعد الآن";
+"room_tombstone_continuation_description" = "هذه الغرفة هي استمرار لمحادثة أخرى";
+"room_tombstone_predecessor_link" = "انقر هنا لرؤية الرسائل الأقدم";
+"resource_limit_contact_admin" = "راسِل مدير الخدمة";
+"resource_limit_soft_contact" = "رجاءً %@ لزيادة هذا الحدّ.";
+"resource_limit_hard_contact" = "رجاءً %@ لمتابعة استخدام هذه الخدمة.";
+"command_description_emote" = "يعرض إجراءً";
+"command_description_deop_user" = "يُلغي إدارية المستخدم حسب المعرّف المعطى";
+"command_description_join_room" = "ينضمّ للغرفة حسب الاختصار المعطى";
+"command_description_part_room" = "اترك الغرفة";
+"command_description_topic" = "اضبط موضوع الغرفة";
+"command_description_remove_user" = "يطرد المستخدم حسب المعرّف المعطى";
+"command_description_nick" = "يُغيّر اسم العرض لحسابك";
+"command_description_clear_scalar_token" = "لإصلاح إدارة تطبيقات «ماترِكس»";
+"avatar" = "شعار";
+"deactivate_account_delete_checkbox" = "رجاءً انسَ كل الرسائل التي أرسلتها عندما كان حسابي غير مفعّل (تحذير: سيتسبب هذا بأن يرى المستخدمون اللاحقون عرضًا غير كاملًا للمحادثات)";
+"room_tombstone_continuation_link" = "استمرت المحادثة هنا";
+"resource_limit_soft_default.b_0" = "لن يستطيع بعض المستخدمين الولوج";
+"resource_limit_hard_default" = "تخطّ خادوم المنزل هذا أحد حدود الموارد لديه.";
+"resource_limit_soft_mau.b_0" = "لن يستطيع بعض المستخدمين الولوج";
+"resource_limit_hard_mau" = "وصل خادوم المنزل هذا حدّ المستخدمين النشطين شهريًا.";
+"call_connecting" = "يجري وصل الاتصال…";
+"deactivate_account_content.b_0" = "هذا إجراء لا عودة فيه";
+"deactivate_account_content.b_1" = "لا يتسبب بأن ننسى رسائلك التي أرسلتها (مبدئيًا)";
+"title_activity_keys_backup_restore" = "الرسائل الآمنة";
+"action_skip" = "تخطي";
+"done" = "تم";
+"dialog_title_error" = "خطأ";
+"settings_call_category" = "المكالمات";
+"room_participants_action_remove" = "طرد";
+"settings_notification_advanced" = "الإعدادات المتقدمة للإشعارات";
+"sign_out_bottom_sheet_warning_no_backup" = "عند تسجيل الخروج الآن ستخسر مفاتيحك";
+"sign_out_bottom_sheet_warning_backing_up" = "النسخ الاحتياطي المفاتيح ما زال جاريا. في حال خروجك الآن لن تتمكن لاحقا من قراءة الرسائل المعماة.";
+"sign_out_bottom_sheet_warning_backup_not_active" = "تأكد من تفعيل النسخ الاحتياطي للمفاتيح على كل أجهزتك كي لا تخسر رسائلك المعماة";
+"sign_out_bottom_sheet_backing_up_keys" = "ينسخ احتياطيا المفاتيح…";
+"no_permissions_to_start_conf_call_in_direct_room" = "ليس لديك تصريح لبدء إجتماع";
+"no_permissions_to_start_conf_call" = "ليس لديك تصريح لبدء إجتماع في هذه الغرفة";
+"start_chatting" = "إبدأ بالمحادثة";
+"action_reset" = "إعادة ضبط";
+"action_dismiss" = "إصرف";
+"action_play" = "شغل";
+"action_disconnect" = "إفصل";
+"action_revoke" = "أبّطل";
+"none" = "لاشيء";
+"sign_out_bottom_sheet_will_lose_secure_messages" = "ستفقد الوصول إلى رسائلك المعماة إلا إذا أخذت نسخة إحتياطية من مفاتيحك قبل تسجيلك للخروج.";
+"backup" = "نسخة إحتياطية";
+"are_you_sure" = "هل أنت متأكد؟";
+"sign_out_bottom_sheet_dont_want_secure_messages" = "لا أريد رسائلي المعماة";
+"title_activity_keys_backup_setup" = "نسخ إحتياطي للمفتاح";
+"system_theme" = "إفتراضي النظام";
+"notice_room_canonical_alias_set" = "غير %1$@ عنوان الغرفة الى %2$@.";
+"event_status_sent_message" = "أُرسلتْ الرسالة";
+"initial_sync_start_downloading" = "المزامنة الأولية:
+\nينزّل البيانات…";
+"initial_sync_start_server_computing" = "المزامنة الأولية:
+\nينتظر رد الخادم…";
+"notice_display_name_set" = "غير %1$@ اسمه العلنيّ الى %2$@";
+"invite_just_to_this_room" = "فقط في هذه الغُرفة";
+"invite_just_to_this_room_desc" = "لن يكونوا جزءًا من %@";
+"share_space_link_message" = "إنضم إلى مساحتي %1$@ %2$@";
+"skip_for_now" = "تخطي في الوقت الراهن";
+"create_space" = "إنشاء مساحة";
+"join_space" = "انضم إلى المساحة";
+"join_anyway" = "الانضمام على أي حال";
+"room_alias_preview_not_found" = "هذا الاسم المستعار غير متوفر في الوقت الحالي.
+\nحاول مرة أخرى لاحقًا، أو اطلب من مسؤول الغرفة التحقق مما إذا كان لديك وصول.";
+"space_explore_activity_title" = "استكشِف الغُرف";
+"space_add_child_title" = "أضف غُرف";
+"leave_space" = "غادر المساحة";
+"space_leave_prompt_msg_only_you" = "انت الشخص الوحيد هنا إذا غادرت، فلن يتمكن أي شخص من الانضمام في المستقبل، بما في ذلك أنت.";
+"space_leave_prompt_msg_private" = "هذه المساحة ليست عامة. لن تتمكن من الانضمام مرة أخرى بدون دعوة.";
+"space_leave_prompt_msg_as_admin" = "أنت المسؤول عن هذه المساحة، تأكد من أنك قمت بنقل حق المسؤول إلى عضو آخر قبل المغادرة.";
+"space_add_existing_rooms" = "أضف الغُرف الموجودة ومساحة";
+"spaces_beta_welcome_to_spaces_desc" = "تعد المساحات طريقة جديدة لتجميع الغرف والأشخاص.";
+"you_are_invited" = "أنت مدعو";
+"space_mark_as_suggested" = "علم كمقترحة";
+"space_mark_as_not_suggested" = "علم كغير مقترحة";
+"space_manage_rooms_and_spaces" = "إدارة الغُرف والمساحات";
+"spaces_feeling_experimental_subspace" = "تشعر بالتجربة؟
+\nيمكنك إضافة مساحات موجودة إلى مساحة.";
+"spaces_no_server_support_description" = "يرجى الاتصال بمسؤول الخادم الخاص بك للحصول على مزيد من المعلومات";
+"spaces_no_server_support_title" = "يبدو أن خادمك لا يدعم المساحات بعد";
+"this_space_has_no_rooms" = "هذه المساحة لا تحتوي على غُرف";
+"this_space_has_no_rooms_not_admin" = "قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.
+\nليس لديك إذن لإضافة غُرف.";
+"this_space_has_no_rooms_admin" = "قد تكون بعض الغُرف مخفية لأنها خاصة وأنك بحاجة إلى دعوة.";
+"user_invites_you" = "%@ يدعوك";
+"looking_for_someone_not_in_space" = "تبحث عن شخص ما ليس في %@؟";
+"space_settings_manage_rooms" = "إدارة الغُرف";
+"space_suggested" = "مقترح";
+"notice_room_canonical_alias_unset_by_you" = "أنت أزلت العنوان الرئيسي لهذه الغرفة.";
+"notice_room_canonical_alias_unset" = "%1$@ أزال العنوان الرئيسي لهذه الغُرفة.";
+"notice_room_canonical_alias_set_by_you" = "أنت غيرت العنوان الرئيسي لهذه الغرفة إلى %1$@.";
+"notice_room_aliases_added_and_removed_by_you" = "أنت أضفت %1$@ وحذفت %2$@ كعنوان لهذه الغرفة.";
+"notice_room_aliases_added_and_removed" = "%1$@ أضاف %2$@ وحذف %3$@ كعناوين لهذه الغرفة.";
+"denied_permission_generic" = "لإكمال الاجراء امنح التصاريح الناقصة عبر إعدادات النظام.";
+"spaces" = "الفضاءات";
+"notice_direct_room_guest_access_forbidden_by_you" = "منعتَ الزوار من دخول الغرفة.";
+"notice_room_guest_access_forbidden" = "منع %1$@ الزوار من دخول الغرفة.";
+"notice_direct_room_guest_access_can_join_by_you" = "سمحت للزوار بدخول هنا.";
+"notice_direct_room_guest_access_can_join" = "سمح %1$@ للزوار بدخول الغرفة.";
+"notice_room_guest_access_can_join_by_you" = "سمحتَ للزوار بدخول الغرفة.";
+"notice_room_guest_access_can_join" = "سمح %1$@ للزوار بدخول الغرفة.";
+"notice_room_canonical_alias_no_change_by_you" = "غيرتَ عناوين الغرفة.";
+"notice_room_canonical_alias_no_change" = "غّير %1$@ عناوين الغرفة.";
+"notice_room_canonical_alias_main_and_alternative_changed_by_you" = "غيرتَ العناوين الرئيسية والبديلة للغرفة.";
+"notice_room_canonical_alias_alternative_changed_by_you" = "غيّرت العناوين البديلة للغرفة.";
+"notice_direct_room_guest_access_forbidden" = "منع %1$@ الزوار من دخول الغرفة.";
+"notice_room_guest_access_forbidden_by_you" = "منعتَ الزوار من دخول الغرفة.";
+"call_remove_jitsi_widget_progress" = "ينهي المكالمة…";
+"call_ended_invite_timeout_title" = "لا رد";
+"call_ended_user_busy_description" = "المتَصل به مشغول.";
+"call_ended_user_busy_title" = "المستخدم مشغول";
+"call_held_by_you" = "علّقتَ المكالمة";
+"call_held_by_user" = "علق %@ المكالمة";
+"call_hold_action" = "علِّق";
+"call_resume_action" = "استأنِف";
+"audio_call_with_participant" = "مكالمة صوتية مع %@";
+"video_call_with_participant" = "مكالمة فيديو مع %@";
+"call_ringing" = "يتصل…";
+"settings_call_ringtone_dialog_title" = "اختر نغمة للمكالمات:";
+"settings_call_ringtone_title" = "نغمة المكالمات الواردة";
+"settings_call_show_confirmation_dialog_summary" = "أكّد المكالمة قبل إجرائها";
+"login_error_ssl_other" = "خطأ SSL.";
+"login_error_no_homeserver_found" = "هذا ليس عنوان صالح لخادم مايتركس";
+"auth_accept_policies" = "راجع واقبل سياسات هذا الخادم:";
+"auth_msisdn_already_defined" = "رقم الهاتف مستخدم بالفعل.";
+"use_as_default_and_do_not_ask_again" = "استخدمه كافتراضي ولا تسأل مجددًا";
+"option_always_ask" = "اسأل دائمًا";
+"call_camera_back" = "الخلفية";
+"call_camera_front" = "الأمامية";
+"call_switch_camera" = "غيّر الكاميرا";
+"sound_device_headset" = "السماعة";
+"sound_device_speaker" = "المكبر";
+"sound_device_phone" = "الهاتف";
+"call_select_sound_device" = "اختر جهاز الصوت";
+"spaces_header" = "الفضاءات";
+"call_notification_hangup" = "علّق";
+"notice_room_canonical_alias_main_and_alternative_changed" = "غيّر %1$@ العنوان الرئيسي و العناوين البديلة للغرفة.";
+"notice_room_canonical_alias_alternative_changed" = "غيّر %1$@ العناوين البديلة للغرفة.";
+"settings_category_room_directory" = "دليل الغرف";
+"no_more_results" = "لا مزيد من النتائج";
+"suggested_header" = "غرف مقترحة";
+"bottom_action_notification" = "الإخطارات";
+"dialog_edit_hint" = "قيمة جديدة";
+"dialog_title_success" = "نجح";
+"action_unpublish" = "ألغ نشرها";
+"action_switch" = "بدّل";
+"action_add" = "أضف";
+"action_copy" = "انسخ";
+"action_mark_room_read" = "علّمه كمقروء";
+"action_sign_out_confirmation_simple" = "أمتأكد من الخروج؟";
+"call_notification_reject" = "رَفض";
+"call_notification_answer" = "قبُول";
+"action_decline" = "رَفض";
+"action_ignore" = "تجاهل";
+"action_accept" = "قبُول";
+"cannot_call_yourself" = "لا يمكن مكالمة نفسك";
+"no_permissions_to_start_webrtc_call_in_direct_room" = "ليس لديك تصريح لبدء مكالمة";
+"no_permissions_to_start_webrtc_call" = "ليس لديك تصريح لبدء مكالمة في هذه الغرفة";
+"missing_permissions_title" = "تصاريح ناقصة";
+"denied_permission_voice_message" = "لإرسال رسائل صوتية امنح تصريح الوصول للميكريفون.";
+"denied_permission_camera" = "لإكمال هذا الإجراء امنح تصريح الوصول للكميرا عبر إعدادات النظام.";
+"keys_backup_setup_creating_backup" = "ينشئ نسخة احتياطية";
+"keys_backup_setup_step2_button_title" = "عيّن عبارة مرور";
+"keys_backup_setup_step2_text_title" = "أمّن النسخ الاختياطي بعبارة مرور.";
+"keys_backup_setup_step1_manual_export" = "تصدير المفاتيح يدويًا";
+"keys_backup_setup_step1_advanced" = "(متقدم)";
+"send_bug_report_include_key_share_history" = "أرسل سجل طلبات مشاركة المفاتيح";
+"audio_meeting" = "ابدأ مقابلة صوتية";
+"video_meeting" = "ابدأ مقابلة فيديو";
+"notice_end_to_end_unknown_algorithm" = "%1$@ فعّل تشفير طرف لطرف (لم يُتعرف على خوارزمية %2$@).";
+"notice_end_to_end_ok_by_you" = "عطلتّ تشفير طرف لطرف.";
+"notice_end_to_end_ok" = "%1$@ فعّل تشفير طرف لطرف.";
+"room_permissions_change_topic" = "غيّر الموضوع";
+"room_permissions_change_permissions" = "عدّل الأذونات";
+"room_permissions_change_space_name" = "غيّر اسم الفضاء";
+"room_permissions_change_room_name" = "غيّر اسم الغرفة";
+"room_permissions_enable_space_encryption" = "فعّل تشفير الفضاء";
+"room_permissions_change_main_address_for_the_space" = "غيّر العنوان الرئيسي للفضاء";
+"room_permissions_change_main_address_for_the_room" = "غيّر العنوان الرئيسي للغرفة";
+"room_permissions_change_space_avatar" = "غيّر الصورة الرمزية للفضاء";
+"room_permissions_change_room_avatar" = "غيّر الصورة الرمزية للغرفة";
+"room_permissions_modify_widgets" = "عدّل الودجات";
+"room_permissions_notify_everyone" = "نبّه الكل";
+"room_permissions_remove_messages_sent_by_others" = "أزل رسائل الآخرين";
+"room_permissions_ban_users" = "احظر مستخدمين";
+"room_permissions_remove_users" = "أطرد مستخدمين";
+"room_permissions_change_settings" = "غيّر الإعدادات";
+"room_permissions_invite_users" = "أدعوا مستخدمين";
+"room_permissions_send_messages" = "أرسل رسائل";
+"room_permissions_enable_room_encryption" = "فعّل تشفير الغرفة";
+"keys_backup_restore_success_title" = "أُستعيد النسخ الاحتياطي %@ !";
+"keys_backup_recovery_code_empty_error_message" = "رجاءً أدخل مفتاح الاستعادة";
+"keys_backup_unlock_button" = "فك قفل التأريخ";
+"keys_backup_restoring_importing_keys_waiting_message" = "يستورد المفاتيح…";
+"keys_backup_restoring_downloading_backup_waiting_message" = "ينزّل المفاتيح…";
+"room_error_access_unauthorized" = "لا يسمح لك بالانضمام لهذه الغرفة";
+"call_failed_no_connection" = "فشلت مكالمة %@";
+"action_thread_copy_link_to_thread" = "انسخ رابط النقاش";
+"action_thread_view_in_room" = "اعرضه في الغرفة";
+"action_agree" = "أقبل";
+"action_view_threads" = "اعرض النقاشات";
+"failed_to_remove_widget" = "فشلت إزالة الودجة";
+"failed_to_add_widget" = "فشلت إضافة الودجة";
+"notification_listening_for_notifications" = "يستمع للإشعارات";
+"verification_request_waiting" = "ينتظر…";
+"sent_a_reaction" = "تفاعلَ بـ: %@";
+"sent_a_poll" = "استبيان";
+"send_a_sticker" = "ملصق";
+"sent_a_file" = "ملف";
+"sent_a_voice_message" = "تسجيل صوتي";
+"sent_an_audio_file" = "صوت";
+"sent_an_image" = "صورة.";
+"sent_a_video" = "فيديو.";
+"verification_conclusion_not_secure" = "ليس آمن";
+"create_space_in_progress" = "ينشئ فضاءً…";
+"send_suggestion_failed" = "فشل إرسال الاقتراح (%@)";
+"send_suggestion_sent" = "شكرًا، أُرسل اقتراحك";
+"send_suggestion_report_placeholder" = "صِف اقتراحك";
+"send_suggestion_content" = "اكتب اقتراحك أدناه.";
+"preference_system_settings" = "إعدادات النظام";
+"preference_help_summary" = "احصل على المساعدة باستخدام %@";
+"preference_voice_and_video" = "الصوت والفيديو";
+"settings_security_and_privacy" = "الأمان والخصوصية";
+"settings_preferences" = "الخيارات";
+"settings_general_title" = "عام";
+"create_room_federation_error" = "أُنشئت  الغرفة، لكن فشل إرسال بعض الدعوات بسبب:
+\n
+\n%@";
+"create_room_public_description" = "يمكن لأي شخص الإنضمام لهذه الغرفة";
+"create_room_public_title" = "علنية";
+"create_room_settings_section" = "إعدادات الغرفة";
+"create_room_topic_hint" = "الموضوع";
+"create_room_topic_section" = "موضوع الغرفة (اختياري)";
+"create_room_name_hint" = "الاسم";
+"create_room_name_section" = "اسم الغرفة";
+"create_room_action_create" = "أنشئ";
+"fab_menu_create_chat" = "رسالة مباشرة";
+"fab_menu_create_room" = "الغرف";
+"room_preview_no_preview_join" = "لا يمكنك معاينة هذه الغرفة، هل تريد الإنضمام إليها؟";
+"room_preview_not_found" = "لا يمكنك الوصول إلى هذه الغرفة حاليًا.
+\nحاول لاحقًا، أو اسأل مدير الغرفة إن كان لديك نفاذ لها.";
+"room_preview_no_preview" = "تتعذر معاية هذه الغرفة";
+"group_all_communities" = "كل المجتمعات";
+"please_wait" = "رجاء انتظر…";
+"change_room_directory_network" = "غيّر الشبكة";
+"create_new_space" = "أنشئ فضاء جديد";
+"create_new_room" = "أنشئ غرفة جديدة";
+"event_redacted_by_user_reason" = "حدث حذفه مستخدم";
+"settings_show_redacted" = "اعرض الرسائل المحذوفة";
+"event_redacted" = "حُذفت الرسالة";
+"reactions" = "الانفعالات";
+"message_view_reaction" = "اعرض الانفعالات";
+"message_add_reaction" = "أضف انفعالًا";
+"title_activity_emoji_reaction_picker" = "الانفعالات";
+"plurals.room_displayname_four_and_more_members.item_0" = "%1$@، %2$@ و%3$@";
+"plurals.room_displayname_four_and_more_members.item_1" = "%1$@، %2$@، %3$@ و%4$d آخر";
+"plurals.room_displayname_four_and_more_members.item_2" = "%1$@، %2$@، %3$@ و%4$d آخران";
+"plurals.room_displayname_four_and_more_members.item_3" = "%1$@، %2$@، %3$@ و%4$d آخرون";
+"plurals.room_displayname_four_and_more_members.item_4" = "%1$@، %2$@، %3$@ و%4$d آخرين";
+"plurals.room_displayname_four_and_more_members.item_5" = "%1$@،%2$@،%3$@ و%4$d آخرين";
+"plurals.room_title_members.item_0" = "لا أعضاء";
+"plurals.room_title_members.item_1" = "عضو واحد";
+"plurals.room_title_members.item_2" = "عضوان";
+"plurals.room_title_members.item_3" = "%d أعضاء";
+"plurals.room_title_members.item_4" = "%d عضوا";
+"plurals.room_title_members.item_5" = "%d عضو";
+"plurals.room_new_messages_notification.item_0" = "لا رسائل جديدة";
+"plurals.room_new_messages_notification.item_1" = "رسالة واحدة جديدة";
+"plurals.room_new_messages_notification.item_2" = "رسالتان جديدتان";
+"plurals.room_new_messages_notification.item_3" = "%d رسائل جديدة";
+"plurals.room_new_messages_notification.item_4" = "%d رسالة جديدة";
+"plurals.room_new_messages_notification.item_5" = "%d رسالة جديدة";
+"plurals.membership_changes.item_0" = "لا تغييرات على العضوية";
+"plurals.membership_changes.item_1" = "تغيير واحد على العضوية";
+"plurals.membership_changes.item_2" = "تغييران على العضوية";
+"plurals.membership_changes.item_3" = "%d تغييرات على العضوية";
+"plurals.membership_changes.item_4" = "%d تغييرا على العضوية";
+"plurals.membership_changes.item_5" = "%d تغيير على العضوية";
+"plurals.active_widgets.item_0" = "لا ودجات نشطة";
+"plurals.active_widgets.item_1" = "ودجة واحدة نشطة";
+"plurals.active_widgets.item_2" = "ودجتان نشطتان";
+"plurals.active_widgets.item_3" = "%d ودجات نشطة";
+"plurals.active_widgets.item_4" = "%d ودجة نشطة";
+"plurals.active_widgets.item_5" = "%d ودجة نشطة";
+"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "صفر غرفة";
+"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "غرفة واحدة";
+"plurals.notification_unread_notified_messages_in_room_rooms.item_2" = "غرفتان";
+"plurals.notification_unread_notified_messages_in_room_rooms.item_3" = "%d غرف";
+"plurals.notification_unread_notified_messages_in_room_rooms.item_4" = "%d غرفة";
+"plurals.notification_unread_notified_messages_in_room_rooms.item_5" = "%d غرفة";
+"plurals.room_details_selected.item_0" = "لا شيء محدّد";
+"plurals.room_details_selected.item_1" = "واحدة محدّدة";
+"plurals.room_details_selected.item_2" = "اثنتان محدّدتان";
+"plurals.room_details_selected.item_3" = "%d محدّدة";
+"plurals.room_details_selected.item_4" = "%d محدّدة";
+"plurals.room_details_selected.item_5" = "%d محدّدة";
+"plurals.notification_unread_notified_messages.item_0" = "لا رسائل إخطار غير مقروءة";
+"plurals.notification_unread_notified_messages.item_1" = "رسالة إخطار واحدة غير مقروءة";
+"plurals.notification_unread_notified_messages.item_2" = "رسالتا إخطار غير مقروءان";
+"plurals.notification_unread_notified_messages.item_3" = "%d رسائل إخطار غير مقروءة";
+"plurals.notification_unread_notified_messages.item_4" = "%d رسالة إخطار غير مقروءة";
+"plurals.notification_unread_notified_messages.item_5" = "%d رسالة إخطار غير مقروءة";
+"plurals.notice_room_aliases_added.item_0" = "%1$@ أضاف %2$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_added.item_1" = "%1$@ أضاف %2$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_added.item_2" = "%1$@ أضاف %2$@ كعنوانين لهذه الغرفة.";
+"plurals.notice_room_aliases_added.item_3" = "%1$@ أضاف %2$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_added.item_4" = "%1$@ أضاف %2$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_added.item_5" = "%1$@ أضاف %2$@ كعناوين لهذه الغرفة.";
+"plurals.space_people_you_know.item_0" = "%d شخص تعرفه قد انضم بالفعل";
+"plurals.space_people_you_know.item_1" = "%d شخص تعرفه قد انضم بالفعل";
+"plurals.space_people_you_know.item_2" = "%d شخصان تعرفهم قد انضموا بالفعل";
+"plurals.space_people_you_know.item_3" = "%d أشخاص تعرفهم قد انضموا بالفعل";
+"plurals.space_people_you_know.item_4" = "%d أشخاص تعرفهم قد انضموا بالفعل";
+"plurals.space_people_you_know.item_5" = "%d أشخاص تعرفهم قد انضموا بالفعل";
+"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ أضاف العنوان البديل %2$@ لهذه الغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ أضاف العنوان البديل %2$@ لهذه الغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added.item_2" = "%1$@ أضاف العنوانين البديل %2$@ لهذه الغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added.item_3" = "%1$@ أضاف العناوين البديل %2$@ لهذه الغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added.item_4" = "%1$@ أضاف العناوين البديل %2$@ لهذه الغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added.item_5" = "%1$@ أضاف العناوين البديل %2$@ لهذه الغرفة.";
+"plurals.notice_room_aliases_removed_by_you.item_0" = "أنت أزلت %1$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_removed_by_you.item_1" = "أنت أزلت %1$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_removed_by_you.item_2" = "أنت أزلت %1$@ كعنوانين لهذه الغرفة.";
+"plurals.notice_room_aliases_removed_by_you.item_3" = "أنت أزلت %1$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_removed_by_you.item_4" = "أنت أزلت %1$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_removed_by_you.item_5" = "أنت أزلت %1$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_removed.item_0" = "%1$@ أزال %2$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_removed.item_1" = "%1$@ أزال %2$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_removed.item_2" = "%1$@ أزال %2$@ كعنوانين لهذه الغرفة.";
+"plurals.notice_room_aliases_removed.item_3" = "%1$@ أزال %2$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_removed.item_4" = "%1$@ أزال %2$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_removed.item_5" = "%1$@ أزال %2$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_added_by_you.item_0" = "أنت أضفت %1$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_added_by_you.item_1" = "أنت أضفت %1$@ كعنوان لهذه الغرفة.";
+"plurals.notice_room_aliases_added_by_you.item_2" = "أنت أضفت %1$@ كعنوانين لهذه الغرفة.";
+"plurals.notice_room_aliases_added_by_you.item_3" = "أنت أضفت %1$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_added_by_you.item_4" = "أنت أضفت %1$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_aliases_added_by_you.item_5" = "أنت أضفت %1$@ كعناوين لهذه الغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "لم تضف أي رابط بديل.";
+"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "أضفت الرابط البديل %1$@ للغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added_by_you.item_2" = "أضفت الرابطين البديلين %1$@ للغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added_by_you.item_3" = "أضفت الروابط البديلة %1$@ للغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added_by_you.item_4" = "أضفت الروابط البديلة %1$@ للغرفة.";
+"plurals.notice_room_canonical_alias_alternative_added_by_you.item_5" = "أضفت الروابط البديلة %1$@ للغرفة.";
+"plurals.missed_audio_call.item_0" = "لا مكالمات فائة";
+"plurals.missed_audio_call.item_1" = "مكالمة فائة واحدة";
+"plurals.missed_audio_call.item_2" = "مكالمتان فائتتان";
+"plurals.missed_audio_call.item_3" = "%d مكالمات فائة";
+"plurals.missed_audio_call.item_4" = "%d مكالمةً فائة";
+"plurals.missed_audio_call.item_5" = "%d مكالمة فائة";

@@ -1,0 +1,70 @@
+"notice_room_invite_no_invitee" = "%@-nin dəvəti";
+"notice_room_invite" = "%1$@ dəvət etdi %2$@";
+"notice_room_invite_you" = "%1$@ sizi dəvət etdi";
+"notice_room_join" = "%1$@ qoşuldu";
+"notice_room_leave" = "%1$@ qalıb";
+"notice_room_reject" = "%1$@ dəvəti rədd etdi";
+"notice_room_remove" = "%1$@ %2$@-i xaric etdi";
+"notice_room_unban" = "%1$@ %2$@-i blokdan açdı";
+"notice_room_ban" = "%1$@ %2$@-i blokladı";
+"notice_room_withdraw" = "%1$@ %2$@-in dəvətini geri götürdü";
+"notice_avatar_url_changed" = "%1$@ avatarı dəyişdi";
+"notice_display_name_set" = "%1$@ ekran adını %2$@ olaraq təyin etdi";
+"notice_display_name_changed_from" = "%1$@ ekran adını %2$@-dan %3$@-ya dəyişdi";
+"notice_display_name_removed" = "%1$@ onların göstərilən adlarını sildi (%2$@)";
+"notice_room_topic_changed" = "%1$@ mövzunu dəyişdi: %2$@";
+"notice_room_name_changed" = "%1$@ otaq adını dəyişdirdi: %2$@";
+"notice_placed_video_call" = "%@ video zəng etdi.";
+"notice_placed_voice_call" = "%@ səsli zəng etdi.";
+"notice_answered_call" = "%@ zəngə cavab verdi.";
+"notice_ended_call" = "%@ zəng başa çatdı.";
+"notice_made_future_room_visibility" = "%1$@ gələcək otaq tarixçəsini %2$@-ə  görünən etdi";
+"notice_room_visibility_invited" = "bütün otaq üzvləri, dəvət olunduğu andan.";
+"notice_room_visibility_joined" = "bütün otaq üzvləri, qoşulduğu andan.";
+"notice_room_visibility_shared" = "bütün otaq üzvləri.";
+"notice_room_visibility_world_readable" = "hər kəs.";
+"notice_room_update" = "%@ bu otağı təkmilləşdirdi.";
+"notice_avatar_changed_too" = "(avatar da dəyişdirilib)";
+"notice_room_name_removed" = "%1$@ otaq adını sildi";
+"notice_room_topic_removed" = "%1$@ otaq mövzusunu sildi";
+"notice_room_third_party_invite" = "%1$@ otağa qoşulmaq üçün %2$@ dəvətnamə göndərdi";
+"notice_room_third_party_revoked_invite" = "%1$@ otağa qoşulmaq üçün %2$@ dəvətini ləğv etdi";
+"notice_room_third_party_registered_invite" = "%1$@ %2$@ üçün dəvəti qəbul etdi";
+"notice_crypto_unable_to_decrypt" = "** Şifrəni aça bilmir: %@ **";
+"notice_crypto_error_unknown_inbound_session_id" = "Göndərənin cihazı bu mesaj üçün açarları bizə göndərməyib.";
+"unable_to_send_message" = "Mesaj göndərmək olmur";
+"matrix_error" = "Matris xətası";
+"encrypted_message" = "Şifrəli mesaj";
+"medium_email" = "Elektron poçt ünvanı";
+"medium_phone_number" = "Telefon nömrəsi";
+"room_displayname_room_invite" = "Otağa dəvət";
+"room_displayname_two_members" = "%1$@ və %2$@";
+"room_displayname_empty_room" = "Boş otaq";
+"initial_sync_start_importing_account" = "İlkin sinxronizasiya:
+\nHesab idxal olunur…";
+"initial_sync_start_importing_account_crypto" = "İlkin sinxronizasiya:
+\nKriptografiyanın idxalı";
+"initial_sync_start_importing_account_rooms" = "İlkin sinxronizasiya:
+\nOtaqlar idxalı";
+"initial_sync_start_importing_account_joined_rooms" = "İlkin sinxronizasiya:
+\nOtaqlara daxil olmaq";
+"initial_sync_start_importing_account_invited_rooms" = "İlkin sinxronizasiya:
+\nDəvət olunmuş otaqların idxalı";
+"initial_sync_start_importing_account_left_rooms" = "İlkin sinxronizasiya:
+\nTərk olunmuş otaqların idxalı";
+"initial_sync_start_importing_account_groups" = "İlkin sinxronizasiya:
+\nİcmaların idxalı";
+"initial_sync_start_importing_account_data" = "İlkin sinxronizasiya:
+\nHesab məlumatlarının idxalı";
+"event_status_sending_message" = "Mesaj göndərilir…";
+"notice_room_invite_no_invitee_with_reason" = "%1$@-nin dəvəti. Səbəb: %2$@";
+"notice_room_invite_with_reason" = "%1$@ dəvət olunmuş %2$@. Səbəb: %3$@";
+"notice_room_invite_you_with_reason" = "%1$@ sizi dəvət etdi. Səbəb: %2$@";
+"notice_room_join_with_reason" = "%1$@ qoşuldu. Səbəb: %2$@";
+"notice_room_leave_with_reason" = "%1$@ qalıb. Səbəb: %2$@";
+"notice_room_reject_with_reason" = "%1$@ dəvəti rədd etdi. Səbəb: %2$@";
+"notice_room_remove_with_reason" = "%1$@ %2$@-i xaric etdi. Səbəb: %3$@";
+"notice_room_unban_with_reason" = "%1$@ blokdan açdı %2$@. Səbəb: %3$@";
+"notice_room_ban_with_reason" = "%1$@ blokladı %2$@. Səbəb: %3$@";
+"notice_room_third_party_registered_invite_with_reason" = "%1$@ %2$@ üçün dəvəti qəbul etdi. Səbəb: %3$@";
+"notice_room_withdraw_with_reason" = "%1$@ %2$@ dəvətini geri götürdü. Səbəb: %3$@";
