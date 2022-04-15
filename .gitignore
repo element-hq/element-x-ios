@@ -22,3 +22,5 @@ fastlane/screenshots/**/*.png
 fastlane/test_output
 
 build
+
+Tools/Scripts/element-android
