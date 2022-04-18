@@ -129,9 +129,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
             self.maxHeight = maxHeight
         }
         
-        func textViewDidChange(_ uiView: UITextView) {
-            text.wrappedValue = uiView.text
-            UITextViewWrapper.recalculateHeight(view: uiView,
+        func textViewDidChange(_ textView: UITextView) {
+            text.wrappedValue = textView.text
+            UITextViewWrapper.recalculateHeight(view: textView,
                                                 result: calculatedHeight,
                                                 maxHeight: maxHeight)
         }

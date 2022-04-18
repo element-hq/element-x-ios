@@ -36,6 +36,9 @@ struct TimelineItemList: View {
                 // No idea why previews don't work otherwise
                 ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in
                     timelineItem
+                        .contextMenu(menuItems: {
+                            context.viewState.contextMenuBuilder?(timelineItem.id)
+                        })
                         .listRowSeparator(.hidden)
                         .onAppear {
                             context.send(viewAction: .itemAppeared(id: timelineItem.id))

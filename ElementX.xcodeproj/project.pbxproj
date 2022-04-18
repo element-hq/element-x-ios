@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		01CB8ACFA5E143E89C168CA8 /* TimelineItemContextMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = B43AF03660F5FD4FFFA7F1CE /* TimelineItemContextMenu.swift */; };
 		01F4A40C1EDCEC8DC4EC9CFA /* WeakDictionary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 109C0201D8CB3F947340DC80 /* WeakDictionary.swift */; };
 		02D8DF8EB7537EB4E9019DDB /* EventBasedTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218AB05B4E3889731959C5F1 /* EventBasedTimelineItemProtocol.swift */; };
 		03B8FEA668A5B76A93113BB1 /* MemberDetailProviderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2ABC1A9B62BDB3D216E7FD /* MemberDetailProviderManager.swift */; };
@@ -254,6 +255,7 @@
 		AF25E364AE85090A70AE4644 /* AttributedStringBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilderTests.swift; sourceTree = "<group>"; };
 		B12969CEC0051BC750DA5068 /* WeakKeyDictionary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeakKeyDictionary.swift; sourceTree = "<group>"; };
 		B4173A48FD8542CD4AD3645C /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
+		B43AF03660F5FD4FFFA7F1CE /* TimelineItemContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemContextMenu.swift; sourceTree = "<group>"; };
 		B5B243E7818E5E9F6A4EDC7A /* NoticeRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeRoomTimelineView.swift; sourceTree = "<group>"; };
 		B6BDAC8895AB2B77B47703AE /* MockRoomSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRoomSummary.swift; sourceTree = "<group>"; };
 		B8108C8F0ACF6A7EB72D0117 /* RoomScreenCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenCoordinator.swift; sourceTree = "<group>"; };
@@ -541,6 +543,7 @@
 				E18CF12478983A5EB390FB26 /* MessageComposer.swift */,
 				BE6C10032A77AE7DC5AA4C50 /* MessageComposerTextField.swift */,
 				5221DFDF809142A2D6AC82B9 /* RoomScreen.swift */,
+				B43AF03660F5FD4FFFA7F1CE /* TimelineItemContextMenu.swift */,
 				804F9B0FABE093C7284CD09B /* TimelineItemList.swift */,
 				874A1842477895F199567BD7 /* TimelineView.swift */,
 				B7D3886505ECC85A06DA8258 /* Timeline */,
@@ -1062,6 +1065,7 @@
 				D013E70C8E28E43497820444 /* TextRoomMessage.swift in Sources */,
 				7963F98CDFDEAC75E072BD81 /* TextRoomTimelineItem.swift in Sources */,
 				5E0F2E612718BB4397A6D40A /* TextRoomTimelineView.swift in Sources */,
+				01CB8ACFA5E143E89C168CA8 /* TimelineItemContextMenu.swift in Sources */,
 				4D970CB606276717B43E2332 /* TimelineItemList.swift in Sources */,
 				500CB65ED116B81DA52FDAEE /* TimelineView.swift in Sources */,
 				15FEC447B7FEA62F418732AC /* ToastActivityPresenter.swift in Sources */,

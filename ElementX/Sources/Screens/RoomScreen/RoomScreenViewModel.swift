@@ -56,6 +56,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         }.store(in: &cancellables)
         
+        state.contextMenuBuilder = buildContexMenuForItemId(_:)
+        
         buildTimelineViews()
     }
     
@@ -92,5 +94,36 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.items = stateItems
+    }
+    
+    // MARK: ContextMenus
+    
+    private func buildContexMenuForItemId(_ itemId: String) -> TimelineItemContextMenu {
+        TimelineItemContextMenu(contextMenuActions: self.contextMenuActionsForItemId(itemId)) { [weak self] action in
+            self?.processContentMenuAction(action, itemId: itemId)
+        }
+    }
+    
+    private func contextMenuActionsForItemId(_ itemId: String) -> [TimelineItemContextMenuAction] {
+        guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
+              timelineItem is EventBasedTimelineItemProtocol else {
+            return []
+        }
+        
+        return [.copy, .quote]
+    }
+    
+    private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
+        guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
+              let item = timelineItem as? EventBasedTimelineItemProtocol else {
+            return
+        }
+        
+        switch action {
+        case .copy:
+            UIPasteboard.general.string = item.text
+        case .quote:
+            state.bindings.composerText = "> \(item.text)"
+        }
     }
 }

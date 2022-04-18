@@ -20,6 +20,11 @@ enum RoomScreenViewModelResult {
 
 }
 
+enum TimelineItemContextMenuAction: Hashable {
+    case copy
+    case quote
+}
+
 enum RoomScreenViewAction {
     case loadPreviousPage
     case itemAppeared(id: String)
@@ -33,6 +38,8 @@ struct RoomScreenViewState: BindableState {
     var items: [RoomTimelineViewProvider] = []
     var isBackPaginating = false
     var bindings: RoomScreenViewStateBindings
+    
+    var contextMenuBuilder: ((_ itemId: String) -> TimelineItemContextMenu)?
     
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
