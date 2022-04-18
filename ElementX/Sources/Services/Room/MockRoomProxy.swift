@@ -46,4 +46,8 @@ struct MockRoomProxy: RoomProxyProtocol {
     func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
         
     }
+    
+    func sendMessage(_ message: String, callback: ((Result<Void, RoomProxyError>) -> Void)?) {
+        
+    }
 }

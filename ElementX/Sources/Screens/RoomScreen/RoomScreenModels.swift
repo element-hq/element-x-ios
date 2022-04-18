@@ -25,10 +25,20 @@ enum RoomScreenViewAction {
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
     case linkClicked(url: URL)
+    case sendMessage
 }
 
 struct RoomScreenViewState: BindableState {
     var roomTitle: String = ""
     var items: [RoomTimelineViewProvider] = []
     var isBackPaginating = false
+    var bindings: RoomScreenViewStateBindings
+    
+    var sendButtonDisabled: Bool {
+        bindings.composerText.count == 0
+    }
+}
+
+struct RoomScreenViewStateBindings {
+    var composerText: String
 }

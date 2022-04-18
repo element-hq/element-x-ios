@@ -165,6 +165,25 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func sendMessage(_ message: String, callback: ((Result<Void, RoomProxyError>) -> Void)?) {
+        let messageContent = messageEventContentFromMarkdown(md: message)
+        let transactionId = genTransactionId()
+        
+        messageProcessingQueue.async {
+            do {
+                try self.room.send(msg: messageContent, txnId: transactionId)
+                
+                DispatchQueue.main.async {
+                    callback?(.success(()))
+                }
+            } catch {
+                DispatchQueue.main.async {
+                    callback?(.failure(.failedSendingMessage))
+                }
+            }
+        }
+    }
+    
     // MARK: - Private
     
     fileprivate func appendMessage(_ message: AnyMessage) {

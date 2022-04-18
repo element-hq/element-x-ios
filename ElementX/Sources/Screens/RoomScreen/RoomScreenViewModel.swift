@@ -38,7 +38,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         
-        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥"))
+        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥", bindings: RoomScreenViewStateBindings(composerText: "")))
         
         timelineController.callbacks.sink { [weak self] callback in
             guard let self = self else { return }
@@ -74,6 +74,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             timelineController.processItemDisappearance(id)
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
+        case .sendMessage:
+            guard state.bindings.composerText.count > 0 else {
+                return
+            }
+            
+            timelineController.sendMessage(state.bindings.composerText)
+            state.bindings.composerText = ""
         }
     }
     

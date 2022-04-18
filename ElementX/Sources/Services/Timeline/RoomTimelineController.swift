@@ -79,6 +79,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
     }
     
+    func sendMessage(_ message: String) {
+        timelineProvider.sendMessage(message)
+    }
+    
     // MARK: - Private
     
     @objc private func contentSizeCategoryDidChange() {

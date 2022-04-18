@@ -21,9 +21,23 @@ struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
     
     var body: some View {
-        TimelineView(context: context)
-            .navigationTitle(context.viewState.roomTitle)
-            .navigationBarTitleDisplayMode(.inline)
+        VStack(spacing: 0.0) {
+            TimelineView(context: context)
+                .navigationTitle(context.viewState.roomTitle)
+                .navigationBarTitleDisplayMode(.inline)
+            MessageComposer(text: $context.composerText, disabled: context.viewState.sendButtonDisabled) {
+                sendMessage()
+            }
+            .padding()
+        }
+    }
+    
+    private func sendMessage() {
+        guard !context.viewState.sendButtonDisabled else {
+            return
+        }
+        
+        context.send(viewAction: .sendMessage)
     }
 }
 
@@ -31,6 +45,12 @@ struct RoomScreen: View {
 
 struct RoomScreen_Previews: PreviewProvider {
     static var previews: some View {
+        body.preferredColorScheme(.light)
+        body.preferredColorScheme(.dark)
+    }
+    
+    @ViewBuilder
+    static var body: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             roomName: "Preview room")

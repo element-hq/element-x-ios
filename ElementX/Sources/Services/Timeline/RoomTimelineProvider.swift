@@ -28,6 +28,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }.store(in: &cancellables)
     }
     
+    var messages: [RoomMessageProtocol] {
+        roomProxy.messages
+    }
+    
     func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineError>) -> Void)?) {
         self.roomProxy.paginateBackwards(count: count) { result in
             switch result {
@@ -39,7 +43,14 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
     }
     
-    var messages: [RoomMessageProtocol] {
-        roomProxy.messages
+    func sendMessage(_ message: String) {
+        roomProxy.sendMessage(message) { result in
+            switch result {
+            case .success:
+                break
+            case .failure(let error):
+                MXLog.error("Failed sending message with error: \(error)")
+            }
+        }
     }
 }

@@ -44,7 +44,7 @@ struct MediaProvider: MediaProviderProtocol {
             
             processingQueue.async {
                 do {
-                    let imageData = try client.loadImage(source: source.underlyingSource)
+                    let imageData = try client.getMediaContent(source: source.underlyingSource)
                     
                     guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
                         MXLog.error("Invalid image data")

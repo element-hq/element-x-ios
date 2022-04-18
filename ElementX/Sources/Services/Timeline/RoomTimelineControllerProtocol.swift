@@ -27,4 +27,6 @@ protocol RoomTimelineControllerProtocol {
     func processItemAppearance(_ itemId: String)
     
     func processItemDisappearance(_ itemId: String)
+    
+    func sendMessage(_ message: String)
 }

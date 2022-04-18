@@ -30,4 +30,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func processItemDisappearance(_ itemId: String) {
         
     }
+    
+    func sendMessage(_ message: String) {
+        
+    }
 }

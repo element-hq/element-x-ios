@@ -8,6 +8,8 @@ fileGroups:
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
+  deploymentTarget:
+    iOS: "15.0"
 
 include:
   - path: ElementX/SupportingFiles/target.yml

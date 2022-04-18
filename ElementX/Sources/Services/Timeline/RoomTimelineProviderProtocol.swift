@@ -23,4 +23,6 @@ protocol RoomTimelineProviderProtocol {
     var messages: [RoomMessageProtocol] { get }
     
     func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineError>) -> Void)?)
+    
+    func sendMessage(_ message: String)
 }
