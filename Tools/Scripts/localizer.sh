@@ -34,7 +34,7 @@ for d in values* ; do
 	if grep -Fq "</string>" $XML_FILE
 	then
 		echo -e "---------------------- Start converting $LANG_CODE ----------------------"
-		FOLDER="../../../../../../../ElementX/Assets/Localizations/$LANG_CODE.lproj"
+		FOLDER="../../../../../../../ElementX/Resources/Localizations/$LANG_CODE.lproj"
 		mkdir -p $FOLDER
 		STRINGS_FILE="$FOLDER/Localizable.strings"
 		rm -rf $STRINGS_FILE

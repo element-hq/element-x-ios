@@ -1,13 +1,13 @@
 input_dir: ../../ElementX/
 output_dir: ../../ElementX/Sources/Generated/
-xcassets:  
+xcassets:
   inputs:
-    - Assets/Assets.xcassets
+    - Resources/Assets.xcassets
   outputs:
     templateName: swift5
     output: Assets.swift
 strings:
-  - inputs: Assets/Localizations/en.lproj/Localizable.strings
+  - inputs: Resources/Localizations/en.lproj/Localizable.strings
     outputs:
       templatePath: Templates/Strings/structured-swift5-element.stencil
       output: Strings.swift
@@ -15,7 +15,7 @@ strings:
         enumName: ElementL10n
         lookupFunction: tr  # used for the loc to be computed variables
         publicAccess: true
-  - inputs: Assets/Localizations/en.lproj/Untranslated.strings
+  - inputs: Resources/Localizations/en.lproj/Untranslated.strings
     outputs:
       templatePath: Templates/Strings/structured-swift5-untranslated.stencil
       output: Strings+Untranslated.swift

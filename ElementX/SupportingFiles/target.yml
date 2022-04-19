@@ -84,5 +84,5 @@ targets:
     - path: ../Sources
       excludes:
         - Screens/Templates
-    - path: ../Assets
+    - path: ../Resources
     - path: ../SupportingFiles
