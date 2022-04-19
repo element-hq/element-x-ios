@@ -2,7 +2,7 @@ input_dir: ../../ElementX/
 output_dir: ../../ElementX/Sources/Generated/
 xcassets:  
   inputs:
-    - SupportingFiles/Assets.xcassets
+    - Assets/Assets.xcassets
   outputs:
     templateName: swift5
     output: Assets.swift
