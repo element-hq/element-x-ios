@@ -7,7 +7,7 @@ xcassets:
     templateName: swift5
     output: Assets.swift
 strings:
-  - inputs: Assets/Localizations/en.lproj/Element.strings
+  - inputs: Assets/Localizations/en.lproj/Localizable.strings
     outputs:
       templatePath: Templates/Strings/structured-swift5-element.stencil
       output: Strings.swift
