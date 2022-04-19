@@ -10,16 +10,18 @@ else
 fi
 
 ./fetch_android_strings.sh
+echo -e "\n\nAndroid strings fetched.\n\n";
 
 # Run "npm install --global attranslate" before you run this script.
 
 XML_TO_STRINGS=( "--srcFormat=xml" "--targetFormat=ios-strings" "--service=sync-without-translate" )
-ANDROID_RES_FOLDER="element-android/vector/src/main/res"
 
-cd $ANDROID_RES_FOLDER
+# navigate into res folder
+cd "element-android/vector/src/main/res"
 
-# Loop through Android string values
+# Loop through Android resource directories
 for d in values* ; do
+	# parse language code after dash
 	LANG_CODE="${d#*-}"
 	if [ $LANG_CODE == "values" ]
 	then
@@ -35,23 +37,24 @@ for d in values* ; do
 	then
 		echo -e "---------------------- Start converting $LANG_CODE ----------------------"
 		FOLDER="../../../../../../../ElementX/Resources/Localizations/$LANG_CODE.lproj"
+		# create folder with intermediate directories
 		mkdir -p $FOLDER
 		STRINGS_FILE="$FOLDER/Localizable.strings"
+		# remove old strings file before generating
 		rm -rf $STRINGS_FILE
+		# generate new strings file
 		attranslate "${XML_TO_STRINGS[@]}" --srcFile=$XML_FILE --targetFile=$STRINGS_FILE --srcLng=$LANG_CODE --targetLng=$LANG_CODE
-		sed -i '' 's/""/"/g' $STRINGS_FILE
-		sed -i '' 's/\\";/\\"";/g' $STRINGS_FILE
-		sed -i '' 's/%s/%@/g' $STRINGS_FILE
-		sed -i '' 's/$s/$@/g' $STRINGS_FILE
-		sed -i '' 's/= ";/= "";/g' $STRINGS_FILE
-		sed -i '' 's/"\.";/\.";/g' $STRINGS_FILE
-		sed -i '' 's/"bot"/\\"bot\\""/g' $STRINGS_FILE
-		sed -i '' 's/\${app_name}/%@/g' $STRINGS_FILE
-		sed -i '' 's/\$ {app_name}/%@/g' $STRINGS_FILE
-		# delete empty lines
-		sed -i '' '/^$/d' $STRINGS_FILE
-		# delete not translated lines
-		sed -i '' '/"";/d' $STRINGS_FILE
+		sed -i '' 's/""/"/g' $STRINGS_FILE							# replace double quotes with single quote
+		sed -i '' 's/\\";/\\"";/g' $STRINGS_FILE				# replace strings ending with quotes properly
+		sed -i '' 's/%s/%@/g' $STRINGS_FILE							# replace C-style format specifiers to @ specifiers
+		sed -i '' 's/$s/$@/g' $STRINGS_FILE							#	replace C-style ordered format specifiers to ordered @ specifiers
+		sed -i '' 's/= ";/= "";/g' $STRINGS_FILE				# replace empty translations properly
+		sed -i '' 's/"\.";/\.";/g' $STRINGS_FILE				#	replace strings ending with dot properly
+		sed -i '' 's/"bot"/\\"bot\\""/g' $STRINGS_FILE	# ridiculous, to escape quotes in "Mensagens enviadas por "bot"; string specifically
+		sed -i '' 's/\${app_name}/%@/g' $STRINGS_FILE		# replace ${app_name} specifier to @ specifier
+		sed -i '' 's/\$ {app_name}/%@/g' $STRINGS_FILE	# replace $ {app_name} specifier to @ specifier
+		sed -i '' '/^$/d' $STRINGS_FILE									# delete empty lines
+		sed -i '' '/"";/d' $STRINGS_FILE								# delete lines not translated
 		# lint the strings file
 		plutil -lint $STRINGS_FILE
 		echo -e "---------------------- Finish converting $LANG_CODE ----------------------\n"
