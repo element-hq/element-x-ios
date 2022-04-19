@@ -27,6 +27,8 @@ internal enum Asset {
   }
   internal enum Images {
     internal static let appLogo = ImageAsset(name: "Images/app-logo")
+    internal static let timelineComposerSendMessage = ImageAsset(name: "Images/timelineComposerSendMessage")
+    internal static let timelineScrollToBottom = ImageAsset(name: "Images/timelineScrollToBottom")
   }
 }
 // swiftlint:enable identifier_name line_length nesting type_body_length type_name
