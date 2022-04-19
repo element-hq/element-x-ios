@@ -11,6 +11,15 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private var appCoordinator: AppCoordinator!
+
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+
+        //  fixme: Use `Bundle.elementLanguage = ".."` when we have the functionality
+        //  use `en` as fallback language
+        Bundle.elementFallbackLanguage = "en"
+
+        return true
+    }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         if isRunningUnitTests {
