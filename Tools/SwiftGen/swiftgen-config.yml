@@ -9,15 +9,16 @@ xcassets:
 strings:
   - inputs: Assets/Localizations/en.lproj/Element.strings
     outputs:
-      templatePath: Templates/Strings/flat-swift4-vector.stencil
+      templatePath: Templates/Strings/structured-swift5-element.stencil
       output: Strings.swift
       params:
-        className: ElementL10n
+        enumName: ElementL10n
+        lookupFunction: tr  # used for the loc to be computed variables
         publicAccess: true
   - inputs: Assets/Localizations/en.lproj/Untranslated.strings
     outputs:
-      templatePath: Templates/Strings/flat-swift4-vector-untranslated.stencil
-      output: UntranslatedStrings.swift
+      templatePath: Templates/Strings/structured-swift5-untranslated.stencil
+      output: Strings+Untranslated.swift
       params:
-        className: ElementL10n
+        enumName: ElementL10n
         publicAccess: true

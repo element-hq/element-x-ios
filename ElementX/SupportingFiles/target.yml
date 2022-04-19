@@ -67,6 +67,7 @@ targets:
       script: |
         export PATH="$PATH:/opt/homebrew/bin"
         if which swiftgen >/dev/null; then
+            swiftgen config lint
             swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml
         else
             echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"

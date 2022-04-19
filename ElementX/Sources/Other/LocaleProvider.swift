@@ -12,19 +12,30 @@ import Foundation
  Used to provide an application/target specific locale.
  */
 protocol LocaleProviderType {
-    static var locale: Locale? { get }
+    /// Returns the locale specified with `Bundle.elementLanguage` if provided, otherwise `current`.
+    static var preferredLocale: Locale { get }
+
+    /// Returns the locale specified with `Bundle.elementFallbackLanguage` if provided, otherwise `preferredLocale`.
+    static var fallbackLocale: Locale { get }
 }
 
 /**
- Provides the locale logic for Riot app based on mx languages.
+ Provides the locale logic for Element app based on languages.
  */
 class LocaleProvider: LocaleProviderType {
-    static var locale: Locale? {
-        if let localeIdentifier = Bundle.mxk_language() {
-            return Locale(identifier: localeIdentifier)
-        } else if let fallbackLocaleIdentifier = Bundle.mxk_fallbackLanguage() {
-            return Locale(identifier: fallbackLocaleIdentifier)
+
+    static var preferredLocale: Locale {
+        guard let localeIdentifier = Bundle.elementLanguage else {
+            return .current
         }
-        return nil
+        return Locale(identifier: localeIdentifier)
     }
+
+    static var fallbackLocale: Locale {
+        guard let fallbackLocaleIdentifier = Bundle.elementFallbackLanguage else {
+            return Self.preferredLocale
+        }
+        return Locale(identifier: fallbackLocaleIdentifier)
+    }
+
 }
