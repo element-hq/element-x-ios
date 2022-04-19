@@ -5660,12 +5660,7 @@ public enum ElementL10n {
 
 extension ElementL10n {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
-    var set = Set<String>()
-    let languages = ([Bundle.elementLanguage] +
-      Locale.preferredLanguages +
-      [Bundle.elementFallbackLanguage])
-      .compactMap { $0 }
-      .filter { set.insert($0).inserted }
+    let languages = Bundle.preferredLanguages
 
     for language in languages {
       let translation = trIn(language, table, key, args)
