@@ -36,7 +36,7 @@ for d in values* ; do
 		echo -e "---------------------- Start converting $LANG_CODE ----------------------"
 		FOLDER="../../../../../../../ElementX/Assets/Localizations/$LANG_CODE.lproj"
 		mkdir -p $FOLDER
-		STRINGS_FILE="$FOLDER/Element.strings"
+		STRINGS_FILE="$FOLDER/Localizable.strings"
 		rm -rf $STRINGS_FILE
 		attranslate "${XML_TO_STRINGS[@]}" --srcFile=$XML_FILE --targetFile=$STRINGS_FILE --srcLng=$LANG_CODE --targetLng=$LANG_CODE
 		sed -i '' 's/""/"/g' $STRINGS_FILE
