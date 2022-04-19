@@ -32,18 +32,33 @@ public extension Bundle {
         return Bundle(url: lprojURL)
     }
 
-    /// Whether or not the bundle is the ElementShareExtension.
-    var isShareExtension: Bool {
-        bundleURL.lastPathComponent.contains("ElementShareExtension.appex")
-    }
-
     /// Preferred app language for translations. Takes the highest priority in translations. The priority list for translations:
     /// - `Bundle.elementLanguage`
     /// - `Locale.preferredLanguages`
     /// - `Bundle.elementFallbackLanguage`
-    static var elementLanguage: String?
+    static var elementLanguage: String? {
+        didSet {
+            preferredLanguages = calculatePreferredLanguages()
+        }
+    }
 
     /// Preferred fallback language for translations. Only used for strings not translated neither to `elementLanguage` nor to one of the user's preferred languages.
-    static var elementFallbackLanguage: String?
+    static var elementFallbackLanguage: String? {
+        didSet {
+            preferredLanguages = calculatePreferredLanguages()
+        }
+    }
+
+    /// Preferred languages in the priority order.
+    static private(set) var preferredLanguages: [String] = calculatePreferredLanguages()
+
+    private static func calculatePreferredLanguages() -> [String] {
+        var set = Set<String>()
+        return ([Bundle.elementLanguage] +
+                Locale.preferredLanguages +
+                [Bundle.elementFallbackLanguage])
+        .compactMap { $0 }
+        .filter { set.insert($0).inserted }
+    }
 
 }
