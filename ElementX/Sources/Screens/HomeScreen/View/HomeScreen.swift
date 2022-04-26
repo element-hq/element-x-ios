@@ -22,6 +22,8 @@ struct HomeScreen: View {
     
     // MARK: Views
     
+    
+    
     var body: some View {
         VStack(spacing: 16.0) {
             if context.viewState.isLoadingRooms {

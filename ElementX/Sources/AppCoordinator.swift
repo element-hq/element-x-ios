@@ -21,14 +21,14 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let memberDetailProviderManager: MemberDetailProviderManager
     
     private var loadingActivity: Activity?
-    private var errorActivity: Activity?
+    private var errorActivity:Activity?
     
     var childCoordinators: [Coordinator] = []
     
     init() {
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
-        window = UIWindow(frame: UIScreen.main.bounds)
+        window = UIWindow(frame:   UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         
         navigationRouter = NavigationRouter(navigationController: mainNavigationController)
@@ -37,6 +37,9 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
+            
+            
+            
         }
         
         keychainController = KeychainController(identifier: bundleIdentifier)
@@ -65,6 +68,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didFailWithError error: AuthenticationCoordinatorError) {
         hideLoadingIndicator()
         showLoginErrorToast()
+        
+        
     }
     
     func authenticationCoordinatorDidSetupUserSession(_ authenticationCoordinator: AuthenticationCoordinator) {

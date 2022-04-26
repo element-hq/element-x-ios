@@ -46,6 +46,3 @@ custom_rules:
     match_kinds: identifier
     message: "MXLog should be used instead of os_log()"
     severity: error
-
-
-
