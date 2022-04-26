@@ -1,0 +1,20 @@
+name: Danger CI
+
+on: [pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Danger
+    steps:
+      - uses: actions/checkout@v2
+
+      - uses: actions/cache@v2
+        with: 
+          path: ~/.danger-swift
+          key: danger-swift-cache-key
+
+      - name: Danger
+        uses: docker://ghcr.io/danger/danger-swift-with-swiftlint:3.12.3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

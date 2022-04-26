@@ -10,6 +10,7 @@ options:
   createIntermediateGroups: true
   deploymentTarget:
     iOS: "15.0"
+    macOS: "12.0"
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
