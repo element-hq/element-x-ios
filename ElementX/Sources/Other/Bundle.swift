@@ -26,9 +26,9 @@ public extension Bundle {
 
     /// Get an lproj language bundle from the main app bundle.
     /// - Parameter language: The language to try to load.
-    /// - Returns: The lproj bundle if found otherwise the `app` bundle.
+    /// - Returns: The lproj bundle if found otherwise nil.
     @objc static func lprojBundle(for language: String) -> Bundle? {
-        guard let lprojURL = Bundle.app.url(forResource: language, withExtension: "lproj") else { return .app }
+        guard let lprojURL = Bundle.app.url(forResource: language, withExtension: "lproj") else { return nil }
         return Bundle(url: lprojURL)
     }
 

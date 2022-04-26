@@ -66,6 +66,13 @@ class LocalizationTests: XCTestCase {
 
         XCTAssertEqual(ElementL10n.membershipChanges(1), "1 üyelik değişikliği")
         XCTAssertEqual(ElementL10n.membershipChanges(2), "2 adet üyelik değişikliği")
+
+        //  set app language to Polish
+        Bundle.elementLanguage = "pl"
+
+        XCTAssertEqual(ElementL10n.seconds(1), "1 sekunda")     //  one
+        XCTAssertEqual(ElementL10n.seconds(2), "2 sekundy")     //  few
+        XCTAssertEqual(ElementL10n.seconds(5), "5 sekund")      //  many, other
     }
 
     /// Test plurals fallback language for a language not supported at all

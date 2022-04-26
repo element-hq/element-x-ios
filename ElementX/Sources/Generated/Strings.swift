@@ -5411,7 +5411,7 @@ extension ElementL10n {
       return key
     }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
-    return String.localizedStringWithFormat(format, args)
+    return String(format: format, locale: Locale(identifier: language), arguments: args)
   }
 }
 
