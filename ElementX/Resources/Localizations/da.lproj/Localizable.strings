@@ -130,8 +130,7 @@
 "call_error_user_not_responding" = "Den anden side tog den ikke.";
 "permissions_rationale_popup_title" = "Information";
 "permissions_rationale_msg_record_audio" = "%@ skal bruge tilladelse til at bruge din mikrofon for at lave lydopkald.";
-"permissions_rationale_msg_camera_and_audio" = "%@ skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.
-Giv venligst tilladelse ved næste pop-up for at lave opkaldet.";
+"permissions_rationale_msg_camera_and_audio" = "%@ skal bruge tilladelse til at bruge dit kamera og din mikrofon for at lave videoopkald.Giv venligst tilladelse ved næste pop-up for at lave opkaldet.";
 "yes" = "JA";
 "no" = "NEJ";
 "_continue" = "Fortsæt";
@@ -148,8 +147,7 @@ Giv venligst tilladelse ved næste pop-up for at lave opkaldet.";
 "room_participants_action_ignore" = "Skjul alle beskeder fra denne bruger";
 "room_participants_action_unignore" = "Vis alle beskeder fra denne bruger";
 "room_participants_action_mention" = "Nævn";
-"room_participants_power_level_prompt" = "Du vil ikke kunne omgøre denne ændring da du forfremmer brugeren til at have samme magt niveau som dig selv.
-Er du sikker?";
+"room_participants_power_level_prompt" = "Du vil ikke kunne omgøre denne ændring da du forfremmer brugeren til at have samme magt niveau som dig selv.Er du sikker?";
 "room_one_user_is_typing" = "%@ skriver…";
 "room_two_users_are_typing" = "%1$@ & %2$@  skriver…";
 "room_many_users_are_typing" = "%1$@, %2$@ og andre skriver…";
@@ -265,9 +263,3 @@ Er du sikker?";
 "notice_room_created" = "%1$@ oprettede rummet";
 "notice_room_invite_no_invitee_by_you" = "Din invitation";
 "link_this_email_settings_link" = "Forbind denne email med din konto";
-"plurals.membership_changes.item_0" = "1 medlemsændring";
-"plurals.membership_changes.item_1" = "%d medlemsændringer";
-"plurals.room_title_members.item_0" = "1 medlem";
-"plurals.room_title_members.item_1" = "%d medlemmer";
-"plurals.room_new_messages_notification.item_0" = "1 ny meddelelse";
-"plurals.room_new_messages_notification.item_1" = "%d nye meddelelser";

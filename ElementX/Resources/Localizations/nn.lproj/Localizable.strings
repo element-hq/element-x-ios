@@ -131,7 +131,7 @@
 "login_error_bad_json" = "Feilformatert JSON";
 "login_error_not_json" = "Innehaldt ikkje ein gyldig JSON";
 "login_error_limit_exceeded" = "For mange førespurnader vart sendt";
-"e2e_re_request_encryption_key.u_0" = "Etterspør på nytt krypteringsnøkklar";
+"e2e_re_request_encryption_key" = "<u>Etterspør på nytt krypteringsnøkklar</u> frå dei andre einingane dine.";
 "e2e_re_request_encryption_key_dialog_content" = "Start %@ på ein annan eining som kan dekryptere meldingen, slik at den kan sende nøkklane til denne sesjonen";
 "compression_opt_list_original" = "Original";
 "compression_opt_list_large" = "Stor";
@@ -146,9 +146,7 @@
 "call_error_user_not_responding" = "Den andre parten tok ikkje samtalen.";
 "permissions_rationale_popup_title" = "Info";
 "permissions_rationale_msg_record_audio" = "%@ treng tilgang til mikrofonen din for å utføra talesamtalar.";
-"permissions_rationale_msg_camera_and_audio" = "%@ treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.
-\n
-\nGjer vel og gjev tilgang på sprettvindauget som kjem for å utføra samtalen.";
+"permissions_rationale_msg_camera_and_audio" = "%@ treng tilgang til kameraet og mikrofonen din for å utføra videosamtalar.\n\nGjer vel og gjev tilgang på sprettvindauget som kjem for å utføra samtalen.";
 "yes" = "JA";
 "no" = "NEI";
 "_continue" = "Gå fram";
@@ -166,8 +164,7 @@
 "room_participants_action_ignore" = "Gøym alle meldingar frå denne brukaren";
 "room_participants_action_unignore" = "Syn alle meldingar frå denne brukaren";
 "room_participants_action_mention" = "Nemn";
-"room_participants_power_level_prompt" = "Du vil ikkje kunne angre denne endringa, då du promoterar brukaren til å ha same tilgangsnivå som deg sjølv.
-\nEr du sikker på dette\?";
+"room_participants_power_level_prompt" = "Du vil ikkje kunne angre denne endringa, då du promoterar brukaren til å ha same tilgangsnivå som deg sjølv.\nEr du sikker på dette\?";
 "room_participants_ban_prompt_msg" = "Er du trygg på at du vil stengja brukaren ute frå samtala\?";
 "room_one_user_is_typing" = "%@ skriv…";
 "room_two_users_are_typing" = "%1$@ og %2$@ skriv…";
@@ -361,8 +358,7 @@
 "dialog_user_consent_content" = "For å halda fram med å bruka %1$@-heimtenaren må du sjå over og seia deg einig i vilkåret og føresetnader.";
 "dialog_user_consent_submit" = "Sjå over no";
 "deactivate_account_title" = "Deaktiver konto";
-"deactivate_account_content.b_0" = "Denne handlinga kan ikkje gjerast om.";
-"deactivate_account_content.b_1" = "gjer i utgangspunktet ikkje at vi gløymer meldingane du har send.";
+"deactivate_account_content" = "Dette gjer at brukaren din vert ubrukeleg til evig tid. Du kjem ikkje til å kunna logga inn, og ingen andre kjem til å kunna melde seg inn med den gamle brukar-IDen din. Brukaren din forlét òg alle rom han er i, og brukardetaljane dine vil verta fjerna frå identitetstenaren. <b>Denne handlinga kan ikkje gjerast om.</b>Å avliva brukaren din <b>gjer i utgangspunktet ikkje at vi gløymer meldingane du har send.</b> Viss du vil at vi skal gløyma meldingane dine, ver venleg og kryss av i firkanten under.Meldingssynlegheit på Matrix liknar på epost. At vi gløymer meldingane dine tyder at meldingar du har send ikkje vil verta delt med nye, ikkje-innmeldte brukarar, men brukare som er meldt på som allereie har tilgang til desse meldingane vil fortsatt kunne sjå kopien deira.";
 "deactivate_account_delete_checkbox" = "Ver venleg og gløym alle meldingane eg har send når brukarkontoen min vert deaktivert (Åtvaring: dette gjer at framtidige brukarar ikkje får eit fullstendig oversyn av samtalene)";
 "deactivate_account_submit" = "Deaktiver konto";
 "error_empty_field_your_password" = "Ver venleg og skriv passordet ditt inn.";
@@ -372,9 +368,9 @@
 "room_tombstone_predecessor_link" = "Klikk her for å sjå gamle meldingar";
 "system_alerts_header" = "Systemvarsel";
 "resource_limit_contact_admin" = "kontakt tenesteadministratoren din";
-"resource_limit_soft_default.b_0" = "nokre brukarar vil ikkje kunna logga inn";
+"resource_limit_soft_default" = "Heimtenaren har truffe ei av ressursgrensene sine so <b>nokre brukarar vil ikkje kunna logga inn</b>.";
 "resource_limit_hard_default" = "Heimtenaren har forbigått ei av ressursgrensene sine.";
-"resource_limit_soft_mau.b_0" = "nokre brukarar vil ikkje kunna logga inn";
+"resource_limit_soft_mau" = "Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar, so <b>nokre brukarar vil ikkje kunna logga inn</b>.";
 "resource_limit_hard_mau" = "Heimtenaren har truffe den Månadlege Grensa si for Aktive Brukarar.";
 "resource_limit_soft_contact" = "Ver venleg og %@ for å heva grensa.";
 "resource_limit_hard_contact" = "Ver venleg og %@ for å halda fram med å bruka tenesten.";
@@ -403,18 +399,15 @@
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Éin eller fleire prøvar gjekk galne. Gjer vel og send inn ei feilmelding so me kann sjå nærare på det.";
 "settings_troubleshoot_test_system_settings_title" = "Systeminnstillingar.";
 "settings_troubleshoot_test_system_settings_success" = "Varsel er skrudde på i systeminnstillingane.";
-"settings_troubleshoot_test_system_settings_failed" = "Varsel er skrudde av i systeminnstillingane.
-\nGjer vel og sjå på systeminnstillingane.";
+"settings_troubleshoot_test_system_settings_failed" = "Varsel er skrudde av i systeminnstillingane.\nGjer vel og sjå på systeminnstillingane.";
 "open_settings" = "Opna innstillingane";
 "settings_troubleshoot_test_account_settings_title" = "Brukarinnstillingar.";
 "settings_troubleshoot_test_account_settings_success" = "Varsel er skrudde på fyr brukaren din.";
-"settings_troubleshoot_test_account_settings_failed" = "Varsel er skrudde av fyr brukaren din.
-\nGjer vel og sjå på brukarinnstillingane.";
+"settings_troubleshoot_test_account_settings_failed" = "Varsel er skrudde av fyr brukaren din.\nGjer vel og sjå på brukarinnstillingane.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Skru på";
 "settings_troubleshoot_test_device_settings_title" = "Sesjonsinnstillingar.";
 "settings_troubleshoot_test_device_settings_success" = "Varslingar er aktivert for denne sesjonen.";
-"settings_troubleshoot_test_device_settings_failed" = "Varslingar er deaktivert for denne sesjonen.
-\nSjekk %@-innstillingane.";
+"settings_troubleshoot_test_device_settings_failed" = "Varslingar er deaktivert for denne sesjonen.\nSjekk %@-innstillingane.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Skru på";
 "title_activity_keys_backup_setup" = "Sikkerheitskopi av nøkkel";
 "title_activity_keys_backup_restore" = "Bruk sikkerheitskopiering av nøkkel";
@@ -434,8 +427,7 @@
 "login_error_no_homeserver_found" = "Dette er ikkje ei gyldig Matrix-tenaradresse";
 "login_error_homeserver_not_found" = "Klarar ikkje å nå ein heimetenar på denne URL\'en, sjekk at den er korrekt";
 "settings_integrations" = "Integrasjonar";
-"settings_integrations_summary" = "Bruk ein integrasjonshandterar (Integration Manager) for å handtere botar, bruer, tillegg og klistermerkepakker. 
-\nIntegrasjonshandterarar hentar konfigurasjonsdata, og kan endra tillegg, senda rominvitasjonar og sette tilgangsnivå på vegne av deg.";
+"settings_integrations_summary" = "Bruk ein integrasjonshandterar (Integration Manager) for å handtere botar, bruer, tillegg og klistermerkepakker. \nIntegrasjonshandterarar hentar konfigurasjonsdata, og kan endra tillegg, senda rominvitasjonar og sette tilgangsnivå på vegne av deg.";
 "settings_cryptography_manage_keys" = "Handtering av kryptografiske nøkklar";
 "settings_other_third_party_notices" = "Anna informasjon frå tredjepart";
 "verification_conclusion_ok_notice" = "Meldingar med denne brukaren er ende-til-ende kryptert, dei kan ikkje bli lesne av tredje part.";
@@ -470,8 +462,7 @@
 "room_member_power_level_admin_in" = "Administrator i %1$@";
 "room_member_power_level_moderator_in" = "Moderator i %1$@";
 "room_member_power_level_custom_in" = "Tilpassa (%1$d) i %2$@";
-"verify_cannot_cross_sign" = "Denne økta klarde ikkje å dele denne verifikasjonen med dine andre økter.
-\nVerifikasjonsdata er lagra lokalt, og vil bli delt i ein framtidig versjon av programmet.";
+"verify_cannot_cross_sign" = "Denne økta klarde ikkje å dele denne verifikasjonen med dine andre økter.\nVerifikasjonsdata er lagra lokalt, og vil bli delt i ein framtidig versjon av programmet.";
 "settings_category_timeline" = "Historikk";
 "settings_send_markdown_summary" = "Formater meldingar skrivne med Markdown-syntaksen før dei blir sendt. Dette gjer at ein kan t.d. bruke stjerne(*) for å vise tekst i kursiv.";
 "settings_send_markdown" = "Bruk Markdown-formatering";
@@ -508,17 +499,3 @@
 "action_reset" = "Nullstill";
 "bottom_action_people_x" = "Folk";
 "fab_menu_create_chat" = "Folk";
-"plurals.membership_changes.item_0" = "%d endring i medlemskap";
-"plurals.membership_changes.item_1" = "%d endringar i medlemskap";
-"plurals.room_title_members.item_0" = "%d medlem";
-"plurals.room_title_members.item_1" = "%d medlem";
-"plurals.room_new_messages_notification.item_0" = "%d ny melding";
-"plurals.room_new_messages_notification.item_1" = "%d nye meldingar";
-"plurals.notification_unread_notified_messages.item_0" = "%d ulest varsla melding";
-"plurals.notification_unread_notified_messages.item_1" = "%d uleste varsla meldingar";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d rom";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d rom";
-"plurals.active_widgets.item_0" = "%d widget på";
-"plurals.active_widgets.item_1" = "%d widgetar på";
-"plurals.room_details_selected.item_0" = "%d valt";
-"plurals.room_details_selected.item_1" = "%d valde";

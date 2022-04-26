@@ -76,9 +76,7 @@
 "option_take_photo_video" = "Video kaydet veya fotoğraf çek";
 "option_take_photo" = "Fotoğraf çek";
 "option_take_video" = "Video kaydet";
-"no_sticker_application_dialog_content" = "Etkin bir çıkartma paketine sahip değilsin.
-\n
-\nBirkaç tane eklemek ister misin\?";
+"no_sticker_application_dialog_content" = "Etkin bir çıkartma paketine sahip değilsin.\n\nBirkaç tane eklemek ister misin\?";
 "error_no_external_application_found" = "Üzgünüm, bu eylemi gerçekleştirebilecek harici bir uygulama bulunamadı.";
 "auth_login" = "Giriş yap";
 "auth_submit" = "Tamam";
@@ -120,7 +118,7 @@
 "login_error_bad_json" = "Hatalı JSON";
 "login_error_not_json" = "Geçerli JSON içermiyor";
 "login_error_limit_exceeded" = "Çok fazla istek gönderildi";
-"e2e_re_request_encryption_key.u_0" = "şifreleme anahtarlarını tekrar iste";
+"e2e_re_request_encryption_key" = "Diğer oturumlardan <u>şifreleme anahtarlarını tekrar iste</u>.";
 "e2e_re_request_encryption_key_dialog_content" = "%@\'i mesajları çözebilen farklı bir cihazda açarsanız ordan anahtarları bu oturuma gönderebilirsiniz.";
 "compression_opt_list_original" = "Orijinal";
 "compression_opt_list_large" = "Büyük";
@@ -140,9 +138,7 @@
 "call_error_user_not_responding" = "Uzak sunucu alınamadı.";
 "permissions_rationale_popup_title" = "Bilgilendirme";
 "permissions_rationale_msg_record_audio" = "%@\'in sesli arama yapması için mikrofonunuza erişmeye ihtiyacı var.";
-"permissions_rationale_msg_camera_and_audio" = "%@\'in görüntülü arama yapması için kameranıza ve mikrofonunuza erişmeye ihtiyacı var.
-\n
-\nLütfen çıkacak ekranda kamera ve mikrofon erişimine izin verin.";
+"permissions_rationale_msg_camera_and_audio" = "%@\'in görüntülü arama yapması için kameranıza ve mikrofonunuza erişmeye ihtiyacı var.\n\nLütfen çıkacak ekranda kamera ve mikrofon erişimine izin verin.";
 "yes" = "EVET";
 "no" = "HAYIR";
 "_continue" = "Devam et";
@@ -160,8 +156,7 @@
 "room_participants_action_ignore" = "Bu kullanıcının tüm mesajlarını gizle";
 "room_participants_action_unignore" = "Bu kullanıcının tüm mesajlarını göster";
 "room_participants_action_mention" = "Bahset";
-"room_participants_power_level_prompt" = "Bu işlemin geri dönüşü yok kullanıcıyı kendin ile aynı erişim seviyesine getiriyorsun.
-\nEmin misin\?";
+"room_participants_power_level_prompt" = "Bu işlemin geri dönüşü yok kullanıcıyı kendin ile aynı erişim seviyesine getiriyorsun.\nEmin misin\?";
 "room_participants_ban_prompt_msg" = "Kullanıcıyı engellemek onları bu odadan çıkaracak ve tekrar katılmalarını engelleyecektir.";
 "room_one_user_is_typing" = "%@ yazıyor…";
 "room_two_users_are_typing" = "%1$@ & %2$@ yazıyor…";
@@ -200,53 +195,40 @@
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Bir ya da birden fazla test hata verdi, lütfen araştırmamız için bize hata raporu gönderin.";
 "settings_troubleshoot_test_system_settings_title" = "Sistem Ayarları.";
 "settings_troubleshoot_test_system_settings_success" = "Bildirimler sistem ayarlarında etkinleştirilmiş.";
-"settings_troubleshoot_test_system_settings_failed" = "Bildirimler sistem ayarlarında etkin değil.
-\nLütfen sistem ayarlarınızı gözden geçirin.";
+"settings_troubleshoot_test_system_settings_failed" = "Bildirimler sistem ayarlarında etkin değil.\nLütfen sistem ayarlarınızı gözden geçirin.";
 "open_settings" = "Ayarları Aç";
 "settings_troubleshoot_test_account_settings_title" = "Hesap Ayarları.";
 "settings_troubleshoot_test_account_settings_success" = "Bildirimler hesabın için etkin durumda.";
-"settings_troubleshoot_test_account_settings_failed" = "Bildirimler hesabın için etkin durumda değil.
-\nLütfen hesap ayarlarınızı gözden geçirin.";
+"settings_troubleshoot_test_account_settings_failed" = "Bildirimler hesabın için etkin durumda değil.\nLütfen hesap ayarlarınızı gözden geçirin.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Etkinleştir";
 "settings_troubleshoot_test_device_settings_title" = "Oturum Ayarları";
 "settings_troubleshoot_test_device_settings_success" = "Bildirimler bu oturum için etkinleştirilmiş.";
-"settings_troubleshoot_test_device_settings_failed" = "Bildirimler bu oturum için etkin değil.
-\nLütfen %@ ayarlarını gözden geçirin.";
+"settings_troubleshoot_test_device_settings_failed" = "Bildirimler bu oturum için etkin değil.\nLütfen %@ ayarlarını gözden geçirin.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Etkinleştir";
 "settings_troubleshoot_test_bing_settings_title" = "Özel Ayarlar";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Bazı mesajların türü sessize ayarlanmıştır (sessiz bir bildirim gönderecektir).";
 "settings_troubleshoot_test_bing_settings_failed" = "Bazı bildirimler özel ayarlarınızda devre dışı durumda.";
 "settings_troubleshoot_test_play_services_title" = "Play Hizmetlerini Gözden Geçir";
 "settings_troubleshoot_test_play_services_success" = "Google Play Hizmetleri APK\'sı kullanılabilir ve güncel.";
-"settings_troubleshoot_test_play_services_failed" = "%@ bildirimleri göndermek için Google Play Hizmetleri kullanır, ancak düzgün ayarlanmış görünmüyor:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ bildirimleri göndermek için Google Play Hizmetleri kullanır, ancak düzgün ayarlanmış görünmüyor:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Google Play Hizmetlerini Düzelt";
 "settings_troubleshoot_test_fcm_title" = "Firebase Belirteci";
-"settings_troubleshoot_test_fcm_success" = "FCM belirteci başarıyla alındı:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "FCM belirtecini alırken hata meydana geldi:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nBu hata %@\'in kontrolü dışında Google\'a bağlı ve cihazın çok fazla FCM ile kayıtlı uygulaması olduğunu belirtiyor. Bu hata sadece çok fazla uygulama kullanıldığı zaman olur ve genelde ortalama kullanıcıyı etkilemez.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nBu hata %@\'in kontrolü dışında ve birçok nedene bağlı olabilir. Belki sonra denediğin zaman çalışır. Ayrıca Google Play Hizmetlerinin veri kullanımı konusunda sistem ayarlarında kısıtlanmamış ya da cihaz saatinin doğru olduğundan emin olun, bu hata özel ROM\'larda meydana gelebiliyor.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nBu hata %@\'in kontrolü dışında. Telefonda hiç Google hesabı yok. Lütfen hesap yöneticisini açın ve bir tane Google hesabı ekleyin.";
+"settings_troubleshoot_test_fcm_success" = "FCM belirteci başarıyla alındı:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "FCM belirtecini alırken hata meydana geldi:\n%1$@";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nBu hata %@\'in kontrolü dışında Google\'a bağlı ve cihazın çok fazla FCM ile kayıtlı uygulaması olduğunu belirtiyor. Bu hata sadece çok fazla uygulama kullanıldığı zaman olur ve genelde ortalama kullanıcıyı etkilemez.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nBu hata %@\'in kontrolü dışında ve birçok nedene bağlı olabilir. Belki sonra denediğin zaman çalışır. Ayrıca Google Play Hizmetlerinin veri kullanımı konusunda sistem ayarlarında kısıtlanmamış ya da cihaz saatinin doğru olduğundan emin olun, bu hata özel ROM\'larda meydana gelebiliyor.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nBu hata %@\'in kontrolü dışında. Telefonda hiç Google hesabı yok. Lütfen hesap yöneticisini açın ve bir tane Google hesabı ekleyin.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Hesap ekle";
 "settings_troubleshoot_test_token_registration_title" = "Belirteç Kayıtı";
 "settings_troubleshoot_test_token_registration_success" = "FCM belirteci başarı ile Ana Sunucuya kaydedildi.";
-"settings_troubleshoot_test_token_registration_failed" = "FCM belirteci Ana Sunucuya kaydedilirken hata:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "FCM belirteci Ana Sunucuya kaydedilirken hata:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Açılışta başlat";
 "settings_troubleshoot_test_service_boot_success" = "Hizmet cihaz yeniden başlatıldığında çalıştırılacak.";
 "settings_troubleshoot_test_service_boot_failed" = "Hizmet cihaz yeniden başlatılınca çalıştırılmayacak, %@\'i açana kadar bildirimleri almakyacaksın.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Açılışta başlatı etkinleştir";
 "settings_troubleshoot_test_bg_restricted_title" = "Arka plan kısıtlamalarını gözden geçir";
-"settings_troubleshoot_test_bg_restricted_success" = "Arka plan kısıtlamaları %@ için devre dışı. Bu test mobil veri kullanacak (WIFI değil).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Arka plan kısıtlamaları %@ için etkinleştirilmiş.
-\nUygulamanın arka planda iken yapmaya çalıştığı şeyler agresif bir biçimde kısıtlanacak ve bu bildirimleri de etkileyebilir.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Arka plan kısıtlamaları %@ için devre dışı. Bu test mobil veri kullanacak (WIFI değil).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Arka plan kısıtlamaları %@ için etkinleştirilmiş.\nUygulamanın arka planda iken yapmaya çalıştığı şeyler agresif bir biçimde kısıtlanacak ve bu bildirimleri de etkileyebilir.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Kısıtlamaları devre dışı bırak";
 "settings_troubleshoot_test_battery_title" = "Pil Optimizasyonu";
 "settings_troubleshoot_test_battery_success" = "%@ Pil Optimizasyonundan etkilenmedi.";
@@ -335,9 +317,7 @@
 "settings_new_password" = "Yeni şifre";
 "settings_fail_to_update_password" = "Şifreyi güncellerken hata oluştu";
 "settings_password_updated" = "Şifren güncellendi";
-"settings_unignore_user" = "%@ den/dan tüm mesajlar gösterilsin mi\?
-\n
-\nNot bu eylem uygulamayı yeniden başlatacak ve biraz zaman alabilir.";
+"settings_unignore_user" = "%@ den/dan tüm mesajlar gösterilsin mi\?\n\nNot bu eylem uygulamayı yeniden başlatacak ve biraz zaman alabilir.";
 "settings_select_country" = "Ülke seç";
 "settings_flair" = "Kabiliyet";
 "media_saving_period_3_days" = "3 gün";
@@ -443,8 +423,7 @@
 "dialog_user_consent_content" = "%1$@ ana sunucusunu kullanmaya devam etmek için şart ve koşulları gözden geçirip kabul etmelisiniz.";
 "dialog_user_consent_submit" = "Şimdi yorumla";
 "deactivate_account_title" = "Hesabı devre dışı bırak";
-"deactivate_account_content.b_0" = "Bu eylem geri çevrilemez";
-"deactivate_account_content.b_1" = "varsayılan olarak gönderdiğiniz mesajlarınızın silinmesini sağlamaz";
+"deactivate_account_content" = "Bu hesabınızın kalıcı bir şekilde kullanılamaz yapar. Giriş yapamazsınız ve kimse tekrar aynı kullanıcı ID\'sini kullanarak kayıt yaptıramaz. Bu hesabınızın tüm odalardan ayrılmasına ve kimlik sunucusundan hesap detaylarınızın silinmesine yok açar. <b>Bu eylem geri çevrilemez</b>.\n\nHesabınızı devre dışı bırakmak <b>varsayılan olarak gönderdiğiniz mesajlarınızın silinmesini sağlamaz</b>. Eğer mesajlarınızın silinmesini istiyorsanız lütfen alttaki kutuyu işaretleyin.\n\nMatrixdeki mesaj görünürlüğü e-posta ile benzerdir. Silinen mesajlarınız yeni ya da kayıtsız kullanıcılarla paylaşılmaz ama kayıtlı ve zaten mesajlarınıza erişebilen kullanıcılar halen mesajlarınızın bir kopyasına sahip olurlar.";
 "deactivate_account_delete_checkbox" = "Lütfen hesabım devre dışı olunca gönderdiğim tüm mesajları sil (Uyarı: bu gelecekteki kullanıcıların bitmemiş yarım tartışma görmelerine sebep olur)";
 "deactivate_account_submit" = "Hesabı devre dışı bırak";
 "error_empty_field_enter_user_name" = "Lütfen kullanıcı adı girin.";
@@ -454,9 +433,9 @@
 "room_tombstone_continuation_description" = "Bu oda farklı bir tartışmanın devamı";
 "room_tombstone_predecessor_link" = "Eski mesajları görmek için tıkla";
 "resource_limit_contact_admin" = "Hizmet yöneticin iletişime geç";
-"resource_limit_soft_default.b_0" = "bazı kullanıcılar giriş yapamayabilir";
+"resource_limit_soft_default" = "Bu ana sunucu kaynak sınırılarından birini aştı <b>bazı kullanıcılar giriş yapamayabilir</b>.";
 "resource_limit_hard_default" = "Bu ana sunucu kaynak sınırılarından birini aştı.";
-"resource_limit_soft_mau.b_0" = "bazı kullanıcılar giriş yapamayabilir";
+"resource_limit_soft_mau" = "Bu ana sunucu Aylık Etkin Kullanıcı sınırına ulaştı <b>bazı kullanıcılar giriş yapamayabilir</b>.";
 "resource_limit_hard_mau" = "Bu ana sunucu Aylık Etkin Kullanıcı sınırına ulaştı.";
 "resource_limit_soft_contact" = "Lütfen limitin arttırılması için %@ yapın.";
 "resource_limit_hard_contact" = "Lütfen bu hizmeti kullanmak için %@ yapın.";
@@ -474,24 +453,19 @@
 "passphrase_passphrase_too_weak" = "Parola çok zayıf";
 "keys_backup_passphrase_not_empty_error_message" = "Eğer %@\'in kurtarma anahtarı oluşturmasını istiyorsanız lütfen parolayı silin.";
 "keys_backup_setup_step1_title" = "Şifrelenmiş mesajları asla kaybetme";
-"keys_backup_setup_step1_description" = "Şifrelenmiş odalarda mesajlar uçtan-uca şifreleme ile korunur. Sadece sen ve makbuzcular bu mesajları okumak için anahtara sahip.
-\n
-\nAnahtarları kaybetmeden güvenli bir şekilde yedekle.";
+"keys_backup_setup_step1_description" = "Şifrelenmiş odalarda mesajlar uçtan-uca şifreleme ile korunur. Sadece sen ve makbuzcular bu mesajları okumak için anahtara sahip.\n\nAnahtarları kaybetmeden güvenli bir şekilde yedekle.";
 "keys_backup_setup" = "Anahtar yedeklemeyi başlat";
 "keys_backup_setup_step1_advanced" = "(Gelişmiş)";
 "keys_backup_setup_step1_manual_export" = "Elle anahtarları dışa aktar";
 "keys_backup_setup_step2_text_title" = "Yedeklemeni parola ile güvence altına al.";
-"keys_backup_setup_step2_text_description" = "Anahtarlarının şifrelenmiş bir kopyasını ana sunucuda depolayacağız. Yedeklemeni parola ile koru ve güvenli tut.
-\n
-\nÜst düzey güvenlik için parolanız hesap şifresinden farklı olmalıdır.";
+"keys_backup_setup_step2_text_description" = "Anahtarlarının şifrelenmiş bir kopyasını ana sunucuda depolayacağız. Yedeklemeni parola ile koru ve güvenli tut.\n\nÜst düzey güvenlik için parolanız hesap şifresinden farklı olmalıdır.";
 "keys_backup_setup_step2_button_title" = "Parolayı ayarla";
 "keys_backup_setup_creating_backup" = "Yedekleme Oluştur";
 "keys_backup_setup_step1_recovery_key_alternative" = "Ya da yedeklemeni kurtarma anahtarı ile güvende tut ve güvenli bir yere kaydet.";
 "keys_backup_setup_step2_skip_button_title" = "(Gelişmiş) Kurtarma anahtarı ile kur";
 "keys_backup_setup_step3_success_title" = "Başarılı !";
 "keys_backup_setup_step3_text_line1" = "Anahtarların yedekleniyor.";
-"keys_backup_setup_step3_text_line2" = "Kurtarma anahtarın bir güvenli ağ - onu şifrelenmiş mesajlarına erişmek için kullanabilirsin eğer parolanı unuttuysan.
-\nKurtarma anahtarını çok güvenli bir yerde tut şifre yöneticisi gibi (ya da güvenli)";
+"keys_backup_setup_step3_text_line2" = "Kurtarma anahtarın bir güvenli ağ - onu şifrelenmiş mesajlarına erişmek için kullanabilirsin eğer parolanı unuttuysan.\nKurtarma anahtarını çok güvenli bir yerde tut şifre yöneticisi gibi (ya da güvenli)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Kurtarma anahtarını çok güvenli bir yerde tut şifre yöneticisi gibi (ya da güvenli)";
 "keys_backup_setup_step3_button_title" = "Tamam";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Bir kopya oluşturdum";
@@ -545,15 +519,12 @@
 "auth_login_sso" = "Tek oturum açma ile giriş yap";
 "settings_send_message_with_enter" = "Enter ile mesaj gönder";
 "settings_send_message_with_enter_summary" = "Klavyedeki Enter tuşuna bastığında alt satıra geçmek yerine mesajı gönder";
-"settings_background_fdroid_sync_mode_battery_description" = "%@, cihazın sınırlı kaynaklarını (pil) koruyacak şekilde arka planda senkronize olur.
-\nCihazınızın kaynak durumuna bağlı olarak, senkronizasyon işletim sistemi tarafından ertelenebilir.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@, cihazın sınırlı kaynaklarını (pil) koruyacak şekilde arka planda senkronize olur.\nCihazınızın kaynak durumuna bağlı olarak, senkronizasyon işletim sistemi tarafından ertelenebilir.";
 "settings_background_fdroid_sync_mode_real_time" = "Gerçek zamanlı için optimize";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ periyodik olarak belirli bir zamanda (ayarlanabilir) arka planda senkronize olur.
-\nBu pil ve radyo kullanımını etkileyecek ve %@\'in olayları dinlediğini belirten kalıcı bir bildirim gösterecektir.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ periyodik olarak belirli bir zamanda (ayarlanabilir) arka planda senkronize olur.\nBu pil ve radyo kullanımını etkileyecek ve %@\'in olayları dinlediğini belirten kalıcı bir bildirim gösterecektir.";
 "settings_background_fdroid_sync_mode_disabled" = "Arka plan senkronizasyonu yok";
 "settings_integrations" = "Entegrasyonlar";
-"settings_integrations_summary" = "Botları, köprüleri, widget\'ları ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.
-\n Entegrasyon yöneticileri, yapılandırma verilerini alır ve widget\'ları değiştirebilir, oda davetleri gönderebilir ve sizin adınıza güç seviyeleri ayarlayabilir.";
+"settings_integrations_summary" = "Botları, köprüleri, widget\'ları ve çıkartma paketlerini yönetmek için bir entegrasyon yöneticisi kullanın.\n Entegrasyon yöneticileri, yapılandırma verilerini alır ve widget\'ları değiştirebilir, oda davetleri gönderebilir ve sizin adınıza güç seviyeleri ayarlayabilir.";
 "settings_discovery_category" = "Keşif";
 "settings_discovery_manage" = "Keşif ayarlarını düzenle.";
 "settings_integration_allow" = "Entegrasyonlara izin ver";
@@ -577,8 +548,7 @@
 "room_widget_permission_added_by" = "Bu widget\'ı ekleyen:";
 "room_widget_permission_webview_shared_info_title" = "Bunu kullanmak çerezler oluşturabilir ve %@ ile veri paylaşabilir:";
 "room_widget_permission_shared_info_title" = "Bunu kullanmak %@ ile veri paylaşabilir:";
-"room_widget_failed_to_load" = "Widget yüklenemedi.
-\n%@";
+"room_widget_failed_to_load" = "Widget yüklenemedi.\n%@";
 "room_widget_reload" = "Widget\'ı yenile";
 "room_widget_open_in_browser" = "Tarayıcıda Aç";
 "room_widget_revoke_access" = "Benim için erişimi iptal et";
@@ -596,14 +566,8 @@
 "room_widget_webview_access_microphone" = "Mikrofon kullan";
 "room_widget_webview_read_protected_media" = "DRM korumalı içerik oynat";
 "widget_integration_review_terms" = "Devam etmek için Hizmet Şartlarını kabul etmeniz gerekir.";
-"you_added_a_new_device_with_info" = "Yeni oturum şifreleme anahtarlarını talep ediyor. Oturum adı: %1$@
-\nOturum ismi: %1$@
-\nSon görülme: %2$@
-\nEğer farklı bir oturumda giriş yapmadıysanız bu talebi reddedin.";
-"your_unverified_device_requesting_with_info" = "Bir doğrulanmamış oturum şifreleme anahtarlarını talep ediyor.
-\nOturum adı: %1$@
-\nSon görülme: %2$@
-\nEğer farklı bir oturumda giriş yapmadıysanız bu talebi reddedin.";
+"you_added_a_new_device_with_info" = "Yeni oturum şifreleme anahtarlarını talep ediyor. Oturum adı: %1$@\nOturum ismi: %1$@\nSon görülme: %2$@\nEğer farklı bir oturumda giriş yapmadıysanız bu talebi reddedin.";
+"your_unverified_device_requesting_with_info" = "Bir doğrulanmamış oturum şifreleme anahtarlarını talep ediyor.\nOturum adı: %1$@\nSon görülme: %2$@\nEğer farklı bir oturumda giriş yapmadıysanız bu talebi reddedin.";
 "share_without_verifying_short_label" = "Paylaş";
 "key_share_request" = "Anahtar Paylaşma Talebi";
 "ignore_request_short_label" = "Reddet";
@@ -664,8 +628,7 @@
 "dialog_title_success" = "Başarılı";
 "bottom_action_notification" = "Bildirimler";
 "call_failed_no_connection" = "%@ Araması Başarısız Oldu";
-"call_failed_no_connection_description" = "Eş zamanlı bağlantı kurulamadı.
-\nAramaların hatasız çalışması için snucunuzun yöneticisinden TURN sunucusu ayarlamasını rica edin.";
+"call_failed_no_connection_description" = "Eş zamanlı bağlantı kurulamadı.\nAramaların hatasız çalışması için snucunuzun yöneticisinden TURN sunucusu ayarlamasını rica edin.";
 "call_select_sound_device" = "Ses Cihazı Seç";
 "sound_device_phone" = "Telefon";
 "sound_device_speaker" = "Hoparlör";
@@ -685,18 +648,14 @@
 "room_participants_power_level_demote_warning_prompt" = "Kendi yetkinizi düşürdüğünüzde bunu geri alma şansınız olmayacak, eğer bu odadaki son yetkili kişiyseniz yetkileri geri alma imkânınız olmayacak.";
 "room_participants_power_level_demote" = "Yetkiyi Düşür";
 "room_participants_action_ignore_title" = "Kullanıcıyı yoksay";
-"room_participants_action_ignore_prompt_msg" = "Bu kullanıcıyı yoksayarsanız ortak odalarınızda mesajlarını görmeyeceksiniz.
-\n
-\nBunu istediğiniz zaman genel ayarlardan geri alabilirsiniz.";
+"room_participants_action_ignore_prompt_msg" = "Bu kullanıcıyı yoksayarsanız ortak odalarınızda mesajlarını görmeyeceksiniz.\n\nBunu istediğiniz zaman genel ayarlardan geri alabilirsiniz.";
 "room_participants_action_unignore_title" = "Kullanıcıyı yoksaymaktan vazgeç";
 "room_participants_action_unignore_prompt_msg" = "Bu kullanıcıyı yoksaymaktan vazgeçerseniz tekrar tüm mesajlarını görmeye başlayacaksınız.";
 "room_participants_action_cancel_invite_title" = "Daveti geri çevir";
 "room_participants_action_cancel_invite_prompt_msg" = "Bu kullanıcıdan gelen daveti geri çevirmek istediğinizden emin misiniz\?";
 "room_participants_remove_title" = "Kullanıcıyı kov";
 "room_participants_remove_reason" = "Kovma sebebi";
-"room_participants_remove_prompt_msg" = "Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.
-\n
-\nEğer tekrar katılmasını engellemek istiyorsanız kovmak yerine yasaklamalısınız.";
+"room_participants_remove_prompt_msg" = "Kullanıcıyı kovarsanız kendisi bu odadan çıkacak.\n\nEğer tekrar katılmasını engellemek istiyorsanız kovmak yerine yasaklamalısınız.";
 "room_participants_ban_title" = "Kullanıcıyı yasakla";
 "room_participants_ban_reason" = "Yasaklama sebebi";
 "room_participants_unban_title" = "Kullanıcının yasağını kaldır";
@@ -747,22 +706,12 @@
 "room_permissions_title" = "İzinler";
 "room_settings_permissions_subtitle" = "Odanın çeşitli bölümlerinde değişiklik yapmak için gerekli olan rolleri görüntüleyin ve güncelleyin.";
 "send_bug_report_include_key_share_history" = "Anahtar paylaşım istekleri geçmişini gönderin";
-"soft_logout_clear_data_notice" = "Uyarı: Kişisel verileriniz (şifreleme anahtarlarınız dahil) bu cihazda depolanır.
-\n
-\nEğer bu cihazı artık kullanmayacaksanız ya da başka bir hesapta oturum açmak istiyorsanız onları temizleyin.";
+"soft_logout_clear_data_notice" = "Uyarı: Kişisel verileriniz (şifreleme anahtarlarınız dahil) bu cihazda depolanır.\n\nEğer bu cihazı artık kullanmayacaksanız ya da başka bir hesapta oturum açmak istiyorsanız onları temizleyin.";
 "labs_allow_extended_logging_summary" = "Ayrıntılı günlükler, telefonunuzu öfkeyle salladığınızda daha fazla günlük göndererek geliştiriciye yardım edecektir. Etkin olsa bile, uygulama mesaj içeriklerini veya başka özel verileri günlüğe kaydetmeyecektir.";
 "error_network_timeout" = "Sunucunun yanıt vermesi uzun sürmüş gibi görünüyor. Bu durum, kötü bağlantıdan ya da sunucuyla ilgili bir sorundan meydana gelmiş olabilir. Bir süre sonra tekrar deneyin.";
-"bootstrap_cancel_text" = "Şimdi iptal ederseniz, oturum açma bilgilerinize erişiminizi kaybetmeniz durumunda şifrelenmiş mesajlarınızı ve verilerinizi kaybedebilirsiniz.
-\n
-\nAyrıca, ayarlardan güvenli yedeklemeyi kurabilir ve anahtarlarınızı yönetebilirsiniz.";
+"bootstrap_cancel_text" = "Şimdi iptal ederseniz, oturum açma bilgilerinize erişiminizi kaybetmeniz durumunda şifrelenmiş mesajlarınızı ve verilerinizi kaybedebilirsiniz.\n\nAyrıca, ayarlardan güvenli yedeklemeyi kurabilir ve anahtarlarınızı yönetebilirsiniz.";
 "login_reset_password_warning_content" = "Parolanızı değiştirmek, tüm oturumlarınızdaki uçtan uca şifreleme anahtarlarını sıfırlayarak şifreli sohbet geçmişini okunamaz hale getirir. Parolanızı sıfırlamadan önce Anahtar Yedeklemeyi ayarlayın veya oda anahtarlarınızı başka bir oturumdan dışa aktarın.";
-"signed_out_notice" = "Birçok sebepten dolayı olabilir:
-\n
-\n• Başka bir oturumda şifrenizi değiştirdiniz.
-\n
-\n• Başka bir oturumdan bu oturumu sildiniz.
-\n
-\n• Sunucunuzun yöneticisi, güvenlik sebebiyle erişiminizi engelledi.";
+"signed_out_notice" = "Birçok sebepten dolayı olabilir:\n\n• Başka bir oturumda şifrenizi değiştirdiniz.\n\n• Başka bir oturumdan bu oturumu sildiniz.\n\n• Sunucunuzun yöneticisi, güvenlik sebebiyle erişiminizi engelledi.";
 "room_settings_permissions_title" = "Oda izinleri";
 "room_participants_leave_private_warning" = "Bu oda herkese açık değil. Davet olmadan tekrar katılamayacaksınız.";
 "permissions_denied_add_contact" = "Rehber erişimi için izin verin.";
@@ -814,15 +763,12 @@
 "qr_code" = "QR kod";
 "add_by_qr_code" = "QR kod ile ekle";
 "settings_labs_show_complete_history_in_encrypted_room" = "Şifreli odalarda tam geçmişi göster";
-"create_room_federation_error" = "Bu oda oluşturuldu, fakat bazı davetler aşağıdaki sebeplerden ötürü gönderilemedi:
-\n
-\n%@";
+"create_room_federation_error" = "Bu oda oluşturuldu, fakat bazı davetler aşağıdaki sebeplerden ötürü gönderilemedi:\n\n%@";
 "create_room_settings_section" = "Oda ayarları";
 "create_room_topic_hint" = "Konu";
 "create_room_topic_section" = "Oda konusu (isteğe bağlı)";
 "create_room_name_section" = "Oda ismi";
-"room_preview_not_found" = "Bu odaya şuan erişilemiyor.
-\nDaha sonra tekrar deneyin veya bir oda yöneticisinden erişiminiz olup olmadığını kontrol etmesini isteyin.";
+"room_preview_not_found" = "Bu odaya şuan erişilemiyor.\nDaha sonra tekrar deneyin veya bir oda yöneticisinden erişiminiz olup olmadığını kontrol etmesini isteyin.";
 "room_no_active_widgets" = "Aktif widget bulunmamakta";
 "room_alias_local_address_empty" = "Bu odanın yerel adresi yok";
 "room_alias_action_unpublish" = "Bu adresi yayından kaldır";
@@ -932,12 +878,8 @@
 "room_list_quick_actions_favorite_add" = "Favorilere ekle";
 "room_list_quick_actions_notifications_mentions" = "Sadece bahsetmeler";
 "room_list_quick_actions_notifications_all" = "Tüm mesajlar";
-"content_reported_as_spam_content" = "İçerik spam olarak raporlandı.
-\n
-\nEğer bu kullanıcıdan daha fazla içerik görmek istemiyorsanız, mesajlarını gizlemek için kullanıcıyı yok sayabilirsiniz.";
-"content_reported_as_inappropriate_content" = "İçerik, uygunsuz olarak raporlandı.
-\n
-\nEğer bu kullanıcıdan daha fazla içerik görmek istemiyorsanız, mesajlarını gizlemek için kullanıcıyı yok sayabilirsiniz.";
+"content_reported_as_spam_content" = "İçerik spam olarak raporlandı.\n\nEğer bu kullanıcıdan daha fazla içerik görmek istemiyorsanız, mesajlarını gizlemek için kullanıcıyı yok sayabilirsiniz.";
+"content_reported_as_inappropriate_content" = "İçerik, uygunsuz olarak raporlandı.\n\nEğer bu kullanıcıdan daha fazla içerik görmek istemiyorsanız, mesajlarını gizlemek için kullanıcıyı yok sayabilirsiniz.";
 "message_ignore_user" = "Kullanıcıyı yoksay";
 "content_reported_as_inappropriate_title" = "Uygunsuz olarak raporlandı";
 "content_reported_as_spam_title" = "Spam olarak raporlandı";
@@ -979,17 +921,14 @@
 "login_error_outdated_homeserver_warning_content" = "Bu ana sunucu eski bir sürümü çalıştırıyor. Ana sunucu yöneticinizden yükseltmesini isteyin. Devam edebilirsiniz, ancak bazı özellikler düzgün çalışmayabilir.";
 "login_error_outdated_homeserver_title" = "Tarihi geçmiş sunucu";
 "login_validation_code_is_not_correct" = "Girilen kod doğru değil. Lütfen kontrol edin.";
-"login_wait_for_email_notice" = "%1$@ adresine bir e-posta gönderdik.
-\nHesap oluşturmaya devam etmek için lütfen içerdiği bağlantıya tıklayın.";
+"login_wait_for_email_notice" = "%1$@ adresine bir e-posta gönderdik.\nHesap oluşturmaya devam etmek için lütfen içerdiği bağlantıya tıklayın.";
 "login_wait_for_email_title" = "Lütfen e-postanızı kontrol edin";
 "login_terms_title" = "Devam etmek için koşulları kabul edin";
 "login_a11y_captcha_container" = "Lütfen aşağıdaki doğrulamayı tamamlayın";
 "login_a11y_choose_other" = "Özel bir ana sunucu seçin";
 "login_a11y_choose_modular" = "Element Matric Hizmetleri\'ni seç";
 "login_a11y_choose_matrix_org" = "Matrix.org sunucusunu seç";
-"login_signup_cancel_confirmation_content" = "Hesabınız henüz oluşturulmadı.
-\n
-\nKayıt işlemini durdurmak istiyor musunuz\?";
+"login_signup_cancel_confirmation_content" = "Hesabınız henüz oluşturulmadı.\n\nKayıt işlemini durdurmak istiyor musunuz\?";
 "login_signup_cancel_confirmation_title" = "Uyarı";
 "login_signup_error_user_in_use" = "Bu kullanıcı adı alınmış";
 "login_signup_submit" = "İleri";
@@ -1025,9 +964,7 @@
 "login_reset_password_password_hint" = "Yeni parola";
 "login_reset_password_notice" = "Yeni parolanızı ayarlamayı onaylamak için e-postanıza onaylama linki gönderdik.";
 "login_reset_password_on" = "%1$@ sunucusunda parolayı yenile";
-"login_registration_not_supported" = "Uygulama bu sunucuda yeni hesap oluşturamıyor.
-\n
-\nİnternet istemcisi ile kayıt olmak ister misiniz\?";
+"login_registration_not_supported" = "Uygulama bu sunucuda yeni hesap oluşturamıyor.\n\nİnternet istemcisi ile kayıt olmak ister misiniz\?";
 "login_registration_disabled" = "Üzgünüm, bu sunucu artık yeni hesap kabul etmiyor.";
 "login_login_with_email_error" = "Bu e-posta herhangi bir hesapla ilişkili değil.";
 "login_server_url_form_modular_hint" = "Element Matrix Hizmetleri Adresi";
@@ -1169,9 +1106,7 @@
 "room_unsupported_e2e_algorithm" = "Şifreleme yanlış yapılandırıldı, böylece mesaj gönderemezsiniz. Şifrelemeyi geçerli bir duruma geri yüklemek için lütfen bir yöneticiyle iletişime geçin.";
 "space_participants_unban_prompt_msg" = "Yasağı kaldırmak, kullanıcının alana tekrar katılmasına izin verir.";
 "space_participants_ban_prompt_msg" = "Kullanıcıyı yasaklamak onları bu alandan kaldıracak ve tekrar katılmalarını engelleyecektir.";
-"space_participants_remove_prompt_msg" = "Kullanıcı bu alandan kaldırılacaktır.
-\n
-\nTekrar katılmalarını önlemek için, onları yasaklamalısınız.";
+"space_participants_remove_prompt_msg" = "Kullanıcı bu alandan kaldırılacaktır.\n\nTekrar katılmalarını önlemek için, onları yasaklamalısınız.";
 "call_remove_jitsi_widget_progress" = "Arama sonlandırılıyor…";
 "call_ended_invite_timeout_title" = "Cevap yok";
 "call_ended_user_busy_description" = "Aradığınız kullanıcı meşgul.";
@@ -1250,27 +1185,16 @@
 "notice_room_invite_no_invitee_with_reason_by_you" = "Senin davetiyen. Sebep: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "%1$@\'in davetiyesi. Neden: %2$@";
 "event_status_sent_message" = "Mesajı gönderildi";
-"initial_sync_start_importing_account_data" = "İlk senkronizasyon:
-\nHesap verilerini içe aktarma";
-"initial_sync_start_importing_account_groups" = "İlk senkronizasyon:
-\nToplulukları içe aktarma";
-"initial_sync_start_importing_account_left_rooms" = "İlk senkronizasyon:
-\nSol odalar içe aktarılıyor";
-"initial_sync_start_importing_account_invited_rooms" = "İlk senkronizasyon:
-\nDavetli odaları içe aktarma";
-"initial_sync_start_importing_account_joined_rooms" = "İlk senkronizasyon:
-\nKonuşmalarınız yükleniyor
-\nÇok sayıda odaya katıldıysanız, bu biraz zaman alabilir";
-"initial_sync_start_importing_account_rooms" = "İlk senkronizasyon:
-\nOdaları içe aktarma";
-"initial_sync_start_importing_account_crypto" = "İlk senkronizasyon:
-\nKripto içe aktarma";
-"initial_sync_start_importing_account" = "İlk senkronizasyon:
-\nHesap içe aktarılıyor…";
-"initial_sync_start_downloading" = "İlk senkronizasyon:
-\nVeriler indiriliyor…";
-"initial_sync_start_server_computing" = "İlk senkronizasyon:
-\nSunucu yanıtı bekleniyor…";
+"initial_sync_start_importing_account_data" = "İlk senkronizasyon:\nHesap verilerini içe aktarma";
+"initial_sync_start_importing_account_groups" = "İlk senkronizasyon:\nToplulukları içe aktarma";
+"initial_sync_start_importing_account_left_rooms" = "İlk senkronizasyon:\nSol odalar içe aktarılıyor";
+"initial_sync_start_importing_account_invited_rooms" = "İlk senkronizasyon:\nDavetli odaları içe aktarma";
+"initial_sync_start_importing_account_joined_rooms" = "İlk senkronizasyon:\nKonuşmalarınız yükleniyor\nÇok sayıda odaya katıldıysanız, bu biraz zaman alabilir";
+"initial_sync_start_importing_account_rooms" = "İlk senkronizasyon:\nOdaları içe aktarma";
+"initial_sync_start_importing_account_crypto" = "İlk senkronizasyon:\nKripto içe aktarma";
+"initial_sync_start_importing_account" = "İlk senkronizasyon:\nHesap içe aktarılıyor…";
+"initial_sync_start_downloading" = "İlk senkronizasyon:\nVeriler indiriliyor…";
+"initial_sync_start_server_computing" = "İlk senkronizasyon:\nSunucu yanıtı bekleniyor…";
 "room_displayname_empty_room_was" = "Boş oda (%@ idi)";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ ve %4$@";
 "room_displayname_two_members" = "%1$@ ve %2$@";
@@ -1338,12 +1262,10 @@
 "legals_home_server_title" = "Ana sunucu politikanız";
 "legals_application_title" = "%@ politikası";
 "analytics_opt_in_list_item_3" = "Bunu istediğiniz zaman ayarlardan kapatabilirsiniz";
-"analytics_opt_in_list_item_2.b_0" = "paylaşmayız";
-"analytics_opt_in_list_item_1.b_0" = "kaydetmiyoruz";
+"analytics_opt_in_list_item_2" = "Bilgileri üçüncü taraflarla <b>paylaşmayız</b>";
+"analytics_opt_in_list_item_1" = "Herhangi bir hesap verisini <b>kaydetmiyoruz</b>";
 "analytics_opt_in_content_link" = "burada";
-"analytics_opt_in_content" = "Anonim kullanım verilerini paylaşarak sorunları belirlememize ve %@\'i iyileştirmemize yardımcı olun. İnsanların birden fazla cihazı nasıl kullandığını anlamak için, cihazlarınız tarafından paylaşılan rastgele bir tanımlayıcı oluşturacağız.
-\n
-\n Tüm şartlarımızı %@ okuyabilirsiniz.";
+"analytics_opt_in_content" = "Anonim kullanım verilerini paylaşarak sorunları belirlememize ve %@\'i iyileştirmemize yardımcı olun. İnsanların birden fazla cihazı nasıl kullandığını anlamak için, cihazlarınız tarafından paylaşılan rastgele bir tanımlayıcı oluşturacağız.\n\n Tüm şartlarımızı %@ okuyabilirsiniz.";
 "analytics_opt_in_title" = "Öğeyi iyileştirmeye yardımcı olun";
 "settings_mentions_and_keywords_encryption_notice" = "Mobil cihazlarda şifreli odalarda bahsedilenler ve anahtar kelimeler için bildirim almayacaksınız.";
 "settings_room_upgrades" = "Oda yükseltmeleri";
@@ -1400,12 +1322,7 @@
 "sent_an_audio_file" = "Ses";
 "sent_an_image" = "Resim.";
 "sent_a_video" = "Video.";
-"verification_conclusion_compromised" = "Aşağıdakilerden biri tehlikeye girmiş olabilir:
-\n
-\n- Ana sunucunuz
-\n- Doğruladığınız kullanıcının bağlı olduğu ana sunucusu
-\n- Sizin veya diğer kullanıcıların internet bağlantısı
-\n- Sizin veya diğer kullanıcıların cihazı";
+"verification_conclusion_compromised" = "Aşağıdakilerden biri tehlikeye girmiş olabilir:\n\n- Ana sunucunuz\n- Doğruladığınız kullanıcının bağlı olduğu ana sunucusu\n- Sizin veya diğer kullanıcıların internet bağlantısı\n- Sizin veya diğer kullanıcıların cihazı";
 "verification_conclusion_not_secure" = "Güvenli değil";
 "verification_sas_do_not_match" = "eşleşmiyorlar";
 "verification_sas_match" = "Eşleşiyorlar";
@@ -1443,11 +1360,9 @@
 "notification_initial_sync" = "İlk Senkronizasyon…";
 "bug_report_error_too_short" = "Açıklama çok kısa";
 "permalink_malformed" = "matrix.to bağlantınız hatalı biçimlendirilmiş";
-"soft_logout_sso_not_same_user_error" = "Geçerli oturum %1$@ kullanıcısı içindir ve %2$@ kullanıcısı için kimlik bilgileri sağlarsınız. Bu, %@ tarafından desteklenmez.
-\nLütfen önce verileri temizleyin, sonra başka bir hesapta tekrar oturum açın.";
+"soft_logout_sso_not_same_user_error" = "Geçerli oturum %1$@ kullanıcısı içindir ve %2$@ kullanıcısı için kimlik bilgileri sağlarsınız. Bu, %@ tarafından desteklenmez.\nLütfen önce verileri temizleyin, sonra başka bir hesapta tekrar oturum açın.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Şifreleme anahtarlarınızı kurtarmak için oturum açmadığınız sürece güvenli mesajlara erişiminizi kaybedersiniz.";
-"soft_logout_clear_data_dialog_content" = "Bu cihazda şu anda depolanan tüm veriler silinsin mi\?
-\nHesap verilerinize ve mesajlarınıza erişmek için tekrar oturum açın.";
+"soft_logout_clear_data_dialog_content" = "Bu cihazda şu anda depolanan tüm veriler silinsin mi\?\nHesap verilerinize ve mesajlarınıza erişmek için tekrar oturum açın.";
 "soft_logout_clear_data_dialog_title" = "Verileri temizle";
 "soft_logout_clear_data_submit" = "Tüm verileri temizle";
 "soft_logout_clear_data_title" = "Kişisel verileri temizle";
@@ -1462,13 +1377,9 @@
 "seen_by" = "Tarafından görüldü";
 "does_not_look_like_valid_email" = "Geçerli bir e-posta adresi gibi görünmüyor";
 "login_set_email_notice" = "Hesabınızı kurtarmak için bir e-posta ayarlayın. Daha sonra isteğe bağlı olarak tanıdığınız kişilerin sizi e-postanızla keşfetmesine izin verebilirsiniz.";
-"login_reset_password_cancel_confirmation_content" = "Şifreniz henüz değiştirilmedi.
-\n
-\n Şifre değiştirme işlemi durdurulsun mu\?";
+"login_reset_password_cancel_confirmation_content" = "Şifreniz henüz değiştirilmedi.\n\n Şifre değiştirme işlemi durdurulsun mu\?";
 "login_reset_password_success_notice_2" = "Tüm oturumlardan çıkış yaptınız ve artık anında iletme bildirimleri almayacaksınız. Bildirimleri yeniden etkinleştirmek için her cihazda tekrar oturum açın.";
-"login_mode_not_supported" = "Uygulama bu ana sunucusunda oturum açamıyor. Ana sunucusu şu oturum açma türlerini destekler: %1$@.
-\n
-\n Bir web istemcisi kullanarak oturum açmak istiyor musunuz\?";
+"login_mode_not_supported" = "Uygulama bu ana sunucusunda oturum açamıyor. Ana sunucusu şu oturum açma türlerini destekler: %1$@.\n\n Bir web istemcisi kullanarak oturum açmak istiyor musunuz\?";
 "login_sso_error_message" = "Sayfa yüklenirken bir hata oluştu: %1$@ (%2$d)";
 "login_server_url_form_common_notice" = "Kullanmak istediğiniz sunucunun adresini girin";
 "login_server_url_form_modular_notice" = "Kullanmak istediğiniz Modüler Öğe veya Sunucunun adresini girin";
@@ -1493,9 +1404,7 @@
 "spoiler" = "Spoiler";
 "command_description_spoiler" = "Verilen mesajı spoiler olarak gönderir";
 "room_list_quick_actions_notifications_all_noisy" = "Tüm mesajlar (gürültülü)";
-"content_reported_content" = "Bu içerik rapor edildi.
-\n
-\n Bu kullanıcıdan daha fazla içerik görmek istemiyorsanız, mesajlarını gizlemek için onları yok sayabilirsiniz.";
+"content_reported_content" = "Bu içerik rapor edildi.\n\n Bu kullanıcıdan daha fazla içerik görmek istemiyorsanız, mesajlarını gizlemek için onları yok sayabilirsiniz.";
 "report_content_custom" = "Özel rapor…";
 "uploads_files_subtitle" = "%1$@, %2$@ konumunda";
 "attachment_viewer_item_x_of_y" = "%1$d / %2$d";
@@ -1584,9 +1493,7 @@
 "create_spaces_just_me" = "Yalnızca ben";
 "create_spaces_who_are_you_working_with" = "Kiminle çalışıyorsun\?";
 "tooltip_attachment_location" = "Konum paylaş";
-"room_profile_encrypted_subtitle" = "Bu odadaki mesajlar uçtan uca şifrelenir.
-\n
-\nMesajlarınız şifrelerle korunur ve yalnızca siz ve alıcı, mesajların kilidini açmak için benzersiz anahtarlara sahip olursunuz.";
+"room_profile_encrypted_subtitle" = "Bu odadaki mesajlar uçtan uca şifrelenir.\n\nMesajlarınız şifrelerle korunur ve yalnızca siz ve alıcı, mesajların kilidini açmak için benzersiz anahtarlara sahip olursunuz.";
 "direct_room_profile_not_encrypted_subtitle" = "Buradaki mesajlar uçtan uca şifrelenmez.";
 "room_profile_not_encrypted_subtitle" = "Bu odadaki mesajlar uçtan uca şifrelenmez.";
 "verification_request_waiting_for" = "%@ bekleniyor…";
@@ -1616,63 +1523,3 @@
 "action_thread_copy_link_to_thread" = "Konu bağlantısını kopyala";
 "action_thread_view_in_room" = "Odada görüntüle";
 "action_view_threads" = "Konuları Görüntüle";
-"plurals.membership_changes.item_0" = "%d üyelik değişikliği";
-"plurals.membership_changes.item_1" = "%d adet üyelik değişikliği";
-"plurals.room_title_members.item_0" = "%d üye";
-"plurals.room_title_members.item_1" = "%d adet üye";
-"plurals.room_new_messages_notification.item_0" = "%d yeni mesaj";
-"plurals.room_new_messages_notification.item_1" = "%d yeni mesaj";
-"plurals.room_details_selected.item_0" = "%d adet seçili";
-"plurals.room_details_selected.item_1" = "%d adet seçili";
-"plurals.notification_unread_notified_messages.item_0" = "%d okunmamış bildirim mesajı";
-"plurals.notification_unread_notified_messages.item_1" = "%d okunmamış bildirim mesajları";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d oda";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d odalar";
-"plurals.active_widgets.item_0" = "%d etkin widget";
-"plurals.active_widgets.item_1" = "%d etkin widgetler";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Yedekleme %d anahtarı ile işlendi.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Yedekleme %d anahtarları ile işlendi.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d yeni anahtar bu oturuma eklendi.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d adet yeni anahtar bu oturuma eklendi.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "%d anahtarı yedekleniyor…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "%d anahtarları yedekleniyor…";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: 1 mesaj";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d adet mesaj";
-"plurals.notification_compat_summary_title.item_0" = "%d bildirim";
-"plurals.notification_compat_summary_title.item_1" = "%d adet bildirim";
-"plurals.room_settings_banned_users_count.item_0" = "1 yasaklanmış kullanıcı";
-"plurals.room_settings_banned_users_count.item_1" = "%d adet yasaklanmış kullanıcı";
-"plurals.seconds.item_0" = "%d saniye";
-"plurals.seconds.item_1" = "%d saniye";
-"plurals.notification_invitations.item_0" = "%d davetiye";
-"plurals.notification_invitations.item_1" = "%d davetiye";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Çok fazla istek gönderildi. %1$d saniye sonra tekrar deneyebilirsiniz…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Çok fazla istek gönderildi. %1$d saniye sonra tekrar deneyebilirsiniz…";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d anahtar başarıyla içe aktarıldı.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d anahtar başarıyla içe aktarıldı.";
-"plurals.missed_video_call.item_0" = "Cevapsız görüntülü arama";
-"plurals.missed_video_call.item_1" = "%d adet cevapsız görüntülü arama";
-"plurals.missed_audio_call.item_0" = "Cevapsız sesli arama";
-"plurals.missed_audio_call.item_1" = "%d adet cevapsız sesli arama";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Bu oda için %1$@ alternatif adresini kaldırdınız.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Bu oda için %1$@ alternatif adreslerini kaldırdınız.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ bu oda için %2$@ alternatif adresini kaldırdı.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ bu oda için %2$@ alternatif adreslerini kaldırdı.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Bu oda için %1$@ alternatif adresini eklediniz.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Bu oda için %1$@ alternatif adreslerini eklediniz.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@, bu oda için %2$@ alternatif adresini ekledi.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@, bu oda için %2$@ alternatif adreslerini ekledi.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "%1$@ adresini bu odanın adresi olarak kaldırdınız.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "%1$@ adresini bu oda için adres olarak kaldırdınız.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@, %2$@ adresini bu odanın adresi olarak kaldırdı.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@, %2$@ adresini bu odanın adresi olarak kaldırdı.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Bu oda için adres olarak %1$@ eklediniz.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Bu oda için adres olarak %1$@ eklediniz.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@, bu oda için bir adres olarak %2$@ ekledi.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@, bu oda için adres olarak %2$@ ekledi.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ ve %4$d diğer";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ ve %4$d kişi daha";
-"plurals.fallback_users_read.item_0" = "%d kullanıcı okudu";
-"plurals.fallback_users_read.item_1" = "%d kullanıcı okudular";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ ve %3$d diğer okuma";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ ve %3$d kişi daha okudu";

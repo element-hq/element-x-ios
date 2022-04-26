@@ -1,0 +1,946 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>active_widgets</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d ישומונים פעילים</string>
+			<key>one</key>
+			<string>%d יישומון פעיל</string>
+			<key>other</key>
+			<string>%d ישומונים אחרים פעילים</string>
+			<key>two</key>
+			<string>%d ישומונים פעילים</string>
+		</dict>
+	</dict>
+	<key>call_active_status</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$d שיחות פעילות ·</string>
+			<key>one</key>
+			<string>שיחה פעילה ·</string>
+			<key>other</key>
+			<string>%1$d שיחות פעילות ·</string>
+			<key>two</key>
+			<string>%1$d שיחות פעילות ·</string>
+		</dict>
+	</dict>
+	<key>create_poll_not_enough_options_error</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>נדרשות %1$@ אפשרויות לפחות</string>
+			<key>one</key>
+			<string>נדרשת אפשרות %1$@ לפחות</string>
+			<key>other</key>
+			<string>נדרשות %1$@ אפשרויות לפחות</string>
+			<key>two</key>
+			<string>נדרשות %1$@ אפשרויות לפחות</string>
+		</dict>
+	</dict>
+	<key>encryption_import_room_keys_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>מפתחות %1$d/%2$d מעטים יובאו בהצלחה.</string>
+			<key>one</key>
+			<string>מפתח %1$d/%2$d מיובא בהצלחה.</string>
+			<key>other</key>
+			<string>מפתחות %1$d/%2$d אחרים יובאו בהצלחה.</string>
+			<key>two</key>
+			<string>מפתחות %1$d/%2$d יובאו בהצלחה.</string>
+		</dict>
+	</dict>
+	<key>entries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d כניסות</string>
+			<key>one</key>
+			<string>כניסה %d</string>
+			<key>other</key>
+			<string>%d כניסות</string>
+			<key>two</key>
+			<string>שתי כניסות %d</string>
+		</dict>
+	</dict>
+	<key>fallback_users_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d משתמשים קראו</string>
+			<key>one</key>
+			<string>משתמש %d קרא</string>
+			<key>other</key>
+			<string>%d משתמשים קראו</string>
+			<key>two</key>
+			<string>%d משתמשים קראו</string>
+		</dict>
+	</dict>
+	<key>invitations_sent_to_one_and_more_users</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הזמנות נשלחו אל%1$@ ואחרים</string>
+			<key>one</key>
+			<string>הזמנות נשלחו אל%1$@ ואחד נוסף</string>
+			<key>other</key>
+			<string>הזמנות נשלחו אל%1$@ ואחריםה</string>
+			<key>two</key>
+			<string>הזמנות נשלחו אל%1$@ ואחרים</string>
+		</dict>
+	</dict>
+	<key>keys_backup_info_keys_backing_up</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>מגבה%d המפתחות …</string>
+			<key>one</key>
+			<string>גיבוי המפתח%d …</string>
+			<key>other</key>
+			<string>מגבה%d המפתחות …</string>
+			<key>two</key>
+			<string>גיבוי%d המפתחות …</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part1</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>שוחזרו גיבויים עם מפתחות%d.</string>
+			<key>one</key>
+			<string>שוחזרו גיבויים עם %d מפתח.</string>
+			<key>other</key>
+			<string>שוחזרו גיבויים עם מפתחות%d.</string>
+			<key>two</key>
+			<string>שוחזרו גיבויים עם מפתחות%d.</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part2</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d מפתחות חדשים נוספו להפעלה זו.</string>
+			<key>one</key>
+			<string>%d מפתח חדש נוסף להפעלה זו.</string>
+			<key>other</key>
+			<string>%d מפתחות חדשים נוספו להפעלה זו.</string>
+			<key>two</key>
+			<string>%d מפתחות חדשים נוספו להפעלה זו.</string>
+		</dict>
+	</dict>
+	<key>login_error_limit_exceeded_retry_after</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …</string>
+			<key>one</key>
+			<string>יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד%1$d שנייה …</string>
+			<key>other</key>
+			<string>יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …</string>
+			<key>two</key>
+			<string>יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …</string>
+		</dict>
+	</dict>
+	<key>membership_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d שינוי בפרטי חברות</string>
+			<key>one</key>
+			<string>%d שינוי בפרט חברות</string>
+			<key>other</key>
+			<string>%d שינוי בפרטי חברות</string>
+			<key>two</key>
+			<string>%d שינוי בפרטי חברות</string>
+		</dict>
+	</dict>
+	<key>message_reaction_show_more</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$d יותר</string>
+			<key>one</key>
+			<string>%1$d יותר</string>
+			<key>other</key>
+			<string>%1$d יותר</string>
+			<key>two</key>
+			<string>%1$d יותר</string>
+		</dict>
+	</dict>
+	<key>missed_audio_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d שיחות שלא נענו</string>
+			<key>one</key>
+			<string>שיחה שלא נענתה</string>
+			<key>other</key>
+			<string>שיחה שלא נענתה</string>
+			<key>two</key>
+			<string>%d שיחות שלא נענו</string>
+		</dict>
+	</dict>
+	<key>missed_video_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d שיחות וידאו שלא נענו</string>
+			<key>one</key>
+			<string>שיחת וידאו שלא נענתה</string>
+			<key>other</key>
+			<string>שיחת וידאו שלא נענתה</string>
+			<key>two</key>
+			<string>%d שיחות וידאו שלא נענו</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$@ הוסיפו את %2$@ ככתובות לחדר הזה.</string>
+			<key>one</key>
+			<string>%1$@ הוסיף את %2$@ ככתובת לחדר הזה.</string>
+			<key>other</key>
+			<string>%1$@ הוסיפו את %2$@ ככתובות לחדר הזה.</string>
+			<key>two</key>
+			<string>%1$@ הוסיפו את %2$@ ככתובות לחדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הוספת את %1$@ ככתובות לחדר הזה.</string>
+			<key>one</key>
+			<string>הוספת את %1$@ ככתובת לחדר הזה.</string>
+			<key>other</key>
+			<string>הוספת את %1$@ ככתובת לחדר הזה.</string>
+			<key>two</key>
+			<string>הוספת את %1$@ ככתובות לחדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$@ הסיר את %2$@ ככתובות עבור החדר הזה.</string>
+			<key>one</key>
+			<string>%1$@ הסיר את %2$@ ככתובת לחדר הזה.</string>
+			<key>other</key>
+			<string>%1$@ הסיר את %2$@ ככתובת עבור החדר הזה.</string>
+			<key>two</key>
+			<string>%1$@ הסיר את %2$@ ככתובות עבור החדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הסרת את %1$@ ככתובות לחדר הזה.</string>
+			<key>one</key>
+			<string>הסרת את %1$@ ככתובת לחדר הזה.</string>
+			<key>other</key>
+			<string>הסרת את %1$@ ככתובת לחדר הזה.</string>
+			<key>two</key>
+			<string>הסרת את %1$@ ככתובות לחדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$@ הוסיף את הכתובות החלופיות %2$@ לחדר הזה.</string>
+			<key>one</key>
+			<string>%1$@ הוסיף את הכתובת החלופית %2$@ לחדר הזה.</string>
+			<key>other</key>
+			<string>%1$@ הוסיף את הכתובת החלופית %2$@ לחדר הזה.</string>
+			<key>two</key>
+			<string>%1$@ הוסיף את הכתובות החלופיות %2$@ לחדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הוספת את הכתובות החלופיות %1$@ לחדר הזה.</string>
+			<key>one</key>
+			<string>הוספת את הכתובת החלופית %1$@ לחדר הזה.</string>
+			<key>other</key>
+			<string>הוספת את הכתובת החלופית %1$@ לחדר הזה.</string>
+			<key>two</key>
+			<string>הוספת את הכתובות החלופיות %1$@ לחדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$@ הסיר את הכתובות החלופיות %2$@ עבור החדר הזה.</string>
+			<key>one</key>
+			<string>%1$@ הסיר את הכתובת החלופית %2$@ עבור החדר הזה.</string>
+			<key>other</key>
+			<string>%1$@ הסיר את הכתובת החלופית %2$@ עבור החדר הזה.</string>
+			<key>two</key>
+			<string>%1$@ הסיר את הכתובות החלופיות %2$@ עבור החדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הסרת את הכתובות החלופיות %1$@ עבור החדר הזה.</string>
+			<key>one</key>
+			<string>הסרת את הכתובת החלופית %1$@ עבור החדר הזה.</string>
+			<key>other</key>
+			<string>הסרת את הכתובת החלופית %1$@ עבור החדר הזה.</string>
+			<key>two</key>
+			<string>הסרת את הכתובות החלופיות %1$@ עבור החדר הזה.</string>
+		</dict>
+	</dict>
+	<key>notice_room_server_acl_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d שינוים ברשימות ACL בשרתים</string>
+			<key>one</key>
+			<string>%d שינוי ברשימות ACL בשרתים</string>
+			<key>other</key>
+			<string>%d שינוים ברשימות ACL בשרתים</string>
+			<key>two</key>
+			<string>%d שינוים ברשימות ACL בשרתים</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_line_for_room</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הודעות מעטות %1$@: %2$d</string>
+			<key>one</key>
+			<string>הודעה %1$@: %2$d</string>
+			<key>other</key>
+			<string>הודעות אחרות %1$@: %2$d</string>
+			<key>two</key>
+			<string>הודעות %1$@: %2$d</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>התראות %d</string>
+			<key>one</key>
+			<string>התראה %d</string>
+			<key>other</key>
+			<string>התראות %d</string>
+			<key>two</key>
+			<string>התראות %d</string>
+		</dict>
+	</dict>
+	<key>notification_invitations</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d הזמנות מעטות</string>
+			<key>one</key>
+			<string>%d הזמנה</string>
+			<key>other</key>
+			<string>%d הזמנות אחרות</string>
+			<key>two</key>
+			<string>%d הזמנות</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d הודעות התראה מעטות שלא נקראו</string>
+			<key>one</key>
+			<string>הודעת התראה %d שלא נקראה</string>
+			<key>other</key>
+			<string>%d הודעות התראה אחרות שלא נקראו</string>
+			<key>two</key>
+			<string>%d הודעות התראה שלא נקראו</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages_in_room_rooms</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d חדרים מועטים</string>
+			<key>one</key>
+			<string>%d חדר</string>
+			<key>other</key>
+			<string>%d חדרים אחרים</string>
+			<key>two</key>
+			<string>%d חדרים</string>
+		</dict>
+	</dict>
+	<key>poll_option_vote_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$d הצבעות</string>
+			<key>one</key>
+			<string>%1$d הצבעה</string>
+			<key>other</key>
+			<string>%1$d הצבעות</string>
+			<key>two</key>
+			<string>%1$d הצבעות</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_after_ended</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>התוצאות הסופיות מתבססות על %1$d הצבעות</string>
+			<key>one</key>
+			<string>התוצאה הסופית מתבססת על הצבעה %1$d</string>
+			<key>other</key>
+			<string>התוצאות הסופיות מתבססות על %1$d הצבעות</string>
+			<key>two</key>
+			<string>התוצאות הסופיות מתבססות על %1$d הצבעות</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_not_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הצבעות %1$d. הצביעו כדי לראות את התוצאות</string>
+			<key>one</key>
+			<string>הצבעה %1$d. הצביעו כדי לראות את התוצאות</string>
+			<key>other</key>
+			<string>הצבעות %1$d. הצביעו כדי לראות את התוצאות</string>
+			<key>two</key>
+			<string>הצבעות %1$d. הצביעו כדי לראות את התוצאות</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>מבוסס על %1$d הצבעות</string>
+			<key>one</key>
+			<string>מבוסס על %1$d הצבעה</string>
+			<key>other</key>
+			<string>מבוסס על %1$d הצבעות</string>
+			<key>two</key>
+			<string>מבוסס על %1$d הצבעות</string>
+		</dict>
+	</dict>
+	<key>room_details_selected</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d נבחרים</string>
+			<key>one</key>
+			<string>%d נבחר</string>
+			<key>other</key>
+			<string>%d נבחרים</string>
+			<key>two</key>
+			<string>%d נבחרים</string>
+		</dict>
+	</dict>
+	<key>room_displayname_four_and_more_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$@, %2$@, %3$@ ו-%4$d אחרים</string>
+			<key>one</key>
+			<string>%1$@, %2$@, %3$@ ו-%4$d אחר</string>
+			<key>other</key>
+			<string>%1$@, %2$@, %3$@ ו-%4$d אחר</string>
+			<key>two</key>
+			<string>%1$@, %2$@, %3$@ ו-%4$d אחרים</string>
+		</dict>
+	</dict>
+	<key>room_new_messages_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d הודעות חדשות</string>
+			<key>one</key>
+			<string>%d הודעה חדשה</string>
+			<key>other</key>
+			<string>%d הודעות חדשות</string>
+			<key>two</key>
+			<string>d% הודעות חדשות</string>
+		</dict>
+	</dict>
+	<key>room_profile_section_more_member_list</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$d אנשים</string>
+			<key>one</key>
+			<string>אדם אחד</string>
+			<key>other</key>
+			<string>%1$d אנשים</string>
+			<key>two</key>
+			<string>%1$d אנשים</string>
+		</dict>
+	</dict>
+	<key>room_settings_banned_users_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d משתמשים חסומים</string>
+			<key>one</key>
+			<string>%d משתמש חסום</string>
+			<key>other</key>
+			<string>%d משתמשים אחרים שחסומים</string>
+			<key>two</key>
+			<string>%d משתמשים חסומים</string>
+		</dict>
+	</dict>
+	<key>room_title_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d חברים</string>
+			<key>one</key>
+			<string>%d חבר</string>
+			<key>other</key>
+			<string>%d חברים</string>
+			<key>two</key>
+			<string>%d חברים</string>
+		</dict>
+	</dict>
+	<key>seconds</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d שניות</string>
+			<key>one</key>
+			<string>%d שנייה</string>
+			<key>other</key>
+			<string>%d שניות</string>
+			<key>two</key>
+			<string>%d שניות</string>
+		</dict>
+	</dict>
+	<key>secure_backup_reset_devices_you_can_verify</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>הראה את המכשירים שאיתם תוכל לאמת כעת</string>
+			<key>one</key>
+			<string>הראה את המכשיר שאיתו תוכל לאמת כעת</string>
+			<key>other</key>
+			<string>הראה את המכשירים שאיתם תוכל לאמת כעת</string>
+			<key>two</key>
+			<string>הראה את המכשירים שאיתם תוכל לאמת כעת</string>
+		</dict>
+	</dict>
+	<key>send_images_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>שלח תמונות בגודל המקורי</string>
+			<key>one</key>
+			<string>שלח תמונה בגודל המקורי</string>
+			<key>other</key>
+			<string>שלח תמונות בגודל המקורי</string>
+			<key>two</key>
+			<string>שלח תמוננות בגודל המקורי</string>
+		</dict>
+	</dict>
+	<key>send_videos_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>שלח סרטי וידאו בגודלם המקורי</string>
+			<key>one</key>
+			<string>שלח סרט וידאו בגודל המקורי</string>
+			<key>other</key>
+			<string>שלח סרט וידאו בגודל המקורי</string>
+			<key>two</key>
+			<string>שלח שני סרטי וידאו בגודל המקורי</string>
+		</dict>
+	</dict>
+	<key>settings_active_sessions_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d מושבים פעילים</string>
+			<key>one</key>
+			<string>%d מושב פעיל</string>
+			<key>other</key>
+			<string>%d מושבים פעילים</string>
+			<key>two</key>
+			<string>%d מושבים פעילים</string>
+		</dict>
+	</dict>
+	<key>space_people_you_know</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%d אנשים שאתה מכיר כבר הצטרפו</string>
+			<key>one</key>
+			<string>אדם %d שאתה מכיר כבר הצטרף</string>
+			<key>other</key>
+			<string>%d אנשים שאתה מכיר כבר הצטרפו</string>
+			<key>two</key>
+			<string>%d אנשים שאתה מכיר כבר הצטרפו</string>
+		</dict>
+	</dict>
+	<key>two_and_some_others_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>%1$@,%2$@ ו-%3$d אחרים קוראים</string>
+			<key>one</key>
+			<string>%1$@,%2$@ ו-%3$d אחרים קראו</string>
+			<key>other</key>
+			<string>%1$@,%2$@ ו-%3$d אחרים קוראים</string>
+			<key>two</key>
+			<string>%1$@,%2$@ ו-%3$d אחרים קוראים</string>
+		</dict>
+	</dict>
+	<key>wrong_pin_message_remaining_attempts</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>many</key>
+			<string>קוד שגוי,%d ניסיונות נוספים</string>
+			<key>one</key>
+			<string>קוד שגוי,%d ניסיון נוסף</string>
+			<key>other</key>
+			<string>קוד שגוי,%d ניסיונות נוספים</string>
+			<key>two</key>
+			<string>קוד שגוי,%d ניסיונות נוספים</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

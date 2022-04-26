@@ -7,7 +7,8 @@ xcassets:
     templateName: swift5
     output: Assets.swift
 strings:
-  - inputs: Resources/Localizations/en.lproj/Localizable.strings
+  - inputs: Resources/Localizations/en.lproj
+    filter: Localizable*
     outputs:
       templatePath: Templates/Strings/structured-swift5-element.stencil
       output: Strings.swift
@@ -15,7 +16,8 @@ strings:
         enumName: ElementL10n
         lookupFunction: tr  # used for the loc to be computed variables
         publicAccess: true
-  - inputs: Resources/Localizations/en.lproj/Untranslated.strings
+  - inputs: Resources/Localizations/en.lproj
+    filter: Untranslated*
     outputs:
       templatePath: Templates/Strings/structured-swift5-untranslated.stencil
       output: Strings+Untranslated.swift

@@ -37,22 +37,14 @@
 "room_displayname_room_invite" = "Gespreksuutnodigienge";
 "room_displayname_two_members" = "%1$@ en %2$@";
 "room_displayname_empty_room" = "Leeg gesprek";
-"initial_sync_start_importing_account" = "Initiële synchronisoasje:
-\nAccount wor geïmporteerd…";
-"initial_sync_start_importing_account_crypto" = "Initiële synchronisoasje:
-\nCrypto wor geïmporteerd";
-"initial_sync_start_importing_account_rooms" = "Initiële synchronisoasje:
-\nGesprekkn wordn geïmporteerd";
-"initial_sync_start_importing_account_joined_rooms" = "Initiële synchronisoasje:
-\nDeelgenoomn gesprekken wordn geïmporteerd";
-"initial_sync_start_importing_account_invited_rooms" = "Initiële synchronisoasje:
-\nUutgenodigde gesprekkn wordn geïmporteerd";
-"initial_sync_start_importing_account_left_rooms" = "Initiële synchronisoasje:
-\nVerloatn gesprekkn wordn geïmporteerd";
-"initial_sync_start_importing_account_groups" = "Initiële synchronisoasje:
-\nGemeenschappn wordn geïmporteerd";
-"initial_sync_start_importing_account_data" = "Initiële synchronisoasje:
-\nAccountgegeevns wordn geïmporteerd";
+"initial_sync_start_importing_account" = "Initiële synchronisoasje:\nAccount wor geïmporteerd…";
+"initial_sync_start_importing_account_crypto" = "Initiële synchronisoasje:\nCrypto wor geïmporteerd";
+"initial_sync_start_importing_account_rooms" = "Initiële synchronisoasje:\nGesprekkn wordn geïmporteerd";
+"initial_sync_start_importing_account_joined_rooms" = "Initiële synchronisoasje:\nDeelgenoomn gesprekken wordn geïmporteerd";
+"initial_sync_start_importing_account_invited_rooms" = "Initiële synchronisoasje:\nUutgenodigde gesprekkn wordn geïmporteerd";
+"initial_sync_start_importing_account_left_rooms" = "Initiële synchronisoasje:\nVerloatn gesprekkn wordn geïmporteerd";
+"initial_sync_start_importing_account_groups" = "Initiële synchronisoasje:\nGemeenschappn wordn geïmporteerd";
+"initial_sync_start_importing_account_data" = "Initiële synchronisoasje:\nAccountgegeevns wordn geïmporteerd";
 "notice_room_update" = "%@ èt da gesprek hier ipgewoardeerd.";
 "event_status_sending_message" = "Bericht wor verstuurd…";
 "notice_room_third_party_revoked_invite" = "%1$@ èt d’uutnodigienge vo %2$@ vo ’t gesprek toe te treedn ingetrokkn";

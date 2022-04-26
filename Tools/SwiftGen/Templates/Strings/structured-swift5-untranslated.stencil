@@ -62,9 +62,7 @@ import Foundation
 extension {{enumName}} {
   {% if tables.count > 1 or param.forceFileNameEnum %}
   {% for table in tables %}
-  {{accessModifier}} enum {{table.name|swiftIdentifier:"pretty"|escapeReservedKeywords}} {
     {% filter indent:2 %}{% call recursiveBlock table.name table.levels %}{% endfilter %}
-  }
   {% endfor %}
   {% else %}
   {% call recursiveBlock tables.first.name tables.first.levels %}

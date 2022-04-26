@@ -232,6 +232,10 @@ public enum ElementL10n {
   public static var actionVoiceCall: String { return ElementL10n.tr("Localizable", "action_voice_call") }
   /// VIEW
   public static var activeWidgetViewAction: String { return ElementL10n.tr("Localizable", "active_widget_view_action") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func activeWidgets(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "active_widgets", p1)
+  }
   /// Active widgets
   public static var activeWidgetsTitle: String { return ElementL10n.tr("Localizable", "active_widgets_title") }
   /// Create a space
@@ -264,6 +268,10 @@ public enum ElementL10n {
   }
   /// here
   public static var analyticsOptInContentLink: String { return ElementL10n.tr("Localizable", "analytics_opt_in_content_link") }
+  /// We <b>don't</b> record or profile any account data
+  public static var analyticsOptInListItem1: String { return ElementL10n.tr("Localizable", "analytics_opt_in_list_item_1") }
+  /// We <b>don't</b> share information with third parties
+  public static var analyticsOptInListItem2: String { return ElementL10n.tr("Localizable", "analytics_opt_in_list_item_2") }
   /// You can turn this off anytime in settings
   public static var analyticsOptInListItem3: String { return ElementL10n.tr("Localizable", "analytics_opt_in_list_item_3") }
   /// Help improve %@
@@ -482,6 +490,10 @@ public enum ElementL10n {
   public static var bugReportErrorTooShort: String { return ElementL10n.tr("Localizable", "bug_report_error_too_short") }
   /// Call
   public static var call: String { return ElementL10n.tr("Localizable", "call") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func callActiveStatus(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "call_active_status", p1)
+  }
   /// Back
   public static var callCameraBack: String { return ElementL10n.tr("Localizable", "call_camera_back") }
   /// Front
@@ -547,6 +559,10 @@ public enum ElementL10n {
   public static var callSelectSoundDevice: String { return ElementL10n.tr("Localizable", "call_select_sound_device") }
   /// Slide to end the call
   public static var callSlideToEndConference: String { return ElementL10n.tr("Localizable", "call_slide_to_end_conference") }
+  /// Share screen
+  public static var callStartScreenSharing: String { return ElementL10n.tr("Localizable", "call_start_screen_sharing") }
+  /// Stop screen sharing
+  public static var callStopScreenSharing: String { return ElementL10n.tr("Localizable", "call_stop_screen_sharing") }
   /// Switch Camera
   public static var callSwitchCamera: String { return ElementL10n.tr("Localizable", "call_switch_camera") }
   /// %1$@ Tap to return
@@ -767,6 +783,10 @@ public enum ElementL10n {
   public static var createPollButton: String { return ElementL10n.tr("Localizable", "create_poll_button") }
   /// Question cannot be empty
   public static var createPollEmptyQuestionError: String { return ElementL10n.tr("Localizable", "create_poll_empty_question_error") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func createPollNotEnoughOptionsError(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "create_poll_not_enough_options_error", p1)
+  }
   /// Option %1$d
   public static func createPollOptionsHint(_ p1: Int) -> String {
     return ElementL10n.tr("Localizable", "create_poll_options_hint", p1)
@@ -897,6 +917,12 @@ public enum ElementL10n {
   public static var cryptoErrorWithheldUnverified: String { return ElementL10n.tr("Localizable", "crypto_error_withheld_unverified") }
   /// Dark Theme
   public static var darkTheme: String { return ElementL10n.tr("Localizable", "dark_theme") }
+  /// This will make your account permanently unusable. You will not be able to log in, and no one will be able to re-register the same user ID. This will cause your account to leave all rooms it is participating in, and it will remove your account details from your identity server. <b>This action is irreversible</b>.
+  /// 
+  /// Deactivating your account <b>does not by default cause us to forget messages you have sent</b>. If you would like us to forget your messages, please tick the box below.
+  /// 
+  /// Message visibility in Matrix is similar to email. Our forgetting your messages means that messages you have sent will not be shared with any new or unregistered users, but registered users who already have access to these messages will still have access to their copy.
+  public static var deactivateAccountContent: String { return ElementL10n.tr("Localizable", "deactivate_account_content") }
   /// Please forget all messages I have sent when my account is deactivated (Warning: this will cause future users to see an incomplete view of conversations)
   public static var deactivateAccountDeleteCheckbox: String { return ElementL10n.tr("Localizable", "deactivate_account_delete_checkbox") }
   /// Deactivate Account
@@ -1129,6 +1155,10 @@ public enum ElementL10n {
   public static var encryptionImportImport: String { return ElementL10n.tr("Localizable", "encryption_import_import") }
   /// Import room keys
   public static var encryptionImportRoomKeys: String { return ElementL10n.tr("Localizable", "encryption_import_room_keys") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func encryptionImportRoomKeysSuccess(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "encryption_import_room_keys_success", p1)
+  }
   /// Import the keys from a local file
   public static var encryptionImportRoomKeysSummary: String { return ElementL10n.tr("Localizable", "encryption_import_room_keys_summary") }
   /// Cross-Signing
@@ -1196,6 +1226,10 @@ public enum ElementL10n {
   /// Use your %1$@ or use your %2$@ to continue.
   public static func enterSecretStoragePassphraseOrKey(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "enter_secret_storage_passphrase_or_key", String(describing: p1), String(describing: p2))
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func entries(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "entries", p1)
   }
   /// An error occurred while retrieving the attachment.
   public static var errorAttachment: String { return ElementL10n.tr("Localizable", "error_attachment") }
@@ -1307,6 +1341,10 @@ public enum ElementL10n {
   public static var failedToRemoveWidget: String { return ElementL10n.tr("Localizable", "failed_to_remove_widget") }
   /// Failed to UnBan user
   public static var failedToUnban: String { return ElementL10n.tr("Localizable", "failed_to_unban") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func fallbackUsersRead(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "fallback_users_read", p1)
+  }
   /// Feedback
   public static var feedback: String { return ElementL10n.tr("Localizable", "feedback") }
   /// The feedback failed to be sent (%@)
@@ -1477,7 +1515,7 @@ public enum ElementL10n {
   public static var identityServerUserConsentNotProvided: String { return ElementL10n.tr("Localizable", "identity_server_user_consent_not_provided") }
   /// Ignore
   public static var ignoreRequestShortLabel: String { return ElementL10n.tr("Localizable", "ignore_request_short_label") }
-  /// Import e2e keys from file "%1$@.
+  /// Import e2e keys from file "%1$@".
   public static func importE2eKeysFromFile(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "import_e2e_keys_from_file", String(describing: p1))
   }
@@ -1485,6 +1523,17 @@ public enum ElementL10n {
   public static var incomingVideoCall: String { return ElementL10n.tr("Localizable", "incoming_video_call") }
   /// Incoming Voice Call
   public static var incomingVoiceCall: String { return ElementL10n.tr("Localizable", "incoming_voice_call") }
+  /// %@ needs to perform a clear cache to be up to date, for the following reason:
+  /// %@
+  /// 
+  /// Note that this action will restart the app and it may take some time.
+  public static func initialSyncRequestContent(_ p1: Any, _ p2: Any) -> String {
+    return ElementL10n.tr("Localizable", "initial_sync_request_content", String(describing: p1), String(describing: p2))
+  }
+  /// - Some users have been unignored
+  public static var initialSyncRequestReasonUnignoredUsers: String { return ElementL10n.tr("Localizable", "initial_sync_request_reason_unignored_users") }
+  /// Initial sync request
+  public static var initialSyncRequestTitle: String { return ElementL10n.tr("Localizable", "initial_sync_request_title") }
   /// Initial sync:
   /// Downloading data…
   public static var initialSyncStartDownloading: String { return ElementL10n.tr("Localizable", "initial_sync_start_downloading") }
@@ -1526,6 +1575,10 @@ public enum ElementL10n {
   }
   /// Invites
   public static var invitationsHeader: String { return ElementL10n.tr("Localizable", "invitations_header") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func invitationsSentToOneAndMoreUsers(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "invitations_sent_to_one_and_more_users", p1)
+  }
   /// Invitations sent to %1$@ and %2$@
   public static func invitationsSentToTwoUsers(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "invitations_sent_to_two_users", String(describing: p1), String(describing: p2))
@@ -1618,6 +1671,10 @@ public enum ElementL10n {
   }
   /// All keys backed up
   public static var keysBackupInfoKeysAllBackupUp: String { return ElementL10n.tr("Localizable", "keys_backup_info_keys_all_backup_up") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func keysBackupInfoKeysBackingUp(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "keys_backup_info_keys_backing_up", p1)
+  }
   /// Algorithm
   public static var keysBackupInfoTitleAlgorithm: String { return ElementL10n.tr("Localizable", "keys_backup_info_title_algorithm") }
   /// Signature
@@ -1638,6 +1695,14 @@ public enum ElementL10n {
   public static var keysBackupRestoreIsGettingBackupVersion: String { return ElementL10n.tr("Localizable", "keys_backup_restore_is_getting_backup_version") }
   /// Enter Recovery Key
   public static var keysBackupRestoreKeyEnterHint: String { return ElementL10n.tr("Localizable", "keys_backup_restore_key_enter_hint") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func keysBackupRestoreSuccessDescriptionPart1(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "keys_backup_restore_success_description_part1", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func keysBackupRestoreSuccessDescriptionPart2(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "keys_backup_restore_success_description_part2", p1)
+  }
   /// Backup Restored %@ !
   public static func keysBackupRestoreSuccessTitle(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "keys_backup_restore_success_title", String(describing: p1))
@@ -1928,6 +1993,10 @@ public enum ElementL10n {
   public static var loginErrorInvalidHomeServer: String { return ElementL10n.tr("Localizable", "login_error_invalid_home_server") }
   /// Too many requests have been sent
   public static var loginErrorLimitExceeded: String { return ElementL10n.tr("Localizable", "login_error_limit_exceeded") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func loginErrorLimitExceededRetryAfter(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "login_error_limit_exceeded_retry_after", p1)
+  }
   /// This is not a valid Matrix server address
   public static var loginErrorNoHomeserverFound: String { return ElementL10n.tr("Localizable", "login_error_no_homeserver_found") }
   /// Did not contain valid JSON
@@ -2185,6 +2254,10 @@ public enum ElementL10n {
   public static func memberBannedBy(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "member_banned_by", String(describing: p1))
   }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func membershipChanges(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "membership_changes", p1)
+  }
   /// collapse
   public static var mergedEventsCollapse: String { return ElementL10n.tr("Localizable", "merged_events_collapse") }
   /// expand
@@ -2203,10 +2276,22 @@ public enum ElementL10n {
   public static var messageKey: String { return ElementL10n.tr("Localizable", "message_key") }
   /// Show less
   public static var messageReactionShowLess: String { return ElementL10n.tr("Localizable", "message_reaction_show_less") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func messageReactionShowMore(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "message_reaction_show_more", p1)
+  }
   /// View Edit History
   public static var messageViewEditHistory: String { return ElementL10n.tr("Localizable", "message_view_edit_history") }
   /// View Reactions
   public static var messageViewReaction: String { return ElementL10n.tr("Localizable", "message_view_reaction") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func missedAudioCall(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "missed_audio_call", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func missedVideoCall(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "missed_video_call", p1)
+  }
   /// Missing permissions
   public static var missingPermissionsTitle: String { return ElementL10n.tr("Localizable", "missing_permissions_title") }
   /// You are already viewing this room!
@@ -2443,6 +2528,10 @@ public enum ElementL10n {
   public static func noticePowerLevelDiff(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_power_level_diff", String(describing: p1), String(describing: p2), String(describing: p3))
   }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomAliasesAdded(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_aliases_added", p1)
+  }
   /// %1$@ added %2$@ and removed %3$@ as addresses for this room.
   public static func noticeRoomAliasesAddedAndRemoved(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_room_aliases_added_and_removed", String(describing: p1), String(describing: p2), String(describing: p3))
@@ -2450,6 +2539,18 @@ public enum ElementL10n {
   /// You added %1$@ and removed %2$@ as addresses for this room.
   public static func noticeRoomAliasesAddedAndRemovedByYou(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_room_aliases_added_and_removed_by_you", String(describing: p1), String(describing: p2))
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomAliasesAddedByYou(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_aliases_added_by_you", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomAliasesRemoved(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_aliases_removed", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomAliasesRemovedByYou(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_aliases_removed_by_you", p1)
   }
   /// %1$@ changed the room avatar
   public static func noticeRoomAvatarChanged(_ p1: Any) -> String {
@@ -2479,12 +2580,28 @@ public enum ElementL10n {
   public static func noticeRoomBanWithReasonByYou(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_room_ban_with_reason_by_you", String(describing: p1), String(describing: p2))
   }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomCanonicalAliasAlternativeAdded(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_canonical_alias_alternative_added", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomCanonicalAliasAlternativeAddedByYou(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_canonical_alias_alternative_added_by_you", p1)
+  }
   /// %1$@ changed the alternative addresses for this room.
   public static func noticeRoomCanonicalAliasAlternativeChanged(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_room_canonical_alias_alternative_changed", String(describing: p1))
   }
   /// You changed the alternative addresses for this room.
   public static var noticeRoomCanonicalAliasAlternativeChangedByYou: String { return ElementL10n.tr("Localizable", "notice_room_canonical_alias_alternative_changed_by_you") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomCanonicalAliasAlternativeRemoved(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_canonical_alias_alternative_removed", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomCanonicalAliasAlternativeRemovedByYou(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_canonical_alias_alternative_removed_by_you", p1)
+  }
   /// %1$@ changed the main and alternative addresses for this room.
   public static func noticeRoomCanonicalAliasMainAndAlternativeChanged(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_room_canonical_alias_main_and_alternative_changed", String(describing: p1))
@@ -2641,6 +2758,10 @@ public enum ElementL10n {
   }
   /// 🎉 All servers are banned from participating! This room can no longer be used.
   public static var noticeRoomServerAclAllowIsEmpty: String { return ElementL10n.tr("Localizable", "notice_room_server_acl_allow_is_empty") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func noticeRoomServerAclChanges(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notice_room_server_acl_changes", p1)
+  }
   /// • Servers matching %@ are allowed.
   public static func noticeRoomServerAclSetAllowed(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_room_server_acl_set_allowed", String(describing: p1))
@@ -2803,10 +2924,22 @@ public enum ElementL10n {
   public static func noticeWidgetRemovedByYou(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "notice_widget_removed_by_you", String(describing: p1))
   }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func notificationCompatSummaryLineForRoom(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notification_compat_summary_line_for_room", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func notificationCompatSummaryTitle(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notification_compat_summary_title", p1)
+  }
   /// Initial Sync…
   public static var notificationInitialSync: String { return ElementL10n.tr("Localizable", "notification_initial_sync") }
   /// ** Failed to send - please open room
   public static var notificationInlineReplyFailed: String { return ElementL10n.tr("Localizable", "notification_inline_reply_failed") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func notificationInvitations(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notification_invitations", p1)
+  }
   /// Listening for events
   public static var notificationListeningForEvents: String { return ElementL10n.tr("Localizable", "notification_listening_for_events") }
   /// Listening for notifications
@@ -2839,6 +2972,10 @@ public enum ElementL10n {
   public static var notificationUnknownNewEvent: String { return ElementL10n.tr("Localizable", "notification_unknown_new_event") }
   /// Room
   public static var notificationUnknownRoomName: String { return ElementL10n.tr("Localizable", "notification_unknown_room_name") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func notificationUnreadNotifiedMessages(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notification_unread_notified_messages", p1)
+  }
   /// %1$@ and %2$@
   public static func notificationUnreadNotifiedMessagesAndInvitation(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "notification_unread_notified_messages_and_invitation", String(describing: p1), String(describing: p2))
@@ -2850,6 +2987,10 @@ public enum ElementL10n {
   /// %1$@ in %2$@ and %3$@
   public static func notificationUnreadNotifiedMessagesInRoomAndInvitation(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return ElementL10n.tr("Localizable", "notification_unread_notified_messages_in_room_and_invitation", String(describing: p1), String(describing: p2), String(describing: p3))
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func notificationUnreadNotifiedMessagesInRoomRooms(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "notification_unread_notified_messages_in_room_rooms", p1)
   }
   /// OK
   public static var ok: String { return ElementL10n.tr("Localizable", "ok") }
@@ -2933,8 +3074,24 @@ public enum ElementL10n {
   public static var pollEndRoomListPreview: String { return ElementL10n.tr("Localizable", "poll_end_room_list_preview") }
   /// No votes cast
   public static var pollNoVotesCast: String { return ElementL10n.tr("Localizable", "poll_no_votes_cast") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func pollOptionVoteCount(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "poll_option_vote_count", p1)
+  }
   /// Vote cast
   public static var pollResponseRoomListPreview: String { return ElementL10n.tr("Localizable", "poll_response_room_list_preview") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func pollTotalVoteCountAfterEnded(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "poll_total_vote_count_after_ended", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func pollTotalVoteCountBeforeEndedAndNotVoted(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "poll_total_vote_count_before_ended_and_not_voted", p1)
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func pollTotalVoteCountBeforeEndedAndVoted(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "poll_total_vote_count_before_ended_and_voted", p1)
+  }
   /// Poll type
   public static var pollTypeTitle: String { return ElementL10n.tr("Localizable", "poll_type_title") }
   /// Admin
@@ -3081,6 +3238,10 @@ public enum ElementL10n {
   public static func resourceLimitSoftContact(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "resource_limit_soft_contact", String(describing: p1))
   }
+  /// This homeserver has exceeded one of its resource limits so <b>some users will not be able to log in</b>.
+  public static var resourceLimitSoftDefault: String { return ElementL10n.tr("Localizable", "resource_limit_soft_default") }
+  /// This homeserver has hit its Monthly Active User limit so <b>some users will not be able to log in</b>.
+  public static var resourceLimitSoftMau: String { return ElementL10n.tr("Localizable", "resource_limit_soft_mau") }
   /// Restart the application for the change to take effect.
   public static var restartTheApplicationToApplyChanges: String { return ElementL10n.tr("Localizable", "restart_the_application_to_apply_changes") }
   /// Review where you’re logged in
@@ -3152,6 +3313,10 @@ public enum ElementL10n {
   public static func roomCreatedSummaryNoTopicCreationText(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "room_created_summary_no_topic_creation_text", String(describing: p1))
   }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func roomDetailsSelected(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "room_details_selected", p1)
+  }
   /// Name or ID (#example:matrix.org)
   public static var roomDirectorySearchHint: String { return ElementL10n.tr("Localizable", "room_directory_search_hint") }
   /// %1$@, %2$@ and %3$@
@@ -3167,6 +3332,10 @@ public enum ElementL10n {
   /// Empty room (was %@)
   public static func roomDisplaynameEmptyRoomWas(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "room_displayname_empty_room_was", String(describing: p1))
+  }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func roomDisplaynameFourAndMoreMembers(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "room_displayname_four_and_more_members", p1)
   }
   /// Room Invite
   public static var roomDisplaynameRoomInvite: String { return ElementL10n.tr("Localizable", "room_displayname_room_invite") }
@@ -3288,6 +3457,10 @@ public enum ElementL10n {
   public static var roomMessageNotifyEveryone: String { return ElementL10n.tr("Localizable", "room_message_notify_everyone") }
   /// Message…
   public static var roomMessagePlaceholder: String { return ElementL10n.tr("Localizable", "room_message_placeholder") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func roomNewMessagesNotification(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "room_new_messages_notification", p1)
+  }
   /// No active widgets
   public static var roomNoActiveWidgets: String { return ElementL10n.tr("Localizable", "room_no_active_widgets") }
   /// %1$@, %2$@ and others
@@ -3329,8 +3502,6 @@ public enum ElementL10n {
   /// Unignore
   public static var roomParticipantsActionUnignore: String { return ElementL10n.tr("Localizable", "room_participants_action_unignore") }
   /// Unignoring this user will show all messages from them again.
-  /// 
-  /// Note that this action will restart the app and it may take some time.
   public static var roomParticipantsActionUnignorePromptMsg: String { return ElementL10n.tr("Localizable", "room_participants_action_unignore_prompt_msg") }
   /// Unignore user
   public static var roomParticipantsActionUnignoreTitle: String { return ElementL10n.tr("Localizable", "room_participants_action_unignore_title") }
@@ -3442,6 +3613,10 @@ public enum ElementL10n {
   public static var roomProfileSectionMore: String { return ElementL10n.tr("Localizable", "room_profile_section_more") }
   /// Leave Room
   public static var roomProfileSectionMoreLeave: String { return ElementL10n.tr("Localizable", "room_profile_section_more_leave") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func roomProfileSectionMoreMemberList(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "room_profile_section_more_member_list", p1)
+  }
   /// Notifications
   public static var roomProfileSectionMoreNotifications: String { return ElementL10n.tr("Localizable", "room_profile_section_more_notifications") }
   /// Room settings
@@ -3464,6 +3639,10 @@ public enum ElementL10n {
   public static var roomSettingsAliasTitle: String { return ElementL10n.tr("Localizable", "room_settings_alias_title") }
   /// All messages
   public static var roomSettingsAllMessages: String { return ElementL10n.tr("Localizable", "room_settings_all_messages") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func roomSettingsBannedUsersCount(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "room_settings_banned_users_count", p1)
+  }
   /// Banned users
   public static var roomSettingsBannedUsersTitle: String { return ElementL10n.tr("Localizable", "room_settings_banned_users_title") }
   /// Advanced
@@ -3562,6 +3741,10 @@ public enum ElementL10n {
   public static var roomSettingsUnsetMainAddress: String { return ElementL10n.tr("Localizable", "room_settings_unset_main_address") }
   /// Filter Threads in room
   public static var roomThreadsFilter: String { return ElementL10n.tr("Localizable", "room_threads_filter") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func roomTitleMembers(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "room_title_members", p1)
+  }
   /// This room is a continuation of another conversation
   public static var roomTombstoneContinuationDescription: String { return ElementL10n.tr("Localizable", "room_tombstone_continuation_description") }
   /// The conversation continues here
@@ -3653,6 +3836,12 @@ public enum ElementL10n {
   public static var sasVerified: String { return ElementL10n.tr("Localizable", "sas_verified") }
   /// Save recovery key in
   public static var saveRecoveryKeyChooserHint: String { return ElementL10n.tr("Localizable", "save_recovery_key_chooser_hint") }
+  /// Screen sharing is in progress
+  public static var screenSharingNotificationDescription: String { return ElementL10n.tr("Localizable", "screen_sharing_notification_description") }
+  /// %@ Screen Sharing
+  public static func screenSharingNotificationTitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "screen_sharing_notification_title", String(describing: p1))
+  }
   /// Search
   public static var search: String { return ElementL10n.tr("Localizable", "search") }
   /// Filter banned users
@@ -3667,6 +3856,10 @@ public enum ElementL10n {
   public static var searchNoResults: String { return ElementL10n.tr("Localizable", "search_no_results") }
   /// From a Thread
   public static var searchThreadFromAThread: String { return ElementL10n.tr("Localizable", "search_thread_from_a_thread") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func seconds(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "seconds", p1)
+  }
   /// Secure Backup
   public static var secureBackupBannerSetupLine1: String { return ElementL10n.tr("Localizable", "secure_backup_banner_setup_line1") }
   /// Safeguard against losing access to encrypted messages & data
@@ -3675,6 +3868,10 @@ public enum ElementL10n {
   public static var secureBackupResetAll: String { return ElementL10n.tr("Localizable", "secure_backup_reset_all") }
   /// Only do this if you have no other device you can verify this device with.
   public static var secureBackupResetAllNoOtherDevices: String { return ElementL10n.tr("Localizable", "secure_backup_reset_all_no_other_devices") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func secureBackupResetDevicesYouCanVerify(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "secure_backup_reset_devices_you_can_verify", p1)
+  }
   /// If you reset everything
   public static var secureBackupResetIfYouResetAll: String { return ElementL10n.tr("Localizable", "secure_backup_reset_if_you_reset_all") }
   /// You will restart with no history, no messages, trusted devices or trusted users
@@ -3757,6 +3954,10 @@ public enum ElementL10n {
   }
   /// Send media with the original size
   public static var sendImagesAndVideoWithOriginalSize: String { return ElementL10n.tr("Localizable", "send_images_and_video_with_original_size") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func sendImagesWithOriginalSize(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "send_images_with_original_size", p1)
+  }
   /// Make a suggestion
   public static var sendSuggestion: String { return ElementL10n.tr("Localizable", "send_suggestion") }
   /// Please write your suggestion below.
@@ -3769,6 +3970,10 @@ public enum ElementL10n {
   public static var sendSuggestionReportPlaceholder: String { return ElementL10n.tr("Localizable", "send_suggestion_report_placeholder") }
   /// Thanks, the suggestion has been successfully sent
   public static var sendSuggestionSent: String { return ElementL10n.tr("Localizable", "send_suggestion_sent") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func sendVideosWithOriginalSize(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "send_videos_with_original_size", p1)
+  }
   /// Sent you an invitation
   public static var sendYouInvite: String { return ElementL10n.tr("Localizable", "send_you_invite") }
   /// File
@@ -3807,6 +4012,10 @@ public enum ElementL10n {
   public static var settings1224Timestamps: String { return ElementL10n.tr("Localizable", "settings_12_24_timestamps") }
   /// Account Data
   public static var settingsAccountData: String { return ElementL10n.tr("Localizable", "settings_account_data") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func settingsActiveSessionsCount(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "settings_active_sessions_count", p1)
+  }
   /// Active Sessions
   public static var settingsActiveSessionsList: String { return ElementL10n.tr("Localizable", "settings_active_sessions_list") }
   /// Manage Sessions
@@ -4367,7 +4576,7 @@ public enum ElementL10n {
   public static var settingsTroubleshootTestAccountSettingsSuccess: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_account_settings_success") }
   /// Account Settings.
   public static var settingsTroubleshootTestAccountSettingsTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_account_settings_title") }
-  /// If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms. 
+  /// If a user leaves a device unplugged and stationary for a period of time, with the screen off, the device enters Doze mode. This prevents apps from accessing the network and defers their jobs, syncs, and standard alarms.
   public static var settingsTroubleshootTestBatteryFailed: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_battery_failed") }
   /// Ignore Optimization
   public static var settingsTroubleshootTestBatteryQuickfix: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_battery_quickfix") }
@@ -4496,8 +4705,6 @@ public enum ElementL10n {
   /// Troubleshoot
   public static var settingsTroubleshootTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_title") }
   /// Show all messages from %@?
-  /// 
-  /// Note that this action will restart the app and it may take some time.
   public static func settingsUnignoreUser(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "settings_unignore_user", String(describing: p1))
   }
@@ -4635,6 +4842,10 @@ public enum ElementL10n {
   public static var spaceParticipantsRemovePromptMsg: String { return ElementL10n.tr("Localizable", "space_participants_remove_prompt_msg") }
   /// Unbanning user will allow them to join the space again.
   public static var spaceParticipantsUnbanPromptMsg: String { return ElementL10n.tr("Localizable", "space_participants_unban_prompt_msg") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func spacePeopleYouKnow(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "space_people_you_know", p1)
+  }
   /// Select the roles required to change various parts of this space
   public static var spacePermissionsNotice: String { return ElementL10n.tr("Localizable", "space_permissions_notice") }
   /// You don't have permission to update the roles required to change various parts of this space
@@ -4841,6 +5052,10 @@ public enum ElementL10n {
   public static var topicPrefix: String { return ElementL10n.tr("Localizable", "topic_prefix") }
   /// Trusted
   public static var trusted: String { return ElementL10n.tr("Localizable", "trusted") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func twoAndSomeOthersRead(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "two_and_some_others_read", p1)
+  }
   /// %1$@ and %2$@ read
   public static func twoUsersRead(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "two_users_read", String(describing: p1), String(describing: p2))
@@ -4948,7 +5163,6 @@ public enum ElementL10n {
   ///    - The homeserver the user you’re verifying is connected to
   ///    - Yours, or the other users’ internet connection
   ///    - Yours, or the other users’ device
-  ///     
   public static var verificationConclusionCompromised: String { return ElementL10n.tr("Localizable", "verification_conclusion_compromised") }
   /// Not secure
   public static var verificationConclusionNotSecure: String { return ElementL10n.tr("Localizable", "verification_conclusion_not_secure") }
@@ -5057,8 +5271,7 @@ public enum ElementL10n {
   public static var verifyNewSessionNotice: String { return ElementL10n.tr("Localizable", "verify_new_session_notice") }
   /// This wasn’t me
   public static var verifyNewSessionWasNotMe: String { return ElementL10n.tr("Localizable", "verify_new_session_was_not_me") }
-  /// 
-  ///         One of the following may be compromised:
+  /// One of the following may be compromised:
   /// 
   /// - Your password
   /// - Your homeserver
@@ -5066,7 +5279,6 @@ public enum ElementL10n {
   /// - The internet connection either device is using
   /// 
   /// We recommend you change your password & recovery key in Settings immediately.
-  ///     
   public static var verifyNotMeSelfVerification: String { return ElementL10n.tr("Localizable", "verify_not_me_self_verification") }
   /// Verify all your sessions to ensure your account & messages are safe
   public static var verifyOtherSessions: String { return ElementL10n.tr("Localizable", "verify_other_sessions") }
@@ -5134,6 +5346,10 @@ public enum ElementL10n {
   public static var widgetIntegrationUnableToCreate: String { return ElementL10n.tr("Localizable", "widget_integration_unable_to_create") }
   /// Warning! Last remaining attempt before logout!
   public static var wrongPinMessageLastRemainingAttempt: String { return ElementL10n.tr("Localizable", "wrong_pin_message_last_remaining_attempt") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func wrongPinMessageRemainingAttempts(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "wrong_pin_message_remaining_attempts", p1)
+  }
   /// %d+
   public static func xPlus(_ p1: Int) -> String {
     return ElementL10n.tr("Localizable", "x_plus", p1)
@@ -5170,488 +5386,6 @@ public enum ElementL10n {
   public static func yourUnverifiedDeviceRequestingWithInfo(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "your_unverified_device_requesting_with_info", String(describing: p1), String(describing: p2))
   }
-
-  public enum AnalyticsOptInListItem1 {
-    /// don't
-    public static var b0: String { return ElementL10n.tr("Localizable", "analytics_opt_in_list_item_1.b_0") }
-  }
-
-  public enum AnalyticsOptInListItem2 {
-    /// don't
-    public static var b0: String { return ElementL10n.tr("Localizable", "analytics_opt_in_list_item_2.b_0") }
-  }
-
-  public enum DeactivateAccountContent {
-    /// This action is irreversible
-    public static var b0: String { return ElementL10n.tr("Localizable", "deactivate_account_content.b_0") }
-    /// does not by default cause us to forget messages you have sent
-    public static var b1: String { return ElementL10n.tr("Localizable", "deactivate_account_content.b_1") }
-  }
-
-  public enum Plurals {
-    public enum ActiveWidgets {
-      /// %d active widget
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.active_widgets.item_0", p1)
-      }
-      /// %d active widgets
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.active_widgets.item_1", p1)
-      }
-    }
-    public enum CallActiveStatus {
-      /// Active call ·
-      public static var item0: String { return ElementL10n.tr("Localizable", "plurals.call_active_status.item_0") }
-      /// %1$d active calls ·
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.call_active_status.item_1", p1)
-      }
-    }
-    public enum CreatePollNotEnoughOptionsError {
-      /// At least %1$@ option is required
-      public static func item0(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.create_poll_not_enough_options_error.item_0", String(describing: p1))
-      }
-      /// At least %1$@ options are required
-      public static func item1(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.create_poll_not_enough_options_error.item_1", String(describing: p1))
-      }
-    }
-    public enum EncryptionImportRoomKeysSuccess {
-      /// %1$d/%2$d key imported with success.
-      public static func item0(_ p1: Int, _ p2: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.encryption_import_room_keys_success.item_0", p1, p2)
-      }
-      /// %1$d/%2$d keys imported with success.
-      public static func item1(_ p1: Int, _ p2: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.encryption_import_room_keys_success.item_1", p1, p2)
-      }
-    }
-    public enum Entries {
-      /// %d entry
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.entries.item_0", p1)
-      }
-      /// %d entries
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.entries.item_1", p1)
-      }
-    }
-    public enum FallbackUsersRead {
-      /// %d user read
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.fallback_users_read.item_0", p1)
-      }
-      /// %d users read
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.fallback_users_read.item_1", p1)
-      }
-    }
-    public enum InvitationsSentToOneAndMoreUsers {
-      /// Invitations sent to %1$@ and one more
-      public static func item0(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.invitations_sent_to_one_and_more_users.item_0", String(describing: p1))
-      }
-      /// Invitations sent to %1$@ and %2$d more
-      public static func item1(_ p1: Any, _ p2: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.invitations_sent_to_one_and_more_users.item_1", String(describing: p1), p2)
-      }
-    }
-    public enum KeysBackupInfoKeysBackingUp {
-      /// Backing up %d key…
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.keys_backup_info_keys_backing_up.item_0", p1)
-      }
-      /// Backing up %d keys…
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.keys_backup_info_keys_backing_up.item_1", p1)
-      }
-    }
-    public enum KeysBackupRestoreSuccessDescriptionPart1 {
-      /// Restored a backup with %d key.
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.keys_backup_restore_success_description_part1.item_0", p1)
-      }
-      /// Restored a backup with %d keys.
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.keys_backup_restore_success_description_part1.item_1", p1)
-      }
-    }
-    public enum KeysBackupRestoreSuccessDescriptionPart2 {
-      /// %d new key has been added to this session.
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.keys_backup_restore_success_description_part2.item_0", p1)
-      }
-      /// %d new keys have been added to this session.
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.keys_backup_restore_success_description_part2.item_1", p1)
-      }
-    }
-    public enum LoginErrorLimitExceededRetryAfter {
-      /// Too many requests have been sent. You can retry in %1$d second…
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.login_error_limit_exceeded_retry_after.item_0", p1)
-      }
-      /// Too many requests have been sent. You can retry in %1$d seconds…
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.login_error_limit_exceeded_retry_after.item_1", p1)
-      }
-    }
-    public enum MembershipChanges {
-      /// %d membership change
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.membership_changes.item_0", p1)
-      }
-      /// %d membership changes
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.membership_changes.item_1", p1)
-      }
-    }
-    public enum MessageReactionShowMore {
-      /// %1$d more
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.message_reaction_show_more.item_0", p1)
-      }
-      /// %1$d more
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.message_reaction_show_more.item_1", p1)
-      }
-    }
-    public enum MissedAudioCall {
-      /// Missed audio call
-      public static var item0: String { return ElementL10n.tr("Localizable", "plurals.missed_audio_call.item_0") }
-      /// %d missed audio calls
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.missed_audio_call.item_1", p1)
-      }
-    }
-    public enum MissedVideoCall {
-      /// Missed video call
-      public static var item0: String { return ElementL10n.tr("Localizable", "plurals.missed_video_call.item_0") }
-      /// %d missed video calls
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.missed_video_call.item_1", p1)
-      }
-    }
-    public enum NoticeRoomAliasesAdded {
-      /// %1$@ added %2$@ as an address for this room.
-      public static func item0(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_added.item_0", String(describing: p1), String(describing: p2))
-      }
-      /// %1$@ added %2$@ as addresses for this room.
-      public static func item1(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_added.item_1", String(describing: p1), String(describing: p2))
-      }
-    }
-    public enum NoticeRoomAliasesAddedByYou {
-      /// You added %1$@ as an address for this room.
-      public static func item0(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_added_by_you.item_0", String(describing: p1))
-      }
-      /// You added %1$@ as addresses for this room.
-      public static func item1(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_added_by_you.item_1", String(describing: p1))
-      }
-    }
-    public enum NoticeRoomAliasesRemoved {
-      /// %1$@ removed %2$@ as an address for this room.
-      public static func item0(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_removed.item_0", String(describing: p1), String(describing: p2))
-      }
-      /// %1$@ removed %2$@ as addresses for this room.
-      public static func item1(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_removed.item_1", String(describing: p1), String(describing: p2))
-      }
-    }
-    public enum NoticeRoomAliasesRemovedByYou {
-      /// You removed %1$@ as an address for this room.
-      public static func item0(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_removed_by_you.item_0", String(describing: p1))
-      }
-      /// You removed %1$@ as addresses for this room.
-      public static func item1(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_aliases_removed_by_you.item_1", String(describing: p1))
-      }
-    }
-    public enum NoticeRoomCanonicalAliasAlternativeAdded {
-      /// %1$@ added the alternative address %2$@ for this room.
-      public static func item0(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_added.item_0", String(describing: p1), String(describing: p2))
-      }
-      /// %1$@ added the alternative addresses %2$@ for this room.
-      public static func item1(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_added.item_1", String(describing: p1), String(describing: p2))
-      }
-    }
-    public enum NoticeRoomCanonicalAliasAlternativeAddedByYou {
-      /// You added the alternative address %1$@ for this room.
-      public static func item0(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_added_by_you.item_0", String(describing: p1))
-      }
-      /// You added the alternative addresses %1$@ for this room.
-      public static func item1(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_added_by_you.item_1", String(describing: p1))
-      }
-    }
-    public enum NoticeRoomCanonicalAliasAlternativeRemoved {
-      /// %1$@ removed the alternative address %2$@ for this room.
-      public static func item0(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_removed.item_0", String(describing: p1), String(describing: p2))
-      }
-      /// %1$@ removed the alternative addresses %2$@ for this room.
-      public static func item1(_ p1: Any, _ p2: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_removed.item_1", String(describing: p1), String(describing: p2))
-      }
-    }
-    public enum NoticeRoomCanonicalAliasAlternativeRemovedByYou {
-      /// You removed the alternative address %1$@ for this room.
-      public static func item0(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0", String(describing: p1))
-      }
-      /// You removed the alternative addresses %1$@ for this room.
-      public static func item1(_ p1: Any) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1", String(describing: p1))
-      }
-    }
-    public enum NoticeRoomServerAclChanges {
-      /// %d server ACLs change
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_server_acl_changes.item_0", p1)
-      }
-      /// %d server ACLs changes
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notice_room_server_acl_changes.item_1", p1)
-      }
-    }
-    public enum NotificationCompatSummaryLineForRoom {
-      /// %1$@: %2$d message
-      public static func item0(_ p1: Any, _ p2: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_compat_summary_line_for_room.item_0", String(describing: p1), p2)
-      }
-      /// %1$@: %2$d messages
-      public static func item1(_ p1: Any, _ p2: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_compat_summary_line_for_room.item_1", String(describing: p1), p2)
-      }
-    }
-    public enum NotificationCompatSummaryTitle {
-      /// %d notification
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_compat_summary_title.item_0", p1)
-      }
-      /// %d notifications
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_compat_summary_title.item_1", p1)
-      }
-    }
-    public enum NotificationInvitations {
-      /// %d invitation
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_invitations.item_0", p1)
-      }
-      /// %d invitations
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_invitations.item_1", p1)
-      }
-    }
-    public enum NotificationUnreadNotifiedMessages {
-      /// %d unread notified message
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_unread_notified_messages.item_0", p1)
-      }
-      /// %d unread notified messages
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_unread_notified_messages.item_1", p1)
-      }
-    }
-    public enum NotificationUnreadNotifiedMessagesInRoomRooms {
-      /// %d room
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_unread_notified_messages_in_room_rooms.item_0", p1)
-      }
-      /// %d rooms
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.notification_unread_notified_messages_in_room_rooms.item_1", p1)
-      }
-    }
-    public enum PollOptionVoteCount {
-      /// %1$d vote
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_option_vote_count.item_0", p1)
-      }
-      /// %1$d votes
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_option_vote_count.item_1", p1)
-      }
-    }
-    public enum PollTotalVoteCountAfterEnded {
-      /// Final result based on %1$d vote
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_total_vote_count_after_ended.item_0", p1)
-      }
-      /// Final result based on %1$d votes
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_total_vote_count_after_ended.item_1", p1)
-      }
-    }
-    public enum PollTotalVoteCountBeforeEndedAndNotVoted {
-      /// %1$d vote cast. Vote to the see the results
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_total_vote_count_before_ended_and_not_voted.item_0", p1)
-      }
-      /// %1$d votes cast. Vote to the see the results
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_total_vote_count_before_ended_and_not_voted.item_1", p1)
-      }
-    }
-    public enum PollTotalVoteCountBeforeEndedAndVoted {
-      /// Based on %1$d vote
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_total_vote_count_before_ended_and_voted.item_0", p1)
-      }
-      /// Based on %1$d votes
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.poll_total_vote_count_before_ended_and_voted.item_1", p1)
-      }
-    }
-    public enum RoomDetailsSelected {
-      /// %d selected
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_details_selected.item_0", p1)
-      }
-      /// %d selected
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_details_selected.item_1", p1)
-      }
-    }
-    public enum RoomDisplaynameFourAndMoreMembers {
-      /// %1$@, %2$@, %3$@ and %4$d other
-      public static func item0(_ p1: Any, _ p2: Any, _ p3: Any, _ p4: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_displayname_four_and_more_members.item_0", String(describing: p1), String(describing: p2), String(describing: p3), p4)
-      }
-      /// %1$@, %2$@, %3$@ and %4$d others
-      public static func item1(_ p1: Any, _ p2: Any, _ p3: Any, _ p4: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_displayname_four_and_more_members.item_1", String(describing: p1), String(describing: p2), String(describing: p3), p4)
-      }
-    }
-    public enum RoomNewMessagesNotification {
-      /// %d new message
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_new_messages_notification.item_0", p1)
-      }
-      /// %d new messages
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_new_messages_notification.item_1", p1)
-      }
-    }
-    public enum RoomProfileSectionMoreMemberList {
-      /// One person
-      public static var item0: String { return ElementL10n.tr("Localizable", "plurals.room_profile_section_more_member_list.item_0") }
-      /// %1$d people
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_profile_section_more_member_list.item_1", p1)
-      }
-    }
-    public enum RoomSettingsBannedUsersCount {
-      /// %d banned user
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_settings_banned_users_count.item_0", p1)
-      }
-      /// %d banned users
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_settings_banned_users_count.item_1", p1)
-      }
-    }
-    public enum RoomTitleMembers {
-      /// %d member
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_title_members.item_0", p1)
-      }
-      /// %d members
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.room_title_members.item_1", p1)
-      }
-    }
-    public enum Seconds {
-      /// %d second
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.seconds.item_0", p1)
-      }
-      /// %d seconds
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.seconds.item_1", p1)
-      }
-    }
-    public enum SecureBackupResetDevicesYouCanVerify {
-      /// Show the device you can verify with now
-      public static var item0: String { return ElementL10n.tr("Localizable", "plurals.secure_backup_reset_devices_you_can_verify.item_0") }
-      /// Show %d devices you can verify with now
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.secure_backup_reset_devices_you_can_verify.item_1", p1)
-      }
-    }
-    public enum SendImagesWithOriginalSize {
-      /// Send image with the original size
-      public static var item0: String { return ElementL10n.tr("Localizable", "plurals.send_images_with_original_size.item_0") }
-      /// Send images with the original size
-      public static var item1: String { return ElementL10n.tr("Localizable", "plurals.send_images_with_original_size.item_1") }
-    }
-    public enum SendVideosWithOriginalSize {
-      /// Send video with the original size
-      public static var item0: String { return ElementL10n.tr("Localizable", "plurals.send_videos_with_original_size.item_0") }
-      /// Send videos with the original size
-      public static var item1: String { return ElementL10n.tr("Localizable", "plurals.send_videos_with_original_size.item_1") }
-    }
-    public enum SettingsActiveSessionsCount {
-      /// %d active session
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.settings_active_sessions_count.item_0", p1)
-      }
-      /// %d active sessions
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.settings_active_sessions_count.item_1", p1)
-      }
-    }
-    public enum SpacePeopleYouKnow {
-      /// %d person you know has already joined
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.space_people_you_know.item_0", p1)
-      }
-      /// %d people you know have already joined
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.space_people_you_know.item_1", p1)
-      }
-    }
-    public enum TwoAndSomeOthersRead {
-      /// %1$@, %2$@ and %3$d other read
-      public static func item0(_ p1: Any, _ p2: Any, _ p3: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.two_and_some_others_read.item_0", String(describing: p1), String(describing: p2), p3)
-      }
-      /// %1$@, %2$@ and %3$d others read
-      public static func item1(_ p1: Any, _ p2: Any, _ p3: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.two_and_some_others_read.item_1", String(describing: p1), String(describing: p2), p3)
-      }
-    }
-    public enum WrongPinMessageRemainingAttempts {
-      /// Wrong code, %d remaining attempt
-      public static func item0(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.wrong_pin_message_remaining_attempts.item_0", p1)
-      }
-      /// Wrong code, %d remaining attempts
-      public static func item1(_ p1: Int) -> String {
-        return ElementL10n.tr("Localizable", "plurals.wrong_pin_message_remaining_attempts.item_1", p1)
-      }
-    }
-  }
-
-  public enum ResourceLimitSoftDefault {
-    /// some users will not be able to log in
-    public static var b0: String { return ElementL10n.tr("Localizable", "resource_limit_soft_default.b_0") }
-  }
-
-  public enum ResourceLimitSoftMau {
-    /// some users will not be able to log in
-    public static var b0: String { return ElementL10n.tr("Localizable", "resource_limit_soft_mau.b_0") }
-  }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
@@ -5677,7 +5411,7 @@ extension ElementL10n {
       return key
     }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
-    return String(format: format, locale: Locale(identifier: language), arguments: args)
+    return String.localizedStringWithFormat(format, args)
   }
 }
 

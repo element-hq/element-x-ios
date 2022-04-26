@@ -92,22 +92,14 @@
 "notice_room_invite_no_invitee_with_reason_by_you" = "La teva invitació. Motiu: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "la invitació de %1$@. Motiu: %2$@";
 "event_status_sending_message" = "Enviant missatge…";
-"initial_sync_start_importing_account_data" = "Sincronització inicial:
-\nImportant dades del compte";
-"initial_sync_start_importing_account_groups" = "Sincronització inicial:
-\nImportant comunitats";
-"initial_sync_start_importing_account_left_rooms" = "Sincronització inicial:
-\nImportant sales que deixat";
-"initial_sync_start_importing_account" = "Sincronització inicial:
-\nImportant compte…";
-"initial_sync_start_importing_account_crypto" = "Sincronització inicial:
-\nImportant xifrat";
-"initial_sync_start_importing_account_rooms" = "Sincronització inicial:
-\nImportant sales";
-"initial_sync_start_importing_account_invited_rooms" = "Sincronització inicial:
-\nImportant sales on hi estàs convidat";
-"initial_sync_start_importing_account_joined_rooms" = "Sincronització inicial:
-\nImportant sales on hi estàs unit";
+"initial_sync_start_importing_account_data" = "Sincronització inicial:\nImportant dades del compte";
+"initial_sync_start_importing_account_groups" = "Sincronització inicial:\nImportant comunitats";
+"initial_sync_start_importing_account_left_rooms" = "Sincronització inicial:\nImportant sales que deixat";
+"initial_sync_start_importing_account" = "Sincronització inicial:\nImportant compte…";
+"initial_sync_start_importing_account_crypto" = "Sincronització inicial:\nImportant xifrat";
+"initial_sync_start_importing_account_rooms" = "Sincronització inicial:\nImportant sales";
+"initial_sync_start_importing_account_invited_rooms" = "Sincronització inicial:\nImportant sales on hi estàs convidat";
+"initial_sync_start_importing_account_joined_rooms" = "Sincronització inicial:\nImportant sales on hi estàs unit";
 "notice_power_level_diff" = "%1$@ de %2$@ a %3$@";
 "notice_power_level_changed" = "%1$@ ha canviat el nivell d\'autoritat de %2$@.";
 "notice_power_level_changed_by_you" = "Has canviat el nivell d\'autoritat de %1$@.";
@@ -282,9 +274,7 @@
 "call_error_user_not_responding" = "No s\'està responent a la trucada.";
 "permissions_rationale_popup_title" = "Informació";
 "permissions_rationale_msg_record_audio" = "Per tal de fer trucades de veu, %@ necessita permís per accedir al micròfon.";
-"permissions_rationale_msg_camera_and_audio" = "Per tal de fer videotrucades, %@ necessita permís per accedir a la càmera i al micròfon.
-\n
-\nPermet-li l\'accés en la següent finestra emergent per tal de poder fer la trucada.";
+"permissions_rationale_msg_camera_and_audio" = "Per tal de fer videotrucades, %@ necessita permís per accedir a la càmera i al micròfon.\n\nPermet-li l\'accés en la següent finestra emergent per tal de poder fer la trucada.";
 "yes" = "SÍ";
 "no" = "NO";
 "_continue" = "Continua";
@@ -301,8 +291,7 @@
 "room_participants_action_ignore" = "Ignora";
 "room_participants_action_unignore" = "Deixa d\'ignorar";
 "room_participants_action_mention" = "Menciona";
-"room_participants_power_level_prompt" = "No podràs desfer aquest canvi ja que estàs donant a l\'usuari el mateix nivell d\'autoritat que el teu.
-\nN\'estàs segur\?";
+"room_participants_power_level_prompt" = "No podràs desfer aquest canvi ja que estàs donant a l\'usuari el mateix nivell d\'autoritat que el teu.\nN\'estàs segur\?";
 "room_participants_ban_prompt_msg" = "Si vetes un usuari, se l\'expulsarà d\'aquesta sala i no podrà tornar a unir-s\'hi.";
 "room_one_user_is_typing" = "%@ està escrivint…";
 "room_two_users_are_typing" = "%1$@ & %2$@ estan escrivint…";
@@ -390,9 +379,7 @@
 "settings_new_password" = "Contrasenya nova";
 "settings_fail_to_update_password" = "No s\'ha pogut actualitzar la contrasenya";
 "settings_password_updated" = "La contrasenya s\'ha actualitzat";
-"settings_unignore_user" = "Mostra tots els missatges de %@\?
-\n
-\nTingues en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una estona.";
+"settings_unignore_user" = "Mostra tots els missatges de %@\?\n\nTingues en compte que aquesta acció reiniciarà l\'aplicació i pot trigar una estona.";
 "settings_select_country" = "Escull un país";
 "settings_flair" = "Insígnia";
 "media_saving_period_3_days" = "Tres dies";
@@ -488,9 +475,7 @@
 "dialog_title_error" = "Error";
 "system_alerts_header" = "Alertes de sistema";
 "send_bug_report_description_in_english" = "Si és possible, escriu la descripció en anglès.";
-"no_sticker_application_dialog_content" = "Encara no tens cap paquet d\'adhesius activat.
-\n
-\nEn vols afegir algun\?";
+"no_sticker_application_dialog_content" = "Encara no tens cap paquet d\'adhesius activat.\n\nEn vols afegir algun\?";
 "settings_preview_media_before_sending" = "Mostra el contingut multimèdia abans d\'enviar-lo";
 "settings_deactivate_account_section" = "Desactivar el compte";
 "settings_deactivate_my_account" = "Desactivar el meu compte";
@@ -517,8 +502,7 @@
 "dialog_user_consent_content" = "Per poder continuar utilitzant el servidor local %1$@ has de revisar i acceptar els termes i condicions.";
 "dialog_user_consent_submit" = "Revisa ara";
 "deactivate_account_title" = "Desactiva el compte";
-"deactivate_account_content.b_0" = "Aquesta acció és irreversible";
-"deactivate_account_content.b_1" = "no implica que s\'oblidin els missatges que has enviat";
+"deactivate_account_content" = "Això farà que no puguis utilitzar més el teu compte. No podràs iniciar sessió i ningú podrà tornar-se a registrar amb el mateix ID d\'usuari. Això farà que el teu compte marxi de totes les sales a les que estigui participant i eliminarà les dades del compte del teu servidor d\'identitat. <b>Aquesta acció és irreversible</b>.\n\nDesactivar el compte <b>no implica que s\'oblidin els missatges que has enviat</b>. Si vols que ens n\'oblidem, marca la casella a continuació.\n\nLa visibilitat dels missatges a Matrix és similar a la del correu electrònic. Que oblidem els teus missatges vol dir que els missatges que hagis enviat no seran accessibles per a nous usuaris o usuaris no registrats, però els usuaris registrats que ja hi tinguin accés, en conservaran una còpia.";
 "deactivate_account_delete_checkbox" = "Elimina tots els missatges que he enviat quan es desactivi el meu compte (Avís: això farà que els futurs usuaris vegin una vista incompleta dels xats)";
 "deactivate_account_submit" = "Desactivar el compte";
 "error_empty_field_your_password" = "Si us plau escriviu la vostra contrasenya.";
@@ -527,9 +511,9 @@
 "room_tombstone_continuation_description" = "Aquesta sala és un continuació d\'un altre xat";
 "room_tombstone_predecessor_link" = "Feu clic aquí per veure els missatges antics";
 "resource_limit_contact_admin" = "Contacteu amb l\'administrador del servei";
-"resource_limit_soft_default.b_0" = "alguns usuaris no podran identificar-s\'hi";
+"resource_limit_soft_default" = "Aquest servidor base ha sobrepassat un dels seus límits de recursos, així que <b>alguns usuaris no podran identificar-s\'hi</b>.";
 "resource_limit_hard_default" = "Aquest servidor base ha sobrepassat un dels seus límits de recursos.";
-"resource_limit_soft_mau.b_0" = "alguns usuaris no podran iniciar-hi sessió";
+"resource_limit_soft_mau" = "Aquest servidor base ha assolit el seu límit màxim mensual d\'usuaris actius i <b>alguns usuaris no podran iniciar-hi sessió</b>.";
 "resource_limit_hard_mau" = "Aquest servidor base ha assolit el seu límit mensual d\'activitat d\'usuaris.";
 "resource_limit_soft_contact" = "Si us plau %@ per tal d\'incrementar aquest límit.";
 "resource_limit_hard_contact" = "Si us plau %@ per continuar utilitzant aquest servei.";
@@ -557,13 +541,11 @@
 "settings_troubleshoot_diagnostic_failure_status_with_quickfix" = "Ha fallat una o més proves, prova les solucions proposades.";
 "settings_troubleshoot_test_system_settings_title" = "Configuració del sistema.";
 "settings_troubleshoot_test_system_settings_success" = "Les notificacions estan activades a la configuració del sistema.";
-"settings_troubleshoot_test_system_settings_failed" = "Les notificacions estan desactivades a la configuració del sistema.
-\nComprova la configuració de sistema.";
+"settings_troubleshoot_test_system_settings_failed" = "Les notificacions estan desactivades a la configuració del sistema.\nComprova la configuració de sistema.";
 "open_settings" = "Obre la configuració";
 "settings_troubleshoot_test_account_settings_title" = "Configuració del compte.";
 "settings_troubleshoot_test_account_settings_success" = "Les notificacions del teu compte estan activades.";
-"settings_troubleshoot_test_account_settings_failed" = "Les notificacions per al teu compte estan desactivades.
-\nComprova la configuració del compte.";
+"settings_troubleshoot_test_account_settings_failed" = "Les notificacions per al teu compte estan desactivades.\nComprova la configuració del compte.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Habilita";
 "settings_troubleshoot_test_device_settings_title" = "Configuració de la sessió.";
 "settings_troubleshoot_test_device_settings_success" = "Les notificacions per aquesta sessió estan activades.";
@@ -590,27 +572,21 @@
 "settings_notification_troubleshoot" = "Diagnostica les notificacions";
 "settings_troubleshoot_diagnostic" = "Diagnòstic de la resolució de problemes";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Ha fallat una o més proves, envia un informe d\'errors per ajudar-nos a investigar-ho.";
-"settings_troubleshoot_test_device_settings_failed" = "Les notificacions per aquesta sessió no estan activades.
-\nComprova la configuració d\'%@.";
+"settings_troubleshoot_test_device_settings_failed" = "Les notificacions per aquesta sessió no estan activades.\nComprova la configuració d\'%@.";
 "settings_troubleshoot_test_bing_settings_title" = "Configuració personalitzada.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Tingues en compte que alguns tipus de missatge estan configurats per ser silenciosos (es produirà una notificació sense so).";
 "settings_troubleshoot_test_bing_settings_failed" = "Algunes notificacions estan desactivades a la configuració personalitzada.";
 "settings_troubleshoot_test_play_services_title" = "Comprovació dels serveis de Play";
 "settings_troubleshoot_test_play_services_success" = "L\'APK dels Serveis de Google Play està disponible i està actualitzada.";
-"settings_troubleshoot_test_play_services_failed" = "%@ utilitza els serveis de Google Play per lliurar missatges però sembla que no està configurat correctament:
-\n %1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ utilitza els serveis de Google Play per lliurar missatges però sembla que no està configurat correctament:\n %1$@";
 "settings_troubleshoot_test_fcm_title" = "Token de Firebase";
-"settings_troubleshoot_test_fcm_success" = "Token FCM obtingut correctament:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "No s\'ha pogut obtenir el token FCM:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nAquest error està fora del control d\'%@ i, segons Google, aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions i, per tant, no hauria d\'afectar els usuari normals.";
+"settings_troubleshoot_test_fcm_success" = "Token FCM obtingut correctament:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "No s\'ha pogut obtenir el token FCM:\n%1$@";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nAquest error està fora del control d\'%@ i, segons Google, aquest error indica que aquest dispositiu té massa aplicacions registrades amb FCM. L\'error només ocorre en casos en què hi ha un nombre extrem d\'aplicacions i, per tant, no hauria d\'afectar els usuari normals.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Afegeix un compte";
 "settings_troubleshoot_test_token_registration_title" = "Registre de token";
 "settings_troubleshoot_test_token_registration_success" = "El token FCM s\'ha registrat correctament al servidor local.";
-"settings_troubleshoot_test_token_registration_failed" = "No s\'ha pogut registrar el token FCM al servidor local:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "No s\'ha pogut registrar el token FCM al servidor local:\n%1$@";
 "settings_troubleshoot_test_service_boot_success" = "El servei s\'iniciarà quan es reiniciï el dispositiu.";
 "settings_troubleshoot_test_service_boot_failed" = "El servei no s\'iniciarà quan el dispositiu es reiniciï, per tant, no rebràs notificacions fins que %@ no s\'hagi obert per primera vegada.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Habilita l\'inici durant l\'arrencada";
@@ -631,9 +607,7 @@
 "passphrase_passphrase_too_weak" = "La frase de pas és massa feble";
 "keys_backup_passphrase_not_empty_error_message" = "Suprimiu la frase si vols que %@ generi una clau de recuperació.";
 "keys_backup_setup_step1_title" = "No perdeu mai els missatges xifrats";
-"keys_backup_setup_step1_description" = "Els missatges en sales xifrades estan protegits amb xifrat d\'extrem a extrem. Només tu i el/s destinatari/s teniu les claus per poder llegir aquests missatges.
-\n
-\nFes una còpia de seguretat de les teves claus per evitar perdre\'ls.";
+"keys_backup_setup_step1_description" = "Els missatges en sales xifrades estan protegits amb xifrat d\'extrem a extrem. Només tu i el/s destinatari/s teniu les claus per poder llegir aquests missatges.\n\nFes una còpia de seguretat de les teves claus per evitar perdre\'ls.";
 "keys_backup_setup_step2_button_title" = "Estableix la frase de pas";
 "keys_backup_setup_step3_button_title" = "Fet";
 "keys_backup_setup_step3_copy_button_title" = "Desa la clau de recuperació";
@@ -651,15 +625,10 @@
 "keys_backup_restore_with_recovery_key" = "Utilitza la clau de recuperació per desbloquejar l\'històric de missatges xifrats";
 "keys_backup_restore_key_enter_hint" = "Introdueix la clau de recuperació";
 "keys_backup_restore_with_key_helper" = "Has perdut la clau de recuperació\? Pots configurar-ne una de nova a la configuració.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nAquest error està fora del control d\'%@. Pot ser causat per diferents motius. És possible que torni a funcionar més endavant. També pots comprovar, a la configuració del sistema, que els Serveis de Google Play no tinguin cap restricció de dades o que l\'hora del dispositiu sigui la correcta. També pot passar si tens una ROM personalitzada.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nAquest error està fora del control d\'%@. No hi ha cap compte de Google al telèfon. Vés a la configuració de comptes i afegeix un compte de Google.";
-"settings_troubleshoot_test_bg_restricted_success" = "Les restriccions en segon pla per a %@ estan desactivades. Aquesta prova s\'hauria de fer emprant dades mòbils (sense WiFi).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Les restriccions en segon pla per a %@ estan activades.
-\nLes tasques que l\'aplicació intenta fer en segon pla estaran força restringides, això pot afectar a les notificacions.
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nAquest error està fora del control d\'%@. Pot ser causat per diferents motius. És possible que torni a funcionar més endavant. També pots comprovar, a la configuració del sistema, que els Serveis de Google Play no tinguin cap restricció de dades o que l\'hora del dispositiu sigui la correcta. També pot passar si tens una ROM personalitzada.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nAquest error està fora del control d\'%@. No hi ha cap compte de Google al telèfon. Vés a la configuració de comptes i afegeix un compte de Google.";
+"settings_troubleshoot_test_bg_restricted_success" = "Les restriccions en segon pla per a %@ estan desactivades. Aquesta prova s\'hauria de fer emprant dades mòbils (sense WiFi).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Les restriccions en segon pla per a %@ estan activades.\nLes tasques que l\'aplicació intenta fer en segon pla estaran força restringides, això pot afectar a les notificacions.\n%1$@";
 "settings_troubleshoot_test_battery_failed" = "Si un usuari deixa un dispositiu amb la pantalla apagada, desendollat i quiet durant un període de temps, el dispositiu entra en el mode repòs. Això impedeix que les aplicacions accedeixin a la xarxa i n\'ajorna les seves tasques, sincronitzacions i alarmes estàndard.";
 "keys_backup_setup_step3_generating_key_status" = "Generant la clau de recuperació emprant la frase, aquest procés pot trigar uns segons.";
 "keys_backup_passphrase_error_decrypt" = "No s\'ha pogut desxifrar la còpia de seguretat amb aquesta frase: comprova que la frase de recuperació introduïda és correcta.";
@@ -714,11 +683,8 @@
 "keys_backup_info_title_signature" = "Signatura";
 "sign_out_bottom_sheet_warning_backup_not_active" = "Per evitar la pèrdua d\'accés als teus missatges xifrats, hauries d\'activar la còpia de seguretat de les claus a totes les teves sessions.";
 "sign_out_bottom_sheet_will_lose_secure_messages" = "Perdràs l\'accés als teus missatges xifrats si no fas una còpia de seguretat de les teves claus abans de tancar la sessió.";
-"keys_backup_setup_step2_text_description" = "Es desarà una còpia xifrada de les teves claus al teu servidor local. Protegeix la còpia de seguretat amb una contrasenya per tal de mantenir-la segura.
-\n
-\nPer la màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del teu compte.";
-"keys_backup_setup_step3_text_line2" = "En cas que oblidis la teva contrasenya, la clau de recuperació és un recurs per recuperar l\'accés als teus missatges xifrats.
-\nDesa la clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes (o una caixa forta)";
+"keys_backup_setup_step2_text_description" = "Es desarà una còpia xifrada de les teves claus al teu servidor local. Protegeix la còpia de seguretat amb una contrasenya per tal de mantenir-la segura.\n\nPer la màxima seguretat, aquesta contrasenya hauria de ser diferent de la contrasenya del teu compte.";
+"keys_backup_setup_step3_text_line2" = "En cas que oblidis la teva contrasenya, la clau de recuperació és un recurs per recuperar l\'accés als teus missatges xifrats.\nDesa la clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes (o una caixa forta)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Desa la clau de recuperació en un lloc molt segur, com ara un gestor de contrasenyes (o una caixa forta)";
 "keys_backup_restoring_computing_key_waiting_message" = "S\'està generant la clau de recuperació…";
 "keys_backup_restoring_downloading_backup_waiting_message" = "S\'estan baixant les claus…";
@@ -745,14 +711,8 @@
 "notification_sender_me" = "Jo";
 "notification_inline_reply_failed" = "** No s\'ha pogut enviar - si us plau, obre la sala";
 "error_jitsi_not_supported_on_old_device" = "Ho sentim, les videoconferències amb Jitsi no són compatibles amb dispositius antics (dispositius amb Android inferior a 6.0)";
-"you_added_a_new_device_with_info" = "Una nova sessió està sol·licitant claus de xifrat.
-\nNom de la sessió: %1$@
-\nVist per última vegada: %2$@
-\nSi no has iniciat sessió en cap altre lloc, ignora la sol·licitud.";
-"your_unverified_device_requesting_with_info" = "Una sessió no verificada està sol·licitant claus de xifrat.
-\nNom de la sessió: %1$@
-\nVist per última vegada: %2$@
-\nSi no has iniciat sessió en cap altre lloc, ignora la sol·licitud.";
+"you_added_a_new_device_with_info" = "Una nova sessió està sol·licitant claus de xifrat.\nNom de la sessió: %1$@\nVist per última vegada: %2$@\nSi no has iniciat sessió en cap altre lloc, ignora la sol·licitud.";
+"your_unverified_device_requesting_with_info" = "Una sessió no verificada està sol·licitant claus de xifrat.\nNom de la sessió: %1$@\nVist per última vegada: %2$@\nSi no has iniciat sessió en cap altre lloc, ignora la sol·licitud.";
 "share_without_verifying_short_label" = "Compartir";
 "key_share_request" = "Sol·licituds d\'intercanvi de claus";
 "ignore_request_short_label" = "Ignorar";
@@ -800,7 +760,7 @@
 "create_room_public_description" = "Qualsevol podrà unir-se a aquesta sala";
 "keys_backup_unable_to_get_trust_info" = "Hi ha hagut un error rebent informació de confança";
 "keys_backup_unable_to_get_keys_backup_data" = "Hi ha hagut un error rebent dades de la còpia de seguretat de les claus";
-"import_e2e_keys_from_file" = "Importa claus E2E des del fitxer \"%1$@\.";
+"import_e2e_keys_from_file" = "Importa claus E2E des del fitxer \"%1$@\".";
 "settings_sdk_version" = "Versió de l\'SDK de Matrix";
 "navigate_to_room_when_already_in_the_room" = "Ja estàs veient aquesta sala!";
 "settings_general_title" = "General";
@@ -812,12 +772,8 @@
 "identity_server_error_bulk_sha256_not_supported" = "Per a la teva pròpia privadesa, %@ només admet l\'enviament del \"hash\" de correus electrònics i números de telèfon.";
 "command_description_discard_session_not_handled" = "Només admès en sales xifrades";
 "encryption_unknown_algorithm_tile_description" = "El xifrat que utilitza aquesta sala no és compatible";
-"login_registration_not_supported" = "L\'aplicació no ha pogut crear un compte en aquest servidor.
-\n
-\nVols registrar-te utilitzant un client web\?";
-"login_mode_not_supported" = "L\'aplicació no ha pogut iniciar sessió en aquest servidor. El servidor és compatible amb el/s següent/s tipus d\'inici de sessió: %1$@.
-\n
-\nVols iniciar sessió utilitzant un client web\?";
+"login_registration_not_supported" = "L\'aplicació no ha pogut crear un compte en aquest servidor.\n\nVols registrar-te utilitzant un client web\?";
+"login_mode_not_supported" = "L\'aplicació no ha pogut iniciar sessió en aquest servidor. El servidor és compatible amb el/s següent/s tipus d\'inici de sessió: %1$@.\n\nVols iniciar sessió utilitzant un client web\?";
 "warning_room_not_created_yet" = "La sala encara no s\'ha acabat de crear. Vols cancel·lar la seva creació\?";
 "room_error_not_found" = "No s\'ha trobat aquesta sala. Assegura\'t que existeixi.";
 "settings_security_pin_code_notifications_summary_on" = "Mostra detalls com per exemple noms de sala i contingut dels missatges.";
@@ -837,16 +793,12 @@
 "room_list_quick_actions_notifications_all_noisy" = "Tots els missatges (amb so)";
 "uploads_media_no_result" = "En aquesta sala no hi ha mitjans";
 "uploads_files_no_result" = "No hi ha fitxers en aquesta sala";
-"create_room_federation_error" = "La sala ha estat creada però algunes invitacions no s\'han enviat pel motiu següent:
-\n
-\n%@";
+"create_room_federation_error" = "La sala ha estat creada però algunes invitacions no s\'han enviat pel motiu següent:\n\n%@";
 "room_no_active_widgets" = "No hi ha ginys actius";
 "notification_unread_notified_messages_in_room_and_invitation" = "%1$@ s %2$@ i %3$@";
 "room_participants_action_unignore_prompt_msg" = "Si deixes d\'ignorar aquest usuari, tornaràs a veure tots els seus missatges.";
 "room_participants_action_unignore_title" = "Deixa d\'ignorar";
-"room_participants_action_ignore_prompt_msg" = "Si ignores aquest usuari s\'eliminaran els seus missatges de les sales que compartiu.
-\n
-\nPots desfer aquest canvi en qualsevol moment a la configuració general.";
+"room_participants_action_ignore_prompt_msg" = "Si ignores aquest usuari s\'eliminaran els seus missatges de les sales que compartiu.\n\nPots desfer aquest canvi en qualsevol moment a la configuració general.";
 "room_participants_action_ignore_title" = "Ignora usuari";
 "room_participants_power_level_demote_warning_prompt" = "No podràs desfer aquest canvi ja que t\'estàs baixant de nivell d\'autoritat, si ets l\'últim usuari de la sala amb privilegis, et serà impossible recuperar-los.";
 "no_more_results" = "Sense més resultats";
@@ -949,9 +901,7 @@
 "no_message_edits_found" = "No s\'han trobat edicions";
 "message_edits" = "Edicions de missatges";
 "edited_suffix" = "(editat)";
-"room_profile_encrypted_subtitle" = "Els missatges d\'aquesta sala estan encriptats d\'extrem a extrem.
-\n
-\nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.";
+"room_profile_encrypted_subtitle" = "Els missatges d\'aquesta sala estan encriptats d\'extrem a extrem.\n\nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.";
 "sent_a_file" = "Fitxer";
 "sent_an_audio_file" = "Àudio";
 "uploads_files_subtitle" = "%1$@ a les %2$@";
@@ -963,8 +913,7 @@
 "send_file_step_sending_thumbnail" = "Enviant miniatura (%1$@ / %2$@)";
 "send_file_step_encrypting_thumbnail" = "Xifrant miniatura…";
 "send_file_step_idle" = "Esperant…";
-"room_preview_not_found" = "Aquesta sala no és accessible actualment.
-\nProva-ho més tard o pregunta a un administrador de la sala si hi tens accés.";
+"room_preview_not_found" = "Aquesta sala no és accessible actualment.\nProva-ho més tard o pregunta a un administrador de la sala si hi tens accés.";
 "this_is_the_beginning_of_room_no_name" = "Inici d\'aquest xat.";
 "login_splash_text2" = "Utilitza el xifrat per mantenir els teus xats privats";
 "login_splash_title" = "Aquest xat és teu. Apropia-te\'n.";
@@ -972,9 +921,7 @@
 "this_is_the_beginning_of_dm" = "Inici de l\'històric del xat personal amb %@.";
 "settings_hs_admin_e2e_disabled" = "L\'administrador del servidor ha desactivat el xifrat d\'extrem a extrem per defecte en sales privades i xats personals.";
 "room_member_open_or_create_dm" = "Xat personal";
-"direct_room_profile_encrypted_subtitle" = "Els missatges aquí estan xifrats d\'extrem a extrem.
-\n
-\nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.";
+"direct_room_profile_encrypted_subtitle" = "Els missatges aquí estan xifrats d\'extrem a extrem.\n\nEls missatges estan protegits i només tu i el destinatari teniu les úniques claus per poder desxifrar-los.";
 "a11y_create_direct_message" = "Crea un nou xat personal";
 "room_filtering_footer_create_new_direct_message" = "Envia un nou missatge";
 "bottom_action_people_x" = "Xats personals";
@@ -1038,16 +985,13 @@
 "settings_chat_effects_description" = "Utilitza la comanda /confetti o envia un missatge amb ❄️ or 🎉";
 "settings_chat_effects_title" = "Mostra els efectes del xat";
 "terms_description_for_integration_manager" = "Utilitza bots, enllaços, ginys i paquets d\'adhesius";
-"settings_integrations_summary" = "Utilitza els gestors d\'integracions per a gestionar bots, enllaços, ginys i paquets d\'adhesius.
-\nEls gestors d\'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i configurar els nivells d\'autoritat per tu.";
+"settings_integrations_summary" = "Utilitza els gestors d\'integracions per a gestionar bots, enllaços, ginys i paquets d\'adhesius.\nEls gestors d\'integracions reben dades de configuració i poden modificar ginys, enviar invitacions a sales i configurar els nivells d\'autoritat per tu.";
 "settings_integrations" = "Integracions";
 "settings_background_fdroid_sync_mode_disabled_description" = "No se\'t notificarà de missatges entrants quan l\'aplicació es trobi en segon pla.";
 "settings_background_fdroid_sync_mode_disabled" = "Sense sincronització en segon pla";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ farà la sincronització en segon pla periòdicament en instants de temps precisos (configurable).
-\nAixò tindrà un impacte en l\'ús de la ràdio i la bateria, es mostrarà una notificació permanent informant de que %@ està a l\'espera d\'esdeveniments.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ farà la sincronització en segon pla periòdicament en instants de temps precisos (configurable).\nAixò tindrà un impacte en l\'ús de la ràdio i la bateria, es mostrarà una notificació permanent informant de que %@ està a l\'espera d\'esdeveniments.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimitzat per a temps real";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ farà la sincronització en segon pla de manera que es preservin els recursos limitats del dispositiu (bateria).
-\nEn funció de l\'estat dels recursos del dispositiu, pot ser que el sistema operatiu endarrereixi la sincronització.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ farà la sincronització en segon pla de manera que es preservin els recursos limitats del dispositiu (bateria).\nEn funció de l\'estat dels recursos del dispositiu, pot ser que el sistema operatiu endarrereixi la sincronització.";
 "settings_background_fdroid_sync_mode_battery" = "Optimitzat per a la bateria";
 "settings_background_fdroid_sync_mode" = "Mode de sincronització en segon pla";
 "settings_troubleshoot_test_notification_notification_clicked" = "La notificació ha estat clicada!";
@@ -1101,13 +1045,10 @@
 "room_permissions_notice" = "Selecciona els rols necessaris per canviar les diferents parts de la sala";
 "room_permissions_title" = "Permisos";
 "room_settings_permissions_title" = "Permisos de la sala";
-"room_participants_remove_prompt_msg" = "l\'expulsió d\'un usuari l\'eliminarà de la sala.
-\n
-\nPer evitar que torni a unir-s\'hi, l\'hauries de vetar.";
+"room_participants_remove_prompt_msg" = "l\'expulsió d\'un usuari l\'eliminarà de la sala.\n\nPer evitar que torni a unir-s\'hi, l\'hauries de vetar.";
 "room_participants_action_cancel_invite_prompt_msg" = "Segur que vols cancel·lar la invitació d\'aquest usuari\?";
 "room_participants_leave_private_warning" = "Aquesta sala no és pública. No podràs tornar-t\'hi a unir sense una invitació.";
-"call_failed_no_connection_description" = "No s\'ha pogut establir una connexió en temps real.
-\nDemana a l\'administrador del servidor local que configuri un servidor TURN perquè les trucades funcionin correctament.";
+"call_failed_no_connection_description" = "No s\'ha pogut establir una connexió en temps real.\nDemana a l\'administrador del servidor local que configuri un servidor TURN perquè les trucades funcionin correctament.";
 "encryption_enabled" = "Xifrat activat";
 "alert_push_are_disabled_title" = "Les notificacions estan desactivades";
 "login_reset_password_success_notice_2" = "Se t\'ha desconnectat de totes les teves sessions i no rebràs més notificacions. Per reactivar les notificacions, torna a iniciar sessió a cada dispositiu.";
@@ -1217,10 +1158,8 @@
 "auth_invalid_login_param_space_in_password" = "Usuari i/o contrasenya incorrectes. La contrasenya introduïda comença o acaba amb espais, comprova-la.";
 "auth_invalid_login_deactivated_account" = "Aquest compte ha estat desactivat.";
 "attachment_viewer_item_x_of_y" = "%1$d de %2$d";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ Web
-\n%@ per a escriptori";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ per a escriptori";
 "add_people" = "Afegeix gent";
 "add_members_to_room" = "Afegeix membres";
 "a11y_unmute_microphone" = "Deixa de silenciar el micròfon";
@@ -1232,30 +1171,20 @@
 "settings_security_pin_code_use_biometrics_summary_off" = "El codi PIN és l\'única manera de desbloquejar %@.";
 "or_other_mx_capable_client" = "o un altre client Matrix compatible amb la signatura creuada";
 "encryption_information_dg_xsigning_disabled" = "La signatura creuada no està activada";
-"encryption_information_dg_xsigning_not_trusted" = "La signatura creuada està activada
-\nClaus no fiables";
-"encryption_information_dg_xsigning_trusted" = "La signatura creuada està activada
-\nClaus de confiança.
-\nClaus privades desconegudes";
-"encryption_information_dg_xsigning_complete" = "La signatura creuada està activada
-\nClaus privades al dispositiu.";
+"encryption_information_dg_xsigning_not_trusted" = "La signatura creuada està activada\nClaus no fiables";
+"encryption_information_dg_xsigning_trusted" = "La signatura creuada està activada\nClaus de confiança.\nClaus privades desconegudes";
+"encryption_information_dg_xsigning_complete" = "La signatura creuada està activada\nClaus privades al dispositiu.";
 "encryption_information_cross_signing_state" = "Signatura creuada";
 "room_permissions_change_topic" = "Canviar el tema";
 "room_permissions_upgrade_the_room" = "Actualitzar la sala";
 "room_permissions_send_m_room_server_acl_events" = "Enviar esdeveniments m.room.server_acl";
 "room_permissions_change_permissions" = "Canviar els permisos";
 "room_permissions_change_room_name" = "Canviar el nom de la sala";
-"content_reported_as_inappropriate_content" = "Aquest contingut ha estat com a inadequat.
-\n
-\nSi no vols veure cap més contingut d\'aquest usuari pots ignorar-lo per ocultar els seus missatges.";
+"content_reported_as_inappropriate_content" = "Aquest contingut ha estat com a inadequat.\n\nSi no vols veure cap més contingut d\'aquest usuari pots ignorar-lo per ocultar els seus missatges.";
 "content_reported_as_inappropriate_title" = "Reportat com a inadequat";
-"content_reported_as_spam_content" = "Aquest contingut ha estat reportat com a brossa.
-\n
-\nSi no vols veure cap més contingut d\'aquest usuari pots ignorar-lo per ocultar els seus missatges.";
+"content_reported_as_spam_content" = "Aquest contingut ha estat reportat com a brossa.\n\nSi no vols veure cap més contingut d\'aquest usuari pots ignorar-lo per ocultar els seus missatges.";
 "content_reported_as_spam_title" = "Reportat com a brossa";
-"content_reported_content" = "Aquest contingut ha estat reportat.
-\n
-\nSi no vols veure cap més contingut d\'aquest usuari pots ignorar-lo per ocultar els seus missatges.";
+"content_reported_content" = "Aquest contingut ha estat reportat.\n\nSi no vols veure cap més contingut d\'aquest usuari pots ignorar-lo per ocultar els seus missatges.";
 "content_reported_title" = "Contingut reportat";
 "report_content_custom_submit" = "REPORT";
 "report_content_custom_hint" = "Motiu pel qual reportes aquest contingut";
@@ -1317,8 +1246,7 @@
 "room_widget_permission_user_id" = "El teu ID d\'usuari";
 "room_widget_open_in_browser" = "Obre al navegador";
 "room_widget_reload" = "Actualitza el giny";
-"room_widget_failed_to_load" = "No s\'ha pogut carregar el giny.
-\n%@";
+"room_widget_failed_to_load" = "No s\'ha pogut carregar el giny.\n%@";
 "room_widget_permission_added_by" = "Aquest giny ha estat afegit per:";
 "room_widget_permission_title" = "Carrega giny";
 "room_widget_activity_title" = "Giny";
@@ -1382,14 +1310,7 @@
 "recovery_passphrase" = "Frase de recuperació";
 "verification_cancelled" = "Verificació cancel·lada";
 "verify_cancelled_notice" = "Verifica els teus dispositius des de la configuració.";
-"verify_not_me_self_verification" = "Alguna de les següents pot haver estat compromesa:
-\n
-\n- La teva contrasenya
-\n- El servidor local
-\n- Aquest dispositiu o l\'altre dispositiu
-\n- La connexió a internet utilitzada per algun dels dispositius
-\n
-\nEt recomanem que canviïs la contrasenya i la clau de recuperació a configuració immediatament.";
+"verify_not_me_self_verification" = "Alguna de les següents pot haver estat compromesa:\n\n- La teva contrasenya\n- El servidor local\n- Aquest dispositiu o l\'altre dispositiu\n- La connexió a internet utilitzada per algun dels dispositius\n\nEt recomanem que canviïs la contrasenya i la clau de recuperació a configuració immediatament.";
 "verify_cancel_other" = "Si cancel·les ara, no verificaràs %1$@ (%2$@). Torna a començar des del seu perfil d\'usuari.";
 "verify_cancel_self_verification_from_trusted" = "Si cancel·les, no podràs llegir els missatges xifrats en el teu nou dispositiu i altres usuaris no hi confiaran";
 "verify_cancel_self_verification_from_untrusted" = "Si cancel·les, no podràs llegir els missatges xifrats en aquest dispositiu i altres usuaris no hi confiaran";
@@ -1409,9 +1330,7 @@
 "enter_secret_storage_invalid" = "No s\'han pogut trobar els secrets a la memòria";
 "verification_use_passphrase" = "Si no pots accedir a una sessió existent";
 "verification_cannot_access_other_session" = "Utilitza una frase de recuperació o una clau";
-"delete_account_data_warning" = "Vols eliminar les dades del compte de tipus %1$@\?
-\n
-\nVés en compte, pot ser que provoqui comportaments inesperats.";
+"delete_account_data_warning" = "Vols eliminar les dades del compte de tipus %1$@\?\n\nVés en compte, pot ser que provoqui comportaments inesperats.";
 "settings_account_data" = "Dades del compte";
 "settings_dev_tools" = "Eines per a desenvolupadors";
 "verification_sas_do_not_match" = "No coincideixen";
@@ -1436,8 +1355,7 @@
 "settings_developer_mode" = "Mode desenvolupador";
 "notification_initial_sync" = "Sincronització inicial…";
 "permalink_malformed" = "L\'enllaç de matrix.to no s\'ha format correctament";
-"soft_logout_clear_data_dialog_content" = "Vols esborrar totes les dades emmagatzemades en aquest dispositiu\?
-\nTorna a iniciar sessió per accedir a les dades i missatges del teu compte.";
+"soft_logout_clear_data_dialog_content" = "Vols esborrar totes les dades emmagatzemades en aquest dispositiu\?\nTorna a iniciar sessió per accedir a les dades i missatges del teu compte.";
 "soft_logout_clear_data_dialog_title" = "Esborra les dades";
 "soft_logout_clear_data_title" = "Esborra les dades personals";
 "soft_logout_clear_data_submit" = "Esborra totes les dades";
@@ -1472,22 +1390,17 @@
 "login_error_outdated_homeserver_warning_content" = "Aquest servidor està funcionant amb una versió massa antiga per poder-s\'hi connectar. Pots continuar però pot ser que algunes funcions no vagin bé.";
 "login_error_outdated_homeserver_title" = "Versió del servidor local obsoleta";
 "login_validation_code_is_not_correct" = "El codi introduït no és correcte. Comprova\'l.";
-"login_wait_for_email_notice" = "Acabem d\'enviar un correu a %1$@.
-\nFes clic a l\'enllaç que conté per continuar amb la creació del compte.";
+"login_wait_for_email_notice" = "Acabem d\'enviar un correu a %1$@.\nFes clic a l\'enllaç que conté per continuar amb la creació del compte.";
 "login_wait_for_email_title" = "Comprova el teu correu";
 "login_a11y_captcha_container" = "Resol el repte captcha";
 "login_a11y_choose_other" = "Selecciona un servidor local personalitzat";
 "login_a11y_choose_modular" = "Selecciona Serveis Matrix d\'Element";
 "login_a11y_choose_matrix_org" = "Selecciona matrix.org";
-"login_signup_cancel_confirmation_content" = "El teu compte encara s\'ha creat.
-\n
-\nVols aturar el procés de registre\?";
+"login_signup_cancel_confirmation_content" = "El teu compte encara s\'ha creat.\n\nVols aturar el procés de registre\?";
 "login_signup_cancel_confirmation_title" = "Atenció";
 "login_signup_error_user_in_use" = "Aquest nom d\'usuari ja està agafat";
 "login_set_msisdn_notice" = "Estableix un número de telèfon per, opcionalment, permetre que la gent que coneixes et pugui trobar.";
-"login_reset_password_cancel_confirmation_content" = "La contrasenya encara no s\'ha canviat.
-\n
-\nVols parar el procés de canvi de contrasenya\?";
+"login_reset_password_cancel_confirmation_content" = "La contrasenya encara no s\'ha canviat.\n\nVols parar el procés de canvi de contrasenya\?";
 "login_reset_password_cancel_confirmation_title" = "Atenció";
 "login_reset_password_success_submit" = "Torna a l\'inici de sessió";
 "login_reset_password_success_notice" = "La teva contrasenya s\'ha restablert.";
@@ -1530,23 +1443,14 @@
 "settings_category_composer" = "Editor de missatges";
 "command_description_rainbow_emote" = "Envia l\'emoticona proporcionat pintat amb un arc de Sant Martí";
 "command_description_rainbow" = "Envia el missatge proporcionat pintat amb un arc de Sant Martí";
-"signed_out_notice" = "Pot ser causat per diferents motius:
-\n
-\n• Has canviat la teva contrasenya des d\'una altra sessió.
-\n
-\n• Has eliminat aquesta sessió des d\'una altra sessió.
-\n
-\n• L\'administrador del servidor t\'ha invalidat l\'accés per motius de seguretat.";
+"signed_out_notice" = "Pot ser causat per diferents motius:\n\n• Has canviat la teva contrasenya des d\'una altra sessió.\n\n• Has eliminat aquesta sessió des d\'una altra sessió.\n\n• L\'administrador del servidor t\'ha invalidat l\'accés per motius de seguretat.";
 "login_signin_matrix_id_notice" = "Si configures un compte a un servidor local, utilitza el teu ID de Matrix (ex. @usuari:domini.com) i la contrasenya a sota.";
 "login_server_text" = "Com els correus electrònics, els comptes pertanyen a una entitat però els pots fer servir per parlar amb tothom";
 "create_room_disable_federation_description" = "Potser ho hauries d\'activar si la sala només s\'utilitzarà per la interacció de grups interns dins el teu servidor local. Això no es podrà canviar més tard.";
 "create_room_disable_federation_title" = "Bloqueja qualsevol persona que no formi part de %@ perquè mai pugui unir-se a la sala";
-"soft_logout_sso_not_same_user_error" = "La sessió actual és de l\'usuari %1$@ i has introduït les credencials de l\'usuari %2$@. Això no es pot fer amb %@.
-\nPrimer esborra les dades i després torna a iniciar sessió amb l\'altre compte.";
+"soft_logout_sso_not_same_user_error" = "La sessió actual és de l\'usuari %1$@ i has introduït les credencials de l\'usuari %2$@. Això no es pot fer amb %@.\nPrimer esborra les dades i després torna a iniciar sessió amb l\'altre compte.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Perdràs l\'accés als missatges protegits tret de que iniciïs sessió i obtinguis les teves claus de xifrat.";
-"soft_logout_clear_data_notice" = "Atenció: les teves dades personals (incloses les claus de xifrat) encara estan desades en aquest dispositiu.
-\n
-\nEsborra-les si ja no vols utilitzar aquest dispositiu o vols iniciar sessió amb un altre compte.";
+"soft_logout_clear_data_notice" = "Atenció: les teves dades personals (incloses les claus de xifrat) encara estan desades en aquest dispositiu.\n\nEsborra-les si ja no vols utilitzar aquest dispositiu o vols iniciar sessió amb un altre compte.";
 "error_unauthorized" = "No estàs autoritzat, no s\'han trobat credencials d\'autenticació vàlides";
 "bootstrap_progress_generating_ssss_recovery" = "Generant clau SSSS a partir de clau de recuperació";
 "bootstrap_progress_generating_ssss_with_info" = "Generant clau SSSS a partir de frase (%@)";
@@ -1652,12 +1556,7 @@
 "crosssigning_verify_this_session" = "Verifica aquest inici de sessió";
 "settings_active_sessions_unverified_device_desc" = "Verifica aquesta sessió per fer-la de confiança i permetre que accedeixi als missatges xifrats. Si no has estat tu el que ha iniciat sessió aquí, pot ser que el teu compte estigui compromès:";
 "verification_verify_device" = "Verifica aquesta sessió";
-"verification_conclusion_compromised" = "Alguna de les següents pot haver estat compromesa:
-\n
-\n- El teu servidor local
-\n- El servidor on està connectat l\'usuari que estàs intentant verificar
-\n- La teva connexió a internet a la de l\'altre usuari
-\n- El teu dispositiu o el de l\'altre usuari";
+"verification_conclusion_compromised" = "Alguna de les següents pot haver estat compromesa:\n\n- El teu servidor local\n- El servidor on està connectat l\'usuari que estàs intentant verificar\n- La teva connexió a internet a la de l\'altre usuari\n- El teu dispositiu o el de l\'altre usuari";
 "verification_conclusion_not_secure" = "No segur";
 "room_member_jump_to_read_receipt" = "Vés a confirmacions de lectura";
 "soft_logout_signin_e2e_warning_notice" = "Inicia sessió per recuperar les claus de xifrat emmagatzemades exclusivament en aquest dispositiu. Les necessites per poder llegir, en qualsevol dispositiu, els teus missatges segurs.";
@@ -1666,9 +1565,7 @@
 "invite_users_to_room_title" = "Convida usuaris";
 "inviting_users_to_room" = "Convidant usuaris…";
 "invite_users_to_room_action_invite" = "CONVIDA";
-"external_link_confirmation_message" = "L\'enllaç %1$@ t\'està intentant portar a un altre lloc: %2$@.
-\n
-\nSegur que vols continuar\?";
+"external_link_confirmation_message" = "L\'enllaç %1$@ t\'està intentant portar a un altre lloc: %2$@.\n\nSegur que vols continuar\?";
 "external_link_confirmation_title" = "Comprova aquest enllaç";
 "use_other_session_content_description" = "Utilitza l\'última versió d\'%@ als teus altres dispositius, %@ Web, %@ per escriptori, %@ iOS, %@ per Android, o algun altre client de Matrix que admeti signatura creuada";
 "bootstrap_progress_storing_in_sss" = "Desant secret de clau de còpia de seguretat a SSSS";
@@ -1721,15 +1618,10 @@
 "command_description_discard_session" = "Obliga a descartar la sessió de grup sortint actual, en una sala xifrada";
 "bootstrap_migration_with_passphrase_helper_with_link" = "Si no coneixes la frase clau de còpia de seguretat, pots %@.";
 "bootstrap_migration_enter_backup_password" = "Introdueix la frase clau de còpia de seguretat per continuar.";
-"bootstrap_cancel_text" = "Si t\'atures ara, pot ser que perdis dades i missatges xifrats en cas de que perdis l\'accés a les teves sessions.
-\n
-\nTambé pots configurar una copia de seguretat de seguretat i gestionar les teves claus a la configuració.";
-"bootstrap_cross_signing_success" = "La teva %2$@ i %1$@ s\'han configurat.
-\n
-\nGuarda-les en un lloc segur! Les necessitaràs per desbloquejar missatges xifrats i informació protegida en cas de que perdis l\'accés a totes les teves sessions actives.";
+"bootstrap_cancel_text" = "Si t\'atures ara, pot ser que perdis dades i missatges xifrats en cas de que perdis l\'accés a les teves sessions.\n\nTambé pots configurar una copia de seguretat de seguretat i gestionar les teves claus a la configuració.";
+"bootstrap_cross_signing_success" = "La teva %2$@ i %1$@ s\'han configurat.\n\nGuarda-les en un lloc segur! Les necessitaràs per desbloquejar missatges xifrats i informació protegida en cas de que perdis l\'accés a totes les teves sessions actives.";
 "settings_export_trail" = "Exporta informe";
-"verify_cannot_cross_sign" = "Aquesta sessió no pot compartir la verificació amb les teves altres sessions.
-\nLa verificació es desarà localment i es compartirà més endavant en noves versions de l\'aplicació.";
+"verify_cannot_cross_sign" = "Aquesta sessió no pot compartir la verificació amb les teves altres sessions.\nLa verificació es desarà localment i es compartirà més endavant en noves versions de l\'aplicació.";
 "call_transfer_users_tab_title" = "Usuaris";
 "call_transfer_failure" = "S\'ha produït un error al transferir la trucada";
 "call_transfer_title" = "Transferència";
@@ -1757,10 +1649,8 @@
 "jitsi_leave_conf_to_join_another_one_content" = "Abandonar conferència actual i anar a l\'altra\?";
 "room_settings_room_version_title" = "Versió de sala";
 "dialog_edit_hint" = "Nou valor";
-"initial_sync_start_downloading" = "Sincronització inicial:
-\nBaixant dades…";
-"initial_sync_start_server_computing" = "Sincronització inicial:
-\nEsperant resposta del servidor…";
+"initial_sync_start_downloading" = "Sincronització inicial:\nBaixant dades…";
+"initial_sync_start_server_computing" = "Sincronització inicial:\nEsperant resposta del servidor…";
 "a11y_view_read_receipts" = "Mostra confirmacions de lectura";
 "a11y_open_widget" = "Obre giny";
 "settings_server_upload_size_title" = "Límit de càrrega de fitxers al servidor";
@@ -1816,73 +1706,3 @@
 "room_settings_room_access_entry_knock" = "Qualsevol pot demanar entrar a la sala, els participants poden acceptar-ho o rebutjar-ho";
 "room_settings_guest_access_title" = "Permet als convidats unir-se";
 "suggested_header" = "Sales suggerides";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Has eliminat l\'adreça %1$@ d\'aquesta sala.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Has eliminat les adreces %1$@ d\'aquesta sala.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ ha eliminat %2$@ com a adreça d\'aquesta sala.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ ha eliminat %2$@ com a adreces d\'aquesta sala.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Has afegit l\'adreça %1$@ a aquesta sala.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Has afegit les adreces %1$@ a aquesta sala.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ ha afegit l\'adreça %2$@ a aquesta sala.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ ha afegit les adreces %2$@ a aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Has eliminat l\'adreça alternativa %1$@ d\'aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Has eliminat les adreces alternatives %1$@ d\'aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ ha eliminat l\'adreça alternativa %2$@ d\'aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ ha eliminat les adreces alternatives %2$@ d\'aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Has afegit l\'adreça alternativa %1$@ per aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Has afegit les adreces alternatives %1$@ per aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ ha afegit l\'adreça alternativa %2$@ per aquesta sala.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ ha afegit les adreces alternatives %2$@ per aquesta sala.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ i %4$d altre";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ i %4$d altres";
-"plurals.room_title_members.item_0" = "%d membre";
-"plurals.room_title_members.item_1" = "%d membres";
-"plurals.room_new_messages_notification.item_0" = "%d missatge nou";
-"plurals.room_new_messages_notification.item_1" = "%d missatges nous";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d sala";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d sales";
-"plurals.membership_changes.item_0" = "%d canvi de membres";
-"plurals.membership_changes.item_1" = "%d canvis de membres";
-"plurals.notification_unread_notified_messages.item_0" = "%d missatge notificat no llegit";
-"plurals.notification_unread_notified_messages.item_1" = "%d missatges notificats no llegits";
-"plurals.active_widgets.item_0" = "%d giny actiu";
-"plurals.active_widgets.item_1" = "%d ginys actius";
-"plurals.room_details_selected.item_0" = "%d seleccionat";
-"plurals.room_details_selected.item_1" = "%d seleccionats";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "S\'ha restaurat una còpia amb %d clau.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "S\'ha restaurat una còpia amb %d claus.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "S\'ha afegit %d clau nova a aquesta sessió.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "S\'han afegit %d claus noves a aquesta sessió.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "S\'està fent una còpia de seguretat d\'%d clau…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "S\'està fent una còpia de seguretat de %d claus…";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d missatge";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d missatges";
-"plurals.notification_compat_summary_title.item_0" = "%d notificacion";
-"plurals.notification_compat_summary_title.item_1" = "%d notificacions";
-"plurals.seconds.item_0" = "%d segon";
-"plurals.seconds.item_1" = "%d segons";
-"plurals.notification_invitations.item_0" = "%d invitació";
-"plurals.notification_invitations.item_1" = "%d invitacions";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d clau importada amb èxit.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d claus importades amb èxit.";
-"plurals.room_settings_banned_users_count.item_0" = "%d usuari vetat";
-"plurals.room_settings_banned_users_count.item_1" = "%d usuaris vetats";
-"plurals.fallback_users_read.item_0" = "%d usuari ho ha llegit";
-"plurals.fallback_users_read.item_1" = "%d usuaris ho han llegit";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ i %3$d altre ho han llegit";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ i %3$d altres ho han llegit";
-"plurals.settings_active_sessions_count.item_0" = "%d sessió activa";
-"plurals.settings_active_sessions_count.item_1" = "%d sessions actives";
-"plurals.send_images_with_original_size.item_0" = "Envia la imatge a mida real";
-"plurals.send_images_with_original_size.item_1" = "Envia les imatges a mida real";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "S\'han enviat massa peticions. Ho pots tornar a intentar en %1$d segon…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "S\'han enviat massa peticions. Ho pots tornar a intentar en %1$d segons…";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Codi incorrecte, %d intent restant";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Codi incorrecte, %d intents restants";
-"plurals.room_profile_section_more_member_list.item_0" = "Una persona";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d persones";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Invitacions enviades a %1$@ i un més";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Invitacions enviades a %1$@ i %2$d més";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Veure el dispositiu amb el qual et pots verificar";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Veure els %d dispositius amb el quals et pots verificar";
-"plurals.entries.item_0" = "%d entrada";
-"plurals.entries.item_1" = "%d entrades";

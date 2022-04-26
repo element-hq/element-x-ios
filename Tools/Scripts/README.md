@@ -5,5 +5,13 @@ Generates all app icon variants from one single .pdf file.
 
 Usage:
 ```
-sh iconizer.sh ../ElementX/Supporting\ Files/AppIcon.pdf ../ElementX/Supporting\ Files 
+sh iconizer.sh ../ElementX/Supporting\ Files/AppIcon.pdf ../ElementX/Supporting\ Files
+```
+
+## Localizer
+Generates all app localization files and imports them to the project, by downloading strings from [element-android](https://github.com/vector-im/element-android/tree/develop/vector/src/main/res) and converting them to `strings` and `stringsdict` files.
+
+Usage:
+```
+./localizer.py
 ```

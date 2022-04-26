@@ -97,9 +97,7 @@
 "option_take_photo_video" = "Napravi fotografiju ili video zapis";
 "option_take_photo" = "Napravi fotografiju";
 "option_take_video" = "Napravi video zapis";
-"no_sticker_application_dialog_content" = "Trenutno nemate omogućene ni jedan paket naljepnica.
-\n
-\nŽelite li ih sada dodati\?";
+"no_sticker_application_dialog_content" = "Trenutno nemate omogućene ni jedan paket naljepnica.\n\nŽelite li ih sada dodati\?";
 "error_no_external_application_found" = "Nažalost nije pronađena vanjska aplikacija za dovršetak ove radnje.";
 "auth_login" = "Prijavi se";
 "auth_submit" = "Pošalji";
@@ -137,9 +135,7 @@
 "call_error_user_not_responding" = "Druga strana se nije javila.";
 "permissions_rationale_popup_title" = "Informacije";
 "permissions_rationale_msg_record_audio" = "%@ treba dozvolu pristupa Vašem mikrofonu za obavljanje zvučnih poziva.";
-"permissions_rationale_msg_camera_and_audio" = "%@ treba dozvolu pristupa Vašoj kameri i mikrofonu za obavljanje video poziva.
-\n
-\nOmogućite pristup putem sljedećih skočnih prozora kako biste mogli uspostaviti poziv.";
+"permissions_rationale_msg_camera_and_audio" = "%@ treba dozvolu pristupa Vašoj kameri i mikrofonu za obavljanje video poziva.\n\nOmogućite pristup putem sljedećih skočnih prozora kako biste mogli uspostaviti poziv.";
 "yes" = "DA";
 "no" = "NE";
 "_continue" = "Nastavi";
@@ -180,8 +176,7 @@
 "settings_add_phone_number" = "Dodaj broj telefona";
 "settings_app_info_link_title" = "Informacije o aplikaciji";
 "settings_app_info_link_summary" = "Prikaži informacije o aplikaciji u postavkama sustava.";
-"room_participants_power_level_prompt" = "Nećete moći poništiti ovu izmjenu jer dotičnom korisniku dajete istu razinu upravljanja kao Vaša.
-\nJeste li sigurni\?";
+"room_participants_power_level_prompt" = "Nećete moći poništiti ovu izmjenu jer dotičnom korisniku dajete istu razinu upravljanja kao Vaša.\nJeste li sigurni\?";
 "room_participants_ban_prompt_msg" = "Jeste li sigurni da želite zabraniti korisniku pristup ovom razgovoru\?";
 "ssl_cert_new_account_expl" = "Ako je poslužiteljski administrator rekao da je ovo očekivano, provjerite podudara li se niže navedeni otisak prsta s otiskom prsta koji je on naveo.";
 "ssl_unexpected_existing_expl" = "Certifikat se promijenio u odnosu na onaj kojeg Vaš uređaj smatra pouzdanim. Ovo je VRLO NEOBIČNO. Preporuka je NE PRIHVATITI ovaj novi certifikat.";
@@ -198,53 +193,40 @@
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Jedan ili više testova nije uspjelo, pošaljite izvješće o grešci kako bi se mogao utvrditi problem.";
 "settings_troubleshoot_test_system_settings_title" = "Postavke sustava.";
 "settings_troubleshoot_test_system_settings_success" = "Obavijesti se uključuju u postavkama sustava.";
-"settings_troubleshoot_test_system_settings_failed" = "Obavijesti se isključuju u postavkama sustava.
-\nProvjerite postavke sustava.";
+"settings_troubleshoot_test_system_settings_failed" = "Obavijesti se isključuju u postavkama sustava.\nProvjerite postavke sustava.";
 "open_settings" = "Otvori postavke";
 "settings_troubleshoot_test_account_settings_title" = "Postavke računa.";
 "settings_troubleshoot_test_account_settings_success" = "Obavijesti su uključene za Vaš račun.";
-"settings_troubleshoot_test_account_settings_failed" = "Obavijesti su isključene za Vaš račun.
-\nProvjerite postavke računa.";
+"settings_troubleshoot_test_account_settings_failed" = "Obavijesti su isključene za Vaš račun.\nProvjerite postavke računa.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Uključi";
 "settings_troubleshoot_test_device_settings_title" = "Postavke sesije.";
 "settings_troubleshoot_test_device_settings_success" = "Obavijesti su uključene za ovu sesiju.";
-"settings_troubleshoot_test_device_settings_failed" = "Obavijesti su isključene za ovu sesiju.
-\nProvjerite postavke %@a.";
+"settings_troubleshoot_test_device_settings_failed" = "Obavijesti su isključene za ovu sesiju.\nProvjerite postavke %@a.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Uključi";
 "settings_troubleshoot_test_bing_settings_title" = "Prilagođene postavke.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Uočite da su neke poruke postavljene na tiho (doći će do obavijesti bez zvuka).";
 "settings_troubleshoot_test_bing_settings_failed" = "Neke obavijesti su isključene u prilagođenim postavkama.";
 "settings_troubleshoot_test_play_services_title" = "Provjera Usluga za Play";
 "settings_troubleshoot_test_play_services_success" = "APK Usluga za Google Play je dostupan i ažuriran.";
-"settings_troubleshoot_test_play_services_failed" = "%@ koristi Usluge za Google Play kako bi isporučio poruke, no čini se da nisu ispravno podešene.
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ koristi Usluge za Google Play kako bi isporučio poruke, no čini se da nisu ispravno podešene.\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Popravi Usluge za Play";
 "settings_troubleshoot_test_fcm_title" = "Firebaseova oznaka";
-"settings_troubleshoot_test_fcm_success" = "Oznaka FCM-a je uspješno dohvaćena:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "Neuspješno dohvaćanje oznake FCM-a:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\n%@ nema kontrolu nad ovom greškom te prema Googleu ova greška ukazuje da uređaj ima previše prijavljenih aplikacija na FCM-u. Greška se pojavljuje samo u slučajevima u kojima postoji krajnje mnogo aplikacija te to ne bi trebao biti slučaj kod prosječnog korisnika.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\n%@ nema kontrolu nad ovom greškom. Nekoliko je mogućih razloga za grešku. Možda će raditi ako kasnije ponovno pokušate. Također u postavkama sustava možete provjeriti da Usluge za Google Play nisu ograničene u korištenju podatkovnog prometa i da je sat Vašeg uređaja točan. Greška je moguća i na prilagođenim ROM-ovima.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\n%@ nema kontrolu nad ovom greškom. Na uređaju ne postoji račun pri Googleu. Možete otvoriti upravitelja računima i dodati račun pri Googleu.";
+"settings_troubleshoot_test_fcm_success" = "Oznaka FCM-a je uspješno dohvaćena:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "Neuspješno dohvaćanje oznake FCM-a:\n%1$@";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\n%@ nema kontrolu nad ovom greškom te prema Googleu ova greška ukazuje da uređaj ima previše prijavljenih aplikacija na FCM-u. Greška se pojavljuje samo u slučajevima u kojima postoji krajnje mnogo aplikacija te to ne bi trebao biti slučaj kod prosječnog korisnika.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\n%@ nema kontrolu nad ovom greškom. Nekoliko je mogućih razloga za grešku. Možda će raditi ako kasnije ponovno pokušate. Također u postavkama sustava možete provjeriti da Usluge za Google Play nisu ograničene u korištenju podatkovnog prometa i da je sat Vašeg uređaja točan. Greška je moguća i na prilagođenim ROM-ovima.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\n%@ nema kontrolu nad ovom greškom. Na uređaju ne postoji račun pri Googleu. Možete otvoriti upravitelja računima i dodati račun pri Googleu.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Dodaj račun";
 "settings_troubleshoot_test_token_registration_title" = "Registracija oznake";
 "settings_troubleshoot_test_token_registration_success" = "Oznaka FCM-a je uspješno registrirana pri Vašem poslužitelju.";
-"settings_troubleshoot_test_token_registration_failed" = "Neuspjela registracija oznake FCM-a pri Vašem poslužitelju:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Neuspjela registracija oznake FCM-a pri Vašem poslužitelju:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Pokreni pri podizanju sustava";
 "settings_troubleshoot_test_service_boot_success" = "Servis će se pokrenuti prilikom ponovnog pokretanja uređaja.";
 "settings_troubleshoot_test_service_boot_failed" = "Servis se neće pokrenuti sa ponovnim pokretanjem uređaja pa nećete primati obavijesti sve dok ne otvorite %@.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Omogući pokretanje pri podizanju sustava";
 "settings_troubleshoot_test_bg_restricted_title" = "Provjeri pozadinska ograničenja";
-"settings_troubleshoot_test_bg_restricted_success" = "Pozadinska su ograničenja onemogućena za %@. Ovaj test trebate izvršiti putem podatkovne veze (bez WIFI-ja).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Pozadinska su ograničenja omogućena za %@.
-\nRadnje koje aplikacija pokušava napraviti su bitno ograničene dok je u pozadini i ovo možete utjecati na obavijesti.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Pozadinska su ograničenja onemogućena za %@. Ovaj test trebate izvršiti putem podatkovne veze (bez WIFI-ja).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Pozadinska su ograničenja omogućena za %@.\nRadnje koje aplikacija pokušava napraviti su bitno ograničene dok je u pozadini i ovo možete utjecati na obavijesti.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Onemogući ograničenja";
 "settings_troubleshoot_test_battery_title" = "Optimiranje baterije";
 "settings_troubleshoot_test_battery_success" = "Optimiranje baterije ne utječe na %@.";
@@ -267,11 +249,9 @@
 "settings_background_sync" = "Pozadinska sinkronizacija";
 "settings_background_fdroid_sync_mode" = "Način pozadinske sinkronizacije (eksperimentalno)";
 "settings_background_fdroid_sync_mode_battery" = "Optimirano za bateriju";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ će sinkronizirati u pozadini na način koji čuva ograničena sredstva uređaja (baterija).
-\nOvisno o stanju sredstava uređaja, operacijski sustav može odgoditi sinkronizaciju.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ će sinkronizirati u pozadini na način koji čuva ograničena sredstva uređaja (baterija).\nOvisno o stanju sredstava uređaja, operacijski sustav može odgoditi sinkronizaciju.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimirano za stvarno vrijeme";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ će u pozadini i periodično u točno određeno vrijeme koje je podesivo vršiti sinkronizaciju.
-\nOvo će imati utjecaja na korištenje radijskog sustava i potrošnju baterije. Uočit ćete stalno prikazanu obavijest da %@ osluškuje događaje.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ će u pozadini i periodično u točno određeno vrijeme koje je podesivo vršiti sinkronizaciju.\nOvo će imati utjecaja na korištenje radijskog sustava i potrošnju baterije. Uočit ćete stalno prikazanu obavijest da %@ osluškuje događaje.";
 "settings_background_fdroid_sync_mode_disabled" = "Bez pozadinske sinkronizacije";
 "settings_background_fdroid_sync_mode_disabled_description" = "Nećete primati obavijesti o dolaznim porukama kada je aplikacija u pozadini.";
 "settings_start_on_boot" = "Pokreni pri podizanju sustava";
@@ -350,9 +330,7 @@
 "settings_fail_to_update_password" = "Neuspjela promjena lozinke";
 "settings_fail_to_update_password_invalid_current_password" = "Lozinka je neispravna";
 "settings_password_updated" = "Vaša je lozinka promijenjena";
-"settings_unignore_user" = "Prikazati sve poruke od %@\?
-\n
-\nOva će radnja ponovno pokrenuti aplikaciju i to bi moglo potrajati.";
+"settings_unignore_user" = "Prikazati sve poruke od %@\?\n\nOva će radnja ponovno pokrenuti aplikaciju i to bi moglo potrajati.";
 "settings_select_country" = "Odaberite državu";
 "settings_media" = "Mediji";
 "settings_default_compression" = "Zadano komprimiranje";
@@ -371,7 +349,7 @@
 "room_widget_webview_access_camera" = "Koristi kameru";
 "room_widget_webview_access_microphone" = "Koristi mikrofon";
 "room_widget_webview_read_protected_media" = "Čitaj medije ograničene DRM-om";
-"resource_limit_soft_default.b_0" = "neki korisnici neće moći prijaviti";
+"resource_limit_soft_default" = "Ovaj poslužitelj je prekoračio jedno od ograničenja sredstava pa se <b>neki korisnici neće moći prijaviti</b>.";
 "resource_limit_hard_default" = "Ovaj je poslužitelj prekoračio jedno od ograničenja sredstava.";
 "widget_integration_unable_to_create" = "Neuspjela izrada grafičkog elementa.";
 "widget_integration_failed_to_send_request" = "Neuspjelo slanje zahtjeva.";
@@ -387,14 +365,9 @@
 "settings_labs_native_camera_summary" = "Pokreni sistemsku kameru umjesto prilagođenog zaslona za kameru.";
 "widget_integration_review_terms" = "Za nastavak trebate prihvatiti Uvjete korištenja ovog servisa.";
 "you_added_a_new_device" = "Dodali ste novu sesiju \'%@\' koja zahtijeva ključeve za šifriranje.";
-"you_added_a_new_device_with_info" = "Nova sesija zahtijeva ključeve za šifriranje. Naziv sesije: %1$@
-\nZadnji puta viđena: %2$@
-\nAko se niste prijavili u drugoj sesiji, zanemarite ovaj zahtjev.";
+"you_added_a_new_device_with_info" = "Nova sesija zahtijeva ključeve za šifriranje. Naziv sesije: %1$@\nZadnji puta viđena: %2$@\nAko se niste prijavili u drugoj sesiji, zanemarite ovaj zahtjev.";
 "your_unverified_device_requesting" = "Vaša nepotvrđena sesija \'%@\' zahtijeva ključeve za šifriranje.";
-"your_unverified_device_requesting_with_info" = "Nepotvrđena sesija zahtijeva ključeve za šifriranje.
-\nNaziv sesije: %1$@
-\nZadnji puta viđena: %2$@
-\nAko se niste prijavili u drugoj sesiji, zanemarite ovaj zahtjev.";
+"your_unverified_device_requesting_with_info" = "Nepotvrđena sesija zahtijeva ključeve za šifriranje.\nNaziv sesije: %1$@\nZadnji puta viđena: %2$@\nAko se niste prijavili u drugoj sesiji, zanemarite ovaj zahtjev.";
 "start_verification" = "Započni potvrdu";
 "share_without_verifying_short_label" = "Dijeli";
 "key_share_request" = "Zahtjev za dijeljenje ključeva";
@@ -439,7 +412,7 @@
 "room_tombstone_continuation_description" = "Ova je soba nastavak drugog razgovora";
 "room_tombstone_predecessor_link" = "Ovdje kliknite kako biste vidjeli starije poruke";
 "resource_limit_contact_admin" = "obratite se administratoru Vašeg servisa";
-"resource_limit_soft_mau.b_0" = "neki korisnici neće moći prijaviti";
+"resource_limit_soft_mau" = "Vaš je poslužitelj dosegao svoje ograničenje mjesečno aktivnih korisnika pa se <b>neki korisnici neće moći prijaviti</b>.";
 "resource_limit_hard_mau" = "Vaš je poslužitelj dosegao svoje ograničenje mjesečno aktivnih korisnika.";
 "resource_limit_soft_contact" = "Molimo %@ za povećanje ovog ograničenja.";
 "resource_limit_hard_contact" = "Molimo %@ za nastavak korištenja ovog servisa.";
@@ -535,8 +508,7 @@
 "a11y_create_direct_message" = "Započni novi izravni razgovor";
 "a11y_create_room" = "Izradi novu sobu";
 "settings_rageshake" = "Gnjevno drmanje";
-"settings_integrations_summary" = "Koristite upravitelja integracijama kako biste rukovali botovima, mostovima, grafičkim elementima i paketima naljepnica.
-\nUpravitelji integracijama primaju konfiguracijske podatke i mogu mijenjati grafičke elemente, slati pozivnice za pridruživanje u sobe i postavljati razine upravljanja u Vaše ime.";
+"settings_integrations_summary" = "Koristite upravitelja integracijama kako biste rukovali botovima, mostovima, grafičkim elementima i paketima naljepnica.\nUpravitelji integracijama primaju konfiguracijske podatke i mogu mijenjati grafičke elemente, slati pozivnice za pridruživanje u sobe i postavljati razine upravljanja u Vaše ime.";
 "settings_flair" = "Sklonost";
 "room_settings_room_read_history_rules_pref_title" = "Čitljivost sobne povijesti";
 "room_settings_room_read_history_rules_pref_dialog_title" = "Tko može čitati povijest\?";
@@ -601,8 +573,7 @@
 "room_widget_permission_added_by" = "Ovaj je grafički element dodao/la:";
 "room_widget_permission_webview_shared_info_title" = "Njegovo korištenje može postaviti kolačiće i dijeliti podatke s %@:";
 "room_widget_permission_shared_info_title" = "Njegovo korištenje može dijeliti podatke s %@:";
-"room_widget_failed_to_load" = "Neuspješno učitavanje grafičkog elementa.
-\n%@";
+"room_widget_failed_to_load" = "Neuspješno učitavanje grafičkog elementa.\n%@";
 "room_widget_reload" = "Ponovno učitaj grafički element";
 "room_widget_open_in_browser" = "Otvori u web pregledniku";
 "room_widget_revoke_access" = "Opozovi moj pristup";
@@ -616,15 +587,11 @@
 "command_description_clear_scalar_token" = "Za popravak upravljanja aplikacijama unutar Matrixa";
 "group_details_home" = "Početna";
 "keys_backup_setup_step1_title" = "Nikada ne izgubite šifrirane poruke";
-"keys_backup_setup_step1_description" = "Poruke u šifriranim sobama su osigurane šifriranjem s kraja na kraj. Samo Vi i primatelj(i) imate ključeve za čitanje ovih poruka.
-\n
-\nNapravite sigurnosnu kopiju Vaših ključeva kako ih ne biste izgubili.";
+"keys_backup_setup_step1_description" = "Poruke u šifriranim sobama su osigurane šifriranjem s kraja na kraj. Samo Vi i primatelj(i) imate ključeve za čitanje ovih poruka.\n\nNapravite sigurnosnu kopiju Vaših ključeva kako ih ne biste izgubili.";
 "keys_backup_setup_step1_advanced" = "(Napredno)";
 "keys_backup_setup_step1_manual_export" = "Ručno izvezi ključeve";
 "keys_backup_setup_step2_text_title" = "Zaštitite svoju sigurnosnu kopiju rečeničnom lozinkom.";
-"keys_backup_setup_step2_text_description" = "Šifriran primjerak Vaših ključeva bit će spremljen na Vašem poslužitelju. Zaštitite Vašu sigurnosnu kopiju fraza-lozinkom.
-\n
-\nZa najveću sigurnost ona bi trebala biti drugačija od Vaše lozinke za račun.";
+"keys_backup_setup_step2_text_description" = "Šifriran primjerak Vaših ključeva bit će spremljen na Vašem poslužitelju. Zaštitite Vašu sigurnosnu kopiju fraza-lozinkom.\n\nZa najveću sigurnost ona bi trebala biti drugačija od Vaše lozinke za račun.";
 "keys_backup_setup_step2_button_title" = "Postavi rečeničnu lozinku";
 "keys_backup_setup_creating_backup" = "Izrada sigurnosne kopije";
 "keys_backup_setup_step1_recovery_key_alternative" = "Alternativno, zaštitite Vašu sigurnosnu kopiju ključem za obnovu i pohranite ga na sigurno.";
@@ -664,13 +631,9 @@
 "login_server_url_form_modular_text" = "Plaćeno gošćenje za organizacije";
 "login_server_url_form_modular_notice" = "Unesite adresu Modular Elementa ili poslužitelja koji želite koristiti";
 "login_sso_error_message" = "Došlo je do greške pri učitavanju stranice: %1$@ (%2$d)";
-"login_mode_not_supported" = "Aplikacija se ne može prijaviti na ovog poslužitelja. Poslužitelj podržava sljedeće vrste prijava: %1$@.
-\n
-\nŽelite li se prijaviti pomoću web-klijenta\?";
+"login_mode_not_supported" = "Aplikacija se ne može prijaviti na ovog poslužitelja. Poslužitelj podržava sljedeće vrste prijava: %1$@.\n\nŽelite li se prijaviti pomoću web-klijenta\?";
 "login_registration_disabled" = "Nažalost ovaj poslužitelj ne prihvaća nove račune.";
-"login_registration_not_supported" = "Aplikacija ne može otvoriti račun na ovom poslužitelju.
-\n
-\nŽelite li otvoriti račun pomoću web-klijenta\?";
+"login_registration_not_supported" = "Aplikacija ne može otvoriti račun na ovom poslužitelju.\n\nŽelite li otvoriti račun pomoću web-klijenta\?";
 "login_login_with_email_error" = "Ova e-pošta nije vezana ni uz koji račun.";
 "login_reset_password_on" = "Poništi lozinku na %1$@";
 "login_reset_password_notice" = "Bit će Vam poslana kontrolna e-pošta u Vaš sandučić radi potvrde postavljanja nove lozinke.";
@@ -690,17 +653,13 @@
 "login_reset_password_success_notice_2" = "Odjavljeni ste iz svih sesija i više nećete primati obavijesti. Kako biste ponovno omogućili obavijesti, ponovno se prijavite na svakom uređaju.";
 "login_reset_password_success_submit" = "Povratak na prijavu";
 "login_reset_password_cancel_confirmation_title" = "Upozorenje";
-"login_reset_password_cancel_confirmation_content" = "Vaša lozinka nije promijenjena.
-\n
-\nŽelite li zaustaviti proces promjene lozinke\?";
+"login_reset_password_cancel_confirmation_content" = "Vaša lozinka nije promijenjena.\n\nŽelite li zaustaviti proces promjene lozinke\?";
 "bug_report_error_too_short" = "Opis je prekratak";
 "command_description_shrug" = "Ubacuje ¯\\_(ツ)_/¯ prije početka tekstualne poruke";
 "verification_verified_user" = "%@ potvrđen/a";
 "verification_request_waiting_for" = "Čekanje na %@…";
 "room_profile_not_encrypted_subtitle" = "Poruke u ovoj sobi nisu šifrirane s kraja na kraj.";
-"room_profile_encrypted_subtitle" = "Poruke u ovoj sobi su šifrirane s kraja na kraj.
-\n
-\nVaše su poruke osigurane ključanicama te samo Vi i primatelj imate jedinstvene ključeve za otključavanje.";
+"room_profile_encrypted_subtitle" = "Poruke u ovoj sobi su šifrirane s kraja na kraj.\n\nVaše su poruke osigurane ključanicama te samo Vi i primatelj imate jedinstvene ključeve za otključavanje.";
 "room_profile_section_security" = "Sigurnost";
 "room_profile_section_security_learn_more" = "Saznajte više";
 "room_profile_section_more" = "Više";
@@ -755,7 +714,7 @@
 "create_room_public_title" = "Javna";
 "create_room_public_description" = "Bilo tko moći će se pridružiti sobi";
 "keys_backup_unable_to_get_keys_backup_data" = "Došlo je do greške pri dohvaćanju podataka iz sigurnosne kopije ključeva";
-"import_e2e_keys_from_file" = "Uvezi ključeve za E2E iz datoteke \"%1$@\.";
+"import_e2e_keys_from_file" = "Uvezi ključeve za E2E iz datoteke \"%1$@\".";
 "settings_sdk_version" = "Inačica Matrix SDK-a";
 "settings_other_third_party_notices" = "Druge obavijesti trećih strana";
 "navigate_to_room_when_already_in_the_room" = "Već se nalazite u toj sobi!";
@@ -776,33 +735,3 @@
 "message_action_item_redact" = "Ukloni…";
 "delete_event_dialog_title" = "Potvrda uklanjanja";
 "delete_event_dialog_content" = "Jeste li sigurni da želite ukloniti (izbrisati) ovaj događaj\? Ukoliko izbrišete naziv sobe ili promjenu teme, to može poništiti promjenu.";
-"plurals.membership_changes.item_0" = "%d promjena u članstvu";
-"plurals.membership_changes.item_1" = "%d promjene u članstvu";
-"plurals.membership_changes.item_2" = "%d promjena u članstvu";
-"plurals.room_title_members.item_0" = "%d član";
-"plurals.room_title_members.item_1" = "%d člana";
-"plurals.room_title_members.item_2" = "%d članova";
-"plurals.room_new_messages_notification.item_0" = "%d nova poruka";
-"plurals.room_new_messages_notification.item_1" = "%d nove poruke";
-"plurals.room_new_messages_notification.item_2" = "%d novih poruka";
-"plurals.room_details_selected.item_0" = "%d označen";
-"plurals.room_details_selected.item_1" = "%d označena";
-"plurals.room_details_selected.item_2" = "%d označenih";
-"plurals.notification_unread_notified_messages.item_0" = "%d nepročitana obavijesna poruka";
-"plurals.notification_unread_notified_messages.item_1" = "%d nepročitane obavijesne poruke";
-"plurals.notification_unread_notified_messages.item_2" = "%d nepročitanih obavijesnih poruka";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d soba";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d sobe";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_2" = "%d soba";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d poruka";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d poruke";
-"plurals.notification_compat_summary_line_for_room.item_2" = "%1$@: %2$d poruka";
-"plurals.notification_compat_summary_title.item_0" = "%d obavijest";
-"plurals.notification_compat_summary_title.item_1" = "%d obavijesti";
-"plurals.notification_compat_summary_title.item_2" = "%d obavijesti";
-"plurals.active_widgets.item_0" = "%d aktivan grafički element";
-"plurals.active_widgets.item_1" = "%d aktivna grafička elementa";
-"plurals.active_widgets.item_2" = "%d aktivnih grafičkih elemenata";
-"plurals.room_profile_section_more_member_list.item_0" = "%1$d osoba";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d osobe";
-"plurals.room_profile_section_more_member_list.item_2" = "%1$d osoba";

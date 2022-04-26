@@ -36,22 +36,14 @@
 "room_displayname_room_invite" = "Invito al ĉambro";
 "room_displayname_two_members" = "%1$@ kaj %2$@";
 "room_displayname_empty_room" = "Malplena ĉambro";
-"initial_sync_start_importing_account" = "Komenca spegulado:
-\nEnportante konton…";
-"initial_sync_start_importing_account_crypto" = "Komenca spegulado:
-\nEnportante ĉifrilojn";
-"initial_sync_start_importing_account_rooms" = "Komenca spegulado:
-\nEnportante ĉambrojn";
-"initial_sync_start_importing_account_joined_rooms" = "Komenca spegulado:
-\nEnportante aliĝitajn ĉambrojn";
-"initial_sync_start_importing_account_invited_rooms" = "Komenca spegulado:
-\nEnportante ĉambrojn de invitoj";
-"initial_sync_start_importing_account_left_rooms" = "Komenca spegulado:
-\nEnportante forlasitajn ĉambrojn";
-"initial_sync_start_importing_account_groups" = "Komenca spegulado:
-\nEnportante komunumojn";
-"initial_sync_start_importing_account_data" = "Komenca spegulado:
-\nEnportante datumojn de konto";
+"initial_sync_start_importing_account" = "Komenca spegulado:\nEnportante konton…";
+"initial_sync_start_importing_account_crypto" = "Komenca spegulado:\nEnportante ĉifrilojn";
+"initial_sync_start_importing_account_rooms" = "Komenca spegulado:\nEnportante ĉambrojn";
+"initial_sync_start_importing_account_joined_rooms" = "Komenca spegulado:\nEnportante aliĝitajn ĉambrojn";
+"initial_sync_start_importing_account_invited_rooms" = "Komenca spegulado:\nEnportante ĉambrojn de invitoj";
+"initial_sync_start_importing_account_left_rooms" = "Komenca spegulado:\nEnportante forlasitajn ĉambrojn";
+"initial_sync_start_importing_account_groups" = "Komenca spegulado:\nEnportante komunumojn";
+"initial_sync_start_importing_account_data" = "Komenca spegulado:\nEnportante datumojn de konto";
 "event_status_sending_message" = "Sendante mesaĝon…";
 "notice_avatar_changed_too" = "(ankaŭ profilbildo ŝanĝiĝis)";
 "notice_room_name_removed" = "%1$@ forigis nomon de la ĉambro";
@@ -257,9 +249,7 @@
 "option_take_photo_video" = "Foti aŭ filmi";
 "option_take_photo" = "Foti";
 "option_take_video" = "Filmi";
-"no_sticker_application_dialog_content" = "Vi havas neniujn ŝaltitajn glumarkarojn.
-\n
-\nĈu vi volas iujn aldoni nun\?";
+"no_sticker_application_dialog_content" = "Vi havas neniujn ŝaltitajn glumarkarojn.\n\nĈu vi volas iujn aldoni nun\?";
 "error_no_external_application_found" = "Pardonu, troviĝis neniu ekstera aplikaĵo por ĉi tiu ago.";
 "auth_login" = "Saluti";
 "auth_login_sso" = "Saluti per ununura saluto";
@@ -286,11 +276,9 @@
 "settings_background_sync" = "Fona spegulado";
 "settings_background_fdroid_sync_mode" = "Reĝimo de fona spegulado";
 "settings_background_fdroid_sync_mode_battery" = "Optimumigita por baterio";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).
-\nDepende de la stato de la rimedoj de via aparato, la spegulado povus esti prokrastita de la operaciumo.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ spegulos fone, per maniero konservanta la limigitajn rimedojn de la aparato (ĉefe la baterion).\nDepende de la stato de la rimedoj de via aparato, la spegulado povus esti prokrastita de la operaciumo.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimumigita por tujeco";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ spegulos fone, ripete, je preciza tempo (agordebla).
-\nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke %@ aŭskultas okazojn.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ spegulos fone, ripete, je preciza tempo (agordebla).\nĈi tio influos uzadon de baterio kaj radiilo, kaj aperigos ĉiaman sciigon pri tio, ke %@ aŭskultas okazojn.";
 "settings_background_fdroid_sync_mode_disabled" = "Neniu fona spegulado";
 "settings_background_fdroid_sync_mode_disabled_description" = "Vi ne sciiĝos pri envenaj mesaĝoj dum la aplikaĵo estas fone.";
 "settings_start_on_boot" = "Ruliĝi je eko de sistemo";
@@ -309,8 +297,7 @@
 "settings_other" = "Aliaj";
 "settings_advanced" = "Altnivelaj";
 "settings_integrations" = "Kunigoj";
-"settings_integrations_summary" = "Uzu kunigilon por administri robotojn, pontojn, fenestraĵojn kaj glumarkarojn.
-\nKunigiloj ricevas datumojn pri agordoj kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj agordi povnivelojn laŭ via rajtigo.";
+"settings_integrations_summary" = "Uzu kunigilon por administri robotojn, pontojn, fenestraĵojn kaj glumarkarojn.\nKunigiloj ricevas datumojn pri agordoj kaj povas modifi fenestraĵojn, sendi invitojn al ĉambroj, kaj agordi povnivelojn laŭ via rajtigo.";
 "settings_cryptography" = "Ĉifroteĥnikaro";
 "settings_cryptography_manage_keys" = "Administrado de ĉifraj ŝlasiloj";
 "settings_notifications_targets" = "Celoj de sciigoj";
@@ -333,9 +320,7 @@
 "login_reset_password_success_notice_2" = "Vi adiaŭis ĉiujn viajn salutaĵojn kaj ne plu ricevados pasivajn sciigojn. Por reŝalti sciigojn, resalutu per ĉiu via aparato.";
 "login_reset_password_success_submit" = "Reen al salutejo";
 "login_reset_password_cancel_confirmation_title" = "Averto";
-"login_reset_password_cancel_confirmation_content" = "Via pasvorto ankoraŭ ne ŝanĝiĝis.
-\n
-\nĈu haltigi la ŝanĝan procedon\?";
+"login_reset_password_cancel_confirmation_content" = "Via pasvorto ankoraŭ ne ŝanĝiĝis.\n\nĈu haltigi la ŝanĝan procedon\?";
 "login_set_email_title" = "Agordi retpoŝtadreson";
 "unencrypted" = "Neĉifrita";
 "encrypted_unverified" = "Ĉifrita de nekonata aparato";
@@ -346,9 +331,7 @@
 "error_empty_field_choose_user_name" = "Bonvolu elekti uzantonomon.";
 "error_empty_field_choose_password" = "Bonvolu elekti pasvorton.";
 "external_link_confirmation_title" = "Bone kontrolu ĉi tiun ligilon";
-"external_link_confirmation_message" = "La ligilo %1$@ kondukas vin al alia retejo: %2$@.
-\n
-\nĈu vi certe volas daŭrigi\?";
+"external_link_confirmation_message" = "La ligilo %1$@ kondukas vin al alia retejo: %2$@.\n\nĈu vi certe volas daŭrigi\?";
 "create_room_dm_failure" = "Ni ne povis krei vian individuan ĉambron. Bonvolu kontroli la invitotajn uzantojn kaj reprovi.";
 "send_bug_report_logs_description" = "Por diagnozi problemojn, protokolo de ĉi tiu kliento sendiĝos kune kun ĉi tiu erar-raporto. Ĉi tiu erar-raporto, inkluzive la protokolon kaj la ekrankopion, ne estos publike videbla. Se vi preferus sendi nur la ĉi-supran tekston, bonvolu malmarki:";
 "send_bug_report_alert_message" = "Ŝajnas, ke vi kolere skuas la telefonon. Ĉu vi volas malfermi la erar-raportilon\?";
@@ -368,9 +351,7 @@
 "video_call_in_progress" = "Vidvoko progresas…";
 "permissions_rationale_popup_title" = "Informoj";
 "permissions_rationale_msg_record_audio" = "%@ bezonas permeson aliri vian mikrofonon por fari voĉvokojn.";
-"permissions_rationale_msg_camera_and_audio" = "%@ bezonas premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.
-\n 
-\nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon.";
+"permissions_rationale_msg_camera_and_audio" = "%@ bezonas premeson aliri viajn filmilon kaj mikrofonon por fari vidvokojn.\n \nBonvolu permesi aliron per la sekva ŝprucpeto, por ebligi la vokon.";
 "yes" = "JES";
 "no" = "NE";
 "_continue" = "Daŭrigi";
@@ -387,8 +368,7 @@
 "room_participants_action_ignore" = "Malatenti";
 "room_participants_action_unignore" = "Reatenti";
 "room_participants_action_mention" = "Mencii";
-"room_participants_power_level_prompt" = "Vi ne povos malfari ĉi tiun ŝanĝon, ĉar vi donas al la uzanto la saman povnivelon, kiun havas vi mem.
-\nĈu vi certas\?";
+"room_participants_power_level_prompt" = "Vi ne povos malfari ĉi tiun ŝanĝon, ĉar vi donas al la uzanto la saman povnivelon, kiun havas vi mem.\nĈu vi certas\?";
 "room_one_user_is_typing" = "%@ tajpas…";
 "room_two_users_are_typing" = "%1$@ kaj %2$@ tajpas…";
 "room_many_users_are_typing" = "%1$@ kaj %2$@ kaj aliaj tajpas…";
@@ -410,8 +390,7 @@
 "cannot_call_yourself" = "Vi ne povas voki sola";
 "cannot_call_yourself_with_invite" = "Vi ne povas voki sola; atendu aliajn partoprenantojn";
 "command_description_rainbow" = "Sendas la donitan mesaĝon en ĉielarkaj koloroj";
-"verify_cannot_cross_sign" = "Tiu ĉi salutaĵo ne povas konigi ĉi tiun kontrolon al aliaj viaj salutaĵoj.
-\nLa kontrolo konserviĝos loke kaj estos konigota de venonta versio de la aplikaĵo.";
+"verify_cannot_cross_sign" = "Tiu ĉi salutaĵo ne povas konigi ĉi tiun kontrolon al aliaj viaj salutaĵoj.\nLa kontrolo konserviĝos loke kaj estos konigota de venonta versio de la aplikaĵo.";
 "unignore" = "Reatenti";
 "rendering_event_error_exception" = "%@ renkontis problemon bildigante enhavon de okazo kun la identigilo «%1$@»";
 "rendering_event_error_type_of_event_not_handled" = "%@ ne traktas okazojn de speco «%1$@»";
@@ -435,13 +414,9 @@
 "room_profile_section_admin" = "Agoj de administranto";
 "room_profile_section_more" = "Pli";
 "room_profile_section_security_learn_more" = "Eksciu plion";
-"room_profile_encrypted_subtitle" = "Mesaĝoj en ĉi tiu ĉambro estas tutvoje ĉifrataj.
-\n
-\nViaj mesaĝoj estas sekurigitaj per seruroj, kaj nur vi kaj la adresato havas la unikajn ŝlosilojn por ilin malŝlosi.";
+"room_profile_encrypted_subtitle" = "Mesaĝoj en ĉi tiu ĉambro estas tutvoje ĉifrataj.\n\nViaj mesaĝoj estas sekurigitaj per seruroj, kaj nur vi kaj la adresato havas la unikajn ŝlosilojn por ilin malŝlosi.";
 "room_profile_section_security" = "Sekureco";
-"direct_room_profile_encrypted_subtitle" = "Mesaĝoj ĉi tie estas tutvoje ĉifrataj.
-\n
-\nViaj mesaĝoj estas sekurigitaj per seruroj, kaj nur vi kaj la adresato havas la unikajn ŝlosilojn por ilin malŝlosi.";
+"direct_room_profile_encrypted_subtitle" = "Mesaĝoj ĉi tie estas tutvoje ĉifrataj.\n\nViaj mesaĝoj estas sekurigitaj per seruroj, kaj nur vi kaj la adresato havas la unikajn ŝlosilojn por ilin malŝlosi.";
 "direct_room_profile_not_encrypted_subtitle" = "Mesaĝoj ĉi tie ne estas tutvoje ĉifrataj.";
 "room_profile_not_encrypted_subtitle" = "Mesaĝoj en ĉi tiu ĉambro ne estas tutvoje ĉifrataj.";
 "verification_request_waiting_for" = "Atendante je %@…";
@@ -468,12 +443,7 @@
 "sent_an_audio_file" = "Sono";
 "sent_an_image" = "Bildo.";
 "sent_a_video" = "Filmo.";
-"verification_conclusion_compromised" = "Sekureco de unu el la jenaj povus esti rompita:
-\n
-\n - Via hejmservilo
-\n - La hejmesrvilo, al kiu konektiĝas la kontrolata uzanto
-\n - Via aŭ ĝia retkonekto
-\n - Via aŭ ĝia aparato";
+"verification_conclusion_compromised" = "Sekureco de unu el la jenaj povus esti rompita:\n\n - Via hejmservilo\n - La hejmesrvilo, al kiu konektiĝas la kontrolata uzanto\n - Via aŭ ĝia retkonekto\n - Via aŭ ĝia aparato";
 "verification_conclusion_not_secure" = "Nesekure";
 "verification_sas_do_not_match" = "Ili ne akordas";
 "verification_sas_match" = "Ili akordas";
@@ -496,16 +466,12 @@
 "notification_initial_sync" = "Komenca spegulado…";
 "bug_report_error_too_short" = "La priskribo estas tro mallonga";
 "permalink_malformed" = "Via ligilo al matrix.to estis misformita";
-"soft_logout_sso_not_same_user_error" = "Ĉi tiu salutaĵo estas por uzanto %1$@ kaj vi donas salutilojn por uzanto %2$@. %@ ne subtenas tion.
-\nBonvolu unue vakigi datumojn, kaj poste saluti alian konton.";
+"soft_logout_sso_not_same_user_error" = "Ĉi tiu salutaĵo estas por uzanto %1$@ kaj vi donas salutilojn por uzanto %2$@. %@ ne subtenas tion.\nBonvolu unue vakigi datumojn, kaj poste saluti alian konton.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Vi perdos aliron al sekuraj mesaĝoj, se vi ne salutos por rehavi viajn ĉifrajn ŝlosilojn.";
-"soft_logout_clear_data_dialog_content" = "Ĉu vakigi ĉiujn datumojn nun deponitajn en ĉi tiu aparato\?
-\nResalutu por aliri al la datumoj kaj mesaĝoj de via konto.";
+"soft_logout_clear_data_dialog_content" = "Ĉu vakigi ĉiujn datumojn nun deponitajn en ĉi tiu aparato\?\nResalutu por aliri al la datumoj kaj mesaĝoj de via konto.";
 "soft_logout_clear_data_dialog_title" = "Vakigi datumojn";
 "soft_logout_clear_data_submit" = "Vakigi ĉiujn datumojn";
-"soft_logout_clear_data_notice" = "Averto: Viaj personaj datumoj (inkluzive ĉifrajn ŝlosilojn) ankoraŭ estas deponitaj en ĉi tiu aparato.
-\n
-\nVakigu ilin, se vi ne plu uzados ĉi tiun aparaton, aŭ se vi volas saluti alian konton.";
+"soft_logout_clear_data_notice" = "Averto: Viaj personaj datumoj (inkluzive ĉifrajn ŝlosilojn) ankoraŭ estas deponitaj en ĉi tiu aparato.\n\nVakigu ilin, se vi ne plu uzados ĉi tiun aparaton, aŭ se vi volas saluti alian konton.";
 "soft_logout_clear_data_title" = "Vakigi personajn datumojn";
 "soft_logout_signin_password_hint" = "Pasvorto";
 "soft_logout_signin_submit" = "Saluti";
@@ -514,13 +480,7 @@
 "soft_logout_signin_title" = "Saluti";
 "soft_logout_title" = "Vi adiaŭis";
 "signed_out_submit" = "Resaluti";
-"signed_out_notice" = "Tio povas okazi pro diversaj kialoj:
-\n
-\n• Vi ŝanĝis vian pasvorton per alia salutaĵo.
-\n
-\n• Vi forigis ĉi tiun salutaĵon per alia salutaĵo.
-\n
-\n• La administranto de via servilo senvalidigis vian aliron pro kialo sekureca.";
+"signed_out_notice" = "Tio povas okazi pro diversaj kialoj:\n\n• Vi ŝanĝis vian pasvorton per alia salutaĵo.\n\n• Vi forigis ĉi tiun salutaĵon per alia salutaĵo.\n\n• La administranto de via servilo senvalidigis vian aliron pro kialo sekureca.";
 "signed_out_title" = "Vi adiaŭis";
 "seen_by" = "Vidita de";
 "autodiscover_well_known_error" = "Ne povas trovi validan hejmservilon. Bonvolu kontroli vian identigilon";
@@ -530,17 +490,14 @@
 "login_signin_matrix_id_notice" = "Se vi starigis konton ĉe hejmservilo, uzu viajn identigilon de Matrix (ekz. @uzanto:retnomo.net) kaj pasvorton sube.";
 "login_error_outdated_homeserver_title" = "Tro malnova hejmservilo";
 "login_validation_code_is_not_correct" = "La enigita kodo ne ĝustas. Bonvolu kontroli.";
-"login_wait_for_email_notice" = "Ni ĵus sendis retleteron al %1$@.
-\nBonvolu klaki la enhavitan ligilon por pluigi la kreadon de konto.";
+"login_wait_for_email_notice" = "Ni ĵus sendis retleteron al %1$@.\nBonvolu klaki la enhavitan ligilon por pluigi la kreadon de konto.";
 "login_wait_for_email_title" = "Bonvolu kontroli vian retpoŝton";
 "login_terms_title" = "Akceptu la uzokondiĉojn por pluiĝi";
 "login_a11y_captcha_container" = "Bonvolu fari la teston de homeco";
 "login_a11y_choose_other" = "Elekti propran hejmservilon";
 "login_a11y_choose_modular" = "Elekti Element Matrix Services";
 "login_a11y_choose_matrix_org" = "Elekti matrix.org";
-"login_signup_cancel_confirmation_content" = "Via konto ankoraŭ ne estas kreita.
-\n
-\nĈu haltigi la registriĝon\?";
+"login_signup_cancel_confirmation_content" = "Via konto ankoraŭ ne estas kreita.\n\nĈu haltigi la registriĝon\?";
 "login_signup_cancel_confirmation_title" = "Averto";
 "login_signup_error_user_in_use" = "Tiu uzantonomo jam estas prenita";
 "login_signup_submit" = "Pluen";
@@ -581,13 +538,9 @@
 "login_reset_password_notice" = "Kontrola retletero sendiĝos al via enirkesto por konfirmi la agordon de via nova pasvorto.";
 "login_reset_password_on" = "Restarigi pasvorton ĉe %1$@";
 "login_login_with_email_error" = "Ĉi tiu retpoŝtadreso estas ligita al neniu konto.";
-"login_registration_not_supported" = "Ĉi tiu aplikaĵo ne povas krei konton ĉe tiu ĉi hejmservilo.
-\n
-\nĈu vi volas registriĝi per TTT-kliento\?";
+"login_registration_not_supported" = "Ĉi tiu aplikaĵo ne povas krei konton ĉe tiu ĉi hejmservilo.\n\nĈu vi volas registriĝi per TTT-kliento\?";
 "login_registration_disabled" = "Pardonu, tiu ĉi servilo ne akceptas novajn kontojn.";
-"login_mode_not_supported" = "La aplikaĵo ne povas saluti ĉi tiun hejmservilon. La hejmservilo subtenas la jenajn specojn de saluto: %1$@.
-\n
-\nĈu vi volas saluti per TTT-kliento\?";
+"login_mode_not_supported" = "La aplikaĵo ne povas saluti ĉi tiun hejmservilon. La hejmservilo subtenas la jenajn specojn de saluto: %1$@.\n\nĈu vi volas saluti per TTT-kliento\?";
 "login_sso_error_message" = "Eraris enlegado de la paĝo: %1$@ (%2$d)";
 "login_server_url_form_common_notice" = "Enigu adreson de servilo, kiun vi volas uzi";
 "login_server_url_form_other_hint" = "Adreso";
@@ -630,17 +583,11 @@
 "room_list_quick_actions_notifications_all" = "Ĉiuj mesaĝoj";
 "room_list_quick_actions_notifications_all_noisy" = "Ĉiuj mesaĝoj (laŭte)";
 "message_ignore_user" = "Malatenti uzanton";
-"content_reported_as_inappropriate_content" = "Ĉi tiu enhavo estis raportita kiel maltaŭga.
-\n
-\nSe vi ne plu volas vidi enhavon de ĉi tiu uzanto, vi povas malatenti ĝin por kaŝi ĝiajn mesaĝojn.";
+"content_reported_as_inappropriate_content" = "Ĉi tiu enhavo estis raportita kiel maltaŭga.\n\nSe vi ne plu volas vidi enhavon de ĉi tiu uzanto, vi povas malatenti ĝin por kaŝi ĝiajn mesaĝojn.";
 "content_reported_as_inappropriate_title" = "Raportita kiel maltaŭga";
-"content_reported_as_spam_content" = "Ĉi tiu enhavo estis raportita kiel rubmesaĝo.
-\n
-\nSe vi ne plu volas vidi enhavon de ĉi tiu uzanto, vi povas malatenti ĝin por kaŝi ĝiajn mesaĝojn.";
+"content_reported_as_spam_content" = "Ĉi tiu enhavo estis raportita kiel rubmesaĝo.\n\nSe vi ne plu volas vidi enhavon de ĉi tiu uzanto, vi povas malatenti ĝin por kaŝi ĝiajn mesaĝojn.";
 "content_reported_as_spam_title" = "Raportita kiel rubmesaĝo";
-"content_reported_content" = "Ĉi tiu enhavo raportiĝis.
-\n
-\nSe vi ne plu volas vidi enhavon de tiu ĉi uzanto, vi povas ĝin malatenti por kaŝi ĝiajn mesaĝojn.";
+"content_reported_content" = "Ĉi tiu enhavo raportiĝis.\n\nSe vi ne plu volas vidi enhavon de tiu ĉi uzanto, vi povas ĝin malatenti por kaŝi ĝiajn mesaĝojn.";
 "content_reported_title" = "Enhavo raportiĝis";
 "block_user" = "MALATENTI UZANTON";
 "report_content_custom_submit" = "RAPORTO";
@@ -738,9 +685,7 @@
 "import_e2e_keys_from_file" = "Enporti tutvoje ĉifrajn ŝlosilojn el dosiero «%1$@».";
 "keys_backup_unable_to_get_keys_backup_data" = "Eraris akirado de datumoj de savkopio de ŝlosiloj";
 "keys_backup_unable_to_get_trust_info" = "Eraris akirado de informoj pri fideco";
-"create_room_federation_error" = "Ĉi tiu ĉambro kreiĝis, sed iuj invitoj ne sendiĝis pro la jena kialo:
-\n
-\n%@";
+"create_room_federation_error" = "Ĉi tiu ĉambro kreiĝis, sed iuj invitoj ne sendiĝis pro la jena kialo:\n\n%@";
 "create_room_public_description" = "Ĉiu ajn povos aliĝi al la ĉambro";
 "create_room_public_title" = "Publika";
 "create_room_name_hint" = "Nomo";
@@ -846,17 +791,14 @@
 "keys_backup_setup_step3_button_title_no_passphrase" = "Mi faris kopion";
 "keys_backup_setup_step3_button_title" = "Finite";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Tenu vian rehavan ŝlosilon en tre sekura loko, ekzemple mastrumilo de pasvortoj (aŭ sekurkesto)";
-"keys_backup_setup_step3_text_line2" = "Via rehava ŝlosilo estas formo de asekuro – vi povas uzi ĝin por rehavi aliron al viaj ĉifritaj mesaĝoj se vi forgesos vian pasfrazon.
-\nTenu vian rehavan ŝlosilon en tre sekura loko, ekzemple mastrumilo de pasvortoj (aŭ sekurkesto)";
+"keys_backup_setup_step3_text_line2" = "Via rehava ŝlosilo estas formo de asekuro – vi povas uzi ĝin por rehavi aliron al viaj ĉifritaj mesaĝoj se vi forgesos vian pasfrazon.\nTenu vian rehavan ŝlosilon en tre sekura loko, ekzemple mastrumilo de pasvortoj (aŭ sekurkesto)";
 "keys_backup_setup_step3_text_line1" = "Viaj ŝlosiloj estas savkopiataj.";
 "keys_backup_setup_step3_success_title" = "Sukcese!";
 "keys_backup_setup_step2_skip_button_title" = "(Altnivele) Agordi kun rehava ŝlosilo";
 "keys_backup_setup_step1_recovery_key_alternative" = "Aŭ sekurigu vian savkopion per rehava ŝlosilo, kiun vi deponu en loko sekura.";
 "keys_backup_setup_creating_backup" = "Farante savkopion";
 "keys_backup_setup_step2_button_title" = "Agordi pasfrazon";
-"keys_backup_setup_step2_text_description" = "Ni deponos ĉifritan kopion de viaj ŝlosiloj en via hejmservilo. Protektu vian savkopion per pasfrazo por bone ĝin sekurigi.
-\n
-\nPor pleja sekureco, la pasfrazo estu malsama al la pasvorto de via konto.";
+"keys_backup_setup_step2_text_description" = "Ni deponos ĉifritan kopion de viaj ŝlosiloj en via hejmservilo. Protektu vian savkopion per pasfrazo por bone ĝin sekurigi.\n\nPor pleja sekureco, la pasfrazo estu malsama al la pasvorto de via konto.";
 "keys_backup_setup_step2_text_title" = "Sekurigu vian savkopion per pasfrazo.";
 "login_signin_matrix_id_title" = "Saluti per identigilo de Matrix";
 "login_connect_using_matrix_id_submit" = "Salutu per identigilo de Matrix";
@@ -864,9 +806,7 @@
 "keys_backup_setup_step1_manual_export" = "Permane elporti ŝlosilojn";
 "keys_backup_setup_step1_advanced" = "(Altnivele)";
 "keys_backup_setup" = "Komenci uzi Savkopiadon de ŝlosiloj";
-"keys_backup_setup_step1_description" = "Mesaĝoj en ĉifritaj ĉambroj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la adresato(j) havas la ŝlosilojn por malĉifri tiujn ĉi mesaĝojn.
-\n
-\nSekure savkopiu viajn ŝlosilojn por eviti ilian perdon.";
+"keys_backup_setup_step1_description" = "Mesaĝoj en ĉifritaj ĉambroj estas sekurigitaj per tutvoja ĉifrado. Nur vi kaj la adresato(j) havas la ŝlosilojn por malĉifri tiujn ĉi mesaĝojn.\n\nSekure savkopiu viajn ŝlosilojn por eviti ilian perdon.";
 "keys_backup_setup_step1_title" = "Neniam perdu ĉifritajn mesaĝojn";
 "keys_backup_passphrase_not_empty_error_message" = "Bonvolu forigi la pasfrazon se vi volas, ke %@ estigu novan rehavan ŝlosilon.";
 "passphrase_passphrase_too_weak" = "Pasfrazo estas tro malforta";
@@ -881,8 +821,7 @@
 "merged_events_collapse" = "maletendi";
 "merged_events_expand" = "etendi";
 "unknown_error" = "Pardonu, okazis eraro";
-"deactivate_account_content.b_0" = "Tiu ĉi ago estas nemalfarebla";
-"deactivate_account_content.b_1" = "ne forgesigas memage ĉiujn mesaĝojn, kiujn vi sendis";
+"deactivate_account_content" = "Ĉi tio faros vian konton por ĉiam neuzebla. Vi ne povos saluti, kaj neniu alia povos ree registriĝi per la sama identigilo de uzanto. Via konto foriros de ĉiuj partoprenitaj ĉambroj, kaj forigos detalojn de via konto de via identiga servilo. <b>Tiu ĉi ago estas nemalfarebla</b>.\n\nMalaktivigo de via konto <b>ne forgesigas memage ĉiujn mesaĝojn, kiujn vi sendis</b>. Se vi volus, ke ni forgesu viajn mesaĝojn, bonvolu marki la markbutonon sube.\n\nVidebleco de mesaĝoj en Matrix estas simila al retpoŝto. Nia forgeso de viaj mesaĝoj signifas, ke viaj senditaj mesaĝoj estos havigotaj al neniuj novaj aŭ neregistritaj uzantoj, sed uzantoj registritaj, kiuj jam povas aliri tiujn mesaĝojn, daŭre povos aliri sian kopion.";
 "deactivate_account_title" = "Malaktivigi konton";
 "dialog_user_consent_submit" = "Tralegi nun";
 "dialog_user_consent_content" = "Por daŭrigi uzadon de la hejmservilo «%1$@», vi devas tralegi kaj konsenti la uzokondiĉojn.";
@@ -908,14 +847,8 @@
 "key_share_request" = "Peto je havigo de ŝlosiloj";
 "share_without_verifying_short_label" = "Havigi";
 "start_verification" = "Komenci kontroladon";
-"your_unverified_device_requesting_with_info" = "Nekontrolita salutaĵo petas ĉifrajn ŝlosilojn.
-\nNomo de salutaĵo: %1$@
-\nLastafoje vidita: %2$@
-\nSe vi ne salutis alian salutaĵon, malatentu ĉi tiun peton.";
-"you_added_a_new_device_with_info" = "Nova salutaĵo petas ĉifrajn ŝlosilojn.
-\nNomo de salutaĵo: %1$@
-\nLastafoje vidita: %2$@
-\nSe vi ne salutis alian salutaĵon, malatentu ĉi tiun peton.";
+"your_unverified_device_requesting_with_info" = "Nekontrolita salutaĵo petas ĉifrajn ŝlosilojn.\nNomo de salutaĵo: %1$@\nLastafoje vidita: %2$@\nSe vi ne salutis alian salutaĵon, malatentu ĉi tiun peton.";
+"you_added_a_new_device_with_info" = "Nova salutaĵo petas ĉifrajn ŝlosilojn.\nNomo de salutaĵo: %1$@\nLastafoje vidita: %2$@\nSe vi ne salutis alian salutaĵon, malatentu ĉi tiun peton.";
 "your_unverified_device_requesting" = "Via nekontrolita salutaĵo «%@» petas ĉifrajn ŝlosilojn.";
 "you_added_a_new_device" = "Vi aldonis novan salutaĵon «%@», kiu petas ĉifrajn ŝlosilojn.";
 "widget_integration_review_terms" = "Por daŭrigi vi devas akcepti la uzokondiĉojn de tiu ĉi servo.";
@@ -949,8 +882,7 @@
 "room_widget_revoke_access" = "Nuligi mian aliron";
 "room_widget_open_in_browser" = "Malfermi en foliumilo";
 "room_widget_reload" = "Re-enlegi fenestraĵon";
-"room_widget_failed_to_load" = "Malsukcesis enlegi fenestraĵon.
-\n%@";
+"room_widget_failed_to_load" = "Malsukcesis enlegi fenestraĵon.\n%@";
 "room_widget_permission_shared_info_title" = "Ĝia uzado povas havigi datumojn al %@:";
 "room_widget_permission_webview_shared_info_title" = "Ĝia uzado povas agordi kuketojn kaj havigi datumojn al %@:";
 "room_widget_permission_added_by" = "Tiun ĉi fenestraĵon aldonis:";
@@ -1038,9 +970,7 @@
 "settings_select_country" = "Elektu landon";
 "settings_emails_and_phone_numbers_summary" = "Administri retpoŝtadresojn kaj telefonnumerojn ligitajn al via konto de Matrix";
 "settings_emails_and_phone_numbers_title" = "Retpoŝtadresoj kaj telefonnumeroj";
-"settings_unignore_user" = "Ĉu montri ĉiujn mesaĝojn de %@\?
-\n
-\nSciu ke tiu ĉi ago reekigos la aplikaĵon, kaj tio povas daŭri iom da tempo.";
+"settings_unignore_user" = "Ĉu montri ĉiujn mesaĝojn de %@\?\n\nSciu ke tiu ĉi ago reekigos la aplikaĵon, kaj tio povas daŭri iom da tempo.";
 "settings_password_updated" = "Via pasvorto ĝisdatiĝis";
 "settings_fail_to_update_password_invalid_current_password" = "La pasvorto ne validas";
 "settings_fail_to_update_password" = "Malsukcesis ĝisdatigi pasvorton";
@@ -1117,11 +1047,8 @@
 "settings_troubleshoot_test_battery_success" = "Optimumigo de baterio ne influas sur %@.";
 "settings_troubleshoot_test_battery_title" = "Optimumigo de baterio";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Malŝalti limigojn";
-"settings_troubleshoot_test_bg_restricted_failed" = "Fonaj limigoj estas ŝaltitaj por %@.
-\nAgado de la aplikaĵo estos akre limigita dum ĝi estas fone, kaj tio povus influi sciigojn.
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_success" = "Fonaj limigoj estas malŝaltitaj por %@. Ĉi tiu testo devus esti rulata kun telefonaj datumoj (ne kun Vifio).
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Fonaj limigoj estas ŝaltitaj por %@.\nAgado de la aplikaĵo estos akre limigita dum ĝi estas fone, kaj tio povus influi sciigojn.\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Fonaj limigoj estas malŝaltitaj por %@. Ĉi tiu testo devus esti rulata kun telefonaj datumoj (ne kun Vifio).\n%1$@";
 "settings_troubleshoot_test_bg_restricted_title" = "Kontroli fonajn limigojn";
 "settings_troubleshoot_test_service_boot_quickfix" = "Ŝalti ekadon kune kun aparato";
 "settings_troubleshoot_test_service_boot_failed" = "La servo ne ekos kiam la aparato reekos, kaj vi ne ricevos sciigojn ĝis vi mem %@ malfermos.";
@@ -1130,9 +1057,9 @@
 "resource_limit_hard_contact" = "Bonvolu %@ por daŭre uzadi ĉi tiun servon.";
 "resource_limit_soft_contact" = "Bonvolu %@ por plialtigi ĉi tiun limon.";
 "resource_limit_hard_mau" = "Ĉi tiu hejmservilo atingis sian monatan limon de aktivaj uzantoj.";
-"resource_limit_soft_mau.b_0" = "iuj uzantoj do ne povos saluti";
+"resource_limit_soft_mau" = "Ĉi tiu hejmservilo atingis sian monatan limon de aktivaj uzantoj; <b>iuj uzantoj do ne povos saluti</b>.";
 "resource_limit_hard_default" = "Ĉi tiu hejmservilo superis je unu el siaj limoj de rimedoj.";
-"resource_limit_soft_default.b_0" = "iuj uzantoj do ne povos saluti";
+"resource_limit_soft_default" = "Ĉi tiu hejmservilo jam superis je unu el siaj limoj de rimedoj; <b>iuj uzantoj do ne povos saluti</b>.";
 "resource_limit_contact_admin" = "kontakti administranton de via servo";
 "room_tombstone_predecessor_link" = "Klaku ĉi tien por vidi pli malnovajn mesaĝojn";
 "room_tombstone_continuation_description" = "Ĉi tiu ĉambro estas la daŭrigo de alia interparolo";
@@ -1147,40 +1074,30 @@
 "settings_troubleshoot_test_notification_title" = "Montrado de sciigoj";
 "settings_troubleshoot_test_push_notification_content" = "Vi nun rigardas la sciigon! Klaku min!";
 "settings_troubleshoot_test_push_loop_title" = "Testi pasivojn";
-"settings_troubleshoot_test_token_registration_failed" = "Malsukcesis registri la ĵetonon de FCM ĉe la hejmservilo:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Malsukcesis registri la ĵetonon de FCM ĉe la hejmservilo:\n%1$@";
 "settings_troubleshoot_test_token_registration_success" = "Ĵetono de FCM sukcese registriĝis ĉe la hejmservilo.";
 "settings_troubleshoot_test_token_registration_title" = "Registrado de ĵetono";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Aldoni konton";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nTiu ĉi eraro ne dependas de %@. La telefono ne havas konton de Google. Bonvolu malfermi la administrilon de kontoj kaj aldoni konton de Google.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nTiu ĉi eraro ne dependas de %@. Ĝi povas okazi pro kelkaj kialoj. Eble ĝi funkcios se vi reprovos poste. Vi ankaŭ povas kontroli, ĉu la servo de Google Play ne estas datume limigita en la sistemaj agordoj, aŭ ĉu la horloĝo de via aparato ĝuste funkcias, aŭ ĉu ĝi ne okazas sur propra ROM.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nTiu ĉi eraro ne dependas de %@, kaj laŭ Google ĝi indikas, ke la aparato havas tro multajn aplikaĵojn registritajn je FCM. La eraro nur okazas kiam multegaj aplikaĵoj estas samtempe instalitaj, kaj ne devus koncerni ordinaran uzanton.";
-"settings_troubleshoot_test_fcm_failed" = "Malsukcesis akiri ĵetonon de FCM:
-\n%1$@";
-"settings_troubleshoot_test_fcm_success" = "Ĵetono de FCM sukcese akiriĝis:
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nTiu ĉi eraro ne dependas de %@. La telefono ne havas konton de Google. Bonvolu malfermi la administrilon de kontoj kaj aldoni konton de Google.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nTiu ĉi eraro ne dependas de %@. Ĝi povas okazi pro kelkaj kialoj. Eble ĝi funkcios se vi reprovos poste. Vi ankaŭ povas kontroli, ĉu la servo de Google Play ne estas datume limigita en la sistemaj agordoj, aŭ ĉu la horloĝo de via aparato ĝuste funkcias, aŭ ĉu ĝi ne okazas sur propra ROM.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nTiu ĉi eraro ne dependas de %@, kaj laŭ Google ĝi indikas, ke la aparato havas tro multajn aplikaĵojn registritajn je FCM. La eraro nur okazas kiam multegaj aplikaĵoj estas samtempe instalitaj, kaj ne devus koncerni ordinaran uzanton.";
+"settings_troubleshoot_test_fcm_failed" = "Malsukcesis akiri ĵetonon de FCM:\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "Ĵetono de FCM sukcese akiriĝis:\n%1$@";
 "settings_troubleshoot_test_fcm_title" = "Ĵetono de Firebase";
 "settings_troubleshoot_test_play_services_quickfix" = "Ripari servojn de Google Play";
-"settings_troubleshoot_test_play_services_failed" = "%@ uzas la servojn de Google Play por liveri pasivajn mesaĝojn, sed ili ne ŝajnas ĝuste agorditaj:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ uzas la servojn de Google Play por liveri pasivajn mesaĝojn, sed ili ne ŝajnas ĝuste agorditaj:\n%1$@";
 "settings_troubleshoot_test_play_services_success" = "APK de servoj de Google Play estas ĝisdata kaj disponebla.";
 "settings_troubleshoot_test_play_services_title" = "Kontrolo de servoj de Google Play";
 "settings_troubleshoot_test_bing_settings_failed" = "Iuj sciigoj estas malŝaltitaj en viaj propraj agordoj.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Rimarku, ke iuj specoj de mesaĝoj estas silentaj (sciigas sensone).";
 "settings_troubleshoot_test_bing_settings_title" = "Propraj agordoj.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Ŝalti";
-"settings_troubleshoot_test_device_settings_failed" = "Sciigoj ne estas ŝaltitaj por ĉi tiu salutaĵo.
-\nBonvolu kontroli la agordojn de %@.";
+"settings_troubleshoot_test_device_settings_failed" = "Sciigoj ne estas ŝaltitaj por ĉi tiu salutaĵo.\nBonvolu kontroli la agordojn de %@.";
 "settings_troubleshoot_test_device_settings_success" = "Sciigoj estas ŝaltitaj por ĉi tiu salutaĵo.";
 "settings_troubleshoot_test_device_settings_title" = "Agordoj de salutaĵo.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Ŝalti";
-"settings_troubleshoot_test_account_settings_failed" = "Sciigoj estas malŝaltitaj por via konto.
-\nBonvolu kontroli la agordojn de konto.";
-"settings_troubleshoot_test_system_settings_failed" = "Sciigoj estas malŝaltitaj en la sistemaj agordoj.
-\nBonvolu kontroli la sistemajn agordojn.";
+"settings_troubleshoot_test_account_settings_failed" = "Sciigoj estas malŝaltitaj por via konto.\nBonvolu kontroli la agordojn de konto.";
+"settings_troubleshoot_test_system_settings_failed" = "Sciigoj estas malŝaltitaj en la sistemaj agordoj.\nBonvolu kontroli la sistemajn agordojn.";
 "settings_troubleshoot_test_system_settings_success" = "Sciigoj estas ŝaltitaj en la sistemaj agordoj.";
 "settings_troubleshoot_test_system_settings_title" = "Sistemaj agordoj.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Unu aŭ pli da testoj malsukcesis, bonvolu raporti la problemon por helpi nin esplori ĝin.";
@@ -1216,18 +1133,14 @@
 "room_participants_unban_title" = "Malforbari uzanton";
 "room_participants_ban_reason" = "Kialo de forbaro";
 "room_participants_ban_title" = "Forbari uzanton";
-"room_participants_remove_prompt_msg" = "Forpelo de uzanto ĝin forigos de la ĉambro.
-\n
-\nPor malhelpi ĝin ree aliĝi, vi ĝin anstataŭe forbaru.";
+"room_participants_remove_prompt_msg" = "Forpelo de uzanto ĝin forigos de la ĉambro.\n\nPor malhelpi ĝin ree aliĝi, vi ĝin anstataŭe forbaru.";
 "room_participants_remove_reason" = "Kialo de forpelo";
 "room_participants_remove_title" = "Forpeli uzanton";
 "room_participants_action_cancel_invite_prompt_msg" = "Ĉu vi certe volas nuligi la inviton por tiu ĉi uzanto\?";
 "room_participants_action_cancel_invite_title" = "Nuligi inviton";
 "room_participants_action_unignore_prompt_msg" = "Reatento de tiu ĉi uzanto remontros ĉiujn ĝiajn mesaĝojn.";
 "room_participants_action_unignore_title" = "Reatenti uzanton";
-"room_participants_action_ignore_prompt_msg" = "Malatento de ĉi tiu uzanto forigos ĝiajn mesaĝojn de ĉambroj, kie vi ambaŭ estas.
-\n
-\nVi ĉiam povas malfari tiun agon per la ĝeneralaj agordoj.";
+"room_participants_action_ignore_prompt_msg" = "Malatento de ĉi tiu uzanto forigos ĝiajn mesaĝojn de ĉambroj, kie vi ambaŭ estas.\n\nVi ĉiam povas malfari tiun agon per la ĝeneralaj agordoj.";
 "room_participants_action_ignore_title" = "Malatenti uzanton";
 "room_participants_power_level_demote" = "Malaltigi povnivelon";
 "room_participants_power_level_demote_warning_prompt" = "Vi ne povos malfari ĉi tiun ŝanĝon, ĉar vi malaltigas vian propran povnivelon. Se vi estas la lasta uzanto de la ĉambro kun tia ĉi povo, ne eblos ĝin rehavi.";
@@ -1255,8 +1168,7 @@
 "sound_device_speaker" = "Laŭtparolilo";
 "sound_device_phone" = "Telefono";
 "call_select_sound_device" = "Elekti sonaparaton";
-"call_failed_no_connection_description" = "Malsukcesis fari realtempan konekton.
-\nBonvolu peti la administranton de via hejmservilo agordi TURN-servilon, por ke vokoj funkciu dependeble.";
+"call_failed_no_connection_description" = "Malsukcesis fari realtempan konekton.\nBonvolu peti la administranton de via hejmservilo agordi TURN-servilon, por ke vokoj funkciu dependeble.";
 "call_failed_no_connection" = "Malsukcesis voko de %@";
 "matrix_only_filter" = "Nur kontaktoj de Matrix";
 "bottom_action_notification" = "Sciigoj";
@@ -1398,10 +1310,8 @@
 "command_description_discard_session_not_handled" = "Subtenata nur en ĉifritaj ĉambroj";
 "use_latest_app" = "Uzu la plej freŝan version de %@ per aliaj viaj aparatoj:";
 "or_other_mx_capable_client" = "aŭ alian klienton de Matrix kapablan je delegaj subskriboj";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ Web (por TTT)
-\n%@ Desktop (por labortablo)";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ Web (por TTT)\n%@ Desktop (por labortablo)";
 "use_other_session_content_description" = "Uzu la plej freŝan %@ per aliaj viaj aparatoj: %@ Web, %@ Desktop, %@ iOS, %@ por Android, aŭ alian klienton de Matrix kapablan je delegaj subskriboj";
 "change_password_summary" = "Agordi novan pasvorton de konto…";
 "error_saving_media_file" = "Ne povis konservi dosieron de vidaŭdaĵo";
@@ -1436,14 +1346,7 @@
 "recovery_passphrase" = "Rehava pasfrazo";
 "verification_cancelled" = "Kontrolo nuliĝis";
 "verify_cancelled_notice" = "Kontrolo nuliĝis. Vi povas rekomenci ĝin.";
-"verify_not_me_self_verification" = "La sekureco de unu el la sekvaj povus esti rompita:
-\n
-\n- Via pasvorto
-\n- Via hejmservilo
-\n- Ĉi tiu aparato, aŭ la alia aparato
-\n- La retkonekto de la alia aparato
-\n
-\nNi rekomendas, ke vi tuj ŝanĝu viajn pasvorton kaj rehavan ŝlosilon en la agordoj.";
+"verify_not_me_self_verification" = "La sekureco de unu el la sekvaj povus esti rompita:\n\n- Via pasvorto\n- Via hejmservilo\n- Ĉi tiu aparato, aŭ la alia aparato\n- La retkonekto de la alia aparato\n\nNi rekomendas, ke vi tuj ŝanĝu viajn pasvorton kaj rehavan ŝlosilon en la agordoj.";
 "verify_cancel_other" = "%1$@ (%2$@) ne kontroliĝos, se vi nuligos nun. Rekomencu de ĝia profilo de uzanto.";
 "verify_cancel_self_verification_from_trusted" = "Se vi nuligos, vi ne povos legi ĉifritajn mesaĝojn per via nova aparato, kaj aliaj uzantoj ĝin ne fidos";
 "verify_cancel_self_verification_from_untrusted" = "Se vi nuligos, vi ne povos legi ĉifritajn mesaĝojn per ĉi tiu aparato, kaj aliaj uzantoj ĝin ne fidos";
@@ -1467,9 +1370,7 @@
 "enter_secret_storage_invalid" = "Ne povas trovi sekretojn en deponejo";
 "verification_use_passphrase" = "Se vi ne povas aliri jaman salutaĵon";
 "verification_cannot_access_other_session" = "Uzi rehavan pasfrazon aŭ ŝlosilon";
-"delete_account_data_warning" = "Ĉu forigi la datumojn de konto de la speco «%1$@»\?
-\n
-\nForu tion zorge, ĝi povus kaŭzi neatenditan konduton.";
+"delete_account_data_warning" = "Ĉu forigi la datumojn de konto de la speco «%1$@»\?\n\nForu tion zorge, ĝi povus kaŭzi neatenditan konduton.";
 "settings_account_data" = "Datumoj de konto";
 "settings_dev_tools" = "Programistaj iloj";
 "no_connectivity_to_the_server_indicator_airplane" = "Aviadila reĝimo estas ŝaltita";
@@ -1500,13 +1401,9 @@
 "settings_active_sessions_list" = "Aktivaj salutaĵoj";
 "settings_hs_admin_e2e_disabled" = "La administranto de via servilo malŝaltis implicitan tutvojan ĉifradon en privataj kaj individuaj ĉambroj.";
 "encryption_information_dg_xsigning_disabled" = "Delegaj subskriboj ne estas ŝaltitaj";
-"encryption_information_dg_xsigning_not_trusted" = "Delegaj subskriboj estas ŝaltitaj.
-\nŜlosiloj ne estas fidataj";
-"encryption_information_dg_xsigning_trusted" = "Delegaj subskriboj estas ŝaltitaj
-\nŜlosiloj estas fidataj.
-\nPrivataj ŝlosiloj estas nekonataj";
-"encryption_information_dg_xsigning_complete" = "Delegaj subskriboj estas ŝaltitaj
-\nPrivataj ŝlosiloj estas en la aparato.";
+"encryption_information_dg_xsigning_not_trusted" = "Delegaj subskriboj estas ŝaltitaj.\nŜlosiloj ne estas fidataj";
+"encryption_information_dg_xsigning_trusted" = "Delegaj subskriboj estas ŝaltitaj\nŜlosiloj estas fidataj.\nPrivataj ŝlosiloj estas nekonataj";
+"encryption_information_dg_xsigning_complete" = "Delegaj subskriboj estas ŝaltitaj\nPrivataj ŝlosiloj estas en la aparato.";
 "encryption_information_cross_signing_state" = "Delegaj subskriboj";
 "verification_conclusion_ok_self_notice" = "Via nova salutaĵo nun estas kontrolita. Ĝi povas aliri viajn ĉifritajn mesaĝojn, kaj aliaj uzantoj ĝin vidos fidata.";
 "verification_conclusion_ok_notice" = "Mesaĝoj kun ĉi tiu uzanto estas tutvoje ĉifritaj kaj nelegeblaj al aliuloj.";
@@ -1543,15 +1440,11 @@
 "direct_room_encryption_enabled_tile_description" = "Mesaĝoj en ĉi tiu ĉambro estas tutvoje ĉifrataj.";
 "encryption_enabled_tile_description" = "Mesaĝoj en ĉi tiu ĉambro estas tutvoje ĉifrataj. Eksciu plion kaj kontrolu uzantojn per iliaj profiloj de uzanto.";
 "encryption_enabled" = "Ĉifrado estas ŝaltita";
-"bootstrap_cancel_text" = "Se vi nuligos nun, vi eble perdos ĉifritajn mesaĝojn kaj datumojn, se vi perdos aliron al viaj salutoj.
-\n
-\nVi povas agordi sekuran savkopiadon kaj administri viajn ŝlosilojn per la agordoj.";
+"bootstrap_cancel_text" = "Se vi nuligos nun, vi eble perdos ĉifritajn mesaĝojn kaj datumojn, se vi perdos aliron al viaj salutoj.\n\nVi povas agordi sekuran savkopiadon kaj administri viajn ŝlosilojn per la agordoj.";
 "bootstrap_crosssigning_save_cloud" = "Kopiu ĝin al via persona fora deponejo";
 "bootstrap_crosssigning_save_usb" = "Konservu ĝin en USB-memorilo aŭ savkopia disko";
 "bootstrap_crosssigning_print_it" = "Presu ĝin kaj deponu ĝin en sekura loko";
-"bootstrap_cross_signing_success" = "Viaj %2$@ kaj %1$@ agordiĝis.
-\n
-\nTenu ilin sekuraj! Vi bezonos ilin por malŝlosi ĉifritajn mesaĝoj kaj sekurigi informojn, se vi perdos ĉiujn viajn aktivajn salutaĵojn.";
+"bootstrap_cross_signing_success" = "Viaj %2$@ kaj %1$@ agordiĝis.\n\nTenu ilin sekuraj! Vi bezonos ilin por malŝlosi ĉifritajn mesaĝoj kaj sekurigi informojn, se vi perdos ĉiujn viajn aktivajn salutaĵojn.";
 "bootstrap_crosssigning_progress_key_backup" = "Agordante savkopiadon de ŝlosiloj";
 "bootstrap_crosssigning_progress_save_ssk" = "Spegulante sinsubskriban ŝlosilon";
 "bootstrap_crosssigning_progress_save_usk" = "Spegulante ŝlosilon de uzanto";
@@ -1629,10 +1522,8 @@
 "notice_room_canonical_alias_main_and_alternative_changed" = "%1$@ ŝanĝis la ĉefan kaj alternativajn adresojn por ĉi tiu ĉambro.";
 "notice_room_canonical_alias_alternative_changed_by_you" = "Vi ŝanĝis la alternativajn adresojn por ĉi tiu ĉambro.";
 "notice_room_canonical_alias_alternative_changed" = "%1$@ ŝanĝis la alternativajn adresojn por ĉi tiu ĉambro.";
-"initial_sync_start_downloading" = "Komenca spegulado:
-\nElŝutante datumojn…";
-"initial_sync_start_server_computing" = "Komenca spegulado:
-\nAtendante respondon de servilo…";
+"initial_sync_start_downloading" = "Komenca spegulado:\nElŝutante datumojn…";
+"initial_sync_start_server_computing" = "Komenca spegulado:\nAtendante respondon de servilo…";
 "room_displayname_empty_room_was" = "Malplena ĉambro (estis %@)";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ kaj %4$@";
 "room_displayname_3_members" = "%1$@, %2$@ kaj %3$@";
@@ -1724,8 +1615,7 @@
 "feedback" = "Prikomentoj";
 "send_feedback_space_title" = "Prikomentoj pri aroj";
 "room_preview_no_preview_join" = "Oni ne povas antaŭrigardi ĉi tiun ĉambron. Ĉu vi volas eniri\?";
-"room_preview_not_found" = "Ĉi tiu ĉambro nun ne estas disponebla.
-\nReprovu poste, aŭ petu administranton de ĉambro kontroli, ĉu vi rajtas aliri.";
+"room_preview_not_found" = "Ĉi tiu ĉambro nun ne estas disponebla.\nReprovu poste, aŭ petu administranton de ĉambro kontroli, ĉu vi rajtas aliri.";
 "settings_discovery_consent_action_give_consent" = "Konsenti";
 "settings_discovery_consent_action_revoke" = "Nuligi mian konsenton";
 "settings_discovery_consent_notice_on" = "Vi konsentis sendi retpoŝtadresojn kaj telefonnumerojn al ĉi tiu identiga servilo por trovi aliajn uzantojn el viaj kontaktoj.";
@@ -1783,13 +1673,11 @@
 "re_authentication_default_confirm_text" = "%@ postulas enigon de viaj salutiloj por tiu ĉi ago.";
 "error_jitsi_join_conf" = "Pardonu, eraris via aliĝo al la grupa voko";
 "this_space_has_no_rooms_admin" = "Iuj ĉambroj povas esti kaŝitaj ĉar ili estas privataj kaj vi bezonas inviton.";
-"this_space_has_no_rooms_not_admin" = "Iuj ĉambroj povas esti kaŝitaj, ĉar ili estas privataj kaj vi bezonas inviton.
-\nVi ne havas permeson aldoni ĉambrojn.";
+"this_space_has_no_rooms_not_admin" = "Iuj ĉambroj povas esti kaŝitaj, ĉar ili estas privataj kaj vi bezonas inviton.\nVi ne havas permeson aldoni ĉambrojn.";
 "this_space_has_no_rooms" = "Ĉi tiu aro ne havas ĉambrojn";
 "spaces_no_server_support_description" = "Bonvolu kontakti administranton de via hejmservilo por pliaj informoj";
 "spaces_no_server_support_title" = "Ŝajnas, ke via hejmservilo ankoraŭ ne subtenas arojn";
-"spaces_feeling_experimental_subspace" = "Ĉu vi eksperimentemas\?
-\nVi povas arigi jamajn arojn.";
+"spaces_feeling_experimental_subspace" = "Ĉu vi eksperimentemas\?\nVi povas arigi jamajn arojn.";
 "space_manage_rooms_and_spaces" = "Administri ĉambrojn kaj arojn";
 "space_mark_as_not_suggested" = "Marki nerekomendita";
 "space_mark_as_suggested" = "Marki rekomendita";
@@ -1806,8 +1694,7 @@
 "leave_space" = "Foriri de aro";
 "space_add_child_title" = "Aldoni ĉambrojn";
 "space_explore_activity_title" = "Esplori ĉambrojn";
-"room_alias_preview_not_found" = "Ĉi tiu kromnomo ne estas nun atingebla.
-\nReprovu poste, aŭ petu al administranto de ĉambro kontroli, ĉu vi rajtas aliri.";
+"room_alias_preview_not_found" = "Ĉi tiu kromnomo ne estas nun atingebla.\nReprovu poste, aŭ petu al administranto de ĉambro kontroli, ĉu vi rajtas aliri.";
 "join_anyway" = "Tamen aliĝi";
 "join_space" = "Aliĝi al aro";
 "create_space" = "Krei aron";
@@ -1918,8 +1805,7 @@
 "upgrade_room_no_power_to_manage" = "Vi bezonas permeson gradaltigi ĉambron";
 "upgrade_room_auto_invite" = "Memage inviti uzantojn";
 "upgrade_public_room_from_to" = "Vi gradaltigos ĉi tiun ĉambron de %1$@ al %2$@.";
-"upgrade_room_warning" = "Gradaltigo de ĉambro estas altnivela ago, kiu ofte estas rekomendata kiam ĉambro malfirmas pro eraroj, manko de funkcioj, aŭ sekurecaj misoj.
-\nĈi tio kutime nur influas la servilflankan traktadon de la ĉambro.";
+"upgrade_room_warning" = "Gradaltigo de ĉambro estas altnivela ago, kiu ofte estas rekomendata kiam ĉambro malfirmas pro eraroj, manko de funkcioj, aŭ sekurecaj misoj.\nĈi tio kutime nur influas la servilflankan traktadon de la ĉambro.";
 "upgrade_private_room" = "Gradaltigi privatan ĉambron";
 "upgrade_public_room" = "Gradaltigi publikan ĉambron";
 "upgrade_required" = "Necesas gradaltigo";
@@ -2016,6 +1902,7 @@
 "room_settings_room_notifications_notify_me" = "Sciigu min pri";
 "settings_mentions_and_keywords_encryption_notice" = "VI ne ricevos sciigojn al poŝtelefono pri mencioj kaj ĉefvortoj en ĉifritaj ĉambroj.";
 "settings_messages_containing_keywords" = "Ĉefvortoj";
+"settings_mentions_at_room" = "";
 "settings_notification_keyword_contains_invalid_character" = "Ĉefvortoj ne povas enhavi «%@»";
 "settings_notification_keyword_contains_dot" = "Ĉefvortoj ne povas eki per «.»";
 "settings_notification_new_keyword" = "Aldoni novan ĉefvorton";
@@ -2036,9 +1923,7 @@
 "space_settings_permissions_title" = "Permesoj de aro";
 "space_participants_unban_prompt_msg" = "Malforbaro de uzanto permesos al ĝi re-aliĝi al la aro.";
 "space_participants_ban_prompt_msg" = "Forbaro forpelos uzanton de tiu ĉi aro kaj malhelpos ĝian re-aliĝon.";
-"space_participants_remove_prompt_msg" = "forpelo de uzanto forigos ĝin de tiu ĉi aro.
-\n
-\nPor malhelpi ĝian re-aliĝon, vi forbaru ĝin.";
+"space_participants_remove_prompt_msg" = "forpelo de uzanto forigos ĝin de tiu ĉi aro.\n\nPor malhelpi ĝian re-aliĝon, vi forbaru ĝin.";
 "call_remove_jitsi_widget_progress" = "Finante vokon…";
 "call_ended_invite_timeout_title" = "Sen respondo";
 "call_ended_user_busy_description" = "La uzanto, kiun vi vokis, estas okupata.";
@@ -2047,83 +1932,3 @@
 "video_call_with_participant" = "Vidvoko kun %@";
 "call_ringing" = "Sonorante…";
 "spaces" = "Aroj";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ aldonis %2$@ kiel adreson por ĉi tiu ĉambro.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ aldonis %2$@ kiel adresojn por ĉi tiu ĉambro.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ forigis %2$@ kiel adreson por ĉi tiu ĉambro.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ forigis %2$@ kiel adresojn por ĉi tiu ĉambro.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Vi forigis %1$@ kiel adreson por ĉi tiu ĉambro.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Vi forigis %1$@ kiel adresojn por ĉi tiu ĉambro.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Vi aldonis %1$@ kiel adreson por ĉi tiu ĉambro.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Vi aldonis %1$@ kiel adresojn por ĉi tiu ĉambro.";
-"plurals.room_details_selected.item_0" = "%d elektita";
-"plurals.room_details_selected.item_1" = "%d elektitaj";
-"plurals.room_title_members.item_0" = "%d ĉambrano";
-"plurals.room_title_members.item_1" = "%d ĉambranoj";
-"plurals.room_new_messages_notification.item_0" = "%d nova mesaĝo";
-"plurals.room_new_messages_notification.item_1" = "%d novaj mesaĝoj";
-"plurals.room_profile_section_more_member_list.item_0" = "Unu persono";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d personoj";
-"plurals.fallback_users_read.item_0" = "%d uzanto legis";
-"plurals.fallback_users_read.item_1" = "%d uzantoj legis";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ kaj %3$d alia legis";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ kaj %3$d aliaj legis";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Savkopiante %d ŝlosilon…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Savkopiante %d ŝlosilojn…";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d nova ŝlosilo aldoniĝis al ĉi tiu salutaĵo.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d novaj ŝlosiloj aldoniĝis al ĉi tiu salutaĵo.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Rehavis savkopion kun %d ŝlosilo.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Rehavis savkopion kun %d ŝlosiloj.";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Tro multaj petoj sendiĝis. Vi povas reprovi post %1$d sekundo…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Tro multaj petoj sendiĝis. Vi povas reprovi post %1$d sekundoj…";
-"plurals.active_widgets.item_0" = "%d aktiva fenestraĵo";
-"plurals.active_widgets.item_1" = "%d aktivaj fenestraĵoj";
-"plurals.notification_compat_summary_title.item_0" = "%d sciigo";
-"plurals.notification_compat_summary_title.item_1" = "%d sciigoj";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d mesaĝo";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d mesaĝoj";
-"plurals.notification_invitations.item_0" = "%d invito";
-"plurals.notification_invitations.item_1" = "%d invitoj";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d ĉambro";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d ĉambroj";
-"plurals.notification_unread_notified_messages.item_0" = "%d nelegita mesaĝo sciigita";
-"plurals.notification_unread_notified_messages.item_1" = "%d nelegitaj mesaĝoj sciigitaj";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d ŝlosilo sukcese enportiĝis.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d ŝlosiloj sukcese enportiĝis.";
-"plurals.room_settings_banned_users_count.item_0" = "%d forbarita uzanto";
-"plurals.room_settings_banned_users_count.item_1" = "%d forbaritaj uzantoj";
-"plurals.seconds.item_0" = "%d sekundo";
-"plurals.seconds.item_1" = "%d sekundoj";
-"plurals.membership_changes.item_0" = "%d ŝanĝo de aneco";
-"plurals.membership_changes.item_1" = "%d ŝanĝoj de aneco";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Malĝusta kodo; restas %d provo";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Malĝusta kodo; restas %d provoj";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Invitoj sendiĝis al %1$@ kaj unu alia";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Invitoj sendiĝis al %1$@ kaj %2$d aliaj";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Montri la aparaton per kiu vi povas kontroli nun";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Montri %d aparatojn per kiuj vi povas kontroli nun";
-"plurals.send_images_with_original_size.item_0" = "Sendi bildon je la originala grando";
-"plurals.send_images_with_original_size.item_1" = "Sendi bildojn je la originala grando";
-"plurals.settings_active_sessions_count.item_0" = "%d aktiva salutaĵo";
-"plurals.settings_active_sessions_count.item_1" = "%d aktivaj salutaĵoj";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Vi forigis la alternativan adreson %1$@ por ĉi tiu ĉambro.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Vi forigis la alternativajn adresojn %1$@ por ĉi tiu ĉambro.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ forigis la alternativan adreson %2$@ por ĉi tiu ĉambro.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ forigis la alternativajn adresojn %2$@ por ĉi tiu ĉambro.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Vi aldonis la alternativan adreson %1$@ por ĉi tiu ĉambro.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Vi aldonis la alternativajn adresojn %1$@ por ĉi tiu ĉambro.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ aldonis la alternativan adreson %2$@ por ĉi tiu ĉambro.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ aldonis la alternativajn adresojn %2$@ por ĉi tiu ĉambro.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@, kaj %4$d alia";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@, kaj %4$d aliaj";
-"plurals.entries.item_0" = "%d ero";
-"plurals.entries.item_1" = "%d eroj";
-"plurals.send_videos_with_original_size.item_0" = "Sendi filmon en originala grandeco";
-"plurals.send_videos_with_original_size.item_1" = "Sendi filmojn en originala grandeco";
-"plurals.space_people_you_know.item_0" = "%d persono, kiun vi konas, jam aliĝis";
-"plurals.space_people_you_know.item_1" = "%d personoj, kiujn vi konas, jam aliĝis";
-"plurals.missed_video_call.item_0" = "Nerespondita vidvoko";
-"plurals.missed_video_call.item_1" = "%d neresponditaj vidvokoj";
-"plurals.missed_audio_call.item_0" = "Nerespondita voĉvoko";
-"plurals.missed_audio_call.item_1" = "%d neresponditaj voĉvokoj";
-"plurals.call_active_status.item_0" = "Aktiva voko ·";
-"plurals.call_active_status.item_1" = "%1$d aktivaj vokoj ·";

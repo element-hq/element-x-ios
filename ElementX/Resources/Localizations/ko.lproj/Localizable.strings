@@ -18,10 +18,10 @@
 "notice_placed_voice_call" = "%@님이 음성 통화를 걸었습니다.";
 "notice_answered_call" = "%@님이 전화를 받았습니다.";
 "notice_ended_call" = "%@님이 전화를 끊었습니다.";
-"notice_made_future_room_visibility" = "%1$@님이 이후 %2$@에게 방 기록을 공개했습니다";
-"notice_room_visibility_invited" = "초대된 시점부터 모든 방 구성원.";
-"notice_room_visibility_joined" = "들어온 시점부터 모든 방 구성원.";
-"notice_room_visibility_shared" = "모든 방 구성원.";
+"notice_made_future_room_visibility" = "%1$@님이 이 시점 이후 방 기록을 %2$@님이 볼 수 있도록 공개했습니다";
+"notice_room_visibility_invited" = "방 참여자 모두, 다만 초대받은 시점부터.";
+"notice_room_visibility_joined" = "방 참여자 모두, 다만 들어온 시점부터.";
+"notice_room_visibility_shared" = "방 참여자 모두.";
 "notice_room_visibility_world_readable" = "누구나.";
 "notice_room_update" = "%@님이 방을 업그레이드했습니다.";
 "notice_avatar_changed_too" = "(아바타도 변경됨)";
@@ -38,22 +38,14 @@
 "room_displayname_room_invite" = "방 초대";
 "room_displayname_two_members" = "%1$@님과 %2$@님";
 "room_displayname_empty_room" = "빈 방";
-"initial_sync_start_importing_account" = "초기 동기화:
-\n계정 가져오는 중…";
-"initial_sync_start_importing_account_crypto" = "초기 동기화:
-\n암호 가져오는 중";
-"initial_sync_start_importing_account_rooms" = "초기 동기화:
-\n방 가져오는 중";
-"initial_sync_start_importing_account_joined_rooms" = "초기 동기화:
-\n들어간 방 가져오는 중";
-"initial_sync_start_importing_account_invited_rooms" = "초기 동기화:
-\n초대받은 방 가져오는 중";
-"initial_sync_start_importing_account_left_rooms" = "초기 동기화:
-\n떠난 방 가져오는 중";
-"initial_sync_start_importing_account_groups" = "초기 동기화:
-\n커뮤니티 가져오는 중";
-"initial_sync_start_importing_account_data" = "초기 동기화:
-\n계정 데이터 가져오는 중";
+"initial_sync_start_importing_account" = "초기 동기화:\n계정 가져오는 중…";
+"initial_sync_start_importing_account_crypto" = "초기 동기화:\n암호 가져오는 중";
+"initial_sync_start_importing_account_rooms" = "초기 동기화:\n방 가져오는 중";
+"initial_sync_start_importing_account_joined_rooms" = "초기 동기화:\n들어간 방 가져오는 중";
+"initial_sync_start_importing_account_invited_rooms" = "초기 동기화:\n초대받은 방 가져오는 중";
+"initial_sync_start_importing_account_left_rooms" = "초기 동기화:\n떠난 방 가져오는 중";
+"initial_sync_start_importing_account_groups" = "초기 동기화:\n커뮤니티 가져오는 중";
+"initial_sync_start_importing_account_data" = "초기 동기화:\n계정 데이터 가져오는 중";
 "event_status_sending_message" = "메시지 보내는 중…";
 "notice_room_third_party_revoked_invite" = "%1$@님이 %2$@님에게 방에 참가하라고 보낸 초대를 취소했습니다";
 "light_theme" = "밝은 테마";
@@ -135,9 +127,7 @@
 "send_bug_report_app_crashed" = "최근에 애플리케이션이 충돌한 것 같습니다. 충돌 보고서를 열까요\?";
 "username" = "사용자 이름";
 "option_send_voice" = "음성 보내기";
-"no_sticker_application_dialog_content" = "스티커팩이 하나도 없습니다.
-\n
-\n뭐라도 추가할까요\?";
+"no_sticker_application_dialog_content" = "스티커팩이 하나도 없습니다.\n\n뭐라도 추가할까요\?";
 "auth_invalid_login_param" = "알맞지 않은 사용자 이름이나 비밀번호";
 "auth_invalid_email" = "올바른 이메일 주소가 아닙니다";
 "auth_forgot_password" = "비밀번호를 잊어버리셨나요\?";
@@ -170,7 +160,7 @@
 "login_error_bad_json" = "잘못된 JSON";
 "login_error_not_json" = "올바른 JSON을 갖고 있지 않음";
 "login_error_limit_exceeded" = "너무 많은 요청을 보냈습니다";
-"e2e_re_request_encryption_key.u_0" = "다시 요청된 암호 키";
+"e2e_re_request_encryption_key" = "다른 기기에서 온 <u>다시 요청된 암호 키</u>.";
 "e2e_re_request_encryption_key_dialog_content" = "다른 기기에서 %@을 설치해서 메시지를 암호화하고 이 기기로 키를 보내도록 합니다.";
 "compression_opt_list_original" = "원본";
 "compression_opt_list_large" = "크게";
@@ -190,9 +180,7 @@
 "call_error_user_not_responding" = "상대방이 전화를 받지 못했습니다.";
 "permissions_rationale_popup_title" = "정보";
 "permissions_rationale_msg_record_audio" = "음성 통화를 하려면 %@은 마이크에 접근하는 권한이 필요합니다.";
-"permissions_rationale_msg_camera_and_audio" = "영상 통화를 하려면 %@은 카메라와 마이크에 접근하는 권한이 필요합니다.
-\n
-\n전화를 하려면 다음 팝업에서 접근을 허용해주세요.";
+"permissions_rationale_msg_camera_and_audio" = "영상 통화를 하려면 %@은 카메라와 마이크에 접근하는 권한이 필요합니다.\n\n전화를 하려면 다음 팝업에서 접근을 허용해주세요.";
 "yes" = "네";
 "no" = "아니오";
 "_continue" = "계속";
@@ -211,8 +199,7 @@
 "room_participants_action_ignore" = "차단";
 "room_participants_action_unignore" = "차단 해제";
 "room_participants_action_mention" = "언급";
-"room_participants_power_level_prompt" = "사용자를 자신과 동일한 권한 등급으로 승격시키는 것은 취소할 수 없습니다.
-\n확신합니까\?";
+"room_participants_power_level_prompt" = "사용자를 자신과 동일한 권한 등급으로 승격시키는 것은 취소할 수 없습니다.\n확신합니까\?";
 "room_participants_ban_prompt_msg" = "이 사용자를 이 대화에서 출입 금지하겠습니까\?";
 "room_one_user_is_typing" = "%@님이 입력 중…";
 "room_two_users_are_typing" = "%1$@님과 %2$@님이 입력 중…";
@@ -251,53 +238,40 @@
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "1개 이상의 테스트가 실패했습니다, 버그를 신고해서 우리가 조사할 수 있도록 도와주세요.";
 "settings_troubleshoot_test_system_settings_title" = "시스템 설정.";
 "settings_troubleshoot_test_system_settings_success" = "알림이 시스템 설정에서 켜집니다.";
-"settings_troubleshoot_test_system_settings_failed" = "알림이 시스템 설정에서 꺼집니다.
-\n시스템 설정을 확인해주세요.";
+"settings_troubleshoot_test_system_settings_failed" = "알림이 시스템 설정에서 꺼집니다.\n시스템 설정을 확인해주세요.";
 "open_settings" = "설정 열기";
 "settings_troubleshoot_test_account_settings_title" = "계정 설정.";
 "settings_troubleshoot_test_account_settings_success" = "알림이 당신의 계정에서 켜집니다.";
-"settings_troubleshoot_test_account_settings_failed" = "알림이 당신의 계정에서 꺼집니다.
-\n계정 설정을 확인해주세요.";
+"settings_troubleshoot_test_account_settings_failed" = "알림이 당신의 계정에서 꺼집니다.\n계정 설정을 확인해주세요.";
 "settings_troubleshoot_test_account_settings_quickfix" = "켜기";
 "settings_troubleshoot_test_device_settings_title" = "기기 설정.";
 "settings_troubleshoot_test_device_settings_success" = "알림이 이 기기에서 켜집니다.";
-"settings_troubleshoot_test_device_settings_failed" = "알림이 이 기기에서 허용되지 않습니다.
-\n%@ 설정을 확인해주세요.";
+"settings_troubleshoot_test_device_settings_failed" = "알림이 이 기기에서 허용되지 않습니다.\n%@ 설정을 확인해주세요.";
 "settings_troubleshoot_test_device_settings_quickfix" = "켜기";
 "settings_troubleshoot_test_bing_settings_title" = "맞춤 설정.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "일부 메시지 유형은 조용하게 설정되어 있습니다 (소리가 없는 알림을 생성합니다).";
 "settings_troubleshoot_test_bing_settings_failed" = "일부 알림이 맞춤 설정에서 꺼집니다.";
 "settings_troubleshoot_test_play_services_title" = "Play 서비스 확인";
 "settings_troubleshoot_test_play_services_success" = "Google Play 서비스 APK는 최신 버전입니다.";
-"settings_troubleshoot_test_play_services_failed" = "%@은 Google Play 서비스를 사용해 푸시 메시지를 보내지만 올바르게 설정되지 않은 모양입니다:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@은 Google Play 서비스를 사용해 푸시 메시지를 보내지만 올바르게 설정되지 않은 모양입니다:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Play 서비스 고치기";
 "settings_troubleshoot_test_fcm_title" = "Firebase 토큰";
-"settings_troubleshoot_test_fcm_success" = "FCM 토큰이 성공적으로 검색되었습니다:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "FCM 토큰을 검색하는데 실패했습니다:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\n이 오류는 %@의 통제 밖에 있으며 Google과 관련이 있습니다, 이 오류는 기기가 FCM에 등록된 앱이 너무 많다는 것을 나타냅니다. 오류는 수 많은 앱이 있는 경우에만 발생하고, 일반 사용자에게 영향을 미치지 않아야 합니다.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\n이 오류는 %@의 통제 밖입니다. 여러 이유로 발생할 수 있습니다. 나중에 다시 시도하면 작동할 지도 모릅니다, 시스템 설정에서 Google Play 서비스의 데이터 사용이 제한되었는지, 기기의 시간은 맞는 지 확인해보세요, 혹은 커스텀 롬 환경에서 발생할 수 있습니다.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\n이 오류는 %@의 통제 밖에 있습니다. 휴대 전화에 Google 계정이 없습니다. 계정 관리자를 열어 Google 계정을 추가하세요.";
+"settings_troubleshoot_test_fcm_success" = "FCM 토큰이 성공적으로 검색되었습니다:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "FCM 토큰을 검색하는데 실패했습니다:\n%1$@";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\n이 오류는 %@의 통제 밖에 있으며 Google과 관련이 있습니다, 이 오류는 기기가 FCM에 등록된 앱이 너무 많다는 것을 나타냅니다. 오류는 수 많은 앱이 있는 경우에만 발생하고, 일반 사용자에게 영향을 미치지 않아야 합니다.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\n이 오류는 %@의 통제 밖입니다. 여러 이유로 발생할 수 있습니다. 나중에 다시 시도하면 작동할 지도 모릅니다, 시스템 설정에서 Google Play 서비스의 데이터 사용이 제한되었는지, 기기의 시간은 맞는 지 확인해보세요, 혹은 커스텀 롬 환경에서 발생할 수 있습니다.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\n이 오류는 %@의 통제 밖에 있습니다. 휴대 전화에 Google 계정이 없습니다. 계정 관리자를 열어 Google 계정을 추가하세요.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "계정 추가";
 "settings_troubleshoot_test_token_registration_title" = "토큰 등록";
 "settings_troubleshoot_test_token_registration_success" = "FCM 토큰이 성공적으로 홈서버에 등록되었습니다.";
-"settings_troubleshoot_test_token_registration_failed" = "FCM 토큰을 홈서버에 등록 실패:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "FCM 토큰을 홈서버에 등록 실패:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "부팅 시 시작";
 "settings_troubleshoot_test_service_boot_success" = "기기가 다시 시작되면 서비스가 시작됩니다.";
 "settings_troubleshoot_test_service_boot_failed" = "기기가 다시 시작될 때 서비스가 시작되지 않습니다, 다시 시작한 후 %@을 한 번이라도 열지 않으면 알림을 받을 수 없습니다.";
 "settings_troubleshoot_test_service_boot_quickfix" = "부팅 시 시작 활성화";
 "settings_troubleshoot_test_bg_restricted_title" = "백그라운드 제한 사항 확인";
-"settings_troubleshoot_test_bg_restricted_success" = "%@에 대한 백그라운드 제한 사항을 비활성화합니다. 이 테스트는 모바일 데이터를 사용해야 합니다 (WIFI 없음).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "%@에 대한 백그라운드 제한 사항이 활성화됩니다.
-\n앱이 백그라운드에서 작업하는 동안 앱이 시도하는 작업은 적극적으로 제한되며, 이는 알림에 영향을 줄 수 있습니다.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "%@에 대한 백그라운드 제한 사항을 비활성화합니다. 이 테스트는 모바일 데이터를 사용해야 합니다 (WIFI 없음).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "%@에 대한 백그라운드 제한 사항이 활성화됩니다.\n앱이 백그라운드에서 작업하는 동안 앱이 시도하는 작업은 적극적으로 제한되며, 이는 알림에 영향을 줄 수 있습니다.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "제한 사항 비활성화";
 "settings_troubleshoot_test_battery_title" = "배터리 최적화";
 "settings_troubleshoot_test_battery_success" = "%@은 배터리 최적화의 영향을 받지 않습니다.";
@@ -390,9 +364,7 @@
 "settings_fail_to_update_password" = "비밀번호 갱신 실패";
 "settings_fail_to_update_password_invalid_current_password" = "비밀번호가 올바르지 않습니다";
 "settings_password_updated" = "당신의 비밀번호가 갱신되었습니다";
-"settings_unignore_user" = "%@님의 모든 메시지를 표시하시겠습니까\?
-\n
-\n이 동작은 앱을 다시 시작하고 일정 시간이 걸릴 수 있습니다.";
+"settings_unignore_user" = "%@님의 모든 메시지를 표시하시겠습니까\?\n\n이 동작은 앱을 다시 시작하고 일정 시간이 걸릴 수 있습니다.";
 "settings_select_country" = "나라를 선택하세요";
 "settings_media" = "미디어";
 "settings_default_compression" = "기본 압축";
@@ -477,15 +449,9 @@
 "settings_labs_native_camera" = "기본 카메라 사용";
 "settings_labs_native_camera_summary" = "맞춤 카메라 화면 대신 시스템 카메라를 실행합니다.";
 "you_added_a_new_device" = "새 기기 \'%@\'을(를) 추가했습니다, 여기에는 암호화 키가 필요합니다.";
-"you_added_a_new_device_with_info" = "새 기기에는 암호화 키가 필요합니다.
-\n기기 이름: %1$@
-\n마지막으로 본 순간: %2$@
-\n다른 기기에서 로그인하지 않았다면, 이 요청을 무시하세요.";
+"you_added_a_new_device_with_info" = "새 기기에는 암호화 키가 필요합니다.\n기기 이름: %1$@\n마지막으로 본 순간: %2$@\n다른 기기에서 로그인하지 않았다면, 이 요청을 무시하세요.";
 "your_unverified_device_requesting" = "확인되지 않은 기기 \'%@\'이(가) 암호화 키를 요청했습니다.";
-"your_unverified_device_requesting_with_info" = "확인되지 않은 기기가 암호화 키를 요청했습니다. 
-\n기기 이름: %1$@ 
-\n마지막으로 본 순간: %2$@ 
-\n다른 기기에서 로그인하지 않았다면, 이 요청을 무시하세요.";
+"your_unverified_device_requesting_with_info" = "확인되지 않은 기기가 암호화 키를 요청했습니다. \n기기 이름: %1$@ \n마지막으로 본 순간: %2$@ \n다른 기기에서 로그인하지 않았다면, 이 요청을 무시하세요.";
 "start_verification" = "확인 시작";
 "share_without_verifying_short_label" = "공유";
 "key_share_request" = "키 공유 요청";
@@ -523,8 +489,7 @@
 "dialog_user_consent_content" = "%1$@ 홈서버를 계속 사용하려면 이용 약관을 검토하고 승인해야 합니다.";
 "dialog_user_consent_submit" = "지금 검토하기";
 "deactivate_account_title" = "계정 비활성화";
-"deactivate_account_content.b_0" = "이 행동은 돌이킬 수 없습니다";
-"deactivate_account_content.b_1" = "기본적으로 보낸 메시지를 잊지 않습니다";
+"deactivate_account_content" = "이것으로 계정은 영구적으로 사용할 수 없게 됩니다. 로그인할 수 없고 누구도 같은 사용자 ID로 다시 등록할 수 없게 됩니다. 이 계정으로 참가한 모든 방에서 떠나게 되고, ID 서버의 계정 세부 사항도 삭제됩니다. <b>이 행동은 돌이킬 수 없습니다</b>. \n \n계정을 비활성화해도 <b>기본적으로 보낸 메시지를 잊지 않습니다</b>. 메시지를 잊기를 원한다면, 아래 상자를 선택하세요. \n \nMatrix의 메시지 가시성은 이메일과 유사합니다. 우리가 메시지를 잊는 것은 보낸 메시지가 모든 새 사용자 혹은 등록하지 않은 사용자와 공유하지 않는다는 것입니다, 하지만 이 메시지에 접근한 등록된 사용자는 이 사본으로 여전히 접근할 수 있을 것입니다.";
 "deactivate_account_delete_checkbox" = "내 계정을 비활성화하면 내가 보낸 모든 메시지는 잊어주세요 (경고: 이것은 미래 사용자가 불완전한 대화를 읽게 됩니다)";
 "deactivate_account_submit" = "계정 비활성화";
 "error_empty_field_enter_user_name" = "사용자 이름을 입력하세요.";
@@ -534,9 +499,9 @@
 "room_tombstone_continuation_description" = "이 방은 다른 대화의 연장선입니다";
 "room_tombstone_predecessor_link" = "오래된 메시지를 보려면 여기를 클릭";
 "resource_limit_contact_admin" = "서비스 관리자에게 연락";
-"resource_limit_soft_default.b_0" = "일부 사용자는 로그인할 수 없습니다";
+"resource_limit_soft_default" = "이 홈서버가 리소스 한도를 초과해서 <b>일부 사용자는 로그인할 수 없습니다</b>.";
 "resource_limit_hard_default" = "이 홈서버가 리소스 한도를 초과했습니다.";
-"resource_limit_soft_mau.b_0" = "일부 사용자는 로그인할 수 없습니다";
+"resource_limit_soft_mau" = "이 홈서버가 월 간 활성 사용자 한도를 초과해서 <b>일부 사용자는 로그인할 수 없습니다</b>.";
 "resource_limit_hard_mau" = "이 홈서버가 월 간 활성 사용자 한도를 초과했습니다.";
 "resource_limit_soft_contact" = "한도를 높이려면 %@하세요.";
 "resource_limit_hard_contact" = "이 서비스 사용을 계속하려면 %@하세요.";
@@ -554,24 +519,19 @@
 "passphrase_passphrase_too_weak" = "암호가 너무 약합니다";
 "keys_backup_passphrase_not_empty_error_message" = "%@으로 복구 키를 생성하려면 암호를 지워주세요.";
 "keys_backup_setup_step1_title" = "암호화된 메시지를 잃지 마세요";
-"keys_backup_setup_step1_description" = "암호화된 방의 메시지는 종단간 암호화로 보호됩니다. 자신과 수신자만이 메시지를 읽을 수 있는 키를 갖습니다.
-\n
-\n분실하지 않도록 키를 안전하게 백업해두세요.";
+"keys_backup_setup_step1_description" = "암호화된 방의 메시지는 종단간 암호화로 보호됩니다. 자신과 수신자만이 메시지를 읽을 수 있는 키를 갖습니다.\n\n분실하지 않도록 키를 안전하게 백업해두세요.";
 "keys_backup_setup" = "키 백업 시작";
 "keys_backup_setup_step1_advanced" = "(고급)";
 "keys_backup_setup_step1_manual_export" = "수동으로 키 내보내기";
 "keys_backup_setup_step2_text_title" = "암호로 백업을 보호하세요.";
-"keys_backup_setup_step2_text_description" = "홈서버에 암호화된 키의 사본을 저장합니다. 보안을 유지하기 위해 암호로 백업을 보호하세요.
-\n
-\n보안을 최대한 끌어내려면, 암호는 계정 비밀번호와 다른 것이 좋습니다.";
+"keys_backup_setup_step2_text_description" = "홈서버에 암호화된 키의 사본을 저장합니다. 보안을 유지하기 위해 암호로 백업을 보호하세요.\n\n보안을 최대한 끌어내려면, 암호는 계정 비밀번호와 다른 것이 좋습니다.";
 "keys_backup_setup_step2_button_title" = "암호 설정";
 "keys_backup_setup_creating_backup" = "백업 만들기";
 "keys_backup_setup_step1_recovery_key_alternative" = "혹은 복구 키로 백업을 보호하여 안전한 곳에 보관하세요.";
 "keys_backup_setup_step2_skip_button_title" = "(고급) 복구 키와 함께 설정";
 "keys_backup_setup_step3_success_title" = "성공 !";
 "keys_backup_setup_step3_text_line1" = "당신의 키가 백업됬습니다.";
-"keys_backup_setup_step3_text_line2" = "복구 키는 안전망입니다 - 암호를 잊어버린다면 이걸로 암호화된 메시지에 대한 접근을 복구할 수 있습니다.
-\n복구 키가 비밀번호 관리자 (혹은 금고)같은 어딘가에 매우 안전하게 있도록 유지하세요";
+"keys_backup_setup_step3_text_line2" = "복구 키는 안전망입니다 - 암호를 잊어버린다면 이걸로 암호화된 메시지에 대한 접근을 복구할 수 있습니다.\n복구 키가 비밀번호 관리자 (혹은 금고)같은 어딘가에 매우 안전하게 있도록 유지하세요";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "복구 키가 비밀번호 관리자 (혹은 금고)같은 어딘가에 매우 안전하게 있도록 유지하세요";
 "keys_backup_setup_step3_button_title" = "완료";
 "keys_backup_setup_step3_button_title_no_passphrase" = "사본을 만들었습니다";
@@ -726,11 +686,9 @@
 "login_error_homeserver_not_found" = "이 URL로는 홈서버에 접근할 수 없습니다, 확인해주세요";
 "settings_background_fdroid_sync_mode" = "백그라운드 동기화 모드 (실험적)";
 "settings_background_fdroid_sync_mode_battery" = "배터리에 최적화됨";
-"settings_background_fdroid_sync_mode_battery_description" = "%@은 기기의 제한된 자원 (배터리)을 유지하기 위해 백그라운드에서 동기화합니다.
-\n기기 자원 상태에 따라 운영체제에 의해 동기화는 지연될 수 있습니다.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@은 기기의 제한된 자원 (배터리)을 유지하기 위해 백그라운드에서 동기화합니다.\n기기 자원 상태에 따라 운영체제에 의해 동기화는 지연될 수 있습니다.";
 "settings_background_fdroid_sync_mode_real_time" = "실시간으로 최적화됨";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@은 (설정할 수 있는) 특정 시간에 주기적으로 백그라운드에거 동기화됩니다.
-\n이는 라디오와 배터리 사용에 영향을 주며 %@이 이벤트를 수신하고 있는 상태라는 알림이 영구적으로 표시됩니다.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@은 (설정할 수 있는) 특정 시간에 주기적으로 백그라운드에거 동기화됩니다.\n이는 라디오와 배터리 사용에 영향을 주며 %@이 이벤트를 수신하고 있는 상태라는 알림이 영구적으로 표시됩니다.";
 "settings_background_fdroid_sync_mode_disabled" = "백그라운드 동기화 없음";
 "settings_background_fdroid_sync_mode_disabled_description" = "앱이 백그라운드에 있을 때 수신 메시지의 알림을 받지 않습니다.";
 "settings_discovery_category" = "탐색";
@@ -787,17 +745,11 @@
 "report_content_custom_submit" = "신고";
 "block_user" = "사용자 차단";
 "content_reported_title" = "내용 신고됨";
-"content_reported_content" = "이 내용을 신고했습니다.
-\n
-\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.";
+"content_reported_content" = "이 내용을 신고했습니다.\n\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.";
 "content_reported_as_spam_title" = "스팸 문자로 신고됨";
-"content_reported_as_spam_content" = "이 내용을 스팸 메일로 신고했습니다.
-\n
-\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.";
+"content_reported_as_spam_content" = "이 내용을 스팸 메일로 신고했습니다.\n\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.";
 "content_reported_as_inappropriate_title" = "부적절한 문자로 신고됨";
-"content_reported_as_inappropriate_content" = "이 내용을 부적절한 문자로 신고했습니다.
-\n
-\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.";
+"content_reported_as_inappropriate_content" = "이 내용을 부적절한 문자로 신고했습니다.\n\n이 사용자의 내용을 더 이상 보고 싶지 않다면, 사용자를 차단하거나 메시지를 감출 수 있습니다.";
 "settings_integrations" = "통합";
 "settings_integration_allow" = "통합 수락";
 "create_space_topic_hint" = "설명";
@@ -808,9 +760,7 @@
 "room_permissions_change_topic" = "주제 변경";
 "direct_room_encryption_enabled_tile_description" = "이 방의 메시지는 종단간 암호화가 적용되었습니다.";
 "encryption_enabled_tile_description" = "이 방의 메시지는 종단간 암호화가 적용되었습니다. 더보기 & 프로필을 통해 검증.";
-"room_profile_encrypted_subtitle" = "이 방의 메시지는 종단간 암호화가 적용됩니다.
-\n
-\n메시지는 암호화되어 보호되며, 메시지를 복호화할 수 있는 고유 키는 사용자와 수신자만 가지고 있습니다.";
+"room_profile_encrypted_subtitle" = "이 방의 메시지는 종단간 암호화가 적용됩니다.\n\n메시지는 암호화되어 보호되며, 메시지를 복호화할 수 있는 고유 키는 사용자와 수신자만 가지고 있습니다.";
 "room_profile_not_encrypted_subtitle" = "이 방의 메시지는 종단간 암호화가 적용되지 않습니다.";
 "room_profile_section_security_learn_more" = "더보기";
 "room_profile_section_security" = "보안";
@@ -901,17 +851,20 @@
 "notice_room_topic_changed_by_you" = "주제를 다음으로 변경했습니다: %1$@";
 "notice_display_name_removed_by_you" = "표시 이름을 삭제했습니다 (이전 이름: %1$@)";
 "notice_display_name_changed_from_by_you" = "표시 이름을 %1$@에서 %2$@(으)로 변경했습니다";
-"plurals.membership_changes.item_0" = "%d명의 구성원 변경 사항";
-"plurals.room_title_members.item_0" = "%d명의 구성원";
-"plurals.room_new_messages_notification.item_0" = "%d개의 새 메시지";
-"plurals.room_details_selected.item_0" = "%d개 선택됨";
-"plurals.notification_unread_notified_messages.item_0" = "%d개의 읽지 않은 알림 메시지";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d개의 방";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d개의 메시지";
-"plurals.notification_compat_summary_title.item_0" = "%d개의 알림";
-"plurals.active_widgets.item_0" = "%d개의 활성 위젯";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "%d개의 키와 함께 백업을 복구했습니다.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d개의 새 키가 이 기기에 추가되었습니다.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "%d개의 키를 백업 중…";
-"plurals.fallback_users_read.item_0" = "%d명이 읽음";
-"plurals.settings_active_sessions_count.item_0" = "%d개의 활성 세션";
+"notice_room_server_acl_set_title_by_you" = "서버 접근제어목록을 설정했습니다.";
+"notice_room_server_acl_set_title" = "%@님이 서버 접근제어목록을 설정했습니다.";
+"notice_direct_room_update_by_you" = "이곳을 업그레이드했습니다.";
+"notice_direct_room_update" = "%@님이 이곳을 업그레이드했습니다.";
+"notice_room_update_by_you" = "방을 업그레이드했습니다.";
+"notice_made_future_direct_room_visibility_by_you" = "이 시점 이후 메시지를 %1$@님이 볼 수 있도록 공개했습니다";
+"notice_made_future_direct_room_visibility" = "%1$@님이 이 시점 이후 메시지를 %2$@님이 볼 수 있도록 공개했습니다";
+"notice_made_future_room_visibility_by_you" = "이 시점 이후 방 기록을 %1$@님이 볼 수 있도록 공개했습니다";
+"notice_ended_call_by_you" = "전화를 끊었습니다.";
+"notice_answered_call_by_you" = "전화를 받았습니다.";
+"notice_call_candidates_by_you" = "통화 연결을 위한 데이터를 보냈습니다.";
+"notice_call_candidates" = "%@님이 통화 연결을 위한 데이터를 보냈습니다.";
+"notice_placed_voice_call_by_you" = "음성 통화를 시작했습니다.";
+"notice_placed_video_call_by_you" = "영상 통화를 시작했습니다.";
+"notice_room_name_changed_by_you" = "방 이름을 바꾸었습니다: %1$@";
+"notice_room_avatar_changed_by_you" = "방 사진을 바꾸었습니다";
+"notice_room_avatar_changed" = "%1$@님이 방 사진을 바꾸었습니다";

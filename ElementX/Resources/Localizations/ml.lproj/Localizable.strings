@@ -368,26 +368,16 @@
 "notice_room_invite_no_invitee_with_reason_by_you" = "നിങ്ങളുടെ ക്ഷണം. കാരണം: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "%1$@ ന്റെ ക്ഷണം. കാരണം: %2$@";
 "event_status_sending_message" = "സന്ദേശം അയയ്ക്കുന്നു…";
-"initial_sync_start_importing_account_data" = "പ്രാരംഭ സമന്വയം:
-\nഅക്കൗണ്ട് ഡാറ്റ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account_groups" = "പ്രാരംഭ സമന്വയം:
-\nജനസമൂഹങ്ങൾ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account_left_rooms" = "പ്രാരംഭ സമന്വയം:
-\nഉപേക്ഷിച്ച മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account_invited_rooms" = "പ്രാരംഭ സമന്വയം:
-\nക്ഷണിക്കപ്പെട്ട മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account_joined_rooms" = "പ്രാരംഭ സമന്വയം:
-\nചേർന്ന മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account_rooms" = "പ്രാരംഭ സമന്വയം:
-\nമുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account_crypto" = "പ്രാരംഭ സമന്വയം:
-\nക്രിപ്‌റ്റോ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account" = "പ്രാരംഭ സമന്വയം:
-\nഅക്കൗണ്ട് ഇറക്കുമതി ചെയ്യുന്നു…";
-"initial_sync_start_downloading" = "പ്രാരംഭ സമന്വയം:
-\nഡാറ്റ ഡൗൺലോഡുചെയ്യുന്നു…";
-"initial_sync_start_server_computing" = "പ്രാരംഭ സമന്വയം:
-\nസെർവർ പ്രതികരണത്തിനായി കാത്തിരിക്കുന്നു…";
+"initial_sync_start_importing_account_data" = "പ്രാരംഭ സമന്വയം:\nഅക്കൗണ്ട് ഡാറ്റ ഇറക്കുമതി ചെയ്യുന്നു";
+"initial_sync_start_importing_account_groups" = "പ്രാരംഭ സമന്വയം:\nജനസമൂഹങ്ങൾ ഇറക്കുമതി ചെയ്യുന്നു";
+"initial_sync_start_importing_account_left_rooms" = "പ്രാരംഭ സമന്വയം:\nഉപേക്ഷിച്ച മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
+"initial_sync_start_importing_account_invited_rooms" = "പ്രാരംഭ സമന്വയം:\nക്ഷണിക്കപ്പെട്ട മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
+"initial_sync_start_importing_account_joined_rooms" = "പ്രാരംഭ സമന്വയം:\nചേർന്ന മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
+"initial_sync_start_importing_account_rooms" = "പ്രാരംഭ സമന്വയം:\nമുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
+"initial_sync_start_importing_account_crypto" = "പ്രാരംഭ സമന്വയം:\nക്രിപ്‌റ്റോ ഇറക്കുമതി ചെയ്യുന്നു";
+"initial_sync_start_importing_account" = "പ്രാരംഭ സമന്വയം:\nഅക്കൗണ്ട് ഇറക്കുമതി ചെയ്യുന്നു…";
+"initial_sync_start_downloading" = "പ്രാരംഭ സമന്വയം:\nഡാറ്റ ഡൗൺലോഡുചെയ്യുന്നു…";
+"initial_sync_start_server_computing" = "പ്രാരംഭ സമന്വയം:\nസെർവർ പ്രതികരണത്തിനായി കാത്തിരിക്കുന്നു…";
 "room_displayname_empty_room_was" = "ശൂന്യമായ മുറി ( %@ ആയിരുന്നു)";
 "room_displayname_empty_room" = "ശൂന്യമായ മുറി";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ പിന്നെ %4$@ഉം";
@@ -644,27 +634,3 @@
 "encryption_import_import" = "ഇമ്പോർട്ട്";
 "encryption_export_export" = "എക്സ്പോർട്ട്";
 "settings_flair" = "ഫ്ലെയർ";
-"plurals.room_new_messages_notification.item_0" = "%d പുതിയ സന്ദേശങ്ങൾ";
-"plurals.room_new_messages_notification.item_1" = "%d പുതിയ സന്ദേശം";
-"plurals.room_title_members.item_0" = "%d അംഗം";
-"plurals.room_title_members.item_1" = "%d അംഗങ്ങൾ";
-"plurals.room_profile_section_more_member_list.item_0" = "ഒരു വ്യക്തി";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d ആളുകൾ";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "നിങ്ങൾ ഈ മുറിയുടെ വിലാസമായിരുന്ന %1$@ നീക്കംചെയ്‌തു.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "നിങ്ങൾ ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %1$@ നീക്കംചെയ്‌തു.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ ഈ മുറിയുടെ വിലാസമായിരുന്ന %2$@ നീക്കംചെയ്‌തു.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ ഈ മുറിയുടെ വിലാസങ്ങളായിരുന്ന %2$@ നീക്കംചെയ്‌തു.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "ഈ മുറിയുടെ വിലാസമായി നിങ്ങൾ %1$@ ചേർത്തു.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "ഈ മുറിയുടെ വിലാസങ്ങളായി നിങ്ങൾ %1$@ ചേർത്തു.";
-"plurals.notice_room_aliases_added.item_0" = "ഈ മുറിയുടെ വിലാസമായി %1$@ %2$@ ചേർത്തു.";
-"plurals.notice_room_aliases_added.item_1" = "ഈ മുറിയുടെ വിലാസങ്ങളായി %1$@ %2$@ ചേർത്തു.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ കൂടാതെ %4$d പേർ";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ കൂടാതെ %4$d പേരും";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "ഈ മുറിക്കായി %1$@ എന്ന ഇതര വിലാസം നിങ്ങൾ ചേർത്തു.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "ഈ മുറിക്കായി %1$@ എന്ന ഇതര വിലാസങ്ങൾ നിങ്ങൾ ചേർത്തു.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ ഈ മുറിക്കായി %2$@ എന്ന ഇതര വിലാസം ചേർത്തു.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ ഈ മുറിക്കായി %2$@ എന്നീ ഇതര വിലാസങ്ങൾ ചേർത്തു.";
-"plurals.seconds.item_0" = "%d സെക്കൻഡ്";
-"plurals.seconds.item_1" = "%d സെക്കൻഡുകൾ";
-"plurals.room_details_selected.item_0" = "%d തിരഞ്ഞെടുത്തു";
-"plurals.room_details_selected.item_1" = "%d തിരഞ്ഞെടുത്തു";

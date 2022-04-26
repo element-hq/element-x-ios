@@ -39,23 +39,14 @@
 "room_displayname_room_invite" = "دعوت اتاق";
 "room_displayname_two_members" = "%1$@ و %2$@";
 "room_displayname_empty_room" = "اتاق خالی";
-"initial_sync_start_importing_account" = "همگام‌سازی نخستین:
-\nدرون‌ریزی حساب…";
-"initial_sync_start_importing_account_crypto" = "همگام‌سازی نخستین:
-\nدرون‌ریزی رمزنگاری";
-"initial_sync_start_importing_account_rooms" = "همگام‌سازی نخستین:
-\nدرون‌ریزی اتاق‌ها";
-"initial_sync_start_importing_account_joined_rooms" = "همگام‌سازی نخستین:
-\nبار کردن گفت‌وگوهایتان
-\nاگر به اتاق‌های زیادی پیوسته‌اید، ممکن است کمی طول بکشد";
-"initial_sync_start_importing_account_invited_rooms" = "همگام‌سازی نخستین:
-\nدرون‌ریزی اتاق‌های دعوت‌شده";
-"initial_sync_start_importing_account_left_rooms" = "همگام‌سازی نخستین:
-\nدرون‌ریزی اتاق‌های ترک شده";
-"initial_sync_start_importing_account_groups" = "همگام‌سازی نخستین:
-\nدرون‌ریزی اجتماع‌ها";
-"initial_sync_start_importing_account_data" = "همگام‌سازی نخستین:
-\nدرون‌ریزی داده‌های حساب";
+"initial_sync_start_importing_account" = "همگام‌سازی نخستین:\nدرون‌ریزی حساب…";
+"initial_sync_start_importing_account_crypto" = "همگام‌سازی نخستین:\nدرون‌ریزی رمزنگاری";
+"initial_sync_start_importing_account_rooms" = "همگام‌سازی نخستین:\nدرون‌ریزی اتاق‌ها";
+"initial_sync_start_importing_account_joined_rooms" = "همگام‌سازی نخستین:\nبار کردن گفت‌وگوهایتان\nاگر به اتاق‌های زیادی پیوسته‌اید، ممکن است کمی طول بکشد";
+"initial_sync_start_importing_account_invited_rooms" = "همگام‌سازی نخستین:\nدرون‌ریزی اتاق‌های دعوت‌شده";
+"initial_sync_start_importing_account_left_rooms" = "همگام‌سازی نخستین:\nدرون‌ریزی اتاق‌های ترک شده";
+"initial_sync_start_importing_account_groups" = "همگام‌سازی نخستین:\nدرون‌ریزی اجتماع‌ها";
+"initial_sync_start_importing_account_data" = "همگام‌سازی نخستین:\nدرون‌ریزی داده‌های حساب";
 "event_status_sending_message" = "در حال فرستادن پیام…";
 "notice_room_invite_no_invitee_with_reason" = "دعوت %1$@. دلیل: %2$@";
 "notice_room_invite_with_reason" = "%1$@، %2$@ را دعوت کرد. دلیل: %3$@";
@@ -247,9 +238,7 @@
 "start_video_call_prompt_msg" = "آیا مطمئنید می‌خواهید که یک تماس صوتی را آغاز کنید؟";
 "option_send_files" = "ارسال پرونده‌ها";
 "option_send_sticker" = "ارسال برچسب";
-"no_sticker_application_dialog_content" = "بستهٔ برچسب فعّالی ندارید.
-\n
-\nچندتایی افزوده شود؟";
+"no_sticker_application_dialog_content" = "بستهٔ برچسب فعّالی ندارید.\n\nچندتایی افزوده شود؟";
 "error_no_external_application_found" = "متاسفانه برنامه‌ای روی گوشی شما برای انجام این کار پیدا نشد.";
 "auth_email_already_defined" = "این نشانی رایانامه قبلاً ثبت شده.";
 "settings_call_category" = "تماس‌ها";
@@ -295,7 +284,7 @@
 "permalink" = "پیوند دائمی";
 "view_decrypted_source" = "مشاهده منبع رمزگشایی شده";
 "auth_recaptcha_message" = "این کارساز خانگی می‌خواهد مطمئن شود که روبات نیستید";
-"e2e_re_request_encryption_key.u_0" = "بازدرخواست کلیدهای رمزنگاری";
+"e2e_re_request_encryption_key" = "<u>بازدرخواست کلیدهای رمزنگاری</u> از دیگر نشست‌هایتان.";
 "e2e_re_request_encryption_key_dialog_content" = "لطفاً المنت را روی افزاره‌ای دیگر که می‌تواند پیام را رمزگشایی کند، اجرا کنید تا بتواند کلیدها را به این نشست بفرستد.";
 "keys_backup_setup_skip_title" = "آیا مطمئن هستید؟";
 "action_disconnect" = "قطع اتصال";
@@ -310,14 +299,11 @@
 "settings_notification_advanced" = "تنظمیات پیش‌رفتهٔ آگاهی";
 "settings_notification_troubleshoot" = "آگاهی‌های رفع‌اشکال";
 "settings_troubleshoot_test_system_settings_success" = "آگاهی‌ها در تنظیمات سامانه به کار افتاده‌اند.";
-"settings_troubleshoot_test_system_settings_failed" = "آگاهی‌ّا در تنظیمات سامانه از کار افتاده‌اند.
-\nلطفاً تنظیمات سامانه را بررسی کنید.";
+"settings_troubleshoot_test_system_settings_failed" = "آگاهی‌ّا در تنظیمات سامانه از کار افتاده‌اند.\nلطفاً تنظیمات سامانه را بررسی کنید.";
 "settings_troubleshoot_test_account_settings_success" = "آگاهی‌ها برای حسابتان به کار افتاده‌اند.";
-"settings_troubleshoot_test_account_settings_failed" = "آگاهی‌ها برای حسابتان از کار افتاده‌اند.
-\nلطفاً تتظیمات حساب را بررسی کنید.";
+"settings_troubleshoot_test_account_settings_failed" = "آگاهی‌ها برای حسابتان از کار افتاده‌اند.\nلطفاً تتظیمات حساب را بررسی کنید.";
 "settings_troubleshoot_test_device_settings_success" = "آگاهی‌ها برای این نشست به کار افتاده‌اند.";
-"settings_troubleshoot_test_device_settings_failed" = "آگاهی‌ها برای این نشست به کار نیفتاده‌اند.
-\nلطفاً تنظیمات المنت را بررسی کنید.";
+"settings_troubleshoot_test_device_settings_failed" = "آگاهی‌ها برای این نشست به کار نیفتاده‌اند.\nلطفاً تنظیمات المنت را بررسی کنید.";
 "settings_troubleshoot_test_bing_settings_failed" = "برخی آگاهی‌ها در تنظیمات سفارشیتان از کار افتاده‌اند.";
 "settings_enable_all_notif" = "به کار انداختن آگاهی‌ها برای این حساب";
 "settings_enable_this_device" = "به کار انداختن آگاهی‌ها برای این نشست";
@@ -541,9 +527,7 @@
 "room_participants_action_cancel_invite_prompt_msg" = "مطمئنید که می‌خواهید دعوت این کاربر را لغو کنید؟";
 "room_participants_remove_title" = "اخراج کاربر";
 "room_participants_remove_reason" = "دلیل اخراج";
-"room_participants_remove_prompt_msg" = "اخراج کاربر، از این اتاق برش می‌دارد.
-\n
-\nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.";
+"room_participants_remove_prompt_msg" = "اخراج کاربر، از این اتاق برش می‌دارد.\n\nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.";
 "room_participants_ban_title" = "تحریم کاربر";
 "room_participants_ban_reason" = "دلیل تحریم";
 "room_participants_unban_title" = "تحریم نکردن کاربر";
@@ -573,11 +557,8 @@
 "settings_troubleshoot_test_service_boot_success" = "خدمت هنگام شروع دوبارهٔ افزاره، شروع خواهد شد.";
 "settings_troubleshoot_test_service_boot_quickfix" = "به کار اندازی شروع هنگام راه‌اندازی";
 "settings_troubleshoot_test_bg_restricted_title" = "بررسی محدودیت‌های پس‌زمینه";
-"settings_troubleshoot_test_bg_restricted_success" = "محدودیت‌های پس‌زمینه برای المنت از کار افتاده‌اند. این آزمون باید با استفاده از دادهٔ همراه (بدون وای‌فای) اجرا شود.
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "محدودیت‌های پس‌زمینه برای النت به کار افتاده‌اند.
-\nکارهایی که کاره می‌خواهد انجام دهد، هنگامی که در پس‌زمینه است به صورت تهاجمی محدود می‌شوند که می‌تواند روی آگاهی‌ها تأثیر بگذارد.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "محدودیت‌های پس‌زمینه برای المنت از کار افتاده‌اند. این آزمون باید با استفاده از دادهٔ همراه (بدون وای‌فای) اجرا شود.\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "محدودیت‌های پس‌زمینه برای النت به کار افتاده‌اند.\nکارهایی که کاره می‌خواهد انجام دهد، هنگامی که در پس‌زمینه است به صورت تهاجمی محدود می‌شوند که می‌تواند روی آگاهی‌ها تأثیر بگذارد.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "از کار انداختن محدودیت‌ها";
 "settings_troubleshoot_test_battery_title" = "بهینه‌سازی باتری";
 "settings_troubleshoot_test_battery_success" = "المنت تحت تأثیر بهینه‌سازی باتری نیست.";
@@ -599,8 +580,7 @@
 "settings_background_fdroid_sync_mode_disabled_description" = "هنگامی که کاره در پس‌زمینه‌است، از پیام‌های ورودی آگاه نخواهید شد.";
 "settings_start_on_boot" = "شروع هنگام راه‌اندازی";
 "settings_set_sync_timeout" = "پایان زمان درخواست همگام‌سازی";
-"settings_integrations_summary" = "برای مدیریت بات‌ها، پل‌ها، ابزارک‌ها و بسته‌های برچسب از یک مدیر یکپارچگی استفاده کنید.
-\nمدیرهای یکپارچگی، داده‌های پیکربندی را دریافت کرده و می‌توانند از طرف شما ابزارک‌ها را تغییر داده، دعوت‌های اتاق فرستاده و سطوح قدرت را تنظیم کنند.";
+"settings_integrations_summary" = "برای مدیریت بات‌ها، پل‌ها، ابزارک‌ها و بسته‌های برچسب از یک مدیر یکپارچگی استفاده کنید.\nمدیرهای یکپارچگی، داده‌های پیکربندی را دریافت کرده و می‌توانند از طرف شما ابزارک‌ها را تغییر داده، دعوت‌های اتاق فرستاده و سطوح قدرت را تنظیم کنند.";
 "settings_always_show_timestamps" = "نمایش برچسب زمانی برای تمامی پیام‌ها";
 "settings_12_24_timestamps" = "نمایش برچسب‌های زمانی در قالب ۱۲ساعته";
 "settings_secure_backup_section_title" = "پشتیبان امن";
@@ -612,9 +592,7 @@
 "settings_deactivate_my_account" = "حسابم را غیرفعال کن";
 "settings_discovery_category" = "کشف";
 "settings_discovery_manage" = "مدیریت تنظیمات کشفتان.";
-"settings_unignore_user" = "نمایش همهٔ پیام‌ها از %@؟
-\n
-\nبه خاطر داشته باشید این عمل، کاره را دوباره شروع خواهد کرد و ممکن است کمی زمان ببرد.";
+"settings_unignore_user" = "نمایش همهٔ پیام‌ها از %@؟\n\nبه خاطر داشته باشید این عمل، کاره را دوباره شروع خواهد کرد و ممکن است کمی زمان ببرد.";
 "settings_emails_and_phone_numbers_title" = "رایانامه‌ها و شماره تلفن‌ها";
 "settings_emails_and_phone_numbers_summary" = "مدیریت رایانامه‌ها و شماره تلفن‌های پیوسته به حساب ماتریکستان";
 "media_saving_period_3_days" = "۳ روز";
@@ -676,8 +654,7 @@
 "room_widget_permission_added_by" = "ابزارک افزوده شده به دست:";
 "room_widget_permission_webview_shared_info_title" = "استفاده از آن ممکن است کوکی تنظیم کرده و داده‌ها را با %@ هم‌رسانی کند:";
 "room_widget_permission_shared_info_title" = "استفاده از آن ممکن است داده‌ها را با %@ هم‌رسانی کند:";
-"room_widget_failed_to_load" = "شکست در بار کردن ابزارک.
-\n%@";
+"room_widget_failed_to_load" = "شکست در بار کردن ابزارک.\n%@";
 "room_widget_reload" = "بار کردن دوبارهٔ ابزارک";
 "room_widget_open_in_browser" = "گشودن در مرورگر";
 "room_widget_revoke_access" = "ابطال دسترسی من";
@@ -880,9 +857,7 @@
 "verification_verified_user" = "%@ تأیید شد";
 "verification_request_waiting_for" = "منتظر %@…";
 "room_profile_not_encrypted_subtitle" = "پیام‌های این اتاق، رمزنگاری سرتاسری نشده‌اند.";
-"room_profile_encrypted_subtitle" = "پیام‌های این اتاق، رمزنگاری سرتاسری شده‌اند.
-\n
-\nپیام‌هایتان با قفل‌هایی امن شده‌اند و فقط شما و گیرندگان دیگر، کلیدهای یکتا را برای قفل‌گشاییشان دارید.";
+"room_profile_encrypted_subtitle" = "پیام‌های این اتاق، رمزنگاری سرتاسری شده‌اند.\n\nپیام‌هایتان با قفل‌هایی امن شده‌اند و فقط شما و گیرندگان دیگر، کلیدهای یکتا را برای قفل‌گشاییشان دارید.";
 "room_profile_section_security" = "امنیت";
 "room_profile_section_security_learn_more" = "بثیش‌تر بدانید";
 "room_profile_section_more" = "بیش‌تر";
@@ -904,13 +879,9 @@
 "unignore" = "لغو نادیده‌گرفتن";
 "room_settings_enable_encryption_dialog_submit" = "به کار انداختن رمزنگاری";
 "encryption_information_cross_signing_state" = "ورود چندگانه";
-"encryption_information_dg_xsigning_complete" = "ورود چندگانه به کار افتاده
-\nکلیدهای خصوصی روی دستگاه.";
-"encryption_information_dg_xsigning_trusted" = "ورود چندگانه به کار افتاده
-\nکلیدها مورد اعتمادند.
-\nکلیدهای خصوصی ناشناخته";
-"encryption_information_dg_xsigning_not_trusted" = "ورود چندگانه به کار افتاده.
-\nکلیدها مورد اعتماد نیستند";
+"encryption_information_dg_xsigning_complete" = "ورود چندگانه به کار افتاده\nکلیدهای خصوصی روی دستگاه.";
+"encryption_information_dg_xsigning_trusted" = "ورود چندگانه به کار افتاده\nکلیدها مورد اعتمادند.\nکلیدهای خصوصی ناشناخته";
+"encryption_information_dg_xsigning_not_trusted" = "ورود چندگانه به کار افتاده.\nکلیدها مورد اعتماد نیستند";
 "encryption_information_dg_xsigning_disabled" = "ورود چندگانه به کار نیفتاده";
 "settings_hs_admin_e2e_disabled" = "مدیر کارسازتان رمزنگاری سرتاسری پیش‌گزیده را در اتاق‌های خصوصی و پیام‌های مستقیم از کار انداخته است.";
 "settings_active_sessions_signout_device" = "خروج از این نشست";
@@ -960,18 +931,14 @@
 "bootstrap_migration_backup_recovery_key" = "کلید بازیابی پشتیبان کلید";
 "settings_security_prevent_screenshots_title" = "جلوگیری از نماگرفت کاره";
 "settings_security_prevent_screenshots_summary" = "به کار انداختن این انتخاب، FLAG_SECURE را به تمامی فعّالیت‌ها می‌افزاید. برای اثرگذاری تغییر، برنامه را دوباره شروع کنید.";
-"app_desktop_web" = "المنت وب
-\nالمنت میزکار";
-"app_ios_android" = "المنت آی‌اواس
-\nالمنت اندروید";
+"app_desktop_web" = "المنت وب\nالمنت میزکار";
+"app_ios_android" = "المنت آی‌اواس\nالمنت اندروید";
 "use_recovery_key" = "استفاده از کلید بازیابی";
 "encrypted_unverified" = "رمزشده به دست افزاره‌ای تأییدنشده";
 "error_empty_field_choose_user_name" = "لطفاً نام کاربری‌ای برگزینید.";
 "error_empty_field_choose_password" = "لطفاً گذرواژه‌ای برگزینید.";
 "external_link_confirmation_title" = "این پیوند را دوباره بررسی کنید";
-"external_link_confirmation_message" = "پیوند %1$@ به پایگاه دیگری می‌بردتان: %2$@.
-\n
-\nمطمئنید که می‌خواهید ادامه دهید؟";
+"external_link_confirmation_message" = "پیوند %1$@ به پایگاه دیگری می‌بردتان: %2$@.\n\nمطمئنید که می‌خواهید ادامه دهید؟";
 "add_members_to_room" = "افزودن اعضا";
 "invite_users_to_room_action_invite" = "دعوت";
 "inviting_users_to_room" = "دعوت کردن کاربران…";
@@ -1002,9 +969,7 @@
 "encryption_unknown_algorithm_tile_description" = "رمزنگاری این اتاق پشتیبانی نمی‌شود";
 "error_empty_field_enter_user_name" = "لطفاً نام کاربری‌ای وارد کنید.";
 "room_tombstone_predecessor_link" = "برای دیدن پیام‌های قدیمی‌تر، کلیک کنید";
-"direct_room_profile_encrypted_subtitle" = "پیام‌های این‌جا، رمزنگاری سرتاسری شده‌اند. 
-\n 
-\nپیام‌هایتان با قفل‌هایی امن شده‌اند و فقط شما و گیرندگان دیگر، کلیدهای یکتا را برای قفل‌گشاییشان دارید.";
+"direct_room_profile_encrypted_subtitle" = "پیام‌های این‌جا، رمزنگاری سرتاسری شده‌اند. \n \nپیام‌هایتان با قفل‌هایی امن شده‌اند و فقط شما و گیرندگان دیگر، کلیدهای یکتا را برای قفل‌گشاییشان دارید.";
 "direct_room_profile_not_encrypted_subtitle" = "پیام‌های این‌جا رمزنگاری سرتاسری نشده‌اند.";
 "direct_room_profile_section_more_leave" = "ترک کردن";
 "direct_room_profile_section_more_settings" = "تنظیمات";
@@ -1116,10 +1081,8 @@
 "settings_show_join_leave_messages_summary" = "دعوت‌ها، برداشتن‌ها و انسدادها تأثیر نمی‌پذیرند.";
 "settings_show_join_leave_messages" = "نمایش پیام‌های پیوستن و ترک اتاق";
 "settings_inline_url_preview_summary" = "پیش‌نمایشی از آدرس‌های URL در پیام‌ها نمایش داده شود.";
-"settings_background_fdroid_sync_mode_real_time_description" = "المنت بصورت دوره‌ای و در بازه‌های قابل تنظیم در پس زمینه همگام‌سازی می شود.
-\nاین بر مصرف باتری شما تأثیر می‌گذارد، یک اعلان دائمی نمایش داده می‌شود که المنت برای رویدادها گوش می‌دهد.";
-"settings_background_fdroid_sync_mode_battery_description" = "المنت در پس زمینه همگام‌سازی می‌کند به گونه ای که منابع محدود دستگاه (باتری) حفظ می‌شود.
-\nبسته به شارژ گوشی شما، ممکن است همگام‌سازی توسط سیستم‌عامل به تعویق بیوفتد.";
+"settings_background_fdroid_sync_mode_real_time_description" = "المنت بصورت دوره‌ای و در بازه‌های قابل تنظیم در پس زمینه همگام‌سازی می شود.\nاین بر مصرف باتری شما تأثیر می‌گذارد، یک اعلان دائمی نمایش داده می‌شود که المنت برای رویدادها گوش می‌دهد.";
+"settings_background_fdroid_sync_mode_battery_description" = "المنت در پس زمینه همگام‌سازی می‌کند به گونه ای که منابع محدود دستگاه (باتری) حفظ می‌شود.\nبسته به شارژ گوشی شما، ممکن است همگام‌سازی توسط سیستم‌عامل به تعویق بیوفتد.";
 "settings_troubleshoot_test_battery_failed" = "اگر دستگاه برای مدتی از شارژر جدا باشد و از دستگاه نیز استفاده نشود، گوشی وارد حالت غیر هوشیار می‌شود. در این حالت از دسترسی برنامه‌ها به اینترنت جلوگیری می‌شود و همگام سازی و هشدارهای استاندارد آن‌ها به تعویق می‌افتد.";
 "settings_troubleshoot_test_service_boot_failed" = "خدمت، هنگام شروع دوبارهٔ افزاره اجرا نخواهد شد. تا وقتی یک بار المنت باز نشود، آگاهی‌ها را دریافت نخواهید کرد.";
 "settings_troubleshoot_test_notification_notification_clicked" = "روی آگاهی کلیک شد!";
@@ -1130,25 +1093,18 @@
 "settings_troubleshoot_test_push_loop_success" = "برنامه Push دریافت کرد";
 "settings_troubleshoot_test_push_loop_waiting_for_push" = "برنامه منتظر دریافت Push است";
 "settings_troubleshoot_test_push_loop_title" = "تست ‌Push";
-"settings_troubleshoot_test_token_registration_failed" = "شکست در ثبت ژتون FCM در کارساز خانگی:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "شکست در ثبت ژتون FCM در کارساز خانگی:\n%1$@";
 "settings_troubleshoot_test_token_registration_success" = "ژتون FCM با موفقیت در کارساز خانگی ثبت شد.";
 "settings_troubleshoot_test_token_registration_title" = "ثبت توکن";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "افزودن حساب کاربری";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nاین خطا خارج از مهار %@ است. هیچ حساب گوگلی روی تلفن نیست. لطفاً مدیر حساب را گشوده و حساب گوگلی بیفزایید.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nاین خطا خارج از مهار %@ است و ممکن است به دلایل مختلفی رخ داده باشد. ممکن است اگر بعداً دوباره تلاش کنید، کار کند. می‌توانید بررسی کنید که مصرف دادهٔ خدمات پلی گوگل در تنظیمات سامانه محدود نشده باشد یا ساعت افزاره‌تان درست باشد. همچنین ممکن است روی رام‌های سفارشی اتفاق بیفتد.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nاین خطا، خارج از مهار %@ است و طبق گفتهٔ گوگل، نشانگر ثبت بیش‌از حد کاره‌ها در FCM است. خطا فقط در مواردی که تعداد خیلی زیادی کاره وجود داشته باشد رخ می‌دهد، پس کاربران معمولی نباید تحت تأثیر قرار گیرند.";
-"settings_troubleshoot_test_fcm_failed" = "بازیابی توکن FCM با مشکل مواجه شد:
-\n%1$@";
-"settings_troubleshoot_test_fcm_success" = "توکن FCM با موفقیت بازیابی شد:
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nاین خطا خارج از مهار %@ است. هیچ حساب گوگلی روی تلفن نیست. لطفاً مدیر حساب را گشوده و حساب گوگلی بیفزایید.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nاین خطا خارج از مهار %@ است و ممکن است به دلایل مختلفی رخ داده باشد. ممکن است اگر بعداً دوباره تلاش کنید، کار کند. می‌توانید بررسی کنید که مصرف دادهٔ خدمات پلی گوگل در تنظیمات سامانه محدود نشده باشد یا ساعت افزاره‌تان درست باشد. همچنین ممکن است روی رام‌های سفارشی اتفاق بیفتد.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nاین خطا، خارج از مهار %@ است و طبق گفتهٔ گوگل، نشانگر ثبت بیش‌از حد کاره‌ها در FCM است. خطا فقط در مواردی که تعداد خیلی زیادی کاره وجود داشته باشد رخ می‌دهد، پس کاربران معمولی نباید تحت تأثیر قرار گیرند.";
+"settings_troubleshoot_test_fcm_failed" = "بازیابی توکن FCM با مشکل مواجه شد:\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "توکن FCM با موفقیت بازیابی شد:\n%1$@";
 "settings_troubleshoot_test_fcm_title" = "توکن Firebase";
 "settings_troubleshoot_test_play_services_quickfix" = "مشکل Google Play Services را برطرف کنید";
-"settings_troubleshoot_test_play_services_failed" = "المنت برای ارسال آگاهی‌ها از خدمات پلی گوگل استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "المنت برای ارسال آگاهی‌ها از خدمات پلی گوگل استفاده می‌کند اما به نظر می‌رسد به درستی پیکربندی نشده است:\n%1$@";
 "settings_troubleshoot_test_play_services_success" = "Google Play Services در دسترس و بروز است.";
 "settings_troubleshoot_diagnostic_success_status" = "عیب‌یابی اولیه مشکلی را نشان نمی‌دهد. اگر همچنان در دریافت آگاهی‌ها مشکل دارید، لطفا خطا را گزارش کرده تا آن را بررسی کنیم.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "یک یا چند تست ناموفق بودند، لطفا خطا را گزارش کرده تا آن را بررسی کنیم.";
@@ -1171,21 +1127,15 @@
 "ssl_cert_not_trust" = "می‌تواند به این معنی باشد که کسی شدامدتان را بدخواهانه دستکاری کرده یا تلفنتان، به گواهی فراهم‌شده به دست کارساز دوردست، اطمینان ندارد.";
 "room_participants_unban_prompt_msg" = "با لغو مسدودیت، کاربر می‌تواند مجددا به اتاق اضافه شود.";
 "room_participants_action_unignore_prompt_msg" = "لغو نادیده‌گیری کاربر سبب می‌شود دوباره همه پیام‌های او نمایش داده شود.";
-"room_participants_action_ignore_prompt_msg" = "نادیده‌گرفتن این کاربر پیام‌هایش را از اتاق‌های مشترکتان حذف خواهد کرد.
-\n 
-\nهرگاه که بخواهید می‌توانید این کنش را در تنظیمات کلی لغو کنید.";
+"room_participants_action_ignore_prompt_msg" = "نادیده‌گرفتن این کاربر پیام‌هایش را از اتاق‌های مشترکتان حذف خواهد کرد.\n \nهرگاه که بخواهید می‌توانید این کنش را در تنظیمات کلی لغو کنید.";
 "room_participants_power_level_demote" = "تنزل بده";
 "room_participants_power_level_demote_warning_prompt" = "شما نمی‌توانید این تغییر را بازگردانید زیرا در حال تنزل نقش خود در اتاق هستید، اگر آخرین کاربر ممتاز در اتاق باشید، امکان دستیابی مجدد به دسترسی‌های سطح بالای اتاق غیرممکن است.";
 "room_participants_power_level_demote_warning_title" = "تنزل نقش شما در اتاق؟";
-"room_participants_power_level_prompt" = "شما نمی‌توانید این تغییر را بازگردانید. زیرا در حال ارتقای سطح کاربر دیگر به سطح خودتان هستید.
-\nآیا مطمئن هستید؟";
-"permissions_rationale_msg_camera_and_audio" = "المنت برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.
-\n
-\nلطفا در پنجره های بعدی دسترسی های لازم را بدهید.";
+"room_participants_power_level_prompt" = "شما نمی‌توانید این تغییر را بازگردانید. زیرا در حال ارتقای سطح کاربر دیگر به سطح خودتان هستید.\nآیا مطمئن هستید؟";
+"permissions_rationale_msg_camera_and_audio" = "المنت برای برقراری تماس تصویری نیازمند دسترسی به میکروفون و دوربین است.\n\nلطفا در پنجره های بعدی دسترسی های لازم را بدهید.";
 "permissions_rationale_msg_record_audio" = "المنت برای برقراری تماس صوتی نیازمند دسترسی به میکروفون است.";
 "login_error_ssl_peer_unverified" = "خطای SSL: هویت طرف مقابل تأیید نشد.";
-"call_failed_no_connection_description" = "شکست در برقراری ارتباط همزمان.
-\nلطاً از مدیر کارساز بخواهید برای برقراری مطمئن تماس‌ها، کارساز turn را پیکربندی کند.";
+"call_failed_no_connection_description" = "شکست در برقراری ارتباط همزمان.\nلطاً از مدیر کارساز بخواهید برای برقراری مطمئن تماس‌ها، کارساز turn را پیکربندی کند.";
 "secure_backup_reset_no_history" = "بعد از راه‌اندازی مجدد، هیچ تاریخچه، پیام، دستگاه تائید شده یا کاربر تائید شده‌ای در حساب شما وجود نخواهد داشت";
 "secure_backup_reset_if_you_reset_all" = "اگر همه چیز را بازنشانی کنید";
 "secure_backup_reset_all_no_other_devices" = "تنها در صورتی این کار را انجام دهید که از هیچ دستگاه دیگری نمی‌توانید این دستگاه را تائید نمائید.";
@@ -1205,15 +1155,11 @@
 "bootstrap_progress_compute_curve_key" = "محاسبه‌ی کلید curve";
 "auth_invalid_login_param_space_in_password" = "نام‌کاربری یا گذواژه‌ی اشتباه. ابتدا یا انتهای گذرواژه‌ی وارد شده کاراکتر space قرار دارد، لطفا بررسی کنید.";
 "command_description_plain" = "پیام‌ها را بدون در نظرگرفتن markdown ارسال کن";
-"bootstrap_cancel_text" = "اگر اکنون لغو کنید، ممکن است در صورت قطع دسترسی به ورودهایتان، داده‌ها و پیام‌های رمزنگاشته را از دست بدهد.
-\n
-\nهمچنین می‌توانید در تنظیمات، پشتیبان امن برپا کرده و کلیدهایتان را مدیریت کنید.";
+"bootstrap_cancel_text" = "اگر اکنون لغو کنید، ممکن است در صورت قطع دسترسی به ورودهایتان، داده‌ها و پیام‌های رمزنگاشته را از دست بدهد.\n\nهمچنین می‌توانید در تنظیمات، پشتیبان امن برپا کرده و کلیدهایتان را مدیریت کنید.";
 "bootstrap_crosssigning_save_cloud" = "آن را در فضای ابری خود کپی کنید";
 "bootstrap_crosssigning_save_usb" = "آن را روی فلش یا حافظه‌ای دیگر ذخیره کنید";
 "bootstrap_crosssigning_print_it" = "آن را چاپ کرده و در محلی امن و مطمئن نگهداری کنید";
-"bootstrap_cross_signing_success" = "%2$@ و %1$@ شما تنظیم شد.
-\n
-\nآن‌ها را در جای مطمئن و امن نگهداری کنید! درصورتی که همه‌ی نشست‌های خود را از دست بدهید، به این دو جهت رمزگشایی پیام‌های رمزشده‌ی قبلی و اطلاعات امن نیاز دارید.";
+"bootstrap_cross_signing_success" = "%2$@ و %1$@ شما تنظیم شد.\n\nآن‌ها را در جای مطمئن و امن نگهداری کنید! درصورتی که همه‌ی نشست‌های خود را از دست بدهید، به این دو جهت رمزگشایی پیام‌های رمزشده‌ی قبلی و اطلاعات امن نیاز دارید.";
 "bootstrap_crosssigning_progress_key_backup" = "برپایی پشتیبان‌گیری از کلید";
 "bootstrap_crosssigning_progress_save_ssk" = "همگام‌سازی کلید Self Signing";
 "bootstrap_crosssigning_progress_save_usk" = "همگام‌سازی کلید کاربر";
@@ -1224,14 +1170,7 @@
 "bootstrap_loading_text" = "این ممکن است چند ثانیه طول بکشد، لطفاً صبور باشید.";
 "bootstrap_info_text_2" = "عبارت امنیتی‌ای را که فقط خودتان می‌دانید، وارد کنید. استفاده‌شده برای امن کردن رمزها روی کارسازتان.";
 "bootstrap_dont_reuse_pwd" = "ترجیحا از گذرواژه حساب خود استفاده نکنید.";
-"verify_not_me_self_verification" = "ممکن است یکی از موارد زیر به خطر افتاده‌باشد:
-\n
-\n- گذرواژه شما
-\n- سرور شما
-\n- این دستگاه یا دستگاه دیگر
-\n- اتصال اینترنت دستگاه
-\n
-\nما توصیه می‌کنیم گذرواژه و کلید بازیابی خود را بلافاصله در تنظیمات تغییر دهید.";
+"verify_not_me_self_verification" = "ممکن است یکی از موارد زیر به خطر افتاده‌باشد:\n\n- گذرواژه شما\n- سرور شما\n- این دستگاه یا دستگاه دیگر\n- اتصال اینترنت دستگاه\n\nما توصیه می‌کنیم گذرواژه و کلید بازیابی خود را بلافاصله در تنظیمات تغییر دهید.";
 "verify_cancel_other" = "اگر اکنون انصراف دهید، %1$@ (%2$@) را تأیید نخواهید کرد. دوباره در نمایه‌اش آغاز کنید.";
 "verify_cancel_self_verification_from_trusted" = "اگر لغو کنید، نمی توانید پیام های رمزگذاری شده را در دستگاه جدید خود بخوانید و سایر کاربران به آن اعتماد نخواهند کرد";
 "verify_cancel_self_verification_from_untrusted" = "در صورت لغو ، نمی توانید پیام های رمزشده را در این دستگاه بخوانید و سایر کاربران به آن اعتماد نخواهند کرد";
@@ -1243,9 +1182,7 @@
 "delete_event_dialog_reason_hint" = "علت حذف";
 "delete_event_dialog_content" = "آیا مطمئن هستید که می‌خواهید این رویداد را حذف کنید؟ توجه داشته باشید که اگر نام اتاق یا توضیح آن را حذف کنید، این تغییر می تواند لغو شده و رویداد حذف نشود.";
 "enter_secret_storage_invalid" = "رمزی در حافظه پیدا نشد";
-"delete_account_data_warning" = "داده‌های حساب از نوع %1$@ حذف شوند؟
-\n
-\nبا احتیاط استفاده کنید، چرا که ممکن است منجر به یک رفتار غیرمنتظره شود.";
+"delete_account_data_warning" = "داده‌های حساب از نوع %1$@ حذف شوند؟\n\nبا احتیاط استفاده کنید، چرا که ممکن است منجر به یک رفتار غیرمنتظره شود.";
 "initialize_cross_signing" = "شروع فرآیند تائید متقابل";
 "verification_profile_device_untrust_info" = "تا زمانی که این کاربر این نشست را تایید کند، پیام های ارسالی و دریافتی در آن با برچسب هشدار نشانه‌گذاری می شوند. البته شما می‌توانید این نشست را به صورت دستی تأیید کنید.";
 "verification_profile_device_new_signing" = "%1$@ (%2$@) با یک نشست جدید وارد شد:";
@@ -1264,36 +1201,20 @@
 "room_settings_enable_encryption" = "به کار انداختن رمزنگاری سرتاسری…";
 "command_description_rainbow_emote" = "شکلک را با رنگ‌بندی رنگین گمان ارسال می کند";
 "command_description_rainbow" = "پیام را با رنگ‌بندی رنگین کمان ارسال می کند";
-"verify_cannot_cross_sign" = "این نشست نمی‌تواند تائید را با نشست‌های دیگر شما به اشتراک بگذارد.
-\nتائید به صورت محلی ذخیره می‌شود و در نسخه‌ی بعدی برنامه به اشتراک گذاشته می‌شود.";
+"verify_cannot_cross_sign" = "این نشست نمی‌تواند تائید را با نشست‌های دیگر شما به اشتراک بگذارد.\nتائید به صورت محلی ذخیره می‌شود و در نسخه‌ی بعدی برنامه به اشتراک گذاشته می‌شود.";
 "rendering_event_error_exception" = "المنت هنگام ارائه محتوای رویدادی با شناسه \'%1$@\' با مشکل روبرو شد";
 "rendering_event_error_type_of_event_not_handled" = "المنت رویداد \'%1$@\' را پشتیبانی نمی‌کند";
-"verification_conclusion_compromised" = "ممکن است یکی از موارد زیر به خطر افتاده باشد:
-\n
-\n- سرور میزبان شما
-\n- سرور کاربری که او را تائید می‌کنید
-\n- اتصال اینترنت شما یا کاربران دیگر
-\n- دستگاه شما یا دستگاه سایر کاربران";
+"verification_conclusion_compromised" = "ممکن است یکی از موارد زیر به خطر افتاده باشد:\n\n- سرور میزبان شما\n- سرور کاربری که او را تائید می‌کنید\n- اتصال اینترنت شما یا کاربران دیگر\n- دستگاه شما یا دستگاه سایر کاربران";
 "login_error_threepid_denied" = "دامنهٔ رایانامه‌تان مجاز به ثبت‌نام روی این کارساز نیست";
 "command_description_shrug" = "¯\\\\_(ツ)_/¯ را به یک پیام متنی ساده تغییر می دهد";
 "permalink_malformed" = "لینک مشکل دارد";
-"soft_logout_sso_not_same_user_error" = "نشست فعلی مربوط به کاربر %1$@ است و شما اطلاعات حساب کاربر %2$@ را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .
-\nلطفا ابتدا داده ها را پاک کنید، سپس با یک حساب دیگر وارد برنامه شوید.";
+"soft_logout_sso_not_same_user_error" = "نشست فعلی مربوط به کاربر %1$@ است و شما اطلاعات حساب کاربر %2$@ را ارائه داده‌اید. این مورد توسط المنت پشتیبانی نمی‌شود .\nلطفا ابتدا داده ها را پاک کنید، سپس با یک حساب دیگر وارد برنامه شوید.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "دسترسی به پیام‌های رمزشده را از دست خواهید داد مگر اینکه برای بازیابی کلیدهای رمزگذاری خود، به حساب خود وارد شوید.";
-"soft_logout_clear_data_dialog_content" = "آیا تمامی اطلاعات ذخیره‌شده در این دستگاه پاک شود؟
-\nبرای دسترسی به اطلاعات و پیام‌های حساب خود، دوباره وارد شوید.";
-"soft_logout_clear_data_notice" = "هشدار: داده‌های شخصیتان (شامل کلید‌های رمزنگاری) همچنان روی این افزاره ذخیره شده‌اند.
-\n
-\nاگر کارتان با این افزاره تمام شده یا می‌خواهید به حساب دیگری وارد شوید، پاکشان کنید.";
+"soft_logout_clear_data_dialog_content" = "آیا تمامی اطلاعات ذخیره‌شده در این دستگاه پاک شود؟\nبرای دسترسی به اطلاعات و پیام‌های حساب خود، دوباره وارد شوید.";
+"soft_logout_clear_data_notice" = "هشدار: داده‌های شخصیتان (شامل کلید‌های رمزنگاری) همچنان روی این افزاره ذخیره شده‌اند.\n\nاگر کارتان با این افزاره تمام شده یا می‌خواهید به حساب دیگری وارد شوید، پاکشان کنید.";
 "soft_logout_signin_e2e_warning_notice" = "برای بازیابی کلیدهای رمزگذاری ذخیره شده در این دستگاه، وارد حساب خود شوید. شما برای خواندن همه پیام‌های رمزشده‌ی خود در هر دستگاهی به این کلید‌ها نیاز دارید.";
 "soft_logout_signin_notice" = "مدیر کارساز خانگیتان (%1$@) شما (%2$@) را از حسابتان (%3$@) خارج کرد.";
-"signed_out_notice" = "این می تواند به دلایل مختلف باشد:
-\n
-\n• شما گذرواژه خود را در نشست دیگری تغییر داده‌اید.
-\n
-\n• این نشست را در یکی از نشست دیگر خود حذف کرده‌اید.
-\n
-\n• ادمین سرور حساب شما را غیرفعال کرده‌است.";
+"signed_out_notice" = "این می تواند به دلایل مختلف باشد:\n\n• شما گذرواژه خود را در نشست دیگری تغییر داده‌اید.\n\n• این نشست را در یکی از نشست دیگر خود حذف کرده‌اید.\n\n• ادمین سرور حساب شما را غیرفعال کرده‌است.";
 "autodiscover_well_known_error" = "ناتوان در یافتن یک کارساز خانگی معتبر. لطفاً شناسه‌تان را بررسی کنید";
 "login_signin_matrix_id_error_invalid_matrix_id" = "این یک شناسه کاربری معتبر نیست. قالب صحیح: \\\'@user:homeserver.org\\\'";
 "login_signin_matrix_id_password_notice" = "اگر گذرواژه خود را نمی‌دانید، برای تنظیم مجدد آن بازگردید.";
@@ -1301,26 +1222,21 @@
 "login_error_outdated_homeserver_warning_content" = "این نسخه سرور بسیار قدیمی است. از ادمین خود بخواهید که آن را ارتقا دهد. البته شما می‌توانید ادامه دهید ، اما برخی از ویژگی ها ممکن است به درستی کار نکنند.";
 "login_error_outdated_homeserver_title" = "کارساز خانگی قدیمی";
 "login_validation_code_is_not_correct" = "کد وارد شده صحیح نیست. لطفا بررسی فرمائید.";
-"login_wait_for_email_notice" = "ما ایمیلی به %1$@ ارسال کردیم.
-\nلطفاً برای ادامه فرآیند ایجاد حساب‌کاربری بر روی لینک موجود در آن کلیک کنید.";
+"login_wait_for_email_notice" = "ما ایمیلی به %1$@ ارسال کردیم.\nلطفاً برای ادامه فرآیند ایجاد حساب‌کاربری بر روی لینک موجود در آن کلیک کنید.";
 "login_wait_for_email_title" = "لطفا ایمیل خود را بررسی کنید";
 "login_terms_title" = "برای ادامه، شرایط را قبول کنید";
 "login_a11y_captcha_container" = "لطفا کپچا را حل کنید";
 "login_a11y_choose_other" = "گزینش یک کارساز خانگی سفارشی";
 "login_a11y_choose_modular" = "گزینش خدمات ماتریکس المنت";
 "login_a11y_choose_matrix_org" = "انتخاب matrix.org";
-"login_signup_cancel_confirmation_content" = "حساب شما هنوز ایجاد نشده‌است.
-\n
-\nفرآیند ثبت‌نام متوقف شود؟";
+"login_signup_cancel_confirmation_content" = "حساب شما هنوز ایجاد نشده‌است.\n\nفرآیند ثبت‌نام متوقف شود؟";
 "login_signin_username_hint" = "نام‌کاربری یا ایمیل";
 "login_signup_to" = "ثبت نام در %1$@";
 "login_msisdn_error_other" = "شماره تلفن نامعتبر است. لطفا آن را بررسی کنید";
 "login_msisdn_confirm_notice" = "ما یک کد فعال‌سازی به %1$@ ارسال کردیم. لطفا آن را وارد کنید.";
 "login_set_email_notice" = "برای بازیابی حساب خود یک ایمیل تنظیم کنید. بعداً، در صورتی که تمایل داشتید می‌توانید به افراد اجازه دهید با ایمیل، شما را پیدا کنند.";
 "login_set_msisdn_notice" = "یک شماره تلفن تنظیم کنید تا در صورتی که تمایل دارید، به افراد اجازه پیدا کردن شما را با استفاده از آن بدهد.";
-"login_reset_password_cancel_confirmation_content" = "گذرواژه شما هنوز تغییر نکرده‌است.
-\n
-\nفرآیند تغییر گذرواژه را متوقف می‌کنید؟";
+"login_reset_password_cancel_confirmation_content" = "گذرواژه شما هنوز تغییر نکرده‌است.\n\nفرآیند تغییر گذرواژه را متوقف می‌کنید؟";
 "login_reset_password_success_notice_2" = "از تمام نشست‌ها خارج شده و دیگر آگاهی‌ای دریافت نخواهید کرد. برای به کار انداختن دوبارهٔ آگاهی‌ها، روی هر دستگاهی، دوباره وارد شوید.";
 "login_reset_password_mail_confirmation_submit" = "ایمیل را تایید کردم";
 "login_reset_password_mail_confirmation_notice_2" = "برای تایید گذرواژه جدید لینک ارسالی را باز کرده، سپس روی متن زیر کلیک کنید.";
@@ -1332,13 +1248,9 @@
 "login_reset_password_notice" = "برای تأیید تنظیم گذرواژه‌ی جدید ، یک ایمیل تأیید به آدرس ایمیل شما ارسال خواهد شد.";
 "login_reset_password_on" = "بازنشانی گذرواژه در %1$@";
 "login_login_with_email_error" = "این ایمیل به هیچ حسابی مرتبط نیست.";
-"login_registration_not_supported" = "برنامه قادر به ایجاد حساب در این سرور نیست.
-\n
-\nآیا می خواهید با استفاده از مرورگر حساب کاربری بسازید؟";
+"login_registration_not_supported" = "برنامه قادر به ایجاد حساب در این سرور نیست.\n\nآیا می خواهید با استفاده از مرورگر حساب کاربری بسازید؟";
 "login_registration_disabled" = "متأسفانه این کارساز، حساب جدید نمی‌پذیرد.";
-"login_mode_not_supported" = "برنامه نمی‌تواند به این سرور متصل شود. سرور از این مکانیزم‌(ها) برای ورود پشتیبانی می کند: %1$@.
-\n
-\nآیا می خواهید با استفاده از مرورگر وارد شوید؟";
+"login_mode_not_supported" = "برنامه نمی‌تواند به این سرور متصل شود. سرور از این مکانیزم‌(ها) برای ورود پشتیبانی می کند: %1$@.\n\nآیا می خواهید با استفاده از مرورگر وارد شوید؟";
 "login_sso_error_message" = "هنگام بارگیری صفحه، خطایی روی داد: %1$@ (%2$d)";
 "login_server_url_form_common_notice" = "نشانی کارسازی که می‌خواهید استفاده کنید را وارد کنید";
 "login_server_url_form_modular_notice" = "نشانی کارساز یا المنت ماژولاری که می‌خواهید استفاده کنید را وارد کنید";
@@ -1362,15 +1274,9 @@
 "command_description_spoiler" = "ارسال به عنوان پیام تباه‌کننده";
 "room_list_quick_actions_low_priority_remove" = "حذف‌کردن از اولویت پایین";
 "room_list_quick_actions_low_priority_add" = "اضافه‌کردن به اولویت پایین";
-"content_reported_as_inappropriate_content" = "این محتوا به عنوان محتوای نامناسب گزارش شده‌است.
-\n
-\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.";
-"content_reported_as_spam_content" = "این محتوا به عنوان هرز‌نامه گزارش شده‌است.
-\n
-\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.";
-"content_reported_content" = "این محتوا گزارش شده‌است.
-\n
-\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.";
+"content_reported_as_inappropriate_content" = "این محتوا به عنوان محتوای نامناسب گزارش شده‌است.\n\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.";
+"content_reported_as_spam_content" = "این محتوا به عنوان هرز‌نامه گزارش شده‌است.\n\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید ، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.";
+"content_reported_content" = "این محتوا گزارش شده‌است.\n\nاگر نمی‌خواهید محتوای بیشتری از این کاربر مشاهده کنید، می توانید او را نادیده بگیرید تا پیام‌های او را مشاهده نکنید.";
 "error_handling_incoming_share" = "نتوانست هم‌رسانی داده را مدیریت کند";
 "rotate_and_crop_screen_title" = "چرخش و برش";
 "attachment_type_dialog_title" = "افزودن تصویر از";
@@ -1412,12 +1318,10 @@
 "settings_push_rules_no_rules" = "هیچ قانونی برای push تعریف نشده است";
 "navigate_to_room_when_already_in_the_room" = "شما در حال مشاهده این اتاق هستید!";
 "settings_other_third_party_notices" = "سایر اعلامیه‌های شخص ثالث";
-"import_e2e_keys_from_file" = "در حال بارگیری کلید‌های رمزنگاری سرتاسر از فایل \"%1$@\.";
+"import_e2e_keys_from_file" = "در حال بارگیری کلید‌های رمزنگاری سرتاسر از فایل \"%1$@\".";
 "keys_backup_unable_to_get_keys_backup_data" = "هنگام دریافت داده‌های پشتیبان کلیدها، خطایی روی داد";
 "keys_backup_unable_to_get_trust_info" = "هنگام دریافت اطلاعات مورد اعتماد خطایی رخ داد";
-"create_room_federation_error" = "اتاق ایجاد شده است ، اما برخی از دعوت‌ها به این دلیل ارسال نشده است:
-\n
-\n%@";
+"create_room_federation_error" = "اتاق ایجاد شده است ، اما برخی از دعوت‌ها به این دلیل ارسال نشده است:\n\n%@";
 "create_room_settings_section" = "تنظیمات اتاق";
 "create_room_topic_hint" = "توضیحات";
 "create_room_topic_section" = "توضیح در مورد اتاق (اختیاری)";
@@ -1469,16 +1373,11 @@
 "keys_backup_setup_override_backup_prompt_tile" = "از پیش، پشتیبانی روی کارساز خانگیتان وجود دارد";
 "recovery_key_export_saved" = "کلید بازیابی ذخیره شد.";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "کلید بازیابی خود را در جایی بسیار امن نظیر برنامه‌های شناخته‌شده‌ی مدیریت گذرواژه نگه دارید";
-"keys_backup_setup_step3_text_line2" = "کلید بازیابی شما برای روز مبادا است - اگر کلید امنیتی خود را فراموش کنید می توانید از آن برای بازیابی دسترسی به پیام‌های رمزگذاری شده استفاده کنید.
-\nکلید بازیابی خود را در جایی بسیار امن نظیر برنامه‌های شناخته‌شده‌ی مدیریت گذرواژه نگه دارید";
+"keys_backup_setup_step3_text_line2" = "کلید بازیابی شما برای روز مبادا است - اگر کلید امنیتی خود را فراموش کنید می توانید از آن برای بازیابی دسترسی به پیام‌های رمزگذاری شده استفاده کنید.\nکلید بازیابی خود را در جایی بسیار امن نظیر برنامه‌های شناخته‌شده‌ی مدیریت گذرواژه نگه دارید";
 "keys_backup_setup_step3_text_line1" = "درحال پشتیبان‌گیری از کلید‌های شما.";
 "keys_backup_setup_step1_recovery_key_alternative" = "یا، نسخه‌ی پشتیبان خود را با یک کلید بازیابی ایمن کنید، و آن را در جایی امن ذخیره کنید.";
-"keys_backup_setup_step2_text_description" = "ما یک نسخه رمزگذاری شده از کلیدهای شما را در سرور ذخیره خواهیم کرد. با استفاده از کلید امنیتی قوی، از نسخه‌ی پشتیبان خود محافظت کنید.
-\n
-\nبرای حداکثر امنیت، کلید امنیتی باید با رمز ورود حساب شما متفاوت باشد.";
-"keys_backup_setup_step1_description" = "پیام‌‌ها در اتاق‌های رمزشده، با رمزنگاری سرتاسری امن شده‌اند. فقط شما و گیرنده(ها) کلیدهای خواندم این پیام‌ها را دارید.
-\n
-\nبرای جلوگیری از گم کردن کلیدهایتان، از آن‌ها به صورت امن، پشتیبان بگیرید.";
+"keys_backup_setup_step2_text_description" = "ما یک نسخه رمزگذاری شده از کلیدهای شما را در سرور ذخیره خواهیم کرد. با استفاده از کلید امنیتی قوی، از نسخه‌ی پشتیبان خود محافظت کنید.\n\nبرای حداکثر امنیت، کلید امنیتی باید با رمز ورود حساب شما متفاوت باشد.";
+"keys_backup_setup_step1_description" = "پیام‌‌ها در اتاق‌های رمزشده، با رمزنگاری سرتاسری امن شده‌اند. فقط شما و گیرنده(ها) کلیدهای خواندم این پیام‌ها را دارید.\n\nبرای جلوگیری از گم کردن کلیدهایتان، از آن‌ها به صورت امن، پشتیبان بگیرید.";
 "keys_backup_passphrase_not_empty_error_message" = "اگر می خواهید المنت یک کلید بازیابی ایجاد کند، لطفاً عبارت عبور را حذف کنید.";
 "passphrase_passphrase_too_weak" = "عبارت عبور بیش از حد ضعیف است";
 "passphrase_empty_error_message" = "لطفاً عبارت عبوری وارد کنید";
@@ -1495,15 +1394,14 @@
 "resource_limit_hard_contact" = "لطفا %@ تا استفاده از این سرویس را ادامه دهید.";
 "resource_limit_soft_contact" = "لطفا %@ تا این محدودیت را برطرف نمائید.";
 "resource_limit_hard_mau" = "این کارساز خانگی به کران کاربر فعّال ماهانه‌اش رسیده.";
-"resource_limit_soft_mau.b_0" = "برخی کاربران قادر به ورود نخواهند بود";
+"resource_limit_soft_mau" = "این کارساز خانگی به کران کاربر فعّال ماهانه‌اش رسیده، پس <b>برخی کاربران قادر به ورود نخواهند بود</b>.";
 "resource_limit_hard_default" = "این کارساز خانگی از کران یکی از منابعش تجاوز کرده.";
-"resource_limit_soft_default.b_0" = "برخی کاربران قادر به ورود نخواهند بود";
+"resource_limit_soft_default" = "این کارساز خانگی از کران یکی از منابعش تجاوز کرده، پس <b>برخی کاربران قادر به ورود نخواهند بود</b>.";
 "room_tombstone_continuation_description" = "این اتاق ادامه‌ی گفتگوی دیگر است";
 "room_tombstone_continuation_link" = "گفتگو در اینجا ادامه دارد";
 "room_tombstone_versioned_description" = "این اتاق جایگزین شده و دیگر فعّال نیست.";
 "deactivate_account_delete_checkbox" = "لطفاً تمام پیام‌های ارسال شده‌ی من را حدف کن (هشدار: این امر باعث می شود کاربران آینده مکالمات را به صورت ناقص ببینند)";
-"deactivate_account_content.b_0" = "این عمل بازگشت‌پذیر نیست";
-"deactivate_account_content.b_1" = "منجر به قراموشی پیام‌هایی که فرستاده‌اید نخواهد شد";
+"deactivate_account_content" = "این کار حسابتان را برای همیشه غیر قابل استفاده خواهد کرد. قادر به ورود نخواهید بود و هیچ‌کس نخواهد توانست دوباره این شناسهٔ کاربری را ثبت کند. این کار موجب ترک حسابتان از تمامی اتاق‌ها شده و جزییات حسابتان را از کارساز هویتتان برخواهد داشت. <b>این عمل بازگشت‌پذیر نیست</b>.\n\nغیرفعّال‌سازی حسابتان به صورت پیش‌گزیده <b>منجر به قراموشی پیام‌هایی که فرستاده‌اید نخواهد شد</b>. اگر می‌خواهید پیام‌هایتان را فراموش کنیم، تیک کادر زیر را بزنید.\n\nپدیداری پیام در ماتریکس، مانند رایانامه است. فراموشی پیام‌هایتان به معنی هم‌رسانی نشدن آن‌ها با کاربران جدید یا ثبت‌نشده است. کاربران ثبت‌شده‌ای که پیش‌تر به این پیام‌ها دسترسی داشته‌اند، همچنان به رونوشتشان دسترسی خواهند داشت.";
 "dialog_user_consent_content" = "برای ادامهٔ استفاده از کارساز خانگی %1$@ باید شرایط و ضوابط را خوانده و بپذیرید.";
 "markdown_has_been_disabled" = "Markdown غیرفعال شده است.";
 "markdown_has_been_enabled" = "Markdown فعال شده است.";
@@ -1523,15 +1421,9 @@
 "command_problem_with_parameters" = "دستور \\\"%@\\\" پارامتر‌های بیشتری نیاز دارد، یا اینکه برخی پارامتر‌ها به درستی وارد نشده‌اند.";
 "unrecognized_command" = "دستور ناشناخته: %@";
 "command_error" = "خطا در اجرای دستور";
-"your_unverified_device_requesting_with_info" = "یک نشست تایید نشده، کلید‌های رمزنگاری را درخواست می‌کند.
-\nنام نشست: %1$@
-\nآخرین بازدید: %2$@
-\nاگر به نشست دیگری وارد نشده‌اید، این درخواست را نادیده بگیرید.";
+"your_unverified_device_requesting_with_info" = "یک نشست تایید نشده، کلید‌های رمزنگاری را درخواست می‌کند.\nنام نشست: %1$@\nآخرین بازدید: %2$@\nاگر به نشست دیگری وارد نشده‌اید، این درخواست را نادیده بگیرید.";
 "your_unverified_device_requesting" = "نشست تایید نشده‌ی شما \\\'%@\\\' درخواست کلید‌های رمزنگاری را دارد.";
-"you_added_a_new_device_with_info" = "نشست جدید درخواست دریافت کلید‌های رمزنگاری را دارد.
-\nنام نشست: %1$@
-\nآخرین بازدید: %2$@
-\nاگر در دستگاه دیگری وارد حساب خود نشده‌اید، این درخواست را نادیده بگیرید.";
+"you_added_a_new_device_with_info" = "نشست جدید درخواست دریافت کلید‌های رمزنگاری را دارد.\nنام نشست: %1$@\nآخرین بازدید: %2$@\nاگر در دستگاه دیگری وارد حساب خود نشده‌اید، این درخواست را نادیده بگیرید.";
 "you_added_a_new_device" = "شما یک نشست جدید \\\'%@\\\' اضافه کرده‌اید که درخواست کلید‌های رمزنگاری را دارد.";
 "widget_integration_missing_parameter" = "پارامتر مورد نیاز وجود ندارد.";
 "notification_unread_notified_messages_and_invitation" = "%1$@ و %2$@";
@@ -1634,8 +1526,7 @@
 "confirm_your_identity_quad_s" = "هویت خود را تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.";
 "confirm_your_identity" = "هویت خود را با تأیید این ورود به سیستم از یکی دیگر از نشست‌های خود، تأیید کنید تا به پیام‌های رمز شده دسترسی پیدا کنید.";
 "settings_discovery_consent_notice_on" = "رضاییتان را برای فرستادن رایانامه‌ها و شماره‌تلفن‌ها به این کارساز هویت به منظور کشف دیگر کاربران از آشنایانتان، داده‌اید.";
-"room_preview_not_found" = "در حال حاضر این اتاق قابل دسترسی نیست.
-\nبعدا دوباره تلاش کنید، یا از مدیر اتاق بخواهید بررسی کند که آیا دسترسی دارید.";
+"room_preview_not_found" = "در حال حاضر این اتاق قابل دسترسی نیست.\nبعدا دوباره تلاش کنید، یا از مدیر اتاق بخواهید بررسی کند که آیا دسترسی دارید.";
 "room_alias_action_publish" = "انتشار این نشانی";
 "room_alias_published_alias_add_manually_submit" = "منتشر کردن";
 "room_alias_published_alias_add_manually" = "منتشر کردن دستی یک نشانی جدید";
@@ -1776,10 +1667,8 @@
 "notice_room_canonical_alias_main_and_alternative_changed" = "%1$@ نشانی‌های اصلی و جایگزین این اتاق را تغییر داد.";
 "notice_room_canonical_alias_alternative_changed_by_you" = "شما نشانی‌های جایگزین این اتاق را تغییر دادید.";
 "notice_room_canonical_alias_alternative_changed" = "%1$@ نشانی‌های جایگزین این اتاق را تغییر داد.";
-"initial_sync_start_downloading" = "همگام‌سازی نخستین:
-\nبارگیری داده‌ها…";
-"initial_sync_start_server_computing" = "همگام‌سازی نخستین:
-\nمنتظر پاسخ کارساز…";
+"initial_sync_start_downloading" = "همگام‌سازی نخستین:\nبارگیری داده‌ها…";
+"initial_sync_start_server_computing" = "همگام‌سازی نخستین:\nمنتظر پاسخ کارساز…";
 "room_displayname_empty_room_was" = "اتاق خالی (%@ بود)";
 "notice_room_server_acl_allow_is_empty" = "🎉 تمامی کارسازها از مشارکت تحریم شده‌اند! این اتاق دیگر نمی‌تواند استفاده شود.";
 "notice_room_server_acl_updated_no_change" = "بدون تغییر.";
@@ -1815,8 +1704,7 @@
 "leave_space" = "ترک";
 "space_add_child_title" = "افزودن اتاق";
 "space_explore_activity_title" = "کاوش در اتاق‌ها";
-"room_alias_preview_not_found" = "این نام مستعار در حال حاضر قابل دسترسی نیست.
-\nبعداً دوباره امتحان کنید، یا از مدیر اتاق بخواهید که دسترسی شما به آن را بررسی کند.";
+"room_alias_preview_not_found" = "این نام مستعار در حال حاضر قابل دسترسی نیست.\nبعداً دوباره امتحان کنید، یا از مدیر اتاق بخواهید که دسترسی شما به آن را بررسی کند.";
 "join_anyway" = "در هر صورت بپیوند";
 "join_space" = "پیوستن به فضا";
 "create_space" = "ایجاد فضا";
@@ -1905,8 +1793,7 @@
 "directory_your_server" = "کارساز شما";
 "unnamed_room" = "اتاق بی‌نام";
 "this_space_has_no_rooms_admin" = "ممکن است برخی اتاق‌ها پنهان باشند، زیرا خصوصی بوده و نیاز به دعوت دارید.";
-"this_space_has_no_rooms_not_admin" = "ممکن است برخی اتاق‌ها پنهان باشند، زیرا خصوصی بوده و نیاز به دعوت دارید.
-\nاجازهٔ افزودن اتاق‌ها را ندارید.";
+"this_space_has_no_rooms_not_admin" = "ممکن است برخی اتاق‌ها پنهان باشند، زیرا خصوصی بوده و نیاز به دعوت دارید.\nاجازهٔ افزودن اتاق‌ها را ندارید.";
 "this_space_has_no_rooms" = "این فضا هیچ اتاقی ندارد";
 "spaces_no_server_support_description" = "لطفاً برای اطّلاعات بیش‌تر، با مدیر کارسازتان تماس بگیرید";
 "spaces_no_server_support_title" = "به نظر کارساز خانگیتان هنوز از فضاها پشتیبانی نمی‌کند";
@@ -1924,8 +1811,7 @@
 "upgrade_room_no_power_to_manage" = "برای ارتقای اتاق نیاز به اجازه دارید";
 "upgrade_room_update_parent_space" = "به‌روز رسانی خودکار والد فضا";
 "upgrade_room_auto_invite" = "دعوت خودکار کاربران";
-"upgrade_room_warning" = "ارتقای اتاق، عملی پیش‌رفته است و معمولاً هنگامی که اتاقی به خاطر اشکال‌ها، کمبود ویژگی‌ها یا آسیب‌پذیری‌های امنیتی ناپایدار است، پیشنهاد می‌شود.
-\nاین عمل معمولاً فقط روی چگونگی فراوری اتاق روی کارساز اثر می‌گذارد.";
+"upgrade_room_warning" = "ارتقای اتاق، عملی پیش‌رفته است و معمولاً هنگامی که اتاقی به خاطر اشکال‌ها، کمبود ویژگی‌ها یا آسیب‌پذیری‌های امنیتی ناپایدار است، پیشنهاد می‌شود.\nاین عمل معمولاً فقط روی چگونگی فراوری اتاق روی کارساز اثر می‌گذارد.";
 "upgrade_private_room" = "ارتقای اتاق خصوصی";
 "upgrade_public_room" = "ارتقای اتاق عمومی";
 "upgrade" = "ارتقا";
@@ -1945,8 +1831,7 @@
 "private_space" = "فضای خصوصی";
 "public_space" = "فضای عمومی";
 "command_description_upgrade_room" = "اتاقی را به نگارشی جدید ارتقا می‌دهد";
-"spaces_feeling_experimental_subspace" = "حس آزمایش دارید؟
-\nمی‌توانید فضاهای موجود را به فضایی بیفزایید.";
+"spaces_feeling_experimental_subspace" = "حس آزمایش دارید؟\nمی‌توانید فضاهای موجود را به فضایی بیفزایید.";
 "call_transfer_consulting_with" = "مشاوره با %1$@";
 "voice_message_reply_content" = "پیام صوتی (%1$@)";
 "error_voice_message_cannot_reply_or_edit" = "نمی‌توان هنگام فعّال بودن پیام صوتی، پاسخ داد یا ویراست";
@@ -2074,9 +1959,7 @@
 "space_settings_permissions_title" = "اجازه‌های فضا";
 "space_participants_unban_prompt_msg" = "لغو تحریم کاربر، اجازهٔ پیوستن دوباره‌اش به فضا را می‌دهد.";
 "space_participants_ban_prompt_msg" = "تحریم کاربر، او را از این فضا برداشته و از پیوستن دوباره‌اش جلوگیری می‌کند.";
-"space_participants_remove_prompt_msg" = "اخراج کاربر، از این فضا برش می‌دارد.
-\n
-\nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.";
+"space_participants_remove_prompt_msg" = "اخراج کاربر، از این فضا برش می‌دارد.\n\nبرای پیش‌گیری از پیوستن دوباره، باید تحریمش کنید.";
 "a11y_stop_voice_message" = "پایان ضبط";
 "command_description_lenny" = "( ͡° ͜ʖ ͡°) را به ابتدای پیام‌های متنی خام می‌افزاید";
 "settings_discovery_no_policy_provided" = "سیاستی از سوری کارساز هویت فراهم نشده";
@@ -2111,9 +1994,7 @@
 "identity_server_consent_dialog_content_question" = "با فرستادن این اطّلاعات موافقید؟";
 "action_not_now" = "اکنون نه";
 "identity_server_consent_dialog_content_3" = "برای کشف آشنایان موجود، لازم است اطلاعات آشنایان (رایانامه‌ها و شماره تلفن‌ها) را به کارساز هویتتان بفرستید. برای محرمانگیتان، داده‌هایتان را پیش از فرستادن، در هم می‌ریزیم.";
-"analytics_opt_in_content" = "با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.
-\n
-\nمی‌توانید از %@ قوانینمان را بخوانید.";
+"analytics_opt_in_content" = "با هم‌رسانی داده‌ّای استفادهٔ ناشناس، در تشخیص مشکل‌ها و بهبود المنت یاریمان کنید. برای درک چگونگی استفادهٔ مردم از چندین افزاره، شناسه‌ای کاتوره‌ای بین افزاره‌هایتان هم‌رسانی خواهیم کرد.\n\nمی‌توانید از %@ قوانینمان را بخوانید.";
 "delete_poll_dialog_content" = "مطمئنید که می خواهید این نظرسنجی را بردارید؟ پس از این کار، قادر به بازگردانیش نیستید.";
 "delete_poll_dialog_title" = "برداشتن نظرسنجی";
 "poll_end_room_list_preview" = "نظرسنجی پایان یافت";
@@ -2135,8 +2016,8 @@
 "legals_home_server_title" = "سیاست کارساز خانگیتان";
 "legals_application_title" = "سیاست %@";
 "analytics_opt_in_list_item_3" = "می‌توانید هر زمان، در تنظیمات خاموشش کنید";
-"analytics_opt_in_list_item_2.b_0" = "نمی‌کنیم";
-"analytics_opt_in_list_item_1.b_0" = "نمی‌کنیم";
+"analytics_opt_in_list_item_2" = "ما اطّلاعات را با سوم‌شخص‌ها هم‌رسانی <b>نمی‌کنیم</b>";
+"analytics_opt_in_list_item_1" = "ما هیچ دادهٔ حسابی را ذخیره یا نمایه <b>نمی‌کنیم</b>";
 "analytics_opt_in_content_link" = "این‌جا";
 "analytics_opt_in_title" = "کمک به بهبود المنت";
 "action_enable" = "به کار انداختن";
@@ -2237,97 +2118,25 @@
 "location_share_option_user_current" = "هم‌رسانی مکان کنونیم";
 "a11y_location_share_locate_button" = "بزرگ‌نمایی به مکان کنونی";
 "a11y_location_share_pin_on_map" = "سنجاق مکان گزیده روی نقشه";
-"plurals.notice_room_aliases_added.item_0" = "%1$@، %2$@ را به عنوان نشانی‌ای برای این اتاق افزود.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@، %2$@ را به عنوان نشانی‌هایی برای این اتاق افزود.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@، %2$@ را به عنوان نشانی‌ای برای این اتاق پاک کرد.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@، %2$@ را به عنوان نشانی‌هایی برای این اتاق پاک کرد.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "نشانی %1$@ را به این اتاق افزودید.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "نشانی‌های %1$@ را به این اتاق افزودید.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "نشانی %1$@ را از این اتاق برداشتید.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "نشانی‌های %1$@ را از این اتاق برداشتید.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@، %2$@، %3$@ و %4$d نفر دیگر";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@، %2$@، %3$@ و %4$d نفر دیگر";
-"plurals.room_title_members.item_0" = "%d عضو";
-"plurals.room_title_members.item_1" = "%d عضو";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d اتاق";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d اتاق";
-"plurals.notification_compat_summary_title.item_0" = "%d آگاهی";
-"plurals.notification_compat_summary_title.item_1" = "%d آگاهی";
-"plurals.settings_active_sessions_count.item_0" = "۱ نشست فعّال";
-"plurals.settings_active_sessions_count.item_1" = "%d نشست فعّال";
-"plurals.membership_changes.item_0" = "%d عضویت تغییر کرد";
-"plurals.membership_changes.item_1" = "%d عضویت تغییر کردند";
-"plurals.room_new_messages_notification.item_0" = "%d پیام جدید";
-"plurals.room_new_messages_notification.item_1" = "%d پیام جدید";
-"plurals.seconds.item_0" = "%d ثانیه";
-"plurals.seconds.item_1" = "%d ثانیه";
-"plurals.room_settings_banned_users_count.item_0" = "%d کاربر مسدود";
-"plurals.room_settings_banned_users_count.item_1" = "%d کاربران مسدود";
-"plurals.notification_unread_notified_messages.item_0" = "%d پیام آگاهی نخوانده";
-"plurals.notification_unread_notified_messages.item_1" = "%d پیام آگاهی نخوانده";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d پیام";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d پیام";
-"plurals.active_widgets.item_0" = "%d ابزارک فعّال";
-"plurals.active_widgets.item_1" = "%d ابزارک فعّال";
-"plurals.room_profile_section_more_member_list.item_0" = "۱ نفر";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d نفر";
-"plurals.send_images_with_original_size.item_0" = "فرستادن تصویر با اندازهٔ اصلی";
-"plurals.send_images_with_original_size.item_1" = "فرستادن تصویرها با اندازهٔ اصلی";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "دعوت برای %1$@ و یک نفر دیگر فرستاده شد";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "دعوت برای %1$@ و %2$d نفر دیگر فرستاده شد";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "رمز اشتباه، %d تلاش مانده";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "رمز اشتباه، %d تلاش مانده";
-"plurals.room_details_selected.item_0" = "%d مورد";
-"plurals.room_details_selected.item_1" = "%d مورد";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "درخواست های زیادی ارسال شده است. می توانید در %1$d ثانیه دوباره امتحان کنید…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "درخواست های زیادی ارسال شده است. می توانید در %1$d ثانیه دوباره امتحان کنید…";
-"plurals.fallback_users_read.item_0" = "%d کاربر خواند";
-"plurals.fallback_users_read.item_1" = "%d کاربر خواندند";
-"plurals.two_and_some_others_read.item_0" = "%1$@ ، %2$@ و %3$d نفر دیگر خواندند";
-"plurals.two_and_some_others_read.item_1" = "%1$@ ، %2$@ و %3$d نفر دیگر خواندند";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "در حال پشتیبان‌گیری از %d کلید…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "در حال پشتیبان‌گیری از %d کلید…";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d کلید جدید به این نشست اضافه شد.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d کلید جدید به این نشست اضافه شد.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "پشتیبان با %d کلید بازیابی شد.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "پشتیبان با %d کلید بازیابی شد.";
-"plurals.notification_invitations.item_0" = "%d دعوت";
-"plurals.notification_invitations.item_1" = "%d دعوت";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d از %2$d کلید با موفقیت بارگذاری شد.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d از %2$d کلید با موفقیت بارگذاری شدند.";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "%d دستگاهی را که می‌توانید با استفاده از آن‌ها خود را تایید کنید نشان بده";
-"plurals.entries.item_0" = "%d ورودی";
-"plurals.entries.item_1" = "%d ورودی";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "شما نشانی جایگزین %1$@ را برای این اتاق حذف کردید.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "شما نشانی‌های جایگزین %1$@ را برای این اتاق حذف کردید.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ نشانی جایگزین %2$@ را برای این اتاق حذف کرد.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ نشانی‌های جایگزین %2$@ را برای این اتاق حذف کرد.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "شما نشانی جایگزین %1$@ را برای این اتاق اضافه کردید.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "شما نشانی‌های جایگزین %1$@ را برای این اتاق اضافه کردید.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ یک نشانی جایگزین %2$@ را برای این اتاق اضافه کرد.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ نشانی‌های جایگزین %2$@ را برای این اتاق اضافه کرد.";
-"plurals.space_people_you_know.item_0" = "%d نفر از افرادی که می‌شناسید عضو شده‌اند";
-"plurals.space_people_you_know.item_1" = "%d نفر از کسانی که می‌شناسید عضو شده‌اند";
-"plurals.send_videos_with_original_size.item_0" = "ارسال فیلم با اندازه اصلی";
-"plurals.send_videos_with_original_size.item_1" = "ارسال فیلم‌ها با اندازه اصلی";
-"plurals.missed_video_call.item_0" = "تماس تصویری بی‌پاسخ";
-"plurals.missed_video_call.item_1" = "%d تماس تصویری بی‌پاسخ";
-"plurals.missed_audio_call.item_0" = "تماس صوتی بی‌پاسخ";
-"plurals.missed_audio_call.item_1" = "%d تماس صوتی بی‌پاسخ";
-"plurals.call_active_status.item_0" = "تماس فعّال ·";
-"plurals.call_active_status.item_1" = "%1$d تماس فعّال ·";
-"plurals.create_poll_not_enough_options_error.item_0" = "کمینه %1$@ گزینه لازم است";
-"plurals.create_poll_not_enough_options_error.item_1" = "کمینه %1$@ گزینه لازم است";
-"plurals.poll_total_vote_count_after_ended.item_0" = "نتیجهٔ نهایی بر مبنای %1$d رأی";
-"plurals.poll_total_vote_count_after_ended.item_1" = "نتیجهٔ نهایی بر مبنای %1$d رأی";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "۱ رأی داده شده. برای دیدن نتیجه، رأی دهید";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d رأی داده شده. برای دیدن نتیجه، رأی دهید";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "بر مبنای %1$d رأی";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "بر مبنای %1$d رأی";
-"plurals.poll_option_vote_count.item_0" = "%1$d رأی";
-"plurals.poll_option_vote_count.item_1" = "%1$d رأی";
-"plurals.notice_room_server_acl_changes.item_0" = "%d تغییر سطح کنترل دسترسی";
-"plurals.notice_room_server_acl_changes.item_1" = "%d تغییر سطح کنترل دسترسی";
-"plurals.message_reaction_show_more.item_0" = "%1$d بیش‌تر";
-"plurals.message_reaction_show_more.item_1" = "%1$d بیش‌تر";
+"threads_notice_migration_message" = "داریم به ارائه یک بتای عمومی برای رشته‌ها نزدیک‌تر می‌شویم.\n\nهمین‌طور که برایش آماده می‌شویم، نیاز به انجام چند تغییر است: رشته‌هایی که پیش از این ایجاد شده‌اند،به شکل پاسخ‌های عادی نشان داده خواهند شد.\n\nاین کار، یک تبدیل یک باره است؛ چرا که رشته‌ها اکنون بخشی از مشخّصات ماتریکسند.";
+"threads_notice_migration_title" = "رشته‌ها به بتا می رسند 🎉";
+"live_location_sharing_notification_description" = "هم‌رساین مکان در حال انجام است";
+"live_location_sharing_notification_title" = "مکان زندهٔ %@";
+"location_in_background_missing_permission_dialog_content" = "اگر می‌خواهید مکانتان را هم‌رسانی کنید، %@ نیاز به دسترسی همیشگی مکان هنگام در پس‌زمینه بودن کاره دارد.\nفقط برای مدتی که برمی‌گزینید، به مکانتان دسترسی خواهیم داشت.";
+"error_forbidden_digits_only_username" = "کارساز خانگی، نام‌های کاربری فقط رقمی را نمی‌پذیرد.";
+"ftue_personalize_skip_this_step" = "پرش از این گام";
+"ftue_personalize_submit" = "ذخیره و ادامه";
+"ftue_personalize_complete_subtitle" = "ترجیحاتتان ذخیره شد.";
+"ftue_personalize_complete_title" = "همه‌چیز تنظیم شده!";
+"ftue_personalize_lets_go" = "بزن بریم";
+"ftue_profile_picture_subtitle" = "می‌توانید هرزمانی تغییرش دهید.";
+"ftue_display_name_title" = "گزینش نامی نمایشی";
+"ftue_profile_picture_title" = "افزودن یک تصویر نمایه";
+"ftue_display_name_entry_footer" = "می‌توانید بعدها تغییرش دهید";
+"ftue_display_name_entry_title" = "نام نمایشی";
+"ftue_display_name_subtitle" = "هنگامی که پیام می‌فرستید نشان داده خواهد شد.";
+"ftue_account_created_subtitle" = "حسابتان %@ ایجاد شد.";
+"ftue_account_created_congratulations_title" = "تبریک!";
+"ftue_account_created_take_me_home" = "مرا به خانه ببر";
+"ftue_account_created_personalize" = "شخصی سازی نمایه";
+"action_disable" = "از کار انداختن";

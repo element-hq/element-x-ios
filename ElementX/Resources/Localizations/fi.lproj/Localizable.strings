@@ -37,23 +37,14 @@
 "room_displayname_room_invite" = "Huonekutsu";
 "room_displayname_two_members" = "%1$@ ja %2$@";
 "room_displayname_empty_room" = "Tyhjä huone";
-"initial_sync_start_importing_account" = "Alkusynkronointi:
-\nTuodaan tiliä…";
-"initial_sync_start_importing_account_crypto" = "Alkusynkronointi:
-\nTuodaan kryptoa";
-"initial_sync_start_importing_account_rooms" = "Alkusynkronointi:
-\nTuodaan huoneita";
-"initial_sync_start_importing_account_joined_rooms" = "Alkusynkronointi:
-\nLadataan keskustelujasi
-\nMikäli olet liittynyt moniin huoneisiin, tässä voi mennä tovi";
-"initial_sync_start_importing_account_invited_rooms" = "Alkusynkronointi:
-\nTuodaan kutsuttuja huoneita";
-"initial_sync_start_importing_account_left_rooms" = "Alkusynkronointi:
-\nTuodaan poistuttuja huoneita";
-"initial_sync_start_importing_account_groups" = "Alkusynkronointi:
-\nTuodaan yhteisöjä";
-"initial_sync_start_importing_account_data" = "Alkusynkronointi:
-\nTuodaan tilin tietoja";
+"initial_sync_start_importing_account" = "Alkusynkronointi:\nTuodaan tiliä…";
+"initial_sync_start_importing_account_crypto" = "Alkusynkronointi:\nTuodaan krypto";
+"initial_sync_start_importing_account_rooms" = "Alkusynkronointi:\nTuodaan huoneita";
+"initial_sync_start_importing_account_joined_rooms" = "Alkusynkronointi:\nLadataan keskustelujasi\nMikäli olet liittynyt moniin huoneisiin, tässä voi mennä tovi";
+"initial_sync_start_importing_account_invited_rooms" = "Alkusynkronointi:\nTuodaan kutsuttuja huoneita";
+"initial_sync_start_importing_account_left_rooms" = "Alkusynkronointi:\nTuodaan poistuttuja huoneita";
+"initial_sync_start_importing_account_groups" = "Alkusynkronointi:\nTuodaan yhteisöjä";
+"initial_sync_start_importing_account_data" = "Alkusynkronointi:\nTuodaan tilin tietoja";
 "notice_room_update" = "%@ päivitti tämän huoneen.";
 "event_status_sending_message" = "Lähetetään viestiä…";
 "notice_room_third_party_revoked_invite" = "%1$@ veti takaisin käyttäjän %2$@ liittymiskutsun huoneeseen";
@@ -248,16 +239,14 @@
 "call_error_user_not_responding" = "Toinen puoli ei vastannut.";
 "permissions_rationale_popup_title" = "Huomio";
 "permissions_rationale_msg_record_audio" = "%@ tarvitsee käyttöluvan mikrofoniin suorittakseen puheluita.";
-"permissions_rationale_msg_camera_and_audio" = "%@ tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.
-\n
-\nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.";
+"permissions_rationale_msg_camera_and_audio" = "%@ tarvitsee käyttöluvan kameraan ja mikrofoniin suorittakseen videopuheluita.\n\nSalli mikrofonin ja kameran käyttö seuraavilla näytöillä aloittaaksesi tämän puhelun.";
 "yes" = "KYLLÄ";
 "no" = "EI";
 "_continue" = "Jatka";
 "action_remove" = "Poista";
 "action_join" = "Liity";
 "action_reject" = "Hylkää";
-"room_jump_to_first_unread" = "Siirry ensimmäiseen lukemattomaan viestiin.";
+"room_jump_to_first_unread" = "Siirry lukemattomaan";
 "room_participants_leave_prompt_title" = "Poistu huoneesta";
 "room_participants_leave_prompt_msg" = "Haluatko varmasti poistua huoneesta?";
 "room_participants_header_direct_chats" = "YKSITYISKESKUSTELUT";
@@ -339,9 +328,7 @@
 "settings_new_password" = "Uusi salasana";
 "settings_fail_to_update_password" = "Salasanan päivittäminen epäonnistui";
 "settings_password_updated" = "Salasanasi on vaihdettu";
-"settings_unignore_user" = "Näytä kaikki viestit käyttäjältä %@\?
-\n
-\nHuomaa, että tämä toiminto käynnistää sovelluksen uudelleen ja siinä saattaa kestää jonkin aikaa.";
+"settings_unignore_user" = "Näytä kaikki viestit käyttäjältä %@\?\n\nHuomaa, että tämä toiminto käynnistää sovelluksen uudelleen ja siinä saattaa kestää jonkin aikaa.";
 "settings_select_country" = "Valitse maa";
 "room_settings_topic" = "Aihe";
 "room_settings_room_read_history_rules_pref_title" = "Huoneen historian näkyvyys";
@@ -480,9 +467,7 @@
 "dialog_title_error" = "Virhe";
 "send_bug_report_description_in_english" = "Jos mahdollista, kirjoita kuvaus englanniksi.";
 "option_send_sticker" = "Lähetä tarra";
-"no_sticker_application_dialog_content" = "Sinulla ei ole yhtään tarrapakettia käytössä.
-\n
-\nHaluatko lisätä paketteja\?";
+"no_sticker_application_dialog_content" = "Sinulla ei ole yhtään tarrapakettia käytössä.\n\nHaluatko lisätä paketteja\?";
 "auth_accept_policies" = "Lue ja hyväksy tämän kotipalvelimen käytännöt:";
 "title_activity_keys_backup_setup" = "Avainten varmuuskopiointi";
 "title_activity_keys_backup_restore" = "Käytä avainten varmuuskopiointia";
@@ -497,12 +482,12 @@
 "system_alerts_header" = "Järjestelmähälytykset";
 "option_send_voice" = "Lähetä ääntä";
 "error_no_external_application_found" = "Yhtään ulkopuolista sovellusta tämän toiminnon suorittamiseksi ei löytynyt.";
-"e2e_re_request_encryption_key.u_0" = "Pyydä salausavaimia uudelleen";
+"e2e_re_request_encryption_key" = "<u>Pyydä salausavaimia uudelleen</u> muista istunnoistasi.";
 "e2e_re_request_encryption_key_dialog_content" = "Käynnistä %@ toisella laitteella, joka voi purkaa viestin, jotta se voi lähettää avaimet tähän istuntoon.";
 "settings_call_ringtone_use_app_ringtone" = "Käytä %@in oletussoittoääntä saapuville puheluille";
 "settings_call_ringtone_title" = "Saapuvien puheluiden soittoääni";
 "video_call_in_progress" = "Videopuhelu menossa…";
-"list_members" = "Käyttäjälista";
+"list_members" = "Jäsenet";
 "room_participants_action_remove" = "Poista keskustelusta";
 "settings_notification_advanced" = "Edistyneet ilmoitusasetukset";
 "settings_notification_by_event" = "Ilmoituksen tärkeys tapahtumakohtaisesti";
@@ -515,53 +500,40 @@
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Yksi tai useampi testi epäonnistui. Lähetäthän virheraportin, jotta meidän on helpompi tutkia ongelmaa.";
 "settings_troubleshoot_test_system_settings_title" = "Järjestelmäasetukset.";
 "settings_troubleshoot_test_system_settings_success" = "Ilmoitukset ovat käytössä järjestelmäasetuksissa.";
-"settings_troubleshoot_test_system_settings_failed" = "Ilmoitukset ovat pois käytöstä järjestelmäasetuksissa.
-\nTarkistathan järjestelmäasetukset.";
+"settings_troubleshoot_test_system_settings_failed" = "Ilmoitukset ovat pois käytöstä järjestelmäasetuksissa.\nTarkistathan järjestelmäasetukset.";
 "open_settings" = "Avaa asetukset";
 "settings_troubleshoot_test_account_settings_title" = "Tilin asetukset.";
 "settings_troubleshoot_test_account_settings_success" = "Ilmoitukset ovat käytössä tililläsi.";
-"settings_troubleshoot_test_account_settings_failed" = "Ilmoitukset eivät ole käytössä tililläsi. 
-\nTarkista tilisi asetukset.";
+"settings_troubleshoot_test_account_settings_failed" = "Ilmoitukset eivät ole käytössä tililläsi. \nTarkista tilisi asetukset.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Ota käyttöön";
 "settings_troubleshoot_test_device_settings_title" = "Istunnon asetukset.";
 "settings_troubleshoot_test_device_settings_success" = "Ilmoitukset ovat käytössä tässä istunnossa.";
-"settings_troubleshoot_test_device_settings_failed" = "Ilmoitukset eivät ole käytössä tässä istunnossa.
-\nTarkista %@in asetukset.";
+"settings_troubleshoot_test_device_settings_failed" = "Ilmoitukset eivät ole käytössä tässä istunnossa.\nTarkista %@in asetukset.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Ota käyttöön";
 "settings_troubleshoot_test_bing_settings_title" = "Mukautetut asetukset.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Huomaathan, että osa viestityypeistä on asetettu olemaan hiljaisia (tuottavat ilmoituksen ilman ääntä).";
 "settings_troubleshoot_test_bing_settings_failed" = "Osa ilmoituksista on otettu pois käytöstä mukautetuissa asetuksissasi.";
 "settings_troubleshoot_test_play_services_title" = "Play Services -palvelun tarkistus";
 "settings_troubleshoot_test_play_services_success" = "Google Play Services APK on saatavilla ja ajan tasalla.";
-"settings_troubleshoot_test_play_services_failed" = "%@ käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ käyttää Google Play Services -palvelua ilmoitusten välittämiseen, mutta se ei näytä olevan määritetty oikein:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Korjaa Play Services -palvelu";
 "settings_troubleshoot_test_fcm_title" = "Firebase-tunniste";
-"settings_troubleshoot_test_fcm_success" = "FCM-tunniste haettu onnistuneesti: 
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "FCM-tunnisteen haku epäonnistui: 
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\n%@ ei voi vaikuttaa tähän virheeseen, ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään rekisteröityjä sovelluksia. Tämä virhe ilmenee vain tapauksissa, joissa on erittäin paljon FCM:ään rekisteröityjä sovelluksia asennettuna, joten tätä ei pitäisi tapahtua normaalisti.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nTämä virhe ei ole %@in ratkaistavissa. Se voi johtua useasta eri syystä. Ehkä tämä toimii, jos yrität myöhemmin. Voit myös tarkistaa, että Google Play Services -palvelu ei ole rajoitettuna järjestelmäasetuksissa, ja että laitteesi kello on oikein. Tämä voi tapahtua myös mukautetun käyttöjärjestelmän kanssa.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nTämä virhe ei ole %@in ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.";
+"settings_troubleshoot_test_fcm_success" = "FCM-tunniste haettu onnistuneesti: \n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "FCM-tunnisteen haku epäonnistui: \n%1$@";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\n%@ ei voi vaikuttaa tähän virheeseen, ja Googlen mukaan tämä virhe tarkoittaa, että tällä laitteella on liikaa FCM:ään rekisteröityjä sovelluksia. Tämä virhe ilmenee vain tapauksissa, joissa on erittäin paljon FCM:ään rekisteröityjä sovelluksia asennettuna, joten tätä ei pitäisi tapahtua normaalisti.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nTämä virhe ei ole %@in ratkaistavissa. Se voi johtua useasta eri syystä. Ehkä tämä toimii, jos yrität myöhemmin. Voit myös tarkistaa, että Google Play Services -palvelu ei ole rajoitettuna järjestelmäasetuksissa, ja että laitteesi kello on oikein. Tämä voi tapahtua myös mukautetun käyttöjärjestelmän kanssa.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nTämä virhe ei ole %@in ratkaistavissa. Tässä puhelimessa ei ole Google-tiliä. Lisää laitteeseesi Google-tili tätä toimintoa varten.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Lisää tili";
 "settings_troubleshoot_test_token_registration_title" = "Tunnisteen rekisteröinti";
 "settings_troubleshoot_test_token_registration_success" = "FCM-tunniste rekisteröity onnistuneesti kotipalvelimelle.";
-"settings_troubleshoot_test_token_registration_failed" = "FCM-tunnisteen rekisteröinti kotipalvelimelle epäonnistui: 
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "FCM-tunnisteen rekisteröinti kotipalvelimelle epäonnistui: \n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Käynnistä laitteen käynnistyessä";
 "settings_troubleshoot_test_service_boot_success" = "Palvelu käynnistetään, kun laite käynnistetään uudelleen.";
 "settings_troubleshoot_test_service_boot_failed" = "Palvelua ei käynnistetä laitteen uudelleenkäynnistyksen yhteydessä. Et tule saamaan ilmoituksia ennen kuin %@ on käynnistetty uudelleen.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Ota käyttöön automaattinen käynnistys";
 "settings_troubleshoot_test_bg_restricted_title" = "Tarkista taustapalveluiden rajoitukset";
-"settings_troubleshoot_test_bg_restricted_success" = "Taustapalveluiden rajoitukset ovat pois käytöstä. Tämä testi tulee ajaa mobiilidatayhteydellä (ilman wlania).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Taustapalveluiden rajoitukset ovat käytössä.
-\nTyötä, jota %@ yrittää tehdä, rajoitetaan aggressiivisesti, kun se on taustalla, mikä saattaa vaikuttaa ilmoituksiin.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Taustapalveluiden rajoitukset ovat pois käytöstä. Tämä testi tulee ajaa mobiilidatayhteydellä (ilman wlania).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Taustapalveluiden rajoitukset ovat käytössä.\nTyötä, jota %@ yrittää tehdä, rajoitetaan aggressiivisesti, kun se on taustalla, mikä saattaa vaikuttaa ilmoituksiin.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Poista rajoitukset";
 "settings_troubleshoot_test_battery_title" = "Akunkäytön optimointi";
 "settings_troubleshoot_test_battery_success" = "Akunkäytön optimointi ei vaikuta %@in toimintaan.";
@@ -602,8 +574,7 @@
 "avatar" = "Hahmokuva";
 "dialog_user_consent_content" = "Jatkaaksesi kotipalvelimen %1$@ käyttöä, sinun täytyy hyväksyä palvelun käyttöehdot.";
 "dialog_user_consent_submit" = "Näytä ehdot";
-"deactivate_account_content.b_0" = "Tämä toiminto on peruuttamaton";
-"deactivate_account_content.b_1" = "ei oletuksena saa meitä unohtamaan lähettämiäsi viestejä";
+"deactivate_account_content" = "Tämä tekee tilistäsi lopullisesti käyttökelvottoman. Et voi kirjautua sisään eikä kukaan pysty rekisteröitymään samalla käyttäjätunnuksella. Tämä saa tilisi poistumaan kaikista huoneista, joissa se on osallisena, ja poistaa tilin tiedot identiteettipalvelimelta. <b>Tämä toiminto on peruuttamaton</b>.\n\nTilin poistaminen <b>ei oletuksena saa meitä unohtamaan lähettämiäsi viestejä</b>. Jos haluat meidän unohtavan viestisi, merkitse alapuolella oleva valintaruutu.\n\nViestien näkyvyys Matrixissa on samantapainen kuin sähköpostissa. Viestiesi unohtaminen tarkoittaa, että lähettämiäsi viestejä ei näytetä uusille tai rekisteröitymättömille käyttäjille. Ne rekisteröityneet käyttäjät, joilla viestisi jo on, pääsevät kuitenkin näkemään oman kopionsa niistä jatkossakin.";
 "deactivate_account_delete_checkbox" = "Unohda kaikki viestit, jotka olen lähettänyt, kun tilini on poistettu (Varoitus: tästä seuraa, että tulevat käyttäjät näkevät vanhat keskustelut epätäydellisinä)";
 "error_empty_field_enter_user_name" = "Syötä käyttäjätunnus.";
 "room_tombstone_versioned_description" = "Tämä huone on korvattu toisella eikä ole enää aktiivinen.";
@@ -611,9 +582,9 @@
 "room_tombstone_continuation_description" = "Tämä huone on jatkoa toiselle keskustelulle";
 "room_tombstone_predecessor_link" = "Paina tästä nähdäksesi vanhemmat viestit";
 "resource_limit_contact_admin" = "ota yhteys palvelun ylläpitäjään";
-"resource_limit_soft_default.b_0" = "osa käyttäjistä ei pysty kirjautumaan sisään";
+"resource_limit_soft_default" = "Tämä kotipalvelin on ylittänyt yhden resurssirajoistaan, joten <b>osa käyttäjistä ei pysty kirjautumaan sisään</b>.";
 "resource_limit_hard_default" = "Tämä kotipalvelin on ylittänyt yhden resurssirajoistaan.";
-"resource_limit_soft_mau.b_0" = "osa käyttäjistä ei pysty kirjautumaan sisään";
+"resource_limit_soft_mau" = "Tämä kotipalvelin on saavuttanut kuukausittaisten aktiivisten käyttäjien rajansa, joten <b>osa käyttäjistä ei pysty kirjautumaan sisään</b>.";
 "resource_limit_hard_mau" = "Tämä kotipalvelin on saavuttanut kuukausittaisten aktiivisten käyttäjien rajansa.";
 "resource_limit_soft_contact" = "Tee %@ saadaksesi tätä rajaa korotettua.";
 "resource_limit_hard_contact" = "Tee %@ jatkaaksesi palvelun käyttöä.";
@@ -629,24 +600,19 @@
 "passphrase_passphrase_too_weak" = "Salalause on liian heikko";
 "keys_backup_passphrase_not_empty_error_message" = "Poista salalause, jos haluat %@ generoivan palautusavaimen.";
 "keys_backup_setup_step1_title" = "Älä koskaan menetä salattuja viestejä";
-"keys_backup_setup_step1_description" = "Salatuissa huoneissa viestit ovat suojattuna osapuolten välisellä salauksella. Vain sinä ja vastaanottaja(t) omistavat avaimet näiden viestien lukemiseen.
-\n
-\nVarmuuskopioi avaimesi, jotta et menetä niitä.";
+"keys_backup_setup_step1_description" = "Salatuissa huoneissa viestit ovat suojattuna osapuolten välisellä salauksella. Vain sinä ja vastaanottaja(t) omistavat avaimet näiden viestien lukemiseen.\n\nVarmuuskopioi avaimesi, jotta et menetä niitä.";
 "keys_backup_setup" = "Aloita avainten varmuuskopioinnin käyttö";
 "keys_backup_setup_step1_advanced" = "(Edistynyt)";
 "keys_backup_setup_step1_manual_export" = "Tallenna avaimet käsin";
 "keys_backup_setup_step2_text_title" = "Turvaa varmuuskopiosi salalauseella.";
-"keys_backup_setup_step2_text_description" = "Tallennamme salatun kopion avaimistasi kotipalvelimellesi. Suojaa varmuuskopiosi salalauseella pitääksesi sen turvattuna. 
-\n 
-\nParhaan turvallisuuden takaamiseksi salalauseen tulisi olla eri kuin tilisi salasana.";
+"keys_backup_setup_step2_text_description" = "Tallennamme salatun kopion avaimistasi kotipalvelimellesi. Suojaa varmuuskopiosi salalauseella pitääksesi sen turvattuna. \n \nParhaan turvallisuuden takaamiseksi salalauseen tulisi olla eri kuin tilisi salasana.";
 "keys_backup_setup_step2_button_title" = "Aseta salalause";
 "keys_backup_setup_creating_backup" = "Luodaan varmuuskopiota";
 "keys_backup_setup_step1_recovery_key_alternative" = "Tai, turvaa varmuuskopio palautusavaimella, tallentamalla palautusavain johonkin turvalliseen paikkaan.";
 "keys_backup_setup_step2_skip_button_title" = "(Edistynyt) Aseta palautusavaimella";
 "keys_backup_setup_step3_success_title" = "Onnistui !";
 "keys_backup_setup_step3_text_line1" = "Avaimiasi varmuuskopioidaan.";
-"keys_backup_setup_step3_text_line2" = "Palautusavaimesi on turvaverkko: voit käyttää sitä palauttaaksesi pääsyn salattuihin viesteihisi, mikäli unohdat salalauseesi.
-\nPidä palautusavaimesi jossain erittäin turvallisessa paikassa, kuten salasanojen hallintasovelluksessa (tai kassakaapissa)";
+"keys_backup_setup_step3_text_line2" = "Palautusavaimesi on turvaverkko: voit käyttää sitä palauttaaksesi pääsyn salattuihin viesteihisi, mikäli unohdat salalauseesi.\nPidä palautusavaimesi jossain erittäin turvallisessa paikassa, kuten salasanojen hallintasovelluksessa (tai kassakaapissa)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Pidä palautusavaimesi jossain erittäin turvallisessa paikassa, kuten salasanojen hallintasovelluksessa (tai kassakaapissa)";
 "keys_backup_setup_step3_button_title" = "Valmis";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Olen tehnyt kopion";
@@ -722,10 +688,7 @@
 "notification_inline_reply_failed" = "** Lähetys epäonnistui — avaathan huoneen";
 "error_jitsi_not_supported_on_old_device" = "Valitettavasti konferenssipuhelut Jitsin kanssa eivät toimi vanhoissa laitteissa (laitteet, joissa on Android 6.0 tai vanhempi)";
 "encryption_information_unknown_ip" = "tuntematon IP-osoite";
-"you_added_a_new_device_with_info" = "Uusi istunto pyytää salausavaimia.
-\nIstunnon nimi: %1$@
-\nNähty viimeksi: %2$@
-\nJos et kirjautunut toisessa paikkaa, jätä tämä pyyntö huomiotta.";
+"you_added_a_new_device_with_info" = "Uusi istunto pyytää salausavaimia.\nIstunnon nimi: %1$@\nNähty viimeksi: %2$@\nJos et kirjautunut toisessa paikkaa, jätä tämä pyyntö huomiotta.";
 "share_without_verifying_short_label" = "Jaa";
 "sas_got_it" = "Selvä";
 "sas_error_unknown" = "Tuntematon virhe";
@@ -765,10 +728,7 @@
 "create_room_public_description" = "Kuka tahansa voi liittyä tähän huoneeseen";
 "keys_backup_unable_to_get_trust_info" = "Luottamustietoa haettaessa tapahtui virhe";
 "keys_backup_unable_to_get_keys_backup_data" = "Avainten varmuuskopioinnin tietoja haettaessa tapahtui virhe";
-"your_unverified_device_requesting_with_info" = "Tuntematon laite pyytää salausavaimia
-\nLaitteen nimi: %1$@
-\nViimeksi nähty: %2$@
-\nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.";
+"your_unverified_device_requesting_with_info" = "Tuntematon laite pyytää salausavaimia\nLaitteen nimi: %1$@\nViimeksi nähty: %2$@\nJos et kirjautunut toisella laitteella, voit jättää tämän pyynnön huomiotta.";
 "settings_sdk_version" = "Matrix SDK:n versio";
 "settings_other_third_party_notices" = "Muut kolmansien osapuolten huomautukset";
 "settings_preferences" = "Asetukset";
@@ -851,11 +811,9 @@
 "report_content_inappropriate" = "Se on sopimaton";
 "none" = "Ei mitään";
 "settings_background_fdroid_sync_mode_battery" = "Optimoitu akunkestoa varten";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.
-\nLaitteesi resurssien tilasta riippuen käyttöjärjestelmä saattaa lykätä synkronointia.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ synkronoi taustalla laitteen rajallisia resursseja (akkua) säästäen.\nLaitteesi resurssien tilasta riippuen käyttöjärjestelmä saattaa lykätä synkronointia.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimoitu reaaliaikaa varten";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ synkronoi taustalla täsmällisin aikavälein (säädettävä).
-\nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että %@ kuuntelee tapahtumia.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ synkronoi taustalla täsmällisin aikavälein (säädettävä).\nTämä vaikuttaa radion ja akun käyttöön. Näet pysyvän ilmoituksen, joka kertoo, että %@ kuuntelee tapahtumia.";
 "message_edits" = "Viestimuokkaukset";
 "terms_description_for_identity_server" = "Ole löydettävissä";
 "settings_text_message_sent" = "Tekstiviesti on lähetetty numeroon %@. Syötä sen sisältämä varmistuskoodi.";
@@ -863,8 +821,7 @@
 "a11y_create_direct_message" = "Luo uusi yksityiskeskustelu";
 "action_revoke" = "Kumoa";
 "settings_integrations" = "Integraatiot";
-"settings_integrations_summary" = "Käytä Integraatioiden hallintaa botteihin, siltoihin, sovelmiin ja tarroihin.
-\nIntegraatioiden hallinnat vastaanottavat määritystietoja ja voivat muokata sovelmia, lähettää huonekutsuja ja asettaa oikeustasoja puolestasi.";
+"settings_integrations_summary" = "Käytä Integraatioiden hallintaa botteihin, siltoihin, sovelmiin ja tarroihin.\nIntegraatioiden hallinnat vastaanottavat määritystietoja ja voivat muokata sovelmia, lähettää huonekutsuja ja asettaa oikeustasoja puolestasi.";
 "settings_discovery_category" = "Käyttäjien etsintä";
 "settings_discovery_manage" = "Muokkaa etsinnän asetuksia.";
 "settings_integration_allow" = "Salli integraatiot";
@@ -874,8 +831,7 @@
 "room_widget_permission_added_by" = "Sovelman lisäsi:";
 "room_widget_permission_webview_shared_info_title" = "Sovelman käyttö saattaa asettaa keksejä ja jakaa tietoa kohteen %@ kanssa:";
 "room_widget_permission_shared_info_title" = "Sovelman käyttö saattaa jakaa tietoa kohteen %@ kanssa:";
-"room_widget_failed_to_load" = "Sovelman lataus epäonnistui.
-\n%@";
+"room_widget_failed_to_load" = "Sovelman lataus epäonnistui.\n%@";
 "room_widget_reload" = "Lataa sovelma uudelleen";
 "room_widget_open_in_browser" = "Avaa selaimessa";
 "room_widget_revoke_access" = "Kumoa minun pääsy";
@@ -921,17 +877,11 @@
 "report_content_custom_submit" = "ILMIANNA";
 "block_user" = "JÄTÄ KÄYTTÄJÄ HUOMIOTTA";
 "content_reported_title" = "Sisältö ilmiannettu";
-"content_reported_content" = "Tämä sisältö on ilmiannettu. 
-\n 
-\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.";
+"content_reported_content" = "Tämä sisältö on ilmiannettu. \n \nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.";
 "content_reported_as_spam_title" = "Ilmiannettu roskapostina";
-"content_reported_as_spam_content" = "Tämä sisältö on ilmiannettu roskapostina. 
-\n 
-\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.";
+"content_reported_as_spam_content" = "Tämä sisältö on ilmiannettu roskapostina. \n \nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.";
 "content_reported_as_inappropriate_title" = "Ilmiannettu epäsopivana";
-"content_reported_as_inappropriate_content" = "Tämä sisältö on ilmiannettu epäsopivana. 
-\n 
-\nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.";
+"content_reported_as_inappropriate_content" = "Tämä sisältö on ilmiannettu epäsopivana. \n \nJos et halua nähdä enempää sisältöä tältä käyttäjältä, voit estää hänet piilottaaksesi hänen viestit.";
 "login_error_no_homeserver_found" = "Tämä ei ole kelvollinen Matrix-palvelimen osoite";
 "message_ignore_user" = "Jätä käyttäjä huomiotta";
 "room_list_quick_actions_notifications_all_noisy" = "Kaikki viestit (äänekäs)";
@@ -974,13 +924,9 @@
 "login_server_url_form_modular_text" = "Korkealuokkaista isännöintiä organisaatioille";
 "login_server_url_form_modular_notice" = "Syötä Modular Elementin tai haluamasi palvelimen osoite";
 "login_sso_error_message" = "Sivun lataamisessa tapahtui virhe: %1$@ (%2$d)";
-"login_mode_not_supported" = "Sovellus ei pysty kirjautumaan sisään tälle kotipalvelimelle. Tämä kotipalvelin tukee seuraavia kirjautumistyyppejä: %1$@.
-\n
-\nHaluatko kirjautua sisään web-klientillä\?";
+"login_mode_not_supported" = "Sovellus ei pysty kirjautumaan sisään tälle kotipalvelimelle. Tämä kotipalvelin tukee seuraavia kirjautumistyyppejä: %1$@.\n\nHaluatko kirjautua sisään web-klientillä\?";
 "login_registration_disabled" = "Valitettavasti tämä palvelin ei hyväksy uusia tunnuksia.";
-"login_registration_not_supported" = "Sovellus ei pysty luomaan uusia tunnuksia tälle kotipalvelimelle.
-\n
-\nHaluatko rekisteröityä web-klientillä\?";
+"login_registration_not_supported" = "Sovellus ei pysty luomaan uusia tunnuksia tälle kotipalvelimelle.\n\nHaluatko rekisteröityä web-klientillä\?";
 "login_login_with_email_error" = "Tämä sähköpostiosoite ei ole liitettynä mihinkään tunnukseen.";
 "login_reset_password_on" = "Palauta salasana palvelimella %1$@";
 "login_reset_password_notice" = "Sähköpostiisi lähetetään viesti uuden salananan asettamiseksi.";
@@ -1000,9 +946,7 @@
 "login_reset_password_success_notice_2" = "Olet kirjautunut ulos kaikilta laitteilta, etkä saa enää viesti-ilmoituksia. Ottaaksesi viesti-ilmoitukset uudelleen käyttöön, kirjaudu sisään jokaisella laitteellasi.";
 "login_reset_password_success_submit" = "Takaisin sisäänkirjautumiseen";
 "login_reset_password_cancel_confirmation_title" = "Varoitus";
-"login_reset_password_cancel_confirmation_content" = "Salasanaasi ei ole vielä vaihdettu.
-\n
-\nPeru salasananvaihtoprosessi\?";
+"login_reset_password_cancel_confirmation_content" = "Salasanaasi ei ole vielä vaihdettu.\n\nPeru salasananvaihtoprosessi\?";
 "login_set_email_title" = "Aseta sähköpostiosoite";
 "login_set_email_notice" = "Aseta sähköpostiosoite palauttaaksesi tunnuksesi. Myöhemmin, voit antaa muiden löytää sinut sähköpostillasi.";
 "login_set_email_mandatory_hint" = "Sähköposti";
@@ -1027,17 +971,14 @@
 "login_signup_submit" = "Seuraava";
 "login_signup_error_user_in_use" = "Käyttäjätunnus on varattu";
 "login_signup_cancel_confirmation_title" = "Varoitus";
-"login_signup_cancel_confirmation_content" = "Tunnustasi ei ole vielä luotu.
-\n
-\nPeru rekisteröintiprosessi\?";
+"login_signup_cancel_confirmation_content" = "Tunnustasi ei ole vielä luotu.\n\nPeru rekisteröintiprosessi\?";
 "login_a11y_choose_matrix_org" = "Valitse matrix.org";
 "login_a11y_choose_modular" = "Valitse Element Matrix Services";
 "login_a11y_choose_other" = "Valitse muu kotipalvelin";
 "login_a11y_captcha_container" = "Ratkaise seuraava kuvavarmennushaaste";
 "login_terms_title" = "Hyväksy ehdot jatkaaksesi";
 "login_wait_for_email_title" = "Tarkista sähköpostisi";
-"login_wait_for_email_notice" = "Lähetimme sähköpostin osoitteeseen %1$@.
-\nKlikkaa siinä olevaa linkkiä jatkaaksesi tunnuksen luontia.";
+"login_wait_for_email_notice" = "Lähetimme sähköpostin osoitteeseen %1$@.\nKlikkaa siinä olevaa linkkiä jatkaaksesi tunnuksen luontia.";
 "login_validation_code_is_not_correct" = "Syöttämäsi koodi ei ole kelvollinen. Tarkista se.";
 "login_error_outdated_homeserver_title" = "Vanhentunut kotipalvelin";
 "seen_by" = "Nähneet";
@@ -1049,25 +990,15 @@
 "soft_logout_signin_submit" = "Kirjaudu sisään";
 "soft_logout_signin_password_hint" = "Salasana";
 "soft_logout_clear_data_title" = "Poista henkilökohtaiset tiedot";
-"soft_logout_clear_data_notice" = "Varoitus: henkilökohtaiset tietosi (sisältää salausavaimesi) ovat vielä tallennettuna tälle laitteelle.
-\n
-\nPoista ne jos olet lopettanut tämän laitteen käytön, tai haluat kirjautua sisään toiselle tunnukselle.";
+"soft_logout_clear_data_notice" = "Varoitus: henkilökohtaiset tietosi (sisältää salausavaimesi) ovat vielä tallennettuna tälle laitteelle.\n\nPoista ne jos olet lopettanut tämän laitteen käytön, tai haluat kirjautua sisään toiselle tunnukselle.";
 "soft_logout_clear_data_submit" = "Poista kaikki tiedot";
 "soft_logout_clear_data_dialog_title" = "Poista tiedot";
-"soft_logout_clear_data_dialog_content" = "Poista kaikki tälle laitteelle tallennetut tiedot\?
-\nKirjaudu sisään päästäksesi käsiksi tunnuksesi tietoihin ja viesteihin.";
+"soft_logout_clear_data_dialog_content" = "Poista kaikki tälle laitteelle tallennetut tiedot\?\nKirjaudu sisään päästäksesi käsiksi tunnuksesi tietoihin ja viesteihin.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Menetät pääsyn salattuihin viesteihisi ellet kirjaudu sisään palauttaaksesi salausavaimesi.";
-"soft_logout_sso_not_same_user_error" = "Nykyinen istunto on käyttäjälle %1$@, ja yritit kirjautuas isään käyttäjälle %2$@. %@ ei tue tätä.
-\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää %@in selainversiota.";
+"soft_logout_sso_not_same_user_error" = "Nykyinen istunto on käyttäjälle %1$@, ja yritit kirjautuas isään käyttäjälle %2$@. %@ ei tue tätä.\nPoista ensin tietosi ja kirjaudu sen jälkeen toisella tunnuksella. Voit vaihtoehtoisesti käyttää %@in selainversiota.";
 "permalink_malformed" = "matrix.to-linkkisi oli epämuodostunut";
 "bug_report_error_too_short" = "Kuvaus on liian lyhyt";
-"signed_out_notice" = "Se voi johtua monesta eri syystä:
-\n
-\n• olet vaihtanut salasanasi toisella laitteella
-\n
-\n• olet poistanut tämän laitteen toisella laitteella
-\n
-\n• palvelimen ylläpitäjä on estänyt pääsysi turvallisuussyistä.";
+"signed_out_notice" = "Se voi johtua monesta eri syystä:\n\n• olet vaihtanut salasanasi toisella laitteella\n\n• olet poistanut tämän laitteen toisella laitteella\n\n• palvelimen ylläpitäjä on estänyt pääsysi turvallisuussyistä.";
 "soft_logout_signin_e2e_warning_notice" = "Kirjaudu sisään palauttaaksesi salausavaimesi, jotka ovat tallessa vain tällä laitteella. Tarvitset niitä lukeaksi kaikki salatut viestisi millä tahansa laitteella.";
 "settings_advanced_settings" = "Lisäasetukset";
 "settings" = "Asetukset";
@@ -1101,12 +1032,7 @@
 "verification_conclusion_not_secure" = "Ei turvallinen";
 "sent_a_video" = "Video.";
 "sent_an_image" = "Kuva.";
-"verification_conclusion_compromised" = "Johonkin näistä on mahdollisesti murtauduttu:
-\n
-\n - Kotipalvelimesi
-\n - Varmentamasi toisen käyttäjän kotipalvelin
-\n - Sinun tai toisen käyttäjän Internet-yhteys
-\n - Sinun tai toisen käyttäjän käyttämä laite";
+"verification_conclusion_compromised" = "Johonkin näistä on mahdollisesti murtauduttu:\n\n - Kotipalvelimesi\n - Varmentamasi toisen käyttäjän kotipalvelin\n - Sinun tai toisen käyttäjän Internet-yhteys\n - Sinun tai toisen käyttäjän käyttämä laite";
 "sent_an_audio_file" = "Äänitiedosto";
 "sent_a_file" = "Tiedosto";
 "verification_sent" = "Varmennus lähetetty";
@@ -1121,9 +1047,7 @@
 "verification_verified_user" = "Varmennettu %@";
 "verification_request_waiting_for" = "Odotetaan käyttäjää %@…";
 "room_profile_not_encrypted_subtitle" = "Huoneessa olevat viesti eivät ole salattu osapuolten välisellä salauksella.";
-"room_profile_encrypted_subtitle" = "Huoneen viestit ovat salattu osapuolten välisellä salauksella.
-\n
-\nViestisi salataan niin, että vain sinä ja vastaanottaja pystytte avaamaan ne henkilökohtaisilla salausavaimillanne.";
+"room_profile_encrypted_subtitle" = "Huoneen viestit ovat salattu osapuolten välisellä salauksella.\n\nViestisi salataan niin, että vain sinä ja vastaanottaja pystytte avaamaan ne henkilökohtaisilla salausavaimillanne.";
 "room_profile_section_security" = "Tietoturva";
 "room_profile_section_more" = "Lisää";
 "room_profile_section_more_settings" = "Huoneen asetukset";
@@ -1207,9 +1131,7 @@
 "bootstrap_crosssigning_progress_save_usk" = "Synkronoidaan käyttäjän avain";
 "bootstrap_crosssigning_progress_save_ssk" = "Synkronoidaan allekirjoitusavain";
 "bootstrap_crosssigning_progress_key_backup" = "Alustetaan avainten varmuuskopiointi";
-"bootstrap_cross_signing_success" = "%2$@ ja %1$@ asetettu.
-\n
-\nPidä ne tallessa. Tarvitset ne salattujen viestiesi ja tietojesi avaamiseen, jos suljet kaikki istuntosi.";
+"bootstrap_cross_signing_success" = "%2$@ ja %1$@ asetettu.\n\nPidä ne tallessa. Tarvitset ne salattujen viestiesi ja tietojesi avaamiseen, jos suljet kaikki istuntosi.";
 "bootstrap_crosssigning_print_it" = "Tulosta se jos mahdollista ja säilytä tuloste turvallisessa paikassa";
 "bootstrap_crosssigning_save_usb" = "Tallenna se muistitikulle tai varmuuskopiolevylle talteen";
 "bootstrap_crosssigning_save_cloud" = "Kopioi se henkilökohtaiseen pilvitallennustilaasi";
@@ -1227,9 +1149,7 @@
 "action_reset" = "Nollaa";
 "action_dismiss" = "Jätä huomiotta";
 "action_play" = "Toista";
-"room_participants_action_ignore_prompt_msg" = "Käyttäjän huomiotta jättäminen piilottaa kyseisen käyttäjän viestit sinulta.
-\n
-\nVoit perua tämän milloin tahansa yleisissä asetuksissa.";
+"room_participants_action_ignore_prompt_msg" = "Käyttäjän huomiotta jättäminen piilottaa kyseisen käyttäjän viestit sinulta.\n\nVoit perua tämän milloin tahansa yleisissä asetuksissa.";
 "room_participants_action_ignore_title" = "Jätä käyttäjä huomiotta";
 "room_participants_power_level_demote" = "Alenna";
 "room_participants_power_level_demote_warning_prompt" = "Et voi perua tätä muutosta, koska olet alentamassa itseäsi. Jos olet viimeinen oikeutettu henkilö tässä huoneessa, oikeuksia ei voi enää saada takaisin.";
@@ -1263,8 +1183,7 @@
 "room_participants_action_cancel_invite_title" = "Peruuta kutsu";
 "call_format_turn_hd_on" = "Korkea laatu päälle";
 "call_format_turn_hd_off" = "Korkea laatu pois";
-"call_failed_no_connection_description" = "Reaaliaikaisen yhteyden muodostus epäonnistui.
-\nPyydäthän kotipalvelimesi ylläpitäjää asentamaan TURN-palvelimen varmistaaksesi puhelujen luotettavan toiminnan.";
+"call_failed_no_connection_description" = "Reaaliaikaisen yhteyden muodostus epäonnistui.\nPyydäthän kotipalvelimesi ylläpitäjää asentamaan TURN-palvelimen varmistaaksesi puhelujen luotettavan toiminnan.";
 "call_notification_answer" = "Vastaa";
 "start_chatting" = "Aloita keskustelu";
 "room_list_quick_actions_favorite_remove" = "Poista suosikeista";
@@ -1321,9 +1240,7 @@
 "settings_chat_effects_title" = "Näytä keskustelujen tehosteet";
 "settings_show_redacted" = "Näytä poistetut viestit";
 "room_participants_unban_prompt_msg" = "Jos poistat käyttäjän porttikiellon, hän voi liittyä huoneeseen uudelleen.";
-"room_participants_remove_prompt_msg" = "Tämä poistaa käyttäjän huoneesta, mutta hän voi liittyä uudelleen.
-\n
-\nJos haluat estää häntä uudelleen liittymästä, anna hänelle porttikielto.";
+"room_participants_remove_prompt_msg" = "Tämä poistaa käyttäjän huoneesta, mutta hän voi liittyä uudelleen.\n\nJos haluat estää häntä uudelleen liittymästä, anna hänelle porttikielto.";
 "room_participants_ban_reason" = "Syy porttikielolle";
 "room_participants_remove_reason" = "Syy poistolle";
 "room_participants_remove_title" = "Poista käyttäjä";
@@ -1404,10 +1321,8 @@
 "notice_room_aliases_added_and_removed_by_you" = "Lisäsit %1$@ ja poistit %2$@ huoneen osoitteista.";
 "notice_room_withdraw_with_reason_by_you" = "Peruit %1$@:n kutsun. Syynä: %2$@";
 "event_status_sent_message" = "Viesti lähetetty";
-"initial_sync_start_downloading" = "Ensimmäinen synkronointi:
-\nLadataan tietoja…";
-"initial_sync_start_server_computing" = "Ensimmäinen synkronointi:
-\nOdotetaan palvelimen vastausta…";
+"initial_sync_start_downloading" = "Ensimmäinen synkronointi:\nLadataan tietoja…";
+"initial_sync_start_server_computing" = "Ensimmäinen synkronointi:\nOdotetaan palvelimen vastausta…";
 "notice_power_level_diff" = "%1$@ %2$@:sta %3$@:n";
 "notice_power_level_changed" = "%1$@ muutti käyttäjän %2$@ oikeustasoa.";
 "notice_power_level_changed_by_you" = "Muutit käyttäjän %1$@ oikeustasoa.";
@@ -1438,13 +1353,11 @@
 "it_may_take_some_time" = "Odota hetki, tämä saattaa kestää jonkin aikaa.";
 "unnamed_room" = "Nimetön huone";
 "this_space_has_no_rooms_admin" = "Jotkin huoneet saattavat olla piilotettuja, koska ne ovat yksityisiä. Liittyäksesi tarvitset kutsun.";
-"this_space_has_no_rooms_not_admin" = "Jotkin huoneet saattavat olla piilotettuja, koska ne ovat yksityisiä. Liittyäksesi tarvitset kutsun.
-\nSinulla ei ole oikeutta lisätä huoneita.";
+"this_space_has_no_rooms_not_admin" = "Jotkin huoneet saattavat olla piilotettuja, koska ne ovat yksityisiä. Liittyäksesi tarvitset kutsun.\nSinulla ei ole oikeutta lisätä huoneita.";
 "this_space_has_no_rooms" = "Tässä avaruudessa ei ole huoneita";
 "spaces_no_server_support_description" = "Ole yhteydessä kotipalvelimesi ylläpitäjään saadaksesi lisätietoja";
 "spaces_no_server_support_title" = "Vaikuttaa siltä, ettei kotipalvelimesi tue vielä avaruuksia";
-"spaces_feeling_experimental_subspace" = "Onko olosi kokeellinen\?
-\nVoit lisätä olemassa olevia avaruuksia avaruuteen.";
+"spaces_feeling_experimental_subspace" = "Onko olosi kokeellinen\?\nVoit lisätä olemassa olevia avaruuksia avaruuteen.";
 "space_manage_rooms_and_spaces" = "Hallitse huoneita ja avaruuksia";
 "space_suggested" = "Ehdotettu";
 "space_settings_manage_rooms" = "Hallitse huoneita";
@@ -1457,7 +1370,7 @@
 "space_leave_prompt_msg_private" = "Et voi liittyä uudelleen, ellei sinua kutsuta uudelleen.";
 "space_leave_prompt_msg_only_you" = "Olet ainoa henkilö täällä. Jos poistut, kukaan ei voi liittyä tänne tulevaisuudessa, et edes sinä.";
 "space_leave_prompt_msg_with_name" = "Haluatko varmasti poistua avaruudesta %@\?";
-"leave_space" = "Poistu avaruudesta";
+"leave_space" = "Poistu";
 "space_add_child_title" = "Lisää huoneita";
 "space_explore_activity_title" = "Selaa huoneita";
 "join_anyway" = "Liity silti";
@@ -1598,9 +1511,7 @@
 "choose_locale_loading_locales" = "Ladataan käytettävissä olevia kieliä…";
 "user_code_my_code" = "Oma koodi";
 "invite_users_to_room_failure" = "Käyttäjiä ei voitu kutsua. Tarkista käyttäjät, jotka haluat kutsua, ja yritä uudelleen.";
-"external_link_confirmation_message" = "Linkki %1$@ vie sinut toiselle sivustolle: %2$@.
-\n
-\nHaluatko varmasti jatkaa\?";
+"external_link_confirmation_message" = "Linkki %1$@ vie sinut toiselle sivustolle: %2$@.\n\nHaluatko varmasti jatkaa\?";
 "error_empty_field_choose_password" = "Valitse salasana.";
 "error_empty_field_choose_user_name" = "Valitse käyttäjänimi.";
 "cross_signing_verify_by_emoji" = "Vahvista vuorovaikutteisesti emojilla";
@@ -1640,9 +1551,7 @@
 "settings_server_version" = "Palvelimen versio";
 "settings_server_name" = "Palvelimen nimi";
 "room_settings_enable_encryption_no_permission" = "Sinulla ei ole oikeutta ottaa salausta käyttöön tässä huoneessa.";
-"direct_room_profile_encrypted_subtitle" = "Viestit täällä ovat päästä päähän -salattuja.
-\n
-\nViestisi turvataan lukolla ja vain sinä sekä vastaanottaja omaatte avaimet, joilla salauksen voi purkaa.";
+"direct_room_profile_encrypted_subtitle" = "Viestit täällä ovat päästä päähän -salattuja.\n\nViestisi turvataan lukolla ja vain sinä sekä vastaanottaja omaatte avaimet, joilla salauksen voi purkaa.";
 "direct_room_profile_not_encrypted_subtitle" = "Viestit täällä eivät ole päästä päähän -salattuja.";
 "verification_scan_with_this_device" = "Skannaa tällä laitteella";
 "sent_a_voice_message" = "Ääni";
@@ -1839,8 +1748,7 @@
 "loading_contact_book" = "Noudetaan yhteystietojasi…";
 "command_snow" = "Lähettää viestin lumisateen kera";
 "command_confetti" = "Lähettää viestin konfetin kera";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
+"app_ios_android" = "%@ iOS\n%@ Android";
 "command_description_plain" = "Lähettää viestin pelkkänä tekstinä, tulkitsematta sitä markdowniksi";
 "contact_admin_to_restore_encryption" = "Ota yhteyttä ylläpitäjään salauksen palauttamiseksi kelvolliseen tilaan.";
 "verification_scan_self_notice" = "Lue koodi toisella laitteellasi tai vaihda ja lue tällä laitteella";
@@ -1852,11 +1760,8 @@
 "preference_versions" = "Versiot";
 "preference_help_title" = "Ohje ja tuki";
 "preference_help" = "Ohje";
-"create_room_federation_error" = "Huone on luotu, mutta joitakin kutsuja ei ole lähetetty seuraavasta syystä:
-\n
-\n%@";
-"room_preview_not_found" = "Tähän huoneeseen ei pääse tällä hetkellä.
-\nYritä myöhemmin uudelleen tai kysy huoneen ylläpitäjältä onko sinulla pääsyä.";
+"create_room_federation_error" = "Huone on luotu, mutta joitakin kutsuja ei ole lähetetty seuraavasta syystä:\n\n%@";
+"room_preview_not_found" = "Tähän huoneeseen ei pääse tällä hetkellä.\nYritä myöhemmin uudelleen tai kysy huoneen ylläpitäjältä onko sinulla pääsyä.";
 "view_in_room" = "Näytä huoneessa";
 "room_settings_room_access_entry_unknown" = "Tuntematon pääsyasetus (%@)";
 "room_alias_local_address_subtitle" = "Aseta osoitteita tälle huoneelle, jotta käyttäjät voivat löytää tämän huoneen kotipalvelimesi (%1$@) kautta";
@@ -1864,8 +1769,8 @@
 "room_alias_published_alias_subtitle" = "Kuka hyvänsä millä hyvänsä palvelimella voi käyttää julkaistua osoitetta huoneeseesi liittymiseen. Osoitteen julkaisemiseksi se täytyy ensin asettaa paikalliseksi osoitteeksi.";
 "legals_third_party_notices" = "Kolmansien osapuolten kirjastot";
 "analytics_opt_in_list_item_3" = "Voit poistaa tämän käytöstä koska tahansa asetuksista";
-"analytics_opt_in_list_item_2.b_0" = "Emme";
-"analytics_opt_in_list_item_1.b_0" = "Emme";
+"analytics_opt_in_list_item_2" = "<b>Emme</b> jaa tietoa kolmansien tahojen kanssa";
+"analytics_opt_in_list_item_1" = "<b>Emme</b> tallenna tai profiloi mitään tilin tietoja";
 "shortcut_disabled_reason_room_left" = "Huoneesta on poistuttu!";
 "room_permissions_notice_read_only" = "Sinulla ei ole lupaa päivittää rooleja, jotka vaaditaan huoneen eri osien muuttamiseen";
 "room_permissions_notice" = "Valitse roolit, jotka vaaditaan huoneen eri osien muuttamiseen";
@@ -1876,89 +1781,47 @@
 "action_thread_view_in_room" = "Näytä huoneessa";
 "action_enable" = "Ota käyttöön";
 "room_error_access_unauthorized" = "Sinulla ei ole lupaa liittyä tähän huoneeseen";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ lisäsi tälle huoneelle osoitteen %2$@.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ lisäsi tälle huoneelle osoitteet %2$@.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ poisti tältä huoneelta osoitteen %2$@.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ poisti tältä huoneelta osoitteet %2$@.";
-"plurals.membership_changes.item_0" = "yksi jäsenyysmuutos";
-"plurals.membership_changes.item_1" = "%d jäsenyysmuutosta";
-"plurals.room_title_members.item_0" = "yksi jäsen";
-"plurals.room_title_members.item_1" = "%d jäsentä";
-"plurals.room_new_messages_notification.item_0" = "yksi uusi viesti";
-"plurals.room_new_messages_notification.item_1" = "%d uutta viestiä";
-"plurals.room_details_selected.item_0" = "yksi valittu";
-"plurals.room_details_selected.item_1" = "%d valittu";
-"plurals.notification_unread_notified_messages.item_0" = "yksi lukematon ilmoitettu viesti";
-"plurals.notification_unread_notified_messages.item_1" = "%d lukematonta ilmoitettua viestiä";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "yksi huone";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d huonetta";
-"plurals.active_widgets.item_0" = "yksi aktiivinen sovelma";
-"plurals.active_widgets.item_1" = "%d aktiivista sovelmaa";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Varmuuskopio palautettiin yhdellä avaimella.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Varmuuskopio palautettiin %d avaimella.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "Yksi uusi avain lisätty tähän istuntoon.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d uutta avainta lisätty tähän listuntoon.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Varmuuskopioidaan yhtä avainta…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Varmuuskopioidaan %d avainta…";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: yksi viesti";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d viestiä";
-"plurals.notification_compat_summary_title.item_0" = "yksi ilmoitus";
-"plurals.notification_compat_summary_title.item_1" = "%d ilmoitusta";
-"plurals.fallback_users_read.item_0" = "1 käyttäjä on lukenut";
-"plurals.fallback_users_read.item_1" = "%d käyttäjää on lukenut";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen 1 sekunnissa…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Liian monta pyyntöä lähetettiin. Voit yrittää uudelleen %1$d sekunnissa…";
-"plurals.room_profile_section_more_member_list.item_0" = "Yksi henkilö";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d ihmistä";
-"plurals.settings_active_sessions_count.item_0" = "%d käynnissä oleva istunto";
-"plurals.settings_active_sessions_count.item_1" = "%d käynnissä olevaa istuntoa";
-"plurals.send_images_with_original_size.item_0" = "Lähetä kuva alkuperäisessä koossa";
-"plurals.send_images_with_original_size.item_1" = "Lähetä kuvat alkuperäisessä koossa";
-"plurals.notification_invitations.item_0" = "%d kutsu";
-"plurals.notification_invitations.item_1" = "%d kutsua";
-"plurals.room_settings_banned_users_count.item_0" = "%d estetty käyttäjä";
-"plurals.room_settings_banned_users_count.item_1" = "%d estettyä käyttäjää";
-"plurals.seconds.item_0" = "%d sekunti";
-"plurals.seconds.item_1" = "%d sekuntia";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Poistit %1$@ huoneen osoitteista.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Poistitt %1$@ huoneen osoitteista.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Lisäsit %1$@ osoitteeksi tähän huoneeseen.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Lisäsit %1$@ osoitteiksi tähän huoneeseen.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ ja %4$d muu";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ ja %4$d muuta";
-"plurals.space_people_you_know.item_0" = "%d tuntemasi henkilö on jo liittynyt";
-"plurals.space_people_you_know.item_1" = "%d tuntemaasi henkilöä on jo liittynyt";
-"plurals.call_active_status.item_0" = "Aktiivinen puhelu ·";
-"plurals.call_active_status.item_1" = "%1$d aktiivista puhelua ·";
-"plurals.entries.item_0" = "%d tietue";
-"plurals.entries.item_1" = "%d tietuetta";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Väärä koodi, %d yritys jäljellä";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Väärä koodi, %d yritystä jäljellä";
-"plurals.send_videos_with_original_size.item_0" = "Lähetä video alkuperäisessä koossa";
-"plurals.send_videos_with_original_size.item_1" = "Lähetä videot alkuperäisessä koossa";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d avain tuotu onnistuneesti.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d avainta tuotu onnistuneesti.";
-"plurals.missed_video_call.item_0" = "Vastaamatta jäänyt videopuhelu";
-"plurals.missed_video_call.item_1" = "%d vastaamatta jäänyttä videopuhelua";
-"plurals.missed_audio_call.item_0" = "Vastaamatta jäänyt puhelu";
-"plurals.missed_audio_call.item_1" = "%d vastaamatta jäänyttä puhelua";
-"plurals.create_poll_not_enough_options_error.item_0" = "Vähintään yksi vaihtoehto vaaditaan";
-"plurals.create_poll_not_enough_options_error.item_1" = "Vähintään %1$@ vaihtoehtoa vaaditaan";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Lopullinen tulos yhden äänen perusteella";
-"plurals.poll_total_vote_count_after_ended.item_1" = "Lopullinen tulos %1$d äänen perusteella";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "Yksi ääni annettu. Äänestä nähdäksesi tulokset";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d ääntä annettu. Äänestä nähdäksesi tulokset";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Perustuen yhteen ääneen";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "Perustuen %1$d ääneen";
-"plurals.poll_option_vote_count.item_0" = "yksi ääni";
-"plurals.poll_option_vote_count.item_1" = "%1$d ääntä";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ ja yksi muu lukivat";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ ja %3$d muuta lukivat";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Poistit tältä huoneelta vaihtoehtoisen osoitteen %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Poistit tältä huoneelta vaihtoehtoiset osoitteet %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ poisti tältä huoneelta vaihtoehtoisen osoitteen %2$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ poisti tältä huoneelta vaihtoehtoiset osoitteet %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Lisäsit tälle huoneelle vaihtoehtoisen osoitteen %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Lisäsit tälle huoneelle vaihtoehtoiset osoitteet %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ lisäsi tälle huoneelle vaihtoehtoisen osoitteen %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ lisäsi tälle huoneelle vaihtoehtoiset osoitteet %2$@.";
+"room_message_autocomplete_users" = "Käyttäjät";
+"tooltip_attachment_file" = "Lähetä tiedosto";
+"location_share_live_stop" = "Pysäytä";
+"a11y_location_share_option_pinned_icon" = "Jaa tämä sijainti";
+"location_share_option_pinned" = "Jaa tämä sijainti";
+"a11y_location_share_option_user_current_icon" = "Jaa nykyinen sijaintini";
+"location_share_option_user_current" = "Jaa nykyinen sijaintini";
+"restart_the_application_to_apply_changes" = "Käynnistä sovellus uudelleen, jotta muutos tulee voimaan.";
+"space_add_existing_rooms" = "Lisää olemassa olevia huoneita ja avaruuksia";
+"dont_leave_any" = "Älä poistu mistään huoneesta ja avaruudesta";
+"leave_all_rooms_and_spaces" = "Poistu kaikista huoneista ja avaruuksista";
+"use_latest_app" = "Käytä %@in uusinta versiota muilla laitteillasi:";
+"ftue_personalize_skip_this_step" = "Ohita tämä vaihe";
+"ftue_personalize_submit" = "Tallenna ja jatka";
+"ftue_personalize_complete_subtitle" = "Asetukset on tallennettu.";
+"ftue_personalize_complete_title" = "Kaikki valmista!";
+"ftue_personalize_lets_go" = "Menoksi";
+"ftue_profile_picture_subtitle" = "Voit vaihtaa tämän milloin tahansa.";
+"ftue_profile_picture_title" = "Lisää profiilikuva";
+"ftue_display_name_entry_footer" = "Voit vaihtaa tämän myöhemmin";
+"ftue_display_name_entry_title" = "Näyttönimi";
+"ftue_display_name_subtitle" = "Tämä näytetään, kun lähetät viestejä.";
+"ftue_display_name_title" = "Valitse näyttönimi";
+"ftue_account_created_subtitle" = "Tilisi %@ on luotu.";
+"ftue_account_created_congratulations_title" = "Onnittelut!";
+"ftue_account_created_personalize" = "Personoi profiili";
+"ftue_auth_use_case_skip_partial" = "ohittaa tämän kysymyksen";
+"ftue_auth_use_case_skip" = "Ei varmuutta vielä\? Voit %@";
+"settings_discovery_no_policy_provided" = "Identiteettipalvelin ei tarjoa käytäntöä";
+"settings_discovery_hide_identity_server_policy_title" = "Piilota identiteettipalvelimen käytäntö";
+"settings_discovery_show_identity_server_policy_title" = "Näytä identiteettipalvelimen käytäntö";
+"error_jitsi_join_conf" = "Valitettavasti konfrenssiin liityttäessä ilmeni virhe";
+"legals_no_policy_provided" = "Tämä palvelin ei tarjoa mitään käytäntöä.";
+"legals_identity_server_title" = "Identiteettipalvelimesi käytäntö";
+"legals_home_server_title" = "Kotipalvelimesi käytäntö";
+"legals_application_title" = "%@-käytäntö";
+"action_thread_copy_link_to_thread" = "Kopioi linkki ketjuun";
+"action_disable" = "Poista käytöstä";
+"preference_system_settings" = "Järjestelmän asetukset";
+"preference_help_summary" = "Apua %@in käyttöön";
+"preference_root_legals" = "Lainopilliset asiat";
+"analytics_opt_in_content_link" = "tästä";
+"analytics_opt_in_content" = "Auta meitä tunnistamaan mahdollisia ongelmia ja parantamaan %@iä jakamalla anonyymia käyttödataa. Ymmärtääksemme miten ihmiset käyttävät useita laitteita, luomme satunnaisen tunnisteen, joka jaetaan kaikkien laitteidesi kesken.\n\nLue käyttöehdot %@.";
+"analytics_opt_in_title" = "Auta parantamaan %@iä";

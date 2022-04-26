@@ -38,23 +38,14 @@
 "notice_room_topic_removed" = "%1$@ hoqi temën e dhomës";
 "notice_room_third_party_invite" = "%1$@ dërgoi një ftesë për %2$@ që të marrë pjesë në dhomë";
 "notice_room_update" = "%@ e përmirësoi këtë dhomë.";
-"initial_sync_start_importing_account" = "Njëkohësimi fillestar:
-\nPo importohet llogaria…";
-"initial_sync_start_importing_account_crypto" = "Njëkohësimi fillestar:
-\nPo importohet kriptografi";
-"initial_sync_start_importing_account_rooms" = "Njëkohësimi fillestar:
-\nPo importohen Dhoma";
-"initial_sync_start_importing_account_joined_rooms" = "Njëkohësimi Fillestar:
-\nPo ngarkohen bisedat tuaja
-\nNëse keni hyrë në shumë dhoma, kjo mund të zgjasë ca";
-"initial_sync_start_importing_account_invited_rooms" = "Njëkohësimi fillestar:
-\nPo importohen dhoma me ftesë";
-"initial_sync_start_importing_account_left_rooms" = "Njëkohësimi fillestar:
-\nPo importohen dhoma të braktisura";
-"initial_sync_start_importing_account_groups" = "Njëkohësimi fillestar:
-\nPo importohen bashkësi";
-"initial_sync_start_importing_account_data" = "Njëkohësimi fillestar:
-\nPo importohet të dhëna llogarie";
+"initial_sync_start_importing_account" = "Njëkohësimi fillestar:\nPo importohet llogaria…";
+"initial_sync_start_importing_account_crypto" = "Njëkohësimi fillestar:\nPo importohet kriptografi";
+"initial_sync_start_importing_account_rooms" = "Njëkohësimi fillestar:\nPo importohen Dhoma";
+"initial_sync_start_importing_account_joined_rooms" = "Njëkohësimi Fillestar:\nPo ngarkohen bisedat tuaja\nNëse keni hyrë në shumë dhoma, kjo mund të zgjasë ca";
+"initial_sync_start_importing_account_invited_rooms" = "Njëkohësimi fillestar:\nPo importohen dhoma me ftesë";
+"initial_sync_start_importing_account_left_rooms" = "Njëkohësimi fillestar:\nPo importohen dhoma të braktisura";
+"initial_sync_start_importing_account_groups" = "Njëkohësimi fillestar:\nPo importohen bashkësi";
+"initial_sync_start_importing_account_data" = "Njëkohësimi fillestar:\nPo importohet të dhëna llogarie";
 "event_status_sending_message" = "Po dërgohet mesazh…";
 "notice_room_third_party_revoked_invite" = "%1$@ shfuqizoi ftesën për %2$@ për pjesëmarrje te dhoma";
 "notice_room_invite_no_invitee_with_reason" = "Ftesë e %1$@. Arsye: %2$@";
@@ -497,21 +488,16 @@
 "resource_limit_hard_contact" = "Ju lutemi, %@ që të vazhdoni përdorimin e këtij shërbimi.";
 "or" = "ose";
 "send_bug_report_description_in_english" = "Në qoftë e mundur, ju lutemi, përshkrimin shkruajeni në anglisht.";
-"no_sticker_application_dialog_content" = "Hëpërhë, s’keni të aktivizuar ndonjë pako ngjitësash.
-\n
-\nTë shtohen ca tani\?";
+"no_sticker_application_dialog_content" = "Hëpërhë, s’keni të aktivizuar ndonjë pako ngjitësash.\n\nTë shtohen ca tani\?";
 "error_no_external_application_found" = "Na ndjeni, s’u gjet aplikacion i jashtëm për të plotësuar këtë veprim.";
 "login_error_limit_exceeded" = "Janë dërguar shumë kërkesa";
 "e2e_re_request_encryption_key" = "Rikërkoni kyçe fshehtëzimi prej sesionesh tuaj të tjerë.";
 "call_connecting" = "Po bëhet lidhja e thirrjes…";
 "call_error_user_not_responding" = "Ana e largët dështoi të përgjigjet.";
 "permissions_rationale_msg_record_audio" = "Për të kryer thirrje audio, %@-i lyp leje të përdorë mikrofonin tuaj.";
-"permissions_rationale_msg_camera_and_audio" = "Për të kryer thirrje video, %@-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.
-\n
-\nJu lutemi, lejoni përdorimin, që nga flluskat pasuese, që të jetë në gjendje të bëjë thirrjen.";
+"permissions_rationale_msg_camera_and_audio" = "Për të kryer thirrje video, %@-i lyp leje të përdorë kamerën dhe mikrofonin tuaj.\n\nJu lutemi, lejoni përdorimin, që nga flluskat pasuese, që të jetë në gjendje të bëjë thirrjen.";
 "no" = "JO";
-"room_participants_power_level_prompt" = "S’do të jeni në gjendje ta zhbëni këtë ndryshim, ngaqë po e promovoni përdoruesin të ketë të njëjtën shkallë pushteti si ju vetë.
-\nJeni i sigurt\?";
+"room_participants_power_level_prompt" = "S’do të jeni në gjendje ta zhbëni këtë ndryshim, ngaqë po e promovoni përdoruesin të ketë të njëjtën shkallë pushteti si ju vetë.\nJeni i sigurt\?";
 "account_email_validation_message" = "Ju lutemi, kontrolloni email-in tuaj dhe klikoni mbi lidhjen që përmban. Pasi të jetë bërë kjo, klikoni që të vazhdohet.";
 "room_settings_labs_warning_message" = "Këto janë veçori eksperimentale që mund të ngecin në rrugë të papritura. Përdorini me kujdes.";
 "encryption_export_notice" = "Ju lutemi, krijoni një frazëkalim për fshehtëzimin e kyçeve të eksportuar. Që të jeni në gjendje t’i importoni kyçet, do t’ju duhet të jepni të njëjtin frazëkalim.";
@@ -522,11 +508,10 @@
 "command_problem_with_parameters" = "Urdhri \"%@\" lyp më tepër parametra, ose disa parametra janë të pasaktë.";
 "command_description_invite_user" = "Fton te dhoma e tanishme përdoruesin me ID-në e dhënë";
 "command_description_clear_scalar_token" = "Për ndreqje administrimi Aplikacionesh Matrix";
-"deactivate_account_content.b_0" = "Ky veprim është i paprapakthyeshëm";
-"deactivate_account_content.b_1" = "nuk shkakton, si parazgjedhje, harrimin nga ne të mesazheve që keni dërguar";
+"deactivate_account_content" = "Kjo do ta bëjë llogarinë tuaj përgjithmonë të papërdorshme. S’do të jeni në gjendje të hyni në llogarinë tuaj, dhe askush s’do të jetë në gjendje të riregjistrojë të njëjtën ID përdoruesi. Kjo do të shkaktojë daljen e llogarisë tuaj nga krejt dhomat ku merr pjesë, dhe do të heqë hollësitë e llogarisë tuaj nga shërbyesi juaj i identiteteve. <b>Ky veprim është i paprapakthyeshëm</b>.\n\nÇaktivizimi i llogarisë tuaj <b>nuk shkakton, si parazgjedhje, harrimin nga ne të mesazheve që keni dërguar</b>. Nëse do të donit të harrojmë mesazhet tuaja, ju lutemi, i vini shenjë kutizës më poshtë.\n\nDukshmëria e mesazheve në Matrix është e ngjashme me atë në email. Harrimi i mesazheve nga ana jonë do të thotë që mesazhet që keni dërguar nuk do të ndahen me çfarëdo përdoruesi të ri apo të paregjistruar, por përdoruesit e regjistruar, që kanë tashmë hyrje në këto mesazhe, do të kenë prapëseprapë hyrje te kopja e tyre.";
 "deactivate_account_delete_checkbox" = "Të lutem, harro krejt mesazhet që kam dërguar, kur të çaktivizohet llogaria ime (Kujdes: kjo do të bëjë që përdorues të ardhshëm të shohin një pamje jo të plotë të bisedave)";
-"resource_limit_soft_default.b_0" = "disa përdorues s’do të jenë në gjendje të bëjnë hyrjen";
-"resource_limit_soft_mau.b_0" = "disa përdorues s’do të jenë në gjendje të bëjnë hyrjen";
+"resource_limit_soft_default" = "Ky shërbyes home ka tejkaluar një nga kufijtë mbi burimet, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.";
+"resource_limit_soft_mau" = "Ky shërbyes home ka tejkaluar kufirin Përdorues Aktivë Mujorë, ndaj <b>disa përdorues s’do të jenë në gjendje të bëjnë hyrjen</b>.";
 "send_bug_report_logs_description" = "Që të mund të diagnostikohen probleme, regjistra prej këtij klienti do të dërgohen tok me këtë njoftim të metash. Ky njoftim të metash, përfshi regjistrat dhe foton e ekranit, nuk do të jenë të dukshëm publikisht. Nëse do të parapëlqenit të dërgohej vetëm teksti më sipër, ju lutemi, hiqjani shenjën kutizës:";
 "ssl_cert_not_trust" = "Kjo mund të ishte shenjë se dikush po përgjon me dashakeqësi trafikun tuaj, ose se telefoni juaj nuk i beson dëshmisë së furnizuar nga shërbyesi i largët.";
 "ssl_cert_new_account_expl" = "Nëse përgjegjësi i shërbyesit ka thënë se kjo është e pritshme, sigurohuni që shenjat e gishtave më poshtë përputhen me shenjat e gishtave të furnizuara prej tyre.";
@@ -540,9 +525,7 @@
 "settings_send_markdown_summary" = "Formatojini mesazhet duke përdorur sintaksën Markdown përpara se të dërgohen. Kjo lejon formatim të thelluar, f.v., përdorimi i yllthit për ta shfaqur tekstin me të pjerrëta.";
 "settings_show_join_leave_messages_summary" = "Nuk prek ftesat, heqjet dhe dëbimet.";
 "settings_opt_in_of_analytics_summary" = "%@-i grumbullon të dhëna analitike anonime që të na lejojë ta përmirësojmë aplikacionin.";
-"settings_unignore_user" = "Të shfaqen krejt mesazhet prej %@\?
-\n
-\nKini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.";
+"settings_unignore_user" = "Të shfaqen krejt mesazhet prej %@\?\n\nKini parasysh që ky veprim do të sjellë rinisjen e aplikacionit dhe mund të hajë ca kohë.";
 "settings_labs_native_camera_summary" = "Nis kamerën e sistemit, në vend se skenën e kamerës vetjake.";
 "command_description_emote" = "Shfaq veprimin";
 "command_description_markdown" = "On/Off sintakse Markdown";
@@ -564,43 +547,33 @@
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Një ose më tepër teste dështuan, ju lutemi, parashtroni një njoftim të mete që të na ndihmoni ta hetojmë.";
 "settings_troubleshoot_test_system_settings_title" = "Rregullime Sistemi.";
 "settings_troubleshoot_test_system_settings_success" = "Njoftimet janë të aktivizuara te rregullimet e sistemit.";
-"settings_troubleshoot_test_system_settings_failed" = "Njoftimet janë të çaktivizuara te rregullimet e sistemit.
-\nJu lutemi, kontrolloni rregullimet e sistemit.";
+"settings_troubleshoot_test_system_settings_failed" = "Njoftimet janë të çaktivizuara te rregullimet e sistemit.\nJu lutemi, kontrolloni rregullimet e sistemit.";
 "open_settings" = "Hap Rregullimet";
 "settings_troubleshoot_test_account_settings_title" = "Rregullime Llogarie.";
 "settings_troubleshoot_test_account_settings_success" = "Njoftimet janë të aktivizuara për llogarinë tuaj.";
-"settings_troubleshoot_test_account_settings_failed" = "Njoftimet janë të çaktivizuara për llogarinë tuaj.
-\nJu lutemi, kontrolloni rregullime llogarie.";
+"settings_troubleshoot_test_account_settings_failed" = "Njoftimet janë të çaktivizuara për llogarinë tuaj.\nJu lutemi, kontrolloni rregullime llogarie.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Aktivizoje";
 "settings_troubleshoot_test_device_settings_title" = "Rregullime Sesioni.";
 "settings_troubleshoot_test_device_settings_success" = "Njoftimet janë të aktivizuara për këtë sesion.";
-"settings_troubleshoot_test_device_settings_failed" = "Nuk janë aktivizuar njoftimet për këtë sesion.
-\nJu lutemi, kontrolloni rregullimet e %@-it.";
+"settings_troubleshoot_test_device_settings_failed" = "Nuk janë aktivizuar njoftimet për këtë sesion.\nJu lutemi, kontrolloni rregullimet e %@-it.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Aktivizoje";
 "settings_troubleshoot_test_play_services_title" = "Kontroll pë Play Services";
 "settings_troubleshoot_test_play_services_success" = "APK-ja për Google Play Services është e pranishme dhe e përditësuar.";
-"settings_troubleshoot_test_play_services_failed" = "%@-i përdor Google Play Services për të dorëzuar mesazhe push, por s’duket të jetë formësuar saktë:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@-i përdor Google Play Services për të dorëzuar mesazhe push, por s’duket të jetë formësuar saktë:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Ndreqni Play Services";
 "settings_troubleshoot_test_fcm_title" = "Token Firebase";
-"settings_troubleshoot_test_fcm_success" = "U mor me sukses token FCM:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "S’u arrit të merreh token FCM:
-\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "U mor me sukses token FCM:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "S’u arrit të merreh token FCM:\n%1$@";
 "settings_troubleshoot_test_token_registration_title" = "Regjistrim Token-i";
 "settings_troubleshoot_test_token_registration_success" = "Token-i FCM u regjistrua me sukses te shërbyesi Home.";
-"settings_troubleshoot_test_token_registration_failed" = "S’u arrit të regjistrohej token FCM te shërbyesi Home:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "S’u arrit të regjistrohej token FCM te shërbyesi Home:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Nise gjatë nisjes së sistemit";
 "settings_troubleshoot_test_service_boot_success" = "Shërbimi do të niset kur të riniset pajisja.";
 "settings_troubleshoot_test_service_boot_failed" = "Shërbimi s’do të niset kur të riniset pajisja, s’do të merrni njoftime derisa %@-i të jetë hapur një herë.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Aktivizo Nisje gjatë nisjes së sistemit";
 "settings_troubleshoot_test_bg_restricted_title" = "Kontrollo kufizime prapaskene";
-"settings_troubleshoot_test_bg_restricted_success" = "Kufizimet për në prapaskenë janë të çaktivizuar për %@-in. Ky test duhet të xhirojë duke përdorur të dhëna rrjeti celular (jo WIFI).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Kufizimet për në prapaskenë janë të aktivizuara për %@-in.
-\nPuna që aplikacioni rreket të bëjë do të kufizohet në mënyrë agresive, teksa gjendet në prapaskenë, dhe kjo mund të prekë njoftimet.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Kufizimet për në prapaskenë janë të çaktivizuar për %@-in. Ky test duhet të xhirojë duke përdorur të dhëna rrjeti celular (jo WIFI).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Kufizimet për në prapaskenë janë të aktivizuara për %@-in.\nPuna që aplikacioni rreket të bëjë do të kufizohet në mënyrë agresive, teksa gjendet në prapaskenë, dhe kjo mund të prekë njoftimet.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Çaktivizoji kufizimet";
 "settings_troubleshoot_test_battery_title" = "Optimizim Baterie";
 "settings_troubleshoot_test_battery_success" = "%@-i nuk preket nga Optimizime Baterie.";
@@ -617,12 +590,9 @@
 "settings_troubleshoot_test_bing_settings_title" = "Rregullime Vetjake.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Kini parasysh që disa lloje mesazhesh janë caktuar të jenë të heshtur (do të prodhohet një njoftim pa tingull).";
 "settings_troubleshoot_test_bing_settings_failed" = "Disa njoftime janë të çaktivizuara te rregullimet tuaja vetjake.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nKy gabim është jashtë kontrollit të %@-it dhe, sipas Google-it, ky gabim është shenjë se pajisja ka shumë aplikacione të regjistruar me FCM. Gabimi ndodh vetëm në raste kur ka një numër të skajshëm aplikacionesh, ndaj nuk duhet të prekë përdoruesin mesatar.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nKy gabim është jashtë kontrollit të %@-it. Mund të ndodhë për disa arsye. Ndoshta do të funksionojë, nëse riprovoni më vonë, mund të kontrolloni edhe nëse për Google Play Service s’ka kufizime lidhur me përdorimin e të dhënave, te rregullimet e sistemit, ose se ora e pajisjes suaj është e saktë, ose mund të ndodhë në ROM të përshtatur.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nKy gabim është jashtë kontrollit të %@-it. S’ka llogari Google te telefoni. Ju lutemi, hapni përgjegjësin e llogarive dhe shtoni një llogari Google.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nKy gabim është jashtë kontrollit të %@-it dhe, sipas Google-it, ky gabim është shenjë se pajisja ka shumë aplikacione të regjistruar me FCM. Gabimi ndodh vetëm në raste kur ka një numër të skajshëm aplikacionesh, ndaj nuk duhet të prekë përdoruesin mesatar.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nKy gabim është jashtë kontrollit të %@-it. Mund të ndodhë për disa arsye. Ndoshta do të funksionojë, nëse riprovoni më vonë, mund të kontrolloni edhe nëse për Google Play Service s’ka kufizime lidhur me përdorimin e të dhënave, te rregullimet e sistemit, ose se ora e pajisjes suaj është e saktë, ose mund të ndodhë në ROM të përshtatur.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nKy gabim është jashtë kontrollit të %@-it. S’ka llogari Google te telefoni. Ju lutemi, hapni përgjegjësin e llogarive dhe shtoni një llogari Google.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Shtoni Llogari";
 "settings_noisy_notifications_preferences" = "Formësoni Njoftime të Zhurmshme";
 "settings_call_notifications_preferences" = "Formësoni Njoftime Thirrjesh";
@@ -635,9 +605,7 @@
 "passphrase_passphrase_too_weak" = "Frazëkalimi është shumë i dobët";
 "keys_backup_passphrase_not_empty_error_message" = "Ju lutemi, fshini frazëkalimin, nëse doni që %@-i të prodhojë një kyç rimarrjesh.";
 "keys_backup_setup_step1_title" = "Mos humbni kurrë mesazhe të fshehtëzuar";
-"keys_backup_setup_step1_description" = "Mesazhet në dhoma të fshehtëzuara sigurohen me fshehtëzim skaj-më-skaj. Vetëm ju dhe marrësi(t) keni kyçet për leximin e këtyre mesazheve.
-\n
-\nBëni një kopjeruajtje të sigurt të kyçeve tuaj, për të shmangur humbjen e tyre.";
+"keys_backup_setup_step1_description" = "Mesazhet në dhoma të fshehtëzuara sigurohen me fshehtëzim skaj-më-skaj. Vetëm ju dhe marrësi(t) keni kyçet për leximin e këtyre mesazheve.\n\nBëni një kopjeruajtje të sigurt të kyçeve tuaj, për të shmangur humbjen e tyre.";
 "keys_backup_setup_step2_button_title" = "Caktoni Frazëkalim";
 "keys_backup_setup_step3_button_title" = "U bë";
 "keys_backup_setup_step3_copy_button_title" = "Ruani Kyç Rimarrjesh";
@@ -692,16 +660,13 @@
 "keys_backup_setup_step1_advanced" = "(Të mëtejshme)";
 "keys_backup_setup_step1_manual_export" = "Eksporto dorazi kyçet";
 "keys_backup_setup_step2_text_title" = "Sigurojeni kopjeruajtjen tuaj me një Frazëkalim.";
-"keys_backup_setup_step2_text_description" = "Do të depozitojmë një kopje të fshehtëzuar të kyçeve tuaj në shërbyesin tonë. Mbrojeni kopjeruajtjen tuaj me një frazëkalim, për ta mbajtur të parrezikuar.
-\n
-\nPër maksimumin e sigurisë, ky duhet të jetë i ndryshëm nga fjalëkalimi juaj për llogarinë.";
+"keys_backup_setup_step2_text_description" = "Do të depozitojmë një kopje të fshehtëzuar të kyçeve tuaj në shërbyesin tonë. Mbrojeni kopjeruajtjen tuaj me një frazëkalim, për ta mbajtur të parrezikuar.\n\nPër maksimumin e sigurisë, ky duhet të jetë i ndryshëm nga fjalëkalimi juaj për llogarinë.";
 "keys_backup_setup_creating_backup" = "Po Krijohet Kopjeruajtje";
 "keys_backup_setup_step1_recovery_key_alternative" = "Ose, sigurojeni kopjeruajtjen tuaj me një Kyç Rimarrjesh, duke e ruajtur këtë diku të parrezikuar.";
 "keys_backup_setup_step2_skip_button_title" = "(Të mëtejshme) Rregullojeni me një Kyç Rimarrjesh";
 "keys_backup_setup_step3_success_title" = "Sukses!";
 "keys_backup_setup_step3_text_line1" = "Kyçet tuaj po kopjeruhen.";
-"keys_backup_setup_step3_text_line2" = "Kyçi juaj i rimarrjeve është një lloj mase sigurie - mund ta përdorni për të rifituar hyrje te mesazhet tuaj të fshehtëzuar, nëse harroni frazëkalimin tuaj. 
-\nMbajeni kyçin tuaj të rimarrjeve diku shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)";
+"keys_backup_setup_step3_text_line2" = "Kyçi juaj i rimarrjeve është një lloj mase sigurie - mund ta përdorni për të rifituar hyrje te mesazhet tuaj të fshehtëzuar, nëse harroni frazëkalimin tuaj. \nMbajeni kyçin tuaj të rimarrjeve diku shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Mbajeni kyçin tuaj të rimarrjeve diku në një vend shumë të sigurt, bie fjala, nën një përgjegjës fjalëkalimesh (ose në një kasafortë)";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Bëra një kopje";
 "keys_backup_setup_step3_share_recovery_file" = "Ndajeni me të tjerë";
@@ -738,14 +703,8 @@
 "notification_inline_reply_failed" = "** S’u arrit të dërgohej - ju lutemi, hapni dhomë";
 "error_jitsi_not_supported_on_old_device" = "Na ndjeni, thirrjet konferencë me Jitsi-n nuk mbulohen në pajisje të vjetra (pajisje me Android OS nën 6.0)";
 "encryption_information_unknown_ip" = "ip e panjohur";
-"you_added_a_new_device_with_info" = "Një sesion i ri po kërkon emër kyçe fshehtëzimi.
-\nEmër sesioni: %1$@
-\nParë së fundi më: %2$@
-\nNëse s’keni bërë hyrje në një tjetër sesion, shpërfilleni këtë kërkesë.";
-"your_unverified_device_requesting_with_info" = "Një sesion i paverifikuar po kërkon kyçe fshehtëzimi. 
-\nEmër sesioni: %1$@ 
-\nParë së fundi më: %2$@ 
-\nNëse s’keni bërë hyrje në një sesion tjetër, shpërfilleni këtë kërkesë.";
+"you_added_a_new_device_with_info" = "Një sesion i ri po kërkon emër kyçe fshehtëzimi.\nEmër sesioni: %1$@\nParë së fundi më: %2$@\nNëse s’keni bërë hyrje në një tjetër sesion, shpërfilleni këtë kërkesë.";
+"your_unverified_device_requesting_with_info" = "Një sesion i paverifikuar po kërkon kyçe fshehtëzimi. \nEmër sesioni: %1$@ \nParë së fundi më: %2$@ \nNëse s’keni bërë hyrje në një sesion tjetër, shpërfilleni këtë kërkesë.";
 "share_without_verifying_short_label" = "Ndaje";
 "key_share_request" = "Kërkesat Për Ndarje Kyçesh";
 "ignore_request_short_label" = "Shpërfille";
@@ -793,7 +752,7 @@
 "create_room_public_description" = "Kushdo do të jetë në gjendje të marrë pjesë në këtë dhomë";
 "keys_backup_unable_to_get_trust_info" = "Ndodhi një gabim gjatë marrjes së të dhënave të besueshmërisë";
 "keys_backup_unable_to_get_keys_backup_data" = "Ndodhi një gabim teksa merreshin të dhëna kopjeruajtjeje kyçesh";
-"import_e2e_keys_from_file" = "Importo kyçe e2e prej kartelës \"%1$@\.";
+"import_e2e_keys_from_file" = "Importo kyçe e2e prej kartelës \"%1$@\".";
 "settings_sdk_version" = "Versioni Matrix SDK";
 "settings_other_third_party_notices" = "Shënime të tjera palësh të treta";
 "navigate_to_room_when_already_in_the_room" = "Po e shihni tashmë këtë dhomë!";
@@ -848,11 +807,9 @@
 "login_error_homeserver_not_found" = "S’kapet dot shërbyes Home te kjo URL, ju lutemi, kontrollojeni";
 "settings_background_fdroid_sync_mode" = "Mënyrë Njëkohësimi Në Prapaskenë";
 "settings_background_fdroid_sync_mode_battery" = "E optimizuar për baterinë";
-"settings_background_fdroid_sync_mode_battery_description" = "%@-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).
-\nNë varësi të gjendjes së burimeve tuaja, njëkohësimi mund të shtyhet për më vonë nga sistemi operativ.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@-i do të bëjë njëkohësim në prapaskenë, në një mënyrë që kursen burimet e kufizuara të pajisjes (baterinë).\nNë varësi të gjendjes së burimeve tuaja, njëkohësimi mund të shtyhet për më vonë nga sistemi operativ.";
 "settings_background_fdroid_sync_mode_real_time" = "I optimizuar për kohë të njëmendtë";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).
-\nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se %@-i po përgjon për akte.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@0-i do të bëjë njëkohësim në prapaskenë periodikisht në një kohë të caktuar (e formësueshme).\nKjo do të ketë ndikim mbi përdorimin e baterisë dhe të transmetimit, do të shfaqet një njoftim i pandërprerë që pohon se %@-i po përgjon për akte.";
 "settings_background_fdroid_sync_mode_disabled" = "Pa njëkohësim në prapraskenë";
 "settings_background_fdroid_sync_mode_disabled_description" = "S’do të njoftoheni për mesazhe ardhës, kur aplikacioni gjendet në prapaskenë.";
 "settings_discovery_manage" = "Administroni rregullimet tuaja për zbulime.";
@@ -908,28 +865,20 @@
 "report_content_custom_submit" = "RAPORTOJENI";
 "block_user" = "SHPËRFILLE PËRDORUESIN";
 "content_reported_title" = "Lënda u raportua";
-"content_reported_content" = "Kjo lëndë është raportuar. 
-\n 
-\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.";
+"content_reported_content" = "Kjo lëndë është raportuar. \n \nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.";
 "content_reported_as_spam_title" = "E raportuar si e padëshiruar";
-"content_reported_as_spam_content" = "Kjo lëndë është raportuar si e padëshiruar. 
-\n 
-\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.";
+"content_reported_as_spam_content" = "Kjo lëndë është raportuar si e padëshiruar. \n \nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.";
 "content_reported_as_inappropriate_title" = "E raportuar si e papërshtatshme";
-"content_reported_as_inappropriate_content" = "Kjo lëndë është raportuar si e papërshtatshme. 
-\n 
-\nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.";
+"content_reported_as_inappropriate_content" = "Kjo lëndë është raportuar si e papërshtatshme. \n \nNëse s’doni të shihni më lëndë nga ky përdorues, mund ta shpërfillni, që të fshihen mesazhet e tij.";
 "settings_integrations" = "Integrime";
-"settings_integrations_summary" = "Përdorni një përgjegjës integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.
-\nPërgjegjësit e integrimeve marrin të dhëna formësimi dhe mund të ndryshojnë widget-e, të dërgojnë ftesa për në dhoma dhe të caktojnë shkallë pushteti në emrin tuaj.";
+"settings_integrations_summary" = "Përdorni një përgjegjës integrimesh që të administroni robotë, ura, widget-e dhe paketa ngjitësish.\nPërgjegjësit e integrimeve marrin të dhëna formësimi dhe mund të ndryshojnë widget-e, të dërgojnë ftesa për në dhoma dhe të caktojnë shkallë pushteti në emrin tuaj.";
 "settings_integration_allow" = "Lejo integrim";
 "room_widget_activity_title" = "Widget";
 "room_widget_permission_title" = "Ngarko Widget";
-"room_widget_permission_added_by.em_0" = "widget";
-"room_widget_permission_webview_shared_info_title.em_0" = "cookies";
+"room_widget_permission_added_by" = "Ky <em>widget</em> qe shtuar nga:";
+"room_widget_permission_webview_shared_info_title" = "Përdorimi i tij mund të sjellë depozitim <em>cookies</em> dhe ndarje të dhënash me %@:";
 "room_widget_permission_shared_info_title" = "Përdorimi i tij mund të sjellë ndarje të dhënash me %@:";
-"room_widget_failed_to_load" = "S’u arrit të ngarkohej widget.
-\n%@";
+"room_widget_failed_to_load" = "S’u arrit të ngarkohej widget.\n%@";
 "room_widget_reload" = "Ringarkoje widget-in";
 "room_widget_open_in_browser" = "Hape në shfletues";
 "room_widget_revoke_access" = "Shfuqizo hyrje për mua";
@@ -987,13 +936,9 @@
 "login_server_url_form_modular_text" = "Strehim me pagesë për ente";
 "login_server_url_form_modular_notice" = "Jepni adresën e Modular Element-it ose Shërbyesit që doni të përdoret";
 "login_sso_error_message" = "Ndodhi një gabim kur ngarkohej faqja: %1$@ (%2$d)";
-"login_mode_not_supported" = "Aplikacioni s’është në gjendje të bëjë hyrje në llogari në këtë shërbyes Home. Shërbyesi Home mbulon llojet vijuese të hyrjes(ve): %1$@.
-\n
-\nDoni të hyni duke përdorur një klient web\?";
+"login_mode_not_supported" = "Aplikacioni s’është në gjendje të bëjë hyrje në llogari në këtë shërbyes Home. Shërbyesi Home mbulon llojet vijuese të hyrjes(ve): %1$@.\n\nDoni të hyni duke përdorur një klient web\?";
 "login_registration_disabled" = "Na ndjeni, ky shërbyes s’pranon llogari të reja.";
-"login_registration_not_supported" = "Aplikacioni s’është në gjendje të krijojë llogari në këtë shërbyes Home.
-\n
-\nDoni të regjistroheni duke përdorur një klient web\?";
+"login_registration_not_supported" = "Aplikacioni s’është në gjendje të krijojë llogari në këtë shërbyes Home.\n\nDoni të regjistroheni duke përdorur një klient web\?";
 "login_login_with_email_error" = "Ky emai s’është përshoqëruar me ndonjë llogari.";
 "login_reset_password_on" = "Ricaktoni fjalëkalimin në %1$@";
 "login_reset_password_notice" = "Te mesazhet tuaj do të dërgohet një email verifikimi, për të ripohuar caktimin e fjalëkalimit tuaj të ri.";
@@ -1013,9 +958,7 @@
 "login_reset_password_success_notice_2" = "Jeni nxjerrë jashtë krejt sesioneve dhe nuk do të merrni më njoftime push. Që të riaktivizoni njoftimet, bëni sërish hyrjen në çdo pajisje.";
 "login_reset_password_success_submit" = "Mbrapsht te Hyrja";
 "login_reset_password_cancel_confirmation_title" = "Kujdes";
-"login_reset_password_cancel_confirmation_content" = "Fjalëkalimi juaj s’ka ndryshuar ende.
-\n
-\nTë ndalet procesi i ndryshimit të fjalëkalimit\?";
+"login_reset_password_cancel_confirmation_content" = "Fjalëkalimi juaj s’ka ndryshuar ende.\n\nTë ndalet procesi i ndryshimit të fjalëkalimit\?";
 "login_set_email_title" = "Caktoni adresë email";
 "login_set_email_notice" = "Caktoni një email për rimarrje të llogarisë tuaj. Më vonë, mundeni të lejoni persona që njihni t’ju zbulojnë përmes email-it tuaj.";
 "login_set_email_mandatory_hint" = "Email";
@@ -1040,28 +983,19 @@
 "login_signup_submit" = "Pasuesi";
 "login_signup_error_user_in_use" = "Ai emër përdoruesi është i zënë";
 "login_signup_cancel_confirmation_title" = "Kujdes";
-"login_signup_cancel_confirmation_content" = "Llogaria juaj s’është krijuar ende.
-\n
-\nTë ndalet procesi i regjistrimit\?";
+"login_signup_cancel_confirmation_content" = "Llogaria juaj s’është krijuar ende.\n\nTë ndalet procesi i regjistrimit\?";
 "login_a11y_choose_matrix_org" = "Përzgjidhni matrix.org";
 "login_a11y_choose_modular" = "Përzgjidhni Element Matrix Services";
 "login_a11y_choose_other" = "Përzgjidhni një shërbyes Home vetjak";
 "login_a11y_captcha_container" = "Ju lutemi, zgjidhni captcha-n";
 "login_terms_title" = "Që të vazhdohet, pranoni terma";
 "login_wait_for_email_title" = "Ju lutemi, kontrolloni email-in tuaj";
-"login_wait_for_email_notice" = "Sapo dërguam një email te %1$@.
-\nJu lutemi, klikoni mbi lidhjen që përmban, që të vazhdohet krijimi i llogarisë.";
+"login_wait_for_email_notice" = "Sapo dërguam një email te %1$@.\nJu lutemi, klikoni mbi lidhjen që përmban, që të vazhdohet krijimi i llogarisë.";
 "login_validation_code_is_not_correct" = "Kodi që dhatë s’është i saktë. Ju lutemi, kontrollojeni.";
 "login_error_outdated_homeserver_title" = "Shërbyes Home i vjetruar";
 "seen_by" = "Parë nga";
 "signed_out_title" = "Keni bërë dalje";
-"signed_out_notice" = "Mund të vijë për arsye të ndryshme: 
-\n 
-\n• Keni ndryshuar fjalëkalimin tuaj në sesion tjetër. 
-\n 
-\n• E keni fshirë këtë sesion prej një sesioni tjetër. 
-\n 
-\n• Përgjegjësi i shërbyesit tuaj e ka bërë të pamundur hyrjen tuaj për arsye sigurie.";
+"signed_out_notice" = "Mund të vijë për arsye të ndryshme: \n \n• Keni ndryshuar fjalëkalimin tuaj në sesion tjetër. \n \n• E keni fshirë këtë sesion prej një sesioni tjetër. \n \n• Përgjegjësi i shërbyesit tuaj e ka bërë të pamundur hyrjen tuaj për arsye sigurie.";
 "signed_out_submit" = "Ribëni hyrjen";
 "soft_logout_title" = "Keni bërë dalje";
 "soft_logout_signin_title" = "Hyni";
@@ -1070,21 +1004,17 @@
 "soft_logout_signin_submit" = "Hyni";
 "soft_logout_signin_password_hint" = "Fjalëkalim";
 "soft_logout_clear_data_title" = "Spastro të dhëna personale";
-"soft_logout_clear_data_notice" = "Kujdes: Të dhënat tuaja personale (përfshi kyçe fshehtëzimi) janë ende të depozituara në këtë pajisje.
-\n
-\nSpastrojini, nëse keni përfunduar së përdoruri këtë pajisje, ose dëshironi të bëni hyrjen në një tjetër llogari.";
+"soft_logout_clear_data_notice" = "Kujdes: Të dhënat tuaja personale (përfshi kyçe fshehtëzimi) janë ende të depozituara në këtë pajisje.\n\nSpastrojini, nëse keni përfunduar së përdoruri këtë pajisje, ose dëshironi të bëni hyrjen në një tjetër llogari.";
 "soft_logout_clear_data_submit" = "Spastro krejt të dhënat";
 "soft_logout_clear_data_dialog_title" = "Spastroni të dhëna";
-"soft_logout_clear_data_dialog_content" = "Të spastrohen krejt të dhënat e depozituara aktualisht në këtë pajisje\?
-\nQë të mund të hyni te të dhëna të llogarisë tuaj dhe te mesazhe, bëni sërish hyrjen.";
+"soft_logout_clear_data_dialog_content" = "Të spastrohen krejt të dhënat e depozituara aktualisht në këtë pajisje\?\nQë të mund të hyni te të dhëna të llogarisë tuaj dhe te mesazhe, bëni sërish hyrjen.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Do të humbni hyrje te mesazhe të sigurt, veç në hyfshi për të rimarrë kyçet tuaj të fshehtëzimit.";
-"soft_logout_sso_not_same_user_error" = "Sesioni i tanishëm është për përdoruesin %1$@ dhe ju jepni kredenciale për përdoruesin %2$@. Kjo nuk mbulohet nga %@.
-\nJu lutemi, së pari spastroni të dhëna, mandej hyni sërish në një tjetër llogari.";
+"soft_logout_sso_not_same_user_error" = "Sesioni i tanishëm është për përdoruesin %1$@ dhe ju jepni kredenciale për përdoruesin %2$@. Kjo nuk mbulohet nga %@.\nJu lutemi, së pari spastroni të dhëna, mandej hyni sërish në një tjetër llogari.";
 "permalink_malformed" = "Lidhja juaj matrix.to është e keqformuar";
 "bug_report_error_too_short" = "Përshkrimi është shumë i shkurtër";
 "room_settings_labs_pref_title" = "Labs";
 "settings_troubleshoot_test_token_registration_quick_fix" = "Token regjistrimi";
-"command_description_spoiler.em_0" = "spoiler";
+"command_description_spoiler" = "E dërgon mesazhin e dhënë si <em>spoiler</em>";
 "notification_initial_sync" = "Njëkohësimi Fillestar…";
 "settings_advanced_settings" = "Rregullime të mëtejshme";
 "settings_developer_mode" = "Mënyra zhvillues";
@@ -1119,9 +1049,7 @@
 "verification_verify_user" = "Verifikoni %@";
 "verification_request_waiting_for" = "Po pritet për %@…";
 "room_profile_not_encrypted_subtitle" = "Mesazhet në këtë dhomë s’fshehtëzohen skaj-më-skaj.";
-"room_profile_encrypted_subtitle" = "Mesazhet në këtë dhomë fshehtëzohen skaj-më-skaj.
-\n
-\nMesazhet tuaj sigurohen me kyçe dhe vetëm ju dhe marrësi kanë kyçet unikë për t’i shkyçur.";
+"room_profile_encrypted_subtitle" = "Mesazhet në këtë dhomë fshehtëzohen skaj-më-skaj.\n\nMesazhet tuaj sigurohen me kyçe dhe vetëm ju dhe marrësi kanë kyçet unikë për t’i shkyçur.";
 "room_profile_section_security" = "Siguri";
 "room_profile_section_security_learn_more" = "Mësoni më tepër";
 "room_profile_section_more" = "Më tepër";
@@ -1150,10 +1078,10 @@
 "room_settings_enable_encryption_dialog_submit" = "Aktivizoni fshehtëzim";
 "verification_conclusion_ok_notice" = "Mesazhet me këtë përdorues fshehtëzohen skaj-më-skaj dhe janë të palexueshëm nga palë të treta.";
 "verification_conclusion_ok_self_notice" = "Sesioni juaj i ri tani është i verifikuar. Ka hyrje te mesazhet tuaj të fshehtëzuar dhe përdoruesit e tjerë do ta shohin si të besuar.";
-"encryption_information_cross_signing_state.em_0" = "Cross-signing";
-"encryption_information_dg_xsigning_complete.em_0" = "Cross-signing";
-"encryption_information_dg_xsigning_not_trusted.em_0" = "Cross-signing";
-"encryption_information_dg_xsigning_disabled.em_0" = "Cross-signing";
+"encryption_information_cross_signing_state" = "<em>Cross-signing</em>";
+"encryption_information_dg_xsigning_complete" = "<em>Cross-signing</em> është i aktivizuar\nKyçe Privatë në pajisje.";
+"encryption_information_dg_xsigning_not_trusted" = "<em>Cross-signing</em> është i aktivizuar.\nKyçet s’janë besuar";
+"encryption_information_dg_xsigning_disabled" = "<em>Cross-signing</em> s’është i aktivizuar";
 "settings_active_sessions_list" = "Sesione aktive";
 "settings_active_sessions_show_all" = "Shfaq Krejt Sesionet";
 "settings_active_sessions_manage" = "Administroni Sesione";
@@ -1173,30 +1101,24 @@
 "qr_code_scanned_by_other_yes" = "Po";
 "login_error_threepid_denied" = "Përkatësia juaj për email-e s’është e autorizuar të regjistrohet në këtë shërbyes";
 "verification_conclusion_warning" = "Hyrje jo e besuar";
-"verification_conclusion_compromised" = "Një nga sa vijon mund të jetë komprometuar:
-\n
-\n - Shërbyesi juaj Home
-\n - Shërbyesi Home te i cili është lidhur përdoruesi që po verifikoni
-\n - Lidhja juaj internet ose ajo e përdoruesit tjetër
-\n - Pajisja juaj ose ajo e përdoruesit tjetër";
+"verification_conclusion_compromised" = "Një nga sa vijon mund të jetë komprometuar:\n\n - Shërbyesi juaj Home\n - Shërbyesi Home te i cili është lidhur përdoruesi që po verifikoni\n - Lidhja juaj internet ose ajo e përdoruesit tjetër\n - Pajisja juaj ose ajo e përdoruesit tjetër";
 "verification_request_other_cancelled" = "%@ u anulua";
 "verification_request_other_accepted" = "%@ u pranua";
 "verification_scan_notice" = "Skanojeni kodin me pajisjen e përdoruesit tjetër, për të verifikuar në mënyrë të sigurt njëri-tjetrin";
 "verification_scan_emoji_subtitle" = "Nëse s’jeni vetë atje, krahasoni emoji-n";
 "rendering_event_error_type_of_event_not_handled" = "%@ nuk trajton akte të llojit \'%1$@\'";
 "rendering_event_error_exception" = "%@ ndeshi një problem kur vizatohej lëndë e aktit me ID \'%1$@\'";
-"verify_cannot_cross_sign" = "Ky sesion s’është në gjendje të ndajë këtë verifikim me sesionet tuaj të tjerë.
-\nVerifikimi do të ruhet lokalisht dhe do të ndahet nën një version të ardhshëm të aplikacionit.";
+"verify_cannot_cross_sign" = "Ky sesion s’është në gjendje të ndajë këtë verifikim me sesionet tuaj të tjerë.\nVerifikimi do të ruhet lokalisht dhe do të ndahet nën një version të ardhshëm të aplikacionit.";
 "verification_request_notice" = "Për të qenë i sigurt, verifikoni %@ duke kontrolluar një kod njëpërdorimsh.";
 "verification_request_start_notice" = "Për të qenë i sigurt, bëjeni këtë duke qenë vetë i pranishëm ose për të komunikuar përdorni një rrugë tjetër.";
 "verification_emoji_notice" = "Krahasoni emoji-n unik, duke u siguruar se shfaqen në të njëjtën radhë.";
 "verification_code_notice" = "Krahasojeni kodin me atë të shfaqur te ekrani i përdoruesit tjetër.";
-"encryption_information_dg_xsigning_trusted.em_0" = "Cross-Signing";
+"encryption_information_dg_xsigning_trusted" = "<em>Cross-Signing</em> është i aktivizuar\nKyçet janë të besuar.\nKyçet privatë nuk njihen";
 "settings_active_sessions_unverified_device_desc" = "Verifikojeni këtë sesion që t’i vihet shenjë si i besuar & dhe t’i akordohet hyrje te mesazhe të fshehtëzuar. Nëse s’keni bërë hyrjen në këtë sesion, llogaria juaj mund të jetë komprometuar:";
 "verification_open_other_to_verify" = "Përdorni një sesion ekzistues që të verifikoni këtë këtu, duke i akorduar hyrje te mesazhe të fshehtëzuar.";
 "not_trusted" = "Jo i Besuar";
 "verification_profile_device_verified_because" = "Ky sesion është i besuar për shkëmbim të sigurt të mesazheve, ngaqë e verifikoi %1$@ (%2$@):";
-"initialize_cross_signing.em_0" = "CrossSigning";
+"initialize_cross_signing" = "Gatit <em>CrossSigning</em>";
 "reset_cross_signing" = "Zeroji Kyçet";
 "qr_code_scanned_by_other_notice" = "Thuaje mbërritëm! A shfaq %@ një shenjë\?";
 "qr_code_scanned_by_other_no" = "Jo";
@@ -1228,14 +1150,7 @@
 "verify_cancel_self_verification_from_untrusted" = "Nëse e anuloni, s’do të jeni në gjendje të lexoni mesazhe të fshehtëzuar në këtë pajisje, dhe përdoruesit e tjerë s’do ta besojnë";
 "verify_cancel_self_verification_from_trusted" = "Nëse e anuloni, s’do të jeni në gjendje të lexoni mesazhe të fshehtëzuar në pajisjen tuaj të re, dhe përdoruesit e tjerë s’do ta besojnë";
 "verify_cancel_other" = "S’do ta verifikoni %1$@ (%2$@), nëse e anuloni tani. Fillojani sërish te profili i tij i përdoruesit.";
-"verify_not_me_self_verification" = "Një nga sa vijon mund të jetë komprometuar:
-\n
-\n- Fjalëkalimi juaj
-\n- Shërbyesi juaj Home
-\n- Kjo pajisje, ose pajisja tjetër
-\n- Lidhja internet që përdor njëra pajisje, ose tjetra
-\n
-\nKëshillojmë të ndryshoni menjëherë fjalëkalimin & kyçin tuaj të rimarrjeve te Rregullimet.";
+"verify_not_me_self_verification" = "Një nga sa vijon mund të jetë komprometuar:\n\n- Fjalëkalimi juaj\n- Shërbyesi juaj Home\n- Kjo pajisje, ose pajisja tjetër\n- Lidhja internet që përdor njëra pajisje, ose tjetra\n\nKëshillojmë të ndryshoni menjëherë fjalëkalimin & kyçin tuaj të rimarrjeve te Rregullimet.";
 "verify_cancelled_notice" = "Verifikimi u anulua. Mund ta rifilloni verifikimin.";
 "verification_cancelled" = "Verifikimi u Anulua";
 "recovery_passphrase" = "Frazëkalim Rikthimesh";
@@ -1253,9 +1168,7 @@
 "bootstrap_crosssigning_progress_save_usk" = "Po njëkohësohet kyç Përdoruesi";
 "bootstrap_crosssigning_progress_save_ssk" = "Po njëkohësohet kyç Vetënënshkrues";
 "bootstrap_crosssigning_progress_key_backup" = "Po Ujdiset Kopjeruajtje Kyçesh";
-"bootstrap_cross_signing_success" = "%2$@ & %1$@ tani janë ujdisur.
-\n
-\nMbajini të parrezikuar! Do t’ju duhen për të shkyçur mesazhe të fshehtëzuar dhe informacione të sigurta, nëse humbni krejt sesionet tuaja aktive.";
+"bootstrap_cross_signing_success" = "%2$@ & %1$@ tani janë ujdisur.\n\nMbajini të parrezikuar! Do t’ju duhen për të shkyçur mesazhe të fshehtëzuar dhe informacione të sigurta, nëse humbni krejt sesionet tuaja aktive.";
 "bootstrap_crosssigning_print_it" = "Shtypeni dhe ruajeni diku në një vend të parrezik";
 "bootstrap_crosssigning_save_usb" = "Ruajeni në një diskth USB ose pajisje kopjeruajtjesh";
 "bootstrap_crosssigning_save_cloud" = "Kopjojeni te depozita juaj personale në re";
@@ -1276,6 +1189,7 @@
 "settings_troubleshoot_title" = "Diagnostikoje";
 "command_description_plain" = "E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown";
 "auth_invalid_login_param_space_in_password" = "Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.";
+"settings_rageshake" = "";
 "bootstrap_crosssigning_progress_initializing" = "Po publikohen kyçe të krijuar identiteti";
 "room_message_placeholder" = "Mesazh…";
 "upgrade_security" = "Ka të gatshëm përmirësim fshehtëzimi";
@@ -1298,10 +1212,8 @@
 "settings_security_prevent_screenshots_summary" = "Aktivizimi i këtij rregullimi shton FLAG_SECURE te krejt Veprimtaritë. Që ndryshimi të hyjë në fuqi, rinisni aplikacionin.";
 "change_password_summary" = "Caktoni një fjalëkalim të ri llogarie…";
 "use_other_session_content_description" = "Përdorni %@-in më të ri në pajisjet tuaja të tjera, %@ Web, %@ Desktop, %@ iOS, %@ për Android, ose një tjetër klient Matrix të aftë për <em>cross-signing</em";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
 "or_other_mx_capable_client" = "ose një tjetër klient Matrix i aftë për <em>cross-signing</em";
 "use_latest_app" = "Përdorni %@-in më të ri në pajisjet tuaja të tjera:";
 "command_description_discard_session_not_handled" = "Mbulohet vetëm për dhoma të fshehtëzuara";
@@ -1321,9 +1233,7 @@
 "error_empty_field_choose_user_name" = "Ju lutemi, zgjidhni një emër përdoruesi.";
 "error_empty_field_choose_password" = "Ju lutemi, zgjidhni një fjalëkalim.";
 "external_link_confirmation_title" = "Kontrollojeni edhe një herë këtë lidhje";
-"external_link_confirmation_message" = "Lidhja %1$@ po ju shpie te një tjetër sajt: %2$@.
-\n
-\nJeni i sigurt se doni të vazhdohet\?";
+"external_link_confirmation_message" = "Lidhja %1$@ po ju shpie te një tjetër sajt: %2$@.\n\nJeni i sigurt se doni të vazhdohet\?";
 "create_room_dm_failure" = "S’e krijuam dot DM-në tuaj. Ju lutemi, kontrolloni përdoruesit që doni të ftoni dhe riprovoni.";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
@@ -1386,8 +1296,7 @@
 "dialog_title_success" = "Sukses";
 "bottom_action_notification" = "Njoftime";
 "call_failed_no_connection" = "Thirrja %@ Dështoi";
-"call_failed_no_connection_description" = "S’u arrit të vendosej lidhje e atypëratyshme.
-\nQë thirrjet të punojnë mirë, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home të formësojë një shërbyes TURN.";
+"call_failed_no_connection_description" = "S’u arrit të vendosej lidhje e atypëratyshme.\nQë thirrjet të punojnë mirë, ju lutemi, kërkojini përgjegjësit të shërbyesit tuaj Home të formësojë një shërbyes TURN.";
 "call_select_sound_device" = "Përzgjidhni Pajisje Zëri";
 "sound_device_phone" = "Telefon";
 "sound_device_speaker" = "Altoparlant";
@@ -1406,18 +1315,14 @@
 "room_participants_power_level_demote_warning_prompt" = "S’do të jeni në gjendje ta zhbëni këtë ndryshim, teksa zhgradoni veten, nëse jeni përdoruesi i fundit i privilegjuar, s’do të jetë e mundur të rifitoni privilegjet.";
 "room_participants_power_level_demote" = "Zhgradoje";
 "room_participants_action_ignore_title" = "Shpërfille përdoruesin";
-"room_participants_action_ignore_prompt_msg" = "Shpërfillja e këtij përdoruesi do të heqë mesazhet e tij prej dhomave që ndani me të.
-\n
-\nKëtë veprim mund ta zhbëni në çfarëdo kohe, te rregullimet e përgjithshme.";
+"room_participants_action_ignore_prompt_msg" = "Shpërfillja e këtij përdoruesi do të heqë mesazhet e tij prej dhomave që ndani me të.\n\nKëtë veprim mund ta zhbëni në çfarëdo kohe, te rregullimet e përgjithshme.";
 "room_participants_action_unignore_title" = "Hiqe shpërfilljen e përdoruesit";
 "room_participants_action_unignore_prompt_msg" = "Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.";
 "room_participants_action_cancel_invite_title" = "Anuloje ftesën";
 "room_participants_action_cancel_invite_prompt_msg" = "Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?";
 "room_participants_remove_title" = "Përzëre përdoruesin";
 "room_participants_remove_reason" = "Arsye për përzënie";
-"room_participants_remove_prompt_msg" = "Përzënia e përdoruesit do ta heqë prej kësaj dhome.
-\n
-\nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.";
+"room_participants_remove_prompt_msg" = "Përzënia e përdoruesit do ta heqë prej kësaj dhome.\n\nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.";
 "room_participants_ban_title" = "Dëboje përdoruesin";
 "room_participants_ban_reason" = "Arsye për dëbim";
 "room_participants_unban_title" = "Hiqja dëbimin përdoruesit";
@@ -1448,9 +1353,7 @@
 "secure_backup_banner_setup_line1" = "Kopjeruajtje e Sigur";
 "secure_backup_banner_setup_line2" = "Ruhuni nga humbja e hyrjes në mesazhe & të dhëna të fshehtëzuara";
 "secure_backup_setup" = "Ujdisni Kopjeruajtje të Sigurt";
-"create_room_federation_error" = "Dhoma është krijuar, por disa ftesa s’janë dërguar, për arsyen vijuese:
-\n
-\n%@";
+"create_room_federation_error" = "Dhoma është krijuar, por disa ftesa s’janë dërguar, për arsyen vijuese:\n\n%@";
 "labs_show_unread_notifications_as_tab" = "Shtoni një skedë enkas për njoftime të palexuar në skenën kryesore.";
 "settings_text_message_sent_hint" = "Kod";
 "room_list_quick_actions_favorite_add" = "Shtoje te të parapëlqyerit";
@@ -1468,13 +1371,9 @@
 "room_profile_section_admin" = "Veprime Përgjegjësi";
 "room_member_power_level_default_in" = "%1$@, si parazgjedhje";
 "settings_hs_admin_e2e_disabled" = "Përgjegjësi i shërbyesit tuaj ka çaktivizuar, si parazgjedhje, fshehtëzim skaj-më-skaj në dhoma private & Mesazhe të Drejtpërdrejtë.";
-"delete_account_data_warning" = "Të fshihen të dhënat e llogarisë të llojit %1$@\?
-\n
-\nPërdoreni me kujdes, mund të shpjerë në sjellje të papritura.";
+"delete_account_data_warning" = "Të fshihen të dhënat e llogarisë të llojit %1$@\?\n\nPërdoreni me kujdes, mund të shpjerë në sjellje të papritura.";
 "bootstrap_info_text_2" = "Jepni një frazë sigurie që e dini vetëm ju, e përdorur për të siguruar të fshehta në shërbyesin tuaj.";
-"bootstrap_cancel_text" = "Nëse e anuloni tani, mund të humbni mesazhe & të dhëna të fshehtëzuara, nëse humbni hyrje te kredencialet tuaja.
-\n
-\nMundeni edhe të ujdisni Kopjeruajtje të Sigurt & të administroni kyçet tuaj, te Rregullimet.";
+"bootstrap_cancel_text" = "Nëse e anuloni tani, mund të humbni mesazhe & të dhëna të fshehtëzuara, nëse humbni hyrje te kredencialet tuaja.\n\nMundeni edhe të ujdisni Kopjeruajtje të Sigurt & të administroni kyçet tuaj, te Rregullimet.";
 "room_created_summary_item_by_you" = "Krijuat dhe formësuat dhomën.";
 "auth_invalid_login_deactivated_account" = "Kjo llogari është çaktivizuar.";
 "error_saving_media_file" = "S’u ruajt dot kartelë media";
@@ -1562,9 +1461,7 @@
 "direct_room_encryption_enabled_tile_description" = "Mesazhet në këtë dhomë s’fshehtëzohen skaj-më-skaj.";
 "direct_room_profile_section_more_leave" = "Braktise";
 "direct_room_profile_section_more_settings" = "Rregullime";
-"direct_room_profile_encrypted_subtitle" = "Mesazhet këtu janë të fshehtëzuar skaj-më-skaj.
-\n
-\nMesazhet tuaj janë të siguruar me kyçje dhe vetëm ju dhe marrësi kanë kyçet unikë për shkyçjen e tyre.";
+"direct_room_profile_encrypted_subtitle" = "Mesazhet këtu janë të fshehtëzuar skaj-më-skaj.\n\nMesazhet tuaj janë të siguruar me kyçje dhe vetëm ju dhe marrësi kanë kyçet unikë për shkyçjen e tyre.";
 "direct_room_profile_not_encrypted_subtitle" = "Mesazhet këtu s’janë të fshehtëzuar skaj-më-skaj.";
 "login_error_outdated_homeserver_warning_content" = "Ky shërbyes Home po xhiron një version të vjetër. Kërkojini përgjegjësit të shërbyesit tuaj Home ta përmirësojë. Mund të vazhdoni, por disa veçori mund të mos punojnë si duhet.";
 "direct_room_join_rules_invite_by_you" = "E bëtë këtë vetëm me ftesa.";
@@ -1645,8 +1542,7 @@
 "settings_security_pin_code_change_pin_summary" = "Ndryshoni PIN-in tuaj të tanishëm";
 "settings_security_pin_code_change_pin_title" = "Ndryshoni PIN-in";
 "room_preview_no_preview_join" = "S’mund të bëhet paraparje e kësaj dhome. Doni të hyni\?";
-"room_preview_not_found" = "Te kjo dhomë s’hyhet dot tani.
-\nRiprovoni më vonë, ose kërkojini një përgjegjësi dhome të kontrollojë nëse keni leje për hyrje.";
+"room_preview_not_found" = "Te kjo dhomë s’hyhet dot tani.\nRiprovoni më vonë, ose kërkojini një përgjegjësi dhome të kontrollojë nëse keni leje për hyrje.";
 "room_alias_publish_to_directory_error" = "S’arrihet të merret dukshmëria për listën e tanishme të dhomave (%1$@).";
 "room_alias_publish_to_directory" = "Të bëhet publike kjo dhomë te publiket në listën e dhomave të %1$@\?";
 "room_alias_action_unpublish" = "Hiqe këtë adresë nga publike";
@@ -1789,21 +1685,18 @@
 "dialog_edit_hint" = "Vlerë e re";
 "action_switch" = "Ndërroje";
 "event_status_sent_message" = "Mesazh i dërguar";
-"initial_sync_start_downloading" = "Njëkohësimi fillestar:
-\nPo shkarkohen të dhëna…";
-"initial_sync_start_server_computing" = "Njëkohësimi fillestar:
-\nPo pritet për përgjigje nga shërbyesi…";
+"initial_sync_start_downloading" = "Njëkohësimi fillestar:\nPo shkarkohen të dhëna…";
+"initial_sync_start_server_computing" = "Njëkohësimi fillestar:\nPo pritet për përgjigje nga shërbyesi…";
 "spaces_beta_welcome_to_spaces_desc" = "Hapësirat janë mënyra për të grupuar dhoma dhe persona.";
 "you_are_invited" = "Jeni ftuar";
 "space_add_existing_rooms" = "Shtoni dhoma ekzistuese dhe hapësira";
 "leave_space" = "Braktiseni";
 "space_add_child_title" = "Shtoni dhoma";
 "space_explore_activity_title" = "Eksploroni dhoma";
-"room_alias_preview_not_found" = "Ky alias s’mund të përdoret tani.
-\nRiprovoni më vonë, ose kërkojini një përgjegjësi dhome të kontrollojë nëse keni leje për hyrje.";
+"room_alias_preview_not_found" = "Ky alias s’mund të përdoret tani.\nRiprovoni më vonë, ose kërkojini një përgjegjësi dhome të kontrollojë nëse keni leje për hyrje.";
 "join_anyway" = "Hyni, Sido Qoftë";
 "join_space" = "Hyni te Hapësirë";
-"create_space" = "Krijo Hapësirën";
+"create_space" = "Krijo hapësirën";
 "skip_for_now" = "Hëpërhë anashkaloje";
 "share_space_link_message" = "Ejani në hapësirën time %1$@ %2$@";
 "invite_just_to_this_room_desc" = "S’do të jenë pjesë e %@";
@@ -1842,7 +1735,7 @@
 "create_spaces_choose_type_label" = "Ç’lloj hapësire doni të krijoni\?";
 "your_private_space" = "Hapësira juaj private";
 "your_public_space" = "Hapësira juaj publike";
-"add_space" = "Shtoni Hapësirë";
+"add_space" = "Shtoni hapësirë";
 "command_description_leave_room" = "Braktiseni dhomën me ID-në e dhënë (ose dhomën e tanishme, në qoftë nul)";
 "command_description_join_space" = "Hyni te Hapësira me ID-në e dhënë";
 "command_description_create_space" = "Krijoni një Hapësirë";
@@ -1875,13 +1768,11 @@
 "use_as_default_and_do_not_ask_again" = "Përdore si parazgjedhje dhe mos pyet sërish";
 "option_always_ask" = "Pyet përherë";
 "this_space_has_no_rooms_admin" = "Disa dhoma mund të jenë të fshehura, ngaqë janë private dhe mund t’ju duhet një ftesë.";
-"this_space_has_no_rooms_not_admin" = "Disa dhoma mund të jenë të fshehura, ngaqë janë private dhe ju duhet një ftesë.
-\nS’keni leje të shtoni dhoma.";
+"this_space_has_no_rooms_not_admin" = "Disa dhoma mund të jenë të fshehura, ngaqë janë private dhe ju duhet një ftesë.\nS’keni leje të shtoni dhoma.";
 "this_space_has_no_rooms" = "Kjo hapësirë s’ka dhoma";
 "spaces_no_server_support_description" = "Ju lutemi, për më tepër hollësi, lidhuni me përgjegjësin e shërbyesit tuaj Home";
 "spaces_no_server_support_title" = "Duket sikur shërbyesi juaj Home nuk mbulon ende Hapësira";
-"spaces_feeling_experimental_subspace" = "Ndiheni eksperimentues\?
-\nMund të shtoni te një hapësirë hapësira ekzistuese.";
+"spaces_feeling_experimental_subspace" = "Ndiheni eksperimentues\?\nMund të shtoni te një hapësirë hapësira ekzistuese.";
 "space_leave_prompt_msg_as_admin" = "Jeni përgjegjësi i vetëm i kësaj hapësire. Braktisja e saj do të thotë se askush s’do të ketë kontroll mbi të.";
 "space_leave_prompt_msg_private" = "S’do të jeni në gjendje të rihyni pa një ftesë.";
 "space_leave_prompt_msg_only_you" = "Jeni personi i vetëm këtu. Nëse ikni, askush s’do të jetë në gjendje të marrë pjesë në të ardhmen, përfshi ju.";
@@ -1915,8 +1806,7 @@
 "upgrade_room_update_parent_space" = "Përditëso automatikisht mëmë hapësire";
 "upgrade_room_auto_invite" = "Fto përdorues automatikisht";
 "upgrade_public_room_from_to" = "Do ta përmirësoni këtë dhomë nga %1$@ në %2$@.";
-"upgrade_room_warning" = "Përmirësimi i një dhome është një veprim i thelluar dhe zakonisht i rekomanduar kur një dhomë është e paqëndrueshme për shkak të metash, veçorish që mungojnë ose cenueshmëri sigurie.
-\nZakonisht kjo prek vetëm mënyrën se si trajtohet dhoma te shërbyesi.";
+"upgrade_room_warning" = "Përmirësimi i një dhome është një veprim i thelluar dhe zakonisht i rekomanduar kur një dhomë është e paqëndrueshme për shkak të metash, veçorish që mungojnë ose cenueshmëri sigurie.\nZakonisht kjo prek vetëm mënyrën se si trajtohet dhoma te shërbyesi.";
 "upgrade_private_room" = "Përmirësoni dhomë private";
 "upgrade_public_room" = "Përmirësoni dhomë publike";
 "upgrade" = "Përmirësoje";
@@ -2058,9 +1948,7 @@
 "space_settings_permissions_title" = "Leje hapësire";
 "space_participants_unban_prompt_msg" = "Heqja e dëbimit përdoruesit do t’i lejojë të marrë pjesë sërish në hapësirë.";
 "space_participants_ban_prompt_msg" = "Dëbimi i përdoruesit do ta heqë atë nga kjo hapësirë dhe do t’i pengojë atij rihyrjen.";
-"space_participants_remove_prompt_msg" = "Përzënia e përdoruesit do ta heqë prej kësaj hapësire.
-\n
-\nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.";
+"space_participants_remove_prompt_msg" = "Përzënia e përdoruesit do ta heqë prej kësaj hapësire.\n\nQë të pengohet pjesëmarrja sërish e tij, duhet ta dëboni.";
 "a11y_stop_voice_message" = "Ndale Regjistrimin";
 "command_description_lenny" = "I shton ( ͡° ͜ʖ ͡°) një mesazhi tekst të thjeshtë përpara";
 "settings_discovery_no_policy_provided" = "S’ka rregulla të dhëna nga shërbyesi i identiteteve";
@@ -2115,12 +2003,10 @@
 "legals_home_server_title" = "Rregulla të shërbyesit tuaj Home";
 "legals_application_title" = "Rregulla për %@";
 "analytics_opt_in_list_item_3" = "Këtë mund të çaktivizoni në çfarëdo kohe, që nga rregullimet";
-"analytics_opt_in_list_item_2.b_0" = "Nuk";
-"analytics_opt_in_list_item_1.b_0" = "Nuk";
+"analytics_opt_in_list_item_2" = "<b>Nuk</b> u japin hollësi palëve të treta";
+"analytics_opt_in_list_item_1" = "<b>Nuk</b> regjistrojmë ose profilizojmë ndonjë të dhënë llogarie";
 "analytics_opt_in_content_link" = "këtu";
-"analytics_opt_in_content" = "Ndihmonani të identifikojmë probleme dhe të përmirësojmë %@-in, duke ndarë me ne të dhëna anonime përdorimi. Për të kuptuar se si i përdorin njerëzit disa pajisje njëherësh, do të prodhojmë një identifikues kuturu, të përbashkët për pajisjet tuaja.
-\n
-\nMund të lexoni krejt kushtet tona %@.";
+"analytics_opt_in_content" = "Ndihmonani të identifikojmë probleme dhe të përmirësojmë %@-in, duke ndarë me ne të dhëna anonime përdorimi. Për të kuptuar se si i përdorin njerëzit disa pajisje njëherësh, do të prodhojmë një identifikues kuturu, të përbashkët për pajisjet tuaja.\n\nMund të lexoni krejt kushtet tona %@.";
 "analytics_opt_in_title" = "Ndihmoni të përmirësohet %@-in";
 "action_enable" = "Aktivizoje";
 "restart_the_application_to_apply_changes" = "Që ndryshimi të hyjë në fuqi, rinisni aplikacionin.";
@@ -2212,8 +2098,7 @@
 "message_reaction_show_less" = "Shfaq më pak";
 "location_share_live_stop" = "Ndale";
 "location_share_live_enabled" = "Vendndodhje Drejtpërsëdrejti e aktivizuar";
-"location_in_background_missing_permission_dialog_content" = "Nëse do të donit të tregonit Vendndodhjen tuaj Drejtpërsëdrejti, %@ lyp njohje të vendndodhjes gjithë kohën, kur aplikacioni gjenden në prapaskenë.
-\nDo ta njohim vendndodhjen tuaj vetëm për kohëzgjatjen që zgjidhni ju.";
+"location_in_background_missing_permission_dialog_content" = "Nëse do të donit të tregonit Vendndodhjen tuaj Drejtpërsëdrejti, %@ lyp njohje të vendndodhjes gjithë kohën, kur aplikacioni gjenden në prapaskenë.\nDo ta njohim vendndodhjen tuaj vetëm për kohëzgjatjen që zgjidhni ju.";
 "location_in_background_missing_permission_dialog_title" = "Lejoni hyrje";
 "a11y_location_share_option_pinned_icon" = "Tregoje këtë vendndodhje";
 "location_share_option_pinned" = "Tregoje këtë vendndodhje";
@@ -2221,103 +2106,25 @@
 "location_share_option_user_current" = "Tregoje vendndodhjen time të tanishme";
 "a11y_location_share_locate_button" = "“Zoom” te vendndodhja e tanishme";
 "a11y_location_share_pin_on_map" = "Piketë e vendndodhjes së përzgjedhur në hartë";
-"threads_notice_migration_message" = "Po i afrohemi hedhjes publike në qarkullim Beta për Rrjedha.
-\n
-\nTeksa përgatitemi për të, na duhet të bëjmë disa ndryshime: rrjedha të krijuara para kësaj pike do të shfaqen si përgjigje të rregullta.
-\n
-\nKy do të jetë tranzicion vetëm për një herë, meqë tanimë Rrjedhat janë pjesë e protokollit Matrix.";
+"threads_notice_migration_message" = "Po i afrohemi hedhjes publike në qarkullim Beta për Rrjedha.\n\nTeksa përgatitemi për të, na duhet të bëjmë disa ndryshime: rrjedha të krijuara para kësaj pike do të shfaqen si përgjigje të rregullta.\n\nKy do të jetë tranzicion vetëm për një herë, meqë tanimë Rrjedhat janë pjesë e protokollit Matrix.";
 "threads_notice_migration_title" = "Rrjedhat Po i Afrohen Beta-s 🎉";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ shtoi %2$@ si një adresë për këtë dhomë.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ shtoi %2$@ si adresa për këtë dhomë.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ hoqi %2$@ si adresë për këtë dhomë.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ hoqi %2$@ si adresa për këtë dhomë.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Shtuat %1$@ si një adresë për këtë dhomë.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Shtuat %1$@ si adresa për këtë dhomë.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Hoqët %1$@ si një adresë për këtë dhomë.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Hoqët %1$@ si adresa për këtë dhomë.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ dhe %4$d tjetër";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ dhe %4$d të tjerë";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Hoqët adresën alternative %1$@ për këtë dhomë.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Hoqët adresat alternative %1$@ për këtë dhomë.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ hoqët adresën alternative %2$@ për këtë dhomë.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ hoqët adresat alternative %2$@ për këtë dhomë.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Shtuat adresën alternative %1$@ për këtë dhomë.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Shtuat adresat alternative %1$@ për këtë dhomë.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ shtoi adresën alternative %2$@ për këtë dhomë.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ shtoi adresat alternative %2$@ për këtë dhomë.";
-"plurals.room_details_selected.item_0" = "%d i përzgjedhur";
-"plurals.room_details_selected.item_1" = "%d të përzgjedhur";
-"plurals.membership_changes.item_0" = "%d ndryshim anëtarësie";
-"plurals.membership_changes.item_1" = "%d ndryshime anëtarësie";
-"plurals.room_title_members.item_0" = "%d anëtar";
-"plurals.room_title_members.item_1" = "%d anëtarë";
-"plurals.room_new_messages_notification.item_0" = "%d mesazh i ri";
-"plurals.room_new_messages_notification.item_1" = "%d mesazhe të rinj";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d dhomë";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d dhoma";
-"plurals.active_widgets.item_0" = "%d widget aktiv";
-"plurals.active_widgets.item_1" = "%d widget-e aktivë";
-"plurals.notification_unread_notified_messages.item_0" = "%d mesazh i njoftuar i palexuar";
-"plurals.notification_unread_notified_messages.item_1" = "%d mesazhe të njoftuar të palexuar";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "U rikthye një kopjeruajtje me %d kyç.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "U rikthye një kopjeruajtje me %d kyçe.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "Te ky sesion u shtua %d kyç i ri.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "Te ky sesion u shtuan %d kyçe të rinj.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Po kopjeruhet %d kyç…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Po kopjeruhen %d kyçe…";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d mesazh";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d mesazhe";
-"plurals.notification_compat_summary_title.item_0" = "%d njoftim";
-"plurals.notification_compat_summary_title.item_1" = "%d njoftime";
-"plurals.fallback_users_read.item_0" = "%d përdorues lexoi";
-"plurals.fallback_users_read.item_1" = "%d përdorues lexuan";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekonde…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekondash…";
-"plurals.room_profile_section_more_member_list.item_0" = "Një person";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d persona";
-"plurals.settings_active_sessions_count.item_0" = "%d sesion aktiv";
-"plurals.settings_active_sessions_count.item_1" = "%d sesione aktive";
-"plurals.send_images_with_original_size.item_0" = "Dërgoje figurën në madhësinë origjinale";
-"plurals.send_images_with_original_size.item_1" = "Dërgoji figurat në madhësinë origjinale";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "U dërguan ftesa te %1$@ dhe një tjetër";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "U dërguan ftesa te %1$@ dhe %2$d të tjerë";
-"plurals.seconds.item_0" = "%d sekondë";
-"plurals.seconds.item_1" = "%d sekonda";
-"plurals.room_settings_banned_users_count.item_0" = "%d përdorues i dëbuar";
-"plurals.room_settings_banned_users_count.item_1" = "%d përdorues të dëbuar";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d kyç i importuar me sukses.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d kyçe të importuar me sukses.";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ dhe %3$d tjetër i lexuar";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ dhe %3$d të tjerë të lexuar";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Kod i gabuar, edhe %d provë";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Kod i gabuar, edhe %d prova";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Shfaq pajisjen me të cilën mund të bëni verifikim tani";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Shfaq %d pajisjet me të cilat mund të bëni verifikim tani";
-"plurals.notification_invitations.item_0" = "%d ftesë";
-"plurals.notification_invitations.item_1" = "%d ftesa";
-"plurals.entries.item_0" = "%d zë";
-"plurals.entries.item_1" = "%d zëra";
-"plurals.space_people_you_know.item_0" = "%d person që e njihni është bërë pjesë tashmë";
-"plurals.space_people_you_know.item_1" = "%d persona që i njihni janë bërë pjesë tashmë";
-"plurals.send_videos_with_original_size.item_0" = "Dërgoje videon në madhësinë origjinale";
-"plurals.send_videos_with_original_size.item_1" = "Dërgoji videot në madhësinë origjinale";
-"plurals.missed_video_call.item_0" = "Thirrje video e humbur";
-"plurals.missed_video_call.item_1" = "%d thirrje video të humbura";
-"plurals.missed_audio_call.item_0" = "Thirrje audio e humbur";
-"plurals.missed_audio_call.item_1" = "%d thirrje audio të humbura";
-"plurals.call_active_status.item_0" = "Thirrje aktive ·";
-"plurals.call_active_status.item_1" = "%1$d thirrje aktive ·";
-"plurals.create_poll_not_enough_options_error.item_0" = "Është e domosdoshme të paktën %1$@ mundësi";
-"plurals.create_poll_not_enough_options_error.item_1" = "Janë të domosdoshme të paktën %1$@ mundësi";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Rezultati përfundimtar, bazua në %1$d votë";
-"plurals.poll_total_vote_count_after_ended.item_1" = "Rezultati përfundimtar, bazua në %1$d vota";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Bazuar në %1$d votë";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "Bazuar në %1$d vota";
-"plurals.poll_option_vote_count.item_0" = "%1$d votë";
-"plurals.poll_option_vote_count.item_1" = "%1$d vota";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d votë e hedhur. Votoni, që të shihni përfundimet";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d vota të hedhur. Votoni, që të shihni përfundimet";
-"plurals.message_reaction_show_more.item_0" = "%1$d më tepër";
-"plurals.message_reaction_show_more.item_1" = "%1$d më tepër";
-"plurals.notice_room_server_acl_changes.item_0" = "%d ndryshim ACL-sh shërbyesi";
-"plurals.notice_room_server_acl_changes.item_1" = "%d ndryshimë ACL-sh shërbyesi";
+"live_location_sharing_notification_description" = "Tregimi i vendndodhjes është në punë e sipër";
+"a11y_location_share_option_user_live_icon" = "Jepe vendndodhjen “live”";
+"location_share_option_user_live" = "Jepe vendndodhjen “live”";
+"error_forbidden_digits_only_username" = "Shërbyesi Home s’pranon emër përdorues vetëm me shifra.";
+"ftue_personalize_skip_this_step" = "Anashkalojeni këtë hap";
+"ftue_personalize_submit" = "Ruajeni dhe vazhdoni";
+"ftue_personalize_complete_subtitle" = "Parapëlqimet tuaja u ruajtën.";
+"ftue_personalize_complete_title" = "Kaq qe!";
+"ftue_personalize_lets_go" = "Shkojmë";
+"ftue_profile_picture_subtitle" = "Këtë mund ta ndryshoni kurdo.";
+"ftue_profile_picture_title" = "Shtoni një foto profili";
+"ftue_display_name_entry_footer" = "Këtë mund ta ndryshoni më vonë";
+"ftue_display_name_entry_title" = "Emër Në Ekran";
+"ftue_display_name_subtitle" = "Kjo do të shfaqet kur dërgoni mesazhe.";
+"ftue_display_name_title" = "Zgjidhni një emër për në ekran";
+"ftue_account_created_subtitle" = "Llogaria juaj %@ u krijua.";
+"ftue_account_created_congratulations_title" = "Përgëzime!";
+"ftue_account_created_take_me_home" = "Shpjemëni në shtëpi";
+"ftue_account_created_personalize" = "Personalizoni profil";
+"action_disable" = "Çaktivizoje";

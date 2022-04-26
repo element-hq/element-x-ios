@@ -1,0 +1,938 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>active_widgets</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d активні віджети</string>
+			<key>many</key>
+			<string>%d активних віджетів</string>
+			<key>one</key>
+			<string>%d активнеий віджет</string>
+			<key>other</key>
+			<string>%d активних віджетів</string>
+		</dict>
+	</dict>
+	<key>call_active_status</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d активні виклики ·</string>
+			<key>many</key>
+			<string>%1$d активних викликів ·</string>
+			<key>one</key>
+			<string>Активний виклик ·</string>
+			<key>other</key>
+			<string>%1$d активних викликів ·</string>
+		</dict>
+	</dict>
+	<key>create_poll_not_enough_options_error</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Потрібні принаймні %1$@ варіанти</string>
+			<key>many</key>
+			<string>Потрібні принаймні %1$@ варіантів</string>
+			<key>one</key>
+			<string>Потрібен принаймні %1$@ варіант</string>
+			<key>other</key>
+			<string>Потрібні принаймні %1$@ варіантів</string>
+		</dict>
+	</dict>
+	<key>encryption_import_room_keys_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d/%2$d ключі успішно імпортовано.</string>
+			<key>many</key>
+			<string>%1$d/%2$d ключів успішно імпортовано.</string>
+			<key>one</key>
+			<string>%1$d/%2$d ключ успішно імпортовано.</string>
+			<key>other</key>
+			<string>%1$d/%2$d ключів успішно імпортовано.</string>
+		</dict>
+	</dict>
+	<key>entries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d елементи</string>
+			<key>many</key>
+			<string>%d елементів</string>
+			<key>one</key>
+			<string>%d елемент</string>
+			<key>other</key>
+			<string>%d елементів</string>
+		</dict>
+	</dict>
+	<key>fallback_users_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Прочитали %d користувачі</string>
+			<key>many</key>
+			<string>Прочитали %d користувачів</string>
+			<key>one</key>
+			<string>Прочитано %d користувачем</string>
+			<key>other</key>
+			<string>Прочитали %d користувачів</string>
+		</dict>
+	</dict>
+	<key>invitations_sent_to_one_and_more_users</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Запрошення надіслано для %1$@ та ще %2$d особам</string>
+			<key>many</key>
+			<string>Запрошення надіслано для %1$@ та ще %2$d осіб</string>
+			<key>one</key>
+			<string>Запрошення надіслано для %1$@ та ще одній особі</string>
+			<key>other</key>
+			<string>Запрошення надіслано для %1$@ та ще %2$d осіб</string>
+		</dict>
+	</dict>
+	<key>keys_backup_info_keys_backing_up</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Резервне копіювання %d ключів…</string>
+			<key>many</key>
+			<string>Резервне копіювання %d ключів…</string>
+			<key>one</key>
+			<string>Резервне копіювання %d ключа…</string>
+			<key>other</key>
+			<string>Резервне копіювання %d ключів…</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part1</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Відновлено резервну копію з %d ключами.</string>
+			<key>many</key>
+			<string>Відновлено резервну копію з %d ключами.</string>
+			<key>one</key>
+			<string>Відновлено резервну копію з %d ключем.</string>
+			<key>other</key>
+			<string>Відновлено резервну копію з %d ключами.</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part2</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>До цього сеансу додано %d нові ключі.</string>
+			<key>many</key>
+			<string>До цього сеансу додано %d нових ключів.</string>
+			<key>one</key>
+			<string>До цього сеансу додано %d новий ключ.</string>
+			<key>other</key>
+			<string>До цього сеансу додано %d нових ключів.</string>
+		</dict>
+	</dict>
+	<key>login_error_limit_exceeded_retry_after</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Надіслано забагато запитів. Спробуйте знову за %1$d секунди…</string>
+			<key>many</key>
+			<string>Надіслано забагато запитів. Спробуйте знову за %1$d секунд…</string>
+			<key>one</key>
+			<string>Надіслано забагато запитів. Спробуйте знову за %1$d секунду…</string>
+			<key>other</key>
+			<string>Надіслано забагато запитів. Спробуйте знову за %1$d секунд…</string>
+		</dict>
+	</dict>
+	<key>membership_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d зміни членства</string>
+			<key>many</key>
+			<string>%d змін членства</string>
+			<key>one</key>
+			<string>%d зміна  членства</string>
+		</dict>
+	</dict>
+	<key>message_reaction_show_more</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>І ще %1$d</string>
+			<key>many</key>
+			<string>І ще %1$d</string>
+			<key>one</key>
+			<string>І ще %1$d</string>
+			<key>other</key>
+			<string>І ще %1$d</string>
+		</dict>
+	</dict>
+	<key>missed_audio_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d пропущених аудіовиклики</string>
+			<key>many</key>
+			<string>%d пропущених аудіовикликів</string>
+			<key>one</key>
+			<string>Пропущено аудіовиклик</string>
+			<key>other</key>
+			<string>%d пропущених аудіовикликів</string>
+		</dict>
+	</dict>
+	<key>missed_video_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d пропущені відеовиклики</string>
+			<key>many</key>
+			<string>%d пропущених відеовикликів</string>
+			<key>one</key>
+			<string>Пропущений відеовиклик</string>
+			<key>other</key>
+			<string>%d пропущених відеовикликів</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ додає %2$@ адресами кімнати.</string>
+			<key>many</key>
+			<string>%1$@ додає %2$@ адресами кімнати.</string>
+			<key>one</key>
+			<string>%1$@ додає %2$@ адресою кімнати.</string>
+			<key>other</key>
+			<string>%1$@ додає %2$@ адресами кімнати.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Ви додали %1$@ адресами кімнати.</string>
+			<key>many</key>
+			<string>Ви додали %1$@ адресами кімнати.</string>
+			<key>one</key>
+			<string>Ви додали %1$@ адресою кімнати.</string>
+			<key>other</key>
+			<string>Ви додали %1$@ адресами кімнати.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ вилучає адреси кімнати %2$@.</string>
+			<key>many</key>
+			<string>%1$@ вилучає адреси кімнати %2$@.</string>
+			<key>one</key>
+			<string>%1$@ вилучає адресу кімнати %2$@.</string>
+			<key>other</key>
+			<string>%1$@ вилучає адреси кімнати %2$@.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Ви вилучили адреси кімнати %1$@.</string>
+			<key>many</key>
+			<string>Ви вилучили адреси кімнати %1$@.</string>
+			<key>one</key>
+			<string>Ви вилучили адресу кімнати %1$@.</string>
+			<key>other</key>
+			<string>Ви вилучили адреси кімнати %1$@.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ додає альтернативні адреси %2$@ для цієї кімнати.</string>
+			<key>many</key>
+			<string>%1$@ додає альтернативні адреси %2$@ для цієї кімнати.</string>
+			<key>one</key>
+			<string>%1$@ додає альтернативну адресу %2$@ для цієї кімнати.</string>
+			<key>other</key>
+			<string>%1$@ додає альтернативні адреси %2$@ для цієї кімнати.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Ви додаєте альтернативні адреси %1$@ для цієї кімнати.</string>
+			<key>many</key>
+			<string>Ви додаєте альтернативні адреси %1$@ для цієї кімнати.</string>
+			<key>one</key>
+			<string>Ви додаєте альтернативну адресу %1$@ для цієї кімнати.</string>
+			<key>other</key>
+			<string>Ви додаєте альтернативні адреси %1$@ для цієї кімнати.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ вилучає альтернативні адреси %2$@ для цієї кімнати.</string>
+			<key>many</key>
+			<string>%1$@ вилучає альтернативні адреси %2$@ для цієї кімнати.</string>
+			<key>one</key>
+			<string>%1$@ вилучає альтернативну адресу %2$@ для цієї кімнати.</string>
+			<key>other</key>
+			<string>%1$@ вилучає альтернативні адреси %2$@ для цієї кімнати.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Ви вилучили альтернативні адреси %1$@ для цієї кімнати.</string>
+			<key>many</key>
+			<string>Ви вилучили альтернативні адреси %1$@ для цієї кімнати.</string>
+			<key>one</key>
+			<string>Ви вилучили альтернативну адресу %1$@ для цієї кімнати.</string>
+			<key>other</key>
+			<string>Ви вилучили альтернативні адреси %1$@ для цієї кімнати.</string>
+		</dict>
+	</dict>
+	<key>notice_room_server_acl_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d зміни ACL сервера</string>
+			<key>many</key>
+			<string>%d змін ACL сервера</string>
+			<key>one</key>
+			<string>%d зміна ACL сервера</string>
+			<key>other</key>
+			<string>%d змін ACL сервера</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_line_for_room</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@: %2$d повідомлення</string>
+			<key>many</key>
+			<string>%1$@: %2$d повідомлень</string>
+			<key>one</key>
+			<string>%1$@: %2$d повідомлення</string>
+			<key>other</key>
+			<string>%1$@: %2$d повідомлень</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d сповіщення</string>
+			<key>many</key>
+			<string>%d сповіщень</string>
+			<key>one</key>
+			<string>%d сповіщення</string>
+			<key>other</key>
+			<string>%d сповіщень</string>
+		</dict>
+	</dict>
+	<key>notification_invitations</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d запрошення</string>
+			<key>many</key>
+			<string>%d запрошень</string>
+			<key>one</key>
+			<string>%d запрошення</string>
+			<key>other</key>
+			<string>%d запрошень</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d непрочитані сповіщення</string>
+			<key>many</key>
+			<string>%d непрочитаних сповіщень</string>
+			<key>one</key>
+			<string>%d непрочитане сповіщення</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages_in_room_rooms</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d кімнати</string>
+			<key>many</key>
+			<string>%d кімнат</string>
+			<key>one</key>
+			<string>%d кімната</string>
+		</dict>
+	</dict>
+	<key>poll_option_vote_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d голоси</string>
+			<key>many</key>
+			<string>%1$d голосів</string>
+			<key>one</key>
+			<string>%1$d голос</string>
+			<key>other</key>
+			<string>%1$d голосів</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_after_ended</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Остаточний результат на підставі %1$d голосів</string>
+			<key>many</key>
+			<string>Остаточний результат на підставі %1$d голосів</string>
+			<key>one</key>
+			<string>Остаточний результат на підставі %1$d голосу</string>
+			<key>other</key>
+			<string>Остаточний результат на підставі %1$d голосів</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_not_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d голоси. Проголосуйте, щоб побачити результати</string>
+			<key>many</key>
+			<string>%1$d голосів. Проголосуйте, щоб побачити результати</string>
+			<key>one</key>
+			<string>%1$d голос. Проголосуйте, щоб побачити результати</string>
+			<key>other</key>
+			<string>%1$d голосів. Проголосуйте, щоб побачити результати</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>На підставі %1$d голосів</string>
+			<key>many</key>
+			<string>На підставі %1$d голосів</string>
+			<key>one</key>
+			<string>На підставі %1$d голосу</string>
+			<key>other</key>
+			<string>На підставі %1$d голосів</string>
+		</dict>
+	</dict>
+	<key>room_details_selected</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d вибрано</string>
+			<key>many</key>
+			<string>%d вибрано</string>
+			<key>one</key>
+			<string>%d вибрано</string>
+			<key>other</key>
+			<string>%d вибрано</string>
+		</dict>
+	</dict>
+	<key>room_displayname_four_and_more_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@, %2$@, %3$@ та %4$d інші</string>
+			<key>many</key>
+			<string>%1$@, %2$@, %3$@ та %4$d інших</string>
+			<key>one</key>
+			<string>%1$@, %2$@, %3$@ та %4$d інший</string>
+			<key>other</key>
+			<string>%1$@, %2$@, %3$@ та %4$d інших</string>
+		</dict>
+	</dict>
+	<key>room_new_messages_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d нових повідомленя</string>
+			<key>many</key>
+			<string>%d нових повідомлень</string>
+			<key>one</key>
+			<string>%d нове повідомлення</string>
+		</dict>
+	</dict>
+	<key>room_profile_section_more_member_list</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d особи</string>
+			<key>many</key>
+			<string>%1$d осіб</string>
+			<key>one</key>
+			<string>Одна особа</string>
+			<key>other</key>
+			<string>%1$d осіб</string>
+		</dict>
+	</dict>
+	<key>room_settings_banned_users_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d заблоковані користувачі</string>
+			<key>many</key>
+			<string>%d заблокованих користувачів</string>
+			<key>one</key>
+			<string>%d заблокований користувач</string>
+			<key>other</key>
+			<string>%d заблокованих користувачів</string>
+		</dict>
+	</dict>
+	<key>room_title_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d учасники</string>
+			<key>many</key>
+			<string>%d учасників</string>
+			<key>one</key>
+			<string>%d учасник</string>
+			<key>other</key>
+			<string>%d учасників</string>
+		</dict>
+	</dict>
+	<key>seconds</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d секунди</string>
+			<key>many</key>
+			<string>%d секунд</string>
+			<key>one</key>
+			<string>%d секунда</string>
+			<key>other</key>
+			<string>%d секунд</string>
+		</dict>
+	</dict>
+	<key>secure_backup_reset_devices_you_can_verify</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Показати %d пристрої, з яких ви можете звірити цей сеанс просто зараз</string>
+			<key>many</key>
+			<string>Показати %d пристроїв, з яких ви можете звірити цей сеанс просто зараз</string>
+			<key>one</key>
+			<string>Показати пристрій, з якого ви можете звірити цей сеанс просто зараз</string>
+			<key>other</key>
+			<string>Показати %d пристроїв, з яких ви можете звірити цей сеанс просто зараз</string>
+		</dict>
+	</dict>
+	<key>send_images_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Надіслати зображення в оригінальному розмірі</string>
+			<key>many</key>
+			<string>Надіслати зображення в оригінальному розмірі</string>
+			<key>one</key>
+			<string>Надіслати зображення в оригінальному розмірі</string>
+			<key>other</key>
+			<string>Надіслати зображення в оригінальному розмірі</string>
+		</dict>
+	</dict>
+	<key>send_videos_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Надіслати відео в оригінальному розмірі</string>
+			<key>many</key>
+			<string>Надіслати відео в оригінальному розмірі</string>
+			<key>one</key>
+			<string>Надіслати відео в оригінальному розмірі</string>
+			<key>other</key>
+			<string>Надіслати відео в оригінальному розмірі</string>
+		</dict>
+	</dict>
+	<key>settings_active_sessions_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d активні сеанси</string>
+			<key>many</key>
+			<string>%d активних сеансів</string>
+			<key>one</key>
+			<string>%d активний сеанс</string>
+			<key>other</key>
+			<string>%d активних сеансів</string>
+		</dict>
+	</dict>
+	<key>space_people_you_know</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d ваші знайомі вже приєдналися</string>
+			<key>many</key>
+			<string>%d ваших знайомих уже приєдналися</string>
+			<key>one</key>
+			<string>%d із ваших знайомих уже тут</string>
+			<key>other</key>
+			<string>%d ваших знайомих уже приєдналися</string>
+		</dict>
+	</dict>
+	<key>two_and_some_others_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@, %2$@ і %3$d інших прочитали</string>
+			<key>many</key>
+			<string>%1$@, %2$@ і %3$d інших прочитали</string>
+			<key>one</key>
+			<string>%1$@, %2$@ і %3$d інший прочитали</string>
+			<key>other</key>
+			<string>%1$@, %2$@ і %3$d інших прочитали</string>
+		</dict>
+	</dict>
+	<key>wrong_pin_message_remaining_attempts</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Неправильний код, залишилося %d спроби</string>
+			<key>many</key>
+			<string>Неправильний код, залишилося %d спроб</string>
+			<key>one</key>
+			<string>Неправильний код, залишилася %d спроба</string>
+			<key>other</key>
+			<string>Неправильний код, залишилося %d спроб</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

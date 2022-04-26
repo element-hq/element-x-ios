@@ -37,23 +37,14 @@
 "room_displayname_room_invite" = "Meghívó egy szobába";
 "room_displayname_two_members" = "%1$@ és %2$@";
 "room_displayname_empty_room" = "Üres szoba";
-"initial_sync_start_importing_account" = "Induló szinkronizáció:
-\nFiók betöltése…";
-"initial_sync_start_importing_account_crypto" = "Induló szinkronizáció:
-\nTitkosítás betöltése";
-"initial_sync_start_importing_account_rooms" = "Induló szinkronizáció:
-\nSzobák betöltése";
-"initial_sync_start_importing_account_joined_rooms" = "Induló szinkronizáció:
-\nBeszélgetések betöltése
-\nHa sok szobában vagy jelen sokáig tarthat";
-"initial_sync_start_importing_account_invited_rooms" = "Induló szinkronizáció:
-\nMeghívott szobák betöltése";
-"initial_sync_start_importing_account_left_rooms" = "Induló szinkronizáció:
-\nElhagyott szobák betöltése";
-"initial_sync_start_importing_account_groups" = "Induló szinkronizáció:
-\nKözösségek betöltése";
-"initial_sync_start_importing_account_data" = "Induló szinkronizáció:
-\nFiók adatok betöltése";
+"initial_sync_start_importing_account" = "Induló szinkronizáció:\nFiók betöltése…";
+"initial_sync_start_importing_account_crypto" = "Induló szinkronizáció:\nTitkosítás betöltése";
+"initial_sync_start_importing_account_rooms" = "Induló szinkronizáció:\nSzobák betöltése";
+"initial_sync_start_importing_account_joined_rooms" = "Induló szinkronizáció:\nBeszélgetések betöltése\nHa sok szobában vagy jelen sokáig tarthat";
+"initial_sync_start_importing_account_invited_rooms" = "Induló szinkronizáció:\nMeghívott szobák betöltése";
+"initial_sync_start_importing_account_left_rooms" = "Induló szinkronizáció:\nElhagyott szobák betöltése";
+"initial_sync_start_importing_account_groups" = "Induló szinkronizáció:\nKözösségek betöltése";
+"initial_sync_start_importing_account_data" = "Induló szinkronizáció:\nFiók adatok betöltése";
 "notice_room_update" = "%@ frissítette ezt a szobát.";
 "event_status_sending_message" = "Üzenet küldése…";
 "notice_room_third_party_revoked_invite" = "%1$@ visszavonta %2$@ meghívását, hogy csatlakozzon a szobához";
@@ -236,9 +227,7 @@
 "call_error_user_not_responding" = "A hívott fél nem vette fel.";
 "permissions_rationale_popup_title" = "Információ";
 "permissions_rationale_msg_record_audio" = "A %@nek engedélyre van szüksége a mikrofon eléréséhez, hogy hanghívás tudjon indítani.";
-"permissions_rationale_msg_camera_and_audio" = "A %@nek engedélyre van szüksége a mikrofonod és kamerád eléréséhez, hogy videohívást tudj indítani.
-\n
-\nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani.";
+"permissions_rationale_msg_camera_and_audio" = "A %@nek engedélyre van szüksége a mikrofonod és kamerád eléréséhez, hogy videohívást tudj indítani.\n\nEngedélyezd a hozzáférést a következő felugró ablakon, hogy hívást tudj indítani.";
 "yes" = "IGEN";
 "no" = "NEM";
 "_continue" = "Folytatás";
@@ -255,8 +244,7 @@
 "room_participants_action_ignore" = "Az összes üzenet elrejtése ettől a felhasználótól";
 "room_participants_action_unignore" = "Az összes üzenet megjelenítése ettől a felhasználótól";
 "room_participants_action_mention" = "Megemlítés";
-"room_participants_power_level_prompt" = "Nem fogod tudni vissza vonni a változtatásokat mert az adott felhasználó ugyan azzal a jogosultság szinten fog állni mint te.
-\nBiztos vagy benne\?";
+"room_participants_power_level_prompt" = "Nem fogod tudni vissza vonni a változtatásokat mert az adott felhasználó ugyan azzal a jogosultság szinten fog állni mint te.\nBiztos vagy benne\?";
 "room_one_user_is_typing" = "%@ éppen ír…";
 "room_two_users_are_typing" = "%1$@ és %2$@ éppen írnak…";
 "room_many_users_are_typing" = "%1$@, %2$@ és mások éppen írnak…";
@@ -326,8 +314,7 @@
 "settings_new_password" = "Új jelszó";
 "settings_fail_to_update_password" = "Jelszó frissítése sikertelen";
 "settings_password_updated" = "A jelszavad sikeresen frissítésre került";
-"settings_unignore_user" = "Az összes üzenet mutatása %@ -tól/-től?
-Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe.";
+"settings_unignore_user" = "Az összes üzenet mutatása %@ -tól/-től?Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe.";
 "settings_select_country" = "Válassz országot";
 "room_settings_topic" = "Téma";
 "room_settings_room_read_history_rules_pref_title" = "Üzenet előzmények láthatósága";
@@ -447,9 +434,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe.";
 "avatar" = "Profilkép";
 "title_activity_choose_sticker" = "Matrica küldése";
 "option_send_sticker" = "Matrica küldése";
-"no_sticker_application_dialog_content" = "Jelenleg nincs matricacsomag bekapcsolva.
-\n
-\nHozzáadsz most párat\?";
+"no_sticker_application_dialog_content" = "Jelenleg nincs matricacsomag bekapcsolva.\n\nHozzáadsz most párat\?";
 "settings_deactivate_account_section" = "Fiók felfüggesztése";
 "settings_deactivate_my_account" = "Saját fiók felfüggesztése";
 "settings_opt_in_of_analytics" = "Analitikai adatok küldése";
@@ -458,8 +443,7 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe.";
 "dialog_user_consent_content" = "A(z) %1$@ Matrix szerver további használatához el kell olvasnod és el kell fogadnod az általános szerződési feltételeket.";
 "dialog_user_consent_submit" = "Elolvasom";
 "deactivate_account_title" = "Fiók felfüggesztése";
-"deactivate_account_content.b_0" = "Ez a művelet visszavonhatatlan";
-"deactivate_account_content.b_1" = "alapesetben nem törli azokat az üzeneteket amiket elküldtél";
+"deactivate_account_content" = "Ez véglegesen használhatatlanná teszi a felhasználói fiókodat. Nem tudsz többé bejelentkezni, és más sem fog tudni regisztrálni ezzel a felhasználói azonosítóval. A felhasználód minden szobából amiben van ki fog lépni és a felhasználói adatod törlésre kerül az \"identity\" szerverről. <b>Ez a művelet visszavonhatatlan</b>A fiók felfüggesztése <b>alapesetben nem törli azokat az üzeneteket amiket elküldtél</b>. Ha azt szeretnéd, hogy töröljük az üzeneteket, koppints a jelölőnégyzetre alul.Matrixban az üzenetek láthatósága hasonlít az e-mailre. Az üzenet törlése azt jelenti, hogy az általad küldött üzeneteket nem osztjuk meg új-, vagy nem regisztrált felhasználókkal de azok a regisztrált felhasználók akik már hozzájutottak az üzenetedhez továbbra is elérik a saját másolatukat.";
 "deactivate_account_delete_checkbox" = "Kérlek töröld az elküldött üzeneteimet a fiók felfüggesztésekor (Figyelem: emiatt a felhasználók részleges beszélgetéseket látnak majd)";
 "deactivate_account_submit" = "Fiók felfüggesztése";
 "action_download" = "Letöltés";
@@ -489,9 +473,9 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe.";
 "room_tombstone_predecessor_link" = "Régebbi üzenetek megjelenítéséhez kattints ide";
 "system_alerts_header" = "Rendszerriasztások";
 "resource_limit_contact_admin" = "vedd fel a kapcsolatot a szolgáltatás adminisztrátorával";
-"resource_limit_soft_default.b_0" = "néhány felhasználó nem tud majd bejelentkezni";
+"resource_limit_soft_default" = "Ez a Matrix szerver túllépte valamely erőforrás korlátot így <b>néhány felhasználó nem tud majd bejelentkezni</b>.";
 "resource_limit_hard_default" = "Ez a Matrix szerver túllépte egyik erőforrás korlátját.";
-"resource_limit_soft_mau.b_0" = "néhány felhasználó nem tud bejelentkezni";
+"resource_limit_soft_mau" = "Ez a Matrix szerver elérte a havi aktív felhasználói korlátját így <b>néhány felhasználó nem tud bejelentkezni</b>.";
 "resource_limit_hard_mau" = "Ez a Matrix szerver elérte a havi aktív felhasználói korlátját.";
 "resource_limit_soft_contact" = "Kérlek %@, hogy ez a korlát megemelésre kerüljön.";
 "resource_limit_hard_contact" = "Kérlek %@, hogy tovább tudd használni ezt a szolgáltatást.";
@@ -536,13 +520,11 @@ Vedd figyelembe, hogy az alkalmazás újraindul  ami sok időt vehet igénybe.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Egy vagy több teszt sikertelenül végződött, kérlek küldj egy hibabejelentést ami segít nekünk a problémát kivizsgálni.";
 "settings_troubleshoot_test_system_settings_title" = "Rendszer beállítások.";
 "settings_troubleshoot_test_system_settings_success" = "Az értesítések engedélyezve vannak a rendszerbeállításokban.";
-"settings_troubleshoot_test_system_settings_failed" = "Az értesítések tiltva vannak a rendszerbeállításokban.
-Kérlek ellenőrizd a rendszerbeállításokat.";
+"settings_troubleshoot_test_system_settings_failed" = "Az értesítések tiltva vannak a rendszerbeállításokban.Kérlek ellenőrizd a rendszerbeállításokat.";
 "open_settings" = "Beállítások megnyitása";
 "settings_troubleshoot_test_account_settings_title" = "Fiók beállítások.";
 "settings_troubleshoot_test_account_settings_success" = "Az értesítések engedélyezve vannak a felhasználói fiókhoz.";
-"settings_troubleshoot_test_account_settings_failed" = "Az értesítések tiltva vannak a felhasználói fiókhoz.
-Kérlek ellenőrizd a fiókbeállításokat.";
+"settings_troubleshoot_test_account_settings_failed" = "Az értesítések tiltva vannak a felhasználói fiókhoz.Kérlek ellenőrizd a fiókbeállításokat.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Engedélyez";
 "settings_troubleshoot_test_device_settings_title" = "Munkamenet beállítások.";
 "settings_troubleshoot_test_device_settings_success" = "Az értesítések engedélyezve vannak ezen az munkameneten.";
@@ -550,28 +532,21 @@ Kérlek ellenőrizd a fiókbeállításokat.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Engedélyez";
 "settings_troubleshoot_test_play_services_title" = "Play Szolgáltatások ellenőrzése";
 "settings_troubleshoot_test_play_services_success" = "Google Play Services APK elérhető és a legújabb verziójú.";
-"settings_troubleshoot_test_play_services_failed" = "%@ a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ a Google Play Services-t használja  a „push” értesítések fogadásához, de úgy tűnik az nincs megfelelően beállítva:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Play Services javítása";
 "settings_troubleshoot_test_fcm_title" = "Firebase token";
-"settings_troubleshoot_test_fcm_success" = "FCM token fogadása sikeres:
-%1$@";
-"settings_troubleshoot_test_fcm_failed" = "FCM token fogadása sikertelen:
-%1$@";
+"settings_troubleshoot_test_fcm_success" = "FCM token fogadása sikeres:%1$@";
+"settings_troubleshoot_test_fcm_failed" = "FCM token fogadása sikertelen:%1$@";
 "settings_troubleshoot_test_token_registration_title" = "Token regisztráció";
 "settings_troubleshoot_test_token_registration_success" = "FCM token sikeresen regisztrálva a Matrix-kiszolgálón.";
-"settings_troubleshoot_test_token_registration_failed" = "FCM token regisztrációja sikertelen a Matrix-kiszolgálón:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "FCM token regisztrációja sikertelen a Matrix-kiszolgálón:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Indítás az eszköz indulásakor";
 "settings_troubleshoot_test_service_boot_success" = "A szolgáltatás az eszköz újraindulásakor elindul.";
 "settings_troubleshoot_test_service_boot_failed" = "A szolgáltatás az eszköz újraindulásakor nem fog elindulni, addig nem kapsz értesítést amíg egyszer el nem indítod a %@-ot.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Indulás engedélyezése amikor az eszköz elindul";
 "settings_troubleshoot_test_bg_restricted_title" = "Háttér korlátozások ellenőrzése";
-"settings_troubleshoot_test_bg_restricted_success" = "A háttér korlátozások nincsenek érvényben a %@-hoz. Ezt a tesztet mobil hálózaton kell elvégezni (WiFi nélkül).
-%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Háttér korlátozások vannak érvényben a %@-hoz.
-Bármi amit a %@ el akar végezni amíg a háttérben fut, agresszívan korlátozva van. Ez érintheti az értesítéseket is.
-%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "A háttér korlátozások nincsenek érvényben a %@-hoz. Ezt a tesztet mobil hálózaton kell elvégezni (WiFi nélkül).%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Háttér korlátozások vannak érvényben a %@-hoz.Bármi amit a %@ el akar végezni amíg a háttérben fut, agresszívan korlátozva van. Ez érintheti az értesítéseket is.%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Korlátozások tiltása";
 "settings_troubleshoot_test_battery_title" = "Akkumulátor optimalizáció";
 "settings_troubleshoot_test_battery_success" = "%@ot nem érinti az akkumulátor optimalizáció.";
@@ -588,12 +563,9 @@ Bármi amit a %@ el akar végezni amíg a háttérben fut, agresszívan korláto
 "settings_troubleshoot_test_bing_settings_title" = "Egyedi beállítások.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Figyelj rá, hogy néhány üzenet típus csendesre van állítva (csak hang nélkül fog értesíteni).";
 "settings_troubleshoot_test_bing_settings_failed" = "Az egyedi beállításaidban néhány értesítés ki van kapcsolva.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-Ez a hiba a %@on kívül van és a Google szerint ez a hiba azt jelzi, hogy túl sok alkalmazás használja az FCM-et. Ez a hiba akkor szokott előfordulni, ha nagyon sok alkalmazás van ezért egy átlagos felhasználót nem nagyon érinthet.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-Ez a hiba a %@on kívül van. Több okból is előjöhet. Lehet, ha később próbálod már működni fog, de megnézheted, hogy a Google Play szolgáltatásnak nincs beállítva adathasználati korlátozás a rendszer beállításokban vagy, hogy az eszközöd órája helyesen jár-e de ezt előfordulhat egyedi ROM esetén is.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-Ez a hiba a %@on kívül van. Nincs Google fiók az eszközön. Kérlek nyisd meg a fiókkezelőt és adj hozzá egy Google fiókot.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]Ez a hiba a %@on kívül van és a Google szerint ez a hiba azt jelzi, hogy túl sok alkalmazás használja az FCM-et. Ez a hiba akkor szokott előfordulni, ha nagyon sok alkalmazás van ezért egy átlagos felhasználót nem nagyon érinthet.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]Ez a hiba a %@on kívül van. Több okból is előjöhet. Lehet, ha később próbálod már működni fog, de megnézheted, hogy a Google Play szolgáltatásnak nincs beállítva adathasználati korlátozás a rendszer beállításokban vagy, hogy az eszközöd órája helyesen jár-e de ezt előfordulhat egyedi ROM esetén is.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]Ez a hiba a %@on kívül van. Nincs Google fiók az eszközön. Kérlek nyisd meg a fiókkezelőt és adj hozzá egy Google fiókot.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Fiók hozzáadása";
 "settings_noisy_notifications_preferences" = "Hangos értesítések beállítása";
 "settings_call_notifications_preferences" = "Hívás értesítések beállítása";
@@ -606,8 +578,7 @@ Ez a hiba a %@on kívül van. Nincs Google fiók az eszközön. Kérlek nyisd me
 "passphrase_passphrase_too_weak" = "A jelmondat túl gyenge";
 "keys_backup_passphrase_not_empty_error_message" = "Ha azt szeretnéd, hogy a %@ Visszaállítási Kulcsot generáljon akkor kérlek töröld a jelmondatot.";
 "keys_backup_setup_step1_title" = "Soha ne veszíts el titkosított üzenetet";
-"keys_backup_setup_step1_description" = "A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.
-Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.";
+"keys_backup_setup_step1_description" = "A titkosított szobákban az üzenetek végponttól-végpontig titkosítva vannak. Csak neked és a címzetteknek vannak meg az üzenet elolvasásához szükséges kulcsok.Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.";
 "keys_backup_setup_step2_button_title" = "Jelmondat beállítása";
 "keys_backup_setup_step3_button_title" = "Kész";
 "keys_backup_setup_step3_copy_button_title" = "Visszaállítási Kulcs mentése";
@@ -662,16 +633,13 @@ Helyezd biztonságba a kulcsokat, hogy ne vesszenek el.";
 "keys_backup_setup_step1_advanced" = "(Haladó)";
 "keys_backup_setup_step1_manual_export" = "Kulcsok exportálása kézzel";
 "keys_backup_setup_step2_text_title" = "Védd a mentésedet jelmondattal.";
-"keys_backup_setup_step2_text_description" = "A kulcsaid másolatait titkosítva a Matrix szervereden fogjuk tárolni. Védd jelszóval a mentést, a biztonság érdekében.
-\n
-\nA maximális biztonság eléréséhez, használj más jelszót, mint amit a bejelentkezéshez használtál.";
+"keys_backup_setup_step2_text_description" = "A kulcsaid másolatait titkosítva a Matrix szervereden fogjuk tárolni. Védd jelszóval a mentést, a biztonság érdekében.\n\nA maximális biztonság eléréséhez, használj más jelszót, mint amit a bejelentkezéshez használtál.";
 "keys_backup_setup_creating_backup" = "Mentés készítése";
 "keys_backup_setup_step1_recovery_key_alternative" = "Vagy védd a mentésedet egy Visszaállítási Kulccsal amit tárolj biztonságos helyen.";
 "keys_backup_setup_step2_skip_button_title" = "(Haladó) Beállítás Visszaállítási Kulccsal";
 "keys_backup_setup_step3_success_title" = "Sikerült!";
 "keys_backup_setup_step3_text_line1" = "A kulcsaid mentésre kerülnek.";
-"keys_backup_setup_step3_text_line2" = "A Visszaállítási Kulcs egy biztosíték amit használhatsz a titkosított üzenet hozzáférések visszaállítására, ha a jelmondatot elfelejtetted.
-A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)";
+"keys_backup_setup_step3_text_line2" = "A Visszaállítási Kulcs egy biztosíték amit használhatsz a titkosított üzenet hozzáférések visszaállítására, ha a jelmondatot elfelejtetted.A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókezelő (vagy széf)";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Készítettem egy másolatot";
 "keys_backup_setup_step3_share_recovery_file" = "Megosztás";
@@ -708,14 +676,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "notification_inline_reply_failed" = "** A küldés nem sikerült - kérlek nyisd meg a szobát";
 "error_jitsi_not_supported_on_old_device" = "Elnézést, Jitsi konferencia hívások a régi eszközökön (Android OS 6.0-nál régebbi) nem támogatottak";
 "encryption_information_unknown_ip" = "ismeretlen ip";
-"you_added_a_new_device_with_info" = "Új munkamenet kér titkosítási kulcsokat. 
-\nMunkamenet neve: %1$@ 
-\nUtoljára látszott: %2$@ 
-\nHa nem jelentkeztél be másik munkameneten, hagyd figyelmen kívül a kérést.";
-"your_unverified_device_requesting_with_info" = "Ellenőrizetlen munkamenet kér titkosítási kulcsokat. 
-\nMunkamenet neve: %1$@ 
-\nUtoljára látszott: %2$@ 
-\nHa nem jelentkeztél be másik munkamenettel, hagyd figyelmen kívül ezt a kérést.";
+"you_added_a_new_device_with_info" = "Új munkamenet kér titkosítási kulcsokat. \nMunkamenet neve: %1$@ \nUtoljára látszott: %2$@ \nHa nem jelentkeztél be másik munkameneten, hagyd figyelmen kívül a kérést.";
+"your_unverified_device_requesting_with_info" = "Ellenőrizetlen munkamenet kér titkosítási kulcsokat. \nMunkamenet neve: %1$@ \nUtoljára látszott: %2$@ \nHa nem jelentkeztél be másik munkamenettel, hagyd figyelmen kívül ezt a kérést.";
 "share_without_verifying_short_label" = "Megoszt";
 "key_share_request" = "Kulcs Megosztási Kérés";
 "ignore_request_short_label" = "Mellőz";
@@ -763,7 +725,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "create_room_public_description" = "Bárki csatlakozhat ehhez a szobához";
 "keys_backup_unable_to_get_trust_info" = "A megbízhatósági információ beszerzésekor hiba történt";
 "keys_backup_unable_to_get_keys_backup_data" = "A kulcs mentés adatainak beszerzésekor hiba történt";
-"import_e2e_keys_from_file" = "Végponttól végpontig titkosítás kulcsainak betöltése ebből a fájlból: \"%1$@\.";
+"import_e2e_keys_from_file" = "Végponttól végpontig titkosítás kulcsainak betöltése ebből a fájlból: \"%1$@\".";
 "settings_sdk_version" = "Matrix SDK Verzió";
 "settings_other_third_party_notices" = "Harmadik fél megjegyzések";
 "navigate_to_room_when_already_in_the_room" = "Már nézed ezt a szobát!";
@@ -820,11 +782,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "login_error_homeserver_not_found" = "Nem érhető el Matrix-kiszolgáló ezen a címen, ellenőrizd";
 "settings_background_fdroid_sync_mode" = "Háttér Szinkronizálási Mód";
 "settings_background_fdroid_sync_mode_battery" = "Optimalizált akkumulátor használat";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ a háttérben úgy szinkronizál, hogy a leginkább kímélje az eszköz korlátozott erőforrásait (akkumulátor).
-\nAz eszköz erőforrásainak állapotától függően a szinkronizációt az operációs rendszer elhalaszthatja.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ a háttérben úgy szinkronizál, hogy a leginkább kímélje az eszköz korlátozott erőforrásait (akkumulátor).\nAz eszköz erőforrásainak állapotától függően a szinkronizációt az operációs rendszer elhalaszthatja.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimalizálás valós idejű használatra";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ a háttérben rendszeresen, pontosan a megadott időközönként, szinkronizálni fog (beállítható).
-\nEz befolyásolja a rádió és az akkumulátor használatot, és folyamatosan egy értesítés fog megjelenni arról, hogy a %@ figyel a neki küldött eseményekre.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ a háttérben rendszeresen, pontosan a megadott időközönként, szinkronizálni fog (beállítható).\nEz befolyásolja a rádió és az akkumulátor használatot, és folyamatosan egy értesítés fog megjelenni arról, hogy a %@ figyel a neki küldött eseményekre.";
 "settings_background_fdroid_sync_mode_disabled" = "Nincs szinkroniziálás a háttérben";
 "settings_background_fdroid_sync_mode_disabled_description" = "Nem leszel értesítve az érkező üzenetekről, ha az alkalmazás csak a háttérben fut.";
 "settings_discovery_category" = "Felderítés";
@@ -881,29 +841,20 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "report_content_custom_submit" = "JELENTÉS";
 "block_user" = "FELHASZNÁLÓ FIGYELMEN KÍVÜL HAGYÁSA";
 "content_reported_title" = "Tartalom bejelentve";
-"content_reported_content" = "Ez a tartalom bejelentve.
-\n
-\nHa nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra.";
+"content_reported_content" = "Ez a tartalom bejelentve.\n\nHa nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra.";
 "content_reported_as_spam_title" = "Bejelentve nem kívántként (spam)";
-"content_reported_as_spam_content" = "Ez a tartalom nem kívántnak (spam) lett bejelentve.
-\n
-\n Ha nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra.";
+"content_reported_as_spam_content" = "Ez a tartalom nem kívántnak (spam) lett bejelentve.\n\n Ha nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra.";
 "content_reported_as_inappropriate_title" = "Nem idevalónak bejelentve";
-"content_reported_as_inappropriate_content" = "Ez a tartalom nem idevalónak lett bejelentve.
-\n
-\n Ha nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra.";
+"content_reported_as_inappropriate_content" = "Ez a tartalom nem idevalónak lett bejelentve.\n\n Ha nem akarsz ettől a felhasználótól több üzenetet látni akkor blokkolhatod, hogy az üzenetei ne jelenjenek meg számodra.";
 "settings_integrations" = "Integrációk";
-"settings_integrations_summary" = "Botok, hidak, kisalkalmazások és matrica csomagok kezeléséhez használj Integrációs Menedzsert.
-\n
-\nIntegrációs Menedzser megkapja a konfigurációt, módosíthat kisalkalmazásokat, szobához meghívót küldhet és a hozzáférési szintet beállíthatja helyetted.";
+"settings_integrations_summary" = "Botok, hidak, kisalkalmazások és matrica csomagok kezeléséhez használj Integrációs Menedzsert.\n\nIntegrációs Menedzser megkapja a konfigurációt, módosíthat kisalkalmazásokat, szobához meghívót küldhet és a hozzáférési szintet beállíthatja helyetted.";
 "settings_integration_allow" = "Integrációk engedélyezése";
 "room_widget_activity_title" = "Kisalkalmazás";
 "room_widget_permission_title" = "Kisalkalmazás betöltése";
 "room_widget_permission_added_by" = "Ezt a kisalkalmazást hozzáadta:";
 "room_widget_permission_webview_shared_info_title" = "A használatához lehet, hogy sütiket kell használni és adat lesz megosztva ezzel: %@:";
 "room_widget_permission_shared_info_title" = "A használatához lehet, hogy adat lesz megosztva ezzel: %@:";
-"room_widget_failed_to_load" = "Kisalkalmazás betöltése sikertelen:
-\n%@";
+"room_widget_failed_to_load" = "Kisalkalmazás betöltése sikertelen:\n%@";
 "room_widget_reload" = "Kisalkalmazás újratöltése";
 "room_widget_open_in_browser" = "Megnyitás böngészőben";
 "room_widget_revoke_access" = "Hozzáférés megvonása magamtól";
@@ -980,9 +931,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "login_reset_password_success_notice_2" = "Minden munkamenetedből ki vagy jelentkeztetve és „push” értesítéseket sem fogsz kapni. Az értesítések újbóli engedélyezéséhez újra be kell jelentkezned minden eszközön.";
 "login_reset_password_success_submit" = "Vissza a belépéshez";
 "login_reset_password_cancel_confirmation_title" = "Figyelmeztetés";
-"login_reset_password_cancel_confirmation_content" = "A jelszavad még nem módosult.
-\n
-\nMegszakítod a jelszó módosítást\?";
+"login_reset_password_cancel_confirmation_content" = "A jelszavad még nem módosult.\n\nMegszakítod a jelszó módosítást\?";
 "login_set_email_title" = "E-mail cím beállítása";
 "login_set_email_mandatory_hint" = "E-mail";
 "login_set_email_optional_hint" = "E-mail (nem kötelező)";
@@ -998,12 +947,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "login_msisdn_confirm_hint" = "Kód megadása";
 "login_msisdn_confirm_send_again" = "Küld újra";
 "login_msisdn_confirm_submit" = "Következő";
-"login_mode_not_supported" = "Az alkalmazás nem tud bejelentkezni a Matrix szerverbe. A Matrix szerver ezeket a bejelentkezési módokat támogatja: %1$@.
-\n
-\nWeb klienssel szeretnél bejelentkezni\?";
-"login_registration_not_supported" = "Az alkalmazás nem tud fiókot készíteni ezen a Matrix szerveren.
-\n
-\nWeb klienssel szeretnél bejelentkezni\?";
+"login_mode_not_supported" = "Az alkalmazás nem tud bejelentkezni a Matrix szerverbe. A Matrix szerver ezeket a bejelentkezési módokat támogatja: %1$@.\n\nWeb klienssel szeretnél bejelentkezni\?";
+"login_registration_not_supported" = "Az alkalmazás nem tud fiókot készíteni ezen a Matrix szerveren.\n\nWeb klienssel szeretnél bejelentkezni\?";
 "login_reset_password_mail_confirmation_notice_2" = "Koppints a linkre az új jelszó megerősítéséhez. Miután követted a linket, kattints alább.";
 "login_set_email_notice" = "Állíts be egy e-mail címet a fiókod visszaállításához. Később esetleg engedélyezheted, hogy ismerősök e-mail címmel megtalálhassanak.";
 "login_msisdn_error_not_international" = "Nemzetközi telefonszámnak „+” jellel kell kezdődnie";
@@ -1014,28 +959,19 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "login_signup_submit" = "Következő";
 "login_signup_error_user_in_use" = "A felhasználónév már használatban van";
 "login_signup_cancel_confirmation_title" = "Figyelmeztetés";
-"login_signup_cancel_confirmation_content" = "A felhasználói fiókod még nincs kész.
-\n
-\nMegállítód a regisztrációt\?";
+"login_signup_cancel_confirmation_content" = "A felhasználói fiókod még nincs kész.\n\nMegállítód a regisztrációt\?";
 "login_a11y_choose_matrix_org" = "matrix.org kiválasztása";
 "login_a11y_choose_modular" = "Element Matrix Services kiválasztása";
 "login_a11y_choose_other" = "Egyedi matrix szerver kiválasztása";
 "login_a11y_captcha_container" = "Kérlek old meg a captcha-t";
 "login_terms_title" = "Folytatáshoz fogadd el a feltételeket";
 "login_wait_for_email_title" = "Kérlek ellenőrizd az e-mailed";
-"login_wait_for_email_notice" = "E-mailt küldtünk ide: %1$@.
-\nKérlek kattints a benne lévő linkre a fiók készítés folytatásához.";
+"login_wait_for_email_notice" = "E-mailt küldtünk ide: %1$@.\nKérlek kattints a benne lévő linkre a fiók készítés folytatásához.";
 "login_validation_code_is_not_correct" = "A beírt kód helytelen. Kérlek ellenőrizd.";
 "login_error_outdated_homeserver_title" = "Elavult matrix szerver";
 "seen_by" = "Látták:";
 "signed_out_title" = "Kijelentkeztél";
-"signed_out_notice" = "A következő okok miatt lehet:
-\n
-\n• Másik munkamenetedben megváltoztattad a jelszavadat.
-\n
-\n• Törölted ezt a munkamenetedet egy másik munkamenetből.
-\n
-\n• Az általad használt Matrix szerver adminisztrátora biztonsági okokból érvénytelenítette a hozzáférésed.";
+"signed_out_notice" = "A következő okok miatt lehet:\n\n• Másik munkamenetedben megváltoztattad a jelszavadat.\n\n• Törölted ezt a munkamenetedet egy másik munkamenetből.\n\n• Az általad használt Matrix szerver adminisztrátora biztonsági okokból érvénytelenítette a hozzáférésed.";
 "signed_out_submit" = "Lépj be újra";
 "soft_logout_title" = "Kijelentkeztél";
 "soft_logout_signin_title" = "Bejelentkezés";
@@ -1044,16 +980,12 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "soft_logout_signin_submit" = "Bejelentkezés";
 "soft_logout_signin_password_hint" = "Jelszó";
 "soft_logout_clear_data_title" = "Személyes adatok törlése";
-"soft_logout_clear_data_notice" = "Figyelmeztetés: A személyes adataid (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva.
-\n
-\nHa az eszközt nem használod tovább, vagy másik fiókba szeretnél bejelentkezni, töröld őket.";
+"soft_logout_clear_data_notice" = "Figyelmeztetés: A személyes adataid (beleértve a titkosító kulcsokat is) továbbra is az eszközön vannak tárolva.\n\nHa az eszközt nem használod tovább, vagy másik fiókba szeretnél bejelentkezni, töröld őket.";
 "soft_logout_clear_data_submit" = "Minden adat törlése";
 "soft_logout_clear_data_dialog_title" = "Adat törlése";
-"soft_logout_clear_data_dialog_content" = "Biztos vagy benne, hogy minden az eszközön tárolt adatot törölni szeretnél\?
-\nA fiók és az üzeneteid eléréséhez jelentkezz be.";
+"soft_logout_clear_data_dialog_content" = "Biztos vagy benne, hogy minden az eszközön tárolt adatot törölni szeretnél\?\nA fiók és az üzeneteid eléréséhez jelentkezz be.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Elveszted a hozzáférésedet a titkosított üzeneteidhez ha nem jelentkezel be a titkosítási kulcsok visszaállításához.";
-"soft_logout_sso_not_same_user_error" = "A jelenlegi munkamenet %1$@ felhasználóhoz tartozik és %2$@ azonosítási adatait adtad meg. Ez %@-ben nem támogatott.
-\nElőször töröld az adatokat, utána lépj be a másik fiókba!";
+"soft_logout_sso_not_same_user_error" = "A jelenlegi munkamenet %1$@ felhasználóhoz tartozik és %2$@ azonosítási adatait adtad meg. Ez %@-ben nem támogatott.\nElőször töröld az adatokat, utána lépj be a másik fiókba!";
 "permalink_malformed" = "A matrix.to linked hibás";
 "bug_report_error_too_short" = "A leírás túl rövid";
 "notification_initial_sync" = "Első szinkronizáció…";
@@ -1078,12 +1010,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "verification_sas_match" = "Egyeznek";
 "verification_sas_do_not_match" = "Nem egyeznek";
 "verification_conclusion_not_secure" = "Nem biztonságos";
-"verification_conclusion_compromised" = "Valamelyiket lehet hogy feltörték:
-\n
-\n - A matrix szerveredet
-\n - A matrix szervert amihez az ellenőrizni kívánt felhasználó csatlakozik
-\n - A te vagy a másik felhasználó Internet hozzáférését
-\n - A te vagy a másik felhasználó készülékét";
+"verification_conclusion_compromised" = "Valamelyiket lehet hogy feltörték:\n\n - A matrix szerveredet\n - A matrix szervert amihez az ellenőrizni kívánt felhasználó csatlakozik\n - A te vagy a másik felhasználó Internet hozzáférését\n - A te vagy a másik felhasználó készülékét";
 "sent_a_video" = "Videó.";
 "sent_an_image" = "Kép.";
 "sent_an_audio_file" = "Hang";
@@ -1105,9 +1032,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "verification_verified_user" = "Ellenőrizve: %@";
 "verification_request_waiting_for" = "Várakozás %@ felhasználóra…";
 "room_profile_not_encrypted_subtitle" = "Az üzenetek a szobában nincsenek végponttól végpontig titkosítva.";
-"room_profile_encrypted_subtitle" = "A szobában az üzenetek végponttól végpontig titkosítva vannak. 
-\n 
-\nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.";
+"room_profile_encrypted_subtitle" = "A szobában az üzenetek végponttól végpontig titkosítva vannak. \n \nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.";
 "room_profile_section_security" = "Biztonság";
 "room_profile_section_security_learn_more" = "Tudj meg többet";
 "room_profile_section_more" = "További";
@@ -1128,8 +1053,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "rendering_event_error_type_of_event_not_handled" = "%@ nem kezeli ezt az eseményt: \'%1$@\'";
 "rendering_event_error_exception" = "%@ problémába ütközött az esemény (azon: %1$@) megjelenítésekor";
 "unignore" = "Figyelembe vesz";
-"verify_cannot_cross_sign" = "Ez a munkamenet nem tudja megosztani ezt az ellenőrzést a másik munkameneteddel.
-\nAz ellenőrzés helyileg elmentésre kerül és az alkalmazás jövőbeli verziójával meg lesz osztva.";
+"verify_cannot_cross_sign" = "Ez a munkamenet nem tudja megosztani ezt az ellenőrzést a másik munkameneteddel.\nAz ellenőrzés helyileg elmentésre kerül és az alkalmazás jövőbeli verziójával meg lesz osztva.";
 "command_description_rainbow" = "A megadott üzenetet szivárvány színben küldi el";
 "command_description_rainbow_emote" = "A megadott hangulatjelet szivárvány színben küldi el";
 "settings_category_timeline" = "Idővonal";
@@ -1145,13 +1069,9 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "verification_conclusion_ok_notice" = "Az üzenetek ezzel a felhasználóval a végpontok között titkosítva vannak és más nem tudja elolvasni.";
 "verification_conclusion_ok_self_notice" = "Ez a munkameneted hitelesítve van. A titkosított üzenetekhez hozzáférése van és más felhasználók megbízhatónak látják.";
 "encryption_information_cross_signing_state" = "Eszközök közti hitelesítés";
-"encryption_information_dg_xsigning_complete" = "Az eszközök közötti hitelesítés engedélyezett.
-\nPrivát kulcsok az eszközön.";
-"encryption_information_dg_xsigning_trusted" = "Az eszközök közötti hitelesítés engedélyezett
-\nA kulcsok megbízhatók.
-\nA privát kulcsok ismeretlenek";
-"encryption_information_dg_xsigning_not_trusted" = "Az eszközök közötti hitelesítés engedélyezett.
-\nA kulcsok nem megbízhatóak";
+"encryption_information_dg_xsigning_complete" = "Az eszközök közötti hitelesítés engedélyezett.\nPrivát kulcsok az eszközön.";
+"encryption_information_dg_xsigning_trusted" = "Az eszközök közötti hitelesítés engedélyezett\nA kulcsok megbízhatók.\nA privát kulcsok ismeretlenek";
+"encryption_information_dg_xsigning_not_trusted" = "Az eszközök közötti hitelesítés engedélyezett.\nA kulcsok nem megbízhatóak";
 "encryption_information_dg_xsigning_disabled" = "Eszközök közti hitelesítés nincs engedélyezve";
 "settings_active_sessions_list" = "Használatban lévő munkamenetek";
 "settings_active_sessions_show_all" = "Minden munkamenet megmutatása";
@@ -1205,14 +1125,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "verify_cancel_self_verification_from_untrusted" = "Ha megszakítod akkor ezen az eszközön nem tudod majd elolvasni a titkosított üzeneteket és mások nem fogják megbízhatónak látni";
 "verify_cancel_self_verification_from_trusted" = "Ha megszakítod akkor az eszközödön nem tudod majd elolvasni a titkosított üzeneteket és mások nem fogják megbízhatónak látni";
 "verify_cancel_other" = "Ha most megszakítod akkor ezt nem fogod ellenőrizni: %1$@ (%2$@). A felhasználói profilból újrakezdheted.";
-"verify_not_me_self_verification" = "Az egyik az alábbiak közül kompromittálódhatott:
-\n
-\n- A jelszavad
-\n- A matrix szervered
-\n- Ez vagy egy másik eszköz
-\n- Valamelyik eszköz által használt internet elérés
-\n
-\nJavasoljuk, hogy azonnal cseréld le a jelszavadat és a visszaállítási kulcsot a Beállításokban.";
+"verify_not_me_self_verification" = "Az egyik az alábbiak közül kompromittálódhatott:\n\n- A jelszavad\n- A matrix szervered\n- Ez vagy egy másik eszköz\n- Valamelyik eszköz által használt internet elérés\n\nJavasoljuk, hogy azonnal cseréld le a jelszavadat és a visszaállítási kulcsot a Beállításokban.";
 "verify_cancelled_notice" = "Ellenőrzés megszakítva. Újrakezdheted az ellenőrzést.";
 "verification_cancelled" = "Ellenőrzés megszakítva";
 "recovery_passphrase" = "Visszaállítási jelmondat";
@@ -1231,9 +1144,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "bootstrap_crosssigning_progress_save_usk" = "Felhasználói kulcs szinkronizálása";
 "bootstrap_crosssigning_progress_save_ssk" = "Saját magával aláírt kulcs szinkronizálása";
 "bootstrap_crosssigning_progress_key_backup" = "Kulcs Mentés beállítása";
-"bootstrap_cross_signing_success" = "Ezek lettek beállítva: %2$@ és %1$@.
-\n
-\nTartsd őket biztonságban! Szükség lesz rájuk a titkosított üzenetek és biztonsági információk eléréséhez ha minden aktív munkameneted megszűnik.";
+"bootstrap_cross_signing_success" = "Ezek lettek beállítva: %2$@ és %1$@.\n\nTartsd őket biztonságban! Szükség lesz rájuk a titkosított üzenetek és biztonsági információk eléréséhez ha minden aktív munkameneted megszűnik.";
 "bootstrap_crosssigning_print_it" = "Nyomtasd ki és tárold valahol biztonságos helyen";
 "bootstrap_crosssigning_save_usb" = "Mentsd el egy USB kulcsra vagy mentő eszközre";
 "bootstrap_crosssigning_save_cloud" = "Másold fel a személyes felhő tárhelyedre";
@@ -1275,10 +1186,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "settings_security_prevent_screenshots_title" = "Az alkalmazásról képernyőkép készítésének megakadályozása";
 "settings_security_prevent_screenshots_summary" = "A beállítással minden \"Activiti\" megkapja a \"FLAG_SECURE\" flaget. Indítsd újra az alkalmazást, hogy a változás életbe léphessen.";
 "change_password_summary" = "Új fiók jelszó beállítása…";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
 "or_other_mx_capable_client" = "vagy más eszközök közötti hitelesítést támogató  Matrix-klienst";
 "use_latest_app" = "Az %@ legújabb kliensét használd a többi eszközödön:";
 "command_description_discard_session" = "A jelenlegi csoport munkamenet törlését kikényszeríti a titkosított szobában";
@@ -1301,9 +1210,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "create_room_dm_failure" = "A közvetlen beszélgetést nem sikerült létrehozni. Ellenőrizd azokat a felhasználókat akiket meg szeretnél hívni és próbáld újra.";
 "use_other_session_content_description" = "Használd a legújabb %@et a többi eszközödön, azaz az %@ Webet, az %@ Desktopot, az %@ for Androidot vagy más eszközök közötti hitelesítést támogató  Matrix-klienst";
 "confirm_your_identity" = "Erősítsd meg ebben a bejelentkezésben a személyazonosságodat egy másik munkamenetből, hogy hozzáférhess a titkosított üzenetekhez.";
-"external_link_confirmation_message" = "%1$@ hivatkozás egy másik oldalra visz: %2$@.
-\n
-\nFolytatod\?";
+"external_link_confirmation_message" = "%1$@ hivatkozás egy másik oldalra visz: %2$@.\n\nFolytatod\?";
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
 "add_members_to_room" = "Tag hozzáadása";
@@ -1387,24 +1294,19 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "failed_to_add_widget" = "Kisalkalmazás hozzáadása sikertelen";
 "failed_to_remove_widget" = "Kisalkalmazás eltávolítása sikertelen";
 "call_failed_no_connection" = "%@ hívás sikertelen";
-"call_failed_no_connection_description" = "Nem sikerült felépíteni a valós idejű kapcsolatot.
-\nKérd meg a Matrix-kiszolgálód rendszergazdáját, hogy állítson be egy TURN-kiszolgálót, hogy a hívások megbízhatóan működjenek.";
+"call_failed_no_connection_description" = "Nem sikerült felépíteni a valós idejű kapcsolatot.\nKérd meg a Matrix-kiszolgálód rendszergazdáját, hogy állítson be egy TURN-kiszolgálót, hogy a hívások megbízhatóan működjenek.";
 "login_error_ssl_peer_unverified" = "SSL hiba: a partner személyazonossága nem lett megerősítve.";
 "settings_call_show_confirmation_dialog_title" = "Véletlen hívás megakadályozása";
 "room_participants_action_cancel_invite" = "Meghívás visszavonása";
 "room_participants_power_level_demote_warning_title" = "Lefokozza magát\?";
 "room_participants_power_level_demote_warning_prompt" = "Nem fogja tudni visszavonni ezt a változtatást, mert lefokozza magát, ha Ön az utolsó privilegizált felhasználó a szobában, akkor lehetetlen lesz a jogosultságok visszanyerése.";
 "room_participants_power_level_demote" = "Lefokozás";
-"room_participants_action_ignore_prompt_msg" = "A felhasználó figyelmen kívül hagyása törli az üzeneteit a közös szobáikban.
-\n
-\nEzt a műveletet bármikor visszavonhatja az általános beállításokban.";
+"room_participants_action_ignore_prompt_msg" = "A felhasználó figyelmen kívül hagyása törli az üzeneteit a közös szobáikban.\n\nEzt a műveletet bármikor visszavonhatja az általános beállításokban.";
 "room_participants_action_unignore_title" = "Felhasználó figyelembe vétele";
 "room_participants_action_unignore_prompt_msg" = "A felhasználó figyelembe vétele után újra meg fog jelenni az összes üzenete.";
 "room_participants_action_cancel_invite_title" = "Meghívás visszavonása";
 "room_participants_action_cancel_invite_prompt_msg" = "Biztos, hogy visszavonja a felhasználó meghívását\?";
-"room_participants_remove_prompt_msg" = "a felhasználó kirúgása eltávolítja a szobából.
-\n
-\nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.";
+"room_participants_remove_prompt_msg" = "a felhasználó kirúgása eltávolítja a szobából.\n\nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.";
 "room_participants_unban_prompt_msg" = "A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra csatlakozzon a szobához.";
 "disabled_integration_dialog_content" = "Ehhez kapcsold be az „Integrációk engedélyezését” a Beállításokban.";
 "encryption_exported_successfully" = "Kulcsok sikeresen exportálva";
@@ -1416,9 +1318,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "secure_backup_banner_setup_line1" = "Biztonságos mentés";
 "secure_backup_banner_setup_line2" = "Biztosíték a titkosított üzenetekhez és adatokhoz hozzáférés elvesztése ellen";
 "secure_backup_setup" = "Biztonságos mentés beállítása";
-"create_room_federation_error" = "A szoba létrejött, de néhány meghívó nem lett elküldve, a következő ok miatt:
-\n
-\n%@";
+"create_room_federation_error" = "A szoba létrejött, de néhány meghívó nem lett elküldve, a következő ok miatt:\n\n%@";
 "labs_show_unread_notifications_as_tab" = "Külön lap hozzáadása az olvasatlan értesítések számára a főképernyőn.";
 "room_list_quick_actions_favorite_add" = "Hozzáadás a kedvencekhez";
 "room_list_quick_actions_favorite_remove" = "Eltávolítás a kedvencek közül";
@@ -1432,9 +1332,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "room_member_power_level_default_in" = "Alapértelmezett itt: %1$@";
 "settings_hs_admin_e2e_disabled" = "A kiszolgáló rendszergazdája alapértelmezetten letiltotta a végpontok közti titkosítást a privát szobákban és közvetlen üzenetekben.";
 "bootstrap_info_text_2" = "Adj meg egy csak általad ismert biztonsági kifejezést a kiszolgálón található titkok védelméhez.";
-"bootstrap_cancel_text" = "Ha most megszakítod, akkor elvesztheted a titkosított üzeneteid és adataid, ha elveszted a bejelentkezési adataid.
-\n
-\nA Beállításokban állíthatsz be biztonságos mentést és kezelheted a kulcsaidat.";
+"bootstrap_cancel_text" = "Ha most megszakítod, akkor elvesztheted a titkosított üzeneteid és adataid, ha elveszted a bejelentkezési adataid.\n\nA Beállításokban állíthatsz be biztonságos mentést és kezelheted a kulcsaidat.";
 "room_created_summary_item_by_you" = "Létrehoztad és beállítottad a szobát.";
 "auth_invalid_login_deactivated_account" = "Ez a fiók letiltásra került.";
 "error_saving_media_file" = "A médiafájl mentése sikertelen";
@@ -1572,10 +1470,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "notice_room_invite_with_reason_by_you" = "Meghívtad: %1$@. Ok: %2$@";
 "notice_room_invite_no_invitee_with_reason_by_you" = "Meghívód. Ok: %1$@";
 "event_status_sent_message" = "Üzenet elküldve";
-"initial_sync_start_downloading" = "Kezdeti szinkronizálás:
-\nAdatok letöltése…";
-"initial_sync_start_server_computing" = "Kezdeti szinkronizálás:
-\nA szerver válaszára várakozás…";
+"initial_sync_start_downloading" = "Kezdeti szinkronizálás:\nAdatok letöltése…";
+"initial_sync_start_server_computing" = "Kezdeti szinkronizálás:\nA szerver válaszára várakozás…";
 "room_displayname_empty_room_was" = "Üres szoba (%@ volt)";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ és %4$@";
 "room_displayname_3_members" = "%1$@, %2$@ és %3$@";
@@ -1634,13 +1530,11 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "notice_direct_room_guest_access_can_join_by_you" = "A vendégeknek megengedted, hogy belépjenek ide.";
 "notice_direct_room_guest_access_can_join" = "%1$@ megengedte a vendégeknek, hogy belépjenek ide.";
 "notice_room_guest_access_can_join_by_you" = "A vendégeknek megengedted, hogy belépjenek a szobába.";
-"this_space_has_no_rooms_not_admin" = "Néhány szoba rejtett lehet, mert privátok és meghívó kell hozzá.
-\nNincs jogosultságod szobák hozzáadásához.";
+"this_space_has_no_rooms_not_admin" = "Néhány szoba rejtett lehet, mert privátok és meghívó kell hozzá.\nNincs jogosultságod szobák hozzáadásához.";
 "this_space_has_no_rooms" = "Ezen a Téren nincsenek szobák";
 "spaces_no_server_support_description" = "További információért vedd fel a kapcsolatot a matrix szerver adminisztrátorával";
 "spaces_no_server_support_title" = "Úgy látszik a matrix szervered nem támogatja egyelőre a Tereket";
-"spaces_feeling_experimental_subspace" = "Szeretsz kísérletezni\?
-\nTereket adhatsz terekhez.";
+"spaces_feeling_experimental_subspace" = "Szeretsz kísérletezni\?\nTereket adhatsz terekhez.";
 "space_manage_rooms_and_spaces" = "Szobák és terek kezelése";
 "space_mark_as_not_suggested" = "Nem javasoltnak jelölés";
 "space_mark_as_suggested" = "Javasoltnak jelölés";
@@ -1657,8 +1551,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "leave_space" = "Elhagyás";
 "space_add_child_title" = "Szobák hozzáadása";
 "space_explore_activity_title" = "Szobák felderítése";
-"room_alias_preview_not_found" = "Ez az álnév jelenleg nem elérhető.
-\nPróbáld meg később vagy kérdezd meg a szoba adminisztrátorát, hogy van-e hozzáférésed.";
+"room_alias_preview_not_found" = "Ez az álnév jelenleg nem elérhető.\nPróbáld meg később vagy kérdezd meg a szoba adminisztrátorát, hogy van-e hozzáférésed.";
 "join_anyway" = "Belépés mindenképpen";
 "join_space" = "Belépés a Térbe";
 "create_space" = "Tér készítése";
@@ -1760,9 +1653,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "call_transfer_failure" = "A hívás átadásánál hiba történt";
 "failed_to_initialize_cross_signing" = "Eszközök közötti aláírást nem sikerült beállítani";
 "settings_export_trail" = "Audit kiexportálása";
-"delete_account_data_warning" = "%1$@ fiók adatait törlöd\?
-\n
-\nÓvatosan használd, váratlan következményei lehetnek.";
+"delete_account_data_warning" = "%1$@ fiók adatait törlöd\?\n\nÓvatosan használd, váratlan következményei lehetnek.";
 "login_error_outdated_homeserver_warning_content" = "Ez egy régi verziójú mátrix szerver. Kérd meg a matrix szerver adminisztrátorát, hogy frissítse. Folytathatod, de néhány funkció nem fog megfelelően működni.";
 "room_settings_room_access_restricted_description" = "Mindenki aki ezzel a szobával egy Térben van megtalálhatja és beléphet. Csak a szoba adminisztrátorok tudják Térhez adni.";
 "this_space_has_no_rooms_admin" = "Néhány szoba lehet rejtett, mert privát és meghívóra van szükséged.";
@@ -1818,9 +1709,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "settings_server_name" = "Szerver neve";
 "room_member_open_or_create_dm" = "Közvetlen beszélgetés";
 "direct_room_profile_section_more_leave" = "Elhagy";
-"direct_room_profile_encrypted_subtitle" = "A szobában az üzenetek végponttól végpontig titkosítva vannak.
-\n
-\nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.";
+"direct_room_profile_encrypted_subtitle" = "A szobában az üzenetek végponttól végpontig titkosítva vannak.\n\nAz üzeneteidet zárolással vannak biztosítva és csak neked és a címzetteknek van meg a kulcs hozzá.";
 "direct_room_profile_not_encrypted_subtitle" = "Itt az üzenetek nincsenek végponttól végpontig titkosítva.";
 "sent_verification_conclusion" = "Hitelesítés eredménye";
 "sent_a_poll" = "Szavazás";
@@ -1864,8 +1753,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "create_room_topic_section" = "Szoba témája (nem kötelező)";
 "create_room_name_section" = "Szoba neve";
 "room_preview_no_preview_join" = "Ennek a szobának nincs előnézete. Szeretnél csatlakozni\?";
-"room_preview_not_found" = "Ez a szoba jelenleg nem elérhető.
-\nPróbáld meg később vagy kérdezd meg a szoba adminisztrátorát, hogy van-e hozzáférésed.";
+"room_preview_not_found" = "Ez a szoba jelenleg nem elérhető.\nPróbáld meg később vagy kérdezd meg a szoba adminisztrátorát, hogy van-e hozzáférésed.";
 "jitsi_leave_conf_to_join_another_one_content" = "Elhagyod ezt a konferenciát és átváltasz egy másikba\?";
 "error_jitsi_join_conf" = "Bocsánat, a konferenciába való belépésnél hiba történt";
 "notification_unread_notified_messages_and_invitation" = "%1$@ és %2$@";
@@ -1928,8 +1816,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "upgrade_room_update_parent_space" = "Szülő tér automatikus frissítése";
 "upgrade_room_auto_invite" = "Felhasználók automatikus meghívása";
 "upgrade_public_room_from_to" = "A szobát fejleszted %1$@ verzióról %2$@ verzióra.";
-"upgrade_room_warning" = "A szoba fejlesztése haladó művelet és általában akkor ajánlott, ha a szoba valami hiba miatt instabil, hiányzik belőle valamilyen funkció vagy biztonsági hiányosság van benne.
-\nEz általában a szoba szerveren való feldolgozásának módját érinti.";
+"upgrade_room_warning" = "A szoba fejlesztése haladó művelet és általában akkor ajánlott, ha a szoba valami hiba miatt instabil, hiányzik belőle valamilyen funkció vagy biztonsági hiányosság van benne.\nEz általában a szoba szerveren való feldolgozásának módját érinti.";
 "upgrade_private_room" = "Privát szoba fejlesztése";
 "upgrade_public_room" = "Nyilvános szoba fejlesztése";
 "upgrade" = "Fejlesztés";
@@ -2072,9 +1959,7 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "space_settings_permissions_title" = "Tér jogosultságok";
 "space_participants_unban_prompt_msg" = "A felhasználó tiltásának visszavonása lehetővé teszi, hogy újra belépjen a térbe.";
 "space_participants_ban_prompt_msg" = "A felhasználó kitiltása eltávolítja őt a térből és megakadályozza, hogy visszajöjjön.";
-"space_participants_remove_prompt_msg" = "a felhasználó kirúgása eltávolítja a térből.
-\n
-\nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.";
+"space_participants_remove_prompt_msg" = "a felhasználó kirúgása eltávolítja a térből.\n\nHa meg akarja akadályozni, hogy újra csatlakozzon, akkor inkább tiltsa ki.";
 "a11y_stop_voice_message" = "Felvétel megállítása";
 "command_description_lenny" = "( ͡° ͜ʖ ͡°) -t tesz a szöveg elejére";
 "settings_discovery_no_policy_provided" = "Azonosítási szerver nem adott meg felhasználási feltételt";
@@ -2129,12 +2014,10 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "legals_home_server_title" = "A Matrix szervered szabályzata";
 "legals_application_title" = "%@ szabályzat";
 "analytics_opt_in_list_item_3" = "Később akármikor kikapcsolhatod a beállításokban";
-"analytics_opt_in_list_item_2.b_0" = "Nem";
-"analytics_opt_in_list_item_1.b_0" = "Nem";
+"analytics_opt_in_list_item_2" = "<b>Nem</b> osztjuk meg az információt harmadik féllel";
+"analytics_opt_in_list_item_1" = "<b>Nem</b> küldünk és nem profilozunk semmilyen fiók adatot";
 "analytics_opt_in_content_link" = "itt";
-"analytics_opt_in_content" = "Segíts észrevennünk a hibákat, és jobbá tenni az %@-et a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközeid között meg lesz osztva.
-\n
-\nElolvashatod a feltételeinket %@.";
+"analytics_opt_in_content" = "Segíts észrevennünk a hibákat, és jobbá tenni az %@-et a névtelen használati adatok küldése által. Ahhoz, hogy megértsük, hogyan használnak a felhasználók egyszerre több eszközt, egy véletlenszerű azonosítót generálunk, ami az eszközeid között meg lesz osztva.\n\nElolvashatod a feltételeinket %@.";
 "analytics_opt_in_title" = "Segíts az %@-et jobbá tenni";
 "a11y_poll_winner_option" = "nyerő válasz";
 "preference_root_legals" = "Jogi dolgok";
@@ -2224,13 +2107,8 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "message_reaction_show_less" = "Kevesebb megjelenítése";
 "room_notification_more_than_two_users_are_typing" = "%1$@, %2$@ és mások";
 "room_notification_two_users_are_typing" = "%1$@ és %2$@";
-"location_in_background_missing_permission_dialog_content" = "Ha folyamatosan meg akarod osztani a földrajzi pozíciódat ahhoz a(z) %@ alkalmazásnak hozzá kell férnie a helyadatokhoz akkor is ha a háttérben fut.
-\nCsak az általad megadott idő intervallumban férünk hozzá a helyadatokhoz.";
-"threads_notice_migration_message" = "Egyre közelebb kerülünk ahhoz, hogy publikus béta állapotba kerüljenek az üzenetszálak.
-\n
-\nAz előkészületekkel be kell vezetnünk pár változtatást: az eddig a pontig készített üzenetszálak hagyományos válaszokként fognak megjelenni.
-\n
-\nEz egy egyszeri változtatás ahogy az üzenetszálak ezentúl a Matrix specifikáció részét képezik.";
+"location_in_background_missing_permission_dialog_content" = "Ha folyamatosan meg akarod osztani a földrajzi pozíciódat ahhoz a(z) %@ alkalmazásnak hozzá kell férnie a helyadatokhoz akkor is ha a háttérben fut.\nCsak az általad megadott idő intervallumban férünk hozzá a helyadatokhoz.";
+"threads_notice_migration_message" = "Egyre közelebb kerülünk ahhoz, hogy publikus béta állapotba kerüljenek az üzenetszálak.\n\nAz előkészületekkel be kell vezetnünk pár változtatást: az eddig a pontig készített üzenetszálak hagyományos válaszokként fognak megjelenni.\n\nEz egy egyszeri változtatás ahogy az üzenetszálak ezentúl a Matrix specifikáció részét képezik.";
 "location_share_live_stop" = "Állj";
 "location_share_live_enabled" = "Folyamatos pozíció megosztás engedélyezve";
 "location_in_background_missing_permission_dialog_title" = "Hozzáférés engedélyezése";
@@ -2243,97 +2121,22 @@ A Visszaállítási Kulcsot tartsd biztonságos helyen, mint pl. egy jelszókeze
 "a11y_location_share_locate_button" = "Ugrás a jelenlegi pozícióra";
 "a11y_location_share_pin_on_map" = "Kiválasztott hely rögzítése a térképen";
 "threads_notice_migration_title" = "Üzenetszálak lassan béta állapotba kerülnek 🎉";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ ezt a címet adta a szobához: %2$@.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ ezeket a címeket adta a szobához: %2$@.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ ezt a címet törölte a szobából: %3$@.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ ezeket a címeket törölte a szobából: %3$@.";
-"plurals.membership_changes.item_0" = "%d tagság változás";
-"plurals.membership_changes.item_1" = "%d tagság változás";
-"plurals.room_title_members.item_0" = "%d tag";
-"plurals.room_title_members.item_1" = "%d tag";
-"plurals.room_new_messages_notification.item_0" = "%d új üzenet";
-"plurals.room_new_messages_notification.item_1" = "%d új üzenet";
-"plurals.notification_unread_notified_messages.item_0" = "%d olvasatlan üzenet";
-"plurals.notification_unread_notified_messages.item_1" = "%d olvasatlan üzenet";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d szoba";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d szoba";
-"plurals.active_widgets.item_0" = "%d aktív kisalkalmazás";
-"plurals.active_widgets.item_1" = "%d aktív kisalkalmazás";
-"plurals.room_details_selected.item_0" = "%d kiválasztva";
-"plurals.room_details_selected.item_1" = "%d kiválasztva";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Mentés visszaállítva %d kulccsal.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Mentés visszaállítva %d kulccsal.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d új kulcs lett hozzáadva ehhez a munkamenethez.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d új kulcs lett hozzáadva ehhez a munkamenet.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "%d kulcs mentése…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "%d kulcs mentése…";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d üzenet";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d üzenet";
-"plurals.notification_compat_summary_title.item_0" = "%d értesítés";
-"plurals.notification_compat_summary_title.item_1" = "%d értesítés";
-"plurals.fallback_users_read.item_0" = "%d felhasználó olvasta";
-"plurals.fallback_users_read.item_1" = "%d felhasználó olvasta";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Túl sok kérés lett elküldve. %1$d másodperc múlva újrapróbálhatod…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Túl sok kérés lett elküldve. %1$d másodperc múlva újrapróbálhatod…";
-"plurals.room_profile_section_more_member_list.item_0" = "1 felhasználó";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d felhasználó";
-"plurals.settings_active_sessions_count.item_0" = "%d aktív munkamenet";
-"plurals.settings_active_sessions_count.item_1" = "%d aktív munkamenet";
-"plurals.send_images_with_original_size.item_0" = "Kép küldése eredeti méretben";
-"plurals.send_images_with_original_size.item_1" = "Képek küldése eredeti méretben";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Meghívó elküldve neki: %1$@ és még egy valakinek";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Meghívó elküldve neki: %1$@ és még %2$d helyre";
-"plurals.room_settings_banned_users_count.item_0" = "%d kitiltott felhasználó";
-"plurals.room_settings_banned_users_count.item_1" = "%d kitiltott felhasználó";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d kulcs sikeresen importálva.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d kulcs sikeresen importálva.";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ és még %3$d felhasználó olvasta";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ és még %3$d felhasználó olvasta";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Hibás kód, %d próbálkozás van hátra";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Hibás kód, %d próbálkozás van hátra";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "A szobához tartozó alternatív címet törölted: %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "A szobához tartozó alternatív címeket törölted: %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ törölte a szobához tartozó alternatív címet: %2$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ törölte a szobához tartozó alternatív címeket: %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "A szobához hozzáadtad, mint alternatív cím: %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "A szobához hozzáadtad, mint alternatív címek: %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ hozzáadta a szobához, mint alternatív cím: %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ hozzáadta a szobához, mint alternatív címek: %2$@.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "A szoba címét törölted: %1$@.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "A szoba címeit törölted: %1$@.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "A szobához hozzáadtad mint cím: %1$@.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "A szobához hozzáadtad mint címek: %1$@.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ és még %4$d";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ és még %4$d";
-"plurals.space_people_you_know.item_0" = "%d ember már csatlakozott";
-"plurals.space_people_you_know.item_1" = "%d ember már csatlakozott";
-"plurals.entries.item_0" = "%d bejegyzés";
-"plurals.entries.item_1" = "%d bejegyzés";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Eszköz megjelenítése amivel most ellenőrizni lehet";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "%d eszköz megjelenítése amivel most ellenőrizni lehet";
-"plurals.send_videos_with_original_size.item_0" = "Videó küldése eredeti méretben";
-"plurals.send_videos_with_original_size.item_1" = "Videók küldése eredeti méretben";
-"plurals.notification_invitations.item_0" = "%d meghívó";
-"plurals.notification_invitations.item_1" = "%d meghívó";
-"plurals.seconds.item_0" = "%d másodperc";
-"plurals.seconds.item_1" = "%d másodperc";
-"plurals.missed_video_call.item_0" = "Nem fogadott videóhívás";
-"plurals.missed_video_call.item_1" = "%d nem fogadott videóhívás";
-"plurals.missed_audio_call.item_0" = "Nem fogadott hanghívás";
-"plurals.missed_audio_call.item_1" = "%d nem fogadott hanghívás";
-"plurals.call_active_status.item_0" = "Aktív hívás ·";
-"plurals.call_active_status.item_1" = "%1$d aktív hívás ·";
-"plurals.create_poll_not_enough_options_error.item_0" = "Legalább %1$@ válasz szükséges";
-"plurals.create_poll_not_enough_options_error.item_1" = "Legalább %1$@ válasz szükséges";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Eredmény %1$d szavazat alapján";
-"plurals.poll_total_vote_count_after_ended.item_1" = "Eredmény %1$d szavazat alapján";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d leadott szavazat. Szavazz az eredmények megtekintéséhez";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d leadott szavazat. Szavazz az eredmények megtekintéséhez";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "%1$d szavazat alapján";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "%1$d szavazat alapján";
-"plurals.poll_option_vote_count.item_0" = "%1$d szavazat";
-"plurals.poll_option_vote_count.item_1" = "%1$d szavazat";
-"plurals.message_reaction_show_more.item_0" = "%1$d darabbal több";
-"plurals.message_reaction_show_more.item_1" = "%1$d darabbal több";
-"plurals.notice_room_server_acl_changes.item_0" = "%d szerver jogosultság változott";
-"plurals.notice_room_server_acl_changes.item_1" = "%d szerver jogosultság változott";
+"live_location_sharing_notification_description" = "Helymeghatározás folyamatban";
+"live_location_sharing_notification_title" = "%@ Folyamatos helymeghatározás";
+"error_forbidden_digits_only_username" = "A matrix szerver nem fogad el olyan felhasználói nevet ami csak számokból áll.";
+"ftue_personalize_skip_this_step" = "Lépés kihagyása";
+"ftue_personalize_submit" = "Mentés és tovább";
+"ftue_personalize_complete_subtitle" = "A beállítások elmentve.";
+"ftue_personalize_complete_title" = "Minden kész!";
+"ftue_personalize_lets_go" = "Gyerünk";
+"ftue_profile_picture_subtitle" = "Bármikor megváltoztatható.";
+"ftue_profile_picture_title" = "Profilkép hozzáadása";
+"ftue_display_name_entry_footer" = "Ezt később meg lehet változtatni";
+"ftue_display_name_entry_title" = "Megjelenítendő név";
+"ftue_display_name_subtitle" = "Ez fog megjelenni amikor üzenetet küldesz.";
+"ftue_display_name_title" = "Válassz egy megjelenítési nevet";
+"ftue_account_created_subtitle" = "A fiókod elkészült: %@.";
+"ftue_account_created_congratulations_title" = "Gratulálunk!";
+"ftue_account_created_take_me_home" = "Vigyél haza";
+"ftue_account_created_personalize" = "Profil személyre szabása";
+"action_disable" = "Tiltás";

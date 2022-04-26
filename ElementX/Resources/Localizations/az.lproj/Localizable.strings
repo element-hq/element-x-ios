@@ -40,22 +40,14 @@
 "room_displayname_room_invite" = "Otağa dəvət";
 "room_displayname_two_members" = "%1$@ və %2$@";
 "room_displayname_empty_room" = "Boş otaq";
-"initial_sync_start_importing_account" = "İlkin sinxronizasiya:
-\nHesab idxal olunur…";
-"initial_sync_start_importing_account_crypto" = "İlkin sinxronizasiya:
-\nKriptografiyanın idxalı";
-"initial_sync_start_importing_account_rooms" = "İlkin sinxronizasiya:
-\nOtaqlar idxalı";
-"initial_sync_start_importing_account_joined_rooms" = "İlkin sinxronizasiya:
-\nOtaqlara daxil olmaq";
-"initial_sync_start_importing_account_invited_rooms" = "İlkin sinxronizasiya:
-\nDəvət olunmuş otaqların idxalı";
-"initial_sync_start_importing_account_left_rooms" = "İlkin sinxronizasiya:
-\nTərk olunmuş otaqların idxalı";
-"initial_sync_start_importing_account_groups" = "İlkin sinxronizasiya:
-\nİcmaların idxalı";
-"initial_sync_start_importing_account_data" = "İlkin sinxronizasiya:
-\nHesab məlumatlarının idxalı";
+"initial_sync_start_importing_account" = "İlkin sinxronizasiya:\nHesab idxal olunur…";
+"initial_sync_start_importing_account_crypto" = "İlkin sinxronizasiya:\nKriptografiyanın idxalı";
+"initial_sync_start_importing_account_rooms" = "İlkin sinxronizasiya:\nOtaqlar idxalı";
+"initial_sync_start_importing_account_joined_rooms" = "İlkin sinxronizasiya:\nOtaqlara daxil olmaq";
+"initial_sync_start_importing_account_invited_rooms" = "İlkin sinxronizasiya:\nDəvət olunmuş otaqların idxalı";
+"initial_sync_start_importing_account_left_rooms" = "İlkin sinxronizasiya:\nTərk olunmuş otaqların idxalı";
+"initial_sync_start_importing_account_groups" = "İlkin sinxronizasiya:\nİcmaların idxalı";
+"initial_sync_start_importing_account_data" = "İlkin sinxronizasiya:\nHesab məlumatlarının idxalı";
 "event_status_sending_message" = "Mesaj göndərilir…";
 "notice_room_invite_no_invitee_with_reason" = "%1$@-nin dəvəti. Səbəb: %2$@";
 "notice_room_invite_with_reason" = "%1$@ dəvət olunmuş %2$@. Səbəb: %3$@";
