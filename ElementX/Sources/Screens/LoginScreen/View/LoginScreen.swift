@@ -30,7 +30,7 @@ struct LoginScreen: View {
                 SecureField("Password", text: $context.password)
                     .textFieldStyle(.roundedBorder)
                 
-                Button(ElementL10n.roomSettingsMentionAndKeywordOnly) {
+                Button("Login") {
                     context.send(viewAction: .login)
                 }
                 .buttonStyle(.borderedProminent)
