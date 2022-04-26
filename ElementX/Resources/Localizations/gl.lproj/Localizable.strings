@@ -105,22 +105,14 @@
 "notice_room_invite_no_invitee_with_reason_by_you" = "O teu convite. Razón: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "Convite de %1$@. Razón: %2$@";
 "event_status_sending_message" = "Enviando mensaxe…";
-"initial_sync_start_importing_account_data" = "Sincr. inicial:
-\nImportando datos da conta";
-"initial_sync_start_importing_account_groups" = "Sincr. inicial:
-\nImportando comunidades";
-"initial_sync_start_importing_account_left_rooms" = "Sincr. inicial:
-\nImportando salas das que saíches";
-"initial_sync_start_importing_account_invited_rooms" = "Sincr. inicial:
-\nImportando convites a salas";
-"initial_sync_start_importing_account_joined_rooms" = "Sincr. inicial:
-\nImportando Salas";
-"initial_sync_start_importing_account_rooms" = "Sincr. inicial:
-\nImportando salas";
-"initial_sync_start_importing_account_crypto" = "Sincr. inicial:
-\nImportando cifrado";
-"initial_sync_start_importing_account" = "Sincr. inicial:
-\nImportando conta…";
+"initial_sync_start_importing_account_data" = "Sincr. inicial:\nImportando datos da conta";
+"initial_sync_start_importing_account_groups" = "Sincr. inicial:\nImportando comunidades";
+"initial_sync_start_importing_account_left_rooms" = "Sincr. inicial:\nImportando salas das que saíches";
+"initial_sync_start_importing_account_invited_rooms" = "Sincr. inicial:\nImportando convites a salas";
+"initial_sync_start_importing_account_joined_rooms" = "Sincr. inicial:\nImportando Salas";
+"initial_sync_start_importing_account_rooms" = "Sincr. inicial:\nImportando salas";
+"initial_sync_start_importing_account_crypto" = "Sincr. inicial:\nImportando cifrado";
+"initial_sync_start_importing_account" = "Sincr. inicial:\nImportando conta…";
 "room_displayname_empty_room_was" = "Sala baleira (estaba %@)";
 "room_displayname_empty_room" = "Sala baleira";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ e %4$@";
@@ -260,9 +252,7 @@
 "option_take_photo_video" = "Sacar unha foto ou vídeo";
 "option_take_photo" = "Sacar foto";
 "option_take_video" = "Sacar vídeo";
-"no_sticker_application_dialog_content" = "Non tes paquetes de pegatinas activados.
-\n
-\nQueres engadir algún\?";
+"no_sticker_application_dialog_content" = "Non tes paquetes de pegatinas activados.\n\nQueres engadir algún\?";
 "auth_login" = "Acceder";
 "auth_submit" = "Enviar";
 "auth_invalid_login_param" = "Nome de usuario e/ou contrasinal incorrecto";
@@ -401,7 +391,7 @@
 "login_error_bad_json" = "JSON con defectos";
 "login_error_not_json" = "Non contiña unha JSON correcta";
 "login_error_limit_exceeded" = "Enviáronse demasiadas peticións";
-"e2e_re_request_encryption_key.u_0" = "Volver a pedir as chaves de cifrado";
+"e2e_re_request_encryption_key" = "<u>Volver a pedir as chaves de cifrado</u> do outro dispositivo seu.";
 "e2e_re_request_encryption_key_dialog_content" = "Inicie %@ noutro dispositivo que poida descifrar esta mensaxe e que despois desde alí lle poida enviar as chaves a este dispositivo.";
 "compression_opt_list_original" = "Autor Inicial";
 "compression_opt_list_medium" = "Mediano";
@@ -454,40 +444,8 @@
 "sign_out_bottom_sheet_warning_backup_not_active" = "A Copia Segura das Chaves está activa para tódalas túas sesións para evitar perder o acceso ás mensaxes cifradas.";
 "sign_out_bottom_sheet_warning_backing_up" = "Estase realizando a copia de apoio. Se desconectas agora perderás o acceso ás mensaxes cifradas.";
 "sign_out_bottom_sheet_warning_no_backup" = "Vas perdelas mensaxes cifradas se desconectas agora";
-"initial_sync_start_downloading" = "Sincr. inicial:
-\nDescargando datos…";
-"initial_sync_start_server_computing" = "Sincr. inicial:
-\nAgardando resposta do servidor…";
+"initial_sync_start_downloading" = "Sincr. inicial:\nDescargando datos…";
+"initial_sync_start_server_computing" = "Sincr. inicial:\nAgardando resposta do servidor…";
 "no_permissions_to_start_conf_call_in_direct_room" = "Non tes permisos para comezar unha chamada de conferencia nesta sala";
 "no_permissions_to_start_conf_call" = "Non tes permisos para comezar unha chamada de conferencia nesta sala";
 "event_status_sent_message" = "Mensaxe enviada";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ e %4$d máis";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ e %4$d outras";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ engadiu %2$@ como enderezo desta sala.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ engadiu %2$@ como enderezos desta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Eliminaches o enderezo alternativo %1$@ para esta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Eliminaches os enderezos alternativos %1$@ para esta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ eliminou o enderezo alternativo %2$@ para esta sala.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ eliminou os enderezos alternativos %2$@ para esta sala.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Engadiches o enderezo alternativo %1$@ para esta sala.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Engadiches os enderezos alternativos %1$@ para esta sala.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ engadiu o enderezo alternativo %2$@ para esta sala.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ engadiu os enderezos alternativos %2$@ para esta sala.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Eliminaches %1$@ como enderezo desta sala.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Eliminaches %1$@ como enderezos desta sala.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ eliminou %2$@ como enderezo desta sala.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ eliminou %2$@ como enderezos desta sala.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Engadiches %1$@ como enderezo para esta sala.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Engadiches %1$@ como enderezos para esta sala.";
-"plurals.room_new_messages_notification.item_0" = "1 mensaxe nova";
-"plurals.room_new_messages_notification.item_1" = "%d mensaxes novas";
-"plurals.notification_unread_notified_messages.item_0" = "%d notificación sen ler";
-"plurals.notification_unread_notified_messages.item_1" = "%d notificacións sen ler";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d sala";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d salas";
-"plurals.active_widgets.item_0" = "%d widget activo";
-"plurals.active_widgets.item_1" = "%d widgets activos";
-"plurals.membership_changes.item_0" = "1 cambio de participantes";
-"plurals.membership_changes.item_1" = "%d cambios de participantes";
-"plurals.room_title_members.item_0" = "1 participante";
-"plurals.room_title_members.item_1" = "%d participantes";

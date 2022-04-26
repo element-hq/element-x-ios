@@ -87,23 +87,14 @@
 "room_displayname_room_invite" = "Rumsinbjudan";
 "room_displayname_two_members" = "%1$@ och %2$@";
 "room_displayname_empty_room" = "Tomt rum";
-"initial_sync_start_importing_account" = "Inledande synk:
-\nImporterar konto…";
-"initial_sync_start_importing_account_crypto" = "Inledande synk:
-\nImporterar krypto";
-"initial_sync_start_importing_account_rooms" = "Inledande synk:
-\nImporterar rum";
-"initial_sync_start_importing_account_joined_rooms" = "Inledande synk:
-\nLaddar dina konversationer
-\nOm du har gått med i många rum så kan detta ta lite tid";
-"initial_sync_start_importing_account_invited_rooms" = "Inledande synk:
-\nImporterar inbjudna rum";
-"initial_sync_start_importing_account_left_rooms" = "Inledande synk:
-\nImporterar lämnade rum";
-"initial_sync_start_importing_account_groups" = "Inledande synk:
-\nImporterar gemenskaper";
-"initial_sync_start_importing_account_data" = "Inledande synk:
-\nImporterar kontodata";
+"initial_sync_start_importing_account" = "Inledande synk:\nImporterar konto…";
+"initial_sync_start_importing_account_crypto" = "Inledande synk:\nImporterar krypto";
+"initial_sync_start_importing_account_rooms" = "Inledande synk:\nImporterar rum";
+"initial_sync_start_importing_account_joined_rooms" = "Inledande synk:\nLaddar dina konversationer\nOm du har gått med i många rum så kan detta ta lite tid";
+"initial_sync_start_importing_account_invited_rooms" = "Inledande synk:\nImporterar inbjudna rum";
+"initial_sync_start_importing_account_left_rooms" = "Inledande synk:\nImporterar lämnade rum";
+"initial_sync_start_importing_account_groups" = "Inledande synk:\nImporterar gemenskaper";
+"initial_sync_start_importing_account_data" = "Inledande synk:\nImporterar kontodata";
 "event_status_sending_message" = "Skickar meddelande…";
 "notice_room_invite_no_invitee_with_reason" = "Inbjudan från %1$@. Anledning: %2$@";
 "notice_room_invite_no_invitee_with_reason_by_you" = "Inbjudan från dig. Anledning: %1$@";
@@ -286,9 +277,7 @@
 "option_take_photo_video" = "Ta foto eller video";
 "option_take_photo" = "Ta ett foto";
 "option_take_video" = "Ta en video";
-"no_sticker_application_dialog_content" = "Du har för närvarande inga dekalpaket aktiva. 
-\n 
-\nLägg till några nu\?";
+"no_sticker_application_dialog_content" = "Du har för närvarande inga dekalpaket aktiva. \n \nLägg till några nu\?";
 "error_no_external_application_found" = "Tyvärr har ingen extern applikation hittats som kan fullfölja denna handling.";
 "auth_login" = "Logga in";
 "auth_login_sso" = "Logga in med externt konto";
@@ -327,9 +316,7 @@
 "call_error_user_not_responding" = "Den andra parten svarade inte.";
 "permissions_rationale_popup_title" = "Information";
 "permissions_rationale_msg_record_audio" = "%@ behöver tillstånd att komma åt din mikrofon för hålla röstsamtal.";
-"permissions_rationale_msg_camera_and_audio" = "%@ behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.
-\n 
-\nVänligen ge tillstånd i nästa popup för att kunna utföra samtalet.";
+"permissions_rationale_msg_camera_and_audio" = "%@ behöver tillstånd att komma åt din kamera och mikrofon för att kunna utföra videosamtal.\n \nVänligen ge tillstånd i nästa popup för att kunna utföra samtalet.";
 "yes" = "JA";
 "no" = "NEJ";
 "_continue" = "Fortsätt";
@@ -352,8 +339,7 @@
 "directory_server_all_rooms_on_server" = "Alla rum på %@-servern";
 "directory_server_native_rooms" = "Alla nativa rum på %@";
 "rooms" = "Rum";
-"deactivate_account_content.b_0" = "Den här handlingen går inte att ångra";
-"deactivate_account_content.b_1" = "får oss normalt inte att glömma meddelanden du har skickat";
+"deactivate_account_content" = "Detta kommer att göra ditt konto permanent oanvändbart. Du kommer inte kunna logga in, och ingen kommer kunna registrera sig med samma användar-ID. Detta kommer att få ditt konto att lämna alla rum det är med i, och det kommer att ta bort din kontoinformation från din identitetsserver. <b>Den här handlingen går inte att ångra</b>.\n\nAtt inaktivera ditt konto <b>får oss normalt inte att glömma meddelanden du har skickat</b>. Om du skulle vilja att vi glömmer dina meddelanden, markera rutan nedan.\n\nMeddelandesynlighet I Matrix är likt e-post. Att vi glömmer dina meddelanden betyder att meddelanden du har skickat inte kommer delas med nya eller oregistrerade användare, men registrerade användare som redan har tillgång till dessa meddelanden kommer fortfarande ha tillgång till deras exemplar.";
 "room_list_catchup_empty_title" = "Du är ikapp!";
 "room_list_catchup_empty_body" = "Du har inga olästa meddelanden kvar";
 "room_list_rooms_empty_title" = "Rum";
@@ -394,11 +380,8 @@
 "encryption_information_verify_device_warning" = "Bekräfta genom att jämföra följande nyckel med användarinställningarna i din andra session:";
 "room_widget_permission_display_name" = "Ditt visningsnamn";
 "error_empty_field_your_password" = "Vänligen skriv in ditt lösenord.";
-"keys_backup_setup_step2_text_description" = "Vi kommer att lagra en krypterad kopia av dina nycklar på din hemserver. Skydda din säkerhetskopia med en lösenfras för att hålla den säker.
-\n
-\nFör maximal säkerhet så bör denna skilja sig från ditt kontolösenord.";
-"keys_backup_setup_step3_text_line2" = "Din återställningsnyckel är ett skyddsnät - du kan använda den för att återfå åtkomst till dina krypterade meddelanden om du skulle glömma din lösenfras.
-\nLagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)";
+"keys_backup_setup_step2_text_description" = "Vi kommer att lagra en krypterad kopia av dina nycklar på din hemserver. Skydda din säkerhetskopia med en lösenfras för att hålla den säker.\n\nFör maximal säkerhet så bör denna skilja sig från ditt kontolösenord.";
+"keys_backup_setup_step3_text_line2" = "Din återställningsnyckel är ett skyddsnät - du kan använda den för att återfå åtkomst till dina krypterade meddelanden om du skulle glömma din lösenfras.\nLagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Lagra din återställningsnyckel på något säkert ställe, t.ex. en lösenordshanterare (eller ett kassaskåp)";
 "change_room_directory_network" = "Byt nätverk";
 "group_all_communities" = "Alla gemenskaper";
@@ -421,20 +404,15 @@
 "settings_troubleshoot_diagnostic_failure_status_with_quickfix" = "Ett eller flera tester har misslyckats, testa de föreslagna fixarna.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Ett eller flera tester har misslyckats, vänligen skicka en buggrapport för att hjälpa oss att undersöka.";
 "settings_troubleshoot_test_system_settings_success" = "Aviseringar är aktiverade i systeminställningarna.";
-"settings_troubleshoot_test_system_settings_failed" = "Aviseringar är inaktiverade i systeminställningarna.
-\nVänligen kolla systeminställningarna.";
+"settings_troubleshoot_test_system_settings_failed" = "Aviseringar är inaktiverade i systeminställningarna.\nVänligen kolla systeminställningarna.";
 "settings_troubleshoot_test_account_settings_success" = "Aviseringar är aktiverade för ditt konto.";
-"settings_troubleshoot_test_account_settings_failed" = "Aviseringar är inaktiverade för ditt konto.
-\nVänligen kolla kontoinställningarna.";
+"settings_troubleshoot_test_account_settings_failed" = "Aviseringar är inaktiverade för ditt konto.\nVänligen kolla kontoinställningarna.";
 "settings_troubleshoot_test_device_settings_success" = "Aviseringar är aktiverade för den här sessionen.";
-"settings_troubleshoot_test_device_settings_failed" = "Aviseringar är inaktiverade för den här sessionen.
-\nVänligen kolla %@inställningarna.";
+"settings_troubleshoot_test_device_settings_failed" = "Aviseringar är inaktiverade för den här sessionen.\nVänligen kolla %@inställningarna.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Observera att vissa meddelandetyper är satta till tyst (kommer att producera aviseringar utan ljud).";
 "settings_troubleshoot_test_bing_settings_failed" = "Vissa aviseringar är inaktiverade i dina anpassade inställningar.";
 "settings_troubleshoot_test_service_boot_failed" = "Tjänsten kommer inte att starta när enheten startas om, så du kommer inte att få aviseringar förrens %@ har öppnats en gång.";
-"settings_troubleshoot_test_bg_restricted_failed" = "Bakgrundsbegränsningar är aktiverade för %@.
-\nSaker som appen försöker göra kommer att kraftigt begränsas när appen är bakgrunden, och detta kan påverka aviseringar.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Bakgrundsbegränsningar är aktiverade för %@.\nSaker som appen försöker göra kommer att kraftigt begränsas när appen är bakgrunden, och detta kan påverka aviseringar.\n%1$@";
 "settings_troubleshoot_test_battery_failed" = "Om en användare lämnar sin enhet urkopplad och stilla en längre tid, med skärmen av, så går enheten in i Doze-läget. Detta hindrar appar från att komma åt nätverket och skjuter upp deras uppgifter, synkroniseringar och standardlarm.";
 "settings_notification_ringtone" = "Aviseringsljud";
 "settings_enable_all_notif" = "Aktivera aviseringar för det här kontot";
@@ -446,8 +424,7 @@
 "settings_containing_my_user_name" = "Meddelanden innehållande mitt användarnamn";
 "settings_messages_in_one_to_one" = "Meddelanden i direktchattar";
 "settings_messages_in_group_chat" = "Meddelanden i gruppchattar";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ kommer att synka i bakgrunden periodiskt vid precisa tider (konfigurerbart).
-\nDetta kommer att påverka data- och batterianvändning, och det kommer att visas en permanent avisering som säger att %@ lyssnar efter händelser.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ kommer att synka i bakgrunden periodiskt vid precisa tider (konfigurerbart).\nDetta kommer att påverka data- och batterianvändning, och det kommer att visas en permanent avisering som säger att %@ lyssnar efter händelser.";
 "settings_version" = "Version";
 "settings_olm_version" = "olm-version";
 "settings_keep_media" = "Behåll media";
@@ -471,9 +448,7 @@
 "settings_identity_server" = "Identitetsserver";
 "account_email_validation_message" = "Vänligen kolla din e-post klicka på länken i den. När du är klar med detta, klicka på fortsätt.";
 "account_email_already_used_error" = "Den här e-postadressen är upptagen.";
-"settings_unignore_user" = "Visa alla meddelanden från %@\?
-\n
-\nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.";
+"settings_unignore_user" = "Visa alla meddelanden från %@\?\n\nObservera att den har handlingen kommer att starta om appen, och det kan ta lite tid.";
 "settings_media" = "Media";
 "settings_default_media_source" = "Förvald mediakälla";
 "settings_flair" = "Emblem";
@@ -493,9 +468,7 @@
 "deactivate_account_submit" = "Inaktivera konto";
 "no_valid_google_play_services_apk" = "Ingen giltig \"Google Play-tjänster\"-APK hittades. Aviseringar kanske inte funkar ordentligt.";
 "keys_backup_setup_step1_title" = "Bli aldrig av med krypterade meddelanden";
-"keys_backup_setup_step1_description" = "Meddelanden i krypterade rum är säkrade med totalsträckskryptering. Bara du och mottagaren har nycklarna för att läsa dessa meddelanden.
-\n
-\nSäkerhetskopiera dina nycklar säkert för att undvika att bli av med dem.";
+"keys_backup_setup_step1_description" = "Meddelanden i krypterade rum är säkrade med totalsträckskryptering. Bara du och mottagaren har nycklarna för att läsa dessa meddelanden.\n\nSäkerhetskopiera dina nycklar säkert för att undvika att bli av med dem.";
 "keys_backup_setup_step1_advanced" = "(Avancerat)";
 "keys_backup_setup_step2_skip_button_title" = "(Avancerat) Sätt upp med återställningsnyckel";
 "keys_backup_restore_is_getting_backup_version" = "Hämtar säkerhetskopieringsversion…";
@@ -535,15 +508,9 @@
 "uploads_media_no_result" = "Det finns ingen media i det här rummet";
 "uploads_files_title" = "FILER";
 "uploads_files_no_result" = "Det finns inga filer i det här rummet";
-"content_reported_content" = "Det här innehållet rapporterades.
-\n
-\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.";
-"content_reported_as_spam_content" = "Det här innehållet rapporterades som spam.
-\n
-\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.";
-"content_reported_as_inappropriate_content" = "Det här innehållet rapporterades som olämpligt.
-\n
-\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.";
+"content_reported_content" = "Det här innehållet rapporterades.\n\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.";
+"content_reported_as_spam_content" = "Det här innehållet rapporterades som spam.\n\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.";
+"content_reported_as_inappropriate_content" = "Det här innehållet rapporterades som olämpligt.\n\nOm du inte vill se något mer innehåll från den här användaren så kan du ignorera denne för att dölja dennes meddelanden.";
 "room_list_quick_actions_notifications_all_noisy" = "Alla meddelanden (högljutt)";
 "room_list_quick_actions_notifications_all" = "Alla meddelanden";
 "room_list_quick_actions_notifications_mentions" = "Endast omnämnande";
@@ -572,20 +539,16 @@
 "login_set_msisdn_notice" = "Sätt ett telefonnummer som valfritt kan användas för att vara upptäckbar av folk som känner dig.";
 "login_signin_username_hint" = "Användarnamn eller e-postadress";
 "login_wait_for_email_title" = "Vänligen kolla din e-post";
-"login_wait_for_email_notice" = "Vi skickade just ett e-brev till %1$@. 
-\nKlicka på länken i det för att fortsätta med kontoskapandet.";
+"login_wait_for_email_notice" = "Vi skickade just ett e-brev till %1$@. \nKlicka på länken i det för att fortsätta med kontoskapandet.";
 "soft_logout_signin_e2e_warning_notice" = "Logga in för att återfå krypteringsnycklar som endast lagras på den här enheten. Du behöver dem för att läsa alla dina säkra meddelanden på andra enheter.";
-"soft_logout_clear_data_dialog_content" = "Rensa all data lagrad på den här enheten\?
-\nLogga in igen för att komma åt din kontodata och dina meddelanden.";
+"soft_logout_clear_data_dialog_content" = "Rensa all data lagrad på den här enheten\?\nLogga in igen för att komma åt din kontodata och dina meddelanden.";
 "settings_advanced_settings" = "Avancerade inställningar";
 "autocomplete_limited_results" = "Visar endast de första resultaten, skriv mer…";
 "settings_developer_mode_fail_fast_summary" = "%@ kan krascha mer när ett oväntat fel inträffar";
 "create_room_encryption_description" = "Efter aktivering så kan kryptering inte avaktiveras.";
 "login_error_threepid_denied" = "Din e-postdomän är inte auktoriserad för att registrera på den här servern";
 "room_profile_not_encrypted_subtitle" = "Meddelanden i det här rummet är inte totalsträckskrypterade.";
-"room_profile_encrypted_subtitle" = "Meddelanden i det här rummet är totalsträckskrypterade.
-\n
-\nDina meddelanden är säkrade med lås och bara du och mottagaren har nycklarna för att låsa upp dem.";
+"room_profile_encrypted_subtitle" = "Meddelanden i det här rummet är totalsträckskrypterade.\n\nDina meddelanden är säkrade med lås och bara du och mottagaren har nycklarna för att låsa upp dem.";
 "room_profile_section_security_learn_more" = "Lär dig mer";
 "room_profile_section_more" = "Mer";
 "room_profile_section_more_settings" = "Rumsinställningar";
@@ -594,17 +557,14 @@
 "room_profile_section_more_leave" = "Lämna rummet";
 "room_member_power_level_admins" = "Administratörer";
 "room_member_power_level_moderators" = "Moderatorer";
-"verify_cannot_cross_sign" = "Den här sessionen kan inte dela den här verifikationen med dina andra sessioner.
-\nVerifikationen kommer att sparas lokalt och delas i en framtida version av appen.";
+"verify_cannot_cross_sign" = "Den här sessionen kan inte dela den här verifikationen med dina andra sessioner.\nVerifikationen kommer att sparas lokalt och delas i en framtida version av appen.";
 "room_settings_enable_encryption" = "Aktivera totalsträckskryptering…";
 "room_settings_enable_encryption_dialog_content" = "Efter aktivering så kan kryptering inte avaktiveras. Meddelanden som skickas i ett krypterat rum kan inte läsas av servern, bara av deltagarna i rummet. Att aktivera kryptering kan göra att många bottar och bryggor inte funkar ordentligt.";
 "verification_conclusion_ok_notice" = "Meddelanden mellan dig och den här användaren är totalsträckskrypterade och kan inte läsas av tredje parter.";
 "verification_conclusion_ok_self_notice" = "Din nya session är nu verifierad. Den har tillgång till dina krypterade meddelanden, och andra användare kommer att se den som betrodd.";
 "settings_active_sessions_unverified_device_desc" = "Verifiera den här sessionen gör att markera den som betrodd och ge den tillgång till dina krypterade meddelanden. Om det inte var du som loggade in i den här sessionen så kan ditt konto vara kapat:";
 "verification_open_other_to_verify" = "Använd en existerande session för att verifiera den här och ge den tillgång till krypterade meddelanden.";
-"bootstrap_cross_signing_success" = "Din %2$@ & %1$@ är nu satta.
-\n
-\nHåll dem säkra! Du kommer att behöva dem för att låsa upp krypterade meddelanden och säker information om du förlorar alla dina aktiva sessioner.";
+"bootstrap_cross_signing_success" = "Din %2$@ & %1$@ är nu satta.\n\nHåll dem säkra! Du kommer att behöva dem för att låsa upp krypterade meddelanden och säker information om du förlorar alla dina aktiva sessioner.";
 "encryption_enabled" = "Kryptering aktiverat";
 "encryption_not_enabled" = "Kryptering inte aktiverat";
 "settings_notification_configuration" = "Aviseringskonfiguration";
@@ -643,9 +603,7 @@
 "dialog_title_success" = "Framgång";
 "bottom_action_notification" = "Aviseringar";
 "call_switch_camera" = "Byt kamera";
-"room_participants_action_ignore_prompt_msg" = "Att ignorera den här användaren kommer att ta bort hens meddelanden från rum ni delar.
-\n
-\nDu kan återkalla det här när som helst i de allmänna inställningarna.";
+"room_participants_action_ignore_prompt_msg" = "Att ignorera den här användaren kommer att ta bort hens meddelanden från rum ni delar.\n\nDu kan återkalla det här när som helst i de allmänna inställningarna.";
 "ssl_expected_existing_expl" = "Certifikatet har ändrats från ett betrott till ett som inte är betrott. Servern kan ha förnyat sitt certifikat. Kontakta serveradministratören för det förväntade fingeravtrycket.";
 "settings_troubleshoot_test_system_settings_title" = "Systeminställningar.";
 "open_settings" = "Öppna inställningar";
@@ -653,8 +611,7 @@
 "settings_troubleshoot_test_device_settings_title" = "Sessionsinställningar.";
 "settings_troubleshoot_test_bing_settings_title" = "Anpassade inställningar.";
 "settings_integrations" = "Integrationer";
-"settings_integrations_summary" = "Använd en integrationshanterare för att hantera bottar, bryggor, widgets och dekalpaket. 
-\nIntegrationshanterare får konfigurationsdata, och kan ändra widgets, skicka rumsinbjudningar, och ändra behörighetsnivåer å dina vägnar.";
+"settings_integrations_summary" = "Använd en integrationshanterare för att hantera bottar, bryggor, widgets och dekalpaket. \nIntegrationshanterare får konfigurationsdata, och kan ändra widgets, skicka rumsinbjudningar, och ändra behörighetsnivåer å dina vägnar.";
 "settings_send_message_with_enter" = "Skicka meddelande med retur";
 "settings_send_message_with_enter_summary" = "Returtangenten på mjukvarutangentbordet kommer att skicka ett meddelande istället för att lägga till ett radslut";
 "settings_secure_backup_section_info" = "Skydda dig mot att tappa åtkomst till krypterade meddelanden och data genom att säkerhetskopiera krypteringsnycklarna på din server.";
@@ -684,7 +641,7 @@
 "keys_backup_banner_update_line1" = "Nya säkra meddelandenycklar";
 "room_list_people_empty_body" = "Dina direktmeddelandekonversationer kommer att visas här. Tryck på + nere till höger för att starta några.";
 "event_redacted" = "Meddelande raderat";
-"import_e2e_keys_from_file" = "Importera krypteringsnycklar från filen \"%1$@\.";
+"import_e2e_keys_from_file" = "Importera krypteringsnycklar från filen \"%1$@\".";
 "send_file_step_encrypting_file" = "Krypterar fil…";
 "send_file_step_sending_file" = "Skickar fil (%1$@ / %2$@)";
 "downloaded_file" = "Filen %1$@ har laddats ner!";
@@ -705,9 +662,7 @@
 "command_description_rainbow" = "Skickar det valda meddelandet I regnbågsfärger";
 "settings_category_composer" = "Meddelanderedigering";
 "message_key" = "Meddelandenyckel";
-"bootstrap_cancel_text" = "Om du avbryter nu så kan du komma att förlora krypterade meddelanden och data om du förlorar åtkomst till dina inloggade sessioner.
-\n
-\nDu kan också sätta upp säker säkerhetskopiering och hantera dina nycklar in inställningarna.";
+"bootstrap_cancel_text" = "Om du avbryter nu så kan du komma att förlora krypterade meddelanden och data om du förlorar åtkomst till dina inloggade sessioner.\n\nDu kan också sätta upp säker säkerhetskopiering och hantera dina nycklar in inställningarna.";
 "settings_messages_in_e2e_one_to_one" = "Krypterade meddelanden i en-till-en-chattar";
 "settings_messages_in_e2e_group_chat" = "Krypterade meddelanden i gruppchattar";
 "settings_troubleshoot_title" = "Felsökning";
@@ -736,8 +691,7 @@
 "failed_to_add_widget" = "Misslyckades att lägga till widget";
 "failed_to_remove_widget" = "Misslyckades att ta bort widget";
 "call_failed_no_connection" = "%@samtal misslyckades";
-"call_failed_no_connection_description" = "Misslyckades att upprätta en realtidsuppkoppling.
-\nVänligen be administratören för din hemserver att konfigurera en TURN-server för att samtal ska fungera pålitligt.";
+"call_failed_no_connection_description" = "Misslyckades att upprätta en realtidsuppkoppling.\nVänligen be administratören för din hemserver att konfigurera en TURN-server för att samtal ska fungera pålitligt.";
 "call_select_sound_device" = "Välj ljudenhet";
 "sound_device_phone" = "Telefon";
 "sound_device_speaker" = "Högtalare";
@@ -753,8 +707,7 @@
 "settings_call_show_confirmation_dialog_summary" = "Fråga efter bekräftelse innan ett samtal startas";
 "room_participants_action_cancel_invite" = "Avbryt inbjudan";
 "room_participants_action_mention" = "Omnämn";
-"room_participants_power_level_prompt" = "Du kommer inte kunna ångra den här ändringen eftersom du befordrar användaren till samma behörighetsnivå som dig själv.
-\nÄr du säker\?";
+"room_participants_power_level_prompt" = "Du kommer inte kunna ångra den här ändringen eftersom du befordrar användaren till samma behörighetsnivå som dig själv.\nÄr du säker\?";
 "room_participants_power_level_demote_warning_title" = "Degradera dig själv\?";
 "room_participants_power_level_demote_warning_prompt" = "Du kommer inte kunna ångra den här ändringen eftersom du degraderar dig själv. Om du är den sista privilegierade användaren i det här rummet så kommer det att vara omöjligt att återfå privilegier.";
 "room_participants_power_level_demote" = "Degradera";
@@ -765,9 +718,7 @@
 "room_participants_action_cancel_invite_prompt_msg" = "Är du säker på att du vill avbryta inbjudan för den här användaren\?";
 "room_participants_remove_title" = "Kicka användaren";
 "room_participants_remove_reason" = "Anledning för kick";
-"room_participants_remove_prompt_msg" = "att sparka ut användaren kommer att ta bort hen från det här rummet.
-\n
-\nFör att hindra hen från att gå med i rummet igen så bör du banna hen istället.";
+"room_participants_remove_prompt_msg" = "att sparka ut användaren kommer att ta bort hen från det här rummet.\n\nFör att hindra hen från att gå med i rummet igen så bör du banna hen istället.";
 "room_participants_ban_title" = "Banna användaren";
 "room_participants_ban_reason" = "Anledning för bann";
 "room_participants_unban_title" = "Avbanna användaren";
@@ -796,31 +747,23 @@
 "settings_troubleshoot_test_device_settings_quickfix" = "Sätt på";
 "settings_troubleshoot_test_play_services_title" = "Kolla Play-tjänster";
 "settings_troubleshoot_test_play_services_success" = "APK:n Google Play-tjänster är tillgänglig och uppdaterad.";
-"settings_troubleshoot_test_play_services_failed" = "%@ använder Google Play-tjänster för att skicka pushmeddelanden, men den verkar inte vara korrekt konfigurerad:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ använder Google Play-tjänster för att skicka pushmeddelanden, men den verkar inte vara korrekt konfigurerad:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Fixa Play-tjänster";
 "settings_troubleshoot_test_fcm_title" = "Firebase-token";
-"settings_troubleshoot_test_fcm_success" = "FCM-token hämtades framgångsrikt:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "Misslyckades att hämta FCM-token:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nDet här felet är ur %@s kontroll, och enligt Google indikerar det här felet att den här enheten har för många appar registrerade med FCM. Felet händer endast i fall då extremt många appar är installerade, så det bör inte påverka normala användare.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nDet här felet är ur %@s kontroll. Det kan hända av flera anledningar. Det kanske funkar om du försöker igen senare, du kan kolla så att Google Play-tjänster inte är databegränsad i systeminställningarna, eller att enhetens klocka går rätt, eller så kan det hända på en alternativ ROM.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nDet här felet är ur %@s kontroll. Det finns inget Google-konto på telefonen. Vänligen öppna kontohanteraren och lägg till ett Google-konto.";
+"settings_troubleshoot_test_fcm_success" = "FCM-token hämtades framgångsrikt:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "Misslyckades att hämta FCM-token:\n%1$@";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nDet här felet är ur %@s kontroll, och enligt Google indikerar det här felet att den här enheten har för många appar registrerade med FCM. Felet händer endast i fall då extremt många appar är installerade, så det bör inte påverka normala användare.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nDet här felet är ur %@s kontroll. Det kan hända av flera anledningar. Det kanske funkar om du försöker igen senare, du kan kolla så att Google Play-tjänster inte är databegränsad i systeminställningarna, eller att enhetens klocka går rätt, eller så kan det hända på en alternativ ROM.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nDet här felet är ur %@s kontroll. Det finns inget Google-konto på telefonen. Vänligen öppna kontohanteraren och lägg till ett Google-konto.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Lägg till konto";
 "settings_troubleshoot_test_token_registration_title" = "Token-registrering";
 "settings_troubleshoot_test_token_registration_success" = "FCM-token registrerades framgångsrikt på hemservern.";
-"settings_troubleshoot_test_token_registration_failed" = "Misslyckades att registrera FCM-token på hemservern:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Misslyckades att registrera FCM-token på hemservern:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Starta vid boot";
 "settings_troubleshoot_test_service_boot_success" = "Tjänsten kommer att startas när enheten startas om.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Aktivera start på boot";
 "settings_troubleshoot_test_bg_restricted_title" = "Kolla bakgrundsrestriktioner";
-"settings_troubleshoot_test_bg_restricted_success" = "Bakgrundsrestriktioner är inaktiverade för %@. Detta test bör köras med mobildata (inte Wi-Fi).
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Bakgrundsrestriktioner är inaktiverade för %@. Detta test bör köras med mobildata (inte Wi-Fi).\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Inaktivera restriktioner";
 "settings_troubleshoot_test_battery_title" = "Batterioptimering";
 "settings_troubleshoot_test_battery_success" = "%@ påverkas inte av batterioptimering.";
@@ -857,15 +800,9 @@
 "encryption_import_import" = "Importera";
 "encryption_never_send_to_unverified_devices_title" = "Kryptera endast till verifierade sessioner";
 "you_added_a_new_device" = "Du har lagt till en ny session \'%@\', vilken begär krypteringsnycklar.";
-"you_added_a_new_device_with_info" = "En ny session begär krypteringsnycklar.
-\nSessionsnamn: %1$@
-\nSenast sedd: %2$@
-\nOm du inte loggade in i en annan session, ignorera denna begäran.";
+"you_added_a_new_device_with_info" = "En ny session begär krypteringsnycklar.\nSessionsnamn: %1$@\nSenast sedd: %2$@\nOm du inte loggade in i en annan session, ignorera denna begäran.";
 "your_unverified_device_requesting" = "Din overifierade session \'%@\' begär krypteringsnycklar.";
-"your_unverified_device_requesting_with_info" = "En ny session begär krypteringsnycklar.
-\nSessionsnamn: %1$@
-\nSenast sedd: %2$@
-\nOm du inte loggade in i en annan session, ignorera denna begäran.";
+"your_unverified_device_requesting_with_info" = "En ny session begär krypteringsnycklar.\nSessionsnamn: %1$@\nSenast sedd: %2$@\nOm du inte loggade in i en annan session, ignorera denna begäran.";
 "markdown_has_been_enabled" = "Markdown har aktiverats.";
 "markdown_has_been_disabled" = "Markdown har inaktiverats.";
 "dialog_user_consent_content" = "För att fortsätta använda hemservern %1$@ så måste du läsa och godkänna användarvillkoren.";
@@ -910,18 +847,9 @@
 "no_ignored_users" = "Du ignorerar inga användare";
 "login_server_other_title" = "Annan";
 "login_signin_matrix_id_notice" = "Om du har skapat ett konto på en hemserver så kan du använda ditt Matrix-ID (t.ex. @användare:domän.com) och lösenord nedan.";
-"signed_out_notice" = "Detta kan bero på flera orsaker:
-\n
-\n• Du har bytt ditt lösenord från en annan session.
-\n
-\n• Du har tagit bort den här sessionen från en annan session.
-\n
-\n• Serveradministratören har tagit bort din åtkomst av säkerhetsskäl.";
-"soft_logout_clear_data_notice" = "Varning: Din personliga data (inklusive krypteringsnycklar) lagras fortfarande på den här enheten.
-\n
-\nRensa den om du inte ska använda den här enheten längre, eller vill logga in på ett annat konto.";
-"soft_logout_sso_not_same_user_error" = "Den nuvarande sessionen är för användaren %1$@ och du försedde uppgifter för användaren %2$@. Detta stöds inte av %@.
-\nVänligen rensa först data, och logga sen in på ett annat konto.";
+"signed_out_notice" = "Detta kan bero på flera orsaker:\n\n• Du har bytt ditt lösenord från en annan session.\n\n• Du har tagit bort den här sessionen från en annan session.\n\n• Serveradministratören har tagit bort din åtkomst av säkerhetsskäl.";
+"soft_logout_clear_data_notice" = "Varning: Din personliga data (inklusive krypteringsnycklar) lagras fortfarande på den här enheten.\n\nRensa den om du inte ska använda den här enheten längre, eller vill logga in på ett annat konto.";
+"soft_logout_sso_not_same_user_error" = "Den nuvarande sessionen är för användaren %1$@ och du försedde uppgifter för användaren %2$@. Detta stöds inte av %@.\nVänligen rensa först data, och logga sen in på ett annat konto.";
 "settings_developer_mode" = "Utvecklarläge";
 "settings_developer_mode_summary" = "Utvecklarläget aktiverar dolda funktioner och kan också göra appen mindre stabil. Endast för utvecklare!";
 "settings_rageshake" = "Raseriskakning";
@@ -930,24 +858,15 @@
 "devices_current_device" = "Nuvarande session";
 "devices_other_devices" = "Andra sessioner";
 "settings_developer_mode_fail_fast_title" = "Misslyckas snabbt";
-"verification_conclusion_compromised" = "En av följande kan vara äventyrad:
-\n
-\n - Din hemserver
-\n - Hemservern användaren du verifierar är ansluten till
-\n - Din eller den andra användarens internetanslutning
-\n - Din eller den andra användarens enhet";
+"verification_conclusion_compromised" = "En av följande kan vara äventyrad:\n\n - Din hemserver\n - Hemservern användaren du verifierar är ansluten till\n - Din eller den andra användarens internetanslutning\n - Din eller den andra användarens enhet";
 "verification_verify_device" = "Verifiera den här sessionen";
 "verification_scan_notice" = "Skanna koden med den andra användarens enhet för att säkert verifiera varandra";
 "settings_category_timeline" = "Tidslinje";
 "verification_code_notice" = "Jämför koden med den som visas på den andra användarens skärm.";
 "encryption_information_cross_signing_state" = "Korssignering";
-"encryption_information_dg_xsigning_complete" = "Korssignering är aktiverad
-\nPrivata nycklar finns på enheten.";
-"encryption_information_dg_xsigning_trusted" = "Korssignering är aktiverad
-\nNycklar är betrodda.
-\nPrivata nycklar är inte kända";
-"encryption_information_dg_xsigning_not_trusted" = "Korssignering är aktiverad.
-\nNycklar är inte betrodda";
+"encryption_information_dg_xsigning_complete" = "Korssignering är aktiverad\nPrivata nycklar finns på enheten.";
+"encryption_information_dg_xsigning_trusted" = "Korssignering är aktiverad\nNycklar är betrodda.\nPrivata nycklar är inte kända";
+"encryption_information_dg_xsigning_not_trusted" = "Korssignering är aktiverad.\nNycklar är inte betrodda";
 "encryption_information_dg_xsigning_disabled" = "Korssignering är inte aktiverat";
 "settings_active_sessions_list" = "Aktiva sessioner";
 "settings_active_sessions_show_all" = "Visa alla sessioner";
@@ -963,14 +882,7 @@
 "settings_account_data" = "Kontodata";
 "verification_use_passphrase" = "Om du inte kan komma åt en existerande session";
 "settings_key_requests" = "Nyckelförfrågningar";
-"verify_not_me_self_verification" = "En av följande kan vara äventyrad:
-\n
-\n- Ditt lösenord
-\n- Din hemserver
-\n- Den här enheten, eller den andra enheten
-\n- Internetuppkopplingen en av enheterna använder
-\n
-\nVi rekommenderar att du byter ditt lösenord och återställningsnyckel i inställningarna omedelbart.";
+"verify_not_me_self_verification" = "En av följande kan vara äventyrad:\n\n- Ditt lösenord\n- Din hemserver\n- Den här enheten, eller den andra enheten\n- Internetuppkopplingen en av enheterna använder\n\nVi rekommenderar att du byter ditt lösenord och återställningsnyckel i inställningarna omedelbart.";
 "bootstrap_crosssigning_progress_key_backup" = "Sätter upp nyckelsäkerhetskopiering";
 "bootstrap_crosssigning_save_usb" = "Spara den på ett USB-minne eller en säkerhetskopieringsenhet";
 "qr_code_scanned_self_verif_notice" = "Nästan färdigt! Visar den andra enheten en bock\?";
@@ -990,8 +902,7 @@
 "bottom_sheet_setup_secure_backup_title" = "Säker säkerhetskopiering";
 "bottom_sheet_setup_secure_backup_submit" = "Sätt upp";
 "bottom_sheet_setup_secure_backup_security_phrase_subtitle" = "Skriv in en hemlig fras endast du känner till, och generera en nyckel för säkerhetskopiering.";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ kommer att synka i bakgrunden på ett sätt som sparar på enhetens begränsade resurser (batteri).
-\nBeroende på din enhets resurser, så kan synkroniseringen bli uppskjuten av operativsystemet.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ kommer att synka i bakgrunden på ett sätt som sparar på enhetens begränsade resurser (batteri).\nBeroende på din enhets resurser, så kan synkroniseringen bli uppskjuten av operativsystemet.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimerad för realtid";
 "settings_background_fdroid_sync_mode_disabled" = "Ingen bakgrundssynk";
 "settings_background_fdroid_sync_mode_disabled_description" = "Du kommer inte att bli aviserad om inkommande meddelanden när appen är i bakgrunden.";
@@ -1066,8 +977,7 @@
 "room_widget_permission_added_by" = "Den här widgeten lades till av:";
 "room_widget_permission_webview_shared_info_title" = "Att använda den kan sätta kakor och dela data med %@:";
 "room_widget_permission_shared_info_title" = "Att använda den kan dela data med %@:";
-"room_widget_failed_to_load" = "Misslyckades att ladda widgeten.
-\n%@";
+"room_widget_failed_to_load" = "Misslyckades att ladda widgeten.\n%@";
 "room_widget_reload" = "Ladda om widget";
 "room_widget_open_in_browser" = "Öppna i webbläsaren";
 "room_widget_revoke_access" = "Återkalla tillgång för mig";
@@ -1122,9 +1032,9 @@
 "room_tombstone_continuation_link" = "Samtalet fortsätter här";
 "room_tombstone_continuation_description" = "Det här rummet är en fortsättning av en annan konversation";
 "room_tombstone_predecessor_link" = "Tryck här för att se äldre meddelanden";
-"resource_limit_soft_default.b_0" = "vissa användare kommer inte att kunna logga in";
+"resource_limit_soft_default" = "Hemservern har överskridit en av sina resursbegränsningar så <b>vissa användare kommer inte att kunna logga in</b>.";
 "resource_limit_hard_default" = "Den här hemservern har överskridit en av sina resursbegränsningar.";
-"resource_limit_soft_mau.b_0" = "vissa användare kommer inte att kunna logga in";
+"resource_limit_soft_mau" = "Den här hemservern har nått sin månatliga aktiva användargräns så <b>vissa användare kommer inte att kunna logga in</b>.";
 "resource_limit_hard_mau" = "Den här hemservern har nått sin månatliga aktiva användargräns.";
 "resource_limit_soft_contact" = "Vänligen %@ för att öka den här gränsen.";
 "resource_limit_hard_contact" = "Vänligen %@ för att fortsätta använda den här tjänsten.";
@@ -1200,9 +1110,7 @@
 "create_room_name_hint" = "Namn";
 "create_room_public_title" = "Publikt";
 "create_room_public_description" = "Vem som helst kommer kunna gå med i det här rummet";
-"create_room_federation_error" = "Rummet har skapats, men vissa inbjudningar har inte skickats av följande anledning:
-\n
-\n%@";
+"create_room_federation_error" = "Rummet har skapats, men vissa inbjudningar har inte skickats av följande anledning:\n\n%@";
 "keys_backup_unable_to_get_trust_info" = "Ett fel inträffade vi hämtning av betroendeinfo";
 "keys_backup_unable_to_get_keys_backup_data" = "Ett fel inträffade vid hämtning av nyckelsäkerhetskopia";
 "navigate_to_room_when_already_in_the_room" = "Du tittar redan på det här rummet!";
@@ -1278,13 +1186,9 @@
 "login_server_url_form_modular_notice" = "Skriv in adressen för den Modular Element eller server du vill använda";
 "login_server_url_form_common_notice" = "Skriv in adressen för servern du vill använda";
 "login_sso_error_message" = "Ett fel inträffade vid laddning av sidan: %1$@ (%2$d)";
-"login_mode_not_supported" = "Appen kan inte logga in på den här hemservern. Hemservern stöder följande inloggningstyp(er): %1$@.
-\n
-\nVill du logga in med en webbklient\?";
+"login_mode_not_supported" = "Appen kan inte logga in på den här hemservern. Hemservern stöder följande inloggningstyp(er): %1$@.\n\nVill du logga in med en webbklient\?";
 "login_registration_disabled" = "Tyvärr, den här servern accepterar inte nya konton.";
-"login_registration_not_supported" = "Appen kan inte skapa ett konto på den här hemservern.
-\n
-\nVill du registrera dig med en webbklient\?";
+"login_registration_not_supported" = "Appen kan inte skapa ett konto på den här hemservern.\n\nVill du registrera dig med en webbklient\?";
 "login_reset_password_submit" = "Nästa";
 "login_reset_password_warning_title" = "Varning!";
 "login_reset_password_warning_submit" = "Fortsätt";
@@ -1294,9 +1198,7 @@
 "login_reset_password_success_notice" = "Ditt lösenord har återställts.";
 "login_reset_password_success_submit" = "Tillbaka till inloggning";
 "login_reset_password_cancel_confirmation_title" = "Varning";
-"login_reset_password_cancel_confirmation_content" = "Ditt lösenord har inte bytts än.
-\n
-\nStoppa lösenordsbytesprocessen\?";
+"login_reset_password_cancel_confirmation_content" = "Ditt lösenord har inte bytts än.\n\nStoppa lösenordsbytesprocessen\?";
 "login_set_email_submit" = "Nästa";
 "login_set_msisdn_title" = "Sätt telefonnummer";
 "login_set_msisdn_notice2" = "Vänligen använd internationellt format.";
@@ -1316,9 +1218,7 @@
 "login_signup_submit" = "Nästa";
 "login_signup_error_user_in_use" = "Det användarnamnet är upptaget";
 "login_signup_cancel_confirmation_title" = "Varning";
-"login_signup_cancel_confirmation_content" = "Ditt konto är inte skapat än.
-\n
-\nVill du avbryta registreringsprocessen\?";
+"login_signup_cancel_confirmation_content" = "Ditt konto är inte skapat än.\n\nVill du avbryta registreringsprocessen\?";
 "login_a11y_choose_matrix_org" = "Välj matrix.org";
 "login_a11y_choose_modular" = "Välj Element Matrix Services";
 "login_a11y_choose_other" = "Välj en annan hemserver";
@@ -1459,10 +1359,8 @@
 "bootstrap_progress_generating_ssss_with_info" = "Generar SSSS-nyckel baserat på lösenfras (%@)";
 "bootstrap_progress_generating_ssss_recovery" = "Generar SSSS-nyckel baserat på återställningsnyckel";
 "bootstrap_progress_storing_in_sss" = "Lagrar hemlighet för nyckelsäkerhetskopiering i SSSS";
-"app_desktop_web" = "%@ Webb
-\n%@ Skrivbord";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
+"app_desktop_web" = "%@ Webb\n%@ Skrivbord";
+"app_ios_android" = "%@ iOS\n%@ Android";
 "enter_secret_storage_passphrase_or_key" = "Använd din %1$@ eller %2$@ för att fortsätta.";
 "use_recovery_key" = "Använd återställningsnyckel";
 "enter_secret_storage_input_key" = "Välj din återställningsnyckel eller mata in den manuellt genom att skriva den eller klistra in från klippbordet";
@@ -1476,9 +1374,7 @@
 "error_empty_field_choose_user_name" = "Vänligen välj ett användarnamn.";
 "error_empty_field_choose_password" = "Vänligen välj att lösenord.";
 "external_link_confirmation_title" = "Dubbelkolla den här länken";
-"external_link_confirmation_message" = "Länken %1$@ tar dig till en annan sida: %2$@.
-\n
-\nÄr du säker på att du vill fortsätta\?";
+"external_link_confirmation_message" = "Länken %1$@ tar dig till en annan sida: %2$@.\n\nÄr du säker på att du vill fortsätta\?";
 "add_members_to_room" = "Lägg till medlemmar";
 "inviting_users_to_room" = "Bjuder in användare…";
 "invitation_sent_to_one_user" = "Inbjudan skickad till %1$@";
@@ -1552,9 +1448,7 @@
 "sent_verification_conclusion" = "Verifieringsavslutning";
 "universal_link_malformed" = "Länken var felformaterad";
 "no_permissions_to_start_webrtc_call" = "Du är inte behörig att starta ett samtal i det här rummet";
-"delete_account_data_warning" = "Radera kontodata av typen %1$@\?
-\n
-\nAnvänd varsamt, det kan leda till oväntat beteende.";
+"delete_account_data_warning" = "Radera kontodata av typen %1$@\?\n\nAnvänd varsamt, det kan leda till oväntat beteende.";
 "secure_backup_reset_no_history" = "så kommer du att börja om utan historik, meddelanden, betrodda enheter eller betrodda användare";
 "settings_security_pin_code_grace_period_summary_off" = "PIN-kod krävs varje gång du öppnar %@.";
 "settings_security_pin_code_grace_period_summary_on" = "PIN-kod krävs efter att du inte har använt %@ på 2 minuter.";
@@ -1577,9 +1471,7 @@
 "direct_room_created_summary_item_by_you" = "Du gick med.";
 "direct_room_encryption_enabled_tile_description" = "Meddelanden i det här rummet är totalsträckskrypterade.";
 "direct_room_profile_section_more_settings" = "Inställningar";
-"direct_room_profile_encrypted_subtitle" = "Meddelanden här är totalsträckskrypterade.
-\n
-\nDina meddelanden är säkrade med lås och bara du och mottagaren har nycklarna för att låsa upp dem.";
+"direct_room_profile_encrypted_subtitle" = "Meddelanden här är totalsträckskrypterade.\n\nDina meddelanden är säkrade med lås och bara du och mottagaren har nycklarna för att låsa upp dem.";
 "direct_room_profile_not_encrypted_subtitle" = "Meddelanden här är inte totalsträckskrypterade.";
 "login_error_outdated_homeserver_warning_content" = "Den här hemservern kör en gammal version. Be din hemserveradministratör att uppgradera. Du kan fortsätta, men vissa funktioner kanske inte fungerar ordentligt.";
 "direct_room_join_rules_invite_by_you" = "Du ändrade detta till endast inbjudna.";
@@ -1662,8 +1554,7 @@
 "qr_code" = "QR-kod";
 "add_by_qr_code" = "Lägg till med QR-kod";
 "room_preview_no_preview_join" = "Det här rummet kan inte förhandsgranskas. Vill du gå med i det\?";
-"room_preview_not_found" = "Det här rummet är inte åtkomligt just nu.
-\nFörsök igen senare, eller be en rumsadministratör för att kolla om du har åtkomst.";
+"room_preview_not_found" = "Det här rummet är inte åtkomligt just nu.\nFörsök igen senare, eller be en rumsadministratör för att kolla om du har åtkomst.";
 "room_alias_publish_to_directory_error" = "Kunde inte hämta nuvarande rumskatalogssynlighet (%1$@).";
 "room_alias_publish_to_directory" = "Publicera det här rummet för offentligheten i rumskatalogen för %1$@\?";
 "room_alias_action_unpublish" = "Avpublicera den här adressen";
@@ -1756,10 +1647,8 @@
 "room_settings_room_version_title" = "Rumsversion";
 "dialog_edit_hint" = "Nytt värde";
 "action_switch" = "Byt";
-"initial_sync_start_downloading" = "Inledande synk:
-\nLaddar ner data…";
-"initial_sync_start_server_computing" = "Inledande synk:
-\nVäntar på serversvar…";
+"initial_sync_start_downloading" = "Inledande synk:\nLaddar ner data…";
+"initial_sync_start_server_computing" = "Inledande synk:\nVäntar på serversvar…";
 "a11y_view_read_receipts" = "Visa läskvitton";
 "a11y_rule_notify_off" = "Avisera inte";
 "a11y_rule_notify_silent" = "Avisera utan ljud";
@@ -1870,8 +1759,7 @@
 "leave_space" = "Lämna";
 "space_add_child_title" = "Lägg till rum";
 "space_explore_activity_title" = "Utforska rum";
-"room_alias_preview_not_found" = "Det här aliaset är inte tillgängligt för tillfället.
-\nFörsök igen senare eller be en rumsadminstratör kolla om du har åtkomst.";
+"room_alias_preview_not_found" = "Det här aliaset är inte tillgängligt för tillfället.\nFörsök igen senare eller be en rumsadminstratör kolla om du har åtkomst.";
 "join_anyway" = "Gå med iallafall";
 "join_space" = "Gå med i utrymme";
 "create_space" = "Skapa utrymme";
@@ -1890,13 +1778,11 @@
 "use_as_default_and_do_not_ask_again" = "Använd som förval och fråga inte igen";
 "option_always_ask" = "Fråga alltid";
 "this_space_has_no_rooms_admin" = "Vissa rum kan vara dolda för att de är privata och du behöver en inbjudan.";
-"this_space_has_no_rooms_not_admin" = "Vissa rum kan vara dolda för att de är privata och du behöver en inbjudan.
-\nDu är inte behörig att lägga till rum.";
+"this_space_has_no_rooms_not_admin" = "Vissa rum kan vara dolda för att de är privata och du behöver en inbjudan.\nDu är inte behörig att lägga till rum.";
 "this_space_has_no_rooms" = "Det här utrymmet har inga rum";
 "spaces_no_server_support_description" = "Vänligen kontakta din hemserveradmin för vidare information";
 "spaces_no_server_support_title" = "Det verkar som att din hemserver inte stöder utrymmen än";
-"spaces_feeling_experimental_subspace" = "Känner du dig äventyrlig\?
-\nDu kan lägga till existerande utrymmen till ett utrymme.";
+"spaces_feeling_experimental_subspace" = "Känner du dig äventyrlig\?\nDu kan lägga till existerande utrymmen till ett utrymme.";
 "space_leave_prompt_msg_as_admin" = "Du är den enda administratören av detta utrymme. Om du lämnar det kommer ingen att ha kontroll över det.";
 "space_leave_prompt_msg_private" = "Du kommer inte att kunna gå med igen om du inte bjuds in igen.";
 "space_leave_prompt_msg_only_you" = "Du är den enda personen här. Om du lämnar så kommer ingen kunna gå med i framtiden, inklusive du.";
@@ -1945,8 +1831,7 @@
 "upgrade_room_update_parent_space" = "Uppdatera automatiskt utrymmesförälder";
 "upgrade_room_auto_invite" = "Bjud in användare automatiskt";
 "upgrade_public_room_from_to" = "Du kommer att uppgradera det här rummet från %1$@ till %2$@.";
-"upgrade_room_warning" = "Att uppgradera ett rum är en avancerad handling och rekommenderas normal när ett rum är instabilt på grund av buggar, saknade funktioner eller säkerhetsproblem.
-\nDet här påverkar normalt bara hur ett rum hanteras på servern.";
+"upgrade_room_warning" = "Att uppgradera ett rum är en avancerad handling och rekommenderas normal när ett rum är instabilt på grund av buggar, saknade funktioner eller säkerhetsproblem.\nDet här påverkar normalt bara hur ett rum hanteras på servern.";
 "upgrade_private_room" = "Uppgradera privat rum";
 "upgrade_public_room" = "Uppgradera offentligt rum";
 "upgrade_required" = "Uppgradering krävs";
@@ -2036,9 +1921,7 @@
 "space_settings_permissions_title" = "Utrymmesbehörigheter";
 "space_participants_unban_prompt_msg" = "Om användaren avbannas kommer denna att få gå med i utrymmet igen.";
 "space_participants_ban_prompt_msg" = "Att banna användaren kommer att ta bort denne från det här utrymmet och hindra denne från att gå med igen.";
-"space_participants_remove_prompt_msg" = "att kicka användaren kommer att ta bort den från det här utrymmet.
-\n
-\nFör att hindra hen från att gå med igen så bör de banna hen istället.";
+"space_participants_remove_prompt_msg" = "att kicka användaren kommer att ta bort den från det här utrymmet.\n\nFör att hindra hen från att gå med igen så bör de banna hen istället.";
 "create_space_in_progress" = "Skapar utrymme…";
 "command_description_lenny" = "Lägger till ( ͡° ͜ʖ ͡°) till början av ett textmeddelande";
 "settings_developer_mode_show_info_on_screen_summary" = "Visa lite användbar info för att hjälpa till att avbugga appen";
@@ -2112,12 +1995,10 @@
 "identity_server_consent_dialog_content_3" = "För att hitta existerande kontakter så behöver du skicka kontaktinfo (e-postadresser och telefonnummer) till din identitetsserver. Vi hashar din data innan den skickas av sekretesskäl.";
 "identity_server_consent_dialog_content_question" = "Går du med på att skicka den här infon\?";
 "analytics_opt_in_list_item_3" = "Du kan stänga av detta när som helst i inställningarna";
-"analytics_opt_in_list_item_2.b_0" = "inte";
-"analytics_opt_in_list_item_1.b_0" = "inte";
+"analytics_opt_in_list_item_2" = "Vi delar <b>inte</b> information med tredje parter";
+"analytics_opt_in_list_item_1" = "Vi spelar <b>inte</b> in eller profilerar någon kontodata";
 "analytics_opt_in_content_link" = "här";
-"analytics_opt_in_content" = "Hjälp oss att identifiera problem och förbättra %@ genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.
-\n
-\nDu kan läsa alla våra villkor %@.";
+"analytics_opt_in_content" = "Hjälp oss att identifiera problem och förbättra %@ genom att dela anonym användningsdata. För att förstå hur personer använder multipla enheter så generar vi en slumpmässig identifierare som delas mellan dina enheter.\n\nDu kan läsa alla våra villkor %@.";
 "analytics_opt_in_title" = "Hjälp att förbättra %@";
 "action_enable" = "Aktivera";
 "delete_poll_dialog_content" = "Är du säker på att du vill ta bort den här omröstningen\? Du kommer inte kunna få tillbaka den när den har tagits bort.";
@@ -2206,7 +2087,7 @@
 "reply_in_thread" = "Svara i tråd";
 "command_not_supported_in_threads" = "Kommandot \"%@\" kändes igen men stöds inte i trådar.";
 "search_thread_from_a_thread" = "Från en tråd";
-"thread_list_empty_notice" = "Tips: Tryck länge på ett meddelande och använd \"%@\.";
+"thread_list_empty_notice" = "Tips: Tryck länge på ett meddelande och använd \"%@\".";
 "thread_list_empty_subtitle" = "Trådar hjälper till att hålla dina konversationer till ämnet och lätta att följa.";
 "thread_list_empty_title" = "Håll diskussioner organiserade med trådar";
 "thread_list_modal_my_threads_subtitle" = "Visar alla trådar du har deltagit i";
@@ -2229,8 +2110,7 @@
 "threads_notice_migration_title" = "Trådar närmar sig beta 🎉";
 "location_share_live_stop" = "Stoppa";
 "location_share_live_enabled" = "Kontinuerligt plats aktiverad";
-"location_in_background_missing_permission_dialog_content" = "Om du vill dela din plats kontinuerligt så behöver %@ åtkomst till din plats hela tiden när appen är i bakgrunden.
-\nVi kommer bara använda din plats under tiden du väljer.";
+"location_in_background_missing_permission_dialog_content" = "Om du vill dela din plats kontinuerligt så behöver %@ åtkomst till din plats hela tiden när appen är i bakgrunden.\nVi kommer bara använda din plats under tiden du väljer.";
 "location_in_background_missing_permission_dialog_title" = "Tillåt åtkomst";
 "a11y_location_share_option_pinned_icon" = "Dela den här platsen";
 "location_share_option_pinned" = "Dela den här platsen";
@@ -2240,102 +2120,23 @@
 "location_share_option_user_current" = "Dela min nuvarande plats";
 "a11y_location_share_locate_button" = "Zooma in till nuvarande plats";
 "a11y_location_share_pin_on_map" = "Nål för vald plats på kartan";
-"threads_notice_migration_message" = "Vi kommer närmare att släppa en offentlig beta för trådar.
-\n
-\nMedan vi förbereder den så behöver vi göra några ändringar: trådar skapade innan den här tidpunkten kommer att visas som vanliga svar.
-\n
-\nDet kommer att vara en engångshändelse, eftersom trådar nu är en del av Matrixspecifikationen.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ lade till %2$@ som en adress för det här rummet.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ lade till %2$@ som adresser för det här rummet.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Du lade till %1$@ som en adress för det här rummet.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Du lade till %1$@ som adresser för det här rummet.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ tog bort %2$@ som en adress för det här rummet.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ tog bort %2$@ som adresser för det här rummet.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Du tog bort %1$@ som en adress för det här rummet.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Du tog bort %1$@ som adresser för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Du tog bort den alternativa adressen %1$@ för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Du tog bort de alternativa adresserna %1$@ för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ tog bort den alternativa adressen %2$@ för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ tog bort de alternativa adresserna %2$@ för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Du lade till den alternativa adressen %1$@ för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Du lade till de alternativa adresserna %1$@ för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ lade till den alternativa adressen %2$@ för det här rummet.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ lade till de alternativa adresserna %2$@ för det här rummet.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ och %4$d till";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ och %4$d till";
-"plurals.membership_changes.item_0" = "%d medlemsskapsändring";
-"plurals.membership_changes.item_1" = "%d medlemsskapsändringar";
-"plurals.room_title_members.item_0" = "%d medlem";
-"plurals.room_title_members.item_1" = "%d medlemmar";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d rum";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d rum";
-"plurals.notification_compat_summary_title.item_0" = "%d avisering";
-"plurals.notification_compat_summary_title.item_1" = "%d aviseringar";
-"plurals.room_profile_section_more_member_list.item_0" = "En person";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d personer";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Inbjudan skickad till %1$@ och en till";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Inbjudan skickad till %1$@ och %2$d till";
-"plurals.room_new_messages_notification.item_0" = "%d nytt meddelande";
-"plurals.room_new_messages_notification.item_1" = "%d nya meddelanden";
-"plurals.notification_unread_notified_messages.item_0" = "%d oläst aviserat meddelande";
-"plurals.notification_unread_notified_messages.item_1" = "%d olästa aviserade meddelanden";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d meddelande";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d meddelanden";
-"plurals.room_details_selected.item_0" = "%d valt";
-"plurals.room_details_selected.item_1" = "%d valda";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Återställde en säkerhetskopia med %d nyckel.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Återställde en säkerhetskopia med %d nycklar.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d ny nyckel har lagts till till den här sessionen.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d nya nycklar har lagts till till den här sessionen.";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ och %3$d annan har läst";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ och %3$d andra har läst";
-"plurals.settings_active_sessions_count.item_0" = "%d aktiv session";
-"plurals.settings_active_sessions_count.item_1" = "%d aktiva sessioner";
-"plurals.room_settings_banned_users_count.item_0" = "%d bannad användare";
-"plurals.room_settings_banned_users_count.item_1" = "%d bannade användare";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d nyckel importerad framgångsrikt.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d nycklar importerade framgångsrikt.";
-"plurals.active_widgets.item_0" = "%d aktiv widget";
-"plurals.active_widgets.item_1" = "%d aktiva widgets";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Säkerhetskopierar %d nyckel…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Säkerhetskopierar %d nycklar…";
-"plurals.fallback_users_read.item_0" = "%d användare läste";
-"plurals.fallback_users_read.item_1" = "%d användare läste";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "För många förfrågningar har skickats. Du kan försöka igen om %1$d sekund…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "För många förfrågningar har skickats. Du kan försöka igen om %1$d sekunder…";
-"plurals.send_images_with_original_size.item_0" = "Skicka bild i originalstorlek";
-"plurals.send_images_with_original_size.item_1" = "Skicka bilder i originalstorlek";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Fel kod, %d försök kvar";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Fel kod, %d försök kvar";
-"plurals.seconds.item_0" = "%d sekund";
-"plurals.seconds.item_1" = "%d sekunder";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Visa enheten du kan verifiera med nu";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Visa %d enheter du kan verifiera med nu";
-"plurals.notification_invitations.item_0" = "%d inbjudan";
-"plurals.notification_invitations.item_1" = "%d inbjudningar";
-"plurals.entries.item_0" = "%d inmatning";
-"plurals.entries.item_1" = "%d inmatningar";
-"plurals.space_people_you_know.item_0" = "%d person du känner har redan gått med";
-"plurals.space_people_you_know.item_1" = "%d personer du känner har redan gått med";
-"plurals.send_videos_with_original_size.item_0" = "Skicka video med originalstorlek";
-"plurals.send_videos_with_original_size.item_1" = "Skicka videor med originalstorlek";
-"plurals.missed_video_call.item_0" = "Missat videosamtal";
-"plurals.missed_video_call.item_1" = "%d missade videosamtal";
-"plurals.missed_audio_call.item_0" = "Missat ljudsamtal";
-"plurals.missed_audio_call.item_1" = "%d missade ljudsamtal";
-"plurals.call_active_status.item_0" = "Aktivt samtal ·";
-"plurals.call_active_status.item_1" = "%1$d aktiva samtal ·";
-"plurals.create_poll_not_enough_options_error.item_0" = "Minst %1$@ alternativ krävs";
-"plurals.create_poll_not_enough_options_error.item_1" = "Minst %1$@ alternativ krävs";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Slutgiltigt resultat baserat på %1$d röst";
-"plurals.poll_total_vote_count_after_ended.item_1" = "Slutgiltigt resultat baserat på %1$d röster";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Baserat på %1$d röst";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "Baserat på %1$d röster";
-"plurals.poll_option_vote_count.item_0" = "%1$d röst";
-"plurals.poll_option_vote_count.item_1" = "%1$d röster";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d röst avgiven. Rösta för att se resultatet";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d röster avgivna. Rösta för att se resultatet";
-"plurals.message_reaction_show_more.item_0" = "%1$d till";
-"plurals.message_reaction_show_more.item_1" = "%1$d till";
-"plurals.notice_room_server_acl_changes.item_0" = "%d server-ACL-ändring";
-"plurals.notice_room_server_acl_changes.item_1" = "%d server-ACL-ändringar";
+"threads_notice_migration_message" = "Vi kommer närmare att släppa en offentlig beta för trådar.\n\nMedan vi förbereder den så behöver vi göra några ändringar: trådar skapade innan den här tidpunkten kommer att visas som vanliga svar.\n\nDet kommer att vara en engångshändelse, eftersom trådar nu är en del av Matrixspecifikationen.";
+"live_location_sharing_notification_description" = "Platsdelning pågår";
+"live_location_sharing_notification_title" = "%@ Kontinuerlig plats";
+"error_forbidden_digits_only_username" = "Hemservern accepterar inte användarnamn med bara siffror.";
+"ftue_personalize_skip_this_step" = "Hoppa över det här steget";
+"ftue_personalize_submit" = "Spara och fortsätt";
+"ftue_personalize_complete_subtitle" = "Dina inställningar har sparats.";
+"ftue_personalize_complete_title" = "Du är redo!";
+"ftue_personalize_lets_go" = "Nu kör vi";
+"ftue_profile_picture_subtitle" = "Du kan ändra detta när som helst.";
+"ftue_profile_picture_title" = "Lägg till en profilbild";
+"ftue_display_name_entry_footer" = "Du kan ändra detta senare";
+"ftue_display_name_entry_title" = "Visningsnamn";
+"ftue_display_name_subtitle" = "Det här kommer att visas när du skickar meddelanden.";
+"ftue_display_name_title" = "Välj ett visningsnamn";
+"ftue_account_created_subtitle" = "Ditt konto %@ har skapats.";
+"ftue_account_created_congratulations_title" = "Grattis!";
+"ftue_account_created_take_me_home" = "För mig hem";
+"ftue_account_created_personalize" = "Anpassa profil";
+"action_disable" = "Inaktivera";

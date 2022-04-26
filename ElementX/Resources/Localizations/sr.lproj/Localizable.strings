@@ -7,8 +7,7 @@
 "notice_room_invite_by_you" = "Ви позвасте корисника %1$@";
 "notice_room_invite" = "%1$@ позва корисника %2$@";
 "notice_direct_room_created_by_you" = "Направили сте дискусију";
-"initial_sync_start_importing_account" = "Почетна синхронизација:
-\nувозим налог…";
+"initial_sync_start_importing_account" = "Почетна синхронизација:\nувозим налог…";
 "room_displayname_empty_room_was" = "Празна соба (била је %@)";
 "room_displayname_empty_room" = "Празна соба";
 "notice_direct_room_created" = "%1$@ направи дискусију";
@@ -108,20 +107,13 @@
 "notice_room_invite_with_reason" = "%1$@ позва корисника %2$@. Разлог: %3$@";
 "notice_room_invite_no_invitee_with_reason_by_you" = "Ваша позивница. Разлог: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "%1$@ - позивница. Разлог: %2$@";
-"initial_sync_start_importing_account_data" = "Почетна синхронизација:
-\nувозим податке о налогу";
-"initial_sync_start_importing_account_groups" = "Почетна синхронизација:
-\nувозим заједнице";
-"initial_sync_start_importing_account_left_rooms" = "Почетна синхронизација:
-\nувозим напуштене собе";
-"initial_sync_start_importing_account_invited_rooms" = "Почетна синхронизација:
-\nувозим собе са позивницом";
-"initial_sync_start_importing_account_joined_rooms" = "Почетна синхронизација:
-\nувозим собе у којима сте";
-"initial_sync_start_importing_account_crypto" = "Почетна синхронизација:
-\nувоз шифровања";
-"initial_sync_start_importing_account_rooms" = "Почетна синхронизација:
-\nувозим собе";
+"initial_sync_start_importing_account_data" = "Почетна синхронизација:\nувозим податке о налогу";
+"initial_sync_start_importing_account_groups" = "Почетна синхронизација:\nувозим заједнице";
+"initial_sync_start_importing_account_left_rooms" = "Почетна синхронизација:\nувозим напуштене собе";
+"initial_sync_start_importing_account_invited_rooms" = "Почетна синхронизација:\nувозим собе са позивницом";
+"initial_sync_start_importing_account_joined_rooms" = "Почетна синхронизација:\nувозим собе у којима сте";
+"initial_sync_start_importing_account_crypto" = "Почетна синхронизација:\nувоз шифровања";
+"initial_sync_start_importing_account_rooms" = "Почетна синхронизација:\nувозим собе";
 "room_displayname_room_invite" = "Позивница за собу";
 "notice_crypto_unable_to_decrypt" = "** Не могу да дешифрујем: %@ **";
 "notice_power_level_diff" = "%1$@ са %2$@ на %3$@";
@@ -326,11 +318,8 @@
 "login_error_no_homeserver_found" = "Ово није валидна адреса Matrix сервера";
 "login_error_invalid_home_server" = "Унети важећи URL";
 "auth_accept_policies" = "Прегледајте и прихватите политику овог сервера:";
-"no_sticker_application_dialog_content" = "Тренутно немате ни један пакет стикера.
-\n
-\nДодати сада неки\?";
-"call_failed_no_connection_description" = "Није успело успостављање везе у реалном времену.
-\nЗамолите администратора вашег домаћег сервера да конфигурише TURN сервер како би позиви поуздано радили.";
+"no_sticker_application_dialog_content" = "Тренутно немате ни један пакет стикера.\n\nДодати сада неки\?";
+"call_failed_no_connection_description" = "Није успело успостављање везе у реалном времену.\nЗамолите администратора вашег домаћег сервера да конфигурише TURN сервер како би позиви поуздано радили.";
 "send_bug_report_description" = "Опишите грешку. Шта сте урадили\? Шта сте очекивали да се догоди\? Шта се заправо догодило\?";
 "send_bug_report_include_key_share_history" = "Укључите историју размене кључева";
 "audio_video_meeting_description" = "Састанци користе Jitsi безбедносне и допунске политике. Сви људи тренутно у соби видеће позив да се придруже састанку.";
@@ -376,10 +365,8 @@
 "no_permissions_to_start_conf_call_in_direct_room" = "Немате дозволу за започињање конференцијског позива";
 "no_permissions_to_start_conf_call" = "Немате дозволу за започињање конференцијског позива у овој соби";
 "permalink" = "ТрајнаВеза";
-"initial_sync_start_downloading" = "Почетна синхронизација:
-\nПреузимање података…";
-"initial_sync_start_server_computing" = "Почетна синхронизација:
-\nЧека се одговор сервера…";
+"initial_sync_start_downloading" = "Почетна синхронизација:\nПреузимање података…";
+"initial_sync_start_server_computing" = "Почетна синхронизација:\nЧека се одговор сервера…";
 "room_permissions_change_permissions" = "Променити дозволе";
 "room_permissions_change_room_name" = "Променити име собе";
 "room_permissions_change_history_visibility" = "Променити видљивост историје";
@@ -403,9 +390,7 @@
 "room_participants_action_unignore_prompt_msg" = "Не игнорисањем овог корисника ће поново приказати све његове поруке.";
 "room_participants_action_unignore_title" = "Не игнориши више корисника";
 "room_participants_action_ignore" = "Игнорисај";
-"room_participants_action_ignore_prompt_msg" = "Игнорирање овог корисника уклониће своје поруке из соба које делите.
-\n
-\nОву акцију можете поништити у било које време у општим подешавањима.";
+"room_participants_action_ignore_prompt_msg" = "Игнорирање овог корисника уклониће своје поруке из соба које делите.\n\nОву акцију можете поништити у било које време у општим подешавањима.";
 "room_participants_action_ignore_title" = "Игнорирај корисника";
 "room_participants_power_level_demote" = "Снизити права";
 "room_participants_power_level_demote_warning_prompt" = "Нећете моћи да поништите ову промену пошто снизујете ваша права, ако сте последњи привилеговани корисник у соби, неће бити могуће повратити привилегије.";
@@ -441,33 +426,3 @@
 "permissions_denied_add_contact" = "Дозволите приступ вашим контактима.";
 "permissions_denied_qr_code" = "Да бисте скенирали QR кôд, морате дозволити приступ камеру.";
 "permissions_rationale_popup_title" = "Информација";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ и још %4$d";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ и још %4$d";
-"plurals.room_displayname_four_and_more_members.item_2" = "%1$@, %2$@, %3$@ и још %4$d";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Додали сте %1$@ као адресу ове собе.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Додали сте %1$@ као адресе ове собе.";
-"plurals.notice_room_aliases_added_by_you.item_2" = "Додали сте %1$@ као адресе ове собе.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ додаде %2$@ као адресу ове собе.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ додаде %2$@ као адресе ове собе.";
-"plurals.notice_room_aliases_added.item_2" = "%1$@ додаде %2$@ као адресе ове собе.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Уклонили сте алтернативну адресу %1$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Уклонили сте алтернативне адресе %1$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_2" = "Уклонили сте алтернативне адресе %1$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ уклони алтернативну адресу %2$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ уклони алтернативне адресе %2$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_2" = "%1$@ уклони алтернативне адресе %2$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Додали сте алтернативну адресу %1$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Додали сте алтернативне адресе %1$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_2" = "Додали сте алтернативне адресе %1$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ додаде алтернативну адресу %2$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ додаде алтернативне адресе %2$@ за ову собу.";
-"plurals.notice_room_canonical_alias_alternative_added.item_2" = "%1$@ додаде алтернативне адресе %2$@ за ову собу.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Уклонили сте %1$@ као адресу ове собе.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Уклонили сте %1$@ као адресе ове собе.";
-"plurals.notice_room_aliases_removed_by_you.item_2" = "Уклонили сте %1$@ као адресе ове собе.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ уклони %2$@ као адресу ове собе.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ уклони %2$@ као адресе ове собе.";
-"plurals.notice_room_aliases_removed.item_2" = "%1$@ уклони %2$@ као адресе ове собе.";
-"plurals.room_title_members.item_0" = "%d члан";
-"plurals.room_title_members.item_1" = "%d члана";
-"plurals.room_title_members.item_2" = "%d чланова";

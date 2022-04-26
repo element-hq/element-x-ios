@@ -1,0 +1,414 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>active_widgets</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d ودجات نشطة</string>
+			<key>many</key>
+			<string>%d ودجة نشطة</string>
+			<key>one</key>
+			<string>ودجة واحدة نشطة</string>
+			<key>other</key>
+			<string>%d ودجة نشطة</string>
+			<key>two</key>
+			<string>ودجتان نشطتان</string>
+			<key>zero</key>
+			<string>لا ودجات نشطة</string>
+		</dict>
+	</dict>
+	<key>membership_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d تغييرات على العضوية</string>
+			<key>many</key>
+			<string>%d تغييرا على العضوية</string>
+			<key>one</key>
+			<string>تغيير واحد على العضوية</string>
+			<key>other</key>
+			<string>%d تغيير على العضوية</string>
+			<key>two</key>
+			<string>تغييران على العضوية</string>
+			<key>zero</key>
+			<string>لا تغييرات على العضوية</string>
+		</dict>
+	</dict>
+	<key>missed_audio_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d مكالمات فائة</string>
+			<key>many</key>
+			<string>%d مكالمةً فائة</string>
+			<key>one</key>
+			<string>مكالمة فائة واحدة</string>
+			<key>other</key>
+			<string>%d مكالمة فائة</string>
+			<key>two</key>
+			<string>مكالمتان فائتتان</string>
+			<key>zero</key>
+			<string>لا مكالمات فائة</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ أضاف %2$@ كعناوين لهذه الغرفة.</string>
+			<key>many</key>
+			<string>%1$@ أضاف %2$@ كعناوين لهذه الغرفة.</string>
+			<key>one</key>
+			<string>%1$@ أضاف %2$@ كعنوان لهذه الغرفة.</string>
+			<key>other</key>
+			<string>%1$@ أضاف %2$@ كعناوين لهذه الغرفة.</string>
+			<key>two</key>
+			<string>%1$@ أضاف %2$@ كعنوانين لهذه الغرفة.</string>
+			<key>zero</key>
+			<string>%1$@ أضاف %2$@ كعنوان لهذه الغرفة.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>أنت أضفت %1$@ كعناوين لهذه الغرفة.</string>
+			<key>many</key>
+			<string>أنت أضفت %1$@ كعناوين لهذه الغرفة.</string>
+			<key>one</key>
+			<string>أنت أضفت %1$@ كعنوان لهذه الغرفة.</string>
+			<key>other</key>
+			<string>أنت أضفت %1$@ كعناوين لهذه الغرفة.</string>
+			<key>two</key>
+			<string>أنت أضفت %1$@ كعنوانين لهذه الغرفة.</string>
+			<key>zero</key>
+			<string>أنت أضفت %1$@ كعنوان لهذه الغرفة.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ أزال %2$@ كعناوين لهذه الغرفة.</string>
+			<key>many</key>
+			<string>%1$@ أزال %2$@ كعناوين لهذه الغرفة.</string>
+			<key>one</key>
+			<string>%1$@ أزال %2$@ كعنوان لهذه الغرفة.</string>
+			<key>other</key>
+			<string>%1$@ أزال %2$@ كعناوين لهذه الغرفة.</string>
+			<key>two</key>
+			<string>%1$@ أزال %2$@ كعنوانين لهذه الغرفة.</string>
+			<key>zero</key>
+			<string>%1$@ أزال %2$@ كعنوان لهذه الغرفة.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>أنت أزلت %1$@ كعناوين لهذه الغرفة.</string>
+			<key>many</key>
+			<string>أنت أزلت %1$@ كعناوين لهذه الغرفة.</string>
+			<key>one</key>
+			<string>أنت أزلت %1$@ كعنوان لهذه الغرفة.</string>
+			<key>other</key>
+			<string>أنت أزلت %1$@ كعناوين لهذه الغرفة.</string>
+			<key>two</key>
+			<string>أنت أزلت %1$@ كعنوانين لهذه الغرفة.</string>
+			<key>zero</key>
+			<string>أنت أزلت %1$@ كعنوان لهذه الغرفة.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ أضاف العناوين البديل %2$@ لهذه الغرفة.</string>
+			<key>many</key>
+			<string>%1$@ أضاف العناوين البديل %2$@ لهذه الغرفة.</string>
+			<key>one</key>
+			<string>%1$@ أضاف العنوان البديل %2$@ لهذه الغرفة.</string>
+			<key>other</key>
+			<string>%1$@ أضاف العناوين البديل %2$@ لهذه الغرفة.</string>
+			<key>two</key>
+			<string>%1$@ أضاف العنوانين البديل %2$@ لهذه الغرفة.</string>
+			<key>zero</key>
+			<string>%1$@ أضاف العنوان البديل %2$@ لهذه الغرفة.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>أضفت الروابط البديلة %1$@ للغرفة.</string>
+			<key>many</key>
+			<string>أضفت الروابط البديلة %1$@ للغرفة.</string>
+			<key>one</key>
+			<string>أضفت الرابط البديل %1$@ للغرفة.</string>
+			<key>other</key>
+			<string>أضفت الروابط البديلة %1$@ للغرفة.</string>
+			<key>two</key>
+			<string>أضفت الرابطين البديلين %1$@ للغرفة.</string>
+			<key>zero</key>
+			<string>لم تضف أي رابط بديل.</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d رسائل إخطار غير مقروءة</string>
+			<key>many</key>
+			<string>%d رسالة إخطار غير مقروءة</string>
+			<key>one</key>
+			<string>رسالة إخطار واحدة غير مقروءة</string>
+			<key>other</key>
+			<string>%d رسالة إخطار غير مقروءة</string>
+			<key>two</key>
+			<string>رسالتا إخطار غير مقروءان</string>
+			<key>zero</key>
+			<string>لا رسائل إخطار غير مقروءة</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages_in_room_rooms</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d غرف</string>
+			<key>many</key>
+			<string>%d غرفة</string>
+			<key>one</key>
+			<string>غرفة واحدة</string>
+			<key>other</key>
+			<string>%d غرفة</string>
+			<key>two</key>
+			<string>غرفتان</string>
+			<key>zero</key>
+			<string>صفر غرفة</string>
+		</dict>
+	</dict>
+	<key>room_details_selected</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d محدّدة</string>
+			<key>many</key>
+			<string>%d محدّدة</string>
+			<key>one</key>
+			<string>واحدة محدّدة</string>
+			<key>other</key>
+			<string>%d محدّدة</string>
+			<key>two</key>
+			<string>اثنتان محدّدتان</string>
+			<key>zero</key>
+			<string>لا شيء محدّد</string>
+		</dict>
+	</dict>
+	<key>room_displayname_four_and_more_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@، %2$@، %3$@ و%4$d آخرون</string>
+			<key>many</key>
+			<string>%1$@، %2$@، %3$@ و%4$d آخرين</string>
+			<key>one</key>
+			<string>%1$@، %2$@، %3$@ و%4$d آخر</string>
+			<key>other</key>
+			<string>%1$@،%2$@،%3$@ و%4$d آخرين</string>
+			<key>two</key>
+			<string>%1$@، %2$@، %3$@ و%4$d آخران</string>
+			<key>zero</key>
+			<string>%1$@، %2$@ و%3$@</string>
+		</dict>
+	</dict>
+	<key>room_new_messages_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d رسائل جديدة</string>
+			<key>many</key>
+			<string>%d رسالة جديدة</string>
+			<key>one</key>
+			<string>رسالة واحدة جديدة</string>
+			<key>other</key>
+			<string>%d رسالة جديدة</string>
+			<key>two</key>
+			<string>رسالتان جديدتان</string>
+			<key>zero</key>
+			<string>لا رسائل جديدة</string>
+		</dict>
+	</dict>
+	<key>room_title_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d أعضاء</string>
+			<key>many</key>
+			<string>%d عضوا</string>
+			<key>one</key>
+			<string>عضو واحد</string>
+			<key>other</key>
+			<string>%d عضو</string>
+			<key>two</key>
+			<string>عضوان</string>
+			<key>zero</key>
+			<string>لا أعضاء</string>
+		</dict>
+	</dict>
+	<key>seconds</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d ثوان</string>
+			<key>many</key>
+			<string>%d ثانية</string>
+			<key>one</key>
+			<string>ثانية واحدة</string>
+			<key>other</key>
+			<string>%d ثانية</string>
+			<key>two</key>
+			<string>ثانيتان</string>
+			<key>zero</key>
+			<string>الآن</string>
+		</dict>
+	</dict>
+	<key>space_people_you_know</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d أشخاص تعرفهم قد انضموا بالفعل</string>
+			<key>many</key>
+			<string>%d أشخاص تعرفهم قد انضموا بالفعل</string>
+			<key>one</key>
+			<string>%d شخص تعرفه قد انضم بالفعل</string>
+			<key>other</key>
+			<string>%d أشخاص تعرفهم قد انضموا بالفعل</string>
+			<key>two</key>
+			<string>%d شخصان تعرفهم قد انضموا بالفعل</string>
+			<key>zero</key>
+			<string>%d شخص تعرفه قد انضم بالفعل</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

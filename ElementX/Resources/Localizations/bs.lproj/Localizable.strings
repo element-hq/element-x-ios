@@ -94,8 +94,7 @@
 "call_error_user_not_responding" = "Daljinska strana nije uspjela pokupiti.";
 "permissions_rationale_popup_title" = "Informacije";
 "permissions_rationale_msg_record_audio" = "Hepek traži dopuštenje za pristup mikrofonu za obavljanje audio poziva.";
-"permissions_rationale_msg_camera_and_audio" = "Hepek treba dopuštenje za pristup vašoj kemeri i mikrofonu za obavljanje video poziva.
-Omogućite pristup sljedećim skočnim prozorima da biste mogli uspostaviti poziv.";
+"permissions_rationale_msg_camera_and_audio" = "Hepek treba dopuštenje za pristup vašoj kemeri i mikrofonu za obavljanje video poziva.Omogućite pristup sljedećim skočnim prozorima da biste mogli uspostaviti poziv.";
 "yes" = "DA";
 "no" = "NE";
 "_continue" = "Nastavi";
@@ -112,8 +111,7 @@ Omogućite pristup sljedećim skočnim prozorima da biste mogli uspostaviti pozi
 "room_participants_action_ignore" = "Sakrij sve poruke od ovog korisnika";
 "room_participants_action_unignore" = "Prikaži sve poruke od ovog korisnika";
 "room_participants_action_mention" = "Spomeni";
-"room_participants_power_level_prompt" = "Nećete moći poništiti ovu promjenu jer će te korisniku dati ista dopuštenja kao što imate i vi.
-Da li ste sigurani?";
+"room_participants_power_level_prompt" = "Nećete moći poništiti ovu promjenu jer će te korisniku dati ista dopuštenja kao što imate i vi.Da li ste sigurani?";
 "room_one_user_is_typing" = "%@ tipka…";
 "room_two_users_are_typing" = "%1$@ & %2$@ tipkaju…";
 "room_many_users_are_typing" = "%1$@ & %2$@ & ostali tipkaju…";

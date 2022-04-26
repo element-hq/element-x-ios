@@ -246,9 +246,7 @@
 "settings_old_password" = "現在のパスワード";
 "settings_new_password" = "新しいパスワード";
 "settings_fail_to_update_password" = "パスワードの更新に失敗しました";
-"settings_unignore_user" = "%@の全てのメッセージを表示しますか？
-\n
-\nこの操作はアプリを再起動するため、時間がかかる場合があります。";
+"settings_unignore_user" = "%@の全てのメッセージを表示しますか？\n\nこの操作はアプリを再起動するため、時間がかかる場合があります。";
 "settings_theme" = "外観";
 "encryption_information_device_name" = "公開端末名";
 "encryption_export_e2e_room_keys" = "ルームのエンドツーエンド暗号鍵をエクスポート";
@@ -265,9 +263,7 @@
 "call_error_user_not_responding" = "通信先が通話の受取に失敗しました。";
 "permissions_rationale_popup_title" = "情報";
 "permissions_rationale_msg_record_audio" = "%@は、音声通話を実行するためにマイクへアクセスするための許可を必要としています。";
-"permissions_rationale_msg_camera_and_audio" = "%@はビデオ通話を行うためにカメラとマイクにアクセスする許可を必要としています。
-\n
-\n通話をするためには、次のポップアップでアクセスを許可してください。";
+"permissions_rationale_msg_camera_and_audio" = "%@はビデオ通話を行うためにカメラとマイクにアクセスする許可を必要としています。\n\n通話をするためには、次のポップアップでアクセスを許可してください。";
 "report_content" = "発言を通報";
 "option_take_photo" = "写真を撮影";
 "option_take_video" = "動画を撮影";
@@ -293,8 +289,7 @@
 "notification_noisy_notifications" = "通知あり（音量大）";
 "notification_silent_notifications" = "通知あり（サイレント）";
 "title_activity_bug_report" = "不具合の報告";
-"room_participants_power_level_prompt" = "このユーザーにあなたと同じ権限を与えます。この変更は取り消せません。
-\nよろしいですか？";
+"room_participants_power_level_prompt" = "このユーザーにあなたと同じ権限を与えます。この変更は取り消せません。\nよろしいですか？";
 "ssl_trust" = "信用する";
 "ssl_do_not_trust" = "信用しない";
 "ssl_fingerprint_hash" = "フィンガープリント（%@）：";
@@ -350,7 +345,7 @@
 "has_been_banned" = "%2$@によって%1$@からブロックされました";
 "reason_colon" = "理由：%1$@";
 "send_bug_report_rage_shake" = "端末を振って不具合を報告";
-"list_members" = "メンバーを表示";
+"list_members" = "メンバー";
 "avatar" = "アバター";
 "title_activity_choose_sticker" = "スタンプを送る";
 "action_download" = "ダウンロード";
@@ -358,9 +353,7 @@
 "send_bug_report_description_in_english" = "可能であれば、英語で説明文を記述してください。";
 "option_send_voice" = "音声を送信";
 "option_send_sticker" = "スタンプを送信";
-"no_sticker_application_dialog_content" = "現在、有効なステッカーパックがありません。
-\n
-\nいくつか追加しますか？";
+"no_sticker_application_dialog_content" = "現在、有効なステッカーパックがありません。\n\nいくつか追加しますか？";
 "error_no_external_application_found" = "申し訳ありません、この操作を完了するための外部アプリが見つかりません。";
 "e2e_re_request_encryption_key" = "あなたの他のセッションに暗号鍵を再要求する。";
 "e2e_re_request_encryption_key_dialog_content" = "鍵をこのセッションに送信できるように、メッセージを復号化できる他の端末で%@を起動してください。";
@@ -389,8 +382,7 @@
 "dialog_title_error" = "エラー";
 "dialog_user_consent_submit" = "今すぐ確認";
 "deactivate_account_title" = "アカウントを停止";
-"deactivate_account_content.b_0" = "この操作は取り消せません。";
-"deactivate_account_content.b_1" = "デフォルトではあなたが送信したメッセージの履歴は消去されません";
+"deactivate_account_content" = "この操作により、あなたのアカウントは永久に使えなくなります。あなたはログインできなくなり、誰も同じユーザーIDを再登録できなくなります。アカウントが参加している全てのルームを退出し、IDサーバーからアカウントの詳細は削除されます。 <b>この操作は取り消せません。</b>\n\nアカウントを停止しても、 <b>デフォルトではあなたが送信したメッセージの履歴は消去されません</b>。メッセージの履歴の消去を望む場合は、以下のボックスにチェックを入れてください。\n\nMatrixのメッセージの見え方は、電子メールと同様のものです。メッセージの履歴を消去すると、あなたが送信したメッセージは、新規または未登録のユーザーに共有されることはありませんが、既にメッセージを取得している登録ユーザーは、今後もそのコピーにアクセスできます。";
 "deactivate_account_delete_checkbox" = "アカウントを停止するときに、自分の送信した全てのメッセージの履歴を消去してください（警告: この操作により、今後のユーザーは会話を不完全な形で見ることになります）";
 "deactivate_account_submit" = "アカウントを停止";
 "error_empty_field_your_password" = "パスワードを入力してください。";
@@ -399,9 +391,9 @@
 "room_tombstone_continuation_description" = "このルームは別の会話の続きです";
 "room_tombstone_predecessor_link" = "以前のメッセージを見るには、ここをクリックしてください";
 "resource_limit_contact_admin" = "サービス管理者に連絡してください";
-"resource_limit_soft_default.b_0" = "ユーザーがログインできなくなることがあります";
+"resource_limit_soft_default" = "このホームサーバーはリソース制限の1つを超過しているため、 <b>ユーザーがログインできなくなることがあります</b>。";
 "resource_limit_hard_default" = "このホームサーバーはリソース制限の1つを超過しています。";
-"resource_limit_soft_mau.b_0" = "ユーザーがログインできなくなることがあります";
+"resource_limit_soft_mau" = "このホームサーバーは月間アクティブユーザーの上限に達しているため、 <b>ユーザーがログインできなくなることがあります</b>。";
 "resource_limit_hard_mau" = "このホームサーバーは月間アクティブユーザーの上限に達しています。";
 "resource_limit_soft_contact" = "この制限を上げるには、%@してください。";
 "resource_limit_hard_contact" = "このサービスを使い続けるには、%@してください。";
@@ -522,13 +514,9 @@
 "room_settings_enable_encryption" = "エンドツーエンド暗号化を有効にする…";
 "room_settings_enable_encryption_dialog_submit" = "暗号化を有効にする";
 "encryption_information_cross_signing_state" = "クロス署名";
-"encryption_information_dg_xsigning_complete" = "クロス署名は有効です
-\n秘密鍵は端末内にあります。";
-"encryption_information_dg_xsigning_trusted" = "クロス署名は有効です
-\n鍵は信頼されています
-\n秘密鍵は不明です";
-"encryption_information_dg_xsigning_not_trusted" = "クロス署名は有効です
-\n鍵は信頼されていません";
+"encryption_information_dg_xsigning_complete" = "クロス署名は有効です\n秘密鍵は端末内にあります。";
+"encryption_information_dg_xsigning_trusted" = "クロス署名は有効です\n鍵は信頼されています\n秘密鍵は不明です";
+"encryption_information_dg_xsigning_not_trusted" = "クロス署名は有効です\n鍵は信頼されていません";
 "encryption_information_dg_xsigning_disabled" = "クロス署名は無効です";
 "settings_active_sessions_list" = "有効なセッション";
 "settings_active_sessions_show_all" = "全てのセッションを表示";
@@ -590,17 +578,14 @@
 "settings_emails_and_phone_numbers_summary" = "あなたのMatrixアカウントに登録されたメールアドレスと電話番号を管理";
 "settings_emails_and_phone_numbers_title" = "メールアドレスと電話番号";
 "settings_troubleshoot_test_device_settings_quickfix" = "有効化";
-"settings_troubleshoot_test_device_settings_failed" = "このセッションで通知が無効化されています。
-\n%@ の設定をご確認ください。";
+"settings_troubleshoot_test_device_settings_failed" = "このセッションで通知が無効化されています。\n%@ の設定をご確認ください。";
 "settings_troubleshoot_test_device_settings_success" = "このセッションで通知は有効化されています。";
 "settings_troubleshoot_test_device_settings_title" = "セッションの設定。";
 "settings_troubleshoot_test_account_settings_quickfix" = "有効化";
-"settings_troubleshoot_test_account_settings_failed" = "あなたのアカウントで通知が無効化されています。
-\nアカウント設定をご確認ください。";
+"settings_troubleshoot_test_account_settings_failed" = "あなたのアカウントで通知が無効化されています。\nアカウント設定をご確認ください。";
 "settings_troubleshoot_test_account_settings_success" = "あなたのアカウントで通知は有効化されています。";
 "open_settings" = "設定を開く";
-"settings_troubleshoot_test_system_settings_failed" = "システム設定で通知が無効化されています。
-\nシステム設定をご確認ください。";
+"settings_troubleshoot_test_system_settings_failed" = "システム設定で通知が無効化されています。\nシステム設定をご確認ください。";
 "settings_troubleshoot_test_system_settings_success" = "システム設定で通知は有効化されています。";
 "settings_troubleshoot_test_battery_title" = "バッテリー最適化";
 "settings_advanced_settings" = "拡張設定";
@@ -639,8 +624,7 @@
 "sound_device_speaker" = "スピーカー";
 "sound_device_phone" = "電話";
 "call_select_sound_device" = "サウンドデバイスを選択";
-"call_failed_no_connection_description" = "リアルタイム接続を確立できませんでした。
-\nホームサーバーの管理者に、通話が正常に動作するためにTURNを設定するようご連絡ください。";
+"call_failed_no_connection_description" = "リアルタイム接続を確立できませんでした。\nホームサーバーの管理者に、通話が正常に動作するためにTURNを設定するようご連絡ください。";
 "call_notification_hangup" = "終了";
 "call_notification_reject" = "拒否";
 "call_notification_answer" = "承諾";
@@ -673,8 +657,7 @@
 "disabled_integration_dialog_title" = "インテグレーションが無効になっています";
 "settings_integration_manager" = "インテグレーションマネージャー";
 "settings_integration_allow" = "インテグレーションを許可";
-"settings_troubleshoot_test_fcm_success" = "FCMトークンが正常に取得されました:
-\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "FCMトークンが正常に取得されました:\n%1$@";
 "settings_troubleshoot_test_fcm_title" = "Firebaseトークン";
 "settings_troubleshoot_test_play_services_quickfix" = "Playサービスを修正";
 "settings_troubleshoot_test_play_services_success" = "Google PlayサービスのAPKは利用可能で最新の状態になっています。";
@@ -718,18 +701,14 @@
 "room_participants_ban_title" = "ユーザーをブロック";
 "room_participants_ban_reason" = "ブロックする理由";
 "room_participants_unban_title" = "ユーザーのブロックを解除";
-"room_participants_remove_prompt_msg" = "このユーザーはルームから追放されます。
-\n
-\n再参加を防ぐためには、追放する代わりにブロックする必要があります。";
+"room_participants_remove_prompt_msg" = "このユーザーはルームから追放されます。\n\n再参加を防ぐためには、追放する代わりにブロックする必要があります。";
 "room_participants_remove_reason" = "追放する理由";
 "room_participants_remove_title" = "ユーザーを追放";
 "room_participants_action_cancel_invite_prompt_msg" = "このユーザーの招待をキャンセルしてよろしいですか？";
 "room_participants_action_cancel_invite_title" = "招待をキャンセル";
 "room_participants_action_unignore_prompt_msg" = "このユーザーを解除すると、そのユーザーからの全てのメッセージが再び表示されます。";
 "room_participants_action_unignore_title" = "ユーザーを無視しない";
-"room_participants_action_ignore_prompt_msg" = "このユーザーを無視すると、あなたが共有しているルームからそのユーザーのメッセージが削除されます。
-\n
-\nこの操作は、設定からいつでも元に戻すことができます。";
+"room_participants_action_ignore_prompt_msg" = "このユーザーを無視すると、あなたが共有しているルームからそのユーザーのメッセージが削除されます。\n\nこの操作は、設定からいつでも元に戻すことができます。";
 "room_participants_action_ignore_title" = "ユーザーを無視";
 "room_participants_power_level_demote" = "降格";
 "room_participants_power_level_demote_warning_prompt" = "あなたは自分自身を降格させようとしています。この変更は取り消せません。あなたがルームの中で最後の特権ユーザーである場合、特権を再取得することはできません。";
@@ -814,13 +793,9 @@
 "notice_direct_room_leave_with_reason_by_you" = "退出しました。理由：%1$@";
 "notice_direct_room_leave_with_reason" = "%1$@が退出しました。理由：%2$@";
 "notice_room_leave_with_reason_by_you" = "このルームを退出しました。理由：%1$@";
-"initial_sync_start_importing_account_left_rooms" = "初期同期：
-\n退出したルームをインポートしています";
-"initial_sync_start_importing_account_invited_rooms" = "初期同期：
-\n招待されたルームをインポートしています";
-"initial_sync_start_importing_account_joined_rooms" = "初期同期：
-\n会話を読み込んでいます
-\n多くのルームに参加している場合、読み込みに時間がかかるかもしれません";
+"initial_sync_start_importing_account_left_rooms" = "初期同期：\n退出したルームをインポートしています";
+"initial_sync_start_importing_account_invited_rooms" = "初期同期：\n招待されたルームをインポートしています";
+"initial_sync_start_importing_account_joined_rooms" = "初期同期：\n会話を読み込んでいます\n多くのルームに参加している場合、読み込みに時間がかかるかもしれません";
 "notice_room_leave_with_reason" = "%1$@がこのルームを退出しました。理由：%2$@";
 "notice_direct_room_join_with_reason_by_you" = "このルームに参加しました。理由：%1$@";
 "notice_direct_room_join_with_reason" = "%1$@がこのルームに参加しました。理由：%2$@";
@@ -833,20 +808,13 @@
 "notice_room_invite_no_invitee_with_reason" = "%1$@の招待です。理由：%2$@";
 "event_status_sending_message" = "メッセージを送っています…";
 "event_status_sent_message" = "メッセージを送りました";
-"initial_sync_start_importing_account_data" = "初期同期：
-\nアカウントデータをインポートしています";
-"initial_sync_start_importing_account_groups" = "初期同期：
-\nコミュニティーをインポートしています";
-"initial_sync_start_importing_account_rooms" = "初期同期：
-\nルームをインポートしています";
-"initial_sync_start_importing_account_crypto" = "初期同期：
-\n暗号をインポートしています";
-"initial_sync_start_importing_account" = "初期同期：
-\nアカウントをインポートしています…";
-"initial_sync_start_downloading" = "初期同期：
-\nデータをダウンロードしています…";
-"initial_sync_start_server_computing" = "初期同期：
-\nサーバーからの応答を待機しています…";
+"initial_sync_start_importing_account_data" = "初期同期：\nアカウントデータをインポートしています";
+"initial_sync_start_importing_account_groups" = "初期同期：\nコミュニティーをインポートしています";
+"initial_sync_start_importing_account_rooms" = "初期同期：\nルームをインポートしています";
+"initial_sync_start_importing_account_crypto" = "初期同期：\n暗号をインポートしています";
+"initial_sync_start_importing_account" = "初期同期：\nアカウントをインポートしています…";
+"initial_sync_start_downloading" = "初期同期：\nデータをダウンロードしています…";
+"initial_sync_start_server_computing" = "初期同期：\nサーバーからの応答を待機しています…";
 "room_displayname_empty_room_was" = "空のルーム（%@でした）";
 "room_displayname_4_members" = "%1$@、%2$@、%3$@と%4$@";
 "room_displayname_3_members" = "%1$@、%2$@と%3$@";
@@ -889,28 +857,21 @@
 "settings_chat_effects_description" = "/confettiコマンドを使用するか、❄️または🎉を含むメッセージを送信";
 "settings_chat_effects_title" = "チャットでエフェクトを表示";
 "settings_inline_url_preview_summary" = "ホームサーバーがこの機能をサポートしている場合は、チャット内のリンクをプレビューします。";
-"settings_integrations_summary" = "ボット、ブリッジ、ウィジェット、ステッカーパックを管理します。
-\nインテグレーションマネージャーは、構成データを受信し、ユーザーに代わってウィジェットの変更や、ルーム招待の送信、権限の設定などを行うことができます。";
+"settings_integrations_summary" = "ボット、ブリッジ、ウィジェット、ステッカーパックを管理します。\nインテグレーションマネージャーは、構成データを受信し、ユーザーに代わってウィジェットの変更や、ルーム招待の送信、権限の設定などを行うことができます。";
 "settings_integrations" = "インテグレーション（統合）";
 "settings_background_fdroid_sync_mode_disabled_description" = "アプリがバックグラウンドにある場合、着信メッセージは通知されません。";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@は正確な時間に定期的にバックグラウンドで同期します（構成可能）。
-\nこれは無線とバッテリーの使用量に影響し、%@がイベントを待機していることを示す永続的な通知が表示されます。";
-"settings_background_fdroid_sync_mode_battery_description" = "%@は、端末の限られたリソース（バッテリーの残量）を維持する方法でバックグラウンド同期をします。
-\n端末の状態によっては、OSによって同期が延期される場合があります。";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@は正確な時間に定期的にバックグラウンドで同期します（構成可能）。\nこれは無線とバッテリーの使用量に影響し、%@がイベントを待機していることを示す永続的な通知が表示されます。";
+"settings_background_fdroid_sync_mode_battery_description" = "%@は、端末の限られたリソース（バッテリーの残量）を維持する方法でバックグラウンド同期をします。\n端末の状態によっては、OSによって同期が延期される場合があります。";
 "settings_system_preferences_summary" = "LEDの色、振動、音を選択してください…";
 "settings_silent_notifications_preferences" = "通知（サイレント）を設定";
 "settings_call_notifications_preferences" = "通話の通知を設定";
 "settings_noisy_notifications_preferences" = "通知（音量大）を設定";
 "settings_troubleshoot_test_battery_quickfix" = "最適化を無視";
 "settings_troubleshoot_test_battery_failed" = "画面をオフにした状態で端末のプラグを抜いて一定時間静止したままにすると、端末は機内モードになります。 これにより、アプリがネットワークにアクセスできなくなり、ジョブ、同期、および標準のアラームが防止されます。";
-"settings_troubleshoot_test_bg_restricted_failed" = "%@のバックグラウンド制限が有効になっています。
-\nアプリがバックグラウンドで実行しようとする作業が積極的に制限されるため、通知に影響を与える可能性があります。
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_success" = "%@のバックグラウンド制限が無効になっています。 このテストは、モバイル（WIFIでない）を使用して実行する必要があります。
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "%@のバックグラウンド制限が有効になっています。\nアプリがバックグラウンドで実行しようとする作業が積極的に制限されるため、通知に影響を与える可能性があります。\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "%@のバックグラウンド制限が無効になっています。 このテストは、モバイル（WIFIでない）を使用して実行する必要があります。\n%1$@";
 "settings_troubleshoot_test_service_boot_failed" = "端末を再起動してもサービスは開始しません。%@を一度開くまで通知は届きません。";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "［%1$@］
-\nこのエラーは%@の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行するとうまくいくかもしれません。システム設定でGoogle Playサービスのデータ使用量が制限されていないか、端末の時刻が正しいかどうかを確認してください。カスタムROMで生じることもあります。";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "［%1$@］\nこのエラーは%@の管理外です。 これはいくつかの理由で発生する可能性があります。 後で再試行するとうまくいくかもしれません。システム設定でGoogle Playサービスのデータ使用量が制限されていないか、端末の時刻が正しいかどうかを確認してください。カスタムROMで生じることもあります。";
 "settings_troubleshoot_test_battery_success" = "%@はバッテリー最適化の影響を受けません。";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "制限を無効にする";
 "settings_troubleshoot_test_service_boot_quickfix" = "起動時の開始を有効にする";
@@ -923,19 +884,14 @@
 "settings_troubleshoot_test_push_loop_success" = "アプリケーションはプッシュ通知を受信しています";
 "settings_troubleshoot_test_push_loop_waiting_for_push" = "アプリケーションはプッシュ通知を待機しています";
 "settings_troubleshoot_test_push_loop_title" = "プッシュ通知のテスト";
-"settings_troubleshoot_test_token_registration_failed" = "FCMトークンのホームサーバーへの登録に失敗しました:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "FCMトークンのホームサーバーへの登録に失敗しました:\n%1$@";
 "settings_troubleshoot_test_token_registration_success" = "FCMトークンのホームサーバーへの登録が成功しました。";
 "settings_troubleshoot_test_token_registration_title" = "トークンの登録";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "アカウントを追加";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nこのエラーは%@の管理外です。このスマートフォンにはGoogleアカウントが登録されていません。アカウントマネージャーを開いて、Googleアカウントを追加してください。";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "［%1$@］
-\nこのエラーは%@の管理外です。Googleによると、このエラーは、FCMに登録されている端末上のアプリの数が多すぎることを示唆しています。 このエラーは、アプリの数が極端に多い場合にのみ発生するため、平均的なユーザーには影響しません。";
-"settings_troubleshoot_test_play_services_failed" = "%@はGoogle Playサービスを使用してプッシュメッセージを配信していますが、正しく設定されていないようです:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "FCMトークンの取得に失敗しました:
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nこのエラーは%@の管理外です。このスマートフォンにはGoogleアカウントが登録されていません。アカウントマネージャーを開いて、Googleアカウントを追加してください。";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "［%1$@］\nこのエラーは%@の管理外です。Googleによると、このエラーは、FCMに登録されている端末上のアプリの数が多すぎることを示唆しています。 このエラーは、アプリの数が極端に多い場合にのみ発生するため、平均的なユーザーには影響しません。";
+"settings_troubleshoot_test_play_services_failed" = "%@はGoogle Playサービスを使用してプッシュメッセージを配信していますが、正しく設定されていないようです:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "FCMトークンの取得に失敗しました:\n%1$@";
 "notice_room_server_acl_allow_is_empty" = "🎉全てのサーバーの参加がブロックされています！このルームは使用できなくなりました。";
 "notice_room_server_acl_updated_no_change" = "変更はありません。";
 "notice_room_server_acl_updated_ip_literals_not_allowed" = "• サーバーにマッチするIPリテラルが禁止されています。";
@@ -1045,32 +1001,21 @@
 "keys_backup_setup_step3_copy_button_title" = "リカバリーキーを保存";
 "keys_backup_setup_step3_button_title_no_passphrase" = "コピーをしました";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "リカバリーキーはパスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください";
-"keys_backup_setup_step3_text_line2" = "リカバリーキーはセーフティーネットとなります。パスフレーズを忘れた場合でも、リカバリーキーを使えば、暗号化されたメッセージにアクセスすることができます。
-\nリカバリーキーは、パスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください。";
+"keys_backup_setup_step3_text_line2" = "リカバリーキーはセーフティーネットとなります。パスフレーズを忘れた場合でも、リカバリーキーを使えば、暗号化されたメッセージにアクセスすることができます。\nリカバリーキーは、パスワードマネージャー（もしくは金庫）のような、非常に安全な場所で保管してください。";
 "keys_backup_setup_step3_text_line1" = "鍵をバックアップしています。";
 "keys_backup_setup_step2_skip_button_title" = "（高度）リカバリーキーを使用して設定";
 "keys_backup_setup_step1_recovery_key_alternative" = "または、リカバリーキーでバックアップを保護し、安全な場所に保存してください。";
-"keys_backup_setup_step2_text_description" = "鍵のコピーを暗号化してホームサーバーに保存します。バックアップを保護するためにパスフレーズを設定してください。
-\n
-\n最大限のセキュリティーを確保するために、アカウントのパスワードと異なるものに設定することが大切です。";
+"keys_backup_setup_step2_text_description" = "鍵のコピーを暗号化してホームサーバーに保存します。バックアップを保護するためにパスフレーズを設定してください。\n\n最大限のセキュリティーを確保するために、アカウントのパスワードと異なるものに設定することが大切です。";
 "keys_backup_setup_step2_text_title" = "パスフレーズを使用してバックアップを保護します。";
-"keys_backup_setup_step1_description" = "暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。
-\n
-\n鍵を失くさないよう、鍵を安全にバックアップしてください。";
+"keys_backup_setup_step1_description" = "暗号化されたメッセージは、エンドツーエンドの暗号化によって保護されています。これらの暗号化されたメッセージを読むための鍵を持っているのは、あなたと受信者だけです。\n\n鍵を失くさないよう、鍵を安全にバックアップしてください。";
 "keys_backup_setup_step1_advanced" = "（高度）";
 "keys_backup_setup_step1_title" = "暗号化されたメッセージを決して失わないために";
 "keys_backup_passphrase_not_empty_error_message" = "%@によるリカバリーキーの生成を望む場合、パスフレーズを削除してください。";
 "markdown_has_been_disabled" = "マークダウンが無効です。";
 "markdown_has_been_enabled" = "マークダウンが有効です。";
 "command_problem_with_parameters" = "”%@”とのコマンドはいくつかのパラメータが欠けているか不正です。";
-"you_added_a_new_device_with_info" = "新しいセッションが暗号鍵を要請しています。
-\nセッション名：%1$@
-\n最後のオンライン日時：%2$@
-\n新たにログインして新しいセッションを開始しなかった場合、この要求を無視してください。";
-"your_unverified_device_requesting_with_info" = "未認証のセッションが暗号鍵を要求しています。
-\nセッション名：%1$@
-\n最後のオンライン日時：%2$@
-\n新しいセッションにログインしていない場合、この要求を無視してください。";
+"you_added_a_new_device_with_info" = "新しいセッションが暗号鍵を要請しています。\nセッション名：%1$@\n最後のオンライン日時：%2$@\n新たにログインして新しいセッションを開始しなかった場合、この要求を無視してください。";
+"your_unverified_device_requesting_with_info" = "未認証のセッションが暗号鍵を要求しています。\nセッション名：%1$@\n最後のオンライン日時：%2$@\n新しいセッションにログインしていない場合、この要求を無視してください。";
 "key_share_request" = "鍵の共有リクエスト";
 "settings_labs_native_camera_summary" = "カスタムカメラ画面の代わりにシステムカメラを使用します。";
 "room_no_active_widgets" = "使用中のウィジェットがありません";
@@ -1083,8 +1028,7 @@
 "error_jitsi_join_conf" = "申し訳ありませんが、ビデオ会議に参加する途中で問題が発生しました";
 "error_jitsi_not_supported_on_old_device" = "申し訳ありませんが、古い端末（Android OS 6.0以前）はJitsiを使用したビデオ会議をサポートしていません";
 "room_widget_permission_display_name" = "あなたの表示名";
-"room_widget_failed_to_load" = "ウィジェットの読み込みに失敗しました。
-\n%@";
+"room_widget_failed_to_load" = "ウィジェットの読み込みに失敗しました。\n%@";
 "room_widget_reload" = "ウィジェットを再読み込み";
 "room_widget_permission_webview_shared_info_title" = "これを使用すると、クッキーが設定され、データが%@と共有される可能性があります：";
 "room_widget_permission_added_by" = "ウィジェットの追加者:";
@@ -1208,16 +1152,13 @@
 "import_e2e_keys_from_file" = "ファイル\"%1$@\"からエンドツーエンド暗号鍵をインポートします。";
 "keys_backup_unable_to_get_keys_backup_data" = "鍵のバックアップデータの取得中にエラーが発生しました";
 "keys_backup_unable_to_get_trust_info" = "信頼情報の取得中にエラーが発生しました";
-"create_room_federation_error" = "ルームが作成されましたが、一部の招待が送信されていません。理由：
-\n
-\n%@";
+"create_room_federation_error" = "ルームが作成されましたが、一部の招待が送信されていません。理由：\n\n%@";
 "create_room_settings_section" = "ルームの設定";
 "create_room_topic_hint" = "トピック";
 "create_room_topic_section" = "ルームの説明（任意）";
 "create_room_name_section" = "ルーム名";
 "room_preview_no_preview_join" = "このルームはプレビューできません。参加しますか？";
-"room_preview_not_found" = "現在、このルームにはアクセスできません。
-\n後でもう一度やり直すか、ルームの管理者にアクセス権があるかどうかを確認するよう依頼してください。";
+"room_preview_not_found" = "現在、このルームにはアクセスできません。\n後でもう一度やり直すか、ルームの管理者にアクセス権があるかどうかを確認するよう依頼してください。";
 "room_preview_no_preview" = "このルームはプレビューできません";
 "please_wait" = "お待ち下さい…";
 "error_no_network" = "ネットワークがありません。インターネット接続を確認してください。";
@@ -1321,21 +1262,12 @@
 "push_gateway_item_format" = "フォーマット:";
 "push_gateway_item_url" = "URL:";
 "push_gateway_item_device_name" = "セッション名:";
-"verify_not_me_self_verification" = "以下のうちいずれかが流出、あるいはハッキングされた恐れがあります。
-\n
-\n- あなたのパスワード
-\n- あなたのホームサーバー
-\n- あなたの端末
-\n- あなたの端末が使用しているインターネット接続
-\n
-\n設定画面からパスワードとリカバリーキーを早急に変更することを推奨します。";
+"verify_not_me_self_verification" = "以下のうちいずれかが流出、あるいはハッキングされた恐れがあります。\n\n- あなたのパスワード\n- あなたのホームサーバー\n- あなたの端末\n- あなたの端末が使用しているインターネット接続\n\n設定画面からパスワードとリカバリーキーを早急に変更することを推奨します。";
 "login_reset_password_email_hint" = "電子メール";
 "login_server_url_form_other_hint" = "アドレス";
 "login_continue" = "続行する";
 "uploads_files_title" = "ファイル";
-"space_participants_remove_prompt_msg" = "このユーザーはスペースから追放されます。
-\n
-\n再参加を防ぐためには、追放する代わりにブロックする必要があります。";
+"space_participants_remove_prompt_msg" = "このユーザーはスペースから追放されます。\n\n再参加を防ぐためには、追放する代わりにブロックする必要があります。";
 "call_remove_jitsi_widget_progress" = "通話を終了しています…";
 "notification_listening_for_notifications" = "通知を待機しています";
 "settings_mentions_at_room" = "\@room";
@@ -1419,7 +1351,7 @@
 "delete_poll_dialog_title" = "アンケートを削除";
 "create_space" = "スペースを作成";
 "join_space" = "スペースに参加";
-"leave_space" = "スペースを退出";
+"leave_space" = "退出";
 "space_settings_manage_rooms" = "ルームを管理";
 "this_space_has_no_rooms" = "このスペースにはルームがありません";
 "error_voice_message_unable_to_play" = "音声メッセージを再生できません";
@@ -1585,8 +1517,8 @@
 "settings_enable_location_sharing_summary" = "一度有効にすると、位置情報はどのルームにも送れるようになります";
 "legals_third_party_notices" = "サードパーティー製ライブラリー";
 "analytics_opt_in_list_item_3" = "これはいつでも設定から無効にできます";
-"analytics_opt_in_list_item_2.b_0" = "ありません";
-"analytics_opt_in_list_item_1.b_0" = "ありません";
+"analytics_opt_in_list_item_2" = "私たちは、情報を第三者と共有することは<b>ありません</b>";
+"analytics_opt_in_list_item_1" = "私たちは、アカウントのデータを記録したり分析したりすることは<b>ありません</b>";
 "analytics_opt_in_title" = "%@の改善を手伝う";
 "room_join_rules_public_by_you" = "このルームを「リンクを知っている人が参加可能」に設定しました。";
 "no_ignored_users" = "どのユーザーも無視していません";
@@ -1646,10 +1578,8 @@
 "location_share_external" = "以下で開く";
 "upgrade_security" = "暗号化のアップグレードが利用可能です";
 "bootstrap_progress_generating_ssss_recovery" = "SSSSキーをリカバリーキーから生成しています";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ウェブ版
-\n%@デスクトップ版";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ウェブ版\n%@デスクトップ版";
 "enter_secret_storage_input_key" = "リカバリーキーを選択、直接入力、あるいはクリップボードからペースト";
 "use_recovery_key" = "リカバリーキーを使用";
 "command_description_discard_session_not_handled" = "暗号化されたルームでのみサポート";
@@ -1693,19 +1623,12 @@
 "space_manage_rooms_and_spaces" = "ルームとスペースを管理";
 "preference_show_all_rooms_in_home" = "ホームに全てのルームを表示";
 "space_suggested" = "おすすめ";
-"spaces_feeling_experimental_subspace" = "実験したい気分ですか？
-\n既存のスペースを別のスペースに追加できます。";
+"spaces_feeling_experimental_subspace" = "実験したい気分ですか？\n既存のスペースを別のスペースに追加できます。";
 "spaces_no_server_support_title" = "あなたのホームサーバーはまだスペースをサポートしていないようです";
 "attachment_type_dialog_title" = "画像を追加";
-"content_reported_as_inappropriate_content" = "このコンテンツは不適切な投稿として報告されています。
-\n
-\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。";
-"content_reported_as_spam_content" = "このコンテンツはスパムとして報告されています。
-\n
-\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。";
-"content_reported_content" = "このコンテンツが報告されています。
-\n
-\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。";
+"content_reported_as_inappropriate_content" = "このコンテンツは不適切な投稿として報告されています。\n\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。";
+"content_reported_as_spam_content" = "このコンテンツはスパムとして報告されています。\n\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。";
+"content_reported_content" = "このコンテンツが報告されています。\n\nこのユーザーのコンテンツをこれ以上見たくなければ、ユーザーを無視してそのメッセージを非表示にできます。";
 "uploads_files_subtitle" = "%1$@により%2$@に";
 "create_poll_question_hint" = "質問あるいはトピック";
 "create_poll_question_title" = "アンケートの質問あるいはトピック";
@@ -1760,8 +1683,7 @@
 "ftue_auth_carousel_control_title" = "管理権を握るのは、あなたです。";
 "preference_help_summary" = "%@の使用に関するヘルプ";
 "labs_allow_extended_logging_summary" = "詳細なログは、イライラシェイクでログを送信する際に、より多くのログを提供することで、開発者にとっての助けになります。有効にした場合でも、メッセージの内容やその他のプライベートな情報は記録されません。";
-"upgrade_room_warning" = "ルームのアップグレードは高度な作業であり、不具合や欠けている機能、セキュリティー上の脆弱性がある場合に推奨されます。
-\nアップグレードは通常、ルームがサーバー上で処理される仕方にだけ影響します。";
+"upgrade_room_warning" = "ルームのアップグレードは高度な作業であり、不具合や欠けている機能、セキュリティー上の脆弱性がある場合に推奨されます。\nアップグレードは通常、ルームがサーバー上で処理される仕方にだけ影響します。";
 "room_settings_enable_encryption_dialog_content" = "一度有効にしたルームの暗号化は無効にすることはできません。暗号化されたルームで送信されたメッセージは、サーバーからは見ることができず、そのルームのメンバーだけが見ることができます。暗号化を有効にすると、多くのボットやブリッジが正常に動作しなくなる場合があります。";
 "room_created_summary_no_topic_creation_text" = "%@して、このルームを皆に紹介しましょう。";
 "user_code_info_text" = "このコードを共有し、スキャンして追加してもらい、会話を始めましょう。";
@@ -1824,17 +1746,14 @@
 "login_signin_to" = "%1$@にサインイン";
 "ftue_auth_use_case_title" = "誰と最もよく会話しますか？";
 "leave_specific_ones" = "特定のルームとスペースから退出…";
-"this_space_has_no_rooms_not_admin" = "非公開で招待が必要なルームは表示されていません。
-\nルームを追加する権限はありません。";
+"this_space_has_no_rooms_not_admin" = "非公開で招待が必要なルームは表示されていません。\nルームを追加する権限はありません。";
 "this_space_has_no_rooms_admin" = "非公開で招待が必要なルームは表示されていません。";
 "a11y_poll_winner_option" = "勝者";
 "login_set_msisdn_notice" = "知人に見つけてもらえるように電話番号を設定できます。任意です。";
 "message_key" = "メッセージキー";
 "recovery_passphrase" = "復旧用のパスフレーズ";
 "room_member_override_nick_color" = "ニックネームの色を変更";
-"login_reset_password_cancel_confirmation_content" = "パスワードはまだ変更されていません。
-\n
-\n変更作業を中止しますか？";
+"login_reset_password_cancel_confirmation_content" = "パスワードはまだ変更されていません。\n\n変更作業を中止しますか？";
 "login_reset_password_mail_confirmation_notice" = "%1$@に確認メールを送信しました。";
 "login_reset_password_mail_confirmation_title" = "メールボックスを確認してください";
 "login_reset_password_success_submit" = "サインインに戻る";
@@ -1855,13 +1774,9 @@
 "login_reset_password_warning_content" = "パスワードを変更すると、全てのセッションでのエンドツーエンド暗号鍵がリセットされ、暗号化されたメッセージ履歴が読めなくなります。パスワードを再設定する前に、鍵のバックアップを設定するか、他のセッションからルームの鍵をエクスポートしておいてください。";
 "login_reset_password_notice" = "パスワードの再設定を確認するために確認メールを送信します。";
 "login_login_with_email_error" = "このメールアドレスはどのアカウントにも登録されていません。";
-"login_registration_not_supported" = "このアプリでは、このホームサーバーにアカウントを作成できません。
-\n
-\nウェブクライアントを使用してアカウントを作成しますか？";
+"login_registration_not_supported" = "このアプリでは、このホームサーバーにアカウントを作成できません。\n\nウェブクライアントを使用してアカウントを作成しますか？";
 "login_registration_disabled" = "申し訳ありませんが、このサーバーはアカウントの新規登録を受け入れていません。";
-"login_mode_not_supported" = "このアプリではこのホームサーバーにサインインできません。このホームサーバーは次のサインインの方法に対応しています：%1$@
-\n
-\nウェブクライエントを使用してサインインしますか？";
+"login_mode_not_supported" = "このアプリではこのホームサーバーにサインインできません。このホームサーバーは次のサインインの方法に対応しています：%1$@\n\nウェブクライエントを使用してサインインしますか？";
 "login_sso_error_message" = "%1$@を読み込み中にエラーが発生しました（%2$d）";
 "login_server_url_form_common_notice" = "利用したいサーバーのアドレスを入力してください";
 "login_server_url_form_modular_notice" = "利用したいModular Elementまたはサーバーのアドレスを入力してください";
@@ -1913,44 +1828,24 @@
 "sent_location" = "位置情報を共有しました";
 "sent_a_reaction" = "%@でリアクションしました";
 "sent_verification_conclusion" = "認証が完了しました";
-"verification_conclusion_compromised" = "次のいずれかのセキュリティーが破られている可能性があります。
-\n
-\n - あなたのホームサーバー
-\n - 認証している相手が接続しているホームサーバー
-\n - あなたか相手のインターネット接続
-\n - あなたか相手の端末";
+"verification_conclusion_compromised" = "次のいずれかのセキュリティーが破られている可能性があります。\n\n - あなたのホームサーバー\n - 認証している相手が接続しているホームサーバー\n - あなたか相手のインターネット接続\n - あなたか相手の端末";
 "verification_conclusion_not_secure" = "セキュアではない";
 "verification_conclusion_warning" = "信頼できないサインイン";
 "create_room_alias_invalid" = "使用できない文字が含まれています";
-"analytics_opt_in_content" = "%@の改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。
-\n
-\n%@で利用規約を閲覧できます。";
+"analytics_opt_in_content" = "%@の改善と課題抽出のために、匿名の使用状況データの送信をお願いします。複数の端末での使用を分析するために、あなたの全端末共通のランダムな識別子を生成します。\n\n%@で利用規約を閲覧できます。";
 "autocomplete_limited_results" = "最初の検索結果のみ表示しています。文字をもっと入力してください…";
 "permalink_malformed" = "matrix.toリンクのフォーマットが正しくありませんでした";
-"soft_logout_clear_data_notice" = "注意！この端末には暗号鍵を含む個人情報が保存されています。
-\n
-\nこの端末での使用を終了、または他のアカウントにサインインしたい場合、このデータをクリアしてください。";
-"soft_logout_clear_data_dialog_content" = "この端末に現在保存されている全てのデータをクリアしますか？
-\nアカウントデータとメッセージにアクセスするにはもう一度サインインしてください。";
-"soft_logout_sso_not_same_user_error" = "現在のセッションはユーザー %1$@ のものですが、あなたが提供している認証情報はユーザー %2$@ のものです。この操作は%@ではサポートされていません。
-\nまずデータをクリアし、その後、別のアカウントにサインインしてください。";
+"soft_logout_clear_data_notice" = "注意！この端末には暗号鍵を含む個人情報が保存されています。\n\nこの端末での使用を終了、または他のアカウントにサインインしたい場合、このデータをクリアしてください。";
+"soft_logout_clear_data_dialog_content" = "この端末に現在保存されている全てのデータをクリアしますか？\nアカウントデータとメッセージにアクセスするにはもう一度サインインしてください。";
+"soft_logout_sso_not_same_user_error" = "現在のセッションはユーザー %1$@ のものですが、あなたが提供している認証情報はユーザー %2$@ のものです。この操作は%@ではサポートされていません。\nまずデータをクリアし、その後、別のアカウントにサインインしてください。";
 "soft_logout_signin_e2e_warning_notice" = "暗号化されたメッセージがどの端末でも読めるように、サインインしてこの端末にのみ保存されている暗号鍵を取り戻してください。";
 "soft_logout_signin_notice" = "あなたのホームサーバー（%1$@）の管理者があなたを%2$@のアカウントからサインアウトしました（%3$@）。";
-"signed_out_notice" = "いくつかの原因が考えられます：
-\n
-\n• 他のセッションでパスワードを変更している。
-\n
-\n• 他のセッションでこのセッションを削除している。
-\n
-\n• サーバーの管理者がセキュリティ上の理由であなたのアクセスを取り消している。";
+"signed_out_notice" = "いくつかの原因が考えられます：\n\n• 他のセッションでパスワードを変更している。\n\n• 他のセッションでこのセッションを削除している。\n\n• サーバーの管理者がセキュリティ上の理由であなたのアクセスを取り消している。";
 "login_error_outdated_homeserver_warning_content" = "このホームサーバーは古いバージョンです。管理者にアップグレードを要請してください。続行できますが、いくつかの機能が正しく作動しない可能性があります。";
 "login_error_outdated_homeserver_title" = "ホームサーバーのバージョンが古すぎます";
-"login_wait_for_email_notice" = "ただいま%1$@にメールを送信しました。
-\nアカウント登録を続行するにはメール内のリンクをクリックしてください。";
+"login_wait_for_email_notice" = "ただいま%1$@にメールを送信しました。\nアカウント登録を続行するにはメール内のリンクをクリックしてください。";
 "login_a11y_captcha_container" = "CAPTCHA認証を行ってください";
-"login_signup_cancel_confirmation_content" = "アカウントがまだ登録されていません。
-\n
-\n登録を中止しますか？";
+"login_signup_cancel_confirmation_content" = "アカウントがまだ登録されていません。\n\n登録を中止しますか？";
 "login_signup_to" = "%1$@にアカウント登録";
 "login_reset_password_success_notice_2" = "あなたはすべてのセッションからログアウトしており、これ以上プッシュ通知を受け取れません。通知を再び有効にするには、各端末でサインインしてください。";
 "set_a_security_phrase_title" = "セキュリティーフレーズを設定";
@@ -1965,9 +1860,7 @@
 "identity_server_user_consent_not_provided" = "ユーザーによる同意は与えられていません。";
 "identity_server_set_alternative_notice" = "または、他のIDサーバーのURLを入力できます";
 "bottom_sheet_setup_secure_backup_subtitle" = "サーバー上の暗号鍵をバックアップして、暗号化されたメッセージとデータへのアクセスが失われるのを防ぎましょう。";
-"bootstrap_cancel_text" = "いまキャンセルすると、ログインできなくなった際に、暗号化されたメッセージとデータを失ってしまう可能性があります。
-\n
-\nまた、設定から、安全なバックアップの設定や鍵の管理を行うことができます。";
+"bootstrap_cancel_text" = "いまキャンセルすると、ログインできなくなった際に、暗号化されたメッセージとデータを失ってしまう可能性があります。\n\nまた、設定から、安全なバックアップの設定や鍵の管理を行うことができます。";
 "bootstrap_crosssigning_save_usb" = "USBメモリーもしくはバックアップドライブに保存";
 "bootstrap_crosssigning_progress_key_backup" = "鍵のバックアップの設定";
 "bootstrap_crosssigning_progress_save_ssk" = "自己署名キーを同期しています";
@@ -1980,12 +1873,8 @@
 "keys_backup_restore_success_title_already_up_to_date" = "鍵は既に最新です！";
 "reset_cross_signing" = "鍵をリセット";
 "create_poll_empty_question_error" = "質問は空にできません";
-"direct_room_profile_encrypted_subtitle" = "ここで送受信されるメッセージはエンドツーエンド暗号化されています。
-\n
-\nメッセージは安全に保護されており、メッセージのロックを解除できる固有の鍵を持っているのはあなたと受信者だけです。";
-"room_profile_encrypted_subtitle" = "この部屋のメッセージはエンドツーエンド暗号化されています。
-\n
-\nメッセージは安全に保護されており、メッセージのロックを解除できる固有の鍵を持っているのはあなたと受信者だけです。";
+"direct_room_profile_encrypted_subtitle" = "ここで送受信されるメッセージはエンドツーエンド暗号化されています。\n\nメッセージは安全に保護されており、メッセージのロックを解除できる固有の鍵を持っているのはあなたと受信者だけです。";
+"room_profile_encrypted_subtitle" = "この部屋のメッセージはエンドツーエンド暗号化されています。\n\nメッセージは安全に保護されており、メッセージのロックを解除できる固有の鍵を持っているのはあなたと受信者だけです。";
 "dev_tools_form_hint_state_key" = "ステートキー";
 "save_recovery_key_chooser_hint" = "リカバリーキーを以下に保存";
 "crypto_error_withheld_generic" = "送信者が意図的に鍵を送信しなかったため、このメッセージにアクセスすることができません";
@@ -2045,9 +1934,7 @@
 "delete_event_dialog_reason_hint" = "削除した理由";
 "share_confirm_room" = "この添付ファイルを%1$@に送信しますか？";
 "verification_use_passphrase" = "既存のセッションにアクセスできない場合";
-"delete_account_data_warning" = "%1$@というタイプのアカウントデータを削除しますか？
-\n
-\n予期しないトラブルを起こす可能性があるので注意してください。";
+"delete_account_data_warning" = "%1$@というタイプのアカウントデータを削除しますか？\n\n予期しないトラブルを起こす可能性があるので注意してください。";
 "verification_profile_device_new_signing" = "%1$@（%2$@）が新しいセッションでサインインしました：";
 "verification_profile_device_verified_because" = "このセッションは%1$@（%2$@）によって認証されているので、メッセージのセキュリティは信頼できます。";
 "verification_open_other_to_verify" = "既存のセッションでこのセッションを認証して、暗号化されたメッセージへアクセスできるようにしましょう。";
@@ -2138,9 +2025,7 @@
 "too_many_pin_failures" = "エラーが多すぎます。ログアウトしました";
 "wrong_pin_message_last_remaining_attempt" = "警告！もう一度誤ったコードを入力すると、ログアウトします！";
 "alert_push_are_disabled_description" = "プッシュ通知を有効にするには、設定を確認してください";
-"external_link_confirmation_message" = "リンク %1$@ は別のサイトに移動します：%2$@
-\n
-\n続行してよろしいですか？";
+"external_link_confirmation_message" = "リンク %1$@ は別のサイトに移動します：%2$@\n\n続行してよろしいですか？";
 "external_link_confirmation_title" = "このリンクを再確認してください";
 "verify_this_session" = "ログインを認証してください：%1$@";
 "failed_to_access_secure_storage" = "機密ストレージのアクセスに失敗しました";
@@ -2148,9 +2033,7 @@
 "auth_invalid_login_deactivated_account" = "このアカウントは無効化されています。";
 "bootstrap_crosssigning_save_cloud" = "個人用のクラウドストレージにコピー";
 "bootstrap_crosssigning_print_it" = "印刷して安全な場所に保管";
-"bootstrap_cross_signing_success" = "%2$@と%1$@が設定されました。
-\n
-\n安全な場所で保管してください！それらは、アクティブなセッションを全て失ってしまった際、暗号化されたメッセージや安全な情報のロックを解除するために必要となります。";
+"bootstrap_cross_signing_success" = "%2$@と%1$@が設定されました。\n\n安全な場所で保管してください！それらは、アクティブなセッションを全て失ってしまった際、暗号化されたメッセージや安全な情報のロックを解除するために必要となります。";
 "bootstrap_crosssigning_progress_initializing" = "作成したアイデンティティーキーを公開しています";
 "settings_security_prevent_screenshots_title" = "アプリケーションのスクリーンショットを防ぐ";
 "enter_secret_storage_passphrase_or_key" = "続行するには%1$@か%2$@を使用してください。";
@@ -2178,8 +2061,7 @@
 "a11y_open_emoji_picker" = "絵文字の一覧を開く";
 "authentication_error" = "認証に失敗しました";
 "bootstrap_loading_title" = "復旧を設定しています。";
-"verify_cannot_cross_sign" = "このセッションは、他のセッションと認証を共有することができません。
-\n認証は端末に保存され、新しいバージョンのアプリで共有されます。";
+"verify_cannot_cross_sign" = "このセッションは、他のセッションと認証を共有することができません。\n認証は端末に保存され、新しいバージョンのアプリで共有されます。";
 "room_notification_more_than_two_users_are_typing" = "%1$@、%2$@他";
 "room_notification_two_users_are_typing" = "%1$@と%2$@";
 "security_prompt_text" = "自分と相手を認証して、チャットを安全に保ちましょう";
@@ -2202,48 +2084,26 @@
 "set_a_security_phrase_notice" = "あなたしか知らないセキュリティーフレーズを入力してください。サーバーで機密情報を保護するために使用します。";
 "message_reaction_show_less" = "詳細を非表示";
 "invite_people_to_your_space_desc" = "他の参加者はいません。%@に招待しましょう。";
-"plurals.membership_changes.item_0" = "%d個のメンバーシップの変更";
-"plurals.room_title_members.item_0" = "%d名のメンバー";
-"plurals.room_new_messages_notification.item_0" = "%d件の新しいメッセージ";
-"plurals.room_details_selected.item_0" = "%d個選択済";
-"plurals.notification_unread_notified_messages.item_0" = "%d件の通知された未読メッセージ";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d個のルーム";
-"plurals.active_widgets.item_0" = "%d個のウィジェットが使用中";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "%d個の鍵をバックアップしています…";
-"plurals.room_profile_section_more_member_list.item_0" = "%1$d人の参加者";
-"plurals.settings_active_sessions_count.item_0" = "%d件のアクティブなセッション";
-"plurals.send_images_with_original_size.item_0" = "元の大きさのまま画像を送信";
-"plurals.seconds.item_0" = "%d秒";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "このルームの代替アドレス %1$@ を削除しました。";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "このルームの代替アドレス %1$@ を追加しました。";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "このルームのアドレスの%1$@を削除しました。";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@がこのルームの代替アドレス %2$@ を削除しました。";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@がこのルームの代替アドレス %2$@ を追加しました。";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@がこのルームのアドレスの%2$@を削除しました。";
-"plurals.notice_room_aliases_added_by_you.item_0" = "このルームのアドレスに%1$@を追加しました。";
-"plurals.notice_room_aliases_added.item_0" = "%1$@がこのルームのアドレスに%2$@を追加しました。";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@、%2$@、%3$@と他%4$d人";
-"plurals.two_and_some_others_read.item_0" = "%1$@、%2$@、他%3$d人のユーザーが読みました";
-"plurals.encryption_import_room_keys_success.item_0" = "%2$d個の鍵のうち%1$d個のインポートに成功。";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d個の新しい鍵がこのセッションに追加されました。";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "%d個のキーが含まれたバックアップを復元しました。";
-"plurals.notification_compat_summary_title.item_0" = "%d件の通知";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@：%2$d件のメッセージ";
-"plurals.notification_invitations.item_0" = "%d件の招待";
-"plurals.room_settings_banned_users_count.item_0" = "ブロックされたユーザー%d人";
-"plurals.missed_video_call.item_0" = "%d個の不在着信（ビデオ）";
-"plurals.missed_audio_call.item_0" = "%d個の不在着信（音声）";
-"plurals.create_poll_not_enough_options_error.item_0" = "%1$@個以上の選択肢が必要です";
-"plurals.fallback_users_read.item_0" = "%d人のユーザーが読みました";
-"plurals.poll_option_vote_count.item_0" = "%1$d個の投票";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d個の投票があります。結果を見るには投票してください";
-"plurals.space_people_you_know.item_0" = "%d人の知り合いがすでに参加しています";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "%1$d個の投票に基づく";
-"plurals.poll_total_vote_count_after_ended.item_0" = "%1$d個の投票に基づく最終結果";
-"plurals.send_videos_with_original_size.item_0" = "元の大きさのまま動画を送信";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "招待を%1$@と他%2$d人に送信しました";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "リクエストが多すぎます。%1$d秒後に再試行できます…";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "いま認証できる%d個の端末を表示";
-"plurals.notice_room_server_acl_changes.item_0" = "%d個のサーバーアクセス制御リストの変更";
-"plurals.message_reaction_show_more.item_0" = "あと%1$d件";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "コードが誤っています。残りの試行回数は%d回です";
+"location_share_live_enabled" = "位置情報（ライブ）が有効です";
+"location_in_background_missing_permission_dialog_title" = "アクセスを許可";
+"a11y_location_share_option_user_current_icon" = "現在の位置情報を共有";
+"location_share_option_user_current" = "現在の位置情報を共有";
+"create_spaces_room_public_header_desc" = "ルームを作成します。後から追加できます。";
+"ftue_personalize_submit" = "保存して続行";
+"ftue_personalize_complete_subtitle" = "設定を保存しました。";
+"ftue_profile_picture_subtitle" = "これは後から変更できます。";
+"ftue_profile_picture_title" = "プロフィール画像を追加";
+"ftue_display_name_entry_footer" = "これは後から変更できます";
+"ftue_display_name_entry_title" = "表示名";
+"ftue_display_name_subtitle" = "メッセージを送信する際に表示されます。";
+"a11y_location_share_option_pinned_icon" = "この位置情報を共有";
+"location_share_option_pinned" = "この位置情報を共有";
+"a11y_location_share_option_user_live_icon" = "位置情報（ライブ）を共有";
+"location_share_option_user_live" = "位置情報（ライブ）を共有";
+"location_share_live_stop" = "中止";
+"ftue_display_name_title" = "表示名を選択";
+"ftue_account_created_subtitle" = "あなたのアカウント %@ が作成されました。";
+"ftue_account_created_congratulations_title" = "おめでとうございます！";
+"threads_notice_migration_message" = "近日中にスレッドはベータ版となります。\n\nその準備として、この時点以前に作成されたスレッドは、通常の返信として表示するように変更します。\n\nスレッドはMatrixの仕様の一部になったため、これは一度限りの変更です。";
+"threads_notice_migration_title" = "スレッドはベータ版になります 🎉";
+"action_disable" = "無効にする";

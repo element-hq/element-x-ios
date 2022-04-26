@@ -1,0 +1,758 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>active_widgets</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d widget aktiv</string>
+			<key>other</key>
+			<string>%d widget-e aktivë</string>
+		</dict>
+	</dict>
+	<key>call_active_status</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Thirrje aktive ·</string>
+			<key>other</key>
+			<string>%1$d thirrje aktive ·</string>
+		</dict>
+	</dict>
+	<key>create_poll_not_enough_options_error</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Është e domosdoshme të paktën %1$@ mundësi</string>
+			<key>other</key>
+			<string>Janë të domosdoshme të paktën %1$@ mundësi</string>
+		</dict>
+	</dict>
+	<key>encryption_import_room_keys_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d/%2$d kyç i importuar me sukses.</string>
+			<key>other</key>
+			<string>%1$d/%2$d kyçe të importuar me sukses.</string>
+		</dict>
+	</dict>
+	<key>entries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d zë</string>
+			<key>other</key>
+			<string>%d zëra</string>
+		</dict>
+	</dict>
+	<key>fallback_users_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d përdorues lexoi</string>
+			<key>other</key>
+			<string>%d përdorues lexuan</string>
+		</dict>
+	</dict>
+	<key>invitations_sent_to_one_and_more_users</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>U dërguan ftesa te %1$@ dhe një tjetër</string>
+			<key>other</key>
+			<string>U dërguan ftesa te %1$@ dhe %2$d të tjerë</string>
+		</dict>
+	</dict>
+	<key>keys_backup_info_keys_backing_up</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Po kopjeruhet %d kyç…</string>
+			<key>other</key>
+			<string>Po kopjeruhen %d kyçe…</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part1</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>U rikthye një kopjeruajtje me %d kyç.</string>
+			<key>other</key>
+			<string>U rikthye një kopjeruajtje me %d kyçe.</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part2</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Te ky sesion u shtua %d kyç i ri.</string>
+			<key>other</key>
+			<string>Te ky sesion u shtuan %d kyçe të rinj.</string>
+		</dict>
+	</dict>
+	<key>login_error_limit_exceeded_retry_after</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekonde…</string>
+			<key>other</key>
+			<string>Janë dërgua shumë kërkesa. Mund të riprovoni pas %1$d sekondash…</string>
+		</dict>
+	</dict>
+	<key>membership_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d ndryshim anëtarësie</string>
+			<key>other</key>
+			<string>%d ndryshime anëtarësie</string>
+		</dict>
+	</dict>
+	<key>message_reaction_show_more</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d më tepër</string>
+			<key>other</key>
+			<string>%1$d më tepër</string>
+		</dict>
+	</dict>
+	<key>missed_audio_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Thirrje audio e humbur</string>
+			<key>other</key>
+			<string>%d thirrje audio të humbura</string>
+		</dict>
+	</dict>
+	<key>missed_video_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Thirrje video e humbur</string>
+			<key>other</key>
+			<string>%d thirrje video të humbura</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ shtoi %2$@ si një adresë për këtë dhomë.</string>
+			<key>other</key>
+			<string>%1$@ shtoi %2$@ si adresa për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Shtuat %1$@ si një adresë për këtë dhomë.</string>
+			<key>other</key>
+			<string>Shtuat %1$@ si adresa për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ hoqi %2$@ si adresë për këtë dhomë.</string>
+			<key>other</key>
+			<string>%1$@ hoqi %2$@ si adresa për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Hoqët %1$@ si një adresë për këtë dhomë.</string>
+			<key>other</key>
+			<string>Hoqët %1$@ si adresa për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ shtoi adresën alternative %2$@ për këtë dhomë.</string>
+			<key>other</key>
+			<string>%1$@ shtoi adresat alternative %2$@ për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Shtuat adresën alternative %1$@ për këtë dhomë.</string>
+			<key>other</key>
+			<string>Shtuat adresat alternative %1$@ për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ hoqët adresën alternative %2$@ për këtë dhomë.</string>
+			<key>other</key>
+			<string>%1$@ hoqët adresat alternative %2$@ për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Hoqët adresën alternative %1$@ për këtë dhomë.</string>
+			<key>other</key>
+			<string>Hoqët adresat alternative %1$@ për këtë dhomë.</string>
+		</dict>
+	</dict>
+	<key>notice_room_server_acl_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d ndryshim ACL-sh shërbyesi</string>
+			<key>other</key>
+			<string>%d ndryshimë ACL-sh shërbyesi</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_line_for_room</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@: %2$d mesazh</string>
+			<key>other</key>
+			<string>%1$@: %2$d mesazhe</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d njoftim</string>
+			<key>other</key>
+			<string>%d njoftime</string>
+		</dict>
+	</dict>
+	<key>notification_invitations</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d ftesë</string>
+			<key>other</key>
+			<string>%d ftesa</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d mesazh i njoftuar i palexuar</string>
+			<key>other</key>
+			<string>%d mesazhe të njoftuar të palexuar</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages_in_room_rooms</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d dhomë</string>
+			<key>other</key>
+			<string>%d dhoma</string>
+		</dict>
+	</dict>
+	<key>poll_option_vote_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d votë</string>
+			<key>other</key>
+			<string>%1$d vota</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_after_ended</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Rezultati përfundimtar, bazua në %1$d votë</string>
+			<key>other</key>
+			<string>Rezultati përfundimtar, bazua në %1$d vota</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_not_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d votë e hedhur. Votoni, që të shihni përfundimet</string>
+			<key>other</key>
+			<string>%1$d vota të hedhur. Votoni, që të shihni përfundimet</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Bazuar në %1$d votë</string>
+			<key>other</key>
+			<string>Bazuar në %1$d vota</string>
+		</dict>
+	</dict>
+	<key>room_details_selected</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d i përzgjedhur</string>
+			<key>other</key>
+			<string>%d të përzgjedhur</string>
+		</dict>
+	</dict>
+	<key>room_displayname_four_and_more_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@, %2$@, %3$@ dhe %4$d tjetër</string>
+			<key>other</key>
+			<string>%1$@, %2$@, %3$@ dhe %4$d të tjerë</string>
+		</dict>
+	</dict>
+	<key>room_new_messages_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d mesazh i ri</string>
+			<key>other</key>
+			<string>%d mesazhe të rinj</string>
+		</dict>
+	</dict>
+	<key>room_profile_section_more_member_list</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Një person</string>
+			<key>other</key>
+			<string>%1$d persona</string>
+		</dict>
+	</dict>
+	<key>room_settings_banned_users_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d përdorues i dëbuar</string>
+			<key>other</key>
+			<string>%d përdorues të dëbuar</string>
+		</dict>
+	</dict>
+	<key>room_title_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d anëtar</string>
+			<key>other</key>
+			<string>%d anëtarë</string>
+		</dict>
+	</dict>
+	<key>seconds</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d sekondë</string>
+			<key>other</key>
+			<string>%d sekonda</string>
+		</dict>
+	</dict>
+	<key>secure_backup_reset_devices_you_can_verify</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Shfaq pajisjen me të cilën mund të bëni verifikim tani</string>
+			<key>other</key>
+			<string>Shfaq %d pajisjet me të cilat mund të bëni verifikim tani</string>
+		</dict>
+	</dict>
+	<key>send_images_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Dërgoje figurën në madhësinë origjinale</string>
+			<key>other</key>
+			<string>Dërgoji figurat në madhësinë origjinale</string>
+		</dict>
+	</dict>
+	<key>send_videos_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Dërgoje videon në madhësinë origjinale</string>
+			<key>other</key>
+			<string>Dërgoji videot në madhësinë origjinale</string>
+		</dict>
+	</dict>
+	<key>settings_active_sessions_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d sesion aktiv</string>
+			<key>other</key>
+			<string>%d sesione aktive</string>
+		</dict>
+	</dict>
+	<key>space_people_you_know</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d person që e njihni është bërë pjesë tashmë</string>
+			<key>other</key>
+			<string>%d persona që i njihni janë bërë pjesë tashmë</string>
+		</dict>
+	</dict>
+	<key>two_and_some_others_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@, %2$@ dhe %3$d tjetër i lexuar</string>
+			<key>other</key>
+			<string>%1$@, %2$@ dhe %3$d të tjerë të lexuar</string>
+		</dict>
+	</dict>
+	<key>wrong_pin_message_remaining_attempts</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Kod i gabuar, edhe %d provë</string>
+			<key>other</key>
+			<string>Kod i gabuar, edhe %d prova</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

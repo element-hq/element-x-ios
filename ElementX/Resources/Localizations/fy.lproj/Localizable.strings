@@ -99,25 +99,15 @@
 "notice_room_invite_no_invitee_with_reason" = "%1$@ harren útnûging. Reden: %2$@";
 "event_status_sending_message" = "Berjocht oan it fersjoeren…";
 "event_status_sent_message" = "Berjocht ferstjoerd";
-"initial_sync_start_importing_account_data" = "Inisjele syngronisaasje:
-\nAccountgegevens ymportearje";
-"initial_sync_start_importing_account_groups" = "Inisjele Syngronisaasje:
-\nMienskippen ymportearje";
-"initial_sync_start_importing_account_left_rooms" = "Inisjele Syngronisaasje:
-\nFerlitten keamers ymportearje";
-"initial_sync_start_importing_account_invited_rooms" = "Inisjele syngronisaasje:
-\nKeamers dêr’t jo foar útnûge binne ymportearje";
-"initial_sync_start_importing_account_joined_rooms" = "Inisjele syngronisaasje:
-\nJo petearen lade
-\nAs jo yn in protte keamers binne kin dit efkes duorje";
-"initial_sync_start_importing_account_rooms" = "Inisjele syngronisaasje:
-\nKeamers ymportearje";
-"initial_sync_start_importing_account" = "Inisjele syngronisaasje:
-\nAccount ymportearje…";
-"initial_sync_start_downloading" = "Inisjele syngronisaasje:
-\nData downloade…";
-"initial_sync_start_server_computing" = "Inisjele syngronisaasje:
-\nWachtsjend op reaksje fan server…";
+"initial_sync_start_importing_account_data" = "Inisjele syngronisaasje:\nAccountgegevens ymportearje";
+"initial_sync_start_importing_account_groups" = "Inisjele Syngronisaasje:\nMienskippen ymportearje";
+"initial_sync_start_importing_account_left_rooms" = "Inisjele Syngronisaasje:\nFerlitten keamers ymportearje";
+"initial_sync_start_importing_account_invited_rooms" = "Inisjele syngronisaasje:\nKeamers dêr’t jo foar útnûge binne ymportearje";
+"initial_sync_start_importing_account_joined_rooms" = "Inisjele syngronisaasje:\nJo petearen lade\nAs jo yn in protte keamers binne kin dit efkes duorje";
+"initial_sync_start_importing_account_rooms" = "Inisjele syngronisaasje:\nKeamers ymportearje";
+"initial_sync_start_importing_account" = "Inisjele syngronisaasje:\nAccount ymportearje…";
+"initial_sync_start_downloading" = "Inisjele syngronisaasje:\nData downloade…";
+"initial_sync_start_server_computing" = "Inisjele syngronisaasje:\nWachtsjend op reaksje fan server…";
 "room_displayname_empty_room_was" = "Lege keamer (wie %@)";
 "room_displayname_empty_room" = "Leech petear";
 "medium_email" = "E-mailadres";
@@ -176,8 +166,7 @@
 "fab_menu_create_chat" = "Direkte berjochten";
 "fab_menu_create_room" = "Keamers";
 "room_preview_no_preview_join" = "Dizze keamer kin net yn it foar toand wurde. Wolle jo de keamer binnen gean\?";
-"room_preview_not_found" = "Dizze keamer jout no gjin tagong.
-\nProbearje it letter nochris, of freegje in behearder om te sjen oft jo wol de nedige rjochten hawwe.";
+"room_preview_not_found" = "Dizze keamer jout no gjin tagong.\nProbearje it letter nochris, of freegje in behearder om te sjen oft jo wol de nedige rjochten hawwe.";
 "room_preview_no_preview" = "Dizze keamer kin net yn it foar toand wurde";
 "please_wait" = "Efkes wachtsje…";
 "change_room_directory_network" = "Netwurk wizigje";
@@ -736,8 +725,7 @@
 "command_description_nick" = "Wiziget jo werjeftenamme";
 "room_widget_permission_display_name" = "Jo werjeftenamme";
 "settings_show_avatar_display_name_changes_messages_summary" = "Befettet wizigingen yn avatar en werjeftenamme.";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ sil periodyk op de eftergrûn syngronisearje (konfigurearber).
-\nDit hat in negative ynfloed op jo batterij- en datagebrûk. Der sil in melding toand wurde ta ynformaasje.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ sil periodyk op de eftergrûn syngronisearje (konfigurearber).\nDit hat in negative ynfloed op jo batterij- en datagebrûk. Der sil in melding toand wurde ta ynformaasje.";
 "settings_messages_containing_display_name" = "Myn werjeftenamme";
 "settings_containing_my_display_name" = "Berjochten dy’t myn werjeftenamme befetsje";
 "invite_friends_rich_title" = "🔐️ Doch mei my mei op %@";
@@ -757,8 +745,7 @@
 "notice_room_unban_with_reason" = "%1$@ hat %2$@ ûnferballe. Reden: %3$@";
 "notice_room_reject_with_reason_by_you" = "Jo hawwe de útnûging wegere. Reden: %1$@";
 "notice_room_reject_with_reason" = "%1$@ hat de útnûging wegere. Reden: %2$@";
-"initial_sync_start_importing_account_crypto" = "Inisjele syngronisaasje:
-\nKryptografy ymportearje";
+"initial_sync_start_importing_account_crypto" = "Inisjele syngronisaasje:\nKryptografy ymportearje";
 "notice_crypto_error_unknown_inbound_session_id" = "It apparaat fan de ôfstjoerder hat gjin kaaien foar dit berjocht stjoerd.";
 "notice_power_level_diff" = "%1$@ fan %2$@ nei %3$@";
 "notice_power_level_changed" = "%1$@ hat it machtigingsnivo fan %2$@ oanpast.";
@@ -792,12 +779,9 @@
 "auth_invalid_email" = "Dit is gjin jildich e-mailadres";
 "auth_invalid_login_param" = "Ferkearde brûkersnamme en/of wachtwurd";
 "error_no_external_application_found" = "Sorry, der is gjin eksterne tapassing fûn om dizze aksje te foltôgjen.";
-"no_sticker_application_dialog_content" = "Jo hawwe op dit stuit gjin stikkerpakketten ynskeakele.
-\n
-\nWolle jo der no in pear tafoegje\?";
+"no_sticker_application_dialog_content" = "Jo hawwe op dit stuit gjin stikkerpakketten ynskeakele.\n\nWolle jo der no in pear tafoegje\?";
 "call_select_sound_device" = "Lûdsapparaten selektearje";
-"call_failed_no_connection_description" = "Live ferbining opsetten mislearre.
-\nFreegje de behearder fan jo thússerver om in TURN-server te konfigurearjen, sadat oproppen betrouber wurkje.";
+"call_failed_no_connection_description" = "Live ferbining opsetten mislearre.\nFreegje de behearder fan jo thússerver om in TURN-server te konfigurearjen, sadat oproppen betrouber wurkje.";
 "call_failed_no_connection" = "%@ Oprop mislearre";
 "start_video_call_prompt_msg" = "Binne jo wis dat jo in fideo-oprop begjinne wolle\?";
 "start_voice_call_prompt_msg" = "Binne jo wis dat jo in spraakoprop begjinne wolle\?";
@@ -823,9 +807,7 @@
 "action_reject" = "Ofwize";
 "permissions_denied_add_contact" = "Tagong jaan ta jo kontaktpersoanen.";
 "permissions_denied_qr_code" = "Om de QR-koade te scannen moatte jo tagong ta de kamera jaan.";
-"permissions_rationale_msg_camera_and_audio" = "%@ hat tagong nedich ta jo kamera en mikrofoan om fideo-oproppen te meitsjen.
-\n
-\nJou tagong op de folgjende pop-ups om de oprop te meitsjen.";
+"permissions_rationale_msg_camera_and_audio" = "%@ hat tagong nedich ta jo kamera en mikrofoan om fideo-oproppen te meitsjen.\n\nJou tagong op de folgjende pop-ups om de oprop te meitsjen.";
 "permissions_rationale_msg_record_audio" = "%@ hat tagong nedich ta jo mikrofoan om spraakoproppen te meitsjen.";
 "call_remove_jitsi_widget_progress" = "Oprop beëinigje…";
 "call_error_user_not_responding" = "De oare kant hat net opnommen.";
@@ -851,22 +833,15 @@
 "room_participants_unban_title" = "Ferballing brûker ûngedien meitsje";
 "room_participants_ban_reason" = "Reden foar ferballing";
 "room_participants_ban_title" = "Brûker ferbalje";
-"space_participants_remove_prompt_msg" = "troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.
-\n
-\nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.";
-"room_participants_remove_prompt_msg" = "troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.
-\n
-\nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.";
+"space_participants_remove_prompt_msg" = "troch dizze brûker fuort te smiten sil dy net mear yn dizze romte sitte.\n\nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.";
+"room_participants_remove_prompt_msg" = "troch dizze brûker fuort te smiten sil dy net mear yn dit petear sitte.\n\nOm foar te kommen dat dyjinge opnij ta treed, kinne jo him/har ek ferballe.";
 "room_participants_remove_reason" = "Reden foar fuortsmiten";
 "room_participants_remove_title" = "Brûker fuortsmite";
 "room_participants_action_cancel_invite_prompt_msg" = "Binne jo wis dat jo de útnûging foar dizze brûker annulearje wolle\?";
 "room_participants_action_unignore_prompt_msg" = "It net mear negearjen fan dizze brûker sil al syn/har berjochten opnij werjaan.";
-"room_participants_action_ignore_prompt_msg" = "Troch dizze brûker te negearjen wurden syn/har berjochten fuortsmiten út petearen dy’t jimme diele.
-\n
-\nJo kinne dizze aksje op elk momint ûngedien meitsje yn de algemiene ynstellingen.";
+"room_participants_action_ignore_prompt_msg" = "Troch dizze brûker te negearjen wurden syn/har berjochten fuortsmiten út petearen dy’t jimme diele.\n\nJo kinne dizze aksje op elk momint ûngedien meitsje yn de algemiene ynstellingen.";
 "room_participants_power_level_demote_warning_prompt" = "Jo kinne dizze wiziging net ûngedien meitsje, omdat jo josels degradearje, as jo de lêste brûker mei rjochten binne yn it petear sil it net mooglik wêze om opnij rjochten te krijen.";
-"room_participants_power_level_prompt" = "Jo kinne dizze wizigingen net ûngedien meitsje omdat jo de brûker ta itselde nivo as josels promovearje.
-\nBinne jo wis\?";
+"room_participants_power_level_prompt" = "Jo kinne dizze wizigingen net ûngedien meitsje omdat jo de brûker ta itselde nivo as josels promovearje.\nBinne jo wis\?";
 "room_participants_action_unban" = "Untballe";
 "room_participants_leave_private_warning" = "Dit petear is net iepenbier. Jo kinne net opnij ta trede sûnder útnûging.";
 "settings_troubleshoot_diagnostic_failure_status_with_quickfix" = "Der binne ien of mear tests mislearre, probearje de oanrekommandearre oplossing(en).";
@@ -907,43 +882,3 @@
 "room_one_user_is_typing" = "%@ is oan it typen…";
 "room_participants_unban_prompt_msg" = "Troch dizze brûker net mear te ferballen kin dy opnij oan it petear meidwaan.";
 "space_participants_unban_prompt_msg" = "Troch dizze brûker net mear te ferballen kin dy opnij yn de romte komme.";
-"plurals.membership_changes.item_0" = "%d lidmaatskip wizige";
-"plurals.membership_changes.item_1" = "%d lidmaatskippen wizige";
-"plurals.notification_compat_summary_title.item_0" = "%d notifikaasje";
-"plurals.notification_compat_summary_title.item_1" = "%d notifikaasjes";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d berjocht";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d berjochten";
-"plurals.notification_invitations.item_0" = "%d útnûging";
-"plurals.notification_invitations.item_1" = "%d útnûgingen";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d keamer";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d keamers";
-"plurals.room_settings_banned_users_count.item_0" = "%d ferballe brûker";
-"plurals.room_settings_banned_users_count.item_1" = "%d ferballe brûkers";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ en %4$d oar";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ en %4$d oaren";
-"plurals.room_details_selected.item_0" = "%d selektearre";
-"plurals.room_details_selected.item_1" = "%d selektearre";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Jo hawwe %1$@ as petearadres fuortsmiten.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Jo hawwe %1$@ as petearadresens fuortsmiten.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ hat %2$@ as petearadres fuortsmiten.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ hat %2$@ as petearadressen fuortsmiten.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Jo hawwe %1$@ as petearadres tafoege.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Jo hawwe %1$@ as petearadressen tafoege.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ hat %2$@ as petearadres tafoege.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ hat %2$@ as petearadressen tafoege.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Jo hawwe it alternative keameradres %1$@ fuortsmiten.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Jo hawwe de alternative keameradressen %1$@ fuortsmiten.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ hat %2$@ as alternatyf keameradres fuortsmiten.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ hat %2$@ as alternative keameradressen fuortsmiten.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Jo hawwe %1$@ as alternatyf keameradres tafoege.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Jo hawwe %1$@ as alternative keameradressen tafoege.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ hat %2$@ as alternatyf keameradres tafoege.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ hat %2$@ as alternative keameradressen tafoege.";
-"plurals.missed_video_call.item_0" = "Miste fideo-oprop";
-"plurals.missed_video_call.item_1" = "%d miste fideo-oproppen";
-"plurals.missed_audio_call.item_0" = "Miste spraakoprop";
-"plurals.missed_audio_call.item_1" = "%d miste spraakoproppen";
-"plurals.room_title_members.item_0" = "%d dielnimmer";
-"plurals.room_title_members.item_1" = "%d dielnimmers";
-"plurals.room_new_messages_notification.item_0" = "%d nij berjocht";
-"plurals.room_new_messages_notification.item_1" = "%d nije berjochten";

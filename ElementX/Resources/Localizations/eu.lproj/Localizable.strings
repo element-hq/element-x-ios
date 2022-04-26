@@ -37,22 +37,14 @@
 "room_displayname_room_invite" = "Gela gonbidapena";
 "room_displayname_two_members" = "%1$@ eta %2$@";
 "room_displayname_empty_room" = "Gela hutsa";
-"initial_sync_start_importing_account" = "Hasierako sinkronizazioa:
-\nKontua inportatzen…";
-"initial_sync_start_importing_account_crypto" = "Hasierako sinkronizazioa:
-\nZifratzea inportatzen";
-"initial_sync_start_importing_account_rooms" = "Hasierako sinkronizazioa:
-\nGelak inportatzen";
-"initial_sync_start_importing_account_joined_rooms" = "Hasierako sinkronizazioa:
-\nElkartutako gelak inportatzen";
-"initial_sync_start_importing_account_invited_rooms" = "Hasierako sinkronizazioa:
-\nGonbidatutako gelak inportatzen";
-"initial_sync_start_importing_account_left_rooms" = "Hasierako sinkronizazioa:
-\nUtzitako gelak inportatzen";
-"initial_sync_start_importing_account_groups" = "Hasierako sinkronizazioa:
-\nKomunitateak inportatzen";
-"initial_sync_start_importing_account_data" = "Hasierako sinkronizazioa:
-\nKontuaren datuak inportatzen";
+"initial_sync_start_importing_account" = "Hasierako sinkronizazioa:\nKontua inportatzen…";
+"initial_sync_start_importing_account_crypto" = "Hasierako sinkronizazioa:\nZifratzea inportatzen";
+"initial_sync_start_importing_account_rooms" = "Hasierako sinkronizazioa:\nGelak inportatzen";
+"initial_sync_start_importing_account_joined_rooms" = "Hasierako sinkronizazioa:\nElkartutako gelak inportatzen";
+"initial_sync_start_importing_account_invited_rooms" = "Hasierako sinkronizazioa:\nGonbidatutako gelak inportatzen";
+"initial_sync_start_importing_account_left_rooms" = "Hasierako sinkronizazioa:\nUtzitako gelak inportatzen";
+"initial_sync_start_importing_account_groups" = "Hasierako sinkronizazioa:\nKomunitateak inportatzen";
+"initial_sync_start_importing_account_data" = "Hasierako sinkronizazioa:\nKontuaren datuak inportatzen";
 "notice_room_update" = "%@ erabiltzaileak gela hau eguneratu du.";
 "event_status_sending_message" = "Mezua bidaltzen…";
 "notice_room_third_party_revoked_invite" = "%1$@ erabiltzaileak %2$@ gelara elkartzeko gonbidapena indargabetu du";
@@ -158,8 +150,7 @@
 "call_error_user_not_responding" = "Urruneko aldeak ez du erantzun.";
 "permissions_rationale_popup_title" = "Informazioa";
 "permissions_rationale_msg_record_audio" = "Elementek zure mikrofonoa atzitzeko baimena behar du ahots deiak egin ahal izateko.";
-"permissions_rationale_msg_camera_and_audio" = "Elementek zure kamera eta mikrofonoa atzitzeko baimenak behar ditu bideo deiak egin ahal izateko.
-Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.";
+"permissions_rationale_msg_camera_and_audio" = "Elementek zure kamera eta mikrofonoa atzitzeko baimenak behar ditu bideo deiak egin ahal izateko.Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.";
 "yes" = "BAI";
 "no" = "EZ";
 "_continue" = "Jarraitu";
@@ -176,8 +167,7 @@ Baimendu sarbidea hurrengo laster-leihoan deia egin ahal izateko.";
 "room_participants_action_ignore" = "Ezkutatu kide honen mezu guztiak";
 "room_participants_action_unignore" = "Erakutsi kide honen mezu guztiak";
 "room_participants_action_mention" = "Aipamena";
-"room_participants_power_level_prompt" = "Ezin izango duzu aldaketa hau desegin kidea zure botere maila berera ekartzen ari zarelako.
-Ziur zaude?";
+"room_participants_power_level_prompt" = "Ezin izango duzu aldaketa hau desegin kidea zure botere maila berera ekartzen ari zarelako.Ziur zaude?";
 "settings_contact" = "Gailuko kontaktuak";
 "encryption_export_room_keys_summary" = "Esportatu gakoak gailuko fitxategi batetara";
 "encryption_import_room_keys_summary" = "Inportatu gakoak gailuko fitxategi batetik";
@@ -257,8 +247,7 @@ Ziur zaude?";
 "settings_new_password" = "Pasahitz berria";
 "settings_fail_to_update_password" = "Huts egin du pasahitza eguneratzean";
 "settings_password_updated" = "Zure pasahitza eguneratu da";
-"settings_unignore_user" = "%@ erabiltzailearen mezu guztiak erakutsi?
-Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela.";
+"settings_unignore_user" = "%@ erabiltzailearen mezu guztiak erakutsi?Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat beharko lukeela.";
 "settings_select_country" = "Hautatu herrialde bat";
 "settings_third_party_notices" = "Hirugarrengoen adierazpenak";
 "media_saving_period_3_days" = "3 egun";
@@ -368,8 +357,7 @@ Kontuan izan ekintza honek aplikazioa berrabiaraziko duela eta denbora bat behar
 "avatar" = "Abatarra";
 "title_activity_choose_sticker" = "Bidali eranskailu bat";
 "option_send_sticker" = "Bidali eranskailua";
-"no_sticker_application_dialog_content" = "Ez duzu eranskailu multzorik aktibatuta.
-Baten bat gehitu orain?";
+"no_sticker_application_dialog_content" = "Ez duzu eranskailu multzorik aktibatuta.Baten bat gehitu orain?";
 "settings_deactivate_account_section" = "Desaktibatu kontua";
 "settings_deactivate_my_account" = "Desaktibatu nire kontua";
 "settings_opt_in_of_analytics" = "Bidali analitiketarako datuak";
@@ -379,8 +367,7 @@ Baten bat gehitu orain?";
 "dialog_user_consent_content" = "%1$@ hasiera-zerbitzaria erabiltzen jarraitzeko erabilera baldintzak irakurri eta onartu behar dituzu.";
 "dialog_user_consent_submit" = "Berrikusi orain";
 "deactivate_account_title" = "Desaktibatu kontua";
-"deactivate_account_content.b_0" = "Ekintza hau ezin da desegin";
-"deactivate_account_content.b_1" = "ez dira zuk bidalitako mezuak ahaztuko.";
+"deactivate_account_content" = "Honek kontua behin betirako erabilgaitza bihurtuko du. Ezin izango duzu saioa hasi, eta ezin izango du beste inork ID hori erabili. Kontua dagoen gela guztietatik aterako da, eta kontuaren xehetasunak identitate-zerbitzaritik ezabatuko dira. <b>Ekintza hau ezin da desegin</b>.Kontua desaktibatzean <b>ez dira zuk bidalitako mezuak ahaztuko.</b> Mezuak ahaztea nahi baduzu markatu beheko kutxa.Matrix-eko mezuen ikusgaitasuna e-mail sistemaren antekoa da. Guk zure mezuak ahaztean ez dizkiogu erabiltzaile berriei edo izena eman ez dutenei erakutsiko, baina jada zure mezuak jaso dituzten erregistratutako erabiltzaileen bere kopia izaten jarraituko dute.";
 "deactivate_account_delete_checkbox" = "Ahaztu bidali ditudan mezu guztiak kontua desaktibatzean (Abisua: Honekin etorkizuneko erabiltzaileek elkarrizketaren bertsio ez oso bat ikusiko dute)";
 "action_download" = "Deskargatu";
 "e2e_re_request_encryption_key" = "Eskatu berriro zifratze-gakoak zure beste saioetatik.";
@@ -409,9 +396,9 @@ Baten bat gehitu orain?";
 "command_description_deop_user" = "Id zehatz bat duen erabiltzaileari maila jaisten dio";
 "system_alerts_header" = "Sistemaren alertak";
 "resource_limit_contact_admin" = "kontaktatu zure zerbitzu administratzailea";
-"resource_limit_soft_default.b_0" = "erabiltzaile batzuk ezin izango dute saioa hasi";
+"resource_limit_soft_default" = "Hasiera zerbitzari honek zure baliabide muga gainditu du <b>erabiltzaile batzuk ezin izango dute saioa hasi</b>.";
 "resource_limit_hard_default" = "Hasiera zerbitzari honek bere baliabide mugetako bat gainditu du.";
-"resource_limit_soft_mau.b_0" = "erabiltzaile batzuk ezin izango dute saioa hasi";
+"resource_limit_soft_mau" = "Hasiera zerbitzari honek hilabeteko erabiltzaile aktiboen muga jo du <b>erabiltzaile batzuk ezin izango dute saioa hasi</b>.";
 "resource_limit_hard_mau" = "Hasiera zerbitzari honek bere hilabeteko erabiltzaile aktiboen muga gainditu du.";
 "resource_limit_soft_contact" = "%@ muga hau areagotzeko.";
 "resource_limit_hard_contact" = "%@ zerbitzu hau erabiltzen jarraitzeko.";
@@ -456,13 +443,11 @@ Baten bat gehitu orain?";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Gutxienez proba batek kale egin du, bidali mesedez arazte-txosten bat ikertu dezagun.";
 "settings_troubleshoot_test_system_settings_title" = "Sistemaren ezarpenak.";
 "settings_troubleshoot_test_system_settings_success" = "Jakinarazpenak aktibatuta daude sistemaren ezarpenetan.";
-"settings_troubleshoot_test_system_settings_failed" = "Jakinarazpenak desaktibatuta daude sistemaren ezarpenetan.
-Egiaztatu sistemaren ezarpenak.";
+"settings_troubleshoot_test_system_settings_failed" = "Jakinarazpenak desaktibatuta daude sistemaren ezarpenetan.Egiaztatu sistemaren ezarpenak.";
 "open_settings" = "Ireki ezarpenak";
 "settings_troubleshoot_test_account_settings_title" = "Kontuaren ezarpenak.";
 "settings_troubleshoot_test_account_settings_success" = "Jakinarazpenak aktibatuta daude zure kontuarentzat.";
-"settings_troubleshoot_test_account_settings_failed" = "Jakinarazpenak desaktibatuta daude zure kontuarentzat.
-Egiaztatu zure kontuaren ezarpenak.";
+"settings_troubleshoot_test_account_settings_failed" = "Jakinarazpenak desaktibatuta daude zure kontuarentzat.Egiaztatu zure kontuaren ezarpenak.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Aktibatu";
 "settings_troubleshoot_test_device_settings_title" = "SAioaren ezarpenak.";
 "settings_troubleshoot_test_device_settings_success" = "Jakinarazpenak aktibatuta daude saio honentzat.";
@@ -470,28 +455,21 @@ Egiaztatu zure kontuaren ezarpenak.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Aktibatu";
 "settings_troubleshoot_test_play_services_title" = "Play Services egiaztaketa";
 "settings_troubleshoot_test_play_services_success" = "Google Play Services APK eskuragarri eta egunean dago.";
-"settings_troubleshoot_test_play_services_failed" = "%@-ek Google Play Services erabiltzen du baina antza ez dago ondo konfiguratuta:
-%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@-ek Google Play Services erabiltzen du baina antza ez dago ondo konfiguratuta:%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Konpondu Play Services";
 "settings_troubleshoot_test_fcm_title" = "Firebase token-a";
-"settings_troubleshoot_test_fcm_success" = "FCM token-a ongi jaso da:
-%1$@";
-"settings_troubleshoot_test_fcm_failed" = "Huts egin du FCM token-a jasotzean:
-%1$@";
+"settings_troubleshoot_test_fcm_success" = "FCM token-a ongi jaso da:%1$@";
+"settings_troubleshoot_test_fcm_failed" = "Huts egin du FCM token-a jasotzean:%1$@";
 "settings_troubleshoot_test_token_registration_title" = "Token erregistroa";
 "settings_troubleshoot_test_token_registration_success" = "FCM token-a ongi erregistratu da hasiera-zerbitzarian.";
-"settings_troubleshoot_test_token_registration_failed" = "Huts egin du FCM token-a hasiera zerbitzarian erregistratzean:
-%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Huts egin du FCM token-a hasiera zerbitzarian erregistratzean:%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Hasi abioan";
 "settings_troubleshoot_test_service_boot_success" = "Zerbitzua gailua berrabiaraztean hasiko da.";
 "settings_troubleshoot_test_service_boot_failed" = "Zerbitzua ez da hasiko gailua berrabiaraztean, ez duzu jakinarazpenik jasoko %@ behin ireki arte.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Gaitu abioan hastea";
 "settings_troubleshoot_test_bg_restricted_title" = "Egiaztatu bigarren planoko murrizketak";
-"settings_troubleshoot_test_bg_restricted_success" = "Bigarren planoko murrizketak desaktibatuta daude %@-entzat. Proba hau datu mugikorrekin egin behar da (Ez WiFi).
-%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Bigarren planoko murrizketak aktibatuta daude %@-entzat.
-Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan dagoenean, eta honek jakinarazpenetan eragina izan dezake.
-%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Bigarren planoko murrizketak desaktibatuta daude %@-entzat. Proba hau datu mugikorrekin egin behar da (Ez WiFi).%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Bigarren planoko murrizketak aktibatuta daude %@-entzat.Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan dagoenean, eta honek jakinarazpenetan eragina izan dezake.%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Desaktibatu murrizketak";
 "settings_troubleshoot_test_battery_title" = "Bateria optimizazioa";
 "settings_troubleshoot_test_battery_success" = "Bateria optimizazioak ez du eraginik %@-engan.";
@@ -541,15 +519,10 @@ Aplikazioa egiten saiatzen ari dena agresiboki murriztuko zaio bigarren planoan 
 "keys_backup_settings_delete_backup_button" = "Ezabatu babes-kopia";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Kontuan izan mezu mota batzuk isilak izateko ezarri direla (soinurik gabeko jakinarazpena sortuko dute).";
 "settings_troubleshoot_test_bing_settings_failed" = "Jakinarazpen batzuk desgaituta daude zure ezarpen pertsonaletan.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-Errore hau %@-en kontroletik kanpo dago eta Google-en arabera, errore honek esan nahi du gailuko aplikazio gehiegik erabiltzen dutela FCM. Errore hau ezohiko aplikazio kopuru bat dagoenean gertatzen da, ez lioke erabiltzaile arrunt bati eragingo.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-Errore hau %@-en kontroletik kanpo dago. Hainbat arrazoiengatik gerta daiteke eta geroago berriro saiatzen bazara agian badabil,  egiaztatu ere Google Play Service-ek ez duela datuen erabilera mugatua sistemaren ezarpenetan, edo zure gailuaren ordua ondo ezarrita dagoela, ROM pertsonalizatuekin gertatu daiteke ere.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki kontuen kudeatzailea eta gehitu Google kontu bat.";
-"keys_backup_setup_step1_description" = "Zifratutako geletako mezuak muturretik muturrera zifratuta daude. Hartzaileak/ek eta zuk eta ez beste inork irakurri ditzakezue mezuok.
-\n
-\nEgin zure gakoen babes-kopia segurua mezuak ez galtzeko.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]Errore hau %@-en kontroletik kanpo dago eta Google-en arabera, errore honek esan nahi du gailuko aplikazio gehiegik erabiltzen dutela FCM. Errore hau ezohiko aplikazio kopuru bat dagoenean gertatzen da, ez lioke erabiltzaile arrunt bati eragingo.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]Errore hau %@-en kontroletik kanpo dago. Hainbat arrazoiengatik gerta daiteke eta geroago berriro saiatzen bazara agian badabil,  egiaztatu ere Google Play Service-ek ez duela datuen erabilera mugatua sistemaren ezarpenetan, edo zure gailuaren ordua ondo ezarrita dagoela, ROM pertsonalizatuekin gertatu daiteke ere.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki kontuen kudeatzailea eta gehitu Google kontu bat.";
+"keys_backup_setup_step1_description" = "Zifratutako geletako mezuak muturretik muturrera zifratuta daude. Hartzaileak/ek eta zuk eta ez beste inork irakurri ditzakezue mezuok.\n\nEgin zure gakoen babes-kopia segurua mezuak ez galtzeko.";
 "keys_backup_setup_step3_generating_key_status" = "Berreskuratze gakoa sortzen pasaesaldia erabiliz, honek hainbat segundo behar ditzake.";
 "keys_backup_restore_is_getting_backup_version" = "Babes-kopiaren bertsioa eskuratzen…";
 "keys_backup_restore_with_passphrase" = "Erabili zure berreskuratze pasaesaldia zure zifratutako mezuen historiala desblokeatzeko";
@@ -595,16 +568,13 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "keys_backup_setup_step1_advanced" = "(Aurreratua)";
 "keys_backup_setup_step1_manual_export" = "Esportatu gakoak manualki";
 "keys_backup_setup_step2_text_title" = "Babestu zure babes-kopia pasaesaldi batekin.";
-"keys_backup_setup_step2_text_description" = "Zure gakoen zifratutako kopia bat gordeko dugu zure hasiera-zerbitzarian. Babestu babes-kopia pasaesaldi batekin seguru mantentzeko.
-\n
-\nSegurtasun hobe baterako, pasaesaldi hau eta zure kontuaren pasahitza desberdinak izan beharko lirateke.";
+"keys_backup_setup_step2_text_description" = "Zure gakoen zifratutako kopia bat gordeko dugu zure hasiera-zerbitzarian. Babestu babes-kopia pasaesaldi batekin seguru mantentzeko.\n\nSegurtasun hobe baterako, pasaesaldi hau eta zure kontuaren pasahitza desberdinak izan beharko lirateke.";
 "keys_backup_setup_creating_backup" = "Babes-kopia sortzen";
 "keys_backup_setup_step1_recovery_key_alternative" = "Edo, babestu zure babes-kopia berreskuratze gako batekin, eta toki seguruan gorde.";
 "keys_backup_setup_step2_skip_button_title" = "(Aurreratua) Ezarri berreskuratze gakoa";
 "keys_backup_setup_step3_success_title" = "Ongi!";
 "keys_backup_setup_step3_text_line1" = "Zure gakoen babes-kopia egiten ari da.";
-"keys_backup_setup_step3_text_line2" = "Zure berreskuratze gakoa badaezpadakoa da, pasaesaldia ahazten baduzu zure zifratutako mezuak berreskuratzeko gakoa erabili dezakezu.
-\nGorde zure berreskuratze gakoa toki oso seguruan, pasahitz kudeatzaile batean esaterako (edo gordailu kutxan)";
+"keys_backup_setup_step3_text_line2" = "Zure berreskuratze gakoa badaezpadakoa da, pasaesaldia ahazten baduzu zure zifratutako mezuak berreskuratzeko gakoa erabili dezakezu.\nGorde zure berreskuratze gakoa toki oso seguruan, pasahitz kudeatzaile batean esaterako (edo gordailu kutxan)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Gorde zure berreskuratze gakoa toki oso seguruan, esaterako pasahitz kudeatzaile batean (edo gordailu kutxan)";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Kopia bat egin dut";
 "keys_backup_setup_step3_share_recovery_file" = "Partekatu";
@@ -629,14 +599,8 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "notification_inline_reply_failed" = "** Bidalketak huts egin du, ireki gela";
 "error_jitsi_not_supported_on_old_device" = "Sentitzen dugu, gailu zaharretan ezin dira Jitsi bidezko konferentzia deiak egin (Android OS 6.0 baino zaharragoak)";
 "encryption_information_unknown_ip" = "ip ezezaguna";
-"you_added_a_new_device_with_info" = "Saio berri bat zifratze gakoak eskatzen ari da. 
-\nSaioaren izena: %1$@ 
-\nAzkenekoz ikusia:  %2$@ 
-\nEz baduzu zuk beste saio bat hasi, ezikusi eskari hau.";
-"your_unverified_device_requesting_with_info" = "Egiaztatu gabeko saio bat zifratze gakoak eskatzen ari da. 
-\nSaioaren izena: %1$@ 
-\nAzkenekoz ikusia:  %2$@ 
-\nEz baduzu zuk hasi saio berria, ezikusi eskari hau.";
+"you_added_a_new_device_with_info" = "Saio berri bat zifratze gakoak eskatzen ari da. \nSaioaren izena: %1$@ \nAzkenekoz ikusia:  %2$@ \nEz baduzu zuk beste saio bat hasi, ezikusi eskari hau.";
+"your_unverified_device_requesting_with_info" = "Egiaztatu gabeko saio bat zifratze gakoak eskatzen ari da. \nSaioaren izena: %1$@ \nAzkenekoz ikusia:  %2$@ \nEz baduzu zuk hasi saio berria, ezikusi eskari hau.";
 "share_without_verifying_short_label" = "Partekatu";
 "key_share_request" = "Gakoa partekatzeko eskaria";
 "ignore_request_short_label" = "Ezikusi";
@@ -737,11 +701,9 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "login_error_homeserver_not_found" = "Ezin izan da hasiera-zerbitzari bat atzitu URL honetan, egiaztatu ezazu";
 "settings_background_fdroid_sync_mode" = "Bigarren planoko sinkronizazio modua (Esperimentala)";
 "settings_background_fdroid_sync_mode_battery" = "Bateria erabilerarako optimizatua";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ bigarren planoan sinkronizatuko da gailuaren baliabide mugatuen erabilera ahal beste murriztuz (bateria).
-\nZure gailuaren baliabideen egoeraren arabera, sistema eragileak sinkronizazioa atzeratu dezake.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ bigarren planoan sinkronizatuko da gailuaren baliabide mugatuen erabilera ahal beste murriztuz (bateria).\nZure gailuaren baliabideen egoeraren arabera, sistema eragileak sinkronizazioa atzeratu dezake.";
 "settings_background_fdroid_sync_mode_real_time" = "Denbora errealerako optimizatua";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ bigarren planoan sinkronizatuko da maiztasun finkoarekin (konfiguragarria).
-\nHonek irrati eta bateriaren erabileran eragina izango du, eta %@ gertaerei adi dagoela dion jakinarazpen bat bistaratuko da etengabe.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ bigarren planoan sinkronizatuko da maiztasun finkoarekin (konfiguragarria).\nHonek irrati eta bateriaren erabileran eragina izango du, eta %@ gertaerei adi dagoela dion jakinarazpen bat bistaratuko da etengabe.";
 "settings_background_fdroid_sync_mode_disabled" = "Ez sinkronizatu bigarren planoan";
 "settings_background_fdroid_sync_mode_disabled_description" = "Ez zaizu jasotako mezuei buruz jakinaraziko aplikazioa bigarren planoan dagoenean.";
 "settings_discovery_category" = "Aurkitzea";
@@ -802,28 +764,20 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "report_content_custom_submit" = "SALATU";
 "block_user" = "BLOKEATU ERABILTZAILEA";
 "content_reported_title" = "Edukia salatuta";
-"content_reported_content" = "Eduki hau salatu da.
-\n
-\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu";
+"content_reported_content" = "Eduki hau salatu da.\n\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu";
 "content_reported_as_spam_title" = "Spam gisa salatua";
-"content_reported_as_spam_content" = "Eduki hau spam gisa salatu da.
-\n
-\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu";
+"content_reported_as_spam_content" = "Eduki hau spam gisa salatu da.\n\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu";
 "content_reported_as_inappropriate_title" = "Desegoki gisa salatua";
-"content_reported_as_inappropriate_content" = "Eduki hau desegoki gisa salatu da.
-\n
-\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu";
+"content_reported_as_inappropriate_content" = "Eduki hau desegoki gisa salatu da.\n\nEz baduzu erabiltzaile honen eduki gehiago ikusi nahi, bere mezuak ezkutatzeko blokeatu dezakezu";
 "settings_integrations" = "Integrazioak";
-"settings_integrations_summary" = "Erabili integrazio kudeatzaileren bat botak, zubiak, trepetak eta eranskailu multzoak kudeatzeko.
-\nIntegrazio kudeatzaileek konfigurazio datuak jasotzen dituzte, eta trepetak aldatu ditzakete, gelarako gonbidapenak bidali, eta botere mailak zure izenean ezarri.";
+"settings_integrations_summary" = "Erabili integrazio kudeatzaileren bat botak, zubiak, trepetak eta eranskailu multzoak kudeatzeko.\nIntegrazio kudeatzaileek konfigurazio datuak jasotzen dituzte, eta trepetak aldatu ditzakete, gelarako gonbidapenak bidali, eta botere mailak zure izenean ezarri.";
 "settings_integration_allow" = "Baimendu integrazioak";
 "room_widget_activity_title" = "Trepeta";
 "room_widget_permission_title" = "Kargatu trepeta";
 "room_widget_permission_added_by" = "Trepeta hau honek gehitu du:";
 "room_widget_permission_webview_shared_info_title" = "Hau erabiltzean cookie-ak ezarri litezke eta %@ zerbitzariarekin datuak partekatu:";
 "room_widget_permission_shared_info_title" = "Hau erabiltzean %@ zerbitzariarekin datuak partekatu litezke:";
-"room_widget_failed_to_load" = "Huts egin du trepeta kargatzean.
-\n%@";
+"room_widget_failed_to_load" = "Huts egin du trepeta kargatzean.\n%@";
 "room_widget_reload" = "Birkargatu trepeta";
 "room_widget_open_in_browser" = "Ireki nabigatzailean";
 "room_widget_revoke_access" = "Indargabetu sarbidea niretzat";
@@ -881,13 +835,9 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "login_server_url_form_modular_text" = "Ordainpeko ostatatzea elkarteentzat";
 "login_server_url_form_modular_notice" = "Sartu erabili nahi duzun Modular Element edo zerbitzariaren helbidea";
 "login_sso_error_message" = "Errore bat gertatu da orria kargatzean: %1$@ (%2$d)";
-"login_mode_not_supported" = "Aplikazioak ezin du hasiera-zerbitzari honetan saioa hasi. Hasiera-zerbitzariak honako saio mota onartzen du: %1$@.
-\n
-\nWeb bezero batekin hasi nahi duzu saioa\?";
+"login_mode_not_supported" = "Aplikazioak ezin du hasiera-zerbitzari honetan saioa hasi. Hasiera-zerbitzariak honako saio mota onartzen du: %1$@.\n\nWeb bezero batekin hasi nahi duzu saioa\?";
 "login_registration_disabled" = "Sentitzen dugu, zerbitzari honek ez ditu kontu berriak onartzen.";
-"login_registration_not_supported" = "Aplikazioak ezin du kontu berri bat sortu hasiera-zerbitzari honetan.
-\n
-\nWeb bezero bat erabiliz erregistratu nahi duzu\?";
+"login_registration_not_supported" = "Aplikazioak ezin du kontu berri bat sortu hasiera-zerbitzari honetan.\n\nWeb bezero bat erabiliz erregistratu nahi duzu\?";
 "login_login_with_email_error" = "E-mail hau ez dago kontu batera lotuta.";
 "login_reset_password_on" = "Berrezarri %1$@ zerbitzariko pasahitza";
 "login_reset_password_notice" = "Egiaztaketa e-mail bat bidaliko zaizu zure pasahitz berriaren ezarpena baieztatzeko.";
@@ -907,9 +857,7 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "login_reset_password_success_notice_2" = "Saio guztiak amaitu dituzu eta ez duzu push jakinarazpenik jasoko. Jakinarazpenak berriro aktibatzeko, hasi saioa gailuetan.";
 "login_reset_password_success_submit" = "Itzuli saio hasierara";
 "login_reset_password_cancel_confirmation_title" = "Abisua";
-"login_reset_password_cancel_confirmation_content" = "Zure pasahitza ez da oraindik aldatu.
-\n
-\nUtzi pasahitza aldatzeko prozesua\?";
+"login_reset_password_cancel_confirmation_content" = "Zure pasahitza ez da oraindik aldatu.\n\nUtzi pasahitza aldatzeko prozesua\?";
 "login_set_email_title" = "Ezarri e-mail helbidea";
 "login_set_email_notice" = "Ezarri e-mail bat zure kontua berreskuratzeko. Geroago, nahiez gero jendeak zure e-mail helbidearen bidez zu aurkitzea ahalbidetu dezakezu.";
 "login_set_email_mandatory_hint" = "E-mail";
@@ -934,28 +882,19 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "login_signup_submit" = "Hurrengoa";
 "login_signup_error_user_in_use" = "Erabiltzaile-izen hori hartuta dago";
 "login_signup_cancel_confirmation_title" = "Abisua";
-"login_signup_cancel_confirmation_content" = "Zure kontua ez da oraindik sortu.
-\n
-\nUtzi erregistratze prozesua\?";
+"login_signup_cancel_confirmation_content" = "Zure kontua ez da oraindik sortu.\n\nUtzi erregistratze prozesua\?";
 "login_a11y_choose_matrix_org" = "Hautatu matrix.org";
 "login_a11y_choose_modular" = "Hautatu Element Matrix Services";
 "login_a11y_choose_other" = "Hautatu hasiera-zerbitzari pertsonalizatu bat";
 "login_a11y_captcha_container" = "Bete captcha erronka";
 "login_terms_title" = "Onartu baldintzak jarraitzeko";
 "login_wait_for_email_title" = "Egiaztatu zure e-maila";
-"login_wait_for_email_notice" = "E-mail bat bidali dizugu %1$@ helbidera.
-\nSakatu dakarren esteka kontuaren sorrerarekin jarraitzeko.";
+"login_wait_for_email_notice" = "E-mail bat bidali dizugu %1$@ helbidera.\nSakatu dakarren esteka kontuaren sorrerarekin jarraitzeko.";
 "login_validation_code_is_not_correct" = "Sartutako kodea ez da zuzena. Egiaztatu ezazu.";
 "login_error_outdated_homeserver_title" = "Zaharkitutako hasiera-zerbitzaria";
 "seen_by" = "Hauek ikusia";
 "signed_out_title" = "Saioa amaitu duzu";
-"signed_out_notice" = "Hainbat arrazoiengatik izan daiteke: 
-\n 
-\n• Pasahitza aldatu duzu beste saio batean. 
-\n 
-\n• Saio hau ezabatu duzu beste saio batetik. 
-\n 
-\n• Zure zerbitzariko administratzaileak zure sarbidea baliogabetu du segurtasun arrazoiengatik.";
+"signed_out_notice" = "Hainbat arrazoiengatik izan daiteke: \n \n• Pasahitza aldatu duzu beste saio batean. \n \n• Saio hau ezabatu duzu beste saio batetik. \n \n• Zure zerbitzariko administratzaileak zure sarbidea baliogabetu du segurtasun arrazoiengatik.";
 "signed_out_submit" = "Hasi saioa berriro";
 "soft_logout_title" = "Saioa amaitu duzu";
 "soft_logout_signin_title" = "Hasi saioa";
@@ -964,17 +903,12 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "soft_logout_signin_submit" = "Hasi saioa";
 "soft_logout_signin_password_hint" = "Pasahitza";
 "soft_logout_clear_data_title" = "Garbitu datu pertsonalak";
-"soft_logout_clear_data_notice" = "Abisua: Zure datu pertsonalak (zure zifratze gakoak barne) gailu honetan daude oraindik. 
-\n
-\nGarbitu ezazu gailu hau erabiltzen bukatu duzunean, edo beste kontu batekin saioa hasi nahi duzunean.";
+"soft_logout_clear_data_notice" = "Abisua: Zure datu pertsonalak (zure zifratze gakoak barne) gailu honetan daude oraindik. \n\nGarbitu ezazu gailu hau erabiltzen bukatu duzunean, edo beste kontu batekin saioa hasi nahi duzunean.";
 "soft_logout_clear_data_submit" = "Garbitu datu guztiak";
 "soft_logout_clear_data_dialog_title" = "Garbitu datuak";
-"soft_logout_clear_data_dialog_content" = "Gailu honetan gordetako datu guztiak ezabatu\? 
-\n
-\nHasi saioa berriro zure kontuaren datuak eta mezuak atzitzeko.";
+"soft_logout_clear_data_dialog_content" = "Gailu honetan gordetako datu guztiak ezabatu\? \n\nHasi saioa berriro zure kontuaren datuak eta mezuak atzitzeko.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Zure mezu zifratuetara sarbidea galduko duzu ez baduzu saioa hasten zifratze gakoak berreskuratzeko.";
-"soft_logout_sso_not_same_user_error" = "Oraingo saioa %1$@ erabiltzailearena da eta %2$@ erabiltzailearen kredentzialak eman dituzu. %@-k ez du hau onartzen.
-\nAurretik garbitu datuak, gero hasi saioa berriro beste kontu batekin.";
+"soft_logout_sso_not_same_user_error" = "Oraingo saioa %1$@ erabiltzailearena da eta %2$@ erabiltzailearen kredentzialak eman dituzu. %@-k ez du hau onartzen.\nAurretik garbitu datuak, gero hasi saioa berriro beste kontu batekin.";
 "permalink_malformed" = "Zure matrix.to esteka gaizki osatua dago";
 "bug_report_error_too_short" = "Deskripzio hau laburregia da";
 "notification_initial_sync" = "Lehen sinkronizazioa…";
@@ -999,12 +933,7 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "verification_sas_match" = "Bat datoz";
 "verification_sas_do_not_match" = "Ez datoz bat";
 "verification_conclusion_not_secure" = "Ez segurua";
-"verification_conclusion_compromised" = "Hauetakoren bat konprometitua egon daiteke:
-\n
-\n- Zure hasiera-zerbitzaria
-\n- Egiaztatzen ari zaren erabiltzailearen hasiera-zerbitzaria
-\n- Zure edo bestearen internet konexioa
-\n- Zure edo bestearen gailua";
+"verification_conclusion_compromised" = "Hauetakoren bat konprometitua egon daiteke:\n\n- Zure hasiera-zerbitzaria\n- Egiaztatzen ari zaren erabiltzailearen hasiera-zerbitzaria\n- Zure edo bestearen internet konexioa\n- Zure edo bestearen gailua";
 "sent_a_video" = "Bideoa.";
 "sent_an_image" = "Irudia.";
 "sent_an_audio_file" = "Audioa";
@@ -1026,9 +955,7 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "verification_verified_user" = "%@ egiaztatuta";
 "verification_request_waiting_for" = "%@ itxaroten…";
 "room_profile_not_encrypted_subtitle" = "Gela honetako mezuak ez daude muturretik-muturrera zifratuta.";
-"room_profile_encrypted_subtitle" = "Gela honetako mezuak muturretik-muturrerako zifratuta daude. 
-\n
-\nZuon mezuak giltzarrapoz babestuta daude, zuk eta hartzaileak besterik ez dauzkazue mezu horiek irakurtzeko giltzak.";
+"room_profile_encrypted_subtitle" = "Gela honetako mezuak muturretik-muturrerako zifratuta daude. \n\nZuon mezuak giltzarrapoz babestuta daude, zuk eta hartzaileak besterik ez dauzkazue mezu horiek irakurtzeko giltzak.";
 "room_profile_section_security" = "Segurtasuna";
 "room_profile_section_security_learn_more" = "Ikasi gehiago";
 "room_profile_section_more" = "Gehiago";
@@ -1049,8 +976,7 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "rendering_event_error_type_of_event_not_handled" = "%@ aplikazioak ez ditu \'%1$@\' motako gertaerak kudeatzen";
 "rendering_event_error_exception" = "%@ aplikazioak arazo bat izan du \'%1$@\' id-a duen edukia erakusteko";
 "unignore" = "Utzi ezikusteari";
-"verify_cannot_cross_sign" = "Saio honek ezin du egiaztaketa hau beste saioekin partekatu.
-\nEgiaztaketa lokalki gordeko da eta aplikazioaren etorkizuneko bertsio batekin partekatuko da.";
+"verify_cannot_cross_sign" = "Saio honek ezin du egiaztaketa hau beste saioekin partekatu.\nEgiaztaketa lokalki gordeko da eta aplikazioaren etorkizuneko bertsio batekin partekatuko da.";
 "command_description_rainbow" = "Emandako mezua ortzadarraren koloreekin bidaltzen du";
 "command_description_rainbow_emote" = "Emandako emote-a ortzadarraren koloreekin bidaltzen du";
 "settings_category_timeline" = "Denbora-lerroa";
@@ -1066,13 +992,9 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "verification_conclusion_ok_notice" = "Erabiltzaile honekin partekatutako mezuak muturretik-muturrera zifratuta daude eta ezin ditu beste inork irakurri.";
 "verification_conclusion_ok_self_notice" = "Zure saio berria orain egiaztatuta dago. Zure mezu zifratuetara sarbidea du, eta beste erabiltzaileek fidagarri gisa ikusiko dute.";
 "encryption_information_cross_signing_state" = "Zeharkako sinadura";
-"encryption_information_dg_xsigning_complete" = "Zeharkako sinadura gaituta dago.
-\nGako pribatuak gailuan.";
-"encryption_information_dg_xsigning_trusted" = "Zeharkako sinadura gaituta dago
-\nGakoak fidagarriak dira
-\nGako pribatuak ezezagunak dira";
-"encryption_information_dg_xsigning_not_trusted" = "Zeharkako sinadura gaituta dago.
-\nGakoak ez dira fidagarritzat jotzen";
+"encryption_information_dg_xsigning_complete" = "Zeharkako sinadura gaituta dago.\nGako pribatuak gailuan.";
+"encryption_information_dg_xsigning_trusted" = "Zeharkako sinadura gaituta dago\nGakoak fidagarriak dira\nGako pribatuak ezezagunak dira";
+"encryption_information_dg_xsigning_not_trusted" = "Zeharkako sinadura gaituta dago.\nGakoak ez dira fidagarritzat jotzen";
 "encryption_information_dg_xsigning_disabled" = "Zeharkako sinadura ez dago gaituta";
 "settings_active_sessions_list" = "Saio aktiboak";
 "settings_active_sessions_show_all" = "Erakutsi saio guztiak";
@@ -1126,14 +1048,7 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "verify_cancel_self_verification_from_untrusted" = "Ezeztatzen baduzu, ezin izango dituzu zifratutako mezuak irakurri gailu honetan, eta beste erabiltzaileek ez dute fidagarritzat joko";
 "verify_cancel_self_verification_from_trusted" = "Ezeztatzen baduzu, ezin izango dituzu zifratutako mezuak irakurri gailu berrian, eta beste erabiltzaileek ez dute fidagarritzat joko";
 "verify_cancel_other" = "Ez duzu %1$@ (%2$@) egiaztatuko orain ezeztatzen baduzu. Hasi berriro bere erabiltzaile profilean.";
-"verify_not_me_self_verification" = "Hauetakoren bat konprometituta egon daiteke:
-\n
-\n- Zure pasahitza
-\n- Zure hasiera-zerbitzaria
-\n- Gailu hau, edo beste gailua
-\n- Gailuren batek darabilen internet konexioa
-\n
-\nPasahitza eta berreskuratze gajoa ezarpenetan berehala aldatzea aholkatzen dugu.";
+"verify_not_me_self_verification" = "Hauetakoren bat konprometituta egon daiteke:\n\n- Zure pasahitza\n- Zure hasiera-zerbitzaria\n- Gailu hau, edo beste gailua\n- Gailuren batek darabilen internet konexioa\n\nPasahitza eta berreskuratze gajoa ezarpenetan berehala aldatzea aholkatzen dugu.";
 "verify_cancelled_notice" = "Egiaztatu gailuak ezarpenetatik.";
 "verification_cancelled" = "Egiaztaketa ezeztatuta";
 "recovery_passphrase" = "Berreskuratze pasa-esaldia";
@@ -1152,9 +1067,7 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "bootstrap_crosssigning_progress_save_usk" = "Erabiltzaile-gakoa sinkronizatzen";
 "bootstrap_crosssigning_progress_save_ssk" = "Norberak sinatzeko gakoa sinkronizatzen";
 "bootstrap_crosssigning_progress_key_backup" = "Gakoen babeskopia ezartzen";
-"bootstrap_cross_signing_success" = "Zure %2$@ eta %1$@ ezarrita daude.
-\n
-\nGorde toki seguruan! Zifratutako mezuak eta informazio segurua desblokeatzeko beharko dituzu  zure saio aktibo guztiak galduz gero.";
+"bootstrap_cross_signing_success" = "Zure %2$@ eta %1$@ ezarrita daude.\n\nGorde toki seguruan! Zifratutako mezuak eta informazio segurua desblokeatzeko beharko dituzu  zure saio aktibo guztiak galduz gero.";
 "bootstrap_crosssigning_print_it" = "Inprimatu eta gorde toki seguruan";
 "bootstrap_crosssigning_save_usb" = "Gorde USB memorian edo babes-kopien diskoan";
 "bootstrap_crosssigning_save_cloud" = "Kopiatu zure hodei pertsonalean";
@@ -1199,10 +1112,8 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "notification_ticker_text_dm" = "%1$@: %2$@";
 "notification_ticker_text_group" = "%1$@: %2$@ %3$@";
 "use_other_session_content_description" = "Erabili azken %@ bertsioa zure beste gailuetan, %@ Web, %@ Desktop, %@ iOS, %@ Android plataformarako, edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
 "or_other_mx_capable_client" = "edo zeharka sinatzeko gaitasuna duen beste Matrix bezero bat";
 "use_latest_app" = "Erabili azken %@ bertsioa zure beste gailuetan:";
 "command_description_discard_session" = "Uneko irteerako talde saioa zifratutako gela batean baztertzera behartzen du";
@@ -1223,9 +1134,7 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "error_empty_field_choose_user_name" = "Hautatu erabiltzaile-izena.";
 "error_empty_field_choose_password" = "Hautatu pasahitza.";
 "external_link_confirmation_title" = "Egiaztatu esteka hau";
-"external_link_confirmation_message" = "%1$@ estekak beste gune batera darama: %2$@.
-\n
-\nZiur jarraitu nahi duzula\?";
+"external_link_confirmation_message" = "%1$@ estekak beste gune batera darama: %2$@.\n\nZiur jarraitu nahi duzula\?";
 "create_room_dm_failure" = "Ezin izan dugu zure mezu zuena sortu. Egiaztatu gonbidatu nahi dituzun erabiltzaileak eta saiatu berriro.";
 "add_members_to_room" = "Gehitu kideak";
 "invite_users_to_room_action_invite" = "GONBIDATU";
@@ -1268,43 +1177,3 @@ Errore hau %@-en kontroletik kanpo dago. Ez dago Google konturik gailuan. Ireki 
 "identity_server_set_alternative_notice" = "Bestela, beste identitate-zerbitzari baten URLa sartu dezakezu";
 "identity_server_set_alternative_notice_no_default" = "Sartu identitate-zerbitzari baten URLa";
 "identity_server_set_alternative_submit" = "Bidali";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ erabiltzaileak %2$@ gehitu du gela honen helbide gisa.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ erabiltzaileak %2$@ gehitu ditu gela honen helbide gisa.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ erabiltzaileak %2$@ kendu du gela honen helbide gisa.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ erabiltzaileak %3$@ kendu ditu gela honen helbide gisa.";
-"plurals.membership_changes.item_0" = "Kidetza aldaketa bat";
-"plurals.membership_changes.item_1" = "%d kidetza aldaketa";
-"plurals.room_title_members.item_0" = "Kide 1";
-"plurals.room_title_members.item_1" = "%d kide";
-"plurals.room_new_messages_notification.item_0" = "Mezu berri 1";
-"plurals.room_new_messages_notification.item_1" = "%d mezu berri";
-"plurals.notification_unread_notified_messages.item_0" = "Irakurri gabeko jakinaraziko mezu bat";
-"plurals.notification_unread_notified_messages.item_1" = "%d irakurri gabeko jakinaraziko mezu";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "Gela 1";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d gela";
-"plurals.active_widgets.item_0" = "Trepeta aktibo bat";
-"plurals.active_widgets.item_1" = "%d trepeta aktibo";
-"plurals.room_details_selected.item_0" = "1 hautatuta";
-"plurals.room_details_selected.item_1" = "%d hautatuta";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Berrezarri gako %d duen babes-kopia.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Berrezarri %d gako dituen babes-kopia.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "Gako berri %d gehitu da saio honetara.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d gako berri gehitu dira saio honetara.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Gako %den babes-kopia egiten…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "%d gakoen babes kopia egiten…";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: mezu 1";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d mezu";
-"plurals.notification_compat_summary_title.item_0" = "jakinarazpen %d";
-"plurals.notification_compat_summary_title.item_1" = "%d jakinarazpen";
-"plurals.fallback_users_read.item_0" = "Erabiltzaile batek irakurria";
-"plurals.fallback_users_read.item_1" = "%d erabiltzailek irakurria";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Eskaera gehiegi bidali dira. Segundo 1$d barru saiatu zaitezke berriro…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Eskaera gehiegi bidali dira. 1$d segundo barru saiatu zaitezke berriro…";
-"plurals.room_profile_section_more_member_list.item_0" = "Pertsona bat";
-"plurals.room_profile_section_more_member_list.item_1" = "%d pertsona";
-"plurals.settings_active_sessions_count.item_0" = "Saio aktibo %d";
-"plurals.settings_active_sessions_count.item_1" = "%d saio aktibo";
-"plurals.send_images_with_original_size.item_0" = "Bidali irudia jatorrizko tamainan";
-"plurals.send_images_with_original_size.item_1" = "Bidali irudiak jatorrizko tamainan";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Gonbidapena bidali zaie %1$@ eta beste bati";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Gonbidapena bidali zaie %1$@ eta beste %2$@ erabiltzaileei";

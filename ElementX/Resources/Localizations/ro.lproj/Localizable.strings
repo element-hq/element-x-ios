@@ -97,9 +97,7 @@
 "room_settings_room_access_restricted_title" = "Spații numai pentru membri";
 "send_a_sticker" = "Autocolant";
 "attachment_type_sticker" = "Autocolant";
-"no_sticker_application_dialog_content" = "Nu aveți seturi de autocolante activate în acest moment.
-\n
-\nDoriți să adăugați câteva\?";
+"no_sticker_application_dialog_content" = "Nu aveți seturi de autocolante activate în acest moment.\n\nDoriți să adăugați câteva\?";
 "option_send_sticker" = "Trimite un autocolant";
 "title_activity_choose_sticker" = "Trimite un autocolant";
 "crypto_error_withheld_blacklisted" = "Nu puteți accesa acest mesaj deoarece ați fost blocat către expeditor";
@@ -243,27 +241,16 @@
 "notice_room_invite_no_invitee_with_reason" = "Invitația trimisă de %1$@. Motivul: %2$@";
 "event_status_sending_message" = "Mesajul se trimite…";
 "event_status_sent_message" = "Mesaj trimis";
-"initial_sync_start_importing_account_data" = "Sincronizare inițială:
-\nSe importă datele contului";
-"initial_sync_start_importing_account_groups" = "Sincronizare inițială:
-\nSe importă comunitățile";
-"initial_sync_start_importing_account_left_rooms" = "Sincronizare inițială:
-\nSe importă camerele pe care le-ați părăsit";
-"initial_sync_start_importing_account_invited_rooms" = "Sincronizare inițială:
-\nSe importă camerele la care a-ți primit invitații";
-"initial_sync_start_importing_account_joined_rooms" = "Sincronizare inițială:
-\nSe încarcă conversațiile tale
-\nDacă te-ai alăturat mai multe camere, ar putea dura puțin mai mult";
-"initial_sync_start_importing_account_rooms" = "Sincronizare inițială:
-\nSe importa camerele";
-"initial_sync_start_importing_account_crypto" = "Sincronizare inițială:
-\nSe importă datele criptografice";
-"initial_sync_start_importing_account" = "Sincronizare inițială:
-\nSe importă contul…";
-"initial_sync_start_downloading" = "Sincronizare inițială:
-\nSe descarcă datele…";
-"initial_sync_start_server_computing" = "Sincronizare inițială:
-\nSe așteaptă pentru răspunsul serverului…";
+"initial_sync_start_importing_account_data" = "Sincronizare inițială:\nSe importă datele contului";
+"initial_sync_start_importing_account_groups" = "Sincronizare inițială:\nSe importă comunitățile";
+"initial_sync_start_importing_account_left_rooms" = "Sincronizare inițială:\nSe importă camerele pe care le-ați părăsit";
+"initial_sync_start_importing_account_invited_rooms" = "Sincronizare inițială:\nSe importă camerele la care a-ți primit invitații";
+"initial_sync_start_importing_account_joined_rooms" = "Sincronizare inițială:\nSe încarcă conversațiile tale\nDacă te-ai alăturat mai multe camere, ar putea dura puțin mai mult";
+"initial_sync_start_importing_account_rooms" = "Sincronizare inițială:\nSe importa camerele";
+"initial_sync_start_importing_account_crypto" = "Sincronizare inițială:\nSe importă datele criptografice";
+"initial_sync_start_importing_account" = "Sincronizare inițială:\nSe importă contul…";
+"initial_sync_start_downloading" = "Sincronizare inițială:\nSe descarcă datele…";
+"initial_sync_start_server_computing" = "Sincronizare inițială:\nSe așteaptă pentru răspunsul serverului…";
 "room_displayname_empty_room_was" = "Cameră liberă (a fost %@)";
 "room_displayname_empty_room" = "Cameră liberă";
 "room_displayname_4_members" = "%1$@,%2$@,%3$@ și %4$@";
@@ -335,39 +322,3 @@
 "notice_room_join_with_reason" = "%1$@ s-a alăturat camerei. Motivul: %2$@";
 "notice_room_invite_you_with_reason" = "%1$@ te-a invitat. Motivul: %2$@";
 "notice_room_invite_with_reason" = "%1$@ la invitat pe %2$@. Motivul este: %3$@";
-"plurals.room_title_members.item_0" = "%d membru";
-"plurals.room_title_members.item_1" = "%d membri";
-"plurals.room_title_members.item_2" = "%d de membri";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d cameră";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d camere";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_2" = "%d de camere";
-"plurals.settings_active_sessions_count.item_0" = "%d sesiune activă";
-"plurals.settings_active_sessions_count.item_1" = "%d sesiuni active";
-"plurals.settings_active_sessions_count.item_2" = "%d de sesiuni active";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ și %4$d altul";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ și %4$d altele";
-"plurals.room_displayname_four_and_more_members.item_2" = "%1$@, %2$@, %3$@ și %4$d altele";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Ai șters adresa alternativă %1$@ pentru aceasta cameră.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Ai șters adresele alternative %1$@ pentru aceste camere.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_2" = "Ai șters adresele alternative %1$@ pentru aceste camere.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ a șters adresa alternativă %2$@ pentru această cameră.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ a șters adresele alternative %2$@ pentru această cameră.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_2" = "%1$@ a șters adresele alternative %2$@ pentru această cameră.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Ai adăugat adresa alternativă %1$@pentru această cameră.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Ai adăugat adresele alternative %1$@ pentru această cameră.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_2" = "Ai adăugat adresele alternative %1$@ pentru această cameră.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ a adăugat adresa alternativă %2$@ pentru aceasta cameră.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ a adăugat adresele alternative %2$@ pentru această cameră.";
-"plurals.notice_room_canonical_alias_alternative_added.item_2" = "%1$@ a adăugat adresele alternative %2$@ pentru această cameră.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Ai îndepărtat %1$@ ca adresă pentru această adresă.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Ai îndepărtat %1$@ ca adrese pentru această adresă.";
-"plurals.notice_room_aliases_removed_by_you.item_2" = "Ai îndepărtat %1$@ ca adrese pentru această adresă.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ a retras %2$@ ca o adresă pentru această cameră.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ a retras %2$@ ca adrese pentru această cameră.";
-"plurals.notice_room_aliases_removed.item_2" = "%1$@ a retras %2$@ ca adrese pentru această cameră.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Ai adăugat %1$@ ca o adresă pentru această cameră.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Ai adăugat %1$@ ca adrese pentru această cameră.";
-"plurals.notice_room_aliases_added_by_you.item_2" = "Ai adăugat %1$@ ca adrese pentru această cameră.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ a adăugat pe %2$@ ca o adresă pentru această cameră.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ a adăugat pe %2$@ ca adrese pentru această cameră.";
-"plurals.notice_room_aliases_added.item_2" = "%1$@ a adăugat pe %2$@ ca adrese pentru această cameră.";

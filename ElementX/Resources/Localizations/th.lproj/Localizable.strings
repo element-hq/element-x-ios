@@ -172,6 +172,3 @@
 "dialog_edit_hint" = "ค่าใหม่";
 "action_switch" = "สลับ";
 "settings_category_room_directory" = "ไดเรกทอรีห้อง";
-"plurals.room_details_selected.item_0" = "เลือก %d รายการ";
-"plurals.room_new_messages_notification.item_0" = "%d ข้อความใหม่";
-"plurals.room_title_members.item_0" = "สมาชิก %d คน";

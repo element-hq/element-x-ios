@@ -38,23 +38,14 @@
 "room_displayname_two_members" = "%1$@ a %2$@";
 "room_displayname_empty_room" = "Prázdna miestnosť";
 "notice_room_update" = "%@ aktualizoval/a túto miestnosť.";
-"initial_sync_start_importing_account" = "Úvodná synchronizácia:
-\nPrebieha import účtu…";
-"initial_sync_start_importing_account_crypto" = "Úvodná synchronizácia:
-\nPrebieha import šifrovacích kľúčov";
-"initial_sync_start_importing_account_rooms" = "Úvodná synchronizácia:
-\nPrebieha import miestností";
-"initial_sync_start_importing_account_joined_rooms" = "Úvodná synchronizácia:
-\nNačítanie konverzácií
-\nAk ste sa pripojili k mnohým miestnostiam, môže to chvíľu trvať";
-"initial_sync_start_importing_account_invited_rooms" = "Počiatočná synchronizácia:
-\nImport pozvaných miestností";
-"initial_sync_start_importing_account_left_rooms" = "Úvodná synchronizácia:
-\nPrebieha import opustených miestností";
-"initial_sync_start_importing_account_groups" = "Úvodná synchronizácia:
-\nPrebieha import komunít";
-"initial_sync_start_importing_account_data" = "Úvodná synchronizácia:
-\nPrebieha import údajov účtu";
+"initial_sync_start_importing_account" = "Úvodná synchronizácia:\nPrebieha import účtu…";
+"initial_sync_start_importing_account_crypto" = "Úvodná synchronizácia:\nPrebieha import šifrovacích kľúčov";
+"initial_sync_start_importing_account_rooms" = "Úvodná synchronizácia:\nPrebieha import miestností";
+"initial_sync_start_importing_account_joined_rooms" = "Úvodná synchronizácia:\nNačítanie konverzácií\nAk ste sa pripojili k mnohým miestnostiam, môže to chvíľu trvať";
+"initial_sync_start_importing_account_invited_rooms" = "Počiatočná synchronizácia:\nImport pozvaných miestností";
+"initial_sync_start_importing_account_left_rooms" = "Úvodná synchronizácia:\nPrebieha import opustených miestností";
+"initial_sync_start_importing_account_groups" = "Úvodná synchronizácia:\nPrebieha import komunít";
+"initial_sync_start_importing_account_data" = "Úvodná synchronizácia:\nPrebieha import údajov účtu";
 "event_status_sending_message" = "Odosielanie správy…";
 "notice_room_third_party_revoked_invite" = "%1$@ zamietol/a pozvanie používateľa %2$@ vstúpiť do miestnosti";
 "notice_room_invite_no_invitee_with_reason" = "Pozvanie od %1$@. Dôvod: %2$@";
@@ -117,8 +108,8 @@
 "power_level_default" = "Predvolený";
 "power_level_custom" = "Vlastná úroveň (%1$d)";
 "power_level_custom_no_value" = "Vlastná úroveň";
-"notice_power_level_changed_by_you" = "Zmenili ste úroveň moci používateľa %1$@.";
-"notice_power_level_changed" = "%1$@ zmenil úroveň moci používateľa %2$@.";
+"notice_power_level_changed_by_you" = "Zmenili ste úroveň oprávnenia používateľa %1$@.";
+"notice_power_level_changed" = "%1$@ zmenil úroveň oprávnenia používateľa %2$@.";
 "notice_power_level_diff" = "%1$@ z %2$@ na %3$@";
 "notice_room_invite_no_invitee_with_reason_by_you" = "Pozvanie od vás. Dôvod: %1$@";
 "notice_room_invite_with_reason_by_you" = "Pozvali ste %1$@. Dôvod: %2$@";
@@ -243,9 +234,7 @@
 "call_error_user_not_responding" = "Vzdialenej strane sa nepodarilo prijať hovor.";
 "permissions_rationale_popup_title" = "Informácia";
 "permissions_rationale_msg_record_audio" = "Aby ste mohli uskutočňovať audio hovory, %@ potrebuje prístup k mikrofónu vašeho zariadenia.";
-"permissions_rationale_msg_camera_and_audio" = "%@ potrebuje povolenie na prístup k vašej kamere a mikrofónu na uskutočňovanie videohovorov.
-\n
-\nPovoľte prístup v ďalších vyskakovacích oknách, aby ste mohli uskutočniť hovor.";
+"permissions_rationale_msg_camera_and_audio" = "%@ potrebuje povolenie na prístup k vašej kamere a mikrofónu na uskutočňovanie videohovorov.\n\nPovoľte prístup v ďalších vyskakovacích oknách, aby ste mohli uskutočniť hovor.";
 "yes" = "ÁNO";
 "no" = "NIE";
 "_continue" = "Pokračovať";
@@ -262,8 +251,7 @@
 "room_participants_action_ignore" = "Skryť všetky správy od tohoto používateľa";
 "room_participants_action_unignore" = "Zobraziť všetky správy od tohoto používateľa";
 "room_participants_action_mention" = "Zmieniť sa";
-"room_participants_power_level_prompt" = "Túto zmenu nebudete môcť vrátiť späť, pretože tomuto používateľovi udeľujete rovnakú úroveň moci, akú máte vy.
-\nSte si istí\?";
+"room_participants_power_level_prompt" = "Túto zmenu nebudete môcť vrátiť späť, pretože tomuto používateľovi udeľujete rovnakú úroveň oprávnenia, akú máte vy.\nSte si istí\?";
 "room_one_user_is_typing" = "%@ píše…";
 "room_two_users_are_typing" = "%1$@ a %2$@ píšu…";
 "room_many_users_are_typing" = "%1$@ a %2$@ ďalší píšu…";
@@ -346,9 +334,7 @@
 "settings_new_password" = "Nové heslo";
 "settings_fail_to_update_password" = "Nepodarilo sa zmeniť heslo";
 "settings_password_updated" = "Vaše heslo bolo aktualizované";
-"settings_unignore_user" = "Zobraziť všetky správy od %@\?
-\n
-\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.";
+"settings_unignore_user" = "Zobraziť všetky správy od %@\?\n\nUpozorňujeme, že táto akcia spôsobí reštart aplikácie a môže chvíľu trvať.";
 "settings_select_country" = "Vyberte si krajinu";
 "media_saving_period_3_days" = "3 dni";
 "media_saving_period_1_week" = "1 týždeň";
@@ -405,7 +391,7 @@
 "widget_delete_message_confirmation" = "Ste si istí, že chcete odstrániť widget z tejto miestnosti?";
 "widget_integration_unable_to_create" = "Nie je možné vytvoriť widget.";
 "widget_integration_failed_to_send_request" = "Nepodarilo sa odoslať požiadavku.";
-"widget_integration_positive_power_level" = "Úroveň moci musí byť kladné celé číslo.";
+"widget_integration_positive_power_level" = "Úroveň oprávnenia musí byť kladné celé číslo.";
 "widget_integration_must_be_in_room" = "Nenachádzate sa v tejto miestnosti.";
 "widget_integration_no_permission_in_room" = "V tejto miestnosti nemáte oprávnenie na vykonanie takejto akcie.";
 "widget_integration_missing_room_id" = "V požiadavke chýba room_id.";
@@ -450,9 +436,7 @@
 "avatar" = "Obrázok";
 "title_activity_choose_sticker" = "Odoslať nálepku";
 "option_send_sticker" = "Odoslať nálepku";
-"no_sticker_application_dialog_content" = "Momentálne nemáte aktívne žiadne balíčky s nálepkami.
-\n
-\nChcete si nejaké pridať teraz\?";
+"no_sticker_application_dialog_content" = "Momentálne nemáte aktívne žiadne balíčky s nálepkami.\n\nChcete si nejaké pridať teraz\?";
 "settings_deactivate_account_section" = "Deaktivovať účet";
 "settings_deactivate_my_account" = "Deaktivovať môj účet";
 "settings_opt_in_of_analytics" = "Odosielať analytické údaje";
@@ -461,8 +445,7 @@
 "dialog_user_consent_content" = "Ak chcete aj naďalej používať domovský server %1$@ , mali by ste si prečítať a odsúhlasiť zmluvné podmienky.";
 "dialog_user_consent_submit" = "Prečítať teraz";
 "deactivate_account_title" = "Deaktivovať účet";
-"deactivate_account_content.b_0" = "Táto akcia je nezvratná";
-"deactivate_account_content.b_1" = "nezapríčiní štandardne, že zabudneme na správy, ktoré ste odoslali";
+"deactivate_account_content" = "Tým sa vaše konto stane trvalo nepoužiteľným. Nebudete sa môcť prihlásiť a nikto nebude môcť opätovne zaregistrovať rovnaké ID používateľa. To spôsobí, že váš účet opustí všetky miestnosti, ktorých sa zúčastňuje, a odstráni údaje o vašom účte zo servera identity. <b>Táto akcia je nezvratná</b>.\n\nDeaktivácia vášho účtu <b>nezapríčiní štandardne, že zabudneme na správy, ktoré ste odoslali</b>. Ak chcete, aby sme vaše správy zabudli, označte nižšie uvedené políčko.\n\nViditeľnosť správ v Matrixe je podobná ako v prípade e-mailu. Naše zabudnutie vašich správ znamená, že správy, ktoré ste poslali, nebudú sprístupnené žiadnym novým alebo neregistrovaným používateľom, ale registrovaní používatelia, ktorí už majú prístup k týmto správam, budú mať stále prístup k ich kópii.";
 "deactivate_account_delete_checkbox" = "Spolu s deaktivovaním účtu si želám odstrániť všetky mnou odoslané správy (Pozor: Môže sa stať, že noví používatelia uvidia neúplnú históriu konverzácií)";
 "deactivate_account_submit" = "Deaktivovať účet";
 "action_download" = "Stiahnuť";
@@ -476,8 +459,8 @@
 "command_description_emote" = "Zobrazí akciu";
 "command_description_ban_user" = "Zakáže vstup zadanému používateľovi";
 "command_description_unban_user" = "Povolí vstup zadanému používateľovi";
-"command_description_op_user" = "Určuje úroveň moci pre zadaného používateľa";
-"command_description_deop_user" = "Znižuje úroveň moci pre zadaného používateľa";
+"command_description_op_user" = "Určuje úroveň oprávnenia pre zadaného používateľa";
+"command_description_deop_user" = "Odstráni používateľa s daným ID";
 "command_description_invite_user" = "Pozve zadaného používateľa do aktuálnej miestnosti";
 "command_description_join_room" = "Pripojí sa do miestnosti s danou adresou";
 "command_description_part_room" = "Opustí aktuálnu miestnosť";
@@ -492,9 +475,9 @@
 "room_tombstone_predecessor_link" = "Staršie správy zobrazíte kliknutím sem";
 "system_alerts_header" = "Systémové upozornenia";
 "resource_limit_contact_admin" = "Kontaktujte správcu služieb";
-"resource_limit_soft_default.b_0" = "niektorí používatelia sa nebudú môcť prihlásiť";
+"resource_limit_soft_default" = "Bol prekročený limit využitia prostriedkov pre tento domovský server a <b>niektorí používatelia sa nebudú môcť prihlásiť</b>.";
 "resource_limit_hard_default" = "Bol prekročený limit využitia prostriedkov pre tento domovský server.";
-"resource_limit_soft_mau.b_0" = "niektorí používatelia sa nebudú môcť prihlásiť";
+"resource_limit_soft_mau" = "Bol dosiahnutý mesačný limit počtu aktívnych používateľov a <b>niektorí používatelia sa nebudú môcť prihlásiť</b>.";
 "resource_limit_hard_mau" = "Bol dosiahnutý mesačný limit počtu aktívnych používateľov.";
 "resource_limit_soft_contact" = "Prosím %@ a pokúste sa tento limit navýšiť.";
 "resource_limit_hard_contact" = "Prosím %@ aby ste službu mohli naďalej používať.";
@@ -524,43 +507,33 @@
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Jeden alebo viac testov zlyhalo, prosím nahláste nám chybu, aby sme sa mohli pokúsiť vypátrať príčinu.";
 "settings_troubleshoot_test_system_settings_title" = "Systémové nastavenia.";
 "settings_troubleshoot_test_system_settings_success" = "Oznámenia sú v systémových nastaveniach povolené.";
-"settings_troubleshoot_test_system_settings_failed" = "Oznámenia nie sú v systémových nastaveniach povolené. 
-\nProsím, skontrolujte systémové nastavenia.";
+"settings_troubleshoot_test_system_settings_failed" = "Oznámenia nie sú v systémových nastaveniach povolené. \nProsím, skontrolujte systémové nastavenia.";
 "open_settings" = "Otvoriť nastavenia";
 "settings_troubleshoot_test_account_settings_title" = "Nastavenia účtu.";
 "settings_troubleshoot_test_account_settings_success" = "Oznámenia pre váš účet sú povolené.";
-"settings_troubleshoot_test_account_settings_failed" = "Oznámenia pre váš účet nie sú povolené. 
-\nProsím, skontrolujte nastavenia účtu.";
+"settings_troubleshoot_test_account_settings_failed" = "Oznámenia pre váš účet nie sú povolené. \nProsím, skontrolujte nastavenia účtu.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Povoliť";
 "settings_troubleshoot_test_device_settings_title" = "Nastavenia relácií.";
 "settings_troubleshoot_test_device_settings_success" = "Oznámenia sú povolené pre túto reláciu.";
-"settings_troubleshoot_test_device_settings_failed" = "Oznámenia nie sú povolené pre túto reláciu.
-\nProsím, skontrolujte nastavenia %@u.";
+"settings_troubleshoot_test_device_settings_failed" = "Oznámenia nie sú povolené pre túto reláciu.\nProsím, skontrolujte nastavenia %@u.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Povoliť";
 "settings_troubleshoot_test_play_services_title" = "Kontrola aplikácii Služby Google Play";
 "settings_troubleshoot_test_play_services_success" = "Aplikácia Služby Google Play je k dispozícii a aktualizovaná.";
-"settings_troubleshoot_test_play_services_failed" = "%@ používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ používa aplikáciu Služby Google Play na doručovanie oznámení. No zdá sa, že táto nie je správne nakonfigurovaná:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Opraviť Služby Play";
 "settings_troubleshoot_test_fcm_title" = "Firebase Token";
-"settings_troubleshoot_test_fcm_success" = "Token FCM úspešne získaný: 
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "Token FCM sa nepodarilo získať: 
-\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "Token FCM úspešne získaný: \n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "Token FCM sa nepodarilo získať: \n%1$@";
 "settings_troubleshoot_test_token_registration_title" = "Registrácia tokenu";
 "settings_troubleshoot_test_token_registration_success" = "Token FCM úspešne zaregistrovaný na domovskom serveri.";
-"settings_troubleshoot_test_token_registration_failed" = "FCM token sa nepodarilo zaregistrovať na domovskom serveri:
-\n %1$@";
+"settings_troubleshoot_test_token_registration_failed" = "FCM token sa nepodarilo zaregistrovať na domovskom serveri:\n %1$@";
 "settings_troubleshoot_test_service_boot_title" = "Spustenie po zapnutí";
 "settings_troubleshoot_test_service_boot_success" = "Služba sa automaticky spustí po reštarte zariadenia.";
 "settings_troubleshoot_test_service_boot_failed" = "Služba sa automaticky nespustí po reštarte zariadenia a nedostanete po reštarte žiadne oznámenia, kým nespustíte %@ aspoň raz.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Povoliť spustenie služby po reštarte";
 "settings_troubleshoot_test_bg_restricted_title" = "Kontrola obmedzenia spustenia na pozadí";
-"settings_troubleshoot_test_bg_restricted_success" = "Obmedzenie spustenia na pozadí nie je aktívne pre %@. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Pre %@ sú povolené obmedzenia na pozadí.
-\nPráca, ktorú sa aplikácia pokúsi vykonať, bude agresívne obmedzená, keď je na pozadí, čo môže ovplyvniť oznámenia.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Obmedzenie spustenia na pozadí nie je aktívne pre %@. Tento test je potrebné spustiť cez mobilné dáta (nie cez wifi).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Pre %@ sú povolené obmedzenia na pozadí.\nPráca, ktorú sa aplikácia pokúsi vykonať, bude agresívne obmedzená, keď je na pozadí, čo môže ovplyvniť oznámenia.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Deaktivovať obmedzenia";
 "settings_troubleshoot_test_battery_title" = "Optimalizácia batérie";
 "settings_troubleshoot_test_battery_success" = "Chod %@ nie je ovplyvnený nastavením optimalizácie batérie.";
@@ -604,12 +577,9 @@
 "settings_troubleshoot_test_bing_settings_title" = "Vlastné nastavenia.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Všimnite si, že niektoré typy správ sú nastavené ako tiché ( vyvolajú oznámenie bez zvuku).";
 "settings_troubleshoot_test_bing_settings_failed" = "Niektoré oznámenia máte zakázané v rozšírených nastaveniach.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia %@ nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nKonfigurácia %@ nemá vplyv na zobrazenie tejto chyby. Táto chyba sa môže zobraziť z niekoľkých dôvodov. Uistite sa že máte správne nastavený systémový čas a že ste v nastaveniach systému aplikácii služby Google play neobmedzili používanie prístupu na internet. Chyba sa tiež môže zobrazovať na vlastných zostaveniach (ROM), alebo sa chyba môže samovoľne prestať zobrazovať neskôr.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia %@ nemá vplyv na zobrazenie tejto chyby.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nNa zariadení máte množstvo aplikácií zaregistrovaných na doručovanie okamžitých oznámení cez služby Google play. Konfigurácia %@ nemá vplyv na výskyt tejto chyby. Podľa Google sa môže vyskytovať len pri veľmi vysokom počte nainštalovaných aplikácií. Bežní používatelia by týmto nemali byť postihnutí.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nTáto chyba sa vymkla spod kontroly aplikácie %@. Môže sa vyskytnúť z niekoľkých dôvodov. Možno to bude fungovať, ak to neskôr skúsite znova, môžete tiež skontrolovať, či služba Google Play nemá v systémových nastaveniach obmedzené používanie dát, alebo či sú hodiny vášho zariadenia správne, prípadne sa to môže stať na vlastnej ROM.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nV zariadení nemáte nastavený účet Google. Prosím, pridajte si účet cez správcu účtov. Konfigurácia %@ nemá vplyv na zobrazenie tejto chyby.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Pridať účet";
 "settings_noisy_notifications_preferences" = "Nastaviť hlasné oznámenia";
 "settings_call_notifications_preferences" = "Nastaviť oznámenia prichádzajúceho hovoru";
@@ -656,8 +626,7 @@
 "dialog_title_success" = "Úspešné";
 "bottom_action_notification" = "Oznámenia";
 "call_failed_no_connection" = "%@ hovor zlyhal";
-"call_failed_no_connection_description" = "Nepodarilo sa uskutočniť spojenie v reálnom čase.
-\nProsím, požiadajte správcu domovského servera, aby správne nastavil server turn na zaistenie čo najspoľahlivejšej prevádzky hovorov.";
+"call_failed_no_connection_description" = "Nepodarilo sa uskutočniť spojenie v reálnom čase.\nProsím, požiadajte správcu domovského servera, aby správne nastavil server turn na zaistenie čo najspoľahlivejšej prevádzky hovorov.";
 "call_select_sound_device" = "Vybrať zvukové zariadenie";
 "sound_device_phone" = "Slúchadlo telefónu";
 "sound_device_speaker" = "Reproduktor";
@@ -673,38 +642,31 @@
 "settings_call_show_confirmation_dialog_title" = "Zabrániť neúmyselnému telefonovaniu";
 "settings_call_show_confirmation_dialog_summary" = "Žiadať potvrdenie pred uskutočnením hovoru";
 "room_participants_action_cancel_invite" = "Zrušiť pozvanie";
-"room_participants_power_level_demote_warning_title" = "Znížiť vlastnú úroveň moci\?";
-"room_participants_power_level_demote_warning_prompt" = "Túto zmenu nebudete môcť vrátiť späť, pretože znižujete vašu vlastnú úroveň moci. Ak ste jediný poverený používateľ v miestnosti, nebudete môcť znovu získať úroveň, akú máte teraz.";
+"room_participants_power_level_demote_warning_title" = "Znížiť vlastnú úroveň oprávnenia\?";
+"room_participants_power_level_demote_warning_prompt" = "Túto zmenu nebudete môcť vrátiť späť, pretože znižujete vašu vlastnú úroveň oprávnenia. Ak ste jediný poverený používateľ v miestnosti, nebudete môcť znovu získať úroveň, akú máte teraz.";
 "room_participants_power_level_demote" = "Znížiť";
 "room_participants_action_ignore_title" = "Ignorovať používateľa";
-"room_participants_action_ignore_prompt_msg" = "Ignorovaním tohoto používateľa odstránite všetky jeho správy vo vašich spoločných miestnostiach.
-\n
-\nTúto akciu môžete kedykoľvek zmeniť späť vo všeobecných nastaveniach.";
+"room_participants_action_ignore_prompt_msg" = "Ignorovaním tohoto používateľa odstránite všetky jeho správy vo vašich spoločných miestnostiach.\n\nTúto akciu môžete kedykoľvek zmeniť späť vo všeobecných nastaveniach.";
 "room_participants_action_unignore_title" = "Neignorovať používateľa";
 "room_participants_action_unignore_prompt_msg" = "Zrušením ignorovania si opäť zobrazíte všetky správy od tohoto používateľa.";
 "room_participants_action_cancel_invite_title" = "Zrušiť pozvanie";
 "room_participants_action_cancel_invite_prompt_msg" = "Ste si istí, že chcete zrušiť pozvanie tohoto používateľa\?";
 "room_participants_remove_title" = "Vykázať používateľa";
 "room_participants_remove_reason" = "Dôvod vykázania";
-"room_participants_remove_prompt_msg" = "Vykázaním odstránite používateľa z miestnosti.
-\n
-\nAk si želáte, aby sa nemohol vrátiť, mali by ste mu tiež zakázať vstupovať.";
+"room_participants_remove_prompt_msg" = "Vykázaním odstránite používateľa z miestnosti.\n\nAk si želáte, aby sa nemohol vrátiť, mali by ste mu tiež zakázať vstupovať.";
 "room_participants_ban_title" = "Zakázať používateľovi vstupovať";
 "room_participants_ban_reason" = "Dôvod zákazu vstupovať";
 "room_participants_unban_title" = "Povoliť používateľovi vstupovať";
 "room_participants_unban_prompt_msg" = "Povolením používateľovi vstupovať zaistíte, aby sa používateľ mohol vrátiť do miestnosti.";
 "settings_background_fdroid_sync_mode" = "Režim synchronizácie na pozadí";
 "settings_background_fdroid_sync_mode_battery" = "Optimalizovaný na využívanie batérie";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).
-\nV závislosti od kapacity prostriedkov zariadenia môže byť synchronizácia odložená operačným systémom na neskôr.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ sa bude synchronizovať na pozadí s cieľom ušetriť limitované zdroje (batériu).\nV závislosti od kapacity prostriedkov zariadenia môže byť synchronizácia odložená operačným systémom na neskôr.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimalizovaný na používanie v reálnom čase";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ sa bude pravidelne synchronizovať na pozadí v presne stanovenom čase (nastaviteľné).
-\nBude to mať vplyv na používanie rádia a batérie, bude sa zobrazovať trvalé oznámenie, že %@ počúva udalosti.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ sa bude pravidelne synchronizovať na pozadí v presne stanovenom čase (nastaviteľné).\nBude to mať vplyv na používanie rádia a batérie, bude sa zobrazovať trvalé oznámenie, že %@ počúva udalosti.";
 "settings_background_fdroid_sync_mode_disabled" = "Žiadna synchronizácia na pozadí";
 "settings_background_fdroid_sync_mode_disabled_description" = "Nebudete dostávať oznámenia o prichádzajúcich správach, keď aplikácia pracuje na pozadí.";
 "settings_integrations" = "Integrácie";
-"settings_integrations_summary" = "Použite správcu integrácií na nastavenie botov, premostení, widgetov a balíčkov s nálepkami.
-\nSprávcovia integrácie dostávajú konfiguračné údaje a môžu vo vašom mene upravovať widgety, posielať pozvánky do miestnosti a nastavovať úrovne oprávnení.";
+"settings_integrations_summary" = "Použite správcu integrácií na nastavenie botov, premostení, widgetov a balíčkov s nálepkami.\nSprávcovia integrácie dostávajú konfiguračné údaje a môžu vo vašom mene upravovať widgety, posielať pozvánky do miestnosti a nastavovať úrovne oprávnení.";
 "settings_secure_backup_section_title" = "Bezpečné zálohovanie";
 "settings_secure_backup_setup" = "Nastaviť bezpečné zálohovanie";
 "settings_secure_backup_reset" = "Znovu nastaviť bezpečné zálohovanie";
@@ -729,8 +691,7 @@
 "room_widget_permission_added_by" = "Tento widget pridal:";
 "room_widget_permission_webview_shared_info_title" = "Používaním prijímate cookies od a zdieľate údaje s %@:";
 "room_widget_permission_shared_info_title" = "Používaním zdieľate údaje s %@:";
-"room_widget_failed_to_load" = "Nepodarilo sa načítať widget.
-\n%@";
+"room_widget_failed_to_load" = "Nepodarilo sa načítať widget.\n%@";
 "room_widget_reload" = "Znovu načítať widget";
 "room_widget_open_in_browser" = "Otvoriť v prehliadači";
 "room_widget_revoke_access" = "Odvolať prístup pre mňa";
@@ -750,14 +711,8 @@
 "room_manage_integrations" = "Spravovať integrácie";
 "room_no_active_widgets" = "Žiadne aktívne widgety";
 "widget_integration_review_terms" = "Ak chcete pokračovať, musíte prijať podmienky tejto služby.";
-"you_added_a_new_device_with_info" = "Nová relácia žiada o šifrovacie kľúče.
-\nNázov relácie: %1$@
-\nPosledné prihlásenie: %2$@
-\nAk ste sa neprihlásili do ďalšej relácie, ignorujte túto žiadosť.";
-"your_unverified_device_requesting_with_info" = "Neoverená relácia žiada o šifrovacie kľúče.
-\nNázov relácie: %1$@
-\nNaposledy prihlásená: %2$@
-\nAk ste sa neprihlásili do novej relácie, ignorujte túto žiadosť.";
+"you_added_a_new_device_with_info" = "Nová relácia žiada o šifrovacie kľúče.\nNázov relácie: %1$@\nPosledné prihlásenie: %2$@\nAk ste sa neprihlásili do ďalšej relácie, ignorujte túto žiadosť.";
+"your_unverified_device_requesting_with_info" = "Neoverená relácia žiada o šifrovacie kľúče.\nNázov relácie: %1$@\nNaposledy prihlásená: %2$@\nAk ste sa neprihlásili do novej relácie, ignorujte túto žiadosť.";
 "share_without_verifying_short_label" = "Zdieľať";
 "key_share_request" = "Žiadosť o zdieľanie kľúčov";
 "ignore_request_short_label" = "Ignorovať";
@@ -765,24 +720,19 @@
 "passphrase_passphrase_too_weak" = "Prístupová fráza je príliš slabá";
 "keys_backup_passphrase_not_empty_error_message" = "Ak chcete, aby %@ vygeneroval kľúč na obnovenie, odstráňte prístupovú frázu.";
 "keys_backup_setup_step1_title" = "Nikdy nepríďte o šifrované správy";
-"keys_backup_setup_step1_description" = "Správy v šifrovaných miestnostiach sú zabezpečené end-to-end šifrovaním. Kľúče na čítanie týchto správ máte len vy a príjemca (príjemcovia).
-\n
-\nKľúče si bezpečne zálohujte, aby ste ich nestratili.";
+"keys_backup_setup_step1_description" = "Správy v šifrovaných miestnostiach sú zabezpečené end-to-end šifrovaním. Kľúče na čítanie týchto správ máte len vy a príjemca (príjemcovia).\n\nKľúče si bezpečne zálohujte, aby ste ich nestratili.";
 "keys_backup_setup" = "Začať používať zálohovanie kľúčov";
 "keys_backup_setup_step1_advanced" = "(Pokročilé)";
 "keys_backup_setup_step1_manual_export" = "Exportovať kľúče ručne";
 "keys_backup_setup_step2_text_title" = "Zabezpečte vašu zálohu pomocou prístupovej frázy.";
-"keys_backup_setup_step2_text_description" = "Šifrovanú kópiu vašich kľúčov uložíme na váš domovský server. Zálohu chráňte prístupovou frázou, aby bola bezpečná.
-\n
-\nV záujme maximálneho zabezpečenia by sa mala líšiť od hesla vášho účtu.";
+"keys_backup_setup_step2_text_description" = "Šifrovanú kópiu vašich kľúčov uložíme na váš domovský server. Zálohu chráňte prístupovou frázou, aby bola bezpečná.\n\nV záujme maximálneho zabezpečenia by sa mala líšiť od hesla vášho účtu.";
 "keys_backup_setup_step2_button_title" = "Nastaviť prístupovú frázu";
 "keys_backup_setup_creating_backup" = "Vytváranie zálohy";
 "keys_backup_setup_step1_recovery_key_alternative" = "Alebo, Zabezpečte si zálohu kľúčom obnovenia, ktorý si niekde naozaj bezpečne uložíte.";
 "keys_backup_setup_step2_skip_button_title" = "(Pre pokročilých) Nastaviť kľúč obnovenia";
 "keys_backup_setup_step3_success_title" = "Úspešne nastavené!";
 "keys_backup_setup_step3_text_line1" = "Vaše kľúče sú zálohované.";
-"keys_backup_setup_step3_text_line2" = "Kľúč na obnovenie je bezpečnostná sieť - môžete ho použiť na obnovenie prístupu k zašifrovaným správam, ak zabudnete svoju prístupovú frázu.
-\nKľúč na obnovenie uchovávajte na veľmi bezpečnom mieste, napríklad v správcovi hesiel (alebo v trezore)";
+"keys_backup_setup_step3_text_line2" = "Kľúč na obnovenie je bezpečnostná sieť - môžete ho použiť na obnovenie prístupu k zašifrovaným správam, ak zabudnete svoju prístupovú frázu.\nKľúč na obnovenie uchovávajte na veľmi bezpečnom mieste, napríklad v správcovi hesiel (alebo v trezore)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Kľúč obnovenia si uchovajte na veľmi bezpečnom mieste napr. v správcovi hesiel (alebo v trezore)";
 "keys_backup_setup_step3_button_title" = "Hotovo";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Urobil(a) som si kópiu";
@@ -888,12 +838,10 @@
 "create_room_name_hint" = "Názov";
 "create_room_public_title" = "Verejná";
 "create_room_public_description" = "Ktokoľvek môže vstúpiť do tejto miestnosti";
-"create_room_federation_error" = "Miestnosť bola vytvorená, ale niektoré pozvania neboli odoslané z dôvodu:
-\n
-\n%@";
+"create_room_federation_error" = "Miestnosť bola vytvorená, ale niektoré pozvania neboli odoslané z dôvodu:\n\n%@";
 "keys_backup_unable_to_get_trust_info" = "Pri získavaní stavu dôveryhodnosti nastala chyba";
 "keys_backup_unable_to_get_keys_backup_data" = "Pri získavaní údajov o zálohe kľúčov nastala chyba";
-"import_e2e_keys_from_file" = "Importovať šifrovacie kľúče zo súboru \"%1$@\.";
+"import_e2e_keys_from_file" = "Importovať šifrovacie kľúče zo súboru \"%1$@\".";
 "settings_sdk_version" = "Verzia Matrix SDK";
 "settings_other_third_party_notices" = "Ďalšie poznámky tretích strán";
 "navigate_to_room_when_already_in_the_room" = "Už máte túto miestnosť zobrazenú!";
@@ -910,7 +858,7 @@
 "push_gateway_item_url" = "Url:";
 "push_gateway_item_format" = "Formát:";
 "preference_voice_and_video" = "Zvuk a video";
-"preference_root_help_about" = "Pomoc a O aplikácii";
+"preference_root_help_about" = "Pomoc a o aplikácii";
 "settings_troubleshoot_test_token_registration_quick_fix" = "Zaregistrovať token";
 "send_suggestion" = "Poslať návrh";
 "send_suggestion_content" = "Nižšie napíšte obsah návrhu.";
@@ -1349,10 +1297,8 @@
 "notice_direct_room_leave_with_reason" = "%1$@ opustil(a). Dôvod: %2$@";
 "notice_direct_room_join_with_reason_by_you" = "Vstúpili ste. Dôvod: %1$@";
 "notice_direct_room_join_with_reason" = "%1$@ vstúpil(a). Dôvod: %2$@";
-"initial_sync_start_downloading" = "Úvodná synchronizácia:
-\nPreberanie údajov…";
-"initial_sync_start_server_computing" = "Úvodná synchronizácia:
-\nčakanie na odpoveď zo servera…";
+"initial_sync_start_downloading" = "Úvodná synchronizácia:\nPreberanie údajov…";
+"initial_sync_start_server_computing" = "Úvodná synchronizácia:\nčakanie na odpoveď zo servera…";
 "room_displayname_empty_room_was" = "Prázdna miestnosť (pred tým %@)";
 "room_error_access_unauthorized" = "Nemáte povolené vstúpiť do tejto miestnosti";
 "notice_direct_room_third_party_revoked_invite_by_you" = "Odvolali ste pozvanie pre %1$@";
@@ -1438,13 +1384,9 @@
 "help_long_click_on_room_for_more_options" = "Dlhým kliknutím na miestnosť zobrazíte ďalšie možnosti";
 "notice_member_no_changes_by_you" = "Nevykonali ste žiadne zmeny";
 "notice_member_no_changes" = "%1$@ nevykonal žiadne zmeny";
-"content_reported_as_spam_content" = "Tento obsah bol nahlásený ako spam.
-\n
-\nAk nechcete vidieť ďalší obsah od tohto používateľa, môžete ho ignorovať a skryť jeho správy.";
+"content_reported_as_spam_content" = "Tento obsah bol nahlásený ako spam.\n\nAk nechcete vidieť ďalší obsah od tohto používateľa, môžete ho ignorovať a skryť jeho správy.";
 "content_reported_as_spam_title" = "Nahlásené ako spam";
-"content_reported_content" = "Tento obsah bol nahlásený.
-\n
-\nAk nechcete vidieť ďalší obsah od tohto používateľa, môžete ho ignorovať a skryť jeho správy.";
+"content_reported_content" = "Tento obsah bol nahlásený.\n\nAk nechcete vidieť ďalší obsah od tohto používateľa, môžete ho ignorovať a skryť jeho správy.";
 "report_content_custom_submit" = "NAHLÁSIŤ";
 "report_content_custom_hint" = "Dôvod nahlásenia tohto obsahu";
 "uploads_files_no_result" = "V tejto miestnosti nie sú žiadne súbory";
@@ -1461,9 +1403,7 @@
 "room_unsupported_e2e_algorithm" = "Šifrovanie bolo nesprávne nastavené, takže nemôžete odosielať správy. Obráťte sa na správcu, aby obnovil platný stav šifrovania.";
 "space_participants_unban_prompt_msg" = "Zrušenie zákazu používateľovi mu umožní znovu sa pripojiť do priestoru.";
 "space_participants_ban_prompt_msg" = "Zakázanie používateľa ho odstráni z tohto priestoru a zabráni mu v ďalšom vstupe.";
-"space_participants_remove_prompt_msg" = "Používateľ bude z tohto priestoru odstránený.
-\n
-\nAby ste mu zabránili v opätovnom pripojení, mali by ste ho zakázať.";
+"space_participants_remove_prompt_msg" = "Používateľ bude z tohto priestoru odstránený.\n\nAby ste mu zabránili v opätovnom pripojení, mali by ste ho zakázať.";
 "room_participants_leave_private_warning" = "Táto miestnosť nie je verejná. Bez pozvánky sa do nej nebudete môcť opätovne pripojiť.";
 "permissions_denied_add_contact" = "Povoľte prístup ku kontaktom.";
 "permissions_denied_qr_code" = "Ak chcete skenovať QR kód, musíte povoliť prístup k fotoaparátu.";
@@ -1492,16 +1432,11 @@
 "verification_no_scan_emoji_title" = "Overiť porovnaním emotikonov";
 "verification_scan_self_emoji_subtitle" = "Namiesto toho overte porovnaním emotikonov";
 "verification_scan_emoji_subtitle" = "Ak nie ste osobne, porovnajte namiesto toho emotikony";
-"verification_scan_with_this_device" = "Skenovať pomocou tohto zariadenia";
-"verification_scan_self_notice" = "Naskenujte kód pomocou iného zariadenia alebo prepnite a skenujte pomocou tohto zariadenia";
+"verification_scan_with_this_device" = "Naskenovať pomocou tohto zariadenia";
+"verification_scan_self_notice" = "Naskenujte kód pomocou iného zariadenia alebo prepnite a naskenujte pomocou tohto zariadenia";
 "verification_scan_notice" = "Naskenujte kód pomocou zariadenia druhého používateľa, aby ste sa navzájom bezpečne overili";
 "sent_verification_conclusion" = "Záver overovania";
-"verification_conclusion_compromised" = "Môže byť narušená jedna z nasledujúcich vecí:
-\n
-\n - váš domovský server
-\n - domovský server, ku ktorému je pripojený overovaný používateľ
-\n - vaše internetové pripojenie alebo internetové pripojenie iných používateľov
-\n - vaše zariadenie alebo zariadenie iných používateľov";
+"verification_conclusion_compromised" = "Môže byť narušená jedna z nasledujúcich vecí:\n\n - váš domovský server\n - domovský server, ku ktorému je pripojený overovaný používateľ\n - vaše internetové pripojenie alebo internetové pripojenie iných používateľov\n - vaše zariadenie alebo zariadenie iných používateľov";
 "login_error_threepid_denied" = "Vaša e-mailová doména nie je oprávnená na registráciu na tomto serveri";
 "create_room_alias_invalid" = "Niektoré znaky nie sú povolené";
 "create_room_alias_empty" = "Uveďte prosím adresu miestnosti";
@@ -1514,20 +1449,11 @@
 "settings_developer_mode_summary" = "Vývojársky režim aktivuje skryté funkcie a môže tiež spôsobiť, že aplikácia bude menej stabilná. Len pre vývojárov!";
 "bug_report_error_too_short" = "Popis je príliš krátky";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Prístup k zabezpečeným správam stratíte, ak sa neprihlásite a neobnovíte svoje šifrovacie kľúče.";
-"soft_logout_clear_data_dialog_content" = "Vymazať všetky údaje aktuálne uložené v tomto zariadení\?
-\nZnovu sa prihláste, aby ste získali prístup k údajom a správam svojho konta.";
-"soft_logout_clear_data_notice" = "Varovanie: Vaše osobné údaje (vrátane šifrovacích kľúčov) sú stále uložené v tomto zariadení.
-\n
-\nVymažte ich, ak ste skončili s používaním tohto zariadenia alebo sa chcete prihlásiť do iného účtu.";
+"soft_logout_clear_data_dialog_content" = "Vymazať všetky údaje aktuálne uložené v tomto zariadení\?\nZnovu sa prihláste, aby ste získali prístup k údajom a správam svojho konta.";
+"soft_logout_clear_data_notice" = "Varovanie: Vaše osobné údaje (vrátane šifrovacích kľúčov) sú stále uložené v tomto zariadení.\n\nVymažte ich, ak ste skončili s používaním tohto zariadenia alebo sa chcete prihlásiť do iného účtu.";
 "soft_logout_signin_e2e_warning_notice" = "Prihláste sa, aby ste obnovili šifrovacie kľúče uložené výlučne v tomto zariadení. Potrebujete ich na čítanie všetkých svojich zabezpečených správ na akomkoľvek zariadení.";
 "soft_logout_signin_notice" = "Váš správca domovského servera (%1$@) vás odhlásil z vášho účtu %2$@ (%3$@).";
-"signed_out_notice" = "Môže to byť spôsobené rôznymi príčinami:
-\n
-\n- Zmenili ste heslo v inej relácii.
-\n
-\n- Odstránili ste túto reláciu z inej relácie.
-\n
-\n- Správca servera vám z bezpečnostných dôvodov zrušil prístup.";
+"signed_out_notice" = "Môže to byť spôsobené rôznymi príčinami:\n\n- Zmenili ste heslo v inej relácii.\n\n- Odstránili ste túto reláciu z inej relácie.\n\n- Správca servera vám z bezpečnostných dôvodov zrušil prístup.";
 "autodiscover_well_known_error" = "Nie je možné nájsť platný domovský server. Skontrolujte prosím svoj identifikátor";
 "login_signin_matrix_id_error_invalid_matrix_id" = "Toto nie je platný identifikátor používateľa. Očakávaný formát je: \'@pouzivatel:domovskyserver.sk\'";
 "login_signin_matrix_id_password_notice" = "Ak svoje heslo nepoznáte, vráťte sa späť a obnovte ho.";
@@ -1535,8 +1461,7 @@
 "login_connect_using_matrix_id_submit" = "Prihláste sa pomocou Matrix ID";
 "login_error_outdated_homeserver_warning_content" = "Tento domovský server má starú verziu. Požiadajte správcu domovského servera o aktualizáciu. Môžete pokračovať, ale niektoré funkcie nemusia fungovať správne.";
 "login_validation_code_is_not_correct" = "Zadaný kód nie je správny. Skontrolujte ho, prosím.";
-"login_wait_for_email_notice" = "Práve sme odoslali e-mail na adresu %1$@.
-\nKliknutím na odkaz, ktorý obsahuje, pokračujte vo vytváraní účtu.";
+"login_wait_for_email_notice" = "Práve sme odoslali e-mail na adresu %1$@.\nKliknutím na odkaz, ktorý obsahuje, pokračujte vo vytváraní účtu.";
 "login_terms_title" = "Prijmite podmienky pre pokračovanie";
 "login_a11y_captcha_container" = "Vykonajte prosím výzvu captcha";
 "login_a11y_choose_other" = "Vybrať vlastný domovský server";
@@ -1634,8 +1559,7 @@
 "upgrade_room_for_restricted_no_param" = "Každý, kto sa nachádza v nadradenom priestore, bude môcť túto miestnosť nájsť a pripojiť sa k nej - nie je potrebné každého ručne pozývať. V nastaveniach miestnosti to budete môcť kedykoľvek zmeniť.";
 "upgrade_room_for_restricted" = "Každý v %@ bude môcť nájsť túto miestnosť a pripojiť sa k nej - nie je potrebné každého ručne pozývať. V nastaveniach miestnosti to budete môcť kedykoľvek zmeniť.";
 "upgrade_room_auto_invite" = "Automaticky pozývať používateľov";
-"this_space_has_no_rooms_not_admin" = "Niektoré miestnosti môžu byť skryté, pretože sú súkromné a potrebujete pozvánku.
-\nNa pridávanie miestností nemáte povolenie.";
+"this_space_has_no_rooms_not_admin" = "Niektoré miestnosti môžu byť skryté, pretože sú súkromné a potrebujete pozvánku.\nNa pridávanie miestností nemáte povolenie.";
 "space_leave_prompt_msg_private" = "Nebudete sa môcť znova pripojiť, kým nebudete opätovne pozvaní.";
 "create_space_identity_server_info_none" = "V súčasnosti nepoužívate server totožností. Ak chcete pozvať spolupracovníkov a byť pre nich vyhľadateľný, nastavte ho nižšie.";
 "invite_just_to_this_room_desc" = "Nebudú súčasťou %@";
@@ -1654,12 +1578,8 @@
 "encryption_enabled_tile_description" = "Správy v tejto miestnosti sú end-to-end šifrované. Zistite viac a overte používateľov v ich profile.";
 "settings_hs_admin_e2e_disabled" = "Správca vášho servera predvolene vypol end-to-end šifrovanie v súkromných miestnostiach a v priamych správach.";
 "verification_conclusion_ok_notice" = "Správy s týmto používateľom sú end-to-end šifrované a tretie strany ich nemôžu čítať.";
-"direct_room_profile_encrypted_subtitle" = "Správy sú tu end-to-end šifrované .
-\n
-\nVaše správy sú zabezpečené zámkami a jedinečné kľúče na ich odomknutie máte len vy a príjemca.";
-"room_profile_encrypted_subtitle" = "Správy v tejto miestnosti sú end-to-end šifrované.
-\n
-\nVaše správy sú zabezpečené zámkami a jedinečné kľúče na ich odomknutie máte len vy a príjemca.";
+"direct_room_profile_encrypted_subtitle" = "Správy sú tu end-to-end šifrované .\n\nVaše správy sú zabezpečené zámkami a jedinečné kľúče na ich odomknutie máte len vy a príjemca.";
+"room_profile_encrypted_subtitle" = "Správy v tejto miestnosti sú end-to-end šifrované.\n\nVaše správy sú zabezpečené zámkami a jedinečné kľúče na ich odomknutie máte len vy a príjemca.";
 "direct_room_profile_not_encrypted_subtitle" = "Správy tu nie sú end-to-end (od vás až k príjemcovi) šifrované.";
 "room_profile_not_encrypted_subtitle" = "Správy v tejto miestnosti nie sú end-to-end šifrované.";
 "login_reset_password_warning_content" = "Zmena hesla vynuluje všetky end-to-end šifrovacie kľúče vo všetkých vašich reláciách, čím sa história zašifrovanej konverzácie stane nečitateľnou. Pred resetovaním hesla si nastavte zálohovanie kľúčov alebo exportujte kľúče miestnosti z inej relácie.";
@@ -1688,6 +1608,7 @@
 "settings_troubleshoot_test_notification_notice" = "Kliknite na oznámenie. Ak sa oznámenie nezobrazí, skontrolujte systémové nastavenia.";
 "settings_troubleshoot_test_push_notification_content" = "Zobrazujete oznámenie! Kliknite na mňa!";
 "settings_notification_keyword_contains_invalid_character" = "Kľúčové slová nemôžu obsahovať \'%@\'";
+"settings_notification_keyword_contains_dot" = "Kľúčové slová nemôžu začínať na \".\"";
 "settings_notification_new_keyword" = "Pridať nové kľúčové slovo";
 "settings_notification_emails_enable_for_email" = "Povoliť e-mailové oznámenia pre %@";
 "settings_notification_emails_no_emails" = "Ak chcete dostávať e-mail s upozornením, priraďte e-mail k svojmu kontu Matrix";
@@ -1698,6 +1619,7 @@
 "settings_mentions_and_keywords_encryption_notice" = "V mobilných zariadeniach nebudete dostávať upozornenia na zmienky a kľúčové slová v zašifrovaných miestnostiach.";
 "settings_notification_mentions_and_keywords" = "Zmienky a kľúčové slová";
 "room_settings_mention_and_keyword_only" = "Iba zmienky a kľúčové slová";
+"login_msisdn_error_not_international" = "Medzinárodné telefónne čísla musia začínať znakom \"+\"";
 "identity_server_consent_dialog_content_3" = "Ak chcete zistiť existujúce kontakty, potrebujete odoslať kontaktné informácie (e-maily a telefónne čísla) na server totožností. Pred odoslaním vaše údaje zahašujeme kvôli ochrane osobných údajov.";
 "identity_server_consent_dialog_title_2" = "Odoslať e-maily a telefónne čísla na %@";
 "settings_discovery_consent_notice_on" = "Dali ste súhlas na odosielanie e-mailov a telefónnych čísel na tento server totožností na objavenie ďalších používateľov z vašich kontaktov.";
@@ -1710,8 +1632,7 @@
 "login_signin_matrix_id_notice" = "Ak ste si vytvorili účet na domovskom serveri, použite svoje Matrix ID (napr. @pouzivatel:domena.sk) a heslo.";
 "login_reset_password_error_not_found" = "Tento e-mail nie je prepojený so žiadnym účtom";
 "spaces_no_server_support_title" = "Vyzerá to, že váš domovský server zatiaľ nepodporuje Priestory";
-"spaces_feeling_experimental_subspace" = "Chcete experimentovať\?
-\nDo priestoru môžete pridať existujúce priestory.";
+"spaces_feeling_experimental_subspace" = "Chcete experimentovať\?\nDo priestoru môžete pridať existujúce priestory.";
 "space_manage_rooms_and_spaces" = "Spravovať miestnosti a priestory";
 "spaces_beta_welcome_to_spaces_desc" = "Priestory sú novým spôsobom spájania miestností a ľudí.";
 "space_add_existing_spaces" = "Pridať existujúce priestory";
@@ -1737,23 +1658,18 @@
 "send_feedback_space_info" = "Používate beta verziu Priestorov. Vaša spätná väzba pomôže pri tvorbe ďalších verzií. Vaša platforma a používateľské meno budú zaznamenané, aby sme mohli čo najlepšie využiť vašu spätnú väzbu.";
 "other_spaces_or_rooms_you_might_not_know" = "Ďalšie priestory alebo miestnosti, o ktorých možno neviete";
 "tap_to_edit_spaces" = "Ťuknutím upravíte priestory";
+"decide_which_spaces_can_access" = "Určite, ktoré priestory budú mať prístup do tejto miestnosti. Ak je vybraný priestor, jeho členovia môžu nájsť a pripojiť sa k <RoomName />.";
 "spaces_which_can_access" = "Priestory, ktoré majú prístup";
 "voice_message_slide_to_cancel" = "Posunutím zrušte";
 "event_status_cancel_sending_dialog_message" = "Chcete zrušiť odosielanie správy\?";
 "warning_room_not_created_yet" = "Miestnosť ešte nie je vytvorená. Zrušiť vytvorenie miestnosti\?";
-"bootstrap_cancel_text" = "Ak to teraz zrušíte, môžete prísť o zašifrované správy a údaje, ak stratíte prístup k svojim prihlasovacím údajom.
-\n
-\nBezpečné zálohovanie a správu kľúčov môžete nastaviť aj v Nastaveniach.";
+"bootstrap_cancel_text" = "Ak to teraz zrušíte, môžete prísť o zašifrované správy a údaje, ak stratíte prístup k svojim prihlasovacím údajom.\n\nBezpečné zálohovanie a správu kľúčov môžete nastaviť aj v Nastaveniach.";
 "verify_cancelled_notice" = "Overovanie bolo zrušené. Overovanie môžete spustiť znova.";
 "verify_cancel_other" = "Ak to teraz zrušíte, neoveríte %1$@ (%2$@). Začnite znova v ich používateľskom profile.";
 "verify_cancel_self_verification_from_trusted" = "Ak to zrušíte, nebudete môcť čítať zašifrované správy v novom zariadení a ostatní používatelia mu nebudú dôverovať";
 "verify_cancel_self_verification_from_untrusted" = "Ak to zrušíte, nebudete môcť čítať zašifrované správy v tomto zariadení a ostatní používatelia mu nebudú dôverovať";
-"login_signup_cancel_confirmation_content" = "Váš účet ešte nie je vytvorený.
-\n
-\nZastaviť proces registrácie\?";
-"login_reset_password_cancel_confirmation_content" = "Vaše heslo ešte nebolo zmenené.
-\n
-\nZastaviť proces zmeny hesla\?";
+"login_signup_cancel_confirmation_content" = "Váš účet ešte nie je vytvorený.\n\nZastaviť proces registrácie\?";
+"login_reset_password_cancel_confirmation_content" = "Vaše heslo ešte nebolo zmenené.\n\nZastaviť proces zmeny hesla\?";
 "bad_passphrase_key_reset_all_action" = "Zabudli ste alebo ste stratili všetky možnosti obnovy\? Obnovte všetko";
 "verification_cannot_access_other_session" = "Použite prístupovú frázu na obnovenie alebo kľúč";
 "use_latest_app" = "Použite najnovšiu aplikáciu %@ na svojich ostatných zariadeniach:";
@@ -1761,7 +1677,7 @@
 "verification_use_passphrase" = "Ak nemáte prístup k existujúcej relácii";
 "verification_open_other_to_verify" = "Použite existujúcu reláciu na overenie tejto relácie, čím jej udelíte prístup k zašifrovaným správam.";
 "analytics_opt_in_list_item_3" = "Túto funkciu môžete kedykoľvek vypnúť v nastaveniach";
-"analytics_opt_in_list_item_2.b_0" = "Nezdieľame";
+"analytics_opt_in_list_item_2" = "<b>Nezdieľame</b> informácie s tretími stranami";
 "error_voice_message_unable_to_record" = "Nemožno nahrať hlasovú správu";
 "voice_message_tap_to_stop_toast" = "Ťuknutím na nahrávku ju zastavíte alebo si ju vypočujete";
 "voice_message_release_to_send_toast" = "Podržaním nahrajte, uvoľnením odošlite";
@@ -1769,12 +1685,10 @@
 "a11y_recording_voice_message" = "Nahrávanie hlasovej správy";
 "a11y_stop_voice_message" = "Zastaviť nahrávanie";
 "a11y_start_voice_message" = "Nahrať hlasovú správu";
-"analytics_opt_in_list_item_1.b_0" = "Nezaznamenávame ani neprofilujeme";
+"analytics_opt_in_list_item_1" = "<b>Nezaznamenávame ani neprofilujeme</b> žiadne údaje o účte";
 "confirm_your_identity_quad_s" = "Potvrďte svoju totožnosť overením tohto prihlasovacieho mena, čím mu udelíte prístup k zašifrovaným správam.";
 "confirm_your_identity" = "Potvrďte svoju totožnosť overením tohto prihlásenia z jednej z vašich ďalších relácií, čím jej udelíte prístup k zašifrovaným správam.";
-"analytics_opt_in_content" = "Pomôžte nám identifikovať problémy a zlepšiť %@ zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor, ktorý zdieľajú vaše zariadenia.
-\n
-\nMôžete si prečítať všetky naše podmienky %@.";
+"analytics_opt_in_content" = "Pomôžte nám identifikovať problémy a zlepšiť %@ zdieľaním anonymných údajov o používaní. Aby sme pochopili, ako ľudia používajú viacero zariadení, vygenerujeme náhodný identifikátor, ktorý zdieľajú vaše zariadenia.\n\nMôžete si prečítať všetky naše podmienky %@.";
 "analytics_opt_in_title" = "Pomôžte zlepšiť %@";
 "call_tap_to_return" = "%1$@ Ťuknite pre návrat";
 "call_one_active" = "Aktívny hovor (%1$@) ·";
@@ -1827,9 +1741,7 @@
 "invitations_sent_to_two_users" = "Pozvánky odoslané používateľovi %1$@ a %2$@";
 "invitation_sent_to_one_user" = "Pozvánka odoslaná používateľovi %1$@";
 "invite_friends_rich_title" = "🔐️ Pridajte sa ku mne na %@";
-"external_link_confirmation_message" = "Odkaz %1$@ vás presmeruje na inú stránku: %2$@.
-\n
-\nSte si istí, že chcete pokračovať\?";
+"external_link_confirmation_message" = "Odkaz %1$@ vás presmeruje na inú stránku: %2$@.\n\nSte si istí, že chcete pokračovať\?";
 "external_link_confirmation_title" = "Prekontrolujte tento odkaz";
 "error_empty_field_choose_password" = "Vyberte si prosím heslo.";
 "error_empty_field_choose_user_name" = "Vyberte si prosím používateľské meno.";
@@ -1853,10 +1765,8 @@
 "command_description_discard_session_not_handled" = "Podporované len v zašifrovaných miestnostiach";
 "command_description_discard_session" = "Vynúti zrušenie aktuálnej relácie odchádzajúcej skupiny v zašifrovanej miestnosti";
 "or_other_mx_capable_client" = "alebo iného klienta Matrix, ktorý dokáže krížovo podpisovať";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
 "error_saving_media_file" = "Nepodarilo sa uložiť mediálny súbor";
 "bootstrap_progress_checking_backup_with_info" = "Kontrola kľúča na zálohovanie (%@)";
 "bootstrap_progress_checking_backup" = "Kontrola kľúča na zálohovanie";
@@ -1874,19 +1784,10 @@
 "bootstrap_crosssigning_save_cloud" = "Skopírujte si ho na osobné úložisko v cloude";
 "bootstrap_crosssigning_save_usb" = "Uložte si ho na USB kľúč alebo iné zálohovacie médium";
 "bootstrap_crosssigning_print_it" = "Vytlačte si to a uložte na bezpečné miesto";
-"bootstrap_cross_signing_success" = "Vaše %2$@ a %1$@ sú teraz nastavené.
-\n
-\nUdržujte ich v bezpečí! Budete ich potrebovať na odomknutie zašifrovaných správ a zabezpečených informácií, ak stratíte všetky svoje aktívne relácie.";
+"bootstrap_cross_signing_success" = "Vaše %2$@ a %1$@ sú teraz nastavené.\n\nUdržujte ich v bezpečí! Budete ich potrebovať na odomknutie zašifrovaných správ a zabezpečených informácií, ak stratíte všetky svoje aktívne relácie.";
 "bootstrap_loading_title" = "Nastavovanie obnovenia.";
 "bootstrap_loading_text" = "Môže to trvať niekoľko sekúnd, buďte prosím trpezliví.";
-"verify_not_me_self_verification" = "Môže byť narušená jedna z nasledujúcich vecí:
-\n
-\n- vaše heslo
-\n- váš domovský server
-\n- toto zariadenie alebo iné zariadenie
-\n- internetové pripojenie, ktoré používa jedno zo zariadení
-\n
-\nOdporúčame vám okamžite zmeniť heslo a kľúč na obnovenie v Nastaveniach.";
+"verify_not_me_self_verification" = "Môže byť narušená jedna z nasledujúcich vecí:\n\n- vaše heslo\n- váš domovský server\n- toto zariadenie alebo iné zariadenie\n- internetové pripojenie, ktoré používa jedno zo zariadení\n\nOdporúčame vám okamžite zmeniť heslo a kľúč na obnovenie v Nastaveniach.";
 "verify_new_session_compromized" = "Váš účet môže byť ohrozený";
 "verify_new_session_notice" = "Túto reláciu použite na overenie novej relácie, čím jej udelíte prístup k zašifrovaným správam.";
 "new_session" = "Nové prihlásenie. Boli ste to vy\?";
@@ -1896,9 +1797,7 @@
 "delete_event_dialog_content" = "Ste si istí, že chcete odstrániť (vymazať) túto udalosť\? Všimnite si: ak vymažete zmenu názvu miestnosti alebo zmenu témy, môžete tak vrátiť zodpovedajúcu zmenu.";
 "send_images_and_video_with_original_size" = "Odoslať médiá s pôvodnou veľkosťou";
 "share_confirm_room" = "Chcete poslať túto prílohu do %1$@\?";
-"delete_account_data_warning" = "Odstrániť údaje účtu typu %1$@\?
-\n
-\nPoužívajte opatrne, môže to viesť k neočakávanému správaniu.";
+"delete_account_data_warning" = "Odstrániť údaje účtu typu %1$@\?\n\nPoužívajte opatrne, môže to viesť k neočakávanému správaniu.";
 "no_connectivity_to_the_server_indicator_airplane" = "Režim lietadla je zapnutý";
 "no_connectivity_to_the_server_indicator" = "Spojenie so serverom bolo prerušené";
 "reset_cross_signing" = "Obnoviť kľúče";
@@ -1924,22 +1823,16 @@
 "room_settings_enable_encryption_no_permission" = "Nemáte oprávnenie povoliť šifrovanie v tejto miestnosti.";
 "command_description_rainbow_emote" = "Odošle daný emotív sfarbený ako dúha";
 "command_description_rainbow" = "Odošle danú správu vo farbe dúhy";
-"verify_cannot_cross_sign" = "Táto relácia nemôže zdieľať toto overenie s vašimi ostatnými reláciami.
-\nOverenie bude uložené lokálne a zdieľané v budúcej verzii aplikácie.";
+"verify_cannot_cross_sign" = "Táto relácia nemôže zdieľať toto overenie s vašimi ostatnými reláciami.\nOverenie bude uložené lokálne a zdieľané v budúcej verzii aplikácie.";
 "room_profile_section_admin" = "Akcie správcu";
 "autocomplete_limited_results" = "Zobrazujú sa len prvé výsledky, zadajte ďalšie písmená…";
 "settings_rageshake_detection_threshold_summary" = "Zatraste telefónom a otestujte prah detekcie";
 "settings_rageshake_detection_threshold" = "Prahová hodnota detekcie";
 "permalink_malformed" = "Váš odkaz matrix.to bol nesprávne vytvorený";
-"soft_logout_sso_not_same_user_error" = "Aktuálna relácia je pre používateľa %1$@ a vy ste zadali poverenia pre používateľa %2$@. Toto nie je podporované aplikáciou %@.
-\nNajprv vymažte údaje a potom sa znovu prihláste na inom účte.";
+"soft_logout_sso_not_same_user_error" = "Aktuálna relácia je pre používateľa %1$@ a vy ste zadali poverenia pre používateľa %2$@. Toto nie je podporované aplikáciou %@.\nNajprv vymažte údaje a potom sa znovu prihláste na inom účte.";
 "login_reset_password_on" = "Obnoviť heslo na %1$@";
-"login_registration_not_supported" = "Aplikácia nie je schopná vytvoriť konto na tomto domovskom serveri.
-\n
-\nChcete sa zaregistrovať pomocou webového klienta\?";
-"login_mode_not_supported" = "Aplikácia sa nemôže prihlásiť na tento domovský server. Tento domovský server podporuje nasledujúce typy prihlasovania: %1$@.
-\n
-\nChcete sa prihlásiť pomocou webového klienta\?";
+"login_registration_not_supported" = "Aplikácia nie je schopná vytvoriť konto na tomto domovskom serveri.\n\nChcete sa zaregistrovať pomocou webového klienta\?";
+"login_mode_not_supported" = "Aplikácia sa nemôže prihlásiť na tento domovský server. Tento domovský server podporuje nasledujúce typy prihlasovania: %1$@.\n\nChcete sa prihlásiť pomocou webového klienta\?";
 "login_sso_error_message" = "Pri načítaní stránky došlo k chybe: %1$@ (%2$d)";
 "login_server_other_text" = "Vlastné a pokročilé nastavenia";
 "no_ignored_users" = "Neignorujete žiadnych používateľov";
@@ -1952,13 +1845,9 @@
 "bootstrap_progress_generating_ssss" = "Generovanie kľúča SSSS z prístupovej frázy";
 "bootstrap_crosssigning_progress_pbkdf2" = "Generuje sa bezpečný kľúč z prístupovej frázy";
 "bottom_sheet_setup_secure_backup_subtitle" = "Zabezpečte sa pred stratou šifrovaných správ a údajov zálohovaním šifrovacích kľúčov na vašom serveri.";
-"encryption_information_dg_xsigning_not_trusted" = "Krížové podpisovanie je povolené.
-\nKľúče nie sú dôveryhodné";
-"encryption_information_dg_xsigning_trusted" = "Krížové podpisovanie je povolené
-\nKľúče sú dôveryhodné.
-\nSúkromné kľúče nie sú známe";
-"encryption_information_dg_xsigning_complete" = "Krížové podpisovanie je povolené
-\nSúkromné kľúče v zariadení.";
+"encryption_information_dg_xsigning_not_trusted" = "Krížové podpisovanie je povolené.\nKľúče nie sú dôveryhodné";
+"encryption_information_dg_xsigning_trusted" = "Krížové podpisovanie je povolené\nKľúče sú dôveryhodné.\nSúkromné kľúče nie sú známe";
+"encryption_information_dg_xsigning_complete" = "Krížové podpisovanie je povolené\nSúkromné kľúče v zariadení.";
 "set_a_security_phrase_again_notice" = "Zadajte svoju bezpečnostnú frázu znova, aby ste ju potvrdili.";
 "set_a_security_phrase_notice" = "Zadajte bezpečnostnú frázu, ktorú poznáte len vy a ktorá sa používa na zabezpečenie tajomstiev na vašom serveri.";
 "set_a_security_phrase_title" = "Nastaviť bezpečnostnú frázu";
@@ -2001,8 +1890,7 @@
 "invite_by_email" = "Pozvať pomocou e-mailu";
 "skip_for_now" = "Zatiaľ preskočiť";
 "join_anyway" = "Pripojiť sa aj tak";
-"room_alias_preview_not_found" = "Tento alias nie je v súčasnosti dostupný.
-\nSkúste to neskôr alebo požiadajte správcu miestnosti, aby skontroloval, či máte prístup.";
+"room_alias_preview_not_found" = "Tento alias nie je v súčasnosti dostupný.\nSkúste to neskôr alebo požiadajte správcu miestnosti, aby skontroloval, či máte prístup.";
 "send_file_step_compressing_video" = "Kompresia videa %d%%";
 "user_invites_you" = "%@ vás pozval";
 "you_may_contact_me" = "V prípade ďalších otázok ma môžete kontaktovať";
@@ -2012,8 +1900,7 @@
 "it_may_take_some_time" = "Buďte prosím trpezliví, môže to chvíľu trvať.";
 "upgrade_public_room" = "Aktualizovať verejnú miestnosť";
 "upgrade_private_room" = "Aktualizovať súkromnú miestnosť";
-"upgrade_room_warning" = "Aktualizácia miestnosti je pokročilá akcia a zvyčajne sa odporúča, keď je miestnosť nestabilná kvôli chybám, chýbajúcim funkciám alebo bezpečnostným zraniteľnostiam.
-\nZvyčajne to má vplyv len na spôsob spracovania miestnosti na serveri.";
+"upgrade_room_warning" = "Aktualizácia miestnosti je pokročilá akcia a zvyčajne sa odporúča, keď je miestnosť nestabilná kvôli chybám, chýbajúcim funkciám alebo bezpečnostným zraniteľnostiam.\nZvyčajne to má vplyv len na spôsob spracovania miestnosti na serveri.";
 "upgrade_public_room_from_to" = "Túto miestnosť aktualizujete z %1$@ na %2$@.";
 "upgrade_room_no_power_to_manage" = "Na aktualizáciu miestnosti potrebujete povolenie";
 "room_using_unstable_room_version" = "Táto miestnosť používa verziu miestnosti %@, ktorú tento domovský server označil ako nestabilnú.";
@@ -2107,7 +1994,7 @@
 "settings_chat_effects_title" = "Zobraziť efekty konverzácie";
 "shortcut_disabled_reason_sign_out" = "Relácia bola odhlásená!";
 "search_thread_from_a_thread" = "Z vlákna";
-"thread_list_empty_notice" = "Tip: Dlho ťuknite na správu a použite \"%@\.";
+"thread_list_empty_notice" = "Tip: Dlho ťuknite na správu a použite \"%@\".";
 "thread_list_empty_subtitle" = "Vlákna pomáhajú udržiavať konverzácie v téme a ľahké sledovanie.";
 "thread_list_empty_title" = "Udržujte diskusie organizované pomocou vlákien";
 "thread_list_modal_my_threads_subtitle" = "Zobrazí všetky vlákna, v ktorých ste sa zúčastnili";
@@ -2140,9 +2027,7 @@
 "room_error_not_found" = "Túto miestnosť nie je možné nájsť. Uistite sa, že existuje.";
 "error_opening_banned_room" = "Nemôžete otvoriť miestnosť, do ktorej máte zákaz vstupu.";
 "enter_secret_storage_invalid" = "Nie je možné nájsť tajné údaje v úložisku";
-"content_reported_as_inappropriate_content" = "Tento obsah bol nahlásený ako nevhodný.
-\n
-\nAk nechcete vidieť ďalší obsah od tohto používateľa, môžete ho ignorovať a skryť jeho správy.";
+"content_reported_as_inappropriate_content" = "Tento obsah bol nahlásený ako nevhodný.\n\nAk nechcete vidieť ďalší obsah od tohto používateľa, môžete ho ignorovať a skryť jeho správy.";
 "direct_room_user_list_known_title" = "Známi používatelia";
 "room_preview_no_preview_join" = "Túto miestnosť nie je možné zobraziť v náhľade. Chcete sa k nej pripojiť\?";
 "a11y_open_emoji_picker" = "Otvoriť výber emotikonov";
@@ -2160,8 +2045,7 @@
 "room_member_override_nick_color" = "Nahradiť farbu prezývky";
 "ftue_auth_use_case_join_existing_server" = "Chcete sa pripojiť k existujúcemu serveru\?";
 "event_redacted_by_admin_reason_with_reason" = "Udalosť bola upravená administrátorom miestnosti, dôvod: %1$@";
-"room_preview_not_found" = "Táto miestnosť je momentálne neprístupná.
-\nSkúste to neskôr alebo požiadajte správcu miestnosti, aby skontroloval, či máte prístup.";
+"room_preview_not_found" = "Táto miestnosť je momentálne neprístupná.\nSkúste to neskôr alebo požiadajte správcu miestnosti, aby skontroloval, či máte prístup.";
 "call_transfer_transfer_to_title" = "Presmerovať na používateľa %1$@";
 "call_transfer_failure" = "Počas presmerovania hovoru došlo k chybe";
 "call_transfer_title" = "Presmerovať";
@@ -2225,8 +2109,7 @@
 "call_transfer_connect_action" = "Pripojiť";
 "location_share_live_stop" = "Zastaviť";
 "location_share_live_enabled" = "Poloha v reálnom čase zapnutá";
-"location_in_background_missing_permission_dialog_content" = "Ak chcete zdieľať svoju polohu v reálnom čase, %@ potrebuje prístup k polohe po celý čas, kým je aplikácia na pozadí.
-\nPrístup k vašej polohe bude len počas obdobia, ktoré si zvolíte.";
+"location_in_background_missing_permission_dialog_content" = "Ak chcete zdieľať svoju polohu v reálnom čase, %@ potrebuje prístup k polohe po celý čas, kým je aplikácia na pozadí.\nPrístup k vašej polohe bude len počas obdobia, ktoré si zvolíte.";
 "location_in_background_missing_permission_dialog_title" = "Povoliť prístup";
 "a11y_location_share_option_pinned_icon" = "Zdieľať túto polohu";
 "location_share_option_pinned" = "Zdieľať túto polohu";
@@ -2236,150 +2119,24 @@
 "location_share_option_user_current" = "Zdieľať moju aktuálnu polohu";
 "a11y_location_share_locate_button" = "Priblížiť k aktuálnej polohe";
 "a11y_location_share_pin_on_map" = "Označiť vybranú lokalitu na mape";
-"threads_notice_migration_message" = "Blížime sa k vydaniu verejnej beta verzie pre vlákna.
-\n
-\nV rámci príprav na ňu musíme urobiť niekoľko zmien: vlákna vytvorené pred týmto bodom sa budú zobrazovať ako bežné odpovede.
-\n
-\nPôjde o jednorazový prechod, keďže vlákna sú teraz súčasťou špecifikácie Matrix.";
+"threads_notice_migration_message" = "Blížime sa k vydaniu verejnej beta verzie pre vlákna.\n\nV rámci príprav na ňu musíme urobiť niekoľko zmien: vlákna vytvorené pred týmto bodom sa budú zobrazovať ako bežné odpovede.\n\nPôjde o jednorazový prechod, keďže vlákna sú teraz súčasťou špecifikácie Matrix.";
 "threads_notice_migration_title" = "Vlákna sa blížia k beta verzii 🎉";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ pridal/a adresu %2$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ pridal/a adresy %2$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_added.item_2" = "%1$@ pridal/a adresy %2$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ odstránil/a %2$@ adresu pre túto miestnosť.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ odstránil/a %2$@ adries pre túto miestnosť.";
-"plurals.notice_room_aliases_removed.item_2" = "%1$@ odstránil/a %2$@ adresy pre túto miestnosť.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Pridali ste adresu %1$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Pridali ste adresy %1$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_added_by_you.item_2" = "Pridali ste adresy %1$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Odstránili ste adresu %1$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Odstránili ste adresy %1$@ pre túto miestnosť.";
-"plurals.notice_room_aliases_removed_by_you.item_2" = "Odstránili ste adresy %1$@ pre túto miestnosť.";
-"plurals.membership_changes.item_0" = "1 zmena členstva";
-"plurals.membership_changes.item_1" = "%d zmeny členstva";
-"plurals.membership_changes.item_2" = "%d zmien členstva";
-"plurals.room_title_members.item_0" = "1 člen";
-"plurals.room_title_members.item_1" = "%d členovia";
-"plurals.room_title_members.item_2" = "%d členov";
-"plurals.room_new_messages_notification.item_0" = "1 nová správa";
-"plurals.room_new_messages_notification.item_1" = "%d nové správy";
-"plurals.room_new_messages_notification.item_2" = "%d nových správ";
-"plurals.notification_unread_notified_messages.item_0" = "1 neprečítaná správa";
-"plurals.notification_unread_notified_messages.item_1" = "%d neprečítané správy";
-"plurals.notification_unread_notified_messages.item_2" = "%d neprečítaných správ";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "1 miestnosť";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d miestnosti";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_2" = "%d miestností";
-"plurals.active_widgets.item_0" = "1 aktívny widget";
-"plurals.active_widgets.item_1" = "%d aktívne widgety";
-"plurals.active_widgets.item_2" = "%d aktívnych widgetov";
-"plurals.room_details_selected.item_0" = "1 vybratý";
-"plurals.room_details_selected.item_1" = "%d vybratí";
-"plurals.room_details_selected.item_2" = "%d vybratých";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: 1 správa";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d správy";
-"plurals.notification_compat_summary_line_for_room.item_2" = "%1$@: %2$d správ";
-"plurals.notification_compat_summary_title.item_0" = "%d oznámenie";
-"plurals.notification_compat_summary_title.item_1" = "%d oznámenia";
-"plurals.notification_compat_summary_title.item_2" = "%d oznámení";
-"plurals.room_settings_banned_users_count.item_0" = "Zakázať vstupovať %d používateľ";
-"plurals.room_settings_banned_users_count.item_1" = "Zakázať vstupovať %d používatelia";
-"plurals.room_settings_banned_users_count.item_2" = "Zakázať vstupovať %d používateľov";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d z %2$d kľúč bol úspešne importovaný.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d z %2$d kľúče boli úspešne importované.";
-"plurals.encryption_import_room_keys_success.item_2" = "%1$d z %2$d kľúčov bolo úspešne importovaných.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Záloha s %d kľúčom obnovená.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Záloha s %d kľúčmi obnovená.";
-"plurals.keys_backup_restore_success_description_part1.item_2" = "Záloha s %d kľúčami obnovená.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d nový kľúč bol pridaný do tejto relácie.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d nové kľúče boli pridané do tejto relácie.";
-"plurals.keys_backup_restore_success_description_part2.item_2" = "%d nových kľúčov bolo pridaných do tejto relácie.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Zálohovanie %d kľúča…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Zálohovanie %d kľúčov…";
-"plurals.keys_backup_info_keys_backing_up.item_2" = "Zálohovanie %d kľúčov…";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ a %4$d ďalší";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ a %4$d ďalší";
-"plurals.room_displayname_four_and_more_members.item_2" = "%1$@, %2$@, %3$@ a %4$d ďalších";
-"plurals.settings_active_sessions_count.item_0" = "%d aktívna relácia";
-"plurals.settings_active_sessions_count.item_1" = "%d aktívne relácie";
-"plurals.settings_active_sessions_count.item_2" = "%d aktívnych relácií";
-"plurals.poll_option_vote_count.item_0" = "%1$d hlas";
-"plurals.poll_option_vote_count.item_1" = "%1$d hlasy";
-"plurals.poll_option_vote_count.item_2" = "%1$d hlasov";
-"plurals.entries.item_0" = "%d záznam";
-"plurals.entries.item_1" = "%d záznamy";
-"plurals.entries.item_2" = "%d záznamov";
-"plurals.notification_invitations.item_0" = "%d pozvánka";
-"plurals.notification_invitations.item_1" = "%d pozvánky";
-"plurals.notification_invitations.item_2" = "%d pozvánok";
-"plurals.seconds.item_0" = "%d sekunda";
-"plurals.seconds.item_1" = "%d sekundy";
-"plurals.seconds.item_2" = "%d sekúnd";
-"plurals.room_profile_section_more_member_list.item_0" = "Jedna osoba";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d osoby";
-"plurals.room_profile_section_more_member_list.item_2" = "%1$d osôb";
-"plurals.missed_video_call.item_0" = "%d zmeškaný video hovor";
-"plurals.missed_video_call.item_1" = "%d zmeškané video hovory";
-"plurals.missed_video_call.item_2" = "%d zmeškaných video hovorov";
-"plurals.missed_audio_call.item_0" = "%d zmeškaný hlasový hovor";
-"plurals.missed_audio_call.item_1" = "%d zmeškané hlasové hovory";
-"plurals.missed_audio_call.item_2" = "%d zmeškaných hlasových hovorov";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Odstránili ste alternatívnu adresu %1$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Odstránili ste alternatívne adresy %1$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_2" = "Odstránili ste alternatívne adresy %1$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ odstránil(a) alternatívnu adresu %2$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ odstránil(a) alternatívne adresy %2$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_2" = "%1$@ odstránil(a) alternatívne adresy %2$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Pridali ste alternatívnu adresu %1$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Pridali ste alternatívne adresy %1$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_2" = "Pridali ste alternatívne adresy %1$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ pridal(a) alternatívnu adresu %2$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ pridal(a) alternatívne adresy %2$@ pre túto miestnosť.";
-"plurals.notice_room_canonical_alias_alternative_added.item_2" = "%1$@ pridal(a) alternatívne adresy %2$@ pre túto miestnosť.";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Bolo odoslaných príliš veľa žiadostí. Pokus môžete zopakovať za %1$d sekundu…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Bolo odoslaných príliš veľa žiadostí. Pokus môžete zopakovať za %1$d sekundy…";
-"plurals.login_error_limit_exceeded_retry_after.item_2" = "Bolo odoslaných príliš veľa žiadostí. Pokus môžete zopakovať za %1$d sekúnd…";
-"plurals.space_people_you_know.item_0" = "%d osoba, ktorú poznáte, sa už pripojila";
-"plurals.space_people_you_know.item_1" = "%d osoby, ktorú poznáte, sa už pripojili";
-"plurals.space_people_you_know.item_2" = "%d osôb, ktorú poznáte, sa už pripojilo";
-"plurals.call_active_status.item_0" = "Aktívny hovor ·";
-"plurals.call_active_status.item_1" = "%1$d aktívne hovory ·";
-"plurals.call_active_status.item_2" = "%1$d aktívnych hovorov ·";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Pozvánky odoslané %1$@ a ešte jednému";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Pozvánky odoslané %1$@ a %2$d ďalším";
-"plurals.invitations_sent_to_one_and_more_users.item_2" = "Pozvánky odoslané %1$@ a %2$d ďalším";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Zobraziť zariadenie, pomocou ktorého môžete teraz overiť";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Zobraziť %d zariadenia, pomocou ktorých môžete teraz overiť";
-"plurals.secure_backup_reset_devices_you_can_verify.item_2" = "Zobraziť %d zariadení, pomocou ktorých môžete teraz overiť";
-"plurals.send_videos_with_original_size.item_0" = "Odoslať video s pôvodnou veľkosťou";
-"plurals.send_videos_with_original_size.item_1" = "Odoslať videá s pôvodnou veľkosťou";
-"plurals.send_videos_with_original_size.item_2" = "Odoslať videá s pôvodnou veľkosťou";
-"plurals.send_images_with_original_size.item_0" = "Odoslať obrázok s pôvodnou veľkosťou";
-"plurals.send_images_with_original_size.item_1" = "Odoslať obrázky s pôvodnou veľkosťou";
-"plurals.send_images_with_original_size.item_2" = "Odoslať obrázky s pôvodnou veľkosťou";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Nesprávny kód, zostáva %d pokus";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Nesprávny kód, zostávajú %d pokusy";
-"plurals.wrong_pin_message_remaining_attempts.item_2" = "Nesprávny kód, zostáva %d pokusov";
-"plurals.create_poll_not_enough_options_error.item_0" = "Vyžaduje sa aspoň %1$@ možnosť";
-"plurals.create_poll_not_enough_options_error.item_1" = "Vyžadujú sa aspoň %1$@ možnosti";
-"plurals.create_poll_not_enough_options_error.item_2" = "Vyžaduje sa aspoň %1$@ možností";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Na základe %1$d hlasu";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "Na základe %1$d hlasov";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_2" = "Na základe %1$d hlasov";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d odovzdaný hlas. Hlasujte a pozrite si výsledky";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d odovzdané hlasy. Hlasujte a pozrite si výsledky";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_2" = "%1$d odovzdaných hlasov. Hlasujte a pozrite si výsledky";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Konečný výsledok na základe %1$d hlasu";
-"plurals.poll_total_vote_count_after_ended.item_1" = "Konečný výsledok na základe %1$d hlasov";
-"plurals.poll_total_vote_count_after_ended.item_2" = "Konečný výsledok na základe %1$d hlasov";
-"plurals.fallback_users_read.item_0" = "%d používateľ prečítal";
-"plurals.fallback_users_read.item_1" = "%d používatelia prečítali";
-"plurals.fallback_users_read.item_2" = "%d používatelia prečítali";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ a %3$d ďalší prečítal";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ a %3$d ďalší prečítali";
-"plurals.two_and_some_others_read.item_2" = "%1$@, %2$@ a %3$d ďalší prečítali";
-"plurals.notice_room_server_acl_changes.item_0" = "%d zmena ACL servera";
-"plurals.notice_room_server_acl_changes.item_1" = "%d zmeny ACL servera";
-"plurals.notice_room_server_acl_changes.item_2" = "%d zmien ACL servera";
-"plurals.message_reaction_show_more.item_0" = "%1$d ďalšia";
-"plurals.message_reaction_show_more.item_1" = "%1$d ďalšie";
-"plurals.message_reaction_show_more.item_2" = "%1$d ďalších";
+"ftue_account_created_subtitle" = "Váš účet %@ bol vytvorený.";
+"live_location_sharing_notification_description" = "Prebieha zdieľanie polohy";
+"live_location_sharing_notification_title" = "%@ Poloha v reálnom čase";
+"error_forbidden_digits_only_username" = "Domovský server neakceptuje používateľské meno obsahujúce iba číslice.";
+"ftue_personalize_skip_this_step" = "Vynechať tento krok";
+"ftue_personalize_submit" = "Uložiť a pokračovať";
+"ftue_personalize_complete_subtitle" = "Vaše nastavenia boli uložené.";
+"ftue_personalize_complete_title" = "Všetko je pripravené!";
+"ftue_personalize_lets_go" = "Poďme na to";
+"ftue_profile_picture_subtitle" = "Toto môžete kedykoľvek zmeniť.";
+"ftue_profile_picture_title" = "Pridať profilový obrázok";
+"ftue_display_name_entry_footer" = "Neskôr to môžete zmeniť";
+"ftue_display_name_entry_title" = "Zobrazované meno";
+"ftue_display_name_subtitle" = "Toto sa zobrazí pri odosielaní správ.";
+"ftue_display_name_title" = "Vyberte si zobrazované meno";
+"ftue_account_created_congratulations_title" = "Gratulujeme!";
+"ftue_account_created_take_me_home" = "Zober ma domov";
+"ftue_account_created_personalize" = "Prispôsobiť profil";
+"action_disable" = "Zakázať";

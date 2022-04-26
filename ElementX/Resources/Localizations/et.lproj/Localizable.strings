@@ -37,23 +37,14 @@
 "room_displayname_room_invite" = "Kutse jututuppa";
 "room_displayname_two_members" = "%1$@ ja %2$@";
 "room_displayname_empty_room" = "Tühi jututuba";
-"initial_sync_start_importing_account" = "Esmane laadimine:
-\nImpordin kontot…";
-"initial_sync_start_importing_account_crypto" = "Esmane laadimine:
-\nImpordin krüptoseadistusi";
-"initial_sync_start_importing_account_rooms" = "Esmane laadimine:
-\nImpordin jututubasid";
-"initial_sync_start_importing_account_joined_rooms" = "Esmane laadimine:
-\nLaadin sinu vestluste ja jtututubade andmeid
-\nKui sa oled liitunud paljude jututubadega, siis kulub natuke aega";
-"initial_sync_start_importing_account_invited_rooms" = "Esmane laadimine:
-\nImpordin kutsutud jututubasid";
-"initial_sync_start_importing_account_left_rooms" = "Esmane laadimine:
-\nImpordin lahkutud jututubasid";
-"initial_sync_start_importing_account_groups" = "Esmane laadimine:
-\nImpordin kogukondi";
-"initial_sync_start_importing_account_data" = "Esmane laadimine:
-\nImpordin kontoandmeid";
+"initial_sync_start_importing_account" = "Esmane laadimine:\nImpordin kontot…";
+"initial_sync_start_importing_account_crypto" = "Esmane laadimine:\nImpordin krüptoseadistusi";
+"initial_sync_start_importing_account_rooms" = "Esmane laadimine:\nImpordin jututubasid";
+"initial_sync_start_importing_account_joined_rooms" = "Esmane laadimine:\nLaadin sinu vestluste ja jtututubade andmeid\nKui sa oled liitunud paljude jututubadega, siis kulub natuke aega";
+"initial_sync_start_importing_account_invited_rooms" = "Esmane laadimine:\nImpordin kutsutud jututubasid";
+"initial_sync_start_importing_account_left_rooms" = "Esmane laadimine:\nImpordin lahkutud jututubasid";
+"initial_sync_start_importing_account_groups" = "Esmane laadimine:\nImpordin kogukondi";
+"initial_sync_start_importing_account_data" = "Esmane laadimine:\nImpordin kontoandmeid";
 "event_status_sending_message" = "Saadan sõnumit…";
 "notice_room_invite_no_invitee_with_reason" = "Kasutaja %1$@ kutse. Põhjus: %2$@";
 "notice_room_invite_with_reason" = "%1$@ saatis kutse kasutajale %2$@. Põhjus: %3$@";
@@ -207,7 +198,7 @@
 "are_you_sure" = "Kas sa oled kindel\?";
 "backup" = "Varunda";
 "sign_out_bottom_sheet_will_lose_secure_messages" = "Kui sa enne väljalogimist ei varunda oma võtmeid, siis sa kaotad ligipääsu oma krüptitud sõnumitele.";
-"loading" = "Laeme…";
+"loading" = "Laadime…";
 "ok" = "Sobib";
 "action_cancel" = "Tühista";
 "action_save" = "Salvesta";
@@ -287,9 +278,7 @@
 "option_take_photo_video" = "Tee foto või video";
 "option_take_photo" = "Tee foto";
 "option_take_video" = "Tee video";
-"no_sticker_application_dialog_content" = "Sul ei ole hetkel ühtegi kleepsupakki kasutusel.
-\n
-\nKas lisame nüüd mõne\?";
+"no_sticker_application_dialog_content" = "Sul ei ole hetkel ühtegi kleepsupakki kasutusel.\n\nKas lisame nüüd mõne\?";
 "error_no_external_application_found" = "Vabandust, aga selle tegevuse jaoks ei leidu ühtegi välist rakendust.";
 "auth_login" = "Logi sisse";
 "auth_submit" = "Saada";
@@ -313,8 +302,7 @@
 "dialog_title_success" = "Õnnestus";
 "bottom_action_notification" = "Teavitused";
 "call_failed_no_connection" = "Kõne ebaõnnestus";
-"call_failed_no_connection_description" = "Reaalajas ühenduse loomine ei õnnestunud.
-\nPalu oma koduserveri %@ haldajat, et ta seadistaks kõnede kindlamaks toimimiseks TURN serveri.";
+"call_failed_no_connection_description" = "Reaalajas ühenduse loomine ei õnnestunud.\nPalu oma koduserveri %@ haldajat, et ta seadistaks kõnede kindlamaks toimimiseks TURN serveri.";
 "call_select_sound_device" = "Vali heliseade";
 "sound_device_phone" = "Telefon";
 "sound_device_speaker" = "Kõlar";
@@ -347,9 +335,7 @@
 "call_error_user_not_responding" = "Teine osapool ei võtnud kõnet vastu.";
 "permissions_rationale_popup_title" = "Lisateave õiguste kohta";
 "permissions_rationale_msg_record_audio" = "Kõnede tegemiseks vajab %@ õigusi kasutada sinu mikrofoni.";
-"permissions_rationale_msg_camera_and_audio" = "%@ vajab videokõnedeks õigusi sinu kaamera ja mikrofoni kasutamiseks.
-\n
-\nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused.";
+"permissions_rationale_msg_camera_and_audio" = "%@ vajab videokõnedeks õigusi sinu kaamera ja mikrofoni kasutamiseks.\n\nKõnede tegemiseks palun anna järgmisel lehel vajalikud õigused.";
 "yes" = "JAH";
 "no" = "EI";
 "_continue" = "Jätka";
@@ -415,8 +401,7 @@
 "room_widget_permission_added_by" = "Selle vidina lisaja:";
 "room_widget_permission_webview_shared_info_title" = "Vidina kasutamine võib tuua kaasa küpsiste salvestamise ja andmete jagamise serveriga %@:";
 "room_widget_permission_shared_info_title" = "Selle kasutamine võib tuua kaasa andmete jagamise serveriga %@:";
-"room_widget_failed_to_load" = "Vidina laadimine ei õnnestunud.
-\n%@";
+"room_widget_failed_to_load" = "Vidina laadimine ei õnnestunud.\n%@";
 "room_widget_reload" = "Lae vidin uuesti";
 "room_widget_open_in_browser" = "Ava veebibrauseris";
 "room_widget_revoke_access" = "Eemalda minu ligipääsuõigused";
@@ -431,17 +416,14 @@
 "keys_backup_setup_step1_advanced" = "(Lisaseadistused)";
 "keys_backup_setup_step1_manual_export" = "Ekspordi võtmed käsitsi";
 "keys_backup_setup_step2_text_title" = "Krüpti oma varukoopia paroolifraasiga.";
-"keys_backup_setup_step2_text_description" = "Me salvestame krüptitud varukoopia sinu krüptovõtmetest meie serveris. Tagamaks, et keegi ei saa seda kasutada, krüpti varukoopia paroolifraasiga.
-\n
-\n Parima turvalisuse jaoks peaks paroolifraas olema erinev sinu konto salasõnast.";
+"keys_backup_setup_step2_text_description" = "Me salvestame krüptitud varukoopia sinu krüptovõtmetest meie serveris. Tagamaks, et keegi ei saa seda kasutada, krüpti varukoopia paroolifraasiga.\n\n Parima turvalisuse jaoks peaks paroolifraas olema erinev sinu konto salasõnast.";
 "keys_backup_setup_step2_button_title" = "Loo paroolifraas";
 "keys_backup_setup_creating_backup" = "Teen varukoopiat";
 "keys_backup_setup_step1_recovery_key_alternative" = "Või krüpti oma varukoopia taastevõtmega ning hoia taastevõtit turvalises kohas.";
 "keys_backup_setup_step2_skip_button_title" = "Võta kasutusele taastevõti";
 "keys_backup_setup_step3_success_title" = "Õnnestus!";
 "keys_backup_setup_step3_text_line1" = "Sinu krüptovõtmeid parasjagu varundatakse.";
-"keys_backup_setup_step3_text_line2" = "Sinu taastevõti toimib turvavõrguna - juhul, kui sa unustad taastamiseks mõeldud paroolifraasi, siis sa saad seda kasutada taastamaks ligipääsu krüptitud sõnumitele.
-\nHoia taastevõtit turvalises kohas, nagu näiteks salasõnahalduris või vana kooli seifis";
+"keys_backup_setup_step3_text_line2" = "Sinu taastevõti toimib turvavõrguna - juhul, kui sa unustad taastamiseks mõeldud paroolifraasi, siis sa saad seda kasutada taastamaks ligipääsu krüptitud sõnumitele.\nHoia taastevõtit turvalises kohas, nagu näiteks salasõnahalduris või vana kooli seifis";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Hoia oma taastevõtit väga turvalises kohas, nagu näiteks salasõnahalduris või vana kooli seifis";
 "keys_backup_setup_step3_button_title" = "Valmis";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Ma olen juba teinud koopia";
@@ -498,13 +480,9 @@
 "verification_conclusion_ok_notice" = "Sõnumid selle kasutajaga on läbivalt krüptitud ning kolmandad osapooled ei saa neid lugeda.";
 "verification_conclusion_ok_self_notice" = "Sinu uus sessioon on nüüd verifitseeritud. Selles sessioonis saad lugeda oma krüptitud sõnumeid ja teiste kasutajate jaoks on ta usaldusväärne.";
 "encryption_information_cross_signing_state" = "Risttunnustamine";
-"encryption_information_dg_xsigning_complete" = "Risttunnustamine on kasutusel
-\nPrivaatvõtmed asuvad seadmes.";
-"encryption_information_dg_xsigning_trusted" = "Risttunnustamine on kasutusel
-\nVõtmed on usaldusväärsed
-\nPrivaatvõtmed ei ole teada";
-"encryption_information_dg_xsigning_not_trusted" = "Risttunnustamine on kasutusel
-\nVõtmed ei ole usaldusväärsed";
+"encryption_information_dg_xsigning_complete" = "Risttunnustamine on kasutusel\nPrivaatvõtmed asuvad seadmes.";
+"encryption_information_dg_xsigning_trusted" = "Risttunnustamine on kasutusel\nVõtmed on usaldusväärsed\nPrivaatvõtmed ei ole teada";
+"encryption_information_dg_xsigning_not_trusted" = "Risttunnustamine on kasutusel\nVõtmed ei ole usaldusväärsed";
 "encryption_information_dg_xsigning_disabled" = "Risttunnustamine ei ole kasutusel";
 "settings_hs_admin_e2e_disabled" = "Sinu serveri haldur on lülitanud läbiva krüptimise omavahelistes jututubades ja otsesõnumites välja.";
 "settings_active_sessions_list" = "Aktiivsed sessioonid";
@@ -528,13 +506,11 @@
 "settings_troubleshoot_test_system_settings_title" = "Süsteemiseadistused.";
 "settings_troubleshoot_test_account_settings_title" = "Kasutajakonto seadistused.";
 "settings_troubleshoot_test_account_settings_success" = "Sinu kontol on teavitused kasutusel.";
-"settings_troubleshoot_test_account_settings_failed" = "Sinu kontol ei ole teavitusi kasutusel.
-\nSeda saad muuta konto seadistuses.";
+"settings_troubleshoot_test_account_settings_failed" = "Sinu kontol ei ole teavitusi kasutusel.\nSeda saad muuta konto seadistuses.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Võta kasutusele";
 "settings_troubleshoot_test_device_settings_title" = "Sessiooni seadistused.";
 "settings_troubleshoot_test_device_settings_success" = "Selles sessioonis on teavitused kasutusel.";
-"settings_troubleshoot_test_device_settings_failed" = "Selles sessioonis ei ole teavitusi kasutusel.
-\nSeda saad muuta %@\'i seadistuses.";
+"settings_troubleshoot_test_device_settings_failed" = "Selles sessioonis ei ole teavitusi kasutusel.\nSeda saad muuta %@\'i seadistuses.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Võta kasutusele";
 "settings_troubleshoot_test_bing_settings_title" = "Kohandatud seadistused.";
 "settings_12_24_timestamps" = "Näita ajatempleid 12-tunnises vormingus";
@@ -596,13 +572,9 @@
 "login_server_url_form_modular_notice" = "Sisesta Modular Element teenuse või muu serveri aadress, mida sa soovid kasutada";
 "login_server_url_form_common_notice" = "Sisesta serveri aadress, mida sa soovid kasutada";
 "login_sso_error_message" = "Lehe laadimisel tekkis viga %1$@ (%2$d)";
-"login_mode_not_supported" = "See rakendus ei saa sisse logida antud koduserverisse. See koduserver toetab järgmisi sisselogimise tüüp(e): %1$@.
-\n
-\nKas sa soovid sisse logida kasutades veebibrauseri põhist klienti\?";
+"login_mode_not_supported" = "See rakendus ei saa sisse logida antud koduserverisse. See koduserver toetab järgmisi sisselogimise tüüp(e): %1$@.\n\nKas sa soovid sisse logida kasutades veebibrauseri põhist klienti\?";
 "login_registration_disabled" = "Vabandust, aga siia serverisse ei saa luua uusi kasutajakontosid.";
-"login_registration_not_supported" = "See rakendus ei saa antud koduserveris uut kasutajakontot.
-\n
-\nKas sa soovid registreerida kasutades veebibrauseri põhist klienti\?";
+"login_registration_not_supported" = "See rakendus ei saa antud koduserveris uut kasutajakontot.\n\nKas sa soovid registreerida kasutades veebibrauseri põhist klienti\?";
 "login_login_with_email_error" = "See e-posti aadress ei ole seotud ühegi kasutajakontoga.";
 "login_reset_password_on" = "Loo uus salasõna koduserveris %1$@";
 "login_reset_password_notice" = "Kontrollimaks, et just sina ise sisestasid uue salasõna, saadame kinnituskirja.";
@@ -618,13 +590,10 @@
 "soft_logout_signin_submit" = "Logi sisse";
 "soft_logout_signin_password_hint" = "Salasõna";
 "soft_logout_clear_data_title" = "Kustuta privaatsed andmed";
-"soft_logout_clear_data_notice" = "Hoiatus: Sinu privaatsed andmed (sealhulgas krüptimisvõtmed) on jätkuvalt salvestatud selles seadmes.
-\n
-\nEemalda nad, kui oled lõpetanud selle seadme kasutamise või soovid sisse logida muu kasutajakontoga.";
+"soft_logout_clear_data_notice" = "Hoiatus: Sinu privaatsed andmed (sealhulgas krüptimisvõtmed) on jätkuvalt salvestatud selles seadmes.\n\nEemalda nad, kui oled lõpetanud selle seadme kasutamise või soovid sisse logida muu kasutajakontoga.";
 "soft_logout_clear_data_submit" = "Eemalda kõik andmed";
 "soft_logout_clear_data_dialog_title" = "Eemalda andmed";
-"soft_logout_clear_data_dialog_content" = "Kas sa oled kindel, et soovid kustutada kõik andmed, mis on hetkel siin seadmes salvestatud\?
-\nOma sõnumite ja kontoandmete nägemiseks logi uuesti sisse.";
+"soft_logout_clear_data_dialog_content" = "Kas sa oled kindel, et soovid kustutada kõik andmed, mis on hetkel siin seadmes salvestatud\?\nOma sõnumite ja kontoandmete nägemiseks logi uuesti sisse.";
 "login_error_ssl_peer_unverified" = "SSL\'i viga: teise osapoole identiteeti ei õnnestu kontrollida.";
 "settings_call_show_confirmation_dialog_title" = "Väldi juhuslikke kõnesid";
 "settings_call_show_confirmation_dialog_summary" = "Enne kõne algatamist küsi kinnitust";
@@ -670,15 +639,12 @@
 "not_trusted" = "Ei ole usaldusväärne";
 "verification_profile_device_verified_because" = "Kuna %1$@ (%2$@) on selle sessiooni verifitseerinud, siis see sessioon on krüptitud sõnumite saatmiseks usaldusväärne:";
 "verification_profile_device_new_signing" = "%1$@ (%2$@) logis sisse uues sessioonis:";
-"room_participants_power_level_prompt" = "Sa ei saa seda muudatust hiljem tagasi pöörata, sest annad teisele kasutajale samad õigused, mis sinul on.
-\nKas sa oled ikka kindel\?";
+"room_participants_power_level_prompt" = "Sa ei saa seda muudatust hiljem tagasi pöörata, sest annad teisele kasutajale samad õigused, mis sinul on.\nKas sa oled ikka kindel\?";
 "room_participants_power_level_demote_warning_title" = "Kas vähendad enda õigusi\?";
 "room_participants_power_level_demote_warning_prompt" = "Kuna sa vähendad enda õigusi, siis sul ei pruugi hiljem olla võimalik seda muutust tagasi pöörata. Kui sa juhtumisi oled viimane haldusõigustega kasutaja jututoas, siis hiljem on võimatu samu õigusi tagasi saada.";
 "room_participants_power_level_demote" = "Vähenda enda õigusi";
 "room_participants_action_ignore_title" = "Eira kasutajat";
-"room_participants_action_ignore_prompt_msg" = "Selle kasutaja eiramine eemaldab teie jagatud jututoast tema sõnumid.
-\n
-\nÜldistest seadistustest saad seda alati muuta.";
+"room_participants_action_ignore_prompt_msg" = "Selle kasutaja eiramine eemaldab teie jagatud jututoast tema sõnumid.\n\nÜldistest seadistustest saad seda alati muuta.";
 "room_participants_action_ignore" = "Eira selle kasutaja sõnumeid";
 "room_participants_action_unignore_title" = "Lõpeta selle kasutaja eiramine";
 "room_participants_action_unignore_prompt_msg" = "Selle kasutaja eiramise lõpetamine teeb tema sõnumid uuesti nähtavaks.";
@@ -687,9 +653,7 @@
 "room_participants_action_cancel_invite_prompt_msg" = "Kas oled kindel et sa soovid tühistada kutse sellele kasutajale\?";
 "room_participants_remove_title" = "Müksa kasutaja välja";
 "room_participants_remove_reason" = "Jututoast väljamüksamise põhjus";
-"room_participants_remove_prompt_msg" = "jututoast välja müksamine eemaldab ta praeguseks jututoast.
-\n
-\nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.";
+"room_participants_remove_prompt_msg" = "jututoast välja müksamine eemaldab ta praeguseks jututoast.\n\nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.";
 "room_participants_ban_title" = "Määra kasutajale suhtluskeeld";
 "room_participants_ban_reason" = "Suhtluskeelu põhjus";
 "room_participants_unban_title" = "Taasta selle kasutaja ligipääs";
@@ -713,32 +677,24 @@
 "settings_troubleshoot_diagnostic_failure_status_with_quickfix" = "Üks või enam testi andis tulemuseks vea, palun proovi pakutud lahendusi.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Üks või enam testi andis tulemuseks vea, palun saada edaspidise uurimise jaoks meile veateade.";
 "settings_troubleshoot_test_system_settings_success" = "Süsteemi seadistustes on teavitused kasutusel.";
-"settings_troubleshoot_test_system_settings_failed" = "Süsteemi seadistustes ei ole teavitusi kasutusel.
-\nPalun vaata need üle.";
+"settings_troubleshoot_test_system_settings_failed" = "Süsteemi seadistustes ei ole teavitusi kasutusel.\nPalun vaata need üle.";
 "open_settings" = "Ava seadistused";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Pane tähele, et mõned teavitused on seadistatud vaiksetena (teavitus kuvatakse ilma helilise märguandeta).";
 "settings_troubleshoot_test_bing_settings_failed" = "Mõned teavitused on sinu kohandatud seadistustes kinni keeratud.";
 "settings_troubleshoot_test_play_services_title" = "Goolge Play teenuste kontrollimine";
 "settings_troubleshoot_test_play_services_success" = "Google Play Services APK on kättesaadav ja uuendatud.";
-"settings_troubleshoot_test_play_services_failed" = "%@ kasutab Google Play teenuseid tõuketeavituste edastamiseks, kui see ei tundu olema korrektselt seadistatud:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ kasutab Google Play teenuseid tõuketeavituste edastamiseks, kui see ei tundu olema korrektselt seadistatud:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Paranda Google Play teenused";
 "settings_troubleshoot_test_fcm_title" = "Firebase tunnusluba";
-"settings_troubleshoot_test_fcm_success" = "FCM tunnusloa laadimine õnnestus:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "FCM tunnusloa laadimine ei õnnestunud:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nSee viga on väljaspool %@\'i kontrolli ning vastavalt Google infole liiga palju rakendusi kasutavad FCM\'i. Selline olukord peaks tekkima vaid siis kui kasutusel on hiidpalju selliseid rakendusi ning ei peaks mõjutama tavakasutajaid.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nSee viga on väljaspool %@\'i kontrolli ning võib juhtuda eri põhjustel. Võib-olla hilisemal proovimisel seda viga enam ei teki, kuid igaks juhuks vaata, et Google Play teenustele ei oleks süsteemi seadetes määratud andmesidepiirangut ning seadme kell on õige. Samuti võib see viga tekkida, kui sa pruugid kohandatud Androidi varianti (custom ROM).";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nSee viga on väljaspool %@\'i kontrolli. Telefoni ei ole seadistatud Google\'i kontot. Palun ava seadistustes kontohaldur ning lisa üks Google\'i konto.";
+"settings_troubleshoot_test_fcm_success" = "FCM tunnusloa laadimine õnnestus:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "FCM tunnusloa laadimine ei õnnestunud:\n%1$@";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nSee viga on väljaspool %@\'i kontrolli ning vastavalt Google infole liiga palju rakendusi kasutavad FCM\'i. Selline olukord peaks tekkima vaid siis kui kasutusel on hiidpalju selliseid rakendusi ning ei peaks mõjutama tavakasutajaid.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nSee viga on väljaspool %@\'i kontrolli ning võib juhtuda eri põhjustel. Võib-olla hilisemal proovimisel seda viga enam ei teki, kuid igaks juhuks vaata, et Google Play teenustele ei oleks süsteemi seadetes määratud andmesidepiirangut ning seadme kell on õige. Samuti võib see viga tekkida, kui sa pruugid kohandatud Androidi varianti (custom ROM).";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nSee viga on väljaspool %@\'i kontrolli. Telefoni ei ole seadistatud Google\'i kontot. Palun ava seadistustes kontohaldur ning lisa üks Google\'i konto.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Lisa Google\'i konto";
 "settings_troubleshoot_test_token_registration_title" = "Tunnusloa registreerimine";
 "settings_troubleshoot_test_token_registration_success" = "FCM tunnusloa registreerimine koduserveris õnnestus.";
-"settings_troubleshoot_test_token_registration_failed" = "FCM tunnusloa registreerimine koduserveris ei õnnestunud:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "FCM tunnusloa registreerimine koduserveris ei õnnestunud:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Käivita teenus seadme käivitamisel";
 "settings_troubleshoot_test_service_boot_success" = "Teenus käivitatakse nutiseadme käivitamisel.";
 "settings_troubleshoot_test_service_boot_failed" = "Seda teenust ei käivitatata nutiseadme käivitamisel. Sa ei saa teavitusi enne, kui %@ on vähemalt korra avatud.";
@@ -772,11 +728,8 @@
 "room_add_matrix_apps" = "Lisa Matrix\'i rakendusi";
 "settings_labs_native_camera" = "Luba süsteemi poolt hallatud kaamera kasutamine";
 "settings_labs_native_camera_summary" = "Käivita kohandatud vaate asemel süsteemne kaamera vaade.";
-"settings_troubleshoot_test_bg_restricted_success" = "Taustapiirangud on Elemendi jaoks keelatud. Seda testi tuleks läbi viia mobiilse andmeside abil (WIFI puudub).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Elemendi jaoks on taustpiirangud lubatud.
-\nTöö, mida rakendus proovib teha, on agressiivselt piiratud, kui see on taustal ja see võib mõjutada teavituste kättesaamist.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Taustapiirangud on Elemendi jaoks keelatud. Seda testi tuleks läbi viia mobiilse andmeside abil (WIFI puudub).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Elemendi jaoks on taustpiirangud lubatud.\nTöö, mida rakendus proovib teha, on agressiivselt piiratud, kui see on taustal ja see võib mõjutada teavituste kättesaamist.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Keela piirangud";
 "settings_troubleshoot_test_battery_title" = "Aku optimeerimine";
 "settings_troubleshoot_test_battery_success" = "Aku optimeerimine ei mõjuta %@.";
@@ -799,11 +752,9 @@
 "settings_background_sync" = "Andmete sünkroniseerimine taustal";
 "settings_background_fdroid_sync_mode" = "Andmete taustal sünkroniseerimise režiim";
 "settings_background_fdroid_sync_mode_battery" = "Optimeeritud akukestust silmas pidades";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).
-\nSõltuvalt seadme olekust võib operatsioonisüsteem sünkroniseerimist edasi lükata.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ sünkroniseerib taustal nii, et see arvestab seadme piiratud ressursse (aku).\nSõltuvalt seadme olekust võib operatsioonisüsteem sünkroniseerimist edasi lükata.";
 "settings_background_fdroid_sync_mode_real_time" = "Optimeeritud reaalajas";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ sünkroniseerib sõnumeid taustal etteantud aja järel (aeg on seadistatav).
-\nSee mõjutab seadme saatjat/vastuvõtjat ja akukasutust ning kuvatakse püsiteade, et %@ kuulab sündmusi.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ sünkroniseerib sõnumeid taustal etteantud aja järel (aeg on seadistatav).\nSee mõjutab seadme saatjat/vastuvõtjat ja akukasutust ning kuvatakse püsiteade, et %@ kuulab sündmusi.";
 "settings_background_fdroid_sync_mode_disabled" = "Taustasünkroonimine puudub";
 "settings_background_fdroid_sync_mode_disabled_description" = "Kui rakendus töötab taustal, siis sa ei saa saabunud sõnumite kohta teavitusi.";
 "settings_start_on_boot" = "Käivita teenus seadme käivitamisel";
@@ -824,8 +775,7 @@
 "settings_other" = "Muud seadistused";
 "settings_advanced" = "Lisaseadistused";
 "settings_integrations" = "Lõiminguid";
-"settings_integrations_summary" = "Kasuta lõiminguhadurit robotite, võrgusildade, vidinate ja kleepsupakkide seadistamiseks.
-\nLõiminguhalduritel on laiad volitused - nad võivad sinu nimel lugeda seadistusi, kohandada vidinaid, saata jututubade kutseid ning määrata õigusi.";
+"settings_integrations_summary" = "Kasuta lõiminguhadurit robotite, võrgusildade, vidinate ja kleepsupakkide seadistamiseks.\nLõiminguhalduritel on laiad volitused - nad võivad sinu nimel lugeda seadistusi, kohandada vidinaid, saata jututubade kutseid ning määrata õigusi.";
 "settings_cryptography" = "Krüptimine";
 "settings_cryptography_manage_keys" = "Krüptovõtmete haldus";
 "settings_notifications_targets" = "Teavituste eesmärgid";
@@ -891,9 +841,7 @@
 "settings_fail_to_update_password" = "Salasõna uuendamine ei õnnestunud";
 "settings_fail_to_update_password_invalid_current_password" = "Salasõna ei ole sobilik";
 "settings_password_updated" = "Sinu salasõna on muudetud";
-"settings_unignore_user" = "Kas sa soovid näha kasutaja %@ kõiki sõnumeid\?
-\n
-\nPane tähele, et antud toiming taaskäivitab rakenduse ja see võib võtta veidi aega.";
+"settings_unignore_user" = "Kas sa soovid näha kasutaja %@ kõiki sõnumeid\?\n\nPane tähele, et antud toiming taaskäivitab rakenduse ja see võib võtta veidi aega.";
 "settings_select_country" = "Vali riik";
 "encryption_export_notice" = "Eksporditavate võtmete krüptimiseks palun sisesta paroolifraas. Võtmete importimisel pead kasutama sama paroolifraasi.";
 "encryption_exported_successfully" = "Võtmete eksportimine õnnestus";
@@ -917,15 +865,9 @@
 "directory_server_native_rooms" = "Kõik %@ jututoad";
 "widget_integration_review_terms" = "Jätkamaks pead nõustuma kasutustingimustega.";
 "you_added_a_new_device" = "Sa oled lisanud uue sessiooni \'%@\', mis soovib saada krüptimisvõtmeid.";
-"you_added_a_new_device_with_info" = "Uus sessioon soovib krüptovõtmeid.
-\nSessiooni nimi: %1$@
-\nViimati nähtud: %2$@
-\nKui sa pole mõnes muus seadmes sisse loginud, siis ära pane seda teadet tähele.";
+"you_added_a_new_device_with_info" = "Uus sessioon soovib krüptovõtmeid.\nSessiooni nimi: %1$@\nViimati nähtud: %2$@\nKui sa pole mõnes muus seadmes sisse loginud, siis ära pane seda teadet tähele.";
 "your_unverified_device_requesting" = "Sinu verifitseerimata sessioon \'%@\' soovib saada krüptimisvõtmeid.";
-"your_unverified_device_requesting_with_info" = "Verifitseerimata sessioon soovib krüptovõtmeid.
-\nSessiooni nimi: %1$@ 
-\nViimati nähtud: %2$@
-\nKui sa pole mõnes muus seadmes sisse loginud, siis ära pane seda teadet tähele.";
+"your_unverified_device_requesting_with_info" = "Verifitseerimata sessioon soovib krüptovõtmeid.\nSessiooni nimi: %1$@ \nViimati nähtud: %2$@\nKui sa pole mõnes muus seadmes sisse loginud, siis ära pane seda teadet tähele.";
 "start_verification" = "Alusta verifitseerimist";
 "share_without_verifying_short_label" = "Jaga";
 "key_share_request" = "Krüptovõtmete jagamise päring";
@@ -960,8 +902,7 @@
 "dialog_user_consent_content" = "Selleks et jätkata koduserveri %1$@ kasutamist sa pead üle vaatama ja nõustuma meie kasutustingimustega.";
 "dialog_user_consent_submit" = "Vaata üle";
 "deactivate_account_title" = "Deaktiveeri konto";
-"deactivate_account_content.b_0" = "Seda tegevust ei saa tagasi pöörata.";
-"deactivate_account_content.b_1" = "vaikimisi ei tähenda, et unustatakse ka sinu saadetud sõnumid.";
+"deactivate_account_content" = "See muudab sinu konto jäädavalt mittekasutatavaks. Sina ei saa enam sisse logida ja keegi teine ei saa seda kasutajatunnust uuesti pruukida. Samuti logitakse sind välja kõikidest jututubadest, kus sa osaled ning eemaldatakse kõik sinu andmed sinu isikutuvastusserverist. <b>Seda tegevust ei saa tagasi pöörata.</b>\n\nSinu konto kustutamine <b>vaikimisi ei tähenda, et unustatakse ka sinu saadetud sõnumid.</b> Kui sa siiski soovid seda, siis palun tee märge alljärgnevasse kasti.\n\nMatrix\'i sõnumite nähtavus on sarnane e-posti kirjadega. Sõnumite unustamine tegelikult tähendab seda, et sinu varemsaadetud sõnumeid ei jagata uute või veel registreerumata kasutajatega, kuid registeerunud kasutajad, kes juba on need sõnumid saanud, võivad neid ka jätkuvalt lugeda.";
 "deactivate_account_submit" = "Deaktiveeri konto";
 "error_empty_field_enter_user_name" = "Palun sisesta kasutajanimi.";
 "error_empty_field_your_password" = "Palun sisesta oma salasõna.";
@@ -970,9 +911,9 @@
 "room_tombstone_continuation_description" = "See jututuba on järg varasemale vestlusele";
 "room_tombstone_predecessor_link" = "Vanemate sõnumite nägemiseks klõpsi siin";
 "resource_limit_contact_admin" = "palun võta ühendust oma teenuse haldajaga";
-"resource_limit_soft_default.b_0" = "mõned kasutajad ei saa sisse logida";
+"resource_limit_soft_default" = "See koduserver ületanud ühe oma ressursipiirangutest, seega <b>mõned kasutajad ei saa sisse logida</b>.";
 "resource_limit_hard_default" = "See koduserver ületanud ühe oma ressursipiirangutest.";
-"resource_limit_soft_mau.b_0" = "mõned kasutajad ei saa sisse logida";
+"resource_limit_soft_mau" = "See koduserver on saavutanud igakuise aktiivsete kasutajate piiri, seega <b>mõned kasutajad ei saa sisse logida</b>.";
 "resource_limit_hard_mau" = "See koduserver on saavutanud igakuise aktiivsete kasutajate piiri.";
 "resource_limit_soft_contact" = "Selle piiri suurendamiseks palun %@.";
 "resource_limit_hard_contact" = "Jätkamaks selle teenuse kasutamist palun %@.";
@@ -990,9 +931,7 @@
 "passphrase_passphrase_too_weak" = "Paroolifraas on liiga nõrk";
 "keys_backup_passphrase_not_empty_error_message" = "Kui sa soovid, et %@ looks taastevõtme, siis palun kustuta paroolifraas.";
 "keys_backup_setup_step1_title" = "Ära kunagi kaota krüptitud sõnumeid";
-"keys_backup_setup_step1_description" = "Sõnumid krüptitud jututubades kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.
-\n
-\nVältimaks krüptovõtmete kadumist, varunda nad turvaliselt.";
+"keys_backup_setup_step1_description" = "Sõnumid krüptitud jututubades kasutavad läbivat krüptimist. Ainult sinul ja saaja(te)l on võtmed selliste sõnumite lugemiseks.\n\nVältimaks krüptovõtmete kadumist, varunda nad turvaliselt.";
 "keys_backup_setup" = "Võta kasutusele krüptovõtmete varundamine";
 "keys_backup_setup_override_backup_prompt_description" = "Tundub, et sul juba on olemas teises sessioonis tehtud krüptovõtmete varukoopia. Kas sa soovid selle asendada varukoopiaga, mida just hakkasid tegema\?";
 "keys_backup_setup_step3_share_intent_chooser_title" = "Jaga taastevõtit…";
@@ -1120,9 +1059,7 @@
 "login_splash_text1" = "Vestle kahekaupa või rühmiti";
 "login_reset_password_mail_confirmation_submit" = "Ma olen verifitseerinud oma e-posti aadressi";
 "login_reset_password_success_title" = "Õnnestus!";
-"login_reset_password_cancel_confirmation_content" = "Sinu salasõna ei ole veel muutunud.
-\n
-\nKas katkestame muutmise\?";
+"login_reset_password_cancel_confirmation_content" = "Sinu salasõna ei ole veel muutunud.\n\nKas katkestame muutmise\?";
 "login_set_email_title" = "Määra e-posti aadress";
 "login_set_email_notice" = "Seadista e-posti aadress, mis võimaldaks sul vajadusel taastada ligipääsu oma kontole. Lisaks võid kasutada e-posti aadressi või telefoninumbrit, et need inimesed, kes sind tunnevad, saaks sind leida.";
 "login_set_email_mandatory_hint" = "E-posti aadress";
@@ -1148,17 +1085,14 @@
 "login_signup_submit" = "Järgmine";
 "login_signup_error_user_in_use" = "Selline kasutajanimi on juba olemas";
 "login_signup_cancel_confirmation_title" = "Hoiatus";
-"login_signup_cancel_confirmation_content" = "Sinu kasutajakonto pole veel loodud.
-\n
-\nKas katkestame konto registreerimise\?";
+"login_signup_cancel_confirmation_content" = "Sinu kasutajakonto pole veel loodud.\n\nKas katkestame konto registreerimise\?";
 "login_a11y_choose_matrix_org" = "Vali matrix.org";
 "login_a11y_choose_modular" = "Vali teenusepakkujaks Element Matrix Services";
 "login_a11y_choose_other" = "Vali mõni muu koduserver";
 "login_a11y_captcha_container" = "Palun tee läbi robotilõksu katse";
 "login_terms_title" = "Jätkamiseks nõustu kasutustingimustega";
 "login_wait_for_email_title" = "Palun kontrolli oma e-kirju";
-"login_wait_for_email_notice" = "Saatsime e-kirja %1$@ aadressile.
-\nKonto loomisega jätkamiseks palun klõpsi selles kirjas leiduvat linki.";
+"login_wait_for_email_notice" = "Saatsime e-kirja %1$@ aadressile.\nKonto loomisega jätkamiseks palun klõpsi selles kirjas leiduvat linki.";
 "login_validation_code_is_not_correct" = "Sisestatud kood ei ole õige. Palun kontrolli seda.";
 "login_error_outdated_homeserver_title" = "Iganenud koduserver";
 "login_signin_matrix_id_error_invalid_matrix_id" = "See ei ole õige kasutajatunnus. Õige vorming on: \'@torekasutaja:koduserver.ee\'";
@@ -1223,9 +1157,7 @@
 "error_empty_field_choose_user_name" = "Palun vali kasutajanimi.";
 "error_empty_field_choose_password" = "Palun vali salasõna.";
 "external_link_confirmation_title" = "Kontrolli seda linki veel üks kord";
-"external_link_confirmation_message" = "See %1$@ link viib sind teise veebisaiti: %2$@.
-\n
-\nKas sa kindlasti soovid jätkata\?";
+"external_link_confirmation_message" = "See %1$@ link viib sind teise veebisaiti: %2$@.\n\nKas sa kindlasti soovid jätkata\?";
 "create_room_dm_failure" = "Otsevestluse loomine ei õnnestunud. Palun kontrolli, et kasutajanimed oleks õiged ja proovi uuesti.";
 "add_members_to_room" = "Lisa liikmeid";
 "invite_users_to_room_action_invite" = "KUTSU";
@@ -1310,9 +1242,7 @@
 "bootstrap_crosssigning_print_it" = "Trüki ta välja ja hoia turvalises kohas";
 "bootstrap_crosssigning_save_usb" = "Salvesta ta mälupulgale või varunduskettale";
 "bootstrap_crosssigning_save_cloud" = "Kopeeri ta isiklikku andmehoidlasse mis asub pilves";
-"bootstrap_cancel_text" = "Kui sa tühistad nüüd, siis sa võid peale viimasest seadmest välja logimist kaotada ligipääsu oma krüptitud sõnumitele ja andmetele.
-\n
-\nAga sa võid seadistustes võtta kasutusele turvalise varunduse ning hallata oma krüptovõtmeid.";
+"bootstrap_cancel_text" = "Kui sa tühistad nüüd, siis sa võid peale viimasest seadmest välja logimist kaotada ligipääsu oma krüptitud sõnumitele ja andmetele.\n\nAga sa võid seadistustes võtta kasutusele turvalise varunduse ning hallata oma krüptovõtmeid.";
 "encryption_enabled" = "Krüptimine on kasutusel";
 "encryption_enabled_tile_description" = "Sõnumid selles jututoas on läbivalt krüptitud. Uuri lisaks ja verifitseeri kasutajad nende kasutajaprofiilides.";
 "encryption_not_enabled" = "Krüptimine ei ole kasutusel";
@@ -1340,9 +1270,7 @@
 "failed_to_remove_widget" = "Vidina eemaldamine ei õnnestunud";
 "room_manage_integrations" = "Halda lõiminguid";
 "room_no_active_widgets" = "Aktiivseid vidinaid ei leidu";
-"create_room_federation_error" = "Jututuba on loodud, kuid mõned kutsed on saatmata järgmistel põhjustel:
-\n
-\n%@";
+"create_room_federation_error" = "Jututuba on loodud, kuid mõned kutsed on saatmata järgmistel põhjustel:\n\n%@";
 "settings_discovery_disconnect_with_bound_pid" = "Sa parasjagu jagad oma e-posti aadressi ja telefoninumbrit isikutuvastusserveriga %1$@. Selleks, et lõpetada see jagamine, pead uuesti looma ühenduse isikutuvastusserveriga %2$@.";
 "labs_allow_extended_logging_summary" = "Detailne logimine võimaldab arendajatel saada rohkem teadet kui sa peale nutiseadme tõsist raputamist saadad veateate. Kui ka detailne logimine on kasutusel, siis rakendus ei logi sõnumite sisu ega isiklikke andmeid.";
 "error_terms_not_accepted" = "Kui sa oled nõustunud koduserveri kasutustingimustega, siis palun proovi uuesti.";
@@ -1365,17 +1293,11 @@
 "uploads_media_title" = "MEEDIA";
 "block_user" = "EIRA KASUTAJAT";
 "content_reported_title" = "Teatasin sisust";
-"content_reported_content" = "Selle sisu kohta on nüüd teade saadetud. 
-\n 
-\nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.";
+"content_reported_content" = "Selle sisu kohta on nüüd teade saadetud. \n \nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.";
 "content_reported_as_spam_title" = "See on rämpssõnum";
-"content_reported_as_spam_content" = "Haldaja sai nüüd teate, et see sisu on rämpssõnum. 
-\n 
-\nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.";
+"content_reported_as_spam_content" = "Haldaja sai nüüd teate, et see sisu on rämpssõnum. \n \nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.";
 "content_reported_as_inappropriate_title" = "See sõnum ei ole sobilik";
-"content_reported_as_inappropriate_content" = "Haldaja sai nüüd teate, et see sisu ei ole sobilik. 
-\n 
-\nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.";
+"content_reported_as_inappropriate_content" = "Haldaja sai nüüd teate, et see sisu ei ole sobilik. \n \nKui sa ei soovi enam näha selle kasutaja sisu, siis sa võid tema sõnumite peitmiseks kasutajat eirata.";
 "message_ignore_user" = "Eira kasutajat";
 "room_list_quick_actions_notifications_all_noisy" = "Kõik sõnumid (lärmakas)";
 "room_list_quick_actions_notifications_all" = "Kõik sõnumid";
@@ -1399,31 +1321,17 @@
 "login_signin_matrix_id_password_notice" = "Kui sa ei tea oma salasṍna, siis mine tagasi ja loo uus salasõna.";
 "seen_by" = "Seda nägi(d)";
 "signed_out_title" = "Sa oled loginud välja";
-"signed_out_notice" = "See võib juhtuda eri põhjustel:
-\n
-\n• Sa oled muutnud oma salasõna mõnes teises sessioonis.
-\n
-\n• Sa oled selle sessiooni kustutanud mõnest teisest sessioonist.
-\n
-\n• Sinu koduserveri haldaja on turvakaalutlustel keelanud sinu ligipääsu.";
+"signed_out_notice" = "See võib juhtuda eri põhjustel:\n\n• Sa oled muutnud oma salasõna mõnes teises sessioonis.\n\n• Sa oled selle sessiooni kustutanud mõnest teisest sessioonist.\n\n• Sinu koduserveri haldaja on turvakaalutlustel keelanud sinu ligipääsu.";
 "signed_out_submit" = "Logi uuesti sisse";
 "soft_logout_title" = "Sa oled loginud välja";
-"soft_logout_sso_not_same_user_error" = "Praegune sessioon kuulub kasutajale %1$@, kuid sina üritad siseneda kasutaajaga %2$@. Sellist võimalust %@ hetkel ei toeta.
-\nPalun eemalda kõik andmed ning siis logi sisse muu kontoga.";
-"verification_conclusion_compromised" = "Mõni järgnevatest võib olla sattunud valedesse kätesse:
-\n 
-\n - Sinu koduserver
-\n - Selle osapoole koduserver, keda sa üritad verifitseerida
-\n - Sinu või teise osapoole internetiühendus
-\n - Sinu või teise osapoole seade";
+"soft_logout_sso_not_same_user_error" = "Praegune sessioon kuulub kasutajale %1$@, kuid sina üritad siseneda kasutaajaga %2$@. Sellist võimalust %@ hetkel ei toeta.\nPalun eemalda kõik andmed ning siis logi sisse muu kontoga.";
+"verification_conclusion_compromised" = "Mõni järgnevatest võib olla sattunud valedesse kätesse:\n \n - Sinu koduserver\n - Selle osapoole koduserver, keda sa üritad verifitseerida\n - Sinu või teise osapoole internetiühendus\n - Sinu või teise osapoole seade";
 "sent_a_video" = "Video.";
 "sent_an_image" = "Pilt.";
 "sent_an_audio_file" = "Helifail";
 "sent_a_file" = "Fail";
 "room_profile_not_encrypted_subtitle" = "Sõnumid siin jututoas on läbivalt krüptitud.";
-"room_profile_encrypted_subtitle" = "Sõnumid siin jututoas kasutavad läbivat krüptimist. 
-\n 
-\nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.";
+"room_profile_encrypted_subtitle" = "Sõnumid siin jututoas kasutavad läbivat krüptimist. \n \nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.";
 "room_profile_section_security" = "Turvalisus";
 "room_profile_section_security_learn_more" = "Lisateave";
 "room_profile_section_more" = "Veel";
@@ -1449,8 +1357,7 @@
 "call_notification_reject" = "Keeldu";
 "call_notification_hangup" = "Lõpeta kõne";
 "unignore" = "Lõpeta eiramine";
-"verify_cannot_cross_sign" = "See sessioon ei oska jagada verifitseerimisteavet sinu teiste sessioonidega.
-\nSeni salvestatakse verifitseerimisteave kohalikus seadmes ja jagatakse rakenduse tulevases versioonis.";
+"verify_cannot_cross_sign" = "See sessioon ei oska jagada verifitseerimisteavet sinu teiste sessioonidega.\nSeni salvestatakse verifitseerimisteave kohalikus seadmes ja jagatakse rakenduse tulevases versioonis.";
 "verification_profile_device_untrust_info" = "Kuni antud kasutaja seda sessiooni ei usalda, on ta märgitud hoiatussildiga. Alternatiivina on sul võimalus verifiseerimist ka käsitsi teha.";
 "initialize_cross_signing" = "Käivita risttunnustamine";
 "reset_cross_signing" = "Lähtesta krüptovõtmed";
@@ -1482,21 +1389,12 @@
 "verify_cancel_self_verification_from_untrusted" = "Kui sa katkestad, siis sa ei saa selles seadmes lugeda krüptitud sõnumeid ning muud kasutajad ei usalda seda";
 "verify_cancel_self_verification_from_trusted" = "Kui sa katkestad, siis sa ei saa oma uues seadmes lugeda krüptitud sõnumeid ning muud kasutajad ei usalda seda";
 "verify_cancel_other" = "Kui sa nüüd katkestad, siis sa ei verifitseeri seadet %1$@ (%2$@). Alusta uuesti sealsest profiilist.";
-"verify_not_me_self_verification" = "Mõni järgnevatest võib olla sattunud valedesse kätesse:
-\n 
-\n - Sinu salasõna
-\n - Sinu koduserver
-\n - Sinu või teise osapoole seade
-\n - Sinu või teise osapoole internetiühendus
-\n
-\nPalun vaheta seadistuste lehelt koheselt oma kasutajakonto salasõna ja taastevõti.";
+"verify_not_me_self_verification" = "Mõni järgnevatest võib olla sattunud valedesse kätesse:\n \n - Sinu salasõna\n - Sinu koduserver\n - Sinu või teise osapoole seade\n - Sinu või teise osapoole internetiühendus\n\nPalun vaheta seadistuste lehelt koheselt oma kasutajakonto salasõna ja taastevõti.";
 "verify_cancelled_notice" = "Verifitseerimine on katkestatud. Soovi korral saad seda uuesti alustada.";
 "verification_cancelled" = "Verifitseerimine on tühistatud";
 "recovery_passphrase" = "Taastamiseks mõeldud paroolifraas";
 "message_key" = "Sõnumite krüptovõti";
-"bootstrap_cross_signing_success" = "Sinu %2$@ ja %1$@ on seadistatud.
-\n
-\nHoia neid turvaliselt! Kui sa oled oma rakendustes kõik sessioonid sulgenud, siis sa vajad neid ligipääsu taastamiseks oma krüptitud sõnumitele ja turvalistele andmetele.";
+"bootstrap_cross_signing_success" = "Sinu %2$@ ja %1$@ on seadistatud.\n\nHoia neid turvaliselt! Kui sa oled oma rakendustes kõik sessioonid sulgenud, siis sa vajad neid ligipääsu taastamiseks oma krüptitud sõnumitele ja turvalistele andmetele.";
 "auth_invalid_login_param_space_in_password" = "Vigane salasõna ja/või kasutajanimi. Palun vaata, kas mitte sisestatud salasõna ei alga või lõppe tühikutega.";
 "auth_invalid_login_deactivated_account" = "See kasutajakonto on deaktiveeritud.";
 "room_message_placeholder" = "Sõnum…";
@@ -1522,10 +1420,8 @@
 "error_saving_media_file" = "Meediafaili salvestamine ei õnnestunud";
 "change_password_summary" = "Määra kontole uus salasõna…";
 "use_other_session_content_description" = "Kasuta kõige uuemat %@\'i versioon mõnes muus seadmes, nagu näiteks %@ Web, %@ Desktop, %@ iOS, %@ Android. Samuti sobib mõni muu Matrix\'i klient, mis oskab risttunnustamist";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
 "or_other_mx_capable_client" = "või mõnda teist Matrix\'i klienti, mis oskab risttunnustamist";
 "use_latest_app" = "Kasuta oma muus seadmes kõige uuemat %@\'i versiooni:";
 "command_description_discard_session" = "Sunnib loobuma praeguse krüptitud jututoa rühmavestluse seansist";
@@ -1552,9 +1448,7 @@
 "sent_verification_conclusion" = "Verifitseerimise tulemus";
 "universal_link_malformed" = "Link oli vigane";
 "no_permissions_to_start_webrtc_call" = "Sul ei ole õigusi siin jututoas helistamiseks";
-"delete_account_data_warning" = "Kas kustutame %1$@ tüüpi kasutajakonto andmed\?
-\n
-\nKuna nii mõndagi ootamatut võib juhtuda, siis kasuta seda võimalust mõningase ettevaatusega.";
+"delete_account_data_warning" = "Kas kustutame %1$@ tüüpi kasutajakonto andmed\?\n\nKuna nii mõndagi ootamatut võib juhtuda, siis kasuta seda võimalust mõningase ettevaatusega.";
 "settings_security_pin_code_grace_period_summary_off" = "PIN-kood on nõutav alati, kui sa %@\'i avad.";
 "settings_security_pin_code_grace_period_summary_on" = "PIN-kood on nõutav, kui sa kahe minuti jooksul pole %@\'i kasutanud.";
 "settings_security_pin_code_grace_period_title" = "Kahe minuti möödumisel küsi uuesti PIN-koodi";
@@ -1577,9 +1471,7 @@
 "direct_room_encryption_enabled_tile_description" = "See jututuba on läbivalt krüptitud.";
 "direct_room_profile_section_more_leave" = "Lahku";
 "direct_room_profile_section_more_settings" = "Seadistused";
-"direct_room_profile_encrypted_subtitle" = "Sõnumid siin jututoas kasutavad läbivat krüptimist. 
-\n 
-\nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.";
+"direct_room_profile_encrypted_subtitle" = "Sõnumid siin jututoas kasutavad läbivat krüptimist. \n \nSinu sõnumid on turvatud ning ainult sinul ja saaja(te)l on unikaalsed võtmed selliste sõnumite lugemiseks.";
 "direct_room_profile_not_encrypted_subtitle" = "See jututuba ei ole läbivalt krüptitud.";
 "login_error_outdated_homeserver_warning_content" = "Selle koduserveri versioon on üsna vana. Palu oma koduserveri haldajat, et ta teeks vajalikud uuendused. Kui jätkad, siis mõni funktsioon ei pruugi nii nagu vaja toimida.";
 "direct_room_join_rules_invite_by_you" = "Sina määrasid, et siia jututuppa pääseb vaid kutsega.";
@@ -1660,8 +1552,7 @@
 "settings_security_pin_code_change_pin_summary" = "Muuda oma praegune PIN-kood";
 "settings_security_pin_code_change_pin_title" = "Muuda PIN-kood";
 "room_preview_no_preview_join" = "Antud jututoal puudub eelvaate võimalus. Kas sa soovid sellega liituda\?";
-"room_preview_not_found" = "Sellele jututoale puudub hetkel ligipääs.
-\nProovi hiljem uuesti või küsi jututoa haldajalt, kas sul on olemas selleks vajalikud õigused.";
+"room_preview_not_found" = "Sellele jututoale puudub hetkel ligipääs.\nProovi hiljem uuesti või küsi jututoa haldajalt, kas sul on olemas selleks vajalikud õigused.";
 "room_alias_publish_to_directory_error" = "Ei õnnestu laadida andmeid selle jututoa nähtavuse kohta (%1$@).";
 "room_alias_publish_to_directory" = "Kas avaldame selle jututoa %1$@ serveri kõigile nähtavad jututubade loendis\?";
 "room_alias_action_unpublish" = "Tühista selle aadressi avaldamine";
@@ -1793,10 +1684,8 @@
 "room_settings_room_version_title" = "Jututoa versioon";
 "dialog_edit_hint" = "Uus väärtus";
 "action_switch" = "Vaheta";
-"initial_sync_start_downloading" = "Esmane sünkroniseerimine:
-\nLaadin andmed alla…";
-"initial_sync_start_server_computing" = "Esmane sünkroniseerimine:
-\nOotan serveri vastust…";
+"initial_sync_start_downloading" = "Esmane sünkroniseerimine:\nLaadin andmed alla…";
+"initial_sync_start_server_computing" = "Esmane sünkroniseerimine:\nOotan serveri vastust…";
 "settings_room_directory_show_all_rooms_summary" = "Näita jututubade kataloogist kõiki jututubasid, sealhulgas neid, kus on ebasobilikku sisu.";
 "settings_room_directory_show_all_rooms" = "Näita jututubasid, kus on ebasobilikku sisu";
 "event_status_failed_messages_warning" = "Nende sõnumite saatmine ei õnnestunud";
@@ -1813,13 +1702,12 @@
 "spaces_beta_welcome_to_spaces_desc" = "Kogukonnakeskused on uus võimalus siduda jututubasid ja inimesi.";
 "space_add_existing_rooms" = "Lisa olemasolevaid jututubasid ja kogukonnakeskuseid";
 "leave_space" = "Lahku kogukonnast";
-"space_add_child_title" = "Lisa jututuba";
+"space_add_child_title" = "Lisa jututube";
 "space_explore_activity_title" = "Tutvu jututubadega";
-"room_alias_preview_not_found" = "Sellele jututoale puudub hetkel ligipääs.
-\nProovi hiljem uuesti või küsi jututoa haldajalt, kas sul on olemas selleks vajalikud õigused.";
+"room_alias_preview_not_found" = "Sellele jututoale puudub hetkel ligipääs.\nProovi hiljem uuesti või küsi jututoa haldajalt, kas sul on olemas selleks vajalikud õigused.";
 "join_anyway" = "Liitu ikkagi";
 "join_space" = "Liitu kogukonnakeskusega";
-"create_space" = "Loo kogukonnakeskus";
+"create_space" = "Loo kogukond";
 "skip_for_now" = "Hetkel jäta vahele";
 "share_space_link_message" = "Palun liitu %1$@ kogukonnakeskusega %2$@";
 "invite_just_to_this_room_desc" = "Nad ei saa osalema %@ jututoas";
@@ -1858,7 +1746,7 @@
 "create_spaces_choose_type_label" = "Missugust kogukonnakeskust sooviksid sa luua\?";
 "your_private_space" = "Sinu privaatne kogukonnakeskus";
 "your_public_space" = "Sinu avalik kogukonnakeskus";
-"add_space" = "Lisa kogukonnakeskus";
+"add_space" = "Lisa kogukond";
 "command_description_leave_room" = "Lahku antud tunnusega jututoast (tunnuse puudumisel jututoast, kus hetkel asud)";
 "command_description_join_space" = "Liitu kogukonnakeskusega tema tunnuse alusel";
 "command_description_create_space" = "Loo kogukonnakeskus";
@@ -1890,13 +1778,11 @@
 "use_as_default_and_do_not_ask_again" = "Kasuta vaikeseadistusena ja ära küsi uuesti";
 "option_always_ask" = "Alati küsi";
 "this_space_has_no_rooms_admin" = "Mõned mitteavalikud jututoad võivad olla peidetud. Nendega liitumiseks vajad kutset.";
-"this_space_has_no_rooms_not_admin" = "Mõned mitteavalikud jututoad võivad olla peidetud. Nendega liitumiseks vajad kutset.
-\nUue jututubade lisamiseks sul õigused puuduvad.";
+"this_space_has_no_rooms_not_admin" = "Mõned mitteavalikud jututoad võivad olla peidetud. Nendega liitumiseks vajad kutset.\nUue jututubade lisamiseks sul õigused puuduvad.";
 "this_space_has_no_rooms" = "Selles kogukonnakeskuses pole jututube";
 "spaces_no_server_support_description" = "Lisateavet saad oma koduserveri haldajalt";
 "spaces_no_server_support_title" = "Tundub, et sinu koduserver veel ei võimalda kogukonnakeskuste kasutamist";
-"spaces_feeling_experimental_subspace" = "Kas sa tahad katsetada\?
-\nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.";
+"spaces_feeling_experimental_subspace" = "Kas sa tahad katsetada\?\nSa võid kogukonnakeskusele lisada ka teisi kogukonnakeskuseid.";
 "space_leave_prompt_msg_as_admin" = "Sa oled selle kogukonna ainus haldaja. Kui lahkud, siis ei leidu enam kedagi, kellel oleks seal haldusõigusi.";
 "space_leave_prompt_msg_private" = "Ilma uue kutseta sa ei saa uuesti liituda.";
 "space_leave_prompt_msg_only_you" = "Sa oled siin viimane osaleja. Kui sa nüüd lahkud, siis mitte keegi, kaasa arvatud sa ise, ei saa hiljem enam liituda.";
@@ -1932,8 +1818,7 @@
 "upgrade_room_update_parent_space" = "Uuenda automaatselt ka kogukonnakeskust, kus jututuba osaleb";
 "upgrade_room_auto_invite" = "Kutsu automaatselt kasutajaid";
 "upgrade_public_room_from_to" = "Sa oled uuendamas jututoa versiooni: %1$@ -> %2$@.";
-"upgrade_room_warning" = "Jututoa versiooni uuendamine on erandlik tegevus ning soovitame seda vaid siis kui ta on vigade tõttu raskestikasutatav, tal puuduvad uued funktsionaalsused või temas leidub turvavigu.
-\nTavaliselt versiooniuuendus mõjutab vaid seda viisi kuidas andmeid töödeldakse serveris.";
+"upgrade_room_warning" = "Jututoa versiooni uuendamine on erandlik tegevus ning soovitame seda vaid siis kui ta on vigade tõttu raskestikasutatav, tal puuduvad uued funktsionaalsused või temas leidub turvavigu.\nTavaliselt versiooniuuendus mõjutab vaid seda viisi kuidas andmeid töödeldakse serveris.";
 "upgrade_private_room" = "Uuenda omavaheline jututuba";
 "upgrade_public_room" = "Uuenda avalik jututuba";
 "upgrade" = "Uuenda";
@@ -2074,9 +1959,7 @@
 "space_settings_permissions_title" = "Õigused kogukonnakeskuses";
 "space_participants_unban_prompt_msg" = "Suhtluskeelu eemaldamine võimaldab kogukonnaga uuesti liituda.";
 "space_participants_ban_prompt_msg" = "Sellele kasutajale suhtluskeelu seadmine tõstab ta kogukonnast välja ning ei võimalda uuesti liitumist.";
-"space_participants_remove_prompt_msg" = "kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.
-\n
-\nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.";
+"space_participants_remove_prompt_msg" = "kogukonnast välja müksamine eemaldab ta praeguseks sellest kogukonnast.\n\nKui soovid, et ta ei saaks uuesti liituda, siis peaksid seadma suhtluskeelu.";
 "a11y_stop_voice_message" = "Lõpeta salvestamine";
 "command_description_lenny" = "Lisa ( ͡° ͜ʖ ͡°) smaili vormindamata sõnumi algusesse";
 "settings_discovery_no_policy_provided" = "Isikutuvastusserveril pole reegleid kirjeldatud";
@@ -2131,12 +2014,10 @@
 "legals_home_server_title" = "Sinu koduserveri kasutustingimused";
 "legals_application_title" = "%@ kasutustingimused";
 "analytics_opt_in_list_item_3" = "Seadistustest saad alati määrata, et see funktsionaalsus pole kasutusel";
-"analytics_opt_in_list_item_2.b_0" = "ei";
-"analytics_opt_in_list_item_1.b_0" = "ei";
+"analytics_opt_in_list_item_2" = "Meie <b>ei</b> jaga teavet kolmandate osapooltega";
+"analytics_opt_in_list_item_1" = "Meie <b>ei</b> salvesta ega profileeri sinu kasutajakonto andmeid";
 "analytics_opt_in_content_link" = "siit";
-"analytics_opt_in_content" = "Võimalike vigade leidmiseks ja %@\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.
-\n
-\nMeie kasutustingimused leiad siit - %@.";
+"analytics_opt_in_content" = "Võimalike vigade leidmiseks ja %@\'i arendamiseks jaga meiega anonüümseid andmeid. Selleks, et mõistaksime, kuidas kasutajad erinevaid seadmeid pruugivad me loome sinu seadmetele ühise juhusliku tunnuse.\n\nMeie kasutustingimused leiad siit - %@.";
 "analytics_opt_in_title" = "Aita %@\'i arendamisel";
 "action_enable" = "Võta kasutusele";
 "restart_the_application_to_apply_changes" = "Muudatuste jõustamiseks käivita rakendus uuesti.";
@@ -2228,8 +2109,7 @@
 "room_notification_two_users_are_typing" = "%1$@ ja %2$@";
 "location_share_live_stop" = "Lõpeta asukoha jagamine";
 "location_share_live_enabled" = "Reaalajas asukoha jagamine on kasutusel";
-"location_in_background_missing_permission_dialog_content" = "Kui sa soovid reaalajas oma asukohta jagada, siis %@ vajab alati õigus asukohta tuvastada. Seda ka siis kui rakendus töötab taustal.
-\nLigipääs asukohale on saadaval vaid sinu valitud ajavahemiku vältel.";
+"location_in_background_missing_permission_dialog_content" = "Kui sa soovid reaalajas oma asukohta jagada, siis %@ vajab alati õigus asukohta tuvastada. Seda ka siis kui rakendus töötab taustal.\nLigipääs asukohale on saadaval vaid sinu valitud ajavahemiku vältel.";
 "location_in_background_missing_permission_dialog_title" = "Luba ligipääs asukohale";
 "a11y_location_share_option_pinned_icon" = "Jaga seda asukohta";
 "location_share_option_pinned" = "Jaga seda asukohta";
@@ -2239,103 +2119,24 @@
 "location_share_option_user_current" = "Jaga minu praegust asukohta";
 "a11y_location_share_locate_button" = "Suumi praeguse asukohani";
 "a11y_location_share_pin_on_map" = "Valitud asukoha marker kaardil";
-"threads_notice_migration_message" = "Me oleme valmis avaldama jutulõngade funktsionaalsuse beetaversiooni.
-\n
-\nValmistudes järgnevaks, me peame tegema natuke muudatusi: enne seda hetke loodud jutulõngad kuvatakse tavaliste vastustena.
-\n
-\nKuna jutulõngad on nüüd osa Matrix\'i spetsifikatsioonist, siis see on ühekordne muudatus.";
+"threads_notice_migration_message" = "Me oleme valmis avaldama jutulõngade funktsionaalsuse beetaversiooni.\n\nValmistudes järgnevaks, me peame tegema natuke muudatusi: enne seda hetke loodud jutulõngad kuvatakse tavaliste vastustena.\n\nKuna jutulõngad on nüüd osa Matrix\'i spetsifikatsioonist, siis see on ühekordne muudatus.";
 "threads_notice_migration_title" = "Jutulõngad on peaaegu valmis 🎉";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ lisas %2$@ selle jututoa aadressiks.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ lisas %2$@ selle jututoa aadressideks.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ eemaldas %2$@ kui selle jututoa aadressi.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ eemaldas %2$@ selle jututoa aadresside hulgast.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Sina lisasid %1$@ selle jututoa aadressiks.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Sina lisasid %1$@ selle jututoa aadressideks.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Sina eemaldasid %1$@, kui selle jututoa aadressi.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Sina eemaldasid %1$@ selle jututoa aadresside hulgast.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ ja %4$d muu";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ ja %4$d muud";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Sa eemaldasid selle jututoa täiendava aadressi %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Sa eemaldasid selle jututoa täiendavad aadressid %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ eemaldas selle jututoa täiendava aadressi %2$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ eemaldas selle jututoa täiendavad aadressid %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Sa lisasid sellele jututoale täiendava aadressi %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Sa lisasid sellele jututoale täiendavad aadressid %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ lisas sellele jututoale täiendava aadressi %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ lisas sellele jututoale täiendavad aadressid %2$@.";
-"plurals.membership_changes.item_0" = "%d liikmelisuse muutus";
-"plurals.membership_changes.item_1" = "%d liikmelisuse muutust";
-"plurals.room_details_selected.item_0" = "%d valitud";
-"plurals.room_details_selected.item_1" = "%d valitud";
-"plurals.active_widgets.item_0" = "Kasutusel on %d vidin";
-"plurals.active_widgets.item_1" = "Kasutusel on %d vidinat";
-"plurals.room_settings_banned_users_count.item_0" = "%d suhtluskeelu saanud kasutaja";
-"plurals.room_settings_banned_users_count.item_1" = "%d suhtluskeelu saanud kasutajat";
-"plurals.room_title_members.item_0" = "%d osaleja";
-"plurals.room_title_members.item_1" = "%d osalejat";
-"plurals.settings_active_sessions_count.item_0" = "%d aktiivne sessioon";
-"plurals.settings_active_sessions_count.item_1" = "%d aktiivset sessiooni";
-"plurals.room_new_messages_notification.item_0" = "%d uus sõnum";
-"plurals.room_new_messages_notification.item_1" = "%d uut sõnumit";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d jututuba";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d jututuba";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d sõnum";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d sõnumit";
-"plurals.notification_compat_summary_title.item_0" = "%d teavitus";
-"plurals.notification_compat_summary_title.item_1" = "%d teavitust";
-"plurals.notification_unread_notified_messages.item_0" = "%d lugemata teavitatud sõnum";
-"plurals.notification_unread_notified_messages.item_1" = "%d lugemata teavitatud sõnumit";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Taastasin varukoopiast ühe võtmega.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Taastasin varukoopiast %d võtmega.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "Üks uus võti on lisatud siia sessiooni.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d uut võtit on lisatud siia sessiooni.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Varundan üht krüptovõtit…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Varundan %d krüptovõtit…";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Liiga palju samaaegseid päringuid. Proovi uuesti ühe sekundi pärast…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Liiga palju samaaegseid päringuid. Proovi uuesti %1$d sekundi pärast…";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Kutsed saadetud kasutajatele %1$@ ja veel ühele teisele kasutajale";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Kutsed saadetud kasutajatele %1$@ ja veel %2$d\'le kasutajale";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d võtme importimine õnnestus.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d võtme importimine õnnestus.";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ ja %3$d muu loevad";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ ja %3$d muud loevad";
-"plurals.fallback_users_read.item_0" = "%d kasutaja luges";
-"plurals.fallback_users_read.item_1" = "%d kasutajat lugesid";
-"plurals.room_profile_section_more_member_list.item_0" = "Üks inimene";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d inimest";
-"plurals.send_images_with_original_size.item_0" = "Saada pilt algupärases suuruses";
-"plurals.send_images_with_original_size.item_1" = "Saada pildid algupärases suuruses";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Vale PIN-kood, jäänud on %d katse";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Vale PIN-kood, jäänud on %d katset";
-"plurals.seconds.item_0" = "%d sekund";
-"plurals.seconds.item_1" = "%d sekundit";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Näita seda seadet, millega saaksid praegu verifitseerimist alustada";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Näita %d seadet, millega saaksid praegu verifitseerimist alustada";
-"plurals.notification_invitations.item_0" = "%d kutse";
-"plurals.notification_invitations.item_1" = "%d kutset";
-"plurals.entries.item_0" = "%d kirje";
-"plurals.entries.item_1" = "%d kirjet";
-"plurals.space_people_you_know.item_0" = "%d sinu tuttav on juba liitunud";
-"plurals.space_people_you_know.item_1" = "%d sinu tuttavat on juba liitunud";
-"plurals.send_videos_with_original_size.item_0" = "Saada videofail algses suuruses";
-"plurals.send_videos_with_original_size.item_1" = "Saada videofailid algses suuruses";
-"plurals.missed_video_call.item_0" = "Vastamata videokõne";
-"plurals.missed_video_call.item_1" = "%d vastamata videokõnet";
-"plurals.missed_audio_call.item_0" = "Vastamata kõne";
-"plurals.missed_audio_call.item_1" = "%d vastamata kõnet";
-"plurals.call_active_status.item_0" = "Kõne on pooleli ·";
-"plurals.call_active_status.item_1" = "%1$d kõnet on pooleli ·";
-"plurals.create_poll_not_enough_options_error.item_0" = "Nõutav on vähemalt %1$@ valik";
-"plurals.create_poll_not_enough_options_error.item_1" = "Nõutav on vähemalt %1$@ valikut";
-"plurals.poll_total_vote_count_after_ended.item_0" = "%1$d\'l häälel põhinev lõpptulemus";
-"plurals.poll_total_vote_count_after_ended.item_1" = "%1$d\'l häälel põhinev lõpptulemus";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "Juba on %1$d hääletanu. Tulemuste nägemiseks pead hääletama";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "Juba on %1$d hääletanut. Tulemuste nägemiseks pead hääletama";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Põhineb %1$d\'l häälel";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "Põhineb %1$d\'l häälel";
-"plurals.poll_option_vote_count.item_0" = "%1$d hääl";
-"plurals.poll_option_vote_count.item_1" = "%1$d häält";
-"plurals.message_reaction_show_more.item_0" = "veel %1$d";
-"plurals.message_reaction_show_more.item_1" = "veel %1$d";
-"plurals.notice_room_server_acl_changes.item_0" = "%d serveri kasutusõiguste muudatus";
-"plurals.notice_room_server_acl_changes.item_1" = "%d serveri kasutusõiguste muudatust";
+"live_location_sharing_notification_description" = "Asukoha reaalajas jagamine on hetkel kasutusel";
+"live_location_sharing_notification_title" = "Asukoht reaalajas - %@";
+"error_forbidden_digits_only_username" = "Koduserver ei võimalda ainult numbritest koosneva kasutajanime loomist.";
+"ftue_personalize_skip_this_step" = "Jäta see samm vahele";
+"ftue_personalize_submit" = "Salvesta ja jätka";
+"ftue_personalize_complete_subtitle" = "Sinu eelistused on salvestatud.";
+"ftue_personalize_complete_title" = "Kõik on valmis!";
+"ftue_personalize_lets_go" = "Alustame nüüd";
+"ftue_profile_picture_subtitle" = "Sa võid seda hiljem alati muuta.";
+"ftue_profile_picture_title" = "Lisa profiilipilt";
+"ftue_display_name_entry_footer" = "Sa võid seda hiljem muuta";
+"ftue_display_name_entry_title" = "Kuvatav nimi";
+"ftue_display_name_subtitle" = "Seda näidatakse sõnumite saatmisel.";
+"ftue_display_name_title" = "Vali kuvatav nimi";
+"ftue_account_created_subtitle" = "Sinu kasutajakonto %@ on nüüd olemas.";
+"ftue_account_created_congratulations_title" = "Õnnitlused!";
+"ftue_account_created_take_me_home" = "Mine avalehele";
+"ftue_account_created_personalize" = "Isikupärasta oma profiili";
+"action_disable" = "Lülita välja";

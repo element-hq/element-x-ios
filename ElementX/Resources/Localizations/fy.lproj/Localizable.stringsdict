@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>membership_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d lidmaatskip wizige</string>
+			<key>other</key>
+			<string>%d lidmaatskippen wizige</string>
+		</dict>
+	</dict>
+	<key>missed_audio_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Miste spraakoprop</string>
+			<key>other</key>
+			<string>%d miste spraakoproppen</string>
+		</dict>
+	</dict>
+	<key>missed_video_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Miste fideo-oprop</string>
+			<key>other</key>
+			<string>%d miste fideo-oproppen</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ hat %2$@ as petearadres tafoege.</string>
+			<key>other</key>
+			<string>%1$@ hat %2$@ as petearadressen tafoege.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jo hawwe %1$@ as petearadres tafoege.</string>
+			<key>other</key>
+			<string>Jo hawwe %1$@ as petearadressen tafoege.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ hat %2$@ as petearadres fuortsmiten.</string>
+			<key>other</key>
+			<string>%1$@ hat %2$@ as petearadressen fuortsmiten.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jo hawwe %1$@ as petearadres fuortsmiten.</string>
+			<key>other</key>
+			<string>Jo hawwe %1$@ as petearadresens fuortsmiten.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ hat %2$@ as alternatyf keameradres tafoege.</string>
+			<key>other</key>
+			<string>%1$@ hat %2$@ as alternative keameradressen tafoege.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jo hawwe %1$@ as alternatyf keameradres tafoege.</string>
+			<key>other</key>
+			<string>Jo hawwe %1$@ as alternative keameradressen tafoege.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ hat %2$@ as alternatyf keameradres fuortsmiten.</string>
+			<key>other</key>
+			<string>%1$@ hat %2$@ as alternative keameradressen fuortsmiten.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jo hawwe it alternative keameradres %1$@ fuortsmiten.</string>
+			<key>other</key>
+			<string>Jo hawwe de alternative keameradressen %1$@ fuortsmiten.</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_line_for_room</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@: %2$d berjocht</string>
+			<key>other</key>
+			<string>%1$@: %2$d berjochten</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d notifikaasje</string>
+			<key>other</key>
+			<string>%d notifikaasjes</string>
+		</dict>
+	</dict>
+	<key>notification_invitations</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d útnûging</string>
+			<key>other</key>
+			<string>%d útnûgingen</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages_in_room_rooms</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d keamer</string>
+			<key>other</key>
+			<string>%d keamers</string>
+		</dict>
+	</dict>
+	<key>room_details_selected</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d selektearre</string>
+			<key>other</key>
+			<string>%d selektearre</string>
+		</dict>
+	</dict>
+	<key>room_displayname_four_and_more_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@, %2$@, %3$@ en %4$d oar</string>
+			<key>other</key>
+			<string>%1$@, %2$@, %3$@ en %4$d oaren</string>
+		</dict>
+	</dict>
+	<key>room_new_messages_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d nij berjocht</string>
+			<key>other</key>
+			<string>%d nije berjochten</string>
+		</dict>
+	</dict>
+	<key>room_settings_banned_users_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d ferballe brûker</string>
+			<key>other</key>
+			<string>%d ferballe brûkers</string>
+		</dict>
+	</dict>
+	<key>room_title_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d dielnimmer</string>
+			<key>other</key>
+			<string>%d dielnimmers</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

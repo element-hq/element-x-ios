@@ -132,13 +132,11 @@
 "open_settings" = "Άνοιγμα ρυθμίσεων";
 "settings_troubleshoot_test_account_settings_title" = "Ρυθμίσεις λογαριασμού.";
 "settings_troubleshoot_test_account_settings_success" = "Οι ειδοποιήσεις είναι ενεργοποιημένες για τον λογαριασμό σας.";
-"settings_troubleshoot_test_account_settings_failed" = "Οι ειδοποιήσεις είναι απενεργοποιημένες για τον λογαριασμό σας. 
-\nΠαρακαλώ ελέγξτε τις ρυθμίσεις λογαριασμού.";
+"settings_troubleshoot_test_account_settings_failed" = "Οι ειδοποιήσεις είναι απενεργοποιημένες για τον λογαριασμό σας. \nΠαρακαλώ ελέγξτε τις ρυθμίσεις λογαριασμού.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Ενεργοποίηση";
 "settings_troubleshoot_test_device_settings_title" = "Ρυθμίσεις συσκευής.";
 "settings_troubleshoot_test_device_settings_success" = "Οι ειδοποιήσεις είναι ενεργοποιημένες για αυτή την συσκευή.";
-"settings_troubleshoot_test_device_settings_failed" = "Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή.
-\nΠαρακαλώ ελέγξτε τις ρυθμίσεις του %@.";
+"settings_troubleshoot_test_device_settings_failed" = "Οι ειδοποιήσεις δεν επιτρέπονται για αυτή την συσκευή.\nΠαρακαλώ ελέγξτε τις ρυθμίσεις του %@.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Ενεργοποίηση";
 "settings_inline_url_preview" = "Προεπισκόπιση συνδέσμων";
 "settings_send_markdown" = "Μορφοποίηση Markdown";
@@ -232,8 +230,7 @@
 "none" = "Κανένα";
 "sign_out_bottom_sheet_warning_backup_not_active" = "H δημιουργία αντιγράφων κλειδιού ασφαλείας θα πρέπει να είναι ενεργή σε όλες τις συνεδρίες σας για να αποφύγετε την απώλεια πρόσβασης στα κρυπτογραφημένα μηνύματά σας.";
 "room_widget_reload" = "Επαναφόρτωση γραφικού στοιχείου";
-"room_widget_failed_to_load" = "Αποτυχία φόρτωσης γραφικού στοιχείου
-\n%@";
+"room_widget_failed_to_load" = "Αποτυχία φόρτωσης γραφικού στοιχείου\n%@";
 "room_widget_permission_webview_shared_info_title" = "Η χρήση του ενδέχεται να δημιουγίσει cookies και να κοινοποιήσει δεδομένα με %@:";
 "room_widget_permission_shared_info_title" = "Η χρήση του ενδέχεται να κοινοποιεί δεδομένα με %@:";
 "room_widget_permission_added_by" = "Αυτο το γραφικό στοιχείο προστέθηκε από:";
@@ -257,9 +254,7 @@
 "auth_login" = "Σύνδεση";
 "room_participants_ban_reason" = "Λόγος οριστικής αποβολής";
 "room_participants_ban_title" = "Αποκλεισμός χρήστη";
-"room_participants_remove_prompt_msg" = "Αποβάλλοντας αυτό το χρήση θα τους αφαιρέσαι από το δωμάτιο.
-\n 
-\nΕάν θέλετε να τους αποτρέψετε να συμμετάσχουν ξανά, θα πρέπει να τους αποβάλλετε οριστικά.";
+"room_participants_remove_prompt_msg" = "Αποβάλλοντας αυτό το χρήση θα τους αφαιρέσαι από το δωμάτιο.\n \nΕάν θέλετε να τους αποτρέψετε να συμμετάσχουν ξανά, θα πρέπει να τους αποβάλλετε οριστικά.";
 "room_participants_remove_reason" = "Λόγος αποβολής";
 "room_participants_remove_title" = "Αποβολή χρήστη";
 "room_participants_action_cancel_invite_prompt_msg" = "Είστε σίγουροι πως θέλετε να καταργήσετε την πρόσκληση προς αυτό τον χρήστη;";
@@ -267,9 +262,7 @@
 "room_participants_action_unignore" = "Κατάργηση παράβλεψης";
 "room_participants_action_unignore_prompt_msg" = "Καταργώντας την παράβλεψη αυτού του χρήστη θα επανφανίσει όλα τα μηνύματα από αυτούς.";
 "room_participants_action_ignore_title" = "Παράβλεψη χρήστη";
-"room_participants_action_ignore_prompt_msg" = "Παραβλέποντας αυτό το χρήση θα αφαιρέσει τα μηνύματα τους από δωμάτια που μοιράζεστε.
-\n 
-\nΜπορείτε να αντιστρέψετε αυτή την ενέργεια οποτεδήποτε στις γενικές ρυθμίσεις.";
+"room_participants_action_ignore_prompt_msg" = "Παραβλέποντας αυτό το χρήση θα αφαιρέσει τα μηνύματα τους από δωμάτια που μοιράζεστε.\n \nΜπορείτε να αντιστρέψετε αυτή την ενέργεια οποτεδήποτε στις γενικές ρυθμίσεις.";
 "room_participants_action_ignore" = "Παράβλεψη";
 "room_participants_action_unignore_title" = "Κατάργηση παράβλεψης χρήστη";
 "room_participants_power_level_demote" = "Υποβίβαση";
@@ -287,9 +280,7 @@
 "room_alias_publish_to_directory_error" = "Δεν είναι δυνατή η ανάκτηση της τρέχουσας ορατότητας καταλόγου δωματίων (%1$@).";
 "room_alias_action_unpublish" = "Κατάργηση δημοσίευσης αυτής της διεύθυνσης";
 "error_no_external_application_found" = "Δεν βρέθηκαν εξωτερικές εφαρμογές για αυτή την πράξη.";
-"no_sticker_application_dialog_content" = "Δεν έχετε ενεργοποιημένα πακέτα αυτοκόλλητων.
-\n
-\nΘέλετε να προσθέσετε μερικά τώρα;";
+"no_sticker_application_dialog_content" = "Δεν έχετε ενεργοποιημένα πακέτα αυτοκόλλητων.\n\nΘέλετε να προσθέσετε μερικά τώρα;";
 "option_take_photo_video" = "Φωτογραφία ή βίντεο";
 "option_take_video" = "Βίντεο";
 "option_take_photo" = "Φωτογραφία";
@@ -304,8 +295,7 @@
 "sound_device_speaker" = "Ομιλητής";
 "sound_device_phone" = "Τηλέφωνο";
 "call_select_sound_device" = "Αλλαγή Συσκευής Ήχου";
-"call_failed_no_connection_description" = "Αποτυχία σύνδεσης σε πραγματικό χρόνο.
-\nΖητήστε από τον διαχειριστή του οικιακού σας διακομιστή να διαμορφώσει έναν διακομιστή TURN ώστε οι κλήσεις να λειτουργούν αξιόπιστα.";
+"call_failed_no_connection_description" = "Αποτυχία σύνδεσης σε πραγματικό χρόνο.\nΖητήστε από τον διαχειριστή του οικιακού σας διακομιστή να διαμορφώσει έναν διακομιστή TURN ώστε οι κλήσεις να λειτουργούν αξιόπιστα.";
 "call_failed_no_connection" = "Η Κλήση %@ Aπέτυχε";
 "start_video_call_prompt_msg" = "Είσαστε σίγουροι ότι θέλετε να κάνετε κλήση βίντεο;";
 "start_voice_call_prompt_msg" = "Είσαστε σίγουροι ότι θέλετε να κάνετε κλήση ήχου;";
@@ -330,8 +320,7 @@
 "start_chatting" = "Ξεκινήστε συζήτηση";
 "error_empty_field_enter_user_name" = "Παρακαλώ εισάγετε όνομα χρήστη.";
 "deactivate_account_delete_checkbox" = "Παρακαλώ ξεχάστε όλα τα μηνύματα τα οποία έχω στείλει μόλις απενεργοποιηθεί ο λογαριασμός μου (Προειδοποίηση: αυτό σημαίνει οτι μελλοντικοί χρήστες θα έχουν μία ατελή εικόνα των συζητήσεων)";
-"deactivate_account_content.b_0" = "Αυτή η πράξη είναι μη αναστρέψιμη";
-"deactivate_account_content.b_1" = "δεν θα ξεχαστούν τα μηνύματά που έχετε στείλει";
+"deactivate_account_content" = "Αυτό θα κάνει το λογαριασμό σας μόνιμα άχρηστο. Δε θα μπορέσετε να συνδεθείτε ξανα, και κανείς δεν θα μπορεί να εγγραφεί με το ίδιο όνομα χρήστη. Ο λογαριασμός σας θα αναχωρήσει από όλα τα δωμάτια στα οποία συμμετέχει, και οι πληροφορίες λογαριασμού θα αφαιρεθούν από το διακομιστή ταυτότητας. <b>Αυτή η πράξη είναι μη αναστρέψιμη</b>.\n\nΜε την απενεργοποίηση του λογαρισμού σας <b>δεν θα ξεχαστούν τα μηνύματά που έχετε στείλει</b>. Εάν θα θέλατε να ξεχαστούν, τότε δηλώστε το στο κουτί πιο κάτω.\n\nΗ ορατότητα μηνυμάτων δουλεύει σαν το ηλεκτρονικό ταχυδρομείο. Το να ξεχαστούν τα μηνύματα σημαίνει οτι μηνύματα τα οποία έχετε στείλει δεν θα σταλούν σε νέους ή μη-εγγεγραμμένους χρήστες, αλλα εγγεγραμμένοι χρήστες οι οποίοι έχουν ήδη πρόσβαση σε αυτά τα μηνύματα θα μπορούν ακόμα να τα δούν.";
 "room_tombstone_versioned_description" = "Αυτό το δωμάτιο έχει αντικατασταθεί και δεν είναι πια ενεργό";
 "ssl_remain_offline" = "Παράβλεψη";
 "ssl_logout_account" = "Αποσύνδεση";
@@ -355,15 +344,3 @@
 "location_share_external" = "Άνοιγμα με";
 "tooltip_attachment_sticker" = "Αποστολή αυτοκόλλητου";
 "notice_room_created" = "%1$@ δημιούργησε το δωμάτιο";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "1 δωμάτιο";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d δωμάτια";
-"plurals.active_widgets.item_0" = "1 ενεργό widget";
-"plurals.active_widgets.item_1" = "%d ενεργά widget";
-"plurals.notification_compat_summary_title.item_0" = "%d ειδοποιήση";
-"plurals.notification_compat_summary_title.item_1" = "%d ειδοποιήσεις";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d μήνυμα";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d μηνύματα";
-"plurals.notification_invitations.item_0" = "%d πρόσκληση";
-"plurals.notification_invitations.item_1" = "%d προσκλήσεις";
-"plurals.room_settings_banned_users_count.item_0" = "%d απαγορευμένος χρήστης";
-"plurals.room_settings_banned_users_count.item_1" = "%d απαγορευμένοι χρήστες";

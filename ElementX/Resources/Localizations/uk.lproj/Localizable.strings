@@ -38,8 +38,7 @@
 "medium_email" = "Адреса електронної пошти";
 "medium_phone_number" = "Номер телефону";
 "notice_room_update" = "%@ оновлює цю кімнату.";
-"initial_sync_start_importing_account_data" = "Початкове налаштування:
-\nІмпортування даних облікового запису";
+"initial_sync_start_importing_account_data" = "Початкове налаштування:\nІмпортування даних облікового запису";
 "notice_direct_room_leave_with_reason_by_you" = "Ви вийшли. Причина: %1$@";
 "notice_direct_room_leave_with_reason" = "%1$@ виходить. Причина: %2$@";
 "notice_room_leave_with_reason_by_you" = "Ви вийшли з кімнати. Причина: %1$@";
@@ -103,21 +102,13 @@
 "notice_room_invite_no_invitee_with_reason_by_you" = "Ваше запрошення. Причина: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "Запрошення від %1$@. Причина: %2$@";
 "event_status_sending_message" = "Надсилання повідомлень…";
-"initial_sync_start_importing_account_groups" = "Початкова синхронізація:
-\nІмпортування спільнот";
-"initial_sync_start_importing_account_left_rooms" = "Початкова синхронізація:
-\nІмпортування кімнат, які ви залишили";
-"initial_sync_start_importing_account_invited_rooms" = "Початкова синхронізація:
-\nІмпортування запрошень до кімнат";
-"initial_sync_start_importing_account_joined_rooms" = "Початкова синхронізація:
-\nЗавантаження ваших бесід
-\nЯкщо ви приєдналися до багатьох кімнат, це може тривати досить довго";
-"initial_sync_start_importing_account_rooms" = "Початкова синхронізація:
-\nІмпортування кімнат";
-"initial_sync_start_importing_account_crypto" = "Початкова синхронізація:
-\nІмпортування криптографічних даних";
-"initial_sync_start_importing_account" = "Початкова синхронізація:
-\nІмпортування даних облікового запису…";
+"initial_sync_start_importing_account_groups" = "Початкова синхронізація:\nІмпортування спільнот";
+"initial_sync_start_importing_account_left_rooms" = "Початкова синхронізація:\nІмпортування кімнат, які ви залишили";
+"initial_sync_start_importing_account_invited_rooms" = "Початкова синхронізація:\nІмпортування запрошень до кімнат";
+"initial_sync_start_importing_account_joined_rooms" = "Початкова синхронізація:\nЗавантаження ваших бесід\nЯкщо ви приєдналися до багатьох кімнат, це може тривати досить довго";
+"initial_sync_start_importing_account_rooms" = "Початкова синхронізація:\nІмпортування кімнат";
+"initial_sync_start_importing_account_crypto" = "Початкова синхронізація:\nІмпортування криптографічних даних";
+"initial_sync_start_importing_account" = "Початкова синхронізація:\nІмпортування даних облікового запису…";
 "room_displayname_empty_room_was" = "Порожня кімната (була %@)";
 "power_level_custom_no_value" = "Не типовий";
 "power_level_custom" = "Не типовий (%1$d)";
@@ -240,8 +231,7 @@
 "room_participants_action_ignore" = "Нехтувати";
 "room_participants_action_unignore" = "Не нехтувати";
 "room_participants_action_mention" = "Згадати";
-"room_participants_power_level_prompt" = "Ви не зможете скасувати цю дію, оскільки надаєте користувачу той же рівень повноважень, що й у вас.
-\nВи впевнені\?";
+"room_participants_power_level_prompt" = "Ви не зможете скасувати цю дію, оскільки надаєте користувачу той же рівень повноважень, що й у вас.\nВи впевнені\?";
 "room_one_user_is_typing" = "%@ друкує…";
 "room_two_users_are_typing" = "%1$@ & %2$@ друкують…";
 "room_many_users_are_typing" = "%1$@ & %2$@ & та інші друкують…";
@@ -325,9 +315,7 @@
 "settings_new_password" = "Новий пароль";
 "settings_fail_to_update_password" = "Не вдалося оновити пароль";
 "settings_password_updated" = "Пароль успішно оновлено";
-"settings_unignore_user" = "Показувати всі повідомлення %@\?
-\n
-\nЗауважте, що це перезавантажить застосунок та може тривати деякий час.";
+"settings_unignore_user" = "Показувати всі повідомлення %@\?\n\nЗауважте, що це перезавантажить застосунок та може тривати деякий час.";
 "settings_select_country" = "Оберіть країну";
 "media_saving_period_3_days" = "3 дні";
 "media_saving_period_1_week" = "1 тиждень";
@@ -415,9 +403,7 @@
 "room_settings_add_homescreen_shortcut" = "Додати ярлик на головний екран";
 "title_activity_choose_sticker" = "Надіслати наліпку";
 "option_send_sticker" = "Надіслати наліпку";
-"no_sticker_application_dialog_content" = "У вас поки що не має наліпок.
-\n
-\nДодати зараз\?";
+"no_sticker_application_dialog_content" = "У вас поки що не має наліпок.\n\nДодати зараз\?";
 "room_participants_ban_prompt_msg" = "Заблокованих користувачів буде вилучено з цієї кімнати й вони не зможуть приєднатися знову.";
 "action_download" = "Завантажити";
 "e2e_re_request_encryption_key" = "Вдруге запитати ключі шифрування з інших ваших сеансів.";
@@ -464,8 +450,7 @@
 "dialog_user_consent_content" = "Щоб продовжити користуватися домашнім сервером %1$@ Вам слід ознайомитись та прийняти Умови використання.";
 "dialog_user_consent_submit" = "Ознайомитись зараз";
 "deactivate_account_title" = "Деактивувати обліковий запис";
-"deactivate_account_content.b_0" = "Ця дія незворотня";
-"deactivate_account_content.b_1" = "типово не спричинить видалення надісланих вами повідомлень";
+"deactivate_account_content" = "Це зробить ваш обліковий запис непридатним до подальшого використання. Ви не зможете заходити до системи, та ніхто інший не зможе зареєструватися з таким самим ID. Це спричинить вихід з вашого облікового запису з усіх кімнат, до яких ви долучилися, а також вилучить усі данні облікового запису із вашого сервера ідентифікації. <b>Ця дія незворотня</b>.\n\nДеактивація вашого облікового запису <b>типово не спричинить видалення надісланих вами повідомлень</b>. Якщо ви бажаєте позбавитись цих повідомлень, залиште позначку під цим текстом.\n\nПоказ повідомлень у Matrix подібне до електронної пошти. Таке видалення означає, що ваші надіслані повідомлення не будуть поширюватись серед нових або незареєстрованих користувачів, проте зареєстрованим користувачам, які мали доступ до цих повідомлень й надалі будуть доступні їхні копії.";
 "deactivate_account_delete_checkbox" = "Будь ласка, після деактивації мого облікового запису видаліть усі надіслані мною повідомлення (Увага: це спричинить неповне відображення розмов для нових користувачів)";
 "deactivate_account_submit" = "Деактивувати обліковий запис";
 "error_empty_field_your_password" = "Будь ласка, введіть Ваш пароль.";
@@ -474,9 +459,9 @@
 "room_tombstone_continuation_description" = "Ця кімната є продовженням іншої розмови";
 "room_tombstone_predecessor_link" = "Натисніть сюди, щоб побачити старіші повідомлення";
 "resource_limit_contact_admin" = "зв’яжіться з Вашим адміністратором";
-"resource_limit_soft_default.b_0" = "деякі користувачі не зможуть увійти в систему";
+"resource_limit_soft_default" = "Цей сервер перевищив один із ресурсних лімітів, тому <b>деякі користувачі не зможуть увійти в систему</b>.";
 "resource_limit_hard_default" = "Цей домашній сервер досяг одного зі своїх ресурсних обмежень.";
-"resource_limit_soft_mau.b_0" = "деякі з них не зможуть увійти в систему";
+"resource_limit_soft_mau" = "Цей сервер досяг свого місячного обмеження на активних користувачів, тому <b>деякі з них не зможуть увійти в систему</b>.";
 "resource_limit_hard_mau" = "Цей сервер досяг свого місячного обмеження на активних користувачів.";
 "resource_limit_soft_contact" = "Будь ласка, %@ для збільшення цього обмеження.";
 "resource_limit_hard_contact" = "Будь ласка, %@ для продовження використання цього сервісу.";
@@ -646,13 +631,11 @@
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Зверніть увагу, що для деяких типів повідомлень встановлено беззвучність (беззвучні сповіщення).";
 "settings_troubleshoot_test_bing_settings_title" = "Власні налаштування.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Увімкнути";
-"settings_troubleshoot_test_device_settings_failed" = "Сповіщення не ввімкнено для цього сеансу.
-\nПеревірте налаштування %@.";
+"settings_troubleshoot_test_device_settings_failed" = "Сповіщення не ввімкнено для цього сеансу.\nПеревірте налаштування %@.";
 "settings_troubleshoot_test_device_settings_success" = "Сповіщення ввімкнено для цього сеансу.";
 "settings_troubleshoot_test_device_settings_title" = "Налаштування сеансу.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Увімкнути";
-"settings_troubleshoot_test_account_settings_failed" = "Сповіщення для вашого облікового запису вимкнено.
-\nПеревірте налаштування облікового запису.";
+"settings_troubleshoot_test_account_settings_failed" = "Сповіщення для вашого облікового запису вимкнено.\nПеревірте налаштування облікового запису.";
 "settings_troubleshoot_test_account_settings_success" = "Сповіщення ввімкнено для вашого облікового запису.";
 "settings_troubleshoot_test_account_settings_title" = "Налаштування облікового запису.";
 "settings_troubleshoot_test_system_settings_success" = "Сповіщення ввімкнено в налаштуваннях системи.";
@@ -680,8 +663,7 @@
 "settings_discovery_emails_title" = "Виявні електронні адреси";
 "settings_discovery_manage" = "Налаштуйте свою виявність.";
 "settings_discovery_category" = "Виявність";
-"call_failed_no_connection_description" = "Не вдалося встановити зв’язок у режимі реального часу.
-\nПопросіть адміністратора вашого домашнього сервера налаштувати сервер TURN для надійної роботи викликів.";
+"call_failed_no_connection_description" = "Не вдалося встановити зв’язок у режимі реального часу.\nПопросіть адміністратора вашого домашнього сервера налаштувати сервер TURN для надійної роботи викликів.";
 "call_failed_no_connection" = "%@ не вдалося здійснити виклик";
 "no_more_results" = "Більше немає результатів";
 "action_unpublish" = "Відкликати публікування";
@@ -699,9 +681,7 @@
 "room_profile_section_security" = "Безпека";
 "settings_security_and_privacy" = "Безпека й приватність";
 "disclaimer_content" = "Ми раді повідомити вас, що ми змінили назву! Ваш застосунок оновлено й ви увійшли у свій обліковий запис.";
-"login_reset_password_cancel_confirmation_content" = "Зміну параля ще не завершено.
-\n
-\nЗупинити змінювання пароля\?";
+"login_reset_password_cancel_confirmation_content" = "Зміну параля ще не завершено.\n\nЗупинити змінювання пароля\?";
 "room_settings_save_success" = "Ви успішно змінили налаштування кімнати";
 "unexpected_error" = "Неочікувана помилка";
 "recovery_key" = "Ключ відновлення";
@@ -719,23 +699,18 @@
 "keys_backup_setup_step3_button_title_no_passphrase" = "Я створив копію";
 "keys_backup_setup_step3_button_title" = "Готово";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Тримайте відновлювальний ключ у якомусь дуже надійному місці, наприклад, у менеджері паролів (або сейфі)";
-"keys_backup_setup_step3_text_line2" = "Відновлювальний ключ підстраховує вас: можете використати його для відновлення доступу до ваших зашифрованих повідомлень, якщо забудете парольну фразу.
-\nТримайте відновлювальний ключ у якомусь дуже надійному місці, наприклад у менеджері паролів (або сейфі)";
+"keys_backup_setup_step3_text_line2" = "Відновлювальний ключ підстраховує вас: можете використати його для відновлення доступу до ваших зашифрованих повідомлень, якщо забудете парольну фразу.\nТримайте відновлювальний ключ у якомусь дуже надійному місці, наприклад у менеджері паролів (або сейфі)";
 "keys_backup_setup_step3_text_line1" = "Створюється резервна копія ключів.";
 "keys_backup_setup_step3_success_title" = "Успішно !";
 "keys_backup_setup_step2_skip_button_title" = "(Додатково) Налаштування за допомогою ключа відновлення";
 "keys_backup_setup_step1_recovery_key_alternative" = "Або захистіть свою резервну копію за допомогою ключа відновлення, зберігаючи її десь у безпеці.";
 "keys_backup_setup_creating_backup" = "Створення резервної копії";
 "keys_backup_setup_step2_button_title" = "Встановіть парольну фразу";
-"keys_backup_setup_step2_text_description" = "Ми збережемо зашифровану копію ваших ключів на вашому домашньому сервері. Захистіть свою резервну копію парольною фразою.
-\n
-\nДля максимальної безпеки фраза повинна відрізнятися від пароля вашого облікового запису.";
+"keys_backup_setup_step2_text_description" = "Ми збережемо зашифровану копію ваших ключів на вашому домашньому сервері. Захистіть свою резервну копію парольною фразою.\n\nДля максимальної безпеки фраза повинна відрізнятися від пароля вашого облікового запису.";
 "keys_backup_setup_step2_text_title" = "Захистіть свою резервну копію за допомогою парольної фрази.";
 "keys_backup_setup_step1_manual_export" = "Експорт ключів вручну";
 "keys_backup_setup" = "Почати використовувати резервне копіювання ключів";
-"keys_backup_setup_step1_description" = "Повідомлення в зашифрованих кімнатах захищено наскрізним шифруванням. Тільки ви та одержувачі маєте ключі для читання цих повідомлень.
-\n
-\nБезпечно створюйте резервні копії ключів, щоб не втратити їх.";
+"keys_backup_setup_step1_description" = "Повідомлення в зашифрованих кімнатах захищено наскрізним шифруванням. Тільки ви та одержувачі маєте ключі для читання цих повідомлень.\n\nБезпечно створюйте резервні копії ключів, щоб не втратити їх.";
 "keys_backup_setup_step1_title" = "Ніколи не втрачайте зашифровані повідомлення";
 "keys_backup_passphrase_not_empty_error_message" = "Видаліть парольну фразу, якщо хочете, щоб %@ створив ключ відновлення.";
 "passphrase_passphrase_too_weak" = "Парольна фраза занадто слабка";
@@ -746,14 +721,8 @@
 "ignore_request_short_label" = "Знехтувати";
 "key_share_request" = "Запит на розподіл ключів";
 "share_without_verifying_short_label" = "Поділитися";
-"your_unverified_device_requesting_with_info" = "Незвірений сеанс запитує ключі шифрування.
-\nНазва сеансу: %1$@
-\nОстанні відвідини: %2$@
-\nЯкщо ви не ввійшли в інший сеанс, знехтуйте цим запитом.";
-"you_added_a_new_device_with_info" = "Новий сеанс запитує ключі шифрування.
-\nНазва сеансу: %1$@
-\nОстанні відвідини: %2$@
-\nЯкщо ви не ввійшли в інший сеанс, знехтуйте цим запитом.";
+"your_unverified_device_requesting_with_info" = "Незвірений сеанс запитує ключі шифрування.\nНазва сеансу: %1$@\nОстанні відвідини: %2$@\nЯкщо ви не ввійшли в інший сеанс, знехтуйте цим запитом.";
+"you_added_a_new_device_with_info" = "Новий сеанс запитує ключі шифрування.\nНазва сеансу: %1$@\nОстанні відвідини: %2$@\nЯкщо ви не ввійшли в інший сеанс, знехтуйте цим запитом.";
 "widget_integration_review_terms" = "Для продовження потрібно прийняти Умови користування цією службою.";
 "room_no_active_widgets" = "Немає активних віджетів";
 "room_manage_integrations" = "Керувати інтеграціями";
@@ -773,8 +742,7 @@
 "room_widget_revoke_access" = "Скасувати доступ для мене";
 "room_widget_open_in_browser" = "Відкрити в переглядачі";
 "room_widget_reload" = "Перезавантажити віджет";
-"room_widget_failed_to_load" = "Не вдалося завантажити віджет.
-\n%@";
+"room_widget_failed_to_load" = "Не вдалося завантажити віджет.\n%@";
 "room_widget_permission_shared_info_title" = "Використання може спричинити обмін даними з %@:";
 "room_widget_permission_webview_shared_info_title" = "За його використання може бути встановлено файли cookie та відбуватися обмін даними з %@:";
 "room_widget_permission_added_by" = "Цей віджет додає:";
@@ -838,16 +806,13 @@
 "settings_secure_backup_setup" = "Налаштувати безпечне резервне копіювання";
 "settings_secure_backup_section_title" = "Безпечне резервне копіювання";
 "settings_cryptography_manage_keys" = "Керування криптографічними ключами";
-"settings_integrations_summary" = "Використовуйте менеджер інтеграції для керування ботами, мостами, віджетам та пакунками наліпок.
-\nМенеджери інтеграції отримують дані конфігурації та можуть змінювати віджети, надсилати запрошення до кімнати та надавати рівень повноважень від вашого імені.";
+"settings_integrations_summary" = "Використовуйте менеджер інтеграції для керування ботами, мостами, віджетам та пакунками наліпок.\nМенеджери інтеграції отримують дані конфігурації та можуть змінювати віджети, надсилати запрошення до кімнати та надавати рівень повноважень від вашого імені.";
 "settings_integrations" = "Інтеграції";
 "settings_background_fdroid_sync_mode_disabled_description" = "Ви не отримуватимете сповіщення про вхідні повідомлення, коли програма перебуває у фоновому режимі.";
 "settings_background_fdroid_sync_mode_disabled" = "Немає фонової синхронізації";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ періодично синхронізуватиметься у фоновому режимі в певний час (налаштовується).
-\nЦе вплине на використання радіо та акумулятора, з’явиться постійне сповіщення про те, що %@ очікує на події.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ періодично синхронізуватиметься у фоновому режимі в певний час (налаштовується).\nЦе вплине на використання радіо та акумулятора, з’явиться постійне сповіщення про те, що %@ очікує на події.";
 "settings_background_fdroid_sync_mode_real_time" = "Оптимізовано для реального часу";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ синхронізується у фоновому режимі так, щоб зберегти обмежені ресурси пристрою (акумулятор).
-\nЗалежно від стану ресурсів вашого пристрою, синхронізацію може бути відкладено операційною системою.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ синхронізується у фоновому режимі так, щоб зберегти обмежені ресурси пристрою (акумулятор).\nЗалежно від стану ресурсів вашого пристрою, синхронізацію може бути відкладено операційною системою.";
 "settings_background_fdroid_sync_mode_battery" = "Оптимізовано для батареї";
 "settings_background_fdroid_sync_mode" = "Режим фонової синхронізації";
 "settings_troubleshoot_test_battery_quickfix" = "Нехтувати оптимізацією";
@@ -855,11 +820,8 @@
 "settings_troubleshoot_test_battery_success" = "Оптимізація акумулятора не впливає на %@.";
 "settings_troubleshoot_test_battery_title" = "Оптимізація акумулятора";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Вимкнути обмеження";
-"settings_troubleshoot_test_bg_restricted_failed" = "Фонові обмеження ввімкнено для %@.
-\nРобота, яку намагається виконати застосунок, буде агресивно обмежена, доки вона перебуває у фоновому режимі й це може вплинути на сповіщення.
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_success" = "Фонові обмеження для %@ вимкнено. Цю перевірку варто виконувати з використанням мобільних даних (без Wi-Fi).
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Фонові обмеження ввімкнено для %@.\nРобота, яку намагається виконати застосунок, буде агресивно обмежена, доки вона перебуває у фоновому режимі й це може вплинути на сповіщення.\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Фонові обмеження для %@ вимкнено. Цю перевірку варто виконувати з використанням мобільних даних (без Wi-Fi).\n%1$@";
 "settings_troubleshoot_test_bg_restricted_title" = "Перевірте фонові обмеження";
 "settings_troubleshoot_test_service_boot_quickfix" = "Увімкніть Запуск під час завантаження";
 "settings_troubleshoot_test_service_boot_failed" = "Служба не запуститься під час перезавантаження пристрою, ви не отримуватимете сповіщень, доки %@ не буде відкрито.";
@@ -873,28 +835,20 @@
 "settings_troubleshoot_test_push_loop_success" = "Застосунок отримує PUSH";
 "settings_troubleshoot_test_push_loop_waiting_for_push" = "Застосунок очікує PUSH";
 "settings_troubleshoot_test_push_loop_title" = "Випробувальне надсилання";
-"settings_troubleshoot_test_token_registration_failed" = "Не вдалося зареєструвати токен FCM на homeserver:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Не вдалося зареєструвати токен FCM на homeserver:\n%1$@";
 "settings_troubleshoot_test_token_registration_success" = "Токен FCM успішно зареєстровано на homeserver.";
 "settings_troubleshoot_test_token_registration_title" = "Реєстрація токена";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Додати обліковий запис";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nЦя помилка не підконтрольна %@. На телефоні немає облікового запису Google. Відкрийте менеджер облікових записів і додайте обліковий запис Google.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nЦя помилка не підконтрольна %@. Це може статися з кількох причин. Можливо все запрацює, якщо ви спробуєте пізніше, ви також можете перевірити, чи не обмежено використання даних для служби Google Play в налаштуваннях системи, чи правильний годинник вашого пристрою, або це може статися в користувацькому ROM.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nЦя помилка не підконтрольна %@ й за даними Google, вона вказує на те, що на пристрої зареєстровано забагато програм у FCM. Помилка виникає лише у випадках, коли встановлено надзвичайно багато застосунків, тому вона не повинна впливати на звичайного користувача.";
-"settings_troubleshoot_test_fcm_failed" = "Не вдалося отримати токен FCM:
-\n%1$@";
-"settings_troubleshoot_test_fcm_success" = "Токен FCM отримано успішно:
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nЦя помилка не підконтрольна %@. На телефоні немає облікового запису Google. Відкрийте менеджер облікових записів і додайте обліковий запис Google.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nЦя помилка не підконтрольна %@. Це може статися з кількох причин. Можливо все запрацює, якщо ви спробуєте пізніше, ви також можете перевірити, чи не обмежено використання даних для служби Google Play в налаштуваннях системи, чи правильний годинник вашого пристрою, або це може статися в користувацькому ROM.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nЦя помилка не підконтрольна %@ й за даними Google, вона вказує на те, що на пристрої зареєстровано забагато програм у FCM. Помилка виникає лише у випадках, коли встановлено надзвичайно багато застосунків, тому вона не повинна впливати на звичайного користувача.";
+"settings_troubleshoot_test_fcm_failed" = "Не вдалося отримати токен FCM:\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "Токен FCM отримано успішно:\n%1$@";
 "settings_troubleshoot_test_fcm_title" = "Токен Firebase";
 "settings_troubleshoot_test_play_services_quickfix" = "Виправити служби Play";
-"settings_troubleshoot_test_play_services_failed" = "%@ використовує сервіси Google Play для доставлення push-сповіщень, але, схоже, його налаштовано неправильно:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ використовує сервіси Google Play для доставлення push-сповіщень, але, схоже, його налаштовано неправильно:\n%1$@";
 "open_settings" = "Відкрити Налаштування";
-"settings_troubleshoot_test_system_settings_failed" = "Сповіщення вимкнено в налаштуваннях системи.
-\nБудь ласка, перевірте налаштування системи.";
+"settings_troubleshoot_test_system_settings_failed" = "Сповіщення вимкнено в налаштуваннях системи.\nБудь ласка, перевірте налаштування системи.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Одну або кілька перевірок не пройдено, надішліть звіт про помилку, щоб допомогти нам розслідувати це.";
 "settings_troubleshoot_diagnostic_failure_status_with_quickfix" = "Одну або кілька перевірок не пройдено, спробуйте запропоновані виправлення.";
 "settings_troubleshoot_diagnostic_success_status" = "Основна діагностика в порядку. Якщо ви й далі не отримуєте сповіщень, надішліть звіт про помилку, щоб допомогти нам розслідувати це.";
@@ -906,18 +860,14 @@
 "room_participants_unban_title" = "Розблокувати користувача";
 "room_participants_ban_reason" = "Причина блокування";
 "room_participants_ban_title" = "Заблокувати користувача";
-"room_participants_remove_prompt_msg" = "вилучення користувачів прибере їх з цієї кімнати.
-\n
-\nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.";
+"room_participants_remove_prompt_msg" = "вилучення користувачів прибере їх з цієї кімнати.\n\nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.";
 "room_participants_remove_reason" = "Причина вилучення";
 "room_participants_remove_title" = "Вилучити користувача";
 "room_participants_action_cancel_invite_prompt_msg" = "Ви впевнені, що бажаєте скасувати запрошення для цього користувача\?";
 "room_participants_action_cancel_invite_title" = "Скасувати запрошення";
 "room_participants_action_unignore_prompt_msg" = "Якщо перестати нехтувати цього користувача, усі його повідомлення стануть знову видимими.";
 "room_participants_action_unignore_title" = "Рознехтувати користувача";
-"room_participants_action_ignore_prompt_msg" = "Нехтування цього користувача призведе до вилучення його повідомлень з усіх спільних кімнат.
-\n
-\nВи можете будь-коли змінити цю дію в загальних налаштуваннях.";
+"room_participants_action_ignore_prompt_msg" = "Нехтування цього користувача призведе до вилучення його повідомлень з усіх спільних кімнат.\n\nВи можете будь-коли змінити цю дію в загальних налаштуваннях.";
 "room_participants_action_ignore_title" = "Нехтувати користувача";
 "room_participants_power_level_demote" = "Понизити";
 "room_participants_power_level_demote_warning_prompt" = "Ви не зможете скасувати цю зміну, оскільки понижуєте свої права, якщо ви останній привілейований користувач у кімнаті, неможливо буде повернути собі привілеї.";
@@ -1040,9 +990,7 @@
 "room_settings_enable_encryption_no_permission" = "У вас немає дозволу на ввімкнення шифрування в цій кімнаті.";
 "room_settings_permissions_title" = "Дозволи кімнати";
 "event_status_delete_all_failed_dialog_message" = "Ви впевнені, що бажаєте видалити усі не надіслані повідомлення з цієї кімнати\?";
-"external_link_confirmation_message" = "Посилання %1$@ спрямовує вас на інший сайт: %2$@.
-\n
-\nВи впевнені, що бажаєте продовжити\?";
+"external_link_confirmation_message" = "Посилання %1$@ спрямовує вас на інший сайт: %2$@.\n\nВи впевнені, що бажаєте продовжити\?";
 "signed_out_title" = "Ви вийшли";
 "message_action_item_redact" = "Вилучити…";
 "send_a_sticker" = "Наліпка";
@@ -1102,13 +1050,9 @@
 "reset_cross_signing" = "Скинути ключі";
 "or_other_mx_capable_client" = "або будь-який інший, здатний до перехресного підписування, Matrix-клієнт";
 "encryption_information_dg_xsigning_disabled" = "Перехресне підписування не ввімкнене";
-"encryption_information_dg_xsigning_not_trusted" = "Перехресне підписування увімкнено.
-\nКлючі не є довіреними";
-"encryption_information_dg_xsigning_trusted" = "Перехресне підписування увімкнено
-\nКлючі є довіреними.
-\nПриватні ключі невідомі";
-"encryption_information_dg_xsigning_complete" = "Перехресне підписування увімкнено
-\nПриватні ключі на пристрої.";
+"encryption_information_dg_xsigning_not_trusted" = "Перехресне підписування увімкнено.\nКлючі не є довіреними";
+"encryption_information_dg_xsigning_trusted" = "Перехресне підписування увімкнено\nКлючі є довіреними.\nПриватні ключі невідомі";
+"encryption_information_dg_xsigning_complete" = "Перехресне підписування увімкнено\nПриватні ключі на пристрої.";
 "encryption_information_cross_signing_state" = "Перехресне підписування";
 "direct_room_created_summary_item" = "%@ приєднується.";
 "encryption_enabled" = "Шифрування увімкнено";
@@ -1121,12 +1065,8 @@
 "notice_room_remove_with_reason_by_you" = "Ви вилучили %1$@. Причина: %2$@";
 "notice_room_remove_with_reason" = "%1$@ вилучає %2$@. Причина: %3$@";
 "this_is_the_beginning_of_dm" = "Це початок історії вашого особистого спілкування з %@.";
-"room_profile_encrypted_subtitle" = "Повідомлення тут захищені наскрізним шифруванням.
-\n
-\nВаші повідомлення захищені замками, тож лише ви та отримувачі мають унікальні ключі для їхнього відмикання.";
-"direct_room_profile_encrypted_subtitle" = "Повідомлення тут захищені наскрізним шифруванням.
-\n
-\nВаші повідомлення захищені замками, тож лише ви та отримувачі мають унікальні ключі для їхнього відмикання.";
+"room_profile_encrypted_subtitle" = "Повідомлення тут захищені наскрізним шифруванням.\n\nВаші повідомлення захищені замками, тож лише ви та отримувачі мають унікальні ключі для їхнього відмикання.";
+"direct_room_profile_encrypted_subtitle" = "Повідомлення тут захищені наскрізним шифруванням.\n\nВаші повідомлення захищені замками, тож лише ви та отримувачі мають унікальні ключі для їхнього відмикання.";
 "this_is_the_beginning_of_room" = "Це початок %@.";
 "call_tile_other_declined" = "%1$@ відхиляє цей виклик";
 "call_transfer_users_tab_title" = "Користувачі";
@@ -1160,10 +1100,8 @@
 "invitation_sent_to_one_user" = "Запрошення надіслано до %1$@";
 "identity_server_user_consent_not_provided" = "Згоду користувача не було надано.";
 "identity_server_set_default_submit" = "Використовувати %1$@";
-"initial_sync_start_downloading" = "Початкова синхронізація:
-\nЗвантаження даних…";
-"initial_sync_start_server_computing" = "Початкова синхронізація:
-\nОчікування відповіді сервера…";
+"initial_sync_start_downloading" = "Початкова синхронізація:\nЗвантаження даних…";
+"initial_sync_start_server_computing" = "Початкова синхронізація:\nОчікування відповіді сервера…";
 "invite_users_to_room_title" = "Запросити користувачів";
 "invite_users_to_room_action_invite" = "ЗАПРОСИТИ";
 "direct_room_user_list_known_title" = "Відомі користувачі";
@@ -1192,15 +1130,9 @@
 "disconnect_identity_server_dialog_content" = "Від\'єднатись від сервера ідентифікації %@\?";
 "settings_agree_to_terms" = "Погодьтесь з умовами використання сервера ідентифікації (%@), щоб дозволити вашу виявність за електронною адресою та номером телефону.";
 "no_ignored_users" = "Ви не нехтуєте жодних користувачів";
-"content_reported_as_inappropriate_content" = "Скаргу на неприйнятний вміст було надіслано.
-\n
-\nЯкщо ви більше не бажаєте бачити жодного вмісту від цього користувача, ви можете знехтувати його, щоб приховати його повідомлення.";
-"content_reported_as_spam_content" = "Скаргу на спам було надіслано.
-\n
-\nЯкщо ви більше не бажаєте бачити жодного вмісту від цього користувача, ви можете знехтувати його, щоб приховати його повідомлення.";
-"content_reported_content" = "Скаргу на вміст було надіслано.
-\n
-\nЯкщо ви більше не бажаєте бачити жодного вмісту від цього користувача, ви можете знехтувати його, щоб приховати його повідомлення.";
+"content_reported_as_inappropriate_content" = "Скаргу на неприйнятний вміст було надіслано.\n\nЯкщо ви більше не бажаєте бачити жодного вмісту від цього користувача, ви можете знехтувати його, щоб приховати його повідомлення.";
+"content_reported_as_spam_content" = "Скаргу на спам було надіслано.\n\nЯкщо ви більше не бажаєте бачити жодного вмісту від цього користувача, ви можете знехтувати його, щоб приховати його повідомлення.";
+"content_reported_content" = "Скаргу на вміст було надіслано.\n\nЯкщо ви більше не бажаєте бачити жодного вмісту від цього користувача, ви можете знехтувати його, щоб приховати його повідомлення.";
 "block_user" = "ЗНЕХТУВАТИ КОРИСТУВАЧА";
 "settings_discovery_disconnect_with_bound_pid" = "Ви зараз оприлюднюєте електронні адреси та номери телефонів для сервера ідентифікації %1$@. Вам необхідно буде перепід\'єднатись до %2$@, щоб припинити оприлюднення.";
 "labs_allow_extended_logging" = "Увімкнути детальні звіти.";
@@ -1365,7 +1297,7 @@
 "room_settings_room_access_entry_unknown" = "Невідоме налаштування доступу (%@)";
 "room_settings_room_access_entry_knock" = "Будь-хто може попроситися до кімнати, учасники можуть прийняти або відхилити";
 "join_anyway" = "Усе одно приєднатися";
-"create_space" = "Створити Простір";
+"create_space" = "Створити простір";
 "join_space" = "Приєднатися до Простору";
 "invite_by_link" = "Поділитися посиланням";
 "invite_by_email" = "Запросити електронним листом";
@@ -1560,9 +1492,7 @@
 "push_gateway_item_push_key" = "push_key:";
 "push_gateway_item_app_id" = "app_id:";
 "settings_sdk_version" = "Версія Matrix SDK";
-"create_room_federation_error" = "Кімнату створено, але деякі запрошення не надіслано з такої причини:
-\n
-\n%@";
+"create_room_federation_error" = "Кімнату створено, але деякі запрошення не надіслано з такої причини:\n\n%@";
 "create_room_public_description" = "Будь-хто зможе приєднатися до цієї кімнати";
 "event_redacted_by_admin_reason" = "Подія модерована адміністратором кімнати";
 "reactions" = "Реакції";
@@ -1598,8 +1528,7 @@
 "keys_backup_unable_to_get_keys_backup_data" = "Сталася помилка отримання ключів резервних копій даних";
 "keys_backup_unable_to_get_trust_info" = "Під час отримання інформації про довіру сталася помилка";
 "room_preview_no_preview_join" = "Попередній перегляд цієї кімнати недоступний. Бажаєте приєднатися до неї\?";
-"room_preview_not_found" = "Зараз ця кімната недоступна.
-\nПовторіть спробу пізніше або попросіть адміністратора кімнати перевірити, чи маєте ви доступ.";
+"room_preview_not_found" = "Зараз ця кімната недоступна.\nПовторіть спробу пізніше або попросіть адміністратора кімнати перевірити, чи маєте ви доступ.";
 "room_preview_no_preview" = "Попередній перегляд цієї кімнати недоступний";
 "error_no_network" = "Немає мережі. Перевірте інтернет-з\'єднання.";
 "malformed_message" = "Хибна подія, неможливо показати";
@@ -1767,9 +1696,7 @@
 "space_settings_permissions_title" = "Дозволи простору";
 "space_participants_unban_prompt_msg" = "Розблокування користувачів дозволить їм знову приєднатися до простору.";
 "space_participants_ban_prompt_msg" = "Блокування користувачів вилучить їх із цього простору та не дозволить їм знову приєднатися.";
-"space_participants_remove_prompt_msg" = "вилучення користувачів прибере їх з цього простору.
-\n
-\nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.";
+"space_participants_remove_prompt_msg" = "вилучення користувачів прибере їх з цього простору.\n\nЩоб запобігти їхньому повторному приєднанню, замість цього слід заблокувати їх.";
 "verification_verify_user" = "Звірити %@";
 "verification_emoji_notice" = "Порівняйте унікальні емоджі, переконавшись, що їх показано в однаковому порядку.";
 "verification_no_scan_emoji_title" = "Звірити порівнявши емоджі";
@@ -1799,11 +1726,8 @@
 "login_signin_matrix_id_error_invalid_matrix_id" = "Це хибний ідентифікатор користувача. Очікуваний формат: «@user:homeserver.org»";
 "login_signin_matrix_id_password_notice" = "Якщо ви не знаєте свій пароль, поверніться, щоб скинути його.";
 "login_error_outdated_homeserver_warning_content" = "Цей домашній сервер працює давній версії. Попросіть адміністратора домашнього сервера оновити його. Ви можете продовжити, але деякі функції не працюватимуть.";
-"login_wait_for_email_notice" = "Ми щойно надіслали листа на %1$@
-\nНатисніть на посилання, яке він містить, щоб продовжити створення облікового запису.";
-"login_signup_cancel_confirmation_content" = "Ваш обліковий запис ще не створено.
-\n
-\nЗупинити процес реєстрації\?";
+"login_wait_for_email_notice" = "Ми щойно надіслали листа на %1$@\nНатисніть на посилання, яке він містить, щоб продовжити створення облікового запису.";
+"login_signup_cancel_confirmation_content" = "Ваш обліковий запис ще не створено.\n\nЗупинити процес реєстрації\?";
 "delete_event_dialog_title" = "Підтвердити вилучення";
 "settings_key_requests" = "Запити ключів";
 "login_default_session_public_name" = "%@ Android";
@@ -1819,10 +1743,8 @@
 "failed_to_initialize_cross_signing" = "Не вдалося налаштувати перехресне підписування";
 "cross_signing_verify_by_text" = "Звірити власноруч за допомогою тексту";
 "failed_to_access_secure_storage" = "Не вдалося отримати доступ до безпечного сховища";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ для переглядача
-\n%@ для ПК";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ для переглядача\n%@ для ПК";
 "error_saving_media_file" = "Не вдалося зберегти медіафайл";
 "bootstrap_invalid_recovery_key" = "Це не дійсний ключ відновлення";
 "recovery_passphrase" = "Парольна фраза відновлення";
@@ -1837,9 +1759,7 @@
 "bootstrap_crosssigning_save_cloud" = "Скопіювати у своє особисте хмарне сховище";
 "bootstrap_crosssigning_save_usb" = "Зберегти на USB-накопичувач або резервний диск";
 "bootstrap_crosssigning_print_it" = "Надрукуйте його та зберігайте у безпечному місці";
-"bootstrap_cross_signing_success" = "Ваші %2$@ та %1$@ налаштовано.
-\n
-\nТримайте їх у безпеці! Вони знадобляться вам, щоб розблокувати зашифровані повідомлення та захистити дані, якщо ви втратите всі активні сеанси.";
+"bootstrap_cross_signing_success" = "Ваші %2$@ та %1$@ налаштовано.\n\nТримайте їх у безпеці! Вони знадобляться вам, щоб розблокувати зашифровані повідомлення та захистити дані, якщо ви втратите всі активні сеанси.";
 "bootstrap_crosssigning_progress_key_backup" = "Налаштування резервного копіювання ключів";
 "bootstrap_crosssigning_progress_save_ssk" = "Синхронізація самопідписаного ключа";
 "bootstrap_crosssigning_progress_save_usk" = "Синхронізація користувацького ключа";
@@ -1865,8 +1785,7 @@
 "command_description_nick_for_room" = "Змінює ваше показуване ім\'я лише у поточній кімнаті";
 "command_description_room_name" = "Установлює назву кімнати";
 "settings_discovery_no_policy_provided" = "Сервер ідентифікації не надав жодних правил";
-"spaces_feeling_experimental_subspace" = "Бажаєте поекспериментувати\?
-\nМожете додати наявні простори до простору.";
+"spaces_feeling_experimental_subspace" = "Бажаєте поекспериментувати\?\nМожете додати наявні простори до простору.";
 "all_rooms_youre_in_will_be_shown_in_home" = "Усі кімнати, у яких ви перебуваєте, буде показано на сторінці Домівка.";
 "preference_show_all_rooms_in_home" = "Показувати у Домівці";
 "verification_cancelled" = "Перевірку скасовано";
@@ -1994,40 +1913,23 @@
 "bottom_sheet_save_your_recovery_key_content" = "Збережіть ключ безпеки у надійне місце, наприклад, до менеджера паролів або до сейфа.";
 "bottom_sheet_save_your_recovery_key_title" = "Збережіть ключ безпеки";
 "set_a_security_phrase_again_notice" = "Для підтвердження введіть таємну фразу ще раз.";
-"soft_logout_clear_data_notice" = "Увага: пристрій досі зберігає ваші особисті дані, зокрема ключі шифрування.
-\n
-\nОчистіть сховище, перш ніж передати комусь пристрій чи зайти до іншого облікового запису.";
+"soft_logout_clear_data_notice" = "Увага: пристрій досі зберігає ваші особисті дані, зокрема ключі шифрування.\n\nОчистіть сховище, перш ніж передати комусь пристрій чи зайти до іншого облікового запису.";
 "soft_logout_signin_e2e_warning_notice" = "Увійдіть, щоб відновити ключі шифрування, збережені винятково на цьому пристрої. Вони потрібні вам, щоб читати захищене листування з інших пристроїв.";
 "soft_logout_signin_notice" = "Адміністратор домашнього сервера (%1$@) скасував ваш вхід до облікового запису %2$@ (%3$@).";
-"signed_out_notice" = "Можливі кілька причин:
-\n
-\n• Ви змінили пароль в іншому сеансі.
-\n
-\n• Ви видалили цей сеанс за допомогою іншого.
-\n
-\n• Адміністратор сервера скасував ваш вхід із міркувань безпеки.";
+"signed_out_notice" = "Можливі кілька причин:\n\n• Ви змінили пароль в іншому сеансі.\n\n• Ви видалили цей сеанс за допомогою іншого.\n\n• Адміністратор сервера скасував ваш вхід із міркувань безпеки.";
 "login_signin_matrix_id_notice" = "Вже маєте обліковий запис на домашньому сервері\? Введіть ідентифікатор Matrix (наприклад @user:domain.com) і пароль нижче.";
 "login_set_email_notice" = "Вкажіть е-пошту для відновлення облікового запису. Згодом ви зможете дозволити знайомим знаходити вас за е-поштою.";
 "login_reset_password_success_notice_2" = "Ви вийшли з усіх сеансів і більше не отримуватимете сповіщень. Щоб отримувати сповіщення знову, ввійдіть на кожному пристрої заново.";
 "login_reset_password_warning_content" = "Зміна пароля скине всі ключі наскрізного шифрування всіх ваших сеансів, унеможливлюючи читання історії шифрованих чатів. Налаштуйте резервне копіювання ключів чи експортуйте ключі кімнат з іншого сеансу, перш ніж скинути пароль.";
-"login_registration_not_supported" = "Застосунку не вдалося створити обліковий запис на цьому домашньому сервері.
-\n
-\nБажаєте зареєструватись через вебклієнт\?";
-"login_mode_not_supported" = "Застосунку не вдається зайти до вашого домашнього сервера. Домашній сервер підтримує такі типи входу: %1$@.
-\n
-\nБажаєте зайти через вебклієнт\?";
+"login_registration_not_supported" = "Застосунку не вдалося створити обліковий запис на цьому домашньому сервері.\n\nБажаєте зареєструватись через вебклієнт\?";
+"login_mode_not_supported" = "Застосунку не вдається зайти до вашого домашнього сервера. Домашній сервер підтримує такі типи входу: %1$@.\n\nБажаєте зайти через вебклієнт\?";
 "identity_server_consent_dialog_content_3" = "Щоб знайти наявні контакти, надішліть дані контактів (е-пошти й номери телефонів) серверу ідентифікації. Ми хешуємо ваші дані перед надсиланням для приватності.";
 "settings_discovery_consent_notice_off_2" = "Ваші контакти приватні. Щоб дізнаватись про користувачів, відповідних вашим контактам, дозвольте нам надсилати дані ваших контактів серверу ідентифікації.";
 "identity_server_consent_dialog_title_2" = "Надіслати електронні адреси та номери телефонів %@";
 "shortcut_disabled_reason_sign_out" = "Сеанс завершено!";
 "shortcut_disabled_reason_room_left" = "Кімнату залишено!";
 "space_explore_activity_title" = "Дослідити кімнати";
-"verification_conclusion_compromised" = "Щось із перерахованого скомпроментовано:
-\n
-\n - Ваш домашній сервер
-\n - Домашній сервер, до якого під\'єднаний користувач, якого ви перевірили
-\n - Ваше інтернет-з\'єднання або інтернет-з\'єднання вашого користувача
-\n - Ваш пристрій або пристрій іншого користувача";
+"verification_conclusion_compromised" = "Щось із перерахованого скомпроментовано:\n\n - Ваш домашній сервер\n - Домашній сервер, до якого під\'єднаний користувач, якого ви перевірили\n - Ваше інтернет-з\'єднання або інтернет-з\'єднання вашого користувача\n - Ваш пристрій або пристрій іншого користувача";
 "invite_just_to_this_room" = "Лише в цю кімнату";
 "invite_to_space_with_name_desc" = "Вони зможуть переглядати %@";
 "invite_by_username_or_mail" = "Запрошення за іменем користувача або е-поштою";
@@ -2038,27 +1940,16 @@
 "identity_server_error_no_current_binding_error" = "Наразі відсутнє повʼязування з цим ідентифікатором.";
 "identity_server_error_binding_error" = "Не вдалося повʼязати.";
 "identity_server_error_outdated_home_server" = "Ця операція неможлива. Домашній сервер застарілий.";
-"delete_account_data_warning" = "Видалити дані облікового запису типу %1$@\?
-\n
-\nКористуйтеся обачно. Це може призвести до несподіваних наслідків.";
+"delete_account_data_warning" = "Видалити дані облікового запису типу %1$@\?\n\nКористуйтеся обачно. Це може призвести до несподіваних наслідків.";
 "verification_conclusion_ok_notice" = "Повідомлення з цим користувачем наскрізно шифровані й не можуть бути прочитані сторонніми.";
 "verification_code_notice" = "Порівняйте цей код з показаним на екрані іншого користувача кодом.";
 "rendering_event_error_exception" = "%@ зіткнувся з проблемою показу вмісту події з ID «%1$@»";
 "room_member_jump_to_read_receipt" = "Перейти до останнього прочитаного";
-"soft_logout_clear_data_dialog_content" = "Очистити всі дані, збережені на цьому пристрої\?
-\nУвійдіть знову, щоб отримати доступ до даних свого облікового запису й повідомлень.";
-"verify_not_me_self_verification" = "Щось із перерахованого скомпрометовано:
-\n
-\n- Ваш пароль
-\n- Ваш домашній сервер
-\n- Цей або інший пристрій
-\n- Інтернет-з\'єднання одного з пристроїв
-\n
-\nРадимо негайно змінити пароль і відновлювальний ключ у налаштуваннях.";
+"soft_logout_clear_data_dialog_content" = "Очистити всі дані, збережені на цьому пристрої\?\nУвійдіть знову, щоб отримати доступ до даних свого облікового запису й повідомлень.";
+"verify_not_me_self_verification" = "Щось із перерахованого скомпрометовано:\n\n- Ваш пароль\n- Ваш домашній сервер\n- Цей або інший пристрій\n- Інтернет-з\'єднання одного з пристроїв\n\nРадимо негайно змінити пароль і відновлювальний ключ у налаштуваннях.";
 "settings_security_prevent_screenshots_summary" = "Увімкнення цього параметру додає FLAG_SECURE всім екранам. Зміна потребує перезапуску застосунку.";
 "command_description_discard_session" = "Примусово відхиляє поточний вихідний сеанс групи в зашифрованій кімнаті";
-"room_alias_preview_not_found" = "Цей псевдонім наразі недоступний.
-\nСпробуйте згодом або запитайте адміністратора кімнати, чи є у вас доступ.";
+"room_alias_preview_not_found" = "Цей псевдонім наразі недоступний.\nСпробуйте згодом або запитайте адміністратора кімнати, чи є у вас доступ.";
 "this_invite_to_this_space_was_sent" = "Це запрошення до простору надіслане %@, не пов\'язаній із вашим обліковим записом";
 "this_invite_to_this_room_was_sent" = "Це запрошення до кімнати надіслане %@, не пов\'язаній із вашим обліковим записом";
 "upgrade_room_for_restricted_note" = "Зауважте, що поліпшення створить нову версію кімнати. Всі наявні повідомлення залишаться в цій архівованій кімнаті.";
@@ -2066,11 +1957,9 @@
 "upgrade_room_for_restricted" = "Будь-хто в %@ зможе знайти кімнату й долучитись — нема потреби вручну запрошувати всіх. Можна змінити це в налаштуваннях кімнати будь-коли.";
 "error_voice_message_cannot_reply_or_edit" = "Не вдалося відповісти чи редагувати, бо голосове повідомлення активне";
 "room_using_unstable_room_version" = "Кімната — версії %@, яку домашній сервер позначив нестабільною.";
-"upgrade_room_warning" = "Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.
-\nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.";
+"upgrade_room_warning" = "Поліпшення кімнати — серйозна операція. Її зазвичай радять, коли кімната нестабільна через вади, брак функціоналу чи вразливості безпеки.\nЗазвичай це впливає лише на деталі опрацювання кімнати сервером.";
 "this_space_has_no_rooms_admin" = "Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.";
-"this_space_has_no_rooms_not_admin" = "Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.
-\nУ вас нема дозволу додавати кімнати.";
+"this_space_has_no_rooms_not_admin" = "Деяких кімнат може бути не видно, бо вони закриті й потребують запрошення.\nУ вас нема дозволу додавати кімнати.";
 "space_leave_prompt_msg_as_admin" = "Ви єдиний адміністратор цього простору. Якщо вийдете, він залишиться без керівництва.";
 "space_leave_prompt_msg_private" = "Ви не зможете приєднатись, поки вас не запросять знову.";
 "space_leave_prompt_msg_only_you" = "Ви єдина особа тут. Якщо ви вийдете, більше ніхто не зможе приєднатись, навіть ви ж.";
@@ -2097,18 +1986,14 @@
 "bootstrap_migration_with_passphrase_helper_with_link" = "Забули парольну фразу резервного копіювання ключів\? Можете %@.";
 "bootstrap_migration_use_recovery_key" = "використати відновлювальний ключ резервного копіювання ключів";
 "bootstrap_migration_enter_backup_password" = "Введіть парольну фразу резервного копіювання ключів, щоб продовжити.";
-"bootstrap_cancel_text" = "Якщо скасуєте це й загубите пристрій, то втратите зашифровані повідомлення й дані.
-\n
-\nВвімкнути захищене резервне копіювання й керувати своїми ключами можна в налаштуваннях.";
+"bootstrap_cancel_text" = "Якщо скасуєте це й загубите пристрій, то втратите зашифровані повідомлення й дані.\n\nВвімкнути захищене резервне копіювання й керувати своїми ключами можна в налаштуваннях.";
 "verify_cancel_other" = "Скасування залишить %1$@ (%2$@) без звірки. У їхньому користувацькому профілі можна почати заново.";
 "verify_new_session_notice" = "Звірте цим сеансом свій новий. Це надасть йому доступ до зашифрованих повідомлень.";
 "verification_profile_device_untrust_info" = "Надіслані цьому сеансу й цим сеансом повідомлення позначатимуться застереженнями, поки цей користувач йому не довірить. Або ви можете власноруч звірити сеанс.";
 "room_settings_enable_encryption_dialog_content" = "Якщо ви увімкнете шифрування для кімнати, його неможливо буде вимкнути. Надіслані у зашифровану кімнату повідомлення будуть прочитними тільки для учасників кімнати, натомість для сервера вони будуть непрочитними. Увімкнення шифрування може унеможливити роботу ботів та мостів.";
-"verify_cannot_cross_sign" = "Не вдалося поширити звірку цього сеансу з вашими іншими.
-\nЗвірка збережеться локально, її поширить майбутня версія застосунку.";
+"verify_cannot_cross_sign" = "Не вдалося поширити звірку цього сеансу з вашими іншими.\nЗвірка збережеться локально, її поширить майбутня версія застосунку.";
 "create_room_disable_federation_description" = "Можете ввімкнути це, якщо в кімнаті співпрацюватимуть лише внутрішні команди на вашому домашньому сервері. Цього більше не можна буде змінити.";
-"soft_logout_sso_not_same_user_error" = "Цей сеанс — користувача %1$@, а ви надаєте облікові дані користувача %2$@. Це не підтримується в %@.
-\nБудь ласка, спершу очистіть дані, а тоді ввійдіть в інший обліковий запис.";
+"soft_logout_sso_not_same_user_error" = "Цей сеанс — користувача %1$@, а ви надаєте облікові дані користувача %2$@. Це не підтримується в %@.\nБудь ласка, спершу очистіть дані, а тоді ввійдіть в інший обліковий запис.";
 "delete_poll_dialog_content" = "Точно видалити опитування\? Ви не зможете відновити опитування після видалення.";
 "delete_poll_dialog_title" = "Видалити опитування";
 "poll_end_room_list_preview" = "Голосування завершене";
@@ -2130,13 +2015,10 @@
 "legals_home_server_title" = "Політика вашого домашнього сервера";
 "legals_application_title" = "Політика %@";
 "analytics_opt_in_list_item_3" = "Можете вимкнути це коли завгодно в налаштуваннях";
-"analytics_opt_in_list_item_2.b_0" = "не";
-"analytics_opt_in_list_item_1.b_0" = "не";
-"analytics_opt_in_list_item_1.b_1" = "не";
+"analytics_opt_in_list_item_2" = "Ми <b>не</b> передаємо даних стороннім особам";
+"analytics_opt_in_list_item_1" = "Ми <b>не</b> записуємо й <b>не</b> аналізуємо жодних даних облікового запису";
 "analytics_opt_in_content_link" = "тут";
-"analytics_opt_in_content" = "Допомагайте нам визначати проблеми й удосконалювати %@, надсилаючи анонімні дані про використання. Щоб розуміти, як люди використовують кілька пристроїв, ми створимо спільний для ваших пристроїв випадковий ідентифікатор.
-\n
-\nМожете прочитати всі наші умови %@.";
+"analytics_opt_in_content" = "Допомагайте нам визначати проблеми й удосконалювати %@, надсилаючи анонімні дані про використання. Щоб розуміти, як люди використовують кілька пристроїв, ми створимо спільний для ваших пристроїв випадковий ідентифікатор.\n\nМожете прочитати всі наші умови %@.";
 "analytics_opt_in_title" = "Допоможіть покращити %@";
 "action_enable" = "Увімкнути";
 "restart_the_application_to_apply_changes" = "Перезапустіть застосунок, щоб зміни набули чинності.";
@@ -2227,8 +2109,7 @@
 "room_notification_two_users_are_typing" = "%1$@ і %2$@";
 "location_share_live_stop" = "Зупинити";
 "location_share_live_enabled" = "Місцеперебування поширюється наживо";
-"location_in_background_missing_permission_dialog_content" = "Якщо бажаєте поширювати місцеперебування наживо, %@ потребує доступу до місцеперебування протягом усієї фонової роботи застосунку.
-\nМи отримуватимемо ваше місцеперебування лише протягом обраного вами терміну.";
+"location_in_background_missing_permission_dialog_content" = "Якщо бажаєте поширювати місцеперебування наживо, %@ потребує доступу до місцеперебування протягом усієї фонової роботи застосунку.\nМи отримуватимемо ваше місцеперебування лише протягом обраного вами терміну.";
 "location_in_background_missing_permission_dialog_title" = "Дозвольте доступ";
 "a11y_location_share_option_pinned_icon" = "Поширити ці координати";
 "location_share_option_pinned" = "Поширити ці координати";
@@ -2238,193 +2119,24 @@
 "a11y_location_share_option_user_current_icon" = "Поширити моє поточне місцеперебування";
 "location_share_option_user_current" = "Поширити моє поточне місцеперебування";
 "a11y_location_share_locate_button" = "Перейти до поточного місцеперебування";
-"threads_notice_migration_message" = "Наближаємось до випуску тредів у загальнодоступну бета-версію.
-\n
-\nГотуючись, маємо дещо змінити: раніше створені треди буде показано як звичайні відповіді.
-\n
-\nЦе буде одноразовий перехід, оскільки треди — тепер частина специфікації Matrix.";
+"threads_notice_migration_message" = "Наближаємось до випуску тредів у загальнодоступну бета-версію.\n\nГотуючись, маємо дещо змінити: раніше створені треди буде показано як звичайні відповіді.\n\nЦе буде одноразовий перехід, оскільки треди — тепер частина специфікації Matrix.";
 "threads_notice_migration_title" = "Незабаром бета-версія тредів 🎉";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ та %4$d інший";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ та %4$d інші";
-"plurals.room_displayname_four_and_more_members.item_2" = "%1$@, %2$@, %3$@ та %4$d інших";
-"plurals.room_displayname_four_and_more_members.item_3" = "%1$@, %2$@, %3$@ та %4$d інших";
-"plurals.membership_changes.item_0" = "%d зміна  членства";
-"plurals.membership_changes.item_1" = "%d зміни членства";
-"plurals.membership_changes.item_2" = "%d змін членства";
-"plurals.room_title_members.item_0" = "%d учасник";
-"plurals.room_title_members.item_1" = "%d учасники";
-"plurals.room_title_members.item_2" = "%d учасників";
-"plurals.room_title_members.item_3" = "%d учасників";
-"plurals.room_new_messages_notification.item_0" = "%d нове повідомлення";
-"plurals.room_new_messages_notification.item_1" = "%d нових повідомленя";
-"plurals.room_new_messages_notification.item_2" = "%d нових повідомлень";
-"plurals.room_details_selected.item_0" = "%d вибрано";
-"plurals.room_details_selected.item_1" = "%d вибрано";
-"plurals.room_details_selected.item_2" = "%d вибрано";
-"plurals.room_details_selected.item_3" = "%d вибрано";
-"plurals.notification_unread_notified_messages.item_0" = "%d непрочитане сповіщення";
-"plurals.notification_unread_notified_messages.item_1" = "%d непрочитані сповіщення";
-"plurals.notification_unread_notified_messages.item_2" = "%d непрочитаних сповіщень";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d кімната";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d кімнати";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_2" = "%d кімнат";
-"plurals.active_widgets.item_0" = "%d активнеий віджет";
-"plurals.active_widgets.item_1" = "%d активні віджети";
-"plurals.active_widgets.item_2" = "%d активних віджетів";
-"plurals.active_widgets.item_3" = "%d активних віджетів";
-"plurals.notification_compat_summary_title.item_0" = "%d сповіщення";
-"plurals.notification_compat_summary_title.item_1" = "%d сповіщення";
-"plurals.notification_compat_summary_title.item_2" = "%d сповіщень";
-"plurals.notification_compat_summary_title.item_3" = "%d сповіщень";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d повідомлення";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d повідомлення";
-"plurals.notification_compat_summary_line_for_room.item_2" = "%1$@: %2$d повідомлень";
-"plurals.notification_compat_summary_line_for_room.item_3" = "%1$@: %2$d повідомлень";
-"plurals.notification_invitations.item_0" = "%d запрошення";
-"plurals.notification_invitations.item_1" = "%d запрошення";
-"plurals.notification_invitations.item_2" = "%d запрошень";
-"plurals.notification_invitations.item_3" = "%d запрошень";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d ключ успішно імпортовано.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d ключі успішно імпортовано.";
-"plurals.encryption_import_room_keys_success.item_2" = "%1$d/%2$d ключів успішно імпортовано.";
-"plurals.encryption_import_room_keys_success.item_3" = "%1$d/%2$d ключів успішно імпортовано.";
-"plurals.room_settings_banned_users_count.item_0" = "%d заблокований користувач";
-"plurals.room_settings_banned_users_count.item_1" = "%d заблоковані користувачі";
-"plurals.room_settings_banned_users_count.item_2" = "%d заблокованих користувачів";
-"plurals.room_settings_banned_users_count.item_3" = "%d заблокованих користувачів";
-"plurals.seconds.item_0" = "%d секунда";
-"plurals.seconds.item_1" = "%d секунди";
-"plurals.seconds.item_2" = "%d секунд";
-"plurals.seconds.item_3" = "%d секунд";
-"plurals.settings_active_sessions_count.item_0" = "%d активний сеанс";
-"plurals.settings_active_sessions_count.item_1" = "%d активні сеанси";
-"plurals.settings_active_sessions_count.item_2" = "%d активних сеансів";
-"plurals.settings_active_sessions_count.item_3" = "%d активних сеансів";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Запрошення надіслано для %1$@ та ще одній особі";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Запрошення надіслано для %1$@ та ще %2$d особам";
-"plurals.invitations_sent_to_one_and_more_users.item_2" = "Запрошення надіслано для %1$@ та ще %2$d осіб";
-"plurals.invitations_sent_to_one_and_more_users.item_3" = "Запрошення надіслано для %1$@ та ще %2$d осіб";
-"plurals.room_profile_section_more_member_list.item_0" = "Одна особа";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d особи";
-"plurals.room_profile_section_more_member_list.item_2" = "%1$d осіб";
-"plurals.room_profile_section_more_member_list.item_3" = "%1$d осіб";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Показати пристрій, з якого ви можете звірити цей сеанс просто зараз";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Показати %d пристрої, з яких ви можете звірити цей сеанс просто зараз";
-"plurals.secure_backup_reset_devices_you_can_verify.item_2" = "Показати %d пристроїв, з яких ви можете звірити цей сеанс просто зараз";
-"plurals.secure_backup_reset_devices_you_can_verify.item_3" = "Показати %d пристроїв, з яких ви можете звірити цей сеанс просто зараз";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "До цього сеансу додано %d новий ключ.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "До цього сеансу додано %d нові ключі.";
-"plurals.keys_backup_restore_success_description_part2.item_2" = "До цього сеансу додано %d нових ключів.";
-"plurals.keys_backup_restore_success_description_part2.item_3" = "До цього сеансу додано %d нових ключів.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Відновлено резервну копію з %d ключем.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Відновлено резервну копію з %d ключами.";
-"plurals.keys_backup_restore_success_description_part1.item_2" = "Відновлено резервну копію з %d ключами.";
-"plurals.keys_backup_restore_success_description_part1.item_3" = "Відновлено резервну копію з %d ключами.";
-"plurals.call_active_status.item_0" = "Активний виклик ·";
-"plurals.call_active_status.item_1" = "%1$d активні виклики ·";
-"plurals.call_active_status.item_2" = "%1$d активних викликів ·";
-"plurals.call_active_status.item_3" = "%1$d активних викликів ·";
-"plurals.missed_video_call.item_0" = "Пропущений відеовиклик";
-"plurals.missed_video_call.item_1" = "%d пропущені відеовиклики";
-"plurals.missed_video_call.item_2" = "%d пропущених відеовикликів";
-"plurals.missed_video_call.item_3" = "%d пропущених відеовикликів";
-"plurals.missed_audio_call.item_0" = "Пропущено аудіовиклик";
-"plurals.missed_audio_call.item_1" = "%d пропущених аудіовиклики";
-"plurals.missed_audio_call.item_2" = "%d пропущених аудіовикликів";
-"plurals.missed_audio_call.item_3" = "%d пропущених аудіовикликів";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Ви вилучили альтернативну адресу %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Ви вилучили альтернативні адреси %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_2" = "Ви вилучили альтернативні адреси %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_3" = "Ви вилучили альтернативні адреси %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ вилучає альтернативну адресу %2$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ вилучає альтернативні адреси %2$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_2" = "%1$@ вилучає альтернативні адреси %2$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_3" = "%1$@ вилучає альтернативні адреси %2$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Ви додаєте альтернативну адресу %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Ви додаєте альтернативні адреси %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_2" = "Ви додаєте альтернативні адреси %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_3" = "Ви додаєте альтернативні адреси %1$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ додає альтернативну адресу %2$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ додає альтернативні адреси %2$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added.item_2" = "%1$@ додає альтернативні адреси %2$@ для цієї кімнати.";
-"plurals.notice_room_canonical_alias_alternative_added.item_3" = "%1$@ додає альтернативні адреси %2$@ для цієї кімнати.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Ви вилучили адресу кімнати %1$@.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Ви вилучили адреси кімнати %1$@.";
-"plurals.notice_room_aliases_removed_by_you.item_2" = "Ви вилучили адреси кімнати %1$@.";
-"plurals.notice_room_aliases_removed_by_you.item_3" = "Ви вилучили адреси кімнати %1$@.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ вилучає адресу кімнати %2$@.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ вилучає адреси кімнати %2$@.";
-"plurals.notice_room_aliases_removed.item_2" = "%1$@ вилучає адреси кімнати %2$@.";
-"plurals.notice_room_aliases_removed.item_3" = "%1$@ вилучає адреси кімнати %2$@.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Ви додали %1$@ адресою кімнати.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Ви додали %1$@ адресами кімнати.";
-"plurals.notice_room_aliases_added_by_you.item_2" = "Ви додали %1$@ адресами кімнати.";
-"plurals.notice_room_aliases_added_by_you.item_3" = "Ви додали %1$@ адресами кімнати.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ додає %2$@ адресою кімнати.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ додає %2$@ адресами кімнати.";
-"plurals.notice_room_aliases_added.item_2" = "%1$@ додає %2$@ адресами кімнати.";
-"plurals.notice_room_aliases_added.item_3" = "%1$@ додає %2$@ адресами кімнати.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Резервне копіювання %d ключа…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Резервне копіювання %d ключів…";
-"plurals.keys_backup_info_keys_backing_up.item_2" = "Резервне копіювання %d ключів…";
-"plurals.keys_backup_info_keys_backing_up.item_3" = "Резервне копіювання %d ключів…";
-"plurals.fallback_users_read.item_0" = "Прочитано %d користувачем";
-"plurals.fallback_users_read.item_1" = "Прочитали %d користувачі";
-"plurals.fallback_users_read.item_2" = "Прочитали %d користувачів";
-"plurals.fallback_users_read.item_3" = "Прочитали %d користувачів";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ і %3$d інший прочитали";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ і %3$d інших прочитали";
-"plurals.two_and_some_others_read.item_2" = "%1$@, %2$@ і %3$d інших прочитали";
-"plurals.two_and_some_others_read.item_3" = "%1$@, %2$@ і %3$d інших прочитали";
-"plurals.send_videos_with_original_size.item_0" = "Надіслати відео в оригінальному розмірі";
-"plurals.send_videos_with_original_size.item_1" = "Надіслати відео в оригінальному розмірі";
-"plurals.send_videos_with_original_size.item_2" = "Надіслати відео в оригінальному розмірі";
-"plurals.send_videos_with_original_size.item_3" = "Надіслати відео в оригінальному розмірі";
-"plurals.send_images_with_original_size.item_0" = "Надіслати зображення в оригінальному розмірі";
-"plurals.send_images_with_original_size.item_1" = "Надіслати зображення в оригінальному розмірі";
-"plurals.send_images_with_original_size.item_2" = "Надіслати зображення в оригінальному розмірі";
-"plurals.send_images_with_original_size.item_3" = "Надіслати зображення в оригінальному розмірі";
-"plurals.create_poll_not_enough_options_error.item_0" = "Потрібен принаймні %1$@ варіант";
-"plurals.create_poll_not_enough_options_error.item_1" = "Потрібні принаймні %1$@ варіанти";
-"plurals.create_poll_not_enough_options_error.item_2" = "Потрібні принаймні %1$@ варіантів";
-"plurals.create_poll_not_enough_options_error.item_3" = "Потрібні принаймні %1$@ варіантів";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Неправильний код, залишилася %d спроба";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Неправильний код, залишилося %d спроби";
-"plurals.wrong_pin_message_remaining_attempts.item_2" = "Неправильний код, залишилося %d спроб";
-"plurals.wrong_pin_message_remaining_attempts.item_3" = "Неправильний код, залишилося %d спроб";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Надіслано забагато запитів. Спробуйте знову за %1$d секунду…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Надіслано забагато запитів. Спробуйте знову за %1$d секунди…";
-"plurals.login_error_limit_exceeded_retry_after.item_2" = "Надіслано забагато запитів. Спробуйте знову за %1$d секунд…";
-"plurals.login_error_limit_exceeded_retry_after.item_3" = "Надіслано забагато запитів. Спробуйте знову за %1$d секунд…";
-"plurals.space_people_you_know.item_0" = "%d із ваших знайомих уже тут";
-"plurals.space_people_you_know.item_1" = "%d ваші знайомі вже приєдналися";
-"plurals.space_people_you_know.item_2" = "%d ваших знайомих уже приєдналися";
-"plurals.space_people_you_know.item_3" = "%d ваших знайомих уже приєдналися";
-"plurals.entries.item_0" = "%d елемент";
-"plurals.entries.item_1" = "%d елементи";
-"plurals.entries.item_2" = "%d елементів";
-"plurals.entries.item_3" = "%d елементів";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d голос. Проголосуйте, щоб побачити результати";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d голоси. Проголосуйте, щоб побачити результати";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_2" = "%1$d голосів. Проголосуйте, щоб побачити результати";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_3" = "%1$d голосів. Проголосуйте, щоб побачити результати";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Остаточний результат на підставі %1$d голосу";
-"plurals.poll_total_vote_count_after_ended.item_1" = "Остаточний результат на підставі %1$d голосів";
-"plurals.poll_total_vote_count_after_ended.item_2" = "Остаточний результат на підставі %1$d голосів";
-"plurals.poll_total_vote_count_after_ended.item_3" = "Остаточний результат на підставі %1$d голосів";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "На підставі %1$d голосу";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "На підставі %1$d голосів";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_2" = "На підставі %1$d голосів";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_3" = "На підставі %1$d голосів";
-"plurals.poll_option_vote_count.item_0" = "%1$d голос";
-"plurals.poll_option_vote_count.item_1" = "%1$d голоси";
-"plurals.poll_option_vote_count.item_2" = "%1$d голосів";
-"plurals.poll_option_vote_count.item_3" = "%1$d голосів";
-"plurals.notice_room_server_acl_changes.item_0" = "%d зміна ACL сервера";
-"plurals.notice_room_server_acl_changes.item_1" = "%d зміни ACL сервера";
-"plurals.notice_room_server_acl_changes.item_2" = "%d змін ACL сервера";
-"plurals.notice_room_server_acl_changes.item_3" = "%d змін ACL сервера";
-"plurals.message_reaction_show_more.item_0" = "І ще %1$d";
-"plurals.message_reaction_show_more.item_1" = "І ще %1$d";
-"plurals.message_reaction_show_more.item_2" = "І ще %1$d";
-"plurals.message_reaction_show_more.item_3" = "І ще %1$d";
+"live_location_sharing_notification_description" = "Триває передавання місцеперебування";
+"live_location_sharing_notification_title" = "%@ Місцеперебування наживо";
+"error_forbidden_digits_only_username" = "Домашній сервер не приймає ім\'я користувача лише з цифр.";
+"ftue_personalize_skip_this_step" = "Пропустити цей крок";
+"ftue_personalize_submit" = "Зберегти й продовжити";
+"ftue_personalize_complete_subtitle" = "Ваші налаштування збережено.";
+"ftue_personalize_complete_title" = "Усе налаштовано!";
+"ftue_personalize_lets_go" = "Поїхали";
+"ftue_profile_picture_subtitle" = "Ви можете змінити його будь-коли.";
+"ftue_profile_picture_title" = "Додати зображення профілю";
+"ftue_display_name_entry_footer" = "Ви можете змінити його пізніше";
+"ftue_display_name_entry_title" = "Показуване ім\'я";
+"ftue_display_name_subtitle" = "Його буде показано у надісланих повідомленнях.";
+"ftue_display_name_title" = "Виберіть показуване ім\'я";
+"ftue_account_created_subtitle" = "Ваш обліковий запис %@ створено.";
+"ftue_account_created_congratulations_title" = "Вітаємо!";
+"ftue_account_created_take_me_home" = "На головну";
+"ftue_account_created_personalize" = "Персоналізувати профіль";
+"action_disable" = "Вимкнути";

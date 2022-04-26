@@ -1,0 +1,852 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>active_widgets</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d aktívne widgety</string>
+			<key>one</key>
+			<string>1 aktívny widget</string>
+			<key>other</key>
+			<string>%d aktívnych widgetov</string>
+		</dict>
+	</dict>
+	<key>call_active_status</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d aktívne hovory ·</string>
+			<key>one</key>
+			<string>Aktívny hovor ·</string>
+			<key>other</key>
+			<string>%1$d aktívnych hovorov ·</string>
+		</dict>
+	</dict>
+	<key>create_poll_not_enough_options_error</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Vyžadujú sa aspoň %1$@ možnosti</string>
+			<key>one</key>
+			<string>Vyžaduje sa aspoň %1$@ možnosť</string>
+			<key>other</key>
+			<string>Vyžaduje sa aspoň %1$@ možností</string>
+		</dict>
+	</dict>
+	<key>encryption_import_room_keys_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d z %2$d kľúče boli úspešne importované.</string>
+			<key>one</key>
+			<string>%1$d z %2$d kľúč bol úspešne importovaný.</string>
+			<key>other</key>
+			<string>%1$d z %2$d kľúčov bolo úspešne importovaných.</string>
+		</dict>
+	</dict>
+	<key>entries</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d záznamy</string>
+			<key>one</key>
+			<string>%d záznam</string>
+			<key>other</key>
+			<string>%d záznamov</string>
+		</dict>
+	</dict>
+	<key>fallback_users_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d používatelia prečítali</string>
+			<key>one</key>
+			<string>%d používateľ prečítal</string>
+			<key>other</key>
+			<string>%d používatelia prečítali</string>
+		</dict>
+	</dict>
+	<key>invitations_sent_to_one_and_more_users</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Pozvánky odoslané %1$@ a %2$d ďalším</string>
+			<key>one</key>
+			<string>Pozvánky odoslané %1$@ a ešte jednému</string>
+			<key>other</key>
+			<string>Pozvánky odoslané %1$@ a %2$d ďalším</string>
+		</dict>
+	</dict>
+	<key>keys_backup_info_keys_backing_up</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Zálohovanie %d kľúčov…</string>
+			<key>one</key>
+			<string>Zálohovanie %d kľúča…</string>
+			<key>other</key>
+			<string>Zálohovanie %d kľúčov…</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part1</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Záloha s %d kľúčmi obnovená.</string>
+			<key>one</key>
+			<string>Záloha s %d kľúčom obnovená.</string>
+			<key>other</key>
+			<string>Záloha s %d kľúčmi obnovená.</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part2</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d nové kľúče boli pridané do tejto relácie.</string>
+			<key>one</key>
+			<string>%d nový kľúč bol pridaný do tejto relácie.</string>
+			<key>other</key>
+			<string>%d nových kľúčov bolo pridaných do tejto relácie.</string>
+		</dict>
+	</dict>
+	<key>login_error_limit_exceeded_retry_after</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Bolo odoslaných príliš veľa žiadostí. Pokus môžete zopakovať za %1$d sekundy…</string>
+			<key>one</key>
+			<string>Bolo odoslaných príliš veľa žiadostí. Pokus môžete zopakovať za %1$d sekundu…</string>
+			<key>other</key>
+			<string>Bolo odoslaných príliš veľa žiadostí. Pokus môžete zopakovať za %1$d sekúnd…</string>
+		</dict>
+	</dict>
+	<key>membership_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d zmeny členstva</string>
+			<key>one</key>
+			<string>1 zmena členstva</string>
+			<key>other</key>
+			<string>%d zmien členstva</string>
+		</dict>
+	</dict>
+	<key>message_reaction_show_more</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d ďalšie</string>
+			<key>one</key>
+			<string>%1$d ďalšia</string>
+			<key>other</key>
+			<string>%1$d ďalších</string>
+		</dict>
+	</dict>
+	<key>missed_audio_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d zmeškané hlasové hovory</string>
+			<key>one</key>
+			<string>%d zmeškaný hlasový hovor</string>
+			<key>other</key>
+			<string>%d zmeškaných hlasových hovorov</string>
+		</dict>
+	</dict>
+	<key>missed_video_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d zmeškané video hovory</string>
+			<key>one</key>
+			<string>%d zmeškaný video hovor</string>
+			<key>other</key>
+			<string>%d zmeškaných video hovorov</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ pridal/a adresy %2$@ pre túto miestnosť.</string>
+			<key>one</key>
+			<string>%1$@ pridal/a adresu %2$@ pre túto miestnosť.</string>
+			<key>other</key>
+			<string>%1$@ pridal/a adresy %2$@ pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Pridali ste adresy %1$@ pre túto miestnosť.</string>
+			<key>one</key>
+			<string>Pridali ste adresu %1$@ pre túto miestnosť.</string>
+			<key>other</key>
+			<string>Pridali ste adresy %1$@ pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ odstránil/a %2$@ adries pre túto miestnosť.</string>
+			<key>one</key>
+			<string>%1$@ odstránil/a %2$@ adresu pre túto miestnosť.</string>
+			<key>other</key>
+			<string>%1$@ odstránil/a %2$@ adresy pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Odstránili ste adresy %1$@ pre túto miestnosť.</string>
+			<key>one</key>
+			<string>Odstránili ste adresu %1$@ pre túto miestnosť.</string>
+			<key>other</key>
+			<string>Odstránili ste adresy %1$@ pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ pridal(a) alternatívne adresy %2$@ pre túto miestnosť.</string>
+			<key>one</key>
+			<string>%1$@ pridal(a) alternatívnu adresu %2$@ pre túto miestnosť.</string>
+			<key>other</key>
+			<string>%1$@ pridal(a) alternatívne adresy %2$@ pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Pridali ste alternatívne adresy %1$@ pre túto miestnosť.</string>
+			<key>one</key>
+			<string>Pridali ste alternatívnu adresu %1$@ pre túto miestnosť.</string>
+			<key>other</key>
+			<string>Pridali ste alternatívne adresy %1$@ pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ odstránil(a) alternatívne adresy %2$@ pre túto miestnosť.</string>
+			<key>one</key>
+			<string>%1$@ odstránil(a) alternatívnu adresu %2$@ pre túto miestnosť.</string>
+			<key>other</key>
+			<string>%1$@ odstránil(a) alternatívne adresy %2$@ pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Odstránili ste alternatívne adresy %1$@ pre túto miestnosť.</string>
+			<key>one</key>
+			<string>Odstránili ste alternatívnu adresu %1$@ pre túto miestnosť.</string>
+			<key>other</key>
+			<string>Odstránili ste alternatívne adresy %1$@ pre túto miestnosť.</string>
+		</dict>
+	</dict>
+	<key>notice_room_server_acl_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d zmeny ACL servera</string>
+			<key>one</key>
+			<string>%d zmena ACL servera</string>
+			<key>other</key>
+			<string>%d zmien ACL servera</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_line_for_room</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@: %2$d správy</string>
+			<key>one</key>
+			<string>%1$@: 1 správa</string>
+			<key>other</key>
+			<string>%1$@: %2$d správ</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d oznámenia</string>
+			<key>one</key>
+			<string>%d oznámenie</string>
+			<key>other</key>
+			<string>%d oznámení</string>
+		</dict>
+	</dict>
+	<key>notification_invitations</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d pozvánky</string>
+			<key>one</key>
+			<string>%d pozvánka</string>
+			<key>other</key>
+			<string>%d pozvánok</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d neprečítané správy</string>
+			<key>one</key>
+			<string>1 neprečítaná správa</string>
+			<key>other</key>
+			<string>%d neprečítaných správ</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages_in_room_rooms</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d miestnosti</string>
+			<key>one</key>
+			<string>1 miestnosť</string>
+			<key>other</key>
+			<string>%d miestností</string>
+		</dict>
+	</dict>
+	<key>poll_option_vote_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d hlasy</string>
+			<key>one</key>
+			<string>%1$d hlas</string>
+			<key>other</key>
+			<string>%1$d hlasov</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_after_ended</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Konečný výsledok na základe %1$d hlasov</string>
+			<key>one</key>
+			<string>Konečný výsledok na základe %1$d hlasu</string>
+			<key>other</key>
+			<string>Konečný výsledok na základe %1$d hlasov</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_not_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d odovzdané hlasy. Hlasujte a pozrite si výsledky</string>
+			<key>one</key>
+			<string>%1$d odovzdaný hlas. Hlasujte a pozrite si výsledky</string>
+			<key>other</key>
+			<string>%1$d odovzdaných hlasov. Hlasujte a pozrite si výsledky</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Na základe %1$d hlasov</string>
+			<key>one</key>
+			<string>Na základe %1$d hlasu</string>
+			<key>other</key>
+			<string>Na základe %1$d hlasov</string>
+		</dict>
+	</dict>
+	<key>room_details_selected</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d vybratí</string>
+			<key>one</key>
+			<string>1 vybratý</string>
+			<key>other</key>
+			<string>%d vybratých</string>
+		</dict>
+	</dict>
+	<key>room_displayname_four_and_more_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@, %2$@, %3$@ a %4$d ďalší</string>
+			<key>one</key>
+			<string>%1$@, %2$@, %3$@ a %4$d ďalší</string>
+			<key>other</key>
+			<string>%1$@, %2$@, %3$@ a %4$d ďalších</string>
+		</dict>
+	</dict>
+	<key>room_new_messages_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d nové správy</string>
+			<key>one</key>
+			<string>1 nová správa</string>
+			<key>other</key>
+			<string>%d nových správ</string>
+		</dict>
+	</dict>
+	<key>room_profile_section_more_member_list</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$d osoby</string>
+			<key>one</key>
+			<string>Jedna osoba</string>
+			<key>other</key>
+			<string>%1$d osôb</string>
+		</dict>
+	</dict>
+	<key>room_settings_banned_users_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Zakázať vstupovať %d používatelia</string>
+			<key>one</key>
+			<string>Zakázať vstupovať %d používateľ</string>
+			<key>other</key>
+			<string>Zakázať vstupovať %d používateľov</string>
+		</dict>
+	</dict>
+	<key>room_title_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d členovia</string>
+			<key>one</key>
+			<string>1 člen</string>
+			<key>other</key>
+			<string>%d členov</string>
+		</dict>
+	</dict>
+	<key>seconds</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d sekundy</string>
+			<key>one</key>
+			<string>%d sekunda</string>
+			<key>other</key>
+			<string>%d sekúnd</string>
+		</dict>
+	</dict>
+	<key>secure_backup_reset_devices_you_can_verify</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Zobraziť %d zariadenia, pomocou ktorých môžete teraz overiť</string>
+			<key>one</key>
+			<string>Zobraziť zariadenie, pomocou ktorého môžete teraz overiť</string>
+			<key>other</key>
+			<string>Zobraziť %d zariadení, pomocou ktorých môžete teraz overiť</string>
+		</dict>
+	</dict>
+	<key>send_images_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Odoslať obrázky s pôvodnou veľkosťou</string>
+			<key>one</key>
+			<string>Odoslať obrázok s pôvodnou veľkosťou</string>
+			<key>other</key>
+			<string>Odoslať obrázky s pôvodnou veľkosťou</string>
+		</dict>
+	</dict>
+	<key>send_videos_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Odoslať videá s pôvodnou veľkosťou</string>
+			<key>one</key>
+			<string>Odoslať video s pôvodnou veľkosťou</string>
+			<key>other</key>
+			<string>Odoslať videá s pôvodnou veľkosťou</string>
+		</dict>
+	</dict>
+	<key>settings_active_sessions_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d aktívne relácie</string>
+			<key>one</key>
+			<string>%d aktívna relácia</string>
+			<key>other</key>
+			<string>%d aktívnych relácií</string>
+		</dict>
+	</dict>
+	<key>space_people_you_know</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d osoby, ktorú poznáte, sa už pripojili</string>
+			<key>one</key>
+			<string>%d osoba, ktorú poznáte, sa už pripojila</string>
+			<key>other</key>
+			<string>%d osôb, ktorú poznáte, sa už pripojilo</string>
+		</dict>
+	</dict>
+	<key>two_and_some_others_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@, %2$@ a %3$d ďalší prečítali</string>
+			<key>one</key>
+			<string>%1$@, %2$@ a %3$d ďalší prečítal</string>
+			<key>other</key>
+			<string>%1$@, %2$@ a %3$d ďalší prečítali</string>
+		</dict>
+	</dict>
+	<key>wrong_pin_message_remaining_attempts</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Nesprávny kód, zostávajú %d pokusy</string>
+			<key>one</key>
+			<string>Nesprávny kód, zostáva %d pokus</string>
+			<key>other</key>
+			<string>Nesprávny kód, zostáva %d pokusov</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

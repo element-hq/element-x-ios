@@ -1,0 +1,636 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>active_widgets</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d aktīvi vidžeti</string>
+			<key>other</key>
+			<string>%d aktīvu vidžetu</string>
+			<key>zero</key>
+			<string>%d aktīvs vidžets</string>
+		</dict>
+	</dict>
+	<key>encryption_import_room_keys_success</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d/%2$d veiksmīgi importēta atslēga.</string>
+			<key>other</key>
+			<string>%1$d/%2$d veiksmīgi importēta atslēgas.</string>
+			<key>zero</key>
+			<string>%1$d/%2$d veiksmīgi importēta atslēgas.</string>
+		</dict>
+	</dict>
+	<key>fallback_users_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d lietotājs izlasīja</string>
+			<key>other</key>
+			<string>%d lietotāji izlasīja</string>
+			<key>zero</key>
+			<string>%d lietotāju izlasīja</string>
+		</dict>
+	</dict>
+	<key>keys_backup_info_keys_backing_up</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Dublē %d atslēgu…</string>
+			<key>other</key>
+			<string>Dublē %d atslēgas…</string>
+			<key>zero</key>
+			<string>Dublē %d atslēgu…</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part1</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Atjaunota rezerves kopija ar %d atslēgu.</string>
+			<key>other</key>
+			<string>Atjaunota rezerves kopija ar %d atslēgām.</string>
+			<key>zero</key>
+			<string>Atjaunota rezerves kopija ar %d atslēgu.</string>
+		</dict>
+	</dict>
+	<key>keys_backup_restore_success_description_part2</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d jauna atslēgu tika pievienotas šai sesijai.</string>
+			<key>other</key>
+			<string>%d jaunas atslēgu tika pievienotas šai sesijai.</string>
+			<key>zero</key>
+			<string>%d jaunu atslēgu tika pievienotas šai sesijai.</string>
+		</dict>
+	</dict>
+	<key>login_error_limit_exceeded_retry_after</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Ir nosūtīts pārāk daudz pieprasījumu. Jūs varat atkārtot mēģinājumu pēc %1$d sekundes…</string>
+			<key>other</key>
+			<string>Ir nosūtīts pārāk daudz pieprasījumu. Jūs varat atkārtot mēģinājumu pēc %1$d sekundēm…</string>
+			<key>zero</key>
+			<string>Ir nosūtīts pārāk daudz pieprasījumu. Jūs varat atkārtot mēģinājumu pēc %1$d sekundēm…</string>
+		</dict>
+	</dict>
+	<key>membership_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d biedru izmaiņa</string>
+			<key>other</key>
+			<string>%d biedru izmaiņas</string>
+			<key>zero</key>
+			<string>%d biedru izmaiņu</string>
+		</dict>
+	</dict>
+	<key>missed_audio_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Neatbildēts zvans</string>
+			<key>other</key>
+			<string>%d neatbildēti zvans</string>
+			<key>zero</key>
+			<string>Neatbildētu zvanu</string>
+		</dict>
+	</dict>
+	<key>missed_video_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Neatbildēts video zvans</string>
+			<key>other</key>
+			<string>%d neatbildēti zvans</string>
+			<key>zero</key>
+			<string>Neatbildētu video zvanu</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ pievienoja %2$@ kā šis istabas adreses.</string>
+			<key>other</key>
+			<string>%1$@ pievienoja %2$@ kā šīs istabas adreses.</string>
+			<key>zero</key>
+			<string>%1$@ pievienoja %2$@ kā šīs istabas adresi.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jūs pievienojāt %1$@ kā šīs istabas adreses.</string>
+			<key>other</key>
+			<string>Jūs pievienojāt %1$@ kā šīs istabas adreses.</string>
+			<key>zero</key>
+			<string>Jūs pievienojāt %1$@ kā šīs istabas adresi.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ izdzēsa %2$@ kā šīs istabas adreses.</string>
+			<key>other</key>
+			<string>%1$@ izdzēsa %2$@ kā šīs istabas adreses.</string>
+			<key>zero</key>
+			<string>%1$@ izdzēsa %2$@ kā šīs istabas adresi.</string>
+		</dict>
+	</dict>
+	<key>notice_room_aliases_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jūs izdzēsāt %1$@ kā šīs istabas adreses.</string>
+			<key>other</key>
+			<string>Jūs izdzēsāt %1$@ kā šīs istabas adreses.</string>
+			<key>zero</key>
+			<string>Jūs izdzēsāt %1$@ kā šīs istabas adresi.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ pievienoja šīs istabas alternatīvās adreses %2$@.</string>
+			<key>other</key>
+			<string>%1$@ pievienoja šīs istabas alternatīvās adreses %2$@.</string>
+			<key>zero</key>
+			<string>%1$@ pievienoja šīs istabas alternatīvo adresi %2$@.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_added_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jūs pievienojāt šīs istabas alternatīvās adreses %1$@.</string>
+			<key>other</key>
+			<string>Jūs pievienojāt šīs istabas alternatīvās adreses %1$@.</string>
+			<key>zero</key>
+			<string>Jūs pievienojāt šīs istabas alternatīvo adresi %1$@.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ izdzēsa šīs istabas alternatīvās adreses %2$@.</string>
+			<key>other</key>
+			<string>%1$@ izdzēsa šīs istabas alternatīvās adreses %2$@.</string>
+			<key>zero</key>
+			<string>%1$@ izdzēsa šīs istabas alternatīvo adresi %2$@.</string>
+		</dict>
+	</dict>
+	<key>notice_room_canonical_alias_alternative_removed_by_you</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Jūs izdzēsāt šīs istabas alternatīvās adreses %1$@.</string>
+			<key>other</key>
+			<string>Jūs izdzēsāt šīs istabas alternatīvās adreses %1$@.</string>
+			<key>zero</key>
+			<string>Jūs izdzēsāt šīs istabas alternatīvo adresi %1$@.</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_line_for_room</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@: %2$d ziņojums</string>
+			<key>other</key>
+			<string>%1$@: %2$d ziņojumi</string>
+			<key>zero</key>
+			<string>%1$@: %2$d ziņojumu</string>
+		</dict>
+	</dict>
+	<key>notification_compat_summary_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d paziņojums</string>
+			<key>other</key>
+			<string>%d paziņojumi</string>
+			<key>zero</key>
+			<string>%d paziņojumu</string>
+		</dict>
+	</dict>
+	<key>notification_invitations</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d uzaicinājums</string>
+			<key>other</key>
+			<string>%d uzaicinājumi</string>
+			<key>zero</key>
+			<string>%d uzaicinājumu</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d nelasītas paziņotas ziņas</string>
+			<key>other</key>
+			<string>%d nelasītu paziņotu ziņu</string>
+			<key>zero</key>
+			<string>%d nelasīta paziņota ziņa</string>
+		</dict>
+	</dict>
+	<key>notification_unread_notified_messages_in_room_rooms</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d istabas</string>
+			<key>other</key>
+			<string>%d istabu</string>
+			<key>zero</key>
+			<string>%d istaba</string>
+		</dict>
+	</dict>
+	<key>room_details_selected</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d izvēlēts</string>
+			<key>other</key>
+			<string>%d izvēlēti</string>
+			<key>zero</key>
+			<string>%d izvēlēti</string>
+		</dict>
+	</dict>
+	<key>room_displayname_four_and_more_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@, %2$@, %3$@ un %4$d cits</string>
+			<key>other</key>
+			<string>%1$@, %2$@, %3$@ un %4$d citi</string>
+			<key>zero</key>
+			<string>%1$@, %2$@, %3$@ un %4$d citi</string>
+		</dict>
+	</dict>
+	<key>room_new_messages_notification</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d jauna ziņa</string>
+			<key>other</key>
+			<string>%d jaunas ziņas</string>
+			<key>zero</key>
+			<string>%d jaunu ziņu</string>
+		</dict>
+	</dict>
+	<key>room_profile_section_more_member_list</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d cilvēki</string>
+			<key>other</key>
+			<string>%1$d cilvēki</string>
+			<key>zero</key>
+			<string>Viena persona</string>
+		</dict>
+	</dict>
+	<key>room_settings_banned_users_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d lietotāji, kuriem liegta pieeja</string>
+			<key>other</key>
+			<string>%d lietotāji, kuriem liegta pieeja</string>
+			<key>zero</key>
+			<string>%d lietotājs, kuram liegta pieeja</string>
+		</dict>
+	</dict>
+	<key>room_title_members</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d biedrs</string>
+			<key>other</key>
+			<string>%d biedri</string>
+			<key>zero</key>
+			<string>%d biedri</string>
+		</dict>
+	</dict>
+	<key>seconds</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d sekundes</string>
+			<key>other</key>
+			<string>%d sekundes</string>
+			<key>zero</key>
+			<string>%d sekunde</string>
+		</dict>
+	</dict>
+	<key>secure_backup_reset_devices_you_can_verify</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Parādīt %d ierīces, ar kurām jūs šobrīd varat veikt verifikāciju</string>
+			<key>other</key>
+			<string>Parādīt %d ierīces, ar kurām jūs šobrīd varat veikt verifikāciju</string>
+			<key>zero</key>
+			<string>Parādīt ierīci, ar kuru jūs šobrīd varat veikt verifikāciju</string>
+		</dict>
+	</dict>
+	<key>send_images_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Sūtīt attēlu ar oriģinālo izmēru</string>
+			<key>other</key>
+			<string>Sūtīt attēlus ar oriģinālo izmēru</string>
+			<key>zero</key>
+			<string>Sūtīt attēlu ar oriģinālo izmēru</string>
+		</dict>
+	</dict>
+	<key>send_videos_with_original_size</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Sūtīt video ar oriģinālo izmēru</string>
+			<key>other</key>
+			<string>Sūtīt video ar oriģinālo izmēru</string>
+			<key>zero</key>
+			<string>Sūtīt video ar oriģinālo izmēru</string>
+		</dict>
+	</dict>
+	<key>settings_active_sessions_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d aktīva sesiju</string>
+			<key>other</key>
+			<string>%d aktīvas sesiju</string>
+			<key>zero</key>
+			<string>%d aktīvu sesiju</string>
+		</dict>
+	</dict>
+	<key>two_and_some_others_read</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@, %2$@ un %3$d citi lasīja</string>
+			<key>other</key>
+			<string>%1$@, %2$@ un %3$d citi lasīja</string>
+			<key>zero</key>
+			<string>%1$@, %2$@ un %3$d citi lasīja</string>
+		</dict>
+	</dict>
+</dict>
+</plist>

@@ -165,9 +165,7 @@
 "settings_new_password" = "Nýtt lykilorð";
 "settings_fail_to_update_password" = "Mistókst að uppfæra lykilorð";
 "settings_password_updated" = "Lykilorðið þitt hefur verið uppfært";
-"settings_unignore_user" = "Sýna öll skilaboð frá %@\?
-\n
-\nAthugaðu að þessi aðgerð mun endurræsa forritið og það getur tekið nokkurn tíma.";
+"settings_unignore_user" = "Sýna öll skilaboð frá %@\?\n\nAthugaðu að þessi aðgerð mun endurræsa forritið og það getur tekið nokkurn tíma.";
 "settings_select_country" = "Veldu land";
 "media_saving_period_3_days" = "3 dagar";
 "media_saving_period_1_week" = "1 vika";
@@ -295,8 +293,7 @@
 "auth_recaptcha_message" = "Þessi heimavefþjónn vill ganga úr skugga um að þú sért ekki vélmenni";
 "auth_reset_password_missing_email" = "Það þarf að setja inn tölvupóstfangið sem tengt er notandaaðgangnum þínum.";
 "auth_reset_password_error_unauthorized" = "Gat ekki sannprófað tölvupóstfang: gakktu úr skugga um að þú hafir smellt á tengilinn í tölvupóstinum";
-"room_participants_power_level_prompt" = "Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að gefa notandanum jafn mikil völd og þú hefur sjálf/ur.
-\nErtu alveg viss\?";
+"room_participants_power_level_prompt" = "Þú getur ekki afturkallað þessa aðgerð, þar sem þú ert að gefa notandanum jafn mikil völd og þú hefur sjálf/ur.\nErtu alveg viss\?";
 "settings_set_sync_delay" = "Hlé milli tveggja samstillingarbeiðna";
 "settings_keep_media" = "Halda myndefni";
 "account_email_validation_message" = "Skoðaðu tölvupóstinn þinn og smelltu á tengilinn sem hann inniheldur. Þegar því er lokið skaltu smella á að halda áfram.";
@@ -310,9 +307,7 @@
 "title_activity_choose_sticker" = "Senda límmerki";
 "call_error_user_not_responding" = "Ekki var svarað á fjartengda endanum.";
 "permissions_rationale_msg_record_audio" = "%@ þarf heimild til að nota hljóðnemann svo hægt sé að hringja hljóðsímtöl.";
-"permissions_rationale_msg_camera_and_audio" = "%@ þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.
-\n
-\nLeyfðu aðgang í næstu sprettgluggum til þess að geta hringt.";
+"permissions_rationale_msg_camera_and_audio" = "%@ þarf heimild til að nota myndavélina og hljóðnemann svo hægt sé að hringja myndsímtöl.\n\nLeyfðu aðgang í næstu sprettgluggum til þess að geta hringt.";
 "settings_deactivate_account_section" = "Gera notandaaðgang óvirkann";
 "settings_deactivate_my_account" = "Gera notandaaðganginn minn óvirkann";
 "settings_opt_in_of_analytics" = "Senda greiningargögn";
@@ -336,9 +331,7 @@
 "analytics_opt_in_list_item_3" = "Þú getur slökkt á þessu hvenær sem er í stillingunum";
 "settings_messages_in_e2e_group_chat" = "Dulrituð skilaboð í hópaspjalli";
 "settings_messages_in_e2e_one_to_one" = "Dulrituð skilaboð í maður-á-mann spjalli";
-"initial_sync_start_importing_account_joined_rooms" = "Upphaf samstillingar:
-\nHleð inn samtölunum þínum
-\nÞetta getur tekið dálítinn tíma ef þú tekur þátt í mörgum spjallrásum";
+"initial_sync_start_importing_account_joined_rooms" = "Upphaf samstillingar:\nHleð inn samtölunum þínum\nÞetta getur tekið dálítinn tíma ef þú tekur þátt í mörgum spjallrásum";
 "room_settings_room_access_private_description" = "Aðeins fólk sem hefur verið boðið getur fundið og tekið þátt";
 "room_settings_room_access_private_invite_only_title" = "Einka (einungis gegn boði)";
 "room_settings_room_notifications_manage_notifications" = "Þú getur sýsla- með tilkynningar í %1$@.";
@@ -360,14 +353,11 @@
 "settings_encrypted_direct_messages" = "Dulrituð bein skilaboð";
 "settings_troubleshoot_test_battery_title" = "Bestun fyrir rafhlöðuendingu";
 "settings_troubleshoot_test_notification_title" = "Birting tilkynninga";
-"settings_troubleshoot_test_device_settings_failed" = "Tilkynningar eru óvirkar í þessari setu.
-\nYfirfarðu stillingar í %@.";
+"settings_troubleshoot_test_device_settings_failed" = "Tilkynningar eru óvirkar í þessari setu.\nYfirfarðu stillingar í %@.";
 "settings_troubleshoot_test_device_settings_success" = "Tilkynningar eru virkar í þessari setu.";
-"settings_troubleshoot_test_account_settings_failed" = "Tilkynningar eru óvirkar fyrir notandaaðganginn þinn.
-\nYfirfarðu stillingar aðgangsins.";
+"settings_troubleshoot_test_account_settings_failed" = "Tilkynningar eru óvirkar fyrir notandaaðganginn þinn.\nYfirfarðu stillingar aðgangsins.";
 "settings_troubleshoot_test_account_settings_success" = "Tilkynningar eru virkar fyrir notandaaðganginn þinn.";
-"settings_troubleshoot_test_system_settings_failed" = "Tilkynningar eru óvirkar í kerfisstillingum.
-\nYfirfarðu kerfisstillingarnar.";
+"settings_troubleshoot_test_system_settings_failed" = "Tilkynningar eru óvirkar í kerfisstillingum.\nYfirfarðu kerfisstillingarnar.";
 "settings_troubleshoot_test_system_settings_success" = "Tilkynningar eru virkar í kerfisstillingum.";
 "settings_troubleshoot_diagnostic_running_status" = "Í keyrslu (%1$d af %2$d)";
 "settings_troubleshoot_diagnostic_run_button_title" = "Keyra prófanir";
@@ -413,9 +403,7 @@
 "settings_call_show_confirmation_dialog_title" = "Koma í veg fyrir símtöl af slysni";
 "auth_msisdn_already_defined" = "Þetta símanúmer er nú þegar skráð.";
 "error_no_external_application_found" = "Því miður, ekkert utankomandi forrit hefur fundist sem getur lokið þessari aðgerð.";
-"no_sticker_application_dialog_content" = "Í augnablikinu ertu ekki með neina límmerkjapakka virkjaða.
-\n
-\nBæta einhverjum við núna\?";
+"no_sticker_application_dialog_content" = "Í augnablikinu ertu ekki með neina límmerkjapakka virkjaða.\n\nBæta einhverjum við núna\?";
 "call_select_sound_device" = "Veldu hljóðtæki";
 "call_failed_no_connection" = "%@ símtal mistókst";
 "option_send_voice" = "Senda tal";
@@ -486,24 +474,15 @@
 "notice_room_invite_with_reason" = "%1$@ bauð %2$@. Ástæða: %3$@";
 "notice_room_invite_no_invitee_with_reason_by_you" = "Boð um þátttöku til þín. Ástæða: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "Boð um þátttöku til %1$@. Ástæða: %2$@";
-"initial_sync_start_importing_account_data" = "Upphaf samstillingar:
-\nFlyt inn gögn úr notandaaðgangi";
-"initial_sync_start_importing_account_groups" = "Upphaf samstillingar:
-\nFlyt inn samfélög";
-"initial_sync_start_importing_account_left_rooms" = "Upphaf samstillingar:
-\nFlyt inn yfirgefnar spjallrásir";
-"initial_sync_start_importing_account_invited_rooms" = "Upphaf samstillingar:
-\nFlyt inn boð í spjallrásir";
-"initial_sync_start_importing_account_rooms" = "Upphaf samstillingar:
-\nFlyt inn spjallrásir";
-"initial_sync_start_importing_account_crypto" = "Upphaf samstillingar:
-\nFlyt inn dulritunargögn";
-"initial_sync_start_importing_account" = "Upphaf samstillingar:
-\nFlyt inn notandaaðgang…";
-"initial_sync_start_downloading" = "Upphaf samstillingar:
-\nSæki gögn…";
-"initial_sync_start_server_computing" = "Upphaf samstillingar:
-\nBíð eftir svari frá netþjóni…";
+"initial_sync_start_importing_account_data" = "Upphaf samstillingar:\nFlyt inn gögn úr notandaaðgangi";
+"initial_sync_start_importing_account_groups" = "Upphaf samstillingar:\nFlyt inn samfélög";
+"initial_sync_start_importing_account_left_rooms" = "Upphaf samstillingar:\nFlyt inn yfirgefnar spjallrásir";
+"initial_sync_start_importing_account_invited_rooms" = "Upphaf samstillingar:\nFlyt inn boð í spjallrásir";
+"initial_sync_start_importing_account_rooms" = "Upphaf samstillingar:\nFlyt inn spjallrásir";
+"initial_sync_start_importing_account_crypto" = "Upphaf samstillingar:\nFlyt inn dulritunargögn";
+"initial_sync_start_importing_account" = "Upphaf samstillingar:\nFlyt inn notandaaðgang…";
+"initial_sync_start_downloading" = "Upphaf samstillingar:\nSæki gögn…";
+"initial_sync_start_server_computing" = "Upphaf samstillingar:\nBíð eftir svari frá netþjóni…";
 "room_error_access_unauthorized" = "Þú hefur ekki heimild til að taka þátt í þessari spjallrás";
 "notice_power_level_changed_by_you" = "Þú breyttir völdum %1$@.";
 "notice_widget_modified_by_you" = "Þú breyttir %1$@ viðmótshluta";
@@ -650,8 +629,7 @@
 "settings_notification_notify_me_for" = "Láta mig vita fyrir";
 "settings_emails_empty" = "Engu tölvupóstfangi hefur verið bætt við notandaaðganginn þinn";
 "settings_phone_number_empty" = "Engu símanúmeri hefur verið bætt við notandaaðganginn þinn";
-"call_failed_no_connection_description" = "Mistókst að koma á rauntímatengingu.
-\nBiddu kerfisstjóra heimaþjónsins þíns um að setja upp TURN-þjón til að tryggja að símtöl virki eðlilega.";
+"call_failed_no_connection_description" = "Mistókst að koma á rauntímatengingu.\nBiddu kerfisstjóra heimaþjónsins þíns um að setja upp TURN-þjón til að tryggja að símtöl virki eðlilega.";
 "notice_power_level_diff" = "%1$@ úr %2$@ í %3$@";
 "notice_power_level_changed" = "%1$@ breytti völdum %2$@.";
 "power_level_admin" = "Stjórnandi";
@@ -744,8 +722,7 @@
 "settings_send_message_with_enter" = "Senda skilaboð með \'Enter\'";
 "settings_show_join_leave_messages_summary" = "Hefur ekki áhrif á boð/fjarlægingu/bönn.";
 "settings_show_join_leave_messages" = "Birta taka-þátt og hætta skilaboð";
-"settings_integrations_summary" = "Notaðu samþættingarstýringu til að stýra vélmennum, viðmótshlutum og límmerkjapökkum.
-\nSamþættingarstýringar taka við stillingagögnum og geta breytt viðmótshlutum, sent boð í spjallrásir, auk þess að geta úthlutað völdum fyrir þína hönd.";
+"settings_integrations_summary" = "Notaðu samþættingarstýringu til að stýra vélmennum, viðmótshlutum og límmerkjapökkum.\nSamþættingarstýringar taka við stillingagögnum og geta breytt viðmótshlutum, sent boð í spjallrásir, auk þess að geta úthlutað völdum fyrir þína hönd.";
 "settings_integrations" = "Samþættingar";
 "this_is_the_beginning_of_dm" = "Þetta er upphaf ferils beinna skilaboða með %@.";
 "room_member_open_or_create_dm" = "Bein skilaboð";
@@ -832,9 +809,9 @@
 "resource_limit_hard_contact" = "Endilega %@ til að halda áfram að nota þessa þjónustu.";
 "resource_limit_soft_contact" = "Endilega %@ til að fá þessi takmörk hækkuð.";
 "resource_limit_hard_mau" = "Þessi heimaþjónn er kominn fram yfir takmörk á mánaðarlega virkum notendum.";
-"resource_limit_soft_mau.b_0" = "sumir notendur munu ekki geta skráð sig inn";
+"resource_limit_soft_mau" = "Þessi heimaþjónn er kominn fram yfir takmörk á mánaðarlega virkum notendum þannig að <b>sumir notendur munu ekki geta skráð sig inn</b>.";
 "resource_limit_hard_default" = "Þessi heimaþjónn er kominn fram yfir takmörk á tilföngum sínum.";
-"resource_limit_soft_default.b_0" = "sumir notendur munu ekki geta skráð sig inn";
+"resource_limit_soft_default" = "Þessi heimaþjónn er kominn fram yfir takmörk á tilföngum sínum þannig að <b>sumir notendur munu ekki geta skráð sig inn</b>.";
 "resource_limit_contact_admin" = "hafðu samband við kerfisstjóra þjónustunnar þinnar";
 "room_tombstone_continuation_description" = "Þessi spjallrás er framhald af öðru samtali";
 "room_tombstone_continuation_link" = "Samtalið heldur áfram hér";
@@ -849,8 +826,7 @@
 "error_jitsi_join_conf" = "Því miður, villa kom upp við að reyna að tengjast fjarfundinum";
 "error_jitsi_not_supported_on_old_device" = "Því miður, fjarfundasímtöl með Jitsi eru ekki studd á eldri tækjum (tæki með Android OS minna en 6.0)";
 "room_widget_revoke_access" = "Afturkalla aðgang fyrir mig";
-"room_widget_failed_to_load" = "Mistókst að hlaða inn viðmótshluta.
-\n%@";
+"room_widget_failed_to_load" = "Mistókst að hlaða inn viðmótshluta.\n%@";
 "room_widget_permission_shared_info_title" = "Að nota það gæti deilt gögnum með %@:";
 "room_widget_permission_webview_shared_info_title" = "Að nota það gæti stillt vefkökur og deilt gögnum með %@:";
 "encryption_information_verify_device_warning2" = "Ef þetta samsvarar ekki, getur verið að samskiptin þín séu berskjölduð.";
@@ -1552,8 +1528,8 @@
 "legals_identity_server_title" = "Stefna fyrir auðkenningarþjóninn þinn";
 "legals_home_server_title" = "Stefna fyrir heimaþjóninn þinn";
 "legals_application_title" = "Reglur %@";
-"analytics_opt_in_list_item_2.b_0" = "deilum ekki";
-"analytics_opt_in_list_item_1.b_0" = "skráum ekki eða búum til snið";
+"analytics_opt_in_list_item_2" = "Við <b>deilum ekki</b> upplýsingum með utanaðkomandi aðilum";
+"analytics_opt_in_list_item_1" = "Við <b>skráum ekki eða búum til snið</b> með gögnum notendaaðganga";
 "settings_system_preferences_summary" = "Veldu lit á LED, hljóð, titring…";
 "settings_silent_notifications_preferences" = "Stilla þöglar tilkynningar";
 "settings_call_notifications_preferences" = "Stilla tilkynningar símtala";
@@ -1563,14 +1539,11 @@
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Gera takmarkanir óvirkar";
 "settings_troubleshoot_test_service_boot_quickfix" = "Virkja keyrslu í ræsingu";
 "settings_troubleshoot_test_token_registration_title" = "Skráning á aðgangsteikni";
-"settings_troubleshoot_test_fcm_failed" = "Mistókst að ná FCM-teikni:
-\n%1$@";
-"settings_troubleshoot_test_fcm_success" = "Tókst að ná FCM-teikni:
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "Mistókst að ná FCM-teikni:\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "Tókst að ná FCM-teikni:\n%1$@";
 "settings_troubleshoot_test_fcm_title" = "Firebase-teikn";
 "settings_troubleshoot_test_play_services_quickfix" = "Laga Play-þjónustur";
-"settings_troubleshoot_test_play_services_failed" = "%@ notar Google Play þjónustur til að afhenda ýtitilkynningar en það lítur út fyrir að vera rangt stillt:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ notar Google Play þjónustur til að afhenda ýtitilkynningar en það lítur út fyrir að vera rangt stillt:\n%1$@";
 "settings_troubleshoot_test_play_services_success" = "Google Play Services APK er tiltækt og af nýjustu gerð.";
 "settings_troubleshoot_test_play_services_title" = "Athugun á Play-þjónustum";
 "upgrade_private_room" = "Uppfæra einkaspjallrás";
@@ -1599,10 +1572,8 @@
 "encrypted_unverified" = "Dulritað meðf ósannreyndu tæki";
 "default_message_emote_snow" = "sendir snjókomu ❄️";
 "default_message_emote_confetti" = "sendir skraut 🎉";
-"app_ios_android" = "%@ fyrir iOS
-\n%@ fyrir Android";
-"app_desktop_web" = "%@ fyrir vefinn
-\n%@ fyrir vinnutölvur";
+"app_ios_android" = "%@ fyrir iOS\n%@ fyrir Android";
+"app_desktop_web" = "%@ fyrir vefinn\n%@ fyrir vinnutölvur";
 "use_file" = "Nota skrá";
 "direct_room_created_summary_item_by_you" = "Þú gekkst í hópinn.";
 "room_created_summary_item_by_you" = "Þú bjóst til og stilltir spjallrásina.";
@@ -1629,7 +1600,7 @@
 "settings_push_gateway_no_pushers" = "Engar skráðar ýtigáttir";
 "settings_push_rules_no_rules" = "Engar ýtireglur skilgreindar";
 "settings_push_rules" = "Ýtireglur (push rules)";
-"import_e2e_keys_from_file" = "Flytja e2e-lykla inn úr skránni \"%1$@\.";
+"import_e2e_keys_from_file" = "Flytja e2e-lykla inn úr skránni \"%1$@\".";
 "create_room_public_description" = "Hver sem er getur tekið þátt í þessari spjallrás";
 "warning_room_not_created_yet" = "Ekki er ennþá búið að útbúa spjallrásina. Hætta við að búa hana til\?";
 "discovery_invite" = "Bjóddu með tölvupósti, finndu tengiliði og ýmislegt fleira…";
@@ -1642,9 +1613,7 @@
 "bootstrap_progress_checking_backup" = "Athuga öryggisafritunarlykil";
 "bootstrap_invalid_recovery_key" = "Þetta er ekki gildur endurheimtulykill";
 "bootstrap_enter_recovery" = "Settu inn %@ þinn til að halda áfram";
-"external_link_confirmation_message" = "Tengillinn %1$@ fer með þig yfir á annað vefsvæði: %2$@.
-\n
-\nErtu viss um að þú viljir halda áfram\?";
+"external_link_confirmation_message" = "Tengillinn %1$@ fer með þig yfir á annað vefsvæði: %2$@.\n\nErtu viss um að þú viljir halda áfram\?";
 "universal_link_malformed" = "Tengillinn er ekki rétt formaður";
 "room_error_not_found" = "Finn ekki þessa spjallrás. Gakktu úr skugga um að hún sé til.";
 "error_opening_banned_room" = "Get ekki opnað spjallrás þar sem þú ert í banni.";
@@ -1726,11 +1695,8 @@
 "a11y_trust_level_default" = "Sjálfgefið stig trausts";
 "a11y_unsent_draft" = "er með ósend drög";
 "a11y_error_some_message_not_sent" = "Sum skilaboð hafa ekki verið send";
-"encryption_information_dg_xsigning_not_trusted" = "Kross-undirritun er virk
-\nLyklum er ekki treyst";
-"encryption_information_dg_xsigning_trusted" = "Kross-undirritun er virk
-\nLyklum er treyst.
-\nEinkalyklar eru ekki þekktir";
+"encryption_information_dg_xsigning_not_trusted" = "Kross-undirritun er virk\nLyklum er ekki treyst";
+"encryption_information_dg_xsigning_trusted" = "Kross-undirritun er virk\nLyklum er treyst.\nEinkalyklar eru ekki þekktir";
 "verification_conclusion_warning" = "Vantreyst innskráning";
 "keys_backup_unable_to_get_trust_info" = "Villa kom upp við að sækja upplýsingar um traust";
 "join_anyway" = "Taka samt þátt";
@@ -1762,8 +1728,7 @@
 "upgrade_public_room_from_to" = "Þú munt uppfæra þessa spjallrás úr %1$@ upp í %2$@.";
 "this_space_has_no_rooms" = "Þetta svæði er ekki með neinar spjallrásir";
 "spaces_no_server_support_description" = "Hafðu samband við stjórnanda heimaþjónsins þíns til að fá frekari upplýsingar";
-"spaces_feeling_experimental_subspace" = "Ertu til í tilraunastarfsemi\?
-\nÞú getur bætt fyrirliggjandi svæðum í annað svæði.";
+"spaces_feeling_experimental_subspace" = "Ertu til í tilraunastarfsemi\?\nÞú getur bætt fyrirliggjandi svæðum í annað svæði.";
 "all_rooms_youre_in_will_be_shown_in_home" = "Allar spjallrásir sem þú ert í munu birtast á forsíðu.";
 "looking_for_someone_not_in_space" = "Leitarðu að einhverjum sem ekki er í %@\?";
 "labs_enable_thread_messages_desc" = "Athugaðu: forritið verður endurræst";
@@ -1815,85 +1780,3 @@
 "threads_notice_migration_title" = "Spjallþræðir í bráðlegri Beta-útgáfu 🎉";
 "call_transfer_consulting_with" = "Ráðfæri við %1$@";
 "call_transfer_consult_first" = "Ráðfæra fyrst";
-"plurals.membership_changes.item_0" = "%d breyting á aðild";
-"plurals.membership_changes.item_1" = "%d breytingar á aðild";
-"plurals.room_title_members.item_0" = "%d meðlimur";
-"plurals.room_title_members.item_1" = "%d meðlimir";
-"plurals.room_new_messages_notification.item_0" = "%d ný skilaboð";
-"plurals.room_new_messages_notification.item_1" = "%d ný skilaboð";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d spjallrás";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d spjallrásir";
-"plurals.active_widgets.item_0" = "%d virkur viðmótshluti";
-"plurals.active_widgets.item_1" = "%d virkir viðmótshlutar";
-"plurals.notification_unread_notified_messages.item_0" = "%d ólesið tilkynnt skilaboð";
-"plurals.notification_unread_notified_messages.item_1" = "%d ólesin tilkynnt skilaboð";
-"plurals.missed_video_call.item_0" = "Ósvarað myndsímtal";
-"plurals.missed_video_call.item_1" = "%d ósvöruð myndsímtöl";
-"plurals.missed_audio_call.item_0" = "Ósvarað raddsímtal";
-"plurals.missed_audio_call.item_1" = "%d ósvöruð raddsímtöl";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Þú fjarlægðir varavistfangið %1$@ af þessari spjallrás.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Þú fjarlægðir varavistföngin %1$@ af þessari spjallrás.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ fjarlægði varavistfangið %2$@ af þessari spjallrás.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ fjarlægði varavistföngin %2$@ af þessari spjallrás.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Þú bættir við varavistfanginu %1$@ fyrir þessa spjallrás.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Þú bættir við varavistföngunum %1$@ fyrir þessa spjallrás.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ bætti við varavistfanginu %2$@ fyrir þessa spjallrás.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ bætti við varavistföngunum %2$@ fyrir þessa spjallrás.";
-"plurals.notice_room_server_acl_changes.item_0" = "Breyting á ACL á %d netþjóni";
-"plurals.notice_room_server_acl_changes.item_1" = "Breyting á ACL á %d netþjónum";
-"plurals.room_profile_section_more_member_list.item_0" = "Einn aðili";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d aðilar";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d skilaboð";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d skilaboð";
-"plurals.notification_invitations.item_0" = "%d boð";
-"plurals.notification_invitations.item_1" = "%d boð";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Lokaniðurstöður byggðar á %1$d atkvæði";
-"plurals.poll_total_vote_count_after_ended.item_1" = "Lokaniðurstöður byggðar á %1$d atkvæðum";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d atkvæði greitt. Greiddu atkvæði til að sjá útkomuna";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "%1$d atkvæði greidd. Greiddu atkvæði til að sjá útkomuna";
-"plurals.message_reaction_show_more.item_0" = "%1$d til viðbótar";
-"plurals.message_reaction_show_more.item_1" = "%1$d til viðbótar";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Byggt á %1$d atkvæði";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "Byggt á %1$d atkvæðum";
-"plurals.poll_option_vote_count.item_0" = "%1$d atkvæði";
-"plurals.poll_option_vote_count.item_1" = "%1$d atkvæði";
-"plurals.create_poll_not_enough_options_error.item_0" = "Það þarf allavega %1$@ valkost";
-"plurals.create_poll_not_enough_options_error.item_1" = "Það þarf allavega %1$@ valkosti";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d nýjum lykli hefur verið bætt við þessa setu.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d nýjum lyklum hefur verið bætt við þessa setu.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Endurheimti öryggisafrit með %d lykli.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Endurheimti öryggisafrit með %d lyklum.";
-"plurals.encryption_import_room_keys_success.item_0" = "Tókst að flytja inn%1$d/%2$d dulritunarlykli.";
-"plurals.encryption_import_room_keys_success.item_1" = "Tókst að flytja inn%1$d/%2$d dulritunarlyklum.";
-"plurals.room_settings_banned_users_count.item_0" = "%d bannaður notandi";
-"plurals.room_settings_banned_users_count.item_1" = "%d bannaðir notendur";
-"plurals.call_active_status.item_0" = "Virkt símtal ·";
-"plurals.call_active_status.item_1" = "%1$d virk símtöl ·";
-"plurals.entries.item_0" = "%d færsla";
-"plurals.entries.item_1" = "%d færslur";
-"plurals.notification_compat_summary_title.item_0" = "%d tilkynning";
-"plurals.notification_compat_summary_title.item_1" = "%d tilkynningar";
-"plurals.seconds.item_0" = "%d sekúnda";
-"plurals.seconds.item_1" = "%d sekúndur";
-"plurals.room_details_selected.item_0" = "%d valið";
-"plurals.room_details_selected.item_1" = "%d valið";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Þú fjarlægðir %1$@ sem vistfang fyrir þessa spjallrás.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Þú fjarlægðir %1$@ sem vistföng fyrir þessa spjallrás.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ fjarlægði %2$@ sem vistfang fyrir þessa spjallrás.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ fjarlægði %2$@ sem vistföng fyrir þessa spjallrás.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Þú bættir við %1$@ sem vistfangi fyrir þessa spjallrás.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Þú bættir við %1$@ sem vistföngum fyrir þessa spjallrás.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ bætti við %2$@ sem vistfangi fyrir þessa spjallrás.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ bætti við %2$@ sem vistföngum fyrir þessa spjallrás.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ og %4$d til viðbótar";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ og %4$d til viðbótar";
-"plurals.fallback_users_read.item_0" = "%d notandi las";
-"plurals.fallback_users_read.item_1" = "%d notendur lásu";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ og %3$d til viðbótar lásu";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ og %3$d til viðbótar lásu";
-"plurals.space_people_you_know.item_0" = "%d aðili sem þú þekkir hefur þegar tekið þátt";
-"plurals.space_people_you_know.item_1" = "%d aðilar sem þú þekkir hafa þegar tekið þátt";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Rangur kóði, %d tilraun eftir";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Rangur kóði, %d tilraunir eftir";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Boð voru send til %1$@ og eins til viðbótar";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Boð voru send til %1$@ og %2$d til viðbótar";

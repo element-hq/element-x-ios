@@ -102,9 +102,7 @@
 "auth_invalid_login_param" = "Tên người dùng hoặc mật khẩu không đúng";
 "auth_login" = "Đăng nhập";
 "error_no_external_application_found" = "Xin lỗi, không có ứng dụng nào được tìm thấy có thể hoàn thành hành động này.";
-"no_sticker_application_dialog_content" = "Hiện tại bạn không có bộ nhãn dán nào được kích hoạt cả.
-\n
-\nBạn có muốn thêm không\?";
+"no_sticker_application_dialog_content" = "Hiện tại bạn không có bộ nhãn dán nào được kích hoạt cả.\n\nBạn có muốn thêm không\?";
 "option_take_video" = "Quay video";
 "option_take_photo" = "Chụp ảnh";
 "option_take_photo_video" = "Chụp ảnh hoặc quay video";
@@ -136,8 +134,7 @@
 "login_error_ssl_other" = "Lỗi SSL.";
 "login_error_ssl_peer_unverified" = "Lỗi SSL: danh tính của đối tác chưa được kiểm chứng.";
 "login_error_no_homeserver_found" = "Đây không phải là một địa chỉ máy chủ Matrix hợp lệ";
-"call_failed_no_connection_description" = "Thiết lập kết nối thời gian thực thất bại.
-\nXin vui lòng yêu cầu quản trị viên máy chủ nhà của bạn thiết lập máy chủ TURN để có thể gọi điện bình thường.";
+"call_failed_no_connection_description" = "Thiết lập kết nối thời gian thực thất bại.\nXin vui lòng yêu cầu quản trị viên máy chủ nhà của bạn thiết lập máy chủ TURN để có thể gọi điện bình thường.";
 "call_connecting" = "Cuộc gọi đang được kết nối…";
 "call" = "Gọi";
 "settings_call_ringtone_dialog_title" = "Chọn nhạc chuông:";
@@ -311,8 +308,7 @@
 "invite_to_space_with_name_desc" = "Họ sẽ có thể khám phá %@";
 "invite_to_space_with_name" = "Mời vào %@";
 "invite_by_link" = "Chia sẻ liên kết";
-"room_alias_preview_not_found" = "Bí danh này không truy cập được vào lúc này.
-\nHãy thử lại sau, hoặc yêu cầu một quản trị viên của phòng kiểm tra xem bạn có quyền truy cập không.";
+"room_alias_preview_not_found" = "Bí danh này không truy cập được vào lúc này.\nHãy thử lại sau, hoặc yêu cầu một quản trị viên của phòng kiểm tra xem bạn có quyền truy cập không.";
 "join_anyway" = "Vẫn tham gia";
 "disclaimer_positive_button" = "TÌM HIỂU THÊM";
 "disclaimer_negative_button" = "HIỂU RỒI";
@@ -372,9 +368,7 @@
 "yes" = "CÓ";
 "permissions_denied_add_contact" = "Cho phép quyền truy cập danh bạ của bạn.";
 "permissions_denied_qr_code" = "Để quét mã QR, bạn cần cho phép quyền truy cập máy ảnh.";
-"permissions_rationale_msg_camera_and_audio" = "%@ cần quyền truy cập máy ảnh và micro của bạn để thực hiện các cuộc gọi video.
-\n
-\nVui lòng cho phép quyền truy cập trên các cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi.";
+"permissions_rationale_msg_camera_and_audio" = "%@ cần quyền truy cập máy ảnh và micro của bạn để thực hiện các cuộc gọi video.\n\nVui lòng cho phép quyền truy cập trên các cửa sổ popup tiếp theo để có thể thực hiện cuộc gọi.";
 "permissions_rationale_msg_record_audio" = "%@ cần quyền truy cập micro của bạn để thực hiện các cuộc gọi âm thanh.";
 "permissions_rationale_popup_title" = "Thông tin";
 "call_error_user_not_responding" = "Bên kia không thể nhấc máy.";
@@ -454,27 +448,16 @@
 "notice_room_invite_no_invitee_with_reason" = "Lời mời của %1$@. Lý do: %2$@";
 "event_status_sending_message" = "Đang gửi tin nhắn…";
 "event_status_sent_message" = "Đã gửi tin nhắn";
-"initial_sync_start_importing_account_data" = "Đồng bộ ban đầu:
-\nĐang nhập dữ liệu tài khoản";
-"initial_sync_start_importing_account_groups" = "Đồng bộ ban đầu:
-\nĐang nhập các Community";
-"initial_sync_start_importing_account_left_rooms" = "Đồng bộ ban đầu:
-\nĐang nhập các phòng đã rời khỏi";
-"initial_sync_start_importing_account_invited_rooms" = "Đồng bộ ban đầu:
-\nĐang nhập các phòng đã mời vào";
-"initial_sync_start_importing_account_joined_rooms" = "Đồng bộ ban đầu:
-\nTải hội thoại của bạn
-\nNếu bạn đã tham gia nhiều phòng, điều này có thể mất một thời gian.";
-"initial_sync_start_importing_account_rooms" = "Đồng bộ ban đầu:
-\nĐang nhập các phòng";
-"initial_sync_start_importing_account_crypto" = "Đồng bộ ban đầu:
-\nĐang nhập mã hoá";
-"initial_sync_start_importing_account" = "Đồng bộ ban đầu:
-\nĐang nhập tài khoản…";
-"initial_sync_start_downloading" = "Đồng bộ ban đầu:
-\nĐang tải xuống dữ liệu…";
-"initial_sync_start_server_computing" = "Đồng bộ ban đầu:
-\nĐang đợi phản hồi từ máy chủ…";
+"initial_sync_start_importing_account_data" = "Đồng bộ ban đầu:\nĐang nhập dữ liệu tài khoản";
+"initial_sync_start_importing_account_groups" = "Đồng bộ ban đầu:\nĐang nhập các Community";
+"initial_sync_start_importing_account_left_rooms" = "Đồng bộ ban đầu:\nĐang nhập các phòng đã rời khỏi";
+"initial_sync_start_importing_account_invited_rooms" = "Đồng bộ ban đầu:\nĐang nhập các phòng đã mời vào";
+"initial_sync_start_importing_account_joined_rooms" = "Đồng bộ ban đầu:\nTải hội thoại của bạn\nNếu bạn đã tham gia nhiều phòng, điều này có thể mất một thời gian.";
+"initial_sync_start_importing_account_rooms" = "Đồng bộ ban đầu:\nĐang nhập các phòng";
+"initial_sync_start_importing_account_crypto" = "Đồng bộ ban đầu:\nĐang nhập mã hoá";
+"initial_sync_start_importing_account" = "Đồng bộ ban đầu:\nĐang nhập tài khoản…";
+"initial_sync_start_downloading" = "Đồng bộ ban đầu:\nĐang tải xuống dữ liệu…";
+"initial_sync_start_server_computing" = "Đồng bộ ban đầu:\nĐang đợi phản hồi từ máy chủ…";
 "room_displayname_empty_room_was" = "Phòng trống (đã là %@)";
 "room_displayname_empty_room" = "Phòng trống";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ và %4$@";
@@ -487,15 +470,12 @@
 "notice_room_server_acl_set_ip_literals_allowed" = "• Những máy chủ khớp với IP được cho phép.";
 "room_participants_action_unignore_title" = "Hủy bỏ qua người dùng";
 "room_participants_action_ignore" = "Bỏ qua";
-"room_participants_action_ignore_prompt_msg" = "Bỏ qua người dùng này sẽ xóa những tin nhắn của họ khỏi những phòng bạn chia sẻ.
-\n
-\nBạn có thể đảo ngược hành động này bất cứ lúc nào trong cài đặt chung.";
+"room_participants_action_ignore_prompt_msg" = "Bỏ qua người dùng này sẽ xóa những tin nhắn của họ khỏi những phòng bạn chia sẻ.\n\nBạn có thể đảo ngược hành động này bất cứ lúc nào trong cài đặt chung.";
 "room_participants_action_ignore_title" = "Bỏ qua người dùng";
 "room_participants_power_level_demote" = "Giáng cấp";
 "room_participants_power_level_demote_warning_prompt" = "Bạn sẽ không thể hoàn tác thay đổi này vì bạn đang tự giáng cấp bản thân, nếu bạn là người dùng cuối cùng có đặc quyền trong phòng, nó sẽ không thể lấy lại đặc quyền.";
 "room_participants_power_level_demote_warning_title" = "Giáng cấp bản thân\?";
-"room_participants_power_level_prompt" = "Bạn sẽ không thể hoàn tác thay đổi này vì bạn đang thăng cấp người dùng có cùng cấp quyền như của bạn.
-\nBạn có chắc không\?";
+"room_participants_power_level_prompt" = "Bạn sẽ không thể hoàn tác thay đổi này vì bạn đang thăng cấp người dùng có cùng cấp quyền như của bạn.\nBạn có chắc không\?";
 "room_participants_action_mention" = "Nhắc đến";
 "room_participants_action_remove" = "Đá";
 "room_participants_action_unban" = "Bỏ cấm";
@@ -656,17 +636,11 @@
 "room_list_quick_actions_notifications_all" = "Tất cả tin nhắn";
 "room_list_quick_actions_notifications_all_noisy" = "Tất cả tin nhắn (ầm ĩ)";
 "message_ignore_user" = "Lơ người dùng";
-"content_reported_as_inappropriate_content" = "Nội dung này bị báo cáo không phù hợp.
-\n
-\nNếu bạn không muốn thấy thêm nội dung từ người dùng này, bạn có thể lơ họ để ẩn nội dung tin nhắn.";
+"content_reported_as_inappropriate_content" = "Nội dung này bị báo cáo không phù hợp.\n\nNếu bạn không muốn thấy thêm nội dung từ người dùng này, bạn có thể lơ họ để ẩn nội dung tin nhắn.";
 "content_reported_as_inappropriate_title" = "Bị báo cáo không phù hợp";
-"content_reported_as_spam_content" = "Nội dung này bị báo cáo tin rác.
-\n
-\nNếu bạn không muốn thấy thêm nội dung từ người dùng này, bạn có thể lơ họ để ẩn nội dung tin nhắn.";
+"content_reported_as_spam_content" = "Nội dung này bị báo cáo tin rác.\n\nNếu bạn không muốn thấy thêm nội dung từ người dùng này, bạn có thể lơ họ để ẩn nội dung tin nhắn.";
 "content_reported_as_spam_title" = "Báo cáo tin rác";
-"content_reported_content" = "Nội dung này bị báo cáo.
-\n
-\nNếu bạn không muốn thấy thêm nội dung từ người dùng này, bạn có thể lơ họ để ẩn nội dung tin nhắn.";
+"content_reported_content" = "Nội dung này bị báo cáo.\n\nNếu bạn không muốn thấy thêm nội dung từ người dùng này, bạn có thể lơ họ để ẩn nội dung tin nhắn.";
 "content_reported_title" = "Nội dung bị báo cáo";
 "block_user" = "LƠ NGƯỜI DÙNG";
 "report_content_custom_submit" = "BÁO CÁO";
@@ -744,9 +718,7 @@
 "settings_select_country" = "Chọn quốc gia";
 "settings_emails_and_phone_numbers_summary" = "Quản lý email và số điện thoại liên kết với tài khoản Matrix";
 "settings_emails_and_phone_numbers_title" = "Email và số điện thoại";
-"settings_unignore_user" = "Hiện tất cả tin nhắn từ %@\?
-\n
-\nLưu ý rằng hành động này sẽ khởi động App và có thể mất nhiều thời gian.";
+"settings_unignore_user" = "Hiện tất cả tin nhắn từ %@\?\n\nLưu ý rằng hành động này sẽ khởi động App và có thể mất nhiều thời gian.";
 "settings_password_updated" = "Mật khẩu của bạn vừa được cập nhật";
 "settings_fail_to_update_password_invalid_current_password" = "Mật khẩu này không hợp lệ";
 "settings_fail_to_update_password" = "Cập nhật mật khẩu thất bại";
@@ -830,17 +802,14 @@
 "settings_version" = "Phiên bản";
 "settings_set_sync_delay" = "Thời gian chờ giữa 2 lần đồng bộ";
 "login_validation_code_is_not_correct" = "Mã nhập vào không hợp lệ. Vui lòng kiểm tra.";
-"login_wait_for_email_notice" = "Chúng tôi vừa gửi email tới %1$@.
-\nClick vào đường link trong email để tiếp tục quá trình tạo tài khoản.";
+"login_wait_for_email_notice" = "Chúng tôi vừa gửi email tới %1$@.\nClick vào đường link trong email để tiếp tục quá trình tạo tài khoản.";
 "login_wait_for_email_title" = "Hãy kiểm tra email của bạn";
 "login_terms_title" = "Chấp nhận điều khoản để tiếp tục";
 "login_a11y_captcha_container" = "Hãy thực hiện thách thức captcha";
 "login_a11y_choose_other" = "Chọn một máy chủ khác";
 "login_a11y_choose_modular" = "Chọn Dịch vụ Element Matrix";
 "login_a11y_choose_matrix_org" = "Chọn matrix.org";
-"login_signup_cancel_confirmation_content" = "Tài khoản của bạn chưa được tạo.
-\n
-\nBạn muốn ngừng tiến trình đăng ký\?";
+"login_signup_cancel_confirmation_content" = "Tài khoản của bạn chưa được tạo.\n\nBạn muốn ngừng tiến trình đăng ký\?";
 "login_signup_cancel_confirmation_title" = "Cảnh báo";
 "login_signup_error_user_in_use" = "Tên đăng nhập này đã được đăng ký";
 "login_signup_submit" = "Tiếp";
@@ -867,9 +836,7 @@
 "login_set_email_mandatory_hint" = "Email";
 "login_set_email_notice" = "Thêm địa chỉ email để phục hồi tài khoản. Sau này bạn có thể tùy chọn cho phép người khác tìm mình qua email.";
 "login_set_email_title" = "Thêm địa chỉ email";
-"login_reset_password_cancel_confirmation_content" = "Mật khẩu chưa được thay đổi.
-\n
-\nBạn muốn ngừng tiến trình đổi mật khẩu\?";
+"login_reset_password_cancel_confirmation_content" = "Mật khẩu chưa được thay đổi.\n\nBạn muốn ngừng tiến trình đổi mật khẩu\?";
 "login_reset_password_cancel_confirmation_title" = "Cảnh báo";
 "login_reset_password_success_submit" = "Trở lại Đăng nhập";
 "login_reset_password_success_notice_2" = "Bạn vừa đăng xuất tất cả phiên đăng nhập và không còn nhận được thông báo đẩy. Đăng nhập lại để nhận thông báo trên thiết bị.";
@@ -911,18 +878,15 @@
 "login_server_text" = "Giống như email, tài khoản cần có nhà riêng, dù bạn có thể nói chuyện với bất kỳ ai";
 "settings_troubleshoot_test_bing_settings_title" = "Thiết lập tùy chỉnh.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Khả dụng";
-"settings_troubleshoot_test_device_settings_failed" = "Thông báo không được bật cho phiên này.
-\nVui lòng kiểm tra trong thiết lập ứng dụng %@.";
+"settings_troubleshoot_test_device_settings_failed" = "Thông báo không được bật cho phiên này.\nVui lòng kiểm tra trong thiết lập ứng dụng %@.";
 "settings_troubleshoot_test_device_settings_success" = "Thông báo được bật cho phiên này.";
 "settings_troubleshoot_test_device_settings_title" = "Thiết lập phiên.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Khả dụng";
-"settings_troubleshoot_test_account_settings_failed" = "Thông báo bị tắt cho tài khoản của bạn.
-\nVui lòng kiểm tra thiết lập.";
+"settings_troubleshoot_test_account_settings_failed" = "Thông báo bị tắt cho tài khoản của bạn.\nVui lòng kiểm tra thiết lập.";
 "settings_troubleshoot_test_account_settings_success" = "Thông báo được bật cho tài khoản của bạn.";
 "settings_troubleshoot_test_account_settings_title" = "Thiết lập tài khoản.";
 "open_settings" = "Mở thiết lập";
-"settings_troubleshoot_test_system_settings_failed" = "Thông báo bị tắt trong thiết lập hệ thống.
-\nVui lòng kiểm tra thiết lập.";
+"settings_troubleshoot_test_system_settings_failed" = "Thông báo bị tắt trong thiết lập hệ thống.\nVui lòng kiểm tra thiết lập.";
 "settings_troubleshoot_test_system_settings_success" = "Thông báo được bật trong thiết lập hệ thống.";
 "settings_troubleshoot_test_system_settings_title" = "Thiết lập hệ thống.";
 "settings_notification_troubleshoot" = "Xử lý lỗi thông báo";
@@ -993,9 +957,7 @@
 "room_participants_unban_title" = "Hủy cấm người dùng";
 "room_participants_ban_reason" = "Lý do cấm";
 "room_participants_ban_title" = "Cấm người dùng";
-"room_participants_remove_prompt_msg" = "việc đá người dùng sẽ xóa họ khỏi phòng.
-\n
-\nĐể ngăn họ tham gia lại, bạn nên cấm họ thay vì đá.";
+"room_participants_remove_prompt_msg" = "việc đá người dùng sẽ xóa họ khỏi phòng.\n\nĐể ngăn họ tham gia lại, bạn nên cấm họ thay vì đá.";
 "room_participants_remove_reason" = "Lý do đá";
 "room_participants_remove_title" = "Đá người dùng";
 "room_participants_action_cancel_invite_prompt_msg" = "Bạn có chắc bạn muốn hủy lời mời đối với người dùng này không\?";
@@ -1009,18 +971,12 @@
 "room_settings_space_access_title" = "Truy cập không gian";
 "room_settings_access_rules_pref_dialog_title" = "Ai có quyền truy cập\?";
 "account_email_validation_message" = "Vui lòng kiểm tra email và bấm vào liên kết trong đó. Một khi xong, bấm tiếp tục.";
-"settings_integrations_summary" = "Sử dụng trình quản lý chung để quản lý bot, các cầu nối, widget và các gói nhãn dán.
-\nTrình quản lý chung sẽ nhận được dữ liệu hiệu chỉnh, và sẽ có thể điều chỉnh các widget, gửi lời mời vào phòng và thiết lập các mốc quyền lợi theo ý bạn.";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ sẽ đồng bộ hóa dưới nền trong một khoảng thời gian nhất định (có thể điều chỉnh thời gian).
-\nViệc này sẽ làm ảnh hưởng tới khả năng thu phát và sử dụng pin, sẽ xuất hiện một thông báo cho biết lúc nào %@ đang hoạt động.";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ sẽ đồng bộ dưới nền và sẽ sử dụng các tài nguyên như pin một cách tiết kiệm.
-\nTùy vào các tài nguyên có sẵn trên thiết bị, việc đồng bộ hóa có thể sẽ bị ngăn cản bởi hệ điều hành.";
+"settings_integrations_summary" = "Sử dụng trình quản lý chung để quản lý bot, các cầu nối, widget và các gói nhãn dán.\nTrình quản lý chung sẽ nhận được dữ liệu hiệu chỉnh, và sẽ có thể điều chỉnh các widget, gửi lời mời vào phòng và thiết lập các mốc quyền lợi theo ý bạn.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ sẽ đồng bộ hóa dưới nền trong một khoảng thời gian nhất định (có thể điều chỉnh thời gian).\nViệc này sẽ làm ảnh hưởng tới khả năng thu phát và sử dụng pin, sẽ xuất hiện một thông báo cho biết lúc nào %@ đang hoạt động.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ sẽ đồng bộ dưới nền và sẽ sử dụng các tài nguyên như pin một cách tiết kiệm.\nTùy vào các tài nguyên có sẵn trên thiết bị, việc đồng bộ hóa có thể sẽ bị ngăn cản bởi hệ điều hành.";
 "settings_troubleshoot_test_battery_failed" = "Nếu người dùng để thiết bị đã tháo sạc và đang chờ trong khoảng thời gian, với màn hình tắt, thiết bị sẽ khởi động chế độ Doze. Việc này ngăn cản các ứng dụng sử dụng mạng và dừng lại các hoạt động đồng bộ hóa, kể cả các báo thức.";
-"settings_troubleshoot_test_bg_restricted_failed" = "Giới hạn dưới nền đã được bật cho %@.
-\nCác hoạt động của ứng dụng sẽ bị giới hạn nặng nề khi chạy dưới nền, điều này có thể ảnh hưởng đến cách thông báo của ứng dụng.
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_success" = "Các giới hạn dưới nền đã được tắt cho %@. Bài kiểm tra này sẽ được chạy khi sử dụng dữ liệu di động (không Wi-Fi).
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Giới hạn dưới nền đã được bật cho %@.\nCác hoạt động của ứng dụng sẽ bị giới hạn nặng nề khi chạy dưới nền, điều này có thể ảnh hưởng đến cách thông báo của ứng dụng.\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Các giới hạn dưới nền đã được tắt cho %@. Bài kiểm tra này sẽ được chạy khi sử dụng dữ liệu di động (không Wi-Fi).\n%1$@";
 "settings_troubleshoot_test_bg_restricted_title" = "Kiểm tra giới hạn dưới nền";
 "settings_troubleshoot_test_service_boot_quickfix" = "Bật khởi động cùng hệ thống";
 "settings_troubleshoot_test_service_boot_failed" = "Dịch vụ sẽ không khởi động sau khi thiết bị đã khởi động lại, bạn sẽ không nhận được bất kỳ thông báo nào cho tới khi %@ được mở một lần.";
@@ -1034,25 +990,18 @@
 "settings_troubleshoot_test_push_loop_success" = "Ứng dụng đang được ĐẨY";
 "settings_troubleshoot_test_push_loop_waiting_for_push" = "Ứng dụng đang chờ được ĐẨY";
 "settings_troubleshoot_test_push_loop_title" = "Đẩy thử";
-"settings_troubleshoot_test_token_registration_failed" = "Khai báo token FCM với máy chủ không thành công:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Khai báo token FCM với máy chủ không thành công:\n%1$@";
 "settings_troubleshoot_test_token_registration_success" = "Đăng ký token FCM thành công tới máy chủ.";
 "settings_troubleshoot_test_token_registration_title" = "Đăng ký token";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Thêm tài khoản";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@
-\nLỗi này đã vượt khỏi tầm kiểm soát của %@. Không phát hiện thấy tài khoản Google trên thiết bị. Vui lòng thêm một tài khoản.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@
-\nLỗi này đã vượt ra khỏi tầm kiểm soát của %@. Nó có thể xảy ra vì vài lý do. Có thể nó sẽ hoạt động nếu bạn thử lại sau, bạn cũng có thể kiểm rằng các dịch vụ của Google Play không bị giới hạn quyền sử dụng data trong cài đặt hệ thống, hoặc đồng hồ trên thiết bị của bạn bị sai, hoặc là do bản ROM custom của bạn.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@
-\nLỗi này đã vượt ra khỏi tầm kiểm soát của %@ và theo như Google thông báo, lỗi này chỉ ra rằng thiết bị đã có quá nhiều ứng dụng được đăng ký với FCM. Lỗi này chỉ xảy ra khi có quá nhiều ứng dụng hoạt động, vì vậy có thể sẽ không ảnh hưởng đến trải nghiệm người dùng cơ bản.";
-"settings_troubleshoot_test_fcm_failed" = "Lấy token FCM thất bại:
-\n%1$@";
-"settings_troubleshoot_test_fcm_success" = "Lấy token FCM thành công:
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@\nLỗi này đã vượt khỏi tầm kiểm soát của %@. Không phát hiện thấy tài khoản Google trên thiết bị. Vui lòng thêm một tài khoản.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@\nLỗi này đã vượt ra khỏi tầm kiểm soát của %@. Nó có thể xảy ra vì vài lý do. Có thể nó sẽ hoạt động nếu bạn thử lại sau, bạn cũng có thể kiểm rằng các dịch vụ của Google Play không bị giới hạn quyền sử dụng data trong cài đặt hệ thống, hoặc đồng hồ trên thiết bị của bạn bị sai, hoặc là do bản ROM custom của bạn.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@\nLỗi này đã vượt ra khỏi tầm kiểm soát của %@ và theo như Google thông báo, lỗi này chỉ ra rằng thiết bị đã có quá nhiều ứng dụng được đăng ký với FCM. Lỗi này chỉ xảy ra khi có quá nhiều ứng dụng hoạt động, vì vậy có thể sẽ không ảnh hưởng đến trải nghiệm người dùng cơ bản.";
+"settings_troubleshoot_test_fcm_failed" = "Lấy token FCM thất bại:\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "Lấy token FCM thành công:\n%1$@";
 "settings_troubleshoot_test_fcm_title" = "Token Firebase";
 "settings_troubleshoot_test_play_services_quickfix" = "Sửa dịch vụ của Google Play";
-"settings_troubleshoot_test_play_services_failed" = "%@ sử dụng Dịch vụ của Google Play nhằm đưa ra cái thông báo đẩy nhưng có vẻ nó đã không được căn chỉnh đúng cách:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ sử dụng Dịch vụ của Google Play nhằm đưa ra cái thông báo đẩy nhưng có vẻ nó đã không được căn chỉnh đúng cách:\n%1$@";
 "settings_troubleshoot_test_play_services_success" = "Dịch vụ của Google Play APK đang hoạt động và đã được nâng cấp lên phiên bản mới nhất.";
 "settings_troubleshoot_test_play_services_title" = "Kiểm tra dịch vụ của Google Play";
 "settings_troubleshoot_test_bing_settings_failed" = "Bạn đã tắt một vài thông báo trong cài đặt nâng cao.";
@@ -1083,9 +1032,7 @@
 "ssl_cert_new_account_expl" = "Nếu quản trị viên của máy chủ đã nói rằng điều này có thể xảy ra, hãy chắc chắn rằng dấu vân tay phía dưới trùng với dấu vân tay được họ cung cấp.";
 "space_participants_unban_prompt_msg" = "Hủy cấm người dùng sẽ cho phép họ tham gia không gian này lần nữa.";
 "space_participants_ban_prompt_msg" = "Cấm người dùng này sẽ đá họ khỏi không gian này và ngăn chặn họ tiếp tục tham gia.";
-"space_participants_remove_prompt_msg" = "hành động của bạn sẽ xóa họ khỏi không gian này.
-\n
-\nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.";
+"space_participants_remove_prompt_msg" = "hành động của bạn sẽ xóa họ khỏi không gian này.\n\nTrong trường hợp không muốn họ quay lại, bạn nên cấm họ tham gia lần nữa.";
 "delete_poll_dialog_content" = "Bạn có chắc chắn muốn xóa cuộc thăm dò này không\? Bạn sẽ không thể phục hồi nó một khi bị xóa.";
 "delete_poll_dialog_title" = "Xóa cuộc thăm dò ý kiến";
 "poll_end_room_list_preview" = "Cuộc thăm dò kết thúc";
@@ -1131,8 +1078,7 @@
 "upgrade_room_update_parent_space" = "Tự động cập nhật Space cha mẹ";
 "upgrade_room_auto_invite" = "Tự động mời người dùng";
 "upgrade_public_room_from_to" = "Bạn sẽ nâng cấp phòng này từ %1$@ lên %2$@";
-"upgrade_room_warning" = "Nâng cấp phòng là một hành động nâng cao và thường được khuyến khích khi phòng không ổn định do lỗi, thiếu tính năng hoặc lỗ hổng bảo mật.
-\nĐiều này thường chỉ ảnh hưởng đến cách phòng được xử lý trên máy chủ.";
+"upgrade_room_warning" = "Nâng cấp phòng là một hành động nâng cao và thường được khuyến khích khi phòng không ổn định do lỗi, thiếu tính năng hoặc lỗ hổng bảo mật.\nĐiều này thường chỉ ảnh hưởng đến cách phòng được xử lý trên máy chủ.";
 "upgrade_private_room" = "Nâng cấp phòng riêng tư";
 "upgrade_public_room" = "Nâng cấp phòng công cộng";
 "upgrade_required" = "Yêu cầu nâng cấp";
@@ -1141,13 +1087,11 @@
 "joining_replacement_room" = "Tham gia phòng thay thế";
 "unnamed_room" = "Phòng không tên";
 "this_space_has_no_rooms_admin" = "Một số phòng có thể bị ẩn vì chúng riêng tư và bạn cần một lời mời.";
-"this_space_has_no_rooms_not_admin" = "Một số phòng có thể bị ẩn vì chúng riêng tư và bạn cần một lời mời.
-\nBạn không có quyền thêm phòng.";
+"this_space_has_no_rooms_not_admin" = "Một số phòng có thể bị ẩn vì chúng riêng tư và bạn cần một lời mời.\nBạn không có quyền thêm phòng.";
 "this_space_has_no_rooms" = "Space này không có phòng";
 "spaces_no_server_support_description" = "Vui lòng liên hệ với quản trị viên homeerver của bạn để biết thêm thông tin";
 "spaces_no_server_support_title" = "Có vẻ như homeerver của bạn chưa hỗ trợ Spaces";
-"spaces_feeling_experimental_subspace" = "Cảm thấy thử nghiệm\?
-\nBạn có thể thêm các Space hiện có vào một Space.";
+"spaces_feeling_experimental_subspace" = "Cảm thấy thử nghiệm\?\nBạn có thể thêm các Space hiện có vào một Space.";
 "all_rooms_youre_in_will_be_shown_in_home" = "Tất cả các phòng bạn đang ở sẽ được hiển thị tại Home.";
 "preference_show_all_rooms_in_home" = "Hiển thị tất cả các phòng trong Home";
 "space_manage_rooms_and_spaces" = "Quản lý phòng và Space";
@@ -1363,9 +1307,7 @@
 "add_people" = "Thêm người";
 "add_members_to_room" = "Thêm thành viên";
 "create_room_dm_failure" = "Chúng tôi không thể tạo ra DM của bạn. Vui lòng kiểm tra người dùng bạn muốn mời và thử lại.";
-"external_link_confirmation_message" = "Nối kết %1$@ đang đưa bạn đến một trang khác: %2$@.
-\n
-\nBạn có chắc chắn muốn tiếp tục\?";
+"external_link_confirmation_message" = "Nối kết %1$@ đang đưa bạn đến một trang khác: %2$@.\n\nBạn có chắc chắn muốn tiếp tục\?";
 "external_link_confirmation_title" = "Kiểm tra lại nối kết này";
 "error_empty_field_choose_password" = "Vui lòng chọn mật khẩu.";
 "error_empty_field_choose_user_name" = "Vui lòng chọn tên người dùng.";
@@ -1397,10 +1339,8 @@
 "command_description_discard_session" = "Buộc nhóm phiên hướng ra hiện tại trong một căn phòng được mã hóa phải bị loại bỏ";
 "use_latest_app" = "Sử dụng ${app_name mới nhất} trên các thiết bị khác của bạn:";
 "or_other_mx_capable_client" = "hoặc một máy khách Matrix có khả năng xác thực chéo khác";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
 "use_other_session_content_description" = "Sử dụng %@ mới nhất trên các thiết bị khác của bạn, Web %@, Máy tính để bàn %@, %@ iOS, %@ cho Android hoặc một máy khách Matrix có khả năng xác thực chéo khác";
 "change_password_summary" = "Đặt mật khẩu tài khoản mới…";
 "error_saving_media_file" = "Không thể lưu tệp Media";
@@ -1448,15 +1388,11 @@
 "direct_room_encryption_enabled_tile_description" = "Tin nhắn trong phòng này được mã hóa đầu cuối";
 "encryption_enabled_tile_description" = "Tin nhắn trong phòng này được mã hóa đầu cuối. Tìm hiểu thêm và xác minh người dùng trong hồ sơ của họ.";
 "encryption_enabled" = "Mã hóa được bật";
-"bootstrap_cancel_text" = "Nếu bạn hủy ngay bây giờ, bạn có thể mất tin nhắn và dữ liệu được mã hóa nếu bạn mất quyền truy cập vào thông tin đăng nhập của mình.
-\n
-\nBạn cũng có thể thiết lập Sao lưu Bảo mật và quản lý khóa của mình trong Cài đặt.";
+"bootstrap_cancel_text" = "Nếu bạn hủy ngay bây giờ, bạn có thể mất tin nhắn và dữ liệu được mã hóa nếu bạn mất quyền truy cập vào thông tin đăng nhập của mình.\n\nBạn cũng có thể thiết lập Sao lưu Bảo mật và quản lý khóa của mình trong Cài đặt.";
 "bootstrap_crosssigning_save_cloud" = "Sao chép nó vào bộ nhớ đám mây cá nhân của bạn";
 "bootstrap_crosssigning_save_usb" = "Lưu nó trên khóa USB hoặc ổ đĩa sao lưu";
 "bootstrap_crosssigning_print_it" = "In nó và lưu trữ nó ở đâu đó an toàn";
-"bootstrap_cross_signing_success" = "%2$@ &%1$@ của bạn đã được đặt.
-\n
-\nGiữ chúng an toàn! Bạn sẽ cần chúng để mở khóa tin nhắn được mã hóa và bảo mật thông tin nếu bạn mất tất cả các phiên đang hoạt động của mình.";
+"bootstrap_cross_signing_success" = "%2$@ &%1$@ của bạn đã được đặt.\n\nGiữ chúng an toàn! Bạn sẽ cần chúng để mở khóa tin nhắn được mã hóa và bảo mật thông tin nếu bạn mất tất cả các phiên đang hoạt động của mình.";
 "bootstrap_crosssigning_progress_key_backup" = "Đang cài đặt chìa khóa sao lưu";
 "bootstrap_crosssigning_progress_save_ssk" = "Đang đồng bộ chìa khóa đăng nhập của bản thân";
 "settings_server_upload_size_unknown" = "Giới hạn là không rõ.";
@@ -1470,13 +1406,9 @@
 "settings_active_sessions_list" = "Phiên Hoạt động";
 "settings_hs_admin_e2e_disabled" = "Người quản trị máy chủ của bạn đã vô hiệu hóa mã hóa đầu cuối theo mặc định trong phòng riêng và Tin nhắn trực tiếp.";
 "encryption_information_dg_xsigning_disabled" = "Xác thực chéo không được bật";
-"encryption_information_dg_xsigning_not_trusted" = "Xác thực chéo được kích hoạt.
-\nCác khóa không đáng tin cậy";
-"encryption_information_dg_xsigning_trusted" = "Xác thực chéo chéo được kích hoạt
-\nChìa khóa được tin cậy.
-\nKhóa riêng tư không được biết";
-"encryption_information_dg_xsigning_complete" = "Xác thực chéo được kích hoạt
-\nKhóa riêng trên thiết bị.";
+"encryption_information_dg_xsigning_not_trusted" = "Xác thực chéo được kích hoạt.\nCác khóa không đáng tin cậy";
+"encryption_information_dg_xsigning_trusted" = "Xác thực chéo chéo được kích hoạt\nChìa khóa được tin cậy.\nKhóa riêng tư không được biết";
+"encryption_information_dg_xsigning_complete" = "Xác thực chéo được kích hoạt\nKhóa riêng trên thiết bị.";
 "encryption_information_cross_signing_state" = "Xác thực chéo";
 "verification_conclusion_ok_self_notice" = "Phiên mới của bạn hiện đã được xác minh. Nó có quyền truy cập vào các tin nhắn được mã hóa của bạn và những người dùng khác sẽ thấy nó đáng tin cậy.";
 "verification_conclusion_ok_notice" = "Tin nhắn với người dùng này được mã hóa đầu cuối và không thể được đọc bởi các bên thứ ba.";
@@ -1493,8 +1425,7 @@
 "settings_category_timeline" = "Dòng thời gian";
 "command_description_rainbow_emote" = "Gửi emote đã cho màu cầu vồng";
 "command_description_rainbow" = "Gửi tin nhắn đã cho có màu cầu vồng";
-"verify_cannot_cross_sign" = "Phiên này không thể chia sẻ xác minh này với các phiên khác của bạn.
-\nViệc xác minh sẽ được lưu cục bộ và chia sẻ trong phiên bản tương lai của ứng dụng.";
+"verify_cannot_cross_sign" = "Phiên này không thể chia sẻ xác minh này với các phiên khác của bạn.\nViệc xác minh sẽ được lưu cục bộ và chia sẻ trong phiên bản tương lai của ứng dụng.";
 "unignore" = "Hủy bỏ qua";
 "rendering_event_error_exception" = "%@ gặp sự cố khi hiển thị nội dung sự kiện với id \'%1$@\'";
 "rendering_event_error_type_of_event_not_handled" = "%@ không xử lý các sự kiện thuộc loại \'%1$@\'";
@@ -1520,12 +1451,8 @@
 "room_profile_section_more" = "Thêm";
 "room_profile_section_security_learn_more" = "Tìm hiểu thêm";
 "room_profile_section_security" = "Bảo mật";
-"direct_room_profile_encrypted_subtitle" = "Tin nhắn ở đây được mã hóa đầu cuối.
-\n
-\nTin nhắn của bạn được bảo mật bằng khóa và chỉ có bạn và người nhận có các khóa duy nhất để mở khóa chúng.";
-"room_profile_encrypted_subtitle" = "Tin nhắn trong phòng này được mã hóa đầu cuối.
-\n
-\nTin nhắn của bạn được bảo mật bằng khóa và chỉ có bạn và người nhận có các khóa duy nhất để mở khóa chúng.";
+"direct_room_profile_encrypted_subtitle" = "Tin nhắn ở đây được mã hóa đầu cuối.\n\nTin nhắn của bạn được bảo mật bằng khóa và chỉ có bạn và người nhận có các khóa duy nhất để mở khóa chúng.";
+"room_profile_encrypted_subtitle" = "Tin nhắn trong phòng này được mã hóa đầu cuối.\n\nTin nhắn của bạn được bảo mật bằng khóa và chỉ có bạn và người nhận có các khóa duy nhất để mở khóa chúng.";
 "direct_room_profile_not_encrypted_subtitle" = "Tin nhắn ở đây không được mã hóa đầu cuối.";
 "room_profile_not_encrypted_subtitle" = "Tin nhắn trong phòng này không được mã hóa đầu cuối.";
 "verification_request_waiting_for" = "Đang chờ %@…";
@@ -1556,12 +1483,7 @@
 "sent_an_audio_file" = "Âm thanh";
 "sent_an_image" = "Hình ảnh.";
 "sent_a_video" = "Video.";
-"verification_conclusion_compromised" = "Một trong những điều sau đây có thể bị xâm phạm:
-\n
-\n - Homeserver của bạn
-\n - Homeserver mà bạn đang xác minh được kết nối với
-\n - Kết nối internet của bạn hoặc của người dùng khác
-\n - Thiết bị của bạn hoặc thiết bị của người dùng khác";
+"verification_conclusion_compromised" = "Một trong những điều sau đây có thể bị xâm phạm:\n\n - Homeserver của bạn\n - Homeserver mà bạn đang xác minh được kết nối với\n - Kết nối internet của bạn hoặc của người dùng khác\n - Thiết bị của bạn hoặc thiết bị của người dùng khác";
 "verification_conclusion_not_secure" = "Không bảo mật";
 "verification_sas_do_not_match" = "Chúng không phù hợp";
 "verification_sas_match" = "Chúng phù hợp";
@@ -1599,16 +1521,12 @@
 "notification_initial_sync" = "Đồng bộ ban đầu…";
 "bug_report_error_too_short" = "Mô tả quá ngắn";
 "permalink_malformed" = "Liên kết matrix.to của bạn bị dị hỏng";
-"soft_logout_sso_not_same_user_error" = "Phiên hiện tại dành cho người dùng %1$@ và bạn cung cấp thông tin đăng nhập cho người dùng %2$@. Điều này không được hỗ trợ bởi %@.
-\nTrước tiên, hãy xóa dữ liệu, sau đó đăng nhập lại trên tài khoản khác.";
+"soft_logout_sso_not_same_user_error" = "Phiên hiện tại dành cho người dùng %1$@ và bạn cung cấp thông tin đăng nhập cho người dùng %2$@. Điều này không được hỗ trợ bởi %@.\nTrước tiên, hãy xóa dữ liệu, sau đó đăng nhập lại trên tài khoản khác.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Bạn sẽ mất quyền truy cập vào các tin nhắn an toàn trừ khi bạn đăng nhập để khôi phục khóa mã hóa của mình.";
-"soft_logout_clear_data_dialog_content" = "Xóa tất cả dữ liệu hiện đang được lưu trữ trên thiết bị này\?
-\nĐăng nhập lại để truy cập dữ liệu tài khoản và tin nhắn của bạn.";
+"soft_logout_clear_data_dialog_content" = "Xóa tất cả dữ liệu hiện đang được lưu trữ trên thiết bị này\?\nĐăng nhập lại để truy cập dữ liệu tài khoản và tin nhắn của bạn.";
 "soft_logout_clear_data_dialog_title" = "Xóa dữ liệu";
 "soft_logout_clear_data_submit" = "Xóa tất cả dữ liệu";
-"soft_logout_clear_data_notice" = "Cảnh báo: Dữ liệu cá nhân của bạn (bao gồm cả khóa mã hóa) vẫn được lưu trữ trên thiết bị này.
-\n
-\nXóa nó nếu bạn đã hoàn tất việc sử dụng thiết bị này hoặc muốn đăng nhập vào tài khoản khác.";
+"soft_logout_clear_data_notice" = "Cảnh báo: Dữ liệu cá nhân của bạn (bao gồm cả khóa mã hóa) vẫn được lưu trữ trên thiết bị này.\n\nXóa nó nếu bạn đã hoàn tất việc sử dụng thiết bị này hoặc muốn đăng nhập vào tài khoản khác.";
 "soft_logout_clear_data_title" = "Xóa dữ liệu cá nhân";
 "soft_logout_signin_password_hint" = "Mật khẩu";
 "soft_logout_signin_submit" = "Đăng nhập";
@@ -1617,13 +1535,7 @@
 "soft_logout_signin_title" = "Đăng nhập";
 "soft_logout_title" = "Bạn đã đăng xuất";
 "signed_out_submit" = "Đăng nhập lại";
-"signed_out_notice" = "Có thể là do nhiều lý do khác nhau:
-\n
-\n• Bạn đã thay đổi mật khẩu của mình trên một phiên khác.
-\n
-\n• Bạn đã xóa phiên này khỏi phiên khác.
-\n
-\n• Người quản trị máy chủ của bạn đã vô hiệu hóa quyền truy cập của bạn vì lý do bảo mật.";
+"signed_out_notice" = "Có thể là do nhiều lý do khác nhau:\n\n• Bạn đã thay đổi mật khẩu của mình trên một phiên khác.\n\n• Bạn đã xóa phiên này khỏi phiên khác.\n\n• Người quản trị máy chủ của bạn đã vô hiệu hóa quyền truy cập của bạn vì lý do bảo mật.";
 "signed_out_title" = "Bạn đã đăng xuất";
 "seen_by" = "Nhìn thấy bởi";
 "autodiscover_well_known_error" = "Không thể tìm thấy một homeerver hợp lệ. Vui lòng kiểm tra mã định danh của bạn";
@@ -1636,13 +1548,9 @@
 "login_error_outdated_homeserver_warning_content" = "Homeerver này đang chạy một phiên bản cũ. Yêu cầu người quản trị homeerver của bạn nâng cấp. Bạn có thể tiếp tục, nhưng một số tính năng có thể không hoạt động chính xác.";
 "login_error_outdated_homeserver_title" = "Homeerver lỗi thời";
 "does_not_look_like_valid_email" = "Không giống như một địa chỉ email hợp lệ";
-"login_registration_not_supported" = "Ứng dụng không thể tạo tài khoản trên homeerver này.
-\n
-\nBạn có muốn đăng ký bằng máy khách web không\?";
+"login_registration_not_supported" = "Ứng dụng không thể tạo tài khoản trên homeerver này.\n\nBạn có muốn đăng ký bằng máy khách web không\?";
 "login_registration_disabled" = "Xin lỗi, máy chủ này không chấp nhận tài khoản mới";
-"login_mode_not_supported" = "Ứng dụng không thể đăng nhập vào homeerver này. Homeerver hỗ trợ loại signin sau đây:%1$@.
-\n
-\nBạn có muốn đăng nhập bằng máy khách web không\?";
+"login_mode_not_supported" = "Ứng dụng không thể đăng nhập vào homeerver này. Homeerver hỗ trợ loại signin sau đây:%1$@.\n\nBạn có muốn đăng nhập bằng máy khách web không\?";
 "login_sso_error_message" = "Lỗi xảy ra khi tải trang: %1$@ (%2$d)";
 "login_server_url_form_common_notice" = "Nhập địa chỉ của máy chủ bạn muốn sử dụng";
 "login_server_url_form_modular_notice" = "Nhập địa chỉ của Mô-đun Element hoặc Máy chủ bạn muốn sử dụng";
@@ -1705,12 +1613,10 @@
 "navigate_to_room_when_already_in_the_room" = "Bạn đang xem phòng này rồi!";
 "settings_other_third_party_notices" = "Thông báo của bên thứ ba khác";
 "settings_sdk_version" = "Phiên bản Matrix SDK";
-"import_e2e_keys_from_file" = "Nhập khóa e2e từ tệp \"%1$@\.";
+"import_e2e_keys_from_file" = "Nhập khóa e2e từ tệp \"%1$@\".";
 "keys_backup_unable_to_get_keys_backup_data" = "Lỗi xảy ra khi nhận được dữ liệu sao lưu khóa";
 "keys_backup_unable_to_get_trust_info" = "Lỗi xảy ra khi nhận được thông tin tin cậy";
-"create_room_federation_error" = "Căn phòng đã được tạo ra, nhưng một số lời mời đã không được gửi vì lý do sau:
-\n
-\n%@";
+"create_room_federation_error" = "Căn phòng đã được tạo ra, nhưng một số lời mời đã không được gửi vì lý do sau:\n\n%@";
 "create_room_public_description" = "Bất cứ ai cũng có thể tham gia vào căn phòng này.";
 "create_room_public_title" = "Công cộng";
 "create_room_settings_section" = "Cài đặt phòng";
@@ -1722,8 +1628,7 @@
 "fab_menu_create_chat" = "Tin nhắn trực tiếp";
 "fab_menu_create_room" = "Phòng";
 "room_preview_no_preview_join" = "Căn phòng này không thể xem trước được. Bạn có muốn tham gia nó không\?";
-"room_preview_not_found" = "Căn phòng này không thể truy cập vào thời điểm này.
-\nHãy thử lại sau, hoặc yêu cầu quản trị viên phòng kiểm tra xem bạn có quyền truy cập hay không.";
+"room_preview_not_found" = "Căn phòng này không thể truy cập vào thời điểm này.\nHãy thử lại sau, hoặc yêu cầu quản trị viên phòng kiểm tra xem bạn có quyền truy cập hay không.";
 "room_preview_no_preview" = "Phòng này không thể được xem trước";
 "group_all_communities" = "Tất cả Community";
 "please_wait" = "Vui lòng chờ…";
@@ -1816,24 +1721,19 @@
 "keys_backup_setup_step3_button_title_no_passphrase" = "Tôi đã tạo ra một bản sao";
 "keys_backup_setup_step3_button_title" = "Xong";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Giữ khóa khôi phục của bạn ở đâu đó rất an toàn, như trình quản lý mật khẩu (hoặc két an toàn)";
-"keys_backup_setup_step3_text_line2" = "Khóa khôi phục của bạn là một mạng lưới an toàn - bạn có thể sử dụng nó để khôi phục quyền truy cập vào các tin nhắn được mã hóa của mình nếu bạn quên cụm mật khẩu của mình.
-\nGiữ khóa khôi phục của bạn ở đâu đó rất an toàn, như trình quản lý mật khẩu (hoặc an toàn)";
+"keys_backup_setup_step3_text_line2" = "Khóa khôi phục của bạn là một mạng lưới an toàn - bạn có thể sử dụng nó để khôi phục quyền truy cập vào các tin nhắn được mã hóa của mình nếu bạn quên cụm mật khẩu của mình.\nGiữ khóa khôi phục của bạn ở đâu đó rất an toàn, như trình quản lý mật khẩu (hoặc an toàn)";
 "keys_backup_setup_step3_text_line1" = "Các khóa của bạn đang được sao lưu.";
 "keys_backup_setup_step3_success_title" = "Thành công!";
 "keys_backup_setup_step2_skip_button_title" = "(Nâng cao) Thiết lập với Khóa Khôi phục";
 "keys_backup_setup_step1_recovery_key_alternative" = "Hoặc, bảo mật sao lưu của bạn bằng Khóa Khôi phục, lưu nó ở đâu đó an toàn.";
 "keys_backup_setup_creating_backup" = "Tạo Sao lưu";
 "keys_backup_setup_step2_button_title" = "Đặt Cụm mật khẩu";
-"keys_backup_setup_step2_text_description" = "Chúng tôi sẽ lưu trữ một bản sao được mã hóa của khóa của bạn trên homeerver của bạn. Bảo vệ bản sao lưu của bạn bằng cụm mật khẩu để giữ an toàn.
-\n
-\nĐể bảo mật tối đa, điều này phải khác với mật khẩu tài khoản của bạn.";
+"keys_backup_setup_step2_text_description" = "Chúng tôi sẽ lưu trữ một bản sao được mã hóa của khóa của bạn trên homeerver của bạn. Bảo vệ bản sao lưu của bạn bằng cụm mật khẩu để giữ an toàn.\n\nĐể bảo mật tối đa, điều này phải khác với mật khẩu tài khoản của bạn.";
 "keys_backup_setup_step2_text_title" = "Bảo mật sao lưu của bạn bằng Cụm mật khẩu.";
 "keys_backup_setup_step1_manual_export" = "Xuất các khóa thủ công";
 "keys_backup_setup_step1_advanced" = "(Nâng cao)";
 "keys_backup_setup" = "Bắt đầu sử dụng Khóa Sao lưu";
-"keys_backup_setup_step1_description" = "Tin nhắn trong các phòng được mã hóa được bảo mật bằng mã hóa đầu cuối. Chỉ có bạn và người nhận mới có chìa khóa để đọc các tin nhắn này.
-\n
-\nSao lưu an toàn chìa khóa của bạn để tránh mất chúng.";
+"keys_backup_setup_step1_description" = "Tin nhắn trong các phòng được mã hóa được bảo mật bằng mã hóa đầu cuối. Chỉ có bạn và người nhận mới có chìa khóa để đọc các tin nhắn này.\n\nSao lưu an toàn chìa khóa của bạn để tránh mất chúng.";
 "keys_backup_setup_step1_title" = "Không bao giờ mất tin nhắn được mã hóa";
 "bootstrap_crosssigning_progress_save_usk" = "Đang đồng hộ chìa khóa người dùng";
 "bootstrap_crosssigning_progress_save_msk" = "Đang đồng bộ chìa khóa Master";
@@ -1852,14 +1752,7 @@
 "recovery_passphrase" = "Cụm mật khẩu phục hồi";
 "verification_cancelled" = "Xác minh bị hủy bỏ";
 "verify_cancelled_notice" = "Xác minh đã bị hủy bỏ. Bạn có thể bắt đầu xác minh lại.";
-"verify_not_me_self_verification" = "Một trong những điều sau đây có thể bị xâm phạm:
-\n
-\n- Mật khẩu của bạn
-\n- Người ở nhà của anh
-\n- Thiết bị này hoặc thiết bị khác
-\n- Kết nối internet mà một trong hai thiết bị đang sử dụng
-\n
-\nChúng tôi khuyên bạn nên thay đổi mật khẩu và khóa khôi phục trong Cài đặt ngay lập tức.";
+"verify_not_me_self_verification" = "Một trong những điều sau đây có thể bị xâm phạm:\n\n- Mật khẩu của bạn\n- Người ở nhà của anh\n- Thiết bị này hoặc thiết bị khác\n- Kết nối internet mà một trong hai thiết bị đang sử dụng\n\nChúng tôi khuyên bạn nên thay đổi mật khẩu và khóa khôi phục trong Cài đặt ngay lập tức.";
 "verify_cancel_other" = "Bạn sẽ không xác minh %1$@ (%2$@) nếu bạn hủy ngay. Bắt đầu lại trong hồ sơ người dùng của họ.";
 "verify_cancel_self_verification_from_trusted" = "Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị mới của mình và những người dùng khác sẽ không tin tưởng nó.";
 "verify_cancel_self_verification_from_untrusted" = "Nếu bạn hủy, bạn sẽ không thể đọc tin nhắn được mã hóa trên thiết bị này và những người dùng khác sẽ không tin tưởng nó.";
@@ -1885,9 +1778,7 @@
 "enter_secret_storage_invalid" = "Không thể tìm thấy bí mật trong kho";
 "verification_use_passphrase" = "Nếu bạn không thể truy nhập phiên hiện có";
 "verification_cannot_access_other_session" = "Sử dụng Cụm mật khẩu hoặc Khóa phục hồi";
-"delete_account_data_warning" = "Xóa dữ liệu tài khoản của loại %1$@\?
-\n
-\nSử dụng một cách thận trọng, nó có thể dẫn đến hành vi bất ngờ.";
+"delete_account_data_warning" = "Xóa dữ liệu tài khoản của loại %1$@\?\n\nSử dụng một cách thận trọng, nó có thể dẫn đến hành vi bất ngờ.";
 "settings_account_data" = "Dữ liệu tài khoản";
 "settings_dev_tools" = "Công cụ Dev";
 "no_connectivity_to_the_server_indicator_airplane" = "Chế độ máy bay đang bật";
@@ -1933,9 +1824,9 @@
 "resource_limit_hard_contact" = "Vui lòng %@ để tiếp tục sử dụng dịch vụ này.";
 "resource_limit_soft_contact" = "Vui lòng %@ để tăng giới hạn này.";
 "resource_limit_hard_mau" = "Homeerver này đã đạt đến giới hạn người dùng hoạt động hàng tháng.";
-"resource_limit_soft_mau.b_0" = "một số người dùng sẽ không thể đăng nhập";
+"resource_limit_soft_mau" = "Homeerver này đã đạt đến giới hạn Người dùng hoạt động hàng tháng của nó vì vậy <b>một số người dùng sẽ không thể đăng nhập</b>.";
 "resource_limit_hard_default" = "Homeserver này đã vượt quá một trong những giới hạn tài nguyên của nó.";
-"resource_limit_soft_default.b_0" = "một số người dùng sẽ không thể đăng nhập";
+"resource_limit_soft_default" = "Homeerver này đã vượt quá một trong những giới hạn tài nguyên của nó vì vậy <b>một số người dùng sẽ không thể đăng nhập</b>.";
 "resource_limit_contact_admin" = "liên hệ với người quản trị dịch vụ của bạn";
 "room_tombstone_predecessor_link" = "Bấm vào đây để xem tin nhắn cũ hơn";
 "room_tombstone_continuation_description" = "Phòng này là sự tiếp nối của một cuộc trò chuyện khác.";
@@ -1945,8 +1836,7 @@
 "error_empty_field_enter_user_name" = "Vui lòng nhập tên người dùng.";
 "deactivate_account_submit" = "Hủy kích hoạt Tài khoản";
 "deactivate_account_delete_checkbox" = "Vui lòng quên tất cả các tin nhắn tôi đã gửi khi tài khoản của tôi bị vô hiệu hóa (Cảnh báo: điều này sẽ khiến người dùng trong tương lai thấy chế độ xem cuộc hội thoại không đầy đủ)";
-"deactivate_account_content.b_0" = "Điều này là không thể đảo ngược";
-"deactivate_account_content.b_1" = "does không theo mặc định khiến chúng tôi quên tin nhắn bạn đã gửi";
+"deactivate_account_content" = "Điều này sẽ làm cho tài khoản của bạn vĩnh viễn không thể sử dụng được. Bạn sẽ không thể đăng nhập và không ai có thể đăng ký lại cùng một ID người dùng. Điều này sẽ khiến tài khoản của bạn rời khỏi tất cả các phòng mà nó đang tham gia và nó sẽ xóa chi tiết tài khoản của bạn khỏi máy chủ nhận dạng của bạn. <b>Điều này là không thể đảo ngược</b>.\n\nHủy kích hoạt tài khoản của bạn <b>does không theo mặc định khiến chúng tôi quên tin nhắn bạn đã gửi</b>. Nếu bạn muốn chúng tôi quên tin nhắn của bạn, vui lòng đánh dấu vào hộp bên dưới.\n\nKhả năng hiển thị tin nhắn trong Matrix tương tự như email. Chúng tôi quên tin nhắn của bạn có nghĩa là tin nhắn bạn đã gửi sẽ không được chia sẻ với bất kỳ người dùng mới hoặc chưa đăng ký nào, nhưng người dùng đã đăng ký đã có quyền truy cập vào các tin nhắn này vẫn sẽ có quyền truy cập vào bản sao của họ.";
 "dialog_user_consent_content" = "Để tiếp tục sử dụng homeserver %1$@, bạn phải xem xét và đồng ý với các điều khoản và điều kiện.";
 "avatar" = "Avatar";
 "reason_colon" = "Lý do: %1$@";
@@ -1986,15 +1876,9 @@
 "unrecognized_command" = "Lệnh không được nhận ra: %@";
 "command_error" = "Lỗi lệnh";
 "key_share_request" = "Yêu cầu Chia sẻ Khóa";
-"your_unverified_device_requesting_with_info" = "Một phiên chưa được xác minh đang yêu cầu khóa mã hóa.
-\nTên phiên: %1$@
-\nLần nhìn thấy lần cuối: %2$@
-\nNếu bạn không đăng nhập vào phiên khác, hãy bỏ qua yêu cầu này.";
+"your_unverified_device_requesting_with_info" = "Một phiên chưa được xác minh đang yêu cầu khóa mã hóa.\nTên phiên: %1$@\nLần nhìn thấy lần cuối: %2$@\nNếu bạn không đăng nhập vào phiên khác, hãy bỏ qua yêu cầu này.";
 "your_unverified_device_requesting" = "Phiên chưa được xác minh của bạn \'%@\' đang yêu cầu khóa mã hóa";
-"you_added_a_new_device_with_info" = "Một phiên mới đang yêu cầu các khóa mã hóa.
-\nTên phiên: %1$@
-\nLần nhìn thấy lần cuối: %2$@
-\nNếu bạn không đăng nhập vào phiên khác, hãy bỏ qua yêu cầu này.";
+"you_added_a_new_device_with_info" = "Một phiên mới đang yêu cầu các khóa mã hóa.\nTên phiên: %1$@\nLần nhìn thấy lần cuối: %2$@\nNếu bạn không đăng nhập vào phiên khác, hãy bỏ qua yêu cầu này.";
 "you_added_a_new_device" = "Bạn đã thêm phiên mới \'%@\', nó đang yêu cầu các khóa mã hóa.";
 "widget_integration_review_terms" = "Để tiếp tục, bạn cần phải chấp nhận các điều khoản của dịch vụ này.";
 "settings_labs_native_camera_summary" = "Khởi động camera hệ thống thay vì màn hình camera tùy chỉnh.";
@@ -2075,12 +1959,10 @@
 "legals_home_server_title" = "Chính sách homeerver của bạn";
 "legals_application_title" = "Chính sách %@";
 "analytics_opt_in_list_item_3" = "Bạn có thể tắt tính năng này bất cứ lúc nào trong cài đặt";
-"analytics_opt_in_list_item_2.b_0" = "không ";
-"analytics_opt_in_list_item_1.b_0" = "không";
+"analytics_opt_in_list_item_2" = "Chúng tôi <b>không </b> chia sẻ thông tin với bên thứ ba";
+"analytics_opt_in_list_item_1" = "Chúng tôi <b>không</b> ghi âm hoặc tạo hồ sơ bất kỳ dữ liệu tài khoản nào";
 "analytics_opt_in_content_link" = "ở đây";
-"analytics_opt_in_content" = "Giúp chúng tôi xác định các vấn đề và cải thiện %@ bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.
-\n
-\nBạn có thể đọc tất cả các thuật ngữ của chúng tôi %@.";
+"analytics_opt_in_content" = "Giúp chúng tôi xác định các vấn đề và cải thiện %@ bằng cách chia sẻ dữ liệu sử dụng ẩn danh. Để hiểu cách mọi người sử dụng nhiều thiết bị, chúng tôi sẽ tạo ra một mã định danh ngẫu nhiên, được chia sẻ bởi các thiết bị của bạn.\n\nBạn có thể đọc tất cả các thuật ngữ của chúng tôi %@.";
 "analytics_opt_in_title" = "Giúp cải thiện %@";
 "shortcut_disabled_reason_sign_out" = "Thiết bị đã bị đăng xuất!";
 "shortcut_disabled_reason_room_left" = "Căn phòng đã bị bỏ lại!";
@@ -2139,48 +2021,3 @@
 "push_gateway_item_device_name" = "session_name:";
 "push_gateway_item_app_display_name" = "app_display_name:";
 "push_gateway_item_push_key" = "push_key:";
-"plurals.encryption_import_room_keys_success.item_0" = "Nhập %1$d/%2$d mã khoá thành công.";
-"plurals.room_title_members.item_0" = "%d thành viên";
-"plurals.membership_changes.item_0" = "%d thay đổi thành viên";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Bạn đã xoá các địa chỉ thay thế %1$@ cho phòng này.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ đã xoá các địa chỉ thay thế %2$@ cho phòng này.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Bạn đã thêm các địa chỉ thay thế %1$@ cho phòng này.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ đã thêm các địa chỉ thay thế %2$@ cho phòng này.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Bạn đã xoá %1$@ với tư cách là các địa chỉ cho phòng này.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ đã xoá %2$@ với tư cách là các địa chỉ cho phòng này.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Bạn đã thêm %1$@ làm các địa chỉ cho phòng này.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ đã thêm %2$@ làm các địa chỉ cho phòng này.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ và %4$d người khác";
-"plurals.missed_video_call.item_0" = "%d cuộc gọi video bị nhỡ";
-"plurals.missed_audio_call.item_0" = "%d cuộc gọi thoại bị nhỡ";
-"plurals.room_settings_banned_users_count.item_0" = "%d người dùng bị cấm";
-"plurals.fallback_users_read.item_0" = "%d người dùng đã đọc";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ và %3$d người khác đã đọc";
-"plurals.seconds.item_0" = "%d giây";
-"plurals.room_details_selected.item_0" = "%d được chọn";
-"plurals.room_new_messages_notification.item_0" = "%d tin nhắn mới";
-"plurals.entries.item_0" = "%d mục";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Mã sai, còn lại %d lần thử";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Các lời mời đã gửi tới %1$@ và %2$d người nữa";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Hiển thị %d thiết bị bạn có thể xác minh ngay bây giờ";
-"plurals.settings_active_sessions_count.item_0" = "%d phiên đang hoạt động";
-"plurals.room_profile_section_more_member_list.item_0" = "%1$d người";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Quá nhiều yêu cầu vừa được gửi. Bạn có thể thử lại trong %1$d giây…";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Đang sao lưu %d khóa…";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d khóa mới vừa được thêm vào phiên này.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Đã khôi phục bản sao lưu với % d chìa khóa.";
-"plurals.active_widgets.item_0" = "%d widget hoạt động";
-"plurals.notification_compat_summary_title.item_0" = "%d thông báo";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d tin nhắn";
-"plurals.notification_invitations.item_0" = "%d lời mời";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d phòng";
-"plurals.notification_unread_notified_messages.item_0" = "%d tin nhắn được thông báo chưa đọc";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Kết quả cuối cùng dựa trên %1$d phiếu bầu";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "Đã bỏ %1$d phiếu bầu. Bỏ phiếu để xem kết quả";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Dựa trên %1$d phiếu bầu";
-"plurals.poll_option_vote_count.item_0" = "%1$d phiếu bầu";
-"plurals.create_poll_not_enough_options_error.item_0" = "Ít nhất %1$@ tùy chọn là cần thiết";
-"plurals.space_people_you_know.item_0" = "%d người bạn biết đã tham gia";
-"plurals.call_active_status.item_0" = "%1$d cuộc gọi đang hoạt động ·";
-"plurals.send_videos_with_original_size.item_0" = "Gửi video với kích thước gốc";
-"plurals.send_images_with_original_size.item_0" = "Gửi ảnh với kích thước gốc";

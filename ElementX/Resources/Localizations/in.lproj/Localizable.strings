@@ -100,9 +100,7 @@
 "incoming_voice_call" = "Panggilan Suara Masuk";
 "call_in_progress" = "Panggilan Sedang Berlangsung…";
 "permissions_rationale_msg_record_audio" = "%@ membutuhkan permisi atas akses mikrofon Anda untuk melakukan panggilan audio.";
-"permissions_rationale_msg_camera_and_audio" = "%@ membutuhkan izin untuk mengakses kamera dan mikrofon Anda untuk melakukan panggilan video.
-\n
-\nHarap berikan akses pada halaman berikut ini untuk melakukan panggilan.";
+"permissions_rationale_msg_camera_and_audio" = "%@ membutuhkan izin untuk mengakses kamera dan mikrofon Anda untuk melakukan panggilan video.\n\nHarap berikan akses pada halaman berikut ini untuk melakukan panggilan.";
 "light_theme" = "Tema Terang";
 "dark_theme" = "Tema Gelap";
 "black_theme" = "Tema Hitam";
@@ -122,11 +120,9 @@
 "option_send_sticker" = "Kirim Sticker";
 "option_take_photo" = "Ambil foto";
 "option_take_video" = "Ambil video";
-"no_sticker_application_dialog_content" = "Saat ini Anda belum memiliki pak stiker.
-\n
-\nMau tambah sekarang\?";
+"no_sticker_application_dialog_content" = "Saat ini Anda belum memiliki pak stiker.\n\nMau tambah sekarang\?";
 "error_no_external_application_found" = "Maaf, tidak ada aplikasi eksternal yang mendukung apa yang ingin dilakukan.";
-"e2e_re_request_encryption_key.u_0" = "Meminta ulang kunci enkripsi";
+"e2e_re_request_encryption_key" = "<u>Meminta ulang kunci enkripsi</u> dari perangkat Anda yang lain.";
 "e2e_re_request_encryption_key_dialog_content" = "Jalankan %@ di perangkat yang dapat mendekripsi pesan tersebut agar kunci dapat dikirim ke perangkat ini.";
 "call" = "Panggilan";
 "list_members" = "Anggota";
@@ -140,8 +136,7 @@
 "room_participants_action_ignore" = "Sembunyikan semua pesan dari pengguna ini";
 "room_participants_action_unignore" = "Tunjukkan semua pesan dari pengguna ini";
 "room_participants_action_mention" = "Sebut";
-"room_participants_power_level_prompt" = "Anda tidak akan dapat mengembalikan perubahan ini setelah Anda mengangkat pengguna ini agar memiliki kuasa yang setara dengan Anda.
-\nApakah anda yakin untuk melanjutkan\?";
+"room_participants_power_level_prompt" = "Anda tidak akan dapat mengembalikan perubahan ini setelah Anda mengangkat pengguna ini agar memiliki kuasa yang setara dengan Anda.\nApakah anda yakin untuk melanjutkan\?";
 "room_participants_ban_prompt_msg" = "Melakukan pencekalan pengguna akan mengeluarkannya dari ruangan ini dan mencegahnya untuk kembali masuk.";
 "call_error_user_not_responding" = "Gagal terjawab oleh pihak lain.";
 "room_one_user_is_typing" = "%@ sedang mengetik…";
@@ -231,8 +226,7 @@
 "avatar" = "Avatar";
 "dialog_user_consent_submit" = "Baca sekarang";
 "deactivate_account_title" = "Nonaktifkan Akun";
-"deactivate_account_content.b_0" = "Tindakan ini tidak dapat diubah";
-"deactivate_account_content.b_1" = "tidak membuat kami melupakan pesan-pesan yang Anda kirim secara default";
+"deactivate_account_content" = "Ini akan mengakibatkan akun Anda tidak dapat digunakan secara permanen. Anda tidak akan dapat masuk dan orang lain tidak dapat mendaftar ulang dengan ID pengguna yang sama. Ini akan mengakibatkan akun Anda keluar dari semua ruangan tempat Anda berpartisipasi serta menghapus semua detail akun dari server identitas Anda. <b>Tindakan ini tidak dapat diubah</b>.\n\nMenonaktifkan akun Anda <b>tidak membuat kami melupakan pesan-pesan yang Anda kirim secara default</b>. Jika Anda ingin kami melupakan pesan-pesan Anda, mohon centang kotak berikut.\n\nKeterbacaan pesan di Matrix serupa dengan email. Dengan kami melupakan pesan-pesan Anda berarti pesan-pesan yang Anda kirim tidak akan dibagikan kepada pengguna baru ataupun yang belum terdaftar, tetapi pengguna yang terdaftar yang mempunyai mengakses pesan-pesan tersebut masih dapat mengakses salinan mereka.";
 "deactivate_account_delete_checkbox" = "Mohon lupakan semua pesan yang telah saya kirim ketika akun saya dideaktivasi (Peringatan: ini akan mengakibatkan pengguna di masa depan melihat percakapan yang tidak lengkap)";
 "deactivate_account_submit" = "Nonaktifkan Akun";
 "error_empty_field_your_password" = "Mohon masukkan kata sandi Anda.";
@@ -241,9 +235,9 @@
 "room_tombstone_continuation_description" = "Ruangan ini adalah kelanjutan percakapan lain";
 "room_tombstone_predecessor_link" = "Klik di sini untuk melihat pesan lama";
 "resource_limit_contact_admin" = "kontak administrator layanan Anda";
-"resource_limit_soft_default.b_0" = "beberapa pengguna tidak dapat masuk";
+"resource_limit_soft_default" = "Homeserver ini telah melampaui salah satu batas sumber dayanya sehingga <b>beberapa pengguna tidak dapat masuk</b>.";
 "resource_limit_hard_default" = "Homeserver ini telah melampaui salah satu batasan sumber dayanya.";
-"resource_limit_soft_mau.b_0" = "beberapa pengguna tidak dapat masuk";
+"resource_limit_soft_mau" = "Homeserver ini telah mencapai batas Pengguna Aktif Bulanan sehingga <b>beberapa pengguna tidak dapat masuk</b>.";
 "resource_limit_hard_mau" = "Homeserver ini telah mencapai batas Pengguna Aktif Bulanan.";
 "resource_limit_soft_contact" = "Mohon %@ untuk meningkatkan batasan ini.";
 "resource_limit_hard_contact" = "Mohon %@ untuk terus menggunakan layanan ini.";
@@ -256,9 +250,7 @@
 "encryption_information_not_verified" = "TIDAK terverifikasi";
 "encryption_information_verify" = "Verifikasi";
 "encryption_information_verify_device_warning" = "Untuk memastikan perangkat dapat dipercaya, mohon kontak pengguna dengan medium lain (misalnya tatap muka atau panggilan telepon) dan tanya apakah kunci yang mereka lihat di Pengaturan Pengguna untuk perangkat ini cocok dengan kunci berikut:";
-"encryption_information_verify_device_warning2" = "Apabila cocok, tekan tombol verifikasi berikut.
-Apabila tidak, seseorang sedang menyadap perangkat ini dan mungkin perlu diblokir.
-Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
+"encryption_information_verify_device_warning2" = "Apabila cocok, tekan tombol verifikasi berikut.Apabila tidak, seseorang sedang menyadap perangkat ini dan mungkin perlu diblokir.Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "directory_server_all_rooms_on_server" = "Semua ruangan dalam server %@";
 "directory_server_native_rooms" = "Semua ruangan bawaan %@";
 "room_settings_room_read_history_rules_pref_title" = "Singkapan Riwayat Ruangan";
@@ -335,9 +327,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "settings_new_password" = "Sandi baru";
 "settings_fail_to_update_password" = "Gagal memperbaharui kata sandi";
 "settings_password_updated" = "Kata sandi Anda telah diperbaharui";
-"settings_unignore_user" = "Tunjukkan semua pesan dari %@\?
-\n
-\nMohon perhatikan bahwa tindakan ini akan me-restart aplikasi dan mungkin akan membutuhkan waktu.";
+"settings_unignore_user" = "Tunjukkan semua pesan dari %@\?\n\nMohon perhatikan bahwa tindakan ini akan me-restart aplikasi dan mungkin akan membutuhkan waktu.";
 "settings_select_country" = "Pilih negara";
 "settings_flair" = "Flair";
 "media_saving_period_3_days" = "3 hari";
@@ -364,43 +354,33 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Satu atau beberapa ujicoba gagal, mohon kirim laporan kutu untuk kami selidiki.";
 "settings_troubleshoot_test_system_settings_title" = "Pengaturan Sistem.";
 "settings_troubleshoot_test_system_settings_success" = "Pemberitahuan diperbolehkan dalam pengaturan sistem.";
-"settings_troubleshoot_test_system_settings_failed" = "Notifikasi dinonaktifkan dalam pengaturan sistem.
-\nMohon periksa pengaturan sistem anda.";
+"settings_troubleshoot_test_system_settings_failed" = "Notifikasi dinonaktifkan dalam pengaturan sistem.\nMohon periksa pengaturan sistem anda.";
 "open_settings" = "Buka Pengaturan";
 "settings_troubleshoot_test_account_settings_title" = "Pengaturan Akun.";
 "settings_troubleshoot_test_account_settings_success" = "Pemberitahuan diperbolehkan dalam pengaturan akun Anda.";
-"settings_troubleshoot_test_account_settings_failed" = "Notifikasi dinonaktifkan dalam pengaturan akun anda.
-\nMohon periksa pengaturan akun anda.";
+"settings_troubleshoot_test_account_settings_failed" = "Notifikasi dinonaktifkan dalam pengaturan akun anda.\nMohon periksa pengaturan akun anda.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Perbolehkan";
 "settings_troubleshoot_test_device_settings_title" = "Pengaturan Perangkat.";
 "settings_troubleshoot_test_device_settings_success" = "Pemberitahuan diperbolehkan untuk perangkat ini.";
-"settings_troubleshoot_test_device_settings_failed" = "Notifikasi tidak diaktifkan pada sesi ini.
-\nMohon periksa pengaturan %@.";
+"settings_troubleshoot_test_device_settings_failed" = "Notifikasi tidak diaktifkan pada sesi ini.\nMohon periksa pengaturan %@.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Perbolehkan";
 "settings_troubleshoot_test_play_services_title" = "Pemeriksaan Layanan Google Play";
 "settings_troubleshoot_test_play_services_success" = "APK Layanan Google Play ditemukan dan telah diperbaharui.";
-"settings_troubleshoot_test_play_services_failed" = "%@ menggunakan Layanan Google Play untuk mendorong pesan tapi tampaknya tidak diatur sebagaimana harusnya.
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ menggunakan Layanan Google Play untuk mendorong pesan tapi tampaknya tidak diatur sebagaimana harusnya.\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Perbaiki Layanan Google Play";
 "settings_troubleshoot_test_fcm_title" = "Token Firebase";
-"settings_troubleshoot_test_fcm_success" = "Sukses mengambil token FCM:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "Gagal mengambil token FCM:
-\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "Sukses mengambil token FCM:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "Gagal mengambil token FCM:\n%1$@";
 "settings_troubleshoot_test_token_registration_title" = "Pendaftaran Token";
 "settings_troubleshoot_test_token_registration_success" = "Berhasil mendaftarkan token FCM di homeserver.";
-"settings_troubleshoot_test_token_registration_failed" = "Gagal mendaftarkan token FCM ke homeserver:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Gagal mendaftarkan token FCM ke homeserver:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Mulai ketika menyalakan perangkat";
 "settings_troubleshoot_test_service_boot_success" = "Layanan akan dimulai ketika perangkat dinyalakan kembali.";
 "settings_troubleshoot_test_service_boot_failed" = "Layanan tidak akan mulai ketika perangkat dinyalakan kembali, Anda tidak akan menerima pemberitahuan hingga Anda membuka %@.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Perbolehkan memulai ketika perangkat dinyalakan";
 "settings_troubleshoot_test_bg_restricted_title" = "Periksa halangan di balik layar";
-"settings_troubleshoot_test_bg_restricted_success" = "Larangan background dinonaktifkan untuk %@. Percobaan ini sebaiknya dijalankan menggunakan jaringan mobile data (bukan WIFI).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Larangan background dinonaktifkan untuk %@.
-\nAktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik layar, dan ini dapat mempengaruhi pemunculan notifikasi.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Larangan background dinonaktifkan untuk %@. Percobaan ini sebaiknya dijalankan menggunakan jaringan mobile data (bukan WIFI).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Larangan background dinonaktifkan untuk %@.\nAktivitas yang dilakukan aplikasi ini akan terhalang ketika beroperasi di balik layar, dan ini dapat mempengaruhi pemunculan notifikasi.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Matikan penghalang";
 "settings_troubleshoot_test_battery_title" = "Optimisasi Baterai";
 "settings_troubleshoot_test_battery_success" = "%@ tidak terpengaruh oleh Optimisasi Baterai.";
@@ -422,12 +402,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "settings_troubleshoot_test_bing_settings_title" = "Pengaturan Sesukanya.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Perhatikan bahwa sebagian jenis pesan tersetel diam (mengeluarkan pemberitahuan tanpa suara).";
 "settings_troubleshoot_test_bing_settings_failed" = "Sebagian pemberitahuan dimatikan dalam aturan Anda.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nError ini di luar kendali %@ dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nError ini di luar kendali %@, dan dapat muncul karena berbagai alasan. Coba lagi nanti, atau Anda juga dapat memeriksa apabila penggunaan jaringan data Layanan Google Play tidak terhalang oleh sistem, atau waktu pada perangkat sudah benar, atau ini dapat terjadi pada ROM tidak resmi.";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nError ini di luar kendali %@. Tidak terdapat akun Google pada perangkat. Mohon buka pengelola akun dan tambahkan akun Google.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nError ini di luar kendali %@ dan menurut Google, error ini muncul ketika terlalu banyak aplikasi terdaftar dengan FCM pada perangkat tersebut. Error ini tidak seharusnya mempengaruhi pengguna biasa.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nError ini di luar kendali %@, dan dapat muncul karena berbagai alasan. Coba lagi nanti, atau Anda juga dapat memeriksa apabila penggunaan jaringan data Layanan Google Play tidak terhalang oleh sistem, atau waktu pada perangkat sudah benar, atau ini dapat terjadi pada ROM tidak resmi.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nError ini di luar kendali %@. Tidak terdapat akun Google pada perangkat. Mohon buka pengelola akun dan tambahkan akun Google.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Tambah Akun";
 "settings_troubleshoot_test_battery_failed" = "Apabila perangkat tidak sedang diisi atau dipergunakan dengan layar dimatikan, perangkat masuk mode Doze. Ini akan menghalangi aplikasi mengakses jaringan dan menunda tugas, sinkronisasi, dan alarm standar.";
 "settings_troubleshoot_test_battery_quickfix" = "Abaikan Optimisasi";
@@ -514,8 +491,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "notice_room_invite_no_invitee_by_you" = "Undangan Anda";
 "notice_room_invite_no_invitee" = "Undangan %@";
 "settings_background_fdroid_sync_mode_real_time" = "Dioptimalkan untuk real-time";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ akan mengsinkron di latar belakang dengan cara yang akan mempertahankan sumber daya (baterai) yang terbatas.
-\nTergantung pada keadaan sumber daya perangkat Anda, sinkronisasi dapat ditangguhkan oleh operasi sistem.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ akan mengsinkron di latar belakang dengan cara yang akan mempertahankan sumber daya (baterai) yang terbatas.\nTergantung pada keadaan sumber daya perangkat Anda, sinkronisasi dapat ditangguhkan oleh operasi sistem.";
 "settings_background_fdroid_sync_mode_battery" = "Dioptimalkan untuk baterai";
 "settings_background_fdroid_sync_mode" = "Mode Sinkronisasi Latar Belakang";
 "settings_troubleshoot_test_notification_notification_clicked" = "Pemberitahuannya telah ditekan!";
@@ -557,18 +533,14 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "room_participants_unban_title" = "Batalkan pencekalan pengguna";
 "room_participants_ban_reason" = "Alasan untuk mencekal";
 "room_participants_ban_title" = "Cekal pengguna";
-"room_participants_remove_prompt_msg" = "Pengguna yang dikeluarkan akan menghilangkannya dari ruangan ini.
-\n
-\nUntuk mencegah mereka bergabung lagi, Anda seharusnya mencekalnya.";
+"room_participants_remove_prompt_msg" = "Pengguna yang dikeluarkan akan menghilangkannya dari ruangan ini.\n\nUntuk mencegah mereka bergabung lagi, Anda seharusnya mencekalnya.";
 "room_participants_remove_reason" = "Alasan untuk mengeluarkan";
 "room_participants_remove_title" = "Keluarkan pengguna";
 "room_participants_action_cancel_invite_prompt_msg" = "Apakah Anda yakin ingin membatalkan undangan untuk pengguna ini\?";
 "room_participants_action_cancel_invite_title" = "Batalkan undangan";
 "room_participants_action_unignore_prompt_msg" = "Membatalkan abaian pengguna ini akan menampilkan semua pesan dari mereka.";
 "room_participants_action_unignore_title" = "Batal pengabaian pengguna";
-"room_participants_action_ignore_prompt_msg" = "Mengabaikan pengguna ini akan menghilangkan pesan mereka dari ruangan yang Anda bagikan.
-\n
-\nAnda dapat membalikkan tindakan ini kapan saja dalam pengaturan umum.";
+"room_participants_action_ignore_prompt_msg" = "Mengabaikan pengguna ini akan menghilangkan pesan mereka dari ruangan yang Anda bagikan.\n\nAnda dapat membalikkan tindakan ini kapan saja dalam pengaturan umum.";
 "room_participants_action_ignore_title" = "Abaikan pengguna";
 "room_participants_power_level_demote" = "Turunkan";
 "room_participants_power_level_demote_warning_prompt" = "Anda tidak akan dapat membatalkan perubahan ini karena Anda menurunkan diri sendiri, jika Anda adalah pengguna istimewa terakhir di ruangan itu akan tidak mungkin untuk mendapatkan kembali hak istimewa.";
@@ -602,8 +574,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "sound_device_speaker" = "Speaker";
 "sound_device_phone" = "Ponsel";
 "call_select_sound_device" = "Pilih Perangkat Suara";
-"call_failed_no_connection_description" = "Gagal membuat koneksi real-time.
-\nSilakan minta administrator homeserver Anda untuk mengkonfigurasi server TURN agar panggilan untuk bekerja dengan andal.";
+"call_failed_no_connection_description" = "Gagal membuat koneksi real-time.\nSilakan minta administrator homeserver Anda untuk mengkonfigurasi server TURN agar panggilan untuk bekerja dengan andal.";
 "call_failed_no_connection" = "%@ Panggilan Gagal";
 "hs_client_url" = "URL API homeserver";
 "send_bug_report_include_key_share_history" = "Kirim riwayat permintaan pemberian kunci";
@@ -700,28 +671,17 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "notice_room_invite_no_invitee_with_reason" = "Undangan %1$@. Alasan: %2$@";
 "event_status_sending_message" = "Mengirim pesan…";
 "event_status_sent_message" = "Pesan terkirim";
-"initial_sync_start_importing_account_data" = "Sinkronisasi awal:
-\nMengimpor data akun";
-"initial_sync_start_importing_account_groups" = "Sinkronisasi awal:
-\nMengimpor komunitas";
-"initial_sync_start_importing_account_left_rooms" = "Sinkronisasi Awal:
-\nMengimpor ruangan yang ditinggalkan";
-"initial_sync_start_importing_account_invited_rooms" = "Sinkronisasi awal:
-\nMengimpor ruangan yang diundang";
-"initial_sync_start_importing_account_joined_rooms" = "Sinkronisasi awal:
-\nMemuat obrolan Anda
-\nJika Anda telah bergabung dengan banyak ruangan, ini mungkin membutuhkan waktu yang cukup lama";
-"initial_sync_start_importing_account_rooms" = "Sinkronisasi awal:
-\nMengimpor ruangan";
-"initial_sync_start_importing_account_crypto" = "Sinkronisasi awal:
-\nMengimpor kripto";
+"initial_sync_start_importing_account_data" = "Sinkronisasi awal:\nMengimpor data akun";
+"initial_sync_start_importing_account_groups" = "Sinkronisasi awal:\nMengimpor komunitas";
+"initial_sync_start_importing_account_left_rooms" = "Sinkronisasi Awal:\nMengimpor ruangan yang ditinggalkan";
+"initial_sync_start_importing_account_invited_rooms" = "Sinkronisasi awal:\nMengimpor ruangan yang diundang";
+"initial_sync_start_importing_account_joined_rooms" = "Sinkronisasi awal:\nMemuat obrolan Anda\nJika Anda telah bergabung dengan banyak ruangan, ini mungkin membutuhkan waktu yang cukup lama";
+"initial_sync_start_importing_account_rooms" = "Sinkronisasi awal:\nMengimpor ruangan";
+"initial_sync_start_importing_account_crypto" = "Sinkronisasi awal:\nMengimpor kripto";
 "notice_power_level_changed" = "%1$@ mengubah tingkat daya %2$@.";
-"initial_sync_start_importing_account" = "Sinkronisasi awal:
-\nMengimpor akun…";
-"initial_sync_start_downloading" = "Sinkronisasi awal:
-\nMengunduh data…";
-"initial_sync_start_server_computing" = "Sinkronisasi awal:
-\nMenunggu respons server…";
+"initial_sync_start_importing_account" = "Sinkronisasi awal:\nMengimpor akun…";
+"initial_sync_start_downloading" = "Sinkronisasi awal:\nMengunduh data…";
+"initial_sync_start_server_computing" = "Sinkronisasi awal:\nMenunggu respons server…";
 "room_displayname_empty_room_was" = "Ruangan kosong (tadi adalah %@)";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@, dan %4$@";
 "room_displayname_3_members" = "%1$@, %2$@, dan %3$@";
@@ -787,14 +747,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "ignore_request_short_label" = "Abaikan";
 "key_share_request" = "Permintaan Pembagian Kunci";
 "share_without_verifying_short_label" = "Bagikan";
-"your_unverified_device_requesting_with_info" = "Sesi yang belum diverifikasi meminta kunci enkripsi.
-\nNama sesi: %1$@
-\nTerakhir dilihat: %2$@
-\nJika Anda tidak masuk pada sesi lain, abaikan permintaan ini.";
-"you_added_a_new_device_with_info" = "Sesi baru meminta kunci enkripsi.
-\nNama sesi: %1$@
-\nTerakhir dilihat: %2$@
-\nJika Anda tidak masuk pada sesi lain, abaikan permintaan ini.";
+"your_unverified_device_requesting_with_info" = "Sesi yang belum diverifikasi meminta kunci enkripsi.\nNama sesi: %1$@\nTerakhir dilihat: %2$@\nJika Anda tidak masuk pada sesi lain, abaikan permintaan ini.";
+"you_added_a_new_device_with_info" = "Sesi baru meminta kunci enkripsi.\nNama sesi: %1$@\nTerakhir dilihat: %2$@\nJika Anda tidak masuk pada sesi lain, abaikan permintaan ini.";
 "widget_integration_review_terms" = "Untuk melanjutkan, Anda harus menerima persyaratan layanan ini.";
 "settings_labs_native_camera_summary" = "Mulai kamera sistem daripada layar kamera khusus.";
 "room_no_active_widgets" = "Tidak ada widget yang aktif";
@@ -817,8 +771,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "room_widget_revoke_access" = "Cabut akses untuk saya";
 "room_widget_open_in_browser" = "Buka di browser";
 "room_widget_reload" = "Muat ulang widget";
-"room_widget_failed_to_load" = "Gagal memuat widget.
-\n%@";
+"room_widget_failed_to_load" = "Gagal memuat widget.\n%@";
 "room_widget_permission_shared_info_title" = "Menggunakannya dapat berbagi data dengan %@:";
 "room_widget_permission_webview_shared_info_title" = "Menggunakannya dapat mengatur cookie dan berbagi data dengan %@:";
 "room_widget_permission_added_by" = "Widget ini ditambahkan oleh:";
@@ -924,13 +877,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "settings_show_avatar_display_name_changes_messages_summary" = "Termasuk avatar dan perubahan nama tampilan.";
 "settings_chat_effects_description" = "Gunakan perintah /confetti atau kirim pesan yang berisi ❄️ atau 🎉";
 "settings_chat_effects_title" = "Tampilkan efek chat";
-"settings_integrations_summary" = "Gunakan pengelola integrasi untuk mengelola bot, jembatan, widget, dan paket stiker.
-\nPengelola integrasi menerima data konfigurasi, dan dapat memodifikasi widget, mengirim undangan ruang, dan mengatur tingkat daya dengan sepengetahuan Anda.";
+"settings_integrations_summary" = "Gunakan pengelola integrasi untuk mengelola bot, jembatan, widget, dan paket stiker.\nPengelola integrasi menerima data konfigurasi, dan dapat memodifikasi widget, mengirim undangan ruang, dan mengatur tingkat daya dengan sepengetahuan Anda.";
 "settings_integrations" = "Integrasi";
 "settings_background_fdroid_sync_mode_disabled_description" = "Anda tidak akan diberitahu tentang pesan masuk saat aplikasi berada di latar belakang.";
 "settings_background_fdroid_sync_mode_disabled" = "Tidak ada sinkronisasi latar belakang";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).
-\nIni akan memengaruhi penggunaan radio dan baterai, dan ada juga pemberitahuan yang ditampilkan permanen menyatakan bahwa %@ sedang mendengarkan peristiwa.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ akan disinkronkan di latar belakang secara berkala pada waktu yang tepat (dapat dikonfigurasi).\nIni akan memengaruhi penggunaan radio dan baterai, dan ada juga pemberitahuan yang ditampilkan permanen menyatakan bahwa %@ sedang mendengarkan peristiwa.";
 "settings_mentions_and_keywords_encryption_notice" = "Anda tidak akan mendapatkan notifikasi untuk sebutan & keyword di ruangan terenkripsi di ponsel.";
 "settings_room_upgrades" = "Peningkatan ruangan";
 "settings_messages_by_bot" = "Pesan dari bot";
@@ -975,13 +926,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "settings_discovery_confirm_mail" = "Kami mengirimi Anda email konfirmasi ke %@, periksa email Anda dan klik tautan konfirmasi";
 "login_reset_password_on" = "Setel ulang sandi di %1$@";
 "login_login_with_email_error" = "Email ini tidak terkait dengan akun apapun.";
-"login_registration_not_supported" = "Aplikasi tidak dapat membuat akun di homeserver ini.
-\n
-\nApakah Anda ingin mendaftar menggunakan client web\?";
+"login_registration_not_supported" = "Aplikasi tidak dapat membuat akun di homeserver ini.\n\nApakah Anda ingin mendaftar menggunakan client web\?";
 "login_registration_disabled" = "Maaf, server ini tidak menerima akun baru.";
-"login_mode_not_supported" = "Aplikasi tidak dapat masuk ke homeserver ini. Homeserver mendukung jenis masuk berikut: %1$@.
-\n
-\nApakah Anda ingin masuk menggunakan client web\?";
+"login_mode_not_supported" = "Aplikasi tidak dapat masuk ke homeserver ini. Homeserver mendukung jenis masuk berikut: %1$@.\n\nApakah Anda ingin masuk menggunakan client web\?";
 "login_sso_error_message" = "Ada kesalahan terjadi saat memuat halaman: %1$@ (%2$d)";
 "login_server_url_form_common_notice" = "Masukkan alamat server yang ingin Anda gunakan";
 "login_server_url_form_modular_notice" = "Masukkan alamat Modular Element atau Server yang ingin Anda gunakan";
@@ -1040,16 +987,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "room_list_quick_actions_notifications_all" = "Semua pesan";
 "room_list_quick_actions_notifications_all_noisy" = "Semua pesan (brisik)";
 "message_ignore_user" = "Abaikan pengguna";
-"content_reported_as_inappropriate_content" = "Konten ini telah dilaporkan sebagai tidak pantas.
-\n
-\nJika Anda tidak ingin melihat konten dari pengguna ini, Anda dapat mengabaikan pengguna itu untuk menyembunyikan pesan dari pengguna.";
+"content_reported_as_inappropriate_content" = "Konten ini telah dilaporkan sebagai tidak pantas.\n\nJika Anda tidak ingin melihat konten dari pengguna ini, Anda dapat mengabaikan pengguna itu untuk menyembunyikan pesan dari pengguna.";
 "content_reported_as_inappropriate_title" = "Dilaporkan sebagai tidak pantas";
-"content_reported_content" = "Konten ini telah dilaporkan.
-\n
-\nJika Anda tidak ingin melihat konten dari pengguna ini, Anda dapat mengabaikan pengguna itu untuk menyembunyikan pesan dari pengguna.";
-"content_reported_as_spam_content" = "Konten ini telah dilaporkan sebagai spam.
-\n
-\nJika Anda tidak ingin melihat konten dari pengguna ini, Anda dapat mengabaikan pengguna itu untuk menyembunyikan pesan dari pengguna.";
+"content_reported_content" = "Konten ini telah dilaporkan.\n\nJika Anda tidak ingin melihat konten dari pengguna ini, Anda dapat mengabaikan pengguna itu untuk menyembunyikan pesan dari pengguna.";
+"content_reported_as_spam_content" = "Konten ini telah dilaporkan sebagai spam.\n\nJika Anda tidak ingin melihat konten dari pengguna ini, Anda dapat mengabaikan pengguna itu untuk menyembunyikan pesan dari pengguna.";
 "content_reported_as_spam_title" = "Dilaporkan sebagai spam";
 "content_reported_title" = "Konten dilaporkan";
 "block_user" = "ABAIKAN PENGGUNA";
@@ -1243,24 +1184,19 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Saya telah membuat salinan";
 "keys_backup_setup_step3_button_title" = "Selesai";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Simpan kunci pemulihan Anda di suatu tempat yang sangat aman, seperti manajer kata sandi (atau brankas)";
-"keys_backup_setup_step3_text_line2" = "Kunci pemulihan Anda adalah jaring pengaman — Anda dapat menggunakannya untuk memulihkan akses ke pesan terenkripsi Anda jika Anda lupa frasa sandi Anda.
-\nSimpan kunci pemulihan Anda di suatu tempat yang sangat aman, seperti manajer kata sandi (atau brankas)";
+"keys_backup_setup_step3_text_line2" = "Kunci pemulihan Anda adalah jaring pengaman — Anda dapat menggunakannya untuk memulihkan akses ke pesan terenkripsi Anda jika Anda lupa frasa sandi Anda.\nSimpan kunci pemulihan Anda di suatu tempat yang sangat aman, seperti manajer kata sandi (atau brankas)";
 "keys_backup_setup_step3_text_line1" = "Kunci Anda sedang dicadangkan.";
 "keys_backup_setup_step3_success_title" = "Berhasil!";
 "keys_backup_setup_step2_skip_button_title" = "(Lanjutan) Atur dengan Kunci Pemulihan";
 "keys_backup_setup_step1_recovery_key_alternative" = "Atau, amankan cadangan Anda dengan Kunci Pemulihan, disimpan di tempat yang aman.";
 "keys_backup_setup_creating_backup" = "Membuat Cadangan";
 "keys_backup_setup_step2_button_title" = "Atur Frasa Sandi";
-"keys_backup_setup_step2_text_description" = "Kami akan menyimpan salinan kunci terenkripsi Anda di homeserver Anda. Lindungi cadangan Anda dengan frasa sandi supaya tetap aman.
-\n
-\nUntuk keamanan maksimum, ini harus berbeda dari kata sandi akun Anda.";
+"keys_backup_setup_step2_text_description" = "Kami akan menyimpan salinan kunci terenkripsi Anda di homeserver Anda. Lindungi cadangan Anda dengan frasa sandi supaya tetap aman.\n\nUntuk keamanan maksimum, ini harus berbeda dari kata sandi akun Anda.";
 "keys_backup_setup_step2_text_title" = "Amankan cadangan Anda dengan frasa sandi.";
 "keys_backup_setup_step1_manual_export" = "Ekspor kunci secara manual";
 "keys_backup_setup_step1_advanced" = "(Lanjutan)";
 "keys_backup_setup" = "Mulai menggunakan Cadangan Kunci";
-"keys_backup_setup_step1_description" = "Pesan di ruangan terenkripsi diamankan dengan enkripsi ujung-ke-ujung. Hanya Anda dan penerima memiliki kunci untuk membaca pesan-pesan ini.
-\n
-\nCadangkan kunci Anda dengan aman untuk menghindari kehilangan kunci Anda.";
+"keys_backup_setup_step1_description" = "Pesan di ruangan terenkripsi diamankan dengan enkripsi ujung-ke-ujung. Hanya Anda dan penerima memiliki kunci untuk membaca pesan-pesan ini.\n\nCadangkan kunci Anda dengan aman untuk menghindari kehilangan kunci Anda.";
 "keys_backup_setup_step1_title" = "Jangan pernah kehilangan pesan terenkripsi";
 "keys_backup_passphrase_not_empty_error_message" = "Mohon hapus frasa sandinya jika Anda ingin %@ untuk membuat kunci pemulihan.";
 "passphrase_passphrase_too_weak" = "Frasa sandi terlalu lemah";
@@ -1274,12 +1210,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "navigate_to_room_when_already_in_the_room" = "Anda telah menampilkan ruangan ini!";
 "settings_other_third_party_notices" = "Pemberitahuan pihak ketiga lainnya";
 "settings_sdk_version" = "Versi SDK Matrix";
-"import_e2e_keys_from_file" = "Impor kunci E2E dari file \"%1$@\.";
+"import_e2e_keys_from_file" = "Impor kunci E2E dari file \"%1$@\".";
 "keys_backup_unable_to_get_keys_backup_data" = "Sebuah kesalahan terjadi mendapatkan data cadangan kunci";
 "keys_backup_unable_to_get_trust_info" = "Sebuah kesalahan terjadi mendapatkan info kepercyaan";
-"create_room_federation_error" = "Ruangan telah dibuat, tetapi beberapa undangan belum terkirim karena alasan berikut:
-\n
-\n%@";
+"create_room_federation_error" = "Ruangan telah dibuat, tetapi beberapa undangan belum terkirim karena alasan berikut:\n\n%@";
 "create_room_public_description" = "Siapa saja dapat bergabung ruangan ini";
 "create_room_public_title" = "Publik";
 "create_room_settings_section" = "Pengaturan ruangan";
@@ -1291,8 +1225,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "fab_menu_create_chat" = "Pesan Langsung";
 "fab_menu_create_room" = "Ruangan";
 "room_preview_no_preview_join" = "Ruangan ini tidak dapat ditampilkan. Apakah Anda masih mau bergabung\?";
-"room_preview_not_found" = "Ruangan ini tidak dapat di akses di waktu ini.
-\nCoba lagi nanti, atau tanya admin ruangan untuk memeriksa jika Anda punya akses.";
+"room_preview_not_found" = "Ruangan ini tidak dapat di akses di waktu ini.\nCoba lagi nanti, atau tanya admin ruangan untuk memeriksa jika Anda punya akses.";
 "room_preview_no_preview" = "Ruangan ini tidak dapat di tampilkan";
 "group_all_communities" = "Semua Komunitas";
 "please_wait" = "Mohon menunggu…";
@@ -1318,12 +1251,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "room_list_catchup_empty_body" = "Anda tidak mempunyai pesan yang belum dibaca";
 "room_list_catchup_empty_title" = "Anda telah melihat semuanya!";
 "invited_by" = "Diundang oleh %@";
-"verification_conclusion_compromised" = "Salah satu dari yang berikut ini dapat dikompromikan:
-\n
-\n - Homeserver Anda
-\n - Homeserver pengguna yang Anda memverifikasi yang terhubung
-\n - Koneksi internet Anda, atau koneksi internet pengguna lain
-\n - Perangkat Anda, atau perangkat pengguna lain";
+"verification_conclusion_compromised" = "Salah satu dari yang berikut ini dapat dikompromikan:\n\n - Homeserver Anda\n - Homeserver pengguna yang Anda memverifikasi yang terhubung\n - Koneksi internet Anda, atau koneksi internet pengguna lain\n - Perangkat Anda, atau perangkat pengguna lain";
 "not_trusted" = "Tidak Terpercaya";
 "trusted" = "Terpercaya";
 "room_member_profile_sessions_section_title" = "Sesi";
@@ -1351,13 +1279,9 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "settings_active_sessions_list" = "Sesi Aktif";
 "settings_hs_admin_e2e_disabled" = "Admin server Anda telah menonaktifkan enkripsi ujung-ke-ujung secara default di kamar pribadi & pesan langsung.";
 "encryption_information_dg_xsigning_disabled" = "Tanda Tangan Silang dinonaktifkan";
-"encryption_information_dg_xsigning_trusted" = "Tanda Tangan Silang diaktifkan.
-\nKunci dipercaya.
-\nKunci privat tidak diketahui";
-"encryption_information_dg_xsigning_not_trusted" = "Tanda Tangan Silang diaktifkan.
-\nKunci tidak dipercaya";
-"encryption_information_dg_xsigning_complete" = "Tanda Tangan Silang diaktifkan
-\nKunci Privat di perangkat.";
+"encryption_information_dg_xsigning_trusted" = "Tanda Tangan Silang diaktifkan.\nKunci dipercaya.\nKunci privat tidak diketahui";
+"encryption_information_dg_xsigning_not_trusted" = "Tanda Tangan Silang diaktifkan.\nKunci tidak dipercaya";
+"encryption_information_dg_xsigning_complete" = "Tanda Tangan Silang diaktifkan\nKunci Privat di perangkat.";
 "encryption_information_cross_signing_state" = "Tanda Tangan Silang";
 "verification_conclusion_ok_self_notice" = "Sesi baru Anda telah diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya.";
 "verification_conclusion_ok_notice" = "Pesan dengan pengguna ini dienkripsi ujung-ke-ujung dan tidak dapat dibaca oleh pihak ketiga.";
@@ -1374,8 +1298,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "settings_category_timeline" = "Linimasa";
 "command_description_rainbow_emote" = "Mengirim emote yang dicantum berwarna pelangi";
 "command_description_rainbow" = "Mengirim pesan yang dicantum berwarna pelangi";
-"verify_cannot_cross_sign" = "Sesi ini tidak dapat berbagi verifikasi ini dengan sesi Anda yang lain.
-\nVerifikasi akan disimpan secara lokal dan dibagikan dalam versi aplikasi di masa depan.";
+"verify_cannot_cross_sign" = "Sesi ini tidak dapat berbagi verifikasi ini dengan sesi Anda yang lain.\nVerifikasi akan disimpan secara lokal dan dibagikan dalam versi aplikasi di masa depan.";
 "unignore" = "Hapus pengabaian";
 "rendering_event_error_exception" = "%@ menemukan sebuah masalah ketika rendering konten dengan id \'%1$@\'";
 "room_member_jump_to_read_receipt" = "Ke laporan dibaca";
@@ -1401,12 +1324,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "room_profile_section_more" = "Lebih banyak";
 "room_profile_section_security_learn_more" = "Pelajari lebih lanjut";
 "room_profile_section_security" = "Keamanan";
-"direct_room_profile_encrypted_subtitle" = "Pesan di ruangan ini dienkripsi ujung-ke-ujung.
-\n
-\nPesan Anda diamankan dengan kunci dan hanya Anda dan penerima memiliki kunci unik untuk mengakses mereka.";
-"room_profile_encrypted_subtitle" = "Pesan di ruangan ini dienkripsi ujung-ke-ujung.
-\n
-\nPesan Anda diamankan dengan kunci dan hanya Anda dan penerima memiliki kunci unik untuk mengakses mereka.";
+"direct_room_profile_encrypted_subtitle" = "Pesan di ruangan ini dienkripsi ujung-ke-ujung.\n\nPesan Anda diamankan dengan kunci dan hanya Anda dan penerima memiliki kunci unik untuk mengakses mereka.";
+"room_profile_encrypted_subtitle" = "Pesan di ruangan ini dienkripsi ujung-ke-ujung.\n\nPesan Anda diamankan dengan kunci dan hanya Anda dan penerima memiliki kunci unik untuk mengakses mereka.";
 "direct_room_profile_not_encrypted_subtitle" = "Pesan ini tidak terenkripsi secara ujung-ke-ujung.";
 "room_profile_not_encrypted_subtitle" = "Pesan di ruangan ini tidak terenkripsi secara ujung-ke-ujung.";
 "verification_request_waiting_for" = "Menunggu untuk %@…";
@@ -1472,16 +1391,12 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "notification_initial_sync" = "Sinkronisasi Awal…";
 "bug_report_error_too_short" = "Deskripsi terlalu pendek";
 "permalink_malformed" = "Tautan matrix.to Anda tidak benar";
-"soft_logout_sso_not_same_user_error" = "Sesi saat ini hanya untuk pengguna %1$@ dan Anda memberikan kredensial untuk pengguna %2$@. Ini tidak didukung oleh %@.
-\nMohon bersihkan data, terus masuk lagi ke akun lainnya.";
+"soft_logout_sso_not_same_user_error" = "Sesi saat ini hanya untuk pengguna %1$@ dan Anda memberikan kredensial untuk pengguna %2$@. Ini tidak didukung oleh %@.\nMohon bersihkan data, terus masuk lagi ke akun lainnya.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Anda akan kehilangan akses ke pesan yang aman kecuali jika Anda masuk untuk memulihkan kunci enkripsi Anda.";
-"soft_logout_clear_data_dialog_content" = "Bersihkan semua data yang disimpan di perangkat ini\?
-\nMasuk lagi untuk mengakses data akun dan pesan Anda.";
+"soft_logout_clear_data_dialog_content" = "Bersihkan semua data yang disimpan di perangkat ini\?\nMasuk lagi untuk mengakses data akun dan pesan Anda.";
 "soft_logout_clear_data_dialog_title" = "Bersihkan data";
 "soft_logout_clear_data_submit" = "Bersihkan semua data";
-"soft_logout_clear_data_notice" = "Peringatan: Data personal Anda (termasuk kunci enkripsi) masih disimpan di perangkat ini.
-\n
-\nBersihkanlah jika Anda selesai menggunakan perangkat ini, atau ingin masuk ke akun lain.";
+"soft_logout_clear_data_notice" = "Peringatan: Data personal Anda (termasuk kunci enkripsi) masih disimpan di perangkat ini.\n\nBersihkanlah jika Anda selesai menggunakan perangkat ini, atau ingin masuk ke akun lain.";
 "soft_logout_clear_data_title" = "Bersihkan data personal";
 "soft_logout_signin_password_hint" = "Kata sandi";
 "soft_logout_signin_submit" = "Masuk";
@@ -1489,13 +1404,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "soft_logout_signin_title" = "Masuk";
 "soft_logout_title" = "Anda telah keluar";
 "signed_out_submit" = "Masuk lagi";
-"signed_out_notice" = "Ini dapat disebabkan oleh berbagai alasan:
-\n
-\n• Anda telah mengubah kata sandi Anda pada sesi lain.
-\n
-\n• Anda telah menghapus sesi ini dari sesi lain.
-\n
-\n• Administrator server Anda telah menghilangkan akses Anda untuk keamanan.";
+"signed_out_notice" = "Ini dapat disebabkan oleh berbagai alasan:\n\n• Anda telah mengubah kata sandi Anda pada sesi lain.\n\n• Anda telah menghapus sesi ini dari sesi lain.\n\n• Administrator server Anda telah menghilangkan akses Anda untuk keamanan.";
 "signed_out_title" = "Anda telah keluar";
 "seen_by" = "Dilihat oleh";
 "autodiscover_well_known_error" = "Tidak dapat menemukan homeserver yang valid. Mohon cek pengenal Anda";
@@ -1508,8 +1417,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "login_error_outdated_homeserver_warning_content" = "Homeserver ini terlalu usang untuk dihubungkan. Tanyakan admin homeservernya untuk ditingkatkan. Anda dapat lanjut, tetapi beberapa fitur tidak akan bekerja dengan seharusnya.";
 "login_error_outdated_homeserver_title" = "Homeserver usang";
 "login_validation_code_is_not_correct" = "Kode yang dimasukkan tidak benar. Mohon dicek.";
-"login_wait_for_email_notice" = "Kami telah mengirimkan email ke %1$@.
-\nMohon klik tautan yang ada untuk melanjutkan pembuatan akun.";
+"login_wait_for_email_notice" = "Kami telah mengirimkan email ke %1$@.\nMohon klik tautan yang ada untuk melanjutkan pembuatan akun.";
 "login_msisdn_confirm_notice" = "Kami telah mengirimkan kode ke %1$@. Masukkan di bawah untuk memverifikasi bahwa itu Anda.";
 "login_wait_for_email_title" = "Mohon cek email Anda";
 "login_terms_title" = "Terima ketentuan untuk melanjutkan";
@@ -1517,9 +1425,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "login_a11y_choose_other" = "Pilih homeserver kustom";
 "login_a11y_choose_modular" = "Pilih Element Matrix Services";
 "login_a11y_choose_matrix_org" = "Pilih matrix.org";
-"login_signup_cancel_confirmation_content" = "Akun Anda belum dibuat.
-\n
-\nBatalkan proses pendaftaran\?";
+"login_signup_cancel_confirmation_content" = "Akun Anda belum dibuat.\n\nBatalkan proses pendaftaran\?";
 "login_signup_cancel_confirmation_title" = "Peringatan";
 "login_signup_error_user_in_use" = "Nama pengguna itu telah diambil";
 "login_signup_submit" = "Lanjut";
@@ -1544,9 +1450,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "login_set_email_mandatory_hint" = "Email";
 "login_set_email_notice" = "Atur sebuah email untuk memulihkan akun Anda. Nantinya, Anda dapat mengizinkan orang yang Anda tahu untuk menemukan Anda dari email secara opsional.";
 "login_set_email_title" = "Atur alamat email";
-"login_reset_password_cancel_confirmation_content" = "Kata sandi Anda belum diubah.
-\n
-\nBatalkan proses penggantian kata sandi\?";
+"login_reset_password_cancel_confirmation_content" = "Kata sandi Anda belum diubah.\n\nBatalkan proses penggantian kata sandi\?";
 "login_reset_password_cancel_confirmation_title" = "Peringatan";
 "login_reset_password_success_submit" = "Kembali untuk Masuk";
 "login_reset_password_success_notice_2" = "Anda telah keluar dari semua sesi dan tidak akan menerima notifikasi. Untuk mengaktifkan notifikasi, masuk lagi di setiap perangkat.";
@@ -1587,8 +1491,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "upgrade_room_update_parent_space" = "Otomatis memperbarui induk space";
 "upgrade_room_auto_invite" = "Otomatis undang pengguna";
 "upgrade_public_room_from_to" = "Anda akan meningkatkan ruangan ini dari %1$@ ke %2$@.";
-"upgrade_room_warning" = "Meningkatkan ruangan adalah aksi lanjutan dan hanya disarankan ketika ruangan tidak stabil karena kutu yang ada, fitur yang kurang atau rentanan keamanan.
-\nIni biasanya hanya mempengaruhi bagaimana ruangan itu diproses di servernya.";
+"upgrade_room_warning" = "Meningkatkan ruangan adalah aksi lanjutan dan hanya disarankan ketika ruangan tidak stabil karena kutu yang ada, fitur yang kurang atau rentanan keamanan.\nIni biasanya hanya mempengaruhi bagaimana ruangan itu diproses di servernya.";
 "upgrade_private_room" = "Tingkatkan ruangan privat";
 "upgrade_public_room" = "Tingkatkan ruangan publik";
 "upgrade_required" = "Peningkatan dibutuhkan";
@@ -1597,13 +1500,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "joining_replacement_room" = "Bergabung ke ruangan yang diganti";
 "unnamed_room" = "Ruangan Tanpa Nama";
 "this_space_has_no_rooms_admin" = "Beberapa ruangan mungkin disembunyikan karena mereka privat dan Anda membutuhkan undangan.";
-"this_space_has_no_rooms_not_admin" = "Beberapa ruangan mungkin disembunyikan karena mereka privat dan Anda membutuhkan undangan.
-\nAnda tidak memiliki izin untuk menambahkan ruangan.";
+"this_space_has_no_rooms_not_admin" = "Beberapa ruangan mungkin disembunyikan karena mereka privat dan Anda membutuhkan undangan.\nAnda tidak memiliki izin untuk menambahkan ruangan.";
 "this_space_has_no_rooms" = "Space ini belum ada ruangan";
 "spaces_no_server_support_description" = "Mohon kontak admin homeserver Anda untuk informasi lanjut";
 "spaces_no_server_support_title" = "Sepertinya homeserver Anda belum mendukung fitur space";
-"spaces_feeling_experimental_subspace" = "Merasa eksperimental\?
-\nAnda dapat menambahkan space yang sudah ada ke space.";
+"spaces_feeling_experimental_subspace" = "Merasa eksperimental\?\nAnda dapat menambahkan space yang sudah ada ke space.";
 "all_rooms_youre_in_will_be_shown_in_home" = "Semua ruangan yang Anda berada akan ditampilkan juga di Beranda.";
 "preference_show_all_rooms_in_home" = "Tampilkan semua ruangan di Beranda";
 "space_manage_rooms_and_spaces" = "Kelola ruangan dan space";
@@ -1634,11 +1535,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "discovery_invite" = "Undang dari email, cari kontak dan lain lagi…";
 "finish_setting_up_discovery" = "Selesai menyiapkan penjelajahan.";
 "create_space_identity_server_info_none" = "Anda tidak menggunakan server identitas. Supaya dapat mengundang tim dan dapat dijelajahi oleh mereka, konfigurasi sebuah server identitas di bawah.";
-"room_alias_preview_not_found" = "Alias ini tidak tersedia sekarang.
-\nCoba lagi nanti, atau tanyakan ke admin ruangan untuk mengecek jika Anda punya akses.";
+"room_alias_preview_not_found" = "Alias ini tidak tersedia sekarang.\nCoba lagi nanti, atau tanyakan ke admin ruangan untuk mengecek jika Anda punya akses.";
 "join_anyway" = "Bergabung Saja";
 "join_space" = "Bergabung ke Space";
-"create_space" = "Buat Space";
+"create_space" = "Buat space";
 "skip_for_now" = "Lewat untuk sekarang";
 "share_space_link_message" = "Bergabung ke space saya %1$@ %2$@";
 "invite_just_to_this_room_desc" = "Mereka tidak akan menjadi bagian dari %@";
@@ -1680,7 +1580,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "create_spaces_choose_type_label" = "Tipe space apa yang Anda ingin buat\?";
 "your_private_space" = "Space privat Anda";
 "your_public_space" = "Space publik Anda";
-"add_space" = "Tambahkan Space";
+"add_space" = "Tambahkan space";
 "private_space" = "Space privat";
 "public_space" = "Space publik";
 "event_status_delete_all_failed_dialog_message" = "Apakah Anda yakin untuk menghapus semua pesan yang belum dikirim di ruangan ini\?";
@@ -1841,9 +1741,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "add_people" = "Tambahkan orang";
 "add_members_to_room" = "Tambahkan anggota";
 "create_room_dm_failure" = "Kami tidak dapat membuat pesan langsung Anda. Mohon cek pengguna yang Anda ingin undang dan coba lagi.";
-"external_link_confirmation_message" = "Tautan ini %1$@ akan membawa Anda ke situs lain: %2$@.
-\n
-\nApakah Anda yakin untuk melanjutkan\?";
+"external_link_confirmation_message" = "Tautan ini %1$@ akan membawa Anda ke situs lain: %2$@.\n\nApakah Anda yakin untuk melanjutkan\?";
 "space_add_space_to_any_space_you_manage" = "Tambahkan sebuah space ke space apa saja yang Anda dapat kelola.";
 "create_space_error_empty_field_space_name" = "Beri nama untuk melanjutkan.";
 "create_pin_confirm_failure" = "Gagal untuk memvalidasi PIN, mohon ketuk yang baru.";
@@ -1880,10 +1778,8 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "use_latest_app" = "Gunakan %@ di perangkat Anda yang lain:";
 "use_other_session_content_description" = "Gunakan %@ di perangkat Anda yang lain, %@ Web, %@ Desktop, %@ iOS, %@ untuk Android, atau client Matrix lainnya yang mendukung tanda tangan silang";
 "or_other_mx_capable_client" = "atau client Matrix lainnya yang mendukung tanda tangan silang";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
 "change_password_summary" = "Atur kata sandi akun baru…";
 "error_saving_media_file" = "Tidak dapat menyimpan file media";
 "settings_security_prevent_screenshots_summary" = "Mengaktifkan pengaturan ini menambahkan FLAG_SECURE ke semua Aktivitas. Mulai ulang aplikasi ini untuk berpengaruh pada perubahannya.";
@@ -1929,15 +1825,11 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "direct_room_encryption_enabled_tile_description" = "Pesan di ruangan ini dienkripsi secara ujung-ke-ujung.";
 "encryption_enabled_tile_description" = "Pesan di ruangan ini dienkripsi secara ujung-ke-ujung. Pelajari lebih lanjut & verifikasi pengguna di profil mereka.";
 "encryption_enabled" = "Enkripsi diaktifkan";
-"bootstrap_cancel_text" = "Jika Anda batalkan, Anda mungkin kehilangan pesan terenkripsi dan data Anda jika Anda kehilangan akses ke login Anda.
-\n
-\nAnda juga dapat mengatur Cadangan Aman dan kelola kunci Anda di Pengaturan.";
+"bootstrap_cancel_text" = "Jika Anda batalkan, Anda mungkin kehilangan pesan terenkripsi dan data Anda jika Anda kehilangan akses ke login Anda.\n\nAnda juga dapat mengatur Cadangan Aman dan kelola kunci Anda di Pengaturan.";
 "bootstrap_crosssigning_save_cloud" = "Salin ke penyimpanan awan pribadi Anda";
 "bootstrap_crosssigning_save_usb" = "Simpan di flashdisk atau penyimpanan cadangan";
 "bootstrap_crosssigning_print_it" = "Cetak dan simpan di tempat yang aman";
-"bootstrap_cross_signing_success" = "%2$@ & %1$@ Anda telah diatur.
-\n
-\nSimpan mereka di tempat yang aman! Anda membutuhkannya untuk mengakses pesan terenkripsi dan mengamankan informasi jika Anda kehilangan sesi aktif Anda.";
+"bootstrap_cross_signing_success" = "%2$@ & %1$@ Anda telah diatur.\n\nSimpan mereka di tempat yang aman! Anda membutuhkannya untuk mengakses pesan terenkripsi dan mengamankan informasi jika Anda kehilangan sesi aktif Anda.";
 "bootstrap_crosssigning_progress_key_backup" = "Mengatur Cadangan Kunci";
 "bootstrap_crosssigning_progress_save_ssk" = "Mengsinkronisasikan Kunci Penandatanganan Diri";
 "bootstrap_crosssigning_progress_save_usk" = "Mengsinkronisasikan Kunci Pengguna";
@@ -1957,14 +1849,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "recovery_passphrase" = "Frasa Sandi Pemulihan";
 "verification_cancelled" = "Verifikasi Dibatalkan";
 "verify_cancelled_notice" = "Verifikasi telah dibatalkan. Anda dapat memulai verifikasi lagi.";
-"verify_not_me_self_verification" = "Salah satu dari yang berikut ini dapat dikompromikan:
-\n
-\n- Kata sandi Anda
-\n- Homeserver Anda
-\n- Perangkat ini, atau perangkat lainnya
-\n- Koneksi internet yang digunakan oleh perangkat Anda
-\n
-\nKami menyarankan Anda untuk segera mengubah kata sandi & kunci pemulihan Anda dalam Pengaturan.";
+"verify_not_me_self_verification" = "Salah satu dari yang berikut ini dapat dikompromikan:\n\n- Kata sandi Anda\n- Homeserver Anda\n- Perangkat ini, atau perangkat lainnya\n- Koneksi internet yang digunakan oleh perangkat Anda\n\nKami menyarankan Anda untuk segera mengubah kata sandi & kunci pemulihan Anda dalam Pengaturan.";
 "verify_cancel_other" = "Anda tidak akan memverifikasi %1$@ (%2$@) jika Anda membatalkan. Mulai lagi di profil pengguna.";
 "verify_cancel_self_verification_from_trusted" = "Jika Anda batalkan, Anda tidak dapat membaca pesan terenkripsi di perangkat baru Anda dan pengguna lain tidak akan mempercayainya";
 "verify_cancel_self_verification_from_untrusted" = "Jika Anda batalkan, Anda tidak dapat membaca pesan terenkripsi di perangkat ini dan pengguna lain tidak akan mempercayainya";
@@ -2036,9 +1921,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "warning_unsaved_change_discard" = "Buang perubahan";
 "warning_unsaved_change" = "Ada perubahan yang belum disimpan. Buang perubahannya\?";
 "verification_cannot_access_other_session" = "Gunakan Frasa Sandi Pemulihan atau Kunci";
-"delete_account_data_warning" = "Hapus data akun dengan tipe %1$@\?
-\n
-\nHati-hati menggunakannya, ini dapat menyebabkan perilaku yang tidak terduga.";
+"delete_account_data_warning" = "Hapus data akun dengan tipe %1$@\?\n\nHati-hati menggunakannya, ini dapat menyebabkan perilaku yang tidak terduga.";
 "settings_account_data" = "Data Akun";
 "settings_dev_tools" = "Alat Pengembang";
 "no_connectivity_to_the_server_indicator_airplane" = "Mode pesawat diaktifkan";
@@ -2076,9 +1959,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "space_settings_permissions_title" = "Izin space";
 "space_participants_unban_prompt_msg" = "Menghapus cekalan akan mengizinkan pengguna untuk bergabung ke space lagi.";
 "space_participants_ban_prompt_msg" = "Mencekal pengguna akan mengeluarkan pengguna dari space ini dan mencegah pengguna untuk bergabung lagi.";
-"space_participants_remove_prompt_msg" = "mengeluarkan pengguna akan mengeluarkannya dari space ini.
-\n
-\nUntuk mencegah pengguna untuk bergabung lagi, Anda seharusnya cekal pengguna itu saja.";
+"space_participants_remove_prompt_msg" = "mengeluarkan pengguna akan mengeluarkannya dari space ini.\n\nUntuk mencegah pengguna untuk bergabung lagi, Anda seharusnya cekal pengguna itu saja.";
 "a11y_stop_voice_message" = "Berhenti Merekam";
 "command_description_lenny" = "Menambahkan ( ͡° ͜ʖ ͡°) ke pesan teks biasa";
 "settings_discovery_no_policy_provided" = "Tidak ada kebijakan yang disediakan oleh server identitasnya";
@@ -2134,12 +2015,10 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "legals_home_server_title" = "Kebijakan homeserver Anda";
 "legals_application_title" = "Kebijakan %@";
 "analytics_opt_in_list_item_3" = "Anda dapat mematikannya kapan saja di pengaturan";
-"analytics_opt_in_list_item_2.b_0" = "tidak";
-"analytics_opt_in_list_item_1.b_0" = "tidak";
+"analytics_opt_in_list_item_2" = "Kami <b>tidak</b> membagikan informasi ini dengan pihak ketiga";
+"analytics_opt_in_list_item_1" = "Kami <b>tidak</b> merekam atau memprofil data akun apapun";
 "analytics_opt_in_content_link" = "di sini";
-"analytics_opt_in_content" = "Bantu kami mengidentifikasi masalah-masalah dan membuat %@ lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.
-\n
-\nAnda dapat membaca semua kebijakan kami %@.";
+"analytics_opt_in_content" = "Bantu kami mengidentifikasi masalah-masalah dan membuat %@ lebih baik dengan membagikan data penggunaan anonim. Untuk memahami bagaimana orang-orang menggunakan beberapa perangkat-perangkat, kami akan membuat pengenal acak, yang dibagikan oleh perangkat Anda.\n\nAnda dapat membaca semua kebijakan kami %@.";
 "analytics_opt_in_title" = "Bantu buat %@ lebih baik";
 "action_enable" = "Aktifkan";
 "restart_the_application_to_apply_changes" = "Mulai ulang aplikasi ini untuk menerapkan perubahan.";
@@ -2230,8 +2109,7 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "room_notification_two_users_are_typing" = "%1$@ dan %2$@";
 "location_share_live_stop" = "Berhenti";
 "location_share_live_enabled" = "Lokasi langsung diaktifkan";
-"location_in_background_missing_permission_dialog_content" = "Jika Anda ingin membagikan lokasi langsung Anda, %@ membutuhkan akses ke lokasi selama aplikasinya di latar belakang.
-\nKami hanya akan mengakses lokasi Anda untuk durasi yang Anda pilih.";
+"location_in_background_missing_permission_dialog_content" = "Jika Anda ingin membagikan lokasi langsung Anda, %@ membutuhkan akses ke lokasi selama aplikasinya di latar belakang.\nKami hanya akan mengakses lokasi Anda untuk durasi yang Anda pilih.";
 "location_in_background_missing_permission_dialog_title" = "Perbolehkan akses";
 "a11y_location_share_option_pinned_icon" = "Bagikan lokasi ini";
 "location_share_option_pinned" = "Bagikan lokasi ini";
@@ -2241,52 +2119,24 @@ Di masa mendatang proses verifikasi ini akan dimutakhirkan.";
 "location_share_option_user_current" = "Bagikan lokasi saya saat ini";
 "a11y_location_share_locate_button" = "Perbesar ke lokasi saat ini";
 "a11y_location_share_pin_on_map" = "Pin dari lokasi yang terpilih pada peta";
-"threads_notice_migration_message.strong_0" = "ditampilkan sebagai balasan biasa";
+"threads_notice_migration_message" = "Kami hampir dekat untuk meriliskan sebuah Beta publik untuk Utasan.\n\nSaat kami mempersiapkan, kami harus membuat beberapa perubahan: utasan dibuat sebelum titik ini akan <strong>ditampilkan sebagai balasan biasa</strong>.\n\nIni hanya transisi sekali, utasan sekarang sebagai bagian dari spesifikasi Matrix.";
 "threads_notice_migration_title" = "Utasan Mencapai Beta 🎉";
-"plurals.membership_changes.item_0" = "%d perubahan keanggotaan";
-"plurals.room_title_members.item_0" = "%d anggota";
-"plurals.room_new_messages_notification.item_0" = "%d pesan baru";
-"plurals.room_details_selected.item_0" = "%d terpilih";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d ruangan";
-"plurals.active_widgets.item_0" = "%d widget aktif";
-"plurals.notification_unread_notified_messages.item_0" = "%d pesan pemberitahuan yang belum dibaca";
-"plurals.missed_video_call.item_0" = "%d panggilan video yang terjawab";
-"plurals.missed_audio_call.item_0" = "%d panggilan audio yang terjawab";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Anda menghapus alamat alternatif %1$@ untuk ruangan ini.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ menghapus alamat alternatif %2$@ untuk ruangan ini.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Anda menambahkan alamat alternatif %1$@ untuk ruangan ini.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ menambahkan alamat alternatif %2$@ untuk ruangan ini.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Anda menghapus %1$@ sebagai alamat untuk ruangan ini.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ menghapus %2$@ sebagai alamat untuk ruangan ini.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Anda menambahkan %1$@ sebagai alamat untuk ruangan ini.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ menambahkan %2$@ sebagai alamat untuk ruangan ini.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@, dan %4$d lainnya";
-"plurals.notification_compat_summary_title.item_0" = "%d notifikasi";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d pesan";
-"plurals.notification_invitations.item_0" = "%d undangan";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d kunci berhasil diimpor.";
-"plurals.room_settings_banned_users_count.item_0" = "%d pengguna yang dicekal";
-"plurals.seconds.item_0" = "%d detik";
-"plurals.fallback_users_read.item_0" = "%d pengguna telah membaca";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ dan %3$d lainnya telah membaca";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Mencadangkan %d kunci…";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d kunci baru telah ditambahkan ke sesi ini.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Dipulihkan cadangan dengan %d kunci.";
-"plurals.settings_active_sessions_count.item_0" = "%d sesi aktif";
-"plurals.room_profile_section_more_member_list.item_0" = "%1$d orang";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Terlalu banyak permintaan. Anda dapat mencoba lagi dalam %1$d detik…";
-"plurals.space_people_you_know.item_0" = "%d orang yang Anda tahu telah bergabung";
-"plurals.entries.item_0" = "%d entri";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Kode salah, %d upaya tersisa";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Undangan terkirim ke %1$@ dan %2$d lagi";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Tampilkan %d perangkat Anda dapat memverifikasi sekarang";
-"plurals.send_videos_with_original_size.item_0" = "Kirim video dengan ukuran asli";
-"plurals.send_images_with_original_size.item_0" = "Kirim gambar dengan ukuran asli";
-"plurals.call_active_status.item_0" = "%1$d panggilan aktif ·";
-"plurals.create_poll_not_enough_options_error.item_0" = "Setidaknya diperlukan %1$@ opsi";
-"plurals.poll_total_vote_count_after_ended.item_0" = "Hasil akhir berdasarkan oleh %1$d suara";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "%1$d suara diberikan. Berikan suara untuk melihat hasilnya";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "Berdasarkan oleh %1$d suara";
-"plurals.poll_option_vote_count.item_0" = "%1$d suara";
-"plurals.message_reaction_show_more.item_0" = "%1$d lagi";
-"plurals.notice_room_server_acl_changes.item_0" = "%d perubahan ACL server";
+"live_location_sharing_notification_description" = "Penbagian lokasi sedang dilakukan";
+"live_location_sharing_notification_title" = "%@ Lokasi langsung";
+"error_forbidden_digits_only_username" = "Homeserver tidak menerima nama pengguna dengan hanya angka.";
+"ftue_personalize_skip_this_step" = "Lewati";
+"ftue_personalize_submit" = "Simpan dan lanjutkan";
+"ftue_personalize_complete_subtitle" = "Preferensi Anda telah disimpan.";
+"ftue_personalize_complete_title" = "Anda siap!";
+"ftue_personalize_lets_go" = "Ayo";
+"ftue_profile_picture_subtitle" = "Anda dapat mengubahnya kapan saja.";
+"ftue_profile_picture_title" = "Tambahkan sebuah foto profil";
+"ftue_display_name_entry_footer" = "Anda dapat mengubahnya nanti";
+"ftue_display_name_entry_title" = "Nama Tampilan";
+"ftue_display_name_subtitle" = "Ini akan ditampilkan ketika Anda mengirim pesan.";
+"ftue_display_name_title" = "Pilih nama tampilan";
+"ftue_account_created_subtitle" = "Akun %@ Anda telah dibuat.";
+"ftue_account_created_congratulations_title" = "Selamat!";
+"ftue_account_created_take_me_home" = "Kembalikan saya ke beranda";
+"ftue_account_created_personalize" = "Ubah profil";
+"action_disable" = "Nonaktifkan";

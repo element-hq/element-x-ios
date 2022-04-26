@@ -134,9 +134,7 @@
 "auth_login_sso" = "היכנס באמצעות כניסה יחידה";
 "auth_login" = "היכנס";
 "error_no_external_application_found" = "מצטערים, לא נמצאה יישום חיצוני להשלמת פעולה זו.";
-"no_sticker_application_dialog_content" = "כרגע אין לך חבילות מדבקה מופעלות.
-\n
-\nלהוסיף כמה עכשיו\?";
+"no_sticker_application_dialog_content" = "כרגע אין לך חבילות מדבקה מופעלות.\n\nלהוסיף כמה עכשיו\?";
 "option_take_video" = "צלם סרטון";
 "option_take_photo" = "צלם תמונה";
 "option_take_photo_video" = "צלם תמונה או סרטון";
@@ -152,8 +150,7 @@
 "sound_device_speaker" = "רמקול";
 "sound_device_phone" = "טלפון";
 "call_select_sound_device" = "בחר מכשיר סאונד";
-"call_failed_no_connection_description" = "נכשל החיבור בזמן אמת.
-\nאנא בקש ממנהל שרת הבית שלך להגדיר שרת TURN על מנת שהשיחות יעבדו בצורה אמינה.";
+"call_failed_no_connection_description" = "נכשל החיבור בזמן אמת.\nאנא בקש ממנהל שרת הבית שלך להגדיר שרת TURN על מנת שהשיחות יעבדו בצורה אמינה.";
 "call_failed_no_connection" = "שיחת האלמנט נכשלה";
 "start_video_call_prompt_msg" = "האם אתה בטוח שברצונך להתחיל שיחת וידאו\?";
 "start_voice_call_prompt_msg" = "האם אתה בטוח שברצונך להתחיל שיחה קולית\?";
@@ -167,9 +164,7 @@
 "yes" = "כן";
 "permissions_denied_add_contact" = "אפשר הרשאה לגשת לאנשי הקשר שלך.";
 "permissions_denied_qr_code" = "כדי לסרוק קוד QR, עליך לאפשר גישה למצלמה.";
-"permissions_rationale_msg_camera_and_audio" = "אלמנט זקוק להרשאה כדי לגשת למצלמה ולמיקרופון שלך כדי לבצע שיחות וידאו.
-\n
-\nאנא אפשר גישה בחלונות הקופצים הבאים כדי להיות מסוגל לבצע את השיחה.";
+"permissions_rationale_msg_camera_and_audio" = "אלמנט זקוק להרשאה כדי לגשת למצלמה ולמיקרופון שלך כדי לבצע שיחות וידאו.\n\nאנא אפשר גישה בחלונות הקופצים הבאים כדי להיות מסוגל לבצע את השיחה.";
 "permissions_rationale_msg_record_audio" = "אלמנט זקוק להרשאה כדי לגשת למיקרופון שלך כדי לבצע שיחות שמע.";
 "permissions_rationale_popup_title" = "מידע";
 "call_error_user_not_responding" = "הצד המרוחק לא הצליח להרים.";
@@ -195,8 +190,7 @@
 "settings_notifications_targets" = "יעדי התראות";
 "settings_cryptography_manage_keys" = "ניהול מפתחות קריפטוגרפיה";
 "settings_cryptography" = "קריפטוגרפיה";
-"settings_integrations_summary" = "השתמש במנהל אינטגרציה כדי לנהל בוטים, גשרים, ווידג\'טים וחבילות מדבקות.
-\nמנהלי אינטגרציה מקבלים נתוני תצורה, ויכולים לשנות ווידג\'טים, לשלוח הזמנות לחדר ולהגדיר רמות כוח בשמך.";
+"settings_integrations_summary" = "השתמש במנהל אינטגרציה כדי לנהל בוטים, גשרים, ווידג\'טים וחבילות מדבקות.\nמנהלי אינטגרציה מקבלים נתוני תצורה, ויכולים לשנות ווידג\'טים, לשלוח הזמנות לחדר ולהגדיר רמות כוח בשמך.";
 "settings_integrations" = "אינטגרציות";
 "settings_advanced" = "מתקדם";
 "settings_other" = "אחר";
@@ -217,11 +211,9 @@
 "settings_start_on_boot" = "החל באתחול";
 "settings_background_fdroid_sync_mode_disabled_description" = "לא תקבל הודעה על הודעות נכנסות כאשר האפליקציה ברקע.";
 "settings_background_fdroid_sync_mode_disabled" = "אין סנכרון רקע";
-"settings_background_fdroid_sync_mode_real_time_description" = "אלמנט יסונכרן ברקע מעת לעת בזמן מדויק (ניתן להגדרה).
-\nזה ישפיע על השימוש ברדיו ובסוללה, תוצג הודעה קבועה לפיה אלמנט מאזין לאירועים.";
+"settings_background_fdroid_sync_mode_real_time_description" = "אלמנט יסונכרן ברקע מעת לעת בזמן מדויק (ניתן להגדרה).\nזה ישפיע על השימוש ברדיו ובסוללה, תוצג הודעה קבועה לפיה אלמנט מאזין לאירועים.";
 "settings_background_fdroid_sync_mode_real_time" = "מותאם לזמן אמת";
-"settings_background_fdroid_sync_mode_battery_description" = "אלמנט יסונכרן ברקע באופן שישמור על המשאבים המוגבלים של המכשיר (סוללה).
-\nבהתאם למצב משאבי המכשיר שלך, ייתכן שהסנכרון יידחה על ידי מערכת ההפעלה.";
+"settings_background_fdroid_sync_mode_battery_description" = "אלמנט יסונכרן ברקע באופן שישמור על המשאבים המוגבלים של המכשיר (סוללה).\nבהתאם למצב משאבי המכשיר שלך, ייתכן שהסנכרון יידחה על ידי מערכת ההפעלה.";
 "settings_background_fdroid_sync_mode_battery" = "מותאם לסוללה";
 "settings_background_fdroid_sync_mode" = "מצב סנכרון רקע";
 "settings_background_sync" = "סנכרון רקע";
@@ -244,11 +236,8 @@
 "settings_troubleshoot_test_battery_success" = "אלמנט אינו מושפע מתהליך מיטוב הסוללה.";
 "settings_troubleshoot_test_battery_title" = "אופטימיזציה של הסוללה";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "השבת הגבלות";
-"settings_troubleshoot_test_bg_restricted_failed" = "מגבלות רקע מופעלות עבור Element.
-\nהעבודה שהאפליקציה מנסה לעשות תוגבל באגרסיביות בזמן שהיא ברקע, וזה עלול להשפיע על ההודעות.
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_success" = "מגבלות רקע מושבתות עבור Element. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "מגבלות רקע מופעלות עבור Element.\nהעבודה שהאפליקציה מנסה לעשות תוגבל באגרסיביות בזמן שהיא ברקע, וזה עלול להשפיע על ההודעות.\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "מגבלות רקע מושבתות עבור Element. יש להריץ בדיקה זו באמצעות נתונים ניידים (ללא WIFI).\n%1$@";
 "settings_troubleshoot_test_bg_restricted_title" = "בדוק מגבלות רקע";
 "settings_troubleshoot_test_service_boot_quickfix" = "הפעל את התחלה לאחר אתחול";
 "settings_troubleshoot_test_service_boot_failed" = "השירות לא יופעל עם הפעלת המכשיר מחדש, לא תקבל התראות עד שאלמנט ייפתח לפחות פעם אחת.";
@@ -262,25 +251,18 @@
 "settings_troubleshoot_test_push_loop_title" = "בדיקת שליחה בדחיפה (PUSH)";
 "settings_troubleshoot_test_push_loop_success" = "היישום מקבל PUSH";
 "settings_troubleshoot_test_push_loop_waiting_for_push" = "היישום ממתין ל- PUSH";
-"settings_troubleshoot_test_token_registration_failed" = "רישום אסימון FCM לשרת הבית נכשל:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "רישום אסימון FCM לשרת הבית נכשל:\n%1$@";
 "settings_troubleshoot_test_token_registration_success" = "אסימון FCM נרשם בהצלחה לשרת הבית.";
 "settings_troubleshoot_test_token_registration_title" = "רישום אסימונים";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "הוסף חשבון";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nשגיאה זו אינה בשליטה על אלמנט. אין חשבון Google בטלפון. אנא פתח את מנהל החשבון והוסף חשבון Google.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nשגיאה זו אינה בשליטה על אלמנט. זה יכול להתרחש מכמה סיבות. אולי זה יעבוד אם תנסה שוב מאוחר יותר, תוכל גם לבדוק ששירות Google Play אינו מוגבל בשימוש נתונים בהגדרות המערכת, או ששעון המכשיר שלך תקין, או שזה יכול לקרות ב- ROM מותאם אישית.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nשגיאה זו איננה בשליטה על Element ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.";
-"settings_troubleshoot_test_fcm_failed" = "נכשל באחזור אסימון FCM:
-\n%1$@";
-"settings_troubleshoot_test_fcm_success" = "אסימון FCM אוחזר בהצלחה:
-\n%1$@";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nשגיאה זו אינה בשליטה על אלמנט. אין חשבון Google בטלפון. אנא פתח את מנהל החשבון והוסף חשבון Google.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nשגיאה זו אינה בשליטה על אלמנט. זה יכול להתרחש מכמה סיבות. אולי זה יעבוד אם תנסה שוב מאוחר יותר, תוכל גם לבדוק ששירות Google Play אינו מוגבל בשימוש נתונים בהגדרות המערכת, או ששעון המכשיר שלך תקין, או שזה יכול לקרות ב- ROM מותאם אישית.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nשגיאה זו איננה בשליטה על Element ולפי גוגל, שגיאה זו מצביעה על כך שלמכשיר יש יותר מדי אפליקציות הרשומות ב- FCM. השגיאה מתרחשת רק במקרים שבהם ישנם מספרים קיצוניים של אפליקציות, כך שהיא לא אמורה להשפיע על המשתמש הממוצע.";
+"settings_troubleshoot_test_fcm_failed" = "נכשל באחזור אסימון FCM:\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "אסימון FCM אוחזר בהצלחה:\n%1$@";
 "settings_troubleshoot_test_fcm_title" = "אסימון Firebase";
 "settings_troubleshoot_test_play_services_quickfix" = "תקן שירותי Google Play";
-"settings_troubleshoot_test_play_services_failed" = "אלמנט משתמש בשירותי Google Play כדי להעביר הודעות פוש אך נראה שהוא אינו מוגדר כהלכה:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "אלמנט משתמש בשירותי Google Play כדי להעביר הודעות פוש אך נראה שהוא אינו מוגדר כהלכה:\n%1$@";
 "settings_troubleshoot_test_play_services_success" = "ה- APK של שירותי Google Play זמין ומעודכן.";
 "settings_troubleshoot_test_play_services_title" = "בדיקת שירותי הפעלה";
 "search_no_results" = "אין תוצאות";
@@ -307,9 +289,7 @@
 "room_participants_unban_title" = "הסר נידוי ממשתמש";
 "room_participants_ban_reason" = "סיבות לנידוי";
 "room_participants_ban_title" = "נדה משתמש";
-"room_participants_remove_prompt_msg" = "משתמש מעיף יסיר אותם מחדר זה.
-\n
-\nכדי למנוע מהם להצטרף שוב, עליך לאסור אותם במקום זאת.";
+"room_participants_remove_prompt_msg" = "משתמש מעיף יסיר אותם מחדר זה.\n\nכדי למנוע מהם להצטרף שוב, עליך לאסור אותם במקום זאת.";
 "room_participants_remove_reason" = "סיבות להעפה";
 "room_participants_remove_title" = "העף משתמש";
 "room_participants_action_cancel_invite_prompt_msg" = "האם אתה בטוח שברצונך לבטל את ההזמנה עבור משתמש זה\?";
@@ -318,15 +298,12 @@
 "room_participants_action_unignore_prompt_msg" = "ביטול חתימת משתמש זה יציג את כל ההודעות מהם שוב.";
 "room_participants_action_unignore_title" = "הסרת התעלמות ממשתמש";
 "room_participants_action_ignore" = "התעלם";
-"room_participants_action_ignore_prompt_msg" = "התעלמות ממשתמש זה תסיר את ההודעות שלו מחדרים שאתה משתף.
-\n
-\nאתה יכול להפוך פעולה זו בכל עת בהגדרות הכלליות.";
+"room_participants_action_ignore_prompt_msg" = "התעלמות ממשתמש זה תסיר את ההודעות שלו מחדרים שאתה משתף.\n\nאתה יכול להפוך פעולה זו בכל עת בהגדרות הכלליות.";
 "room_participants_action_ignore_title" = "התעלם ממשתמש";
 "room_participants_power_level_demote" = "לְהוֹרִיד בְּדַרגָה";
 "room_participants_power_level_demote_warning_prompt" = "לא תוכל לבטל את השינוי הזה מכיוון שאתה מוריד את עצמך בדרגה, אם אתה המשתמש המיועד האחרון בחדר, אי אפשר יהיה להחזיר לו הרשאות.";
 "room_participants_power_level_demote_warning_title" = "להוריד את עצמך\?";
-"room_participants_power_level_prompt" = "לא תוכל לבטל את השינוי הזה מכיוון שאתה מקדם את המשתמש לאותה רמת כוח כמוך.
-\nהאם אתה בטוח\?";
+"room_participants_power_level_prompt" = "לא תוכל לבטל את השינוי הזה מכיוון שאתה מקדם את המשתמש לאותה רמת כוח כמוך.\nהאם אתה בטוח\?";
 "room_participants_action_mention" = "אזכר";
 "room_participants_action_remove" = "העף";
 "room_participants_action_unban" = "הסרת התעלמות";
@@ -338,18 +315,15 @@
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "שים לב שחלק מסוגי ההודעות מוגדרים כשתיקים (יפיקו התראה ללא צליל).";
 "settings_troubleshoot_test_bing_settings_title" = "הגדרות מותאמות אישית.";
 "settings_troubleshoot_test_device_settings_quickfix" = "אפשר";
-"settings_troubleshoot_test_device_settings_failed" = "התראות אינן מופעלות עבור הפעלה זו.
-\nאנא בדוק את הגדרות האלמנט.";
+"settings_troubleshoot_test_device_settings_failed" = "התראות אינן מופעלות עבור הפעלה זו.\nאנא בדוק את הגדרות האלמנט.";
 "settings_troubleshoot_test_device_settings_success" = "התראות מופעלות להפעלה זו.";
 "settings_troubleshoot_test_device_settings_title" = "הגדרות מושב.";
 "settings_troubleshoot_test_account_settings_quickfix" = "אפשר";
-"settings_troubleshoot_test_account_settings_failed" = "התראות מושבתות עבור חשבונך.
-\nאנא בדוק את הגדרות החשבון.";
+"settings_troubleshoot_test_account_settings_failed" = "התראות מושבתות עבור חשבונך.\nאנא בדוק את הגדרות החשבון.";
 "settings_troubleshoot_test_account_settings_success" = "התראות מופעלות עבור חשבונך.";
 "settings_troubleshoot_test_account_settings_title" = "הגדרות חשבון.";
 "open_settings" = "פתח את ההגדרות";
-"settings_troubleshoot_test_system_settings_failed" = "התראות מושבתות בהגדרות המערכת.
-\nאנא בדוק את הגדרות המערכת.";
+"settings_troubleshoot_test_system_settings_failed" = "התראות מושבתות בהגדרות המערכת.\nאנא בדוק את הגדרות המערכת.";
 "settings_troubleshoot_test_system_settings_success" = "התראות מופעלות בהגדרות המערכת.";
 "settings_troubleshoot_test_system_settings_title" = "הגדרות מערכת.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "בדיקה אחת או יותר נכשלו, אנא שלח דו\"ח שגיאה שיעזור לנו לחקור זאת.";
@@ -377,15 +351,9 @@
 "room_participants_leave_prompt_msg" = "האם ברצונך לעזוב את החדר\?";
 "room_participants_leave_prompt_title" = "עזוב חדר";
 "start_verification" = "התחל אימות";
-"your_unverified_device_requesting_with_info" = "מושב לא מאומת מבקש מפתחות הצפנה.
-\nשם מושב: %1$@
-\nנראה לאחרונה: %2$@
-\nאם לא נכנסת למפגש אחר, התעלם מבקשה זו.";
+"your_unverified_device_requesting_with_info" = "מושב לא מאומת מבקש מפתחות הצפנה.\nשם מושב: %1$@\nנראה לאחרונה: %2$@\nאם לא נכנסת למפגש אחר, התעלם מבקשה זו.";
 "your_unverified_device_requesting" = "ההפעלה \'%@\' לא מאומתת מבקשת מפתחות הצפנה.";
-"you_added_a_new_device_with_info" = "מושב חדש מבקש מפתחות הצפנה.
-\nשם מושב: %1$@
-\nנראה לאחרונה: %2$@
-\nאם לא נכנסת למפגש אחר, התעלם מבקשה זו.";
+"you_added_a_new_device_with_info" = "מושב חדש מבקש מפתחות הצפנה.\nשם מושב: %1$@\nנראה לאחרונה: %2$@\nאם לא נכנסת למפגש אחר, התעלם מבקשה זו.";
 "you_added_a_new_device" = "הוספת מושב חדש \'%@\', המבקש מפתחות הצפנה.";
 "widget_integration_review_terms" = "כדי להמשיך עליך לקבל את תנאי השירות הזה.";
 "settings_labs_native_camera_summary" = "הפעל את מצלמת המערכת במקום את מסך המצלמה המותאם אישית.";
@@ -525,9 +493,7 @@
 "settings_select_country" = "בחר\\י מדינה";
 "settings_emails_and_phone_numbers_summary" = "נהל מיילים ומספרי טלפון המקושרים לחשבון מטריקס שלך";
 "settings_emails_and_phone_numbers_title" = "דוא\"ל ומספר טלפון";
-"settings_unignore_user" = "הצג את כל ההודעות מ- %@\?
-\n
-\nשים לב שפעולה זו תפעיל מחדש את האפליקציה והיא עשויה להימשך זמן מה.";
+"settings_unignore_user" = "הצג את כל ההודעות מ- %@\?\n\nשים לב שפעולה זו תפעיל מחדש את האפליקציה והיא עשויה להימשך זמן מה.";
 "settings_password_updated" = "הסיסמה שלכם עודכנה";
 "settings_fail_to_update_password_invalid_current_password" = "הסיסמה אינה תקינה";
 "settings_fail_to_update_password" = "עדכון הסיסמה נכשל";
@@ -537,24 +503,19 @@
 "settings_password" = "סיסמה";
 "keys_backup_setup_step3_button_title" = "הסתיים";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "שמור על מפתח התאוששות שלך במקום כלשהו מאובטח מאוד, כמו מנהל סיסמאות (או כספת)";
-"keys_backup_setup_step3_text_line2" = "מפתח השחזור שלך הוא רשת ביטחון - אתה יכול להשתמש בו כדי להחזיר את הגישה להודעות המוצפנות שלך אם תשכח את משפט הסיסמה שלך.
-\nשמור על מפתח התאוששות שלך במקום כלשהו מאובטח מאוד, כמו מנהל סיסמאות (או כספת)";
+"keys_backup_setup_step3_text_line2" = "מפתח השחזור שלך הוא רשת ביטחון - אתה יכול להשתמש בו כדי להחזיר את הגישה להודעות המוצפנות שלך אם תשכח את משפט הסיסמה שלך.\nשמור על מפתח התאוששות שלך במקום כלשהו מאובטח מאוד, כמו מנהל סיסמאות (או כספת)";
 "keys_backup_setup_step3_text_line1" = "המפתחות שלך מגובים.";
 "keys_backup_setup_step3_success_title" = "הצלחה!";
 "keys_backup_setup_step2_skip_button_title" = "(מתקדם) הגדר עם מפתח השחזור";
 "keys_backup_setup_step1_recovery_key_alternative" = "לחלופין, אבטח את הגיבוי שלך באמצעות מפתח שחזור ושמור אותו במקום בטוח.";
 "keys_backup_setup_creating_backup" = "יוצר גיבוי";
 "keys_backup_setup_step2_button_title" = "הגדר ביטוי";
-"keys_backup_setup_step2_text_description" = "אנו נאחסן עותק מוצפן של המפתחות שלך בשרת הבית שלך. הגן על הגיבוי שלך באמצעות משפט סיסמה כדי לשמור על אבטחתו.
-\n
-\nליתר ביטחון, זה צריך להיות שונה מסיסמת החשבון שלך.";
+"keys_backup_setup_step2_text_description" = "אנו נאחסן עותק מוצפן של המפתחות שלך בשרת הבית שלך. הגן על הגיבוי שלך באמצעות משפט סיסמה כדי לשמור על אבטחתו.\n\nליתר ביטחון, זה צריך להיות שונה מסיסמת החשבון שלך.";
 "keys_backup_setup_step2_text_title" = "אבטח את הגיבוי שלך באמצעות משפט סיסמה.";
 "keys_backup_setup_step1_manual_export" = "ייצא ידנית מפתחות";
 "keys_backup_setup_step1_advanced" = "(מתקדם)";
 "keys_backup_setup" = "התחל להשתמש בגיבוי מקשים";
-"keys_backup_setup_step1_description" = "הודעות בחדרים מוצפנים מאובטחות באמצעות הצפנה מקצה לקצה. רק אתה והנמען / ים יש את המקשים לקריאת ההודעות האלה.
-\n
-\nגבה את המפתחות שלך בצורה מאובטחת כדי לא לאבד אותם.";
+"keys_backup_setup_step1_description" = "הודעות בחדרים מוצפנים מאובטחות באמצעות הצפנה מקצה לקצה. רק אתה והנמען / ים יש את המקשים לקריאת ההודעות האלה.\n\nגבה את המפתחות שלך בצורה מאובטחת כדי לא לאבד אותם.";
 "keys_backup_setup_step1_title" = "לעולם אל תאבד הודעות מוצפנות";
 "keys_backup_passphrase_not_empty_error_message" = "אנא מחק את משפט הסיסמה אם ברצונך ש- Element ייצור מפתח שחזור.";
 "passphrase_passphrase_too_weak" = "משפט הסיסמה חלש מדי";
@@ -572,9 +533,9 @@
 "resource_limit_hard_contact" = "אנא %@ להמשיך להשתמש בשירות זה.";
 "resource_limit_soft_contact" = "אנא %@ כדי להגדיל מגבלה זו.";
 "resource_limit_hard_mau" = "שרת בית זה הגיע למגבלת המשתמשים הפעילים החודשיים שלו.";
-"resource_limit_soft_mau.b_0" = " חלק מהמשתמשים לא יוכלו להתחבר ";
+"resource_limit_soft_mau" = "שרת בית זה הגיע למגבלת המשתמשים הפעילים החודשיים כך ש <b> חלק מהמשתמשים לא יוכלו להתחבר </b>.";
 "resource_limit_hard_default" = "שרת בית זה חרג מאחד ממגבלות המשאבים שלו.";
-"resource_limit_soft_default.b_0" = " משתמשים מסוימים לא יוכלו להתחבר ";
+"resource_limit_soft_default" = "שרת בית זה חרג מאחד ממגבלות המשאבים שלו כך ש <b> משתמשים מסוימים לא יוכלו להתחבר </b>.";
 "resource_limit_contact_admin" = "פנה למנהל השירות שלך";
 "room_tombstone_predecessor_link" = "לחץ כאן לצפייה בהודעות ישנות יותר";
 "room_tombstone_continuation_description" = "החדר הזה הוא המשך לשיחה אחרת";
@@ -584,8 +545,7 @@
 "error_empty_field_enter_user_name" = "אהא הזינו שם משתמש.";
 "deactivate_account_submit" = "השבת חשבון";
 "deactivate_account_delete_checkbox" = "אנא שכח את כל ההודעות ששלחתי כאשר חשבוני מושבת (אזהרה: הדבר יגרום למשתמשים עתידיים לראות תצוגה חלקית של השיחות)";
-"deactivate_account_content.b_0" = " פעולה זו היא בלתי הפיכה ";
-"deactivate_account_content.b_1" = " אינה גורמת לנו כברירת מחדל לשכוח הודעות ששלחת ";
+"deactivate_account_content" = "זה יהפוך את חשבונך ללא שימוש לצמיתות. לא תוכל להתחבר, ואף אחד לא יוכל לרשום מחדש את אותו מזהה משתמש. הדבר יביא לחשבונך לעזוב את כל החדרים בהם הוא משתתף, והוא יסיר את פרטי חשבונך משרת הזהות שלך. <b> פעולה זו היא בלתי הפיכה </b>.\n\nהשבתת חשבונך <b> אינה גורמת לנו כברירת מחדל לשכוח הודעות ששלחת </b>. אם תרצה שנשכח את ההודעות שלך, סמן את התיבה למטה.\n\nנראות ההודעות במטריקס דומה לדוא\"ל. המשמעות של שכחת ההודעות שלך היא שהודעות ששלחת לא ישותפו עם משתמשים חדשים או לא רשומים, אך למשתמשים רשומים שכבר יש גישה להודעות אלה עדיין תהיה גישה להעתק שלהם.";
 "deactivate_account_title" = "השבת חשבון";
 "dialog_user_consent_submit" = "בדוק כעת";
 "dialog_user_consent_content" = "כדי להמשיך להשתמש בשרת הבית %1$@ עליך לבדוק ולהסכים לתנאים ולהגבלות.";
@@ -706,12 +666,7 @@
 "sent_an_audio_file" = "קול";
 "sent_an_image" = "תמונה.";
 "sent_a_video" = "וידאו.";
-"verification_conclusion_compromised" = "אחד מהדברים הבאים עלול להתפשר:
-\n
-\n - שרת הבית שלך
-\n - שרת הבית שהמשתמש שאתה מאמת מחובר אליו
-\n - שלך, או חיבור האינטרנט של המשתמשים האחרים
-\n - שלך, או המכשיר של המשתמשים האחרים";
+"verification_conclusion_compromised" = "אחד מהדברים הבאים עלול להתפשר:\n\n - שרת הבית שלך\n - שרת הבית שהמשתמש שאתה מאמת מחובר אליו\n - שלך, או חיבור האינטרנט של המשתמשים האחרים\n - שלך, או המכשיר של המשתמשים האחרים";
 "verification_conclusion_not_secure" = "לא מאובטח";
 "verification_sas_do_not_match" = "הם לא תואמים";
 "verification_sas_match" = "הם מתאימים";
@@ -744,16 +699,12 @@
 "notification_initial_sync" = "סנכרון ראשוני …";
 "bug_report_error_too_short" = "התיאור קצר מדי";
 "permalink_malformed" = "הקישור שלך ל- matrix.to היה תקין";
-"soft_logout_sso_not_same_user_error" = "ההפעלה הנוכחית מיועדת למשתמש %1$@ ואתה מספק אישורי משתמש %2$@. זה אינו נתמך על ידי אלמנט.
-\nראשית נקה נתונים ואז היכנס שוב לחשבון אחר.";
+"soft_logout_sso_not_same_user_error" = "ההפעלה הנוכחית מיועדת למשתמש %1$@ ואתה מספק אישורי משתמש %2$@. זה אינו נתמך על ידי אלמנט.\nראשית נקה נתונים ואז היכנס שוב לחשבון אחר.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "תאבד את הגישה להודעות מאובטחות אלא אם תיכנס בכדי לשחזר את מפתחות ההצפנה שלך.";
-"soft_logout_clear_data_dialog_content" = "למחוק את כל הנתונים השמורים כעת במכשיר זה\?
-\nהיכנס שוב כדי לגשת לנתוני החשבון ולהודעות שלך.";
+"soft_logout_clear_data_dialog_content" = "למחוק את כל הנתונים השמורים כעת במכשיר זה\?\nהיכנס שוב כדי לגשת לנתוני החשבון ולהודעות שלך.";
 "soft_logout_clear_data_dialog_title" = "נקה נתונים";
 "soft_logout_clear_data_submit" = "נקה את כל הנתונים";
-"soft_logout_clear_data_notice" = "אזהרה: הנתונים האישיים שלך (כולל מפתחות הצפנה) עדיין שמורים במכשיר זה.
-\n
-\nנקה אותה אם סיימת להשתמש במכשיר זה, או אם ברצונך להיכנס לחשבון אחר.";
+"soft_logout_clear_data_notice" = "אזהרה: הנתונים האישיים שלך (כולל מפתחות הצפנה) עדיין שמורים במכשיר זה.\n\nנקה אותה אם סיימת להשתמש במכשיר זה, או אם ברצונך להיכנס לחשבון אחר.";
 "soft_logout_clear_data_title" = "נקה מידע אישי";
 "soft_logout_signin_password_hint" = "סיסמה";
 "soft_logout_signin_submit" = "כניסה";
@@ -762,13 +713,7 @@
 "soft_logout_signin_title" = "כניסה";
 "soft_logout_title" = "התנתקתם";
 "signed_out_submit" = "התחבר שוב";
-"signed_out_notice" = "זה יכול להיות מסיבות שונות:
-\n
-\n• שינית את הסיסמה שלך בפגישה אחרת.
-\n
-\n• מחקת את ההפעלה הזו מהפעלה אחרת.
-\n
-\n• מנהל השרת שלך ביטל את גישתך מסיבות אבטחה.";
+"signed_out_notice" = "זה יכול להיות מסיבות שונות:\n\n• שינית את הסיסמה שלך בפגישה אחרת.\n\n• מחקת את ההפעלה הזו מהפעלה אחרת.\n\n• מנהל השרת שלך ביטל את גישתך מסיבות אבטחה.";
 "signed_out_title" = "התנתקתם";
 "seen_by" = "נראה על ידי";
 "autodiscover_well_known_error" = "לא ניתן למצוא שרת בית חוקי. אנא בדוק את המזהה שלך";
@@ -781,17 +726,14 @@
 "login_error_outdated_homeserver_warning_content" = "שרת בית זה מריץ גרסה ישנה. בקש ממנהל שרת הבית שלך לשדרג. אתה יכול להמשיך, אך ייתכן שתכונות מסוימות לא יפעלו כהלכה.";
 "login_error_outdated_homeserver_title" = "שרת בית מיושן";
 "login_validation_code_is_not_correct" = "הקוד שהוזן אינו נכון. בבקשה תבדוק.";
-"login_wait_for_email_notice" = "פשוט שלחנו אימייל ל- %1$@.
-\nאנא לחץ על הקישור שהוא מכיל להמשך יצירת החשבון.";
+"login_wait_for_email_notice" = "פשוט שלחנו אימייל ל- %1$@.\nאנא לחץ על הקישור שהוא מכיל להמשך יצירת החשבון.";
 "login_wait_for_email_title" = "אנא בדוק את הדוא\"ל שלך";
 "login_terms_title" = "קבל תנאים להמשך";
 "login_a11y_captcha_container" = "אנא בצע את אתגר ה- captcha";
 "login_a11y_choose_other" = "בחר שרת בית מותאם אישית";
 "login_a11y_choose_modular" = "בחר שירותי מטריקס אלמנט";
 "login_a11y_choose_matrix_org" = "בחר matrix.org";
-"login_signup_cancel_confirmation_content" = "חשבונך טרם נוצר.
-\n
-\nלהפסיק את תהליך ההרשמה\?";
+"login_signup_cancel_confirmation_content" = "חשבונך טרם נוצר.\n\nלהפסיק את תהליך ההרשמה\?";
 "login_signup_cancel_confirmation_title" = "אזהרה";
 "login_signup_error_user_in_use" = "שם המשתמש הזה תפוס";
 "login_signup_submit" = "הבא";
@@ -818,9 +760,7 @@
 "login_set_email_mandatory_hint" = "דוא\"ל";
 "login_set_email_notice" = "הגדר דוא\"ל לשחזור חשבונך. מאוחר יותר, באפשרותך לאפשר לאנשים שאתה מכיר לגלות אותך באמצעות הדוא\"ל שלך.";
 "login_set_email_title" = "הגדר כתובת דוא\"ל";
-"login_reset_password_cancel_confirmation_content" = "הסיסמה שלך טרם שונתה.
-\n
-\nלהפסיק את תהליך שינוי הסיסמה\?";
+"login_reset_password_cancel_confirmation_content" = "הסיסמה שלך טרם שונתה.\n\nלהפסיק את תהליך שינוי הסיסמה\?";
 "login_reset_password_cancel_confirmation_title" = "אזהרה";
 "login_reset_password_success_submit" = "חזרה לכניסה";
 "login_reset_password_success_notice_2" = "הוצאת אותך מכל ההפעלות ולא תקבל עוד התראות דחיפה. כדי להפעיל מחדש התראות, היכנס שוב בכל מכשיר.";
@@ -840,13 +780,9 @@
 "login_reset_password_notice" = "דוא\"ל אימות יישלח לתיבת הדואר הנכנס שלך כדי לאשר את הגדרת הסיסמה החדשה שלך.";
 "login_reset_password_on" = "אפס סיסמה ב- %1$@";
 "login_login_with_email_error" = "דוא\"ל זה אינו משויך לשום חשבון.";
-"login_registration_not_supported" = "היישום אינו מסוגל ליצור חשבון בשרת הבית הזה.
-\n
-\nהאם אתה רוצה להירשם באמצעות לקוח אינטרנט\?";
+"login_registration_not_supported" = "היישום אינו מסוגל ליצור חשבון בשרת הבית הזה.\n\nהאם אתה רוצה להירשם באמצעות לקוח אינטרנט\?";
 "login_registration_disabled" = "מצטערים, שרת זה אינו מקבל חשבונות חדשים.";
-"login_mode_not_supported" = "היישום אינו מסוגל להיכנס לשרת ביתי זה. שרת הבית תומך בסוגי הכניסה הבאים: %1$@.
-\n
-\nהאם אתה רוצה להיכנס באמצעות לקוח אינטרנט\?";
+"login_mode_not_supported" = "היישום אינו מסוגל להיכנס לשרת ביתי זה. שרת הבית תומך בסוגי הכניסה הבאים: %1$@.\n\nהאם אתה רוצה להיכנס באמצעות לקוח אינטרנט\?";
 "login_sso_error_message" = "אירעה שגיאה בעת טעינת הדף: %1$@ (%2$d)";
 "login_server_url_form_common_notice" = "הזן את כתובת השרת שבו ברצונך להשתמש";
 "login_server_url_form_modular_notice" = "הזן את כתובת האלמנט המודולרי או השרת שבו ברצונך להשתמש";
@@ -897,17 +833,11 @@
 "room_list_quick_actions_notifications_all" = "כל ההודעות";
 "room_list_quick_actions_notifications_all_noisy" = "כל ההודעות (רועשות)";
 "message_ignore_user" = "התעלם ממשתמש זה";
-"content_reported_as_inappropriate_content" = "תוכן זה דווח כבלתי הולם.
-\n
-\nאם אינך רוצה לראות תוכן נוסף ממשתמש זה, תוכל להתעלם ממנו כדי להסתיר את ההודעות שלו.";
+"content_reported_as_inappropriate_content" = "תוכן זה דווח כבלתי הולם.\n\nאם אינך רוצה לראות תוכן נוסף ממשתמש זה, תוכל להתעלם ממנו כדי להסתיר את ההודעות שלו.";
 "content_reported_as_inappropriate_title" = "דווח כבלתי הולם";
-"content_reported_as_spam_content" = "תוכן זה דווח כספאם.
-\n
-\nאם אינך רוצה לראות תוכן נוסף ממשתמש זה, תוכל להתעלם ממנו כדי להסתיר את ההודעות שלו.";
+"content_reported_as_spam_content" = "תוכן זה דווח כספאם.\n\nאם אינך רוצה לראות תוכן נוסף ממשתמש זה, תוכל להתעלם ממנו כדי להסתיר את ההודעות שלו.";
 "content_reported_as_spam_title" = "דווח כספאם";
-"content_reported_content" = "תוכן זה דווח.
-\n
-\nאם אינך רוצה לראות תוכן נוסף ממשתמש זה, תוכל להתעלם ממנו כדי להסתיר את ההודעות שלו.";
+"content_reported_content" = "תוכן זה דווח.\n\nאם אינך רוצה לראות תוכן נוסף ממשתמש זה, תוכל להתעלם ממנו כדי להסתיר את ההודעות שלו.";
 "content_reported_title" = "תוכן מדווח";
 "block_user" = "התעלם ממשתמש";
 "report_content_custom_submit" = "דיווח";
@@ -1026,12 +956,10 @@
 "navigate_to_room_when_already_in_the_room" = "אתה כבר צופה בחדר הזה!";
 "settings_other_third_party_notices" = "הודעות צד שלישי אחרות";
 "settings_sdk_version" = "גרסת SDK של מטריקס";
-"import_e2e_keys_from_file" = "ייבא מפתחות e2e מהקובץ \"%1$@\.";
+"import_e2e_keys_from_file" = "ייבא מפתחות e2e מהקובץ \"%1$@\".";
 "keys_backup_unable_to_get_keys_backup_data" = "אירעה שגיאה בקבלת נתוני גיבוי למפתחות";
 "keys_backup_unable_to_get_trust_info" = "אירעה שגיאה בקבלת פרטי אמון";
-"create_room_federation_error" = "החדר נוצר, אך כמה הזמנות לא נשלחו מהסיבה הבאה:
-\n
-\n%@";
+"create_room_federation_error" = "החדר נוצר, אך כמה הזמנות לא נשלחו מהסיבה הבאה:\n\n%@";
 "create_room_public_description" = "כל אחד יוכל להצטרף לחדר זה";
 "create_room_public_title" = "ציבורי";
 "room_member_power_level_admins" = "מנהלים";
@@ -1046,12 +974,8 @@
 "room_profile_section_more" = "עוד";
 "room_profile_section_security_learn_more" = "למד עוד";
 "room_profile_section_security" = "אבטחה";
-"direct_room_profile_encrypted_subtitle" = "ההודעות כאן מוצפנות מקצה לקצה.
-\n
-\nההודעות שלך מאובטחות במנעולים ורק לך ולמקבל יש את המפתחות הייחודיים לפתיחתם.";
-"room_profile_encrypted_subtitle" = "ההודעות בחדר זה מוצפנות מקצה לקצה.
-\n
-\nההודעות שלך מאובטחות במנעולים ורק לך ולמקבל יש את המפתחות הייחודיים לפתיחתם.";
+"direct_room_profile_encrypted_subtitle" = "ההודעות כאן מוצפנות מקצה לקצה.\n\nההודעות שלך מאובטחות במנעולים ורק לך ולמקבל יש את המפתחות הייחודיים לפתיחתם.";
+"room_profile_encrypted_subtitle" = "ההודעות בחדר זה מוצפנות מקצה לקצה.\n\nההודעות שלך מאובטחות במנעולים ורק לך ולמקבל יש את המפתחות הייחודיים לפתיחתם.";
 "direct_room_profile_not_encrypted_subtitle" = "ההודעות כאן אינן מוצפנות מקצה לקצה.";
 "room_profile_not_encrypted_subtitle" = "הודעות בחדר זה אינן מוצפנות מקצה לקצה.";
 "verification_request_waiting_for" = "ממתין ל- %@…";
@@ -1079,8 +1003,7 @@
 "fab_menu_create_chat" = "הודעות ישירות";
 "fab_menu_create_room" = "חדרים";
 "room_preview_no_preview_join" = "לא ניתן להציג תצוגה מקדימה של חדר זה. האם אתה רוצה להצטרף אליו\?";
-"room_preview_not_found" = "בשלב זה אין גישה לחדר זה.
-\nנסה שוב מאוחר יותר, או בקש ממנהל החדר לבדוק אם יש לך גישה.";
+"room_preview_not_found" = "בשלב זה אין גישה לחדר זה.\nנסה שוב מאוחר יותר, או בקש ממנהל החדר לבדוק אם יש לך גישה.";
 "room_preview_no_preview" = "לא ניתן להציג תצוגה מקדימה של חדר זה";
 "group_all_communities" = "כל הקהילות";
 "please_wait" = "אנא המתינו…";
@@ -1196,8 +1119,7 @@
 "login_social_signup_with" = "הירשם עם%@";
 "login_social_continue_with" = "המשך עם%@";
 "login_social_continue" = "או";
-"room_widget_failed_to_load" = "טעינת היישומון נכשלה.
-\n%@";
+"room_widget_failed_to_load" = "טעינת היישומון נכשלה.\n%@";
 "account_phone_number_already_used_error" = "מספר הטלפון הזה כבר נמצא בשימוש.";
 "account_email_already_used_error" = "כתובת דוא\"ל זו כבר נמצאת בשימוש.";
 "account_email_validation_message" = "אנא בדוק את הדוא\"ל שלך ולחץ על הקישור שהוא מכיל. לאחר שתסיים, לחץ על המשך.";
@@ -1252,9 +1174,7 @@
 "enter_secret_storage_invalid" = "לא ניתן למצוא סודות באחסון";
 "verification_use_passphrase" = "אם אינך יכול לגשת להפעלה קיימת";
 "verification_cannot_access_other_session" = "השתמש בביטוי סיסמה או מפתח שחזור";
-"delete_account_data_warning" = "למחוק את נתוני החשבון מסוג %1$@\?
-\n
-\nהשתמש בזהירות, זה עלול להוביל להתנהגות בלתי צפויה.";
+"delete_account_data_warning" = "למחוק את נתוני החשבון מסוג %1$@\?\n\nהשתמש בזהירות, זה עלול להוביל להתנהגות בלתי צפויה.";
 "settings_account_data" = "נתוני חשבון";
 "settings_security_pin_code_use_biometrics_title" = "אפשר ביומטריה";
 "settings_security_pin_code_summary" = "אם ברצונך לאפס את הקוד שלך, הקש על שכחת קוד כדי לצאת ולאפס.";
@@ -1302,13 +1222,9 @@
 "settings_active_sessions_list" = "מושבים אקטיביים";
 "settings_hs_admin_e2e_disabled" = "מנהל השרת שלך השבית הצפנה מקצה לקצה כברירת מחדל בחדרים פרטיים ובהודעות ישירות.";
 "encryption_information_dg_xsigning_disabled" = "חתימה צולבת אינה מופעלת";
-"encryption_information_dg_xsigning_not_trusted" = "חתימה צולבת מופעלת.
-\nלא סומכים על מקשים";
-"encryption_information_dg_xsigning_trusted" = "חתימה צולבת מופעלת
-\nמקשים מהימנים.
-\nמפתחות פרטיים אינם ידועים";
-"encryption_information_dg_xsigning_complete" = "חתימה צולבת מופעלת
-\nמפתחות פרטיים במכשיר.";
+"encryption_information_dg_xsigning_not_trusted" = "חתימה צולבת מופעלת.\nלא סומכים על מקשים";
+"encryption_information_dg_xsigning_trusted" = "חתימה צולבת מופעלת\nמקשים מהימנים.\nמפתחות פרטיים אינם ידועים";
+"encryption_information_dg_xsigning_complete" = "חתימה צולבת מופעלת\nמפתחות פרטיים במכשיר.";
 "encryption_information_cross_signing_state" = "חתימה צולבת";
 "verification_conclusion_ok_self_notice" = "ההפעלה החדשה שלך אומתה. יש לו גישה להודעות המוצפנות שלך, ומשתמשים אחרים יראו בכך אמינים.";
 "verification_conclusion_ok_notice" = "הודעות עם משתמש זה מוצפנות מקצה לקצה ולא ניתן לקרוא על ידי צדדים שלישיים.";
@@ -1325,8 +1241,7 @@
 "settings_category_timeline" = "ציר הזמן";
 "command_description_rainbow_emote" = "שולח את הטקסט הנתון בצבע קשת";
 "command_description_rainbow" = "שולח את ההודעה הנתונה בצבע קשת";
-"verify_cannot_cross_sign" = "הפעלה זו אינה יכולה לשתף את האימות הזה עם הפעלות אחרות שלך.
-\nהאימות יישמר באופן מקומי וישותף בגרסה עתידית של האפליקציה.";
+"verify_cannot_cross_sign" = "הפעלה זו אינה יכולה לשתף את האימות הזה עם הפעלות אחרות שלך.\nהאימות יישמר באופן מקומי וישותף בגרסה עתידית של האפליקציה.";
 "unignore" = "בטל התעלמות";
 "rendering_event_error_exception" = "אלמנט נתקל בבעיה בעת הצגת תוכן האירוע עם המזהה \'%1$@\'";
 "devices_details_last_seen_format" = "%1$@ @ %2$@";
@@ -1344,10 +1259,8 @@
 "command_description_discard_session" = "מכריח את ההפעלה הקבוצתית החוצה הנוכחית בחדר מוצפן להיזרק";
 "use_latest_app" = "השתמש באלמנט האחרון במכשירים האחרים שלך:";
 "or_other_mx_capable_client" = "או לקוח מטריקס אחר עם יכולת חתימה צולבת";
-"app_ios_android" = "אלמנט iOS
-\nאלמנט אנדרואיד";
-"app_desktop_web" = "רשת האינטרנט
-\nשולחן העבודה של אלמנט";
+"app_ios_android" = "אלמנט iOS\nאלמנט אנדרואיד";
+"app_desktop_web" = "רשת האינטרנט\nשולחן העבודה של אלמנט";
 "use_other_session_content_description" = "השתמש באלמנט העדכני ביותר במכשירים האחרים שלך, Element Web, Element Desktop, Element iOS, Element for Android, או לקוח מטריקס אחר עם יכולת חתימה צולבת";
 "change_password_summary" = "הגדר סיסמת חשבון חדשה …";
 "error_saving_media_file" = "לא ניתן היה לשמור את קובץ המדיה";
@@ -1399,15 +1312,11 @@
 "direct_room_encryption_enabled_tile_description" = "ההודעות בחדר זה מוצפנות מקצה לקצה.";
 "encryption_enabled_tile_description" = "ההודעות בחדר זה מוצפנות מקצה לקצה. למידע נוסף ואמת משתמשים בפרופיל שלהם.";
 "encryption_enabled" = "ההצפנה מופעלת";
-"bootstrap_cancel_text" = "אם תבטל עכשיו, אתה עלול לאבד הודעות ונתונים מוצפנים אם תאבד את הגישה לכניסות שלך.
-\n
-\nאתה יכול גם להגדיר גיבוי מאובטח ולנהל את המפתחות שלך בהגדרות.";
+"bootstrap_cancel_text" = "אם תבטל עכשיו, אתה עלול לאבד הודעות ונתונים מוצפנים אם תאבד את הגישה לכניסות שלך.\n\nאתה יכול גם להגדיר גיבוי מאובטח ולנהל את המפתחות שלך בהגדרות.";
 "bootstrap_crosssigning_save_cloud" = "העתק אותו לאחסון הענן האישי שלך";
 "bootstrap_crosssigning_save_usb" = "שמור אותו במפתח USB או בכונן גיבוי";
 "bootstrap_crosssigning_print_it" = "הדפיסו ואחסנו במקום בטוח";
-"bootstrap_cross_signing_success" = "%2$@ ו %1$@ מוגדרים כעת.
-\n
-\nתשמור עליהם! תזדקק להם בכדי לפתוח הודעות מוצפנות ומידע מאובטח אם תאבד את כל ההפעלות הפעילות שלך.";
+"bootstrap_cross_signing_success" = "%2$@ ו %1$@ מוגדרים כעת.\n\nתשמור עליהם! תזדקק להם בכדי לפתוח הודעות מוצפנות ומידע מאובטח אם תאבד את כל ההפעלות הפעילות שלך.";
 "bootstrap_crosssigning_progress_key_backup" = "הגדרת גיבוי מקשים";
 "bootstrap_crosssigning_progress_save_ssk" = "סנכרון מפתח חתימה עצמית";
 "bootstrap_crosssigning_progress_save_usk" = "סנכרון מפתח משתמש";
@@ -1427,14 +1336,7 @@
 "recovery_passphrase" = "ביטוי סיסמה לשחזור";
 "verification_cancelled" = "האימות בוטל";
 "verify_cancelled_notice" = "אמת את המכשירים שלך מההגדרות.";
-"verify_not_me_self_verification" = "אחד מהדברים הבאים עלול להתפשר:
-\n
-\n- הסיסמה שלך
-\n- שרת הבית שלך
-\n- מכשיר זה, או המכשיר האחר
-\n- חיבור האינטרנט שמשני המכשירים משתמשים בו
-\n
-\nאנו ממליצים לך לשנות את הסיסמה ומפתח השחזור שלך בהגדרות באופן מיידי.";
+"verify_not_me_self_verification" = "אחד מהדברים הבאים עלול להתפשר:\n\n- הסיסמה שלך\n- שרת הבית שלך\n- מכשיר זה, או המכשיר האחר\n- חיבור האינטרנט שמשני המכשירים משתמשים בו\n\nאנו ממליצים לך לשנות את הסיסמה ומפתח השחזור שלך בהגדרות באופן מיידי.";
 "verify_cancel_other" = "לא תאמת את %1$@ (%2$@) אם תבטל עכשיו. התחל שוב בפרופיל המשתמש שלהם.";
 "create_pin_title" = "בחר PIN לאבטחה";
 "too_many_pin_failures" = "שגיאות רבות מדי, יצאת מהחשבון";
@@ -1515,9 +1417,7 @@
 "invite_users_to_room_action_invite" = "להזמין";
 "add_people" = "הוסף אנשים";
 "create_room_dm_failure" = "לא הצלחנו ליצור את ה- DM שלך. אנא בדוק את המשתמשים שברצונך להזמין ונסה שוב.";
-"external_link_confirmation_message" = "הקישור%1$@ מעביר אותך לאתר אחר:%2$@.
-\n
-\nהאם אתה בטוח שאתה רוצה להמשיך\?";
+"external_link_confirmation_message" = "הקישור%1$@ מעביר אותך לאתר אחר:%2$@.\n\nהאם אתה בטוח שאתה רוצה להמשיך\?";
 "external_link_confirmation_title" = "בדוק-פעמיים קישור זה";
 "error_empty_field_choose_password" = "אנא בחר סיסמה.";
 "error_empty_field_choose_user_name" = "אנא בחר שם משתמש.";
@@ -1616,27 +1516,16 @@
 "notice_room_invite_no_invitee_with_reason" = "ההזמנה של %1$@. סיבה: %2$@";
 "event_status_sending_message" = "הודעה נשלחת…";
 "event_status_sent_message" = "הודעה נשלחה";
-"initial_sync_start_importing_account_data" = "סנכרון ראשוני:
-\nייבוא נתוני חשבון";
-"initial_sync_start_importing_account_groups" = "סנכרון ראשוני:
-\nייבוא קהילות";
-"initial_sync_start_importing_account_left_rooms" = "סנכרון ראשוני:
-\nייבוא חדרים עזובים";
-"initial_sync_start_importing_account_invited_rooms" = "סנכרון ראשוני:
-\nייבוא חדרים מוזמנים";
-"initial_sync_start_importing_account_joined_rooms" = "סנכרון ראשוני:
-\nטוען את השיחות שלך
-\nאם הצטרפת להרבה חדרים, זה עשוי לקחת זמן מה";
-"initial_sync_start_importing_account_rooms" = "סנכרון ראשוני:
-\nייבוא חדרים";
-"initial_sync_start_importing_account_crypto" = "סנכרון ראשוני:
-\nייבוא קריפטו";
-"initial_sync_start_importing_account" = "סנכרון ראשוני:
-\nמייבא חשבון…";
-"initial_sync_start_downloading" = "סנכרון ראשוני:
-\nמוריד נתונים…";
-"initial_sync_start_server_computing" = "סנכרון ראשוני:
-\nממתין לתגובת השרת…";
+"initial_sync_start_importing_account_data" = "סנכרון ראשוני:\nייבוא נתוני חשבון";
+"initial_sync_start_importing_account_groups" = "סנכרון ראשוני:\nייבוא קהילות";
+"initial_sync_start_importing_account_left_rooms" = "סנכרון ראשוני:\nייבוא חדרים עזובים";
+"initial_sync_start_importing_account_invited_rooms" = "סנכרון ראשוני:\nייבוא חדרים מוזמנים";
+"initial_sync_start_importing_account_joined_rooms" = "סנכרון ראשוני:\nטוען את השיחות שלך\nאם הצטרפת להרבה חדרים, זה עשוי לקחת זמן מה";
+"initial_sync_start_importing_account_rooms" = "סנכרון ראשוני:\nייבוא חדרים";
+"initial_sync_start_importing_account_crypto" = "סנכרון ראשוני:\nייבוא קריפטו";
+"initial_sync_start_importing_account" = "סנכרון ראשוני:\nמייבא חשבון…";
+"initial_sync_start_downloading" = "סנכרון ראשוני:\nמוריד נתונים…";
+"initial_sync_start_server_computing" = "סנכרון ראשוני:\nממתין לתגובת השרת…";
 "room_displayname_empty_room_was" = "חדר ריק (היה %@)";
 "room_displayname_empty_room" = "חדר ריק";
 "room_displayname_4_members" = "%3$@, %2$@, %1$@ ו-%4$@";
@@ -1746,7 +1635,7 @@
 "room_settings_none" = "אף אחד";
 "room_settings_mention_and_keyword_only" = "אזכורים ומילות מפתח בלבד";
 "search_thread_from_a_thread" = "מתוך שרשור";
-"thread_list_empty_notice" = "טיפ: הקש ארוכות על הודעה והשתמש ב-\"%@\.";
+"thread_list_empty_notice" = "טיפ: הקש ארוכות על הודעה והשתמש ב-\"%@\".";
 "thread_list_empty_subtitle" = "שרשורים עוזרים לשמור על השיחות שלך בנושא וקל למעקב.";
 "thread_list_empty_title" = "שמור על דיונים מאורגנים באמצעות שרשורים";
 "thread_list_modal_my_threads_subtitle" = "מציג את כל השרשורים שבהם השתתפת";
@@ -1770,9 +1659,7 @@
 "room_unsupported_e2e_algorithm" = "ההצפנה הוגדרה בצורה שגויה כך שאינך יכול לשלוח הודעות. אנא צור קשר עם מנהל מערכת כדי לשחזר את ההצפנה למצב חוקי.";
 "space_participants_unban_prompt_msg" = "ביטול החסימה של המשתמש יאפשר לו להצטרף שוב למרחב.";
 "space_participants_ban_prompt_msg" = "חסימת משתמש תסיר אותם מהמרחב הזה ותמנע ממנו להצטרף שוב.";
-"space_participants_remove_prompt_msg" = "המשתמש יוסר מהמרחב הזה.
-\n
-\nכדי למנוע מהם להצטרף שוב, עליך לחסום אותם במקום זאת.";
+"space_participants_remove_prompt_msg" = "המשתמש יוסר מהמרחב הזה.\n\nכדי למנוע מהם להצטרף שוב, עליך לחסום אותם במקום זאת.";
 "call_remove_jitsi_widget_progress" = "מסיים שיחה…";
 "call_ended_invite_timeout_title" = "אין מענה";
 "call_ended_user_busy_description" = "המשתמש אליו התקשרת עסוק.";
@@ -2016,8 +1903,7 @@
 "this_space_has_no_rooms" = "בחלל זה אין חדרים";
 "spaces_no_server_support_description" = "אנא צור קשר עם מנהל השרת הביתי שלך לקבלת מידע נוסף";
 "spaces_no_server_support_title" = "נראה שהשרת הביתי שלך עדיין לא תומך במרחבים";
-"spaces_feeling_experimental_subspace" = "מרגיש ניסיוני\?
-\nניתן להוסיף חללים קיימים למרחב.";
+"spaces_feeling_experimental_subspace" = "מרגיש ניסיוני\?\nניתן להוסיף חללים קיימים למרחב.";
 "preference_show_all_rooms_in_home" = "הצג את כל החדרים בדף הבית";
 "all_rooms_youre_in_will_be_shown_in_home" = "כל החדרים שבהם אתה נמצא יוצגו בדף הבית.";
 "space_manage_rooms_and_spaces" = "ניהול חדרים ומרחבים";
@@ -2052,8 +1938,7 @@
 "discovery_invite" = "הזמן בדואר אלקטרוני, מצא אנשי קשר ועוד…";
 "finish_setting_up_discovery" = "סיים להגדיר את הגילוי.";
 "create_space_identity_server_info_none" = "אינך משתמש כעת בשרת זהות. על מנת להזמין חברים לצוות ולהיות ניתנים לגילוי על ידם, הגדר שרת זהות למטה.";
-"room_alias_preview_not_found" = "כינוי זה אינו נגיש בשלב זה.
-\nנסה שוב מאוחר יותר, או בקש ממנהל חדר לבדוק אם יש לך גישה.";
+"room_alias_preview_not_found" = "כינוי זה אינו נגיש בשלב זה.\nנסה שוב מאוחר יותר, או בקש ממנהל חדר לבדוק אם יש לך גישה.";
 "invite_just_to_this_room_desc" = "הם לא יהיו חלק מ-%@";
 "invite_just_to_this_room" = "רק לחדר הזה";
 "invite_to_space_with_name_desc" = "הם יוכלו לחקור את %@";
@@ -2111,14 +1996,12 @@
 "command_description_room_avatar" = "משנה את האווטר בחדר הנוכחי";
 "command_description_nick_for_room" = "משנה את הכינוי בחדר הנוכחי בלבד";
 "command_not_supported_in_threads" = "הפקודה \"%@\" מזוהה אך אינה נתמכת.";
-"analytics_opt_in_content" = "עזרו לנו לזהות ולשפר את %@ על ידי שיתוף השימוש בצורה אנונימי. להבנת השימוש של אנשים במכשירים שונים , אנחנו נחולל מזהה אקראי , אשר ישותף על ידי המכשירים שלך .
-\n
-\n ניתן לקרוא את כל התנאים %@.";
+"analytics_opt_in_content" = "עזרו לנו לזהות ולשפר את %@ על ידי שיתוף השימוש בצורה אנונימי. להבנת השימוש של אנשים במכשירים שונים , אנחנו נחולל מזהה אקראי , אשר ישותף על ידי המכשירים שלך .\n\n ניתן לקרוא את כל התנאים %@.";
 "decide_which_spaces_can_access" = "החליטו אילו מרחבים יכולים לגשת לחדר זה. אם מרחב נבחר חבריו יוכלו למצוא את שם החדר ולהצטרף אליו.";
 "room_create_member_of_space_name_can_join" = "חברים במרחב %@ יכולים למצוא , לצפות ולהצטרף.";
 "room_settings_room_access_restricted_description" = "כל מי שנמצא במרחב עם החדר הזה יכול למצוא אותו ולהצטרף אליו. רק מנהלי חדר זה יכולים להוסיף אותו למרחב.";
-"analytics_opt_in_list_item_2.b_0" = " לא ";
-"analytics_opt_in_list_item_1.b_0" = " לא";
+"analytics_opt_in_list_item_2" = "אנחנו <b> לא </b> משתפים מידע עם חברות צד שלישי";
+"analytics_opt_in_list_item_1" = "אנחנו <b> לא</b> מקליטים או עושים פרופיל מנתוני החשבון";
 "command_description_unignore_user" = "הפסק להתעלם ממשתמש , אשר הודעותיו נראות";
 "command_description_room_name" = "הגדר את שם החדר";
 "command_description_ignore_user" = "מתעלם ממשתמש, מסתיר ממך את ההודעות שלו";
@@ -2212,12 +2095,10 @@
 "contact_admin_to_restore_encryption" = "אנא צור קשר עם מנהל המערכת לשחזור ההצפנה למצב תקין .";
 "unnamed_room" = "חדר ללא שם";
 "this_space_has_no_rooms_admin" = "חלק מהחדרים עשויים להיות מוסתרים כי הם פרטיים ואתה זקוק להזמנה.";
-"this_space_has_no_rooms_not_admin" = "חלק מהחדרים עשויים להיות מוסתרים כי הם פרטיים ואתה זקוק להזמנה.
-\nאין לך הרשאה להוסיף חדרים.";
+"this_space_has_no_rooms_not_admin" = "חלק מהחדרים עשויים להיות מוסתרים כי הם פרטיים ואתה זקוק להזמנה.\nאין לך הרשאה להוסיף חדרים.";
 "poll_no_votes_cast" = "אין הצבעות";
 "link_this_email_with_your_account" = "%@ בהגדרות כדי לקבל הזמנות ישירות ב-%@.";
-"location_in_background_missing_permission_dialog_content" = "אם תרצה לשתף את המיקום החי שלך, %@ זקוק לגישה למיקום כל הזמן כשהאפליקציה נמצאת ברקע.
-\nאנו ניגשים למיקום שלך רק למשך הזמן שתבחר.";
+"location_in_background_missing_permission_dialog_content" = "אם תרצה לשתף את המיקום החי שלך, %@ זקוק לגישה למיקום כל הזמן כשהאפליקציה נמצאת ברקע.\nאנו ניגשים למיקום שלך רק למשך הזמן שתבחר.";
 "location_in_background_missing_permission_dialog_title" = "אפשר גישה";
 "a11y_location_share_option_pinned_icon" = "שתף מיקום זה";
 "location_share_option_pinned" = "שתף מיקום זה";
@@ -2229,197 +2110,9 @@
 "a11y_location_share_pin_on_map" = "קיבוע של המיקום שנבחר במפה";
 "location_share_live_stop" = "עצור";
 "location_share_live_enabled" = "מיקום בזמן אמת מופעל";
-"upgrade_room_warning" = "שדרוג חדר הוא פעולה מתקדמת ומומלץ לרוב כאשר החדר אינו יציב עקב באגים, תכונות חסרות או פרצות אבטחה.
-\nזה בדרך כלל משפיע רק על אופן עיבוד החדר בשרת.";
+"upgrade_room_warning" = "שדרוג חדר הוא פעולה מתקדמת ומומלץ לרוב כאשר החדר אינו יציב עקב באגים, תכונות חסרות או פרצות אבטחה.\nזה בדרך כלל משפיע רק על אופן עיבוד החדר בשרת.";
 "upgrade_room_for_restricted" = "כל מי שנמצא ב%@ יוכל למצוא או להצטרף לחדר- אין צורך להזמין משתתפים. ניתן לשנות את הגדרת החדר בכל זמן.";
 "labs_enable_latex_maths" = "אפשר LaTeX mathematics";
 "link_this_email_settings_link" = "שייך את הדואר האלקטרוני לחשבונך";
 "identity_server_consent_dialog_content_3" = "כדי לגלות אנשי קשר קיימים, עליך לשלוח פרטי איש קשר (אימייל ומספרי טלפון) לשרת הזהות שלך. אנו משייכים את הנתונים שלך לפני השליחה לצורך פרטיות.";
-"threads_notice_migration_message" = "אנחנו מתקרבים לשחרור גרסת ביטא ציבורית לשרשורים.
-\n
-\nבזמן שאנו מתכוננים לכך, עלינו לבצע מספר שינויים: שרשורים שנוצרו לפני נקודה זו יוצגו כתשובות רגילות.
-\n
-\nזה יהיה מעבר חד פעמי שכן שרשורים הם כעת חלק ממפרט Matrix.";
-"plurals.membership_changes.item_0" = "%d שינוי בפרט חברות";
-"plurals.membership_changes.item_1" = "%d שינוי בפרטי חברות";
-"plurals.membership_changes.item_2" = "%d שינוי בפרטי חברות";
-"plurals.membership_changes.item_3" = "%d שינוי בפרטי חברות";
-"plurals.seconds.item_0" = "%d שנייה";
-"plurals.seconds.item_1" = "%d שניות";
-"plurals.seconds.item_2" = "%d שניות";
-"plurals.seconds.item_3" = "%d שניות";
-"plurals.room_details_selected.item_0" = "%d נבחר";
-"plurals.room_details_selected.item_1" = "%d נבחרים";
-"plurals.room_details_selected.item_2" = "%d נבחרים";
-"plurals.room_details_selected.item_3" = "%d נבחרים";
-"plurals.room_new_messages_notification.item_0" = "%d הודעה חדשה";
-"plurals.room_new_messages_notification.item_1" = "d% הודעות חדשות";
-"plurals.room_new_messages_notification.item_2" = "%d הודעות חדשות";
-"plurals.room_new_messages_notification.item_3" = "%d הודעות חדשות";
-"plurals.room_title_members.item_0" = "%d חבר";
-"plurals.room_title_members.item_1" = "%d חברים";
-"plurals.room_title_members.item_2" = "%d חברים";
-"plurals.room_title_members.item_3" = "%d חברים";
-"plurals.active_widgets.item_0" = "%d יישומון פעיל";
-"plurals.active_widgets.item_1" = "%d ישומונים פעילים";
-"plurals.active_widgets.item_2" = "%d ישומונים פעילים";
-"plurals.active_widgets.item_3" = "%d ישומונים אחרים פעילים";
-"plurals.notification_compat_summary_title.item_0" = "התראה %d";
-"plurals.notification_compat_summary_title.item_1" = "התראות %d";
-"plurals.notification_compat_summary_title.item_2" = "התראות %d";
-"plurals.notification_compat_summary_title.item_3" = "התראות %d";
-"plurals.notification_compat_summary_line_for_room.item_0" = "הודעה %1$@: %2$d";
-"plurals.notification_compat_summary_line_for_room.item_1" = "הודעות %1$@: %2$d";
-"plurals.notification_compat_summary_line_for_room.item_2" = "הודעות מעטות %1$@: %2$d";
-"plurals.notification_compat_summary_line_for_room.item_3" = "הודעות אחרות %1$@: %2$d";
-"plurals.notification_invitations.item_0" = "%d הזמנה";
-"plurals.notification_invitations.item_1" = "%d הזמנות";
-"plurals.notification_invitations.item_2" = "%d הזמנות מעטות";
-"plurals.notification_invitations.item_3" = "%d הזמנות אחרות";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d חדר";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d חדרים";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_2" = "%d חדרים מועטים";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_3" = "%d חדרים אחרים";
-"plurals.notification_unread_notified_messages.item_0" = "הודעת התראה %d שלא נקראה";
-"plurals.notification_unread_notified_messages.item_1" = "%d הודעות התראה שלא נקראו";
-"plurals.notification_unread_notified_messages.item_2" = "%d הודעות התראה מעטות שלא נקראו";
-"plurals.notification_unread_notified_messages.item_3" = "%d הודעות התראה אחרות שלא נקראו";
-"plurals.encryption_import_room_keys_success.item_0" = "מפתח %1$d/%2$d מיובא בהצלחה.";
-"plurals.encryption_import_room_keys_success.item_1" = "מפתחות %1$d/%2$d יובאו בהצלחה.";
-"plurals.encryption_import_room_keys_success.item_2" = "מפתחות %1$d/%2$d מעטים יובאו בהצלחה.";
-"plurals.encryption_import_room_keys_success.item_3" = "מפתחות %1$d/%2$d אחרים יובאו בהצלחה.";
-"plurals.room_profile_section_more_member_list.item_0" = "אדם אחד";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d אנשים";
-"plurals.room_profile_section_more_member_list.item_2" = "%1$d אנשים";
-"plurals.room_profile_section_more_member_list.item_3" = "%1$d אנשים";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "יותר מדי בקשות נשלחו. תוכל לנסות שוב בעוד%1$d שנייה …";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …";
-"plurals.login_error_limit_exceeded_retry_after.item_2" = "יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …";
-"plurals.login_error_limit_exceeded_retry_after.item_3" = "יותר מדי בקשות נשלחו. תוכלו לנסות שוב בעוד%1$d שניות …";
-"plurals.fallback_users_read.item_0" = "משתמש %d קרא";
-"plurals.fallback_users_read.item_1" = "%d משתמשים קראו";
-"plurals.fallback_users_read.item_2" = "%d משתמשים קראו";
-"plurals.fallback_users_read.item_3" = "%d משתמשים קראו";
-"plurals.two_and_some_others_read.item_0" = "%1$@,%2$@ ו-%3$d אחרים קראו";
-"plurals.two_and_some_others_read.item_1" = "%1$@,%2$@ ו-%3$d אחרים קוראים";
-"plurals.two_and_some_others_read.item_2" = "%1$@,%2$@ ו-%3$d אחרים קוראים";
-"plurals.two_and_some_others_read.item_3" = "%1$@,%2$@ ו-%3$d אחרים קוראים";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "גיבוי המפתח%d …";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "גיבוי%d המפתחות …";
-"plurals.keys_backup_info_keys_backing_up.item_2" = "מגבה%d המפתחות …";
-"plurals.keys_backup_info_keys_backing_up.item_3" = "מגבה%d המפתחות …";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d מפתח חדש נוסף להפעלה זו.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d מפתחות חדשים נוספו להפעלה זו.";
-"plurals.keys_backup_restore_success_description_part2.item_2" = "%d מפתחות חדשים נוספו להפעלה זו.";
-"plurals.keys_backup_restore_success_description_part2.item_3" = "%d מפתחות חדשים נוספו להפעלה זו.";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "שוחזרו גיבויים עם %d מפתח.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "שוחזרו גיבויים עם מפתחות%d.";
-"plurals.keys_backup_restore_success_description_part1.item_2" = "שוחזרו גיבויים עם מפתחות%d.";
-"plurals.keys_backup_restore_success_description_part1.item_3" = "שוחזרו גיבויים עם מפתחות%d.";
-"plurals.room_settings_banned_users_count.item_0" = "%d משתמש חסום";
-"plurals.room_settings_banned_users_count.item_1" = "%d משתמשים חסומים";
-"plurals.room_settings_banned_users_count.item_2" = "%d משתמשים חסומים";
-"plurals.room_settings_banned_users_count.item_3" = "%d משתמשים אחרים שחסומים";
-"plurals.settings_active_sessions_count.item_0" = "%d מושב פעיל";
-"plurals.settings_active_sessions_count.item_1" = "%d מושבים פעילים";
-"plurals.settings_active_sessions_count.item_2" = "%d מושבים פעילים";
-"plurals.settings_active_sessions_count.item_3" = "%d מושבים פעילים";
-"plurals.send_images_with_original_size.item_0" = "שלח תמונה בגודל המקורי";
-"plurals.send_images_with_original_size.item_1" = "שלח תמוננות בגודל המקורי";
-"plurals.send_images_with_original_size.item_2" = "שלח תמונות בגודל המקורי";
-"plurals.send_images_with_original_size.item_3" = "שלח תמונות בגודל המקורי";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "קוד שגוי,%d ניסיון נוסף";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "קוד שגוי,%d ניסיונות נוספים";
-"plurals.wrong_pin_message_remaining_attempts.item_2" = "קוד שגוי,%d ניסיונות נוספים";
-"plurals.wrong_pin_message_remaining_attempts.item_3" = "קוד שגוי,%d ניסיונות נוספים";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "הזמנות נשלחו אל%1$@ ואחד נוסף";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "הזמנות נשלחו אל%1$@ ואחרים";
-"plurals.invitations_sent_to_one_and_more_users.item_2" = "הזמנות נשלחו אל%1$@ ואחרים";
-"plurals.invitations_sent_to_one_and_more_users.item_3" = "הזמנות נשלחו אל%1$@ ואחריםה";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "הראה את המכשיר שאיתו תוכל לאמת כעת";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "הראה את המכשירים שאיתם תוכל לאמת כעת";
-"plurals.secure_backup_reset_devices_you_can_verify.item_2" = "הראה את המכשירים שאיתם תוכל לאמת כעת";
-"plurals.secure_backup_reset_devices_you_can_verify.item_3" = "הראה את המכשירים שאיתם תוכל לאמת כעת";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ ו-%4$d אחר";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ ו-%4$d אחרים";
-"plurals.room_displayname_four_and_more_members.item_2" = "%1$@, %2$@, %3$@ ו-%4$d אחרים";
-"plurals.room_displayname_four_and_more_members.item_3" = "%1$@, %2$@, %3$@ ו-%4$d אחר";
-"plurals.missed_video_call.item_0" = "שיחת וידאו שלא נענתה";
-"plurals.missed_video_call.item_1" = "%d שיחות וידאו שלא נענו";
-"plurals.missed_video_call.item_2" = "%d שיחות וידאו שלא נענו";
-"plurals.missed_video_call.item_3" = "שיחת וידאו שלא נענתה";
-"plurals.missed_audio_call.item_0" = "שיחה שלא נענתה";
-"plurals.missed_audio_call.item_1" = "%d שיחות  שלא נענו";
-"plurals.missed_audio_call.item_2" = "%d שיחות  שלא נענו";
-"plurals.missed_audio_call.item_3" = "שיחה שלא נענתה";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "הסרת את הכתובת החלופית %1$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "הסרת את הכתובות החלופיות %1$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_2" = "הסרת את הכתובות החלופיות %1$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_3" = "הסרת את הכתובת החלופית %1$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ הסיר את הכתובת החלופית %2$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ הסיר את הכתובות החלופיות %2$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_2" = "%1$@ הסיר את הכתובות החלופיות %2$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_3" = "%1$@ הסיר את הכתובת החלופית %2$@ עבור החדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "הוספת את הכתובת החלופית %1$@ לחדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "הוספת את הכתובות החלופיות %1$@ לחדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_2" = "הוספת את הכתובות החלופיות %1$@ לחדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_3" = "הוספת את הכתובת החלופית %1$@ לחדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ הוסיף את הכתובת החלופית %2$@ לחדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ הוסיף את הכתובות החלופיות %2$@ לחדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added.item_2" = "%1$@ הוסיף את הכתובות החלופיות %2$@ לחדר הזה.";
-"plurals.notice_room_canonical_alias_alternative_added.item_3" = "%1$@ הוסיף את הכתובת החלופית %2$@ לחדר הזה.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "הסרת את %1$@ ככתובת לחדר הזה.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "הסרת את %1$@ ככתובות לחדר הזה.";
-"plurals.notice_room_aliases_removed_by_you.item_2" = "הסרת את %1$@ ככתובות לחדר הזה.";
-"plurals.notice_room_aliases_removed_by_you.item_3" = "הסרת את %1$@ ככתובת לחדר הזה.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ הסיר את %2$@ ככתובת לחדר הזה.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ הסיר את %2$@ ככתובות עבור החדר הזה.";
-"plurals.notice_room_aliases_removed.item_2" = "%1$@ הסיר את %2$@ ככתובות עבור החדר הזה.";
-"plurals.notice_room_aliases_removed.item_3" = "%1$@ הסיר את %2$@ ככתובת עבור החדר הזה.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "הוספת את %1$@ ככתובת לחדר הזה.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "הוספת את %1$@ ככתובות לחדר הזה.";
-"plurals.notice_room_aliases_added_by_you.item_2" = "הוספת את %1$@ ככתובות לחדר הזה.";
-"plurals.notice_room_aliases_added_by_you.item_3" = "הוספת את %1$@ ככתובת לחדר הזה.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ הוסיף את %2$@ ככתובת לחדר הזה.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ הוסיפו את %2$@ ככתובות לחדר הזה.";
-"plurals.notice_room_aliases_added.item_2" = "%1$@ הוסיפו את %2$@ ככתובות לחדר הזה.";
-"plurals.notice_room_aliases_added.item_3" = "%1$@ הוסיפו את %2$@ ככתובות לחדר הזה.";
-"plurals.call_active_status.item_0" = "שיחה פעילה ·";
-"plurals.call_active_status.item_1" = "%1$d שיחות פעילות ·";
-"plurals.message_reaction_show_more.item_0" = "%1$d יותר";
-"plurals.message_reaction_show_more.item_1" = "%1$d יותר";
-"plurals.message_reaction_show_more.item_2" = "%1$d יותר";
-"plurals.message_reaction_show_more.item_3" = "%1$d יותר";
-"plurals.notice_room_server_acl_changes.item_0" = "%d שינוי ברשימות ACL בשרתים";
-"plurals.space_people_you_know.item_0" = "אדם %d שאתה מכיר כבר הצטרף";
-"plurals.space_people_you_know.item_1" = "%d אנשים שאתה מכיר כבר הצטרפו";
-"plurals.space_people_you_know.item_2" = "%d אנשים שאתה מכיר כבר הצטרפו";
-"plurals.space_people_you_know.item_3" = "%d אנשים שאתה מכיר כבר הצטרפו";
-"plurals.poll_total_vote_count_after_ended.item_0" = "התוצאה הסופית מתבססת על הצבעה %1$d";
-"plurals.poll_total_vote_count_after_ended.item_1" = "התוצאות הסופיות מתבססות על %1$d הצבעות";
-"plurals.poll_total_vote_count_after_ended.item_2" = "התוצאות הסופיות מתבססות על %1$d הצבעות";
-"plurals.poll_total_vote_count_after_ended.item_3" = "התוצאות הסופיות מתבססות על %1$d הצבעות";
-"plurals.entries.item_0" = "כניסה %d";
-"plurals.entries.item_1" = "שתי כניסות %d";
-"plurals.entries.item_2" = "%d כניסות";
-"plurals.entries.item_3" = "%d כניסות";
-"plurals.send_videos_with_original_size.item_0" = "שלח סרט וידאו בגודל המקורי";
-"plurals.send_videos_with_original_size.item_1" = "שלח שני סרטי וידאו בגודל המקורי";
-"plurals.send_videos_with_original_size.item_2" = "שלח סרטי וידאו בגודלם המקורי";
-"plurals.send_videos_with_original_size.item_3" = "שלח סרט וידאו בגודל המקורי";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_0" = "הצבעה %1$d. הצביעו כדי לראות את התוצאות";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_1" = "הצבעות %1$d. הצביעו כדי לראות את התוצאות";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_2" = "הצבעות %1$d. הצביעו כדי לראות את התוצאות";
-"plurals.poll_total_vote_count_before_ended_and_not_voted.item_3" = "הצבעות %1$d. הצביעו כדי לראות את התוצאות";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_0" = "מבוסס על %1$d הצבעה";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_1" = "מבוסס על %1$d הצבעות";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_2" = "מבוסס על %1$d הצבעות";
-"plurals.poll_total_vote_count_before_ended_and_voted.item_3" = "מבוסס על %1$d הצבעות";
-"plurals.poll_option_vote_count.item_0" = "%1$d הצבעה";
-"plurals.poll_option_vote_count.item_1" = "%1$d הצבעות";
-"plurals.poll_option_vote_count.item_2" = "%1$d הצבעות";
-"plurals.poll_option_vote_count.item_3" = "%1$d הצבעות";
-"plurals.create_poll_not_enough_options_error.item_0" = "נדרשת אפשרות %1$@ לפחות";
-"plurals.create_poll_not_enough_options_error.item_1" = "נדרשות %1$@ אפשרויות לפחות";
-"plurals.create_poll_not_enough_options_error.item_2" = "נדרשות %1$@ אפשרויות לפחות";
-"plurals.create_poll_not_enough_options_error.item_3" = "נדרשות %1$@ אפשרויות לפחות";
+"threads_notice_migration_message" = "אנחנו מתקרבים לשחרור גרסת ביטא ציבורית לשרשורים.\n\nבזמן שאנו מתכוננים לכך, עלינו לבצע מספר שינויים: שרשורים שנוצרו לפני נקודה זו יוצגו כתשובות רגילות.\n\nזה יהיה מעבר חד פעמי שכן שרשורים הם כעת חלק ממפרט Matrix.";

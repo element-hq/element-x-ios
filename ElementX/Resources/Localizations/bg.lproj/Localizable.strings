@@ -37,22 +37,14 @@
 "room_displayname_room_invite" = "Покана за стая";
 "room_displayname_two_members" = "%1$@ и %2$@";
 "room_displayname_empty_room" = "Празна стая";
-"initial_sync_start_importing_account" = "Начална синхронизация:
-\nИмпортиране на профил…";
-"initial_sync_start_importing_account_crypto" = "Начална синхронизация:
-\nИмпортиране на данни за шифроване";
-"initial_sync_start_importing_account_rooms" = "Начална синхронизация:
-\nИмпортиране на стаи";
-"initial_sync_start_importing_account_joined_rooms" = "Начална синхронизация:
-\nИмпортиране на стаи, от които съм част";
-"initial_sync_start_importing_account_invited_rooms" = "Начална синхронизация:
-\nИмпортиране на стаи, към които съм поканен";
-"initial_sync_start_importing_account_left_rooms" = "Начална синхронизация:
-\nИмпортиране на стаи, които съм напуснал";
-"initial_sync_start_importing_account_groups" = "Начална синхронизация:
-\nИмпортиране на общности";
-"initial_sync_start_importing_account_data" = "Начална синхронизация:
-\nИмпортиране на данни за профила";
+"initial_sync_start_importing_account" = "Начална синхронизация:\nИмпортиране на профил…";
+"initial_sync_start_importing_account_crypto" = "Начална синхронизация:\nИмпортиране на данни за шифроване";
+"initial_sync_start_importing_account_rooms" = "Начална синхронизация:\nИмпортиране на стаи";
+"initial_sync_start_importing_account_joined_rooms" = "Начална синхронизация:\nИмпортиране на стаи, от които съм част";
+"initial_sync_start_importing_account_invited_rooms" = "Начална синхронизация:\nИмпортиране на стаи, към които съм поканен";
+"initial_sync_start_importing_account_left_rooms" = "Начална синхронизация:\nИмпортиране на стаи, които съм напуснал";
+"initial_sync_start_importing_account_groups" = "Начална синхронизация:\nИмпортиране на общности";
+"initial_sync_start_importing_account_data" = "Начална синхронизация:\nИмпортиране на данни за профила";
 "notice_room_update" = "%@ обнови тази стая.";
 "event_status_sending_message" = "Изпращане на съобщение…";
 "notice_room_third_party_revoked_invite" = "%1$@ оттегли поканата за присъединяване на %2$@ към стаята";
@@ -179,8 +171,7 @@
 "room_participants_header_direct_chats" = "ДИРЕКТНИ ЧАТОВЕ";
 "room_participants_action_ban" = "Блокирай";
 "room_participants_action_unban" = "Отблокирай";
-"room_participants_power_level_prompt" = "Няма да можете да възвърнете тази промяна, тъй като повишавате този потребител до същото ниво на достъп като Вашето.
-\nСигурни ли сте\?";
+"room_participants_power_level_prompt" = "Няма да можете да възвърнете тази промяна, тъй като повишавате този потребител до същото ниво на достъп като Вашето.\nСигурни ли сте\?";
 "room_one_user_is_typing" = "%@ пише…";
 "room_two_users_are_typing" = "%1$@ и %2$@ пишат…";
 "title_activity_bug_report" = "Съобщаване за грешка";
@@ -346,9 +337,7 @@
 "settings_new_password" = "Нова парола";
 "settings_fail_to_update_password" = "Неуспешно обновяване на паролата";
 "settings_password_updated" = "Вашата парола беше обновена";
-"settings_unignore_user" = "Показване на всички съобщения от %@\?
-\n
-\nИмайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.";
+"settings_unignore_user" = "Показване на всички съобщения от %@\?\n\nИмайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.";
 "settings_select_country" = "Избор на държава";
 "settings_flair" = "Значка";
 "media_saving_period_3_days" = "3 дни";
@@ -404,9 +393,7 @@
 "widget_integration_room_not_visible" = "Стая %@ не е видима.";
 "room_add_matrix_apps" = "Добави Matrix приложения";
 "permissions_rationale_msg_record_audio" = "%@ иска разшерение за достъп до Вашия микрофон, за да се извърши звуков разговор.";
-"permissions_rationale_msg_camera_and_audio" = "%@ иска разширение за достъп до микрофона и камерата Ви, за да извърши видео разговор.
-\n
-\nМоля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.";
+"permissions_rationale_msg_camera_and_audio" = "%@ иска разширение за достъп до микрофона и камерата Ви, за да извърши видео разговор.\n\nМоля, разрешете достъпа от следващия прозорец, който ще се покаже, за да можете да се обадите.";
 "yes" = "ДА";
 "no" = "НЕ";
 "_continue" = "Продължи";
@@ -456,9 +443,7 @@
 "reason_colon" = "Причина: %1$@";
 "title_activity_choose_sticker" = "Изпрати стикер";
 "option_send_sticker" = "Изпрати стикер";
-"no_sticker_application_dialog_content" = "В момента нямате активирани пакети със стикери.
-\n
-\nДобавете сега\?";
+"no_sticker_application_dialog_content" = "В момента нямате активирани пакети със стикери.\n\nДобавете сега\?";
 "settings_deactivate_account_section" = "Деактивиране на акаунт";
 "settings_deactivate_my_account" = "Деактивирай акаунта ми";
 "settings_opt_in_of_analytics" = "Изпращане на статистически данни";
@@ -467,12 +452,11 @@
 "dialog_user_consent_content" = "За да продължите да използвате %1$@ трябва да прегледате и да се съгласите с правилата и условията.";
 "dialog_user_consent_submit" = "Прегледай сега";
 "deactivate_account_title" = "Деактивиране на акаунт";
-"deactivate_account_content.b_0" = "Действието е необратимо.";
-"deactivate_account_content.b_1" = "по подразбиране не прави така, че изпратените съобщения да бъдат забравени.";
+"deactivate_account_content" = "Това ще направи акаунта Ви неизползваем завинаги. Няма да можете да влезете пак, а регистрирането повторно на същия потребителски идентификатор няма да е възможно. Акаунтът Ви да напусне всички стаи, в които участва. Ще бъдат премахнати и данните за акаунта Ви от сървъра за самоличност. <b>Действието е необратимо.</b>\n\nДеактивирането на акаунта Ви <b>по подразбиране не прави така, че изпратените съобщения да бъдат забравени.</b> Ако искате да забравим съобщенията Ви, моля отбележете с отметка по-долу.\n\nВидимостта на съобщенията в Matrix е подобно на имейл системата. Нашето забравяне означава, че: изпратените от Вас съобщения няма да бъдат споделяни с нови или нерегистрирани потребители, но регистрираните потребители имащи достъп до тях ще продължат да имат достъп до своето копие.";
 "deactivate_account_delete_checkbox" = "Моля, забравете всички изпратени от мен съобщения, когато акаунта ми се деактивира (Внимание: това ще направи бъдещите потребители да имат само частичен поглед върху кореспонденцията)";
 "deactivate_account_submit" = "Деактивирай акаунта";
 "action_download" = "Изтегли";
-"e2e_re_request_encryption_key.u_0" = "Изисквай повторно ключове за шифроване";
+"e2e_re_request_encryption_key" = "<u>Изисквай повторно ключове за шифроване</u> от другите ми устройства.";
 "e2e_re_request_encryption_key_dialog_content" = "Моля стартирайте %@ на друго устройство можещо да разшифрова съобщението, за да може то да изпрати ключовете до това устройство.";
 "option_send_voice" = "Изпрати гласово съобщение";
 "error_no_external_application_found" = "Съжаляваме, не е намерено външно приложение, което да извърши това действие.";
@@ -498,9 +482,9 @@
 "room_tombstone_predecessor_link" = "Натиснете тук за да видите по-стари съобщения";
 "system_alerts_header" = "Системни уведомления";
 "resource_limit_contact_admin" = "свържете се със администратора на услугата";
-"resource_limit_soft_default.b_0" = "някои потребители няма да успеят да влязат в профила си";
+"resource_limit_soft_default" = "Сървърът е надвишил някой от лимитите си, така че <b>някои потребители няма да успеят да влязат в профила си</b>.";
 "resource_limit_hard_default" = "Сървърът е надвишил някой от лимитите си.";
-"resource_limit_soft_mau.b_0" = "някои потребители няма да успеят да влязат в профила си";
+"resource_limit_soft_mau" = "Сървърът е достигнал своя лимит за потребители на месец, така че <b>някои потребители няма да успеят да влязат в профила си</b>.";
 "resource_limit_hard_mau" = "Сървърът е достигнал лимита си за потребители на месец.";
 "resource_limit_soft_contact" = "Моля, %@, за да се увеличи лимита.";
 "resource_limit_hard_contact" = "Моля, %@, за да продължите да използвате услугата.";
@@ -545,43 +529,33 @@
 "settings_troubleshoot_test_system_settings_title" = "Системни настройки.";
 "settings_notification_troubleshoot" = "Диагностика на проблеми с известията";
 "settings_troubleshoot_test_system_settings_success" = "Уведомленията са разрешени в системните настройки.";
-"settings_troubleshoot_test_system_settings_failed" = "Уведомленията са забранени в системните настройки.
-\nМоля, проверете системните настройки.";
+"settings_troubleshoot_test_system_settings_failed" = "Уведомленията са забранени в системните настройки.\nМоля, проверете системните настройки.";
 "open_settings" = "Отвори настройки";
 "settings_troubleshoot_test_account_settings_title" = "Настройки на профила.";
 "settings_troubleshoot_test_account_settings_success" = "Уведомленията са разрешени за този профил.";
-"settings_troubleshoot_test_account_settings_failed" = "Уведомленията са забранени за този профил.
-\nМоля, проверете настройките на профила.";
+"settings_troubleshoot_test_account_settings_failed" = "Уведомленията са забранени за този профил.\nМоля, проверете настройките на профила.";
 "settings_troubleshoot_test_account_settings_quickfix" = "Разреши";
 "settings_troubleshoot_test_device_settings_title" = "Настройки на устройството.";
 "settings_troubleshoot_test_device_settings_success" = "Уведомленията са разрешени за това устройство.";
-"settings_troubleshoot_test_device_settings_failed" = "Уведомленията са забранени за тази сесия.
-\nМоля, проверете настройките на %@.";
+"settings_troubleshoot_test_device_settings_failed" = "Уведомленията са забранени за тази сесия.\nМоля, проверете настройките на %@.";
 "settings_troubleshoot_test_device_settings_quickfix" = "Разреши";
 "settings_troubleshoot_test_play_services_title" = "Проверка на Google Play услугите";
 "settings_troubleshoot_test_play_services_success" = "APK пакет за Google Play услугите е наличен и с актуална версия.";
-"settings_troubleshoot_test_play_services_failed" = "%@ използва Google Play услугите за да доставя известия за съобщения, но изглежда те не са конфигурирани правилно:
-\n%1$@";
+"settings_troubleshoot_test_play_services_failed" = "%@ използва Google Play услугите за да доставя известия за съобщения, но изглежда те не са конфигурирани правилно:\n%1$@";
 "settings_troubleshoot_test_play_services_quickfix" = "Поправи Google Play услугите";
 "settings_troubleshoot_test_fcm_title" = "Firebase токен";
-"settings_troubleshoot_test_fcm_success" = "Успешно получаване на FCM токен:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "Неуспешно получаване на FCM токен:
-\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "Успешно получаване на FCM токен:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "Неуспешно получаване на FCM токен:\n%1$@";
 "settings_troubleshoot_test_token_registration_title" = "Токен регистрация";
 "settings_troubleshoot_test_token_registration_success" = "FCM токенът беше успешно регистриран със сървъра.";
-"settings_troubleshoot_test_token_registration_failed" = "Неуспешна регистрация на FCM токена със сървъра:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Неуспешна регистрация на FCM токена със сървъра:\n%1$@";
 "settings_troubleshoot_test_service_boot_title" = "Стартирай при старт на системата";
 "settings_troubleshoot_test_service_boot_success" = "Услугата ще стартира когато устройството се рестартира.";
 "settings_troubleshoot_test_service_boot_failed" = "Услугата няма да стартира когато устройството се рестартира. Няма да получавате известия докато %@ не бъде отворен поне веднъж.";
 "settings_troubleshoot_test_service_boot_quickfix" = "Стартирай при старт на системата";
 "settings_troubleshoot_test_bg_restricted_title" = "Проверка на фоновите ограничения";
-"settings_troubleshoot_test_bg_restricted_success" = "Ограниченията във фонов режим са изключени за %@. Тази проверка трябва да се изпълни използвайки мобилни данни (не на Wi-Fi).
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_failed" = "Активирани са ограничения във фонов режим за %@.
-\nРаботата, която приложението се опитва да извършва във фонов режим бива агресивно ограничена. Това може да повлияе на известяването.
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Ограниченията във фонов режим са изключени за %@. Тази проверка трябва да се изпълни използвайки мобилни данни (не на Wi-Fi).\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Активирани са ограничения във фонов режим за %@.\nРаботата, която приложението се опитва да извършва във фонов режим бива агресивно ограничена. Това може да повлияе на известяването.\n%1$@";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Премахни ограниченията";
 "settings_troubleshoot_test_battery_title" = "Оптимизация на батерията";
 "settings_troubleshoot_test_battery_success" = "%@ не се влияе от Оптимизация на батерията.";
@@ -598,12 +572,9 @@
 "settings_troubleshoot_test_bing_settings_title" = "Собствени настройки.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Забележете, че някои типове съобщения са настроени да бъдат безшумни (има известие, но без звук).";
 "settings_troubleshoot_test_bing_settings_failed" = "Някои известия са изключени в собствените Ви настройки.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nТази грешка е извън контрола на %@. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за известия FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nТази грешка е извън контрола на %@. Може да се случи поради няколко причини. Възможно е проблема да изчезне, ако опитате по-късно. Също така, може да проверите дали Google Play услугите не са ограничени откъм мобилни данни (вижте системните настройки), или че часовникът на устройството е правилен. Възможно е грешката да възникне и ако използвате модифицирана операционна система (custom ROM).";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nТази грешка е извън контрола на %@. Няма Google акаунт на телефонът. Отворете системата за управления на акаунти и добавете Google акаунт.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nТази грешка е извън контрола на %@. Според Google, грешката показва, че устройството има прекалено много приложения регистрирани към системата за известия FCM. Проблема се случва само в случай на огромен брой приложения, така че не би трябвало да повлияе средно-статистическия потребител.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nТази грешка е извън контрола на %@. Може да се случи поради няколко причини. Възможно е проблема да изчезне, ако опитате по-късно. Също така, може да проверите дали Google Play услугите не са ограничени откъм мобилни данни (вижте системните настройки), или че часовникът на устройството е правилен. Възможно е грешката да възникне и ако използвате модифицирана операционна система (custom ROM).";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nТази грешка е извън контрола на %@. Няма Google акаунт на телефонът. Отворете системата за управления на акаунти и добавете Google акаунт.";
 "settings_troubleshoot_test_fcm_failed_account_missing_quick_fix" = "Добави акаунт";
 "settings_noisy_notifications_preferences" = "Настройка на шумни известия";
 "settings_call_notifications_preferences" = "Настройка на известия за разговори";
@@ -616,9 +587,7 @@
 "passphrase_passphrase_too_weak" = "Паролата е прекалено слаба";
 "keys_backup_passphrase_not_empty_error_message" = "Моля, изтрийте паролата, ако искате %@ да генерира ключ за възстановяване.";
 "keys_backup_setup_step1_title" = "Никога не губете шифровани съобщения";
-"keys_backup_setup_step1_description" = "Съобщения в шифровани стаи са защитени с шифроване от край до край. Само Вие и получателят (получателите) имате ключовете за прочитането им.
-\n
-\nПравете резервно копие на ключовете, за да не ги загубите.";
+"keys_backup_setup_step1_description" = "Съобщения в шифровани стаи са защитени с шифроване от край до край. Само Вие и получателят (получателите) имате ключовете за прочитането им.\n\nПравете резервно копие на ключовете, за да не ги загубите.";
 "keys_backup_setup_step2_button_title" = "Настройка на парола";
 "keys_backup_setup_step3_button_title" = "Готово";
 "keys_backup_setup_step3_copy_button_title" = "Запази ключа за възстановяване";
@@ -673,16 +642,13 @@
 "keys_backup_setup_step1_advanced" = "(За напреднали)";
 "keys_backup_setup_step1_manual_export" = "Ръчно експортиране на ключовете";
 "keys_backup_setup_step2_text_title" = "Защитете резервното копие с парола.";
-"keys_backup_setup_step2_text_description" = "Ще съхраним резервно копие на ключовете Ви на Вашия сървър. Защитете резервното копие с парола.
-\n
-\nЗа максимална защита, паролата е добре да е различна от тази за акаунта Ви.";
+"keys_backup_setup_step2_text_description" = "Ще съхраним резервно копие на ключовете Ви на Вашия сървър. Защитете резервното копие с парола.\n\nЗа максимална защита, паролата е добре да е различна от тази за акаунта Ви.";
 "keys_backup_setup_creating_backup" = "Създаване на резервно копие";
 "keys_backup_setup_step1_recovery_key_alternative" = "Или защитете резервното копие с ключ за възстановяване, който ще трябва да пазите на безопасно място.";
 "keys_backup_setup_step2_skip_button_title" = "(За напреднали) Настройка с ключ за възстановяване";
 "keys_backup_setup_step3_success_title" = "Успешно!";
 "keys_backup_setup_step3_text_line1" = "Прави се резервно копие на ключовете Ви.";
-"keys_backup_setup_step3_text_line2" = "Ключът за възстановяване е допълнителна застраховка - ако забравите паролата, може да използвате ключа за да възстановите достъпа до шифрованите съобщения.
-\nПазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)";
+"keys_backup_setup_step3_text_line2" = "Ключът за възстановяване е допълнителна застраховка - ако забравите паролата, може да използвате ключа за да възстановите достъпа до шифрованите съобщения.\nПазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Пазете ключа за възстановяване на много безопасно място, например в password manager програма (или сейф)";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Направих копие";
 "keys_backup_setup_step3_share_recovery_file" = "Сподели";
@@ -719,14 +685,8 @@
 "error_jitsi_not_supported_on_old_device" = "Извиняваме се, но конферентни разговори с Jitsi не се поддържат на стари устройства (устройства с Android OS под 6.0)";
 "auth_login_sso" = "Влез с единично вписване";
 "encryption_information_unknown_ip" = "неизвестен IP адрес";
-"you_added_a_new_device_with_info" = "Ново устройство изисква криптиращите ключове.
-\nИме на устройство: %1$@
-\nЗа последно видяно: %2$@
-\nАко не сте се вписвали с друго устройство, не обръщайте внимание на тази заявка.";
-"your_unverified_device_requesting_with_info" = "Непроверено устройство изисква криптиращите ключове.
-\nИме на устройство: %1$@
-\nЗа последно видяно: %2$@
-\nАко не сте се вписвали с друго устройство, не обръщайте внимание на тази заявка.";
+"you_added_a_new_device_with_info" = "Ново устройство изисква криптиращите ключове.\nИме на устройство: %1$@\nЗа последно видяно: %2$@\nАко не сте се вписвали с друго устройство, не обръщайте внимание на тази заявка.";
+"your_unverified_device_requesting_with_info" = "Непроверено устройство изисква криптиращите ключове.\nИме на устройство: %1$@\nЗа последно видяно: %2$@\nАко не сте се вписвали с друго устройство, не обръщайте внимание на тази заявка.";
 "share_without_verifying_short_label" = "Сподели";
 "key_share_request" = "Искане за споделяне на ключ";
 "ignore_request_short_label" = "Отхвърли";
@@ -774,7 +734,7 @@
 "create_room_public_description" = "Всеки ще може да се присъедини към стаята";
 "keys_backup_unable_to_get_trust_info" = "Случи се грешка при извличане на информацията за довереността";
 "keys_backup_unable_to_get_keys_backup_data" = "Случи се грешка при извличане на резервните данни за ключовете";
-"import_e2e_keys_from_file" = "Импортирай e2e ключове от файл \"%1$@\.";
+"import_e2e_keys_from_file" = "Импортирай e2e ключове от файл \"%1$@\".";
 "settings_sdk_version" = "Matrix SDK версия";
 "navigate_to_room_when_already_in_the_room" = "Вече гледате тази стая!";
 "settings_general_title" = "Основни";
@@ -831,11 +791,9 @@
 "login_error_homeserver_not_found" = "Неуспешна връзка със сървъра на този адрес, моля проверете";
 "settings_background_fdroid_sync_mode" = "Режим на фонова синхронизация";
 "settings_background_fdroid_sync_mode_battery" = "Пестящ батерия";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ ще синхронизира във фонов режим по начин, който пести ограничените ресурси на устройството (батерия).
-\nВ зависимост от състоянието на ресурсите, синхронизацията може да бъде отложена от операционната система.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ ще синхронизира във фонов режим по начин, който пести ограничените ресурси на устройството (батерия).\nВ зависимост от състоянието на ресурсите, синхронизацията може да бъде отложена от операционната система.";
 "settings_background_fdroid_sync_mode_real_time" = "Целящ висока интерактивност";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ ще синхронизира във фонов режим на определен интервал (конфигурируемо).
-\nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че %@ слуша за събития.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ ще синхронизира във фонов режим на определен интервал (конфигурируемо).\nТова ще повлияе на използването на антената и батерията. Ще се показва перманентна нотификация, че %@ слуша за събития.";
 "settings_background_fdroid_sync_mode_disabled" = "Без фонова синхронизация";
 "settings_background_fdroid_sync_mode_disabled_description" = "Няма да бъдете уведомени за входящи съобщения, когато приложението е във фонов режим.";
 "settings_discovery_category" = "Откриване";
@@ -892,29 +850,21 @@
 "report_content_custom_submit" = "ДОКЛАДВАЙ";
 "block_user" = "ИГНОРИРАЙ ПОТРЕБИТЕЛЯ";
 "content_reported_title" = "Съдържанието беше докладвано";
-"content_reported_content" = "Съдържанието беше докладвано. 
-\n 
-\nАко не искате да виждате повече съдържание от този потребител, може да ги игнорирате за да скриете съобщенията им.";
+"content_reported_content" = "Съдържанието беше докладвано. \n \nАко не искате да виждате повече съдържание от този потребител, може да ги игнорирате за да скриете съобщенията им.";
 "content_reported_as_spam_title" = "Докладвано като спам";
-"content_reported_as_spam_content" = "Съдържанието беше докладвано като спам. 
-\n 
-\nАко не искате да виждате повече съдържание от този потребител, може да ги игнорирате за да скриете съобщенията им.";
+"content_reported_as_spam_content" = "Съдържанието беше докладвано като спам. \n \nАко не искате да виждате повече съдържание от този потребител, може да ги игнорирате за да скриете съобщенията им.";
 "content_reported_as_inappropriate_title" = "Докладвано като неподходящо";
-"content_reported_as_inappropriate_content" = "Съдържанието беше докладвано като неподходящо. 
-\n 
-\nАко не искате да виждате повече съдържание от този потребител, може да ги игнорирате за да скриете съобщенията им.";
+"content_reported_as_inappropriate_content" = "Съдържанието беше докладвано като неподходящо. \n \nАко не искате да виждате повече съдържание от този потребител, може да ги игнорирате за да скриете съобщенията им.";
 "login_error_no_homeserver_found" = "Това не е валиден адрес на Matrix сървър";
 "settings_integrations" = "Интеграции";
-"settings_integrations_summary" = "Използвайте мениджър на интеграции за да управлявате ботове, връзки с други мрежи, приспособления и стикери.
-\nМениджърите на интеграции получават конфигурационни данни, могат да променят приспособления, да изпращат покани за стаи и да настройват нива на достъп от ваше име.";
+"settings_integrations_summary" = "Използвайте мениджър на интеграции за да управлявате ботове, връзки с други мрежи, приспособления и стикери.\nМениджърите на интеграции получават конфигурационни данни, могат да променят приспособления, да изпращат покани за стаи и да настройват нива на достъп от ваше име.";
 "settings_integration_allow" = "Разреши интеграции";
 "room_widget_activity_title" = "Приспособление";
 "room_widget_permission_title" = "Зареди приспособление";
 "room_widget_permission_added_by" = "Приспособлението е добавено от:";
 "room_widget_permission_webview_shared_info_title" = "Използването му може да настрой бисквитки или да сподели данни с %@:";
 "room_widget_permission_shared_info_title" = "Използването му може да сподели данни с %@:";
-"room_widget_failed_to_load" = "Неуспешно зареждане на приспособление.
-\n%@";
+"room_widget_failed_to_load" = "Неуспешно зареждане на приспособление.\n%@";
 "room_widget_reload" = "Презареди приспособлението";
 "room_widget_open_in_browser" = "Отвори в браузър";
 "room_widget_revoke_access" = "Премахни достъпа ми";
@@ -971,13 +921,9 @@
 "login_server_url_form_modular_text" = "Премиум хостинг за организации";
 "login_server_url_form_modular_notice" = "Въведете адреса на Modular Element или на сървър, който искате да използвате";
 "login_sso_error_message" = "Възникна грешка при зареждане на страницата: %1$@ (%2$d)";
-"login_mode_not_supported" = "Приложението не може да влезе в този сървър. Сървъра поддържа следните методи за вход: %1$@.
-\n
-\nИскате ли да влезете използвайки уеб клиент\?";
+"login_mode_not_supported" = "Приложението не може да влезе в този сървър. Сървъра поддържа следните методи за вход: %1$@.\n\nИскате ли да влезете използвайки уеб клиент\?";
 "login_registration_disabled" = "Извинявайте, този сървър не приема нови профили.";
-"login_registration_not_supported" = "Приложението не може да създаде профил на този сървър.
-\n
-\nИскате ли да се регистрирате използвайки уеб клиент\?";
+"login_registration_not_supported" = "Приложението не може да създаде профил на този сървър.\n\nИскате ли да се регистрирате използвайки уеб клиент\?";
 "login_login_with_email_error" = "Този имейл адрес не е асоцииран с профил.";
 "login_reset_password_on" = "Възстановяване на парола за %1$@";
 "login_reset_password_notice" = "За да се потвърди настройката на новата ви парола ще ви бъде изпратен имейл за потвърждение.";
@@ -997,9 +943,7 @@
 "login_reset_password_success_notice_2" = "Бяхте изхвърлени от профила си от всички устройства и вече няма да получавате push уведомления. За да включите уведомленията отново, влезте наново от всяко едно устройство.";
 "login_reset_password_success_submit" = "Обратно към Вход";
 "login_reset_password_cancel_confirmation_title" = "Внимание";
-"login_reset_password_cancel_confirmation_content" = "Паролата ви все още не е сменена.
-\n
-\nСпиране на процеса на промяна на паролата\?";
+"login_reset_password_cancel_confirmation_content" = "Паролата ви все още не е сменена.\n\nСпиране на процеса на промяна на паролата\?";
 "login_set_email_title" = "Настройка на имейл адрес";
 "login_set_email_notice" = "Настройте имейл адрес за да възстановявате профила си. По-късно, може по избор да позволите на познати хора да ви откриват по имейл адрес.";
 "login_set_email_mandatory_hint" = "Имейл";
@@ -1024,28 +968,19 @@
 "login_signup_submit" = "Напред";
 "login_signup_error_user_in_use" = "Това потребителско име е заето";
 "login_signup_cancel_confirmation_title" = "Внимание";
-"login_signup_cancel_confirmation_content" = "Профила ви все още не е създаден.
-\n
-\nПрекратяване на процеса на регистрация\?";
+"login_signup_cancel_confirmation_content" = "Профила ви все още не е създаден.\n\nПрекратяване на процеса на регистрация\?";
 "login_a11y_choose_matrix_org" = "Избери matrix.org";
 "login_a11y_choose_modular" = "Избери Element Matrix Services";
 "login_a11y_choose_other" = "Избери собствен сървър";
 "login_a11y_captcha_container" = "Моля извършете captcha проверката";
 "login_terms_title" = "Приемете условията за да продължите";
 "login_wait_for_email_title" = "Проверете имейла си";
-"login_wait_for_email_notice" = "Изпратихме имейл до %1$@.
-\nНатиснете на връзката в него за да продължите със създаването на профила.";
+"login_wait_for_email_notice" = "Изпратихме имейл до %1$@.\nНатиснете на връзката в него за да продължите със създаването на профила.";
 "login_validation_code_is_not_correct" = "Въведения код не е правилен. Моля проверете.";
 "login_error_outdated_homeserver_title" = "Стар сървър";
 "seen_by" = "Видяно от";
 "signed_out_title" = "Излязохте от профила";
-"signed_out_notice" = "Може да е поради няколко причини:
-\n
-\n• Променили сте паролата си на друго устройство.
-\n
-\n• Изтрили сте това устройство от някое друго.
-\n
-\n• Администратора на сървъра е премахнал достъпа ви от съображения за сигурност.";
+"signed_out_notice" = "Може да е поради няколко причини:\n\n• Променили сте паролата си на друго устройство.\n\n• Изтрили сте това устройство от някое друго.\n\n• Администратора на сървъра е премахнал достъпа ви от съображения за сигурност.";
 "signed_out_submit" = "Влез отново";
 "soft_logout_title" = "Излязохте от профила";
 "soft_logout_signin_title" = "Вход";
@@ -1054,16 +989,12 @@
 "soft_logout_signin_submit" = "Влез";
 "soft_logout_signin_password_hint" = "Парола";
 "soft_logout_clear_data_title" = "Изчисти личните данни";
-"soft_logout_clear_data_notice" = "Внимание: Личните ви данни (включително ключове за шифроване) все още са съхранени на това устройство.
-\n
-\nИзчистете ги, ако сте приключили с това устройство или пък искате да влезете в друг профил.";
+"soft_logout_clear_data_notice" = "Внимание: Личните ви данни (включително ключове за шифроване) все още са съхранени на това устройство.\n\nИзчистете ги, ако сте приключили с това устройство или пък искате да влезете в друг профил.";
 "soft_logout_clear_data_submit" = "Изчисти всички данни";
 "soft_logout_clear_data_dialog_title" = "Изчистване на данни";
-"soft_logout_clear_data_dialog_content" = "Изчистване на всички данни съхранени на това устройство\?
-\nВлезте отново за да достъпите профила и съобщенията си.";
+"soft_logout_clear_data_dialog_content" = "Изчистване на всички данни съхранени на това устройство\?\nВлезте отново за да достъпите профила и съобщенията си.";
 "soft_logout_clear_data_dialog_e2e_warning_content" = "Ще загубите достъпа до защитените съобщения, освен ако не влезете за да възстановите ключовете за шифроване.";
-"soft_logout_sso_not_same_user_error" = "Текущата сесия е за потребител %1$@, а вие сте въвели данни за вход за %2$@. %@ не поддържа това.
-\nПърво изчистете данните, след това влезте отново с друг профил.";
+"soft_logout_sso_not_same_user_error" = "Текущата сесия е за потребител %1$@, а вие сте въвели данни за вход за %2$@. %@ не поддържа това.\nПърво изчистете данните, след това влезте отново с друг профил.";
 "permalink_malformed" = "matrix.to връзката ви беше невалидна";
 "bug_report_error_too_short" = "Описанието е прекалено кратко";
 "notification_initial_sync" = "Начална синхронизация…";
@@ -1092,9 +1023,7 @@
 "room_participants_action_cancel_invite_title" = "Отказва на покана";
 "room_participants_action_unignore_prompt_msg" = "Премахване на игнорирането на потребителя ще покаже отново всички техни съобщения.";
 "room_participants_action_unignore_title" = "Премахване на игнорирането на потребител";
-"room_participants_action_ignore_prompt_msg" = "Игнорирането на този потребител ще премахне съобщенията им от стаите, които споделяте.
-\n
-\nТова действие е обратимо по всяко време от основните настройки.";
+"room_participants_action_ignore_prompt_msg" = "Игнорирането на този потребител ще премахне съобщенията им от стаите, които споделяте.\n\nТова действие е обратимо по всяко време от основните настройки.";
 "room_participants_action_ignore_title" = "Игнориране на потребител";
 "room_participants_power_level_demote" = "Понижи";
 "room_participants_power_level_demote_warning_prompt" = "Ако сте последния привилегирован потребител в стаята, понижавайки себе си, няма да можете да възвърнете привилегиите си.";
@@ -1115,8 +1044,7 @@
 "sound_device_speaker" = "Високоговорител";
 "sound_device_phone" = "Телефон";
 "call_select_sound_device" = "Избор на звуково устройство";
-"call_failed_no_connection_description" = "Неуспешно установяване на връзка в реално време.
-\nПомолете администратора на сървъра да конфигурира TURN сървър, за да може разговорите да работят надеждно.";
+"call_failed_no_connection_description" = "Неуспешно установяване на връзка в реално време.\nПомолете администратора на сървъра да конфигурира TURN сървър, за да може разговорите да работят надеждно.";
 "call_failed_no_connection" = "Свързването е неуспешно";
 "bottom_action_notification" = "Уведомления";
 "dialog_title_success" = "Успешно";
@@ -1152,8 +1080,7 @@
 "settings_category_timeline" = "Списък със съобщения";
 "command_description_rainbow_emote" = "Изпраща емоцията оцветена като дъга";
 "command_description_rainbow" = "Изпраща текущото съобщение оцветено като дъга";
-"verify_cannot_cross_sign" = "Тази сесия не може да сподели потвърждението с другите ви сесии.
-\nПотвърждението ще се съхрани локално и ще може да бъде споделено в бъдеща версия на приложението.";
+"verify_cannot_cross_sign" = "Тази сесия не може да сподели потвърждението с другите ви сесии.\nПотвърждението ще се съхрани локално и ще може да бъде споделено в бъдеща версия на приложението.";
 "unignore" = "Махни игнорирането";
 "rendering_event_error_exception" = "%@ срещна проблем опитвайки се да визуализира съдържанието на събитие с идентификатор \'%1$@\'";
 "rendering_event_error_type_of_event_not_handled" = "%@ не може да обработва събития от тип \'%1$@\'";
@@ -1178,12 +1105,8 @@
 "room_profile_section_more" = "Още";
 "room_profile_section_security_learn_more" = "Научете повече";
 "room_profile_section_security" = "Сигурност";
-"direct_room_profile_encrypted_subtitle" = "Съобщенията тук са шифровани от-край-до-край.
-\n
-\nСъобщенията ви са защитени чрез заключване, и само вие и получателят имате уникалните ключове да го отключите.";
-"room_profile_encrypted_subtitle" = "Съобщенията в тази стая са шифровани от-край-до-край.
-\n
-\nСъобщенията ви са защитени чрез заключване, и само вие и получателят имате уникалните ключове да го отключите.";
+"direct_room_profile_encrypted_subtitle" = "Съобщенията тук са шифровани от-край-до-край.\n\nСъобщенията ви са защитени чрез заключване, и само вие и получателят имате уникалните ключове да го отключите.";
+"room_profile_encrypted_subtitle" = "Съобщенията в тази стая са шифровани от-край-до-край.\n\nСъобщенията ви са защитени чрез заключване, и само вие и получателят имате уникалните ключове да го отключите.";
 "direct_room_profile_not_encrypted_subtitle" = "Съобщенията тук не са шифровани от-край-до-край.";
 "room_profile_not_encrypted_subtitle" = "Съобщенията в тази стая не са шифровани от-край-до-край.";
 "verification_request_waiting_for" = "Изчакване на %@…";
@@ -1210,12 +1133,7 @@
 "sent_an_audio_file" = "Аудио";
 "sent_an_image" = "Изображение.";
 "sent_a_video" = "Видео.";
-"verification_conclusion_compromised" = "Някое от следните неща може би е компрометирано:
-\n
-\n- вашият сървър
-\n- сървърът, на който е свързан другият потребител
-\n- вашата връзка, или тази на другият потребител
-\n- вашето устройство, или това на другият потребител";
+"verification_conclusion_compromised" = "Някое от следните неща може би е компрометирано:\n\n- вашият сървър\n- сървърът, на който е свързан другият потребител\n- вашата връзка, или тази на другият потребител\n- вашето устройство, или това на другият потребител";
 "verification_conclusion_not_secure" = "Не е безопасно";
 "verification_sas_do_not_match" = "Не съвпадат";
 "verification_sas_match" = "Съвпадат";
@@ -1252,9 +1170,7 @@
 "settings_discovery_confirm_mail_not_clicked" = "Изпратихме имейл за потвърждение към %@. Проверете писмото и кликнете на връзката за потвърждение";
 "labs_show_unread_notifications_as_tab" = "Добави специализиран раздел за непрочетени уведомления на основния екран.";
 "settings_labs_show_complete_history_in_encrypted_room" = "Показвай пълна история в шифрованите стаи";
-"create_room_federation_error" = "Стаята беше създадена, но някои покани все още не са били изпратени поради следните причини:
-\n
-\n%@";
+"create_room_federation_error" = "Стаята беше създадена, но някои покани все още не са били изпратени поради следните причини:\n\n%@";
 "secure_backup_setup" = "Настройте сигурно резервно копие";
 "secure_backup_banner_setup_line2" = "Предпазете се от загуба на достъп до шифровани съобщения и данни";
 "secure_backup_banner_setup_line1" = "Сигурно резервно копие";
@@ -1296,9 +1212,7 @@
 "room_participants_unban_title" = "Премахване на блокиране";
 "room_participants_ban_reason" = "Причина за блокирането";
 "room_participants_ban_title" = "Блокиране на потребител";
-"room_participants_remove_prompt_msg" = "Изгонването на потребителя ще ги премахне от тази стая.
-\n
-\nАко искате да не могат да влязат пак, блокирайте ги вместо това.";
+"room_participants_remove_prompt_msg" = "Изгонването на потребителя ще ги премахне от тази стая.\n\nАко искате да не могат да влязат пак, блокирайте ги вместо това.";
 "event_redacted_by_admin_reason_with_reason" = "Събитието бе модерирано от администратор на стаята, причина: %1$@";
 "event_redacted_by_user_reason_with_reason" = "Събитието бе изтрито от потребител, причина: %1$@";
 "delete_event_dialog_reason_hint" = "Причина за редактиране";
@@ -1310,11 +1224,10 @@
 "enter_secret_storage_invalid" = "Не могат да бъдат намерени тайни в секретното складиране";
 "verification_use_passphrase" = "Ако не можете да достъпите съществуваща сесия";
 "verification_cannot_access_other_session" = "Използвай парола или ключ за възстановяване";
-"delete_account_data_warning" = "Изтриване на профилните данни от тип %1$@\?
-\n
-\nВнимавайте с това - може да доведе до неочаквано поведение.";
+"delete_account_data_warning" = "Изтриване на профилните данни от тип %1$@\?\n\nВнимавайте с това - може да доведе до неочаквано поведение.";
 "settings_account_data" = "Профилни данни";
 "settings_dev_tools" = "Инструменти на разработчика";
+"no_connectivity_to_the_server_indicator_airplane" = "Включен е режим \"самолет\"";
 "no_connectivity_to_the_server_indicator" = "Връзката със сървъра беше изгубена";
 "qr_code_scanned_by_other_no" = "Не";
 "qr_code_scanned_by_other_yes" = "Да";
@@ -1343,13 +1256,9 @@
 "settings_active_sessions_list" = "Активни сесии";
 "settings_hs_admin_e2e_disabled" = "Сървърният ви администратор по подразбиране е изключил шифроването от-край-до-край в частни стаи и директни съобщения.";
 "encryption_information_dg_xsigning_disabled" = "Кръстосаното-подписване не е включено";
-"encryption_information_dg_xsigning_not_trusted" = "Кръстосаното-подписване е включено.
-\nКлючовете не са доверени";
-"encryption_information_dg_xsigning_trusted" = "Кръстосаното-подписване е включено
-\nКлючовете са доверени.
-\nЧастните ключове са неизвестни";
-"encryption_information_dg_xsigning_complete" = "Кръстосаното-подписване е включено.
-\nЧастните ключове са на устройството.";
+"encryption_information_dg_xsigning_not_trusted" = "Кръстосаното-подписване е включено.\nКлючовете не са доверени";
+"encryption_information_dg_xsigning_trusted" = "Кръстосаното-подписване е включено\nКлючовете са доверени.\nЧастните ключове са неизвестни";
+"encryption_information_dg_xsigning_complete" = "Кръстосаното-подписване е включено.\nЧастните ключове са на устройството.";
 "identity_server_error_outdated_home_server" = "Операцията е невъзможна. Сървърът е стар.";
 "identity_server_error_outdated_identity_server" = "Този сървър за идентичност е стар. %@ поддържа само API V2.";
 "disconnect_identity_server_dialog_content" = "Прекъснете връзката със сървъра за идентичност %@\?";
@@ -1365,9 +1274,7 @@
 "invite_users_to_room_action_invite" = "ПОКАНИ";
 "add_members_to_room" = "Добави членове";
 "create_room_dm_failure" = "Неуспешно създаване на директен чат. Проверете потребителите, които искате да поканите, и опитайте пак.";
-"external_link_confirmation_message" = "Връзката %1$@ ви води към друг сайт: %2$@.
-\n
-\nСигурни ли сте, че искате да продължите\?";
+"external_link_confirmation_message" = "Връзката %1$@ ви води към друг сайт: %2$@.\n\nСигурни ли сте, че искате да продължите\?";
 "external_link_confirmation_title" = "Проверете тази връзка отново";
 "error_empty_field_choose_password" = "Изберете парола.";
 "error_empty_field_choose_user_name" = "Изберете потребителско име.";
@@ -1394,10 +1301,8 @@
 "command_description_discard_session" = "Принудително премахва текущата изходяща групова сесия от шифрованата стая";
 "use_latest_app" = "Използвайте последната версия на %@ за устройствата си:";
 "or_other_mx_capable_client" = "или друг Matrix клиент поддържаш кръстосано-подписване";
-"app_ios_android" = "%@ iOS
-\n%@ Android";
-"app_desktop_web" = "%@ Web
-\n%@ Desktop";
+"app_ios_android" = "%@ iOS\n%@ Android";
+"app_desktop_web" = "%@ Web\n%@ Desktop";
 "use_other_session_content_description" = "Използвайте последната версия на %@ за устройствата си (%@ Web, %@ Desktop, %@ iOS, %@ за Android) или друг Matrix клиент поддържаш кръстосано-подписване";
 "change_password_summary" = "Промяна на паролата за профила…";
 "error_saving_media_file" = "Неуспешно съхраняване на медиен файл";
@@ -1443,15 +1348,11 @@
 "direct_room_encryption_enabled_tile_description" = "Съобщенията в тази стая са шифровани от-край-до-край.";
 "encryption_enabled_tile_description" = "Съобщенията в тази стая са шифровани от-край-до-край. Научете повече и потвърдете потребителите от профилите им.";
 "encryption_enabled" = "Шифроването е включено";
-"bootstrap_cancel_text" = "Ако се откажете сега, може да загубите шифрованите съобщения и данни, в случай че загубите достъп до сесиите си.
-\n
-\nМоже също така да настроите защитено резервно копие и да управлявате ключовете си от Настройки.";
+"bootstrap_cancel_text" = "Ако се откажете сега, може да загубите шифрованите съобщения и данни, в случай че загубите достъп до сесиите си.\n\nМоже също така да настроите защитено резервно копие и да управлявате ключовете си от Настройки.";
 "bootstrap_crosssigning_save_cloud" = "Копирайте го в личното си облачно пространство";
 "bootstrap_crosssigning_save_usb" = "Запазете го на USB флашка или резервен диск";
 "bootstrap_crosssigning_print_it" = "Принтирайте го и го съхранете на безопасно място";
-"bootstrap_cross_signing_success" = "Вашият %2$@ и %1$@ са настроени.
-\n
-\nПазете ги в безопасност! Ще са ви нужни за да отключите шифрованите съобщения и защитената информация, в случай, че изгубите всичките си активни сесии.";
+"bootstrap_cross_signing_success" = "Вашият %2$@ и %1$@ са настроени.\n\nПазете ги в безопасност! Ще са ви нужни за да отключите шифрованите съобщения и защитената информация, в случай, че изгубите всичките си активни сесии.";
 "bootstrap_crosssigning_progress_key_backup" = "Настройка на резервно копие на ключовете";
 "bootstrap_crosssigning_progress_save_ssk" = "Синхронизиране на ключа за самоподписване";
 "bootstrap_crosssigning_progress_save_usk" = "Синхронизиране на потребителския ключ";
@@ -1471,14 +1372,7 @@
 "recovery_passphrase" = "Парола за възстановяване";
 "verification_cancelled" = "Потвърждението отказано";
 "verify_cancelled_notice" = "Потвърдете устройствата си от Настройки.";
-"verify_not_me_self_verification" = "Едно от следните може да е било компрометирано:
-\n
-\n- паролата ви
-\n- сървърът ви
-\n- това устройство или другото устройство
-\n- интернет връзката на някое от устройствата
-\n
-\nПрепоръчваме ви веднага да промените паролата и ключът за възстановяване от Настройки.";
+"verify_not_me_self_verification" = "Едно от следните може да е било компрометирано:\n\n- паролата ви\n- сървърът ви\n- това устройство или другото устройство\n- интернет връзката на някое от устройствата\n\nПрепоръчваме ви веднага да промените паролата и ключът за възстановяване от Настройки.";
 "verify_cancel_other" = "Ако се откажете сега, няма да потвърдите %1$@ (%2$@). Започнете пак от потребителския им профил.";
 "verify_cancel_self_verification_from_trusted" = "Ако се откажете, няма да можете да четете шифровани съобщения на новото устройство, а други потребители няма да му се доверяват";
 "verify_cancel_self_verification_from_untrusted" = "Ако се откажете, няма да можете да четете шифрованите съобщения на това устройства, а други потребители няма да му се доверяват";
@@ -1588,10 +1482,8 @@
 "send_bug_report_include_key_share_history" = "Изпрати историята на заявките за споделяне на ключове";
 "no_more_results" = "Няма повече резултати";
 "event_status_sent_message" = "Съобщението беше изпратено";
-"initial_sync_start_downloading" = "Начална синхронизация:
-\nИзтегляне на данни…";
-"initial_sync_start_server_computing" = "Начална синхронизация:
-\nИзчакване на отговор от сървъра…";
+"initial_sync_start_downloading" = "Начална синхронизация:\nИзтегляне на данни…";
+"initial_sync_start_server_computing" = "Начална синхронизация:\nИзчакване на отговор от сървъра…";
 "room_displayname_empty_room_was" = "Празна стая (беше %@)";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ и %4$@";
 "room_displayname_3_members" = "%1$@, %2$@ и %3$@";
@@ -1611,63 +1503,3 @@
 "notice_room_server_acl_set_banned" = "• Сървърите съдържащи %@ са блокирани.";
 "notice_room_server_acl_set_title_by_you" = "Настроихте сървърните разрешения (ACL) за тази стая.";
 "notice_room_server_acl_set_title" = "%@ настрой разрешенията (ACL) за тази стая.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ добави %2$@ като адрес за тази стая.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ добави %2$@ като адреси за тази стая.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ премахна %2$@ като адрес за тази стая.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ премахна %2$@ като адреси за тази стая.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Премахнахте %1$@ от адресите на стаята.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Премахнахте %1$@ от адресите на стаята.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Добавихте %1$@ като адрес за тази стая.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Добавихте %1$@ като адреси за тази стая.";
-"plurals.room_title_members.item_0" = "%d член";
-"plurals.room_title_members.item_1" = "%d членове";
-"plurals.membership_changes.item_0" = "%d промяна в членствата";
-"plurals.membership_changes.item_1" = "%d промени в членствата";
-"plurals.room_new_messages_notification.item_0" = "%d ново съобщение";
-"plurals.room_new_messages_notification.item_1" = "%d нови съобщения";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d стая";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d стаи";
-"plurals.active_widgets.item_0" = "%d активно приспособление";
-"plurals.active_widgets.item_1" = "%d активни приспособления";
-"plurals.notification_unread_notified_messages.item_0" = "%d непрочетено съобщение";
-"plurals.notification_unread_notified_messages.item_1" = "%d непрочетени съобщения";
-"plurals.room_details_selected.item_0" = "%d избран";
-"plurals.room_details_selected.item_1" = "%d избрани";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Възстановено резервно копие с %d ключ.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Възстановено резервно копие с %d ключа.";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d нов ключ бе добавен към това устройство.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d нови ключа бяха добавени към това устройство.";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Правене на резервно копие на %d ключ…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Правене на резервно копие на %d ключа…";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d съобщение";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d съобщения";
-"plurals.notification_compat_summary_title.item_0" = "%d известие";
-"plurals.notification_compat_summary_title.item_1" = "%d известия";
-"plurals.fallback_users_read.item_0" = "%d потребител прочете";
-"plurals.fallback_users_read.item_1" = "%d потребителя прочетоха";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунда…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Изпратени са прекалено много заявки. Може да опитате пак след %1$d секунди…";
-"plurals.room_profile_section_more_member_list.item_0" = "Един участник";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d участника";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ и %3$d друг прочетоха";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ и %3$d други прочетоха";
-"plurals.notification_invitations.item_0" = "%d покана";
-"plurals.notification_invitations.item_1" = "%d покани";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d ключ беше импортиран успешно.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d ключа бяха импортирани успешно.";
-"plurals.room_settings_banned_users_count.item_0" = "%d блокиран потребител";
-"plurals.room_settings_banned_users_count.item_1" = "%d блокирани потребителя";
-"plurals.seconds.item_0" = "%d секунда";
-"plurals.seconds.item_1" = "%d секунди";
-"plurals.send_images_with_original_size.item_0" = "Изпрати снимката с оригинален размер";
-"plurals.send_images_with_original_size.item_1" = "Изпрати снимките с оригинални размери";
-"plurals.settings_active_sessions_count.item_0" = "%d активна сесия";
-"plurals.settings_active_sessions_count.item_1" = "%d активни сесии";
-"plurals.invitations_sent_to_one_and_more_users.item_0" = "Изпратени са покани към %1$@ и още един потребител";
-"plurals.invitations_sent_to_one_and_more_users.item_1" = "Изпратени са покани към %1$@ и още %2$d потребителя";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Покажи устройството, с което можете да се потвърдите сега";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Покажи %d устройства, с които можете да се потвърдите сега";
-"plurals.wrong_pin_message_remaining_attempts.item_0" = "Грешен код, %d оставащ опит";
-"plurals.wrong_pin_message_remaining_attempts.item_1" = "Грешен код, %d оставащи опита";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ и %4$d друг";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ и %4$d други";

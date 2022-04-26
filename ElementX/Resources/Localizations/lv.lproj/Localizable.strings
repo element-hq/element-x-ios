@@ -107,23 +107,14 @@
 "notice_room_invite_no_invitee_with_reason_by_you" = "Jūsu uzaicinājums. Iemesls: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "%1$@ uzaicinājums. Iemesls: %2$@";
 "event_status_sending_message" = "Sūta ziņu…";
-"initial_sync_start_importing_account_data" = "Sākotnējā sinhronizācija:
-\nImportē konta datus";
-"initial_sync_start_importing_account_groups" = "Sākotnējā sinhronizācija:
-\nImportē kopienas";
-"initial_sync_start_importing_account_left_rooms" = "Sākotnējā sinhronizācija:
-\nImportē pamestās istabas";
-"initial_sync_start_importing_account_invited_rooms" = "Sākotnējā sinhronizācija:
-\nImportē istabas, uz kurām uzaicināts";
-"initial_sync_start_importing_account_joined_rooms" = "Sākotnējā sinhronizācija:
-\nLādē jūsu sarunas
-\nJa esat pievienojies daudzām istabām, tas var aizņemt kādu laiku.";
-"initial_sync_start_importing_account_rooms" = "Sākotnējā sinhronizācija:
-\nImportē istabas";
-"initial_sync_start_importing_account_crypto" = "Sākotnējā sinhronizācija:
-\nImportē kriptogrāfiju";
-"initial_sync_start_importing_account" = "Sākotnējā sinhronizācija:
-\nImportē kontu…";
+"initial_sync_start_importing_account_data" = "Sākotnējā sinhronizācija:\nImportē konta datus";
+"initial_sync_start_importing_account_groups" = "Sākotnējā sinhronizācija:\nImportē kopienas";
+"initial_sync_start_importing_account_left_rooms" = "Sākotnējā sinhronizācija:\nImportē pamestās istabas";
+"initial_sync_start_importing_account_invited_rooms" = "Sākotnējā sinhronizācija:\nImportē istabas, uz kurām uzaicināts";
+"initial_sync_start_importing_account_joined_rooms" = "Sākotnējā sinhronizācija:\nLādē jūsu sarunas\nJa esat pievienojies daudzām istabām, tas var aizņemt kādu laiku.";
+"initial_sync_start_importing_account_rooms" = "Sākotnējā sinhronizācija:\nImportē istabas";
+"initial_sync_start_importing_account_crypto" = "Sākotnējā sinhronizācija:\nImportē kriptogrāfiju";
+"initial_sync_start_importing_account" = "Sākotnējā sinhronizācija:\nImportē kontu…";
 "room_displayname_empty_room_was" = "Tukša istaba (bija %@)";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ un %4$@";
 "room_displayname_3_members" = "%1$@, %2$@ un %3$@";
@@ -258,9 +249,7 @@
 "call_error_user_not_responding" = "Adresāts neatbildēja uz zvanu.";
 "permissions_rationale_popup_title" = "Element informācija";
 "permissions_rationale_msg_record_audio" = "%@-am nepieciešama atļauja piekļūt mikrofonam, lai nodrošinātu audio zvanus.";
-"permissions_rationale_msg_camera_and_audio" = "%@ nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus.
-\n
-\nLūdzu, dodiet piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus.";
+"permissions_rationale_msg_camera_and_audio" = "%@ nepieciešama atļauja piekļūt kamerai un mikrofonam, lai veiktu videozvanus.\n\nLūdzu, dodiet piekļuves atļauju nākamajā uznirstošajā logā, lai būtu iespēja veikt zvanus.";
 "yes" = "JĀ";
 "no" = "NĒ";
 "_continue" = "Turpināt";
@@ -277,8 +266,7 @@
 "room_participants_action_ignore" = "Ignorēt";
 "room_participants_action_unignore" = "Atcelt ignorēšanu";
 "room_participants_action_mention" = "Pieminēt";
-"room_participants_power_level_prompt" = "Jūs nevarēsiet atsaukt šīs izmaiņas, jo lietotājam būtu tāds pats piekļuves līmenis kā jums pašam.
-\nVai esat pārliecināts\?";
+"room_participants_power_level_prompt" = "Jūs nevarēsiet atsaukt šīs izmaiņas, jo lietotājam būtu tāds pats piekļuves līmenis kā jums pašam.\nVai esat pārliecināts\?";
 "room_participants_ban_prompt_msg" = "Liedzot pieeju lietotājam, šī darbība izmetīs viņu no šīs istabas un neļaus pievienoties atkārtoti.";
 "room_one_user_is_typing" = "%@ raksta…";
 "room_two_users_are_typing" = "%1$@ & %2$@ raksta…";
@@ -359,7 +347,7 @@
 "settings_user_interface" = "Lietotāja saskarne";
 "settings_interface_language" = "Saskarnes valoda";
 "settings_select_language" = "Izvēlies valodu";
-"account_email_validation_message" = "Pārbaudi savu epastu un noklikšķini uz epasata sūtījumā esošās tīmekļa saites. Kad tas paveikts, klikšķini uz \"turpināt\.";
+"account_email_validation_message" = "Pārbaudi savu epastu un noklikšķini uz epasata sūtījumā esošās tīmekļa saites. Kad tas paveikts, klikšķini uz \"turpināt\".";
 "account_email_already_used_error" = "Šī epasta adrese sistēmā tiek jau lietota.";
 "account_phone_number_already_used_error" = "Šis tālruņa numurs sistēmā tiek jau lietots.";
 "settings_change_password" = "Nomainīt paroli";
@@ -367,9 +355,7 @@
 "settings_new_password" = "Jaunā parole";
 "settings_fail_to_update_password" = "Paroles nomaiņas kļūda";
 "settings_password_updated" = "Parole nomainīta";
-"settings_unignore_user" = "Rādīt visas ziņas no %@\?
-\n
-\nŅemiet vērā, ka ar šo darbību tiks pārstartēta lietotne, un tas var aizņemt kādu laiku.";
+"settings_unignore_user" = "Rādīt visas ziņas no %@\?\n\nŅemiet vērā, ka ar šo darbību tiks pārstartēta lietotne, un tas var aizņemt kādu laiku.";
 "settings_select_country" = "Izvēlies valsti";
 "settings_flair" = "Gaidas";
 "media_saving_period_3_days" = "3 dienas";
@@ -413,8 +399,7 @@
 "encryption_information_verified" = "Verificēta";
 "encryption_information_verify" = "Verificēt";
 "encryption_information_verify_device_warning" = "Apstipriniet, salīdzinot sekojošo ar lietotāja iestatījumiem citā savā sesijā:";
-"encryption_information_verify_device_warning2" = "Ja tā sakrīt, nospied zemāk esošo verifikācijas pogu. Ja tā nesakrīt, tad kāds ir pārtvēris šo ierīci un Tu droši vien vēlies šo ierīci pievienot melnajam sarakstam.
-Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
+"encryption_information_verify_device_warning2" = "Ja tā sakrīt, nospied zemāk esošo verifikācijas pogu. Ja tā nesakrīt, tad kāds ir pārtvēris šo ierīci un Tu droši vien vēlies šo ierīci pievienot melnajam sarakstam.Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "select_room_directory" = "Izvēlies istabu katalogu";
 "directory_server_placeholder" = "Mājasservera nosaukums";
 "directory_server_all_rooms_on_server" = "Visas istabas %@ serverī";
@@ -513,12 +498,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "room_profile_section_more" = "Vairāk";
 "room_profile_section_security_learn_more" = "Uzzināt vairāk";
 "room_profile_section_security" = "Drošība";
-"direct_room_profile_encrypted_subtitle" = "Ziņas šeit ir nodrošinātas ar pilnīgu šifrēšanu.
-\n
-\nJūsu ziņas tiek nodrošinātas ar slēdzenēm, un tikai jums un saņēmējam ir unikālas atslēgas, lai tās atbloķētu.";
-"room_profile_encrypted_subtitle" = "Ziņas šeit ir nodrošinātas ar pilnīgu šifrēšanu.
-\n
-\nJūsu ziņas tiek nodrošinātas ar slēdzenēm, un tikai jums un saņēmējam ir unikālas atslēgas, lai tās atbloķētu.";
+"direct_room_profile_encrypted_subtitle" = "Ziņas šeit ir nodrošinātas ar pilnīgu šifrēšanu.\n\nJūsu ziņas tiek nodrošinātas ar slēdzenēm, un tikai jums un saņēmējam ir unikālas atslēgas, lai tās atbloķētu.";
+"room_profile_encrypted_subtitle" = "Ziņas šeit ir nodrošinātas ar pilnīgu šifrēšanu.\n\nJūsu ziņas tiek nodrošinātas ar slēdzenēm, un tikai jums un saņēmējam ir unikālas atslēgas, lai tās atbloķētu.";
 "direct_room_profile_not_encrypted_subtitle" = "Ziņas šeit nav nodrošinātas ar pilnīgu šifrēšanu.";
 "room_profile_not_encrypted_subtitle" = "Ziņām šajā istabā netiek piemērota pilnīga šifrēšana.";
 "verification_request_you_accepted" = "Jūs akceptējāt";
@@ -738,12 +719,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "sent_verification_conclusion" = "Verifikācijas slēdziens";
 "sent_a_poll" = "Aptauja";
 "send_a_sticker" = "Uzlīme";
-"verification_conclusion_compromised" = "Kāds no uzskaitītajiem var būt kompromitēts:
-\n
-\n - jūsu bāzes serveris
-\n - bāzes serveris, kuram pieslēdzies verificējamais lietotājs
-\n - jūsu vai otra lietotāja interneta pieslēgums
-\n - jūsu vai otra lietotāja ierīce";
+"verification_conclusion_compromised" = "Kāds no uzskaitītajiem var būt kompromitēts:\n\n - jūsu bāzes serveris\n - bāzes serveris, kuram pieslēdzies verificējamais lietotājs\n - jūsu vai otra lietotāja interneta pieslēgums\n - jūsu vai otra lietotāja ierīce";
 "verification_conclusion_not_secure" = "Nav droša";
 "verification_sas_do_not_match" = "Tie nesakrīt";
 "verification_sas_match" = "Tie sakrīt";
@@ -801,8 +777,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_other_third_party_notices" = "Citi trešo pušu paziņojumi";
 "settings_sdk_version" = "Matrix SDK versija";
 "room_preview_no_preview_join" = "Šīs istabas priekšskatījums nav pieejams. Vai vēlaties tai pievienoties\?";
-"room_preview_not_found" = "Šī istaba šobrīd nav pieejama.
-\nMēģiniet vēlreiz vēlāk vai lūdziet istabas administratoru pārbaudīt, vai jums ir piekļuve.";
+"room_preview_not_found" = "Šī istaba šobrīd nav pieejama.\nMēģiniet vēlreiz vēlāk vai lūdziet istabas administratoru pārbaudīt, vai jums ir piekļuve.";
 "please_wait" = "Lūdzu, gaidiet…";
 "action_change" = "Mainīt";
 "room_list_catchup_empty_body" = "Jums vairs nav nelasītu ziņu";
@@ -822,14 +797,8 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "dialog_user_consent_submit" = "Pārskatīt tagad";
 "dialog_user_consent_content" = "Lai turpinātu izmantot %1$@ bāzes serveri, jums ir jāpārskata un jāpiekrīt noteikumiem un nosacījumiem.";
 "notification_silent" = "Kluss";
-"your_unverified_device_requesting_with_info" = "Neverificēta sesija pieprasa šifrēšanas atslēgas.
-\nSesijas nosaukums: %1$@
-\nRedzēta pēdējo reizi: %2$@
-\nJa neesat pierakstījies citā sesijā, ignorējiet šo pieprasījumu.";
-"you_added_a_new_device_with_info" = "Jauna sesija pieprasa šifrēšanas atslēgas.
-\nSesijas nosaukums: %1$@
-\nRedzēta pēdējo reizi: %2$@
-\nJa neesat pierakstījies citā sesijā, ignorējiet šo pieprasījumu.";
+"your_unverified_device_requesting_with_info" = "Neverificēta sesija pieprasa šifrēšanas atslēgas.\nSesijas nosaukums: %1$@\nRedzēta pēdējo reizi: %2$@\nJa neesat pierakstījies citā sesijā, ignorējiet šo pieprasījumu.";
+"you_added_a_new_device_with_info" = "Jauna sesija pieprasa šifrēšanas atslēgas.\nSesijas nosaukums: %1$@\nRedzēta pēdējo reizi: %2$@\nJa neesat pierakstījies citā sesijā, ignorējiet šo pieprasījumu.";
 "widget_integration_review_terms" = "Lai turpinātu, jums ir jāpieņem šī pakalpojuma noteikumi.";
 "room_manage_integrations" = "Pārvaldīt integrācijas";
 "widget_integration_missing_parameter" = "Iztrūks obligāts parametrs.";
@@ -866,16 +835,12 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "room_participants_unban_title" = "Atcelt pieejas liegumu lietotājam";
 "room_participants_ban_reason" = "Pieejas lieguma iemesls";
 "room_participants_ban_title" = "Liegt pieeju lietotājam";
-"room_participants_remove_prompt_msg" = "lietotāja padzīšanas gadījumā tas tiks dzēsts no šis istabas.
-\n
-\nLai novērstu atkārtotu pievienošanos, tā vietā jums vajadzētu liegt pieeju.";
+"room_participants_remove_prompt_msg" = "lietotāja padzīšanas gadījumā tas tiks dzēsts no šis istabas.\n\nLai novērstu atkārtotu pievienošanos, tā vietā jums vajadzētu liegt pieeju.";
 "room_participants_remove_reason" = "Padzīšanas iemesls";
 "room_participants_remove_title" = "Padzīt lietotāju";
 "room_participants_action_cancel_invite_prompt_msg" = "Vai tiešām vēlaties atcelt uzaicinājumu šim lietotājam\?";
 "room_participants_action_unignore_prompt_msg" = "Atceļot ši lietotāja ignorēšanu, visas lietotāja ziņas atkal būs redzamas.";
-"room_participants_action_ignore_prompt_msg" = "Ignorējot šo lietotāju noņems viņa ziņas istabās, kuras ir jums kopīgas.
-\n
-\nJūs varat atcelt šo darbību jebkurā brīdī vispārīgajos iestatījumos.";
+"room_participants_action_ignore_prompt_msg" = "Ignorējot šo lietotāju noņems viņa ziņas istabās, kuras ir jums kopīgas.\n\nJūs varat atcelt šo darbību jebkurā brīdī vispārīgajos iestatījumos.";
 "room_participants_power_level_demote" = "Pazemināt";
 "room_participants_power_level_demote_warning_title" = "Pazemināt sevi\?";
 "settings_call_category" = "Zvani";
@@ -956,17 +921,14 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "login_error_outdated_homeserver_warning_content" = "Uz šī bāzes servera darbojas pārāk veca versija. Aiciniet sava bāzes servera administratoru veikt atjauninājumus. Jūs varat turpināt, tomēr atsevišķas iespējas var nedarboties pareizi.";
 "login_error_outdated_homeserver_title" = "Novecojis bāzes serveris";
 "login_validation_code_is_not_correct" = "Ievadītais kods nav pareizs. Lūdzu, pārbaudiet.";
-"login_wait_for_email_notice" = "Mēs tikko nosūtījām epastu uz %1$@.
-\nLūdzu, noklikšķiniet uz saites epastā, lai turpinātu konta izveidi.";
+"login_wait_for_email_notice" = "Mēs tikko nosūtījām epastu uz %1$@.\nLūdzu, noklikšķiniet uz saites epastā, lai turpinātu konta izveidi.";
 "login_wait_for_email_title" = "Lūdzu, pārbaudiet savu epastu";
 "login_terms_title" = "Pieņemt noteikumus, lai turpinātu";
 "login_a11y_captcha_container" = "Lūdzu, veiciet CAPTCHA izaicinājumu";
 "login_a11y_choose_other" = "Izvēlēties pielāgotu bāzes serveri";
 "login_a11y_choose_modular" = "Izvēlēties Element Matrix Services";
 "login_a11y_choose_matrix_org" = "Izvēlēties matrix.org";
-"login_signup_cancel_confirmation_content" = "Jūsu konts vēl nav izveidots..
-\n
-\nVai pārtraukt reģistrēšanos\?";
+"login_signup_cancel_confirmation_content" = "Jūsu konts vēl nav izveidots..\n\nVai pārtraukt reģistrēšanos\?";
 "login_set_msisdn_notice2" = "Lūdzu, izmantojiet starptautisko formātu.";
 "login_set_msisdn_notice" = "Iestatiet tālruņa numuru,lai pēc izvēles ļaut jums zināmiem cilvēkiem atrast.";
 "login_set_msisdn_title" = "Iestatiet tālruņa numuru";
@@ -974,9 +936,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "login_set_email_optional_hint" = "Epasts (izvēles)";
 "login_set_email_notice" = "Iestatiet epastu, lai atgūtu savu kontu. Vēlāk jūs varat pēc izvēles ļaut jums zināmiem cilvēkiem atrast sevi pēc epasta adreses.";
 "login_set_email_title" = "Iestatīt epasta adresi";
-"login_reset_password_cancel_confirmation_content" = "Jūsu parole vēl nav nomainīta.
-\n
-\nVai pārtraukt paroles nomaiņu\?";
+"login_reset_password_cancel_confirmation_content" = "Jūsu parole vēl nav nomainīta.\n\nVai pārtraukt paroles nomaiņu\?";
 "login_reset_password_success_title" = "Gatavs!";
 "login_reset_password_mail_confirmation_notice_2" = "Nospiediet saiti, lai apstiprinātu savu jauno paroli. Kad esat sekojis saitei, noklikšķiniet zemāk.";
 "login_reset_password_mail_confirmation_notice" = "Apstiprinājuma epasts tika nosūtīts uz %1$@.";
@@ -984,13 +944,9 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "login_reset_password_error_not_found" = "Šis epasts nav piesaistīts nevienam kontam";
 "login_reset_password_on" = "Atiestatīt paroli uz %1$@";
 "login_login_with_email_error" = "Šis epasts nav piesaistīts nevienam kontam.";
-"login_registration_not_supported" = "Lietotnei neizdodas izveidot kontu uz šī bāzes servera.
-\n
-\nVai vēlaties reģistrēties, izmantojot tīmekļa klientu\?";
+"login_registration_not_supported" = "Lietotnei neizdodas izveidot kontu uz šī bāzes servera.\n\nVai vēlaties reģistrēties, izmantojot tīmekļa klientu\?";
 "login_registration_disabled" = "Atvainojiet, šis serveris nepieņem jaunus kontus.";
-"login_mode_not_supported" = "Lietotnei neizdodas pierakstīties uz šī bāzes servera. Bāzes serveris atbalsta sekojošos pierakstīšanās veidus: %1$@.
-\n
-\nVai vēlaties pierakstīties, izmantojot tīmekļa klientu\?";
+"login_mode_not_supported" = "Lietotnei neizdodas pierakstīties uz šī bāzes servera. Bāzes serveris atbalsta sekojošos pierakstīšanās veidus: %1$@.\n\nVai vēlaties pierakstīties, izmantojot tīmekļa klientu\?";
 "login_sso_error_message" = "Radās kļūda, ielādējot lapu: %1$@ (%2$d)";
 "login_server_url_form_common_notice" = "Ievadiet servera adresi, kuru vēlaties izmantot";
 "login_server_url_form_modular_notice" = "Ievadiet Modular Element vai servera adresi, kuru vēlaties izmantot";
@@ -1039,9 +995,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "room_filtering_footer_create_new_room" = "Izveidot jaunu istabu";
 "room_filtering_footer_title" = "Nevarat atrast meklēto\?";
 "room_filtering_filter_hint" = "Filtrēt sarakstes…";
-"create_room_federation_error" = "Istaba ir izveidota, bet daži ielūgumi nav nosūtīti šāda iemesla dēļ:
-\n
-\n%@";
+"create_room_federation_error" = "Istaba ir izveidota, bet daži ielūgumi nav nosūtīti šāda iemesla dēļ:\n\n%@";
 "create_room_public_description" = "Jebkurš varēs pievienoties istabai";
 "create_new_room" = "Izveidot jaunu istabu";
 "room_list_rooms_empty_body" = "Jūsu istabas parādīsies šeit. Pieskarieties + labajā apakšējā stūrī, lai atrastu esošās istabas vai izveidotu jaunu.";
@@ -1100,9 +1054,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "invite_users_to_room_action_invite" = "UZAICINĀT";
 "add_people" = "Pievienot cilvēkus";
 "add_members_to_room" = "Pievienot dalībniekus";
-"external_link_confirmation_message" = "Saite %1$@ ved uz citu vietni: %2$@.
-\n
-\nVai tiešām vēlaties turpināt\?";
+"external_link_confirmation_message" = "Saite %1$@ ved uz citu vietni: %2$@.\n\nVai tiešām vēlaties turpināt\?";
 "external_link_confirmation_title" = "Pārbaudiet šo saiti";
 "cross_signing_verify_by_emoji" = "Interaktīvi verificēt ar emocijzīmēm";
 "crosssigning_verify_session" = "Verificējiet sesiju";
@@ -1121,14 +1073,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "finish" = "Pabeigt";
 "enter_account_password" = "Ievadiet savu %@, lai turpinātu.";
 "verify_cancelled_notice" = "Verifikācija tika atcelta. Jūs varat uzsākt atkal.";
-"verify_not_me_self_verification" = "Kāds no uzskaitītajiem var būt kompromitēts:
-\n
-\n- jūsu parole
-\n- jūsu bāzes serveris
-\n- šī vai cita ierīce
-\n- interneta savienojums kādai no ierīcēm
-\n
-\nMēs iesakām jums nekavējoties nomainīt paroli un atiestatīšanas atslēgu iestatījumos.";
+"verify_not_me_self_verification" = "Kāds no uzskaitītajiem var būt kompromitēts:\n\n- jūsu parole\n- jūsu bāzes serveris\n- šī vai cita ierīce\n- interneta savienojums kādai no ierīcēm\n\nMēs iesakām jums nekavējoties nomainīt paroli un atiestatīšanas atslēgu iestatījumos.";
 "refresh" = "Atsvaidzināt";
 "share_confirm_room" = "Vai vēlaties sūtīt šo pielikumu %1$@\?";
 "settings_account_data" = "Konta dati";
@@ -1146,16 +1091,14 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_integration_manager" = "Integrācija pārvaldnieks";
 "settings_integration_allow" = "Atļaut integrācijas";
 "settings_deactivate_my_account" = "Deaktivizēt manu kontu";
-"initial_sync_start_downloading" = "Sākotnējā sinhronizācija:
-\nLejupielādē datus…";
-"initial_sync_start_server_computing" = "Sākotnējā sinhronizācija:
-\nGaida servera atbildi…";
+"initial_sync_start_downloading" = "Sākotnējā sinhronizācija:\nLejupielādē datus…";
+"initial_sync_start_server_computing" = "Sākotnējā sinhronizācija:\nGaida servera atbildi…";
 "labs_show_unread_notifications_as_tab" = "Pievienojiet speciālu cilni priekš nelasītiem paziņojumiem galvenajā ekrānā.";
 "labs_swipe_to_reply_in_timeline" = "Ieslēgt pavilkšanas žestu, lai atbildētu uz ziņu";
 "no_message_edits_found" = "Netika atrasti rediģējumi";
 "message_edits" = "Rediģētas Ziņas";
 "settings_labs_show_complete_history_in_encrypted_room" = "Rādīt pilnīgu vēsturi šifrētajās istabās";
-"import_e2e_keys_from_file" = "Importējiet E2E atslēgas no faila \"%1$@\.";
+"import_e2e_keys_from_file" = "Importējiet E2E atslēgas no faila \"%1$@\".";
 "keys_backup_unable_to_get_keys_backup_data" = "Kļūda radās vācot atslēgu dublējumu datus";
 "keys_backup_unable_to_get_trust_info" = "Kļūda radās vācot uzticības informāciju";
 "change_room_directory_network" = "Mainīt tīklu";
@@ -1196,23 +1139,15 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_troubleshoot_test_bg_restricted_quickfix" = "Izslēgt ierobežojumus";
 "settings_troubleshoot_test_bg_restricted_title" = "Pārbaudīt fona ierobežojumus";
 "settings_troubleshoot_test_notification_notification_clicked" = "Notifikācija tika nospiesta!";
-"settings_troubleshoot_test_token_registration_failed" = "Neizdevās reģistrēt FCM žetonu mājasserverī:
-\n%1$@";
+"settings_troubleshoot_test_token_registration_failed" = "Neizdevās reģistrēt FCM žetonu mājasserverī:\n%1$@";
 "settings_troubleshoot_test_token_registration_success" = "FCM žetons veiksmīgi reģistrēts mājasserverī.";
-"settings_troubleshoot_test_fcm_success" = "FCM žetons veiksmīgi saņemts:
-\n%1$@";
-"settings_troubleshoot_test_fcm_failed" = "FCM žetons netika saņemts:
-\n%1$@";
+"settings_troubleshoot_test_fcm_success" = "FCM žetons veiksmīgi saņemts:\n%1$@";
+"settings_troubleshoot_test_fcm_failed" = "FCM žetons netika saņemts:\n%1$@";
 "settings_troubleshoot_test_token_registration_title" = "Žetona Reģistrācija";
-"settings_troubleshoot_test_play_services_failed" = "%@ izmanto Google Play pakalpojumus, lai nodrošinātu ziņu pakalpojumu, bet tas nešķiet pareizi konfigurēts:
-\n%1$@";
-"no_sticker_application_dialog_content" = "Jums pašlaik nav iespējotas uzlīmes.
-\n
-\nPievienojiet dažas tagad\?";
-"call_failed_no_connection_description" = "Neizdevās izveidot reālā laika savienojumu.
-\nLūdzu, jautājiet sava servera administratoram, lai konfigurētu PAGRIEZIENA serveri, lai zvani strādātu uzticami.";
-"settings_integrations_summary" = "Izmantojiet Integrācijas Pārvaldnieku, lai pārvaldītu botus, tiltus, logrīkus un uzlīmes.
-\nIntegrācijas Pārvaldnieks saņem konfigurācijas datus un var modificēt logrīkus, sūtīt istabu uzaicinājumus jūsu vārdā.";
+"settings_troubleshoot_test_play_services_failed" = "%@ izmanto Google Play pakalpojumus, lai nodrošinātu ziņu pakalpojumu, bet tas nešķiet pareizi konfigurēts:\n%1$@";
+"no_sticker_application_dialog_content" = "Jums pašlaik nav iespējotas uzlīmes.\n\nPievienojiet dažas tagad\?";
+"call_failed_no_connection_description" = "Neizdevās izveidot reālā laika savienojumu.\nLūdzu, jautājiet sava servera administratoram, lai konfigurētu PAGRIEZIENA serveri, lai zvani strādātu uzticami.";
+"settings_integrations_summary" = "Izmantojiet Integrācijas Pārvaldnieku, lai pārvaldītu botus, tiltus, logrīkus un uzlīmes.\nIntegrācijas Pārvaldnieks saņem konfigurācijas datus un var modificēt logrīkus, sūtīt istabu uzaicinājumus jūsu vārdā.";
 "settings_background_fdroid_sync_mode_disabled_description" = "Jūs nesaņemsiet jaunas notifikācijas, kad aplikācija ir fonā.";
 "settings_background_fdroid_sync_mode_disabled" = "Bez fona sinhronizācijas";
 "settings_background_fdroid_sync_mode_real_time" = "Optimizēts reālajam laikam";
@@ -1273,35 +1208,29 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "keys_backup_setup_step3_copy_button_title" = "Saglabāt Atgūšanas Atslēgu";
 "keys_backup_setup_step3_button_title_no_passphrase" = "Es uztaisīju kopiju";
 "keys_backup_setup_step3_text_line2_no_passphrase" = "Saglabājiet savu atgūšanas atslēgu kaut kur ļoti drošā vietā, piemēram, paroles pārvaldniekā (vai seifā)";
-"keys_backup_setup_step3_text_line2" = "Jūsu atkopšanas atslēga ir drošības tīkls - to var izmantot, lai atjaunotu piekļuvi jūsu šifrētajām ziņām, ja esat aizmirsis savu paroles frāzi.
-\nSaglabājiet savu atgūšanas atslēgu kaut kur ļoti drošā vietā, piemēram, paroles pārvaldniekā (vai seifā)";
+"keys_backup_setup_step3_text_line2" = "Jūsu atkopšanas atslēga ir drošības tīkls - to var izmantot, lai atjaunotu piekļuvi jūsu šifrētajām ziņām, ja esat aizmirsis savu paroles frāzi.\nSaglabājiet savu atgūšanas atslēgu kaut kur ļoti drošā vietā, piemēram, paroles pārvaldniekā (vai seifā)";
 "keys_backup_setup_step3_text_line1" = "Jūsu atslēgas tiek dublētas.";
 "keys_backup_setup_step3_success_title" = "Izdevās !";
 "keys_backup_setup_step2_skip_button_title" = "(Advancēti) Iestatīt ar Atgūšanas Atslēgu";
 "keys_backup_setup_step1_recovery_key_alternative" = "Vai, aizsargājiet jūsu dublējumu ar Atgūšanas Atslēgu, saglabājot to drošā vietā.";
 "keys_backup_setup_creating_backup" = "Taisa Dublējumu";
 "keys_backup_setup_step2_button_title" = "Iestatīt Frāzi";
-"keys_backup_setup_step2_text_description" = "Mēs saglabāsim šifrētu jūsu atslēgu kopiju savā serverī. Aizsargājiet savu dublējumu ar frāzi, lai tā būtu droši aizsargāta.
-\n
-\nLai nodrošinātu maksimālu drošību, tam jāatšķiras no jūsu konta paroles.";
+"keys_backup_setup_step2_text_description" = "Mēs saglabāsim šifrētu jūsu atslēgu kopiju savā serverī. Aizsargājiet savu dublējumu ar frāzi, lai tā būtu droši aizsargāta.\n\nLai nodrošinātu maksimālu drošību, tam jāatšķiras no jūsu konta paroles.";
 "keys_backup_setup_step2_text_title" = "Aizsargājiet savu dublējumu ar Frāzi.";
 "keys_backup_setup_step1_manual_export" = "Manuāli eksportēt atslēgas";
 "keys_backup_setup_step1_advanced" = "(Advancēti)";
 "keys_backup_setup" = "Sākt izmantot Atslēgu Dublēšanu";
-"keys_backup_setup_step1_description" = "Ziņojumi šifrētās istabās ir nodrošināti ar E2E šifrēšanu. Tikai jums un saņēmējam (-iem) ir atslēgas, lai izlasītu šos ziņojumus.
-\n
-\nDroši dublējiet atslēgas, lai izvairītos no viņu zaudēšanas.";
+"keys_backup_setup_step1_description" = "Ziņojumi šifrētās istabās ir nodrošināti ar E2E šifrēšanu. Tikai jums un saņēmējam (-iem) ir atslēgas, lai izlasītu šos ziņojumus.\n\nDroši dublējiet atslēgas, lai izvairītos no viņu zaudēšanas.";
 "keys_backup_setup_step1_title" = "Nekad nepazaudējiet šifrētās ziņas";
 "resource_limit_hard_mau" = "Šis serveris ir sasniedzis savu ikmēneša aktīvo lietotāju limitu.";
-"resource_limit_soft_mau.b_0" = " daži lietotāji nevarēs pierakstīties ";
+"resource_limit_soft_mau" = "Šis serveris ir sasniedzis savu ikmēneša aktīvo lietotāju limitu, tāpēc <b> daži lietotāji nevarēs pierakstīties </b>.";
 "resource_limit_hard_default" = "Šis serveris ir pārsniedzis vienu no saviem resursu ierobežojumiem.";
-"resource_limit_soft_default.b_0" = " daži lietotāji nevarēs ierakstīties ";
+"resource_limit_soft_default" = "Šis servers ir pārsniedzis vienu no saviem resursu ierobežojumiem, tāpēc <b> daži lietotāji nevarēs ierakstīties </b>.";
 "resource_limit_contact_admin" = "kontaktēt jūsu pakalpojuma administratoru";
 "error_empty_field_your_password" = "Lūdzu ievadiet paroli.";
 "error_empty_field_enter_user_name" = "Lūdzu ievadiet lietotājvārdu.";
 "deactivate_account_delete_checkbox" = "Lūdzu aizmirst visas ziņas, ko esmu nosūtījis, kad mans konts ir deaktivizēts (Brīdinājums: šis nākotnes lietotājiem neļaus redzēt visu sarunu kontekstu)";
-"deactivate_account_content.b_0" = " Šī darbība ir neatgriezeniska ";
-"deactivate_account_content.b_1" = ", pēc noklusējuma, neliek mums aizmirst jūsu nosūtītās ziņas ";
+"deactivate_account_content" = "Tas padarīs jūsu kontu nelietojamu. Jūs nevarēsiet ierakstīties, un neviens nevarēs atkārtoti reģistrēt to pašu lietotāja ID. Tas liks jūsu kontu atstāt visas istabas, kurās piedalās, un tas noņems jūsu konta datus no jūsu identitātes servera. <b> Šī darbība ir neatgriezeniska </b>.\n\nDeaktivizējot savu kontu <b>, pēc noklusējuma, neliek mums aizmirst jūsu nosūtītās ziņas </b>. Ja jūs vēlētos, lai mēs aizmirstu jūsu ziņas, lūdzu, atzīmējiet zemāk redzamo lodziņu.\n\nZiņu redzamība Matrix ir līdzīga e-pastam. Mums aizmirst jūsu ziņas nozīmē, ka ziņas, ko esat nosūtījis, netiks rādītas jauniem vai nereģistrētiem lietotājiem, bet reģistrētiem lietotājiem, kuriem jau ir piekļuve šīm ziņām, joprojām būs piekļuve to kopijai.";
 "key_share_request" = "Atslēgas Dalīšanās Pieprasījums";
 "room_no_active_widgets" = "Nav aktīvu logrīku";
 "room_widget_webview_access_microphone" = "Izmantot mikrofonu";
@@ -1319,8 +1248,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "room_widget_revoke_access" = "Atsaukt piekļuvi man";
 "room_widget_open_in_browser" = "Atvērt pārlūkprogrammā";
 "room_widget_reload" = "Pārlādēt logrīku";
-"room_widget_failed_to_load" = "Neizdevās ielādēt logrīku.
-\n%@";
+"room_widget_failed_to_load" = "Neizdevās ielādēt logrīku.\n%@";
 "room_widget_permission_added_by" = "Šis logrīks bija pievienots no:";
 "room_widget_permission_title" = "Ielādēt Logrīku";
 "room_widget_activity_title" = "Logrīks";
@@ -1362,8 +1290,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_troubleshoot_test_play_services_quickfix" = "Salabot Play Servisus";
 "error_threepid_auth_failed" = "Pārliecinieties, ka esat nospiedis uz saites e-pasta ziņojumā, ko esam nosūtījuši jums.";
 "settings_background_fdroid_sync_mode_battery" = "Optimizēts akumulatoram";
-"settings_background_fdroid_sync_mode_battery_description" = "%@ sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.
-\nAtkarībā no ierīces baterijas stāvokļa, sinhronizāciju var atcelt operētājsistēma.";
+"settings_background_fdroid_sync_mode_battery_description" = "%@ sinhronizēsies fonā, tā lai ietaupītu telefona bateriju.\nAtkarībā no ierīces baterijas stāvokļa, sinhronizāciju var atcelt operētājsistēma.";
 "settings_troubleshoot_test_battery_quickfix" = "Ignorēt optimizāciju";
 "settings_troubleshoot_test_battery_success" = "%@ neietekmē akumulatora optimizācija.";
 "settings_troubleshoot_test_battery_title" = "Akumulatora Optimizācija";
@@ -1372,16 +1299,13 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_troubleshoot_test_bing_settings_failed" = "Daži paziņojumi ir izslēgti jūsu pielāgotos iestatījumos.";
 "settings_troubleshoot_test_bing_settings_success_with_warn" = "Ievērojiet, ka daži ziņojumi ir iestatīti kā klusi (paziņojumi pienāks bez skaņas).";
 "settings_troubleshoot_test_bing_settings_title" = "Pielāgoti Iestatījumi.";
-"settings_troubleshoot_test_device_settings_failed" = "Paziņojumi nav ieslēgti šai sesijai.
-\nLūdzu, pārbaudiet %@ iestatījumus.";
+"settings_troubleshoot_test_device_settings_failed" = "Paziņojumi nav ieslēgti šai sesijai.\nLūdzu, pārbaudiet %@ iestatījumus.";
 "settings_troubleshoot_test_device_settings_success" = "Paziņojumi ir ieslēgti šai sesijai.";
 "settings_troubleshoot_test_device_settings_title" = "Sesijas Iestatījumi.";
-"settings_troubleshoot_test_account_settings_failed" = "Paziņojumi ir atspējoti jūsu kontā.
-\nLūdzu, pārbaudiet konta iestatījumus.";
+"settings_troubleshoot_test_account_settings_failed" = "Paziņojumi ir atspējoti jūsu kontā.\nLūdzu, pārbaudiet konta iestatījumus.";
 "settings_troubleshoot_test_account_settings_success" = "Paziņojumi ir ieslēgti jūsu kontam.";
 "settings_troubleshoot_test_account_settings_title" = "Konta iestatījumi.";
-"settings_troubleshoot_test_system_settings_failed" = "Paziņojumi ir izslēgti sistēmas iestatījumos.
-\nLūdzu, pārbaudiet sistēmas iestatījumus.";
+"settings_troubleshoot_test_system_settings_failed" = "Paziņojumi ir izslēgti sistēmas iestatījumos.\nLūdzu, pārbaudiet sistēmas iestatījumus.";
 "settings_troubleshoot_test_system_settings_success" = "Paziņojumi ir ieslēgti sistēmas iestatījumos.";
 "settings_troubleshoot_test_system_settings_title" = "Sistēmas iestatījumi.";
 "settings_troubleshoot_diagnostic_failure_status_no_quickfix" = "Viens vai vairāki testi nav izdevušies, lūdzu, iesniedziet kļūdu ziņojumu, lai palīdzētu mums izmeklēt.";
@@ -1435,9 +1359,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "keys_backup_restore_success_title_already_up_to_date" = "Atslēgas jau ir atjauninātas!";
 "event_redacted_by_admin_reason_with_reason" = "Pasākumu moderē telpas administrators, iemesls: %1$@";
 "event_redacted_by_user_reason_with_reason" = "Lietotājs izdzēsa notikumu, iemesls: %1$@";
-"delete_account_data_warning" = "Dzēst %1$@ tipa konta datus\?
-\n
-\nLietojiet piesardzīgi, tas var izraisīt neparedzētu uzvedību.";
+"delete_account_data_warning" = "Dzēst %1$@ tipa konta datus\?\n\nLietojiet piesardzīgi, tas var izraisīt neparedzētu uzvedību.";
 "settings_dev_tools" = "Izstrādātāj rīki";
 "settings_failed_to_get_crypto_device_info" = "Nav pieejama kriptogrāfiska informācija";
 "settings_server_upload_size_content" = "Jūsu serveris pieņem pielikumus (failus, multivides u.c.), kuru izmērs nepārsniedz %@.";
@@ -1457,17 +1379,11 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "seen_by" = "Skatīja";
 "reaction_search_type_hint" = "Ievadiet atslēgvārdus, lai atrastu reakciju.";
 "spoiler" = "Spoileris";
-"content_reported_as_inappropriate_content" = "Par šo saturu tika ziņots kā par nepiemērotu.
-\n
-\nJa vairs nevēlaties redzēt saturu no šī lietotāja, varat to ignorēt, lai paslēptu viņa ziņojumus.";
+"content_reported_as_inappropriate_content" = "Par šo saturu tika ziņots kā par nepiemērotu.\n\nJa vairs nevēlaties redzēt saturu no šī lietotāja, varat to ignorēt, lai paslēptu viņa ziņojumus.";
 "content_reported_as_inappropriate_title" = "Ziņots kā nepiemērots";
-"content_reported_as_spam_content" = "Par šo saturu tika ziņots kā par spamu.
-\n
-\nJa vairs nevēlaties redzēt saturu no šī lietotāja, varat to ignorēt, lai paslēptu viņa ziņojumus.";
+"content_reported_as_spam_content" = "Par šo saturu tika ziņots kā par spamu.\n\nJa vairs nevēlaties redzēt saturu no šī lietotāja, varat to ignorēt, lai paslēptu viņa ziņojumus.";
 "content_reported_as_spam_title" = "Ziņots kā spams";
-"content_reported_content" = "Par šo saturu tika ziņots.
-\n
-\nJa vairs nevēlaties redzēt saturu no šī lietotāja, varat to ignorēt, lai paslēptu viņa ziņojumus.";
+"content_reported_content" = "Par šo saturu tika ziņots.\n\nJa vairs nevēlaties redzēt saturu no šī lietotāja, varat to ignorēt, lai paslēptu viņa ziņojumus.";
 "content_reported_title" = "Saturs ziņots";
 "block_user" = "IGNORĒT LIETOTĀJU";
 "rotate_and_crop_screen_title" = "Rotēšana un apgriešana";
@@ -1529,8 +1445,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_discovery_manage" = "Pārvaldiet atklāšanas iestatījumus.";
 "settings_discovery_category" = "Atklāšana";
 "settings_preview_media_before_sending" = "Priekšskatīt failu pirms nosūtīšanas";
-"settings_background_fdroid_sync_mode_real_time_description" = "%@ sinhronizēsies fonā periodiski, precīzi, noteiktā laikā (konfigurējams).
-\nTas ietekmēs radio un akumulatora izmantošanu, tiks parādīts pastāvīgs paziņojums par to, ka %@ klausās notikumus.";
+"settings_background_fdroid_sync_mode_real_time_description" = "%@ sinhronizēsies fonā periodiski, precīzi, noteiktā laikā (konfigurējams).\nTas ietekmēs radio un akumulatora izmantošanu, tiks parādīts pastāvīgs paziņojums par to, ka %@ klausās notikumus.";
 "settings_troubleshoot_test_battery_failed" = "Ja lietotājs kādu laiku atstāj ierīci atvienotu no tīkla un nekustīgu, ar izslēgtu ekrānu, ierīcē tiek ieslēgts dīkstāves režīms. Tas neļauj lietotnēm piekļūt tīklam un atliek to darbu izpildi, sinhronizāciju un standarta trauksmes signālus.";
 "settings_troubleshoot_test_service_boot_failed" = "Pakalpojums nesāksies, kad ierīce tiks restartēta, jūs nesaņemsiet paziņojumus, kamēr vismaz vienreiz nebūsiet atvēris %@.";
 "settings_troubleshoot_test_notification_notice" = "Lūdzu, noklikšķiniet uz paziņojuma. Ja paziņojums nav redzams, pārbaudiet sistēmas iestatījumus.";
@@ -1672,9 +1587,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "bootstrap_crosssigning_save_cloud" = "Nokopējiet to uz personālās mākoņa krātuves";
 "bootstrap_crosssigning_save_usb" = "Saglabājiet uz USB vai rezerves diska";
 "bootstrap_crosssigning_print_it" = "Izprintējiet un turiet to drošībā";
-"bootstrap_cross_signing_success" = "Jūsu %2$@ un %1$@ tagad ir iestatīti.
-\n
-\nSaglabājiet tos drošībā! Tie jums būs nepieciešami, lai atbloķētu šifrētus ziņojumus un aizsargātu informāciju, ja zaudēsiet visas aktīvās sesijas.";
+"bootstrap_cross_signing_success" = "Jūsu %2$@ un %1$@ tagad ir iestatīti.\n\nSaglabājiet tos drošībā! Tie jums būs nepieciešami, lai atbloķētu šifrētus ziņojumus un aizsargātu informāciju, ja zaudēsiet visas aktīvās sesijas.";
 "keep_it_safe" = "Turiet to drošībā";
 "bootstrap_finish_title" = "Viss pabeigts!";
 "bootstrap_loading_text" = "Šis varētu aizņemt dažas sekundes.";
@@ -1730,8 +1643,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_server_room_versions" = "Istabu versijas 👓";
 "settings_category_composer" = "Ziņu redaktors";
 "settings_category_timeline" = "Hronoloģija";
-"verify_cannot_cross_sign" = "Šī sesija nevar kopīgot šo verifikāciju ar citām sesijām.
-\nVerifikācija tiks saglabāta lokāli un kopīgota kādā no nākamajām lietotnes versijām.";
+"verify_cannot_cross_sign" = "Šī sesija nevar kopīgot šo verifikāciju ar citām sesijām.\nVerifikācija tiks saglabāta lokāli un kopīgota kādā no nākamajām lietotnes versijām.";
 "rendering_event_error_exception" = "%@ saskārās ar problēmu, atveidojot notikuma ar id \'%1$@\' saturu";
 "rendering_event_error_type_of_event_not_handled" = "%@ neapstrādā \'%1$@\' tipa notikumus";
 "verification_scan_self_emoji_subtitle" = "Tā vietā pārbaudiet, salīdzinot emocijzīmes";
@@ -1745,22 +1657,12 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "settings_developer_mode_show_info_on_screen_summary" = "Rādīt kādu noderīgu informāciju, lai palīdzētu atkļūdošanas programmā";
 "settings_developer_mode_show_info_on_screen_title" = "Parādīt atkļūdošanas informāciju ekrānā";
 "settings_developer_mode_fail_fast_summary" = "%@ var biežāk avarēt, ja rodas neparedzēta kļūda";
-"soft_logout_sso_not_same_user_error" = "Pašreizējā sesija ir lietotājam %1$@, un jūs sniedzat lietotāja %2$@ akreditācijas datus. To neatbalsta %@.
-\nLūdzu, vispirms notīriet datus un pēc tam pierakstieties vēlreiz, izmantojot citu kontu.";
-"soft_logout_clear_data_dialog_content" = "Izdzēst visus šajā ierīcē pašlaik saglabātos datus\?
-\nPierakstieties vēlreiz, lai piekļūtu konta datiem un ziņojumiem.";
-"soft_logout_clear_data_notice" = "Brīdinājums: Šajā ierīcē joprojām tiek glabāti jūsu personas dati (tostarp šifrēšanas atslēgas).
-\n
-\nIzdzēsiet tos, ja esat beidzis lietot šo ierīci vai vēlaties pierakstīties citā kontā.";
+"soft_logout_sso_not_same_user_error" = "Pašreizējā sesija ir lietotājam %1$@, un jūs sniedzat lietotāja %2$@ akreditācijas datus. To neatbalsta %@.\nLūdzu, vispirms notīriet datus un pēc tam pierakstieties vēlreiz, izmantojot citu kontu.";
+"soft_logout_clear_data_dialog_content" = "Izdzēst visus šajā ierīcē pašlaik saglabātos datus\?\nPierakstieties vēlreiz, lai piekļūtu konta datiem un ziņojumiem.";
+"soft_logout_clear_data_notice" = "Brīdinājums: Šajā ierīcē joprojām tiek glabāti jūsu personas dati (tostarp šifrēšanas atslēgas).\n\nIzdzēsiet tos, ja esat beidzis lietot šo ierīci vai vēlaties pierakstīties citā kontā.";
 "soft_logout_signin_e2e_warning_notice" = "Pierakstieties, lai atgūtu šifrēšanas atslēgas, kas glabājas tikai šajā ierīcē. Jums tās ir nepieciešamas, lai lasītu visus savus drošos ziņojumus jebkurā ierīcē.";
 "soft_logout_signin_notice" = "Jūsu mājasservera (%1$@) administrators ir izslēdzis jūs no konta %2$@ (%3$@).";
-"signed_out_notice" = "To var izraisīt dažādi iemesli:
-\n
-\n• Jūs esat mainījis paroli citā sesijā.
-\n
-\n• Jūs esat izdzēsis šo sesiju no citas sesijas.
-\n
-\n• Jūsu servera administrators ir anulējis jūsu piekļuvi drošības apsvērumu dēļ.";
+"signed_out_notice" = "To var izraisīt dažādi iemesli:\n\n• Jūs esat mainījis paroli citā sesijā.\n\n• Jūs esat izdzēsis šo sesiju no citas sesijas.\n\n• Jūsu servera administrators ir anulējis jūsu piekļuvi drošības apsvērumu dēļ.";
 "does_not_look_like_valid_email" = "Neizskatās pēc derīgas e-pasta adreses";
 "command_description_spoiler" = "Nosūta doto ziņojumu kā pārsteigumu";
 "uploads_files_subtitle" = "%1$@ pie %2$@";
@@ -1826,21 +1728,15 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "command_description_avatar_for_room" = "Nomaina jūsu avatāru tikai šajā istabā";
 "command_description_room_avatar" = "Nomaina šīs istabas avatāru";
 "settings_when_rooms_are_upgraded" = "Kad istabas ir atjaunotas";
-"settings_troubleshoot_test_bg_restricted_failed" = "Fona ierobežojumi ir ieslēgti lietotnei %@.
-\nDarbs, ko lietotne mēģina veikt, tiks agresīvi ierobežots, kamēr tā atrodas fonā, un tas var ietekmēt paziņojumus.
-\n%1$@";
-"settings_troubleshoot_test_bg_restricted_success" = "Fona ierobežojumi ir izslēgti priekš %@. Šis tests jāveic, izmantojot mobilos datus (bez WIFI).
-\n%1$@";
+"settings_troubleshoot_test_bg_restricted_failed" = "Fona ierobežojumi ir ieslēgti lietotnei %@.\nDarbs, ko lietotne mēģina veikt, tiks agresīvi ierobežots, kamēr tā atrodas fonā, un tas var ietekmēt paziņojumus.\n%1$@";
+"settings_troubleshoot_test_bg_restricted_success" = "Fona ierobežojumi ir izslēgti priekš %@. Šis tests jāveic, izmantojot mobilos datus (bez WIFI).\n%1$@";
 "settings_troubleshoot_test_push_loop_failed" = "Neizdevās saņemt palaišanu. Iespējams, vajag pārielādēt lietotni.";
 "settings_troubleshoot_test_push_loop_success" = "Lietotne saņem Palaišanu";
 "settings_troubleshoot_test_push_loop_waiting_for_push" = "Lietotne gaida Palaišanu";
 "settings_troubleshoot_test_push_loop_title" = "Testa Palaišana";
-"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]
-\nŠī kļūda ir ārpus %@ kontroles. Tālrunī nav Google konta. Lūdzu, atveriet kontu pārvaldnieku un pievienojiet Google kontu.";
-"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]
-\nŠī kļūda ir ārpus %@ kontroles. Tā var rasties vairāku iemeslu dēļ. Iespējams, tā darbosies, ja vēlāk mēģināsiet vēlreiz, varat arī pārbaudīt, vai sistēmas iestatījumos nav ierobežota Google Play pakalpojuma datu izmantošana, vai ierīces pulkstenis ir pareizs, vai arī tā var notikt uz atsevišķām sistēmām.";
-"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]
-\nŠī kļūda nav kontrolējama ar %@, un saskaņā ar Google datiem šī kļūda norāda, ka ierīcē ir pārāk daudz lietotņu, kas reģistrētas FCM. Kļūda rodas tikai gadījumos, kad ir ārkārtīgi liels lietotņu skaits, tāpēc šim nevajadzētu ietekmēt parastu lietotāju.";
+"settings_troubleshoot_test_fcm_failed_account_missing" = "[%1$@]\nŠī kļūda ir ārpus %@ kontroles. Tālrunī nav Google konta. Lūdzu, atveriet kontu pārvaldnieku un pievienojiet Google kontu.";
+"settings_troubleshoot_test_fcm_failed_service_not_available" = "[%1$@]\nŠī kļūda ir ārpus %@ kontroles. Tā var rasties vairāku iemeslu dēļ. Iespējams, tā darbosies, ja vēlāk mēģināsiet vēlreiz, varat arī pārbaudīt, vai sistēmas iestatījumos nav ierobežota Google Play pakalpojuma datu izmantošana, vai ierīces pulkstenis ir pareizs, vai arī tā var notikt uz atsevišķām sistēmām.";
+"settings_troubleshoot_test_fcm_failed_too_many_registration" = "[%1$@]\nŠī kļūda nav kontrolējama ar %@, un saskaņā ar Google datiem šī kļūda norāda, ka ierīcē ir pārāk daudz lietotņu, kas reģistrētas FCM. Kļūda rodas tikai gadījumos, kad ir ārkārtīgi liels lietotņu skaits, tāpēc šim nevajadzētu ietekmēt parastu lietotāju.";
 "settings_troubleshoot_diagnostic_running_status" = "Izpilda… (%1$d of %2$d)";
 "settings_notification_keyword_contains_invalid_character" = "Atslēgvārds nevar saturēt \'%@\'";
 "settings_notification_keyword_contains_dot" = "Atslēgvārds nevar sākties ar \'.\'";
@@ -1866,9 +1762,7 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "space_settings_permissions_title" = "Telpas atļaujas";
 "space_participants_unban_prompt_msg" = "Atceļot pievienošanās aizliegumu lietotājam, ļaus viņam atkal pievienoties Telpai.";
 "space_participants_ban_prompt_msg" = "Aizliedzot lietotājam pievienoties, viņš tiks izmests no šīs Telpas un vairs nevarēs tai pievienoties.";
-"space_participants_remove_prompt_msg" = "izmetot lietotāju, noņems viņu no šīs Telpas.
-\n
-\nLai novērstu viņu atkārtotu pievienošanos, jums tā vietā vajadzētu viņiem aizliegt pievienoties.";
+"space_participants_remove_prompt_msg" = "izmetot lietotāju, noņems viņu no šīs Telpas.\n\nLai novērstu viņu atkārtotu pievienošanos, jums tā vietā vajadzētu viņiem aizliegt pievienoties.";
 "call_remove_jitsi_widget_progress" = "Beidz zvanu…";
 "call_ended_invite_timeout_title" = "Nav atbildes";
 "call_ended_user_busy_description" = "Lietotājs, kuram zvanījāt, ir aizņemts.";
@@ -1884,108 +1778,3 @@ Nākotnē šī pārbaudes procedūra plānota sarežģītāka.";
 "denied_permission_voice_message" = "Lai sūtītu balss ziņojumus, piešķiriet Mikrofona atļauju.";
 "spaces" = "Telpas";
 "notification_listening_for_notifications" = "Uztver paziņojumus";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_0" = "Jūs izdzēsāt šīs istabas alternatīvo adresi %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_1" = "Jūs izdzēsāt šīs istabas alternatīvās adreses %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed_by_you.item_2" = "Jūs izdzēsāt šīs istabas alternatīvās adreses %1$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_0" = "%1$@ izdzēsa šīs istabas alternatīvo adresi %2$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_1" = "%1$@ izdzēsa šīs istabas alternatīvās adreses %2$@.";
-"plurals.notice_room_canonical_alias_alternative_removed.item_2" = "%1$@ izdzēsa šīs istabas alternatīvās adreses %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_0" = "Jūs pievienojāt šīs istabas alternatīvo adresi %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_1" = "Jūs pievienojāt šīs istabas alternatīvās adreses %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added_by_you.item_2" = "Jūs pievienojāt šīs istabas alternatīvās adreses %1$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_0" = "%1$@ pievienoja šīs istabas alternatīvo adresi %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_1" = "%1$@ pievienoja šīs istabas alternatīvās adreses %2$@.";
-"plurals.notice_room_canonical_alias_alternative_added.item_2" = "%1$@ pievienoja šīs istabas alternatīvās adreses %2$@.";
-"plurals.notice_room_aliases_removed_by_you.item_0" = "Jūs izdzēsāt %1$@ kā šīs istabas adresi.";
-"plurals.notice_room_aliases_removed_by_you.item_1" = "Jūs izdzēsāt %1$@ kā šīs istabas adreses.";
-"plurals.notice_room_aliases_removed_by_you.item_2" = "Jūs izdzēsāt %1$@ kā šīs istabas adreses.";
-"plurals.notice_room_aliases_removed.item_0" = "%1$@ izdzēsa %2$@ kā šīs istabas adresi.";
-"plurals.notice_room_aliases_removed.item_1" = "%1$@ izdzēsa %2$@ kā šīs istabas adreses.";
-"plurals.notice_room_aliases_removed.item_2" = "%1$@ izdzēsa %2$@ kā šīs istabas adreses.";
-"plurals.notice_room_aliases_added_by_you.item_0" = "Jūs pievienojāt %1$@ kā šīs istabas adresi.";
-"plurals.notice_room_aliases_added_by_you.item_1" = "Jūs pievienojāt %1$@ kā šīs istabas adreses.";
-"plurals.notice_room_aliases_added_by_you.item_2" = "Jūs pievienojāt %1$@ kā šīs istabas adreses.";
-"plurals.notice_room_aliases_added.item_0" = "%1$@ pievienoja %2$@ kā šīs istabas adresi.";
-"plurals.notice_room_aliases_added.item_1" = "%1$@ pievienoja %2$@ kā šis istabas adreses.";
-"plurals.notice_room_aliases_added.item_2" = "%1$@ pievienoja %2$@ kā šīs istabas adreses.";
-"plurals.room_displayname_four_and_more_members.item_0" = "%1$@, %2$@, %3$@ un %4$d citi";
-"plurals.room_displayname_four_and_more_members.item_1" = "%1$@, %2$@, %3$@ un %4$d cits";
-"plurals.room_displayname_four_and_more_members.item_2" = "%1$@, %2$@, %3$@ un %4$d citi";
-"plurals.membership_changes.item_0" = "%d biedru izmaiņu";
-"plurals.membership_changes.item_1" = "%d biedru izmaiņa";
-"plurals.membership_changes.item_2" = "%d biedru izmaiņas";
-"plurals.room_title_members.item_0" = "%d biedri";
-"plurals.room_title_members.item_1" = "%d biedrs";
-"plurals.room_title_members.item_2" = "%d biedri";
-"plurals.room_new_messages_notification.item_0" = "%d jaunu ziņu";
-"plurals.room_new_messages_notification.item_1" = "%d jauna ziņa";
-"plurals.room_new_messages_notification.item_2" = "%d jaunas ziņas";
-"plurals.notification_unread_notified_messages.item_0" = "%d nelasīta paziņota ziņa";
-"plurals.notification_unread_notified_messages.item_1" = "%d nelasītas paziņotas ziņas";
-"plurals.notification_unread_notified_messages.item_2" = "%d nelasītu paziņotu ziņu";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_0" = "%d istaba";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_1" = "%d istabas";
-"plurals.notification_unread_notified_messages_in_room_rooms.item_2" = "%d istabu";
-"plurals.active_widgets.item_0" = "%d aktīvs vidžets";
-"plurals.active_widgets.item_1" = "%d aktīvi vidžeti";
-"plurals.active_widgets.item_2" = "%d aktīvu vidžetu";
-"plurals.room_settings_banned_users_count.item_0" = "%d lietotājs, kuram liegta pieeja";
-"plurals.room_settings_banned_users_count.item_1" = "%d lietotāji, kuriem liegta pieeja";
-"plurals.room_settings_banned_users_count.item_2" = "%d lietotāji, kuriem liegta pieeja";
-"plurals.seconds.item_0" = "%d sekunde";
-"plurals.seconds.item_1" = "%d sekundes";
-"plurals.seconds.item_2" = "%d sekundes";
-"plurals.secure_backup_reset_devices_you_can_verify.item_0" = "Parādīt ierīci, ar kuru jūs šobrīd varat veikt verifikāciju";
-"plurals.secure_backup_reset_devices_you_can_verify.item_1" = "Parādīt %d ierīces, ar kurām jūs šobrīd varat veikt verifikāciju";
-"plurals.secure_backup_reset_devices_you_can_verify.item_2" = "Parādīt %d ierīces, ar kurām jūs šobrīd varat veikt verifikāciju";
-"plurals.room_profile_section_more_member_list.item_0" = "Viena persona";
-"plurals.room_profile_section_more_member_list.item_1" = "%1$d cilvēki";
-"plurals.room_profile_section_more_member_list.item_2" = "%1$d cilvēki";
-"plurals.login_error_limit_exceeded_retry_after.item_0" = "Ir nosūtīts pārāk daudz pieprasījumu. Jūs varat atkārtot mēģinājumu pēc %1$d sekundēm…";
-"plurals.login_error_limit_exceeded_retry_after.item_1" = "Ir nosūtīts pārāk daudz pieprasījumu. Jūs varat atkārtot mēģinājumu pēc %1$d sekundes…";
-"plurals.login_error_limit_exceeded_retry_after.item_2" = "Ir nosūtīts pārāk daudz pieprasījumu. Jūs varat atkārtot mēģinājumu pēc %1$d sekundēm…";
-"plurals.fallback_users_read.item_0" = "%d lietotāju izlasīja";
-"plurals.fallback_users_read.item_1" = "%d lietotājs izlasīja";
-"plurals.fallback_users_read.item_2" = "%d lietotāji izlasīja";
-"plurals.keys_backup_info_keys_backing_up.item_0" = "Dublē %d atslēgu…";
-"plurals.keys_backup_info_keys_backing_up.item_1" = "Dublē %d atslēgu…";
-"plurals.keys_backup_info_keys_backing_up.item_2" = "Dublē %d atslēgas…";
-"plurals.keys_backup_restore_success_description_part1.item_0" = "Atjaunota rezerves kopija ar %d atslēgu.";
-"plurals.keys_backup_restore_success_description_part1.item_1" = "Atjaunota rezerves kopija ar %d atslēgu.";
-"plurals.keys_backup_restore_success_description_part1.item_2" = "Atjaunota rezerves kopija ar %d atslēgām.";
-"plurals.notification_compat_summary_title.item_0" = "%d paziņojumu";
-"plurals.notification_compat_summary_title.item_1" = "%d paziņojums";
-"plurals.notification_compat_summary_title.item_2" = "%d paziņojumi";
-"plurals.notification_compat_summary_line_for_room.item_0" = "%1$@: %2$d ziņojumu";
-"plurals.notification_compat_summary_line_for_room.item_1" = "%1$@: %2$d ziņojums";
-"plurals.notification_compat_summary_line_for_room.item_2" = "%1$@: %2$d ziņojumi";
-"plurals.notification_invitations.item_0" = "%d uzaicinājumu";
-"plurals.notification_invitations.item_1" = "%d uzaicinājums";
-"plurals.notification_invitations.item_2" = "%d uzaicinājumi";
-"plurals.encryption_import_room_keys_success.item_0" = "%1$d/%2$d veiksmīgi importēta atslēgas.";
-"plurals.encryption_import_room_keys_success.item_1" = "%1$d/%2$d veiksmīgi importēta atslēga.";
-"plurals.encryption_import_room_keys_success.item_2" = "%1$d/%2$d veiksmīgi importēta atslēgas.";
-"plurals.room_details_selected.item_0" = "%d izvēlēti";
-"plurals.room_details_selected.item_1" = "%d izvēlēts";
-"plurals.room_details_selected.item_2" = "%d izvēlēti";
-"plurals.settings_active_sessions_count.item_0" = "%d aktīvu sesiju";
-"plurals.settings_active_sessions_count.item_1" = "%d aktīva sesiju";
-"plurals.settings_active_sessions_count.item_2" = "%d aktīvas sesiju";
-"plurals.send_videos_with_original_size.item_0" = "Sūtīt video ar oriģinālo izmēru";
-"plurals.send_videos_with_original_size.item_1" = "Sūtīt video ar oriģinālo izmēru";
-"plurals.send_videos_with_original_size.item_2" = "Sūtīt video ar oriģinālo izmēru";
-"plurals.send_images_with_original_size.item_0" = "Sūtīt attēlu ar oriģinālo izmēru";
-"plurals.send_images_with_original_size.item_1" = "Sūtīt attēlu ar oriģinālo izmēru";
-"plurals.send_images_with_original_size.item_2" = "Sūtīt attēlus ar oriģinālo izmēru";
-"plurals.two_and_some_others_read.item_0" = "%1$@, %2$@ un %3$d citi lasīja";
-"plurals.two_and_some_others_read.item_1" = "%1$@, %2$@ un %3$d citi lasīja";
-"plurals.two_and_some_others_read.item_2" = "%1$@, %2$@ un %3$d citi lasīja";
-"plurals.keys_backup_restore_success_description_part2.item_0" = "%d jaunu atslēgu tika pievienotas šai sesijai.";
-"plurals.keys_backup_restore_success_description_part2.item_1" = "%d jauna atslēgu tika pievienotas šai sesijai.";
-"plurals.keys_backup_restore_success_description_part2.item_2" = "%d jaunas atslēgu tika pievienotas šai sesijai.";
-"plurals.missed_video_call.item_0" = "Neatbildētu video zvanu";
-"plurals.missed_video_call.item_1" = "Neatbildēts video zvans";
-"plurals.missed_video_call.item_2" = "%d neatbildēti zvans";
-"plurals.missed_audio_call.item_0" = "Neatbildētu zvanu";
-"plurals.missed_audio_call.item_1" = "Neatbildēts zvans";
-"plurals.missed_audio_call.item_2" = "%d neatbildēti zvans";
