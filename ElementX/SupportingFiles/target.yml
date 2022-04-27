@@ -20,6 +20,7 @@ schemes:
       config: Debug
     test:
       config: Debug
+      gatherCoverageData: true
       environmentVariables:
         IS_RUNNING_UNIT_TESTS: "1"
       targets:
