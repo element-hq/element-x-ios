@@ -54,7 +54,6 @@
 		46562110EE202E580A5FFD9C /* RoomScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 93CF7B19FFCF8EFBE0A8696A /* RoomScreenViewModelTests.swift */; };
 		49F2E7DD8CAACE09CEECE3E6 /* SeparatorRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6390A6DC140CA3D6865A66FF /* SeparatorRoomTimelineView.swift */; };
 		4D970CB606276717B43E2332 /* TimelineItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 804F9B0FABE093C7284CD09B /* TimelineItemList.swift */; };
-		4E50727077B53D26A7C3E504 /* ElementXUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CCEAA8205BCCCB8DBE01724 /* ElementXUITestsLaunchTests.swift */; };
 		4E945AD6862C403F74E57755 /* RoomTimelineItemFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 105B2A8426404EF66F00CFDB /* RoomTimelineItemFactory.swift */; };
 		4ED453A61AF45EBE18D8BC69 /* NavigationModule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5F77E8010D41AA3F5F9A1FCA /* NavigationModule.swift */; };
 		4FC1EFE4968A259CBBACFAFB /* RoomProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A65F140F9FE5E8D4DAEFF354 /* RoomProxy.swift */; };
@@ -182,7 +181,6 @@
 		0AD575D36B9F6D1D543305D1 /* AuthenticationCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinator.swift; sourceTree = "<group>"; };
 		0C13A92C1E9C79F055B8133D /* ar */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ar; path = ar.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0CB569EAA5017B5B23970655 /* pt */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = pt; path = pt.lproj/Localizable.strings; sourceTree = "<group>"; };
-		0CCEAA8205BCCCB8DBE01724 /* ElementXUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementXUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		0DD16CE9A66C9040B066AD60 /* vi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = vi; path = vi.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0E7062F88E9D5F79C8A80524 /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = th; path = th.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		0EE9EAF0309A2A1D67D8FAF5 /* sv */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = sv; path = sv.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -742,7 +740,6 @@
 			children = (
 				7D0CBC76C80E04345E11F2DB /* Application.swift */,
 				A069578069541F94F2AF016C /* ElementXUITests.swift */,
-				0CCEAA8205BCCCB8DBE01724 /* ElementXUITestsLaunchTests.swift */,
 				4D6E4C37E9F0E53D3DF951AC /* HomeScreenUITests.swift */,
 				1DB34B0C74CD242FED9DD069 /* LoginScreenUITests.swift */,
 				086B997409328F091EBA43CE /* RoomScreenUITests.swift */,
@@ -1323,7 +1320,6 @@
 			files = (
 				7405B4824D45BA7C3D943E76 /* Application.swift in Sources */,
 				20563476E4766B9C3035E461 /* ElementXUITests.swift in Sources */,
-				4E50727077B53D26A7C3E504 /* ElementXUITestsLaunchTests.swift in Sources */,
 				9DC5FB22B8F86C3B51E907C1 /* HomeScreenUITests.swift in Sources */,
 				5C8AFBF168A41E20835F3B86 /* LoginScreenUITests.swift in Sources */,
 				2F1CF90A3460C153154427F0 /* RoomScreenUITests.swift in Sources */,

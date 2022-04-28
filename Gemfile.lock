@@ -193,6 +193,7 @@ GEM
     simctl (1.6.8)
       CFPropertyList
       naturally
+    slack-notifier (2.4.0)
     terminal-notifier (2.0.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
@@ -215,10 +216,18 @@ GEM
       colored2 (~> 3.1)
       nanaimo (~> 0.3.0)
       rexml (~> 3.2.4)
+    xcov (1.8.1)
+      fastlane (>= 2.141.0, < 3.0.0)
+      multipart-post
+      slack-notifier
+      terminal-table
+      xcodeproj
+      xcresult (~> 0.2.0)
     xcpretty (0.3.0)
       rouge (~> 2.0.7)
     xcpretty-travis-formatter (1.0.1)
       xcpretty (~> 0.2, >= 0.0.7)
+    xcresult (0.2.1)
 
 PLATFORMS
   arm64-darwin-21
@@ -226,6 +235,7 @@ PLATFORMS
 DEPENDENCIES
   fastlane
   fastlane-plugin-diawi
+  xcov
 
 BUNDLED WITH
    2.3.7

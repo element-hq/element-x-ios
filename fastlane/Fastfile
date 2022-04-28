@@ -37,6 +37,11 @@ lane :mac_adhoc do
   )
 end
 
+lane :tests do
+  run_tests()
+  xcov()
+end
+
 desc "Upload IPA to Diawi"
 private_lane :upload_to_diawi do
   api_token = "" #ENV["DIAWI_API_TOKEN"]
