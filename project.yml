@@ -13,6 +13,8 @@ options:
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "Colors/ElementGreen"
+
 
 include:
   - path: ElementX/SupportingFiles/target.yml
