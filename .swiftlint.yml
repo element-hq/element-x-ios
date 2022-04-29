@@ -3,6 +3,7 @@ disabled_rules:
   - trailing_whitespace
   - unused_setter_value
   - redundant_discardable_let
+  - identifier_name
 
 # some rules are only opt-in
 opt_in_rules:  
