@@ -10,7 +10,7 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    private var appCoordinator: AppCoordinator!
+    private var appCoordinator: Coordinator!
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 
@@ -27,11 +27,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         }
         
         if isRunningUITests {
-            // Bootstrap a different version of the application
-            return true
+            appCoordinator = UITestsAppCoordinator()
+        } else {
+            appCoordinator = AppCoordinator()
         }
         
-        appCoordinator = AppCoordinator()
         appCoordinator.start()
         return true
     }

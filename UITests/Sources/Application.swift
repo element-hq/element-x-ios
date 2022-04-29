@@ -9,9 +9,23 @@
 import XCTest
 
 struct Application {
-    func launch() {
+    static func launch() -> XCUIApplication {
         let app = XCUIApplication()
         app.launchEnvironment = ["IS_RUNNING_UI_TESTS": "1"]
         app.launch()
+        return app
+    }
+}
+
+extension XCUIApplication {
+    func goToScreenWithIdentifier(_ identifier: String) {
+        let button = self.buttons[identifier]
+        let lastLabel = staticTexts["lastItem"]
+        
+        while !button.isHittable && !lastLabel.isHittable {
+            self.tables.firstMatch.swipeUp()
+        }
+        
+        button.tap()
     }
 }
