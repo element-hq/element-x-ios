@@ -10,7 +10,7 @@ import UIKit
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
-    private var appCoordinator: Coordinator!
+    private lazy var appCoordinator: Coordinator = isRunningUITests ? UITestsAppCoordinator() : AppCoordinator()
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 
@@ -26,13 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             return true
         }
         
-        if isRunningUITests {
-            appCoordinator = UITestsAppCoordinator()
-        } else {
-            appCoordinator = AppCoordinator()
-        }
-        
         appCoordinator.start()
+        
         return true
     }
     

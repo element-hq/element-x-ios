@@ -22,11 +22,11 @@ class UITestsAppCoordinator: Coordinator {
         
         let screens = mockScreens()
         let rootView = UITestsRootView(mockCoordinators: screens) { id in
-            guard let coordinator = screens.filter({ $0.id == id }).first else {
+            guard let screen = screens.filter({ $0.id == id }).first else {
                 fatalError()
             }
             
-            self.mainNavigationController.pushViewController(coordinator.coordinator.toPresentable(), animated: true)
+            self.mainNavigationController.pushViewController(screen.coordinator.toPresentable(), animated: true)
         }
         
         mainNavigationController.setViewControllers([UIHostingController(rootView: rootView)], animated: false)
