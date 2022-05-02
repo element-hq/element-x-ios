@@ -76,15 +76,15 @@ struct TimelineItemList: View {
             .onReceive(scrollToBottomPublisher, perform: {
                 tableViewObserver.scrollToBottom(animated: true)
             })
-            .onReceive(tableViewObserver.scrollViewBottomVisiblePublisher, perform: { value in
-                bottomVisiblePublisher.send(value)
-            })
-            .onReceive(tableViewObserver.scrollViewDidReachTopPublisher, perform: {
-                if context.viewState.isBackPaginating {
+            .onReceive(tableViewObserver.scrollViewTopVisiblePublisher, perform: { isTopVisible in
+                if !isTopVisible || context.viewState.isBackPaginating {
                     return
                 }
                 
                 attemptBackPagination()
+            })
+            .onReceive(tableViewObserver.scrollViewBottomVisiblePublisher, perform: { isBottomVisible in
+                bottomVisiblePublisher.send(isBottomVisible)
             })
             .onChange(of: context.viewState.items) { _ in
                 // Don't update the list while moving
@@ -123,9 +123,10 @@ struct TimelineItemList: View {
             return
         }
         
-        if tableViewObserver.isTopVisible == false {
+        if tableViewObserver.scrollViewTopVisiblePublisher.value == false {
             return
         }
+        
         context.send(viewAction: .loadPreviousPage)
     }
     

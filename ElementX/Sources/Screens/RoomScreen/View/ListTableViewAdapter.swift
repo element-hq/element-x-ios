@@ -22,23 +22,20 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     private var contentOffsetObserverToken: NSKeyValueObservation?
     private var boundsObserverToken: NSKeyValueObservation?
     
-    private var isAtTop: Bool = false
-    private var isAtBottom: Bool = false
-    
     private var offsetDetails: ContentOffsetDetails?
     private var draggingInitiated = false
     private var isAnimatingKeyboardAppearance = false
     private var previousFrame: CGRect = .zero
     
     private(set) var tableView: UITableView?
-    
+        
     let scrollViewDidRestPublisher = PassthroughSubject<Void, Never>()
-    let scrollViewDidReachTopPublisher = PassthroughSubject<Void, Never>()
-    let scrollViewBottomVisiblePublisher = PassthroughSubject<Bool, Never>()
+    let scrollViewTopVisiblePublisher = CurrentValueSubject<Bool, Never>(false)
+    let scrollViewBottomVisiblePublisher = CurrentValueSubject<Bool, Never>(false)
     
     override init() {
-        self.topDetectionOffset = 0.0
-        self.bottomDetectionOffset = 0.0
+        topDetectionOffset = 0.0
+        bottomDetectionOffset = 0.0
     }
     
     init(tableView: UITableView, topDetectionOffset: CGFloat, bottomDetectionOffset: CGFloat) {
@@ -65,9 +62,9 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
             return
         }
     
-        if isBottomVisible {
+        if computeIsBottomVisible() {
             offsetDetails = .bottomOffset
-        } else if isTopVisible {
+        } else if computeIsTopVisible() {
             if let topIndexPath = tableView.indexPathsForVisibleRows?.first {
                 offsetDetails = .topOffset(previousVisibleIndexPath: topIndexPath,
                                            previousItemCount: tableView.numberOfRows(inSection: 0))
@@ -101,27 +98,11 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     }
     
     var isTracking: Bool {
-        self.tableView?.isTracking == true
+        tableView?.isTracking == true
     }
     
     var isDecelerating: Bool {
-        self.tableView?.isDecelerating == true
-    }
-    
-    var isTopVisible: Bool {
-        guard let scrollView = tableView else {
-            return false
-        }
-
-        return (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) <= topDetectionOffset
-    }
-    
-    var isBottomVisible: Bool {
-        guard let scrollView = tableView else {
-            return false
-        }
-
-        return (scrollView.contentOffset.y + self.bottomDetectionOffset) >= (scrollView.contentSize.height - scrollView.frame.size.height)
+        tableView?.isDecelerating == true
     }
     
     func scrollToBottom(animated: Bool = false) {
@@ -171,12 +152,12 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     }
     
     private func handleScrollViewScroll() {
-        guard let tableView = self.tableView else {
+        guard let tableView = tableView else {
             return
         }
         
         let hasScrolledBecauseOfFrameChange = (previousFrame != tableView.frame)
-        let shouldPinToBottom = isAtBottom && (isAnimatingKeyboardAppearance || hasScrolledBecauseOfFrameChange)
+        let shouldPinToBottom = scrollViewBottomVisiblePublisher.value && (isAnimatingKeyboardAppearance || hasScrolledBecauseOfFrameChange)
         
         if shouldPinToBottom {
             deregisterContentOffsetObserver()
@@ -187,35 +168,49 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
             return
         }
         
-        let isTopVisible = self.isTopVisible
-        if isTopVisible && self.isAtTop != isTopVisible {
-            self.scrollViewDidReachTopPublisher.send(())
-        }
-        self.isAtTop = isTopVisible
-        
-        let isBottomVisible = self.isBottomVisible
-        if self.isAtBottom != isBottomVisible {
-            self.scrollViewBottomVisiblePublisher.send(isBottomVisible)
-            self.isAtBottom = isBottomVisible
+        let isTopVisible = computeIsTopVisible()
+        if isTopVisible != scrollViewTopVisiblePublisher.value {
+            scrollViewTopVisiblePublisher.send(isTopVisible)
         }
         
-        if !self.draggingInitiated && tableView.isDragging {
-            self.draggingInitiated = true
-        } else if self.draggingInitiated && !tableView.isDragging {
-            self.draggingInitiated = false
-            self.scrollViewDidRestPublisher.send(())
+        let isBottomVisible = computeIsBottomVisible()
+        if isBottomVisible != scrollViewBottomVisiblePublisher.value {
+            scrollViewBottomVisiblePublisher.send(isBottomVisible)
+        }
+        
+        if !draggingInitiated && tableView.isDragging {
+            draggingInitiated = true
+        } else if draggingInitiated && !tableView.isDragging {
+            draggingInitiated = false
+            scrollViewDidRestPublisher.send(())
         }
     }
     
     @objc private func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        guard let tableView = self.tableView,
+        guard let tableView = tableView,
               sender.state == .ended,
               draggingInitiated == true,
               !tableView.isDecelerating else {
                   return
         }
         
-        self.draggingInitiated = false
-        self.scrollViewDidRestPublisher.send(())
+        draggingInitiated = false
+        scrollViewDidRestPublisher.send(())
+    }
+    
+    private func computeIsTopVisible() -> Bool {
+        guard let scrollView = tableView else {
+            return false
+        }
+
+        return (scrollView.contentOffset.y + scrollView.adjustedContentInset.top) <= topDetectionOffset
+    }
+    
+    private func computeIsBottomVisible() -> Bool {
+        guard let scrollView = tableView else {
+            return false
+        }
+
+        return (scrollView.contentOffset.y + bottomDetectionOffset) >= (scrollView.contentSize.height - scrollView.frame.size.height)
     }
 }
