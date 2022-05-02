@@ -105,8 +105,11 @@ GEM
       xcodeproj (>= 1.13.0, < 2.0.0)
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
+    fastlane-plugin-brew (0.1.1)
     fastlane-plugin-diawi (2.1.0)
       rest-client (>= 2.0.0)
+    fastlane-plugin-xcodegen (1.1.0)
+      fastlane-plugin-brew (~> 0.1.1)
     gh_inspector (1.1.3)
     google-apis-androidpublisher_v3 (0.16.0)
       google-apis-core (>= 0.4, < 2.a)
@@ -235,6 +238,7 @@ PLATFORMS
 DEPENDENCIES
   fastlane
   fastlane-plugin-diawi
+  fastlane-plugin-xcodegen
   xcov
 
 BUNDLED WITH

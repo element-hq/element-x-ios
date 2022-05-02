@@ -1,3 +1,56 @@
+require 'yaml'
+
+lane :alpha do
+
+  config_xcodegen_alpha()
+
+  xcodegen(spec: "project.yml")
+
+  provisioning_profile_name = "ElementX PR Ad Hoc"
+  bundle_identifier = "io.element.elementx.pr"
+  code_signing_identity = "Apple Distribution: Vector Creations Limited (7J4U792NQT)"
+
+  update_code_signing_settings(
+    use_automatic_signing: false,
+    bundle_identifier: bundle_identifier,
+    profile_name: provisioning_profile_name,
+    code_sign_identity: code_signing_identity
+  )
+
+  get_provisioning_profile(
+    app_identifier: bundle_identifier,
+    provisioning_name: provisioning_profile_name,
+    ignore_profiles_with_different_name: true,
+    adhoc: true 
+  )
+
+  update_app_icon()
+
+  build_ios_app(
+    clean: true,
+    export_method: "ad-hoc",
+    output_directory: "build",
+    export_options: {
+      provisioningProfiles: { 
+        bundle_identifier => provisioning_profile_name,
+      }
+    }
+  )
+
+  upload_to_diawi()
+
+end
+
+private_lane :config_xcodegen_alpha do
+  target_file_path = "../ElementX/SupportingFiles/target.yml"
+  data = YAML.load_file target_file_path
+  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX PR"
+  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
+  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+end
+
+
+
 lane :build_and_publish_on_github do
   ios_adhoc()
 
@@ -44,7 +97,7 @@ end
 
 desc "Upload IPA to Diawi"
 private_lane :upload_to_diawi do
-  api_token = "" #ENV["DIAWI_API_TOKEN"]
+  api_token = ENV["DIAWI_API_TOKEN"]
   UI.user_error!("Invalid Diawi API token.") unless !api_token.to_s.empty?
 
   # Upload to Diawi
@@ -57,6 +110,14 @@ private_lane :upload_to_diawi do
   # Get the Diawi link from Diawi action shared value
   diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
   UI.command_output("Diawi link: " + diawi_link.to_s)
+
+  # Generate the Diawi QR code file link
+  diawi_app_id = URI(diawi_link).path.split('/').last
+  diawi_qr_code_link = "https://www.diawi.com/qrcode/link/#{diawi_app_id}"
+
+  # Set "DIAWI_FILE_LINK" to GitHub environment variables for Github actions
+  sh("echo DIAWI_FILE_LINK=#{diawi_link} >> $GITHUB_ENV")
+  sh("echo DIAWI_QR_CODE_LINK=#{diawi_qr_code_link} >> $GITHUB_ENV")
 end
 
 desc "Create GitHub Release"
@@ -83,4 +144,23 @@ private_lane :release_to_github do
     ![QR code](#{diawi_qr_code_link})",
     upload_assets: ["build/ElementX.app.zip"]
   )
+end
+
+private_lane :update_app_icon do
+  pr_number = ENV["GITHUB_PR_NUMBER"]
+  UI.user_error!("Invalid GitHub PR number.") unless !pr_number.to_s.empty?
+  caption_text="PR ##{pr_number}"
+
+  Dir.glob("../ElementX/Resources/Assets.xcassets/AppIcon.appiconset/**/*.png") do |file_name|
+    # Change the icons color
+    sh("convert '#{file_name}' -modulate 100,100,200 '#{file_name}'")
+
+    caption_width = sh("identify -format %w '#{file_name}'")
+    caption_height = file_name.end_with?("@2x.png") ? 60 : 30
+    if caption_width.to_i > caption_height*2 then
+
+      # Add a label on top
+      sh("convert -background '#0008' -fill white -gravity center -size '#{caption_width}'x'#{caption_height}' caption:'#{caption_text}' '#{file_name}' +swap -gravity south -composite '#{file_name}'")
+    end
+  end
 end
