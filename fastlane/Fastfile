@@ -92,7 +92,14 @@ end
 
 lane :tests do
   run_tests()
-  xcov()
+  
+  slather(
+    sonarqube_xml: true,
+    output_directory: "./fastlane/test_output",
+    proj: "ElementX.xcodeproj",
+    scheme: "ElementX",
+  )
+
 end
 
 desc "Upload IPA to Diawi"

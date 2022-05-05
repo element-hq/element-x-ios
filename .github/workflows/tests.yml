@@ -1,4 +1,4 @@
-name: Unit and UI Tests
+name: Tests
 
 on:
   push:
@@ -31,5 +31,11 @@ jobs:
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3    
       
-      - name: Tests
+      - name: Run tests
         run: bundle exec fastlane tests
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test_output
+          path: fastlane/test_output
