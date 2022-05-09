@@ -1,3 +1,7 @@
+![Build Status](https://img.shields.io/github/workflow/status/vector-im/element-x-ios/Tests?style=flat-square)
+[![codecov](https://codecov.io/gh/vector-im/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/vector-im/element-x-ios)
+[![License](https://img.shields.io/badge/License-Apache%202.0-yellowgreen.svg?style=flat-square)](https://opensource.org/licenses/Apache-2.0)
+
 # Element X iOS
 
 Element X iOS is a [Matrix](https://matrix.org/) client provided by [Element](https://element.io/) and based on the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk).
