@@ -1,4 +1,5 @@
 require 'yaml'
+require_relative 'changelog'
 
 lane :alpha do
 
@@ -24,7 +25,9 @@ lane :alpha do
     adhoc: true 
   )
 
-  update_app_icon()
+  version = ENV["GITHUB_PR_NUMBER"]
+
+  update_app_icon(caption_text: "PR #{version}")
 
   build_ios_app(
     clean: true,
@@ -39,17 +42,9 @@ lane :alpha do
 
   upload_to_diawi()
 
+  export_version_changes(version: version)
+
 end
-
-private_lane :config_xcodegen_alpha do
-  target_file_path = "../ElementX/SupportingFiles/target.yml"
-  data = YAML.load_file target_file_path
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX PR"
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
-  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
-end
-
-
 
 lane :build_and_publish_on_github do
   ios_adhoc()
@@ -100,6 +95,26 @@ lane :tests do
     scheme: "ElementX",
   )
 
+end
+
+private_lane :export_version_changes do |options|
+  Dir.chdir("..") do
+    Changelog.update_topmost_section(version: options[:version], additional_entries: {})
+    changelog = Changelog.extract_first_section
+
+    # Pushing them directly into the $GITHUB_ENV results in errors
+    # https://trstringer.com/github-actions-multiline-strings/
+    # String substitution and here documents failed too
+    sh("echo '#{changelog}' >> version_changes.md")
+  end
+end
+
+private_lane :config_xcodegen_alpha do
+  target_file_path = "../ElementX/SupportingFiles/target.yml"
+  data = YAML.load_file target_file_path
+  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX PR"
+  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
+  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 end
 
 desc "Upload IPA to Diawi"
@@ -153,10 +168,9 @@ private_lane :release_to_github do
   )
 end
 
-private_lane :update_app_icon do
-  pr_number = ENV["GITHUB_PR_NUMBER"]
-  UI.user_error!("Invalid GitHub PR number.") unless !pr_number.to_s.empty?
-  caption_text="PR ##{pr_number}"
+private_lane :update_app_icon do |options|
+  caption_text = options[:caption_text]
+  UI.user_error!("Invalid caption text.") unless !caption_text.to_s.empty?
 
   Dir.glob("../ElementX/Resources/Assets.xcassets/AppIcon.appiconset/**/*.png") do |file_name|
     # Change the icons color
