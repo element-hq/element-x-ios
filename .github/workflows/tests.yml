@@ -34,8 +34,5 @@ jobs:
       - name: Run tests
         run: bundle exec fastlane tests
 
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v2
-        with:
-          name: test_output
-          path: fastlane/test_output
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v1.2.1
