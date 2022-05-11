@@ -19,9 +19,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let authenticationCoordinator: AuthenticationCoordinator!
     
     private let memberDetailProviderManager: MemberDetailProviderManager
-    
-    private var loadingActivity: Activity?
-    private var errorActivity: Activity?
+        
+    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
+    private var loadingIndicator: UserIndicator?
+    private var errorIndicator: UserIndicator?
     
     var childCoordinators: [Coordinator] = []
     
@@ -34,6 +35,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         navigationRouter = NavigationRouter(navigationController: mainNavigationController)
         
         memberDetailProviderManager = MemberDetailProviderManager()
+        
+        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: mainNavigationController)
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
@@ -143,30 +146,14 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoadingIndicator() {
-        let presenter = FullscreenLoadingActivityPresenter(label: "Loading",
-                                                           on: mainNavigationController)
-        
-        let request = ActivityRequest(
-            presenter: presenter,
-            dismissal: .manual
-        )
-        
-        loadingActivity = ActivityCenter.shared.add(request)
+        loadingIndicator = indicatorPresenter.present(.loading(label: "Loading", isInteractionBlocking: true))
     }
     
     private func hideLoadingIndicator() {
-        loadingActivity = nil
+        loadingIndicator = nil
     }
     
     private func showLoginErrorToast() {
-        let presenter = ToastActivityPresenter(viewState: .init(style: .success, label: "Failed logging in"),
-                                               navigationController: mainNavigationController)
-        
-        let request = ActivityRequest(
-            presenter: presenter,
-            dismissal: .timeout(3.0)
-        )
-        
-        errorActivity = ActivityCenter.shared.add(request)
+        errorIndicator = indicatorPresenter.present(.success(label: "Failed logging in"))
     }
 }
