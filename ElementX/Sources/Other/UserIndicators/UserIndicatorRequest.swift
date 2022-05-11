@@ -16,12 +16,12 @@
 
 import Foundation
 
-/// A request used to create an underlying `Activity`, allowing clients to only specify the visual aspects of an activity.
-public struct ActivityRequest {
-    internal let presenter: ActivityPresentable
-    internal let dismissal: ActivityDismissal
+/// A request used to create an underlying `UserIndicator`, allowing clients to only specify the visual aspects of an indicator.
+public struct UserIndicatorRequest {
+    internal let presenter: UserIndicatorViewPresentable
+    internal let dismissal: UserIndicatorDismissal
     
-    public init(presenter: ActivityPresentable, dismissal: ActivityDismissal) {
+    public init(presenter: UserIndicatorViewPresentable, dismissal: UserIndicatorDismissal) {
         self.presenter = presenter
         self.dismissal = dismissal
     }
