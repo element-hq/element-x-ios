@@ -16,14 +16,10 @@
 
 import SwiftUI
 
-@available(iOS 14.0, *)
 struct TemplateSimpleScreen: View {
 
-    // MARK: - Properties
-    
     // MARK: Private
     
-    @Environment(\.theme) private var theme
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     private var horizontalPadding: CGFloat {
@@ -32,7 +28,7 @@ struct TemplateSimpleScreen: View {
     
     // MARK: Public
     
-    @ObservedObject var viewModel: TemplateSimpleScreenViewModel.Context
+    @ObservedObject var context: TemplateSimpleScreenViewModel.Context
     
     // MARK: Views
     
@@ -50,52 +46,43 @@ struct TemplateSimpleScreen: View {
                     .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
             }
         }
-        .background(theme.colors.background.ignoresSafeArea())
-        .accentColor(theme.colors.accent)
     }
     
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
         VStack(spacing: 36) {
-            Text(viewModel.viewState.promptType.title)
-                .font(theme.fonts.title1B)
-                .foregroundColor(theme.colors.primaryContent)
+            Text(context.viewState.promptType.title)
                 .accessibilityIdentifier("title")
             
-            Image(viewModel.viewState.promptType.image.name)
+            Image(systemName: context.viewState.promptType.imageSystemName)
                 .resizable()
                 .scaledToFit()
                 .frame(width:100)
-                .foregroundColor(theme.colors.accent)
             
             HStack{
-                Text("Counter: \(viewModel.viewState.count)")
-                    .foregroundColor(theme.colors.primaryContent)
+                Text("Counter: \(context.viewState.count)")
                 
                 Button("-") {
-                    viewModel.send(viewAction: .decrementCount)
+                    context.send(viewAction: .decrementCount)
                 }
                 
                 Button("+") {
-                    viewModel.send(viewAction: .incrementCount)
+                    context.send(viewAction: .incrementCount)
                 }
             }
-            .font(theme.fonts.title3)
         }
     }
     
     /// The action buttons shown at the bottom of the view.
     var buttons: some View {
         VStack {
-            Button { viewModel.send(viewAction: .accept) } label: {
+            Button { context.send(viewAction: .accept) } label: {
                 Text("Accept")
-                    .font(theme.fonts.bodySB)
             }
-            .buttonStyle(PrimaryActionButtonStyle())
+            .frame(maxWidth: .infinity)
             
-            Button { viewModel.send(viewAction: .cancel) } label: {
+            Button { context.send(viewAction: .cancel) } label: {
                 Text("Cancel")
-                    .font(theme.fonts.body)
                     .padding(.vertical, 12)
             }
         }
@@ -104,10 +91,15 @@ struct TemplateSimpleScreen: View {
 
 // MARK: - Previews
 
-@available(iOS 14.0, *)
 struct TemplateSimpleScreen_Previews: PreviewProvider {
-    static let stateRenderer = MockTemplateSimpleScreenScreenState.stateRenderer
     static var previews: some View {
-        stateRenderer.screenGroup()
+        Group {
+            let viewModel = TemplateSimpleScreenViewModel(promptType: .regular)
+            TemplateSimpleScreen(context: viewModel.context)
+        }
+        Group {
+            let viewModel = TemplateSimpleScreenViewModel(promptType: .upgrade)
+            TemplateSimpleScreen(context: viewModel.context)
+        }
     }
 }

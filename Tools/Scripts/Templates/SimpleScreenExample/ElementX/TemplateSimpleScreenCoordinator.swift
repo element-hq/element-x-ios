@@ -15,7 +15,6 @@
 //
 
 import SwiftUI
-import CommonKit
 
 struct TemplateSimpleScreenCoordinatorParameters {
     let promptType: TemplateSimpleScreenPromptType
@@ -42,14 +41,13 @@ final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Setup
     
-    @available(iOS 14.0, *)
     init(parameters: TemplateSimpleScreenCoordinatorParameters) {
         self.parameters = parameters
         
         let viewModel = TemplateSimpleScreenViewModel(promptType: parameters.promptType)
-        let view = TemplateSimpleScreen(viewModel: viewModel.context)
+        let view = TemplateSimpleScreen(context: viewModel.context)
         templateSimpleScreenViewModel = viewModel
-        templateSimpleScreenHostingController = VectorHostingController(rootView: view)
+        templateSimpleScreenHostingController = UIHostingController(rootView: view)
         
         indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: templateSimpleScreenHostingController)
     }
@@ -75,7 +73,7 @@ final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
     /// - Parameters:
     ///   - label: The label to show on the indicator.
     ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = VectorL10n.loading, isInteractionBlocking: Bool = true) {
+    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
         loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
     }
     

@@ -7,6 +7,18 @@ targets:
 
     dependencies:
     - target: ElementX
+    - package: MatrixRustSDK
+      linkType: static
+    - package: DTCoreText
+      linkType: static
+    - package: KeychainAccess
+      linkType: static
+    - package: Kingfisher
+      linkType: static
+    - package: Introspect
+      linkType: static
+    - package: SwiftyBeaver
+      linkType: static
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -15,7 +27,10 @@ targets:
       base:
         PRODUCT_NAME: UITests
         PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx.ui.tests
+      debug:
+      release:
 
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI

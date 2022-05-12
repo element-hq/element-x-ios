@@ -63,7 +63,6 @@ struct MessageComposerTextField: View {
     }
 }
 
-@available(iOS 14.0, *)
 private struct UITextViewWrapper: UIViewRepresentable {
     typealias UIViewType = UITextView
 

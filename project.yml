@@ -11,6 +11,12 @@ options:
   deploymentTarget:
     iOS: "15.0"
     macOS: "12.0"
+  groupOrdering: 
+    - order: [ElementX, UnitTests, UITests, Tools]
+    - pattern: ElementX
+      order: [Sources, Resources, SupportingFiles]
+    - pattern: Sources
+      order: [Services, Screens, Other]
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES

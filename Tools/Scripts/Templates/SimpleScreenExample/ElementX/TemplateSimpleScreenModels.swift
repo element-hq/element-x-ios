@@ -29,18 +29,18 @@ extension TemplateSimpleScreenPromptType: Identifiable, CaseIterable {
     var title: String {
         switch self {
         case .regular:
-            return VectorL10n.roomCreationMakePublicPromptTitle
+            return "Make this chat public?"
         case .upgrade:
-            return VectorL10n.roomDetailsHistorySectionPromptTitle
+            return "Privacy warning"
         }
     }
     
-    var image: ImageAsset {
+    var imageSystemName: String {
         switch self {
         case .regular:
-            return Asset.Images.appSymbol
+            return "app.gift"
         case .upgrade:
-            return Asset.Images.keyVerificationSuccessShield
+            return "shield"
         }
     }
 }
