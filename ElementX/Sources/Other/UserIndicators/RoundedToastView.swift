@@ -58,7 +58,7 @@ class RoundedToastView: UIView {
     }()
     
     private let label: UILabel = {
-        return UILabel()
+        UILabel()
     }()
 
     init(viewState: ToastViewState) {

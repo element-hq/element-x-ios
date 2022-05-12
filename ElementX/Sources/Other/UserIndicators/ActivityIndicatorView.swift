@@ -46,7 +46,7 @@ final class ActivityIndicatorView: UIView {
     // MARK: - Setup
     
     private func commonInit() {        
-        self.activityIndicatorBackgroundView.layer.masksToBounds = true
+        activityIndicatorBackgroundView.layer.masksToBounds = true
     }
     
     convenience init() {
@@ -55,37 +55,37 @@ final class ActivityIndicatorView: UIView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.loadNibContent()
-        self.commonInit()
+        loadNibContent()
+        commonInit()
     }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        self.loadNibContent()
-        self.commonInit()
+        loadNibContent()
+        commonInit()
     }
     
     // MARK: - Overrides
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: self.activityIndicatorView.intrinsicContentSize.width + Constants.activityIndicatorMargin.width,
-                      height: self.activityIndicatorView.intrinsicContentSize.height + Constants.activityIndicatorMargin.height)
+        return CGSize(width: activityIndicatorView.intrinsicContentSize.width + Constants.activityIndicatorMargin.width,
+                      height: activityIndicatorView.intrinsicContentSize.height + Constants.activityIndicatorMargin.height)
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        self.activityIndicatorBackgroundView.layer.cornerRadius = Constants.cornerRadius
+        activityIndicatorBackgroundView.layer.cornerRadius = Constants.cornerRadius
     }
     
     // MARK: - Public
     
     func startAnimating() {
-        self.activityIndicatorView.startAnimating()
+        activityIndicatorView.startAnimating()
     }
     
     func stopAnimating() {
-        self.activityIndicatorView.stopAnimating()
+        activityIndicatorView.stopAnimating()
     }
 }
 
@@ -98,7 +98,7 @@ private extension UIView {
       let layoutAttributes: [NSLayoutConstraint.Attribute] = [.top, .leading, .bottom, .trailing]
       for case let view as UIView in type(of: self).nib.instantiate(withOwner: self, options: nil) {
         view.translatesAutoresizingMaskIntoConstraints = false
-        self.addSubview(view)
+        addSubview(view)
         NSLayoutConstraint.activate(layoutAttributes.map { attribute in
           NSLayoutConstraint(
             item: view, attribute: attribute,

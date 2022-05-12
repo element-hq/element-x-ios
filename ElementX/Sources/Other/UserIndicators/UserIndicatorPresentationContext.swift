@@ -37,6 +37,6 @@ public class StaticUserIndicatorPresentationContext: UserIndicatorPresentationCo
     public private(set) weak var indicatorPresentingViewController: UIViewController?
     
     public init(viewController: UIViewController) {
-        self.indicatorPresentingViewController = viewController
+        indicatorPresentingViewController = viewController
     }
 }

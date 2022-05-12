@@ -35,20 +35,20 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
     private weak var presentingView: UIView?
     
     var isPresenting: Bool {
-        return self.activityIndicatorView != nil
+        activityIndicatorView != nil
     }
     
     // MARK: - Public
     
     func presentActivityIndicator(on view: UIView, animated: Bool, completion: (() -> Void)? = nil) {
-        if self.presentingView != nil {
+        if presentingView != nil {
             if let completion = completion {
                 completion()
             }
             return
         }
 
-        self.presentingView = view
+        presentingView = view
         
         view.isUserInteractionEnabled = false
         
@@ -77,11 +77,11 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
         }
         
         if animated {
-            UIView.animate(withDuration: Constants.animationDuration, animations: {
+            UIView.animate(withDuration: Constants.animationDuration) {
                 animationInstructions()
-            }, completion: { _ in
+            } completion: { _ in
                 completion?()
-            })
+            }
         } else {
             animationInstructions()
             completion?()
@@ -109,11 +109,11 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
         }
         
         if animated {
-            UIView.animate(withDuration: Constants.animationDuration, animations: {
+            UIView.animate(withDuration: Constants.animationDuration) {
                 animationInstructions()
-            }, completion: { _ in
+            } completion: { _ in
                 animationCompletionInstructions()
-            })
+            }
         } else {
             animationInstructions()
             animationCompletionInstructions()
@@ -134,7 +134,7 @@ private extension UIView {
     
     /// Add a subview matching parent view using autolayout
     @objc func vc_addSubViewMatchingParent(_ subView: UIView) {
-        self.addSubview(subView)
+        addSubview(subView)
         subView.translatesAutoresizingMaskIntoConstraints = false
         let views = ["view": subView]
         ["H:|[view]|", "V:|[view]|"].forEach { vfl in
