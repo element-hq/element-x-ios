@@ -57,9 +57,9 @@ struct TemplateSimpleScreen: View {
             Image(systemName: context.viewState.promptType.imageSystemName)
                 .resizable()
                 .scaledToFit()
-                .frame(width:100)
+                .frame(width: 100)
             
-            HStack{
+            HStack {
                 Text("Counter: \(context.viewState.count)")
                 
                 Button("-") {

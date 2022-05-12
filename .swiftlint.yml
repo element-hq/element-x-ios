@@ -14,6 +14,7 @@ opt_in_rules:
 # paths to include during linting. `--path` is ignored if present.
 included:
   - ElementX
+  - Tools/Scripts/Templates
 
 line_length:
   warning: 250
