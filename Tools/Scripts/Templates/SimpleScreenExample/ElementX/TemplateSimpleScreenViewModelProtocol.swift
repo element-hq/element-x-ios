@@ -16,10 +16,9 @@
 
 import Foundation
 
-/// Different ways in which an `Activity` can be dismissed
-public enum ActivityDismissal {
-    /// The `Activity` will not manage the dismissal, but will expect the calling client to do so manually
-    case manual
-    /// The `Activity` will be automatically dismissed after `TimeInterval`
-    case timeout(TimeInterval)
+protocol TemplateSimpleScreenViewModelProtocol {
+    
+    var completion: ((TemplateSimpleScreenViewModelResult) -> Void)? { get set }
+    @available(iOS 14, *)
+    var context: TemplateSimpleScreenViewModelType.Context { get }
 }

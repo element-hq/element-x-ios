@@ -14,17 +14,21 @@
 // limitations under the License.
 //
 
-import Foundation
 import UIKit
 
 class RoundedToastView: UIView {
+    private struct ShadowStyle {
+        let offset: CGSize
+        let radius: CGFloat
+        let opacity: Float
+    }
+    
     private struct Constants {
         static let padding = UIEdgeInsets(top: 10, left: 12, bottom: 10, right: 12)
         static let activityIndicatorScale = CGFloat(0.75)
         static let imageViewSize = CGFloat(15)
-        static let shadowOffset = CGSize(width: 0, height: 4)
-        static let shadowRadius = CGFloat(12)
-        static let shadowOpacity = Float(0.1)
+        static let lightShadow = ShadowStyle(offset: .init(width: 0, height: 4), radius: 12, opacity: 0.1)
+        static let darkShadow = ShadowStyle(offset: .init(width: 0, height: 4), radius: 4, opacity: 0.2)
     }
     
     private lazy var activityIndicator: UIActivityIndicatorView = {
@@ -34,7 +38,7 @@ class RoundedToastView: UIView {
         return indicator
     }()
     
-    private lazy var imagView: UIImageView = {
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,10 +58,10 @@ class RoundedToastView: UIView {
     }()
     
     private let label: UILabel = {
-        return UILabel()
+        UILabel()
     }()
 
-    init(viewState: ViewState) {
+    init(viewState: ToastViewState) {
         super.init(frame: .zero)
         setup(viewState: viewState)
     }
@@ -66,11 +70,10 @@ class RoundedToastView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    private func setup(viewState: ViewState) {
+    private func setup(viewState: ToastViewState) {
         
         backgroundColor = .gray.withAlphaComponent(0.75)
         
-        setupLayer()
         setupStackView()
         stackView.addArrangedSubview(toastView(for: viewState.style))
         stackView.addArrangedSubview(label)
@@ -88,36 +91,18 @@ class RoundedToastView: UIView {
         ])
     }
     
-    private func setupLayer() {
-        layer.shadowColor = UIColor.black.cgColor
-        layer.shadowOffset = Constants.shadowOffset
-        layer.shadowRadius = Constants.shadowRadius
-        layer.shadowOpacity = Constants.shadowOpacity
-    }
-    
     override func layoutSubviews() {
         super.layoutSubviews()
         layer.cornerRadius = layer.frame.height / 2
     }
         
-    private func toastView(for style: Style) -> UIView {
+    private func toastView(for style: ToastViewState.Style) -> UIView {
         switch style {
         case .loading:
             return activityIndicator
         case .success:
-            imagView.image = UIImage(systemName: "checkmark.circle")
-            return imagView
+            imageView.image = UIImage(systemName: "checkmark.circle")
+            return imageView
         }
-    }
-}
-
-extension RoundedToastView {
-    enum Style {
-        case loading
-        case success
-    }
-    struct ViewState {
-        let style: Style
-        let label: String
     }
 }

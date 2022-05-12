@@ -52,7 +52,7 @@ final class LabelledActivityIndicatorView: UIView {
     }()
     
     private let label: UILabel = {
-        return UILabel()
+        UILabel()
     }()
     
     init(text: String) {

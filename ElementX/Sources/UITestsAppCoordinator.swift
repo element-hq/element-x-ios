@@ -21,7 +21,7 @@ class UITestsAppCoordinator: Coordinator {
         window.rootViewController = mainNavigationController
         
         let screens = mockScreens()
-        let rootView = UITestsRootView(mockCoordinators: screens) { id in
+        let rootView = UITestsRootView(mockScreens: screens) { id in
             guard let screen = screens.filter({ $0.id == id }).first else {
                 fatalError()
             }
@@ -36,12 +36,14 @@ class UITestsAppCoordinator: Coordinator {
         window.makeKeyAndVisible()
     }
     
-    private func mockScreens() -> [MockScreens] {
-        [MockScreens(id: "Login screen", coordinator: LoginScreenCoordinator(parameters: .init()))]
+    private func mockScreens() -> [MockScreen] {
+        [MockScreen(id: "Login screen", coordinator: LoginScreenCoordinator(parameters: .init())),
+        MockScreen(id: "Simple Screen - Regular", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))),
+        MockScreen(id: "Simple Screen - Upgrade", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .upgrade)))]
     }
 }
 
-struct MockScreens: Identifiable {
+struct MockScreen: Identifiable {
     let id: String
     let coordinator: Presentable
 }

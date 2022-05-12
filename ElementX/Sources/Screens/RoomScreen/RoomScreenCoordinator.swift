@@ -38,7 +38,6 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Setup
     
-    @available(iOS 14.0, *)
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
         

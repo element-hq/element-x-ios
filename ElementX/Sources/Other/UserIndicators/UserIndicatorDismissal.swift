@@ -16,13 +16,10 @@
 
 import Foundation
 
-/// A request used to create an underlying `Activity`, allowing clients to only specify the visual aspects of an activity.
-public struct ActivityRequest {
-    internal let presenter: ActivityPresentable
-    internal let dismissal: ActivityDismissal
-    
-    public init(presenter: ActivityPresentable, dismissal: ActivityDismissal) {
-        self.presenter = presenter
-        self.dismissal = dismissal
-    }
+/// Different ways in which a `UserIndicator` can be dismissed
+public enum UserIndicatorDismissal {
+    /// The `UserIndicator` will not manage the dismissal, but will expect the calling client to do so manually
+    case manual
+    /// The `UserIndicator` will be automatically dismissed after `TimeInterval`
+    case timeout(TimeInterval)
 }
