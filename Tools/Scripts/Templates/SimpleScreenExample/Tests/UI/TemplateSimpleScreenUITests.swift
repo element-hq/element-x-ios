@@ -15,31 +15,26 @@
 //
 
 import XCTest
-import RiotSwiftUI
+import ElementX
 
-@available(iOS 14.0, *)
-class TemplateSimpleScreenUITests: MockScreenTest {
-
-    override class var screenType: MockScreenState.Type {
-        return MockTemplateSimpleScreenScreenState.self
-    }
-
-    override class func createTest() -> MockScreenTest {
-        return TemplateSimpleScreenUITests(selector: #selector(verifyTemplateSimpleScreenScreen))
-    }
-
-    func verifyTemplateSimpleScreenScreen() throws {
-        guard let screenState = screenState as? MockTemplateSimpleScreenScreenState else { fatalError("no screen") }
-        switch screenState {
-        case .promptType(let promptType):
-            verifyTemplateSimpleScreenPromptType(promptType: promptType)
-        }
-    }
-    
-    func verifyTemplateSimpleScreenPromptType(promptType: TemplateSimpleScreenPromptType) {
+class TemplateSimpleScreenUITests: XCTestCase {
+    func testRegularScreen() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier("Simple Screen - Regular")
+        
         let title = app.staticTexts["title"]
         XCTAssert(title.exists)
-        XCTAssertEqual(title.label, promptType.title)
+        
+        XCTAssertEqual(title.label, "Make this chat public?")
     }
-
+    
+    func testUpgradeScreen() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier("Simple Screen - Upgrade")
+        
+        let title = app.staticTexts["title"]
+        XCTAssert(title.exists)
+        
+        XCTAssertEqual(title.label, "Privacy warning")
+    }
 }

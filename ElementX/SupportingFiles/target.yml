@@ -88,3 +88,4 @@ targets:
         - Screens/Templates
     - path: ../Resources
     - path: ../SupportingFiles
+    - path: ../../Tools/Scripts/Templates/SimpleScreenExample/ElementX

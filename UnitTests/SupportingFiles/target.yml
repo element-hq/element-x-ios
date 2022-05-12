@@ -21,3 +21,4 @@ targets:
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit

@@ -10,12 +10,12 @@ import SwiftUI
 
 struct UITestsRootView: View {
     
-    let mockCoordinators: [MockScreens]
+    let mockScreens: [MockScreen]
     var selectionCallback: ((String) -> Void)?
     
     var body: some View {
         NavigationView {
-            List(mockCoordinators) { coordinator in
+            List(mockScreens) { coordinator in
                 Button(coordinator.id) {
                     selectionCallback?(coordinator.id)
                 }
