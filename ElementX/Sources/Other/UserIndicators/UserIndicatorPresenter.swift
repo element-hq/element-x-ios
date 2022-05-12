@@ -49,7 +49,7 @@ class UserIndicatorTypePresenter: UserIndicatorTypePresenterProtocol {
     
     init(presentationContext: UserIndicatorPresentationContext) {
         self.presentationContext = presentationContext
-        self.queue = UserIndicatorQueue()
+        queue = UserIndicatorQueue()
     }
     
     convenience init(presentingViewController: UIViewController) {

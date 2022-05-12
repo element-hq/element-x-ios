@@ -27,7 +27,7 @@ typealias UserIndicatorCancel = () -> Void
     
     init(presenter: UserIndicatorTypePresenterProtocol) {
         self.presenter = presenter
-        self.indicators = []
+        indicators = []
     }
     
     /// Present a new type of user indicator, such as loading spinner or success message.

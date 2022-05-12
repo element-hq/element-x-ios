@@ -64,7 +64,7 @@ final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        return self.templateSimpleScreenHostingController
+        templateSimpleScreenHostingController
     }
     
     // MARK: - Private
