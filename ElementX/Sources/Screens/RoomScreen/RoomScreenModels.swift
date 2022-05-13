@@ -25,9 +25,9 @@ enum TimelineItemContextMenuAction: Hashable {
     case quote
 }
 
-enum RoomScreenViewAction {
+enum RoomScreenViewAction{
     case loadPreviousPage
-    case itemAppeared(id: String)
+    case itemAppeared(id:String)
     case itemDisappeared(id: String)
     case linkClicked(url: URL)
     case sendMessage

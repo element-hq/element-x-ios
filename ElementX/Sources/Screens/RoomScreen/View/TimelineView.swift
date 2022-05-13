@@ -33,7 +33,7 @@ struct TimelineView: View {
             scrollToBottomPublisher.send(())
         }, label: {
             Image(uiImage: Asset.Images.timelineScrollToBottom.image)
-                .shadow(radius: 2.0)
+                .shadow(radius: 4.0)
                 .padding()
         })
         .onReceive(bottomVisiblePublisher, perform: { visible in
