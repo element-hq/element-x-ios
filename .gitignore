@@ -23,3 +23,7 @@ fastlane/test_output
 
 build
 Tools/Scripts/element-android
+
+## macOS Files
+.DS_Store
+._*
