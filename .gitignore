@@ -27,3 +27,6 @@ Tools/Scripts/element-android
 ## macOS Files
 .DS_Store
 ._*
+
+## Node.js
+node_modules/

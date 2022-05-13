@@ -1,0 +1,31 @@
+
+{
+  "color": {
+    "accent": { "value": "{color.global.elementGreen.value}" },
+    "alert": { "value": "{color.global.vermillon.value}" },
+    "primaryContent": {
+      "value": "{color.global.black.900.value}",
+      "darkValue": "{color.global.white.value}"
+    },
+    "secondaryContent": {
+      "value": "{color.global.grey.200.value}",
+      "darkValue": "{color.global.grey.250.value}"
+    },
+    "tertiaryContent": {
+      "value": "{color.global.grey.150.value}",
+      "darkValue": "{color.global.grey.300.value}"
+    },
+    "quaternaryContent": {
+      "value": "{color.global.grey.100.value}",
+      "darkValue": "{color.global.grey.400.value}"
+    },
+    "quinaryContent": {
+      "value": "{color.global.grey.50.value}",
+      "darkValue": "{color.global.grey.450.value}"
+    },
+    "background": {
+      "value": "{color.global.white.value}",
+      "darkValue": "{color.global.black.800.value}"
+    }
+  }
+}

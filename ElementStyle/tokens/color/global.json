@@ -1,0 +1,25 @@
+{
+  "color": {
+    "global": {
+      "elementGreen": { "value": "#0DBD8B" },
+      "white": { "value": "#FFFFFF" },
+      "vermillon": { "value": "#FF5B55" },
+      "black": {
+        "800" : { "value": "#15191E" },
+        "900" : { "value": "#17191C" },
+        "950" : { "value": "#21262C" }
+      },
+      "grey": {
+        "25" : { "value": "#F4F6FA" },
+        "50" : { "value": "#E3E8F0" },
+        "100" : { "value": "#c1c6cd" },
+        "150" : { "value": "#8D97A5" },
+        "200" : { "value": "#737D8C" },
+        "250" : { "value": "#A9B2BC" },
+        "300" : { "value": "#8E99A4" },
+        "400" : { "value": "#6F7882" },
+        "450" : { "value": "#394049" }
+      }
+    }
+  }
+}
