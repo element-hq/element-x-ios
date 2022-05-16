@@ -12,7 +12,7 @@ import Combine
 struct MockRoomProxy: RoomProxyProtocol {
     let id = UUID().uuidString
     let name: String? = nil
-    let displayName: String
+    let displayName: String?
     
     let topic: String? = nil
     let messages: [RoomMessageProtocol] = []
@@ -28,7 +28,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     var callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
     func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
-        completion(.success(displayName))
+        completion(.success("Room display name"))
     }
     
     func startLiveEventListener() {

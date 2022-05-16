@@ -134,7 +134,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                         memberDetailProvider: memberDetailProvider)
         
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
-                                                         roomName: roomProxy.name)
+                                                         roomName: roomProxy.displayName ?? roomProxy.name)
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         
         self.add(childCoordinator: coordinator)

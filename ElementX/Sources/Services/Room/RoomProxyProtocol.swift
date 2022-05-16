@@ -30,6 +30,7 @@ protocol RoomProxyProtocol {
     var isTombstoned: Bool { get }
     
     var name: String? { get }
+    var displayName: String? { get }
     
     var topic: String? { get }
     var messages: [RoomMessageProtocol] { get }

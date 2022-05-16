@@ -36,6 +36,8 @@ class RoomProxy: RoomProxyProtocol {
     
     private var backwardStream: BackwardsStreamProtocol?
     
+    private(set) var displayName: String?
+    
     let callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
     private(set) var messages: [RoomMessageProtocol]
@@ -126,9 +128,15 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
+        if let displayName = displayName {
+            completion(.success(displayName))
+            return
+        }
+        
         generalProcessingQueue.async {
             do {
                 let displayName = try self.room.displayName()
+                self.displayName = displayName
 
                 DispatchQueue.main.async {
                     completion(.success(displayName))
