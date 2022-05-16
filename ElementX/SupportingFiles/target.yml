@@ -40,6 +40,12 @@ targets:
         UILaunchStoryboardName: LaunchScreen
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        UISupportedInterfaceOrientations: [
+          UIInterfaceOrientationPortrait,
+          UIInterfaceOrientationPortraitUpsideDown,
+          UIInterfaceOrientationLandscapeLeft,
+          UIInterfaceOrientationLandscapeRight
+        ]
 
     settings:
       base:
