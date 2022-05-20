@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,50 +16,35 @@
 
 import UIKit
 
+public extension UIFont {
+    /// The fonts used by Element as defined in https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1362%3A0
+    @objc static let element = ElementUIFonts(values: ElementSharedFonts())
+}
+
 /// ObjC class for holding fonts for use in UIKit.
-@objcMembers public class ElementFontsUIKit: NSObject {
+@objcMembers public class ElementUIFonts: NSObject, Fonts {
+    public let largeTitle: UIFont
+    public let largeTitleB: UIFont
+    public let title1: UIFont
+    public let title1B: UIFont
+    public let title2: UIFont
+    public let title2B: UIFont
+    public let title3: UIFont
+    public let title3SB: UIFont
+    public let headline: UIFont
+    public let subheadline: UIFont
+    public let body: UIFont
+    public let bodySB: UIFont
+    public let callout: UIFont
+    public let calloutSB: UIFont
+    public let footnote: UIFont
+    public let footnoteSB: UIFont
+    public let caption1: UIFont
+    public let caption1SB: UIFont
+    public let caption2: UIFont
+    public let caption2SB: UIFont
     
-    public var largeTitle: UIFont
-    
-    public var largeTitleB: UIFont
-    
-    public var title1: UIFont
-    
-    public var title1B: UIFont
-    
-    public var title2: UIFont
-    
-    public var title2B: UIFont
-    
-    public var title3: UIFont
-    
-    public var title3SB: UIFont
-    
-    public var headline: UIFont
-    
-    public var subheadline: UIFont
-    
-    public var body: UIFont
-    
-    public var bodySB: UIFont
-    
-    public var callout: UIFont
-    
-    public var calloutSB: UIFont
-    
-    public var footnote: UIFont
-    
-    public var footnoteSB: UIFont
-    
-    public var caption1: UIFont
-    
-    public var caption1SB: UIFont
-    
-    public var caption2: UIFont
-    
-    public var caption2SB: UIFont
-    
-    public init(values: ElementFonts) {
+    public init(values: ElementSharedFonts) {
         largeTitle = values.largeTitle.uiFont
         largeTitleB = values.largeTitleB.uiFont
         title1 = values.title1.uiFont

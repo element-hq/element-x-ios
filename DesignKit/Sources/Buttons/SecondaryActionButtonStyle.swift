@@ -61,21 +61,21 @@ public struct SecondaryActionButtonStyle_Previews: PreviewProvider {
     
     public static var states: some View {
         VStack {
-            Button("Enabled") { }
+            Button("Enabled") { /* preview */ }
                 .buttonStyle(SecondaryActionButtonStyle())
             
-            Button("Disabled") { }
+            Button("Disabled") { /* preview */ }
                 .buttonStyle(SecondaryActionButtonStyle())
                 .disabled(true)
             
-            Button { } label: {
+            Button { /* preview */ } label: {
                 Text("Clear BG")
-                    .foregroundColor(.red)
+                    .foregroundColor(.element.alert)
             }
             .buttonStyle(SecondaryActionButtonStyle(customColor: .clear))
             
-            Button("Red BG") { }
-            .buttonStyle(SecondaryActionButtonStyle(customColor: .red))
+            Button("Red BG") { /* preview */ }
+                .buttonStyle(SecondaryActionButtonStyle(customColor: .element.alert))
         }
         .padding()
     }

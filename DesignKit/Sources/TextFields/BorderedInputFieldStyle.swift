@@ -30,14 +30,12 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
     public var isError: Bool
     
     private var borderColor: Color {
-        if !isEnabled {
-            return .element.quinaryContent
-        } else if isError {
+        if isError {
             return .element.alert
         } else if isEditing {
             return .element.accent
         } else {
-            return .element.quaternaryContent
+            return .element.quinaryContent
         }
     }
     

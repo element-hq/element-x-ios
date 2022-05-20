@@ -55,21 +55,21 @@ public struct PrimaryActionButtonStyle: ButtonStyle {
 public struct PrimaryActionButtonStyle_Previews: PreviewProvider {
     public static var states: some View {
         VStack {
-            Button("Enabled") { }
+            Button("Enabled") { /* preview */ }
                 .buttonStyle(PrimaryActionButtonStyle())
             
-            Button("Disabled") { }
+            Button("Disabled") { /* preview */  }
                 .buttonStyle(PrimaryActionButtonStyle())
                 .disabled(true)
             
-            Button { } label: {
+            Button { /* preview */  } label: {
                 Text("Clear BG")
-                    .foregroundColor(.red)
+                    .foregroundColor(.element.alert)
             }
             .buttonStyle(PrimaryActionButtonStyle(customColor: .clear))
             
-            Button("Red BG") { }
-                .buttonStyle(PrimaryActionButtonStyle(customColor: .red))
+            Button("Red BG") { /* preview */  }
+                .buttonStyle(PrimaryActionButtonStyle(customColor: .element.alert))
         }
         .padding()
     }
