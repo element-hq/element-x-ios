@@ -9,6 +9,15 @@ xcuserdata/
 *.dSYM.zip
 *.dSYM
 
+## SwiftPM
+/.build
+/Packages
+xcuserdata/
+DerivedData/
+.swiftpm/config/registries.json
+.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.netrc
+
 # fastlane
 #
 # It is recommended to not store the screenshots in the git repo.
@@ -27,6 +36,3 @@ Tools/Scripts/element-android
 ## macOS Files
 .DS_Store
 ._*
-
-## Node.js
-node_modules/

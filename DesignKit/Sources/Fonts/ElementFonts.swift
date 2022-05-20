@@ -62,7 +62,7 @@ extension ElementFonts {
     }
     
     public var largeTitleB: SharedFont {
-        let uiFont = largeTitle.uiFont.vc_bold
+        let uiFont = largeTitle.uiFont.bold
         return SharedFont(uiFont: uiFont, font: .largeTitle.bold())
     }
             
@@ -72,7 +72,7 @@ extension ElementFonts {
     }
     
     public var title1B: SharedFont {
-        let uiFont = title1.uiFont.vc_bold
+        let uiFont = title1.uiFont.bold
         return SharedFont(uiFont: uiFont, font: .title.bold())
     }
     
@@ -82,7 +82,7 @@ extension ElementFonts {
     }
     
     public var title2B: SharedFont {
-        let uiFont = title2.uiFont.vc_bold
+        let uiFont = title2.uiFont.bold
         return SharedFont(uiFont: uiFont, font: .title2.bold())
     }
     
@@ -92,7 +92,7 @@ extension ElementFonts {
     }
     
     public var title3SB: SharedFont {
-        let uiFont = title3.uiFont.vc_semiBold
+        let uiFont = title3.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .title3.weight(.semibold))
     }
     
@@ -112,7 +112,7 @@ extension ElementFonts {
     }
     
     public var bodySB: SharedFont {
-        let uiFont = body.uiFont.vc_semiBold
+        let uiFont = body.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .body.weight(.semibold))
     }
     
@@ -122,7 +122,7 @@ extension ElementFonts {
     }
     
     public var calloutSB: SharedFont {
-        let uiFont = callout.uiFont.vc_semiBold
+        let uiFont = callout.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .callout.weight(.semibold))
     }
     
@@ -132,7 +132,7 @@ extension ElementFonts {
     }
     
     public var footnoteSB: SharedFont {
-        let uiFont = footnote.uiFont.vc_semiBold
+        let uiFont = footnote.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .footnote.weight(.semibold))
     }
     
@@ -142,7 +142,7 @@ extension ElementFonts {
     }
     
     public var caption1SB: SharedFont {
-        let uiFont = caption1.uiFont.vc_semiBold
+        let uiFont = caption1.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .caption.weight(.semibold))
     }
     
@@ -152,7 +152,7 @@ extension ElementFonts {
     }
     
     public var caption2SB: SharedFont {
-        let uiFont = caption2.uiFont.vc_semiBold
+        let uiFont = caption2.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .caption2.weight(.semibold))
     }
 }

@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "element-design-tokens",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vector-im/element-design-tokens.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ed45767113b703dad6e66d33ad7da388066504f8"
+      }
+    },
+    {
       "identity" : "swiftui-introspect",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",

@@ -9,10 +9,16 @@ let package = Package(
     products: [
         .library(name: "DesignKit", targets: ["DesignKit"])
     ],
-    dependencies: [.package(url: "https://github.com/siteline/SwiftUI-Introspect.git", .upToNextMajor(from: "0.1.4"))],
+    dependencies: [
+        .package(url: "https://github.com/vector-im/element-design-tokens.git", branch: "main"),
+        .package(url: "https://github.com/siteline/SwiftUI-Introspect.git", .upToNextMajor(from: "0.1.4"))
+    ],
     targets: [
         .target(name: "DesignKit",
-                dependencies: [.product(name: "Introspect", package: "SwiftUI-Introspect")],
+                dependencies: [
+                    .product(name: "DesignTokens", package: "element-design-tokens"),
+                    .product(name: "Introspect", package: "SwiftUI-Introspect")
+                ],
                 path: "DesignKit"),
         .testTarget(name: "DesignKitTests",
                     dependencies: ["DesignKit"],

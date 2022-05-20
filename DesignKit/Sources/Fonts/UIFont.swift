@@ -21,7 +21,7 @@ public extension UIFont {
     // MARK: - Convenient methods
     
     /// Update current font with a SymbolicTraits
-    func vc_withTraits(_ traits: UIFontDescriptor.SymbolicTraits) -> UIFont {
+    func withTraits(_ traits: UIFontDescriptor.SymbolicTraits) -> UIFont {
         guard let descriptor = fontDescriptor.withSymbolicTraits(traits) else {
             return self
         }
@@ -31,7 +31,7 @@ public extension UIFont {
     }
     
     /// Update current font with a given Weight
-    func vc_withWeight(weight: Weight) -> UIFont {
+    func withWeight(weight: Weight) -> UIFont {
         // Add the font weight to the descriptor
         let weightedFontDescriptor = fontDescriptor.addingAttributes([
             UIFontDescriptor.AttributeName.traits: [
@@ -43,15 +43,15 @@ public extension UIFont {
     
     // MARK: - Shortcuts
     
-    var vc_bold: UIFont {
-        return vc_withTraits(.traitBold)
+    var bold: UIFont {
+        return withTraits(.traitBold)
     }
     
-    var vc_semiBold: UIFont {
-        return vc_withWeight(weight: .semibold)
+    var semiBold: UIFont {
+        return withWeight(weight: .semibold)
     }
 
-    var vc_italic: UIFont {
-        return vc_withTraits(.traitItalic)
+    var italic: UIFont {
+        return withTraits(.traitItalic)
     }
 }

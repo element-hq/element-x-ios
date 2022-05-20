@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import Foundation
 import SwiftUI
 
 @available(iOS 14.0, *)

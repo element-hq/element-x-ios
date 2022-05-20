@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
 import SwiftUI
+import DesignTokens
 import Introspect
 
 /// A bordered style of text input
