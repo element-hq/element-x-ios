@@ -16,11 +16,9 @@
 
 import SwiftUI
 
-@available(iOS 14, *)
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState,
-                                                        Never,
                                                         RoomScreenViewAction>
-@available(iOS 14, *)
+
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     
     private struct Constants {

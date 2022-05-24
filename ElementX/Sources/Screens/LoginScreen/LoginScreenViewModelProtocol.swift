@@ -17,8 +17,6 @@
 import Foundation
 
 protocol LoginScreenViewModelProtocol {
-    
     var completion: ((LoginScreenViewModelResult) -> Void)? { get set }
-    @available(iOS 14, *)
     var context: LoginScreenViewModelType.Context { get }
 }

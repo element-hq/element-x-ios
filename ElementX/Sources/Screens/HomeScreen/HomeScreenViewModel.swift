@@ -17,11 +17,9 @@
 import SwiftUI
 import Combine
 
-@available(iOS 14, *)
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
-                                                        Never,
                                                         HomeScreenViewAction>
-@available(iOS 14, *)
+
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     
     private let attributedStringBuilder: AttributedStringBuilderProtocol

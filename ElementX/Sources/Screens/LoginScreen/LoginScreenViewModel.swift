@@ -16,11 +16,9 @@
 
 import SwiftUI
 
-@available(iOS 14, *)
 typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState,
-                                                         Never,
                                                          LoginScreenViewAction>
-@available(iOS 14, *)
+
 class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
 
     // MARK: - Properties
