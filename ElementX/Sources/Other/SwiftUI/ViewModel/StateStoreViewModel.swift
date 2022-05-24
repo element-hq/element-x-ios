@@ -29,7 +29,6 @@ import Combine
 /// A similar approach is taken in libraries like [CombineFeedback](https://github.com/sergdort/CombineFeedback).
 /// It provides a nice layer of consistency and also safety. As we are not passing the `ViewModel` to the view directly, shortcuts/hacks
 /// can't be made into the `ViewModel`.
-@available(iOS 14, *)
 @dynamicMemberLookup
 class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
     // MARK: - Properties
@@ -65,14 +64,13 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
     }
 }
 
-/// A common ViewModel implementation for handling of `State`, `StateAction`s and `ViewAction`s
+/// A common ViewModel implementation for handling of `State` and `ViewAction`s
 ///
 /// Generic type State is constrained to the BindableState protocol in that it may contain (but doesn't have to)
 /// a specific portion of state that can be safely bound to.
 /// If we decide to add more features to our state management (like doing state processing off the main thread)
 /// we can do it in this centralised place.
-@available(iOS 14, *)
-class StateStoreViewModel<State: BindableState, StateAction, ViewAction> {
+class StateStoreViewModel<State: BindableState, ViewAction> {
 
     typealias Context = ViewModelContext<State, ViewAction>
 
@@ -102,34 +100,6 @@ class StateStoreViewModel<State: BindableState, StateAction, ViewAction> {
             self.process(viewAction: action)
         }
         .store(in: &cancellables)
-    }
-
-    /// Send state actions to modify the state within the reducer.
-    /// - Parameter action: The state action to send to the reducer.
-    @available(*, deprecated, message: "Mutate state directly instead")
-    func dispatch(action: StateAction) {
-        Self.reducer(state: &context.viewState, action: action)
-    }
-
-    /// Send state actions from a publisher to modify the state within the reducer.
-    /// - Parameter actionPublisher: The publisher that produces actions to be sent to the reducer
-    @available(*, deprecated, message: "Mutate state directly instead")
-    func dispatch(actionPublisher: AnyPublisher<StateAction, Never>) {
-        actionPublisher.sink { [weak self] action in
-            guard let self = self else { return }
-            Self.reducer(state: &self.context.viewState, action: action)
-        }
-        .store(in: &cancellables)
-    }
-
-    /// Override to handle mutations to the `State`
-    ///
-    /// A redux style reducer, all modifications to state happen here.
-    /// - Parameters:
-    ///   - state: The `inout` state to be modified,
-    ///   - action: The action that defines which state modification should take place.
-    class func reducer(state: inout State, action: StateAction) {
-        // Default implementation, -no-op
     }
 
     /// Override to handles incoming `ViewAction`s from the `ViewModel`.
