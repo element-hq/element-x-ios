@@ -16,21 +16,20 @@ struct EventBriefFactory: EventBriefFactoryProtocol {
         self.memberDetailProvider = memberDetailProvider
     }
     
-    func eventBriefForMessage(_ message: RoomMessageProtocol?, completion: @escaping ((EventBrief?) -> Void)) {
+    func eventBriefForMessage(_ message: RoomMessageProtocol?) async -> EventBrief? {
         guard let message = message else {
-            completion(nil)
-            return
+            return nil
         }
         
         switch message {
         case is ImageRoomMessage:
-            completion(nil)
+            return nil
         case let message as TextRoomMessage:
-            buildEventBrief(message: message, htmlBody: message.htmlBody, completion: completion)
+            return await buildEventBrief(message: message, htmlBody: message.htmlBody)
         case let message as NoticeRoomMessage:
-            buildEventBrief(message: message, htmlBody: message.htmlBody, completion: completion)
+            return await buildEventBrief(message: message, htmlBody: message.htmlBody)
         case let message as EmoteRoomMessage:
-            buildEventBrief(message: message, htmlBody: message.htmlBody, completion: completion)
+            return await buildEventBrief(message: message, htmlBody: message.htmlBody)
         default:
             fatalError("Unknown room message.")
         }
@@ -38,26 +37,24 @@ struct EventBriefFactory: EventBriefFactoryProtocol {
     
     // MARK: - Private
     
-    private func buildEventBrief(message: RoomMessageProtocol, htmlBody: String?, completion: @escaping ((EventBrief?) -> Void)) {
-        memberDetailProvider.displayNameForUserId(message.sender) { result in
-            switch result {
-            case .success(let displayName):
-                completion(EventBrief(eventId: message.id,
-                                      senderId: message.sender,
-                                      senderDisplayName: displayName,
-                                      body: message.body,
-                                      htmlBody: htmlBody,
-                                      date: message.originServerTs))
-            case .failure(let error):
-                MXLog.error("Failed fetching sender display name with error: \(error)")
-                
-                completion(EventBrief(eventId: message.id,
-                                      senderId: message.sender,
-                                      senderDisplayName: nil,
-                                      body: message.body,
-                                      htmlBody: htmlBody,
-                                      date: message.originServerTs))
-            }
+    private func buildEventBrief(message: RoomMessageProtocol, htmlBody: String?) async ->  EventBrief? {
+        switch await memberDetailProvider.loadDisplayNameForUserId(message.sender) {
+        case .success(let displayName):
+            return EventBrief(eventId: message.id,
+                              senderId: message.sender,
+                              senderDisplayName: displayName,
+                              body: message.body,
+                              htmlBody: htmlBody,
+                              date: message.originServerTs)
+        case .failure(let error):
+            MXLog.error("Failed fetching sender display name with error: \(error)")
+            
+            return EventBrief(eventId: message.id,
+                              senderId: message.sender,
+                              senderDisplayName: nil,
+                              body: message.body,
+                              htmlBody: htmlBody,
+                              date: message.originServerTs)
         }
     }
 }

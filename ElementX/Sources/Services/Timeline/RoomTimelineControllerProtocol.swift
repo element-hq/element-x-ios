@@ -21,12 +21,12 @@ enum RoomTimelineControllerError: Error {
 protocol RoomTimelineControllerProtocol {
     var timelineItems: [RoomTimelineItemProtocol] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
-
-    func paginateBackwards(_ count: UInt, callback: @escaping ((Result<Void, RoomTimelineControllerError>) -> Void))
     
-    func processItemAppearance(_ itemId: String)
+    func processItemAppearance(_ itemId: String) async
     
-    func processItemDisappearance(_ itemId: String)
+    func processItemDisappearance(_ itemId: String) async
     
-    func sendMessage(_ message: String)
+    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError>
+    
+    func sendMessage(_ message: String) async
 }

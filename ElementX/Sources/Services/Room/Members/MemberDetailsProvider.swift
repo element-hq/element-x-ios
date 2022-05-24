@@ -9,7 +9,7 @@
 import Foundation
 
 class MemberDetailProvider: MemberDetailProviderProtocol {
-    private let roomProxy: RoomProxyProtocol?
+    private let roomProxy: RoomProxyProtocol
     private var memberAvatars = [String: String]()
     private var memberDisplayNames = [String: String]()
     
@@ -18,58 +18,38 @@ class MemberDetailProvider: MemberDetailProviderProtocol {
     }
     
     func avatarURLForUserId(_ userId: String) -> String? {
-        self.memberAvatars[userId]
+        memberAvatars[userId]
     }
     
-    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailProviderError>) -> Void) {
-        guard let roomProxy = roomProxy else {
-            return
-        }
-        
+    func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, MemberDetailProviderError> {
         if let avatarURL = avatarURLForUserId(userId) {
-            completion(.success(avatarURL))
+            return .success(avatarURL)
         }
         
-        roomProxy.avatarURLForUserId(userId, completion: { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            
-            switch result {
-            case .success(let avatarURL):
-                self.memberAvatars[userId] = avatarURL
-                completion(.success(avatarURL))
-            case .failure:
-                completion(.failure(.failedRetrievingUserAvatarURL))
-            }
-        })
+        switch await roomProxy.loadAvatarURLForUserId(userId) {
+        case .success(let avatarURL):
+            memberAvatars[userId] = avatarURL
+            return .success(avatarURL)
+        case .failure:
+            return .failure(.failedRetrievingUserAvatarURL)
+        }
     }
-    
+        
     func displayNameForUserId(_ userId: String) -> String? {
-        self.memberDisplayNames[userId]
+        memberDisplayNames[userId]
     }
     
-    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, MemberDetailProviderError>) -> Void) {
-        guard let roomProxy = roomProxy else {
-            return
+    func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, MemberDetailProviderError> {
+        if let displayName = displayNameForUserId(userId) {
+            return .success(displayName)
         }
         
-        if let avatarURL = displayNameForUserId(userId) {
-            completion(.success(avatarURL))
+        switch await roomProxy.loadDisplayNameForUserId(userId) {
+        case .success(let displayName):
+            memberDisplayNames[userId] = displayName
+            return .success(displayName)
+        case .failure:
+            return .failure(.failedRetrievingUserDisplayName)
         }
-        
-        roomProxy.displayNameForUserId(userId, completion: { [weak self] result in
-            guard let self = self else {
-                return
-            }
-            
-            switch result {
-            case .success(let displayName):
-                self.memberDisplayNames[userId] = displayName
-                completion(.success(displayName))
-            case .failure:
-                completion(.failure(.failedRetrievingUserDisplayName))
-            }
-        })
     }
 }

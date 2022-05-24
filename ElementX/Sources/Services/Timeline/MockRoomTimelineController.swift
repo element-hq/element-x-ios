@@ -19,19 +19,19 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                                                      SeparatorRoomTimelineItem(id: UUID().uuidString, text: "Today"),
                                                      TextRoomTimelineItem(id: UUID().uuidString, text: "You too!", timestamp: "5 PM", shouldShowSenderDetails: true, senderId: "Bob")]
     
-    func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineControllerError>) -> Void)) {
-        callbacks.send(.updatedTimelineItems)
+    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
+        return .failure(.generic)
     }
     
-    func processItemAppearance(_ itemId: String) {
+    func processItemAppearance(_ itemId: String) async {
         
     }
     
-    func processItemDisappearance(_ itemId: String) {
+    func processItemDisappearance(_ itemId: String) async {
         
     }
     
-    func sendMessage(_ message: String) {
+    func sendMessage(_ message: String) async {
         
     }
 }

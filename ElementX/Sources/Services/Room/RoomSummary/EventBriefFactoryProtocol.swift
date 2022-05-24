@@ -9,5 +9,5 @@
 import Foundation
 
 protocol EventBriefFactoryProtocol {
-    func eventBriefForMessage(_ message: RoomMessageProtocol?, completion: @escaping ((EventBrief?) -> Void))
+    func eventBriefForMessage(_ message: RoomMessageProtocol?) async -> EventBrief?
 }

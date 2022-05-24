@@ -28,16 +28,13 @@ private class WeakUserSessionWrapper: ClientDelegate {
     }
     
     func didReceiveSyncUpdate() {
-        DispatchQueue.main.async {
-            self.userSession?.didReceiveSyncUpdate()
-        }
+        self.userSession?.didReceiveSyncUpdate()
     }
 }
 
 class UserSession: ClientDelegate {
     
     private let client: Client
-    private let processingQueue: DispatchQueue
     
     private(set) var rooms: [RoomProxy] = [] {
         didSet {
@@ -55,7 +52,6 @@ class UserSession: ClientDelegate {
     
     init(client: Client) {
         self.client = client
-        self.processingQueue = DispatchQueue(label: "UserSessionProcessingQueue")
         self.mediaProvider = MediaProvider(client: client, imageCache: ImageCache.default)
         
         client.setDelegate(delegate: WeakUserSessionWrapper(userSession: self))
@@ -63,7 +59,9 @@ class UserSession: ClientDelegate {
         Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
         client.startSync()
         
-        updateRooms()
+        Task {
+            await updateRooms()
+        }
     }
     
     var userIdentifier: String {
@@ -75,34 +73,25 @@ class UserSession: ClientDelegate {
         }
     }
     
-    func userDisplayName(_ completion: @escaping (Result<String, UserSessionError>) -> Void) {
-        processingQueue.async {
+    func loadUserDisplayName() async -> Result<String, UserSessionError> {
+        await withCheckedContinuation { continuation in
             do {
                 let displayName = try self.client.displayName()
-                
-                DispatchQueue.main.async {
-                    completion(.success(displayName))
-                }
+                continuation.resume(returning: .success(displayName))
             } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(UserSessionError.failedRetrievingDisplayName))
-                }
+                continuation.resume(returning: .failure(.failedRetrievingDisplayName))
             }
+            
         }
     }
-    
-    func userAvatarURL(_ completion: @escaping (Result<String, UserSessionError>) -> Void) {
-        processingQueue.async {
+        
+    func loadUserAvatarURL() async -> Result<String, UserSessionError> {
+        await withCheckedContinuation { continuation in
             do {
-                let displayName = try self.client.avatarUrl()
-                
-                DispatchQueue.main.async {
-                    completion(.success(displayName))
-                }
+                let avatarURL = try self.client.avatarUrl()
+                continuation.resume(returning: .success(avatarURL))
             } catch {
-                DispatchQueue.main.async {
-                    completion(.failure(UserSessionError.failedRetrievingDisplayName))
-                }
+                continuation.resume(returning: .failure(.failedRetrievingDisplayName))
             }
         }
     }
@@ -111,43 +100,38 @@ class UserSession: ClientDelegate {
     
     func didReceiveSyncUpdate() {
         Benchmark.logElapsedDurationForIdentifier("ClientSync", message: "Received sync update")
-        updateRooms()
+        
+        Task {
+            await updateRooms()
+        }
     }
     
     // MARK: Private
     
-    func updateRooms() {
+    private func updateRooms() async {
         var currentRooms = self.rooms
-        self.processingQueue.async { [weak self] in
-            guard let self = self else {
-                return
-            }
-            
-            Benchmark.startTrackingForIdentifier("ClientRooms", message: "Fetching available rooms")
-            let sdkRooms = self.client.rooms()
-            Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")
-            
-            Benchmark.startTrackingForIdentifier("ProcessingRooms", message: "Started processing \(sdkRooms.count) rooms")
-            let diff = sdkRooms.map({ $0.id()}).difference(from: currentRooms.map({ $0.id }))
-            
-            for change in diff {
-                switch change {
-                case .insert(_, let id, _):
-                    guard let sdkRoom = sdkRooms.first(where: { $0.id() == id }) else {
-                        MXLog.error("Failed retrieving sdk room with id: \(id)")
-                        break
-                    }
-                    currentRooms.append(RoomProxy(room: sdkRoom, messageFactory: RoomMessageFactory()))
-                case .remove(_, let id, _):
-                    currentRooms.removeAll { $0.id == id }
+        Benchmark.startTrackingForIdentifier("ClientRooms", message: "Fetching available rooms")
+        let sdkRooms = self.client.rooms()
+        Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")
+        
+        Benchmark.startTrackingForIdentifier("ProcessingRooms", message: "Started processing \(sdkRooms.count) rooms")
+        let diff = sdkRooms.map({ $0.id()}).difference(from: currentRooms.map({ $0.id }))
+        
+        for change in diff {
+            switch change {
+            case .insert(_, let id, _):
+                guard let sdkRoom = sdkRooms.first(where: { $0.id() == id }) else {
+                    MXLog.error("Failed retrieving sdk room with id: \(id)")
+                    break
                 }
-            }
-            
-            Benchmark.endTrackingForIdentifier("ProcessingRooms", message: "Finished processing \(sdkRooms.count) rooms")
-            
-            DispatchQueue.main.async {
-                self.rooms = currentRooms
+                currentRooms.append(RoomProxy(room: sdkRoom, messageFactory: RoomMessageFactory()))
+            case .remove(_, let id, _):
+                currentRooms.removeAll { $0.id == id }
             }
         }
+        
+        Benchmark.endTrackingForIdentifier("ProcessingRooms", message: "Finished processing \(sdkRooms.count) rooms")
+        
+        self.rooms = currentRooms
     }
 }

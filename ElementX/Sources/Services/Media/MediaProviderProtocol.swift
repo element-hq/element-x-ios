@@ -17,9 +17,9 @@ enum MediaProviderError: Error {
 protocol MediaProviderProtocol {
     func imageFromSource(_ source: MediaSource?) -> UIImage?
     
-    func loadImageFromSource(_ source: MediaSource, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void)
+    func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError>
     
     func imageFromURL(_ url: String?) -> UIImage?
     
-    func loadImageFromURL(_ url: String, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void)
+    func loadImageFromURL(_ url: String) async -> Result<UIImage, MediaProviderError>
 }

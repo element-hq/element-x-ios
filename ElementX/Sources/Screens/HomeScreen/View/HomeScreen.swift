@@ -152,7 +152,7 @@ struct RoomCell: View {
             }
             .animation(.easeInOut, value: room)
             .frame(minHeight: 60.0)
-            .onAppear {
+            .task {
                 context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
             }
         }

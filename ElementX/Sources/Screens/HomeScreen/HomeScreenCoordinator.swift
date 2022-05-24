@@ -70,28 +70,31 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
             }
         }
         
-        parameters.userSession.callbacks.sink { [weak self] result in
-            switch result {
-            case .updatedRoomsList:
-                self?.updateRoomsList()
-            }
-        }.store(in: &cancellables)
+        parameters.userSession
+            .callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] result in
+                switch result {
+                case .updatedRoomsList:
+                    self?.updateRoomsList()
+                }
+            }.store(in: &cancellables)
         
         updateRoomsList()
         
-        parameters.userSession.userAvatarURL { [weak self] result in
-            if case let .success(avatarURL) = result {
-                self?.parameters.mediaProvider.loadImageFromURL(avatarURL) { result in
-                    if case let .success(avatar) = result {
-                        self?.viewModel.updateWithUserAvatar(avatar)
+        Task {
+            if case let .success(userAvatarURL) = await parameters.userSession.loadUserAvatarURL() {
+                if case let .success(avatar) = await parameters.mediaProvider.loadImageFromURL(userAvatarURL) {
+                    await MainActor.run {
+                        self.viewModel.updateWithUserAvatar(avatar)
                     }
                 }
             }
-        }
-        
-        parameters.userSession.userDisplayName { [weak self] result in
-            if case let .success(displayName) = result {
-                self?.viewModel.updateWithUserDisplayName(displayName)
+            
+            if case let .success(userDisplayName) = await parameters.userSession.loadUserDisplayName() {
+                await MainActor.run {
+                    self.viewModel.updateWithUserDisplayName(userDisplayName)
+                }
             }
         }
     }
