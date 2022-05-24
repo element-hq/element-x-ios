@@ -38,7 +38,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥", bindings: RoomScreenViewStateBindings(composerText: "")))
         
-        timelineController.callbacks.sink { [weak self] callback in
+        timelineController.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
             guard let self = self else { return }
             
             switch callback {
@@ -62,25 +64,37 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Public
     
     override func process(viewAction: RoomScreenViewAction) {
-        switch viewAction {
-        case .loadPreviousPage:
-            state.isBackPaginating = true
-            timelineController.paginateBackwards(Constants.backPaginationPageSize) { [weak self] _ in
-                self?.state.isBackPaginating = false
+        Task {
+            switch viewAction {
+            case .loadPreviousPage:
+                await MainActor.run {
+                    state.isBackPaginating = true
+                }
+                
+                switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
+                default:
+                    await MainActor.run {
+                        state.isBackPaginating = false
+                    }
+                }
+                
+            case .itemAppeared(let id):
+                await timelineController.processItemAppearance(id)
+            case .itemDisappeared(let id):
+                await timelineController.processItemDisappearance(id)
+            case .linkClicked(let url):
+                MXLog.warning("Link clicked: \(url)")
+            case .sendMessage:
+                guard state.bindings.composerText.count > 0 else {
+                    return
+                }
+                
+                await timelineController.sendMessage(state.bindings.composerText)
+                
+                await MainActor.run {
+                    state.bindings.composerText = ""
+                }
             }
-        case .itemAppeared(let id):
-            timelineController.processItemAppearance(id)
-        case .itemDisappeared(let id):
-            timelineController.processItemDisappearance(id)
-        case .linkClicked(let url):
-            MXLog.warning("Link clicked: \(url)")
-        case .sendMessage:
-            guard state.bindings.composerText.count > 0 else {
-                return
-            }
-            
-            timelineController.sendMessage(state.bindings.composerText)
-            state.bindings.composerText = ""
         }
     }
     

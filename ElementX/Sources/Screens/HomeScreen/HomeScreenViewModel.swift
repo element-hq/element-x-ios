@@ -65,19 +65,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomUpdateListeners.removeAll()
         
         roomList.forEach({ roomSummary  in
-            roomSummary.callbacks.sink { [weak self] callback in
-                guard let self = self else {
-                    return
-                }
-                
-                switch callback {
-                case .updatedData:
-                    if let index = self.state.rooms.firstIndex(where: { $0.id == roomSummary.id }) {
-                        self.state.rooms[index] = self.buildOrUpdateRoomFromSummary(roomSummary)
+            roomSummary.callbacks
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] callback in
+                    guard let self = self else {
+                        return
+                    }
+                    
+                    switch callback {
+                    case .updatedData:
+                        if let index = self.state.rooms.firstIndex(where: { $0.id == roomSummary.id }) {
+                            self.state.rooms[index] = self.buildOrUpdateRoomFromSummary(roomSummary)
+                        }
                     }
                 }
-            }
-            .store(in: &roomUpdateListeners)
+                .store(in: &roomUpdateListeners)
         })
         
     }
@@ -98,7 +100,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        roomSummary.loadData()
+        Task {
+            await roomSummary.loadDetails()
+        }
     }
     
     private func buildOrUpdateRoomFromSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {

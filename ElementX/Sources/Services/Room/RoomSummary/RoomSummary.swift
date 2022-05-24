@@ -71,81 +71,81 @@ class RoomSummary: RoomSummaryProtocol {
         self.mediaProvider = mediaProvider
         self.eventBriefFactory = eventBriefFactory
         
-        eventBriefFactory.eventBriefForMessage(roomProxy.messages.last) { [weak self] result in
-            self?.lastMessage = result
+        Task {
+            lastMessage = await eventBriefFactory.eventBriefForMessage(roomProxy.messages.last)
         }
         
-        roomProxy.callbacks.sink { [weak self] callback in
-            guard let self = self else {
-                return
-            }
-            
-            switch callback {
-            case .updatedMessages:
-                self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last) { [weak self] result in
-                    self?.lastMessage = result
+        roomProxy.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                guard let self = self else {
+                    return
+                }
+                
+                switch callback {
+                case .updatedMessages:
+                    Task {
+                        self.lastMessage = await eventBriefFactory.eventBriefForMessage(roomProxy.messages.last)
+                    }
                 }
             }
-        }
-        .store(in: &roomUpdateListeners)
+            .store(in: &roomUpdateListeners)
     }
     
-    func loadData() {
+    func loadDetails() async {
         if hasLoadedData {
             return
         }
         
-        loadDisplayName()
-        loadLastMessage()
-        loadAvatar()
+        await withTaskGroup(of: Void.self) { group in
+            group.addTask {
+                await self.loadDisplayName()
+            }
+            group.addTask {
+                await self.loadAvatar()
+            }
+            group.addTask {
+                await self.loadLastMessage()
+            }
+        }
         
         hasLoadedData = true
     }
     
     // MARK: - Private
     
-    private func loadDisplayName() {
-        roomProxy.displayName { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
-            case .success(let displayName):
-                self.displayName = displayName
-            case .failure(let error):
-                MXLog.error("Failed fetching room display name with error: \(error)")
-            }
+    private func loadDisplayName() async {
+        switch await roomProxy.loadDisplayName() {
+        case .success(let displayName):
+            self.displayName = displayName
+        case .failure(let error):
+            MXLog.error("Failed fetching room display name with error: \(error)")
         }
     }
     
-    private func loadLastMessage() {
-        if roomProxy.messages.last == nil {
-            roomProxy.paginateBackwards(count: 1) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success:
-                    self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last) { [weak self] result in
-                        self?.lastMessage = result
-                    }
-                case .failure(let error):
-                    MXLog.error("Failed back paginating with error: \(error)")
-                }
-            }
+    private func loadAvatar() async {
+        guard let avatarURL = roomProxy.avatarURL else {
+            return
+        }
+        
+        switch await mediaProvider.loadImageFromURL(avatarURL) {
+        case .success(let avatar):
+            self.avatar = avatar
+        case .failure(let error):
+            MXLog.error("Failed fetching room avatar with error: \(error)")
         }
     }
     
-    private func loadAvatar() {
-        if let avatarURL = roomProxy.avatarURL {
-            mediaProvider.loadImageFromURL(avatarURL) { [weak self] result in
-                guard let self = self else { return }
-                
-                switch result {
-                case .success(let image):
-                    self.avatar = image
-                case .failure(let error):
-                    MXLog.error("Failed fetching room avatar with error: \(error)")
-                }
-            }
+    private func loadLastMessage() async {
+        guard roomProxy.messages.last == nil else {
+            return
+        }
+        
+        switch await roomProxy.paginateBackwards(count: 1) {
+        case .success:
+            self.lastMessage = await self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last)
+        case .failure(let error):
+            MXLog.error("Failed back paginating with error: \(error)")
         }
     }
 }

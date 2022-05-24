@@ -37,15 +37,15 @@ protocol RoomProxyProtocol {
     
     var avatarURL: String? { get }
     
-    func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void)
+    func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void)
+    func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void)
+    func loadDisplayName() async -> Result<String, RoomProxyError>
     
-    func paginateBackwards(count: UInt, callback: ((Result<Void, RoomProxyError>) -> Void)?)
+    func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError>
     
-    func sendMessage(_ message: String, callback: ((Result<Void, RoomProxyError>) -> Void)?)
+    func sendMessage(_ message: String) async -> Result<Void, RoomProxyError>
     
     var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
 }

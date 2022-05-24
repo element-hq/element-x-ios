@@ -13,7 +13,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    let callbacks = PassthroughSubject<RoomTimelineCallback, Never>()
+    let callbacks = PassthroughSubject<RoomTimelineProviderCallback, Never>()
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
@@ -32,25 +32,21 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         roomProxy.messages
     }
     
-    func paginateBackwards(_ count: UInt, callback: ((Result<Void, RoomTimelineError>) -> Void)?) {
-        self.roomProxy.paginateBackwards(count: count) { result in
-            switch result {
-            case .success:
-                callback?(.success(()))
-            case .failure:
-                callback?(.failure(.generic))
-            }
+    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
+        switch await roomProxy.paginateBackwards(count: count) {
+        case .success:
+            return .success(())
+        case .failure:
+            return .failure(.generic)
         }
     }
     
-    func sendMessage(_ message: String) {
-        roomProxy.sendMessage(message) { result in
-            switch result {
-            case .success:
-                break
-            case .failure(let error):
-                MXLog.error("Failed sending message with error: \(error)")
-            }
+    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError> {
+        switch await roomProxy.sendMessage(message) {
+        case .success:
+            return .success(())
+        case .failure:
+            return .failure(.failedSendingMessage)
         }
     }
 }

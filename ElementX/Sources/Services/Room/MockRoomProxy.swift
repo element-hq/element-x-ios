@@ -27,27 +27,27 @@ struct MockRoomProxy: RoomProxyProtocol {
     
     var callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
-    func displayName(_ completion: @escaping (Result<String, RoomProxyError>) -> Void) {
-        completion(.success("Room display name"))
+    func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
+        return .failure(.failedRetrievingMemberDisplayName)
+    }
+    
+    func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
+        return .failure(.failedRetrievingMemberAvatarURL)
+    }
+    
+    func loadDisplayName() async -> Result<String, RoomProxyError> {
+        return .failure(.failedRetrievingDisplayName)
     }
     
     func startLiveEventListener() {
         
     }
     
-    func paginateBackwards(count: UInt, callback: ((Result<Void, RoomProxyError>) -> Void)?) {
-        
+    func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
+        return .failure(.backwardStreamNotAvailable)
     }
-    
-    func avatarURLForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
         
-    }
-    
-    func displayNameForUserId(_ userId: String, completion: @escaping (Result<String?, RoomProxyError>) -> Void) {
-        
-    }
-    
-    func sendMessage(_ message: String, callback: ((Result<Void, RoomProxyError>) -> Void)?) {
-        
+    func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
+        return .failure(.failedSendingMessage)
     }
 }

@@ -29,46 +29,6 @@ struct MediaProvider: MediaProviderProtocol {
         return imageCache.retrieveImageInMemoryCache(forKey: source.underlyingSource.url(), options: nil)
     }
     
-    func loadImageFromSource(_ source: MediaSource, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
-        if let image = imageFromSource(source) {
-            completion(.success(image))
-            return
-        }
-        
-        imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
-            if case let .success(cacheResult) = result,
-               let image = cacheResult.image {
-                completion(.success(image))
-                return
-            }
-            
-            processingQueue.async {
-                do {
-                    let imageData = try client.getMediaContent(source: source.underlyingSource)
-                    
-                    guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
-                        MXLog.error("Invalid image data")
-                        DispatchQueue.main.async {
-                            completion(.failure(.invalidImageData))
-                        }
-                        return
-                    }
-                    
-                    imageCache.store(image, forKey: source.underlyingSource.url())
-                    
-                    DispatchQueue.main.async {
-                        completion(.success(image))
-                    }
-                } catch {
-                    MXLog.error("Failed retrieving image with error: \(error)")
-                    DispatchQueue.main.async {
-                        completion(.failure(.failedRetrievingImage))
-                    }
-                }
-            }
-        }
-    }
-    
     func imageFromURL(_ url: String?) -> UIImage? {
         guard let url = url else {
             return nil
@@ -77,7 +37,42 @@ struct MediaProvider: MediaProviderProtocol {
         return imageFromSource(MediaSource(source: mediaSourceFromUrl(url: url)))
     }
     
-    func loadImageFromURL(_ url: String, _ completion: @escaping (Result<UIImage, MediaProviderError>) -> Void) {
-        return loadImageFromSource(MediaSource(source: mediaSourceFromUrl(url: url)), completion)
+    func loadImageFromURL(_ url: String) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromSource(MediaSource(source: mediaSourceFromUrl(url: url)))
+    }
+        
+    func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
+        if let image = imageFromSource(source) {
+            return .success(image)
+        }
+        
+        return await withCheckedContinuation { continuation in
+            imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
+                if case let .success(cacheResult) = result,
+                   let image = cacheResult.image {
+                    continuation.resume(returning: .success(image))
+                    return
+                }
+                
+                processingQueue.async {
+                    do {
+                        let imageData = try client.getMediaContent(source: source.underlyingSource)
+                        
+                        guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
+                            MXLog.error("Invalid image data")
+                            continuation.resume(returning: .failure(.invalidImageData))
+                            return
+                        }
+                        
+                        imageCache.store(image, forKey: source.underlyingSource.url())
+                        
+                        continuation.resume(returning: .success(image))
+                    } catch {
+                        MXLog.error("Failed retrieving image with error: \(error)")
+                        continuation.resume(returning: .failure(.failedRetrievingImage))
+                    }
+                }
+            }
+        }
     }
 }

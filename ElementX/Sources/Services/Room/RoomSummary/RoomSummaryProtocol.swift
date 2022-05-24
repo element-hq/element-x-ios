@@ -28,5 +28,5 @@ protocol RoomSummaryProtocol {
     
     var callbacks: PassthroughSubject<RoomSummaryCallback, Never> { get }
     
-    func loadData()
+    func loadDetails() async
 }
