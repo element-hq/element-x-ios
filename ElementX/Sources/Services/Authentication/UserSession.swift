@@ -28,7 +28,7 @@ private class WeakUserSessionWrapper: ClientDelegate {
     }
     
     @MainActor func didReceiveSyncUpdate() {
-        self.userSession?.didReceiveSyncUpdate()
+        userSession?.didReceiveSyncUpdate()
     }
 }
 
@@ -112,7 +112,7 @@ class UserSession {
     private func updateRooms() async {
         var currentRooms = self.rooms
         Benchmark.startTrackingForIdentifier("ClientRooms", message: "Fetching available rooms")
-        let sdkRooms = self.client.rooms()
+        let sdkRooms = client.rooms()
         Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")
         
         Benchmark.startTrackingForIdentifier("ProcessingRooms", message: "Started processing \(sdkRooms.count) rooms")
@@ -133,6 +133,6 @@ class UserSession {
         
         Benchmark.endTrackingForIdentifier("ProcessingRooms", message: "Finished processing \(sdkRooms.count) rooms")
         
-        self.rooms = currentRooms
+        rooms = currentRooms
     }
 }

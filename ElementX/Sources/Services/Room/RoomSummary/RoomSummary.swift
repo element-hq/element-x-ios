@@ -143,7 +143,7 @@ class RoomSummary: RoomSummaryProtocol {
         
         switch await roomProxy.paginateBackwards(count: 1) {
         case .success:
-            self.lastMessage = await self.eventBriefFactory.eventBriefForMessage(self.roomProxy.messages.last)
+            lastMessage = await eventBriefFactory.eventBriefForMessage(roomProxy.messages.last)
         case .failure(let error):
             MXLog.error("Failed back paginating with error: \(error)")
         }
