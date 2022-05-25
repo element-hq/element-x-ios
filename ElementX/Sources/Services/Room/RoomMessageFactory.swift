@@ -9,7 +9,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RoomMessageFactory {
+struct RoomMessageFactory: RoomMessageFactoryProtocol {
     func buildRoomMessageFrom(_ message: AnyMessage) -> RoomMessageProtocol {
         if let textMessage = message.textMessage() {
             return TextRoomMessage(message: textMessage)

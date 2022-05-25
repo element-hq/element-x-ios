@@ -22,7 +22,7 @@ class UITestsAppCoordinator: Coordinator {
         
         let screens = mockScreens()
         let rootView = UITestsRootView(mockScreens: screens) { id in
-            guard let screen = screens.filter({ $0.id == id }).first else {
+            guard let screen = screens.first(where: { $0.id == id }) else {
                 fatalError()
             }
             

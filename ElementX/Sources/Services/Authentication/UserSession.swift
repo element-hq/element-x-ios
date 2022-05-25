@@ -60,9 +60,7 @@ class UserSession {
         Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
         client.startSync()
         
-        Task {
-            await updateRooms()
-        }
+        Task { await updateRooms() }
     }
     
     var userIdentifier: String {
@@ -83,7 +81,8 @@ class UserSession {
                 return .failure(.failedRetrievingDisplayName)
             }
             
-        }.value
+        }
+        .value
     }
         
     func loadUserAvatarURL() async -> Result<String, UserSessionError> {
@@ -94,7 +93,8 @@ class UserSession {
             } catch {
                 return .failure(.failedRetrievingDisplayName)
             }
-        }.value
+        }
+        .value
     }
     
     // MARK: ClientDelegate
@@ -116,7 +116,7 @@ class UserSession {
         Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")
         
         Benchmark.startTrackingForIdentifier("ProcessingRooms", message: "Started processing \(sdkRooms.count) rooms")
-        let diff = sdkRooms.map({ $0.id()}).difference(from: currentRooms.map({ $0.id }))
+        let diff = sdkRooms.map({ $0.id() }).difference(from: currentRooms.map(\.id))
         
         for change in diff {
             switch change {
@@ -125,7 +125,7 @@ class UserSession {
                     MXLog.error("Failed retrieving sdk room with id: \(id)")
                     break
                 }
-                currentRooms.append(RoomProxy(room: sdkRoom, messageFactory: RoomMessageFactory()))
+                currentRooms.append(RoomProxy(room: sdkRoom, roomMessageFactory: RoomMessageFactory()))
             case .remove(_, let id, _):
                 currentRooms.removeAll { $0.id == id }
             }

@@ -48,19 +48,19 @@ class RoomSummary: RoomSummaryProtocol {
     
     private(set) var displayName: String? {
         didSet {
-            self.callbacks.send(.updatedData)
+            callbacks.send(.updatedData)
         }
     }
     
     private(set) var lastMessage: EventBrief? {
         didSet {
-            self.callbacks.send(.updatedData)
+            callbacks.send(.updatedData)
         }
     }
     
     private(set) var avatar: UIImage? {
         didSet {
-            self.callbacks.send(.updatedData)
+            callbacks.send(.updatedData)
         }
     }
     
@@ -72,7 +72,7 @@ class RoomSummary: RoomSummaryProtocol {
         self.eventBriefFactory = eventBriefFactory
         
         Task {
-            lastMessage = await eventBriefFactory.eventBriefForMessage(roomProxy.messages.last)
+            lastMessage = await eventBriefFactory.buildEventBriefFor(message: roomProxy.messages.last)
         }
         
         roomProxy.callbacks
@@ -85,7 +85,7 @@ class RoomSummary: RoomSummaryProtocol {
                 switch callback {
                 case .updatedMessages:
                     Task {
-                        self.lastMessage = await eventBriefFactory.eventBriefForMessage(roomProxy.messages.last)
+                        self.lastMessage = await eventBriefFactory.buildEventBriefFor(message: roomProxy.messages.last)
                     }
                 }
             }
@@ -98,13 +98,13 @@ class RoomSummary: RoomSummaryProtocol {
         }
         
         await withTaskGroup(of: Void.self) { group in
-            group.addTask(priority: .medium) {
+            group.addTask {
                 await self.loadDisplayName()
             }
-            group.addTask(priority: .medium) {
+            group.addTask {
                 await self.loadAvatar()
             }
-            group.addTask(priority: .medium) {
+            group.addTask {
                 await self.loadLastMessage()
             }
         }
@@ -143,7 +143,7 @@ class RoomSummary: RoomSummaryProtocol {
         
         switch await roomProxy.paginateBackwards(count: 1) {
         case .success:
-            lastMessage = await eventBriefFactory.eventBriefForMessage(roomProxy.messages.last)
+            lastMessage = await eventBriefFactory.buildEventBriefFor(message: roomProxy.messages.last)
         case .failure(let error):
             MXLog.error("Failed back paginating with error: \(error)")
         }

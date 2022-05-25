@@ -12,7 +12,7 @@ import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
-    private let timelineItemFactory: RoomTimelineItemFactory
+    private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
     private let memberDetailProvider: MemberDetailProviderProtocol
     
@@ -23,7 +23,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
     
     init(timelineProvider: RoomTimelineProviderProtocol,
-         timelineItemFactory: RoomTimelineItemFactory,
+         timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          memberDetailProvider: MemberDetailProviderProtocol) {
         self.timelineProvider = timelineProvider
@@ -35,13 +35,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             .callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-            guard let self = self else { return }
-            
-            switch callback {
-            case .updatedMessages:
-                self.updateTimelineItems()
-            }
-        }.store(in: &cancellables)
+                guard let self = self else { return }
+                
+                switch callback {
+                case .updatedMessages:
+                    self.updateTimelineItems()
+                }
+            }.store(in: &cancellables)
         
         updateTimelineItems()
         
@@ -59,7 +59,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func processItemAppearance(_ itemId: String) async {
-        guard let timelineItem = self.timelineItems.filter({ $0.id == itemId}).first else {
+        guard let timelineItem = timelineItems.first(where: { $0.id == itemId }) else {
             return
         }
         
@@ -98,8 +98,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         
         var previousMessage: RoomMessageProtocol?
-        for message in self.timelineProvider.messages {
-            let areMessagesFromTheSameDay = self.haveSameDay(lhs: previousMessage, rhs: message)
+        for message in timelineProvider.messages {
+            let areMessagesFromTheSameDay = haveSameDay(lhs: previousMessage, rhs: message)
             let shouldAddSectionHeader = !areMessagesFromTheSameDay
             
             if shouldAddSectionHeader {
@@ -110,14 +110,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
             let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
             
-            newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(message, showSenderDetails: shouldShowSenderDetails))
+            newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(message: message, showSenderDetails: shouldShowSenderDetails))
             
             previousMessage = message
         }
         
-        self.timelineItems = newTimelineItems
+        timelineItems = newTimelineItems
         
-        self.callbacks.send(.updatedTimelineItems)
+        callbacks.send(.updatedTimelineItems)
     }
     
     private func haveSameDay(lhs: RoomMessageProtocol?, rhs: RoomMessageProtocol?) -> Bool {

@@ -16,8 +16,7 @@
 
 import SwiftUI
 
-typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState,
-                                                        RoomScreenViewAction>
+typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     
@@ -26,12 +25,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private let timelineController: RoomTimelineControllerProtocol
-    private let timelineViewFactory: RoomTimelineViewFactory
+    private let timelineViewFactory: RoomTimelineViewFactoryProtocol
 
     // MARK: - Setup
     
     init(timelineController: RoomTimelineControllerProtocol,
-         timelineViewFactory: RoomTimelineViewFactory,
+         timelineViewFactory: RoomTimelineViewFactoryProtocol,
          roomName: String?) {
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
@@ -41,20 +40,20 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-            guard let self = self else { return }
-            
-            switch callback {
-            case .updatedTimelineItems:
-                self.buildTimelineViews()
-            case .updatedTimelineItem(let itemId):
-                guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
-                      let viewIndex = self.state.items.firstIndex(where: { $0.id == itemId }) else {
-                          return
-                      }
+                guard let self = self else { return }
                 
-                self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem)
-            }
-        }.store(in: &cancellables)
+                switch callback {
+                case .updatedTimelineItems:
+                    self.buildTimelineViews()
+                case .updatedTimelineItem(let itemId):
+                    guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
+                          let viewIndex = self.state.items.firstIndex(where: { $0.id == itemId }) else {
+                        return
+                    }
+                    
+                    self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
+                }
+            }.store(in: &cancellables)
         
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
         
@@ -63,31 +62,29 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: - Public
     
-    override func process(viewAction: RoomScreenViewAction) {
-        Task {
-            switch viewAction {
-            case .loadPreviousPage:
-                state.isBackPaginating = true
-                
-                switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
-                default:
-                    state.isBackPaginating = false
-                }
-                
-            case .itemAppeared(let id):
-                await timelineController.processItemAppearance(id)
-            case .itemDisappeared(let id):
-                await timelineController.processItemDisappearance(id)
-            case .linkClicked(let url):
-                MXLog.warning("Link clicked: \(url)")
-            case .sendMessage:
-                guard state.bindings.composerText.count > 0 else {
-                    return
-                }
-                
-                await timelineController.sendMessage(state.bindings.composerText)
-                state.bindings.composerText = ""
+    override func process(viewAction: RoomScreenViewAction) async {
+        switch viewAction {
+        case .loadPreviousPage:
+            state.isBackPaginating = true
+            
+            switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
+            default:
+                state.isBackPaginating = false
             }
+            
+        case .itemAppeared(let id):
+            await timelineController.processItemAppearance(id)
+        case .itemDisappeared(let id):
+            await timelineController.processItemDisappearance(id)
+        case .linkClicked(let url):
+            MXLog.warning("Link clicked: \(url)")
+        case .sendMessage:
+            guard state.bindings.composerText.count > 0 else {
+                return
+            }
+            
+            await timelineController.sendMessage(state.bindings.composerText)
+            state.bindings.composerText = ""
         }
     }
     
@@ -95,7 +92,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func buildTimelineViews() {
         let stateItems = timelineController.timelineItems.map { item  in
-            timelineViewFactory.buildTimelineViewFor(item)
+            timelineViewFactory.buildTimelineViewFor(timelineItem: item)
         }
         
         state.items = stateItems

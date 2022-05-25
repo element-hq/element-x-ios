@@ -27,7 +27,7 @@ private class WeakRoomProxyWrapper: RoomDelegate {
 
 class RoomProxy: RoomProxyProtocol {
     private let room: Room
-    private let messageFactory: RoomMessageFactory
+    private let roomMessageFactory: RoomMessageFactoryProtocol
     
     private var backwardStream: BackwardsStreamProtocol?
     
@@ -37,9 +37,9 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var messages: [RoomMessageProtocol]
     
-    init(room: Room, messageFactory: RoomMessageFactory) {
+    init(room: Room, roomMessageFactory: RoomMessageFactoryProtocol) {
         self.room = room
-        self.messageFactory = messageFactory
+        self.roomMessageFactory = roomMessageFactory
         messages = []
         
         room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
@@ -91,7 +91,8 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 return .failure(.failedRetrievingMemberAvatarURL)
             }
-        }.value
+        }
+        .value
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
@@ -102,7 +103,8 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 return .failure(.failedRetrievingMemberDisplayName)
             }
-        }.value
+        }
+        .value
     }
         
     func loadDisplayName() async -> Result<String, RoomProxyError> {
@@ -119,7 +121,8 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 return .failure(.failedRetrievingDisplayName)
             }
-        }.value
+        }
+        .value
     }
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
@@ -133,13 +136,14 @@ class RoomProxy: RoomProxyProtocol {
             Benchmark.endTrackingForIdentifier("BackPagination \(self.id)", message: "Finished backpaginating \(count) message(s) in room \(self.id)")
 
             let messages = sdkMessages.map { message in
-                self.messageFactory.buildRoomMessageFrom(message)
+                self.roomMessageFactory.buildRoomMessageFrom(message)
             }.reversed()
 
             self.messages.insert(contentsOf: messages, at: 0)
             
             return .success(())
-        }.value
+        }
+        .value
     }
     
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
@@ -153,13 +157,14 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 return .failure(.failedSendingMessage)
             }
-        }.value
+        }
+        .value
     }
     
     // MARK: - Private
     
     fileprivate func appendMessage(_ message: AnyMessage) {
-        let message = self.messageFactory.buildRoomMessageFrom(message)
+        let message = roomMessageFactory.buildRoomMessageFrom(message)
         messages.append(message)
         callbacks.send(.updatedMessages)
     }

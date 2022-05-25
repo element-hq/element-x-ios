@@ -17,8 +17,7 @@
 import SwiftUI
 import Combine
 
-typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState,
-                                                        HomeScreenViewAction>
+typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     
@@ -44,7 +43,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Public
     
-    override func process(viewAction: HomeScreenViewAction) {
+    override func process(viewAction: HomeScreenViewAction) async {
         switch viewAction {
         case .logout:
             completion?(.logout)
@@ -100,9 +99,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        Task {
-            await roomSummary.loadDetails()
-        }
+        Task { await roomSummary.loadDetails() }
     }
     
     private func buildOrUpdateRoomFromSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {

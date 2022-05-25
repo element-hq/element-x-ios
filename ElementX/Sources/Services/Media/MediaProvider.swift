@@ -73,6 +73,7 @@ struct MediaProvider: MediaProviderProtocol {
                 MXLog.error("Failed retrieving image with error: \(error)")
                 return .failure(.failedRetrievingImage)
             }
-        }.value
+        }
+        .value
     }
 }

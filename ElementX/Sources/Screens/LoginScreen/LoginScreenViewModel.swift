@@ -16,8 +16,7 @@
 
 import SwiftUI
 
-typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState,
-                                                         LoginScreenViewAction>
+typealias LoginScreenViewModelType = StateStoreViewModel<LoginScreenViewState, LoginScreenViewAction>
 
 class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtocol {
 
@@ -38,7 +37,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
 
     // MARK: - Public
 
-    override func process(viewAction: LoginScreenViewAction) {
+    override func process(viewAction: LoginScreenViewAction) async {
         switch viewAction {
         case .login:
             completion?(.login((username: context.username, password: context.password)))
