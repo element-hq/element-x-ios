@@ -67,15 +67,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         Task {
             switch viewAction {
             case .loadPreviousPage:
-                await MainActor.run {
-                    state.isBackPaginating = true
-                }
+                state.isBackPaginating = true
                 
                 switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
                 default:
-                    await MainActor.run {
-                        state.isBackPaginating = false
-                    }
+                    state.isBackPaginating = false
                 }
                 
             case .itemAppeared(let id):
@@ -90,10 +86,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 }
                 
                 await timelineController.sendMessage(state.bindings.composerText)
-                
-                await MainActor.run {
-                    state.bindings.composerText = ""
-                }
+                state.bindings.composerText = ""
             }
         }
     }

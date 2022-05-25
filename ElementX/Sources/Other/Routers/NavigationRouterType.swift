@@ -18,6 +18,7 @@ import UIKit
 
 /// Protocol describing a router that wraps a UINavigationController and add convenient completion handlers. Completions are called when a Presentable is removed.
 /// Routers are used to be passed between coordinators. They handles only `physical` navigation.
+@MainActor
 protocol NavigationRouterType: AnyObject, Presentable {
 
     /// Present modally a view controller on the navigation controller

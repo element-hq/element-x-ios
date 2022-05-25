@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 class MemberDetailProviderManager {
     
     private var memberDetailProviders: [String: MemberDetailProviderProtocol] = [:]

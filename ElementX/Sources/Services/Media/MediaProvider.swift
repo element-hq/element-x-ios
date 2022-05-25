@@ -46,33 +46,33 @@ struct MediaProvider: MediaProviderProtocol {
             return .success(image)
         }
         
-        return await withCheckedContinuation { continuation in
+        let cachedImageLoadResult = await withCheckedContinuation({ continuation in
             imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
-                if case let .success(cacheResult) = result,
-                   let image = cacheResult.image {
-                    continuation.resume(returning: .success(image))
-                    return
+                continuation.resume(returning: result)
+            }
+        })
+            
+        if case let .success(cacheResult) = cachedImageLoadResult,
+           let image = cacheResult.image {
+            return .success(image)
+        }
+        
+        return await Task.detached { () -> Result<UIImage, MediaProviderError> in
+            do {
+                let imageData = try client.getMediaContent(source: source.underlyingSource)
+                
+                guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
+                    MXLog.error("Invalid image data")
+                    return .failure(.invalidImageData)
                 }
                 
-                processingQueue.async {
-                    do {
-                        let imageData = try client.getMediaContent(source: source.underlyingSource)
-                        
-                        guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
-                            MXLog.error("Invalid image data")
-                            continuation.resume(returning: .failure(.invalidImageData))
-                            return
-                        }
-                        
-                        imageCache.store(image, forKey: source.underlyingSource.url())
-                        
-                        continuation.resume(returning: .success(image))
-                    } catch {
-                        MXLog.error("Failed retrieving image with error: \(error)")
-                        continuation.resume(returning: .failure(.failedRetrievingImage))
-                    }
-                }
+                imageCache.store(image, forKey: source.underlyingSource.url())
+                
+                return .success(image)
+            } catch {
+                MXLog.error("Failed retrieving image with error: \(error)")
+                return .failure(.failedRetrievingImage)
             }
-        }
+        }.value
     }
 }

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 struct RoomTimelineItemFactory {
     private let mediaProvider: MediaProviderProtocol
     private let memberDetailProvider: MemberDetailProviderProtocol

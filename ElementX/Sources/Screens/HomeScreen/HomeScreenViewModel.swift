@@ -47,11 +47,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     override func process(viewAction: HomeScreenViewAction) {
         switch viewAction {
         case .logout:
-            self.completion?(.logout)
+            completion?(.logout)
         case .loadRoomData(let roomIdentifier):
-            self.loadRoomDataForIdentifier(roomIdentifier)
+            loadRoomDataForIdentifier(roomIdentifier)
         case .selectRoom(let roomIdentifier):
-            self.completion?(.selectRoom(roomIdentifier: roomIdentifier))
+            completion?(.selectRoom(roomIdentifier: roomIdentifier))
         }
     }
     

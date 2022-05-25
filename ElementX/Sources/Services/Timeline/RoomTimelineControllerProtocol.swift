@@ -18,6 +18,7 @@ enum RoomTimelineControllerError: Error {
     case generic
 }
 
+@MainActor
 protocol RoomTimelineControllerProtocol {
     var timelineItems: [RoomTimelineItemProtocol] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }

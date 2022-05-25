@@ -98,13 +98,13 @@ class RoomSummary: RoomSummaryProtocol {
         }
         
         await withTaskGroup(of: Void.self) { group in
-            group.addTask {
+            group.addTask(priority: .medium) {
                 await self.loadDisplayName()
             }
-            group.addTask {
+            group.addTask(priority: .medium) {
                 await self.loadAvatar()
             }
-            group.addTask {
+            group.addTask(priority: .medium) {
                 await self.loadLastMessage()
             }
         }

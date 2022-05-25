@@ -14,6 +14,7 @@ enum AuthenticationCoordinatorError: Error {
     case failedSettingUpSession
 }
 
+@MainActor
 protocol AuthenticationCoordinatorDelegate: AnyObject {
     
     func authenticationCoordinatorDidStartLoading(_ authenticationCoordinator: AuthenticationCoordinator)

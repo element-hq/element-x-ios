@@ -18,6 +18,7 @@ enum RoomTimelineProviderError: Error {
     case generic
 }
 
+@MainActor
 protocol RoomTimelineProviderProtocol {
     var callbacks: PassthroughSubject<RoomTimelineProviderCallback, Never> { get }
     

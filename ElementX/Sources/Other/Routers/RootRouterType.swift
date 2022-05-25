@@ -18,6 +18,7 @@ import UIKit
 
 /// Protocol describing a router that wraps the root navigation of the application.
 /// Routers are used to be passed between coordinators. They handles only `physical` navigation.
+@MainActor
 protocol RootRouterType: AnyObject {          
     
     /// Update the root view controller

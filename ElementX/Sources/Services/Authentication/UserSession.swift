@@ -27,12 +27,13 @@ private class WeakUserSessionWrapper: ClientDelegate {
         self.userSession = userSession
     }
     
-    func didReceiveSyncUpdate() {
+    @MainActor func didReceiveSyncUpdate() {
         self.userSession?.didReceiveSyncUpdate()
     }
 }
 
-class UserSession: ClientDelegate {
+@MainActor
+class UserSession {
     
     private let client: Client
     
@@ -74,26 +75,26 @@ class UserSession: ClientDelegate {
     }
     
     func loadUserDisplayName() async -> Result<String, UserSessionError> {
-        await withCheckedContinuation { continuation in
+        await Task.detached { () -> Result<String, UserSessionError> in
             do {
                 let displayName = try self.client.displayName()
-                continuation.resume(returning: .success(displayName))
+                return .success(displayName)
             } catch {
-                continuation.resume(returning: .failure(.failedRetrievingDisplayName))
+                return .failure(.failedRetrievingDisplayName)
             }
             
-        }
+        }.value
     }
         
     func loadUserAvatarURL() async -> Result<String, UserSessionError> {
-        await withCheckedContinuation { continuation in
+        await Task.detached { () -> Result<String, UserSessionError> in
             do {
                 let avatarURL = try self.client.avatarUrl()
-                continuation.resume(returning: .success(avatarURL))
+                return .success(avatarURL)
             } catch {
-                continuation.resume(returning: .failure(.failedRetrievingDisplayName))
+                return .failure(.failedRetrievingDisplayName)
             }
-        }
+        }.value
     }
     
     // MARK: ClientDelegate
@@ -101,8 +102,8 @@ class UserSession: ClientDelegate {
     func didReceiveSyncUpdate() {
         Benchmark.logElapsedDurationForIdentifier("ClientSync", message: "Received sync update")
         
-        Task {
-            await updateRooms()
+        Task.detached {
+            await self.updateRooms()
         }
     }
     

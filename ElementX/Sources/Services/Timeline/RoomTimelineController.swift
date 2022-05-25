@@ -31,7 +31,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         self.mediaProvider = mediaProvider
         self.memberDetailProvider = memberDetailProvider
         
-        self.timelineProvider.callbacks.sink { [weak self] callback in
+        self.timelineProvider
+            .callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
             guard let self = self else { return }
             
             switch callback {

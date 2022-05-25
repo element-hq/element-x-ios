@@ -14,6 +14,7 @@ enum MediaProviderError: Error {
     case invalidImageData
 }
 
+@MainActor
 protocol MediaProviderProtocol {
     func imageFromSource(_ source: MediaSource?) -> UIImage?
     

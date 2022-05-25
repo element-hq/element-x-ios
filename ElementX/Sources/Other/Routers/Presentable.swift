@@ -17,6 +17,7 @@
 import UIKit
 
 /// Protocol used to pass UIViewControllers to routers
+@MainActor
 protocol Presentable {
     func toPresentable() -> UIViewController
 }
