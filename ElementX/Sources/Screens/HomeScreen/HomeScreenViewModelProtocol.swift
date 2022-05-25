@@ -17,6 +17,7 @@
 import Foundation
 import UIKit
 
+@MainActor
 protocol HomeScreenViewModelProtocol {
     var completion: ((HomeScreenViewModelResult) -> Void)? { get set }
     

@@ -16,6 +16,7 @@
 
 import Foundation
 
+@MainActor
 protocol LoginScreenViewModelProtocol {
     var completion: ((LoginScreenViewModelResult) -> Void)? { get set }
     var context: LoginScreenViewModelType.Context { get }

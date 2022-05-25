@@ -14,6 +14,7 @@ enum MemberDetailProviderError: Error {
     case failedRetrievingUserDisplayName
 }
 
+@MainActor
 protocol MemberDetailProviderProtocol {
     func avatarURLForUserId(_ userId: String) -> String?
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, MemberDetailProviderError>

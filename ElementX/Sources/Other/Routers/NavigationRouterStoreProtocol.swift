@@ -17,6 +17,7 @@
 import UIKit
 
 /// `NavigationRouterStoreProtocol` describes a structure that enables to get a NavigationRouter from a UINavigationController instance.
+@MainActor
 protocol NavigationRouterStoreProtocol {
     
     /// Gets the existing navigation router for the supplied controller, creating a new one if it doesn't yet exist.

@@ -30,6 +30,7 @@ import Combine
 /// It provides a nice layer of consistency and also safety. As we are not passing the `ViewModel` to the view directly, shortcuts/hacks
 /// can't be made into the `ViewModel`.
 @dynamicMemberLookup
+@MainActor
 class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
     // MARK: - Properties
 
@@ -70,6 +71,7 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
 /// a specific portion of state that can be safely bound to.
 /// If we decide to add more features to our state management (like doing state processing off the main thread)
 /// we can do it in this centralised place.
+@MainActor
 class StateStoreViewModel<State: BindableState, ViewAction> {
 
     typealias Context = ViewModelContext<State, ViewAction>

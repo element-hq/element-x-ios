@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 protocol EventBriefFactoryProtocol {
     func eventBriefForMessage(_ message: RoomMessageProtocol?) async -> EventBrief?
 }

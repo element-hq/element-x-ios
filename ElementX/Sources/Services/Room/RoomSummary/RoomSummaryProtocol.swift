@@ -13,6 +13,7 @@ enum RoomSummaryCallback {
     case updatedData
 }
 
+@MainActor
 protocol RoomSummaryProtocol {
     var id: String { get }
     var name: String? { get }

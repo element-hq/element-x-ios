@@ -8,6 +8,7 @@
 
 import Foundation
 
+@MainActor
 struct RoomTimelineViewFactory {
     func buildTimelineViewFor(_ timelineItem: RoomTimelineItemProtocol) -> RoomTimelineViewProvider {
         switch timelineItem {

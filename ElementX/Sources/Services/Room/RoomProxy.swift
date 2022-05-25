@@ -44,9 +44,7 @@ class RoomProxy: RoomProxyProtocol {
         
         room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
         
-        Task {
-            backwardStream = room.startLiveEventListener()
-        }
+        backwardStream = room.startLiveEventListener()
     }
     
     var id: String {
@@ -86,78 +84,76 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await withCheckedContinuation({ continuation in
+        await Task.detached { () -> Result<String?, RoomProxyError> in
             do {
                 let avatarURL = try self.room.memberAvatarUrl(userId: userId)
-                continuation.resume(returning: .success(avatarURL))
+                return .success(avatarURL)
             } catch {
-                continuation.resume(returning: .failure(.failedRetrievingMemberAvatarURL))
+                return .failure(.failedRetrievingMemberAvatarURL)
             }
-        })
+        }.value
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await withCheckedContinuation({ continuation in
+        await Task.detached { () -> Result<String?, RoomProxyError> in
             do {
                 let displayName = try self.room.memberDisplayName(userId: userId)
-                continuation.resume(returning: .success(displayName))
+                return .success(displayName)
             } catch {
-                continuation.resume(returning: .failure(.failedRetrievingMemberDisplayName))
+                return .failure(.failedRetrievingMemberDisplayName)
             }
-        })
+        }.value
     }
         
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        await withCheckedContinuation({ continuation in
-            if let displayName = displayName {
-                continuation.resume(returning: .success(displayName))
-                return
+        await Task.detached { () -> Result<String, RoomProxyError> in
+            if let displayName = self.displayName {
+                return .success(displayName)
             }
             
             do {
                 let displayName = try self.room.displayName()
                 self.displayName = displayName
                 
-                continuation.resume(returning: .success(displayName))
+                return .success(displayName)
             } catch {
-                continuation.resume(returning: .failure(.failedRetrievingDisplayName))
+                return .failure(.failedRetrievingDisplayName)
             }
-        })
+        }.value
     }
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
-        await withCheckedContinuation { continuation in
+        await Task.detached { () -> Result<Void, RoomProxyError> in
             guard let backwardStream = self.backwardStream else {
-                continuation.resume(returning: .failure(.backwardStreamNotAvailable))
-                return
+                return .failure(RoomProxyError.backwardStreamNotAvailable)
             }
-            
+
             Benchmark.startTrackingForIdentifier("BackPagination \(self.id)", message: "Backpaginating \(count) message(s) in room \(self.id)")
             let sdkMessages = backwardStream.paginateBackwards(count: UInt64(count))
             Benchmark.endTrackingForIdentifier("BackPagination \(self.id)", message: "Finished backpaginating \(count) message(s) in room \(self.id)")
-            
+
             let messages = sdkMessages.map { message in
                 self.messageFactory.buildRoomMessageFrom(message)
             }.reversed()
-            
+
             self.messages.insert(contentsOf: messages, at: 0)
             
-            continuation.resume(returning: .success(()))
-        }
+            return .success(())
+        }.value
     }
     
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
         let messageContent = messageEventContentFromMarkdown(md: message)
         let transactionId = genTransactionId()
         
-        return await withCheckedContinuation { continuation in
+        return await Task(priority: .high) { () -> Result<Void, RoomProxyError> in
             do {
                 try self.room.send(msg: messageContent, txnId: transactionId)
-                continuation.resume(returning: .success(()))
+                return .success(())
             } catch {
-                continuation.resume(returning: .failure(.failedSendingMessage))
+                return .failure(.failedSendingMessage)
             }
-        }
+        }.value
     }
     
     // MARK: - Private

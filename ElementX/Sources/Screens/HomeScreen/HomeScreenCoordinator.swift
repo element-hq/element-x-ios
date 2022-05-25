@@ -85,16 +85,12 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         Task {
             if case let .success(userAvatarURL) = await parameters.userSession.loadUserAvatarURL() {
                 if case let .success(avatar) = await parameters.mediaProvider.loadImageFromURL(userAvatarURL) {
-                    await MainActor.run {
-                        self.viewModel.updateWithUserAvatar(avatar)
-                    }
+                    self.viewModel.updateWithUserAvatar(avatar)
                 }
             }
             
             if case let .success(userDisplayName) = await parameters.userSession.loadUserDisplayName() {
-                await MainActor.run {
-                    self.viewModel.updateWithUserDisplayName(userDisplayName)
-                }
+                self.viewModel.updateWithUserDisplayName(userDisplayName)
             }
         }
     }
