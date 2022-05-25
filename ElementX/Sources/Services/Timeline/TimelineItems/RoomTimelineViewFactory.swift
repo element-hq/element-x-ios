@@ -1,5 +1,5 @@
 //
-//  TimelineViewFactory.swift
+//  RoomTimelineViewFactory.swift
 //  ElementX
 //
 //  Created by Stefan Ceriu on 16/03/2022.
@@ -8,9 +8,8 @@
 
 import Foundation
 
-@MainActor
-struct RoomTimelineViewFactory {
-    func buildTimelineViewFor(_ timelineItem: RoomTimelineItemProtocol) -> RoomTimelineViewProvider {
+struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
+    func buildTimelineViewFor(timelineItem: RoomTimelineItemProtocol) -> RoomTimelineViewProvider {
         switch timelineItem {
         case let item as TextRoomTimelineItem:
             return .text(item)

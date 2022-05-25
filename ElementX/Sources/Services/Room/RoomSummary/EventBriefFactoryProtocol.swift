@@ -10,5 +10,5 @@ import Foundation
 
 @MainActor
 protocol EventBriefFactoryProtocol {
-    func eventBriefForMessage(_ message: RoomMessageProtocol?) async -> EventBrief?
+    func buildEventBriefFor(message: RoomMessageProtocol?) async -> EventBrief?
 }

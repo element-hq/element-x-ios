@@ -16,7 +16,7 @@ struct EventBriefFactory: EventBriefFactoryProtocol {
         self.memberDetailProvider = memberDetailProvider
     }
     
-    func eventBriefForMessage(_ message: RoomMessageProtocol?) async -> EventBrief? {
+    func buildEventBriefFor(message: RoomMessageProtocol?) async -> EventBrief? {
         guard let message = message else {
             return nil
         }
@@ -37,7 +37,7 @@ struct EventBriefFactory: EventBriefFactoryProtocol {
     
     // MARK: - Private
     
-    private func buildEventBrief(message: RoomMessageProtocol, htmlBody: String?) async ->  EventBrief? {
+    private func buildEventBrief(message: RoomMessageProtocol, htmlBody: String?) async -> EventBrief? {
         switch await memberDetailProvider.loadDisplayNameForUserId(message.sender) {
         case .success(let displayName):
             return EventBrief(eventId: message.id,

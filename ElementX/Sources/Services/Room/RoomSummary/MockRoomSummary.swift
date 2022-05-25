@@ -30,7 +30,7 @@ struct MockRoomSummary: RoomSummaryProtocol {
     
     var avatar: UIImage?
     
-    func loadDetails() {
+    func loadDetails() async {
         
     }
     

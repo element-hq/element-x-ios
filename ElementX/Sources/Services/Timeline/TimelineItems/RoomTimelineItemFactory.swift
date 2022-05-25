@@ -1,5 +1,5 @@
 //
-//  TimelineItemFactory.swift
+//  RoomTimelineItemFactory.swift
 //  ElementX
 //
 //  Created by Stefan Ceriu on 16/03/2022.
@@ -9,8 +9,7 @@
 import Foundation
 import UIKit
 
-@MainActor
-struct RoomTimelineItemFactory {
+struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let memberDetailProvider: MemberDetailProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
@@ -23,12 +22,12 @@ struct RoomTimelineItemFactory {
         self.attributedStringBuilder = attributedStringBuilder
     }
     
-    func buildTimelineItemFor(_ roomMessage: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
-        let displayName = memberDetailProvider.displayNameForUserId(roomMessage.sender)
-        let avatarURL = memberDetailProvider.avatarURLForUserId(roomMessage.sender)
+    func buildTimelineItemFor(message: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
+        let displayName = memberDetailProvider.displayNameForUserId(message.sender)
+        let avatarURL = memberDetailProvider.avatarURLForUserId(message.sender)
         let avatarImage = mediaProvider.imageFromURL(avatarURL)
         
-        switch roomMessage {
+        switch message {
         case let message as TextRoomMessage:
             return buildTextTimelineItemFromMessage(message, showSenderDetails, displayName, avatarImage)
         case let message as ImageRoomMessage:

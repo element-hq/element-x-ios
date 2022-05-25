@@ -16,8 +16,7 @@
 
 import SwiftUI
 
-typealias TemplateSimpleScreenViewModelType = StateStoreViewModel<TemplateSimpleScreenViewState,
-                                                                  TemplateSimpleScreenViewAction>
+typealias TemplateSimpleScreenViewModelType = StateStoreViewModel<TemplateSimpleScreenViewState, TemplateSimpleScreenViewAction>
 
 class TemplateSimpleScreenViewModel: TemplateSimpleScreenViewModelType, TemplateSimpleScreenViewModelProtocol {
 
@@ -34,10 +33,10 @@ class TemplateSimpleScreenViewModel: TemplateSimpleScreenViewModelType, Template
     init(promptType: TemplateSimpleScreenPromptType, initialCount: Int = 0) {
         super.init(initialViewState: TemplateSimpleScreenViewState(promptType: promptType, count: 0))
     }
-
+    
     // MARK: - Public
-
-    override func process(viewAction: TemplateSimpleScreenViewAction) {
+    
+    override func process(viewAction: TemplateSimpleScreenViewAction) async {
         switch viewAction {
         case .accept:
             completion?(.accept)
