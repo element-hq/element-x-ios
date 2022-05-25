@@ -82,9 +82,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func sendMessage(_ message: String) async {
         switch await timelineProvider.sendMessage(message) {
-        case .success:
-            break
-        case .failure:
+        default:
             break
         }
     }
@@ -141,14 +139,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         switch await mediaProvider.loadImageFromSource(source) {
         case .success(let image):
-            guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = self.timelineItems[index] as? ImageRoomTimelineItem else {
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? ImageRoomTimelineItem else {
                 return
             }
             
             item.image = image
-            self.timelineItems[index] = item
-            self.callbacks.send(.updatedTimelineItem(timelineItem.id))
+            timelineItems[index] = item
+            callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:
             break
         }
@@ -167,14 +165,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             
             switch await mediaProvider.loadImageFromURL(avatarURL) {
             case .success(let avatar):
-                guard let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                      var item = self.timelineItems[index] as? EventBasedTimelineItemProtocol else {
+                guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                      var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
                     return
                 }
                 
                 item.senderAvatar = avatar
-                self.timelineItems[index] = item
-                self.callbacks.send(.updatedTimelineItem(timelineItem.id))
+                timelineItems[index] = item
+                callbacks.send(.updatedTimelineItem(timelineItem.id))
             case .failure:
                 break
             }
@@ -192,14 +190,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch await memberDetailProvider.loadDisplayNameForUserId(timelineItem.senderId) {
         case .success(let displayName):
             guard let displayName = displayName,
-                  let index = self.timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = self.timelineItems[index] as? EventBasedTimelineItemProtocol else {
+                  let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
                 return
             }
             
             item.senderDisplayName = displayName
-            self.timelineItems[index] = item
-            self.callbacks.send(.updatedTimelineItem(timelineItem.id))
+            timelineItems[index] = item
+            callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:
             break
         }

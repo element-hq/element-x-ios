@@ -46,12 +46,12 @@ struct MediaProvider: MediaProviderProtocol {
             return .success(image)
         }
         
-        let cachedImageLoadResult = await withCheckedContinuation({ continuation in
+        let cachedImageLoadResult = await withCheckedContinuation { continuation in
             imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
                 continuation.resume(returning: result)
             }
-        })
-            
+        }
+        
         if case let .success(cacheResult) = cachedImageLoadResult,
            let image = cacheResult.image {
             return .success(image)

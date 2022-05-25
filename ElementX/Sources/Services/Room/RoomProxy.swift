@@ -21,7 +21,7 @@ private class WeakRoomProxyWrapper: RoomDelegate {
     // MARK: - RoomDelegate
     
     func didReceiveMessage(message: AnyMessage) {
-        self.roomProxy?.appendMessage(message)
+        roomProxy?.appendMessage(message)
     }
 }
 
