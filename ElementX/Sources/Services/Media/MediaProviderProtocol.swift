@@ -20,7 +20,7 @@ protocol MediaProviderProtocol {
     
     func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError>
     
-    func imageFromURL(_ url: String?) -> UIImage?
+    func imageFromURLString(_ urlString: String?) -> UIImage?
     
-    func loadImageFromURL(_ url: String) async -> Result<UIImage, MediaProviderError>
+    func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError>
 }

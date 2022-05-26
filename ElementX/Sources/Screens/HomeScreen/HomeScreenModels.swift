@@ -17,7 +17,7 @@
 import Foundation
 import UIKit
 
-enum HomeScreenViewModelResult {
+enum HomeScreenViewModelAction {
     case logout
     case selectRoom(roomIdentifier: String)
 }

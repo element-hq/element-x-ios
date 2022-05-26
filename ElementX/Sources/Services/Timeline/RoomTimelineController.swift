@@ -157,13 +157,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        switch await memberDetailProvider.loadAvatarURLForUserId(timelineItem.senderId) {
-        case .success(let avatarURL):
-            guard let avatarURL = avatarURL else {
+        switch await memberDetailProvider.loadAvatarURLStringForUserId(timelineItem.senderId) {
+        case .success(let avatarURLString):
+            guard let avatarURLString = avatarURLString else {
                 return
             }
             
-            switch await mediaProvider.loadImageFromURL(avatarURL) {
+            switch await mediaProvider.loadImageFromURLString(avatarURLString) {
             case .success(let avatar):
                 guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                       var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {

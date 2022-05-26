@@ -20,6 +20,10 @@ struct LoginScreenCoordinatorParameters {
     
 }
 
+enum LoginScreenCoordinatorAction {
+    case login((username: String, password: String))
+}
+
 final class LoginScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Properties
@@ -34,7 +38,7 @@ final class LoginScreenCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var completion: ((LoginScreenViewModelResult) -> Void)?
+    var callback: ((LoginScreenCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
@@ -47,10 +51,13 @@ final class LoginScreenCoordinator: Coordinator, Presentable {
         loginScreenHostingController = UIHostingController(rootView: view)
         loginScreenHostingController.isModalInPresentation = true
         
-        loginScreenViewModel.completion = { [weak self] result in
+        loginScreenViewModel.callback = { [weak self] action in
             MXLog.debug("[LoginScreenCoordinator] LoginScreenViewModel did complete.")
             guard let self = self else { return }
-            self.completion?(result)
+            switch action {
+            case .login(let credentials):
+                self.callback?(.login(credentials))
+            }
         }
     }
     

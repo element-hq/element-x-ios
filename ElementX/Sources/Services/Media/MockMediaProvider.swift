@@ -19,11 +19,11 @@ struct MockMediaProvider: MediaProviderProtocol {
         return .failure(.failedRetrievingImage)
     }
     
-    func imageFromURL(_ url: String?) -> UIImage? {
+    func imageFromURLString(_ urlString: String?) -> UIImage? {
         return nil
     }
         
-    func loadImageFromURL(_ url: String) async -> Result<UIImage, MediaProviderError> {
+    func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError> {
         return .failure(.failedRetrievingImage)
     }
 }

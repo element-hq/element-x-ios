@@ -18,13 +18,12 @@ import SwiftUI
 import Combine
 
 struct HomeScreenCoordinatorParameters {
-    let userSession: UserSession
-    let mediaProvider: MediaProviderProtocol
+    let userSession: UserSessionProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
     let memberDetailProviderManager: MemberDetailProviderManager
 }
 
-enum HomeScreenCoordinatorResult {
+enum HomeScreenCoordinatorAction {
     case logout
     case selectRoom(roomIdentifier: String)
 }
@@ -47,7 +46,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var completion: ((HomeScreenCoordinatorResult) -> Void)?
+    var callback: ((HomeScreenCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
@@ -59,22 +58,22 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)
         
-        viewModel.completion = { [weak self] result in
+        viewModel.callback = { [weak self] action in
             guard let self = self else { return }
             
-            switch result {
+            switch action {
             case .logout:
-                self.completion?(.logout)
+                self.callback?(.logout)
             case .selectRoom(let roomIdentifier):
-                self.completion?(.selectRoom(roomIdentifier: roomIdentifier))
+                self.callback?(.selectRoom(roomIdentifier: roomIdentifier))
             }
         }
         
-        parameters.userSession
+        parameters.userSession.clientProxy
             .callbacks
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] result in
-                switch result {
+            .sink { [weak self] action in
+                switch action {
                 case .updatedRoomsList:
                     self?.updateRoomsList()
                 }
@@ -83,13 +82,13 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         updateRoomsList()
         
         Task {
-            if case let .success(userAvatarURL) = await parameters.userSession.loadUserAvatarURL() {
-                if case let .success(avatar) = await parameters.mediaProvider.loadImageFromURL(userAvatarURL) {
+            if case let .success(userAvatarURLString) = await parameters.userSession.clientProxy.loadUserAvatarURLString() {
+                if case let .success(avatar) = await parameters.userSession.mediaProvider.loadImageFromURLString(userAvatarURLString) {
                     self.viewModel.updateWithUserAvatar(avatar)
                 }
             }
             
-            if case let .success(userDisplayName) = await parameters.userSession.loadUserDisplayName() {
+            if case let .success(userDisplayName) = await parameters.userSession.clientProxy.loadUserDisplayName() {
                 self.viewModel.updateWithUserDisplayName(userDisplayName)
             }
         }
@@ -107,7 +106,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     // MARK: - Private
     
     func updateRoomsList() {
-        self.roomSummaries = parameters.userSession.rooms.compactMap { roomProxy in
+        roomSummaries = parameters.userSession.clientProxy.rooms.compactMap { roomProxy in
             guard !roomProxy.isSpace, !roomProxy.isTombstoned else {
                 return nil
             }
@@ -119,10 +118,10 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
             let memberDetailProvider = parameters.memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
             
             return RoomSummary(roomProxy: roomProxy,
-                               mediaProvider: parameters.mediaProvider,
+                               mediaProvider: parameters.userSession.mediaProvider,
                                eventBriefFactory: EventBriefFactory(memberDetailProvider: memberDetailProvider))
         }
         
-        self.viewModel.updateWithRoomList(roomSummaries)
+        viewModel.updateWithRoomSummaries(roomSummaries)
     }
 }

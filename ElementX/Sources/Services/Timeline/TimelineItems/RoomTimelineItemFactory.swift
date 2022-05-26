@@ -24,8 +24,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     func buildTimelineItemFor(message: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
         let displayName = memberDetailProvider.displayNameForUserId(message.sender)
-        let avatarURL = memberDetailProvider.avatarURLForUserId(message.sender)
-        let avatarImage = mediaProvider.imageFromURL(avatarURL)
+        let avatarURL = memberDetailProvider.avatarURLStringForUserId(message.sender)
+        let avatarImage = mediaProvider.imageFromURLString(avatarURL)
         
         switch message {
         case let message as TextRoomMessage:

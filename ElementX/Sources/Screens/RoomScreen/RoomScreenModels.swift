@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum RoomScreenViewModelResult {
+enum RoomScreenViewModelAction {
 
 }
 

@@ -1,5 +1,5 @@
 //
-//  UserSession.swift
+//  ClientProxy.swift
 //  ElementX
 //
 //  Created by Stefan Ceriu on 14.02.2022.
@@ -9,53 +9,39 @@ import Foundation
 import MatrixRustSDK
 import Combine
 import UIKit
-import Kingfisher
 
-enum UserSessionCallback {
-    case updatedRoomsList
-}
-
-enum UserSessionError: Error {
-    case failedRetrievingAvatarURL
-    case failedRetrievingDisplayName
-}
-
-private class WeakUserSessionWrapper: ClientDelegate {
-    private weak var userSession: UserSession?
+private class WeakClientProxyWrapper: ClientDelegate {
+    private weak var clientProxy: ClientProxy?
     
-    init(userSession: UserSession) {
-        self.userSession = userSession
+    init(clientProxy: ClientProxy) {
+        self.clientProxy = clientProxy
     }
     
-    @MainActor func didReceiveSyncUpdate() {
-        userSession?.didReceiveSyncUpdate()
+    func didReceiveSyncUpdate() {
+        clientProxy?.didReceiveSyncUpdate()
     }
 }
 
-@MainActor
-class UserSession {
+class ClientProxy: ClientProxyProtocol {
     
     private let client: Client
     
     private(set) var rooms: [RoomProxy] = [] {
         didSet {
-            self.callbacks.send(.updatedRoomsList)
+            callbacks.send(.updatedRoomsList)
         }
     }
-    
-    let mediaProvider: MediaProviderProtocol
     
     deinit {
         client.setDelegate(delegate: nil)
     }
     
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
+    let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     init(client: Client) {
         self.client = client
-        self.mediaProvider = MediaProvider(client: client, imageCache: ImageCache.default)
         
-        client.setDelegate(delegate: WeakUserSessionWrapper(userSession: self))
+        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         
         Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
         client.startSync()
@@ -72,8 +58,8 @@ class UserSession {
         }
     }
     
-    func loadUserDisplayName() async -> Result<String, UserSessionError> {
-        await Task.detached { () -> Result<String, UserSessionError> in
+    func loadUserDisplayName() async -> Result<String, ClientProxyError> {
+        await Task.detached { () -> Result<String, ClientProxyError> in
             do {
                 let displayName = try self.client.displayName()
                 return .success(displayName)
@@ -85,8 +71,8 @@ class UserSession {
         .value
     }
         
-    func loadUserAvatarURL() async -> Result<String, UserSessionError> {
-        await Task.detached { () -> Result<String, UserSessionError> in
+    func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
+        await Task.detached { () -> Result<String, ClientProxyError> in
             do {
                 let avatarURL = try self.client.avatarUrl()
                 return .success(avatarURL)
@@ -97,9 +83,18 @@ class UserSession {
         .value
     }
     
-    // MARK: ClientDelegate
+    func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource {
+        MatrixRustSDK.mediaSourceFromUrl(url: urlString)
+    }
     
-    func didReceiveSyncUpdate() {
+    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data {
+        let bytes = try client.getMediaContent(source: source)
+        return Data(bytes: bytes, count: bytes.count)
+    }
+    
+    // MARK: Private
+    
+    fileprivate func didReceiveSyncUpdate() {
         Benchmark.logElapsedDurationForIdentifier("ClientSync", message: "Received sync update")
         
         Task.detached {
@@ -107,10 +102,8 @@ class UserSession {
         }
     }
     
-    // MARK: Private
-    
     private func updateRooms() async {
-        var currentRooms = self.rooms
+        var currentRooms = rooms
         Benchmark.startTrackingForIdentifier("ClientRooms", message: "Fetching available rooms")
         let sdkRooms = client.rooms()
         Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")

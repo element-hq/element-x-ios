@@ -19,11 +19,11 @@ import UIKit
 
 @MainActor
 protocol HomeScreenViewModelProtocol {
-    var completion: ((HomeScreenViewModelResult) -> Void)? { get set }
+    var callback: ((HomeScreenViewModelAction) -> Void)? { get set }
     
     var context: HomeScreenViewModelType.Context { get }
     
     func updateWithUserAvatar(_ avatar: UIImage)
     func updateWithUserDisplayName(_ displayName: String)
-    func updateWithRoomList(_ roomList: [RoomSummaryProtocol])
+    func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol])
 }

@@ -13,11 +13,11 @@ struct MediaSource: Equatable {
     let underlyingSource: MatrixRustSDK.MediaSource
     
     init(source: MatrixRustSDK.MediaSource) {
-        self.underlyingSource = source
+        underlyingSource = source
     }
     
     init(urlString: String) {
-        self.underlyingSource = mediaSourceFromUrl(url: urlString)
+        underlyingSource = MatrixRustSDK.mediaSourceFromUrl(url: urlString)
     }
     
     // MARK: - Equatable

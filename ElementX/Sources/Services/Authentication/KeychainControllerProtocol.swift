@@ -8,8 +8,8 @@
 import Foundation
 
 protocol KeychainControllerProtocol {
-    func setRestoreToken(_ token: String, forUsername username: String)
-    func restoreTokenForUsername(_ username: String) -> String?
-    func restoreTokens() -> [(username: String, token: String)]
-    func removeAllTokens()
+    func setAccessToken(_ accessToken: String, forUsername username: String)
+    func accessTokenForUsername(_ username: String) -> String?
+    func accessTokens() -> [(username: String, accessToken: String)]
+    func removeAllAccessTokens()
 }

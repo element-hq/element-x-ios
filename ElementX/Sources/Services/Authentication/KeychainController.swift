@@ -9,26 +9,21 @@ import Foundation
 import KeychainAccess
 
 class KeychainController: KeychainControllerProtocol {
-    
-    struct Constants {
-        static let restoreTokenGroupKey = "restoreTokens"
-    }
-    
     private let keychain: Keychain
     
     init(identifier: String) {
         keychain = Keychain(service: identifier)
     }
  
-    func setRestoreToken(_ token: String, forUsername username: String) {
+    func setAccessToken(_ accessToken: String, forUsername username: String) {
         do {
-            try keychain.set(token, key: username)
+            try keychain.set(accessToken, key: username)
         } catch {
             MXLog.error("Failed storing user restore token with error: \(error)")
         }
     }
     
-    func restoreTokenForUsername(_ username: String) -> String? {
+    func accessTokenForUsername(_ username: String) -> String? {
         do {
             return try keychain.get(username)
         } catch {
@@ -37,17 +32,17 @@ class KeychainController: KeychainControllerProtocol {
         }
     }
     
-    func restoreTokens() -> [(username: String, token: String)] {
+    func accessTokens() -> [(username: String, accessToken: String)] {
         keychain.allKeys().compactMap { username in
-            guard let token = restoreTokenForUsername(username) else {
+            guard let accessToken = accessTokenForUsername(username) else {
                 return nil
             }
             
-            return (username, token)
+            return (username, accessToken)
         }
     }
     
-    func removeAllTokens() {
+    func removeAllAccessTokens() {
         do {
             try keychain.removeAll()
         } catch {
