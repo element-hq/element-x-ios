@@ -47,7 +47,7 @@ extension TemplateSimpleScreenPromptType: Identifiable, CaseIterable {
 
 // MARK: View model
 
-enum TemplateSimpleScreenViewModelResult {
+enum TemplateSimpleScreenViewModelAction {
     case accept
     case cancel
 }

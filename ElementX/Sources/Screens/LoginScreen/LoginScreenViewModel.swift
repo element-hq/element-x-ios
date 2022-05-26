@@ -26,7 +26,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
 
     // MARK: Public
 
-    var completion: ((LoginScreenViewModelResult) -> Void)?
+    var callback: ((LoginScreenViewModelAction) -> Void)?
 
     // MARK: - Setup
 
@@ -40,7 +40,7 @@ class LoginScreenViewModel: LoginScreenViewModelType, LoginScreenViewModelProtoc
     override func process(viewAction: LoginScreenViewAction) async {
         switch viewAction {
         case .login:
-            completion?(.login((username: context.username, password: context.password)))
+            callback?(.login((username: context.username, password: context.password)))
         }
     }
 }

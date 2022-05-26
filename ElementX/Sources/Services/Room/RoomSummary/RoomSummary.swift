@@ -124,11 +124,11 @@ class RoomSummary: RoomSummaryProtocol {
     }
     
     private func loadAvatar() async {
-        guard let avatarURL = roomProxy.avatarURL else {
+        guard let avatarURLString = roomProxy.avatarURL else {
             return
         }
         
-        switch await mediaProvider.loadImageFromURL(avatarURL) {
+        switch await mediaProvider.loadImageFromURLString(avatarURLString) {
         case .success(let avatar):
             self.avatar = avatar
         case .failure(let error):

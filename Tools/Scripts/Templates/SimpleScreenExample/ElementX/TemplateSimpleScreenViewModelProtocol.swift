@@ -18,6 +18,6 @@ import Foundation
 
 @MainActor
 protocol TemplateSimpleScreenViewModelProtocol {
-    var completion: ((TemplateSimpleScreenViewModelResult) -> Void)? { get set }
+    var callback: ((TemplateSimpleScreenViewModelAction) -> Void)? { get set }
     var context: TemplateSimpleScreenViewModelType.Context { get }
 }

@@ -14,6 +14,8 @@ struct MockRoomSummary: RoomSummaryProtocol {
     
     var name: String?
     
+    var displayName: String?
+    
     var topic: String?
     
     var isDirect: Bool = false
@@ -23,8 +25,6 @@ struct MockRoomSummary: RoomSummaryProtocol {
     var isSpace: Bool = false
     
     var isTombstoned: Bool = false
-    
-    var displayName: String?
     
     var lastMessage: EventBrief?
     

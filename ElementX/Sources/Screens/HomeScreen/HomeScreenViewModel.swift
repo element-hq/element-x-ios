@@ -25,13 +25,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private var roomUpdateListeners = Set<AnyCancellable>()
 
-    private var roomList: [RoomSummaryProtocol]? {
+    private var roomSummaries: [RoomSummaryProtocol]? {
         didSet {
-            self.state.isLoadingRooms = (roomList?.count ?? 0 == 0)
+            self.state.isLoadingRooms = (roomSummaries?.count ?? 0 == 0)
         }
     }
     
-    var completion: ((HomeScreenViewModelResult) -> Void)?
+    var callback: ((HomeScreenViewModelAction) -> Void)?
     
     // MARK: - Setup
     
@@ -46,24 +46,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     override func process(viewAction: HomeScreenViewAction) async {
         switch viewAction {
         case .logout:
-            completion?(.logout)
+            callback?(.logout)
         case .loadRoomData(let roomIdentifier):
             loadRoomDataForIdentifier(roomIdentifier)
         case .selectRoom(let roomIdentifier):
-            completion?(.selectRoom(roomIdentifier: roomIdentifier))
+            callback?(.selectRoom(roomIdentifier: roomIdentifier))
         }
     }
     
-    func updateWithRoomList(_ roomList: [RoomSummaryProtocol]) {
-        self.roomList = roomList
+    func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol]) {
+        self.roomSummaries = roomSummaries
         
-        state.rooms = roomList.map { roomSummary in
+        state.rooms = roomSummaries.map { roomSummary in
             buildOrUpdateRoomFromSummary(roomSummary)
         }
         
         roomUpdateListeners.removeAll()
         
-        roomList.forEach({ roomSummary  in
+        roomSummaries.forEach({ roomSummary  in
             roomSummary.callbacks
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] callback in
@@ -94,7 +94,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadRoomDataForIdentifier(_ roomIdentifier: String) {
-        guard let roomSummary = roomList?.first(where: { $0.id == roomIdentifier }) else {
+        guard let roomSummary = roomSummaries?.first(where: { $0.id == roomIdentifier }) else {
             MXLog.error("Invalid room identifier")
             return
         }

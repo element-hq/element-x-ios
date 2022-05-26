@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let window: UIWindow
@@ -18,8 +19,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let keychainController: KeychainControllerProtocol
     private let authenticationCoordinator: AuthenticationCoordinator!
     
+    private var userSession: UserSession!
+    
     private let memberDetailProviderManager: MemberDetailProviderManager
-        
+    
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     private var errorIndicator: UserIndicator?
@@ -70,15 +73,22 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         showLoginErrorToast()
     }
     
-    func authenticationCoordinatorDidSetupUserSession(_ authenticationCoordinator: AuthenticationCoordinator) {
+    func authenticationCoordinatorDidSetupClientProxy(_ authenticationCoordinator: AuthenticationCoordinator) {
+        guard let clientProxy = authenticationCoordinator.clientProxy else {
+            fatalError("User session should be setup at this point")
+        }
+        
+        userSession = .init(clientProxy: clientProxy,
+                            mediaProvider: MediaProvider(clientProxy: clientProxy, imageCache: ImageCache.default))
+        
         presentHomeScreen()
     }
     
-    func authenticationCoordinatorDidTearDownUserSession(_ authenticationCoordinator: AuthenticationCoordinator) {
+    func authenticationCoordinatorDidTearDownClientProxy(_ authenticationCoordinator: AuthenticationCoordinator) {
         if let presentedCoordinator = childCoordinators.first {
             remove(childCoordinator: presentedCoordinator)
         }
-
+        
         mainNavigationController.setViewControllers([splashViewController], animated: false)
         authenticationCoordinator.start()
     }
@@ -89,18 +99,17 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         hideLoadingIndicator()
         
-        guard let userSession = authenticationCoordinator.userSession else {
+        guard let userSession = userSession else {
             fatalError("User session should be already setup at this point")
         }
         
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         mediaProvider: userSession.mediaProvider,
                                                          attributedStringBuilder: AttributedStringBuilder(),
                                                          memberDetailProviderManager: memberDetailProviderManager)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
-        coordinator.completion = { [weak self] result in
-            switch result {
+        coordinator.callback = { [weak self] action in
+            switch action {
             case .logout:
                 self?.authenticationCoordinator.logout()
             case .selectRoom(let roomIdentifier):
@@ -113,11 +122,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let userSession = authenticationCoordinator.userSession else {
+        guard let userSession = userSession else {
             fatalError("User session should be already setup at this point")
         }
         
-        guard let roomProxy = userSession.rooms.first(where: { $0.id == roomIdentifier }) else {
+        guard let roomProxy = userSession.clientProxy.rooms.first(where: { $0.id == roomIdentifier }) else {
             MXLog.error("Invalid room identifier: \(roomIdentifier)")
             return
         }

@@ -17,12 +17,12 @@ class MemberDetailProvider: MemberDetailProviderProtocol {
         self.roomProxy = roomProxy
     }
     
-    func avatarURLForUserId(_ userId: String) -> String? {
+    func avatarURLStringForUserId(_ userId: String) -> String? {
         memberAvatars[userId]
     }
     
-    func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, MemberDetailProviderError> {
-        if let avatarURL = avatarURLForUserId(userId) {
+    func loadAvatarURLStringForUserId(_ userId: String) async -> Result<String?, MemberDetailProviderError> {
+        if let avatarURL = avatarURLStringForUserId(userId) {
             return .success(avatarURL)
         }
         

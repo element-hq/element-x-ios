@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum LoginScreenViewModelResult {
+enum LoginScreenViewModelAction {
     case login((username: String, password: String))
 }
 

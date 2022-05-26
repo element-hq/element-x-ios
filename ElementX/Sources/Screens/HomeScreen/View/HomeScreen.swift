@@ -176,11 +176,11 @@ struct HomeScreen_Previews: PreviewProvider {
                                     htmlBody: nil,
                                     date: .now)
         
-        let rooms = [MockRoomSummary(topic: "Topic", displayName: "Alpha"),
-                     MockRoomSummary(displayName: "Beta"),
-                     MockRoomSummary(displayName: "Omega", lastMessage: eventBrief)]
+        let roomSummaries = [MockRoomSummary(displayName: "Alpha", topic: "Topic"),
+                             MockRoomSummary(displayName: "Beta"),
+                             MockRoomSummary(displayName: "Omega", lastMessage: eventBrief)]
         
-        viewModel.updateWithRoomList(rooms)
+        viewModel.updateWithRoomSummaries(roomSummaries)
         
         if let avatarImage = UIImage(systemName: "person.fill.questionmark") {
             viewModel.updateWithUserAvatar(avatarImage)

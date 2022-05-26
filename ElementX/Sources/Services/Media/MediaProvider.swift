@@ -7,16 +7,15 @@
 //
 
 import UIKit
-import MatrixRustSDK
 import Kingfisher
 
 struct MediaProvider: MediaProviderProtocol {
-    private let client: Client
+    private let clientProxy: ClientProxyProtocol
     private let imageCache: Kingfisher.ImageCache
     private let processingQueue: DispatchQueue
     
-    init(client: Client, imageCache: Kingfisher.ImageCache) {
-        self.client = client
+    init(clientProxy: ClientProxyProtocol, imageCache: Kingfisher.ImageCache) {
+        self.clientProxy = clientProxy
         self.imageCache = imageCache
         self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue", attributes: .concurrent)
     }
@@ -29,18 +28,18 @@ struct MediaProvider: MediaProviderProtocol {
         return imageCache.retrieveImageInMemoryCache(forKey: source.underlyingSource.url(), options: nil)
     }
     
-    func imageFromURL(_ url: String?) -> UIImage? {
-        guard let url = url else {
+    func imageFromURLString(_ urlString: String?) -> UIImage? {
+        guard let urlString = urlString else {
             return nil
         }
         
-        return imageFromSource(MediaSource(source: mediaSourceFromUrl(url: url)))
+        return imageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)))
     }
     
-    func loadImageFromURL(_ url: String) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(MediaSource(source: mediaSourceFromUrl(url: url)))
+    func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)))
     }
-        
+    
     func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
         if let image = imageFromSource(source) {
             return .success(image)
@@ -59,9 +58,9 @@ struct MediaProvider: MediaProviderProtocol {
         
         return await Task.detached { () -> Result<UIImage, MediaProviderError> in
             do {
-                let imageData = try client.getMediaContent(source: source.underlyingSource)
+                let imageData = try clientProxy.loadMediaContentForSource(source.underlyingSource)
                 
-                guard let image = UIImage(data: Data(bytes: imageData, count: imageData.count)) else {
+                guard let image = UIImage(data: imageData) else {
                     MXLog.error("Invalid image data")
                     return .failure(.invalidImageData)
                 }

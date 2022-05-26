@@ -20,6 +20,11 @@ struct TemplateSimpleScreenCoordinatorParameters {
     let promptType: TemplateSimpleScreenPromptType
 }
 
+enum TemplateSimpleScreenCoordinatorAction {
+    case accept
+    case cancel
+}
+
 final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Properties
@@ -37,7 +42,7 @@ final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var completion: ((TemplateSimpleScreenViewModelResult) -> Void)?
+    var callback: ((TemplateSimpleScreenCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
@@ -56,10 +61,15 @@ final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
     
     func start() {
         MXLog.debug("[TemplateSimpleScreenCoordinator] did start.")
-        templateSimpleScreenViewModel.completion = { [weak self] result in
+        templateSimpleScreenViewModel.callback = { [weak self] action in
             guard let self = self else { return }
-            MXLog.debug("[TemplateSimpleScreenCoordinator] TemplateSimpleScreenViewModel did complete with result: \(result).")
-            self.completion?(result)
+            MXLog.debug("[TemplateSimpleScreenCoordinator] TemplateSimpleScreenViewModel did complete with result: \(action).")
+            switch action {
+            case .accept:
+                self.callback?(.accept)
+            case .cancel:
+                self.callback?(.cancel)
+            }
         }
     }
     

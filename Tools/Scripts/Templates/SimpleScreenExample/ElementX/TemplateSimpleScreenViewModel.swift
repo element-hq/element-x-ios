@@ -26,7 +26,7 @@ class TemplateSimpleScreenViewModel: TemplateSimpleScreenViewModelType, Template
 
     // MARK: Public
 
-    var completion: ((TemplateSimpleScreenViewModelResult) -> Void)?
+    var callback: ((TemplateSimpleScreenViewModelAction) -> Void)?
 
     // MARK: - Setup
 
@@ -39,9 +39,9 @@ class TemplateSimpleScreenViewModel: TemplateSimpleScreenViewModelType, Template
     override func process(viewAction: TemplateSimpleScreenViewAction) async {
         switch viewAction {
         case .accept:
-            completion?(.accept)
+            callback?(.accept)
         case .cancel:
-            completion?(.cancel)
+            callback?(.cancel)
         case .incrementCount:
             state.count += 1
         case .decrementCount:

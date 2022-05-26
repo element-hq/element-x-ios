@@ -19,9 +19,9 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
     
     func authenticationCoordinatorDidStartLoading(_ authenticationCoordinator: AuthenticationCoordinator)
     
-    func authenticationCoordinatorDidSetupUserSession(_ authenticationCoordinator: AuthenticationCoordinator)
+    func authenticationCoordinatorDidSetupClientProxy(_ authenticationCoordinator: AuthenticationCoordinator)
     
-    func authenticationCoordinatorDidTearDownUserSession(_ authenticationCoordinator: AuthenticationCoordinator)
+    func authenticationCoordinatorDidTearDownClientProxy(_ authenticationCoordinator: AuthenticationCoordinator)
     
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator,
                                    didFailWithError error: AuthenticationCoordinatorError)
@@ -32,7 +32,7 @@ class AuthenticationCoordinator: Coordinator {
     private let keychainController: KeychainControllerProtocol
     private let navigationRouter: NavigationRouter
     
-    private(set) var userSession: UserSession?
+    private(set) var clientProxy: ClientProxyProtocol?
     var childCoordinators: [Coordinator] = []
     
     weak var delegate: AuthenticationCoordinatorDelegate?
@@ -45,13 +45,13 @@ class AuthenticationCoordinator: Coordinator {
     
     func start() {
         
-        let availableRestoreTokens = keychainController.restoreTokens()
+        let availableAccessTokens = keychainController.accessTokens()
         
-        guard let usernameTokenTuple = availableRestoreTokens.first else {
+        guard let usernameTokenTuple = availableAccessTokens.first else {
             startNewLoginFlow { result in
                 switch result {
                 case .success:
-                    self.delegate?.authenticationCoordinatorDidSetupUserSession(self)
+                    self.delegate?.authenticationCoordinatorDidSetupClientProxy(self)
                 case .failure(let error):
                     self.delegate?.authenticationCoordinator(self, didFailWithError: error)
                     MXLog.error("Failed logging in user with error: \(error)")
@@ -60,33 +60,31 @@ class AuthenticationCoordinator: Coordinator {
             return
         }
         
-        restorePreviousLogin(usernameTokenTuple) { [weak self] result in
-            guard let self = self else { return }
-            
-            switch result {
+        Task {
+            switch await restorePreviousLogin(usernameTokenTuple) {
             case .success:
-                self.delegate?.authenticationCoordinatorDidSetupUserSession(self)
+                self.delegate?.authenticationCoordinatorDidSetupClientProxy(self)
             case .failure(let error):
                 self.delegate?.authenticationCoordinator(self, didFailWithError: error)
                 MXLog.error("Failed restoring login with error: \(error)")
                 
                 // On any restoration failure reset the token and restart
-                self.keychainController.removeAllTokens()
+                self.keychainController.removeAllAccessTokens()
                 self.start()
             }
         }
     }
-    
-    func logout() {
-        keychainController.removeAllTokens()
         
-        if let userIdentifier = userSession?.userIdentifier {
+    func logout() {
+        keychainController.removeAllAccessTokens()
+        
+        if let userIdentifier = clientProxy?.userIdentifier {
             deleteBaseDirectoryForUsername(userIdentifier)
         }
         
-        userSession = nil
+        clientProxy = nil
         
-        delegate?.authenticationCoordinatorDidTearDownUserSession(self)
+        delegate?.authenticationCoordinatorDidTearDownClientProxy(self)
     }
     
     // MARK: - Private
@@ -95,17 +93,15 @@ class AuthenticationCoordinator: Coordinator {
         let parameters = LoginScreenCoordinatorParameters()
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
-        coordinator.completion = { [weak self, weak coordinator] result in
+        coordinator.callback = { [weak self, weak coordinator] result in
             guard let self = self, let coordinator = coordinator else {
                 return
             }
             
             switch result {
             case .login(let result):
-                self.login(username: result.username, password: result.password) { [weak self] result in
-                    guard let self = self else { return }
-                    
-                    switch result {
+                Task {
+                    switch await self.login(username: result.username, password: result.password) {
                     case .success:
                         completion(.success(()))
                         self.remove(childCoordinator: coordinator)
@@ -113,6 +109,7 @@ class AuthenticationCoordinator: Coordinator {
                     case .failure(let error):
                         completion(.failure(error))
                     }
+                    
                 }
             }
         }
@@ -123,71 +120,63 @@ class AuthenticationCoordinator: Coordinator {
         coordinator.start()
     }
     
-    private func login(username: String, password: String, completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+    private func login(username: String, password: String) async -> Result<Void, AuthenticationCoordinatorError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
         delegate?.authenticationCoordinatorDidStartLoading(self)
         
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let self = self else { return }
-            
-            do {
-                self.setupUserSessionForClient(try loginNewClient(basePath: self.baseDirectoryPathForUsername(username),
-                                                                  username: username,
-                                                                  password: password))
-                
-                DispatchQueue.main.async {
-                    completion(.success(()))
-                }
-            } catch {
-                MXLog.error("Failed logging in with error: \(error)")
-                
-                DispatchQueue.main.async {
-                    completion(.failure(.failedLoggingIn))
-                }
-            }
+        let basePath = baseDirectoryPathForUsername(username)
+        let loginTask = Task.detached {
+            try loginNewClient(basePath: basePath,
+                               username: username,
+                               password: password)
+        }
+        
+        switch await loginTask.result {
+        case .success(let client):
+            return await setupProxyForClient(client)
+        case .failure(let error):
+            MXLog.error("Failed logging in with error: \(error)")
+            return .failure(.failedLoggingIn)
         }
     }
     
-    private func restorePreviousLogin(_ usernameTokenTuple: (username: String, token: String), completion: @escaping (Result<Void, AuthenticationCoordinatorError>) -> Void) {
+    private func restorePreviousLogin(_ usernameTokenTuple: (username: String, accessToken: String)) async -> Result<Void, AuthenticationCoordinatorError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
         
         delegate?.authenticationCoordinatorDidStartLoading(self)
         
-        DispatchQueue.global(qos: .background).async { [weak self] in
-            guard let self = self else { return }
-            
-            do {
-                self.setupUserSessionForClient(try loginWithToken(basePath: self.baseDirectoryPathForUsername(usernameTokenTuple.username),
-                                                                  restoreToken: usernameTokenTuple.token))
-                
-                DispatchQueue.main.async {
-                    completion(.success(()))
-                }
-            } catch {
-                MXLog.error("Failed restoring login with error: \(error)")
-                
-                DispatchQueue.main.async {
-                    completion(.failure(.failedRestoringLogin))
-                }
-            }
+        let basePath = baseDirectoryPathForUsername(usernameTokenTuple.username)
+        let loginTask = Task.detached {
+            try loginWithToken(basePath: basePath,
+                               restoreToken: usernameTokenTuple.accessToken)
+        }
+        
+        switch await loginTask.result {
+        case .success(let client):
+            return await setupProxyForClient(client)
+        case .failure(let error):
+            MXLog.error("Failed restoring login with error: \(error)")
+            return .failure(.failedRestoringLogin)
         }
     }
     
-    private func setupUserSessionForClient(_ client: Client) {
+    private func setupProxyForClient(_ client: Client) async -> Result<Void, AuthenticationCoordinatorError> {
         Benchmark.endTrackingForIdentifier("Login", message: "Finished login")
         
         do {
-            let restoreToken = try client.restoreToken()
+            let accessToken = try client.restoreToken()
             let userId = try client.userId()
             
-            keychainController.setRestoreToken(restoreToken, forUsername: userId)
+            keychainController.setAccessToken(accessToken, forUsername: userId)
         } catch {
-            delegate?.authenticationCoordinator(self, didFailWithError: .failedSettingUpSession)
             MXLog.error("Failed setting up user session with error: \(error)")
+            return .failure(.failedSettingUpSession)
         }
         
-        userSession = UserSession(client: client)
+        clientProxy = ClientProxy(client: client)
+        
+        return .success(())
     }
     
     private func baseDirectoryPathForUsername(_ username: String) -> String {
