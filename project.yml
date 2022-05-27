@@ -48,3 +48,6 @@ packages:
   SwiftyBeaver:
     url: https://github.com/SwiftyBeaver/SwiftyBeaver
     majorVersion: 1.9.5
+  SwiftState:
+    url: https://github.com/ReactKit/SwiftState
+    majorVersion: 6.0.0

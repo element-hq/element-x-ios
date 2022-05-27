@@ -87,6 +87,7 @@ targets:
     - package: Kingfisher
     - package: Introspect
     - package: SwiftyBeaver
+    - package: SwiftState
 
     sources:
     - path: ../Sources

@@ -19,6 +19,8 @@ targets:
       linkType: static
     - package: SwiftyBeaver
       linkType: static
+    - package: SwiftState
+      linkType: static
 
     info:
       path: ../SupportingFiles/Info.plist
