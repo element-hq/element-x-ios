@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import DesignKit
 
 struct LoginScreen: View {
     
@@ -33,8 +34,7 @@ struct LoginScreen: View {
                 Button("Login") {
                     context.send(viewAction: .login)
                 }
-                .buttonStyle(.borderedProminent)
-                .padding(.horizontal, 50)
+                .buttonStyle(PrimaryActionButtonStyle())
             }
             .padding(.horizontal, 8.0)
             .navigationTitle("Login")

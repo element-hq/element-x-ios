@@ -33,6 +33,8 @@ packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift.git
     branch: main
+  DesignKit:
+    path: ./
   DTCoreText:
     url: https://github.com/Cocoanetics/DTCoreText
     majorVersion: 1.6.26
