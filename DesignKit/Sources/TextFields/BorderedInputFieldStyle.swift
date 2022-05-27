@@ -30,20 +30,12 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
     public var isError: Bool
     
     private var borderColor: Color {
-        if isError {
-            return .element.alert
-        } else if isEditing {
-            return .element.accent
-        } else {
-            return .element.quinaryContent
-        }
+        guard !isError else { return .element.alert }
+        return isEditing ? .element.accent : .element.quinaryContent
     }
     
     private var accentColor: Color {
-        if isError {
-            return .element.alert
-        }
-        return .element.accent
+        isError ? .element.alert : .element.accent
     }
     
     private var textColor: Color {
@@ -62,11 +54,11 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
     }
     
     private var placeholderColor: Color {
-        return .element.tertiaryContent
+        .element.tertiaryContent
     }
         
     private var borderWidth: CGFloat {
-        return isEditing || isError ? 2.0 : 1.5
+        isEditing || isError ? 2.0 : 1.5
     }
     
     public init(isEditing: Bool = false, isError: Bool = false) {
@@ -80,13 +72,16 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
             .font(.element.callout)
             .foregroundColor(textColor)
             .accentColor(accentColor)
-            .frame(height: 48.0)
+            .padding(.vertical, 12.0)
             .padding(.horizontal, 8.0)
             .background(backgroundColor)
             .clipShape(rect)
             .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
             .introspectTextField { textField in
-                textField.returnKeyType = .done
+                if #unavailable(iOS 15.0) {
+                    textField.returnKeyType = .done
+                }
+                
                 textField.clearButtonMode = .whileEditing
                 textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
                                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor(placeholderColor)])

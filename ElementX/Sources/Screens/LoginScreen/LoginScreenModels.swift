@@ -26,6 +26,7 @@ enum LoginScreenViewAction {
 
 struct LoginScreenViewState: BindableState {
     var bindings: LoginScreenViewStateBindings
+    var hasCredentials: Bool { !bindings.username.isEmpty && !bindings.password.isEmpty }
 }
 
 struct LoginScreenViewStateBindings {

@@ -17,6 +17,12 @@
 import SwiftUI
 import DesignTokens
 
+public extension ButtonStyle where Self == PrimaryActionButtonStyle {
+    static func primaryAction(customColor: Color? = nil) -> PrimaryActionButtonStyle {
+        PrimaryActionButtonStyle(customColor: customColor)
+    }
+}
+
 public struct PrimaryActionButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme

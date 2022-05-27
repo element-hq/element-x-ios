@@ -17,6 +17,12 @@
 import SwiftUI
 import DesignTokens
 
+public extension ButtonStyle where Self == SecondaryActionButtonStyle {
+    static func secondaryAction(customColor: Color? = nil) -> SecondaryActionButtonStyle {
+        SecondaryActionButtonStyle(customColor: customColor)
+    }
+}
+
 public struct SecondaryActionButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     
@@ -30,20 +36,17 @@ public struct SecondaryActionButtonStyle: ButtonStyle {
         configuration.label
             .padding(12.0)
             .frame(maxWidth: .infinity)
-            .foregroundColor(strokeColor(configuration.isPressed))
+            .foregroundColor(customColor ?? .element.accent)
             .font(.element.body)
             .background(RoundedRectangle(cornerRadius: 8)
                             .strokeBorder()
-                            .foregroundColor(strokeColor(configuration.isPressed)))
-            .opacity(isEnabled ? 1.0 : 0.6)
+                            .foregroundColor(customColor ?? .element.accent))
+            .opacity(opacity(when: configuration.isPressed))
     }
     
-    private func strokeColor(_ isPressed: Bool) -> Color {
-        if let customColor = customColor {
-            return customColor
-        }
-        
-        return isPressed ? .element.accent.opacity(0.6) : .element.accent
+    private func opacity(when isPressed: Bool) -> CGFloat {
+        guard isEnabled else { return 0.6 }
+        return isPressed ? 0.6 : 1.0
     }
 }
 
@@ -68,14 +71,14 @@ public struct SecondaryActionButtonStyle_Previews: PreviewProvider {
                 .buttonStyle(SecondaryActionButtonStyle())
                 .disabled(true)
             
-            Button { /* preview */ } label: {
-                Text("Clear BG")
-                    .foregroundColor(.element.alert)
-            }
-            .buttonStyle(SecondaryActionButtonStyle(customColor: .clear))
-            
             Button("Red BG") { /* preview */ }
                 .buttonStyle(SecondaryActionButtonStyle(customColor: .element.alert))
+            
+            Button { /* preview */ } label: {
+                Text("Custom")
+                    .foregroundColor(.element.primaryContent)
+            }
+            .buttonStyle(SecondaryActionButtonStyle(customColor: .element.quaternaryContent))
         }
         .padding()
     }
