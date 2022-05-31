@@ -45,6 +45,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
         
         super.init()
         
+        tableView.clipsToBounds = true
         tableView.keyboardDismissMode = .onDrag
         
         registerContentOfffsetObserver()
@@ -136,6 +137,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     private func registerBoundsObserver() {
         boundsObserverToken = tableView?.observe(\.frame, options: .new, changeHandler: { [weak self] tableView, _ in
             self?.previousFrame = tableView.frame
+            self?.handleScrollViewScroll()
         })
     }
     
