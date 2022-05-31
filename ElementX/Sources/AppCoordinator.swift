@@ -25,7 +25,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private var userSession: UserSession!
     
     private let memberDetailProviderManager: MemberDetailProviderManager
-    
+
+    private let bugReportService: BugReportServiceProtocol
+    private let screenshotObserver: ScreenshotDetector
+
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     private var errorIndicator: UserIndicator?
@@ -35,6 +38,12 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     init() {
         stateMachine = AppCoordinatorStateMachine()
         
+        guard let baseURL = URL(string: "https://riot.im/bugreports") else {
+            fatalError("")
+        }
+        bugReportService = BugReportService(withBaseURL: baseURL,
+                                            sentryEndpoint: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.matrix.org/44")
+
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -53,6 +62,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         keychainController = KeychainController(identifier: bundleIdentifier)
         authenticationCoordinator = AuthenticationCoordinator(keychainController: keychainController,
                                                               navigationRouter: navigationRouter)
+
+        screenshotObserver = ScreenshotDetector()
+        screenshotObserver.callback = askAfterScreenshot
+
         authenticationCoordinator.delegate = self
         
         setupStateMachine()
@@ -173,6 +186,23 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         add(childCoordinator: coordinator)
         navigationRouter.setRootModule(coordinator)
+
+        if bugReportService.applicationWasCrashed {
+            showCrashPopup()
+        }
+    }
+
+    private func presentSettingsScreen() {
+        let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
+                                                       bugReportService: bugReportService)
+        let coordinator = SettingsCoordinator(parameters: parameters)
+
+        add(childCoordinator: coordinator)
+        navigationRouter.push(coordinator) { [weak self] in
+            guard let self = self else { return }
+
+            self.remove(childCoordinator: coordinator)
+        }
     }
     
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
@@ -225,5 +255,51 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private func showLogoutErrorToast() {
         errorIndicator = indicatorPresenter.present(.success(label: "Failed logging out"))
+    }
+
+    private func showCrashPopup() {
+        let alert = UIAlertController(title: nil,
+                                      message: ElementL10n.sendBugReportAppCrashed,
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
+        alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
+            self?.presentBugReportScreen(for: nil)
+        })
+
+        navigationRouter.present(alert, animated: true)
+    }
+
+    private func askAfterScreenshot(image: UIImage?, error: Error?) {
+        MXLog.debug("[AppCoordinator] askAfterScreenshot: \(String(describing: image)), error: \(String(describing: error))")
+
+        let alert = UIAlertController(title: ElementL10n.screenshotDetectedTitle,
+                                      message: ElementL10n.screenshotDetectedMessage,
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
+        alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
+            self?.presentBugReportScreen(for: image)
+        })
+
+        navigationRouter.present(alert, animated: true)
+    }
+
+    private func presentBugReportScreen(for image: UIImage?) {
+        let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
+                                                        screenshot: image)
+        let coordinator = BugReportCoordinator(parameters: parameters)
+        coordinator.completion = { [weak self] result in
+            guard let self = self else { return }
+            if result == .cancel {
+                self.navigationRouter.dismissModule(animated: true)
+            }
+            self.remove(childCoordinator: coordinator)
+        }
+
+        add(childCoordinator: coordinator)
+        coordinator.start()
+        let navController = UINavigationController(rootViewController: coordinator.toPresentable())
+        self.navigationRouter.present(navController, animated: true)
     }
 }
