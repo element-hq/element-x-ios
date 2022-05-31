@@ -18,6 +18,7 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 class SettingsViewModelTests: XCTestCase {
     private enum Constants {
         static let counterInitialValue = 0
@@ -26,16 +27,16 @@ class SettingsViewModelTests: XCTestCase {
     var viewModel: SettingsViewModelProtocol!
     var context: SettingsViewModelType.Context!
     
-    override func setUpWithError() throws {
+    @MainActor override func setUpWithError() throws {
         viewModel = SettingsViewModel()
         context = viewModel.context
     }
 
     func testInitialState() {
-        XCTAssert(viewModel.context.crashButtonVisible)
+        XCTAssert(context.crashButtonVisible)
     }
 
-    func testReportBug() throws {
+    func testReportBug() async throws {
         var correctResult = false
         self.viewModel.completion = { result in
             switch result {
@@ -47,13 +48,11 @@ class SettingsViewModelTests: XCTestCase {
         }
 
         context.send(viewAction: .reportBug)
-        async { expectation in
-            XCTAssert(correctResult)
-            expectation.fulfill()
-        }
+        await Task.yield()
+        XCTAssert(correctResult)
     }
 
-    func testCrash() throws {
+    func testCrash() async throws {
         var correctResult = false
         self.viewModel.completion = { result in
             switch result {
@@ -65,17 +64,8 @@ class SettingsViewModelTests: XCTestCase {
         }
 
         context.send(viewAction: .crash)
-        async { expectation in
-            XCTAssert(correctResult)
-            expectation.fulfill()
-        }
-    }
-
-    private func async(_ timeout: TimeInterval = 0.5, _ block: @escaping (XCTestExpectation) -> Void) {
-        let waiter = XCTWaiter()
-        let expectation = XCTestExpectation(description: "Async operation expectation")
-        block(expectation)
-        waiter.wait(for: [expectation], timeout: timeout)
+        await Task.yield()
+        XCTAssert(correctResult)
     }
 
 }

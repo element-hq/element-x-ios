@@ -62,7 +62,7 @@ class BugReportUITests: XCTestCase {
 
     func testInitialStateComponentsWithScreenshot() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Bug report screen")
+        app.goToScreenWithIdentifier("Bug report screen with screenshot")
 
         XCTAssert(app.navigationBars["Bug report"].exists)
         XCTAssert(app.staticTexts["Report Bug"].exists)

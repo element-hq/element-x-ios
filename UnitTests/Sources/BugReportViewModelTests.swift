@@ -18,6 +18,7 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 class BugReportViewModelTests: XCTestCase {
 
     func testInitialState() {
@@ -29,20 +30,21 @@ class BugReportViewModelTests: XCTestCase {
         XCTAssertTrue(context.sendingLogsEnabled)
     }
 
-    func testToggleSendingLogs() throws {
+    func testToggleSendingLogs() async throws {
         let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil)
         let context = viewModel.context
 
         context.send(viewAction: .toggleSendLogs)
+        await Task.yield()
         XCTAssertFalse(context.sendingLogsEnabled)
     }
 
-    func testClearScreenshot() throws {
+    func testClearScreenshot() async throws {
         let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: UIImage.actions)
         let context = viewModel.context
 
         context.send(viewAction: .removeScreenshot)
-        XCTAssertFalse(context.sendingLogsEnabled)
+        await Task.yield()
         XCTAssertNil(context.screenshot)
     }
 }
