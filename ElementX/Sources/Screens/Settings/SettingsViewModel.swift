@@ -18,7 +18,6 @@ import SwiftUI
 
 @available(iOS 14, *)
 typealias SettingsViewModelType = StateStoreViewModel<SettingsViewState,
-                                                      Never,
                                                       SettingsViewAction>
 @available(iOS 14, *)
 class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
@@ -40,7 +39,7 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
 
     // MARK: - Public
 
-    override func process(viewAction: SettingsViewAction) {
+    override func process(viewAction: SettingsViewAction) async {
         switch viewAction {
         case .reportBug:
             completion?(.reportBug)

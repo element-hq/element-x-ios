@@ -18,7 +18,6 @@ import SwiftUI
 
 @available(iOS 14, *)
 typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState,
-                                                                  Never,
                                                                   BugReportViewAction>
 @available(iOS 14, *)
 class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
@@ -75,7 +74,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
 
     // MARK: - Public
 
-    override func process(viewAction: BugReportViewAction) {
+    override func process(viewAction: BugReportViewAction) async {
         switch viewAction {
         case .submit:
             submitBugReport()
