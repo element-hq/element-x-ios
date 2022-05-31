@@ -80,6 +80,9 @@ struct HomeScreen: View {
                                 .scaledToFill()
                                 .frame(width: 40, height: 40, alignment: .center)
                                 .mask(Circle())
+                                .onTapGesture {
+                                    context.send(viewAction: .tapUserAvatar)
+                                }
                         } else {
                             EmptyView()
                         }
@@ -92,6 +95,9 @@ struct HomeScreen: View {
                             Text("Hello, \(displayName)!")
                                 .font(.subheadline)
                                 .fontWeight(.bold)
+                                .onTapGesture {
+                                    context.send(viewAction: .tapUserAvatar)
+                                }
                         } else {
                             EmptyView()
                         }

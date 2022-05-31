@@ -20,12 +20,14 @@ import UIKit
 enum HomeScreenViewModelAction {
     case logout
     case selectRoom(roomIdentifier: String)
+    case tapUserAvatar
 }
 
 enum HomeScreenViewAction {
     case logout
     case loadRoomData(roomIdentifier: String)
     case selectRoom(roomIdentifier: String)
+    case tapUserAvatar
 }
 
 struct HomeScreenViewState: BindableState {
