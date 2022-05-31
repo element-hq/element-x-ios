@@ -84,7 +84,7 @@ struct HomeScreen: View {
                             EmptyView()
                         }
                     }
-                    .animation(.easeInOut, value: context.viewState.userAvatar)
+                    .animation(.default, value: context.viewState.userAvatar)
                     .transition(.opacity)
                     
                     ZStack {
@@ -96,7 +96,7 @@ struct HomeScreen: View {
                             EmptyView()
                         }
                     }
-                    .animation(.easeInOut, value: context.viewState.userDisplayName)
+                    .animation(.default, value: context.viewState.userDisplayName)
                     .transition(.opacity)
                 }
             }
@@ -150,7 +150,7 @@ struct RoomCell: View {
                     }
                 }
             }
-            .animation(.easeInOut, value: room)
+            .animation(.default, value: room)
             .frame(minHeight: 60.0)
             .task {
                 context.send(viewAction: .loadRoomData(roomIdentifier: room.id))

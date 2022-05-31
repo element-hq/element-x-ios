@@ -38,7 +38,7 @@ struct EventBasedTimelineView: View {
         }
         .clipShape(Circle())
         .frame(width: 24.0, height: 24.0)
-        .animation(.easeInOut, value: timelineItem.senderAvatar)
+        .animation(.default, value: timelineItem.senderAvatar)
     }
     
     private var firstLetter: String {
