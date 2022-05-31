@@ -35,7 +35,7 @@ struct ImageRoomTimelineView: View {
                         .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
                 }
             }
-            .animation(.easeInOut, value: timelineItem.image)
+            .animation(.default, value: timelineItem.image)
             .frame(maxHeight: 1000.0)
         } else {
             VStack(alignment: .leading) {

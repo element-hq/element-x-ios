@@ -23,13 +23,13 @@ struct RoomScreen: View {
     var body: some View {
         VStack(spacing: 0.0) {
             TimelineView(context: context)
-                .navigationTitle(context.viewState.roomTitle)
-                .navigationBarTitleDisplayMode(.inline)
             MessageComposer(text: $context.composerText, disabled: context.viewState.sendButtonDisabled) {
                 sendMessage()
             }
             .padding()
         }
+        .navigationTitle(context.viewState.roomTitle)
+        .navigationBarTitleDisplayMode(.inline)
     }
     
     private func sendMessage() {

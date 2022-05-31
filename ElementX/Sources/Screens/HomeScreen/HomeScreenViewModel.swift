@@ -107,7 +107,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         guard var room = self.state.rooms.first(where: { $0.id == roomSummary.id }) else {
             return HomeScreenRoom(id: roomSummary.id,
-                                  displayName: roomSummary.displayName ?? roomSummary.name,
+                                  displayName: roomSummary.displayName,
                                   topic: roomSummary.topic,
                                   lastMessage: lastMessage,
                                   avatar: roomSummary.avatar,
