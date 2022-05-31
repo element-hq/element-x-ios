@@ -3,7 +3,7 @@
 //  ElementX
 //
 //  Created by Ismail on 15.04.2022.
-//  Copyright © 2022 element.io. All rights reserved.
+//  Copyright © 2022 Element. All rights reserved.
 //
 
 import Foundation

@@ -1,6 +1,6 @@
 name: ElementX
 attributes:
-  ORGANIZATIONNAME: element.io
+  ORGANIZATIONNAME: Element
 
 fileGroups:
     - project.yml
