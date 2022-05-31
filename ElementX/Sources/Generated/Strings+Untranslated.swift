@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 extension ElementL10n {
+  /// Would you like to submit a bug report?
+  public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
+  /// You took a screenshot
+  public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
   /// Untranslated
   public static let untranslated = ElementL10n.tr("Untranslated", "untranslated")
   /// Plural format key: "%#@VARIABLE@"
