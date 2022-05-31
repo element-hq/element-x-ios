@@ -21,6 +21,10 @@ targets:
       linkType: static
     - package: SwiftState
       linkType: static
+    - package: GZIP
+      linkType: static
+    - package: Sentry
+      linkType: static
 
     info:
       path: ../SupportingFiles/Info.plist
