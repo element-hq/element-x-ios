@@ -136,14 +136,14 @@ private var logger: SwiftyBeaver.Type = {
     // MARK: - Private
     
     fileprivate static func configureLogger(_ logger: SwiftyBeaver.Type, withConfiguration configuration: MXLogConfiguration) {
-//        if let subLogName = configuration.subLogName {
-//            MXLogger.setSubLogName(subLogName)
-//        }
-//
-//        MXLogger.redirectNSLog(toFiles: configuration.redirectLogsToFiles,
-//                               numberOfFiles: configuration.maxLogFilesCount,
-//                               sizeLimit: configuration.logFilesSizeLimit)
-//
+        if let subLogName = configuration.subLogName {
+            MXLogger.setSubLogName(subLogName)
+        }
+
+        MXLogger.redirectNSLog(toFiles: configuration.redirectLogsToFiles,
+                               numberOfFiles: configuration.maxLogFilesCount,
+                               sizeLimit: configuration.logFilesSizeLimit)
+
         guard configuration.logLevel != .none else {
             return
         }

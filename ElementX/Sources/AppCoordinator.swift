@@ -59,6 +59,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         let loggerConfiguration = MXLogConfiguration()
         loggerConfiguration.logLevel = .verbose
+        // Redirect NSLogs to files only if we are not debugging
+        if isatty(STDERR_FILENO) == 0 {
+            loggerConfiguration.redirectLogsToFiles = true
+        }
         MXLog.configure(loggerConfiguration)
         
         // Benchmark.trackingEnabled = true
