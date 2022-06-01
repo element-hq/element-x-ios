@@ -20,6 +20,7 @@ import UIKit
 enum UserIndicatorType {
     case loading(label: String, isInteractionBlocking: Bool)
     case success(label: String)
+    case error(label: String)
 }
 
 /// A presenter which can handle `UserIndicatorType` by creating the underlying `UserIndicator`
@@ -72,6 +73,8 @@ class UserIndicatorTypePresenter: UserIndicatorTypePresenterProtocol {
             }
         case .success(let label):
             return successRequest(label: label)
+        case .error(let label):
+            return errorRequest(label: label)
         }
     }
     
@@ -104,6 +107,20 @@ class UserIndicatorTypePresenter: UserIndicatorTypePresenterProtocol {
         let presenter = ToastViewPresenter(
             viewState: .init(
                 style: .success,
+                label: label
+            ),
+            presentationContext: presentationContext
+        )
+        return UserIndicatorRequest(
+            presenter: presenter,
+            dismissal: .timeout(1.5)
+        )
+    }
+
+    private func errorRequest(label: String) -> UserIndicatorRequest {
+        let presenter = ToastViewPresenter(
+            viewState: .init(
+                style: .error,
                 label: label
             ),
             presentationContext: presentationContext

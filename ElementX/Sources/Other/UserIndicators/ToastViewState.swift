@@ -20,6 +20,7 @@ struct ToastViewState {
     enum Style {
         case loading
         case success
+        case error
     }
     
     let style: Style
