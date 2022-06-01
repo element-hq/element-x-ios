@@ -66,6 +66,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
     // MARK: - Public
     
     func start() {
+        // no-op
     }
     
     func toPresentable() -> UIViewController {
@@ -88,9 +89,9 @@ final class SettingsCoordinator: Coordinator, Presentable {
     }
 
     private func presentBugReportScreen() {
-        let parameters = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
-                                                        screenshot: nil)
-        let coordinator = BugReportCoordinator(parameters: parameters)
+        let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
+                                                    screenshot: nil)
+        let coordinator = BugReportCoordinator(parameters: params)
         coordinator.completion = { [weak self] result in
             guard let self = self else { return }
             switch result {

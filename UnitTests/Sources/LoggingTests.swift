@@ -11,6 +11,10 @@ import XCTest
 
 class LoggingTests: XCTestCase {
 
+    private enum Constants {
+        static let genericFailure = "Test failed"
+    }
+
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -22,7 +26,7 @@ class LoggingTests: XCTestCase {
     func testFileLogging() throws {
         MXLogger.deleteLogFiles()
         guard let logFiles = MXLogger.logFiles() else {
-            XCTFail("Test failed")
+            XCTFail(Constants.genericFailure)
             return
         }
         XCTAssertTrue(logFiles.isEmpty)
@@ -34,7 +38,7 @@ class LoggingTests: XCTestCase {
         MXLog.configure(configuration)
         MXLog.debug(log)
         guard let logFile = MXLogger.logFiles().first else {
-            XCTFail("Test failed")
+            XCTFail(Constants.genericFailure)
             return
         }
 
@@ -45,7 +49,7 @@ class LoggingTests: XCTestCase {
     func testLogLevels() throws {
         MXLogger.deleteLogFiles()
         guard let logFiles = MXLogger.logFiles() else {
-            XCTFail("Test failed")
+            XCTFail(Constants.genericFailure)
             return
         }
         XCTAssert(logFiles.isEmpty)
@@ -58,7 +62,7 @@ class LoggingTests: XCTestCase {
         MXLog.configure(configuration)
         MXLog.debug(log)
         guard let logFile = MXLogger.logFiles().first else {
-            XCTFail("Test failed")
+            XCTFail(Constants.genericFailure)
             return
         }
 
@@ -69,7 +73,7 @@ class LoggingTests: XCTestCase {
     func testSubLogName() {
         MXLogger.deleteLogFiles()
         guard let logFiles = MXLogger.logFiles() else {
-            XCTFail("Test failed")
+            XCTFail(Constants.genericFailure)
             return
         }
         XCTAssert(logFiles.isEmpty)
@@ -82,7 +86,7 @@ class LoggingTests: XCTestCase {
         MXLog.configure(configuration)
         MXLog.debug(UUID().uuidString)
         guard let logFile = MXLogger.logFiles().first else {
-            XCTFail("Test failed")
+            XCTFail(Constants.genericFailure)
             return
         }
 

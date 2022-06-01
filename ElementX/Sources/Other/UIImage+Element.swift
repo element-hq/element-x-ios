@@ -53,7 +53,8 @@ extension UIImage {
             }
             observations.append(contentsOf: results)
         }
-        faceRequest.revision = VNDetectFaceRectanglesRequestRevision2   // revision3 not works!
+        // revision3 doesn't work!
+        faceRequest.revision = VNDetectFaceRectanglesRequestRevision2
 
         //  perform requests
         try handler.perform([
@@ -61,7 +62,14 @@ extension UIImage {
             faceRequest
         ])
 
-        //  render result
+        return render(confidenceLevel: confidenceLevel,
+                      fillColor: fillColor,
+                      observations: observations)
+    }
+
+    private func render(confidenceLevel: Float,
+                        fillColor: UIColor,
+                        observations: [VNDetectedObjectObservation]) -> UIImage {
         let result = UIGraphicsImageRenderer(size: size).image { rendererContext in
             //  first draw self
             self.draw(in: CGRect(origin: .zero, size: size))

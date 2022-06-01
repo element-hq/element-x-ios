@@ -38,13 +38,8 @@ class SettingsViewModelTests: XCTestCase {
 
     func testReportBug() async throws {
         var correctResult = false
-        self.viewModel.completion = { result in
-            switch result {
-            case .reportBug:
-                correctResult = true
-            default:
-                break
-            }
+        viewModel.completion = { result in
+            correctResult = result == .reportBug
         }
 
         context.send(viewAction: .reportBug)
@@ -54,13 +49,8 @@ class SettingsViewModelTests: XCTestCase {
 
     func testCrash() async throws {
         var correctResult = false
-        self.viewModel.completion = { result in
-            switch result {
-            case .crash:
-                correctResult = true
-            default:
-                break
-            }
+        viewModel.completion = { result in
+            correctResult = result == .crash
         }
 
         context.send(viewAction: .crash)

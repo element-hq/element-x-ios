@@ -303,6 +303,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         add(childCoordinator: coordinator)
         coordinator.start()
         let navController = UINavigationController(rootViewController: coordinator.toPresentable())
-        self.navigationRouter.present(navController, animated: true)
+        navigationRouter.present(navController, animated: true)
     }
 }

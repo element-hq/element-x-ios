@@ -133,16 +133,15 @@ struct BugReport: View {
                         .scaledToFit()
                         .frame(width: 100)
                         .accessibilityLabel("Screenshot")
-                    Button { context.send(viewAction: .removeScreenshot) }
-                label: {
-                    Image(uiImage: Asset.Images.closeCircle.image)
+                    Button { context.send(viewAction: .removeScreenshot) } label: {
+                        Image(uiImage: Asset.Images.closeCircle.image)
+                    }
+                    .padding(.top, -10)
+                    .padding(.trailing, -10)
+                    .accessibilityLabel("Remove Screenshot")
                 }
-                .padding(.top, -10)
-                .padding(.trailing, -10)
-                .accessibilityLabel("Remove Screenshot")
-                }
-                    .padding(.vertical, 10)
-                )
+                .padding(.vertical, 10)
+            )
         }
         return AnyView(EmptyView())
     }

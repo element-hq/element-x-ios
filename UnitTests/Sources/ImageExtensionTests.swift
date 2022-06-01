@@ -22,12 +22,12 @@ class ImageExtensionTests: XCTestCase {
     func testImageAnonymizationConfidenceLevel() async throws {
         let image = Asset.Images.sampleScreenshot.image
 
-        let anonymized0_5 = try await image.anonymized()
-        let anonymized0_1 = try await image.anonymized(confidenceLevel: 0.1)
+        let anonymized5 = try await image.anonymized()
+        let anonymized1 = try await image.anonymized(confidenceLevel: 0.1)
 
         //  comparing colors is a complicated process, just compare images for now
-        XCTAssertNotEqual(image, anonymized0_5)
-        XCTAssertNotEqual(anonymized0_1, anonymized0_5)
+        XCTAssertNotEqual(image, anonymized5)
+        XCTAssertNotEqual(anonymized1, anonymized5)
     }
 
     func testImageAnonymizationFillColor() async throws {

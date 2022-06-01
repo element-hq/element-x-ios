@@ -30,7 +30,7 @@ class HomeScreenViewModelTests: XCTestCase {
 
     @MainActor func testLogout() async throws {
         var correctResult = false
-        self.viewModel.callback = { result in
+        viewModel.callback = { result in
             switch result {
             case .logout:
                 correctResult = true
@@ -48,7 +48,7 @@ class HomeScreenViewModelTests: XCTestCase {
         let mockRoomId = "mock_room_id"
         var correctResult = false
         var selectedRoomId = ""
-        self.viewModel.callback = { result in
+        viewModel.callback = { result in
             switch result {
             case .selectRoom(let roomId):
                 correctResult = true
@@ -66,7 +66,7 @@ class HomeScreenViewModelTests: XCTestCase {
 
     @MainActor func testTapUserAvatar() async throws {
         var correctResult = false
-        self.viewModel.callback = { result in
+        viewModel.callback = { result in
             switch result {
             case .tapUserAvatar:
                 correctResult = true

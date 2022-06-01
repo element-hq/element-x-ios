@@ -29,7 +29,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     // MARK: Private
 
     func submitBugReport() {
-        self.completion?(.submitStarted)
+        completion?(.submitStarted)
         Task {
             do {
                 var files: [URL] = []
@@ -50,10 +50,10 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
                                                                         githubLabels: [],
                                                                         files: files)
                 MXLog.info("[BugReportViewModel] submitBugReport succeeded, result: \(result.reportUrl)")
-                self.completion?(.submitFinished)
+                completion?(.submitFinished)
             } catch let error {
                 MXLog.error("[BugReportViewModel] submitBugReport failed: \(error)")
-                self.completion?(.submitFailed(error: error))
+                completion?(.submitFailed(error: error))
             }
         }
     }

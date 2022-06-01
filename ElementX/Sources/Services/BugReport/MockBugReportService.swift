@@ -28,7 +28,7 @@ class MockBugReportService: BugReportServiceProtocol {
     var applicationWasCrashed: Bool = false
 
     func crash() {
-        
+        // no-op
     }
 
 }

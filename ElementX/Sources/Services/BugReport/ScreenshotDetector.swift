@@ -42,24 +42,21 @@ class ScreenshotDetector {
 
     private func userDidTakeScreenshot() {
         let authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
-        switch authStatus {
-        case .notDetermined:
-            if autoRequestPHAuthorization {
-                PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] status in
-                    if status == .authorized {
-                        self?.findScreenshot()
-                    } else {
-                        self?.fail(withError: ScreenshotDetectorError.notAuthorized)
-                    }
-                }
-            } else {
-                fail(withError: ScreenshotDetectorError.notAuthorized)
-            }
-        case .restricted, .denied, .limited:
-            fail(withError: ScreenshotDetectorError.notAuthorized)
-        case .authorized:
+        if authStatus == .authorized {
             findScreenshot()
-        @unknown default:
+        } else if authStatus == .notDetermined && autoRequestPHAuthorization {
+            PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] status in
+                self?.handleAuthStatus(status)
+            }
+        } else {
+            fail(withError: ScreenshotDetectorError.notAuthorized)
+        }
+    }
+
+    private func handleAuthStatus(_ status: PHAuthorizationStatus) {
+        if status == .authorized {
+            findScreenshot()
+        } else {
             fail(withError: ScreenshotDetectorError.notAuthorized)
         }
     }

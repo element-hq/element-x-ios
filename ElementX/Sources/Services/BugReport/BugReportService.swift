@@ -149,7 +149,7 @@ class BugReportService: BugReportServiceProtocol {
                           includeCrashLog: Bool) async throws -> [URL] {
         var filesToCompress: [URL] = []
         if includeLogs, let logFiles = MXLogger.logFiles() {
-            let urls = logFiles.compactMap({ URL(fileURLWithPath: $0) })
+            let urls = logFiles.compactMap { URL(fileURLWithPath: $0) }
             filesToCompress.append(contentsOf: urls)
         }
         if includeCrashLog, let crashLogFile = MXLogger.crashLog() {
