@@ -93,8 +93,11 @@ final class SettingsCoordinator: Coordinator, Presentable {
         let coordinator = BugReportCoordinator(parameters: parameters)
         coordinator.completion = { [weak self] result in
             guard let self = self else { return }
-            if result == .cancel {
+            switch result {
+            case .cancel:
                 self.parameters.navigationRouter.popModule(animated: true)
+            default:
+                break
             }
         }
 

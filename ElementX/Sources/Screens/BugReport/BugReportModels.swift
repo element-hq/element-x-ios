@@ -24,6 +24,7 @@ import UIKit
 enum BugReportViewModelResult {
     case submitStarted
     case submitFinished
+    case submitFailed(error: Error)
     case cancel
 }
 

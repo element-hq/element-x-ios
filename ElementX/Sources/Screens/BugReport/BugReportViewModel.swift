@@ -50,11 +50,12 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
                                                                         githubLabels: [],
                                                                         files: files)
                 MXLog.info("[BugReportViewModel] submitBugReport succeeded, result: \(result.reportUrl)")
+                self.completion?(.submitFinished)
             } catch let error {
                 MXLog.error("[BugReportViewModel] submitBugReport failed: \(error)")
+                self.completion?(.submitFailed(error: error))
             }
         }
-        self.completion?(.submitFinished)
     }
 
     // MARK: Public

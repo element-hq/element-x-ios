@@ -291,8 +291,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         let coordinator = BugReportCoordinator(parameters: parameters)
         coordinator.completion = { [weak self] result in
             guard let self = self else { return }
-            if result == .cancel {
+            switch result {
+            case .cancel:
                 self.navigationRouter.dismissModule(animated: true)
+            default:
+                break
             }
             self.remove(childCoordinator: coordinator)
         }

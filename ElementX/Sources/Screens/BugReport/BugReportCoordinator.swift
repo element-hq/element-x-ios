@@ -33,6 +33,7 @@ final class BugReportCoordinator: Coordinator, Presentable {
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
+    private var errorIndicator: UserIndicator?
     
     // MARK: Public
 
@@ -66,6 +67,10 @@ final class BugReportCoordinator: Coordinator, Presentable {
                 self.startLoading()
             case .submitFinished:
                 self.stopLoading()
+                self.showSuccess(label: ElementL10n.done)
+            case .submitFailed(let error):
+                self.stopLoading()
+                self.showError(label: error.localizedDescription)
             default:
                 break
             }
@@ -91,5 +96,15 @@ final class BugReportCoordinator: Coordinator, Presentable {
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
         loadingIndicator = nil
+    }
+
+    /// Show success indicator
+    private func showSuccess(label: String) {
+        errorIndicator = indicatorPresenter.present(.success(label: label))
+    }
+
+    /// Show error indicator
+    private func showError(label: String) {
+        errorIndicator = indicatorPresenter.present(.error(label: label))
     }
 }
