@@ -42,7 +42,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("")
         }
         bugReportService = BugReportService(withBaseURL: baseURL,
-                                            sentryEndpoint: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.matrix.org/44")
+                                            sentryEndpoint: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44")
 
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
