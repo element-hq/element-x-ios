@@ -28,49 +28,46 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
 
     // MARK: Private
 
-    func submitBugReport() {
-        completion?(.submitStarted)
-        Task {
-            do {
-                var files: [URL] = []
-                if let screenshot = context.screenshot {
-                    let anonymized = try await screenshot.anonymized()
-                    let tmpUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("screenshot").appendingPathExtension("png")
-                    //  remove old screenshot if exists
-                    if FileManager.default.fileExists(atPath: tmpUrl.path) {
-                        try FileManager.default.removeItem(at: tmpUrl)
-                    }
-                    try anonymized.dataForPNGRepresentation().write(to: tmpUrl)
-                    files.append(tmpUrl)
+    func submitBugReport() async {
+        callback?(.submitStarted)
+        do {
+            var files: [URL] = []
+            if let screenshot = state.screenshot {
+                let anonymized = try await screenshot.anonymized()
+                let tmpUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("screenshot").appendingPathExtension("png")
+                //  remove old screenshot if exists
+                if FileManager.default.fileExists(atPath: tmpUrl.path) {
+                    try FileManager.default.removeItem(at: tmpUrl)
                 }
-
-                let result = try await bugReportService.submitBugReport(text: context.reportText,
-                                                                        includeLogs: context.sendingLogsEnabled,
-                                                                        includeCrashLog: true,
-                                                                        githubLabels: [],
-                                                                        files: files)
-                MXLog.info("[BugReportViewModel] submitBugReport succeeded, result: \(result.reportUrl)")
-                completion?(.submitFinished)
-            } catch let error {
-                MXLog.error("[BugReportViewModel] submitBugReport failed: \(error)")
-                completion?(.submitFailed(error: error))
+                try anonymized.dataForPNGRepresentation().write(to: tmpUrl)
+                files.append(tmpUrl)
             }
+
+            let result = try await bugReportService.submitBugReport(text: context.reportText,
+                                                                    includeLogs: context.sendingLogsEnabled,
+                                                                    includeCrashLog: true,
+                                                                    githubLabels: [],
+                                                                    files: files)
+            MXLog.info("[BugReportViewModel] submitBugReport succeeded, result: \(result.reportUrl)")
+            callback?(.submitFinished)
+        } catch let error {
+            MXLog.error("[BugReportViewModel] submitBugReport failed: \(error)")
+            callback?(.submitFailed(error: error))
         }
     }
 
     // MARK: Public
 
-    var completion: ((BugReportViewModelResult) -> Void)?
+    var callback: ((BugReportViewModelAction) -> Void)?
 
     // MARK: - Setup
 
     init(bugReportService: BugReportServiceProtocol,
          screenshot: UIImage?) {
         self.bugReportService = bugReportService
-        let bindings = BugReportViewStateBindings(sendingLogsEnabled: true,
-                                                  reportText: "",
-                                                  screenshot: screenshot)
-        super.init(initialViewState: BugReportViewState(bindings: bindings))
+        let bindings = BugReportViewStateBindings(reportText: "", sendingLogsEnabled: true)
+        super.init(initialViewState: BugReportViewState(screenshot: screenshot,
+                                                        bindings: bindings))
     }
 
     // MARK: - Public
@@ -78,13 +75,13 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     override func process(viewAction: BugReportViewAction) async {
         switch viewAction {
         case .submit:
-            submitBugReport()
+            await submitBugReport()
         case .cancel:
-            completion?(.cancel)
+            callback?(.cancel)
         case .toggleSendLogs:
-            context.sendingLogsEnabled = !context.sendingLogsEnabled
+            context.sendingLogsEnabled.toggle()
         case .removeScreenshot:
-            context.screenshot = nil
+            state.screenshot = nil
         }
     }
 }

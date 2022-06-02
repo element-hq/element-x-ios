@@ -28,7 +28,6 @@ internal enum Asset {
   internal enum Images {
     internal static let appLogo = ImageAsset(name: "Images/app-logo")
     internal static let closeCircle = ImageAsset(name: "Images/close_circle")
-    internal static let sampleScreenshot = ImageAsset(name: "Images/sample_screenshot")
     internal static let selectionTick = ImageAsset(name: "Images/selection_tick")
     internal static let selectionUntick = ImageAsset(name: "Images/selection_untick")
     internal static let timelineComposerSendMessage = ImageAsset(name: "Images/timelineComposerSendMessage")

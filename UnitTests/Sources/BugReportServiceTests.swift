@@ -19,15 +19,13 @@ class BugReportServiceTests: XCTestCase {
         XCTAssertEqual(bugReportService.applicationId, "mock_app_id")
     }
 
-    func testSubmitBugReportWithMockService() {
-        Task {
-            let result = try await bugReportService.submitBugReport(text: "i cannot send message",
-                                                                    includeLogs: true,
-                                                                    includeCrashLog: true,
-                                                                    githubLabels: [],
-                                                                    files: [])
-            XCTAssertFalse(result.reportUrl.isEmpty)
-        }
+    func testSubmitBugReportWithMockService() async throws {
+        let result = try await bugReportService.submitBugReport(text: "i cannot send message",
+                                                                includeLogs: true,
+                                                                includeCrashLog: true,
+                                                                githubLabels: [],
+                                                                files: [])
+        XCTAssertFalse(result.reportUrl.isEmpty)
     }
 
     func testInitialStateWithRealService() {
@@ -43,7 +41,7 @@ class BugReportServiceTests: XCTestCase {
         XCTAssertFalse(service.applicationWasCrashed)
     }
 
-    @MainActor func testSubmitBugReportWithRealService() async {
+    @MainActor func testSubmitBugReportWithRealService() async throws {
         guard let url = URL(string: "https://www.example.com") else {
             XCTFail("Failed to setup test conditions")
             return
@@ -53,17 +51,13 @@ class BugReportServiceTests: XCTestCase {
                                        applicationId: "mock_app_id",
                                        session: .mock)
 
-        do {
-            let result = try await service.submitBugReport(text: "i cannot send message",
-                                                           includeLogs: true,
-                                                           includeCrashLog: true,
-                                                           githubLabels: [],
-                                                           files: [])
-
-            XCTAssertEqual(result.reportUrl, "https://example.com/123")
-        } catch {
-            XCTFail("Test failed")
-        }
+        let result = try await service.submitBugReport(text: "i cannot send message",
+                                                       includeLogs: true,
+                                                       includeCrashLog: true,
+                                                       githubLabels: [],
+                                                       files: [])
+        
+        XCTAssertEqual(result.reportUrl, "https://example.com/123")
     }
 
 }

@@ -28,13 +28,13 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
 
     // MARK: Public
 
-    var completion: ((SettingsViewModelResult) -> Void)?
+    var callback: ((SettingsViewModelAction) -> Void)?
 
     // MARK: - Setup
 
     init() {
-        let bindings = SettingsViewStateBindings(crashButtonVisible: true)
-        super.init(initialViewState: .init(bindings: bindings))
+        let bindings = SettingsViewStateBindings()
+        super.init(initialViewState: .init(crashButtonVisible: true, bindings: bindings))
     }
 
     // MARK: - Public
@@ -42,9 +42,9 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
     override func process(viewAction: SettingsViewAction) async {
         switch viewAction {
         case .reportBug:
-            completion?(.reportBug)
+            callback?(.reportBug)
         case .crash:
-            completion?(.crash)
+            callback?(.crash)
         }
     }
 }

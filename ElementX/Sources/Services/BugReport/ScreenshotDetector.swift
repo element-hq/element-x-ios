@@ -17,30 +17,20 @@ enum ScreenshotDetectorError: Error {
 
 class ScreenshotDetector {
 
-    private var screenshotObserver: Any?
-    var callback: ((UIImage?, Error?) -> Void)?
+    var callback: (@MainActor (UIImage?, Error?) -> Void)?
+
+    /// Flag to whether ask for photos authorization by default if needed.
     var autoRequestPHAuthorization = true
 
     init() {
-        screenshotObserver = startObservingScreenshots()
+        startObservingScreenshots()
     }
 
-    private func startObservingScreenshots() -> Any {
-        return NotificationCenter.default.addObserver(forName: UIApplication.userDidTakeScreenshotNotification,
-                                                      object: nil,
-                                                      queue: .main) { [weak self] _ in
-            self?.userDidTakeScreenshot()
-        }
+    private func startObservingScreenshots() {
+        NotificationCenter.default.addObserver(self, selector: #selector(userDidTakeScreenshot), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
     }
 
-    private func stopObservingScreenshots() {
-        if let observer = screenshotObserver {
-            NotificationCenter.default.removeObserver(observer)
-        }
-        screenshotObserver = nil
-    }
-
-    private func userDidTakeScreenshot() {
+    @objc @MainActor private func userDidTakeScreenshot() {
         let authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         if authStatus == .authorized {
             findScreenshot()
@@ -53,7 +43,7 @@ class ScreenshotDetector {
         }
     }
 
-    private func handleAuthStatus(_ status: PHAuthorizationStatus) {
+    @MainActor private func handleAuthStatus(_ status: PHAuthorizationStatus) {
         if status == .authorized {
             findScreenshot()
         } else {
@@ -61,7 +51,7 @@ class ScreenshotDetector {
         }
     }
 
-    private func findScreenshot() {
+    @MainActor private func findScreenshot() {
         if let asset = PHAsset.fetchLastScreenshot() {
             let imageManager = PHImageManager()
             imageManager.requestImage(for: asset,
@@ -80,19 +70,15 @@ class ScreenshotDetector {
     }
 
     deinit {
-        stopObservingScreenshots()
+        NotificationCenter.default.removeObserver(self)
     }
 
-    func succeed(withImage image: UIImage) {
-        DispatchQueue.main.async {
-            self.callback?(image, nil)
-        }
+    @MainActor func succeed(withImage image: UIImage) {
+        callback?(image, nil)
     }
 
-    func fail(withError error: Error) {
-        DispatchQueue.main.async {
-            self.callback?(nil, error)
-        }
+    @MainActor func fail(withError error: Error) {
+        callback?(nil, error)
     }
 
 }

@@ -39,7 +39,7 @@ final class BugReportCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var completion: ((BugReportViewModelResult) -> Void)?
+    var completion: (() -> Void)?
     
     // MARK: - Setup
     
@@ -59,7 +59,7 @@ final class BugReportCoordinator: Coordinator, Presentable {
     
     func start() {
         MXLog.debug("[BugReportCoordinator] did start.")
-        bugReportViewModel.completion = { [weak self] result in
+        bugReportViewModel.callback = { [weak self] result in
             guard let self = self else { return }
             MXLog.debug("[BugReportCoordinator] BugReportViewModel did complete with result: \(result).")
             switch result {
@@ -71,10 +71,9 @@ final class BugReportCoordinator: Coordinator, Presentable {
             case .submitFailed(let error):
                 self.stopLoading()
                 self.showError(label: error.localizedDescription)
-            default:
-                break
+            case .cancel:
+                self.completion?()
             }
-            self.completion?(result)
         }
     }
     

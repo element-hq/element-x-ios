@@ -21,7 +21,6 @@ struct BugReport: View {
     // MARK: Private
     
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    @State private var textStyle = UIFont.TextStyle.body
     
     private var horizontalPadding: CGFloat {
         horizontalSizeClass == .regular ? 50 : 16
@@ -36,7 +35,7 @@ struct BugReport: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                ScrollView(showsIndicators: false) {
+                ScrollView {
                     mainContent
                         .padding(.top, 50)
                         .padding(.horizontal, horizontalPadding)
@@ -57,7 +56,7 @@ struct BugReport: View {
     var mainContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(ElementL10n.sendBugReportDescription)
-                .accessibilityIdentifier("Report Bug")
+                .accessibilityIdentifier("reportBugDescription")
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
                     .fill(Color(UIColor.secondarySystemBackground))
@@ -72,7 +71,7 @@ struct BugReport: View {
                     .padding(4)
                     .background(Color.clear)
                     .cornerRadius(8)
-                    .accessibilityLabel("Report")
+                    .accessibilityIdentifier("reportTextView")
                     .introspectTextView { textView in
                         textView.backgroundColor = .clear
                     }
@@ -81,10 +80,12 @@ struct BugReport: View {
             .frame(height: 300)
             .font(.body)
             Text(ElementL10n.sendBugReportLogsDescription)
+                .accessibilityIdentifier("sendLogsDescription")
             HStack(spacing: 12) {
-                sendLogsImage
-                    .foregroundColor(Color(Asset.Colors.elementGreen.color))
-                Text(ElementL10n.sendBugReportIncludeLogs).accessibilityLabel("Send Logs")
+                Toggle(ElementL10n.sendBugReportIncludeLogs, isOn: $context.sendingLogsEnabled)
+                    .toggleStyle(ElementToggleStyle())
+                    .accessibilityIdentifier("sendLogsToggle")
+                Text(ElementL10n.sendBugReportIncludeLogs).accessibilityIdentifier("sendLogsText")
             }
             .onTapGesture {
                 context.send(viewAction: .toggleSendLogs)
@@ -102,7 +103,7 @@ struct BugReport: View {
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
             .disabled(context.reportText.count < 5)
-            .accessibilityLabel("Send")
+            .accessibilityIdentifier("sendButton")
 
             Button { context.send(viewAction: .cancel) } label: {
                 Text(ElementL10n.actionCancel)
@@ -110,40 +111,27 @@ struct BugReport: View {
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 8)
-            .accessibilityLabel("Cancel")
+            .accessibilityIdentifier("cancelButton")
         }
     }
 
-    var sendLogsImage: some View {
-        if context.sendingLogsEnabled {
-            return Image(uiImage: Asset.Images.selectionTick.image)
-                .accessibilityLabel("Disable Sending Logs")
-        } else {
-            return Image(uiImage: Asset.Images.selectionUntick.image)
-                .accessibilityLabel("Enable Sending Logs")
-        }
-    }
-
+    @ViewBuilder
     var screenshot: some View {
-        if let screenshot = context.screenshot {
-            return AnyView(
-                ZStack(alignment: .topTrailing) {
-                    Image(uiImage: screenshot)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100)
-                        .accessibilityLabel("Screenshot")
-                    Button { context.send(viewAction: .removeScreenshot) } label: {
-                        Image(uiImage: Asset.Images.closeCircle.image)
-                    }
-                    .padding(.top, -10)
-                    .padding(.trailing, -10)
-                    .accessibilityLabel("Remove Screenshot")
+        if let screenshot = context.viewState.screenshot {
+            ZStack(alignment: .topTrailing) {
+                Image(uiImage: screenshot)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100)
+                    .accessibilityIdentifier("screenshotImage")
+                Button { context.send(viewAction: .removeScreenshot) } label: {
+                    Image(uiImage: Asset.Images.closeCircle.image)
                 }
-                .padding(.vertical, 10)
-            )
+                .offset(x: 10, y: -10)
+                .accessibilityIdentifier("removeScreenshotButton")
+            }
+            .padding(.vertical, 10)
         }
-        return AnyView(EmptyView())
     }
 }
 
@@ -152,7 +140,7 @@ struct BugReport: View {
 struct BugReport_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.sampleScreenshot.image)
+            let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image)
             BugReport(context: viewModel.context)
                 .previewInterfaceOrientation(.portrait)
         }

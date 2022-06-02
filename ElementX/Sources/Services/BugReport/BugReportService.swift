@@ -19,7 +19,7 @@ class BugReportService: BugReportServiceProtocol {
 
     init(withBaseURL baseURL: URL,
          sentryEndpoint: String,
-         applicationId: String = "riot-ios",
+         applicationId: String = BuildSettings.bugReportApplicationId,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.sentryEndpoint = sentryEndpoint
@@ -70,6 +70,8 @@ class BugReportService: BugReportServiceProtocol {
                          includeCrashLog: Bool,
                          githubLabels: [String],
                          files: [URL]) async throws -> SubmitBugReportResponse {
+        MXLog.debug("[BugReportService] submitBugReport")
+
         var params = [
             MultipartFormData(key: "text", type: .text(value: text))
         ]
@@ -147,6 +149,8 @@ class BugReportService: BugReportServiceProtocol {
 
     private func zipFiles(includeLogs: Bool,
                           includeCrashLog: Bool) async throws -> [URL] {
+        MXLog.debug("[BugReportService] zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
+
         var filesToCompress: [URL] = []
         if includeLogs, let logFiles = MXLogger.logFiles() {
             let urls = logFiles.compactMap { URL(fileURLWithPath: $0) }
@@ -182,6 +186,8 @@ class BugReportService: BugReportServiceProtocol {
 
             zippedFiles.append(zippedFileURL)
         }
+
+        MXLog.debug("[BugReportService] zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
 
         return zippedFiles
     }

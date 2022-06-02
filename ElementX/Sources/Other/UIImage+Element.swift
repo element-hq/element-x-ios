@@ -10,6 +10,10 @@ import Foundation
 import Vision
 import UIKit
 
+enum ImageAnonymizationError: Error {
+    case noCgImageBased
+}
+
 extension UIImage {
 
     private static var allowedTextItems: [String] = [
@@ -27,7 +31,7 @@ extension UIImage {
 
     func anonymized(confidenceLevel: Float = 0.5, fillColor: UIColor = .red) async throws -> UIImage {
         guard let cgImage = cgImage else {
-            return self
+            throw ImageAnonymizationError.noCgImageBased
         }
 
         //  create a handler with cgImage

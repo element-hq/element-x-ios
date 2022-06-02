@@ -20,7 +20,7 @@ import Foundation
 
 // MARK: View model
 
-enum SettingsViewModelResult {
+enum SettingsViewModelAction {
     case reportBug
     case crash
 }
@@ -28,11 +28,12 @@ enum SettingsViewModelResult {
 // MARK: View
 
 struct SettingsViewState: BindableState {
+    var crashButtonVisible: Bool
     var bindings: SettingsViewStateBindings
 }
 
 struct SettingsViewStateBindings {
-    var crashButtonVisible: Bool
+    
 }
 
 enum SettingsViewAction {

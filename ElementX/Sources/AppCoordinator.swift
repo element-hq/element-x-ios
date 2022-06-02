@@ -27,7 +27,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let memberDetailProviderManager: MemberDetailProviderManager
 
     private let bugReportService: BugReportServiceProtocol
-    private let screenshotObserver: ScreenshotDetector
+    private let screenshotDetector: ScreenshotDetector
 
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
@@ -39,10 +39,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         stateMachine = AppCoordinatorStateMachine()
         
         guard let baseURL = URL(string: "https://riot.im/bugreports") else {
+        guard let baseURL = URL(string: BuildSettings.bugReportServiceBaseUrlString) else {
             fatalError("")
         }
         bugReportService = BugReportService(withBaseURL: baseURL,
-                                            sentryEndpoint: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44")
+                                            sentryEndpoint: BuildSettings.bugReportSentryEndpoint)
 
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
@@ -63,8 +64,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         authenticationCoordinator = AuthenticationCoordinator(keychainController: keychainController,
                                                               navigationRouter: navigationRouter)
 
-        screenshotObserver = ScreenshotDetector()
-        screenshotObserver.callback = askAfterScreenshot
+        screenshotDetector = ScreenshotDetector()
+        screenshotDetector.callback = askAfterScreenshot
 
         authenticationCoordinator.delegate = self
         
@@ -198,6 +199,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         let coordinator = SettingsCoordinator(parameters: parameters)
 
         add(childCoordinator: coordinator)
+        coordinator.start()
         navigationRouter.push(coordinator) { [weak self] in
             guard let self = self else { return }
 
@@ -250,7 +252,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoginErrorToast() {
-        errorIndicator = indicatorPresenter.present(.success(label: "Failed logging in"))
+        errorIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
     }
     
     private func showLogoutErrorToast() {
@@ -264,7 +266,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
         alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
-            self?.presentBugReportScreen(for: nil)
+            self?.presentBugReportScreen()
         })
 
         navigationRouter.present(alert, animated: true)
@@ -285,18 +287,13 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         navigationRouter.present(alert, animated: true)
     }
 
-    private func presentBugReportScreen(for image: UIImage?) {
+    private func presentBugReportScreen(for image: UIImage? = nil) {
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
                                                         screenshot: image)
         let coordinator = BugReportCoordinator(parameters: parameters)
-        coordinator.completion = { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .cancel:
-                self.navigationRouter.dismissModule(animated: true)
-            default:
-                break
-            }
+        coordinator.completion = { [weak self, weak coordinator] in
+            guard let self = self, let coordinator = coordinator else { return }
+            self.navigationRouter.dismissModule(animated: true)
             self.remove(childCoordinator: coordinator)
         }
 

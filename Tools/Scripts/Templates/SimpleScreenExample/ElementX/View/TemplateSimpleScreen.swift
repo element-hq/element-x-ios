@@ -35,7 +35,7 @@ struct TemplateSimpleScreen: View {
     var body: some View {
         GeometryReader { geometry in
             VStack {
-                ScrollView(showsIndicators: false) {
+                ScrollView {
                     mainContent
                         .padding(.top, 50)
                         .padding(.horizontal, horizontalPadding)

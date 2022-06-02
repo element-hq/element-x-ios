@@ -20,12 +20,6 @@ struct Settings: View {
 
     // MARK: Private
     
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    
-    private var horizontalPadding: CGFloat {
-        horizontalSizeClass == .regular ? 50 : 16
-    }
-    
     // MARK: Public
     
     @ObservedObject var context: SettingsViewModel.Context
@@ -33,33 +27,24 @@ struct Settings: View {
     // MARK: Views
     
     var body: some View {
-        VStack {
-            ScrollView(showsIndicators: false) {
-                buttons
-                    .padding(.horizontal, horizontalPadding)
-            }
-        }
-        .navigationTitle(ElementL10n.settings)
-    }
-
-    /// The action buttons shown at the bottom of the view.
-    var buttons: some View {
-        VStack {
+        Form {
             Button { context.send(viewAction: .reportBug) } label: {
                 Text(ElementL10n.sendBugReport)
             }
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
-            .accessibilityLabel("Report bug")
+            .accessibilityIdentifier("reportBugButton")
 
-            if context.crashButtonVisible {
+            if context.viewState.crashButtonVisible {
                 Button { context.send(viewAction: .crash) } label: {
                     Text("Crash the app")
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
+                .accessibilityIdentifier("crashButton")
             }
         }
+        .navigationTitle(ElementL10n.settings)
     }
 }
 
@@ -70,6 +55,7 @@ struct Settings_Previews: PreviewProvider {
         Group {
             let viewModel = SettingsViewModel()
             Settings(context: viewModel.context)
+                .previewInterfaceOrientation(.portrait)
         }
     }
 }

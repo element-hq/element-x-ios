@@ -24,25 +24,32 @@ class BugReportUITests: XCTestCase {
         app.goToScreenWithIdentifier("Bug report screen")
 
         XCTAssert(app.navigationBars["Bug report"].exists)
-        XCTAssert(app.staticTexts["Report Bug"].exists)
-        XCTAssert(app.textViews["Report"].exists)
-        XCTAssert(app.images["Disable Sending Logs"].exists)
-        XCTAssert(app.staticTexts["Send Logs"].exists)
-        XCTAssert(app.buttons["Send"].exists)
-        XCTAssertFalse(app.buttons["Send"].isEnabled)
-        XCTAssert(app.buttons["Cancel"].exists)
-        XCTAssert(app.buttons["Cancel"].isEnabled)
-        XCTAssertFalse(app.images["Screenshot"].exists)
-        XCTAssertFalse(app.buttons["Remove Screenshot"].exists)
+        XCTAssert(app.staticTexts["reportBugDescription"].exists)
+        XCTAssert(app.staticTexts["sendLogsDescription"].exists)
+        XCTAssert(app.textViews["reportTextView"].exists)
+        let sendingLogsToggle = app.switches["sendLogsToggle"]
+        XCTAssert(sendingLogsToggle.exists)
+        XCTAssert(sendingLogsToggle.isOn)
+        XCTAssert(app.staticTexts["sendLogsText"].exists)
+        let sendButton = app.buttons["sendButton"]
+        XCTAssert(sendButton.exists)
+        XCTAssertFalse(sendButton.isEnabled)
+        let cancelButton = app.buttons["cancelButton"]
+        XCTAssert(cancelButton.exists)
+        XCTAssert(cancelButton.isEnabled)
+        XCTAssertFalse(app.images["screenshotImage"].exists)
+        XCTAssertFalse(app.buttons["removeScreenshotButton"].exists)
     }
 
     func testToggleSendingLogs() {
         let app = Application.launch()
         app.goToScreenWithIdentifier("Bug report screen")
 
-        app.images["Disable Sending Logs"].tap()
+        app.switches["sendLogsToggle"].tap()
 
-        XCTAssert(app.images["Enable Sending Logs"].exists)
+        let sendingLogsToggle = app.switches["sendLogsToggle"]
+        XCTAssert(sendingLogsToggle.exists)
+        XCTAssertFalse(sendingLogsToggle.isOn)
     }
 
     func testReportText() {
@@ -50,14 +57,14 @@ class BugReportUITests: XCTestCase {
         app.goToScreenWithIdentifier("Bug report screen")
 
         //  type 4 chars
-        app.textViews["Report"].tap()
-        app.textViews["Report"].typeText("Test")
-        XCTAssertFalse(app.buttons["Send"].isEnabled)
+        app.textViews["reportTextView"].tap()
+        app.textViews["reportTextView"].typeText("Test")
+        XCTAssertFalse(app.buttons["sendButton"].isEnabled)
 
         //  type one more char and see the button enabled
-        app.textViews["Report"].tap()
-        app.textViews["Report"].typeText("-")
-        XCTAssert(app.buttons["Send"].isEnabled)
+        app.textViews["reportTextView"].tap()
+        app.textViews["reportTextView"].typeText("-")
+        XCTAssert(app.buttons["sendButton"].isEnabled)
     }
 
     func testInitialStateComponentsWithScreenshot() {
@@ -65,16 +72,28 @@ class BugReportUITests: XCTestCase {
         app.goToScreenWithIdentifier("Bug report screen with screenshot")
 
         XCTAssert(app.navigationBars["Bug report"].exists)
-        XCTAssert(app.staticTexts["Report Bug"].exists)
-        XCTAssert(app.textViews["Report"].exists)
-        XCTAssert(app.images["Disable Sending Logs"].exists)
-        XCTAssert(app.staticTexts["Send Logs"].exists)
-        XCTAssert(app.buttons["Send"].exists)
-        XCTAssertFalse(app.buttons["Send"].isEnabled)
-        XCTAssert(app.buttons["Cancel"].exists)
-        XCTAssert(app.buttons["Cancel"].isEnabled)
-        XCTAssert(app.images["Screenshot"].exists)
-        XCTAssert(app.buttons["Remove Screenshot"].exists)
+        XCTAssert(app.staticTexts["reportBugDescription"].exists)
+        XCTAssert(app.staticTexts["sendLogsDescription"].exists)
+
+        XCTAssert(app.textViews["reportTextView"].exists)
+        let sendingLogsToggle = app.switches["sendLogsToggle"]
+        XCTAssert(sendingLogsToggle.exists)
+        XCTAssert(sendingLogsToggle.isOn)
+        XCTAssert(app.staticTexts["sendLogsText"].exists)
+        let sendButton = app.buttons["sendButton"]
+        XCTAssert(sendButton.exists)
+        XCTAssertFalse(sendButton.isEnabled)
+        let cancelButton = app.buttons["cancelButton"]
+        XCTAssert(cancelButton.exists)
+        XCTAssert(cancelButton.isEnabled)
+        XCTAssert(app.images["screenshotImage"].exists)
+        XCTAssert(app.buttons["removeScreenshotButton"].exists)
     }
 
+}
+
+extension XCUIElement {
+    var isOn: Bool {
+        (value as? String) == "1"
+    }
 }

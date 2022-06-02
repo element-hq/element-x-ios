@@ -26,7 +26,7 @@ class BugReportViewModelTests: XCTestCase {
         let context = viewModel.context
 
         XCTAssertEqual(context.reportText, "")
-        XCTAssertNil(context.screenshot)
+        XCTAssertNil(context.viewState.screenshot)
         XCTAssertTrue(context.sendingLogsEnabled)
     }
 
@@ -45,6 +45,6 @@ class BugReportViewModelTests: XCTestCase {
 
         context.send(viewAction: .removeScreenshot)
         await Task.yield()
-        XCTAssertNil(context.screenshot)
+        XCTAssertNil(context.viewState.screenshot)
     }
 }

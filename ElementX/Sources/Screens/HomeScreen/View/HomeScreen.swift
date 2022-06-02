@@ -75,14 +75,13 @@ struct HomeScreen: View {
                 HStack {
                     ZStack {
                         if let avatar = context.viewState.userAvatar {
-                            Image(uiImage: avatar)
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 40, height: 40, alignment: .center)
-                                .mask(Circle())
-                                .onTapGesture {
-                                    context.send(viewAction: .tapUserAvatar)
-                                }
+                            Button { context.send(viewAction: .tapUserAvatar) } label: {
+                                Image(uiImage: avatar)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 40, height: 40, alignment: .center)
+                                    .mask(Circle())
+                            }
                         } else {
                             EmptyView()
                         }
@@ -92,12 +91,12 @@ struct HomeScreen: View {
                     
                     ZStack {
                         if let displayName = context.viewState.userDisplayName {
-                            Text("Hello, \(displayName)!")
-                                .font(.subheadline)
-                                .fontWeight(.bold)
-                                .onTapGesture {
-                                    context.send(viewAction: .tapUserAvatar)
-                                }
+                            Button { context.send(viewAction: .tapUserAvatar) } label: {
+                                Text("Hello, \(displayName)!")
+                                    .font(.subheadline)
+                                    .fontWeight(.bold)
+                                    .foregroundColor(.black)
+                            }
                         } else {
                             EmptyView()
                         }

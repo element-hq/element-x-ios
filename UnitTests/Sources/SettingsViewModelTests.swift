@@ -20,10 +20,7 @@ import XCTest
 
 @MainActor
 class SettingsViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
+
     var viewModel: SettingsViewModelProtocol!
     var context: SettingsViewModelType.Context!
     
@@ -33,12 +30,12 @@ class SettingsViewModelTests: XCTestCase {
     }
 
     func testInitialState() {
-        XCTAssert(context.crashButtonVisible)
+        XCTAssert(context.viewState.crashButtonVisible)
     }
 
     func testReportBug() async throws {
         var correctResult = false
-        viewModel.completion = { result in
+        viewModel.callback = { result in
             correctResult = result == .reportBug
         }
 
@@ -49,7 +46,7 @@ class SettingsViewModelTests: XCTestCase {
 
     func testCrash() async throws {
         var correctResult = false
-        viewModel.completion = { result in
+        viewModel.callback = { result in
             correctResult = result == .crash
         }
 

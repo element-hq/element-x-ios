@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -200,6 +200,9 @@
 		E9CEAF2C38E4E00459B811D9 /* LoginScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2082B5226B2A3A4D0798B6 /* LoginScreenModels.swift */; };
 		EA1E7949533E19C6D862680A /* MediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 885D8C42DD17625B5261BEFF /* MediaProvider.swift */; };
 		EA31DD9043B91ECB8E45A9A6 /* ScreenshotDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C9D319676F3C0DC6B0203 /* ScreenshotDetectorTests.swift */; };
+		ECCAB0652848BFE200BAEBE8 /* BuildSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCAB0642848BFE200BAEBE8 /* BuildSettings.swift */; };
+		ECCAB0692848CBAA00BAEBE8 /* ElementToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECCAB0682848CBAA00BAEBE8 /* ElementToggleStyle.swift */; };
+		ECCAB06E2848E27800BAEBE8 /* sample_screenshot.png in Resources */ = {isa = PBXBuildFile; fileRef = ECCAB06D2848E27800BAEBE8 /* sample_screenshot.png */; };
 		ED4F663C783E9A8C0E80B983 /* TemplateSimpleScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47543EB19F3DCF308751F53C /* TemplateSimpleScreenViewModel.swift */; };
 		EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */; };
 		F03E16ED043C62FED5A07AE0 /* MatrixEntitityRegex.swift in Sources */ = {isa = PBXBuildFile; fileRef = F7B81C8227BBEA95CCE86037 /* MatrixEntitityRegex.swift */; };
@@ -526,6 +529,9 @@
 		E8FD25EB4DF66625B74E4505 /* LoginScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginScreenViewModel.swift; sourceTree = "<group>"; };
 		E9D059BFE329BE09B6D96A9F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ro; path = ro.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EBE5502760CF6CA2D7201883 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ja; path = ja.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		ECCAB0642848BFE200BAEBE8 /* BuildSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BuildSettings.swift; sourceTree = "<group>"; };
+		ECCAB0682848CBAA00BAEBE8 /* ElementToggleStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementToggleStyle.swift; sourceTree = "<group>"; };
+		ECCAB06D2848E27800BAEBE8 /* sample_screenshot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = sample_screenshot.png; sourceTree = "<group>"; };
 		ED1D792EB82506A19A72C8DE /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		EE8BCD14EFED23459A43FDFF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEE384418EB1FEDFA62C9CD0 /* RoomTimelineViewFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineViewFactoryProtocol.swift; sourceTree = "<group>"; };
@@ -598,6 +604,7 @@
 		052CC920F473C10B509F9FC1 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				ECCAB0672848CB9500BAEBE8 /* Views */,
 				10578D9852BA78D309A1CBDF /* ViewModel */,
 			);
 			path = SwiftUI;
@@ -1074,6 +1081,7 @@
 		A4852B57D55D71EEBFCD931D /* UnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				ECCAB06A2848DF0E00BAEBE8 /* Resources */,
 				73CD9796729EB702B4DFA88C /* Sources */,
 				24FD174C31912A5FACFEAFB5 /* SupportingFiles */,
 			);
@@ -1184,12 +1192,29 @@
 				EFFA5FD06AAAC4AF544B594E /* AppDelegate.swift */,
 				967873B9E11828B67F64C89A /* UITestsAppCoordinator.swift */,
 				CCA431E6EDD71F7067B5F9E7 /* UITestsRootView.swift */,
+				ECCAB0642848BFE200BAEBE8 /* BuildSettings.swift */,
 				0787F81684E503024BD0C051 /* Services */,
 				E59565F441830B19DBAE567C /* Screens */,
 				C0937E3B06A8F0E2DB7C8241 /* Other */,
 				337015ADFBA3AB96660DB3A6 /* Generated */,
 			);
 			path = Sources;
+			sourceTree = "<group>";
+		};
+		ECCAB0672848CB9500BAEBE8 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				ECCAB0682848CBAA00BAEBE8 /* ElementToggleStyle.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		ECCAB06A2848DF0E00BAEBE8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				ECCAB06D2848E27800BAEBE8 /* sample_screenshot.png */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		F8474EB69289112888B65518 /* UserIndicators */ = {
@@ -1474,6 +1499,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				35E975CFDA60E05362A7CF79 /* target.yml in Resources */,
+				ECCAB06E2848E27800BAEBE8 /* sample_screenshot.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1609,6 +1635,7 @@
 				62BBF5BE7B905222F0477FF2 /* MediaSource.swift in Sources */,
 				03B8FEA668A5B76A93113BB1 /* MemberDetailProviderManager.swift in Sources */,
 				1999ECC6777752A2616775CF /* MemberDetailsProvider.swift in Sources */,
+				ECCAB0692848CBAA00BAEBE8 /* ElementToggleStyle.swift in Sources */,
 				A5EC21A071F58FC1229C20D0 /* MemberDetailsProviderProtocol.swift in Sources */,
 				24906A1E82D0046655958536 /* MessageComposer.swift in Sources */,
 				072BA9DBA932374CCA300125 /* MessageComposerTextField.swift in Sources */,
@@ -1644,6 +1671,7 @@
 				9B8DE1D424E37581C7D99CCC /* RoomTimelineControllerProtocol.swift in Sources */,
 				4E945AD6862C403F74E57755 /* RoomTimelineItemFactory.swift in Sources */,
 				13C77FDF17C4C6627CFFC205 /* RoomTimelineItemFactoryProtocol.swift in Sources */,
+				ECCAB0652848BFE200BAEBE8 /* BuildSettings.swift in Sources */,
 				1AE4AEA0FA8DEF52671832E0 /* RoomTimelineItemProtocol.swift in Sources */,
 				9BD3A773186291560DF92B62 /* RoomTimelineProvider.swift in Sources */,
 				77D7DAA41AAB36800C1F2E2D /* RoomTimelineProviderProtocol.swift in Sources */,

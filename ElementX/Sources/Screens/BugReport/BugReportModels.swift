@@ -21,7 +21,7 @@ import UIKit
 
 // MARK: View model
 
-enum BugReportViewModelResult {
+enum BugReportViewModelAction {
     case submitStarted
     case submitFinished
     case submitFailed(error: Error)
@@ -31,13 +31,13 @@ enum BugReportViewModelResult {
 // MARK: View
 
 struct BugReportViewState: BindableState {
+    var screenshot: UIImage?
     var bindings: BugReportViewStateBindings
 }
 
 struct BugReportViewStateBindings {
-    var sendingLogsEnabled: Bool
     var reportText: String
-    var screenshot: UIImage?
+    var sendingLogsEnabled: Bool
 }
 
 enum BugReportViewAction {

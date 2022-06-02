@@ -51,7 +51,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
         
         indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: settingsHostingController)
 
-        settingsViewModel.completion = { [weak self] result in
+        settingsViewModel.callback = { [weak self] result in
             guard let self = self else { return }
             MXLog.debug("[SettingsCoordinator] SettingsViewModel did complete with result: \(result).")
             switch result {
@@ -92,14 +92,10 @@ final class SettingsCoordinator: Coordinator, Presentable {
         let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
                                                     screenshot: nil)
         let coordinator = BugReportCoordinator(parameters: params)
-        coordinator.completion = { [weak self] result in
-            guard let self = self else { return }
-            switch result {
-            case .cancel:
-                self.parameters.navigationRouter.popModule(animated: true)
-            default:
-                break
-            }
+        coordinator.completion = { [weak self, weak coordinator] in
+            guard let self = self, let coordinator = coordinator else { return }
+            self.parameters.navigationRouter.popModule(animated: true)
+            self.remove(childCoordinator: coordinator)
         }
 
         add(childCoordinator: coordinator)

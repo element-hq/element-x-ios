@@ -19,8 +19,17 @@ class ImageExtensionTests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
+    func sampleScreenshot() throws -> UIImage {
+        let bundle = Bundle(for: self.classForCoder)
+        guard let path = bundle.path(forResource: "sample_screenshot", ofType: "png"),
+              let image = UIImage(contentsOfFile: path) else {
+            throw XCTestError(.failureWhileWaiting)
+        }
+        return image
+    }
+
     func testImageAnonymizationConfidenceLevel() async throws {
-        let image = Asset.Images.sampleScreenshot.image
+        let image = try sampleScreenshot()
 
         let anonymized5 = try await image.anonymized()
         let anonymized1 = try await image.anonymized(confidenceLevel: 0.1)
@@ -31,7 +40,7 @@ class ImageExtensionTests: XCTestCase {
     }
 
     func testImageAnonymizationFillColor() async throws {
-        let image = Asset.Images.sampleScreenshot.image
+        let image = try sampleScreenshot()
 
         let anonymizedRed = try await image.anonymized()
         let anonymizedBlue = try await image.anonymized(fillColor: .blue)

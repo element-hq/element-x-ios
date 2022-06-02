@@ -24,8 +24,8 @@ class SettingsUITests: XCTestCase {
         app.goToScreenWithIdentifier("Settings screen")
         
         XCTAssert(app.navigationBars["Settings"].exists)
-        XCTAssert(app.buttons["Report bug"].exists)
-        XCTAssert(app.buttons["Crash the app"].exists)
+        XCTAssert(app.buttons["reportBugButton"].exists)
+        XCTAssert(app.buttons["crashButton"].exists)
     }
 
 }
