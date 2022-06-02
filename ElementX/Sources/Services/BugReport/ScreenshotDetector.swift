@@ -69,10 +69,6 @@ class ScreenshotDetector {
         }
     }
 
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-
     @MainActor func succeed(withImage image: UIImage) {
         callback?(image, nil)
     }
