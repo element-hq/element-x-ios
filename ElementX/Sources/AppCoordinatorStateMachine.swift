@@ -22,6 +22,8 @@ class AppCoordinatorStateMachine {
         case signedIn
         /// Showing the home screen
         case homeScreen
+        /// Showing the settings screen
+        case settingsScreen
         /// Showing a particular room's timeline
         /// - Parameter roomId: that room's identifier
         case roomScreen(roomId: String)
@@ -52,6 +54,10 @@ class AppCoordinatorStateMachine {
         case showRoomScreen(roomId: String)
         /// The room screen has been dismissed
         case dismissedRoomScreen
+        /// The settings screen has been dismissed
+        case dismissedSettingsScreen
+        /// Request settings screen presentation
+        case showSettingsScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -71,6 +77,8 @@ class AppCoordinatorStateMachine {
             
             machine.addRoutes(event: .succeededSigningOut, transitions: [ .signingOut => .signedOut ])
             machine.addRoutes(event: .failedSigningOut, transitions: [ .signingOut => .homeScreen ])
+            machine.addRoutes(event: .showSettingsScreen, transitions: [ .homeScreen => .settingsScreen ])
+            machine.addRoutes(event: .dismissedSettingsScreen, transitions: [ .settingsScreen => .homeScreen ])
             
             // Transitions with associated values need to be handled through `addRouteMapping`
             machine.addRouteMapping { event, fromState, _ in
@@ -78,6 +86,8 @@ class AppCoordinatorStateMachine {
                 case (.showRoomScreen(let roomId), .homeScreen):
                     return .roomScreen(roomId: roomId)
                 case (.dismissedRoomScreen, .roomScreen):
+                    return .homeScreen
+                case (.dismissedSettingsScreen, .settingsScreen):
                     return .homeScreen
                 default:
                     return nil

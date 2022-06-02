@@ -37,8 +37,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     init() {
         stateMachine = AppCoordinatorStateMachine()
-        
-        guard let baseURL = URL(string: "https://riot.im/bugreports") else {
+
         guard let baseURL = URL(string: BuildSettings.bugReportServiceBaseUrlString) else {
             fatalError("")
         }
@@ -135,6 +134,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 self.tearDownUserSession()
             case (.signingOut, .failedSigningOut, _):
                 self.showLogoutErrorToast()
+            case (.homeScreen, .showSettingsScreen, .settingsScreen):
+                self.presentSettingsScreen()
+            case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
+                self.tearDownDismissedSettingsScreen()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -182,6 +185,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 self.stateMachine.processEvent(.attemptSignOut)
             case .selectRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
+            case .settings:
+                self.stateMachine.processEvent(.showSettingsScreen)
             }
         }
         
@@ -203,7 +208,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         navigationRouter.push(coordinator) { [weak self] in
             guard let self = self else { return }
 
-            self.remove(childCoordinator: coordinator)
+            self.stateMachine.processEvent(.dismissedSettingsScreen)
         }
     }
     
@@ -240,6 +245,14 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
         }
         
+        remove(childCoordinator: coordinator)
+    }
+
+    private func tearDownDismissedSettingsScreen() {
+        guard let coordinator = childCoordinators.last as? SettingsCoordinator else {
+            fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
+        }
+
         remove(childCoordinator: coordinator)
     }
     

@@ -55,21 +55,21 @@
       }
     },
     {
-      "identity" : "swiftstate",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/ReactKit/SwiftState",
-      "state" : {
-        "revision" : "887e75b96da6be36a062e1b0ef832c32a803348b",
-        "version" : "6.0.1"
-      }
-    },
-    {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
         "revision" : "afa4cd596e5cf97a797fb9b5c3afeea4add2c7a3",
         "version" : "7.15.0"
+      }
+    },
+    {
+      "identity" : "swiftstate",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ReactKit/SwiftState",
+      "state" : {
+        "revision" : "887e75b96da6be36a062e1b0ef832c32a803348b",
+        "version" : "6.0.1"
       }
     },
     {
