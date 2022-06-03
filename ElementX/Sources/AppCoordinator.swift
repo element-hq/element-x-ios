@@ -38,11 +38,12 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     init() {
         stateMachine = AppCoordinatorStateMachine()
 
-        guard let baseURL = URL(string: BuildSettings.bugReportServiceBaseUrlString) else {
-            fatalError("")
+        do {
+            bugReportService = try BugReportService(withBaseUrlString: BuildSettings.bugReportServiceBaseUrlString,
+                                                    sentryEndpoint: BuildSettings.bugReportSentryEndpoint)
+        } catch {
+            fatalError(error.localizedDescription)
         }
-        bugReportService = BugReportService(withBaseURL: baseURL,
-                                            sentryEndpoint: BuildSettings.bugReportSentryEndpoint)
 
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
@@ -64,7 +65,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                               navigationRouter: navigationRouter)
 
         screenshotDetector = ScreenshotDetector()
-        screenshotDetector.callback = askAfterScreenshot
+        screenshotDetector.callback = processScreenshotDetection
 
         authenticationCoordinator.delegate = self
         
@@ -183,9 +184,9 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             switch action {
             case .logout:
                 self.stateMachine.processEvent(.attemptSignOut)
-            case .selectRoom(let roomIdentifier):
+            case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
-            case .settings:
+            case .presentSettings:
                 self.stateMachine.processEvent(.showSettingsScreen)
             }
         }
@@ -193,7 +194,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         add(childCoordinator: coordinator)
         navigationRouter.setRootModule(coordinator)
 
-        if bugReportService.applicationWasCrashed {
+        if bugReportService.crashedLastRun {
             showCrashPopup()
         }
     }
@@ -285,8 +286,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         navigationRouter.present(alert, animated: true)
     }
 
-    private func askAfterScreenshot(image: UIImage?, error: Error?) {
-        MXLog.debug("[AppCoordinator] askAfterScreenshot: \(String(describing: image)), error: \(String(describing: error))")
+    private func processScreenshotDetection(image: UIImage?, error: Error?) {
+        MXLog.debug("[AppCoordinator] processScreenshotDetection: \(String(describing: image)), error: \(String(describing: error))")
 
         let alert = UIAlertController(title: ElementL10n.screenshotDetectedTitle,
                                       message: ElementL10n.screenshotDetectedMessage,

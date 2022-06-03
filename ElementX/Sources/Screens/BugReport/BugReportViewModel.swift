@@ -33,7 +33,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
         do {
             var files: [URL] = []
             if let screenshot = state.screenshot {
-                let anonymized = try await screenshot.anonymized()
+                let anonymized = try await ImageAnonymizer.anonymizedImage(from: screenshot)
                 let tmpUrl = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("screenshot").appendingPathExtension("png")
                 //  remove old screenshot if exists
                 if FileManager.default.fileExists(atPath: tmpUrl.path) {

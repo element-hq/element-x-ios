@@ -15,11 +15,9 @@ struct SubmitBugReportResponse: Decodable {
 
 protocol BugReportServiceProtocol {
 
-    var applicationWasCrashed: Bool { get }
+    var crashedLastRun: Bool { get }
 
     func crash()
-
-    var applicationId: String { get set }
 
     func submitBugReport(text: String,
                          includeLogs: Bool,

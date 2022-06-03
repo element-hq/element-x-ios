@@ -87,8 +87,6 @@ class AppCoordinatorStateMachine {
                     return .roomScreen(roomId: roomId)
                 case (.dismissedRoomScreen, .roomScreen):
                     return .homeScreen
-                case (.dismissedSettingsScreen, .settingsScreen):
-                    return .homeScreen
                 default:
                     return nil
                 }

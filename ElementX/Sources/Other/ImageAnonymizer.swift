@@ -10,11 +10,11 @@ import Foundation
 import Vision
 import UIKit
 
-enum ImageAnonymizationError: Error {
+enum ImageAnonymizerError: Error {
     case noCgImageBased
 }
 
-extension UIImage {
+struct ImageAnonymizer {
 
     private static var allowedTextItems: [String] = [
         "#",
@@ -29,9 +29,11 @@ extension UIImage {
         "*"
     ]
 
-    func anonymized(confidenceLevel: Float = 0.5, fillColor: UIColor = .red) async throws -> UIImage {
-        guard let cgImage = cgImage else {
-            throw ImageAnonymizationError.noCgImageBased
+    static func anonymizedImage(from image: UIImage,
+                                confidenceLevel: Float = 0.5,
+                                fillColor: UIColor = .red) async throws -> UIImage {
+        guard let cgImage = image.cgImage else {
+            throw ImageAnonymizerError.noCgImageBased
         }
 
         //  create a handler with cgImage
@@ -66,17 +68,20 @@ extension UIImage {
             faceRequest
         ])
 
-        return render(confidenceLevel: confidenceLevel,
+        return render(image: image,
+                      confidenceLevel: confidenceLevel,
                       fillColor: fillColor,
                       observations: observations)
     }
 
-    private func render(confidenceLevel: Float,
-                        fillColor: UIColor,
-                        observations: [VNDetectedObjectObservation]) -> UIImage {
+    private static func render(image: UIImage,
+                               confidenceLevel: Float,
+                               fillColor: UIColor,
+                               observations: [VNDetectedObjectObservation]) -> UIImage {
+        let size = image.size
         let result = UIGraphicsImageRenderer(size: size).image { rendererContext in
             //  first draw self
-            self.draw(in: CGRect(origin: .zero, size: size))
+            image.draw(in: CGRect(origin: .zero, size: size))
             //  set fill color
             fillColor.setFill()
             for observation in observations {

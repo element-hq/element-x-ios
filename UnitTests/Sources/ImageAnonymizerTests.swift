@@ -9,7 +9,11 @@
 import XCTest
 @testable import ElementX
 
-class ImageExtensionTests: XCTestCase {
+enum ImageAnonymizerTestsError: String, Error {
+    case screenshotNotFound
+}
+
+class ImageAnonymizerTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
@@ -23,7 +27,7 @@ class ImageExtensionTests: XCTestCase {
         let bundle = Bundle(for: self.classForCoder)
         guard let path = bundle.path(forResource: "sample_screenshot", ofType: "png"),
               let image = UIImage(contentsOfFile: path) else {
-            throw XCTestError(.failureWhileWaiting)
+            throw ImageAnonymizerTestsError.screenshotNotFound
         }
         return image
     }
@@ -31,8 +35,8 @@ class ImageExtensionTests: XCTestCase {
     func testImageAnonymizationConfidenceLevel() async throws {
         let image = try sampleScreenshot()
 
-        let anonymized5 = try await image.anonymized()
-        let anonymized1 = try await image.anonymized(confidenceLevel: 0.1)
+        let anonymized5 = try await ImageAnonymizer.anonymizedImage(from: image)
+        let anonymized1 = try await ImageAnonymizer.anonymizedImage(from: image, confidenceLevel: 0.1)
 
         //  comparing colors is a complicated process, just compare images for now
         XCTAssertNotEqual(image, anonymized5)
@@ -42,8 +46,8 @@ class ImageExtensionTests: XCTestCase {
     func testImageAnonymizationFillColor() async throws {
         let image = try sampleScreenshot()
 
-        let anonymizedRed = try await image.anonymized()
-        let anonymizedBlue = try await image.anonymized(fillColor: .blue)
+        let anonymizedRed = try await ImageAnonymizer.anonymizedImage(from: image)
+        let anonymizedBlue = try await ImageAnonymizer.anonymizedImage(from: image, fillColor: .blue)
 
         //  comparing colors is a complicated process, just compare images for now
         XCTAssertNotEqual(image, anonymizedRed)

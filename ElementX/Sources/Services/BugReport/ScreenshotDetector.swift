@@ -10,11 +10,12 @@ import Foundation
 import UIKit
 import Photos
 
-enum ScreenshotDetectorError: Error {
+enum ScreenshotDetectorError: String, Error {
     case loadFailed
     case notAuthorized
 }
 
+@MainActor
 class ScreenshotDetector {
 
     var callback: (@MainActor (UIImage?, Error?) -> Void)?
@@ -27,23 +28,26 @@ class ScreenshotDetector {
     }
 
     private func startObservingScreenshots() {
-        NotificationCenter.default.addObserver(self, selector: #selector(userDidTakeScreenshot), name: UIApplication.userDidTakeScreenshotNotification, object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(userDidTakeScreenshot),
+                                               name: UIApplication.userDidTakeScreenshotNotification,
+                                               object: nil)
     }
 
-    @objc @MainActor private func userDidTakeScreenshot() {
+    @objc private func userDidTakeScreenshot() {
         let authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         if authStatus == .authorized {
             findScreenshot()
         } else if authStatus == .notDetermined && autoRequestPHAuthorization {
-            PHPhotoLibrary.requestAuthorization(for: .readWrite) { [weak self] status in
-                self?.handleAuthStatus(status)
+            Task {
+                self.handleAuthStatus(await PHPhotoLibrary.requestAuthorization(for: .readWrite))
             }
         } else {
             fail(withError: ScreenshotDetectorError.notAuthorized)
         }
     }
 
-    @MainActor private func handleAuthStatus(_ status: PHAuthorizationStatus) {
+    private func handleAuthStatus(_ status: PHAuthorizationStatus) {
         if status == .authorized {
             findScreenshot()
         } else {
@@ -51,7 +55,7 @@ class ScreenshotDetector {
         }
     }
 
-    @MainActor private func findScreenshot() {
+    private func findScreenshot() {
         if let asset = PHAsset.fetchLastScreenshot() {
             let imageManager = PHImageManager()
             imageManager.requestImage(for: asset,
@@ -69,11 +73,11 @@ class ScreenshotDetector {
         }
     }
 
-    @MainActor func succeed(withImage image: UIImage) {
+    func succeed(withImage image: UIImage) {
         callback?(image, nil)
     }
 
-    @MainActor func fail(withError error: Error) {
+    func fail(withError error: Error) {
         callback?(nil, error)
     }
 

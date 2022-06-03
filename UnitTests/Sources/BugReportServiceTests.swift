@@ -15,8 +15,7 @@ class BugReportServiceTests: XCTestCase {
     let bugReportService = MockBugReportService()
 
     func testInitialStateWithMockService() {
-        XCTAssertFalse(bugReportService.applicationWasCrashed)
-        XCTAssertEqual(bugReportService.applicationId, "mock_app_id")
+        XCTAssertFalse(bugReportService.crashedLastRun)
     }
 
     func testSubmitBugReportWithMockService() async throws {
@@ -28,28 +27,19 @@ class BugReportServiceTests: XCTestCase {
         XCTAssertFalse(result.reportUrl.isEmpty)
     }
 
-    func testInitialStateWithRealService() {
-        guard let url = URL(string: "https://www.example.com") else {
-            XCTFail("Failed to setup test conditions")
-            return
-        }
-        let service = BugReportService(withBaseURL: url,
-                                       sentryEndpoint: "mock_sentry_dsn",
-                                       applicationId: "mock_app_id",
-                                       session: .mock)
-        XCTAssertEqual(service.applicationId, "mock_app_id")
-        XCTAssertFalse(service.applicationWasCrashed)
+    func testInitialStateWithRealService() throws {
+        let service = try BugReportService(withBaseUrlString: "https://www.example.com",
+                                           sentryEndpoint: "mock_sentry_dsn",
+                                           applicationId: "mock_app_id",
+                                           session: .mock)
+        XCTAssertFalse(service.crashedLastRun)
     }
 
     @MainActor func testSubmitBugReportWithRealService() async throws {
-        guard let url = URL(string: "https://www.example.com") else {
-            XCTFail("Failed to setup test conditions")
-            return
-        }
-        let service = BugReportService(withBaseURL: url,
-                                       sentryEndpoint: "mock_sentry_dsn",
-                                       applicationId: "mock_app_id",
-                                       session: .mock)
+        let service = try BugReportService(withBaseUrlString: "https://www.example.com",
+                                           sentryEndpoint: "mock_sentry_dsn",
+                                           applicationId: "mock_app_id",
+                                           session: .mock)
 
         let result = try await service.submitBugReport(text: "i cannot send message",
                                                        includeLogs: true,

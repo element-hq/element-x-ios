@@ -9,16 +9,42 @@
 import Foundation
 @testable import ElementX
 import XCTest
+import Photos
 
 class ScreenshotDetectorTests: XCTestCase {
 
-    func testDetection() {
+    @MainActor func testDetection() async {
         async { expectation in
             let detector = ScreenshotDetector()
-            detector.callback = { _, _ in
+            //  disable auto request authorization
+            detector.autoRequestPHAuthorization = false
+            detector.callback = { image, error in
 
-                //  just check whether the callback is called
-                XCTAssert(true)
+                if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized {
+                    //  if Photos already authorized on the simulator
+
+                    //  we should get an image
+                    XCTAssertNotNil(image)
+
+                    //  we should not get an error
+                    XCTAssertNil(error)
+                } else {
+                    //  otherwise we should not get an image
+                    XCTAssertNil(image)
+
+                    //  and get an error
+                    guard let error = error else {
+                        XCTFail("Should get an error")
+                        return
+                    }
+
+                    switch error {
+                    case ScreenshotDetectorError.notAuthorized:
+                        break
+                    default:
+                        XCTFail("Unknown error")
+                    }
+                }
 
                 expectation.fulfill()
             }

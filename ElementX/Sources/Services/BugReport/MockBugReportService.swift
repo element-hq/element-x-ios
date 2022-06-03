@@ -11,12 +11,6 @@ import UIKit
 
 class MockBugReportService: BugReportServiceProtocol {
 
-    init(withApplicationId applicationId: String = "mock_app_id") {
-        self.applicationId = applicationId
-    }
-
-    var applicationId: String
-
     func submitBugReport(text: String,
                          includeLogs: Bool,
                          includeCrashLog: Bool,
@@ -25,7 +19,7 @@ class MockBugReportService: BugReportServiceProtocol {
         return SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
     }
 
-    var applicationWasCrashed: Bool = false
+    var crashedLastRun: Bool = false
 
     func crash() {
         // no-op

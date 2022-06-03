@@ -12,16 +12,28 @@ import UIKit
 import GZIP
 import Sentry
 
+enum BugReportServiceError: Error {
+    case invalidBaseUrlString
+    case invalidSentryEndpoint
+}
+
 class BugReportService: BugReportServiceProtocol {
     private let baseURL: URL
     private let sentryEndpoint: String
+    private let applicationId: String
     private let session: URLSession
 
-    init(withBaseURL baseURL: URL,
+    init(withBaseUrlString baseUrlString: String,
          sentryEndpoint: String,
          applicationId: String = BuildSettings.bugReportApplicationId,
-         session: URLSession = .shared) {
-        self.baseURL = baseURL
+         session: URLSession = .shared) throws {
+        guard let url = URL(string: baseUrlString) else {
+            throw BugReportServiceError.invalidBaseUrlString
+        }
+        guard !sentryEndpoint.isEmpty else {
+            throw BugReportServiceError.invalidSentryEndpoint
+        }
+        self.baseURL = url
         self.sentryEndpoint = sentryEndpoint
         self.applicationId = applicationId
         self.session = session
@@ -39,7 +51,7 @@ class BugReportService: BugReportServiceProtocol {
 
             options.beforeSend = { event in
                 MXLog.error("Sentry detected crash: \(event)")
-                return nil
+                return event
             }
 
             options.onCrashedLastRun = { event in
@@ -55,15 +67,13 @@ class BugReportService: BugReportServiceProtocol {
 
     // MARK: - BugReportServiceProtocol
 
-    var applicationWasCrashed: Bool {
+    var crashedLastRun: Bool {
         return SentrySDK.crashedLastRun
     }
 
     func crash() {
         SentrySDK.crash()
     }
-
-    var applicationId: String
 
     func submitBugReport(text: String,
                          includeLogs: Bool,
