@@ -314,6 +314,22 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         add(childCoordinator: coordinator)
         coordinator.start()
         let navController = UINavigationController(rootViewController: coordinator.toPresentable())
+        navController.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                                                 target: self,
+                                                                                 action: #selector(dismissBugReportScreen))
+        navController.isModalInPresentation = true
         navigationRouter.present(navController, animated: true)
+    }
+
+    @objc
+    private func dismissBugReportScreen() {
+        MXLog.debug("[AppCoorrdinator] dismissBugReportScreen")
+
+        guard let bugReportCoordinator = childCoordinators.first(where: { $0 is BugReportCoordinator }) else {
+            return
+        }
+
+        navigationRouter.dismissModule()
+        remove(childCoordinator: bugReportCoordinator)
     }
 }

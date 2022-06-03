@@ -104,14 +104,6 @@ struct BugReport: View {
             .padding(.vertical, 16)
             .disabled(context.reportText.count < 5)
             .accessibilityIdentifier("sendButton")
-
-            Button { context.send(viewAction: .cancel) } label: {
-                Text(ElementL10n.actionCancel)
-                    .padding(.vertical, 12)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 8)
-            .accessibilityIdentifier("cancelButton")
         }
     }
 

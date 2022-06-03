@@ -34,9 +34,6 @@ class BugReportUITests: XCTestCase {
         let sendButton = app.buttons["sendButton"]
         XCTAssert(sendButton.exists)
         XCTAssertFalse(sendButton.isEnabled)
-        let cancelButton = app.buttons["cancelButton"]
-        XCTAssert(cancelButton.exists)
-        XCTAssert(cancelButton.isEnabled)
         XCTAssertFalse(app.images["screenshotImage"].exists)
         XCTAssertFalse(app.buttons["removeScreenshotButton"].exists)
     }
@@ -83,9 +80,6 @@ class BugReportUITests: XCTestCase {
         let sendButton = app.buttons["sendButton"]
         XCTAssert(sendButton.exists)
         XCTAssertFalse(sendButton.isEnabled)
-        let cancelButton = app.buttons["cancelButton"]
-        XCTAssert(cancelButton.exists)
-        XCTAssert(cancelButton.isEnabled)
         XCTAssert(app.images["screenshotImage"].exists)
         XCTAssert(app.buttons["removeScreenshotButton"].exists)
     }
