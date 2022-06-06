@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,15 +14,18 @@
 // limitations under the License.
 //
 
-import Foundation
+import XCTest
+import ElementX
 
-struct ToastViewState {
-    enum Style {
-        case loading
-        case success
-        case error
+class SettingsUITests: XCTestCase {
+
+    func testInitialStateComponents() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier("Settings screen")
+        
+        XCTAssert(app.navigationBars["Settings"].exists)
+        XCTAssert(app.buttons["reportBugButton"].exists)
+        XCTAssert(app.buttons["crashButton"].exists)
     }
-    
-    let style: Style
-    let label: String
+
 }

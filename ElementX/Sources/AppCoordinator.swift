@@ -25,7 +25,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private var userSession: UserSession!
     
     private let memberDetailProviderManager: MemberDetailProviderManager
-    
+
+    private let bugReportService: BugReportServiceProtocol
+    private let screenshotDetector: ScreenshotDetector
+
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     private var errorIndicator: UserIndicator?
@@ -34,7 +37,14 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     init() {
         stateMachine = AppCoordinatorStateMachine()
-        
+
+        do {
+            bugReportService = try BugReportService(withBaseUrlString: BuildSettings.bugReportServiceBaseUrlString,
+                                                    sentryEndpoint: BuildSettings.bugReportSentryEndpoint)
+        } catch {
+            fatalError(error.localizedDescription)
+        }
+
         splashViewController = SplashViewController()
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -53,12 +63,20 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         keychainController = KeychainController(identifier: bundleIdentifier)
         authenticationCoordinator = AuthenticationCoordinator(keychainController: keychainController,
                                                               navigationRouter: navigationRouter)
+
+        screenshotDetector = ScreenshotDetector()
+        screenshotDetector.callback = processScreenshotDetection
+
         authenticationCoordinator.delegate = self
         
         setupStateMachine()
         
         let loggerConfiguration = MXLogConfiguration()
         loggerConfiguration.logLevel = .verbose
+        // Redirect NSLogs to files only if we are not debugging
+        if isatty(STDERR_FILENO) == 0 {
+            loggerConfiguration.redirectLogsToFiles = true
+        }
         MXLog.configure(loggerConfiguration)
         
         // Benchmark.trackingEnabled = true
@@ -117,6 +135,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 self.tearDownUserSession()
             case (.signingOut, .failedSigningOut, _):
                 self.showLogoutErrorToast()
+            case (.homeScreen, .showSettingsScreen, .settingsScreen):
+                self.presentSettingsScreen()
+            case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
+                self.tearDownDismissedSettingsScreen()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -162,13 +184,33 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             switch action {
             case .logout:
                 self.stateMachine.processEvent(.attemptSignOut)
-            case .selectRoom(let roomIdentifier):
+            case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
+            case .presentSettings:
+                self.stateMachine.processEvent(.showSettingsScreen)
             }
         }
         
         add(childCoordinator: coordinator)
         navigationRouter.setRootModule(coordinator)
+
+        if bugReportService.crashedLastRun {
+            showCrashPopup()
+        }
+    }
+
+    private func presentSettingsScreen() {
+        let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
+                                                       bugReportService: bugReportService)
+        let coordinator = SettingsCoordinator(parameters: parameters)
+
+        add(childCoordinator: coordinator)
+        coordinator.start()
+        navigationRouter.push(coordinator) { [weak self] in
+            guard let self = self else { return }
+
+            self.stateMachine.processEvent(.dismissedSettingsScreen)
+        }
     }
     
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
@@ -206,6 +248,14 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         remove(childCoordinator: coordinator)
     }
+
+    private func tearDownDismissedSettingsScreen() {
+        guard let coordinator = childCoordinators.last as? SettingsCoordinator else {
+            fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
+        }
+
+        remove(childCoordinator: coordinator)
+    }
     
     private func showLoadingIndicator() {
         loadingIndicator = indicatorPresenter.present(.loading(label: "Loading", isInteractionBlocking: true))
@@ -216,10 +266,70 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoginErrorToast() {
-        errorIndicator = indicatorPresenter.present(.success(label: "Failed logging in"))
+        errorIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
     }
     
     private func showLogoutErrorToast() {
         errorIndicator = indicatorPresenter.present(.success(label: "Failed logging out"))
+    }
+
+    private func showCrashPopup() {
+        let alert = UIAlertController(title: nil,
+                                      message: ElementL10n.sendBugReportAppCrashed,
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
+        alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
+            self?.presentBugReportScreen()
+        })
+
+        navigationRouter.present(alert, animated: true)
+    }
+
+    private func processScreenshotDetection(image: UIImage?, error: Error?) {
+        MXLog.debug("[AppCoordinator] processScreenshotDetection: \(String(describing: image)), error: \(String(describing: error))")
+
+        let alert = UIAlertController(title: ElementL10n.screenshotDetectedTitle,
+                                      message: ElementL10n.screenshotDetectedMessage,
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
+        alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
+            self?.presentBugReportScreen(for: image)
+        })
+
+        navigationRouter.present(alert, animated: true)
+    }
+
+    private func presentBugReportScreen(for image: UIImage? = nil) {
+        let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
+                                                        screenshot: image)
+        let coordinator = BugReportCoordinator(parameters: parameters)
+        coordinator.completion = { [weak self, weak coordinator] in
+            guard let self = self, let coordinator = coordinator else { return }
+            self.navigationRouter.dismissModule(animated: true)
+            self.remove(childCoordinator: coordinator)
+        }
+
+        add(childCoordinator: coordinator)
+        coordinator.start()
+        let navController = UINavigationController(rootViewController: coordinator.toPresentable())
+        navController.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
+                                                                                 target: self,
+                                                                                 action: #selector(dismissBugReportScreen))
+        navController.isModalInPresentation = true
+        navigationRouter.present(navController, animated: true)
+    }
+
+    @objc
+    private func dismissBugReportScreen() {
+        MXLog.debug("[AppCoorrdinator] dismissBugReportScreen")
+
+        guard let bugReportCoordinator = childCoordinators.first(where: { $0 is BugReportCoordinator }) else {
+            return
+        }
+
+        navigationRouter.dismissModule()
+        remove(childCoordinator: bugReportCoordinator)
     }
 }

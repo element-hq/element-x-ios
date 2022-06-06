@@ -15,14 +15,34 @@
 //
 
 import Foundation
+import UIKit
 
-struct ToastViewState {
-    enum Style {
-        case loading
-        case success
-        case error
-    }
-    
-    let style: Style
-    let label: String
+// MARK: - Coordinator
+
+// MARK: View model
+
+enum BugReportViewModelAction {
+    case submitStarted
+    case submitFinished
+    case submitFailed(error: Error)
+    case cancel
+}
+
+// MARK: View
+
+struct BugReportViewState: BindableState {
+    var screenshot: UIImage?
+    var bindings: BugReportViewStateBindings
+}
+
+struct BugReportViewStateBindings {
+    var reportText: String
+    var sendingLogsEnabled: Bool
+}
+
+enum BugReportViewAction {
+    case submit
+    case cancel
+    case toggleSendLogs
+    case removeScreenshot
 }

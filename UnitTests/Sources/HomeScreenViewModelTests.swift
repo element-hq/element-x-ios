@@ -19,11 +19,65 @@ import XCTest
 @testable import ElementX
 
 class HomeScreenViewModelTests: XCTestCase {
-    override func setUpWithError() throws {
 
+    var viewModel: HomeScreenViewModelProtocol!
+    var context: HomeScreenViewModelType.Context!
+
+    @MainActor override func setUpWithError() throws {
+        viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
+        context = viewModel.context
     }
 
-    func testInitialState() {
+    @MainActor func testLogout() async throws {
+        var correctResult = false
+        viewModel.callback = { result in
+            switch result {
+            case .logout:
+                correctResult = true
+            default:
+                break
+            }
+        }
 
+        context.send(viewAction: .logout)
+        await Task.yield()
+        XCTAssert(correctResult)
     }
+
+    @MainActor func testSelectRoom() async throws {
+        let mockRoomId = "mock_room_id"
+        var correctResult = false
+        var selectedRoomId = ""
+        viewModel.callback = { result in
+            switch result {
+            case .selectRoom(let roomId):
+                correctResult = true
+                selectedRoomId = roomId
+            default:
+                break
+            }
+        }
+
+        context.send(viewAction: .selectRoom(roomIdentifier: mockRoomId))
+        await Task.yield()
+        XCTAssert(correctResult)
+        XCTAssertEqual(mockRoomId, selectedRoomId)
+    }
+
+    @MainActor func testTapUserAvatar() async throws {
+        var correctResult = false
+        viewModel.callback = { result in
+            switch result {
+            case .tapUserAvatar:
+                correctResult = true
+            default:
+                break
+            }
+        }
+
+        context.send(viewAction: .tapUserAvatar)
+        await Task.yield()
+        XCTAssert(correctResult)
+    }
+
 }

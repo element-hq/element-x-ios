@@ -51,6 +51,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             loadRoomDataForIdentifier(roomIdentifier)
         case .selectRoom(let roomIdentifier):
             callback?(.selectRoom(roomIdentifier: roomIdentifier))
+        case .tapUserAvatar:
+            callback?(.tapUserAvatar)
         }
     }
     

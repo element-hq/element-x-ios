@@ -16,13 +16,27 @@
 
 import Foundation
 
-struct ToastViewState {
-    enum Style {
-        case loading
-        case success
-        case error
-    }
+// MARK: - Coordinator
+
+// MARK: View model
+
+enum SettingsViewModelAction {
+    case reportBug
+    case crash
+}
+
+// MARK: View
+
+struct SettingsViewState: BindableState {
+    var crashButtonVisible: Bool
+    var bindings: SettingsViewStateBindings
+}
+
+struct SettingsViewStateBindings {
     
-    let style: Style
-    let label: String
+}
+
+enum SettingsViewAction {
+    case reportBug
+    case crash
 }

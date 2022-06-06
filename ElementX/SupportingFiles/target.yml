@@ -88,6 +88,8 @@ targets:
     - package: Introspect
     - package: SwiftyBeaver
     - package: SwiftState
+    - package: GZIP
+    - package: Sentry
 
     sources:
     - path: ../Sources

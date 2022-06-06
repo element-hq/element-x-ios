@@ -16,13 +16,10 @@
 
 import Foundation
 
-struct ToastViewState {
-    enum Style {
-        case loading
-        case success
-        case error
-    }
+@MainActor
+protocol SettingsViewModelProtocol {
     
-    let style: Style
-    let label: String
+    var callback: ((SettingsViewModelAction) -> Void)? { get set }
+    @available(iOS 14, *)
+    var context: SettingsViewModelType.Context { get }
 }

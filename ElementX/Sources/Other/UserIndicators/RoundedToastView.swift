@@ -103,6 +103,9 @@ class RoundedToastView: UIView {
         case .success:
             imageView.image = UIImage(systemName: "checkmark.circle")
             return imageView
+        case .error:
+            imageView.image = UIImage(systemName: "x.circle")
+            return imageView
         }
     }
 }

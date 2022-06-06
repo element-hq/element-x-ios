@@ -37,9 +37,14 @@ class UITestsAppCoordinator: Coordinator {
     }
     
     private func mockScreens() -> [MockScreen] {
-        [MockScreen(id: "Login screen", coordinator: LoginScreenCoordinator(parameters: .init())),
-        MockScreen(id: "Simple Screen - Regular", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))),
-        MockScreen(id: "Simple Screen - Upgrade", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .upgrade)))]
+        [
+            MockScreen(id: "Login screen", coordinator: LoginScreenCoordinator(parameters: .init())),
+            MockScreen(id: "Simple Screen - Regular", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))),
+            MockScreen(id: "Simple Screen - Upgrade", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .upgrade))),
+            MockScreen(id: "Settings screen", coordinator: SettingsCoordinator(parameters: .init(navigationRouter: NavigationRouter(navigationController: UINavigationController()), bugReportService: MockBugReportService()))),
+            MockScreen(id: "Bug report screen", coordinator: BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(), screenshot: nil))),
+            MockScreen(id: "Bug report screen with screenshot", coordinator: BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image)))
+        ]
     }
 }
 

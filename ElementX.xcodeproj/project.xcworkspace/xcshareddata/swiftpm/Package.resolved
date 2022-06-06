@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "gzip",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/GZIP",
+      "state" : {
+        "revision" : "c45c8526dad61240a79aaff5b1cf6e082d2b90b2",
+        "version" : "1.3.0"
+      }
+    },
+    {
       "identity" : "keychainaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
@@ -43,6 +52,15 @@
       "state" : {
         "branch" : "main",
         "revision" : "43c88a4b0912a1589c2a28cc9bb2df45c70cdcad"
+      }
+    },
+    {
+      "identity" : "sentry-cocoa",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/getsentry/sentry-cocoa.git",
+      "state" : {
+        "revision" : "afa4cd596e5cf97a797fb9b5c3afeea4add2c7a3",
+        "version" : "7.15.0"
       }
     },
     {
