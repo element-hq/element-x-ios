@@ -30,6 +30,10 @@ type_name:
     warning: 150
     error: 1000
 
+type_body_length:
+  warning: 700
+  error: 1000
+
 custom_rules:
   print_deprecation:
     regex: "\\b(print)\\b"
