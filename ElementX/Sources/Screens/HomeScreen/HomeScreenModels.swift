@@ -20,17 +20,21 @@ import UIKit
 enum HomeScreenViewModelAction {
     case selectRoom(roomIdentifier: String)
     case tapUserAvatar
+    case verifySession
 }
 
 enum HomeScreenViewAction {
     case loadRoomData(roomIdentifier: String)
     case selectRoom(roomIdentifier: String)
     case tapUserAvatar
+    case verifySession
 }
 
 struct HomeScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatar: UIImage?
+    
+    var showSessionVerificationBanner: Bool = false
     
     var rooms: [HomeScreenRoom] = []
     

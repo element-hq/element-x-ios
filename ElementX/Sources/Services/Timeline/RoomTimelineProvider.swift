@@ -18,7 +18,9 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         
-        self.roomProxy.callbacks.sink { [weak self] callback in
+        self.roomProxy.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
             guard let self = self else { return }
             
             switch callback {

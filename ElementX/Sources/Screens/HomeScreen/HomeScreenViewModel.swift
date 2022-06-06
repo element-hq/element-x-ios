@@ -27,7 +27,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
 
     private var roomSummaries: [RoomSummaryProtocol]? {
         didSet {
-            self.state.isLoadingRooms = (roomSummaries?.count ?? 0 == 0)
+            state.isLoadingRooms = (roomSummaries?.count ?? 0 == 0)
         }
     }
     
@@ -51,6 +51,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.selectRoom(roomIdentifier: roomIdentifier))
         case .tapUserAvatar:
             callback?(.tapUserAvatar)
+        case .verifySession:
+            callback?(.verifySession)
+            state.showSessionVerificationBanner = false
         }
     }
     
@@ -84,11 +87,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     func updateWithUserAvatar(_ avatar: UIImage) {
-        self.state.userAvatar = avatar
+        state.userAvatar = avatar
     }
     
     func updateWithUserDisplayName(_ displayName: String) {
-        self.state.userDisplayName = displayName
+        state.userDisplayName = displayName
+    }
+    
+    func showSessionVerificationBanner() {
+        state.showSessionVerificationBanner = true
     }
     
     // MARK: - Private
@@ -105,7 +112,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func buildOrUpdateRoomFromSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {
         let lastMessage = lastMessageFromEventBrief(roomSummary.lastMessage)
         
-        guard var room = self.state.rooms.first(where: { $0.id == roomSummary.id }) else {
+        guard var room = state.rooms.first(where: { $0.id == roomSummary.id }) else {
             return HomeScreenRoom(id: roomSummary.id,
                                   displayName: roomSummary.displayName,
                                   topic: roomSummary.topic,

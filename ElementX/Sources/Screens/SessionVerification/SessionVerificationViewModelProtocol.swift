@@ -15,17 +15,9 @@
 //
 
 import Foundation
-import UIKit
 
 @MainActor
-protocol HomeScreenViewModelProtocol {
-    var callback: ((HomeScreenViewModelAction) -> Void)? { get set }
-    
-    var context: HomeScreenViewModelType.Context { get }
-    
-    func updateWithUserAvatar(_ avatar: UIImage)
-    func updateWithUserDisplayName(_ displayName: String)
-    func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol])
-    
-    func showSessionVerificationBanner()
+protocol SessionVerificationViewModelProtocol {
+    var callback: ((SessionVerificationViewModelAction) -> Void)? { get set }
+    var context: SessionVerificationViewModelType.Context { get }
 }

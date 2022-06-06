@@ -15,17 +15,30 @@
 //
 
 import Foundation
-import UIKit
 
-@MainActor
-protocol HomeScreenViewModelProtocol {
-    var callback: ((HomeScreenViewModelAction) -> Void)? { get set }
-    
-    var context: HomeScreenViewModelType.Context { get }
-    
-    func updateWithUserAvatar(_ avatar: UIImage)
-    func updateWithUserDisplayName(_ displayName: String)
-    func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol])
-    
-    func showSessionVerificationBanner()
+// MARK: View model
+
+enum SessionVerificationViewModelAction {
+    case finished
+}
+
+// MARK: View
+
+struct SessionVerificationViewState: BindableState {
+    var verificationState: SessionVerificationStateMachine.State = .initial
+}
+
+extension SessionVerificationEmoji: Identifiable {
+    var id: String {
+        symbol + description
+    }
+}
+
+enum SessionVerificationViewAction {
+    case start
+    case restart
+    case approve
+    case decline
+    case dismiss
+    case cancel
 }

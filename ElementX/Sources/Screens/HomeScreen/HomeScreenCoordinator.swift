@@ -26,6 +26,7 @@ struct HomeScreenCoordinatorParameters {
 enum HomeScreenCoordinatorAction {
     case presentRoom(roomIdentifier: String)
     case presentSettings
+    case verifySession
 }
 
 final class HomeScreenCoordinator: Coordinator, Presentable {
@@ -66,16 +67,25 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
                 self.callback?(.presentRoom(roomIdentifier: roomIdentifier))
             case .tapUserAvatar:
                 self.callback?(.presentSettings)
+            case .verifySession:
+                self.callback?(.verifySession)
             }
         }
         
         parameters.userSession.clientProxy
             .callbacks
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] action in
-                switch action {
-                case .updatedRoomsList:
+            .sink { [weak self] callback in
+                if case .updatedRoomsList = callback {
                     self?.updateRoomsList()
+                }
+            }.store(in: &cancellables)
+        
+        parameters.userSession.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                if case .sessionVerificationNeeded = callback {
+                    self?.viewModel.showSessionVerificationBanner()
                 }
             }.store(in: &cancellables)
         

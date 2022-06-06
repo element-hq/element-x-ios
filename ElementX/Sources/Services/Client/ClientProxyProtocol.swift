@@ -12,11 +12,13 @@ import Combine
 
 enum ClientProxyCallback {
     case updatedRoomsList
+    case receivedSyncUpdate
 }
 
 enum ClientProxyError: Error {
     case failedRetrievingAvatarURL
     case failedRetrievingDisplayName
+    case failedRetrievingSessionVerificationController
 }
 
 protocol ClientProxyProtocol {
@@ -33,4 +35,6 @@ protocol ClientProxyProtocol {
     func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource
     
     func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data
+    
+    func getSessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 }
