@@ -27,7 +27,7 @@ strings:
 plist:
   inputs: SupportingFiles/Info.plist
   outputs:
-    templateName: runtime-swift5
+    templatePath: Templates/Plists/runtime-swift5-element-info.stencil
     output: InfoPlist.swift
     params:
       enumName: ElementInfoPlist

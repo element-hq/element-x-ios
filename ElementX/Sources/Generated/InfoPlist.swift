@@ -39,11 +39,7 @@ private struct PlistDocument {
   let data: [String: Any]
 
   init(path: String) {
-    guard let url = BundleToken.bundle.url(forResource: path, withExtension: nil),
-      let data = NSDictionary(contentsOf: url) as? [String: Any] else {
-        fatalError("Unable to load PLIST at path: \(path)")
-    }
-    self.data = data
+    self.data = BundleToken.bundle.infoDictionary ?? [:]
   }
 
   subscript<T>(key: String) -> T {
