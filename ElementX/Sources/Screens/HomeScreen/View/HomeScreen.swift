@@ -35,7 +35,7 @@ struct HomeScreen: View {
                     Section("Rooms") {
                         let rooms = context.viewState.unencryptedRooms.filter {
                             guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.contains(searchString) ?? false
+                            return $0.displayName?.localizedStandardContains(searchString) ?? false
                         }
                         
                         ForEach(rooms) { room in
@@ -44,7 +44,7 @@ struct HomeScreen: View {
                         
                         let other = context.viewState.encryptedRooms.filter {
                             guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.contains(searchString) ?? false
+                            return $0.displayName?.localizedStandardContains(searchString) ?? false
                         }
                         
                         if other.count > 0 {
@@ -59,7 +59,7 @@ struct HomeScreen: View {
                     Section("People") {
                         let dms = context.viewState.unencryptedDMs.filter {
                             guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.contains(searchString) ?? false
+                            return $0.displayName?.localizedStandardContains(searchString) ?? false
                         }
                         
                         ForEach(dms) { room in
@@ -68,7 +68,7 @@ struct HomeScreen: View {
                         
                         let other = context.viewState.encryptedDMs.filter {
                             guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.contains(searchString) ?? false
+                            return $0.displayName?.localizedStandardContains(searchString) ?? false
                         }
                         
                         if other.count > 0 {
