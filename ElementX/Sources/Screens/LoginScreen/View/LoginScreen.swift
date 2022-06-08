@@ -43,7 +43,7 @@ struct LoginScreen: View {
                 .onSubmit(submit)
             
             Button("Login", action: submit)
-                .buttonStyle(.primaryAction())
+                .buttonStyle(.elementAction(.xLarge))
                 .disabled(!context.viewState.hasCredentials)
         }
         .padding(.horizontal, 8.0)

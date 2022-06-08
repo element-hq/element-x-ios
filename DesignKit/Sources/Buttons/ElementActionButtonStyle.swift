@@ -17,38 +17,44 @@
 import SwiftUI
 import DesignTokens
 
-public extension ButtonStyle where Self == PrimaryActionButtonStyle {
-    static func primaryAction(customColor: Color? = nil) -> PrimaryActionButtonStyle {
-        PrimaryActionButtonStyle(customColor: customColor)
+public extension ButtonStyle where Self == ElementActionButtonStyle {
+    /// The CTA button style as defined in Compound.
+    /// - Parameter size: The control size to use. Defaults to regular.
+    /// - Parameter customColor: A custom color for the button's background. Defaults to the accent color.
+    static func elementAction(_ size: ElementControlSize = .regular,
+                              color: Color = .element.accent) -> ElementActionButtonStyle {
+        ElementActionButtonStyle(size: size, color: color)
     }
 }
 
-public struct PrimaryActionButtonStyle: ButtonStyle {
+public struct ElementActionButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     @Environment(\.colorScheme) private var colorScheme
     
-    public var customColor: Color?
+    public var size: ElementControlSize
+    public var color: Color
+    
+    private var verticalPadding: CGFloat { size == .xLarge ? 12 : 4 }
+    private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
     
     private var fontColor: Color {
         // Always white unless disabled with a dark theme.
         .white.opacity(colorScheme == .dark && !isEnabled ? 0.3 : 1.0)
     }
     
-    private var backgroundColor: Color {
-        customColor ?? .element.accent
-    }
-    
-    public init(customColor: Color? = nil) {
-        self.customColor = customColor
+    public init(size: ElementControlSize = .xLarge, color: Color = .element.accent) {
+        self.size = size
+        self.color = color
     }
     
     public func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .padding(12.0)
-            .frame(maxWidth: .infinity)
+            .padding(.horizontal, 12)
+            .padding(.vertical, verticalPadding)
+            .frame(maxWidth: maxWidth)
             .foregroundColor(fontColor)
             .font(.element.body)
-            .background(backgroundColor.opacity(backgroundOpacity(when: configuration.isPressed)))
+            .background(color.opacity(backgroundOpacity(when: configuration.isPressed)))
             .cornerRadius(8.0)
     }
     
@@ -58,24 +64,24 @@ public struct PrimaryActionButtonStyle: ButtonStyle {
     }
 }
 
-public struct PrimaryActionButtonStyle_Previews: PreviewProvider {
+public struct ElementActionButtonStyle_Previews: PreviewProvider {
     public static var states: some View {
         VStack {
             Button("Enabled") { /* preview */ }
-                .buttonStyle(PrimaryActionButtonStyle())
+                .buttonStyle(ElementActionButtonStyle())
             
             Button("Disabled") { /* preview */  }
-                .buttonStyle(PrimaryActionButtonStyle())
+                .buttonStyle(ElementActionButtonStyle())
                 .disabled(true)
             
             Button { /* preview */  } label: {
                 Text("Clear BG")
                     .foregroundColor(.element.alert)
             }
-            .buttonStyle(PrimaryActionButtonStyle(customColor: .clear))
+            .buttonStyle(ElementActionButtonStyle(color: .clear))
             
             Button("Red BG") { /* preview */  }
-                .buttonStyle(PrimaryActionButtonStyle(customColor: .element.alert))
+                .buttonStyle(ElementActionButtonStyle(color: .element.alert))
         }
         .padding()
     }

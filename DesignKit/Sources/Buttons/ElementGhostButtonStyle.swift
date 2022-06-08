@@ -17,31 +17,45 @@
 import SwiftUI
 import DesignTokens
 
-public extension ButtonStyle where Self == SecondaryActionButtonStyle {
-    static func secondaryAction(customColor: Color? = nil) -> SecondaryActionButtonStyle {
-        SecondaryActionButtonStyle(customColor: customColor)
+public extension ButtonStyle where Self == ElementGhostButtonStyle {
+    /// The Ghost button style as defined in Compound.
+    /// - Parameter size: The control size to use. Defaults to `regular`.
+    /// - Parameter customColor: A custom color for the label and border. Defaults to the accent color.
+    static func elementGhost(_ size: ElementControlSize = .regular,
+                             color: Color = .element.accent) -> ElementGhostButtonStyle {
+        ElementGhostButtonStyle(size: size, color: color)
     }
 }
 
-public struct SecondaryActionButtonStyle: ButtonStyle {
+public struct ElementGhostButtonStyle: ButtonStyle {
     @Environment(\.isEnabled) private var isEnabled
     
-    public var customColor: Color?
+    public var size: ElementControlSize
+    public var color: Color
     
-    public init(customColor: Color? = nil) {
-        self.customColor = customColor
+    private var verticalPadding: CGFloat { size == .xLarge ? 12 : 4 }
+    private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
+    
+    public init(size: ElementControlSize = .xLarge, color: Color = .element.accent) {
+        self.size = size
+        self.color = color
     }
     
     public func makeBody(configuration: Self.Configuration) -> some View {
         configuration.label
-            .padding(12.0)
-            .frame(maxWidth: .infinity)
-            .foregroundColor(customColor ?? .element.accent)
+            .padding(.horizontal, 12)
+            .padding(.vertical, verticalPadding)
+            .frame(maxWidth: maxWidth)
+            .foregroundColor(color)
             .font(.element.body)
-            .background(RoundedRectangle(cornerRadius: 8)
-                            .strokeBorder()
-                            .foregroundColor(customColor ?? .element.accent))
+            .background(border)
             .opacity(opacity(when: configuration.isPressed))
+    }
+    
+    private var border: some View {
+        RoundedRectangle(cornerRadius: 8)
+            .strokeBorder()
+            .foregroundColor(color)
     }
     
     private func opacity(when isPressed: Bool) -> CGFloat {
@@ -50,7 +64,7 @@ public struct SecondaryActionButtonStyle: ButtonStyle {
     }
 }
 
-public struct SecondaryActionButtonStyle_Previews: PreviewProvider {
+public struct ElementGhostButtonStyle_Previews: PreviewProvider {
     public static var previews: some View {
         Group {
             states
@@ -65,20 +79,20 @@ public struct SecondaryActionButtonStyle_Previews: PreviewProvider {
     public static var states: some View {
         VStack {
             Button("Enabled") { /* preview */ }
-                .buttonStyle(SecondaryActionButtonStyle())
+                .buttonStyle(ElementGhostButtonStyle())
             
             Button("Disabled") { /* preview */ }
-                .buttonStyle(SecondaryActionButtonStyle())
+                .buttonStyle(ElementGhostButtonStyle())
                 .disabled(true)
             
             Button("Red BG") { /* preview */ }
-                .buttonStyle(SecondaryActionButtonStyle(customColor: .element.alert))
+                .buttonStyle(ElementGhostButtonStyle(color: .element.alert))
             
             Button { /* preview */ } label: {
                 Text("Custom")
                     .foregroundColor(.element.primaryContent)
             }
-            .buttonStyle(SecondaryActionButtonStyle(customColor: .element.quaternaryContent))
+            .buttonStyle(ElementGhostButtonStyle(color: .element.quaternaryContent))
         }
         .padding()
     }
