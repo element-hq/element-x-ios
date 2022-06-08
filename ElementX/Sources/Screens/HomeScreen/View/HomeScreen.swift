@@ -95,7 +95,7 @@ struct HomeScreen: View {
                                 Text("Hello, \(displayName)!")
                                     .font(.subheadline)
                                     .fontWeight(.bold)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.primary)
                             }
                         } else {
                             EmptyView()
