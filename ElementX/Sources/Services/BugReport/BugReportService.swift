@@ -41,9 +41,6 @@ class BugReportService: BugReportServiceProtocol {
         //  enable SentrySDK
         SentrySDK.start { options in
             options.dsn = sentryEndpoint
-            #if DEBUG
-            options.debug = true
-            #endif
 
             // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.
