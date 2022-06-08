@@ -35,23 +35,38 @@ struct HomeScreenViewState: BindableState {
     var userAvatar: UIImage?
     
     var rooms: [HomeScreenRoom] = []
+    
     var isLoadingRooms: Bool = false
     
     var unencryptedDMs: [HomeScreenRoom] {
-        Array(rooms.filter { $0.isDirect && !$0.isEncrypted })
+        searchFilteredRooms.filter { $0.isDirect && !$0.isEncrypted }
     }
     
     var encryptedDMs: [HomeScreenRoom] {
-        Array(rooms.filter { $0.isDirect && $0.isEncrypted})
+        searchFilteredRooms.filter { $0.isDirect && $0.isEncrypted}
     }
     
     var unencryptedRooms: [HomeScreenRoom] {
-        Array(rooms.filter { !$0.isDirect && !$0.isEncrypted })
+        searchFilteredRooms.filter { !$0.isDirect && !$0.isEncrypted }
     }
     
     var encryptedRooms: [HomeScreenRoom] {
-        Array(rooms.filter { !$0.isDirect && $0.isEncrypted })
+        searchFilteredRooms.filter { !$0.isDirect && $0.isEncrypted }
     }
+    
+    private var searchFilteredRooms: [HomeScreenRoom] {
+        guard bindings.searchQuery.count > 0 else {
+            return rooms
+        }
+        
+        return rooms.filter { $0.displayName?.localizedStandardContains(bindings.searchQuery) ?? false }
+    }
+    
+    var bindings = HomeScreenViewStateBindings()
+}
+
+struct HomeScreenViewStateBindings {
+    var searchQuery: String = ""
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

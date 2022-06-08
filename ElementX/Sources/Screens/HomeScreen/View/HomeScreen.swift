@@ -19,7 +19,6 @@ import SwiftUI
 struct HomeScreen: View {
     
     @ObservedObject var context: HomeScreenViewModel.Context
-    @State var searchString = ""
     
     // MARK: Views
     
@@ -33,19 +32,11 @@ struct HomeScreen: View {
             } else {
                 List {
                     Section("Rooms") {
-                        let rooms = context.viewState.unencryptedRooms.filter {
-                            guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.localizedStandardContains(searchString) ?? false
-                        }
-                        
-                        ForEach(rooms) { room in
+                        ForEach(context.viewState.unencryptedRooms) { room in
                             RoomCell(room: room, context: context)
                         }
                         
-                        let other = context.viewState.encryptedRooms.filter {
-                            guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.localizedStandardContains(searchString) ?? false
-                        }
+                        let other = context.viewState.encryptedRooms
                         
                         if other.count > 0 {
                             DisclosureGroup("Encrypted") {
@@ -57,19 +48,11 @@ struct HomeScreen: View {
                     }
                     
                     Section("People") {
-                        let dms = context.viewState.unencryptedDMs.filter {
-                            guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.localizedStandardContains(searchString) ?? false
-                        }
-                        
-                        ForEach(dms) { room in
+                        ForEach(context.viewState.unencryptedDMs) { room in
                             RoomCell(room: room, context: context)
                         }
                         
-                        let other = context.viewState.encryptedDMs.filter {
-                            guard !searchString.isEmpty else { return true }
-                            return $0.displayName?.localizedStandardContains(searchString) ?? false
-                        }
+                        let other = context.viewState.encryptedDMs
                         
                         if other.count > 0 {
                             DisclosureGroup("Encrypted") {
@@ -81,7 +64,7 @@ struct HomeScreen: View {
                     }
                 }
                 .listStyle(.plain)
-                .searchable(text: $searchString)
+                .searchable(text: $context.searchQuery)
             }
             
             Spacer()
