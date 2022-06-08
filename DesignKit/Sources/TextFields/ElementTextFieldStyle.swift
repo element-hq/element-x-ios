@@ -58,7 +58,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
             }
             
             configuration
-                .textFieldStyle(BorderedInputFieldStyle(isEditing: isFocused, isError: isError))
+                .textFieldStyle(BorderedInputFieldStyle(isEditing: isFocused, isError: isError, returnKey: nil))
                 .focused($isFocused)
             
             if let footerText = footerText {

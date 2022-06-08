@@ -28,6 +28,7 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
     
     public var isEditing: Bool
     public var isError: Bool
+    public var returnKey: UIReturnKeyType?
     
     private var borderColor: Color {
         guard !isError else { return .element.alert }
@@ -61,9 +62,15 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
         isEditing || isError ? 2.0 : 1.5
     }
     
-    public init(isEditing: Bool = false, isError: Bool = false) {
+    /// Creates the text field style configured as required.
+    /// - Parameters:
+    ///   - isEditing: Whether or not the text field is currently being edited.
+    ///   - isError: Whether or not the text field is currently in the error state.
+    ///   - returnKey: The return key to be used. Pass `nil` for iOS 15+ and use `.submitLabel` instead.
+    public init(isEditing: Bool = false, isError: Bool = false, returnKey: UIReturnKeyType? = .done) {
         self.isEditing = isEditing
         self.isError = isError
+        self.returnKey = returnKey
     }
     
     public func _body(configuration: TextField<_Label>) -> some View {
@@ -78,8 +85,8 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
             .clipShape(rect)
             .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
             .introspectTextField { textField in
-                if #unavailable(iOS 15.0) {
-                    textField.returnKeyType = .done
+                if let returnKey = returnKey {
+                    textField.returnKeyType = returnKey
                 }
                 
                 textField.clearButtonMode = .whileEditing
