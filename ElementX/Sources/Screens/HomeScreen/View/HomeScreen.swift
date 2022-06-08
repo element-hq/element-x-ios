@@ -64,6 +64,7 @@ struct HomeScreen: View {
                     }
                 }
                 .listStyle(.plain)
+                .searchable(text: $context.searchQuery)
             }
             
             Spacer()
