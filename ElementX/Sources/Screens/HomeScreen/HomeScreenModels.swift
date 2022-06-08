@@ -54,12 +54,14 @@ struct HomeScreenViewState: BindableState {
         searchFilteredRooms.filter { !$0.isDirect && $0.isEncrypted }
     }
     
-    private var searchFilteredRooms: [HomeScreenRoom] {
-        guard bindings.searchQuery.count > 0 else {
-            return rooms
+    private var searchFilteredRooms: LazyFilterSequence<LazySequence<[HomeScreenRoom]>.Elements> {
+        guard !bindings.searchQuery.isEmpty else {
+            // This extra filter is fine for now as there are always downstream filters
+            // but if that changes, this approach should be reconsidered.
+            return rooms.lazy.filter { _ in true }
         }
         
-        return rooms.filter { $0.displayName?.localizedStandardContains(bindings.searchQuery) ?? false }
+        return rooms.lazy.filter { $0.displayName?.localizedStandardContains(bindings.searchQuery) ?? false }
     }
     
     var bindings = HomeScreenViewStateBindings()
