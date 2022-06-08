@@ -47,6 +47,8 @@ struct LoginScreen: View {
                 .disabled(!context.viewState.hasCredentials)
         }
         .padding(.horizontal, 8.0)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.element.background.ignoresSafeArea())
         .navigationTitle("Login")
         .navigationBarTitleDisplayMode(.inline)
     }
