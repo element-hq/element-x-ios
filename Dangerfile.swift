@@ -17,9 +17,9 @@ if danger.github.pullRequest.body?.isEmpty ?? true {
 
 // Request a changelog for each app change
 let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
-let hasChangelog = danger.git.modifiedFiles.contains("/changelog.d")
+let changelogFiles = editedFiles.filter { $0.hasPrefix("changelog.d/") }
 
-if editedFiles.count > 0 && !hasChangelog {
+if editedFiles.count > 0 && changelogFiles.isEmpty {
     warn("Please add a changelog.")
 }
 
