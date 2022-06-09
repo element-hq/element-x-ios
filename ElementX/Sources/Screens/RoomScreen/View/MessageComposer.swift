@@ -21,6 +21,10 @@ struct MessageComposer: View {
                 action()
             } label: {
                 Image(uiImage: Asset.Images.timelineComposerSendMessage.image)
+                    .background(Circle()
+                        .foregroundColor(.element.globalWhite)
+                        .padding(2)
+                    )
             }
             .padding(.bottom, 6.0)
             .disabled(disabled)

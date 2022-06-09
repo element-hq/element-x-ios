@@ -49,6 +49,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         mainNavigationController = UINavigationController(rootViewController: splashViewController)
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
+        window.tintColor = .element.accent
         
         navigationRouter = NavigationRouter(navigationController: mainNavigationController)
         

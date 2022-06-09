@@ -16,7 +16,7 @@ struct ElementToggleStyle: ToggleStyle {
             Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")
                 .font(.title3.weight(.regular))
                 .imageScale(.large)
-                .foregroundColor(Color(uiColor: Asset.Colors.elementGreen.color))
+                .foregroundColor(.element.accent)
         }
         .buttonStyle(.plain)
     }

@@ -20,7 +20,6 @@
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Images/app-logo" translatesAutoresizingMaskIntoConstraints="NO" id="ue7-fB-5XS">
                     <rect key="frame" x="87" y="328" width="240" height="240"/>
-                    <color key="tintColor" red="0.050980392156862744" green="0.74117647058823533" blue="0.54509803921568623" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                 </imageView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
