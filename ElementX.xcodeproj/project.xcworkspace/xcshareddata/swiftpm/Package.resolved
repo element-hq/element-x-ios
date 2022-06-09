@@ -19,6 +19,15 @@
       }
     },
     {
+      "identity" : "element-design-tokens",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vector-im/element-design-tokens.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "4aafdc25ca0e322c0de930d4ec86121f5503023e"
+      }
+    },
+    {
       "identity" : "gzip",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/nicklockwood/GZIP",
@@ -59,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "afa4cd596e5cf97a797fb9b5c3afeea4add2c7a3",
-        "version" : "7.15.0"
+        "revision" : "b34ce9048e6b8b082ea6b15e6b50583d46c936ea",
+        "version" : "7.16.0"
       }
     },
     {

@@ -82,6 +82,7 @@ targets:
       
     dependencies:
     - package: MatrixRustSDK
+    - package: DesignKit
     - package: DTCoreText
     - package: KeychainAccess
     - package: Kingfisher

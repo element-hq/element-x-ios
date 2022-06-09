@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -16,30 +16,7 @@
 
 import Foundation
 
-enum LoginScreenViewModelAction {
-    case login((username: String, password: String))
-}
-
-enum LoginScreenViewAction {
-    case login
-}
-
-struct LoginScreenViewState: BindableState {
-    var bindings: LoginScreenViewStateBindings
-    var hasCredentials: Bool { !bindings.username.isEmpty && !bindings.password.isEmpty }
-}
-
-struct LoginScreenViewStateBindings {
-    var username: String
-    var password: String
-}
-
-struct LoginScreenErrorAlertInfo: Identifiable {
-    enum AlertType {
-        case genericFailure
-    }
-    
-    let id: AlertType
-    let title: String
-    let subtitle: String
+public enum ElementControlSize {
+    case regular
+    case xLarge
 }

@@ -15,35 +15,48 @@
 //
 
 import SwiftUI
+import DesignKit
 
 struct LoginScreen: View {
     
     @ObservedObject var context: LoginScreenViewModel.Context
     
+    enum Field { case username, password }
+    @FocusState private var focussedField: Field?
+    
     var body: some View {
-        NavigationView {
-            VStack {
-                TextField("Username", text: $context.username)
-                    .textFieldStyle(.roundedBorder)
-                    .disableAutocorrection(true)
-                    .autocapitalization(.none)
-                SecureField("Password", text: $context.password)
-                    .textFieldStyle(.roundedBorder)
-                
-                Button("Login") {
-                    context.send(viewAction: .login)
-                }
-                .buttonStyle(.borderedProminent)
-                .padding(.horizontal, 50)
-            }
-            .padding(.horizontal, 8.0)
-            .navigationTitle("Login")
-            .navigationBarTitleDisplayMode(.inline)
-            .onSubmit {
-                context.send(viewAction: .login)
-            }
+        VStack {
+            TextField("Username", text: $context.username)
+                .textFieldStyle(.elementInput())
+                .disableAutocorrection(true)
+                .textContentType(.username)
+                .autocapitalization(.none)
+                .focused($focussedField, equals: .username)
+                .submitLabel(.next)
+                .onSubmit { focussedField = .password }
+            
+            SecureField("Password", text: $context.password)
+                .textFieldStyle(.elementInput())
+                .textContentType(.password)
+                .focused($focussedField, equals: .password)
+                .submitLabel(.go)
+                .onSubmit(submit)
+            
+            Button("Login", action: submit)
+                .buttonStyle(.elementAction(.xLarge))
+                .disabled(!context.viewState.hasCredentials)
         }
-        .navigationViewStyle(StackNavigationViewStyle())
+        .padding(.horizontal, 8.0)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.element.background.ignoresSafeArea())
+        .navigationTitle("Login")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    func submit() {
+        guard context.viewState.hasCredentials else { return }
+        context.send(viewAction: .login)
+        focussedField = nil
     }
 }
 
@@ -52,6 +65,9 @@ struct LoginScreen: View {
 struct LoginScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = LoginScreenViewModel()
-        LoginScreen(context: viewModel.context)
+        NavigationView {
+            LoginScreen(context: viewModel.context)
+        }
+        .navigationViewStyle(.stack)
     }
 }

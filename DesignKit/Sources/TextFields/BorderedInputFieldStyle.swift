@@ -28,22 +28,15 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
     
     public var isEditing: Bool
     public var isError: Bool
+    public var returnKey: UIReturnKeyType?
     
     private var borderColor: Color {
-        if isError {
-            return .element.alert
-        } else if isEditing {
-            return .element.accent
-        } else {
-            return .element.quinaryContent
-        }
+        guard !isError else { return .element.alert }
+        return isEditing ? .element.accent : .element.quinaryContent
     }
     
     private var accentColor: Color {
-        if isError {
-            return .element.alert
-        }
-        return .element.accent
+        isError ? .element.alert : .element.accent
     }
     
     private var textColor: Color {
@@ -62,16 +55,22 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
     }
     
     private var placeholderColor: Color {
-        return .element.tertiaryContent
+        .element.tertiaryContent
     }
         
     private var borderWidth: CGFloat {
-        return isEditing || isError ? 2.0 : 1.5
+        isEditing || isError ? 2.0 : 1.5
     }
     
-    public init(isEditing: Bool = false, isError: Bool = false) {
+    /// Creates the text field style configured as required.
+    /// - Parameters:
+    ///   - isEditing: Whether or not the text field is currently being edited.
+    ///   - isError: Whether or not the text field is currently in the error state.
+    ///   - returnKey: The return key to be used. Pass `nil` for iOS 15+ and use `.submitLabel` instead.
+    public init(isEditing: Bool = false, isError: Bool = false, returnKey: UIReturnKeyType? = .done) {
         self.isEditing = isEditing
         self.isError = isError
+        self.returnKey = returnKey
     }
     
     public func _body(configuration: TextField<_Label>) -> some View {
@@ -80,13 +79,16 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
             .font(.element.callout)
             .foregroundColor(textColor)
             .accentColor(accentColor)
-            .frame(height: 48.0)
+            .padding(.vertical, 12.0)
             .padding(.horizontal, 8.0)
             .background(backgroundColor)
             .clipShape(rect)
             .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
             .introspectTextField { textField in
-                textField.returnKeyType = .done
+                if let returnKey = returnKey {
+                    textField.returnKeyType = returnKey
+                }
+                
                 textField.clearButtonMode = .whileEditing
                 textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
                                                                      attributes: [NSAttributedString.Key.foregroundColor: UIColor(placeholderColor)])
