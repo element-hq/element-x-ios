@@ -19,8 +19,10 @@ import DesignTokens
 
 @available(iOS 15.0, *)
 public extension TextFieldStyle where Self == ElementTextFieldStyle {
-    static func elementInput(isError: Bool = false, labelText: String? = nil, footerText: String? = nil) -> ElementTextFieldStyle {
-        ElementTextFieldStyle(isError: isError, labelText: labelText, footerText: footerText)
+    static func elementInput(labelText: String? = nil,
+                             footerText: String? = nil,
+                             isError: Bool = false) -> ElementTextFieldStyle {
+        ElementTextFieldStyle(labelText: labelText, footerText: footerText, isError: isError)
     }
 }
 
@@ -30,9 +32,9 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     @Environment(\.colorScheme) private var colorScheme
     
     @FocusState private var isFocused: Bool
-    public let isError: Bool
     public let labelText: String?
     public let footerText: String?
+    public let isError: Bool
     
     private var labelColor: Color {
         guard colorScheme == .light else { return .element.tertiaryContent }
@@ -43,14 +45,14 @@ public struct ElementTextFieldStyle: TextFieldStyle {
         isError ? .element.alert : .element.tertiaryContent
     }
     
-    public init(isError: Bool = false, labelText: String? = nil, footerText: String? = nil) {
-        self.isError = isError
+    public init(labelText: String? = nil, footerText: String? = nil, isError: Bool = false) {
         self.labelText = labelText
         self.footerText = footerText
+        self.isError = isError
     }
     
     public func _body(configuration: TextField<_Label>) -> some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 8) {
             if let labelText = labelText {
                 Text(labelText)
                     .font(.element.subheadline)
@@ -66,6 +68,33 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                     .font(.element.footnote)
                     .foregroundColor(footerColor)
             }
+        }
+    }
+}
+
+@available(iOS 15.0, *)
+struct ElementTextFieldStyle_Previews: PreviewProvider {
+    public static var states: some View {
+        VStack(spacing: 12) {
+            TextField("Placeholder", text: .constant(""))
+                .textFieldStyle(.elementInput(labelText: "Label", footerText: "Footer"))
+            TextField("Placeholder", text: .constant("Input text"))
+                .textFieldStyle(.elementInput(labelText: "Title", footerText: "Footer"))
+            TextField("Placeholder", text: .constant("Bad text"))
+                .textFieldStyle(.elementInput(labelText: "Title", footerText: "Footer", isError: true))
+            TextField("Placeholder", text: .constant(""))
+                .textFieldStyle(.elementInput(labelText: "Title", footerText: "Footer"))
+                .disabled(true)
+        }
+        .padding()
+    }
+    
+    public static var previews: some View {
+        Group {
+            states
+                .preferredColorScheme(.light)
+            states
+                .preferredColorScheme(.dark)
         }
     }
 }

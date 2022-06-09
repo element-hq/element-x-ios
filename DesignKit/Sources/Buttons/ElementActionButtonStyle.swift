@@ -20,7 +20,7 @@ import DesignTokens
 public extension ButtonStyle where Self == ElementActionButtonStyle {
     /// The CTA button style as defined in Compound.
     /// - Parameter size: The control size to use. Defaults to regular.
-    /// - Parameter customColor: A custom color for the button's background. Defaults to the accent color.
+    /// - Parameter color: The color of the button's background. Defaults to the accent color.
     static func elementAction(_ size: ElementControlSize = .regular,
                               color: Color = .element.accent) -> ElementActionButtonStyle {
         ElementActionButtonStyle(size: size, color: color)
@@ -42,7 +42,7 @@ public struct ElementActionButtonStyle: ButtonStyle {
         .white.opacity(colorScheme == .dark && !isEnabled ? 0.3 : 1.0)
     }
     
-    public init(size: ElementControlSize = .xLarge, color: Color = .element.accent) {
+    public init(size: ElementControlSize = .regular, color: Color = .element.accent) {
         self.size = size
         self.color = color
     }

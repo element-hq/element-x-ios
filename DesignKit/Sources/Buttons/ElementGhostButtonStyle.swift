@@ -20,7 +20,7 @@ import DesignTokens
 public extension ButtonStyle where Self == ElementGhostButtonStyle {
     /// The Ghost button style as defined in Compound.
     /// - Parameter size: The control size to use. Defaults to `regular`.
-    /// - Parameter customColor: A custom color for the label and border. Defaults to the accent color.
+    /// - Parameter color: The color of the label and border. Defaults to the accent color.
     static func elementGhost(_ size: ElementControlSize = .regular,
                              color: Color = .element.accent) -> ElementGhostButtonStyle {
         ElementGhostButtonStyle(size: size, color: color)
@@ -36,7 +36,7 @@ public struct ElementGhostButtonStyle: ButtonStyle {
     private var verticalPadding: CGFloat { size == .xLarge ? 12 : 4 }
     private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
     
-    public init(size: ElementControlSize = .xLarge, color: Color = .element.accent) {
+    public init(size: ElementControlSize = .regular, color: Color = .element.accent) {
         self.size = size
         self.color = color
     }
