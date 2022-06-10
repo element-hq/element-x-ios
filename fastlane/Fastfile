@@ -55,6 +55,8 @@ lane :build_and_publish_on_github do
 
   release_to_github()
 
+  upload_dsyms_to_sentry()
+
 end
 
 lane :ios_adhoc do
@@ -144,7 +146,7 @@ end
 
 desc "Create GitHub Release"
 private_lane :release_to_github do
-  api_token = "" #ENV["GITHUB_TOKEN"]
+  api_token = ENV["GITHUB_TOKEN"]
   UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
 
   # Get the Diawi link from Diawi action shared value
@@ -184,4 +186,17 @@ private_lane :update_app_icon do |options|
       sh("convert -background '#0008' -fill white -gravity center -size '#{caption_width}'x'#{caption_height}' caption:'#{caption_text}' '#{file_name}' +swap -gravity south -composite '#{file_name}'")
     end
   end
+end
+
+private_lane :upload_dsyms_to_sentry do
+  auth_token = ENV["SENTRY_AUTH_TOKEN"]
+  UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
+
+  sentry_upload_dif(
+    auth_token: auth_token,
+    org_slug: 'element',
+    project_slug: 'elementx',
+    url: 'https://sentry.tools.element.io/',
+    path: './build/ElementX.app.dSYM.zip',
+  )
 end
