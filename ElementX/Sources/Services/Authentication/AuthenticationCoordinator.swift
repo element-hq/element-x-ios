@@ -49,15 +49,7 @@ class AuthenticationCoordinator: Coordinator {
         let availableAccessTokens = keychainController.accessTokens()
         
         guard let usernameTokenTuple = availableAccessTokens.first else {
-            startNewLoginFlow { result in
-                switch result {
-                case .success:
-                    self.delegate?.authenticationCoordinatorDidSetupClientProxy(self)
-                case .failure(let error):
-                    self.delegate?.authenticationCoordinator(self, didFailWithError: error)
-                    MXLog.error("Failed logging in user with error: \(error)")
-                }
-            }
+            showSplashScreen()
             return
         }
         
@@ -90,16 +82,43 @@ class AuthenticationCoordinator: Coordinator {
     
     // MARK: - Private
     
+    private func showSplashScreen() {
+        let coordinator = SplashScreenCoordinator()
+        
+        coordinator.callback = { [weak self] action in
+            guard let self = self else { return }
+            switch action {
+            case .login:
+                self.startNewLoginFlow { result in
+                    switch result {
+                    case .success:
+                        self.delegate?.authenticationCoordinatorDidSetupClientProxy(self)
+                    case .failure(let error):
+                        self.delegate?.authenticationCoordinator(self, didFailWithError: error)
+                        MXLog.error("Failed logging in user with error: \(error)")
+                    }
+                }
+            case .register:
+                fatalError("Not implemented")
+            }
+        }
+        
+        add(childCoordinator: coordinator)
+        navigationRouter.setRootModule(coordinator)
+        
+        coordinator.start()
+    }
+    
     private func startNewLoginFlow(_ completion: @escaping (Result<(), AuthenticationCoordinatorError>) -> Void) {
         let parameters = LoginScreenCoordinatorParameters()
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
-        coordinator.callback = { [weak self, weak coordinator] result in
+        coordinator.callback = { [weak self, weak coordinator] action in
             guard let self = self, let coordinator = coordinator else {
                 return
             }
             
-            switch result {
+            switch action {
             case .login(let result):
                 Task {
                     switch await self.login(username: result.username, password: result.password) {
