@@ -31,7 +31,7 @@ struct EventBasedTimelineView: View {
                 Image(uiImage: avatar)
                     .resizable()
                     .scaledToFill()
-                    .overlay(Circle().stroke(Color(uiColor: Asset.Colors.elementGreen.color)))
+                    .overlay(Circle().stroke(Color.element.accent))
             } else {
                 PlaceholderAvatarImage(firstCharacter: String(firstLetter))
             }

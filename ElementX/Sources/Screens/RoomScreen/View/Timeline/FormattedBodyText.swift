@@ -29,7 +29,7 @@ struct FormattedBodyText: View {
                 }
             }
         }
-        .tint(Color(uiColor: Asset.Colors.elementGreen.color))
+        .tint(.element.accent)
     }
 }
 

@@ -22,7 +22,7 @@ struct PlaceholderAvatarImage: View {
     
     var body: some View {
         ZStack {
-            Color(.sRGB, red: 0.05, green: 0.74, blue: 0.55, opacity: 1.0)
+            Color.element.accent
             Text(firstCharacter)
                 .padding(4)
                 .foregroundColor(.white)

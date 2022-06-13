@@ -32,7 +32,7 @@ struct MessageComposerTextField: View {
     }
     
     private var borderColor: Color {
-        Color(uiColor: Asset.Colors.elementGreen.color)
+        .element.accent
     }
     
     private var borderWidth: CGFloat {
