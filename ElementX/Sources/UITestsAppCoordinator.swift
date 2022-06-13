@@ -19,6 +19,7 @@ class UITestsAppCoordinator: Coordinator {
         mainNavigationController = UINavigationController()
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
+        window.tintColor = .element.accent
         
         let screens = mockScreens()
         let rootView = UITestsRootView(mockScreens: screens) { id in
@@ -43,7 +44,8 @@ class UITestsAppCoordinator: Coordinator {
             MockScreen(id: "Simple Screen - Upgrade", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .upgrade))),
             MockScreen(id: "Settings screen", coordinator: SettingsCoordinator(parameters: .init(navigationRouter: NavigationRouter(navigationController: UINavigationController()), bugReportService: MockBugReportService()))),
             MockScreen(id: "Bug report screen", coordinator: BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(), screenshot: nil))),
-            MockScreen(id: "Bug report screen with screenshot", coordinator: BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image)))
+            MockScreen(id: "Bug report screen with screenshot", coordinator: BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image))),
+            MockScreen(id: "Splash Screen", coordinator: SplashScreenCoordinator())
         ]
     }
 }
