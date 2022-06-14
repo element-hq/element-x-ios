@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import Kingfisher
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let window: UIWindow
@@ -19,8 +18,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private let navigationRouter: NavigationRouter
     
-    private let keychainController: KeychainControllerProtocol
-    private let authenticationCoordinator: AuthenticationCoordinator!
+    private let userSessionStore: UserSessionStore
     
     private var userSession: UserSession!
     
@@ -61,14 +59,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("Should have a valid bundle identifier at this point")
         }
         
-        keychainController = KeychainController(identifier: bundleIdentifier)
-        authenticationCoordinator = AuthenticationCoordinator(keychainController: keychainController,
-                                                              navigationRouter: navigationRouter)
+        userSessionStore = UserSessionStore(bundleIdentifier: bundleIdentifier)
 
         screenshotDetector = ScreenshotDetector()
         screenshotDetector.callback = processScreenshotDetection
-
-        authenticationCoordinator.delegate = self
         
         setupStateMachine()
         
@@ -84,7 +78,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     func start() {
-        stateMachine.processEvent(.start)
+        self.window.makeKeyAndVisible()
+        stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
     
     // MARK: - AuthenticationCoordinatorDelegate
@@ -93,16 +88,14 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         stateMachine.processEvent(.attemptedSignIn)
     }
     
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didFailWithError error: AuthenticationCoordinatorError) {
-        stateMachine.processEvent(.failedSigningIn)
-    }
-    
-    func authenticationCoordinatorDidSetupClientProxy(_ authenticationCoordinator: AuthenticationCoordinator) {
+    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSession) {
+        self.userSession = userSession
+        remove(childCoordinator: authenticationCoordinator)
         stateMachine.processEvent(.succeededSigningIn)
     }
     
-    func authenticationCoordinatorDidTearDownClientProxy(_ authenticationCoordinator: AuthenticationCoordinator) {
-        stateMachine.processEvent(.succeededSigningOut)
+    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didFailWithError error: AuthenticationCoordinatorError) {
+        stateMachine.processEvent(.failedSigningIn)
     }
     
     // MARK: - Private
@@ -111,27 +104,36 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self = self else { return }
-                
+            
             switch (context.fromState, context.event, context.toState) {
-            case (.initial, .start, .signedOut):
-                self.window.makeKeyAndVisible()
-                self.authenticationCoordinator.start()
+            case (.initial, .startWithAuthentication, .signedOut):
+                self.showAuthentication()
             case (.signedOut, .attemptedSignIn, .signingIn):
                 self.showLoadingIndicator()
             case (.signingIn, .failedSigningIn, .signedOut):
                 self.hideLoadingIndicator()
                 self.showLoginErrorToast()
-            case (.signingIn, .succeededSigningIn, .signedIn):
+            case (.signingIn, .succeededSigningIn, .homeScreen):
                 self.hideLoadingIndicator()
-                self.setupUserSession()
-            case (.signedIn, .showHomeScreen, .homeScreen):
                 self.presentHomeScreen()
+            
+            case (.initial, .startWithExistingSession, .restoringSession):
+                self.showLoadingIndicator()
+                self.restoreUserSession()
+            case (.restoringSession, .failedRestoringSession, .signedOut):
+                self.hideLoadingIndicator()
+                self.showLoginErrorToast()
+            case (.restoringSession, .succeededRestoringSession, .homeScreen):
+                self.hideLoadingIndicator()
+                self.presentHomeScreen()
+            
             case(_, _, .roomScreen(let roomId)):
                 self.presentRoomWithIdentifier(roomId)
             case(.roomScreen, .dismissedRoomScreen, .homeScreen):
                 self.tearDownDismissedRoomScreen()
             case (_, .attemptSignOut, .signingOut):
-                self.authenticationCoordinator.logout()
+                self.userSessionStore.logout(userSession: self.userSession)
+                self.stateMachine.processEvent(.succeededSigningOut)
             case (.signingOut, .succeededSigningOut, .signedOut):
                 self.tearDownUserSession()
             case (.signingOut, .failedSigningOut, _):
@@ -151,15 +153,26 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     // swiftlint:enable cyclomatic_complexity
     
-    private func setupUserSession() {
-        guard let clientProxy = authenticationCoordinator.clientProxy else {
-            fatalError("User session should be setup at this point")
+    private func restoreUserSession() {
+        Task {
+            switch await userSessionStore.restoreUserSession() {
+            case .success(let userSession):
+                self.userSession = userSession
+                stateMachine.processEvent(.succeededRestoringSession)
+            case .failure:
+                MXLog.error("Failed to restore an existing session.")
+                stateMachine.processEvent(.failedRestoringSession)
+            }
         }
+    }
+    
+    private func showAuthentication() {
+        let coordinator = AuthenticationCoordinator(userSessionStore: userSessionStore,
+                                                    navigationRouter: navigationRouter)
+        coordinator.delegate = self
         
-        userSession = .init(clientProxy: clientProxy,
-                            mediaProvider: MediaProvider(clientProxy: clientProxy, imageCache: ImageCache.default))
-        
-        stateMachine.processEvent(.showHomeScreen)
+        add(childCoordinator: coordinator)
+        coordinator.start()
     }
     
     private func tearDownUserSession() {
@@ -170,7 +183,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         userSession = nil
         
         mainNavigationController.setViewControllers([splashViewController], animated: false)
-        authenticationCoordinator.start()
+        
+        showAuthentication()
     }
     
     private func presentHomeScreen() {
@@ -259,7 +273,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoadingIndicator() {
-        loadingIndicator = indicatorPresenter.present(.loading(label: "Loading", isInteractionBlocking: true))
+        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
     }
     
     private func hideLoadingIndicator() {
