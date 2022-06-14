@@ -18,8 +18,8 @@ class AppCoordinatorStateMachine {
         case signedOut
         /// Processing sign in request
         case signingIn
-        /// Successfully signed in
-        case signedIn
+        /// Opening an existing session.
+        case restoringSession
         /// Showing the home screen
         case homeScreen
         /// Showing the settings screen
@@ -33,22 +33,29 @@ class AppCoordinatorStateMachine {
 
     /// Events that can be triggered on the AppCoordinator state machine
     enum Event: EventType {
-        /// Start AppCoordinator flows, move from initial
-        case start
+        /// Start the `AppCoordinator` by showing authentication.
+        case startWithAuthentication
         /// A sign in request has been started
         case attemptedSignIn
-        /// Signing it succeeded
+        /// Signing in succeeded
         case succeededSigningIn
         /// Signing in failed
         case failedSigningIn
-        /// Request home screen presentation
-        case showHomeScreen
+        
+        /// Start the `AppCoordinator` by restoring an existing account.
+        case startWithExistingSession
+        /// Restoring session succeeded.
+        case succeededRestoringSession
+        /// Restoring session failed.
+        case failedRestoringSession
+        
         /// Request sign out
         case attemptSignOut
         /// Signing out succeeded
         case succeededSigningOut
         /// Signing out failed
         case failedSigningOut
+        
         /// Request presentation for a particular room
         /// - Parameter roomId:the room identifier
         case showRoomScreen(roomId: String)
@@ -64,14 +71,14 @@ class AppCoordinatorStateMachine {
     
     init() {
         stateMachine = StateMachine(state: .initial) { machine in
-            machine.addRoutes(event: .start, transitions: [ .initial => .signedOut ])
-            
+            machine.addRoutes(event: .startWithAuthentication, transitions: [ .initial => .signedOut ])
             machine.addRoutes(event: .attemptedSignIn, transitions: [ .signedOut => .signingIn ])
-            
-            machine.addRoutes(event: .succeededSigningIn, transitions: [ .signingIn => .signedIn ])
+            machine.addRoutes(event: .succeededSigningIn, transitions: [ .signingIn => .homeScreen ])
             machine.addRoutes(event: .failedSigningIn, transitions: [ .signingIn => .signedOut ])
             
-            machine.addRoutes(event: .showHomeScreen, transitions: [ .signedIn => .homeScreen ])
+            machine.addRoutes(event: .startWithExistingSession, transitions: [ .initial => .restoringSession ])
+            machine.addRoutes(event: .succeededRestoringSession, transitions: [ .restoringSession => .homeScreen ])
+            machine.addRoutes(event: .failedRestoringSession, transitions: [ .restoringSession => .signedOut ])
             
             machine.addRoutes(event: .attemptSignOut, transitions: [ .homeScreen => .signingOut ])
             
