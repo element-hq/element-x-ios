@@ -51,7 +51,7 @@ class UserSessionStore {
             MXLog.error("Failed restoring login with error: \(error)")
             
             // On any restoration failure reset the token and restart
-            self.keychainController.removeAllAccessTokens()
+            keychainController.removeAllAccessTokens()
             deleteBaseDirectory(for: usernameTokenTuple.username)
             
             return .failure(error)
@@ -107,7 +107,7 @@ class UserSessionStore {
         
         let clientProxy = ClientProxy(client: client)
         
-        return .success((clientProxy))
+        return .success(clientProxy)
     }
     
     func baseDirectoryPath(for username: String) -> String {

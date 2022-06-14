@@ -15,10 +15,9 @@
 //
 
 import XCTest
-import Combine
 
 @testable import ElementX
 
 class SplashScreenViewModelTests: XCTestCase {
-    
+    // Nothing to test, the view model has no mutable state.
 }

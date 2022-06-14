@@ -16,14 +16,13 @@
 
 import SwiftUI
 
-extension String {
-    func tinting(_ character: Character, color: Color = .accentColor) -> AttributedString {
-        var string = AttributedString(self)
-        let characterView = string.characters
-        for index in characterView.indices where characterView[index] == character {
-            string[index..<characterView.index(after: index)].foregroundColor = color
-        }
-        
-        return string
-    }
+/// Metrics used across the entire onboarding flow.
+struct AuthenticationMetrics {
+    static let maxContentWidth: CGFloat = 600
+    static let maxContentHeight: CGFloat = 750
+    
+    /// The padding used between the top of the main content and the navigation bar.
+    static let topPaddingToNavigationBar: CGFloat = 16
+    /// The width/height used for the main icon shown in most of the screens.
+    static let iconSize: CGFloat = 90
 }
