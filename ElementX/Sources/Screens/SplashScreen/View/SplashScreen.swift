@@ -90,7 +90,7 @@ struct SplashScreen: View {
                 
                 buttons
                     .padding(.horizontal, 16)
-                    .frame(maxWidth: OnboardingMetrics.maxContentWidth)
+                    .frame(maxWidth: AuthenticationMetrics.maxContentWidth)
                 Spacer()
             }
             .background(ViewFrameReader(frame: $overlayFrame))
@@ -109,33 +109,20 @@ struct SplashScreen: View {
     
     // MARK: - Animation
     
-    func nextPage() {
-        // Wrap back round to the first page index when reaching the end.
-        viewModel.pageIndex = (viewModel.pageIndex + 1) % viewModel.viewState.content.count
-    }
-    func previousPage() {
-        // Prevent the hidden page at index -1 from being shown.
-        viewModel.pageIndex = max(0, (viewModel.pageIndex - 1))
-    }
-    func hiddenPage() {
-        // Hidden page for a nicer animation when looping back to the start.
-        viewModel.pageIndex = -1
-    }
-    
     /// Starts the animation timer for an automatic carousel effect.
     private func startTimer() {
         guard pageTimer == nil else { return }
         
         pageTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
             if viewModel.pageIndex == pageCount - 1 {
-                hiddenPage()
+                showHiddenPage()
                 
                 withAnimation(.easeInOut(duration: 0.7)) {
-                    nextPage()
+                    showNextPage()
                 }
             } else {
                 withAnimation(.easeInOut(duration: 0.7)) {
-                    nextPage()
+                    showNextPage()
                 }
             }
         }
@@ -147,6 +134,21 @@ struct SplashScreen: View {
         
         self.pageTimer = nil
         pageTimer.invalidate()
+    }
+    
+    private func showNextPage() {
+        // Wrap back round to the first page index when reaching the end.
+        viewModel.pageIndex = (viewModel.pageIndex + 1) % viewModel.viewState.content.count
+    }
+    
+    private func showPreviousPage() {
+        // Prevent the hidden page at index -1 from being shown.
+        viewModel.pageIndex = max(0, (viewModel.pageIndex - 1))
+    }
+    
+    private func showHiddenPage() {
+        // Hidden page for a nicer animation when looping back to the start.
+        viewModel.pageIndex = -1
     }
     
     // MARK: - Gestures
@@ -188,9 +190,9 @@ struct SplashScreen: View {
         
         withAnimation(.easeInOut(duration: 0.2)) {
             if drag.predictedEndTranslation.width < -viewSize.width / 2 {
-                nextPage()
+                showNextPage()
             } else if drag.predictedEndTranslation.width > viewSize.width / 2 {
-                previousPage()
+                showPreviousPage()
             }
             
             dragOffset = 0

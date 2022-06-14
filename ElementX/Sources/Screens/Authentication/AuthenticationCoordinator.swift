@@ -54,19 +54,21 @@ class AuthenticationCoordinator: Coordinator {
             guard let self = self else { return }
             switch action {
             case .login:
-                self.startNewLoginFlow()
+                self.showLoginScreen()
             case .register:
                 fatalError("Not implemented")
             }
         }
         
-        add(childCoordinator: coordinator)
-        navigationRouter.setRootModule(coordinator)
-        
         coordinator.start()
+        add(childCoordinator: coordinator)
+        
+        navigationRouter.setRootModule(coordinator) { [weak self] in
+            self?.remove(childCoordinator: coordinator)
+        }
     }
     
-    private func startNewLoginFlow() {
+    private func showLoginScreen() {
         let parameters = LoginScreenCoordinatorParameters()
         let coordinator = LoginScreenCoordinator(parameters: parameters)
         
@@ -91,10 +93,12 @@ class AuthenticationCoordinator: Coordinator {
             }
         }
         
-        add(childCoordinator: coordinator)
-        navigationRouter.push(coordinator)
-        
         coordinator.start()
+        add(childCoordinator: coordinator)
+        
+        navigationRouter.push(coordinator) { [weak self] in
+            self?.remove(childCoordinator: coordinator)
+        }
     }
     
     private func login(username: String, password: String) async -> Result<UserSession, AuthenticationCoordinatorError> {

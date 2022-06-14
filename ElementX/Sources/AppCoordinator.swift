@@ -78,7 +78,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     func start() {
-        self.window.makeKeyAndVisible()
+        window.makeKeyAndVisible()
         stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
     

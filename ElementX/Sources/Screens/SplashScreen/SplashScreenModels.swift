@@ -65,7 +65,7 @@ struct SplashScreenViewState: BindableState, CustomDebugStringConvertible {
         let locale = Locale.current
         let page4Title = locale.identifier.hasPrefix("en") ? "Cut the slack from teams." : ElementL10n.ftueAuthCarouselWorkplaceTitle
         
-        self.content = [
+        content = [
             SplashScreenPageContent(title: ElementL10n.ftueAuthCarouselSecureTitle.tinting("."),
                                               message: ElementL10n.ftueAuthCarouselSecureBody,
                                               image: Asset.Images.splashScreenPage1,
@@ -83,7 +83,7 @@ struct SplashScreenViewState: BindableState, CustomDebugStringConvertible {
                                               image: Asset.Images.splashScreenPage4,
                                               gradient: Gradient(colors: [Constants.gradientColors[3], Constants.gradientColors[4]]))
         ]
-        self.bindings = SplashScreenBindings()
+        bindings = SplashScreenBindings()
     }
 }
 
