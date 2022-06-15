@@ -22,6 +22,8 @@ class UITestsAppCoordinator: Coordinator {
         window.tintColor = .element.accent
         
         let screens = mockScreens()
+        screens.forEach { $0.coordinator.start() }
+        
         let rootView = UITestsRootView(mockScreens: screens) { id in
             guard let screen = screens.first(where: { $0.id == id }) else {
                 fatalError()
@@ -52,5 +54,5 @@ class UITestsAppCoordinator: Coordinator {
 
 struct MockScreen: Identifiable {
     let id: String
-    let coordinator: Presentable
+    let coordinator: Coordinator & Presentable
 }

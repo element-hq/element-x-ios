@@ -16,13 +16,11 @@
 
 import SwiftUI
 
-/// Metrics used across the entire onboarding flow.
-struct AuthenticationMetrics {
+/// Standard constants used across the app's UI.
+struct UIConstants {
     static let maxContentWidth: CGFloat = 600
     static let maxContentHeight: CGFloat = 750
     
     /// The padding used between the top of the main content and the navigation bar.
     static let topPaddingToNavigationBar: CGFloat = 16
-    /// The width/height used for the main icon shown in most of the screens.
-    static let iconSize: CGFloat = 90
 }

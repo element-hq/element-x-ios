@@ -40,7 +40,7 @@ enum SplashScreenViewModelAction {
 
 // MARK: View
 
-struct SplashScreenViewState: BindableState, CustomDebugStringConvertible {
+struct SplashScreenViewState: BindableState {
     private enum Constants {
         static let gradientColors = [
             Color(red: 0.95, green: 0.98, blue: 0.96),
@@ -54,11 +54,6 @@ struct SplashScreenViewState: BindableState, CustomDebugStringConvertible {
     /// An array containing all content of the carousel pages
     let content: [SplashScreenPageContent]
     var bindings: SplashScreenBindings
-    
-    /// Custom debug description to reduce noise in the logs.
-    var debugDescription: String {
-        "SplashScreenViewState at page \(bindings.pageIndex)."
-    }
     
     init() {
         // The pun doesn't translate, so we only use it for English.

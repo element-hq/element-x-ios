@@ -19,7 +19,7 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
     func authenticationCoordinatorDidStartLoading(_ authenticationCoordinator: AuthenticationCoordinator)
     
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator,
-                                   didLoginWithSession userSession: UserSession)
+                                   didLoginWithSession userSession: UserSessionProtocol)
     
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator,
                                    didFailWithError error: AuthenticationCoordinatorError)
@@ -27,7 +27,7 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 
 class AuthenticationCoordinator: Coordinator {
     
-    private let userSessionStore: UserSessionStore
+    private let userSessionStore: UserSessionStoreProtocol
     private let navigationRouter: NavigationRouter
     
     private(set) var clientProxy: ClientProxyProtocol?
@@ -35,7 +35,7 @@ class AuthenticationCoordinator: Coordinator {
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
-    init(userSessionStore: UserSessionStore,
+    init(userSessionStore: UserSessionStoreProtocol,
          navigationRouter: NavigationRouter) {
         self.userSessionStore = userSessionStore
         self.navigationRouter = navigationRouter

@@ -18,9 +18,9 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private let navigationRouter: NavigationRouter
     
-    private let userSessionStore: UserSessionStore
+    private let userSessionStore: UserSessionStoreProtocol
     
-    private var userSession: UserSession!
+    private var userSession: UserSessionProtocol!
     
     private let memberDetailProviderManager: MemberDetailProviderManager
 
@@ -88,7 +88,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         stateMachine.processEvent(.attemptedSignIn)
     }
     
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSession) {
+    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         remove(childCoordinator: authenticationCoordinator)
         stateMachine.processEvent(.succeededSigningIn)
@@ -100,14 +100,14 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     // MARK: - Private
     
-    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable cyclomatic_complexity function_body_length
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self = self else { return }
             
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
-                self.showAuthentication()
+                self.startAuthentication()
             case (.signedOut, .attemptedSignIn, .signingIn):
                 self.showLoadingIndicator()
             case (.signingIn, .failedSigningIn, .signedOut):
@@ -151,7 +151,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("Failed transition with context: \(context)")
         }
     }
-    // swiftlint:enable cyclomatic_complexity
+    // swiftlint:enable cyclomatic_complexity function_body_length
     
     private func restoreUserSession() {
         Task {
@@ -166,7 +166,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         }
     }
     
-    private func showAuthentication() {
+    private func startAuthentication() {
         let coordinator = AuthenticationCoordinator(userSessionStore: userSessionStore,
                                                     navigationRouter: navigationRouter)
         coordinator.delegate = self
@@ -184,7 +184,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         mainNavigationController.setViewControllers([splashViewController], animated: false)
         
-        showAuthentication()
+        startAuthentication()
     }
     
     private func presentHomeScreen() {
