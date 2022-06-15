@@ -20,7 +20,7 @@ class KeychainController: KeychainControllerProtocol {
         do {
             try keychain.set(accessToken, key: username)
         } catch {
-            MXLog.error("Failed storing user restore token with error: \(error)")
+            MXLog.error("Failed storing user access token with error: \(error)")
         }
     }
     
@@ -28,7 +28,7 @@ class KeychainController: KeychainControllerProtocol {
         do {
             return try keychain.get(username)
         } catch {
-            MXLog.error("Failed retrieving user restore token")
+            MXLog.error("Failed retrieving user access token")
             return nil
         }
     }
@@ -40,6 +40,14 @@ class KeychainController: KeychainControllerProtocol {
             }
             
             return (username, accessToken)
+        }
+    }
+    
+    func removeAccessTokenForUsername(_ username: String) {
+        do {
+            try keychain.remove(username)
+        } catch {
+            MXLog.error("Failed removing access token with error: \(error)")
         }
     }
     

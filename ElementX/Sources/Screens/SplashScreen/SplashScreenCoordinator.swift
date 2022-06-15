@@ -16,11 +16,7 @@
 
 import SwiftUI
 
-protocol SplashScreenCoordinatorProtocol: Coordinator, Presentable {
-    var callback: ((SplashScreenCoordinatorAction) -> Void)? { get set }
-}
-
-final class SplashScreenCoordinator: SplashScreenCoordinatorProtocol {
+final class SplashScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Properties
     

@@ -51,6 +51,7 @@ struct SplashScreen: View {
                                                overlayHeight: overlayFrame.height + geometry.safeAreaInsets.bottom)
                         .frame(width: geometry.size.width)
                         .tag(-1)
+                        .accessibilityIdentifier("hiddenPage")
                     
                     ForEach(0..<pageCount, id: \.self) { index in
                         SplashScreenPage(content: viewModel.viewState.content[index],
@@ -90,7 +91,7 @@ struct SplashScreen: View {
                 
                 buttons
                     .padding(.horizontal, 16)
-                    .frame(maxWidth: AuthenticationMetrics.maxContentWidth)
+                    .frame(maxWidth: UIConstants.maxContentWidth)
                 Spacer()
             }
             .background(ViewFrameReader(frame: $overlayFrame))

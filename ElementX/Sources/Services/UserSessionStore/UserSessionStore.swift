@@ -18,14 +18,7 @@ import Foundation
 import MatrixRustSDK
 import Kingfisher
 
-enum UserSessionStoreError: Error {
-    case missingCredentials
-    case failedRestoringLogin
-    case failedSettingUpSession
-}
-
-@MainActor
-class UserSessionStore {
+class UserSessionStore: UserSessionStoreProtocol {
     
     private let keychainController: KeychainControllerProtocol
     
@@ -70,8 +63,9 @@ class UserSessionStore {
     }
     
     func logout(userSession: UserSessionProtocol) {
-        keychainController.removeAllAccessTokens()
-        deleteBaseDirectory(for: userSession.clientProxy.userIdentifier)
+        let username = userSession.clientProxy.userIdentifier
+        keychainController.removeAccessTokenForUsername(username)
+        deleteBaseDirectory(for: username)
     }
     
     private func restorePreviousLogin(_ usernameTokenTuple: (username: String, accessToken: String)) async -> Result<ClientProxyProtocol, UserSessionStoreError> {

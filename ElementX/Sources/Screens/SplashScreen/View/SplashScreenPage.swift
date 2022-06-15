@@ -68,8 +68,8 @@ struct SplashScreenPage: View {
                 Spacer().frame(maxHeight: overlayHeight)
             }
             .padding(.horizontal, 16)
-            .frame(maxWidth: AuthenticationMetrics.maxContentWidth,
-                   maxHeight: AuthenticationMetrics.maxContentHeight)
+            .frame(maxWidth: UIConstants.maxContentWidth,
+                   maxHeight: UIConstants.maxContentHeight)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(backgroundGradient.ignoresSafeArea())
