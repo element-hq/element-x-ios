@@ -39,18 +39,8 @@ class SplashScreenViewModel: SplashScreenViewModelType, SplashScreenViewModelPro
 
     override func process(viewAction: SplashScreenViewAction) async {
         switch viewAction {
-        case .register:
-            register()
         case .login:
-            login()
+            callback?(.login)
         }
-    }
-
-    private func register() {
-        callback?(.register)
-    }
-
-    private func login() {
-        callback?(.login)
     }
 }

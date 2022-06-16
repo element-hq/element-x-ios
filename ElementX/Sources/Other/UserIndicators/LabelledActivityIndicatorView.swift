@@ -22,16 +22,14 @@ final class LabelledActivityIndicatorView: UIView {
         static let padding = UIEdgeInsets(top: 20, left: 40, bottom: 15, right: 40)
         static let activityIndicatorScale = CGFloat(1.5)
         static let cornerRadius: CGFloat = 12.0
-        static let stackBackgroundOpacity: CGFloat = 0.9
         static let stackSpacing: CGFloat = 15
         static let backgroundOpacity: CGFloat = 0.5
     }
     
     private let stackBackgroundView: UIView = {
-        let view = UIView()
+        let view = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
         view.layer.cornerRadius = Constants.cornerRadius
-        view.alpha = Constants.stackBackgroundOpacity
-        view.backgroundColor = .gray.withAlphaComponent(0.75)
+        view.clipsToBounds = true
         return view
     }()
     
@@ -67,6 +65,7 @@ final class LabelledActivityIndicatorView: UIView {
     private func setup(text: String) {
         setupStackView()
         label.text = text
+        label.textColor = .element.primaryContent
     }
         
     private func setupStackView() {

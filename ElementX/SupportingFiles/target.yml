@@ -58,6 +58,18 @@ targets:
         CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements 
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         
+    preBuildScripts:
+    - name: 🛠 SwiftGen
+      runOnlyWhenInstalling: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which swiftgen >/dev/null; then
+            swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml
+        else
+            echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
+        fi
+    
     postBuildScripts:
     - name: ⚠️ SwiftLint
       runOnlyWhenInstalling: false
@@ -68,16 +80,6 @@ targets:
             swiftlint
         else
             echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
-        fi
-    - name: 🛠 SwiftGen
-      runOnlyWhenInstalling: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which swiftgen >/dev/null; then
-            swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml
-        else
-            echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
         fi
       
     dependencies:

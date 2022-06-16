@@ -19,7 +19,6 @@ import SwiftUI
 // MARK: - Coordinator
 
 enum SplashScreenCoordinatorAction {
-    case register
     case login
 }
 
@@ -33,7 +32,6 @@ struct SplashScreenPageContent {
 // MARK: View model
 
 enum SplashScreenViewModelAction {
-    case register
     case login
 }
 
@@ -91,6 +89,5 @@ struct SplashScreenBindings {
 }
 
 enum SplashScreenViewAction {
-    case register
     case login
 }

@@ -49,8 +49,6 @@ struct MockScreen: Identifiable {
     let id: UITestScreenIdentifier
     var coordinator: Coordinator & Presentable {
         switch id {
-        case .login:
-            return LoginScreenCoordinator(parameters: .init())
         case .simpleRegular:
             return TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:

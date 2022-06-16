@@ -10,6 +10,14 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 extension ElementL10n {
+  /// Forgot password
+  public static let authenticationLoginForgotPassword = ElementL10n.tr("Untranslated", "authentication_login_forgot_password")
+  /// Welcome back!
+  public static let authenticationLoginTitle = ElementL10n.tr("Untranslated", "authentication_login_title")
+  /// Join millions for free on the largest public server
+  public static let authenticationServerInfoMatrixDescription = ElementL10n.tr("Untranslated", "authentication_server_info_matrix_description")
+  /// Choose your server to store your data
+  public static let authenticationServerInfoTitle = ElementL10n.tr("Untranslated", "authentication_server_info_title")
   /// Bubbled Timeline
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
   /// Plain Timeline
