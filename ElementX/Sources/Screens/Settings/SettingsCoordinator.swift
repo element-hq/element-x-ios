@@ -33,6 +33,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
+    private var errorIndicator: UserIndicator?
     
     // MARK: Public
 
@@ -96,6 +97,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
             guard let self = self, let coordinator = coordinator else { return }
             self.parameters.navigationRouter.popModule(animated: true)
             self.remove(childCoordinator: coordinator)
+            self.showSuccess(label: ElementL10n.done)
         }
 
         add(childCoordinator: coordinator)
@@ -105,5 +107,10 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
             self.remove(childCoordinator: coordinator)
         }
+    }
+
+    /// Show success indicator
+    private func showSuccess(label: String) {
+        errorIndicator = indicatorPresenter.present(.success(label: label))
     }
 }
