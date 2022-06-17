@@ -67,10 +67,12 @@ final class BugReportCoordinator: Coordinator, Presentable {
                 self.startLoading()
             case .submitFinished:
                 self.stopLoading()
-                self.completion?()
+                self.showSuccess(label: ElementL10n.done)
             case .submitFailed(let error):
                 self.stopLoading()
                 self.showError(label: error.localizedDescription)
+            case .cancel:
+                self.completion?()
             }
         }
     }

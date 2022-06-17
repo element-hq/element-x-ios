@@ -76,6 +76,8 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
         switch viewAction {
         case .submit:
             await submitBugReport()
+        case .cancel:
+            callback?(.cancel)
         case .toggleSendLogs:
             context.sendingLogsEnabled.toggle()
         case .removeScreenshot:

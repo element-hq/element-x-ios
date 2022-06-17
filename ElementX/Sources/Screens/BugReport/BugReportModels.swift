@@ -25,6 +25,7 @@ enum BugReportViewModelAction {
     case submitStarted
     case submitFinished
     case submitFailed(error: Error)
+    case cancel
 }
 
 // MARK: View
@@ -41,6 +42,7 @@ struct BugReportViewStateBindings {
 
 enum BugReportViewAction {
     case submit
+    case cancel
     case toggleSendLogs
     case removeScreenshot
 }
