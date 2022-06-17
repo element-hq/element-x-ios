@@ -95,11 +95,6 @@ final class BugReportCoordinator: Coordinator, Presentable {
         loadingIndicator = nil
     }
 
-    /// Show success indicator
-    private func showSuccess(label: String) {
-        errorIndicator = indicatorPresenter.present(.success(label: label))
-    }
-
     /// Show error indicator
     private func showError(label: String) {
         errorIndicator = indicatorPresenter.present(.error(label: label))
