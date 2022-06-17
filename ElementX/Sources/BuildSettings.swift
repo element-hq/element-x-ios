@@ -17,4 +17,6 @@ final class BuildSettings {
     static let bugReportApplicationId = "riot-ios"
     static let bugReportUISIId = "element-auto-uisi"
 
+    static let bugReportGHLabels: [String] = ["Element-X"]
+
 }
