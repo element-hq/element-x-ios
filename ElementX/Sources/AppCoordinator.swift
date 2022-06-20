@@ -197,8 +197,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             guard let self = self else { return }
             
             switch action {
-            case .logout:
-                self.stateMachine.processEvent(.attemptSignOut)
             case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
             case .presentSettings:
@@ -218,6 +216,13 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
                                                        bugReportService: bugReportService)
         let coordinator = SettingsCoordinator(parameters: parameters)
+        coordinator.callback = { [weak self] action in
+            guard let self = self else { return }
+            switch action {
+            case .logout:
+                self.stateMachine.processEvent(.attemptSignOut)
+            }
+        }
 
         add(childCoordinator: coordinator)
         coordinator.start()

@@ -80,10 +80,10 @@ class AppCoordinatorStateMachine {
             machine.addRoutes(event: .succeededRestoringSession, transitions: [ .restoringSession => .homeScreen ])
             machine.addRoutes(event: .failedRestoringSession, transitions: [ .restoringSession => .signedOut ])
             
-            machine.addRoutes(event: .attemptSignOut, transitions: [ .homeScreen => .signingOut ])
+            machine.addRoutes(event: .attemptSignOut, transitions: [ .settingsScreen => .signingOut ])
             
             machine.addRoutes(event: .succeededSigningOut, transitions: [ .signingOut => .signedOut ])
-            machine.addRoutes(event: .failedSigningOut, transitions: [ .signingOut => .homeScreen ])
+            machine.addRoutes(event: .failedSigningOut, transitions: [ .signingOut => .settingsScreen ])
             machine.addRoutes(event: .showSettingsScreen, transitions: [ .homeScreen => .settingsScreen ])
             machine.addRoutes(event: .dismissedSettingsScreen, transitions: [ .settingsScreen => .homeScreen ])
             

@@ -19,6 +19,8 @@ import SwiftUI
 struct Settings: View {
 
     // MARK: Private
+
+    @State private var showingLogoutConfirmation = false
     
     // MARK: Public
     
@@ -28,23 +30,44 @@ struct Settings: View {
     
     var body: some View {
         Form {
-            Button { context.send(viewAction: .reportBug) } label: {
-                Text(ElementL10n.sendBugReport)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .accessibilityIdentifier("reportBugButton")
+            Section {
+                Button { context.send(viewAction: .reportBug) } label: {
+                    Text(ElementL10n.sendBugReport)
+                }
+                .foregroundColor(Color.element.primaryContent)
+                .accessibilityIdentifier("reportBugButton")
 
-            if context.viewState.crashButtonVisible {
-                Button { context.send(viewAction: .crash) } label: {
-                    Text("Crash the app")
+                if BuildSettings.settingsCrashButtonVisible {
+                    Button("Crash the app",
+                           role: .destructive) { context.send(viewAction: .crash)
+                    }
+                           .accessibilityIdentifier("crashButton")
+                }
+            }
+
+            Section {
+                Button { showingLogoutConfirmation = true } label: {
+                    Text(ElementL10n.actionSignOut)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
-                .accessibilityIdentifier("crashButton")
+                .foregroundColor(Color.element.primaryContent)
+                .accessibilityIdentifier("logoutButton")
+                .confirmationDialog(ElementL10n.actionSignOutConfirmationSimple,
+                                    isPresented: $showingLogoutConfirmation,
+                                    titleVisibility: .visible) {
+                    Button(ElementL10n.actionSignOut,
+                           role: .destructive) { context.send(viewAction: .logout)
+                    }
+                }
+            } footer: {
+                versionText
             }
         }
         .navigationTitle(ElementL10n.settings)
+    }
+
+    var versionText: some View {
+        Text(ElementL10n.settingsVersion + ": " + ElementInfoPlist.cfBundleShortVersionString + " (" + ElementInfoPlist.cfBundleVersion + ")")
     }
 }
 

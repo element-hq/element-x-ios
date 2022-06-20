@@ -141,21 +141,32 @@ class BugReportService: BugReportServiceProtocol {
     // MARK: - Private
 
     private var defaultParams: [MultipartFormData] {
-        [
+        let (localTime, utcTime) = localAndUTCTime(for: Date())
+        return [
             MultipartFormData(key: "user_agent", type: .text(value: "iOS")),
             MultipartFormData(key: "app", type: .text(value: applicationId)),
-            MultipartFormData(key: "version", type: .text(value: version)),
+            MultipartFormData(key: "version", type: .text(value: ElementInfoPlist.cfBundleShortVersionString)),
+            MultipartFormData(key: "build", type: .text(value: ElementInfoPlist.cfBundleVersion)),
             MultipartFormData(key: "os", type: .text(value: os)),
-            MultipartFormData(key: "client", type: .text(value: "Element-X"))
+            MultipartFormData(key: "resolved_language", type: .text(value: Bundle.preferredLanguages[0])),
+            MultipartFormData(key: "user_language", type: .text(value: Bundle.elementLanguage ?? "null")),
+            MultipartFormData(key: "fallback_language", type: .text(value: Bundle.elementFallbackLanguage ?? "null")),
+            MultipartFormData(key: "local_time", type: .text(value: localTime)),
+            MultipartFormData(key: "utc_time", type: .text(value: utcTime))
         ]
+    }
+
+    private func localAndUTCTime(for date: Date) -> (String, String) {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let localTime = dateFormatter.string(from: date)
+        dateFormatter.timeZone = TimeZone(identifier: "UTC")
+        let utcTime = dateFormatter.string(from: date)
+        return (localTime, utcTime)
     }
 
     private var os: String {
         "\(UIDevice.current.systemName) \(UIDevice.current.systemVersion)"
-    }
-
-    private var version: String {
-        ElementInfoPlist.cfBundleShortVersionString
     }
 
     private func zipFiles(includeLogs: Bool,

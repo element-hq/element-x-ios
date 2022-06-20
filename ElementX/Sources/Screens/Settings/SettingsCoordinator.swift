@@ -21,6 +21,10 @@ struct SettingsCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
 }
 
+enum SettingsCoordinatorAction {
+    case logout
+}
+
 final class SettingsCoordinator: Coordinator, Presentable {
     
     // MARK: - Properties
@@ -39,6 +43,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
+    var callback: ((SettingsCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
@@ -60,6 +65,8 @@ final class SettingsCoordinator: Coordinator, Presentable {
                 self.presentBugReportScreen()
             case .crash:
                 self.parameters.bugReportService.crash()
+            case .logout:
+                self.callback?(.logout)
             }
         }
     }

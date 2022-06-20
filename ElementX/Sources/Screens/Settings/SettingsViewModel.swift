@@ -34,7 +34,7 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
 
     init() {
         let bindings = SettingsViewStateBindings()
-        super.init(initialViewState: .init(crashButtonVisible: true, bindings: bindings))
+        super.init(initialViewState: .init(bindings: bindings))
     }
 
     // MARK: - Public
@@ -45,6 +45,8 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
             callback?(.reportBug)
         case .crash:
             callback?(.crash)
+        case .logout:
+            callback?(.logout)
         }
     }
 }

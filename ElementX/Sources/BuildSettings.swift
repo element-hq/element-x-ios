@@ -19,4 +19,7 @@ final class BuildSettings {
 
     static let bugReportGHLabels: [String] = ["Element-X"]
 
+    // MARK: - Settings screen
+    static let settingsCrashButtonVisible: Bool = true
+
 }

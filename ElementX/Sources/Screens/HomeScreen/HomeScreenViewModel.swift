@@ -45,8 +45,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     override func process(viewAction: HomeScreenViewAction) async {
         switch viewAction {
-        case .logout:
-            callback?(.logout)
         case .loadRoomData(let roomIdentifier):
             loadRoomDataForIdentifier(roomIdentifier)
         case .selectRoom(let roomIdentifier):
