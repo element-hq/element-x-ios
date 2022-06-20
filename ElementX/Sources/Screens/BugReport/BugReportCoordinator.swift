@@ -33,7 +33,7 @@ final class BugReportCoordinator: Coordinator, Presentable {
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
-    private var errorIndicator: UserIndicator?
+    private var statusIndicator: UserIndicator?
     
     // MARK: Public
 
@@ -97,6 +97,6 @@ final class BugReportCoordinator: Coordinator, Presentable {
 
     /// Show error indicator
     private func showError(label: String) {
-        errorIndicator = indicatorPresenter.present(.error(label: label))
+        statusIndicator = indicatorPresenter.present(.error(label: label))
     }
 }

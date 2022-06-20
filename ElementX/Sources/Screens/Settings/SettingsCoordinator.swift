@@ -33,7 +33,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
-    private var errorIndicator: UserIndicator?
+    private var statusIndicator: UserIndicator?
     
     // MARK: Public
 
@@ -111,6 +111,6 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
     /// Show success indicator
     private func showSuccess(label: String) {
-        errorIndicator = indicatorPresenter.present(.success(label: label))
+        statusIndicator = indicatorPresenter.present(.success(label: label))
     }
 }
