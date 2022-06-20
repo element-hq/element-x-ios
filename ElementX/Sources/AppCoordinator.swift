@@ -29,7 +29,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
-    private var errorIndicator: UserIndicator?
+    private var statusIndicator: UserIndicator?
     
     var childCoordinators: [Coordinator] = []
     
@@ -281,11 +281,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoginErrorToast() {
-        errorIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
+        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
     }
     
     private func showLogoutErrorToast() {
-        errorIndicator = indicatorPresenter.present(.success(label: "Failed logging out"))
+        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging out"))
     }
 
     private func showCrashPopup() {

@@ -33,7 +33,7 @@ final class BugReportCoordinator: Coordinator, Presentable {
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
-    private var errorIndicator: UserIndicator?
+    private var statusIndicator: UserIndicator?
     
     // MARK: Public
 
@@ -67,12 +67,10 @@ final class BugReportCoordinator: Coordinator, Presentable {
                 self.startLoading()
             case .submitFinished:
                 self.stopLoading()
-                self.showSuccess(label: ElementL10n.done)
+                self.completion?()
             case .submitFailed(let error):
                 self.stopLoading()
                 self.showError(label: error.localizedDescription)
-            case .cancel:
-                self.completion?()
             }
         }
     }
@@ -97,13 +95,8 @@ final class BugReportCoordinator: Coordinator, Presentable {
         loadingIndicator = nil
     }
 
-    /// Show success indicator
-    private func showSuccess(label: String) {
-        errorIndicator = indicatorPresenter.present(.success(label: label))
-    }
-
     /// Show error indicator
     private func showError(label: String) {
-        errorIndicator = indicatorPresenter.present(.error(label: label))
+        statusIndicator = indicatorPresenter.present(.error(label: label))
     }
 }
