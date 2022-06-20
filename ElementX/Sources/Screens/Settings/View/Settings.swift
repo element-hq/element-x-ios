@@ -48,7 +48,7 @@ struct Settings: View {
                 }
             }
 
-            Section {
+            Section(footer: versionText) {
                 Button { showingLogoutConfirmation = true } label: {
                     Text(ElementL10n.actionSignOut)
                 }
@@ -65,6 +65,10 @@ struct Settings: View {
             }
         }
         .navigationTitle(ElementL10n.settings)
+    }
+
+    var versionText: some View {
+        Text(ElementL10n.settingsVersion + ": " + ElementInfoPlist.cfBundleShortVersionString + " (" + ElementInfoPlist.cfBundleVersion + ")")
     }
 }
 
