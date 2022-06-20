@@ -106,11 +106,6 @@ struct HomeScreen: View {
                     .transition(.opacity)
                 }
             }
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button("Logout") {
-                    context.send(viewAction: .logout)
-                }
-            }
         }
     }
 }

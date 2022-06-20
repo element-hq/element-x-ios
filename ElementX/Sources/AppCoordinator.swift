@@ -197,8 +197,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             guard let self = self else { return }
             
             switch action {
-            case .logout:
-                self.stateMachine.processEvent(.attemptSignOut)
             case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
             case .presentSettings:

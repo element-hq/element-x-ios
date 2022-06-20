@@ -24,7 +24,6 @@ struct HomeScreenCoordinatorParameters {
 }
 
 enum HomeScreenCoordinatorAction {
-    case logout
     case presentRoom(roomIdentifier: String)
     case presentSettings
 }
@@ -63,8 +62,6 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
             guard let self = self else { return }
             
             switch action {
-            case .logout:
-                self.callback?(.logout)
             case .selectRoom(let roomIdentifier):
                 self.callback?(.presentRoom(roomIdentifier: roomIdentifier))
             case .tapUserAvatar:
