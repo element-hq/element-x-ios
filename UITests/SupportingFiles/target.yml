@@ -40,3 +40,4 @@ targets:
     - path: ../Sources
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
+    - path: ../../ElementX/Sources/BuildSettings.swift
