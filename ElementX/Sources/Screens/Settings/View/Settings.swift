@@ -34,34 +34,33 @@ struct Settings: View {
                 Button { context.send(viewAction: .reportBug) } label: {
                     Text(ElementL10n.sendBugReport)
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
+                .foregroundColor(Color.element.primaryContent)
                 .accessibilityIdentifier("reportBugButton")
 
                 if BuildSettings.settingsCrashButtonVisible {
                     Button("Crash the app",
-                           role: .destructive,
-                           action: { context.send(viewAction: .crash) })
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 16)
-                    .accessibilityIdentifier("crashButton")
+                           role: .destructive) { context.send(viewAction: .crash)
+                    }
+                           .accessibilityIdentifier("crashButton")
                 }
             }
 
-            Section(footer: versionText) {
+            Section {
                 Button { showingLogoutConfirmation = true } label: {
                     Text(ElementL10n.actionSignOut)
                 }
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 16)
+                .foregroundColor(Color.element.primaryContent)
                 .accessibilityIdentifier("logoutButton")
                 .confirmationDialog(ElementL10n.actionSignOutConfirmationSimple,
                                     isPresented: $showingLogoutConfirmation,
                                     titleVisibility: .visible) {
                     Button(ElementL10n.actionSignOut,
-                           role: .destructive,
-                           action: { context.send(viewAction: .logout) })
+                           role: .destructive) { context.send(viewAction: .logout)
+                    }
                 }
+            } footer: {
+                versionText
             }
         }
         .navigationTitle(ElementL10n.settings)
