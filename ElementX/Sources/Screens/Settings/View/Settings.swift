@@ -35,7 +35,7 @@ struct Settings: View {
             .padding(.vertical, 16)
             .accessibilityIdentifier("reportBugButton")
 
-            if context.viewState.crashButtonVisible {
+                if BuildSettings.settingsCrashButtonVisible {
                 Button { context.send(viewAction: .crash) } label: {
                     Text("Crash the app")
                 }

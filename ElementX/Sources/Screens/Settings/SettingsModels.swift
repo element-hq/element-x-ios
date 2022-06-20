@@ -28,7 +28,6 @@ enum SettingsViewModelAction {
 // MARK: View
 
 struct SettingsViewState: BindableState {
-    var crashButtonVisible: Bool
     var bindings: SettingsViewStateBindings
 }
 
