@@ -45,6 +45,8 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
             callback?(.reportBug)
         case .crash:
             callback?(.crash)
+        case .logout:
+            callback?(.logout)
         }
     }
 }
