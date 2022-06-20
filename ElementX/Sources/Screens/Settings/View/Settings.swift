@@ -19,6 +19,8 @@ import SwiftUI
 struct Settings: View {
 
     // MARK: Private
+
+    @State private var showingLogoutConfirmation = false
     
     // MARK: Public
     
@@ -28,20 +30,38 @@ struct Settings: View {
     
     var body: some View {
         Form {
-            Button { context.send(viewAction: .reportBug) } label: {
-                Text(ElementL10n.sendBugReport)
-            }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .accessibilityIdentifier("reportBugButton")
-
-                if BuildSettings.settingsCrashButtonVisible {
-                Button { context.send(viewAction: .crash) } label: {
-                    Text("Crash the app")
+            Section {
+                Button { context.send(viewAction: .reportBug) } label: {
+                    Text(ElementL10n.sendBugReport)
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 16)
-                .accessibilityIdentifier("crashButton")
+                .accessibilityIdentifier("reportBugButton")
+
+                if BuildSettings.settingsCrashButtonVisible {
+                    Button("Crash the app",
+                           role: .destructive,
+                           action: { context.send(viewAction: .crash) })
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 16)
+                    .accessibilityIdentifier("crashButton")
+                }
+            }
+
+            Section {
+                Button { showingLogoutConfirmation = true } label: {
+                    Text(ElementL10n.actionSignOut)
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 16)
+                .accessibilityIdentifier("logoutButton")
+                .confirmationDialog(ElementL10n.actionSignOutConfirmationSimple,
+                                    isPresented: $showingLogoutConfirmation,
+                                    titleVisibility: .visible) {
+                    Button(ElementL10n.actionSignOut,
+                           role: .destructive,
+                           action: { context.send(viewAction: .logout) })
+                }
             }
         }
         .navigationTitle(ElementL10n.settings)

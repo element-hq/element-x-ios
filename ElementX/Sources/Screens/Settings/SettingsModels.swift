@@ -23,6 +23,7 @@ import Foundation
 enum SettingsViewModelAction {
     case reportBug
     case crash
+    case logout
 }
 
 // MARK: View
@@ -38,4 +39,5 @@ struct SettingsViewStateBindings {
 enum SettingsViewAction {
     case reportBug
     case crash
+    case logout
 }
