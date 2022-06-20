@@ -44,7 +44,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         }
 
         splashViewController = SplashViewController()
-        mainNavigationController = UINavigationController(rootViewController: splashViewController)
+        mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
@@ -333,7 +333,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
         add(childCoordinator: coordinator)
         coordinator.start()
-        let navController = UINavigationController(rootViewController: coordinator.toPresentable())
+        let navController = ElementNavigationController(rootViewController: coordinator.toPresentable())
         navController.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                                                  target: self,
                                                                                  action: #selector(dismissBugReportScreen))

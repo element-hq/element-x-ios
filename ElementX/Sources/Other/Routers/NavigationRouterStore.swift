@@ -44,7 +44,7 @@ class NavigationRouterStore: NavigationRouterStoreProtocol {
             return existingNavigationRouter
         }
         
-        let navigationRouter = NavigationRouter(navigationController: UINavigationController())
+        let navigationRouter = NavigationRouter(navigationController: ElementNavigationController())
         return navigationRouter
     }
     

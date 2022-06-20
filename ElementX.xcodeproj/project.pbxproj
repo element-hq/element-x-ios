@@ -19,6 +19,7 @@
 		059173B3C77056C406906B6D /* target.yml in Resources */ = {isa = PBXBuildFile; fileRef = D4DA544B2520BFA65D6DB4BB /* target.yml */; };
 		0602FA07557F580086782A9E /* UserIndicatorPresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA072E995316CD18BC29313 /* UserIndicatorPresentationContext.swift */; };
 		066A1E9B94723EE9F3038044 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EBB5D698CE9A25BB553A2D /* Strings.swift */; };
+		06E93B2E3B32740B40F47CC5 /* ElementNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF4B39D52CAE7D21D276ABEE /* ElementNavigationController.swift */; };
 		072BA9DBA932374CCA300125 /* MessageComposerTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE6C10032A77AE7DC5AA4C50 /* MessageComposerTextField.swift */; };
 		0B1F80C2BF7D223159FBA82C /* ImageAnonymizerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6045E825AE900A92D61FEFF0 /* ImageAnonymizerTests.swift */; };
 		0E8C480700870BB34A2A360F /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 78A5A8DE1E2B09C978C7F3B0 /* KeychainAccess */; };
@@ -539,6 +540,7 @@
 		CED34C87277BA3CCC6B6EC7A /* th */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = th; path = th.lproj/Localizable.strings; sourceTree = "<group>"; };
 		CF3EDF23226895776553F04A /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		CF47564C584F614B7287F3EB /* RootRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouter.swift; sourceTree = "<group>"; };
+		CF4B39D52CAE7D21D276ABEE /* ElementNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementNavigationController.swift; sourceTree = "<group>"; };
 		CF847B3C1873B8E81CEE7FAC /* SplashScreenViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashScreenViewModel.swift; sourceTree = "<group>"; };
 		D0A45283CF1DB96E583BECA6 /* ImageRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageRoomTimelineView.swift; sourceTree = "<group>"; };
 		D29EBCBFEC6FD0941749404D /* NavigationRouterStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouterStore.swift; sourceTree = "<group>"; };
@@ -1248,6 +1250,7 @@
 				49EAD710A2C16EFF7C3EA16F /* Benchmark.swift */,
 				E5272BC4A60B6AD7553BACA1 /* BlurHashDecode.swift */,
 				95CC95CD75B688E946438165 /* Coordinator.swift */,
+				CF4B39D52CAE7D21D276ABEE /* ElementNavigationController.swift */,
 				12A626D74BBE9F4A60763B45 /* ImageAnonymizer.swift */,
 				F7B81C8227BBEA95CCE86037 /* MatrixEntitityRegex.swift */,
 				44BBB96FAA2F0D53C507396B /* Extensions */,
@@ -1705,6 +1708,7 @@
 				DCB781BD227CA958809AFADF /* Coordinator.swift in Sources */,
 				C4F69156C31A447FEFF2A47C /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */,
+				06E93B2E3B32740B40F47CC5 /* ElementNavigationController.swift in Sources */,
 				D8CFF02C2730EE5BC4F17ABF /* ElementToggleStyle.swift in Sources */,
 				7C1A7B594B2F8143F0DD0005 /* ElementXAttributeScope.swift in Sources */,
 				224A55EEAEECF5336B14A4A5 /* EmoteRoomMessage.swift in Sources */,
