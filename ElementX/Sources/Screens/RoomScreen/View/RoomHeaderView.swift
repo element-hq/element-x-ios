@@ -21,6 +21,7 @@ struct RoomHeaderView: View {
             roomAvatar
             Text(context.viewState.roomTitle)
                 .font(.element.headline)
+                .accessibilityIdentifier("roomNameLabel")
         }
     }
 
