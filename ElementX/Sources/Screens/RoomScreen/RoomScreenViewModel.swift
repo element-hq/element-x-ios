@@ -31,11 +31,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
-         roomName: String?) {
+         roomName: String?,
+         roomAvatar: UIImage? = nil,
+         roomEncryptionBadge: UIImage? = nil) {
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         
-        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥", bindings: RoomScreenViewStateBindings(composerText: "")))
+        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥",
+                                                         roomAvatar: roomAvatar,
+                                                         roomEncryptionBadge: roomEncryptionBadge,
+                                                         bindings: .init(composerText: "")))
         
         timelineController.callbacks
             .receive(on: DispatchQueue.main)

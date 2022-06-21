@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import UIKit
 
 enum RoomScreenViewModelAction {
 
@@ -35,6 +36,8 @@ enum RoomScreenViewAction {
 
 struct RoomScreenViewState: BindableState {
     var roomTitle: String = ""
+    var roomAvatar: UIImage?
+    var roomEncryptionBadge: UIImage?
     var items: [RoomTimelineViewProvider] = []
     var isBackPaginating = false
     var bindings: RoomScreenViewStateBindings

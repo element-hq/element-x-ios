@@ -83,6 +83,15 @@ class RoomProxy: RoomProxyProtocol {
     var avatarURL: String? {
         room.avatarUrl()
     }
+
+    var encryptionBadgeImage: UIImage? {
+        guard isEncrypted else {
+            return nil
+        }
+
+        //  return trusted image for now, should be updated after verification status known
+        return Asset.Images.encryptionTrusted.image
+    }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         await Task.detached { () -> Result<String?, RoomProxyError> in

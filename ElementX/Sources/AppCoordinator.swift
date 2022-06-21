@@ -251,7 +251,9 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                         memberDetailProvider: memberDetailProvider)
         
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
-                                                         roomName: roomProxy.displayName ?? roomProxy.name)
+                                                         roomName: roomProxy.displayName ?? roomProxy.name,
+                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL),
+                                                         roomEncryptionBadge: roomProxy.encryptionBadgeImage)
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         
         add(childCoordinator: coordinator)
