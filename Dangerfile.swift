@@ -75,3 +75,9 @@ if hasChangedViews {
         warn("You seem to have made changes to views. Please consider adding screenshots.")
     }
 }
+
+// Check for pngs on resources
+let hasPngs = !editedFiles.filter { $0.lowercased().hasSuffix(".png") }.isEmpty
+if hasPngs {
+    warn("You seem to have made changes to some images. Please consider using an SVG or PDF.")
+}
