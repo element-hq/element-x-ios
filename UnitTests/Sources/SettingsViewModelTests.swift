@@ -29,8 +29,20 @@ class SettingsViewModelTests: XCTestCase {
         context = viewModel.context
     }
 
-    func testInitialState() {
-        XCTAssert(context.viewState.crashButtonVisible)
+    @MainActor func testLogout() async throws {
+        var correctResult = false
+        viewModel.callback = { result in
+            switch result {
+            case .logout:
+                correctResult = true
+            default:
+                break
+            }
+        }
+
+        context.send(viewAction: .logout)
+        await Task.yield()
+        XCTAssert(correctResult)
     }
 
     func testReportBug() async throws {
