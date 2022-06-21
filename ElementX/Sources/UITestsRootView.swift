@@ -11,14 +11,15 @@ import SwiftUI
 struct UITestsRootView: View {
     
     let mockScreens: [MockScreen]
-    var selectionCallback: ((String) -> Void)?
+    var selectionCallback: ((UITestScreenIdentifier) -> Void)?
     
     var body: some View {
         NavigationView {
             List(mockScreens) { coordinator in
-                Button(coordinator.id) {
+                Button(coordinator.id.description) {
                     selectionCallback?(coordinator.id)
                 }
+                .accessibilityIdentifier(coordinator.id.rawValue)
             }
             .listStyle(.plain)
         }

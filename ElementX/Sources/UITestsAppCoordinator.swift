@@ -40,19 +40,45 @@ class UITestsAppCoordinator: Coordinator {
     }
     
     private func mockScreens() -> [MockScreen] {
-        [
-            MockScreen(id: "Login screen", coordinator: LoginScreenCoordinator(parameters: .init())),
-            MockScreen(id: "Simple Screen - Regular", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))),
-            MockScreen(id: "Simple Screen - Upgrade", coordinator: TemplateSimpleScreenCoordinator(parameters: .init(promptType: .upgrade))),
-            MockScreen(id: "Settings screen", coordinator: SettingsCoordinator(parameters: .init(navigationRouter: NavigationRouter(navigationController: UINavigationController()), bugReportService: MockBugReportService()))),
-            MockScreen(id: "Bug report screen", coordinator: BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(), screenshot: nil))),
-            MockScreen(id: "Bug report screen with screenshot", coordinator: BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image))),
-            MockScreen(id: "Splash Screen", coordinator: SplashScreenCoordinator())
-        ]
+        UITestScreenIdentifier.allCases.map { MockScreen(id: $0) }
     }
 }
 
+@MainActor
 struct MockScreen: Identifiable {
-    let id: String
-    let coordinator: Coordinator & Presentable
+    let id: UITestScreenIdentifier
+    var coordinator: Coordinator & Presentable {
+        switch id {
+        case .login:
+            return LoginScreenCoordinator(parameters: .init())
+        case .simpleRegular:
+            return TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))
+        case .simpleUpgrade:
+            return TemplateSimpleScreenCoordinator(parameters: .init(promptType: .upgrade))
+        case .settings:
+            let router = NavigationRouter(navigationController: ElementNavigationController())
+            return SettingsCoordinator(parameters: .init(navigationRouter: router,
+                                                         bugReportService: MockBugReportService()))
+        case .bugReport:
+            return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                          screenshot: nil))
+        case .bugReportWithScreenshot:
+            return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                          screenshot: Asset.Images.appLogo.image))
+        case .splash:
+            return SplashScreenCoordinator()
+        case .roomPlainNoAvatar:
+            let params = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+                                                         roomName: "Some room name",
+                                                         roomAvatar: nil,
+                                                         roomEncryptionBadge: nil)
+            return RoomScreenCoordinator(parameters: params)
+        case .roomEncryptedWithAvatar:
+            let params = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+                                                         roomName: "Some room name",
+                                                         roomAvatar: Asset.Images.appLogo.image,
+                                                         roomEncryptionBadge: Asset.Images.encryptionTrusted.image)
+            return RoomScreenCoordinator(parameters: params)
+        }
+    }
 }

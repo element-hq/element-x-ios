@@ -19,7 +19,7 @@ import XCTest
 class LoginScreenUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Login screen")
+        app.goToScreenWithIdentifier(.login)
         
         XCTAssert(app.buttons["Login"].exists)
         XCTAssert(app.textFields["Username"].exists)
