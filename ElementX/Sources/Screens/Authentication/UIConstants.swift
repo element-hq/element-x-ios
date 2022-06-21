@@ -18,9 +18,15 @@ import SwiftUI
 
 /// Standard constants used across the app's UI.
 struct UIConstants {
-    static let maxContentWidth: CGFloat = 600
     static let maxContentHeight: CGFloat = 750
     
     /// The padding used between the top of the main content and the navigation bar.
     static let topPaddingToNavigationBar: CGFloat = 16
+    /// The padding used between the footer and the bottom of the view.
+    static let actionButtonBottomPadding: CGFloat = 24
+    
+    /// The height to use for top/bottom spacers to pad the views to fit the `maxContentHeight`.
+    static func spacerHeight(in geometry: GeometryProxy) -> CGFloat {
+        max(0, (geometry.size.height - maxContentHeight) / 2)
+    }
 }

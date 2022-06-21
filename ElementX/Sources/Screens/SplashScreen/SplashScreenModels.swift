@@ -28,7 +28,6 @@ struct SplashScreenPageContent {
     let title: AttributedString
     let message: String
     let image: ImageAsset
-    let gradient: Gradient
 }
 
 // MARK: View model
@@ -41,19 +40,26 @@ enum SplashScreenViewModelAction {
 // MARK: View
 
 struct SplashScreenViewState: BindableState {
-    private enum Constants {
-        static let gradientColors = [
-            Color(red: 0.95, green: 0.98, blue: 0.96),
-            Color(red: 0.89, green: 0.96, blue: 0.97),
-            Color(red: 0.95, green: 0.89, blue: 0.97),
-            Color(red: 0.81, green: 0.95, blue: 0.91),
-            Color(red: 0.95, green: 0.98, blue: 0.96)
-        ]
-    }
+    
+    /// The colours of the background gradient shown behind the 4 pages.
+    private let gradientColors = [
+        Color(red: 0.95, green: 0.98, blue: 0.96),
+        Color(red: 0.89, green: 0.96, blue: 0.97),
+        Color(red: 0.95, green: 0.89, blue: 0.97),
+        Color(red: 0.81, green: 0.95, blue: 0.91),
+        Color(red: 0.95, green: 0.98, blue: 0.96)
+    ]
     
     /// An array containing all content of the carousel pages
     let content: [SplashScreenPageContent]
     var bindings: SplashScreenBindings
+    
+    /// The background gradient for all 4 pages and the hidden page at the start of the carousel.
+    var backgroundGradient: Gradient {
+        // Include the extra stop for the hidden page at the start of the carousel.
+        let hiddenPageColor = gradientColors[gradientColors.count - 2]
+        return Gradient(colors: [hiddenPageColor] + gradientColors)
+    }
     
     init() {
         // The pun doesn't translate, so we only use it for English.
@@ -62,21 +68,17 @@ struct SplashScreenViewState: BindableState {
         
         content = [
             SplashScreenPageContent(title: ElementL10n.ftueAuthCarouselSecureTitle.tinting("."),
-                                              message: ElementL10n.ftueAuthCarouselSecureBody,
-                                              image: Asset.Images.splashScreenPage1,
-                                              gradient: Gradient(colors: [Constants.gradientColors[0], Constants.gradientColors[1]])),
+                                    message: ElementL10n.ftueAuthCarouselSecureBody,
+                                    image: Asset.Images.splashScreenPage1),
             SplashScreenPageContent(title: ElementL10n.ftueAuthCarouselControlTitle.tinting("."),
-                                              message: ElementL10n.ftueAuthCarouselControlBody,
-                                              image: Asset.Images.splashScreenPage2,
-                                              gradient: Gradient(colors: [Constants.gradientColors[1], Constants.gradientColors[2]])),
+                                    message: ElementL10n.ftueAuthCarouselControlBody,
+                                    image: Asset.Images.splashScreenPage2),
             SplashScreenPageContent(title: ElementL10n.ftueAuthCarouselEncryptedTitle.tinting("."),
-                                              message: ElementL10n.ftueAuthCarouselEncryptedBody,
-                                              image: Asset.Images.splashScreenPage3,
-                                              gradient: Gradient(colors: [Constants.gradientColors[2], Constants.gradientColors[3]])),
+                                    message: ElementL10n.ftueAuthCarouselEncryptedBody,
+                                    image: Asset.Images.splashScreenPage3),
             SplashScreenPageContent(title: page4Title.tinting("."),
-                                              message: ElementL10n.ftueAuthCarouselWorkplaceBody(ElementInfoPlist.cfBundleName),
-                                              image: Asset.Images.splashScreenPage4,
-                                              gradient: Gradient(colors: [Constants.gradientColors[3], Constants.gradientColors[4]]))
+                                    message: ElementL10n.ftueAuthCarouselWorkplaceBody(ElementInfoPlist.cfBundleName),
+                                    image: Asset.Images.splashScreenPage4)
         ]
         bindings = SplashScreenBindings()
     }

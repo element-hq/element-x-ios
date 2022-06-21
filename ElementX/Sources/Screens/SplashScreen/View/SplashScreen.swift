@@ -23,13 +23,12 @@ struct SplashScreen: View {
     
     // MARK: Private
     
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.layoutDirection) private var layoutDirection
     
     private var isLeftToRight: Bool { layoutDirection == .leftToRight }
     private var pageCount: Int { viewModel.viewState.content.count }
     
-    /// The dimensions of the stack with the action buttons and page indicator.
-    @State private var overlayFrame: CGRect = .zero
     /// A timer to automatically animate the pages.
     @State private var pageTimer: Timer?
     /// The amount of offset to apply when a drag gesture is in progress.
@@ -41,61 +40,53 @@ struct SplashScreen: View {
     
     var body: some View {
         GeometryReader { geometry in
-            ZStack(alignment: .leading) {
+            VStack(alignment: .leading) {
+                Spacer()
+                    .frame(height: UIConstants.spacerHeight(in: geometry))
                 
                 // The main content of the carousel
-                HStack(spacing: 0) {
+                HStack(alignment: .top, spacing: 0) {
                     
                     // Add a hidden page at the start of the carousel duplicating the content of the last page
-                    SplashScreenPage(content: viewModel.viewState.content[pageCount - 1],
-                                               overlayHeight: overlayFrame.height + geometry.safeAreaInsets.bottom)
+                    SplashScreenPage(content: viewModel.viewState.content[pageCount - 1])
                         .frame(width: geometry.size.width)
-                        .tag(-1)
                         .accessibilityIdentifier("hiddenPage")
                     
                     ForEach(0..<pageCount, id: \.self) { index in
-                        SplashScreenPage(content: viewModel.viewState.content[index],
-                                                   overlayHeight: overlayFrame.height + geometry.safeAreaInsets.bottom)
+                        SplashScreenPage(content: viewModel.viewState.content[index])
                             .frame(width: geometry.size.width)
-                            .tag(index)
                     }
                     
                 }
-                .offset(x: (CGFloat(viewModel.pageIndex + 1) * -geometry.size.width) + dragOffset)
-                .gesture(
-                    DragGesture()
-                        .onChanged(handleDragGestureChange)
-                        .onEnded { handleDragGestureEnded($0, viewSize: geometry.size) }
-                )
+                .offset(x: pageOffset(in: geometry))
                 
-                overlay
+                Spacer()
+                
+                SplashScreenPageIndicator(pageCount: pageCount, pageIndex: viewModel.pageIndex)
                     .frame(width: geometry.size.width)
-            }
-        }
-        .background(Color.element.background.ignoresSafeArea())
-        .navigationBarHidden(true)
-        .onAppear(perform: startTimer)
-        .onDisappear(perform: stopTimer)
-    }
-    
-    /// The only part of the UI that isn't inside of the carousel.
-    var overlay: some View {
-        VStack(spacing: 50) {
-            Color.clear
-            Color.clear
-            
-            VStack {
-                SplashScreenPageIndicator(pageCount: pageCount,
-                                                    pageIndex: viewModel.pageIndex)
+                    .padding(.bottom)
+                
                 Spacer()
                 
                 buttons
-                    .padding(.horizontal, 16)
-                    .frame(maxWidth: UIConstants.maxContentWidth)
+                    .frame(width: geometry.size.width)
+                    .padding(.bottom, UIConstants.actionButtonBottomPadding)
+                    .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
+                
                 Spacer()
+                    .frame(height: UIConstants.spacerHeight(in: geometry))
             }
-            .background(ViewFrameReader(frame: $overlayFrame))
+            .frame(maxHeight: .infinity)
+            .background(background.ignoresSafeArea().offset(x: pageOffset(in: geometry)))
+            .gesture(
+                DragGesture()
+                    .onChanged(handleDragGestureChange)
+                    .onEnded { handleDragGestureEnded($0, viewSize: geometry.size) }
+            )
         }
+        .navigationBarHidden(true)
+        .onAppear(perform: startTimer)
+        .onDisappear(perform: stopTimer)
     }
     
     /// The main action buttons.
@@ -105,6 +96,21 @@ struct SplashScreen: View {
                 Text(ElementL10n.loginSplashSubmit)
             }
             .buttonStyle(.elementAction(.xLarge))
+        }
+        .padding(.horizontal, 16)
+        .readableFrame()
+    }
+    
+    @ViewBuilder
+    /// The view's background, showing a gradient in light mode and a solid colour in dark mode.
+    var background: some View {
+        if colorScheme == .light {
+            LinearGradient(gradient: viewModel.viewState.backgroundGradient,
+                           startPoint: .leading,
+                           endPoint: .trailing)
+                .flipsForRightToLeftLayoutDirection(true)
+        } else {
+            Color.element.background
         }
     }
     
@@ -150,6 +156,11 @@ struct SplashScreen: View {
     private func showHiddenPage() {
         // Hidden page for a nicer animation when looping back to the start.
         viewModel.pageIndex = -1
+    }
+    
+    /// The offset to apply to the `HStack` of pages.
+    private func pageOffset(in geometry: GeometryProxy) -> CGFloat {
+        (CGFloat(viewModel.pageIndex + 1) * -geometry.size.width) + dragOffset
     }
     
     // MARK: - Gestures
