@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "encryption_trusted.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

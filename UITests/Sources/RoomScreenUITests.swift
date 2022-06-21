@@ -15,3 +15,30 @@
 //
 
 import XCTest
+import ElementX
+
+@MainActor
+class RoomScreenUITests: XCTestCase {
+
+    func testPlainNoAvatar() async throws {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomPlainNoAvatar)
+
+        try await Task.sleep(nanoseconds: 400_000_000)
+
+        XCTAssert(app.staticTexts["roomNameLabel"].exists)
+        XCTAssert(app.staticTexts["roomAvatarPlaceholderImage"].exists)
+        XCTAssertFalse(app.images["encryptionBadgeIcon"].exists)
+    }
+
+    func testEncryptedWithAvatar() async throws {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomEncryptedWithAvatar)
+
+        try await Task.sleep(nanoseconds: 400_000_000)
+
+        XCTAssert(app.staticTexts["roomNameLabel"].exists)
+        XCTAssert(app.images["roomAvatarImage"].exists)
+        XCTAssert(app.images["encryptionBadgeIcon"].exists)
+    }
+}

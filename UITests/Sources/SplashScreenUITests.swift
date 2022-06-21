@@ -20,7 +20,7 @@ import XCTest
 class SplashScreenUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Splash Screen")
+        app.goToScreenWithIdentifier(.splash)
         
         let getStartedButton = app.buttons["Get started"]
         XCTAssertTrue(getStartedButton.exists, "The primary action button should be shown.")
@@ -28,7 +28,7 @@ class SplashScreenUITests: XCTestCase {
     
     func testSwipingBetweenPages() async throws {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Splash Screen")
+        app.goToScreenWithIdentifier(.splash)
         
         // Given the splash screen in its initial state.
         let page1TitleText = app.staticTexts["Own your conversations."]

@@ -21,7 +21,7 @@ class BugReportUITests: XCTestCase {
 
     func testInitialStateComponents() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Bug report screen")
+        app.goToScreenWithIdentifier(.bugReport)
 
         XCTAssert(app.navigationBars["Bug report"].exists)
         XCTAssert(app.staticTexts["reportBugDescription"].exists)
@@ -40,7 +40,7 @@ class BugReportUITests: XCTestCase {
 
     func testToggleSendingLogs() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Bug report screen")
+        app.goToScreenWithIdentifier(.bugReport)
 
         app.switches["sendLogsToggle"].tap()
 
@@ -51,7 +51,7 @@ class BugReportUITests: XCTestCase {
 
     func testReportText() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Bug report screen")
+        app.goToScreenWithIdentifier(.bugReport)
 
         //  type 4 chars
         app.textViews["reportTextView"].tap()
@@ -66,7 +66,7 @@ class BugReportUITests: XCTestCase {
 
     func testInitialStateComponentsWithScreenshot() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Bug report screen with screenshot")
+        app.goToScreenWithIdentifier(.bugReportWithScreenshot)
 
         XCTAssert(app.navigationBars["Bug report"].exists)
         XCTAssert(app.staticTexts["reportBugDescription"].exists)

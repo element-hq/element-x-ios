@@ -28,8 +28,12 @@ struct RoomScreen: View {
             }
             .padding()
         }
-        .navigationTitle(context.viewState.roomTitle)
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                RoomHeaderView(context: context)
+            }
+        }
     }
     
     private func sendMessage() {

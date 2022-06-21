@@ -28,22 +28,6 @@ class HomeScreenViewModelTests: XCTestCase {
         context = viewModel.context
     }
 
-    @MainActor func testLogout() async throws {
-        var correctResult = false
-        viewModel.callback = { result in
-            switch result {
-            case .logout:
-                correctResult = true
-            default:
-                break
-            }
-        }
-
-        context.send(viewAction: .logout)
-        await Task.yield()
-        XCTAssert(correctResult)
-    }
-
     @MainActor func testSelectRoom() async throws {
         let mockRoomId = "mock_room_id"
         var correctResult = false

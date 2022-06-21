@@ -18,8 +18,8 @@ struct Application {
 }
 
 extension XCUIApplication {
-    func goToScreenWithIdentifier(_ identifier: String) {
-        let button = self.buttons[identifier]
+    func goToScreenWithIdentifier(_ identifier: UITestScreenIdentifier) {
+        let button = self.buttons[identifier.rawValue]
         let lastLabel = staticTexts["lastItem"]
         
         while !button.isHittable && !lastLabel.isHittable {

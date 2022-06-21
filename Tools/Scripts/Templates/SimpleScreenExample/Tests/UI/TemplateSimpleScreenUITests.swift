@@ -20,7 +20,7 @@ import ElementX
 class TemplateSimpleScreenUITests: XCTestCase {
     func testRegularScreen() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Simple Screen - Regular")
+        app.goToScreenWithIdentifier(.simpleRegular)
         
         let title = app.staticTexts["title"]
         XCTAssert(title.exists)
@@ -30,7 +30,7 @@ class TemplateSimpleScreenUITests: XCTestCase {
     
     func testUpgradeScreen() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Simple Screen - Upgrade")
+        app.goToScreenWithIdentifier(.simpleUpgrade)
         
         let title = app.staticTexts["title"]
         XCTAssert(title.exists)

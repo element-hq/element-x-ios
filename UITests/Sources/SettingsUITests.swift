@@ -21,7 +21,7 @@ class SettingsUITests: XCTestCase {
 
     func testInitialStateComponents() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Settings screen")
+        app.goToScreenWithIdentifier(.settings)
         
         XCTAssert(app.navigationBars["Settings"].exists)
         XCTAssert(app.buttons["reportBugButton"].exists)

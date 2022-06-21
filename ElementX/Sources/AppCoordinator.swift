@@ -44,7 +44,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         }
 
         splashViewController = SplashViewController()
-        mainNavigationController = UINavigationController(rootViewController: splashViewController)
+        mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
@@ -251,7 +251,9 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                         memberDetailProvider: memberDetailProvider)
         
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
-                                                         roomName: roomProxy.displayName ?? roomProxy.name)
+                                                         roomName: roomProxy.displayName ?? roomProxy.name,
+                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL),
+                                                         roomEncryptionBadge: roomProxy.encryptionBadgeImage)
         let coordinator = RoomScreenCoordinator(parameters: parameters)
         
         add(childCoordinator: coordinator)
@@ -333,7 +335,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
         add(childCoordinator: coordinator)
         coordinator.start()
-        let navController = UINavigationController(rootViewController: coordinator.toPresentable())
+        let navController = ElementNavigationController(rootViewController: coordinator.toPresentable())
         navController.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                                                  target: self,
                                                                                  action: #selector(dismissBugReportScreen))
