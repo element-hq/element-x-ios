@@ -26,7 +26,6 @@ internal enum Asset {
     internal static let splashScreenPage4 = ImageAsset(name: "Images/Splash Screen Page 4")
     internal static let appLogo = ImageAsset(name: "Images/app-logo")
     internal static let closeCircle = ImageAsset(name: "Images/close_circle")
-    internal static let dummy = ImageAsset(name: "Images/dummy")
     internal static let timelineComposerSendMessage = ImageAsset(name: "Images/timelineComposerSendMessage")
     internal static let timelineScrollToBottom = ImageAsset(name: "Images/timelineScrollToBottom")
   }
