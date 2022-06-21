@@ -15,6 +15,7 @@
 		02D8DF8EB7537EB4E9019DDB /* EventBasedTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 218AB05B4E3889731959C5F1 /* EventBasedTimelineItemProtocol.swift */; };
 		03B8FEA668A5B76A93113BB1 /* MemberDetailProviderManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8C2ABC1A9B62BDB3D216E7FD /* MemberDetailProviderManager.swift */; };
 		03CB204C52F18E24A5C3D219 /* UITestsAppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 967873B9E11828B67F64C89A /* UITestsAppCoordinator.swift */; };
+		04A16B45228F7678A027C079 /* RoomHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 422724361B6555364C43281E /* RoomHeaderView.swift */; };
 		05776B005C57E92582F0CF08 /* BuildSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F87116470221880017CF522 /* BuildSettings.swift */; };
 		059173B3C77056C406906B6D /* target.yml in Resources */ = {isa = PBXBuildFile; fileRef = D4DA544B2520BFA65D6DB4BB /* target.yml */; };
 		0602FA07557F580086782A9E /* UserIndicatorPresentationContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FA072E995316CD18BC29313 /* UserIndicatorPresentationContext.swift */; };
@@ -337,6 +338,7 @@
 		40B21E611DADDEF00307E7AC /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		4110685D9CA159F3FD2D6BA1 /* TextRoomMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextRoomMessage.swift; sourceTree = "<group>"; };
 		4112D04077F6709C5CA0A13E /* FullscreenLoadingViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FullscreenLoadingViewPresenter.swift; sourceTree = "<group>"; };
+		422724361B6555364C43281E /* RoomHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomHeaderView.swift; sourceTree = "<group>"; };
 		434522ED2BDED08759048077 /* fi */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fi; path = fi.lproj/Localizable.strings; sourceTree = "<group>"; };
 		4411C0DA0087A1CB143E96FA /* EventBrief.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBrief.swift; sourceTree = "<group>"; };
 		4470B8CB654B097D807AA713 /* ToastViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastViewPresenter.swift; sourceTree = "<group>"; };
@@ -1018,6 +1020,7 @@
 				4E854E7CF531DAC5CBEBDC75 /* ListTableViewAdapter.swift */,
 				E18CF12478983A5EB390FB26 /* MessageComposer.swift */,
 				BE6C10032A77AE7DC5AA4C50 /* MessageComposerTextField.swift */,
+				422724361B6555364C43281E /* RoomHeaderView.swift */,
 				5221DFDF809142A2D6AC82B9 /* RoomScreen.swift */,
 				B43AF03660F5FD4FFFA7F1CE /* TimelineItemContextMenu.swift */,
 				804F9B0FABE093C7284CD09B /* TimelineItemList.swift */,
@@ -1768,6 +1771,7 @@
 				7D1DAAA364A9A29D554BD24E /* PlaceholderAvatarImage.swift in Sources */,
 				BF35062D06888FA80BD139FF /* Presentable.swift in Sources */,
 				53B9C2240C2F5533246EE230 /* RectangleToastView.swift in Sources */,
+				04A16B45228F7678A027C079 /* RoomHeaderView.swift in Sources */,
 				FE79E2BCCF69E8BF4D21E15A /* RoomMessageFactory.swift in Sources */,
 				8D9F646387DF656EF91EE4CB /* RoomMessageFactoryProtocol.swift in Sources */,
 				D0619D2E6B9C511190FBEB95 /* RoomMessageProtocol.swift in Sources */,
