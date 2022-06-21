@@ -24,7 +24,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomPlainNoAvatar)
 
-        try await Task.sleep(nanoseconds: 1_000_000_000)
+        try await Task.sleep(nanoseconds: 400_000_000)
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
         XCTAssert(app.staticTexts["roomAvatarPlaceholderImage"].exists)
@@ -35,7 +35,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomEncryptedWithAvatar)
 
-        try await Task.sleep(nanoseconds: 1_000_000_000)
+        try await Task.sleep(nanoseconds: 400_000_000)
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
         XCTAssert(app.images["roomAvatarImage"].exists)

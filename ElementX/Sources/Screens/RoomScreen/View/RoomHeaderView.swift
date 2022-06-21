@@ -17,7 +17,7 @@ struct RoomHeaderView: View {
     @ObservedObject var context: RoomScreenViewModel.Context
 
     var body: some View {
-        HStack(alignment: .center, spacing: 8) {
+        HStack(spacing: 8) {
             roomAvatar
             Text(context.viewState.roomTitle)
                 .font(.element.headline)
@@ -26,13 +26,12 @@ struct RoomHeaderView: View {
     }
 
     @ViewBuilder private var roomAvatar: some View {
-        ZStack {
+        ZStack(alignment: .bottomTrailing) {
             roomAvatarImage
                 .clipShape(Circle())
 
             if let encryptionBadge = context.viewState.roomEncryptionBadge {
                 Image(uiImage: encryptionBadge)
-                    .offset(x: 10, y: 10)
                     .accessibilityIdentifier("encryptionBadgeIcon")
             }
         }
