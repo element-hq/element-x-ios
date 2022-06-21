@@ -20,6 +20,9 @@ internal typealias AssetImageTypeAlias = ImageAsset.Image
 // swiftlint:disable identifier_name line_length nesting type_body_length type_name
 internal enum Asset {
   internal enum Images {
+    internal static let encryptionNormal = ImageAsset(name: "Images/encryption_normal")
+    internal static let encryptionTrusted = ImageAsset(name: "Images/encryption_trusted")
+    internal static let encryptionWarning = ImageAsset(name: "Images/encryption_warning")
     internal static let splashScreenPage1 = ImageAsset(name: "Images/Splash Screen Page 1")
     internal static let splashScreenPage2 = ImageAsset(name: "Images/Splash Screen Page 2")
     internal static let splashScreenPage3 = ImageAsset(name: "Images/Splash Screen Page 3")
