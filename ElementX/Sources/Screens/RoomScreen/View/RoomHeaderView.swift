@@ -43,8 +43,10 @@ struct RoomHeaderView: View {
             Image(uiImage: avatar)
                 .resizable()
                 .scaledToFill()
+                .accessibilityIdentifier("roomAvatarImage")
         } else {
             PlaceholderAvatarImage(firstCharacter: String(context.viewState.roomTitle.first ?? Character("")))
+                .accessibilityIdentifier("roomAvatarPlaceholderImage")
         }
     }
 
