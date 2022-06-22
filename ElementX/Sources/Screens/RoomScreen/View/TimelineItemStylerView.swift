@@ -47,12 +47,12 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
                 Text(timelineItem.timestamp)
                     .foregroundColor(.global.white)
                     .font(.element.caption2)
-                    .alignmentGuide(.trailing, computeValue: { dimensions in
+                    .alignmentGuide(.trailing) { dimensions in
                         dimensions[.trailing] + 8
-                    })
-                    .alignmentGuide(.bottom, computeValue: { dimensions in
+                    }
+                    .alignmentGuide(.bottom) { dimensions in
                         dimensions[.bottom] + 8
-                    })
+                    }
                     .padding(4)
                     .background(Color(white: 0, opacity: 0.7))
                     .clipped()
