@@ -19,7 +19,7 @@ struct EventBasedTimelineView: View {
                 avatar
                 Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
                     .font(.body)
-                    .bold()
+                    .fontWeight(.semibold)
             }
         }
     }
@@ -36,7 +36,12 @@ struct EventBasedTimelineView: View {
             }
         }
         .clipShape(Circle())
-        .frame(width: 24.0, height: 24.0)
+        .frame(width: 26.0, height: 26.0)
+        .overlay(
+            Circle()
+                .stroke(Color.element.background, lineWidth: 2)
+        )
+
         .animation(.default, value: timelineItem.senderAvatar)
     }
     
@@ -66,6 +71,8 @@ struct EventBasedTimelineView_Previews: PreviewProvider {
                                                          timestamp: "Later",
                                                          senderId: "Anne"))
         }
+        .frame(maxHeight: 160)
+        .previewLayout(.sizeThatFits)
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> TextRoomTimelineItem {
@@ -73,6 +80,7 @@ struct EventBasedTimelineView_Previews: PreviewProvider {
                                     text: text,
                                     timestamp: timestamp,
                                     shouldShowSenderDetails: true,
+                                    isOutgoing: false,
                                     senderId: senderId)
     }
 }
