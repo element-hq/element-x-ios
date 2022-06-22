@@ -40,6 +40,7 @@ struct TimelineItemList: View {
                             context.viewState.contextMenuBuilder?(timelineItem.id)
                         })
                         .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
                         .onAppear {
                             context.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
