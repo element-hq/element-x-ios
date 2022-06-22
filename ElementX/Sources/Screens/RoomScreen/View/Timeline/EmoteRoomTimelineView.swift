@@ -15,12 +15,14 @@ struct EmoteRoomTimelineView: View {
     var body: some View {
         VStack(alignment: .leading) {
             EventBasedTimelineView(timelineItem: timelineItem)
-            HStack(alignment: .top) {
-                Image(systemName: "face.dashed").padding(.top, 1.0)
-                if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(attributedComponents: attributedComponents)
-                } else {
-                    Text(timelineItem.text)
+            TimelineItemStylerView(timelineItem: timelineItem) {
+                HStack(alignment: .top) {
+                    Image(systemName: "face.dashed").padding(.top, 1.0)
+                    if let attributedComponents = timelineItem.attributedComponents {
+                        FormattedBodyText(attributedComponents: attributedComponents)
+                    } else {
+                        Text(timelineItem.text)
+                    }
                 }
             }
         }

@@ -15,12 +15,14 @@ struct NoticeRoomTimelineView: View {
     var body: some View {
         VStack(alignment: .leading) {
             EventBasedTimelineView(timelineItem: timelineItem)
-            HStack(alignment: .top) {
-                Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
-                if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(attributedComponents: attributedComponents)
-                } else {
-                    Text(timelineItem.text)
+            TimelineItemStylerView(timelineItem: timelineItem) {
+                HStack(alignment: .top) {
+                    Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
+                    if let attributedComponents = timelineItem.attributedComponents {
+                        FormattedBodyText(attributedComponents: attributedComponents)
+                    } else {
+                        Text(timelineItem.text)
+                    }
                 }
             }
         }

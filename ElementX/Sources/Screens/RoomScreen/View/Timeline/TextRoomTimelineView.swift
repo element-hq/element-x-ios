@@ -13,12 +13,15 @@ struct TextRoomTimelineView: View {
     let timelineItem: TextRoomTimelineItem
     
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 2) {
             EventBasedTimelineView(timelineItem: timelineItem)
-            if let attributedComponents = timelineItem.attributedComponents {
-                FormattedBodyText(attributedComponents: attributedComponents)
-            } else {
-                Text(timelineItem.text)
+            TimelineItemStylerView(timelineItem: timelineItem) {
+                if let attributedComponents = timelineItem.attributedComponents {
+                    FormattedBodyText(attributedComponents: attributedComponents)
+                } else {
+                    Text(timelineItem.text)
+                        .font(.body)
+                }
             }
         }
         .id(timelineItem.id)

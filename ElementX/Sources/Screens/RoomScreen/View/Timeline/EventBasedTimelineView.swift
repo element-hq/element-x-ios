@@ -14,13 +14,12 @@ struct EventBasedTimelineView: View {
     
     var body: some View {
         if timelineItem.shouldShowSenderDetails {
-            HStack {
+            Spacer()
+            HStack(alignment: .top, spacing: 4) {
                 avatar
                 Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
-                    .font(.footnote)
+                    .font(.body)
                     .bold()
-                Text(timelineItem.timestamp)
-                    .font(.footnote)
             }
         }
     }
