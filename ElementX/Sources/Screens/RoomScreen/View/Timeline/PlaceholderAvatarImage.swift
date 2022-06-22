@@ -32,6 +32,18 @@ struct PlaceholderAvatarImage: View {
         }
         .aspectRatio(1, contentMode: .fill)
     }
+
+    init(firstCharacter: String) {
+        self.firstCharacter = firstCharacter
+    }
+
+    init(text: String) {
+        if let first = text.first {
+            firstCharacter = String(first)
+        } else {
+            firstCharacter = ""
+        }
+    }
 }
 
 struct PlaceholderAvatarImage_Previews: PreviewProvider {
