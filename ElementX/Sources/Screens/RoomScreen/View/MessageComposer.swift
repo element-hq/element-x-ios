@@ -22,7 +22,7 @@ struct MessageComposer: View {
             } label: {
                 Image(uiImage: Asset.Images.timelineComposerSendMessage.image)
                     .background(Circle()
-                        .foregroundColor(.element.globalWhite)
+                        .foregroundColor(.global.white)
                         .padding(2)
                     )
             }
@@ -47,5 +47,6 @@ struct MessageComposer_Previews: PreviewProvider {
             MessageComposer(text: .constant(""), disabled: true) { }
             MessageComposer(text: .constant("Some message"), disabled: false) { }
         }
+        .tint(.element.accent)
     }
 }
