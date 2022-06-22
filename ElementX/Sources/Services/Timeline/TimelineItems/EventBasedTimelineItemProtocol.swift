@@ -13,6 +13,7 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
     var text: String { get }
     var timestamp: String { get }
     var shouldShowSenderDetails: Bool { get }
+    var isOutgoing: Bool { get }
     
     var senderId: String { get }
     var senderDisplayName: String? { get set }

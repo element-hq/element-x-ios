@@ -15,6 +15,7 @@ struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equat
     var attributedComponents: [AttributedStringBuilderComponent]?
     let timestamp: String
     let shouldShowSenderDetails: Bool
+    let isOutgoing: Bool
     
     let senderId: String
     var senderDisplayName: String?
