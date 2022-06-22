@@ -45,10 +45,18 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
                     .clipped()
                     .cornerRadius(8)
                 Text(timelineItem.timestamp)
-                    .foregroundColor(Color.element.tertiaryContent)
+                    .foregroundColor(.global.white)
                     .font(.element.caption2)
-                    .padding(.trailing, 8)
-                    .padding(.bottom, 4)
+                    .alignmentGuide(.trailing, computeValue: { dimensions in
+                        dimensions[.trailing] + 8
+                    })
+                    .alignmentGuide(.bottom, computeValue: { dimensions in
+                        dimensions[.bottom] + 8
+                    })
+                    .padding(4)
+                    .background(Color(white: 0, opacity: 0.7))
+                    .clipped()
+                    .cornerRadius(8)
             }
         } else {
             VStack(alignment: .trailing, spacing: 4) {
