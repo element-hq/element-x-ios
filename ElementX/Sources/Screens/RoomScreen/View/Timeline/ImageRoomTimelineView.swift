@@ -15,8 +15,9 @@ struct ImageRoomTimelineView: View {
     var body: some View {
         if timelineItem.image != nil || timelineItem.blurhash != nil { // Fixes view heights after loading finishes
             VStack(alignment: .leading) {
-                EventBasedTimelineView(timelineItem: timelineItem)
                 TimelineItemStylerView(timelineItem: timelineItem) {
+                    EventBasedTimelineSenderView(timelineItem: timelineItem)
+                } content: {
                     if let image = timelineItem.image {
                         if let aspectRatio = timelineItem.aspectRatio {
                             Image(uiImage: image)
@@ -40,8 +41,9 @@ struct ImageRoomTimelineView: View {
             .frame(maxHeight: 1000.0)
         } else {
             VStack(alignment: .leading) {
-                EventBasedTimelineView(timelineItem: timelineItem)
                 TimelineItemStylerView(timelineItem: timelineItem) {
+                    EventBasedTimelineSenderView(timelineItem: timelineItem)
+                } content: {
                     HStack {
                         Spacer()
                         ProgressView("Loading")
@@ -66,6 +68,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Some image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: UIImage(systemName: "photo")))
@@ -74,6 +77,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Some other image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: nil))
@@ -82,6 +86,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Blurhashed image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: nil,

@@ -14,8 +14,9 @@ struct EmoteRoomTimelineView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            EventBasedTimelineView(timelineItem: timelineItem)
             TimelineItemStylerView(timelineItem: timelineItem) {
+                EventBasedTimelineSenderView(timelineItem: timelineItem)
+            } content: {
                 HStack(alignment: .top) {
                     Image(systemName: "face.dashed").padding(.top, 1.0)
                     if let attributedComponents = timelineItem.attributedComponents {
@@ -54,6 +55,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
                                      text: text,
                                      timestamp: timestamp,
                                      shouldShowSenderDetails: true,
+                                     isOutgoing: false,
                                      senderId: senderId)
     }
 }
