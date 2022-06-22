@@ -67,7 +67,7 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
                     .foregroundColor(Color.element.tertiaryContent)
                     .font(.element.caption2)
             }
-            .padding(EdgeInsets(top: 8, leading: 12, bottom: 4, trailing: 8))
+            .padding(EdgeInsets(top: 8, leading: 8, bottom: 4, trailing: 8))
             .clipped()
             .background(Color.element.system)
             .cornerRadius(8)

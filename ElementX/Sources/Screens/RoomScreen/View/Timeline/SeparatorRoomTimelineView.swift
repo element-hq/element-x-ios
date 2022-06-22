@@ -15,6 +15,7 @@ struct SeparatorRoomTimelineView: View {
     var body: some View {
         LabelledDivider(label: timelineItem.text)
             .id(timelineItem.id)
+            .padding(.vertical, 8)
     }
 }
 
