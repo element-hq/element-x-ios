@@ -10,13 +10,16 @@ import Foundation
 import UIKit
 
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
+    private let userId: String
     private let mediaProvider: MediaProviderProtocol
     private let memberDetailProvider: MemberDetailProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
-    init(mediaProvider: MediaProviderProtocol,
+    init(userId: String,
+         mediaProvider: MediaProviderProtocol,
          memberDetailProvider: MemberDetailProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
+        self.userId = userId
         self.mediaProvider = mediaProvider
         self.memberDetailProvider = memberDetailProvider
         self.attributedStringBuilder = attributedStringBuilder
@@ -54,6 +57,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     attributedComponents: attributedComponents,
                                     timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                     shouldShowSenderDetails: showSenderDetails,
+                                    isOutgoing: message.sender == userId,
                                     senderId: message.sender,
                                     senderDisplayName: displayName,
                                     senderAvatar: avatarImage)
@@ -74,6 +78,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      text: message.body,
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                      shouldShowSenderDetails: showSenderDetails,
+                                     isOutgoing: message.sender == userId,
                                      senderId: message.sender,
                                      senderDisplayName: displayName,
                                      senderAvatar: avatarImage,
@@ -97,6 +102,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                       attributedComponents: attributedComponents,
                                       timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                       shouldShowSenderDetails: showSenderDetails,
+                                      isOutgoing: message.sender == userId,
                                       senderId: message.sender,
                                       senderDisplayName: displayName,
                                       senderAvatar: avatarImage)
@@ -114,6 +120,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      attributedComponents: attributedComponents,
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                      shouldShowSenderDetails: showSenderDetails,
+                                     isOutgoing: message.sender == userId,
                                      senderId: message.sender,
                                      senderDisplayName: displayName,
                                      senderAvatar: avatarImage)
