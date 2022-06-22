@@ -1,5 +1,5 @@
 //
-//  EventBasedTimelineView.swift
+//  EventBasedTimelineSenderView.swift
 //  ElementX
 //
 //  Created by Stefan Ceriu on 18/03/2022.
@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct EventBasedTimelineView: View {
+struct EventBasedTimelineSenderView: View {
     let timelineItem: EventBasedTimelineItemProtocol
     
     var body: some View {
@@ -20,6 +20,7 @@ struct EventBasedTimelineView: View {
                 Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
                     .font(.body)
                     .fontWeight(.semibold)
+                    .lineLimit(1)
             }
         }
     }
@@ -54,7 +55,7 @@ struct EventBasedTimelineView: View {
     }
 }
 
-struct EventBasedTimelineView_Previews: PreviewProvider {
+struct EventBasedTimelineSenderView_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
@@ -63,24 +64,32 @@ struct EventBasedTimelineView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
-            EventBasedTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
-                                                         timestamp: "Now",
-                                                         senderId: "Bob"))
+            EventBasedTimelineSenderView(timelineItem: item1)
             
-            EventBasedTimelineView(timelineItem: itemWith(text: "Some other text",
-                                                         timestamp: "Later",
-                                                         senderId: "Anne"))
+            EventBasedTimelineSenderView(timelineItem: item2)
         }
         .frame(maxHeight: 160)
         .previewLayout(.sizeThatFits)
     }
-    
-    private static func itemWith(text: String, timestamp: String, senderId: String) -> TextRoomTimelineItem {
-        return TextRoomTimelineItem(id: UUID().uuidString,
-                                    text: text,
-                                    timestamp: timestamp,
-                                    shouldShowSenderDetails: true,
-                                    isOutgoing: false,
-                                    senderId: senderId)
+
+    private static var item1: EventBasedTimelineItemProtocol {
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "Some text",
+                             timestamp: "",
+                             shouldShowSenderDetails: true,
+                             isOutgoing: false,
+                             senderId: "",
+                             senderDisplayName: "Bob")
     }
+
+    private static var item2: EventBasedTimelineItemProtocol {
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "Some text",
+                             timestamp: "",
+                             shouldShowSenderDetails: true,
+                             isOutgoing: false,
+                             senderId: "",
+                             senderDisplayName: "Some long display name for a user")
+    }
+
 }
