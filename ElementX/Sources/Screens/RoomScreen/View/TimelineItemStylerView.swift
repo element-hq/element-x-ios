@@ -18,19 +18,23 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
     @ViewBuilder let header: () -> Header
     @ViewBuilder let content: () -> Content
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         VStack(alignment: timelineItem.isOutgoing ? .trailing : .leading, spacing: -5) {
-            header()
-                .zIndex(1)
+            if !timelineItem.isOutgoing {
+                header()
+                    .zIndex(1)
+            }
             if timelineItem.isOutgoing {
                 HStack {
                     Spacer()
-                    bubble
+                    styledContent
                 }
                 .padding(.trailing, 16)
                 .padding(.leading, 51)
             } else {
-                bubble
+                styledContent
                     .padding(.leading, 16)
                     .padding(.trailing, 51)
             }
@@ -38,7 +42,7 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
     }
 
     @ViewBuilder
-    var bubble: some View {
+    var styledContent: some View {
         if shouldAvoidBubbling {
             ZStack(alignment: .bottomTrailing) {
                 content()
@@ -47,16 +51,11 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
                 Text(timelineItem.timestamp)
                     .foregroundColor(.global.white)
                     .font(.element.caption2)
-                    .alignmentGuide(.trailing) { dimensions in
-                        dimensions[.trailing] + 8
-                    }
-                    .alignmentGuide(.bottom) { dimensions in
-                        dimensions[.bottom] + 8
-                    }
                     .padding(4)
                     .background(Color(white: 0, opacity: 0.7))
                     .clipped()
                     .cornerRadius(8)
+                    .offset(x: -8, y: -8)
             }
         } else {
             VStack(alignment: .trailing, spacing: 4) {
@@ -69,13 +68,18 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
             }
             .padding(EdgeInsets(top: 8, leading: 8, bottom: 4, trailing: 8))
             .clipped()
-            .background(Color.element.system)
-            .cornerRadius(8)
+            .background(bubbleColor)
+            .cornerRadius(12)
         }
     }
 
     private var shouldAvoidBubbling: Bool {
         return timelineItem is ImageRoomTimelineItem
+    }
+
+    private var bubbleColor: Color {
+        let opacity = colorScheme == .light ? 0.06 : 0.15
+        return timelineItem.isOutgoing ? .element.accent.opacity(opacity) : .element.system
     }
 
 }

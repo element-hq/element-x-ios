@@ -24,6 +24,7 @@ struct TextRoomTimelineView: View {
                     .multilineTextAlignment(.leading)
             }
         }
+        .id(timelineItem.id)
     }
 }
 

@@ -111,9 +111,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             
             let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
-            let shouldShowSenderDetails = message.sender != userId && (!areMessagesFromTheSameSender || !areMessagesFromTheSameDay)
+            let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
             
-            newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(message: message, showSenderDetails: shouldShowSenderDetails))
+            newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(message: message,
+                                                                             isOutgoing: message.sender == userId,
+                                                                             showSenderDetails: shouldShowSenderDetails))
             
             previousMessage = message
         }

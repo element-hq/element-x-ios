@@ -11,17 +11,21 @@ import SwiftUI
 
 struct EventBasedTimelineSenderView: View {
     let timelineItem: EventBasedTimelineItemProtocol
+
+    @ScaledMetric private var avatarSize = 26
     
     var body: some View {
         if timelineItem.shouldShowSenderDetails {
-            Spacer()
-            HStack(alignment: .top, spacing: 4) {
-                avatar
-                Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
-                    .font(.body)
+            VStack {
+                Spacer()
+                HStack(alignment: .top, spacing: 4) {
+                    avatar
+                    Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
+                        .font(.body)
                         .foregroundColor(.element.primaryContent)
-                    .fontWeight(.semibold)
-                    .lineLimit(1)
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                }
             }
         }
     }
@@ -38,7 +42,7 @@ struct EventBasedTimelineSenderView: View {
             }
         }
         .clipShape(Circle())
-        .frame(width: 26.0, height: 26.0)
+        .frame(width: avatarSize, height: avatarSize)
         .overlay(
             Circle()
                 .stroke(Color.element.background, lineWidth: 2)
