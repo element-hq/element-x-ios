@@ -22,10 +22,12 @@ struct FormattedBodyText: View {
                             .frame(width: 4.0)
                         Text(component.attributedString)
                             .fixedSize(horizontal: false, vertical: true)
+                            .foregroundColor(.element.primaryContent)
                     }
                 } else {
                     Text(component.attributedString)
                         .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(.element.primaryContent)
                 }
             }
         }

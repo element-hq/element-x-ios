@@ -23,7 +23,7 @@ struct LabelledDivider: View {
     let label: String
     let color: Color
 
-    init(label: String, color: Color = .gray) {
+    init(label: String, color: Color = Color.element.secondaryContent) {
         self.label = label
         self.color = color
     }

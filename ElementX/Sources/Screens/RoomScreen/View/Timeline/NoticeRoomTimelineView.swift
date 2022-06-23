@@ -23,6 +23,7 @@ struct NoticeRoomTimelineView: View {
                         FormattedBodyText(attributedComponents: attributedComponents)
                     } else {
                         Text(timelineItem.text)
+                            .foregroundColor(.element.primaryContent)
                     }
                 }
             }

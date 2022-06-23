@@ -19,6 +19,7 @@ struct EventBasedTimelineSenderView: View {
                 avatar
                 Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
                     .font(.body)
+                        .foregroundColor(.element.primaryContent)
                     .fontWeight(.semibold)
                     .lineLimit(1)
             }
