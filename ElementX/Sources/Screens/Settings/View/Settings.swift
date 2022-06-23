@@ -66,9 +66,9 @@ struct Settings: View {
                 versionText
             }
         }
-        .introspectTableView(customize: { tableView in
+        .introspectTableView { tableView in
             tableView.backgroundColor = .clear
-        })
+        }
         .navigationTitle(ElementL10n.settings)
         .background(Color.element.background, ignoresSafeAreaEdges: .all)
     }
