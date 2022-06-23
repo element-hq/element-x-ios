@@ -34,6 +34,7 @@ struct Settings: View {
                 Button { context.send(viewAction: .reportBug) } label: {
                     Text(ElementL10n.sendBugReport)
                 }
+                .listRowBackground(Color.element.system)
                 .foregroundColor(Color.element.primaryContent)
                 .accessibilityIdentifier("reportBugButton")
 
@@ -41,6 +42,7 @@ struct Settings: View {
                     Button("Crash the app",
                            role: .destructive) { context.send(viewAction: .crash)
                     }
+                           .listRowBackground(Color.element.system)
                            .accessibilityIdentifier("crashButton")
                 }
             }
@@ -49,6 +51,7 @@ struct Settings: View {
                 Button { showingLogoutConfirmation = true } label: {
                     Text(ElementL10n.actionSignOut)
                 }
+                .listRowBackground(Color.element.system)
                 .frame(maxWidth: .infinity)
                 .foregroundColor(Color.element.primaryContent)
                 .accessibilityIdentifier("logoutButton")
@@ -63,7 +66,11 @@ struct Settings: View {
                 versionText
             }
         }
+        .introspectTableView(customize: { tableView in
+            tableView.backgroundColor = .clear
+        })
         .navigationTitle(ElementL10n.settings)
+        .background(Color.element.background, ignoresSafeAreaEdges: .all)
     }
 
     var versionText: some View {
@@ -75,10 +82,14 @@ struct Settings: View {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            let viewModel = SettingsViewModel()
-            Settings(context: viewModel.context)
-                .previewInterfaceOrientation(.portrait)
-        }
+        body.preferredColorScheme(.light)
+        body.preferredColorScheme(.dark)
+    }
+
+    @ViewBuilder
+    static var body: some View {
+        let viewModel = SettingsViewModel()
+        Settings(context: viewModel.context)
+            .previewInterfaceOrientation(.portrait)
     }
 }

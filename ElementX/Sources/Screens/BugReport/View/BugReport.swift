@@ -50,6 +50,7 @@ struct BugReport: View {
             }
             .navigationTitle(ElementL10n.titleActivityBugReport)
         }
+        .background(Color.element.background, ignoresSafeAreaEdges: .all)
     }
     
     /// The main content of the view to be shown in a scroll view.
@@ -59,11 +60,11 @@ struct BugReport: View {
                 .accessibilityIdentifier("reportBugDescription")
             ZStack(alignment: .topLeading) {
                 RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(Color(UIColor.secondarySystemBackground))
+                    .fill(Color.element.system)
 
                 if context.reportText.isEmpty {
                     Text(ElementL10n.sendBugReportPlaceholder)
-                        .foregroundColor(Color(UIColor.placeholderText))
+                        .foregroundColor(Color.element.secondaryContent)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 12)
                 }
@@ -131,10 +132,14 @@ struct BugReport: View {
 
 struct BugReport_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image)
-            BugReport(context: viewModel.context)
-                .previewInterfaceOrientation(.portrait)
-        }
+        body.preferredColorScheme(.light)
+        body.preferredColorScheme(.dark)
+    }
+
+    @ViewBuilder
+    static var body: some View {
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image)
+        BugReport(context: viewModel.context)
+            .previewInterfaceOrientation(.portrait)
     }
 }
