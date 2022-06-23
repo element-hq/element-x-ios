@@ -15,36 +15,40 @@ struct ImageRoomTimelineView: View {
     var body: some View {
         if timelineItem.image != nil || timelineItem.blurhash != nil { // Fixes view heights after loading finishes
             VStack(alignment: .leading) {
-                EventBasedTimelineView(timelineItem: timelineItem)
-                Text(timelineItem.text)
-                if let image = timelineItem.image {
-                    if let aspectRatio = timelineItem.aspectRatio {
+                TimelineItemStylerView(timelineItem: timelineItem) {
+                    EventBasedTimelineSenderView(timelineItem: timelineItem)
+                } content: {
+                    if let image = timelineItem.image {
+                        if let aspectRatio = timelineItem.aspectRatio {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(aspectRatio, contentMode: .fit)
+                        } else {
+                            Image(uiImage: image)
+                                .resizable()
+                                .scaledToFit()
+                        }
+                    } else if let blurhash = timelineItem.blurhash,
+                              // Build a small blurhash image so that it's fast
+                              let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
                         Image(uiImage: image)
                             .resizable()
-                            .aspectRatio(aspectRatio, contentMode: .fit)
-                    } else {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
+                            .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
                     }
-                } else if let blurhash = timelineItem.blurhash,
-                          // Build a small blurhash image so that it's fast
-                          let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
                 }
             }
             .animation(.default, value: timelineItem.image)
             .frame(maxHeight: 1000.0)
         } else {
             VStack(alignment: .leading) {
-                EventBasedTimelineView(timelineItem: timelineItem)
-                Text(timelineItem.text)
-                HStack {
-                    Spacer()
-                    ProgressView("Loading")
-                    Spacer()
+                TimelineItemStylerView(timelineItem: timelineItem) {
+                    EventBasedTimelineSenderView(timelineItem: timelineItem)
+                } content: {
+                    HStack {
+                        Spacer()
+                        ProgressView("Loading")
+                        Spacer()
+                    }
                 }
             }
         }
@@ -64,6 +68,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Some image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: UIImage(systemName: "photo")))
@@ -72,6 +77,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Some other image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: nil))
@@ -80,6 +86,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Blurhashed image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: nil,

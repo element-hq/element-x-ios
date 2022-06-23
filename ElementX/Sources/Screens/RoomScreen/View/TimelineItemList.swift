@@ -32,6 +32,7 @@ struct TimelineItemList: View {
                         .animation(.default, value: context.viewState.isBackPaginating)
                     Spacer()
                 }
+                .listRowBackground(Color.clear)
                 
                 // No idea why previews don't work otherwise
                 ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in
@@ -39,7 +40,9 @@ struct TimelineItemList: View {
                         .contextMenu(menuItems: {
                             context.viewState.contextMenuBuilder?(timelineItem.id)
                         })
+                        .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
+                        .listRowInsets(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
                         .onAppear {
                             context.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }

@@ -11,6 +11,7 @@ import Combine
 import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
+    private let userId: String
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
@@ -22,10 +23,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
     
-    init(timelineProvider: RoomTimelineProviderProtocol,
+    init(userId: String,
+         timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          memberDetailProvider: MemberDetailProviderProtocol) {
+        self.userId = userId
         self.timelineProvider = timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
@@ -110,7 +113,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
             let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
             
-            newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(message: message, showSenderDetails: shouldShowSenderDetails))
+            newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(message: message,
+                                                                             isOutgoing: message.sender == userId,
+                                                                             showSenderDetails: shouldShowSenderDetails))
             
             previousMessage = message
         }

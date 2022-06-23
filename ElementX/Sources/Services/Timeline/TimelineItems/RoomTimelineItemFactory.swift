@@ -22,20 +22,20 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         self.attributedStringBuilder = attributedStringBuilder
     }
     
-    func buildTimelineItemFor(message: RoomMessageProtocol, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
+    func buildTimelineItemFor(message: RoomMessageProtocol, isOutgoing: Bool, showSenderDetails: Bool) -> RoomTimelineItemProtocol {
         let displayName = memberDetailProvider.displayNameForUserId(message.sender)
         let avatarURL = memberDetailProvider.avatarURLStringForUserId(message.sender)
         let avatarImage = mediaProvider.imageFromURLString(avatarURL)
         
         switch message {
         case let message as TextRoomMessage:
-            return buildTextTimelineItemFromMessage(message, showSenderDetails, displayName, avatarImage)
+            return buildTextTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
         case let message as ImageRoomMessage:
-            return buildImageTimelineItemFromMessage(message, showSenderDetails, displayName, avatarImage)
+            return buildImageTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
         case let message as NoticeRoomMessage:
-            return buildNoticeTimelineItemFromMessage(message, showSenderDetails, displayName, avatarImage)
+            return buildNoticeTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
         case let message as EmoteRoomMessage:
-            return buildEmoteTimelineItemFromMessage(message, showSenderDetails, displayName, avatarImage)
+            return buildEmoteTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
         default:
             fatalError("Unknown room message.")
         }
@@ -43,6 +43,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     // MARK: - Private
     private func buildTextTimelineItemFromMessage(_ message: TextRoomMessage,
+                                                  _ isOutgoing: Bool,
                                                   _ showSenderDetails: Bool,
                                                   _ displayName: String?,
                                                   _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
@@ -54,12 +55,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     attributedComponents: attributedComponents,
                                     timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                     shouldShowSenderDetails: showSenderDetails,
+                                    isOutgoing: isOutgoing,
                                     senderId: message.sender,
                                     senderDisplayName: displayName,
                                     senderAvatar: avatarImage)
     }
     
     private func buildImageTimelineItemFromMessage(_ message: ImageRoomMessage,
+                                                   _ isOutgoing: Bool,
                                                    _ showSenderDetails: Bool,
                                                    _ displayName: String?,
                                                    _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
@@ -74,6 +77,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      text: message.body,
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                      shouldShowSenderDetails: showSenderDetails,
+                                     isOutgoing: isOutgoing,
                                      senderId: message.sender,
                                      senderDisplayName: displayName,
                                      senderAvatar: avatarImage,
@@ -86,6 +90,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func buildNoticeTimelineItemFromMessage(_ message: NoticeRoomMessage,
+                                                    _ isOutgoing: Bool,
                                                     _ showSenderDetails: Bool,
                                                     _ displayName: String?,
                                                     _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
@@ -97,12 +102,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                       attributedComponents: attributedComponents,
                                       timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                       shouldShowSenderDetails: showSenderDetails,
+                                      isOutgoing: isOutgoing,
                                       senderId: message.sender,
                                       senderDisplayName: displayName,
                                       senderAvatar: avatarImage)
     }
     
     private func buildEmoteTimelineItemFromMessage(_ message: EmoteRoomMessage,
+                                                   _ isOutgoing: Bool,
                                                    _ showSenderDetails: Bool,
                                                    _ displayName: String?,
                                                    _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
@@ -114,6 +121,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      attributedComponents: attributedComponents,
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                      shouldShowSenderDetails: showSenderDetails,
+                                     isOutgoing: isOutgoing,
                                      senderId: message.sender,
                                      senderDisplayName: displayName,
                                      senderAvatar: avatarImage)

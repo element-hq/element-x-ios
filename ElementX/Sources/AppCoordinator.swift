@@ -238,6 +238,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             MXLog.error("Invalid room identifier: \(roomIdentifier)")
             return
         }
+        let userId = userSession.clientProxy.userIdentifier
         
         let memberDetailProvider = memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
         
@@ -245,7 +246,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                           memberDetailProvider: memberDetailProvider,
                                                           attributedStringBuilder: AttributedStringBuilder())
         
-        let timelineController = RoomTimelineController(timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
+        let timelineController = RoomTimelineController(userId: userId,
+                                                        timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
                                                         memberDetailProvider: memberDetailProvider)

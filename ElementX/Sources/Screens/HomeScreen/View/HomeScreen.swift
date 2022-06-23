@@ -34,6 +34,7 @@ struct HomeScreen: View {
                     Section("Rooms") {
                         ForEach(context.viewState.unencryptedRooms) { room in
                             RoomCell(room: room, context: context)
+                                .listRowBackground(Color.clear)
                         }
                         
                         let other = context.viewState.encryptedRooms
@@ -44,6 +45,7 @@ struct HomeScreen: View {
                                     RoomCell(room: room, context: context)
                                 }
                             }
+                            .listRowBackground(Color.clear)
                         }
                     }
                     
@@ -60,6 +62,7 @@ struct HomeScreen: View {
                                     RoomCell(room: room, context: context)
                                 }
                             }
+                            .listRowBackground(Color.clear)
                         }
                     }
                 }
@@ -69,6 +72,7 @@ struct HomeScreen: View {
             
             Spacer()
         }
+        .background(Color.element.background)
         .ignoresSafeArea(.all, edges: .bottom)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -127,7 +131,8 @@ struct RoomCell: View {
                         .frame(width: 40, height: 40)
                         .mask(Circle())
                 } else {
-                    Image(systemName: "person.3")
+                    PlaceholderAvatarImage(text: room.displayName ?? room.id)
+                        .clipShape(Circle())
                         .frame(width: 40, height: 40)
                 }
                 
@@ -168,6 +173,11 @@ struct RoomCell: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
+        body.preferredColorScheme(.light)
+        body.preferredColorScheme(.dark)
+    }
+
+    static var body: some View {
         let viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
         
         let eventBrief = EventBrief(eventId: "id",

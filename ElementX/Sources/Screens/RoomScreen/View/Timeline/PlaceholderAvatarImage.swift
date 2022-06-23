@@ -18,12 +18,12 @@ import SwiftUI
 
 struct PlaceholderAvatarImage: View {
     
-    let firstCharacter: String
+    private let textForImage: String
     
     var body: some View {
         ZStack {
             Color.element.accent
-            Text(firstCharacter)
+            Text(textForImage)
                 .padding(4)
                 .foregroundColor(.white)
                 // Make the text resizable (i.e. Make it large and then allow it to scale down)
@@ -31,6 +31,10 @@ struct PlaceholderAvatarImage: View {
                 .minimumScaleFactor(0.001)
         }
         .aspectRatio(1, contentMode: .fill)
+    }
+
+    init(text: String) {
+        textForImage = text.first?.uppercased() ?? ""
     }
 }
 
@@ -42,7 +46,7 @@ struct PlaceholderAvatarImage_Previews: PreviewProvider {
     
     @ViewBuilder
     static var body: some View {
-        PlaceholderAvatarImage(firstCharacter: "X")
+        PlaceholderAvatarImage(text: "X")
             .clipShape(Circle())
             .frame(width: 150, height: 100)
     }

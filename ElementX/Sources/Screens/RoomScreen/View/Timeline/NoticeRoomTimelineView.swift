@@ -14,13 +14,17 @@ struct NoticeRoomTimelineView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            EventBasedTimelineView(timelineItem: timelineItem)
-            HStack(alignment: .top) {
-                Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
-                if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(attributedComponents: attributedComponents)
-                } else {
-                    Text(timelineItem.text)
+            TimelineItemStylerView(timelineItem: timelineItem) {
+                EventBasedTimelineSenderView(timelineItem: timelineItem)
+            } content: {
+                HStack(alignment: .top) {
+                    Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
+                    if let attributedComponents = timelineItem.attributedComponents {
+                        FormattedBodyText(attributedComponents: attributedComponents)
+                    } else {
+                        Text(timelineItem.text)
+                            .foregroundColor(.element.primaryContent)
+                    }
                 }
             }
         }
@@ -50,9 +54,10 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {
         return NoticeRoomTimelineItem(id: UUID().uuidString,
-                                     text: text,
-                                     timestamp: timestamp,
-                                     shouldShowSenderDetails: true,
-                                     senderId: senderId)
+                                      text: text,
+                                      timestamp: timestamp,
+                                      shouldShowSenderDetails: true,
+                                      isOutgoing: false,
+                                      senderId: senderId)
     }
 }
