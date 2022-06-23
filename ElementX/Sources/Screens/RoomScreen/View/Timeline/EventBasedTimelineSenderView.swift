@@ -18,6 +18,7 @@ struct EventBasedTimelineSenderView: View {
         if timelineItem.shouldShowSenderDetails {
             VStack {
                 Spacer()
+                    .frame(height: 8)
                 HStack(alignment: .top, spacing: 4) {
                     avatar
                     Text(timelineItem.senderDisplayName ?? timelineItem.senderId)

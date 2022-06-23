@@ -21,6 +21,7 @@ struct Settings: View {
     // MARK: Private
 
     @State private var showingLogoutConfirmation = false
+    @Environment(\.colorScheme) private var colorScheme
     
     // MARK: Public
     
@@ -34,7 +35,6 @@ struct Settings: View {
                 Button { context.send(viewAction: .reportBug) } label: {
                     Text(ElementL10n.sendBugReport)
                 }
-                .listRowBackground(Color.element.system)
                 .foregroundColor(Color.element.primaryContent)
                 .accessibilityIdentifier("reportBugButton")
 
@@ -42,16 +42,16 @@ struct Settings: View {
                     Button("Crash the app",
                            role: .destructive) { context.send(viewAction: .crash)
                     }
-                           .listRowBackground(Color.element.system)
+
                            .accessibilityIdentifier("crashButton")
                 }
             }
+            .listRowBackground(rowBackgroundColor)
 
             Section {
                 Button { showingLogoutConfirmation = true } label: {
                     Text(ElementL10n.actionSignOut)
                 }
-                .listRowBackground(Color.element.system)
                 .frame(maxWidth: .infinity)
                 .foregroundColor(Color.element.primaryContent)
                 .accessibilityIdentifier("logoutButton")
@@ -65,16 +65,25 @@ struct Settings: View {
             } footer: {
                 versionText
             }
+            .listRowBackground(rowBackgroundColor)
         }
         .introspectTableView { tableView in
             tableView.backgroundColor = .clear
         }
         .navigationTitle(ElementL10n.settings)
-        .background(Color.element.background, ignoresSafeAreaEdges: .all)
+        .background(backgroundColor, ignoresSafeAreaEdges: .all)
     }
 
     var versionText: some View {
         Text(ElementL10n.settingsVersion + ": " + ElementInfoPlist.cfBundleShortVersionString + " (" + ElementInfoPlist.cfBundleVersion + ")")
+    }
+
+    private var backgroundColor: Color {
+        colorScheme == .light ? .element.system : .element.background
+    }
+
+    private var rowBackgroundColor: Color {
+        colorScheme == .light ? .element.background : .element.system
     }
 }
 

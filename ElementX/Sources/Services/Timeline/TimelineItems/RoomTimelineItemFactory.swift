@@ -10,16 +10,13 @@ import Foundation
 import UIKit
 
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
-    private let userId: String
     private let mediaProvider: MediaProviderProtocol
     private let memberDetailProvider: MemberDetailProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
-    init(userId: String,
-         mediaProvider: MediaProviderProtocol,
+    init(mediaProvider: MediaProviderProtocol,
          memberDetailProvider: MemberDetailProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
-        self.userId = userId
         self.mediaProvider = mediaProvider
         self.memberDetailProvider = memberDetailProvider
         self.attributedStringBuilder = attributedStringBuilder
