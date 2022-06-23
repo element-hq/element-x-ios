@@ -19,6 +19,7 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric private var minBubbleWidth = 44
 
     var body: some View {
         VStack(alignment: timelineItem.isOutgoing ? .trailing : .leading, spacing: -5) {
@@ -60,7 +61,7 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
-                    .frame(minWidth: 64, alignment: .leading)
+                    .frame(minWidth: minBubbleWidth, alignment: .leading)
 
                 Text(timelineItem.timestamp)
                     .foregroundColor(Color.element.tertiaryContent)
