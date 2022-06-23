@@ -131,7 +131,7 @@ struct RoomCell: View {
                         .frame(width: 40, height: 40)
                         .mask(Circle())
                 } else {
-                    PlaceholderAvatarImage(text: room.displayName ?? "")
+                    PlaceholderAvatarImage(text: room.displayName ?? room.id)
                         .clipShape(Circle())
                         .frame(width: 40, height: 40)
                 }

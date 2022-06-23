@@ -45,7 +45,7 @@ struct RoomHeaderView: View {
                 .scaledToFill()
                 .accessibilityIdentifier("roomAvatarImage")
         } else {
-            PlaceholderAvatarImage(firstCharacter: String(context.viewState.roomTitle.first ?? Character("")))
+            PlaceholderAvatarImage(text: context.viewState.roomTitle)
                 .accessibilityIdentifier("roomAvatarPlaceholderImage")
         }
     }
@@ -78,7 +78,7 @@ struct RoomHeaderView_Previews: PreviewProvider {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             roomName: "Some Room name",
-                                            roomAvatar: Asset.Images.appLogo.image,
+                                            roomAvatar: nil,
                                             roomEncryptionBadge: Asset.Images.encryptionTrusted.image
         )
 

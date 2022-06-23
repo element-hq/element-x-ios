@@ -38,7 +38,7 @@ struct EventBasedTimelineSenderView: View {
                     .scaledToFill()
                     .overlay(Circle().stroke(Color.element.accent))
             } else {
-                PlaceholderAvatarImage(firstCharacter: String(firstLetter))
+                PlaceholderAvatarImage(text: timelineItem.senderDisplayName ?? timelineItem.senderId)
             }
         }
         .clipShape(Circle())
@@ -49,14 +49,6 @@ struct EventBasedTimelineSenderView: View {
         )
 
         .animation(.default, value: timelineItem.senderAvatar)
-    }
-    
-    private var firstLetter: String {
-        if let senderDisplayName = timelineItem.senderDisplayName {
-            return senderDisplayName.prefix(1).uppercased()
-        } else {
-            return timelineItem.senderId.prefix(2).suffix(1).uppercased()
-        }
     }
 }
 
