@@ -15,6 +15,8 @@ struct TimelineItemList: View {
     @State private var tableViewObserver: ListTableViewAdapter = ListTableViewAdapter()
     @State private var timelineItems: [RoomTimelineViewProvider] = []
     @State private var hasPendingChanges = false
+
+    @Environment(\.timelineStyler) private var timelineStyler
     
     @ObservedObject var context: RoomScreenViewModel.Context
     
@@ -42,7 +44,7 @@ struct TimelineItemList: View {
                         })
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
+                        .listRowInsets(timelineStyler.listRowInsets)
                         .onAppear {
                             context.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
