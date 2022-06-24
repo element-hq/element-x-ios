@@ -12,19 +12,19 @@ import Combine
 
 import Introspect
 
-struct TimelineItemStylerView<Header: View, Content: View>: View {
+struct TimelineItemBubbledStylerView<Content: View>: View {
 
     let timelineItem: EventBasedTimelineItemProtocol
-    @ViewBuilder let header: () -> Header
     @ViewBuilder let content: () -> Content
 
     @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric private var minBubbleWidth = 44
+    @ScaledMetric private var avatarSize = 26
 
     var body: some View {
         VStack(alignment: timelineItem.isOutgoing ? .trailing : .leading, spacing: -5) {
             if !timelineItem.isOutgoing {
-                header()
+                header
                     .zIndex(1)
             }
             if timelineItem.isOutgoing {
@@ -40,6 +40,46 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
                     .padding(.trailing, 51)
             }
         }
+    }
+
+    @ViewBuilder
+    private var header: some View {
+        if timelineItem.shouldShowSenderDetails {
+            VStack {
+                Spacer()
+                    .frame(height: 8)
+                HStack(alignment: .top, spacing: 4) {
+                    senderAvatar
+                    Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
+                        .font(.body)
+                        .foregroundColor(.element.primaryContent)
+                        .fontWeight(.semibold)
+                        .lineLimit(1)
+                }
+            }
+        }
+    }
+
+    @ViewBuilder
+    private var senderAvatar: some View {
+        ZStack(alignment: .center) {
+            if let avatar = timelineItem.senderAvatar {
+                Image(uiImage: avatar)
+                    .resizable()
+                    .scaledToFill()
+                    .overlay(Circle().stroke(Color.element.accent))
+            } else {
+                PlaceholderAvatarImage(text: timelineItem.senderDisplayName ?? timelineItem.senderId)
+            }
+        }
+        .clipShape(Circle())
+        .frame(width: avatarSize, height: avatarSize)
+        .overlay(
+            Circle()
+                .stroke(Color.element.background, lineWidth: 2)
+        )
+
+        .animation(.default, value: timelineItem.senderAvatar)
     }
 
     @ViewBuilder
@@ -85,7 +125,7 @@ struct TimelineItemStylerView<Header: View, Content: View>: View {
 
 }
 
-struct TimelineItemStylerView_Previews: PreviewProvider {
+struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
@@ -94,24 +134,16 @@ struct TimelineItemStylerView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading) {
-            TimelineItemStylerView(timelineItem: item1) {
-                EventBasedTimelineSenderView(timelineItem: item1)
-            } content: {
+            TimelineItemBubbledStylerView(timelineItem: item1) {
                 Text(item1.text)
             }
-            TimelineItemStylerView(timelineItem: item2) {
-                EventBasedTimelineSenderView(timelineItem: item2)
-            } content: {
+            TimelineItemBubbledStylerView(timelineItem: item2) {
                 Text(item2.text)
             }
-            TimelineItemStylerView(timelineItem: item3) {
-                EventBasedTimelineSenderView(timelineItem: item3)
-            } content: {
+            TimelineItemBubbledStylerView(timelineItem: item3) {
                 Text(item3.text)
             }
-            TimelineItemStylerView(timelineItem: item4) {
-                EventBasedTimelineSenderView(timelineItem: item4)
-            } content: {
+            TimelineItemBubbledStylerView(timelineItem: item4) {
                 Text(item4.text)
             }
         }

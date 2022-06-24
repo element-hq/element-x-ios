@@ -11,20 +11,18 @@ import SwiftUI
 
 struct EmoteRoomTimelineView: View {
     let timelineItem: EmoteRoomTimelineItem
+
+    @Environment(\.timelineStyler) private var timelineStyler
     
     var body: some View {
-        VStack(alignment: .leading) {
-            TimelineItemStylerView(timelineItem: timelineItem) {
-                EventBasedTimelineSenderView(timelineItem: timelineItem)
-            } content: {
-                HStack(alignment: .top) {
-                    Image(systemName: "face.dashed").padding(.top, 1.0)
-                    if let attributedComponents = timelineItem.attributedComponents {
-                        FormattedBodyText(attributedComponents: attributedComponents)
-                    } else {
-                        Text(timelineItem.text)
-                            .foregroundColor(.element.primaryContent)
-                    }
+        timelineStyler.styled(timelineItem: timelineItem) {
+            HStack(alignment: .top) {
+                Image(systemName: "face.dashed").padding(.top, 1.0)
+                if let attributedComponents = timelineItem.attributedComponents {
+                    FormattedBodyText(attributedComponents: attributedComponents)
+                } else {
+                    Text(timelineItem.text)
+                        .foregroundColor(.element.primaryContent)
                 }
             }
         }
