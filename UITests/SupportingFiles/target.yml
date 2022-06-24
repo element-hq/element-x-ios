@@ -41,4 +41,5 @@ targets:
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
     - path: ../../ElementX/Sources/BuildSettings.swift
+    - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
     - path: ../../ElementX/Sources/UITestScreenIdentifier.swift

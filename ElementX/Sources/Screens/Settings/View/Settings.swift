@@ -98,7 +98,7 @@ struct Settings: View {
                     HStack {
                         Text(ElementL10n.settingsTimelineStyle)
                         Spacer()
-                        Text(ElementSettings.shared.timelineStyle.shortDescription)
+                        Text(timelineStyler.shortDescription)
                         Image(systemName: "chevron.right")
                             .font(.body)
                     }

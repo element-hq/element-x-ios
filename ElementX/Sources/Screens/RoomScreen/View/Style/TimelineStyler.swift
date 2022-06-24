@@ -22,7 +22,12 @@ class TimelineStyler: ObservableObject, Identifiable {
     static let bubbled = TimelineStyler(style: .bubbled)
 
     var shortDescription: String {
-        style.shortDescription
+        switch style {
+        case .plain:
+            return ElementL10n.roomTimelineStylePlainShortDescription
+        case .bubbled:
+            return ElementL10n.roomTimelineStyleBubbledShortDescription
+        }
     }
 
     @ViewBuilder
@@ -54,7 +59,12 @@ class TimelineStyler: ObservableObject, Identifiable {
 
 extension TimelineStyler: CustomStringConvertible {
     var description: String {
-        style.description
+        switch style {
+        case .plain:
+            return ElementL10n.roomTimelineStylePlainLongDescription
+        case .bubbled:
+            return ElementL10n.roomTimelineStyleBubbledLongDescription
+        }
     }
 }
 
