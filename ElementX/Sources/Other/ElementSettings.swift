@@ -21,11 +21,13 @@ final class ElementSettings {
     static let shared = ElementSettings()
 
     /// UserDefaults to be used on reads and writes.
-    static var store: UserDefaults = {
-        return .standard
-    }()
+    static var store: UserDefaults {
+        .standard
+    }
 
-    private init() {}
+    private init() {
+        // no-op
+    }
 
     // MARK: -
 

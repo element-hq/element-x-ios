@@ -30,7 +30,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     private var header: some View {
         if timelineItem.shouldShowSenderDetails {
             HStack {
-                senderAvatar
+                TimelineSenderAvatarView(timelineItem: timelineItem)
                 Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
                     .font(.body)
                     .foregroundColor(.element.primaryContent)
@@ -41,28 +41,6 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     .font(.element.caption2)
             }
         }
-    }
-
-    @ViewBuilder
-    private var senderAvatar: some View {
-        ZStack(alignment: .center) {
-            if let avatar = timelineItem.senderAvatar {
-                Image(uiImage: avatar)
-                    .resizable()
-                    .scaledToFill()
-                    .overlay(Circle().stroke(Color.element.accent))
-            } else {
-                PlaceholderAvatarImage(text: timelineItem.senderDisplayName ?? timelineItem.senderId)
-            }
-        }
-        .clipShape(Circle())
-        .frame(width: avatarSize, height: avatarSize)
-        .overlay(
-            Circle()
-                .stroke(Color.element.background, lineWidth: 2)
-        )
-
-        .animation(.default, value: timelineItem.senderAvatar)
     }
 }
 
@@ -75,57 +53,13 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading) {
-            TimelineItemPlainStylerView(timelineItem: item1) {
-                Text(item1.text)
-            }
-            TimelineItemPlainStylerView(timelineItem: item2) {
-                Text(item2.text)
-            }
-            TimelineItemPlainStylerView(timelineItem: item3) {
-                Text(item3.text)
-            }
-            TimelineItemPlainStylerView(timelineItem: item4) {
-                Text(item4.text)
+            ForEach((1..<MockRoomTimelineController().timelineItems.count), id: \.self) { index in
+                let item = MockRoomTimelineController().timelineItems[index]
+                RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
             }
         }
+        .timelineStyler(.plain)
         .padding(.horizontal, 8)
-        .frame(maxHeight: 400)
         .previewLayout(.sizeThatFits)
-    }
-
-    private static var item1: TextRoomTimelineItem {
-        return TextRoomTimelineItem(id: UUID().uuidString,
-                                    text: "Short 1",
-                                    timestamp: "07:05",
-                                    shouldShowSenderDetails: true,
-                                    isOutgoing: false,
-                                    senderId: "Bob")
-    }
-
-    private static var item2: TextRoomTimelineItem {
-        return TextRoomTimelineItem(id: UUID().uuidString,
-                                    text: "Short loin ground round tongue hamburger, fatback salami shoulder.",
-                                    timestamp: "08:05",
-                                    shouldShowSenderDetails: true,
-                                    isOutgoing: false,
-                                    senderId: "Bob")
-    }
-
-    private static var item3: TextRoomTimelineItem {
-        return TextRoomTimelineItem(id: UUID().uuidString,
-                                    text: "Short loin ground round tongue hamburger, fatback salami shoulder 2.",
-                                    timestamp: "08:07",
-                                    shouldShowSenderDetails: false,
-                                    isOutgoing: true,
-                                    senderId: "Bob")
-    }
-
-    private static var item4: TextRoomTimelineItem {
-        return TextRoomTimelineItem(id: UUID().uuidString,
-                                    text: "Short 2",
-                                    timestamp: "08:08",
-                                    shouldShowSenderDetails: false,
-                                    isOutgoing: true,
-                                    senderId: "Bob")
     }
 }

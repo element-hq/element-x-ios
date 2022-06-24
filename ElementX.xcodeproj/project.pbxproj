@@ -225,6 +225,7 @@
 		EC7FFD552865219900DF372A /* ElementSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7FFD542865219900DF372A /* ElementSettings.swift */; };
 		EC7FFD592865B54E00DF372A /* TimelineStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7FFD582865B54E00DF372A /* TimelineStyle.swift */; };
 		EC7FFD5B2865D26400DF372A /* TimelineStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7FFD5A2865D26400DF372A /* TimelineStyler.swift */; };
+		EC7FFD5D2865EEC200DF372A /* TimelineSenderAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC7FFD5C2865EEC200DF372A /* TimelineSenderAvatarView.swift */; };
 		EC8128A028620A970012F05B /* TimelineItemBubbledStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC81289F28620A970012F05B /* TimelineItemBubbledStylerView.swift */; };
 		ED4F663C783E9A8C0E80B983 /* TemplateSimpleScreenViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47543EB19F3DCF308751F53C /* TemplateSimpleScreenViewModel.swift */; };
 		EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */; };
@@ -583,6 +584,7 @@
 		EC7FFD542865219900DF372A /* ElementSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementSettings.swift; sourceTree = "<group>"; };
 		EC7FFD582865B54E00DF372A /* TimelineStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStyle.swift; sourceTree = "<group>"; };
 		EC7FFD5A2865D26400DF372A /* TimelineStyler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStyler.swift; sourceTree = "<group>"; };
+		EC7FFD5C2865EEC200DF372A /* TimelineSenderAvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineSenderAvatarView.swift; sourceTree = "<group>"; };
 		EC81289F28620A970012F05B /* TimelineItemBubbledStylerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemBubbledStylerView.swift; sourceTree = "<group>"; };
 		ED1D792EB82506A19A72C8DE /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		EDB3E99D445CFCB3AA3F34FB /* FramePreferenceKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FramePreferenceKey.swift; sourceTree = "<group>"; };
@@ -1039,6 +1041,7 @@
 				B43AF03660F5FD4FFFA7F1CE /* TimelineItemContextMenu.swift */,
 				804F9B0FABE093C7284CD09B /* TimelineItemList.swift */,
 				874A1842477895F199567BD7 /* TimelineView.swift */,
+				EC7FFD5C2865EEC200DF372A /* TimelineSenderAvatarView.swift */,
 				EC7FFD4F286508BD00DF372A /* Style */,
 				B7D3886505ECC85A06DA8258 /* Timeline */,
 			);
@@ -1772,6 +1775,7 @@
 				D5EA4C6C80579279770D5804 /* ImageRoomTimelineView.swift in Sources */,
 				A5C8F013ED9FB8AA6FEE18A7 /* InfoPlist.swift in Sources */,
 				F4C3FEDB1B3A05376A1723A3 /* KeychainController.swift in Sources */,
+				EC7FFD5D2865EEC200DF372A /* TimelineSenderAvatarView.swift in Sources */,
 				F2DD8661B5C0BA2BB526FA6C /* KeychainControllerProtocol.swift in Sources */,
 				9C9E48A627C7C166084E3F5B /* LabelledActivityIndicatorView.swift in Sources */,
 				D826154612415D2A3BB6EBF3 /* ListTableViewAdapter.swift in Sources */,
