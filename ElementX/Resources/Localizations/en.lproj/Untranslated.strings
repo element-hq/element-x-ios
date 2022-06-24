@@ -1,3 +1,9 @@
 "untranslated" = "Untranslated";
 "screenshot_detected_title" = "You took a screenshot";
 "screenshot_detected_message" = "Would you like to submit a bug report?";
+
+"settings_timeline_style" = "Timeline Style";
+"room_timeline_style_plain_short_description" = "Plain";
+"room_timeline_style_bubbled_short_description" = "Bubbles";
+"room_timeline_style_plain_long_description" = "Plain Timeline";
+"room_timeline_style_bubbled_long_description" = "Bubbled Timeline";

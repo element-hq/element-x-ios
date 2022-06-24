@@ -21,7 +21,9 @@ struct Settings: View {
     // MARK: Private
 
     @State private var showingLogoutConfirmation = false
+    @State private var showingTimelineStyles = false
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(\.timelineStyler) private var timelineStyler
     
     // MARK: Public
     
@@ -47,6 +49,8 @@ struct Settings: View {
                 }
             }
             .listRowBackground(rowBackgroundColor)
+
+            userInterfaceSection
 
             Section {
                 Button { showingLogoutConfirmation = true } label: {
@@ -74,7 +78,7 @@ struct Settings: View {
         .background(backgroundColor, ignoresSafeAreaEdges: .all)
     }
 
-    var versionText: some View {
+    private var versionText: some View {
         Text(ElementL10n.settingsVersion + ": " + ElementInfoPlist.cfBundleShortVersionString + " (" + ElementInfoPlist.cfBundleVersion + ")")
     }
 
@@ -84,6 +88,37 @@ struct Settings: View {
 
     private var rowBackgroundColor: Color {
         colorScheme == .light ? .element.background : .element.system
+    }
+
+    @ViewBuilder
+    private var userInterfaceSection: some View {
+        if BuildSettings.settingsShowTimelineStyle {
+            Section(header: Text(ElementL10n.settingsUserInterface)) {
+                Button { showingTimelineStyles = true } label: {
+                    HStack {
+                        Text(ElementL10n.settingsTimelineStyle)
+                        Spacer()
+                        Text(ElementSettings.shared.timelineStyle.shortDescription)
+                        Image(systemName: "chevron.right")
+                            .font(.body)
+                    }
+                }
+                .foregroundColor(Color.element.primaryContent)
+                .accessibilityIdentifier("timelineStyleButton")
+                .confirmationDialog(ElementL10n.settingsTimelineStyle,
+                                    isPresented: $showingTimelineStyles,
+                                    titleVisibility: .visible) {
+                    ForEach(TimelineStyler.allCases) { styler in
+                        Button { ElementSettings.shared.timelineStyle = styler.style
+                            timelineStyler.style = styler.style
+                        } label: {
+                            Text(styler.description)
+                        }
+                    }
+                }
+            }
+            .listRowBackground(rowBackgroundColor)
+        }
     }
 }
 

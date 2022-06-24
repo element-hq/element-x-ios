@@ -26,6 +26,7 @@ class SettingsUITests: XCTestCase {
         XCTAssert(app.navigationBars["Settings"].exists)
         XCTAssert(app.buttons["reportBugButton"].exists)
         XCTAssertEqual(app.buttons["crashButton"].exists, BuildSettings.settingsCrashButtonVisible)
+        XCTAssertEqual(app.buttons["timelineStyleButton"].exists, BuildSettings.settingsShowTimelineStyle)
         XCTAssert(app.buttons["logoutButton"].exists)
     }
 
