@@ -24,17 +24,6 @@ enum TimelineStyle: String, CaseIterable {
     }
 }
 
-extension TimelineStyle: CustomStringConvertible {
-    var description: String {
-        switch self {
-        case .plain:
-            return ElementL10n.roomTimelineStylePlainLongDescription
-        case .bubbled:
-            return ElementL10n.roomTimelineStyleBubbledLongDescription
-        }
-    }
-}
-
 // MARK: - Environment
 
 private struct TimelineStyleKey: EnvironmentKey {

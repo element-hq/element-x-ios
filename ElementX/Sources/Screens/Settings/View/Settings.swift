@@ -99,8 +99,20 @@ struct Settings: View {
                             .tag(style)
                     }
                 }
+                .accessibilityIdentifier("timelineStylePicker")
             }
             .listRowBackground(rowBackgroundColor)
+        }
+    }
+}
+
+extension TimelineStyle: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .plain:
+            return ElementL10n.roomTimelineStylePlainLongDescription
+        case .bubbled:
+            return ElementL10n.roomTimelineStyleBubbledLongDescription
         }
     }
 }
