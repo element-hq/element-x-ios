@@ -8,9 +8,6 @@
 
 import Foundation
 import SwiftUI
-import Combine
-
-import Introspect
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
 
@@ -19,7 +16,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric private var minBubbleWidth = 44
-    @ScaledMetric private var avatarSize = 26
 
     var body: some View {
         VStack(alignment: timelineItem.isOutgoing ? .trailing : .leading, spacing: -5) {

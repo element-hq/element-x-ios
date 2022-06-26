@@ -8,16 +8,11 @@
 
 import Foundation
 import SwiftUI
-import Combine
-
-import Introspect
 
 struct TimelineItemPlainStylerView<Content: View>: View {
 
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
-
-    @ScaledMetric private var avatarSize = 26
 
     var body: some View {
         VStack(alignment: .leading) {
