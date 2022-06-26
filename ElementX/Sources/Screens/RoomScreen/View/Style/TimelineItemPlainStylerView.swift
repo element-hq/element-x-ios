@@ -58,7 +58,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
                 RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
             }
         }
-        .timelineStyler(.plain)
+        .timelineStyle(.plain)
         .padding(.horizontal, 8)
         .previewLayout(.sizeThatFits)
     }

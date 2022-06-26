@@ -11,11 +11,9 @@ import SwiftUI
 
 struct NoticeRoomTimelineView: View {
     let timelineItem: NoticeRoomTimelineItem
-
-    @Environment(\.timelineStyler) private var timelineStyler
     
     var body: some View {
-        timelineStyler.styled(timelineItem: timelineItem) {
+        TimelineStyler(timelineItem: timelineItem) {
             HStack(alignment: .top) {
                 Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
                 if let attributedComponents = timelineItem.attributedComponents {

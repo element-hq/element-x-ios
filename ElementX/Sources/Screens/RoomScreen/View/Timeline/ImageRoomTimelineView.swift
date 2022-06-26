@@ -11,12 +11,10 @@ import SwiftUI
 
 struct ImageRoomTimelineView: View {
     let timelineItem: ImageRoomTimelineItem
-
-    @Environment(\.timelineStyler) private var timelineStyler
     
     var body: some View {
         if timelineItem.image != nil || timelineItem.blurhash != nil { // Fixes view heights after loading finishes
-            timelineStyler.styled(timelineItem: timelineItem) {
+            TimelineStyler(timelineItem: timelineItem) {
                 if let image = timelineItem.image {
                     if let aspectRatio = timelineItem.aspectRatio {
                         Image(uiImage: image)
@@ -39,7 +37,7 @@ struct ImageRoomTimelineView: View {
             .animation(.default, value: timelineItem.image)
             .frame(maxHeight: 1000.0)
         } else {
-            timelineStyler.styled(timelineItem: timelineItem) {
+            TimelineStyler(timelineItem: timelineItem) {
                 HStack {
                     Spacer()
                     ProgressView("Loading")

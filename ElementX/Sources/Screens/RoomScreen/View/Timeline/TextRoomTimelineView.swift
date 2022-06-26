@@ -11,11 +11,9 @@ import SwiftUI
 
 struct TextRoomTimelineView: View {
     let timelineItem: TextRoomTimelineItem
-
-    @Environment(\.timelineStyler) private var timelineStyler
     
     var body: some View {
-        timelineStyler.styled(timelineItem: timelineItem) {
+        TimelineStyler(timelineItem: timelineItem) {
             if let attributedComponents = timelineItem.attributedComponents {
                 FormattedBodyText(attributedComponents: attributedComponents)
             } else {
@@ -54,14 +52,14 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                                                         shouldShowSenderDetails: true,
                                                         isOutgoing: false,
                                                         senderId: "Bob"))
-            .timelineStyler(.plain)
+            .timelineStyle(.plain)
 
             TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
                                                         timestamp: "Later",
                                                         shouldShowSenderDetails: true,
                                                         isOutgoing: true,
                                                         senderId: "Anne"))
-            .timelineStyler(.plain)
+            .timelineStyle(.plain)
         }
         .padding(.horizontal, 8)
     }

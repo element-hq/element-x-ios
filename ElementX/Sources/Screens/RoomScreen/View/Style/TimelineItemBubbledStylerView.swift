@@ -117,7 +117,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
                 RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
             }
         }
-        .timelineStyler(.bubbled)
+        .timelineStyle(.bubbled)
         .padding(.horizontal, 8)
         .previewLayout(.sizeThatFits)
     }

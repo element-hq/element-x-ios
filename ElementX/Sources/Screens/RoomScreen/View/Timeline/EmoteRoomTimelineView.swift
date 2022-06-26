@@ -11,11 +11,9 @@ import SwiftUI
 
 struct EmoteRoomTimelineView: View {
     let timelineItem: EmoteRoomTimelineItem
-
-    @Environment(\.timelineStyler) private var timelineStyler
     
     var body: some View {
-        timelineStyler.styled(timelineItem: timelineItem) {
+        TimelineStyler(timelineItem: timelineItem) {
             HStack(alignment: .top) {
                 Image(systemName: "face.dashed").padding(.top, 1.0)
                 if let attributedComponents = timelineItem.attributedComponents {

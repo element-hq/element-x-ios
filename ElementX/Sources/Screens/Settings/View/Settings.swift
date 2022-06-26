@@ -21,9 +21,8 @@ struct Settings: View {
     // MARK: Private
 
     @State private var showingLogoutConfirmation = false
-    @State private var showingTimelineStyles = false
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.timelineStyler) private var timelineStyler
+    @ObservedObject private var settings = ElementSettings.shared
     
     // MARK: Public
     
@@ -94,26 +93,10 @@ struct Settings: View {
     private var userInterfaceSection: some View {
         if BuildSettings.settingsShowTimelineStyle {
             Section(header: Text(ElementL10n.settingsUserInterface)) {
-                Button { showingTimelineStyles = true } label: {
-                    HStack {
-                        Text(ElementL10n.settingsTimelineStyle)
-                        Spacer()
-                        Text(timelineStyler.shortDescription)
-                        Image(systemName: "chevron.right")
-                            .font(.body)
-                    }
-                }
-                .foregroundColor(Color.element.primaryContent)
-                .accessibilityIdentifier("timelineStyleButton")
-                .confirmationDialog(ElementL10n.settingsTimelineStyle,
-                                    isPresented: $showingTimelineStyles,
-                                    titleVisibility: .visible) {
-                    ForEach(TimelineStyler.allCases) { styler in
-                        Button { ElementSettings.shared.timelineStyle = styler.style
-                            timelineStyler.style = styler.style
-                        } label: {
-                            Text(styler.description)
-                        }
+                Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
+                    ForEach(TimelineStyle.allCases, id: \.self) { style in
+                        Text(style.description)
+                            .tag(style)
                     }
                 }
             }

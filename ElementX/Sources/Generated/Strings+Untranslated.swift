@@ -12,12 +12,8 @@ import Foundation
 extension ElementL10n {
   /// Bubbled Timeline
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
-  /// Bubbles
-  public static let roomTimelineStyleBubbledShortDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_short_description")
   /// Plain Timeline
   public static let roomTimelineStylePlainLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_plain_long_description")
-  /// Plain
-  public static let roomTimelineStylePlainShortDescription = ElementL10n.tr("Untranslated", "room_timeline_style_plain_short_description")
   /// Would you like to submit a bug report?
   public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
   /// You took a screenshot

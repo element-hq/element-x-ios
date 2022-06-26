@@ -11,84 +11,18 @@ import SwiftUI
 
 // MARK: - TimelineStyler
 
-class TimelineStyler: ObservableObject, Identifiable {
-    var style: TimelineStyle
+struct TimelineStyler<Content: View>: View {
+    @Environment(\.timelineStyle) private var style
 
-    fileprivate init(style: TimelineStyle) {
-        self.style = style
-    }
+    let timelineItem: EventBasedTimelineItemProtocol
+    @ViewBuilder let content: () -> Content
 
-    static let plain = TimelineStyler(style: .plain)
-    static let bubbled = TimelineStyler(style: .bubbled)
-
-    var shortDescription: String {
-        switch style {
-        case .plain:
-            return ElementL10n.roomTimelineStylePlainShortDescription
-        case .bubbled:
-            return ElementL10n.roomTimelineStyleBubbledShortDescription
-        }
-    }
-
-    @ViewBuilder
-    /// Builds a styled view fron given timeline item and content. Can add a sender info if configured.
-    /// - Parameters:
-    ///   - timelineItem: timeline item
-    ///   - content: content
-    /// - Returns: Styled content view
-    func styled<Content: View>(timelineItem: EventBasedTimelineItemProtocol,
-                               @ViewBuilder content: @escaping () -> Content) -> some View {
+    var body: some View {
         switch style {
         case .plain:
             TimelineItemPlainStylerView(timelineItem: timelineItem, content: content)
         case .bubbled:
             TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content)
         }
-    }
-
-    /// List row insets for a timeline
-    var listRowInsets: EdgeInsets {
-        switch style {
-        case .plain:
-            return EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20)
-        case .bubbled:
-            return EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8)
-        }
-    }
-}
-
-extension TimelineStyler: CustomStringConvertible {
-    var description: String {
-        switch style {
-        case .plain:
-            return ElementL10n.roomTimelineStylePlainLongDescription
-        case .bubbled:
-            return ElementL10n.roomTimelineStyleBubbledLongDescription
-        }
-    }
-}
-
-extension TimelineStyler: CaseIterable {
-    static var allCases: [TimelineStyler] {
-        TimelineStyle.allCases.map { TimelineStyler(style: $0) }
-    }
-}
-
-// MARK: - Environment
-
-private struct TimelineStylerKey: EnvironmentKey {
-    static let defaultValue = TimelineStyler(style: ElementSettings.shared.timelineStyle)
-}
-
-extension EnvironmentValues {
-    var timelineStyler: TimelineStyler {
-        get { self[TimelineStylerKey.self] }
-        set { self[TimelineStylerKey.self] = newValue }
-    }
-}
-
-extension View {
-    func timelineStyler(_ styler: TimelineStyler) -> some View {
-        environment(\.timelineStyler, styler)
     }
 }

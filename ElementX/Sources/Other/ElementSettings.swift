@@ -10,7 +10,7 @@ import Foundation
 import SwiftUI
 
 /// Store Element specific app settings.
-final class ElementSettings {
+final class ElementSettings: ObservableObject {
 
     // MARK: - Constants
 
@@ -31,17 +31,6 @@ final class ElementSettings {
 
     // MARK: -
 
-    @AppStorage(wrappedValue: BuildSettings.defaultRoomTimelineStyle.rawValue,
-                UserDefaultsKeys.timelineStyle.rawValue,
-                store: store)
-    private var timelineStyleRaw
-
-    /// Computed timeline style
-    var timelineStyle: TimelineStyle {
-        get {
-            TimelineStyle(rawValue: timelineStyleRaw) ?? BuildSettings.defaultRoomTimelineStyle
-        } set {
-            timelineStyleRaw = newValue.rawValue
-        }
-    }
+    @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
+    var timelineStyle = BuildSettings.defaultRoomTimelineStyle
 }
