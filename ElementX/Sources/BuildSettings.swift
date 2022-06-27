@@ -24,6 +24,6 @@ final class BuildSettings {
     static let settingsShowTimelineStyle: Bool = true
 
     // MARK: - Room screen
-    static let defaultRoomTimelineStyle: TimelineStyle = .bubbled
+    static let defaultRoomTimelineStyle: TimelineStyle = .bubbles
 
 }

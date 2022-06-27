@@ -21,7 +21,7 @@ struct TimelineStyler<Content: View>: View {
         switch style {
         case .plain:
             TimelineItemPlainStylerView(timelineItem: timelineItem, content: content)
-        case .bubbled:
+        case .bubbles:
             TimelineItemBubbledStylerView(timelineItem: timelineItem, content: content)
         }
     }

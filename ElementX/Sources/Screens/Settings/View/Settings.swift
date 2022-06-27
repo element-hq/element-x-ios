@@ -111,7 +111,7 @@ extension TimelineStyle: CustomStringConvertible {
         switch self {
         case .plain:
             return ElementL10n.roomTimelineStylePlainLongDescription
-        case .bubbled:
+        case .bubbles:
             return ElementL10n.roomTimelineStyleBubbledLongDescription
         }
     }
