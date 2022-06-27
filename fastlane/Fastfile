@@ -101,13 +101,8 @@ end
 
 private_lane :export_version_changes do |options|
   Dir.chdir("..") do
+    sh("sed -i '.tmp' 's/CHANGES.md/version_changes.md/g' towncrier.toml")
     Changelog.update_topmost_section(version: options[:version], additional_entries: {})
-    changelog = Changelog.extract_first_section
-
-    # Pushing them directly into the $GITHUB_ENV results in errors
-    # https://trstringer.com/github-actions-multiline-strings/
-    # String substitution and here documents failed too
-    sh("echo '#{changelog}' >> version_changes.md")
   end
 end
 
