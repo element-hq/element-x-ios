@@ -49,6 +49,18 @@ struct MockScreen: Identifiable {
     let id: UITestScreenIdentifier
     var coordinator: Coordinator & Presentable {
         switch id {
+        case .login:
+            let router = NavigationRouter(navigationController: ElementNavigationController())
+            return LoginCoordinator(parameters: .init(navigationRouter: router,
+                                                      homeserver: .mockMatrixDotOrg))
+        case .loginOIDC:
+            let router = NavigationRouter(navigationController: ElementNavigationController())
+            return LoginCoordinator(parameters: .init(navigationRouter: router,
+                                                      homeserver: .mockOIDC))
+        case .loginUnsupported:
+            let router = NavigationRouter(navigationController: ElementNavigationController())
+            return LoginCoordinator(parameters: .init(navigationRouter: router,
+                                                      homeserver: .mockUnsupported))
         case .simpleRegular:
             return TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:

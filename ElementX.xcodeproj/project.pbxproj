@@ -157,6 +157,7 @@
 		8D9F646387DF656EF91EE4CB /* RoomMessageFactoryProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96F37AB24AF5A006521D38D1 /* RoomMessageFactoryProtocol.swift */; };
 		90DF83A6A347F7EE7EDE89EE /* AttributedStringBuilderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF25E364AE85090A70AE4644 /* AttributedStringBuilderTests.swift */; };
 		90EB25D13AE6EEF034BDE9D2 /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D52BAA5BADB06E5E8C295D /* Assets.swift */; };
+		91CC102A286A0D9400B6E687 /* LoginScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 91CC1029286A0D9400B6E687 /* LoginScreenUITests.swift */; };
 		93BA4A81B6D893271101F9F0 /* Introspect in Frameworks */ = {isa = PBXBuildFile; productRef = 5986E300FC849DEAB2EE7AEB /* Introspect */; };
 		94E062D08E27B0387658E364 /* SplashScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7B5CF94E124616FD89424B73 /* SplashScreenViewModelTests.swift */; };
 		964B9D2EC38C488C360CE0C9 /* HomeScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = B902EA6CD3296B0E10EE432B /* HomeScreen.swift */; };
@@ -474,6 +475,7 @@
 		8D8169443E5AC5FF71BFB3DB /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8DC2C9E0E15C79BBDA80F0A2 /* TimelineStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStyle.swift; sourceTree = "<group>"; };
 		90733775209F4D4D366A268F /* RootRouterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouterType.swift; sourceTree = "<group>"; };
+		91CC1029286A0D9400B6E687 /* LoginScreenUITests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginScreenUITests.swift; sourceTree = "<group>"; };
 		92B61C243325DC76D3086494 /* EventBriefFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBriefFactoryProtocol.swift; sourceTree = "<group>"; };
 		9349F590E35CE514A71E6764 /* LoginHomeserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHomeserver.swift; sourceTree = "<group>"; };
 		938BD1FCD9E6FF3FCFA7AB4C /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-CN"; path = "zh-CN.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -1135,6 +1137,7 @@
 				4D6E4C37E9F0E53D3DF951AC /* HomeScreenUITests.swift */,
 				086B997409328F091EBA43CE /* RoomScreenUITests.swift */,
 				E3E29F98CF0E960689A410E3 /* SettingsUITests.swift */,
+				91CC1029286A0D9400B6E687 /* LoginScreenUITests.swift */,
 				325A2B3278875554DDEB8A9B /* SplashScreenUITests.swift */,
 			);
 			path = Sources;
@@ -1919,6 +1922,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91CC102A286A0D9400B6E687 /* LoginScreenUITests.swift in Sources */,
 				7405B4824D45BA7C3D943E76 /* Application.swift in Sources */,
 				7756C4E90CABE6F14F7920A0 /* BugReportUITests.swift in Sources */,
 				499A26EB06C97E48C27A2DB9 /* BuildSettings.swift in Sources */,

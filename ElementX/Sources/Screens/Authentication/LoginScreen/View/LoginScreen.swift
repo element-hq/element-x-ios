@@ -131,11 +131,12 @@ struct LoginScreen: View {
     
     /// Text shown if neither password or OIDC login is supported.
     var loginUnavailableText: some View {
-        Text(ElementL10n.loginErrorNoHomeserverFound)
+        Text(ElementL10n.autodiscoverWellKnownError)
             .font(.body)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
             .frame(maxWidth: .infinity)
+            .accessibilityIdentifier("unsupportedServerText")
     }
     
     /// Parses the username for a homeserver.

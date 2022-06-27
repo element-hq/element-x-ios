@@ -78,5 +78,12 @@ extension LoginHomeserver {
                         // swiftlint:disable:next force_unwrapping
                         loginMode: .oidc(URL(string: "https://auth.company.com")!))
     }
+    
+    /// A mock homeserver that only with no supported login flows.
+    static var mockUnsupported: LoginHomeserver {
+        LoginHomeserver(address: "server.net",
+                        isMatrixDotOrg: false,
+                        loginMode: .unsupported)
+    }
 
 }
