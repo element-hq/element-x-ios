@@ -1,7 +1,6 @@
 {# iOS Repositories #}
-{%- set gh_sdk = "https://github.com/matrix-org/matrix-ios-sdk" -%}
-{%- set gh_kit = "https://github.com/matrix-org/matrix-ios-kit" -%}
-{%- set gh_element = "https://github.com/vector-im/element-ios" -%}
+{%- set gh_sdk = "https://github.com/matrix-org/matrix-rust-sdk" -%}
+{%- set gh_element = "https://github.com/vector-im/element-x-ios" -%}
 
 ## {{ versiondata.name }} {{ versiondata.version }} ({{ versiondata.date }})
 {% for section, _ in sections.items() %}
@@ -18,9 +17,6 @@
     {%- if value.startswith("sdk-") %}
         {%- set gh_issue = value.replace("sdk-", "") -%}
         {{- links.append( "[#%s](%s/issues/%s)" | format(gh_issue, gh_sdk, gh_issue) ) | default("", True) -}}
-    {%- elif value.startswith("kit-") %}
-        {%- set gh_issue = value.replace("kit-", "") -%}
-        {{- links.append( "[#%s](%s/issues/%s)" | format(gh_issue, gh_kit, gh_issue) ) | default("", True) -}}
     {%- elif value.startswith("#") %}
         {%- set gh_issue = value.replace("#", "") -%}
         {{- links.append( "[#%s](%s/issues/%s)" | format(gh_issue, gh_element, gh_issue) ) | default("", True) -}}
