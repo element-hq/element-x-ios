@@ -21,5 +21,9 @@ final class BuildSettings {
 
     // MARK: - Settings screen
     static let settingsCrashButtonVisible: Bool = true
+    static let settingsShowTimelineStyle: Bool = true
+
+    // MARK: - Room screen
+    static let defaultRoomTimelineStyle: TimelineStyle = .bubbles
 
 }

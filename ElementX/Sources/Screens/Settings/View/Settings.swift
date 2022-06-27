@@ -22,6 +22,7 @@ struct Settings: View {
 
     @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
+    @ObservedObject private var settings = ElementSettings.shared
     
     // MARK: Public
     
@@ -47,6 +48,8 @@ struct Settings: View {
                 }
             }
             .listRowBackground(rowBackgroundColor)
+
+            userInterfaceSection
 
             Section {
                 Button { showingLogoutConfirmation = true } label: {
@@ -74,7 +77,7 @@ struct Settings: View {
         .background(backgroundColor, ignoresSafeAreaEdges: .all)
     }
 
-    var versionText: some View {
+    private var versionText: some View {
         Text(ElementL10n.settingsVersion + ": " + ElementInfoPlist.cfBundleShortVersionString + " (" + ElementInfoPlist.cfBundleVersion + ")")
     }
 
@@ -84,6 +87,33 @@ struct Settings: View {
 
     private var rowBackgroundColor: Color {
         colorScheme == .light ? .element.background : .element.system
+    }
+
+    @ViewBuilder
+    private var userInterfaceSection: some View {
+        if BuildSettings.settingsShowTimelineStyle {
+            Section(header: Text(ElementL10n.settingsUserInterface)) {
+                Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
+                    ForEach(TimelineStyle.allCases, id: \.self) { style in
+                        Text(style.description)
+                            .tag(style)
+                    }
+                }
+                .accessibilityIdentifier("timelineStylePicker")
+            }
+            .listRowBackground(rowBackgroundColor)
+        }
+    }
+}
+
+extension TimelineStyle: CustomStringConvertible {
+    var description: String {
+        switch self {
+        case .plain:
+            return ElementL10n.roomTimelineStylePlainLongDescription
+        case .bubbles:
+            return ElementL10n.roomTimelineStyleBubbledLongDescription
+        }
     }
 }
 

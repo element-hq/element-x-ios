@@ -24,3 +24,4 @@ targets:
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit
     - path: ../Resources
     - path: ../../ElementX/Sources/BuildSettings.swift
+    - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift

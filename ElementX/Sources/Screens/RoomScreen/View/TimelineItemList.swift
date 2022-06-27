@@ -15,6 +15,7 @@ struct TimelineItemList: View {
     @State private var tableViewObserver: ListTableViewAdapter = ListTableViewAdapter()
     @State private var timelineItems: [RoomTimelineViewProvider] = []
     @State private var hasPendingChanges = false
+    @ObservedObject private var settings = ElementSettings.shared
     
     @ObservedObject var context: RoomScreenViewModel.Context
     
@@ -42,7 +43,7 @@ struct TimelineItemList: View {
                         })
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
-                        .listRowInsets(EdgeInsets(top: 1, leading: 8, bottom: 1, trailing: 8))
+                        .listRowInsets(settings.timelineStyle.listRowInsets)
                         .onAppear {
                             context.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
@@ -56,6 +57,7 @@ struct TimelineItemList: View {
                 }
             }
             .listStyle(.plain)
+            .timelineStyle(settings.timelineStyle)
             .environment(\.defaultMinListRowHeight, 0.0)
             .introspectTableView { tableView in
                 if tableView == tableViewObserver.tableView {

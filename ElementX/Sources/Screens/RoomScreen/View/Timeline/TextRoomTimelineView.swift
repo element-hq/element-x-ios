@@ -13,9 +13,7 @@ struct TextRoomTimelineView: View {
     let timelineItem: TextRoomTimelineItem
     
     var body: some View {
-        TimelineItemStylerView(timelineItem: timelineItem) {
-            EventBasedTimelineSenderView(timelineItem: timelineItem)
-        } content: {
+        TimelineStyler(timelineItem: timelineItem) {
             if let attributedComponents = timelineItem.attributedComponents {
                 FormattedBodyText(attributedComponents: attributedComponents)
             } else {
@@ -42,12 +40,26 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                                                         shouldShowSenderDetails: true,
                                                         isOutgoing: false,
                                                         senderId: "Bob"))
-            
+
             TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
                                                         timestamp: "Later",
                                                         shouldShowSenderDetails: true,
                                                         isOutgoing: true,
                                                         senderId: "Anne"))
+
+            TextRoomTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",
+                                                        timestamp: "Now",
+                                                        shouldShowSenderDetails: true,
+                                                        isOutgoing: false,
+                                                        senderId: "Bob"))
+            .timelineStyle(.plain)
+
+            TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
+                                                        timestamp: "Later",
+                                                        shouldShowSenderDetails: true,
+                                                        isOutgoing: true,
+                                                        senderId: "Anne"))
+            .timelineStyle(.plain)
         }
         .padding(.horizontal, 8)
     }
