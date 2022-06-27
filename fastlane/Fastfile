@@ -99,7 +99,7 @@ lane :tests do
 
 end
 
-lane :export_version_changes do |options|
+private_lane :export_version_changes do |options|
   Dir.chdir("..") do
     sh("sed -i '.tmp' 's/CHANGES.md/version_changes.md/g' towncrier.toml")
     Changelog.update_topmost_section(version: options[:version], additional_entries: {})

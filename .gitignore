@@ -29,6 +29,7 @@ fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots/**/*.png
 fastlane/test_output
+towncrier.toml.tmp
 
 build
 Tools/Scripts/element-android
