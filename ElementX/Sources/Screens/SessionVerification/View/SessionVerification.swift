@@ -29,6 +29,7 @@ struct SessionVerification: View {
                 Text(heading)
                     .font(.body)
                     .multilineTextAlignment(.center)
+                    .accessibilityIdentifier("titleLabel")
                 
                 switch context.viewState.verificationState {
                 case .initial:
@@ -37,23 +38,30 @@ struct SessionVerification: View {
                         context.send(viewAction: .start)
                     }
                     .buttonStyle(.elementAction(.regular))
+                    .accessibilityIdentifier("startButton")
                 
                 case .cancelled:
                     icon("xmark.shield")
+                        .accessibilityIdentifier("sessionVerificationFailedIcon")
                     
                     Button(ElementL10n.globalRetry) {
                         context.send(viewAction: .restart)
                     }
                     .buttonStyle(.elementAction(.regular))
+                    .accessibilityIdentifier("restartButton")
                     
                 case .requestingVerification:
                     ProgressView()
+                        .accessibilityIdentifier("requestingVerificationProgressView")
                 case .cancelling:
                     ProgressView()
+                        .accessibilityIdentifier("cancellingVerificationProgressView")
                 case .acceptingChallenge:
                     ProgressView()
+                        .accessibilityIdentifier("acceptingChallengeProgressView")
                 case .decliningChallenge:
                     ProgressView()
+                        .accessibilityIdentifier("decliningChallengeProgressView")
                 
                 case .showingChallenge(let emojis):
                     HStack(spacing: 8.0) {
@@ -70,6 +78,7 @@ struct SessionVerification: View {
                     actionButtons
                 case .verified:
                     icon("checkmark.shield")
+                        .accessibilityIdentifier("sessionVerificationSucceededIcon")
                 }
                 
                 Spacer()
@@ -84,6 +93,7 @@ struct SessionVerification: View {
                         Button(ElementL10n.actionDismiss) {
                             context.send(viewAction: .dismiss)
                         }
+                        .accessibilityIdentifier("dismissButton")
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
@@ -91,6 +101,7 @@ struct SessionVerification: View {
                         Button(ElementL10n.actionCancel) {
                             context.send(viewAction: .cancel)
                         }
+                        .accessibilityIdentifier("cancelButton")
                     }
                 }
             }
@@ -152,12 +163,14 @@ struct SessionVerification: View {
             }
             .tint(.red)
             .buttonStyle(.borderedProminent)
+            .accessibilityLabel("challengeDeclineButton")
             
             Button(ElementL10n.verificationSasMatch) {
-                context.send(viewAction: .approve)
+                context.send(viewAction: .accept)
             }
             .buttonStyle(.borderedProminent)
             .tint(.element.accent)
+            .accessibilityLabel("challengeAcceptButton")
         }
         .padding(32.0)
     }
@@ -177,16 +190,8 @@ struct SessionVerification_Previews: PreviewProvider {
             sessionVerificationScreen(state: .initial)
             sessionVerificationScreen(state: .requestingVerification)
             sessionVerificationScreen(state: .cancelled)
-            
-            let emojis = [SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
-                          SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
-                          SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
-                          SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
-                          SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
-                          SessionVerificationEmoji(symbol: "🏁", description: "Flag"),
-                          SessionVerificationEmoji(symbol: "🌏", description: "Globe")]
              
-            sessionVerificationScreen(state: .showingChallenge(emojis: emojis))
+            sessionVerificationScreen(state: .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
             sessionVerificationScreen(state: .verified)
         }
     }

@@ -37,7 +37,7 @@ extension SessionVerificationEmoji: Identifiable {
 enum SessionVerificationViewAction {
     case start
     case restart
-    case approve
+    case accept
     case decline
     case dismiss
     case cancel

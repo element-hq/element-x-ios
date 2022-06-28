@@ -13,30 +13,43 @@ import Combine
 struct MockSessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol {
     var callbacks = PassthroughSubject<SessionVerificationControllerProxyCallback, Never>()
     
-    var isVerified: Bool = true
+    var isVerified: Bool = false
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        
-        callbacks.send(.receivedVerificationData(emojis))
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+            callbacks.send(.receivedVerificationData(Self.emojis))
+        }
         
         return .success(())
     }
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+            callbacks.send(.finished)
+        }
+        
         return .success(())
     }
     
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+            callbacks.send(.cancelled)
+        }
+        
         return .success(())
     }
     
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+            callbacks.send(.cancelled)
+        }
+        
         return .success(())
     }
     
     // MARK: - Private
     
-    var emojis: [SessionVerificationEmoji] {
+    static var emojis: [SessionVerificationEmoji] {
         [SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
          SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
          SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),

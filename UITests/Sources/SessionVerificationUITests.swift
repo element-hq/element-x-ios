@@ -18,23 +18,86 @@ import XCTest
 import ElementX
 
 class SessionVerificationUITests: XCTestCase {
-    func testRegularScreen() {
+    
+    func testChallengeMatches() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Simple Screen - Regular")
+        app.goToScreenWithIdentifier(.sessionVerification)
         
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
+        XCTAssert(app.navigationBars["Verify this session"].exists)
         
-        XCTAssertEqual(title.label, "Make this chat public?")
+        XCTAssert(app.buttons["startButton"].exists)
+        XCTAssert(app.buttons["dismissButton"].exists)
+        XCTAssert(app.staticTexts["titleLabel"].exists)
+        
+        app.buttons["startButton"].tap()
+        
+        XCTAssert(app.activityIndicators["requestingVerificationProgressView"].exists)
+        XCTAssert(app.buttons["cancelButton"].exists)
+        
+        XCTAssert(app.buttons["challengeAcceptButton"].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons["challengeDeclineButton"].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons["cancelButton"].waitForExistence(timeout: 5.0))
+        
+        app.buttons["challengeAcceptButton"].tap()
+                  
+        XCTAssert(app.activityIndicators["acceptingChallengeProgressView"].exists)
+        XCTAssert(app.buttons["cancelButton"].exists)
+        
+        XCTAssert(app.images["sessionVerificationSucceededIcon"].waitForExistence(timeout: 5.0))
+        
+        XCTAssert(app.buttons["dismissButton"].exists)
+        app.buttons["dismissButton"].tap()
     }
     
-    func testUpgradeScreen() {
+    func testChallengeDoesNotMatch() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier("Simple Screen - Upgrade")
+        app.goToScreenWithIdentifier(.sessionVerification)
         
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
+        XCTAssert(app.navigationBars["Verify this session"].exists)
         
-        XCTAssertEqual(title.label, "Privacy warning")
+        XCTAssert(app.buttons["startButton"].exists)
+        XCTAssert(app.buttons["dismissButton"].exists)
+        XCTAssert(app.staticTexts["titleLabel"].exists)
+        
+        app.buttons["startButton"].tap()
+        
+        XCTAssert(app.activityIndicators["requestingVerificationProgressView"].exists)
+        XCTAssert(app.buttons["cancelButton"].exists)
+        
+        XCTAssert(app.buttons["challengeAcceptButton"].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons["challengeDeclineButton"].waitForExistence(timeout: 5.0))
+        XCTAssert(app.buttons["cancelButton"].waitForExistence(timeout: 5.0))
+        
+        app.buttons["challengeDeclineButton"].tap()
+                          
+        XCTAssert(app.images["sessionVerificationFailedIcon"].exists)
+        XCTAssert(app.buttons["restartButton"].exists)
+        
+        XCTAssert(app.buttons["dismissButton"].exists)
+        app.buttons["dismissButton"].tap()
+    }
+    
+    func testSessionVerificationCancelation() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.sessionVerification)
+        
+        XCTAssert(app.navigationBars["Verify this session"].exists)
+        
+        XCTAssert(app.buttons["startButton"].exists)
+        XCTAssert(app.buttons["dismissButton"].exists)
+        XCTAssert(app.staticTexts["titleLabel"].exists)
+        
+        app.buttons["startButton"].tap()
+        
+        XCTAssert(app.activityIndicators["requestingVerificationProgressView"].exists)
+        XCTAssert(app.buttons["cancelButton"].exists)
+        
+        app.buttons["cancelButton"].tap()
+        
+        XCTAssert(app.images["sessionVerificationFailedIcon"].exists)
+        XCTAssert(app.buttons["restartButton"].exists)
+        
+        XCTAssert(app.buttons["dismissButton"].exists)
+        app.buttons["dismissButton"].tap()
     }
 }

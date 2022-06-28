@@ -20,6 +20,7 @@ enum UITestScreenIdentifier: String {
     case splash
     case roomPlainNoAvatar
     case roomEncryptedWithAvatar
+    case sessionVerification
 }
 
 extension UITestScreenIdentifier: CustomStringConvertible {

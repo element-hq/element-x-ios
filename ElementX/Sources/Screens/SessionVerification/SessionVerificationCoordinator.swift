@@ -34,9 +34,6 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
     private let sessionVerificationHostingController: UIViewController
     private var sessionVerificationViewModel: SessionVerificationViewModelProtocol
     
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var loadingIndicator: UserIndicator?
-    
     // MARK: Public
 
     // Must be used only internally
@@ -52,8 +49,6 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
         let view = SessionVerification(context: viewModel.context)
         sessionVerificationViewModel = viewModel
         sessionVerificationHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: sessionVerificationHostingController)
     }
     
     // MARK: - Public
@@ -72,20 +67,5 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
     
     func toPresentable() -> UIViewController {
         sessionVerificationHostingController
-    }
-    
-    // MARK: - Private
-    
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        loadingIndicator = nil
     }
 }
