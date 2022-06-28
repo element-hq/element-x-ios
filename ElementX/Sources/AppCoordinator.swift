@@ -26,6 +26,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
     private let bugReportService: BugReportServiceProtocol
     private let screenshotDetector: ScreenshotDetector
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
 
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
@@ -60,6 +61,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         }
         
         userSessionStore = UserSessionStore(bundleIdentifier: bundleIdentifier)
+
+        backgroundTaskService = UIKitBackgroundTaskService()
 
         screenshotDetector = ScreenshotDetector()
         screenshotDetector.callback = processScreenshotDetection
@@ -250,7 +253,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                         timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
-                                                        memberDetailProvider: memberDetailProvider)
+                                                        memberDetailProvider: memberDetailProvider,
+                                                        backgroundTaskService: backgroundTaskService)
         
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
                                                          roomName: roomProxy.displayName ?? roomProxy.name,
