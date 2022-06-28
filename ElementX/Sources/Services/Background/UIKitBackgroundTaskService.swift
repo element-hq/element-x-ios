@@ -59,10 +59,9 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         } else {
             result = UIKitBackgroundTask(name: name,
                                          isReusable: isReusable,
-                                         application: application,
-                                         expirationHandler: { _ in
+                                         application: application) { _ in
                 expirationHandler?()
-            })
+            }
         }
 
         let appState = application.applicationState

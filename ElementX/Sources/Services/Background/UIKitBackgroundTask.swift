@@ -42,18 +42,19 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
         self.expirationHandler = expirationHandler
 
         // attempt to start
-        identifier = application.beginBackgroundTask(withName: name,
-                                                     expirationHandler: { [weak self] in
+        identifier = application.beginBackgroundTask(withName: name) { [weak self] in
             guard let self = self else { return }
             self.expirationHandler?(self)
-        })
+        }
 
         if identifier == .invalid {
             MXLog.debug("[UIKitBackgroundTask] Do not start background task: \(name), as OS declined")
             //  call expiration handler immediately
             expirationHandler?(self)
             return nil
-        } else if isReusable {
+        }
+
+        if isReusable {
             //  creation itself is a use
             reuse()
         }

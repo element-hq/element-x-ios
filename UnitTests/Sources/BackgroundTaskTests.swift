@@ -78,7 +78,7 @@ class BackgroundTaskTests: XCTestCase {
 
         //  create two reusable task with the same name
         guard let task = service.startBackgroundTask(withName: Constants.bgTaskName, isReusable: true),
-              let _ = service.startBackgroundTask(withName: Constants.bgTaskName, isReusable: true) else {
+              service.startBackgroundTask(withName: Constants.bgTaskName, isReusable: true) != nil else {
             XCTFail("Failed to setup test conditions")
             return
         }
