@@ -55,8 +55,6 @@ class AuthenticationCoordinator: Coordinator {
             switch action {
             case .login:
                 self.showLoginScreen()
-            case .register:
-                fatalError("Not implemented")
             }
         }
         
@@ -69,8 +67,9 @@ class AuthenticationCoordinator: Coordinator {
     }
     
     private func showLoginScreen() {
-        let parameters = LoginScreenCoordinatorParameters()
-        let coordinator = LoginScreenCoordinator(parameters: parameters)
+        let homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverURLString)
+        let parameters = LoginCoordinatorParameters(navigationRouter: navigationRouter, homeserver: homeserver)
+        let coordinator = LoginCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self, weak coordinator] action in
             guard let self = self, let coordinator = coordinator else {
@@ -78,9 +77,9 @@ class AuthenticationCoordinator: Coordinator {
             }
             
             switch action {
-            case .login(let result):
+            case .login(let username, let password):
                 Task {
-                    switch await self.login(username: result.username, password: result.password) {
+                    switch await self.login(username: username, password: password) {
                     case .success(let userSession):
                         self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
                         self.remove(childCoordinator: coordinator)
@@ -90,6 +89,8 @@ class AuthenticationCoordinator: Coordinator {
                         MXLog.error("Failed logging in user with error: \(error)")
                     }
                 }
+            case .continueWithOIDC:
+                break
             }
         }
         

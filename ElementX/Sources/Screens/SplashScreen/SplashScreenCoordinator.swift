@@ -54,8 +54,6 @@ final class SplashScreenCoordinator: Coordinator, Presentable {
             switch action {
             case .login:
                 self.callback?(.login)
-            case .register:
-                self.callback?(.register)
             }
         }
     }

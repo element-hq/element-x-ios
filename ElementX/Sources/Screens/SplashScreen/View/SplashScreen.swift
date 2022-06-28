@@ -15,6 +15,7 @@
 //
 
 import SwiftUI
+import DesignKit
 
 /// The splash screen shown at the beginning of the onboarding flow.
 struct SplashScreen: View {
@@ -219,6 +220,6 @@ struct SplashScreen_Previews: PreviewProvider {
     
     static var previews: some View {
         SplashScreen(viewModel: viewModel.context)
-            .accentColor(.element.accent)
+            .tint(.element.accent)
     }
 }

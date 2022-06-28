@@ -72,12 +72,27 @@ class RoundedToastView: UIView {
 
     private func setup(viewState: ToastViewState) {
         
-        backgroundColor = .gray.withAlphaComponent(0.75)
+        backgroundColor = .clear
+        clipsToBounds = true
         
+        setupBackgroundMaterial()
         setupStackView()
         stackView.addArrangedSubview(toastView(for: viewState.style))
         stackView.addArrangedSubview(label)
         label.text = viewState.label
+        label.textColor = .element.primaryContent
+    }
+    
+    private func setupBackgroundMaterial() {
+        let material = UIVisualEffectView(effect: UIBlurEffect(style: .systemMaterial))
+        addSubview(material)
+        material.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            material.topAnchor.constraint(equalTo: topAnchor),
+            material.bottomAnchor.constraint(equalTo: bottomAnchor),
+            material.leadingAnchor.constraint(equalTo: leadingAnchor),
+            material.trailingAnchor.constraint(equalTo: trailingAnchor)
+        ])
     }
     
     private func setupStackView() {
@@ -101,10 +116,10 @@ class RoundedToastView: UIView {
         case .loading:
             return activityIndicator
         case .success:
-            imageView.image = UIImage(systemName: "checkmark.circle")
+            imageView.image = UIImage(systemName: "checkmark")
             return imageView
         case .error:
-            imageView.image = UIImage(systemName: "x.circle")
+            imageView.image = UIImage(systemName: "xmark")
             return imageView
         }
     }

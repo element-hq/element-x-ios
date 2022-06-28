@@ -133,6 +133,21 @@ private var logger: SwiftyBeaver.Type = {
         logger.error(message, file, function, line: line)
     }
     
+    public static func failure(_ message: @autoclosure () -> Any, _
+                               file: String = #file,
+                               _ function: String = #function,
+                               line: Int = #line,
+                               context: Any? = nil) {
+        logger.error(message(), file, function, line: line, context: context)
+        assertionFailure("\(message())")
+    }
+    
+    @available(swift, obsoleted: 5.4)
+    @objc public static func logFailure(_ message: String, file: String, function: String, line: Int) {
+        logger.error(message, file, function, line: line)
+        assertionFailure(message)
+    }
+    
     // MARK: - Private
     
     fileprivate static func configureLogger(_ logger: SwiftyBeaver.Type, withConfiguration configuration: MXLogConfiguration) {

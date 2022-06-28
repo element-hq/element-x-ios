@@ -5,3 +5,11 @@
 "settings_timeline_style" = "Timeline Style";
 "room_timeline_style_plain_long_description" = "Plain Timeline";
 "room_timeline_style_bubbled_long_description" = "Bubbled Timeline";
+
+// MARK: - Authentication
+
+"authentication_login_title" = "Welcome back!";
+"authentication_login_forgot_password" = "Forgot password";
+
+"authentication_server_info_title" = "Choose your server to store your data";
+"authentication_server_info_matrix_description" = "Join millions for free on the largest public server";

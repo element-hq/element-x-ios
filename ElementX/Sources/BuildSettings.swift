@@ -9,6 +9,9 @@
 import Foundation
 
 final class BuildSettings {
+    
+    // MARK: - Servers
+    static let defaultHomeserverURLString = "https://matrix.org"
 
     // MARK: - Bug report
     static let bugReportServiceBaseUrlString = "https://riot.im/bugreports"
