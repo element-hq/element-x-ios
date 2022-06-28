@@ -40,7 +40,7 @@ enum LoginMode: Equatable {
         switch self {
         case .password:
             return true
-        case .unknown, .unsupported, .oidc:
+        default:
             return false
         }
     }

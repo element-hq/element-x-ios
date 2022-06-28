@@ -18,7 +18,7 @@ import XCTest
 import ElementX
 
 @MainActor
-class AuthenticationLoginUITests: XCTestCase {
+class LoginScreenUITests: XCTestCase {
     var app: XCUIApplication!
     
     @MainActor
@@ -56,7 +56,6 @@ class AuthenticationLoginUITests: XCTestCase {
         validateOIDCButtonIsShown(for: state)
         validateUnsupportedServerTextIsHidden(for: state)
     }
-    
     
     func testUnsupported() {
         app = Application.launch()

@@ -60,7 +60,7 @@ struct LoginViewState: BindableState {
     /// The types of login supported by the homeserver.
     var loginMode: LoginMode { homeserver.loginMode }
     
-    /// `true` if it the username and password are ready to be submitted.
+    /// `true` if the username and password are ready to be submitted.
     var hasValidCredentials: Bool {
         !bindings.username.isEmpty && !bindings.password.isEmpty
     }
@@ -96,7 +96,7 @@ enum LoginViewAction {
 enum LoginErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
-    /// Looking up the the homeserver from the username failed.
+    /// Looking up the homeserver from the username failed.
     case invalidHomeserver
     /// The response from the homeserver was unexpected.
     case unknown

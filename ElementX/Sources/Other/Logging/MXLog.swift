@@ -139,17 +139,13 @@ private var logger: SwiftyBeaver.Type = {
                                line: Int = #line,
                                context: Any? = nil) {
         logger.error(message(), file, function, line: line, context: context)
-        #if DEBUG
         assertionFailure("\(message())")
-        #endif
     }
     
     @available(swift, obsoleted: 5.4)
     @objc public static func logFailure(_ message: String, file: String, function: String, line: Int) {
         logger.error(message, file, function, line: line)
-        #if DEBUG
         assertionFailure(message)
-        #endif
     }
     
     // MARK: - Private

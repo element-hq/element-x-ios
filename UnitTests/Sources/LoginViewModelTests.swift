@@ -55,6 +55,7 @@ class LoginViewModelTests: XCTestCase {
         XCTAssertTrue(context.password.isEmpty, "The initial value for the password should be empty.")
         XCTAssertTrue(context.username.isEmpty, "The initial value for the username should be empty.")
         XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
         
         // When entering a username without a password.
         context.username = "bob"
@@ -62,6 +63,7 @@ class LoginViewModelTests: XCTestCase {
         
         // Then the credentials should be considered invalid.
         XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
     }
     
     func testEmptyUsernameWithPassword() {
@@ -69,6 +71,7 @@ class LoginViewModelTests: XCTestCase {
         XCTAssertTrue(context.password.isEmpty, "The initial value for the password should be empty.")
         XCTAssertTrue(context.username.isEmpty, "The initial value for the username should be empty.")
         XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
         
         // When entering a password without a username.
         context.username = ""
@@ -76,6 +79,7 @@ class LoginViewModelTests: XCTestCase {
         
         // Then the credentials should be considered invalid.
         XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
     }
     
     func testValidCredentials() {
@@ -83,6 +87,7 @@ class LoginViewModelTests: XCTestCase {
         XCTAssertTrue(context.password.isEmpty, "The initial value for the password should be empty.")
         XCTAssertTrue(context.username.isEmpty, "The initial value for the username should be empty.")
         XCTAssertFalse(context.viewState.hasValidCredentials, "The credentials should be invalid.")
+        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
         
         // When entering a username and an 8-character password.
         context.username = "bob"
@@ -90,6 +95,7 @@ class LoginViewModelTests: XCTestCase {
         
         // Then the credentials should be considered valid.
         XCTAssertTrue(context.viewState.hasValidCredentials, "The credentials should be valid when the username and password are valid.")
+        XCTAssertTrue(context.viewState.canSubmit, "The form should be ready to submit.")
     }
     
     func testLoadingServer() {
@@ -98,18 +104,21 @@ class LoginViewModelTests: XCTestCase {
         context.password = "12345678"
         XCTAssertTrue(context.viewState.hasValidCredentials, "The credentials should be valid.")
         XCTAssertFalse(context.viewState.isLoading, "The view shouldn't start in a loading state.")
+        XCTAssertTrue(context.viewState.canSubmit, "The form should be ready to submit.")
         
         // When updating the view model whilst loading a homeserver.
         viewModel.update(isLoading: true)
         
         // Then the view state should reflect that the homeserver is loading.
         XCTAssertTrue(context.viewState.isLoading, "The view should now be in a loading state.")
+        XCTAssertFalse(context.viewState.canSubmit, "The form should be blocked for submission.")
         
         // When updating the view model after loading a homeserver.
         viewModel.update(isLoading: false)
         
         // Then the view state should reflect that the homeserver is now loaded.
         XCTAssertFalse(context.viewState.isLoading, "The view should be back in a loaded state.")
+        XCTAssertTrue(context.viewState.canSubmit, "The form should be ready to submit.")
     }
 
     func testOIDCServer() {

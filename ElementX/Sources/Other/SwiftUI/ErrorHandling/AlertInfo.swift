@@ -36,23 +36,25 @@ struct AlertInfo<T: Hashable>: Identifiable {
     var secondaryButton: (title: String, action: (() -> Void)?)?
 }
 
-#warning("Remove the NSError extensions?")
 extension AlertInfo {
-    /// Initialises the type with the title and message from an `NSError` along with the default Ok button.
-    init?(error: NSError? = nil) where T == Int {
-        self.init(id: error?.code ?? -1, error: error)
+    /// Initialises the type with the title from an `Error`'s localised description along with the default Ok button.
+    ///
+    /// Currently this initialiser creates an alert for every error, however in the future it may be updated to filter
+    /// out some specific errors such as cancellation and networking issues that create too much noise or are
+    /// indicated to the user using other mechanisms.
+    init(error: Error) where T == String {
+        self.init(id: error.localizedDescription,
+                  title: error.localizedDescription)
     }
     
-    /// Initialises the type with the title and message from an `NSError` along with the default Ok button.
+    /// Initialises the type with a generic title and message for an unknown error along with the default Ok button.
     /// - Parameters:
     ///   - id: An ID that identifies the error.
     ///   - error: The Error that occurred.
-    init?(id: T, error: NSError? = nil) {
-        guard error?.domain != NSURLErrorDomain && error?.code != NSURLErrorCancelled else { return nil }
-        
+    init(id: T) {
         self.id = id
-        title = error?.userInfo[NSLocalizedFailureReasonErrorKey] as? String ?? ElementL10n.dialogTitleError
-        message = error?.userInfo[NSLocalizedDescriptionKey] as? String ?? ElementL10n.unknownError
+        title = ElementL10n.dialogTitleError
+        message = ElementL10n.unknownError
     }
 }
 
