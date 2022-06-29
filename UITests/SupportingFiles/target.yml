@@ -43,3 +43,7 @@ targets:
     - path: ../../ElementX/Sources/BuildSettings.swift
     - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
     - path: ../../ElementX/Sources/UITestScreenIdentifier.swift
+    - path: ../../ElementX/Sources/Generated/Strings.swift
+    - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
+    - path: ../../ElementX/Resources
+    - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
