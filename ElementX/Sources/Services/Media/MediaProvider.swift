@@ -12,11 +12,15 @@ import Kingfisher
 struct MediaProvider: MediaProviderProtocol {
     private let clientProxy: ClientProxyProtocol
     private let imageCache: Kingfisher.ImageCache
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let processingQueue: DispatchQueue
     
-    init(clientProxy: ClientProxyProtocol, imageCache: Kingfisher.ImageCache) {
+    init(clientProxy: ClientProxyProtocol,
+         imageCache: Kingfisher.ImageCache,
+         backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.clientProxy = clientProxy
         self.imageCache = imageCache
+        self.backgroundTaskService = backgroundTaskService
         self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue", attributes: .concurrent)
     }
     
@@ -43,6 +47,11 @@ struct MediaProvider: MediaProviderProtocol {
     func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
         if let image = imageFromSource(source) {
             return .success(image)
+        }
+
+        let loadImageBgTask = backgroundTaskService.startBackgroundTask(withName: "LoadImage: \(source.underlyingSource.url().hashValue)")
+        defer {
+            loadImageBgTask?.stop()
         }
         
         let cachedImageLoadResult = await withCheckedContinuation { continuation in

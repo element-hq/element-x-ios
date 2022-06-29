@@ -57,10 +57,14 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
                 }
             }
         } else {
-            result = UIKitBackgroundTask(name: name,
-                                         isReusable: isReusable,
-                                         application: application) { _ in
+            if let newTask = UIKitBackgroundTask(name: name,
+                                                 isReusable: isReusable,
+                                                 application: application,
+                                                 expirationHandler: { _ in
                 expirationHandler?()
+            }) {
+                result = newTask
+                created = true
             }
         }
 

@@ -16,11 +16,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
     private let memberDetailProvider: MemberDetailProviderProtocol
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private var cancellables = Set<AnyCancellable>()
-    private var sendMessageBgTask: BackgroundTaskProtocol?
-    private var loadImageBgTask: BackgroundTaskProtocol?
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -30,14 +27,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
-         memberDetailProvider: MemberDetailProviderProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol) {
+         memberDetailProvider: MemberDetailProviderProtocol) {
         self.userId = userId
         self.timelineProvider = timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
         self.memberDetailProvider = memberDetailProvider
-        self.backgroundTaskService = backgroundTaskService
         
         self.timelineProvider
             .callbacks
@@ -89,12 +84,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func sendMessage(_ message: String) async {
-        sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
         switch await timelineProvider.sendMessage(message) {
         default:
             break
         }
-        sendMessageBgTask?.stop()
     }
     
     // MARK: - Private
@@ -148,8 +141,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         guard let source = timelineItem.source else {
             return
         }
-
-        loadImageBgTask = backgroundTaskService.startBackgroundTask(withName: "LoadImage", isReusable: true)
         
         switch await mediaProvider.loadImageFromSource(source) {
         case .success(let image):
@@ -164,7 +155,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case .failure:
             break
         }
-        loadImageBgTask?.stop()
     }
     
     private func loadUserAvatarForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {

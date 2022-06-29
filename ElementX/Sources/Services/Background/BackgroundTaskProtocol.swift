@@ -21,7 +21,7 @@ protocol BackgroundTaskProtocol: AnyObject {
     /// Flag indicating the background task is reusable. If reusable, `name` is the key to distinguish background tasks.
     var isReusable: Bool { get }
 
-    /// Elapsed time after the task started.
+    /// Elapsed time after the task started. In milliseconds.
     var elapsedTime: TimeInterval { get }
 
     /// Expiration handler for the background task

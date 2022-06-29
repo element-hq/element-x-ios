@@ -59,10 +59,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
         }
-        
-        userSessionStore = UserSessionStore(bundleIdentifier: bundleIdentifier)
 
-        backgroundTaskService = UIKitBackgroundTaskService()
+        backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
+        
+        userSessionStore = UserSessionStore(bundleIdentifier: bundleIdentifier,
+                                            backgroundTaskService: backgroundTaskService)
 
         screenshotDetector = ScreenshotDetector()
         screenshotDetector.callback = processScreenshotDetection
@@ -253,8 +254,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                         timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
-                                                        memberDetailProvider: memberDetailProvider,
-                                                        backgroundTaskService: backgroundTaskService)
+                                                        memberDetailProvider: memberDetailProvider)
         
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
                                                          roomName: roomProxy.displayName ?? roomProxy.name,

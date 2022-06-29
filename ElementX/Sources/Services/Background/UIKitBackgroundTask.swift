@@ -82,10 +82,14 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
 
     private func endTask() {
         if identifier != .invalid {
-            MXLog.debug("[UIKitBackgroundTask] End background task #\(identifier.rawValue) - \(name) after \(elapsedTime)")
+            MXLog.debug("[UIKitBackgroundTask] End background task #\(identifier.rawValue) - \(name) after \(readableElapsedTime)")
 
             application.endBackgroundTask(identifier)
             identifier = .invalid
         }
+    }
+
+    private var readableElapsedTime: String {
+        String(format: "%.3fms", elapsedTime)
     }
 }
