@@ -26,6 +26,7 @@ private class WeakClientProxyWrapper: ClientDelegate {
 class ClientProxy: ClientProxyProtocol {
     
     private let client: Client
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private(set) var rooms: [RoomProxy] = [] {
         didSet {
@@ -39,8 +40,10 @@ class ClientProxy: ClientProxyProtocol {
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
-    init(client: Client) {
+    init(client: Client,
+         backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.client = client
+        self.backgroundTaskService = backgroundTaskService
         
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         
@@ -119,7 +122,9 @@ class ClientProxy: ClientProxyProtocol {
                     MXLog.error("Failed retrieving sdk room with id: \(id)")
                     break
                 }
-                currentRooms.append(RoomProxy(room: sdkRoom, roomMessageFactory: RoomMessageFactory()))
+                currentRooms.append(RoomProxy(room: sdkRoom,
+                                              roomMessageFactory: RoomMessageFactory(),
+                                              backgroundTaskService: backgroundTaskService))
             case .remove(_, let id, _):
                 currentRooms.removeAll { $0.id == id }
             }

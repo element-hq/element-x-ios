@@ -29,8 +29,10 @@ private class WeakRoomProxyWrapper: RoomDelegate {
 class RoomProxy: RoomProxyProtocol {
     private let room: Room
     private let roomMessageFactory: RoomMessageFactoryProtocol
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private var backwardStream: BackwardsStreamProtocol?
+    private var sendMessageBgTask: BackgroundTaskProtocol?
     
     private(set) var displayName: String?
     
@@ -38,9 +40,12 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var messages: [RoomMessageProtocol]
     
-    init(room: Room, roomMessageFactory: RoomMessageFactoryProtocol) {
+    init(room: Room,
+         roomMessageFactory: RoomMessageFactoryProtocol,
+         backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.room = room
         self.roomMessageFactory = roomMessageFactory
+        self.backgroundTaskService = backgroundTaskService
         messages = []
         
         room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
@@ -157,6 +162,10 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        defer {
+            sendMessageBgTask?.stop()
+        }
         let messageContent = messageEventContentFromMarkdown(md: message)
         let transactionId = genTransactionId()
         

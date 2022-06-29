@@ -26,6 +26,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
     private let bugReportService: BugReportServiceProtocol
     private let screenshotDetector: ScreenshotDetector
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
 
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
@@ -58,8 +59,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
         }
+
+        backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
         
-        userSessionStore = UserSessionStore(bundleIdentifier: bundleIdentifier)
+        userSessionStore = UserSessionStore(bundleIdentifier: bundleIdentifier,
+                                            backgroundTaskService: backgroundTaskService)
 
         screenshotDetector = ScreenshotDetector()
         screenshotDetector.callback = processScreenshotDetection

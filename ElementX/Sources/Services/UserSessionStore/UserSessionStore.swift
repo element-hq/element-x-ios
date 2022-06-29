@@ -21,12 +21,14 @@ import Kingfisher
 class UserSessionStore: UserSessionStoreProtocol {
     
     private let keychainController: KeychainControllerProtocol
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { !keychainController.accessTokens().isEmpty }
     
-    init(bundleIdentifier: String) {
+    init(bundleIdentifier: String, backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(identifier: bundleIdentifier)
+        self.backgroundTaskService = backgroundTaskService
     }
     
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {
@@ -39,7 +41,9 @@ class UserSessionStore: UserSessionStoreProtocol {
         switch await restorePreviousLogin(usernameTokenTuple) {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
-                                        mediaProvider: MediaProvider(clientProxy: clientProxy, imageCache: ImageCache.default)))
+                                        mediaProvider: MediaProvider(clientProxy: clientProxy,
+                                                                     imageCache: ImageCache.default,
+                                                                     backgroundTaskService: backgroundTaskService)))
         case .failure(let error):
             MXLog.error("Failed restoring login with error: \(error)")
             
@@ -55,7 +59,9 @@ class UserSessionStore: UserSessionStoreProtocol {
         switch await setupProxyForClient(client) {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
-                                        mediaProvider: MediaProvider(clientProxy: clientProxy, imageCache: ImageCache.default)))
+                                        mediaProvider: MediaProvider(clientProxy: clientProxy,
+                                                                     imageCache: ImageCache.default,
+                                                                     backgroundTaskService: backgroundTaskService)))
         case .failure(let error):
             MXLog.error("Failed creating user session with error: \(error)")
             return .failure(error)
@@ -99,7 +105,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.failedSettingUpSession)
         }
         
-        let clientProxy = ClientProxy(client: client)
+        let clientProxy = ClientProxy(client: client, backgroundTaskService: backgroundTaskService)
         
         return .success(clientProxy)
     }
