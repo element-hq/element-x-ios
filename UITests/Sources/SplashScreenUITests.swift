@@ -22,8 +22,9 @@ class SplashScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.splash)
         
-        let getStartedButton = app.buttons["Get started"]
+        let getStartedButton = app.buttons["getStartedButton"]
         XCTAssertTrue(getStartedButton.exists, "The primary action button should be shown.")
+        XCTAssertEqual(getStartedButton.label, ElementL10n.loginSplashSubmit)
     }
     
     func testSwipingBetweenPages() async throws {

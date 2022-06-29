@@ -97,6 +97,7 @@ struct SplashScreen: View {
                 Text(ElementL10n.loginSplashSubmit)
             }
             .buttonStyle(.elementAction(.xLarge))
+            .accessibilityIdentifier("getStartedButton")
         }
         .padding(.horizontal, 16)
         .readableFrame()

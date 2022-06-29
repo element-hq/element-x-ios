@@ -23,11 +23,19 @@ class SettingsUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.settings)
         
-        XCTAssert(app.navigationBars["Settings"].exists)
-        XCTAssert(app.buttons["reportBugButton"].exists)
+        XCTAssert(app.navigationBars[ElementL10n.settings].exists)
+        let reportBugButton = app.buttons["reportBugButton"]
+        XCTAssert(reportBugButton.exists)
+        XCTAssertEqual(reportBugButton.label, ElementL10n.sendBugReport)
         XCTAssertEqual(app.buttons["crashButton"].exists, BuildSettings.settingsCrashButtonVisible)
-        XCTAssertEqual(app.buttons["timelineStylePicker"].exists, BuildSettings.settingsShowTimelineStyle)
-        XCTAssert(app.buttons["logoutButton"].exists)
+        let timelineStylePicker = app.buttons["timelineStylePicker"]
+        XCTAssertEqual(timelineStylePicker.exists, BuildSettings.settingsShowTimelineStyle)
+        if BuildSettings.settingsShowTimelineStyle {
+            XCTAssertEqual(timelineStylePicker.staticTexts.firstMatch.label, ElementL10n.settingsTimelineStyle)
+        }
+        let logoutButton = app.buttons["logoutButton"]
+        XCTAssert(logoutButton.exists)
+        XCTAssertEqual(logoutButton.label, ElementL10n.logout)
     }
 
 }
