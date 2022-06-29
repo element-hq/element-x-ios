@@ -78,9 +78,14 @@ class UserSessionStore: UserSessionStoreProtocol {
         Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
         
         let basePath = baseDirectoryPath(for: usernameTokenTuple.username)
-        let loginTask = Task.detached {
-            try loginWithToken(basePath: basePath,
-                               restoreToken: usernameTokenTuple.accessToken)
+        let builder = ClientBuilder()
+            .basePath(path: basePath)
+            .username(username: usernameTokenTuple.username)
+        
+        let loginTask: Task<Client, Error> = Task.detached {
+            let client = try builder.build()
+            try client.restoreLogin(restoreToken: usernameTokenTuple.accessToken)
+            return client
         }
         
         switch await loginTask.result {

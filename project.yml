@@ -31,7 +31,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift.git
-    branch: main
+    exactVersion: 1.0.11-alpha
   DesignKit:
     path: ./
   DTCoreText:

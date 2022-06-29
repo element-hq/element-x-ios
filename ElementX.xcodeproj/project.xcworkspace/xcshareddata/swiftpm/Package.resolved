@@ -50,8 +50,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "59eb199fdb8dd47733624e8b0277822d0232579e",
-        "version" : "7.2.2"
+        "revision" : "022e4eeb79f817748544b318b991d9a70036bbf8",
+        "version" : "7.2.4"
       }
     },
     {
@@ -59,8 +59,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift.git",
       "state" : {
-        "branch" : "main",
-        "revision" : "43c88a4b0912a1589c2a28cc9bb2df45c70cdcad"
+        "revision" : "4605577f5604b4f2bb1938eb06d69d996eb32a28",
+        "version" : "1.0.11-alpha"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa.git",
       "state" : {
-        "revision" : "b34ce9048e6b8b082ea6b15e6b50583d46c936ea",
-        "version" : "7.16.0"
+        "revision" : "f906913c14eadb6fd31988db1ea9ff10aec9f198",
+        "version" : "7.18.1"
       }
     },
     {
