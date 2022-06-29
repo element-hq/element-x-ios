@@ -26,43 +26,21 @@ struct HomeScreen: View {
         VStack(spacing: 16.0) {
             if context.viewState.isLoadingRooms {
                 VStack {
-                    Text("Loading rooms")
+                    Text(ElementL10n.loading)
                     ProgressView()
                 }
             } else {
                 List {
-                    Section("Rooms") {
-                        ForEach(context.viewState.unencryptedRooms) { room in
+                    Section(ElementL10n.rooms) {
+                        ForEach(context.viewState.visibleRooms) { room in
                             RoomCell(room: room, context: context)
                                 .listRowBackground(Color.clear)
                         }
-                        
-                        let other = context.viewState.encryptedRooms
-                        
-                        if other.count > 0 {
-                            DisclosureGroup("Encrypted") {
-                                ForEach(other) { room in
-                                    RoomCell(room: room, context: context)
-                                }
-                            }
-                            .listRowBackground(Color.clear)
-                        }
                     }
                     
-                    Section("People") {
-                        ForEach(context.viewState.unencryptedDMs) { room in
+                    Section(ElementL10n.bottomActionPeople) {
+                        ForEach(context.viewState.visibleDMs) { room in
                             RoomCell(room: room, context: context)
-                        }
-                        
-                        let other = context.viewState.encryptedDMs
-                        
-                        if other.count > 0 {
-                            DisclosureGroup("Encrypted") {
-                                ForEach(other) { room in
-                                    RoomCell(room: room, context: context)
-                                }
-                            }
-                            .listRowBackground(Color.clear)
                         }
                     }
                 }
@@ -97,7 +75,7 @@ struct HomeScreen: View {
                     ZStack {
                         if let displayName = context.viewState.userDisplayName {
                             Button { context.send(viewAction: .tapUserAvatar) } label: {
-                                Text("Hello, \(displayName)!")
+                                Text(displayName)
                                     .font(.subheadline)
                                     .fontWeight(.bold)
                                     .foregroundColor(.primary)
