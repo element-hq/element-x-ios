@@ -178,7 +178,34 @@ final class LoginCoordinator: Coordinator, Presentable {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        loginViewModel.displayError(.alert("Not implemented. Enter a full Matrix ID such as @user:server.com"))
+        MXLog.debug("[LoginCoordinator] presentServerSelectionScreen")
+        let parameters = ServerSelectionCoordinatorParameters(homeserver: loginViewModel.context.viewState.homeserver,
+                                                                            hasModalPresentation: true)
+        let coordinator = ServerSelectionCoordinator(parameters: parameters)
+        coordinator.callback = { [weak self, weak coordinator] result in
+            guard let self = self, let coordinator = coordinator else { return }
+            self.serverSelectionCoordinator(coordinator, didCompleteWith: result)
+        }
+        
+        coordinator.start()
+        add(childCoordinator: coordinator)
+        
+        let modalRouter = NavigationRouter(navigationController: UINavigationController())
+        modalRouter.setRootModule(coordinator)
+        
+        navigationRouter.present(modalRouter, animated: true)
+    }
+    
+    /// Handles the result from the server selection modal, dismissing it after updating the view.
+    private func serverSelectionCoordinator(_ coordinator: ServerSelectionCoordinator,
+                                            didCompleteWith result: ServerSelectionCoordinatorResult) {
+        navigationRouter.dismissModule(animated: true) { [weak self] in
+            if case let .selected(homeserver) = result {
+                self?.updateViewModel(homeserver: homeserver)
+            }
+
+            self?.remove(childCoordinator: coordinator)
+        }
     }
 
     /// Shows the forgot password screen.
