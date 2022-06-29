@@ -72,6 +72,7 @@ class LoginScreenUITests: XCTestCase {
     func validateServerDescriptionIsVisible(for state: String) {
         let descriptionLabel = app.staticTexts["serverDescriptionText"]
         XCTAssertTrue(descriptionLabel.exists, "The server description should be shown for \(state).")
+        XCTAssertEqual(descriptionLabel.label, ElementL10n.authenticationServerInfoMatrixDescription)
     }
     
     /// Checks that the server description label is hidden.
@@ -89,6 +90,7 @@ class LoginScreenUITests: XCTestCase {
         XCTAssertTrue(usernameTextField.exists, "Username input should be shown for \(state).")
         XCTAssertTrue(passwordTextField.exists, "Password input should be shown for \(state).")
         XCTAssertTrue(nextButton.exists, "The next button should be shown for \(state).")
+        XCTAssertEqual(nextButton.label, ElementL10n.loginSignupSubmit)
     }
     
     /// Checks that the username and password text fields are hidden along with the next button.
@@ -107,6 +109,7 @@ class LoginScreenUITests: XCTestCase {
         let nextButton = app.buttons["nextButton"]
         XCTAssertTrue(nextButton.exists, "The next button should be shown.")
         XCTAssertFalse(nextButton.isEnabled, "The next button should be disabled for \(state).")
+        XCTAssertEqual(nextButton.label, ElementL10n.loginSignupSubmit)
     }
     
     /// Checks that the next button is shown and is enabled.
@@ -114,12 +117,14 @@ class LoginScreenUITests: XCTestCase {
         let nextButton = app.buttons["nextButton"]
         XCTAssertTrue(nextButton.exists, "The next button should be shown.")
         XCTAssertTrue(nextButton.isEnabled, "The next button should be enabled for \(state).")
+        XCTAssertEqual(nextButton.label, ElementL10n.loginSignupSubmit)
     }
     
     /// Checks that the OIDC button is shown on the screen.
     func validateOIDCButtonIsShown(for state: String) {
         let oidcButton = app.buttons["oidcButton"]
         XCTAssertTrue(oidcButton.exists, "The OIDC button should be shown for \(state).")
+        XCTAssertEqual(oidcButton.label, ElementL10n.loginContinue)
     }
     
     /// Checks that the OIDC button is not shown on the screen.
@@ -132,6 +137,7 @@ class LoginScreenUITests: XCTestCase {
     func validateUnsupportedServerTextIsShown(for state: String) {
         let unsupportedText = app.staticTexts["unsupportedServerText"]
         XCTAssertTrue(unsupportedText.exists, "The unsupported homeserver text should be shown for \(state).")
+        XCTAssertEqual(unsupportedText.label, ElementL10n.autodiscoverWellKnownError)
     }
     
     /// Checks that the unsupported homeserver text is not shown on the screen.

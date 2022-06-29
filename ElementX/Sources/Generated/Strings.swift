@@ -5406,7 +5406,7 @@ extension ElementL10n {
   }
 
   private static func trIn(_ language: String, _ table: String, _ key: String, _ args: CVarArg...) -> String {
-    guard let bundle = Bundle.lprojBundle(for: language) else {
+    guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: language) else {
       // no translations for the desired language
       return key
     }
@@ -5414,4 +5414,6 @@ extension ElementL10n {
     return String(format: format, locale: Locale(identifier: language), arguments: args)
   }
 }
+
+private final class BundleToken {}
 

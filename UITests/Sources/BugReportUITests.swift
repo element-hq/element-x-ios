@@ -23,17 +23,8 @@ class BugReportUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.bugReport)
 
-        XCTAssert(app.navigationBars["Bug report"].exists)
-        XCTAssert(app.staticTexts["reportBugDescription"].exists)
-        XCTAssert(app.staticTexts["sendLogsDescription"].exists)
-        XCTAssert(app.textViews["reportTextView"].exists)
-        let sendingLogsToggle = app.switches["sendLogsToggle"]
-        XCTAssert(sendingLogsToggle.exists)
-        XCTAssert(sendingLogsToggle.isOn)
-        XCTAssert(app.staticTexts["sendLogsText"].exists)
-        let sendButton = app.buttons["sendButton"]
-        XCTAssert(sendButton.exists)
-        XCTAssertFalse(sendButton.isEnabled)
+        verifyInitialStateComponents(in: app)
+
         XCTAssertFalse(app.images["screenshotImage"].exists)
         XCTAssertFalse(app.buttons["removeScreenshotButton"].exists)
     }
@@ -68,20 +59,31 @@ class BugReportUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.bugReportWithScreenshot)
 
-        XCTAssert(app.navigationBars["Bug report"].exists)
-        XCTAssert(app.staticTexts["reportBugDescription"].exists)
-        XCTAssert(app.staticTexts["sendLogsDescription"].exists)
-
-        XCTAssert(app.textViews["reportTextView"].exists)
-        let sendingLogsToggle = app.switches["sendLogsToggle"]
-        XCTAssert(sendingLogsToggle.exists)
-        XCTAssert(sendingLogsToggle.isOn)
-        XCTAssert(app.staticTexts["sendLogsText"].exists)
-        let sendButton = app.buttons["sendButton"]
-        XCTAssert(sendButton.exists)
-        XCTAssertFalse(sendButton.isEnabled)
+        verifyInitialStateComponents(in: app)
+        
         XCTAssert(app.images["screenshotImage"].exists)
         XCTAssert(app.buttons["removeScreenshotButton"].exists)
+    }
+
+    func verifyInitialStateComponents(in app: XCUIApplication) {
+        XCTAssert(app.navigationBars[ElementL10n.titleActivityBugReport].exists)
+        let descLabel = app.staticTexts["reportBugDescription"]
+        XCTAssert(descLabel.exists)
+        XCTAssertEqual(descLabel.label, ElementL10n.sendBugReportDescription)
+        let sendLogsDescLabel = app.staticTexts["sendLogsDescription"]
+        XCTAssert(sendLogsDescLabel.exists)
+        XCTAssertEqual(sendLogsDescLabel.label, ElementL10n.sendBugReportLogsDescription)
+        XCTAssert(app.textViews["reportTextView"].exists)
+        let sendLogsToggle = app.switches["sendLogsToggle"]
+        XCTAssert(sendLogsToggle.exists)
+        XCTAssert(sendLogsToggle.isOn)
+        let sendLogsLabel = app.staticTexts["sendLogsText"]
+        XCTAssert(sendLogsLabel.exists)
+        XCTAssertEqual(sendLogsLabel.label, ElementL10n.sendBugReportIncludeLogs)
+        let sendButton = app.buttons["sendButton"]
+        XCTAssert(sendButton.exists)
+        XCTAssertEqual(sendButton.label, ElementL10n.actionSend)
+        XCTAssertFalse(sendButton.isEnabled)
     }
 
 }
