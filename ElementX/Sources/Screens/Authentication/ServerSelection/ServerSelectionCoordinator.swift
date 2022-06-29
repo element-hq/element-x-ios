@@ -80,7 +80,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        return self.serverSelectionHostingController
+        serverSelectionHostingController
     }
     
     // MARK: - Private

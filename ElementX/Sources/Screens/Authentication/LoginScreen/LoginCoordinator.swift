@@ -180,7 +180,7 @@ final class LoginCoordinator: Coordinator, Presentable {
     private func presentServerSelectionScreen() {
         MXLog.debug("[LoginCoordinator] presentServerSelectionScreen")
         let parameters = ServerSelectionCoordinatorParameters(homeserver: loginViewModel.context.viewState.homeserver,
-                                                                            hasModalPresentation: true)
+                                                              hasModalPresentation: true)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] result in
             guard let self = self, let coordinator = coordinator else { return }

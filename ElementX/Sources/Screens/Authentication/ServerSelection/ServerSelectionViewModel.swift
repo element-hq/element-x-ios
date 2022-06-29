@@ -33,7 +33,7 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     init(homeserverAddress: String, hasModalPresentation: Bool) {
         let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress)
         super.init(initialViewState: ServerSelectionViewState(bindings: bindings,
-                                                                            hasModalPresentation: hasModalPresentation))
+                                                              hasModalPresentation: hasModalPresentation))
     }
 
     // MARK: - Public
