@@ -52,11 +52,11 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         await Task.yield()
         
-        XCTAssertEqual(self.context.viewState.verificationState, .cancelling)
+        XCTAssertEqual(context.viewState.verificationState, .cancelling)
         
         await Task.yield()
         
-        XCTAssertEqual(self.context.viewState.verificationState, .cancelled)
+        XCTAssertEqual(context.viewState.verificationState, .cancelled)
         
         context.send(viewAction: .restart)
         
@@ -82,7 +82,7 @@ class SessionVerificationViewModelTests: XCTestCase {
                 case .finished:
                     waitForAcceptance.fulfill()
                 default:
-                    XCTFail()
+                    XCTFail("Unexpected session verification controller callback")
                 }
             }
         
@@ -94,7 +94,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         wait(for: [waitForAcceptance], timeout: 10.0)
         
-        XCTAssertEqual(self.context.viewState.verificationState, .verified)
+        XCTAssertEqual(context.viewState.verificationState, .verified)
     }
     
     func testDeclineChallenge() {
@@ -110,7 +110,7 @@ class SessionVerificationViewModelTests: XCTestCase {
                 case .cancelled:
                     expectation.fulfill()
                 default:
-                    XCTFail()
+                    XCTFail("Unexpected session verification controller callback")
                 }
             }
         
@@ -122,7 +122,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 10.0)
         
-        XCTAssertEqual(self.context.viewState.verificationState, .cancelled)
+        XCTAssertEqual(context.viewState.verificationState, .cancelled)
     }
     
     // MARK: - Private
@@ -149,6 +149,6 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         wait(for: [expectation], timeout: 10.0)
         
-        XCTAssertEqual(self.context.viewState.verificationState, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
+        XCTAssertEqual(context.viewState.verificationState, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
     }
 }
