@@ -56,14 +56,16 @@ struct HomeScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                HStack(spacing: 0) {
-                    userAvatarImage
-                        .animation(.default, value: context.viewState.userAvatar)
-                        .transition(.opacity)
+                Button { context.send(viewAction: .tapUserAvatar) } label: {
+                    HStack {
+                        userAvatarImage
+                            .animation(.default, value: context.viewState.userAvatar)
+                            .transition(.opacity)
 
-                    userDisplayNameView
-                        .animation(.default, value: context.viewState.userDisplayName)
-                        .transition(.opacity)
+                        userDisplayNameView
+                            .animation(.default, value: context.viewState.userDisplayName)
+                            .transition(.opacity)
+                    }
                 }
             }
         }
@@ -72,14 +74,12 @@ struct HomeScreen: View {
     @ViewBuilder
     private var userAvatarImage: some View {
         if let avatar = context.viewState.userAvatar {
-            Button { context.send(viewAction: .tapUserAvatar) } label: {
-                Image(uiImage: avatar)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 32, height: 32, alignment: .center)
-                    .clipShape(Circle())
-                    .accessibilityIdentifier("userAvatarImage")
-            }
+            Image(uiImage: avatar)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 32, height: 32, alignment: .center)
+                .clipShape(Circle())
+                .accessibilityIdentifier("userAvatarImage")
         } else {
             EmptyView()
         }
@@ -88,12 +88,10 @@ struct HomeScreen: View {
     @ViewBuilder
     private var userDisplayNameView: some View {
         if let displayName = context.viewState.userDisplayName {
-            Button { context.send(viewAction: .tapUserAvatar) } label: {
-                Text(displayName)
-                    .font(.headline)
-                    .fontWeight(.bold)
-                    .foregroundColor(.primary)
-            }
+            Text(displayName)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
         } else {
             EmptyView()
         }
