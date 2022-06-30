@@ -28,7 +28,7 @@ struct SplashScreen: View {
     @Environment(\.layoutDirection) private var layoutDirection
     
     private var isLeftToRight: Bool { layoutDirection == .leftToRight }
-    private var pageCount: Int { viewModel.viewState.content.count }
+    private var pageCount: Int { context.viewState.content.count }
     
     /// A timer to automatically animate the pages.
     @State private var pageTimer: Timer?
@@ -37,7 +37,7 @@ struct SplashScreen: View {
     
     // MARK: Public
     
-    @ObservedObject var viewModel: SplashScreenViewModel.Context
+    @ObservedObject var context: SplashScreenViewModel.Context
     
     var body: some View {
         GeometryReader { geometry in
@@ -49,12 +49,12 @@ struct SplashScreen: View {
                 HStack(alignment: .top, spacing: 0) {
                     
                     // Add a hidden page at the start of the carousel duplicating the content of the last page
-                    SplashScreenPage(content: viewModel.viewState.content[pageCount - 1])
+                    SplashScreenPage(content: context.viewState.content[pageCount - 1])
                         .frame(width: geometry.size.width)
                         .accessibilityIdentifier("hiddenPage")
                     
                     ForEach(0..<pageCount, id: \.self) { index in
-                        SplashScreenPage(content: viewModel.viewState.content[index])
+                        SplashScreenPage(content: context.viewState.content[index])
                             .frame(width: geometry.size.width)
                     }
                     
@@ -63,7 +63,7 @@ struct SplashScreen: View {
                 
                 Spacer()
                 
-                SplashScreenPageIndicator(pageCount: pageCount, pageIndex: viewModel.pageIndex)
+                SplashScreenPageIndicator(pageCount: pageCount, pageIndex: context.pageIndex)
                     .frame(width: geometry.size.width)
                     .padding(.bottom)
                 
@@ -93,7 +93,7 @@ struct SplashScreen: View {
     /// The main action buttons.
     var buttons: some View {
         VStack(spacing: 12) {
-            Button { viewModel.send(viewAction: .login) } label: {
+            Button { context.send(viewAction: .login) } label: {
                 Text(ElementL10n.loginSplashSubmit)
             }
             .buttonStyle(.elementAction(.xLarge))
@@ -107,7 +107,7 @@ struct SplashScreen: View {
     /// The view's background, showing a gradient in light mode and a solid colour in dark mode.
     var background: some View {
         if colorScheme == .light {
-            LinearGradient(gradient: viewModel.viewState.backgroundGradient,
+            LinearGradient(gradient: context.viewState.backgroundGradient,
                            startPoint: .leading,
                            endPoint: .trailing)
                 .flipsForRightToLeftLayoutDirection(true)
@@ -123,7 +123,7 @@ struct SplashScreen: View {
         guard pageTimer == nil else { return }
         
         pageTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
-            if viewModel.pageIndex == pageCount - 1 {
+            if context.pageIndex == pageCount - 1 {
                 showHiddenPage()
                 
                 withAnimation(.easeInOut(duration: 0.7)) {
@@ -147,22 +147,22 @@ struct SplashScreen: View {
     
     private func showNextPage() {
         // Wrap back round to the first page index when reaching the end.
-        viewModel.pageIndex = (viewModel.pageIndex + 1) % viewModel.viewState.content.count
+        context.pageIndex = (context.pageIndex + 1) % context.viewState.content.count
     }
     
     private func showPreviousPage() {
         // Prevent the hidden page at index -1 from being shown.
-        viewModel.pageIndex = max(0, (viewModel.pageIndex - 1))
+        context.pageIndex = max(0, (context.pageIndex - 1))
     }
     
     private func showHiddenPage() {
         // Hidden page for a nicer animation when looping back to the start.
-        viewModel.pageIndex = -1
+        context.pageIndex = -1
     }
     
     /// The offset to apply to the `HStack` of pages.
     private func pageOffset(in geometry: GeometryProxy) -> CGFloat {
-        (CGFloat(viewModel.pageIndex + 1) * -geometry.size.width) + dragOffset
+        (CGFloat(context.pageIndex + 1) * -geometry.size.width) + dragOffset
     }
     
     // MARK: - Gestures
@@ -171,9 +171,9 @@ struct SplashScreen: View {
     /// - Parameter width: The gesture's translation width.
     /// - Returns: `true` if there is another page to drag to.
     private func shouldSwipeForTranslation(_ width: CGFloat) -> Bool {
-        if viewModel.pageIndex == 0 {
+        if context.pageIndex == 0 {
             return isLeftToRight ? width < 0 : width > 0
-        } else if viewModel.pageIndex == pageCount - 1 {
+        } else if context.pageIndex == pageCount - 1 {
             return isLeftToRight ? width > 0 : width < 0
         }
         
@@ -220,7 +220,7 @@ struct SplashScreen_Previews: PreviewProvider {
     static let viewModel = SplashScreenViewModel()
     
     static var previews: some View {
-        SplashScreen(viewModel: viewModel.context)
+        SplashScreen(context: viewModel.context)
             .tint(.element.accent)
     }
 }

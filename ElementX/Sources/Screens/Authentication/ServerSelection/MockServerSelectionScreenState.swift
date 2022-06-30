@@ -23,25 +23,22 @@ enum MockServerSelectionScreenState: CaseIterable {
     case nonModal
     
     /// Generate the view struct for the screen state.
-    var viewModel: ServerSelectionViewModel {
-        // swiftlint:disable:next implicit_getter
-        @MainActor get {
-            switch self {
-            case .matrix:
-                return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
-                                                hasModalPresentation: true)
-            case .emptyAddress:
-                return ServerSelectionViewModel(homeserverAddress: "",
-                                                hasModalPresentation: true)
-            case .invalidAddress:
-                let viewModel = ServerSelectionViewModel(homeserverAddress: "thisisbad",
-                                                         hasModalPresentation: true)
-                viewModel.displayError(.footerMessage(ElementL10n.unknownError))
-                return viewModel
-            case .nonModal:
-                return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
-                                                hasModalPresentation: false)
-            }
+    @MainActor var viewModel: ServerSelectionViewModel {
+        switch self {
+        case .matrix:
+            return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
+                                            hasModalPresentation: true)
+        case .emptyAddress:
+            return ServerSelectionViewModel(homeserverAddress: "",
+                                            hasModalPresentation: true)
+        case .invalidAddress:
+            let viewModel = ServerSelectionViewModel(homeserverAddress: "thisisbad",
+                                                     hasModalPresentation: true)
+            viewModel.displayError(.footerMessage(ElementL10n.unknownError))
+            return viewModel
+        case .nonModal:
+            return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
+                                            hasModalPresentation: false)
         }
     }
 }

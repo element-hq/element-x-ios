@@ -54,7 +54,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
         
         let viewModel = ServerSelectionViewModel(homeserverAddress: parameters.homeserver.address,
                                                  hasModalPresentation: parameters.hasModalPresentation)
-        let view = ServerSelectionScreen(viewModel: viewModel.context)
+        let view = ServerSelectionScreen(context: viewModel.context)
         serverSelectionViewModel = viewModel
         serverSelectionHostingController = UIHostingController(rootView: view)
         
@@ -103,8 +103,8 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
         startLoading()
         
         let homeserverAddress = LoginHomeserver.sanitized(homeserverAddress)
-        callback?(.selected(LoginHomeserver(address: homeserverAddress)))
         
         stopLoading()
+        callback?(.selected(LoginHomeserver(address: homeserverAddress)))
     }
 }

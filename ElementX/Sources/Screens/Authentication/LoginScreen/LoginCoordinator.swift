@@ -74,7 +74,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         let viewModel = LoginViewModel(homeserver: parameters.homeserver)
         loginViewModel = viewModel
         
-        let view = LoginScreen(viewModel: viewModel.context)
+        let view = LoginScreen(context: viewModel.context)
         loginHostingController = UIHostingController(rootView: view)
         
         indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: loginHostingController)
@@ -190,7 +190,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         coordinator.start()
         add(childCoordinator: coordinator)
         
-        let modalRouter = NavigationRouter(navigationController: UINavigationController())
+        let modalRouter = NavigationRouter(navigationController: ElementNavigationController())
         modalRouter.setRootModule(coordinator)
         
         navigationRouter.present(modalRouter, animated: true)

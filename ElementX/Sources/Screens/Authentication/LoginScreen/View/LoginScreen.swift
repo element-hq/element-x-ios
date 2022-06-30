@@ -29,7 +29,7 @@ struct LoginScreen: View {
     
     // MARK: Public
     
-    @ObservedObject var viewModel: LoginViewModel.Context
+    @ObservedObject var context: LoginViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -46,7 +46,7 @@ struct LoginScreen: View {
                     .frame(height: 1)
                     .padding(.vertical, 21)
                 
-                switch viewModel.viewState.loginMode {
+                switch context.viewState.loginMode {
                 case .password:
                     loginForm
                 case .oidc:
@@ -61,7 +61,7 @@ struct LoginScreen: View {
             .padding(.bottom, 16)
         }
         .background(Color.element.background.ignoresSafeArea())
-        .alert(item: $viewModel.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     /// The header containing a Welcome Back title.
@@ -74,16 +74,16 @@ struct LoginScreen: View {
     
     /// The sever information section that includes a button to select a different server.
     var serverInfo: some View {
-        LoginServerInfoSection(address: viewModel.viewState.homeserver.address,
-                               showMatrixDotOrgInfo: viewModel.viewState.homeserver.isMatrixDotOrg) {
-            viewModel.send(viewAction: .selectServer)
+        LoginServerInfoSection(address: context.viewState.homeserver.address,
+                               showMatrixDotOrgInfo: context.viewState.homeserver.isMatrixDotOrg) {
+            context.send(viewAction: .selectServer)
         }
     }
     
     /// The form with text fields for username and password, along with a submit button.
     var loginForm: some View {
         VStack(spacing: 14) {
-            TextField(ElementL10n.loginSigninUsernameHint, text: $viewModel.username)
+            TextField(ElementL10n.loginSigninUsernameHint, text: $context.username)
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput())
                 .disableAutocorrection(true)
@@ -96,7 +96,7 @@ struct LoginScreen: View {
             
             Spacer().frame(height: 20)
             
-            SecureField(ElementL10n.loginSignupPasswordHint, text: $viewModel.password)
+            SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
                 .focused($isPasswordFocused)
                 .textFieldStyle(.elementInput())
                 .textContentType(.password)
@@ -104,7 +104,7 @@ struct LoginScreen: View {
                 .onSubmit(submit)
                 .accessibilityIdentifier("passwordTextField")
             
-            Button { viewModel.send(viewAction: .forgotPassword) } label: {
+            Button { context.send(viewAction: .forgotPassword) } label: {
                 Text(ElementL10n.authenticationLoginForgotPassword)
                     .font(.element.body)
             }
@@ -115,14 +115,14 @@ struct LoginScreen: View {
                 Text(ElementL10n.loginSignupSubmit)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .disabled(!viewModel.viewState.canSubmit)
+            .disabled(!context.viewState.canSubmit)
             .accessibilityIdentifier("nextButton")
         }
     }
 
     /// The OIDC button that can be used for login.
     var oidcButton: some View {
-        Button { viewModel.send(viewAction: .continueWithOIDC) } label: {
+        Button { context.send(viewAction: .continueWithOIDC) } label: {
             Text(ElementL10n.loginContinue)
         }
         .buttonStyle(.elementAction(.xLarge))
@@ -141,14 +141,14 @@ struct LoginScreen: View {
     
     /// Parses the username for a homeserver.
     private func usernameFocusChanged(isFocussed: Bool) {
-        guard !isFocussed, !viewModel.username.isEmpty else { return }
-        viewModel.send(viewAction: .parseUsername)
+        guard !isFocussed, !context.username.isEmpty else { return }
+        context.send(viewAction: .parseUsername)
     }
     
     /// Sends the `next` view action so long as valid credentials have been input.
     private func submit() {
-        guard viewModel.viewState.canSubmit else { return }
-        viewModel.send(viewAction: .next)
+        guard context.viewState.canSubmit else { return }
+        context.send(viewAction: .next)
     }
 }
 
@@ -171,7 +171,7 @@ struct Login_Previews: PreviewProvider {
     
     static func screen(for viewModel: LoginViewModel) -> some View {
         NavigationView {
-            LoginScreen(viewModel: viewModel.context)
+            LoginScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)
                 .tint(.element.accent)
         }

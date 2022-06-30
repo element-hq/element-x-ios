@@ -26,7 +26,7 @@ struct ServerSelectionScreen: View {
     
     // MARK: Public
     
-    @ObservedObject var viewModel: ServerSelectionViewModel.Context
+    @ObservedObject var context: ServerSelectionViewModel.Context
     
     // MARK: Views
     
@@ -44,7 +44,7 @@ struct ServerSelectionScreen: View {
         }
         .background(Color.element.background, ignoresSafeAreaEdges: .all)
         .toolbar { toolbar }
-        .alert(item: $viewModel.alertInfo) { $0.alert }
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     /// The title, message and icon at the top of the screen.
@@ -68,23 +68,23 @@ struct ServerSelectionScreen: View {
     /// The text field and confirm button where the user enters a server URL.
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 12) {
-            TextField(ElementL10n.serverSelectionServerUrl, text: $viewModel.homeserverAddress)
+            TextField(ElementL10n.serverSelectionServerUrl, text: $context.homeserverAddress)
                 .focused($isTextFieldFocused)
-                .textFieldStyle(.elementInput(footerText: viewModel.viewState.footerMessage,
-                                              isError: viewModel.viewState.isShowingFooterError))
+                .textFieldStyle(.elementInput(footerText: context.viewState.footerMessage,
+                                              isError: context.viewState.isShowingFooterError))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                .onChange(of: viewModel.homeserverAddress) { _ in viewModel.send(viewAction: .clearFooterError) }
+                .onChange(of: context.homeserverAddress) { _ in context.send(viewAction: .clearFooterError) }
                 .submitLabel(.done)
                 .onSubmit(submit)
                 .accessibilityIdentifier("addressTextField")
             
             Button(action: submit) {
-                Text(viewModel.viewState.buttonTitle)
+                Text(context.viewState.buttonTitle)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .disabled(viewModel.viewState.hasValidationError)
+            .disabled(context.viewState.hasValidationError)
             .accessibilityIdentifier("confirmButton")
         }
     }
@@ -92,8 +92,8 @@ struct ServerSelectionScreen: View {
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            if viewModel.viewState.hasModalPresentation {
-                Button { viewModel.send(viewAction: .dismiss) } label: {
+            if context.viewState.hasModalPresentation {
+                Button { context.send(viewAction: .dismiss) } label: {
                     Text(ElementL10n.actionCancel)
                 }
                 .accessibilityIdentifier("dismissButton")
@@ -103,8 +103,8 @@ struct ServerSelectionScreen: View {
     
     /// Sends the `confirm` view action so long as the text field input is valid.
     func submit() {
-        guard !viewModel.viewState.hasValidationError else { return }
-        viewModel.send(viewAction: .confirm)
+        guard !context.viewState.hasValidationError else { return }
+        context.send(viewAction: .confirm)
     }
 }
 
@@ -114,7 +114,7 @@ struct ServerSelection_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(MockServerSelectionScreenState.allCases, id: \.self) { state in
             NavigationView {
-                ServerSelectionScreen(viewModel: state.viewModel.context)
+                ServerSelectionScreen(context: state.viewModel.context)
                     .tint(.element.accent)
             }
             .navigationViewStyle(.stack)
