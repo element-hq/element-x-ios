@@ -108,10 +108,14 @@ class AuthenticationCoordinator: Coordinator {
         delegate?.authenticationCoordinatorDidStartLoading(self)
         
         let basePath = userSessionStore.baseDirectoryPath(for: username)
-        let loginTask = Task.detached {
-            try loginNewClient(basePath: basePath,
-                               username: username,
-                               password: password)
+        let builder = ClientBuilder()
+            .basePath(path: basePath)
+            .username(username: username)
+        
+        let loginTask: Task<Client, Error> = Task.detached {
+            let client = try builder.build()
+            try client.login(username: username, password: password)
+            return client
         }
         
         switch await loginTask.result {
