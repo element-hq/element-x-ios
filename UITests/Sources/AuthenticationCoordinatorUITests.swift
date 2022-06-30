@@ -50,7 +50,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         XCTAssertTrue(app.alerts.element.exists, "An error alert should be shown when attempting login with invalid credentials.")
     }
     
-    func testSelectingOIDCServer() async {
+    func testSelectingOIDCServer() {
         // Given the authentication flow.
         let app = Application.launch()
         app.goToScreenWithIdentifier(.authenticationFlow)
@@ -70,10 +70,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         // Dismiss server screen.
         app.buttons["confirmButton"].tap()
         
-        await Task.yield()
-        
         // Then the login form should be updated for OIDC.
-        XCTAssertTrue(app.buttons["oidcButton"].exists, "The OIDC button should be shown after selecting a homeserver with OIDC.")
+        XCTAssertTrue(app.buttons["oidcButton"].waitForExistence(timeout: 1), "The OIDC button should be shown after selecting a homeserver with OIDC.")
     }
 }
-

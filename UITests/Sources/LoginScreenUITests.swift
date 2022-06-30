@@ -60,9 +60,9 @@ class LoginScreenUITests: XCTestCase {
         
         // Then the screen should be configured for OIDC.
         let state = "an OIDC only server"
+        validateOIDCButtonIsShown(for: state)
         validateServerDescriptionIsHidden(for: state)
         validateLoginFormIsHidden(for: state)
-        validateOIDCButtonIsShown(for: state)
         validateUnsupportedServerTextIsHidden(for: state)
     }
     
@@ -77,10 +77,10 @@ class LoginScreenUITests: XCTestCase {
         
         // Then the screen should not allow login to continue.
         let state = "an unsupported server"
+        validateUnsupportedServerTextIsShown(for: state)
         validateServerDescriptionIsHidden(for: state)
         validateLoginFormIsHidden(for: state)
         validateOIDCButtonIsHidden(for: state)
-        validateUnsupportedServerTextIsShown(for: state)
     }
     
     /// Checks that the server description label is shown.
@@ -138,7 +138,7 @@ class LoginScreenUITests: XCTestCase {
     /// Checks that the OIDC button is shown on the screen.
     func validateOIDCButtonIsShown(for state: String) {
         let oidcButton = app.buttons["oidcButton"]
-        XCTAssertTrue(oidcButton.exists, "The OIDC button should be shown for \(state).")
+        XCTAssertTrue(oidcButton.waitForExistence(timeout: 1), "The OIDC button should be shown for \(state).")
         XCTAssertEqual(oidcButton.label, ElementL10n.loginContinue)
     }
     
@@ -151,7 +151,7 @@ class LoginScreenUITests: XCTestCase {
     /// Checks that the unsupported homeserver text is shown on the screen.
     func validateUnsupportedServerTextIsShown(for state: String) {
         let unsupportedText = app.staticTexts["unsupportedServerText"]
-        XCTAssertTrue(unsupportedText.exists, "The unsupported homeserver text should be shown for \(state).")
+        XCTAssertTrue(unsupportedText.waitForExistence(timeout: 1), "The unsupported homeserver text should be shown for \(state).")
         XCTAssertEqual(unsupportedText.label, ElementL10n.autodiscoverWellKnownError)
     }
     
