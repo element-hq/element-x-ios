@@ -26,43 +26,22 @@ struct HomeScreen: View {
         VStack(spacing: 16.0) {
             if context.viewState.isLoadingRooms {
                 VStack {
-                    Text("Loading rooms")
+                    Text(ElementL10n.loading)
                     ProgressView()
                 }
             } else {
                 List {
-                    Section("Rooms") {
-                        ForEach(context.viewState.unencryptedRooms) { room in
+                    Section(ElementL10n.rooms) {
+                        ForEach(context.viewState.visibleRooms) { room in
                             RoomCell(room: room, context: context)
                                 .listRowBackground(Color.clear)
                         }
-                        
-                        let other = context.viewState.encryptedRooms
-                        
-                        if other.count > 0 {
-                            DisclosureGroup("Encrypted") {
-                                ForEach(other) { room in
-                                    RoomCell(room: room, context: context)
-                                }
-                            }
-                            .listRowBackground(Color.clear)
-                        }
                     }
                     
-                    Section("People") {
-                        ForEach(context.viewState.unencryptedDMs) { room in
+                    Section(ElementL10n.bottomActionPeople) {
+                        ForEach(context.viewState.visibleDMs) { room in
                             RoomCell(room: room, context: context)
-                        }
-                        
-                        let other = context.viewState.encryptedDMs
-                        
-                        if other.count > 0 {
-                            DisclosureGroup("Encrypted") {
-                                ForEach(other) { room in
-                                    RoomCell(room: room, context: context)
-                                }
-                            }
-                            .listRowBackground(Color.clear)
+                                .listRowBackground(Color.clear)
                         }
                     }
                 }
@@ -77,39 +56,44 @@ struct HomeScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                HStack {
-                    ZStack {
-                        if let avatar = context.viewState.userAvatar {
-                            Button { context.send(viewAction: .tapUserAvatar) } label: {
-                                Image(uiImage: avatar)
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 40, height: 40, alignment: .center)
-                                    .mask(Circle())
-                            }
-                        } else {
-                            EmptyView()
-                        }
+                Button { context.send(viewAction: .tapUserAvatar) } label: {
+                    HStack {
+                        userAvatarImage
+                            .animation(.default, value: context.viewState.userAvatar)
+                            .transition(.opacity)
+
+                        userDisplayNameView
+                            .animation(.default, value: context.viewState.userDisplayName)
+                            .transition(.opacity)
                     }
-                    .animation(.default, value: context.viewState.userAvatar)
-                    .transition(.opacity)
-                    
-                    ZStack {
-                        if let displayName = context.viewState.userDisplayName {
-                            Button { context.send(viewAction: .tapUserAvatar) } label: {
-                                Text("Hello, \(displayName)!")
-                                    .font(.subheadline)
-                                    .fontWeight(.bold)
-                                    .foregroundColor(.primary)
-                            }
-                        } else {
-                            EmptyView()
-                        }
-                    }
-                    .animation(.default, value: context.viewState.userDisplayName)
-                    .transition(.opacity)
                 }
             }
+        }
+    }
+
+    @ViewBuilder
+    private var userAvatarImage: some View {
+        if let avatar = context.viewState.userAvatar {
+            Image(uiImage: avatar)
+                .resizable()
+                .scaledToFill()
+                .frame(width: 32, height: 32, alignment: .center)
+                .clipShape(Circle())
+                .accessibilityIdentifier("userAvatarImage")
+        } else {
+            EmptyView()
+        }
+    }
+
+    @ViewBuilder
+    private var userDisplayNameView: some View {
+        if let displayName = context.viewState.userDisplayName {
+            Text(displayName)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+        } else {
+            EmptyView()
         }
     }
 }
@@ -129,7 +113,7 @@ struct RoomCell: View {
                         .resizable()
                         .scaledToFill()
                         .frame(width: 40, height: 40)
-                        .mask(Circle())
+                        .clipShape(Circle())
                 } else {
                     PlaceholderAvatarImage(text: room.displayName ?? room.id)
                         .clipShape(Circle())
@@ -192,11 +176,14 @@ struct HomeScreen_Previews: PreviewProvider {
                              MockRoomSummary(displayName: "Omega", lastMessage: eventBrief)]
         
         viewModel.updateWithRoomSummaries(roomSummaries)
+        viewModel.updateWithUserDisplayName("username")
         
-        if let avatarImage = UIImage(systemName: "person.fill.questionmark") {
+        if let avatarImage = UIImage(systemName: "person.fill") {
             viewModel.updateWithUserAvatar(avatarImage)
         }
         
-        return HomeScreen(context: viewModel.context)
+        return NavigationView {
+            HomeScreen(context: viewModel.context)
+        }
     }
 }

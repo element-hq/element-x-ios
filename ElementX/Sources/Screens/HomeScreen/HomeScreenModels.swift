@@ -36,20 +36,12 @@ struct HomeScreenViewState: BindableState {
     
     var isLoadingRooms: Bool = false
     
-    var unencryptedDMs: [HomeScreenRoom] {
-        searchFilteredRooms.filter { $0.isDirect && !$0.isEncrypted }
+    var visibleDMs: [HomeScreenRoom] {
+        searchFilteredRooms.filter { $0.isDirect }
     }
-    
-    var encryptedDMs: [HomeScreenRoom] {
-        searchFilteredRooms.filter { $0.isDirect && $0.isEncrypted}
-    }
-    
-    var unencryptedRooms: [HomeScreenRoom] {
-        searchFilteredRooms.filter { !$0.isDirect && !$0.isEncrypted }
-    }
-    
-    var encryptedRooms: [HomeScreenRoom] {
-        searchFilteredRooms.filter { !$0.isDirect && $0.isEncrypted }
+
+    var visibleRooms: [HomeScreenRoom] {
+        searchFilteredRooms.filter { !$0.isDirect }
     }
     
     private var searchFilteredRooms: LazyFilterSequence<LazySequence<[HomeScreenRoom]>.Elements> {
