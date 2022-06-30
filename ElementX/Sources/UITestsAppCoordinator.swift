@@ -62,9 +62,9 @@ struct MockScreen: Identifiable {
             return LoginCoordinator(parameters: .init(navigationRouter: router,
                                                       homeserver: .mockUnsupported))
         case .simpleRegular:
-            return TemplateSimpleScreenCoordinator(parameters: .init(promptType: .regular))
+            return TemplateCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
-            return TemplateSimpleScreenCoordinator(parameters: .init(promptType: .upgrade))
+            return TemplateCoordinator(parameters: .init(promptType: .upgrade))
         case .settings:
             let router = NavigationRouter(navigationController: ElementNavigationController())
             return SettingsCoordinator(parameters: .init(navigationRouter: router,

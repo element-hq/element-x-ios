@@ -17,7 +17,7 @@
 import Foundation
 
 @MainActor
-protocol TemplateSimpleScreenViewModelProtocol {
-    var callback: ((TemplateSimpleScreenViewModelAction) -> Void)? { get set }
-    var context: TemplateSimpleScreenViewModelType.Context { get }
+protocol TemplateViewModelProtocol {
+    var callback: ((TemplateViewModelAction) -> Void)? { get set }
+    var context: TemplateViewModelType.Context { get }
 }

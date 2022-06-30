@@ -51,7 +51,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
         self.parameters = parameters
         
         let viewModel = SettingsViewModel()
-        let view = Settings(context: viewModel.context)
+        let view = SettingsScreen(context: viewModel.context)
         settingsViewModel = viewModel
         settingsHostingController = UIHostingController(rootView: view)
         

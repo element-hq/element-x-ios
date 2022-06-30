@@ -17,7 +17,7 @@
 import XCTest
 import ElementX
 
-class TemplateSimpleScreenUITests: XCTestCase {
+class TemplateScreenUITests: XCTestCase {
     func testRegularScreen() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.simpleRegular)

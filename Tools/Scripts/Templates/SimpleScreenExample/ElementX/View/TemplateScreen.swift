@@ -16,35 +16,35 @@
 
 import SwiftUI
 
-struct TemplateSimpleScreen: View {
+struct TemplateScreen: View {
 
     // MARK: Private
     
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    @Environment(\.colorScheme) private var colorScheme
     
-    private var horizontalPadding: CGFloat {
-        horizontalSizeClass == .regular ? 50 : 16
+    var counterColor: Color {
+        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
     }
     
     // MARK: Public
     
-    @ObservedObject var context: TemplateSimpleScreenViewModel.Context
+    @ObservedObject var context: TemplateViewModel.Context
     
     // MARK: Views
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                ScrollView {
-                    mainContent
-                        .padding(.top, 50)
-                        .padding(.horizontal, horizontalPadding)
-                }
-                
-                buttons
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
-            }
+        ScrollView {
+            mainContent
+                .padding(.top, 50)
+                .padding(.horizontal)
+                .readableFrame()
+        }
+        .safeAreaInset(edge: .bottom) {
+            buttons
+                .padding(.horizontal)
+                .padding(.vertical)
+                .readableFrame()
+                .background(.regularMaterial)
         }
     }
     
@@ -52,6 +52,9 @@ struct TemplateSimpleScreen: View {
     var mainContent: some View {
         VStack(spacing: 36) {
             Text(context.viewState.promptType.title)
+                .font(.element.title2B)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("title")
             
             Image(systemName: context.viewState.promptType.imageSystemName)
@@ -61,14 +64,19 @@ struct TemplateSimpleScreen: View {
             
             HStack {
                 Text("Counter: \(context.viewState.count)")
+                    .font(.element.body)
+                    .multilineTextAlignment(.center)
+                    .foregroundColor(counterColor)
                 
-                Button("-") {
+                Button("−") {
                     context.send(viewAction: .decrementCount)
                 }
+                .buttonStyle(.elementGhost())
                 
                 Button("+") {
                     context.send(viewAction: .incrementCount)
                 }
+                .buttonStyle(.elementGhost())
             }
         }
     }
@@ -79,7 +87,7 @@ struct TemplateSimpleScreen: View {
             Button { context.send(viewAction: .accept) } label: {
                 Text("Accept")
             }
-            .frame(maxWidth: .infinity)
+            .buttonStyle(.elementAction(.xLarge))
             
             Button { context.send(viewAction: .cancel) } label: {
                 Text("Cancel")
@@ -91,15 +99,15 @@ struct TemplateSimpleScreen: View {
 
 // MARK: - Previews
 
-struct TemplateSimpleScreen_Previews: PreviewProvider {
+struct Template_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = TemplateSimpleScreenViewModel(promptType: .regular)
-            TemplateSimpleScreen(context: viewModel.context)
+            let regularViewModel = TemplateViewModel(promptType: .regular)
+            TemplateScreen(context: regularViewModel.context)
+            
+            let upgradeViewModel = TemplateViewModel(promptType: .upgrade)
+            TemplateScreen(context: upgradeViewModel.context)
         }
-        Group {
-            let viewModel = TemplateSimpleScreenViewModel(promptType: .upgrade)
-            TemplateSimpleScreen(context: viewModel.context)
-        }
+        .tint(.element.accent)
     }
 }

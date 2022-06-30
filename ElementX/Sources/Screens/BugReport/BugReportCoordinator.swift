@@ -48,7 +48,7 @@ final class BugReportCoordinator: Coordinator, Presentable {
         
         let viewModel = BugReportViewModel(bugReportService: parameters.bugReportService,
                                            screenshot: parameters.screenshot)
-        let view = BugReport(context: viewModel.context)
+        let view = BugReportScreen(context: viewModel.context)
         bugReportViewModel = viewModel
         bugReportHostingController = UIHostingController(rootView: view)
         

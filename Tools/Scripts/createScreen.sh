@@ -34,10 +34,10 @@ SCREEN_VAR_NAME=`echo $SCREEN_NAME | awk '{ print tolower(substr($0, 1, 1)) subs
 function rename_files {
     for file in $(find * -type f -print)
     do
-      perl -p -i -e "s/TemplateSimpleScreen/"$SCREEN_NAME"/g" $file
-      perl -p -i -e "s/templateSimpleScreen/"$SCREEN_VAR_NAME"/g" $file
+      perl -p -i -e "s/Template/"$SCREEN_NAME"/g" $file
+      perl -p -i -e "s/template/"$SCREEN_VAR_NAME"/g" $file
 
-      mv ${file} ${file/TemplateSimpleScreen/$SCREEN_NAME}
+      mv ${file} ${file/Template/$SCREEN_NAME}
     done
 }
 

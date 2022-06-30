@@ -16,54 +16,54 @@
 
 import SwiftUI
 
-struct TemplateSimpleScreenCoordinatorParameters {
-    let promptType: TemplateSimpleScreenPromptType
+struct TemplateCoordinatorParameters {
+    let promptType: TemplatePromptType
 }
 
-enum TemplateSimpleScreenCoordinatorAction {
+enum TemplateCoordinatorAction {
     case accept
     case cancel
 }
 
-final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
+final class TemplateCoordinator: Coordinator, Presentable {
     
     // MARK: - Properties
     
     // MARK: Private
     
-    private let parameters: TemplateSimpleScreenCoordinatorParameters
-    private let templateSimpleScreenHostingController: UIViewController
-    private var templateSimpleScreenViewModel: TemplateSimpleScreenViewModelProtocol
+    private let parameters: TemplateCoordinatorParameters
+    private let templateHostingController: UIViewController
+    private var templateViewModel: TemplateViewModelProtocol
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var loadingIndicator: UserIndicator?
+    private var activityIndicator: UserIndicator?
     
     // MARK: Public
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: ((TemplateSimpleScreenCoordinatorAction) -> Void)?
+    var callback: ((TemplateCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
-    init(parameters: TemplateSimpleScreenCoordinatorParameters) {
+    init(parameters: TemplateCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = TemplateSimpleScreenViewModel(promptType: parameters.promptType)
-        let view = TemplateSimpleScreen(context: viewModel.context)
-        templateSimpleScreenViewModel = viewModel
-        templateSimpleScreenHostingController = UIHostingController(rootView: view)
+        let viewModel = TemplateViewModel(promptType: parameters.promptType)
+        let view = TemplateScreen(context: viewModel.context)
+        templateViewModel = viewModel
+        templateHostingController = UIHostingController(rootView: view)
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: templateSimpleScreenHostingController)
+        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: templateHostingController)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("[TemplateSimpleScreenCoordinator] did start.")
-        templateSimpleScreenViewModel.callback = { [weak self] action in
+        MXLog.debug("[TemplateCoordinator] did start.")
+        templateViewModel.callback = { [weak self] action in
             guard let self = self else { return }
-            MXLog.debug("[TemplateSimpleScreenCoordinator] TemplateSimpleScreenViewModel did complete with result: \(action).")
+            MXLog.debug("[TemplateCoordinator] TemplateViewModel did complete with result: \(action).")
             switch action {
             case .accept:
                 self.callback?(.accept)
@@ -74,7 +74,7 @@ final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        templateSimpleScreenHostingController
+        templateHostingController
     }
     
     // MARK: - Private
@@ -84,11 +84,11 @@ final class TemplateSimpleScreenCoordinator: Coordinator, Presentable {
     ///   - label: The label to show on the indicator.
     ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
     private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
+        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        loadingIndicator = nil
+        activityIndicator = nil
     }
 }
