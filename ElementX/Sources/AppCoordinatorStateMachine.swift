@@ -16,8 +16,6 @@ class AppCoordinatorStateMachine {
         case initial
         /// Showing the login screen
         case signedOut
-        /// Processing sign in request
-        case signingIn
         /// Opening an existing session.
         case restoringSession
         /// Showing the home screen
@@ -41,12 +39,8 @@ class AppCoordinatorStateMachine {
     enum Event: EventType {
         /// Start the `AppCoordinator` by showing authentication.
         case startWithAuthentication
-        /// A sign in request has been started
-        case attemptedSignIn
         /// Signing in succeeded
         case succeededSigningIn
-        /// Signing in failed
-        case failedSigningIn
         
         /// Start the `AppCoordinator` by restoring an existing account.
         case startWithExistingSession
@@ -84,9 +78,7 @@ class AppCoordinatorStateMachine {
     init() {
         stateMachine = StateMachine(state: .initial) { machine in
             machine.addRoutes(event: .startWithAuthentication, transitions: [ .initial => .signedOut ])
-            machine.addRoutes(event: .attemptedSignIn, transitions: [ .signedOut => .signingIn ])
-            machine.addRoutes(event: .succeededSigningIn, transitions: [ .signingIn => .homeScreen ])
-            machine.addRoutes(event: .failedSigningIn, transitions: [ .signingIn => .signedOut ])
+            machine.addRoutes(event: .succeededSigningIn, transitions: [ .signedOut => .homeScreen ])
             
             machine.addRoutes(event: .startWithExistingSession, transitions: [ .initial => .restoringSession ])
             machine.addRoutes(event: .succeededRestoringSession, transitions: [ .restoringSession => .homeScreen ])

@@ -27,6 +27,7 @@ class LoginScreenUITests: XCTestCase {
     }
     
     func testMatrixDotOrg() {
+        // Given the initial login screen which defaults to matrix.org.
         app = Application.launch()
         app.goToScreenWithIdentifier(.login)
         
@@ -37,19 +38,27 @@ class LoginScreenUITests: XCTestCase {
         validateNextButtonIsDisabled(for: state)
         validateUnsupportedServerTextIsHidden(for: state)
         
+        // When typing in a username and password.
         app.textFields.element.tap()
-        app.typeText("@test:server.com")
+        app.typeText("@test:matrix.org")
         
         app.secureTextFields.element.tap()
         app.typeText("12345678")
         
+        // Then the form should be ready to submit.
         validateNextButtonIsEnabled(for: "matrix.org with credentials entered")
     }
     
     func testOIDC() {
+        // Given the initial login screen.
         app = Application.launch()
-        app.goToScreenWithIdentifier(.loginOIDC)
+        app.goToScreenWithIdentifier(.login)
         
+        // When entering a username on a homeserver that only supports OIDC.
+        app.textFields.element.tap()
+        app.typeText("@test:company.com\n")
+        
+        // Then the screen should be configured for OIDC.
         let state = "an OIDC only server"
         validateServerDescriptionIsHidden(for: state)
         validateLoginFormIsHidden(for: state)
@@ -58,9 +67,15 @@ class LoginScreenUITests: XCTestCase {
     }
     
     func testUnsupported() {
+        // Given the initial login screen.
         app = Application.launch()
-        app.goToScreenWithIdentifier(.loginUnsupported)
+        app.goToScreenWithIdentifier(.login)
         
+        // When entering a username on a homeserver with an unsupported flow.
+        app.textFields.element.tap()
+        app.typeText("@test:server.net\n")
+        
+        // Then the screen should not allow login to continue.
         let state = "an unsupported server"
         validateServerDescriptionIsHidden(for: state)
         validateLoginFormIsHidden(for: state)
@@ -78,7 +93,7 @@ class LoginScreenUITests: XCTestCase {
     /// Checks that the server description label is hidden.
     func validateServerDescriptionIsHidden(for state: String) {
         let descriptionLabel = app.staticTexts["serverDescriptionText"]
-        XCTAssertFalse(descriptionLabel.exists, "The server description should be shown for \(state).")
+        XCTAssertFalse(descriptionLabel.exists, "The server description should be hidden for \(state).")
     }
     
     /// Checks that the username and password text fields are shown along with the next button.

@@ -21,6 +21,8 @@ class UITestsAppCoordinator: Coordinator {
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
         
+        UIView.setAnimationsEnabled(false)
+        
         let screens = mockScreens()
         let rootView = UITestsRootView(mockScreens: screens) { id in
             guard let screen = screens.first(where: { $0.id == id }) else {
@@ -50,24 +52,22 @@ class MockScreen: Identifiable {
     lazy var coordinator: Coordinator & Presentable = {
         switch id {
         case .login:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return LoginCoordinator(parameters: .init(navigationRouter: router,
-                                                      homeserver: .mockMatrixDotOrg))
-        case .loginOIDC:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return LoginCoordinator(parameters: .init(navigationRouter: router,
-                                                      homeserver: .mockOIDC))
-        case .loginUnsupported:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return LoginCoordinator(parameters: .init(navigationRouter: router,
-                                                      homeserver: .mockUnsupported))
+            let navigationRouter = NavigationRouter(navigationController: ElementNavigationController())
+            return LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+                                                      navigationRouter: navigationRouter))
+        case .serverSelection:
+            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+                                                                hasModalPresentation: true))
+        case .serverSelectionNonModal:
+            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+                                                                hasModalPresentation: false))
         case .simpleRegular:
             return TemplateCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
             return TemplateCoordinator(parameters: .init(promptType: .upgrade))
         case .settings:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return SettingsCoordinator(parameters: .init(navigationRouter: router,
+            let navigationRouter = NavigationRouter(navigationController: ElementNavigationController())
+            return SettingsCoordinator(parameters: .init(navigationRouter: navigationRouter,
                                                          bugReportService: MockBugReportService()))
         case .bugReport:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),

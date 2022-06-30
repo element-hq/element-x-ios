@@ -17,14 +17,14 @@
 import SwiftUI
 
 struct ServerSelectionCoordinatorParameters {
-    /// The homeserver to be shown initially.
-    let homeserver: LoginHomeserver
+    /// The service used to authenticate the user.
+    let authenticationService: AuthenticationServiceProtocol
     /// Whether the screen is presented modally or within a navigation stack.
     let hasModalPresentation: Bool
 }
 
-enum ServerSelectionCoordinatorResult {
-    case selected(LoginHomeserver)
+enum ServerSelectionCoordinatorAction {
+    case updated
     case dismiss
 }
 
@@ -38,6 +38,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     private let serverSelectionHostingController: UIViewController
     private var serverSelectionViewModel: ServerSelectionViewModelProtocol
     
+    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     
@@ -45,14 +46,14 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: (@MainActor (ServerSelectionCoordinatorResult) -> Void)?
+    var callback: (@MainActor (ServerSelectionCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
     init(parameters: ServerSelectionCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = ServerSelectionViewModel(homeserverAddress: parameters.homeserver.address,
+        let viewModel = ServerSelectionViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
                                                  hasModalPresentation: parameters.hasModalPresentation)
         let view = ServerSelectionScreen(context: viewModel.context)
         serverSelectionViewModel = viewModel
@@ -66,11 +67,11 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     func start() {
         MXLog.debug("[ServerSelectionCoordinator] did start.")
         
-        serverSelectionViewModel.callback = { [weak self] result in
+        serverSelectionViewModel.callback = { [weak self] action in
             guard let self = self else { return }
-            MXLog.debug("[ServerSelectionCoordinator] ServerSelectionViewModel did complete with result: \(result).")
+            MXLog.debug("[ServerSelectionCoordinator] ServerSelectionViewModel did callback with action: \(action).")
             
-            switch result {
+            switch action {
             case .confirm(let homeserverAddress):
                 self.useHomeserver(homeserverAddress)
             case .dismiss:
@@ -102,9 +103,25 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     private func useHomeserver(_ homeserverAddress: String) {
         startLoading()
         
-        let homeserverAddress = LoginHomeserver.sanitized(homeserverAddress)
-        
-        stopLoading()
-        callback?(.selected(LoginHomeserver(address: homeserverAddress)))
+        Task {
+            switch await authenticationService.startLogin(for: homeserverAddress) {
+            case .success:
+                callback?(.updated)
+                stopLoading()
+            case .failure(let error):
+                stopLoading()
+                handleError(error)
+            }
+        }
+    }
+    
+    /// Processes an error to either update the flow or display it to the user.
+    private func handleError(_ error: Error) {
+        switch error {
+        case AuthenticationServiceError.invalidServer:
+            serverSelectionViewModel.displayError(.footerMessage(ElementL10n.loginErrorHomeserverNotFound))
+        default:
+            serverSelectionViewModel.displayError(.footerMessage(ElementL10n.unknownError))
+        }
     }
 }
