@@ -39,7 +39,7 @@ class MockAuthenticationService: AuthenticationServiceProtocol {
     
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         guard username == validCredentials.username, password == validCredentials.password else {
-            return .failure(.failedLoggingIn)
+            return .failure(.invalidCredentials)
         }
         
         let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: username),

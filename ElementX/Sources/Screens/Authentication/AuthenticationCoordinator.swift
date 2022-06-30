@@ -25,9 +25,9 @@ class AuthenticationCoordinator: Coordinator, Presentable {
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
-    init(userSessionStore: UserSessionStoreProtocol,
+    init(authenticationService: AuthenticationServiceProtocol,
          navigationRouter: NavigationRouter) {
-        self.authenticationService = AuthenticationService(userSessionStore: userSessionStore)
+        self.authenticationService = authenticationService
         self.navigationRouter = navigationRouter
     }
     
