@@ -18,12 +18,12 @@ import Foundation
 
 // MARK: - Coordinator
 
-enum TemplateSimpleScreenPromptType {
+enum TemplatePromptType {
     case regular
     case upgrade
 }
 
-extension TemplateSimpleScreenPromptType: Identifiable, CaseIterable {
+extension TemplatePromptType: Identifiable, CaseIterable {
     var id: Self { self }
     
     var title: String {
@@ -47,19 +47,19 @@ extension TemplateSimpleScreenPromptType: Identifiable, CaseIterable {
 
 // MARK: View model
 
-enum TemplateSimpleScreenViewModelAction {
+enum TemplateViewModelAction {
     case accept
     case cancel
 }
 
 // MARK: View
 
-struct TemplateSimpleScreenViewState: BindableState {
-    var promptType: TemplateSimpleScreenPromptType
+struct TemplateViewState: BindableState {
+    var promptType: TemplatePromptType
     var count: Int
 }
 
-enum TemplateSimpleScreenViewAction {
+enum TemplateViewAction {
     case incrementCount
     case decrementCount
     case accept

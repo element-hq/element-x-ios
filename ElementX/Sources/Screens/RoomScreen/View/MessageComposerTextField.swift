@@ -159,22 +159,18 @@ struct MessageComposerTextField_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack {
-            PreviewWrapper()
-            PlaceholderPreviewWrapper()
+            PreviewWrapper(text: "123")
+            PreviewWrapper(text: "")
         }
     }
     
     struct PreviewWrapper: View {
-        @State(initialValue: "123") var text: String
-
-        var body: some View {
-            MessageComposerTextField(placeholder: "Placeholder", text: $text, maxHeight: 300)
+        @State var text: String
+        
+        init(text: String) {
+            _text = .init(initialValue: text)
         }
-    }
-    
-    struct PlaceholderPreviewWrapper: View {
-        @State(initialValue: "") var text: String
-
+        
         var body: some View {
             MessageComposerTextField(placeholder: "Placeholder", text: $text, maxHeight: 300)
         }

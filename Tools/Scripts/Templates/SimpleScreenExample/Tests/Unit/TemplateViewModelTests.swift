@@ -19,16 +19,16 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class TemplateSimpleScreenViewModelTests: XCTestCase {
+class TemplateScreenViewModelTests: XCTestCase {
     private enum Constants {
         static let counterInitialValue = 0
     }
     
-    var viewModel: TemplateSimpleScreenViewModelProtocol!
-    var context: TemplateSimpleScreenViewModelType.Context!
+    var viewModel: TemplateViewModelProtocol!
+    var context: TemplateViewModelType.Context!
     
     @MainActor override func setUpWithError() throws {
-        viewModel = TemplateSimpleScreenViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
+        viewModel = TemplateViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
         context = viewModel.context
     }
 

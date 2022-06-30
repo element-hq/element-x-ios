@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct BugReport: View {
+struct BugReportScreen: View {
 
     // MARK: Private
     
@@ -139,7 +139,7 @@ struct BugReport_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image)
-        BugReport(context: viewModel.context)
+        BugReportScreen(context: viewModel.context)
             .previewInterfaceOrientation(.portrait)
     }
 }

@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SplashScreenPage: View {
+struct SplashScreenPageView: View {
     
     // MARK: - Properties
     
@@ -59,7 +59,7 @@ struct SplashScreenPage_Previews: PreviewProvider {
     static let content = SplashScreenViewState().content
     static var previews: some View {
         ForEach(0..<content.count, id: \.self) { index in
-            SplashScreenPage(content: content[index])
+            SplashScreenPageView(content: content[index])
         }
     }
 }

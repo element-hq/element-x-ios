@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct Settings: View {
+struct SettingsScreen: View {
 
     // MARK: Private
 
@@ -128,7 +128,7 @@ struct Settings_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         let viewModel = SettingsViewModel()
-        Settings(context: viewModel.context)
+        SettingsScreen(context: viewModel.context)
             .previewInterfaceOrientation(.portrait)
     }
 }

@@ -49,12 +49,12 @@ struct SplashScreen: View {
                 HStack(alignment: .top, spacing: 0) {
                     
                     // Add a hidden page at the start of the carousel duplicating the content of the last page
-                    SplashScreenPage(content: context.viewState.content[pageCount - 1])
+                    SplashScreenPageView(content: context.viewState.content[pageCount - 1])
                         .frame(width: geometry.size.width)
                         .accessibilityIdentifier("hiddenPage")
                     
                     ForEach(0..<pageCount, id: \.self) { index in
-                        SplashScreenPage(content: context.viewState.content[index])
+                        SplashScreenPageView(content: context.viewState.content[index])
                             .frame(width: geometry.size.width)
                     }
                     
