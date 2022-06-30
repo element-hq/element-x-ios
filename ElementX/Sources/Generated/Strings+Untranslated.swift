@@ -10,6 +10,10 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 extension ElementL10n {
+  /// Confirm
+  public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
+  /// Next
+  public static let actionNext = ElementL10n.tr("Untranslated", "action_next")
   /// Forgot password
   public static let authenticationLoginForgotPassword = ElementL10n.tr("Untranslated", "authentication_login_forgot_password")
   /// Welcome back!
@@ -26,6 +30,16 @@ extension ElementL10n {
   public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
   /// You took a screenshot
   public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
+  /// Cannot find a server at this URL, please check it is correct.
+  public static let serverSelectionGenericError = ElementL10n.tr("Untranslated", "server_selection_generic_error")
+  /// What is the address of your server? A server is like a home for all your data.
+  public static let serverSelectionMessage = ElementL10n.tr("Untranslated", "server_selection_message")
+  /// You can only connect to a server that has already been set up
+  public static let serverSelectionServerFooter = ElementL10n.tr("Untranslated", "server_selection_server_footer")
+  /// Server URL
+  public static let serverSelectionServerUrl = ElementL10n.tr("Untranslated", "server_selection_server_url")
+  /// Choose your server
+  public static let serverSelectionTitle = ElementL10n.tr("Untranslated", "server_selection_title")
   /// Timeline Style
   public static let settingsTimelineStyle = ElementL10n.tr("Untranslated", "settings_timeline_style")
   /// Untranslated

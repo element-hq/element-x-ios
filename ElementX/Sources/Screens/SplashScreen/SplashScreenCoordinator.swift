@@ -38,7 +38,7 @@ final class SplashScreenCoordinator: Coordinator, Presentable {
     
     init() {
         let viewModel = SplashScreenViewModel()
-        let view = SplashScreen(viewModel: viewModel.context)
+        let view = SplashScreen(context: viewModel.context)
         splashScreenViewModel = viewModel
         splashScreenHostingController = UIHostingController(rootView: view)
         
