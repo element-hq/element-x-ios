@@ -20,6 +20,7 @@ class MockAuthenticationService: AuthenticationServiceProtocol {
     }
     
     func startLogin(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
+        // Map the address to the mock homeservers
         if LoginHomeserver.mockMatrixDotOrg.address.contains(homeserverAddress) {
             homeserver = .mockMatrixDotOrg
             return .success(())
@@ -34,10 +35,12 @@ class MockAuthenticationService: AuthenticationServiceProtocol {
             return .success(())
         }
         
+        // Otherwise fail with an invalid server.
         return .failure(.invalidServer)
     }
     
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        // Login only succeeds if the username and password match the valid credentials property
         guard username == validCredentials.username, password == validCredentials.password else {
             return .failure(.invalidCredentials)
         }

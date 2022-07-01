@@ -127,14 +127,14 @@ final class LoginCoordinator: Coordinator, Presentable {
     }
     
     /// Processes an error to either update the flow or display it to the user.
-    private func handleError(_ error: Error) {
+    private func handleError(_ error: AuthenticationServiceError) {
         switch error {
-        case AuthenticationServiceError.invalidCredentials:
+        case .invalidCredentials:
             loginViewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
-        case AuthenticationServiceError.accountDeactivated:
+        case .accountDeactivated:
             loginViewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
         default:
-            loginViewModel.displayError(.alert(error.localizedDescription))
+            loginViewModel.displayError(.alert(ElementL10n.unknownError))
         }
     }
     
@@ -146,6 +146,7 @@ final class LoginCoordinator: Coordinator, Presentable {
             switch await authenticationService.login(username: username, password: password) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))
+                stopLoading()
             case .failure(let error):
                 stopLoading()
                 handleError(error)

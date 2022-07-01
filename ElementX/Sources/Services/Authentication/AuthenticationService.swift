@@ -57,8 +57,11 @@ class AuthenticationService: AuthenticationServiceProtocol {
         
         switch await loginTask.result {
         case .success(let client):
+            Benchmark.endTrackingForIdentifier("Login", message: "Finished login")
             return await userSession(for: client)
         case .failure(let error):
+            Benchmark.endTrackingForIdentifier("Login", message: "Login failed")
+            
             MXLog.error("Failed logging in with error: \(error)")
             guard let error = error as? ClientError else { return .failure(.failedLoggingIn) }
             
