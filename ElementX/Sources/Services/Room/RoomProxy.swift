@@ -53,6 +53,10 @@ class RoomProxy: RoomProxyProtocol {
         backwardStream = room.startLiveEventListener()
     }
     
+    deinit {
+        room.setDelegate(delegate: nil)
+    }
+    
     var id: String {
         room.id()
     }

@@ -22,12 +22,12 @@ class UITestsAppCoordinator: Coordinator {
         window.tintColor = .element.accent
         
         let screens = mockScreens()
-        screens.forEach { $0.coordinator.start() }
-        
         let rootView = UITestsRootView(mockScreens: screens) { id in
             guard let screen = screens.first(where: { $0.id == id }) else {
                 fatalError()
             }
+            
+            screen.coordinator.start()
             
             self.mainNavigationController.pushViewController(screen.coordinator.toPresentable(), animated: true)
         }
@@ -45,9 +45,9 @@ class UITestsAppCoordinator: Coordinator {
 }
 
 @MainActor
-struct MockScreen: Identifiable {
+class MockScreen: Identifiable {
     let id: UITestScreenIdentifier
-    var coordinator: Coordinator & Presentable {
+    lazy var coordinator: Coordinator & Presentable = {
         switch id {
         case .login:
             let router = NavigationRouter(navigationController: ElementNavigationController())
@@ -78,17 +78,24 @@ struct MockScreen: Identifiable {
         case .splash:
             return SplashScreenCoordinator()
         case .roomPlainNoAvatar:
-            let params = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
-                                                         roomName: "Some room name",
-                                                         roomAvatar: nil,
-                                                         roomEncryptionBadge: nil)
-            return RoomScreenCoordinator(parameters: params)
+            let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+                                                             roomName: "Some room name",
+                                                             roomAvatar: nil,
+                                                             roomEncryptionBadge: nil)
+            return RoomScreenCoordinator(parameters: parameters)
         case .roomEncryptedWithAvatar:
-            let params = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
-                                                         roomName: "Some room name",
-                                                         roomAvatar: Asset.Images.appLogo.image,
-                                                         roomEncryptionBadge: Asset.Images.encryptionTrusted.image)
-            return RoomScreenCoordinator(parameters: params)
+            let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+                                                             roomName: "Some room name",
+                                                             roomAvatar: Asset.Images.appLogo.image,
+                                                             roomEncryptionBadge: Asset.Images.encryptionTrusted.image)
+            return RoomScreenCoordinator(parameters: parameters)
+        case .sessionVerification:
+            let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy())
+            return SessionVerificationCoordinator(parameters: parameters)
         }
+    }()
+    
+    init(id: UITestScreenIdentifier) {
+        self.id = id
     }
 }

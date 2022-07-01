@@ -61,6 +61,12 @@ struct ImageAnonymizer {
         }
         // revision3 doesn't work!
         faceRequest.revision = VNDetectFaceRectanglesRequestRevision2
+        
+        #if targetEnvironment(simulator)
+        // Avoid `Could not create inference context` errors on Apple Silicon
+        // https://www.caseyliss.com/2022/6/20/feedback-is-broken-stop-trying-to-make-radar-happen
+        faceRequest.usesCPUOnly = true
+        #endif
 
         //  perform requests
         try handler.perform([

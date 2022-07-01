@@ -23,13 +23,27 @@ struct HomeScreen: View {
     // MARK: Views
     
     var body: some View {
-        VStack(spacing: 16.0) {
+        VStack(spacing: 0.0) {
             if context.viewState.isLoadingRooms {
                 VStack {
                     Text(ElementL10n.loading)
                     ProgressView()
                 }
             } else {
+                
+                if context.viewState.showSessionVerificationBanner {
+                    HStack {
+                        Text(ElementL10n.verificationVerifyDevice)
+                        Spacer()
+                        Button(ElementL10n.startVerification) {
+                            context.send(viewAction: .verifySession)
+                        }
+                    }
+                    .padding()
+                    .background(Color.element.quaternaryContent)
+                    .padding(.top, 1)
+                }
+                
                 List {
                     Section(ElementL10n.rooms) {
                         ForEach(context.viewState.visibleRooms) { room in
@@ -52,6 +66,8 @@ struct HomeScreen: View {
             Spacer()
         }
         .background(Color.element.background)
+        .transition(.slide)
+        .animation(.default, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -100,6 +116,8 @@ struct HomeScreen: View {
 
 struct RoomCell: View {
     
+    @ScaledMetric private var avatarSize = 32.0
+    
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     
@@ -112,12 +130,12 @@ struct RoomCell: View {
                     Image(uiImage: avatar)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 40, height: 40)
+                        .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
                 } else {
                     PlaceholderAvatarImage(text: room.displayName ?? room.id)
                         .clipShape(Circle())
-                        .frame(width: 40, height: 40)
+                        .frame(width: avatarSize, height: avatarSize)
                 }
                 
                 VStack(alignment: .leading, spacing: 2.0) {
@@ -181,6 +199,8 @@ struct HomeScreen_Previews: PreviewProvider {
         if let avatarImage = UIImage(systemName: "person.fill") {
             viewModel.updateWithUserAvatar(avatarImage)
         }
+        
+        viewModel.showSessionVerificationBanner()
         
         return NavigationView {
             HomeScreen(context: viewModel.context)

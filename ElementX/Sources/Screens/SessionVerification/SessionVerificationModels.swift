@@ -15,18 +15,32 @@
 //
 
 import Foundation
-import UIKit
 
-@MainActor
-protocol HomeScreenViewModelProtocol {
-    var callback: ((HomeScreenViewModelAction) -> Void)? { get set }
+// MARK: View model
+
+enum SessionVerificationViewModelAction {
+    case finished
+}
+
+// MARK: View
+
+struct SessionVerificationViewState: BindableState {
+    var verificationState: SessionVerificationStateMachine.State = .initial
     
-    var context: HomeScreenViewModelType.Context { get }
+    var shouldDisableDismissButton: Bool {
+        verificationState != .verified
+    }
     
-    func updateWithUserAvatar(_ avatar: UIImage)
-    func updateWithUserDisplayName(_ displayName: String)
-    func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol])
-    
-    func showSessionVerificationBanner()
-    func hideSessionVerificationBanner()
+    var shouldDisableCancelButton: Bool {
+        verificationState == .verified
+    }
+}
+
+enum SessionVerificationViewAction {
+    case start
+    case restart
+    case accept
+    case decline
+    case dismiss
+    case cancel
 }

@@ -7,11 +7,12 @@
 //
 
 import UIKit
+import Combine
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let window: UIWindow
     
-    private var stateMachine: AppCoordinatorStateMachine
+    private let stateMachine: AppCoordinatorStateMachine
     
     private let mainNavigationController: UINavigationController
     private let splashViewController: UIViewController
@@ -120,7 +121,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             case (.signingIn, .succeededSigningIn, .homeScreen):
                 self.hideLoadingIndicator()
                 self.presentHomeScreen()
-            
+                
             case (.initial, .startWithExistingSession, .restoringSession):
                 self.showLoadingIndicator()
                 self.restoreUserSession()
@@ -142,10 +143,17 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 self.tearDownUserSession()
             case (.signingOut, .failedSigningOut, _):
                 self.showLogoutErrorToast()
+            
             case (.homeScreen, .showSettingsScreen, .settingsScreen):
                 self.presentSettingsScreen()
             case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
                 self.tearDownDismissedSettingsScreen()
+                
+            case (.homeScreen, .showSessionVerificationScreen, .sessionVerificationScreen):
+                self.presentSessionVerification()
+            case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .homeScreen):
+                self.tearDownDismissedSessionVerificationScreen()
+                
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -205,6 +213,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
             case .presentSettings:
                 self.stateMachine.processEvent(.showSettingsScreen)
+            case .verifySession:
+                self.stateMachine.processEvent(.showSessionVerificationScreen)
             }
         }
         
@@ -215,28 +225,9 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             showCrashPopup()
         }
     }
-
-    private func presentSettingsScreen() {
-        let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
-                                                       bugReportService: bugReportService)
-        let coordinator = SettingsCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self] action in
-            guard let self = self else { return }
-            switch action {
-            case .logout:
-                self.stateMachine.processEvent(.attemptSignOut)
-            }
-        }
-
-        add(childCoordinator: coordinator)
-        coordinator.start()
-        navigationRouter.push(coordinator) { [weak self] in
-            guard let self = self else { return }
-
-            self.stateMachine.processEvent(.dismissedSettingsScreen)
-        }
-    }
     
+    // MARK: Rooms
+
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
         guard let roomProxy = userSession.clientProxy.rooms.first(where: { $0.id == roomIdentifier }) else {
             MXLog.error("Invalid room identifier: \(roomIdentifier)")
@@ -276,7 +267,30 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         remove(childCoordinator: coordinator)
     }
+    
+    // MARK: Settings
+    
+    private func presentSettingsScreen() {
+        let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
+                                                       bugReportService: bugReportService)
+        let coordinator = SettingsCoordinator(parameters: parameters)
+        coordinator.callback = { [weak self] action in
+            guard let self = self else { return }
+            switch action {
+            case .logout:
+                self.stateMachine.processEvent(.attemptSignOut)
+            }
+        }
 
+        add(childCoordinator: coordinator)
+        coordinator.start()
+        navigationRouter.push(coordinator) { [weak self] in
+            guard let self = self else { return }
+
+            self.stateMachine.processEvent(.dismissedSettingsScreen)
+        }
+    }
+        
     private func tearDownDismissedSettingsScreen() {
         guard let coordinator = childCoordinators.last as? SettingsCoordinator else {
             fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
@@ -285,22 +299,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         remove(childCoordinator: coordinator)
     }
     
-    private func showLoadingIndicator() {
-        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
-    }
-    
-    private func hideLoadingIndicator() {
-        loadingIndicator = nil
-    }
-    
-    private func showLoginErrorToast() {
-        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
-    }
-    
-    private func showLogoutErrorToast() {
-        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging out"))
-    }
-
     private func showCrashPopup() {
         let alert = UIAlertController(title: nil,
                                       message: ElementL10n.sendBugReportAppCrashed,
@@ -359,5 +357,55 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
         navigationRouter.dismissModule()
         remove(childCoordinator: bugReportCoordinator)
+    }
+    
+    // MARK: Session verification
+        
+    private func presentSessionVerification() {
+        Task {
+            guard let sessionVerificationController = userSession.sessionVerificationController else {
+                fatalError("The sessionVerificationController should aways be valid at this point")
+            }
+            
+            let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+            
+            let coordinator = SessionVerificationCoordinator(parameters: parameters)
+            
+            coordinator.callback = { [weak self] in
+                self?.navigationRouter.dismissModule()
+                self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
+            }
+            
+            add(childCoordinator: coordinator)
+            navigationRouter.present(coordinator)
+
+            coordinator.start()
+        }
+    }
+    
+    private func tearDownDismissedSessionVerificationScreen() {
+        guard let coordinator = childCoordinators.last as? SessionVerificationCoordinator else {
+            fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
+        }
+
+        remove(childCoordinator: coordinator)
+    }
+    
+    // MARK: Toasts and loading indicators
+    
+    private func showLoadingIndicator() {
+        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        loadingIndicator = nil
+    }
+    
+    private func showLoginErrorToast() {
+        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
+    }
+    
+    private func showLogoutErrorToast() {
+        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging out"))
     }
 }

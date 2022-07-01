@@ -22,11 +22,17 @@ class AppCoordinatorStateMachine {
         case restoringSession
         /// Showing the home screen
         case homeScreen
-        /// Showing the settings screen
-        case settingsScreen
+        
         /// Showing a particular room's timeline
         /// - Parameter roomId: that room's identifier
         case roomScreen(roomId: String)
+        
+        /// Showing the session verification flows
+        case sessionVerificationScreen
+    
+        /// Showing the settings screen
+        case settingsScreen
+        
         /// Processing a sign out request
         case signingOut
     }
@@ -61,10 +67,16 @@ class AppCoordinatorStateMachine {
         case showRoomScreen(roomId: String)
         /// The room screen has been dismissed
         case dismissedRoomScreen
-        /// The settings screen has been dismissed
-        case dismissedSettingsScreen
+        
+        /// Request the start of the session verification flow
+        case showSessionVerificationScreen
+        /// Session verification has finished
+        case dismissedSessionVerificationScreen
+        
         /// Request settings screen presentation
         case showSettingsScreen
+        /// The settings screen has been dismissed
+        case dismissedSettingsScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -84,8 +96,12 @@ class AppCoordinatorStateMachine {
             
             machine.addRoutes(event: .succeededSigningOut, transitions: [ .signingOut => .signedOut ])
             machine.addRoutes(event: .failedSigningOut, transitions: [ .signingOut => .settingsScreen ])
+
             machine.addRoutes(event: .showSettingsScreen, transitions: [ .homeScreen => .settingsScreen ])
             machine.addRoutes(event: .dismissedSettingsScreen, transitions: [ .settingsScreen => .homeScreen ])
+            
+            machine.addRoutes(event: .showSessionVerificationScreen, transitions: [ .homeScreen => .sessionVerificationScreen ])
+            machine.addRoutes(event: .dismissedSessionVerificationScreen, transitions: [ .sessionVerificationScreen => .homeScreen ])
             
             // Transitions with associated values need to be handled through `addRouteMapping`
             machine.addRouteMapping { event, fromState, _ in
