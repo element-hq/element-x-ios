@@ -29,19 +29,20 @@ struct SessionVerificationScreen: View {
                 Text(heading)
                     .font(.body)
                     .multilineTextAlignment(.center)
+                    .foregroundColor(.element.primaryContent)
                     .accessibilityIdentifier("titleLabel")
                 
                 switch context.viewState.verificationState {
                 case .initial:
-                    icon("lock.shield")
+                    StateIcon(systemName: "lock.shield")
                     Button(ElementL10n.startVerification) {
                         context.send(viewAction: .start)
                     }
                     .buttonStyle(.elementAction(.regular))
                     .accessibilityIdentifier("startButton")
-                
+                    
                 case .cancelled:
-                    icon("xmark.shield")
+                    StateIcon(systemName: "xmark.shield")
                         .accessibilityIdentifier("sessionVerificationFailedIcon")
                     
                     Button(ElementL10n.globalRetry) {
@@ -62,22 +63,22 @@ struct SessionVerificationScreen: View {
                 case .decliningChallenge:
                     ProgressView()
                         .accessibilityIdentifier("decliningChallengeProgressView")
-                
+                    
                 case .showingChallenge(let emojis):
                     HStack(spacing: 8.0) {
-                        ForEach(emojis.prefix(4)) { emoji in
-                            emojiView(emoji)
+                        ForEach(emojis.prefix(4), id: \.self) { emoji in
+                            EmojiView(emoji: emoji)
                         }
                     }
                     HStack(spacing: 8.0) {
-                        ForEach(emojis.suffix(from: 4)) { emoji in
-                            emojiView(emoji)
+                        ForEach(emojis.suffix(from: 4), id: \.self) { emoji in
+                            EmojiView(emoji: emoji)
                         }
                     }
                     
                     actionButtons
                 case .verified:
-                    icon("checkmark.shield")
+                    StateIcon(systemName: "checkmark.shield")
                         .accessibilityIdentifier("sessionVerificationSucceededIcon")
                 }
                 
@@ -89,15 +90,15 @@ struct SessionVerificationScreen: View {
             .navigationTitle(ElementL10n.verificationVerifyDevice)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    if shouldShowDismissButton {
-                        Button(ElementL10n.actionDismiss) {
+                    if context.viewState.shouldEnableDismissButton {
+                        Button(ElementL10n.done) {
                             context.send(viewAction: .dismiss)
                         }
                         .accessibilityIdentifier("dismissButton")
                     }
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    if !shouldShowDismissButton {
+                    if !context.viewState.shouldEnableDismissButton {
                         Button(ElementL10n.actionCancel) {
                             context.send(viewAction: .cancel)
                         }
@@ -132,47 +133,47 @@ struct SessionVerificationScreen: View {
         }
     }
     
-    private var shouldShowDismissButton: Bool {
-        context.viewState.verificationState == .initial ||
-        context.viewState.verificationState == .verified ||
-        context.viewState.verificationState == .cancelled
-    }
-        
-    private func icon(_ systemName: String) -> some View {
-        Image(systemName: systemName)
-            .resizable()
-            .scaledToFit()
-            .foregroundColor(.element.accent)
-            .frame(width: 100, height: 100)
-    }
-    
-    private func emojiView(_ emoji: SessionVerificationEmoji) -> some View {
-        VStack(spacing: 16.0) {
-            Text(emoji.symbol)
-                .font(.largeTitle)
-            Text(emoji.description)
-                .font(.body)
-        }
-        .padding(8.0)
-    }
-    
     private var actionButtons: some View {
         HStack(spacing: 16.0) {
             Button(ElementL10n.verificationSasDoNotMatch) {
                 context.send(viewAction: .decline)
             }
-            .tint(.red)
-            .buttonStyle(.borderedProminent)
+            .buttonStyle(.elementAction(.regular, color: .red))
             .accessibilityLabel("challengeDeclineButton")
             
             Button(ElementL10n.verificationSasMatch) {
                 context.send(viewAction: .accept)
             }
-            .buttonStyle(.borderedProminent)
-            .tint(.element.accent)
+            .buttonStyle(.elementAction(.regular))
             .accessibilityLabel("challengeAcceptButton")
         }
         .padding(32.0)
+    }
+    
+    struct EmojiView: View {
+        let emoji: SessionVerificationEmoji
+        
+        var body: some View {
+            VStack(spacing: 16.0) {
+                Text(emoji.symbol)
+                    .font(.largeTitle)
+                Text(emoji.description)
+                    .font(.body)
+            }
+            .padding(8.0)
+        }
+    }
+    
+    struct StateIcon: View {
+        let systemName: String
+        
+        var body: some View {
+            Image(systemName: systemName)
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.element.accent)
+                .frame(width: 100, height: 100)
+        }
     }
 }
 

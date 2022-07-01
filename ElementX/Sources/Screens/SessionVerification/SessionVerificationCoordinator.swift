@@ -20,10 +20,6 @@ struct SessionVerificationCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
 }
 
-enum SessionVerificationCoordinatorAction {
-    case finished
-}
-
 final class SessionVerificationCoordinator: Coordinator, Presentable {
     
     // MARK: - Properties
@@ -38,7 +34,7 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: ((SessionVerificationCoordinatorAction) -> Void)?
+    var callback: (() -> Void)?
     
     // MARK: - Setup
     
@@ -60,7 +56,7 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
             
             switch action {
             case .finished:
-                self.callback?(.finished)
+                self.callback?()
             }
         }
     }

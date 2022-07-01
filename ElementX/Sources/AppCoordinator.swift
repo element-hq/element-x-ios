@@ -364,24 +364,19 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private func presentSessionVerification() {
         Task {
             // Ideally we would pass this through the stateMachine states as an associated value but that's quite hard to pull off with custom classes
-            guard case .success(let sessionVerificationController) = await userSession.clientProxy.getSessionVerificationControllerProxy() else {
-                return
+            guard let sessionVerificationController = userSession.sessionVerificationController else {
+                fatalError("The sessionVerificationController should aways be valid at this point")
             }
             
             let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
-
+            
             let coordinator = SessionVerificationCoordinator(parameters: parameters)
-
-            coordinator.callback = { [weak self] action in
-                guard let self = self else { return }
-
-                switch action {
-                case .finished:
-                    self.navigationRouter.dismissModule()
-                    self.stateMachine.processEvent(.dismissedSessionVerificationScreen)
-                }
+            
+            coordinator.callback = { [weak self] in
+                self?.navigationRouter.dismissModule()
+                self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
             }
-
+            
             add(childCoordinator: coordinator)
             navigationRouter.present(coordinator)
 

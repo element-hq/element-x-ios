@@ -97,7 +97,7 @@ class ClientProxy: ClientProxyProtocol {
         return Data(bytes: bytes, count: bytes.count)
     }
     
-    func getSessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
+    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         await Task.detached {
             do {
                 let sessionVerificationController = try self.client.getSessionVerificationController()

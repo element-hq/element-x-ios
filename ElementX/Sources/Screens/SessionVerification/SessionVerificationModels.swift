@@ -26,11 +26,11 @@ enum SessionVerificationViewModelAction {
 
 struct SessionVerificationViewState: BindableState {
     var verificationState: SessionVerificationStateMachine.State = .initial
-}
-
-extension SessionVerificationEmoji: Identifiable {
-    var id: String {
-        symbol + description
+    
+    var shouldEnableDismissButton: Bool {
+        verificationState == .initial ||
+        verificationState == .verified ||
+        verificationState == .cancelled
     }
 }
 

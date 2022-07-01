@@ -28,4 +28,5 @@ protocol HomeScreenViewModelProtocol {
     func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol])
     
     func showSessionVerificationBanner()
+    func hideSessionVerificationBanner()
 }

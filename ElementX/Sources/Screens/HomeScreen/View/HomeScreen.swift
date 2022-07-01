@@ -23,7 +23,7 @@ struct HomeScreen: View {
     // MARK: Views
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0.0) {
             if context.viewState.isLoadingRooms {
                 VStack {
                     Text(ElementL10n.loading)
@@ -116,6 +116,8 @@ struct HomeScreen: View {
 
 struct RoomCell: View {
     
+    @ScaledMetric private var avatarSize = 32.0
+    
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     
@@ -128,12 +130,12 @@ struct RoomCell: View {
                     Image(uiImage: avatar)
                         .resizable()
                         .scaledToFill()
-                        .frame(width: 32, height: 32)
+                        .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
                 } else {
                     PlaceholderAvatarImage(text: room.displayName ?? room.id)
                         .clipShape(Circle())
-                        .frame(width: 32, height: 32)
+                        .frame(width: avatarSize, height: avatarSize)
                 }
                 
                 VStack(alignment: .leading, spacing: 2.0) {

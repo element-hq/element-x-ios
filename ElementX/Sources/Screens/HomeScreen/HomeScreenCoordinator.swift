@@ -84,8 +84,11 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         parameters.userSession.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-                if case .sessionVerificationNeeded = callback {
+                switch callback {
+                case .sessionVerificationNeeded:
                     self?.viewModel.showSessionVerificationBanner()
+                case .didVerifySession:
+                    self?.viewModel.hideSessionVerificationBanner()
                 }
             }.store(in: &cancellables)
         

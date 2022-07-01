@@ -53,7 +53,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.tapUserAvatar)
         case .verifySession:
             callback?(.verifySession)
-            state.showSessionVerificationBanner = false
         }
     }
     
@@ -96,6 +95,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     func showSessionVerificationBanner() {
         state.showSessionVerificationBanner = true
+    }
+    
+    func hideSessionVerificationBanner() {
+        state.showSessionVerificationBanner = false
     }
     
     // MARK: - Private

@@ -36,5 +36,5 @@ protocol ClientProxyProtocol {
     
     func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data
     
-    func getSessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
+    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 }
