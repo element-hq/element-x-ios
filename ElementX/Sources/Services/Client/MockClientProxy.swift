@@ -10,6 +10,7 @@ import Combine
 import MatrixRustSDK
 
 struct MockClientProxy: ClientProxyProtocol {
+    
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userIdentifier: String
@@ -30,5 +31,9 @@ struct MockClientProxy: ClientProxyProtocol {
     
     func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data {
         throw ClientProxyError.failedLoadingMedia
+    }
+    
+    func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
+        .failure(.failedRetrievingSessionVerificationController)
     }
 }

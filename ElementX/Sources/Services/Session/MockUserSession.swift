@@ -6,9 +6,12 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
+import Combine
 
 struct MockUserSession: UserSessionProtocol {
+    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
+    let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
+    
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }
