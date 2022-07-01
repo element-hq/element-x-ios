@@ -17,7 +17,7 @@
 import SwiftUI
 import MatrixRustSDK
 
-struct SessionVerification: View {
+struct SessionVerificationScreen: View {
     
     @ObservedObject var context: SessionVerificationViewModel.Context
     
@@ -200,6 +200,6 @@ struct SessionVerification_Previews: PreviewProvider {
         let viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy(),
                                                      initialState: SessionVerificationViewState(verificationState: state))
 
-        return SessionVerification(context: viewModel.context)
+        return SessionVerificationScreen(context: viewModel.context)
     }
 }

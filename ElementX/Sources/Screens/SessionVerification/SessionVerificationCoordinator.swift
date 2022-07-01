@@ -46,7 +46,7 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
         self.parameters = parameters
         
         let viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
-        let view = SessionVerification(context: viewModel.context)
+        let view = SessionVerificationScreen(context: viewModel.context)
         sessionVerificationViewModel = viewModel
         sessionVerificationHostingController = UIHostingController(rootView: view)
     }
