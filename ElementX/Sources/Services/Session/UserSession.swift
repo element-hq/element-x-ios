@@ -11,7 +11,7 @@ import Combine
 
 class UserSession: UserSessionProtocol {
     private var cancellables = Set<AnyCancellable>()
-    private var sessionVerificationControllerCancellable: AnyCancellable?
+    private var checkForSessionVerificationControllerCancellable: AnyCancellable?
     
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
@@ -28,7 +28,7 @@ class UserSession: UserSessionProtocol {
     // MARK: - Private
     
     private func setupSessionVerificationWatchdog() {
-        sessionVerificationControllerCancellable = clientProxy.callbacks
+        checkForSessionVerificationControllerCancellable = clientProxy.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
                 if case .receivedSyncUpdate = callback {
@@ -65,6 +65,6 @@ class UserSession: UserSessionProtocol {
     }
     
     private func tearDownSessionVerificationControllerWatchdog() {
-        sessionVerificationControllerCancellable = nil
+        checkForSessionVerificationControllerCancellable = nil
     }
 }

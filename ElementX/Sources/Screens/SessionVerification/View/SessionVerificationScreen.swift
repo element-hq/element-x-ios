@@ -90,20 +90,18 @@ struct SessionVerificationScreen: View {
             .navigationTitle(ElementL10n.verificationVerifyDevice)
             .toolbar {
                 ToolbarItem(placement: .confirmationAction) {
-                    if context.viewState.shouldEnableDismissButton {
-                        Button(ElementL10n.done) {
-                            context.send(viewAction: .dismiss)
-                        }
-                        .accessibilityIdentifier("dismissButton")
+                    Button(ElementL10n.done) {
+                        context.send(viewAction: .dismiss)
                     }
+                    .disabled(context.viewState.shouldDisableDismissButton)
+                    .accessibilityIdentifier("dismissButton")
                 }
                 ToolbarItem(placement: .cancellationAction) {
-                    if !context.viewState.shouldEnableDismissButton {
-                        Button(ElementL10n.actionCancel) {
-                            context.send(viewAction: .cancel)
-                        }
-                        .accessibilityIdentifier("cancelButton")
+                    Button(ElementL10n.actionCancel) {
+                        context.send(viewAction: .cancel)
                     }
+                    .disabled(context.viewState.shouldDisableCancelButton)
+                    .accessibilityIdentifier("cancelButton")
                 }
             }
         }

@@ -72,6 +72,7 @@ class SessionVerificationStateMachine {
             // handling in `addRouteMapping` for states containing associated values
             machine.addRoutes(event: .didCancel, transitions: [ .cancelling => .cancelled ])
             machine.addRoutes(event: .didCancel, transitions: [ .cancelled => .cancelled ])
+            machine.addRoutes(event: .didFail, transitions: [ .cancelled => .cancelled ])
             
             machine.addRoutes(event: .restart, transitions: [ .cancelled => .initial ])
             

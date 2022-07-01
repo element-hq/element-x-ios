@@ -363,7 +363,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
     private func presentSessionVerification() {
         Task {
-            // Ideally we would pass this through the stateMachine states as an associated value but that's quite hard to pull off with custom classes
             guard let sessionVerificationController = userSession.sessionVerificationController else {
                 fatalError("The sessionVerificationController should aways be valid at this point")
             }

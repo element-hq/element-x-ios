@@ -27,10 +27,12 @@ enum SessionVerificationViewModelAction {
 struct SessionVerificationViewState: BindableState {
     var verificationState: SessionVerificationStateMachine.State = .initial
     
-    var shouldEnableDismissButton: Bool {
-        verificationState == .initial ||
-        verificationState == .verified ||
-        verificationState == .cancelled
+    var shouldDisableDismissButton: Bool {
+        verificationState != .verified
+    }
+    
+    var shouldDisableCancelButton: Bool {
+        verificationState == .verified
     }
 }
 

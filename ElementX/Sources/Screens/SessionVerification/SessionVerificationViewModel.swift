@@ -74,7 +74,14 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
         case .dismiss:
             callback?(.finished)
         case .cancel:
-            stateMachine.processEvent(.cancel)
+            guard stateMachine.state == .initial ||
+                    stateMachine.state == .verified ||
+                    stateMachine.state == .cancelled else {
+                stateMachine.processEvent(.cancel)
+                return
+            }
+            
+            callback?(.finished)
         case .accept:
             stateMachine.processEvent(.acceptChallenge)
         case .decline:
