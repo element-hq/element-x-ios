@@ -51,10 +51,9 @@ targets:
       base:
         PRODUCT_NAME: ElementX
         PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx
-        MARKETING_VERSION: 1.0.0
-        CURRENT_PROJECT_VERSION: 1.0.0
+        MARKETING_VERSION: 1.0.1
+        CURRENT_PROJECT_VERSION: 1
         DEVELOPMENT_TEAM: 7J4U792NQT
-        SUPPORTS_MACCATALYST: YES
         CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements 
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         

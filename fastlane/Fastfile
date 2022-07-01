@@ -51,7 +51,7 @@ lane :build_and_publish_on_github do
 
   upload_to_diawi()
 
-  mac_adhoc()
+  # mac_adhoc()
 
   release_to_github()
 
@@ -151,7 +151,7 @@ private_lane :release_to_github do
   diawi_app_id = URI(diawi_link).path.split('/').last
   diawi_qr_code_link = "https://www.diawi.com/qrcode/link/#{diawi_app_id}"
 
-  release_version = "v#{get_version_number()}.#{Time.now.strftime("%Y%m%d%H%M")}"
+  release_version = "#{get_version_number()}-#{Time.now.strftime("%Y%m%d%H%M")}"
 
   github_release = set_github_release(
     repository_name: "vector-im/element-x-ios",
@@ -161,7 +161,7 @@ private_lane :release_to_github do
     is_generate_release_notes: true,
     description: "[iOS AdHoc Release - Diawi Link](#{diawi_link})
     ![QR code](#{diawi_qr_code_link})",
-    upload_assets: ["build/ElementX.app.zip"]
+    # upload_assets: ["build/ElementX.app.zip"]
   )
 end
 
