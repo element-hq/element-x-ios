@@ -44,6 +44,7 @@ class BugReportViewModelTests: XCTestCase {
 
         context.send(viewAction: .removeScreenshot)
         await Task.yield()
+        try await Task.sleep(nanoseconds: 100_000_000)
         XCTAssertNil(context.viewState.screenshot)
     }
 }
