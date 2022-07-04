@@ -149,6 +149,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             fatalError("Failed transition with context: \(context)")
         }
     }
+
     // swiftlint:enable cyclomatic_complexity function_body_length
     
     private func restoreUserSession() {

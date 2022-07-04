@@ -73,6 +73,7 @@ final class LoginCoordinator: Coordinator, Presentable {
     }
     
     // MARK: - Public
+
     func start() {
         MXLog.debug("[LoginCoordinator] did start.")
         

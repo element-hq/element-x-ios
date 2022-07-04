@@ -46,6 +46,7 @@ final class SplashScreenCoordinator: Coordinator, Presentable {
     }
     
     // MARK: - Public
+
     func start() {
         MXLog.debug("[SplashScreenCoordinator] did start.")
         splashScreenViewModel.callback = { [weak self] action in

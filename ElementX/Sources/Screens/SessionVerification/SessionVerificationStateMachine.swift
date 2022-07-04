@@ -115,6 +115,7 @@ class SessionVerificationStateMachine {
             }
         }
     }
+
     // swiftlint:enable cyclomatic_complexity
     
     /// Attempt to move the state machine to another state through an event

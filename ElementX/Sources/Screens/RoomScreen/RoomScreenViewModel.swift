@@ -96,7 +96,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func buildTimelineViews() {
-        let stateItems = timelineController.timelineItems.map { item  in
+        let stateItems = timelineController.timelineItems.map { item in
             timelineViewFactory.buildTimelineViewFor(timelineItem: item)
         }
         

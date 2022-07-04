@@ -15,6 +15,7 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
     var isRunning: Bool {
         identifier != .invalid
     }
+
     let isReusable: Bool
     let expirationHandler: BackgroundTaskExpirationHandler?
     var elapsedTime: TimeInterval {

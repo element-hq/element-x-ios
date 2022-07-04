@@ -38,14 +38,14 @@ final class ActivityIndicatorView: UIView {
         get {
             return activityIndicatorView.color
         }
-        set {            
+        set {
             activityIndicatorView.color = newValue
         }
     }
     
     // MARK: - Setup
     
-    private func commonInit() {        
+    private func commonInit() {
         activityIndicatorBackgroundView.layer.masksToBounds = true
     }
     

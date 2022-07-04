@@ -65,7 +65,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         roomUpdateListeners.removeAll()
         
-        roomSummaries.forEach({ roomSummary  in
+        roomSummaries.forEach({ roomSummary in
             roomSummary.callbacks
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] callback in

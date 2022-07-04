@@ -269,7 +269,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
         
         controllersToPop.forEach {
             self.willPopViewController($0)
-        }        
+        }
         
         navigationController.setViewControllers([], animated: animated)
         
@@ -328,7 +328,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
         self.postNotification(withName: NavigationRouter.willPopModule, for: viewController)
     }
     
-    private func didPopViewController(_ viewController: UIViewController) {                
+    private func didPopViewController(_ viewController: UIViewController) {
         self.postNotification(withName: NavigationRouter.didPopModule, for: viewController)
         
         // Call completion closure associated to the view controller
@@ -352,6 +352,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
 }
 
 // MARK: - UINavigationControllerDelegate
+
 extension NavigationRouter: UINavigationControllerDelegate {
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
@@ -374,6 +375,7 @@ extension NavigationRouter: UINavigationControllerDelegate {
 }
 
 // MARK: - NavigationRouter notification constants
+
 extension NavigationRouter {
     
     // MARK: Notification names

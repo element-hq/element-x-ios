@@ -1,0 +1,15 @@
+--swiftversion 5.6
+
+--exclude ElementX/Sources/Generated
+
+--disable all
+
+--enable blankLinesAroundMark
+--enable blankLinesBetweenScopes
+--enable consecutiveBlankLines
+--enable consecutiveSpaces
+--enable linebreakAtEndOfFile
+--enable linebreaks
+--enable trailingSpace
+
+--trimwhitespace nonblank-lines

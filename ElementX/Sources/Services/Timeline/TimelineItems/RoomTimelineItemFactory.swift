@@ -42,6 +42,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     // MARK: - Private
+
     private func buildTextTimelineItemFromMessage(_ message: TextRoomMessage,
                                                   _ isOutgoing: Bool,
                                                   _ showSenderDetails: Bool,

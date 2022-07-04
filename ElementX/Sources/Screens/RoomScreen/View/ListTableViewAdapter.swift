@@ -79,7 +79,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
         }
         
         guard let tableView = tableView,
-              tableView.numberOfSections > 0  else {
+              tableView.numberOfSections > 0 else {
                   return
         }
         
@@ -108,7 +108,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     
     func scrollToBottom(animated: Bool = false) {
         guard let tableView = tableView,
-              tableView.numberOfSections > 0  else {
+              tableView.numberOfSections > 0 else {
                   return
         }
         

@@ -41,6 +41,7 @@ public class ElementSharedFonts {
 }
 
 // MARK: - Fonts protocol
+
 extension ElementSharedFonts {
     
     public var largeTitle: SharedFont {
