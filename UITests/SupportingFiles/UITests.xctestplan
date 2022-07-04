@@ -1,0 +1,64 @@
+{
+  "configurations" : [
+    {
+      "id" : "183696C6-4CBB-4BCE-8F4C-D2B848395699",
+      "name" : "English",
+      "options" : {
+        "language" : "en",
+        "locationScenario" : {
+          "identifier" : "London, England",
+          "referenceType" : "built-in"
+        },
+        "region" : "GB"
+      }
+    },
+    {
+      "id" : "9657189C-CDB9-4D85-86EB-8A611144C11E",
+      "name" : "French",
+      "options" : {
+        "language" : "fr",
+        "locationScenario" : {
+          "identifier" : "London, England",
+          "referenceType" : "built-in"
+        },
+        "region" : "FR"
+      }
+    },
+    {
+      "id" : "04E7AF54-391D-42D4-8193-7AD50C685639",
+      "name" : "German",
+      "options" : {
+        "language" : "de",
+        "locationScenario" : {
+          "identifier" : "London, England",
+          "referenceType" : "built-in"
+        },
+        "region" : "DE"
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "addressSanitizer" : {
+      "enabled" : true
+    },
+    "mainThreadCheckerEnabled" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ElementX.xcodeproj",
+      "identifier" : "C0FAEB81CFD9776CD78CE489",
+      "name" : "ElementX"
+    },
+    "uiTestingScreenshotsLifetime" : "keepNever",
+    "undefinedBehaviorSanitizerEnabled" : true,
+    "userAttachmentLifetime" : "keepNever"
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ElementX.xcodeproj",
+        "identifier" : "0E28CD62691FDBC63147D5E3",
+        "name" : "UITests"
+      }
+    }
+  ],
+  "version" : 1
+}
