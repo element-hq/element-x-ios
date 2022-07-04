@@ -8,6 +8,4 @@
 
 import Foundation
 
-protocol DecorationTimelineItemProtocol: RoomTimelineItemProtocol {
-
-}
+protocol DecorationTimelineItemProtocol: RoomTimelineItemProtocol { }

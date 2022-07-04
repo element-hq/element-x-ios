@@ -6,10 +6,10 @@
 //  Copyright © 2022 element.io. All rights reserved.
 //
 
-import Foundation
 @testable import ElementX
-import XCTest
+import Foundation
 import Photos
+import XCTest
 
 class ScreenshotDetectorTests: XCTestCase {
 

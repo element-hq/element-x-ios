@@ -15,8 +15,8 @@
 //
 
 import Foundation
-import MatrixRustSDK
 import Kingfisher
+import MatrixRustSDK
 
 class UserSessionStore: UserSessionStoreProtocol {
     

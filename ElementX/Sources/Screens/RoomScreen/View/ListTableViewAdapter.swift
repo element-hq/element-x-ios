@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 class ListTableViewAdapter: NSObject, UITableViewDelegate {
     
@@ -80,7 +80,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
         
         guard let tableView = tableView,
               tableView.numberOfSections > 0 else {
-                  return
+            return
         }
         
         let currentItemCount = tableView.numberOfRows(inSection: 0)
@@ -89,7 +89,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
         case .bottomOffset:
             tableView.scrollToRow(at: .init(row: max(0, currentItemCount - 1), section: 0), at: .bottom, animated: false)
         case .topOffset(let indexPath, let previousItemCount):
-            let row = indexPath.row + max(0, (currentItemCount - previousItemCount))
+            let row = indexPath.row + max(0, currentItemCount - previousItemCount)
             if row < currentItemCount {
                 tableView.scrollToRow(at: .init(row: row, section: 0), at: .top, animated: false)
             }
@@ -109,7 +109,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     func scrollToBottom(animated: Bool = false) {
         guard let tableView = tableView,
               tableView.numberOfSections > 0 else {
-                  return
+            return
         }
         
         let currentItemCount = tableView.numberOfRows(inSection: 0)
@@ -180,9 +180,9 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
             scrollViewBottomVisiblePublisher.send(isBottomVisible)
         }
         
-        if !draggingInitiated && tableView.isDragging {
+        if !draggingInitiated, tableView.isDragging {
             draggingInitiated = true
-        } else if draggingInitiated && !tableView.isDragging {
+        } else if draggingInitiated, !tableView.isDragging {
             draggingInitiated = false
             scrollViewDidRestPublisher.send(())
         }
@@ -193,7 +193,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
               sender.state == .ended,
               draggingInitiated == true,
               !tableView.isDecelerating else {
-                  return
+            return
         }
         
         draggingInitiated = false

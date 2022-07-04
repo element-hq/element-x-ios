@@ -2,14 +2,16 @@
 
 --exclude ElementX/Sources/Generated
 
---disable all
+--disable wrapMultiLineStatementBraces
+--disable blankLinesAtStartOfScope
+--disable blankLinesAtEndOfScope
+--disable hoistPatternLet
 
---enable blankLinesAroundMark
---enable blankLinesBetweenScopes
---enable consecutiveBlankLines
---enable consecutiveSpaces
---enable linebreakAtEndOfFile
---enable linebreaks
---enable trailingSpace
-
+--commas inline
+--ifdef no-indent
+--nospaceoperators ...,..<
+--stripunusedargs closure-only
 --trimwhitespace nonblank-lines
+--wrapparameters after-first
+--redundanttype inferred
+--emptybraces spaced

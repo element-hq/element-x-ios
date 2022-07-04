@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import DesignKit
+import SwiftUI
 
 /// The splash screen shown at the beginning of the onboarding flow.
 struct SplashScreen: View {
@@ -152,7 +152,7 @@ struct SplashScreen: View {
     
     private func showPreviousPage() {
         // Prevent the hidden page at index -1 from being shown.
-        context.pageIndex = max(0, (context.pageIndex - 1))
+        context.pageIndex = max(0, context.pageIndex - 1)
     }
     
     private func showHiddenPage() {

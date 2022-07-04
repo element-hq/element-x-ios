@@ -52,7 +52,7 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
         
         view.isUserInteractionEnabled = false
         
-        let backgroundOverlayView = self.createBackgroundOverlayView(with: view.frame)
+        let backgroundOverlayView = createBackgroundOverlayView(with: view.frame)
         
         let activityIndicatorView = ActivityIndicatorView()
         
@@ -89,9 +89,9 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
     }
     
     func removeCurrentActivityIndicator(animated: Bool, completion: (() -> Void)? = nil) {
-        guard let presentingView = self.presentingView,
-            let backgroundOverlayView = self.backgroundOverlayView,
-            let activityIndicatorView = self.activityIndicatorView else {
+        guard let presentingView = presentingView,
+              let backgroundOverlayView = backgroundOverlayView,
+              let activityIndicatorView = activityIndicatorView else {
             return
         }
         

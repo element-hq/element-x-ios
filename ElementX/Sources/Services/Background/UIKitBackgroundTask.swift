@@ -19,13 +19,13 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
     let isReusable: Bool
     let expirationHandler: BackgroundTaskExpirationHandler?
     var elapsedTime: TimeInterval {
-        return Date().timeIntervalSince(startDate) * 1000
+        Date().timeIntervalSince(startDate) * 1000
     }
 
     private let application: ApplicationProtocol
     private var identifier: UIBackgroundTaskIdentifier = .invalid
-    private var useCounter: Int = 0
-    private let startDate: Date = Date()
+    private var useCounter = 0
+    private let startDate = Date()
 
     /// Initializes and starts a new background task
     /// - Parameters:

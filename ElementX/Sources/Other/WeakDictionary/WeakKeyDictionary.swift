@@ -48,11 +48,11 @@ public struct WeakKeyDictionary<Key: AnyObject & Hashable, Value: AnyObject> {
     }
 
     public func weakDictionary() -> WeakDictionary<Key, Value> {
-        return dictionary().weakDictionary()
+        dictionary().weakDictionary()
     }
 
     public func weakKeyDictionary() -> WeakKeyDictionary<Key, Value> {
-        return self[startIndex ..< endIndex]
+        self[startIndex..<endIndex]
     }
 
     public func dictionary() -> [Key: Value] {
@@ -73,15 +73,15 @@ extension WeakKeyDictionary: Collection {
     public typealias Index = DictionaryIndex<WeakDictionaryKey<Key, Value>, WeakDictionaryReference<Value>>
 
     public var startIndex: Index {
-        return storage.startIndex
+        storage.startIndex
     }
 
     public var endIndex: Index {
-        return storage.endIndex
+        storage.endIndex
     }
 
     public func index(after index: Index) -> Index {
-        return storage.index(after: index)
+        storage.index(after: index)
     }
 
     public subscript(position: Index) -> (WeakDictionaryKey<Key, Value>, WeakDictionaryReference<Value>) {
@@ -90,7 +90,7 @@ extension WeakKeyDictionary: Collection {
 
     public subscript(key: Key) -> Value? {
         get {
-            return storage[WeakDictionaryKey<Key, Value>(key: key)]
+            storage[WeakDictionaryKey<Key, Value>(key: key)]
         }
 
         set {
@@ -101,24 +101,24 @@ extension WeakKeyDictionary: Collection {
     }
 
     public subscript(bounds: Range<Index>) -> WeakKeyDictionary<Key, Value> {
-        let subStorage = storage[bounds.lowerBound ..< bounds.upperBound]
+        let subStorage = storage[bounds.lowerBound..<bounds.upperBound]
         var newStorage = WeakDictionary<WeakDictionaryKey<Key, Value>, Value>()
 
-        subStorage.filter { key, value in return key.key != nil && value.value != nil }
+        subStorage.filter { key, value in key.key != nil && value.value != nil }
             .forEach { key, value in newStorage[key] = value.value }
 
         return WeakKeyDictionary<Key, Value>(storage: newStorage)
     }
 }
 
-extension WeakDictionary where Key: AnyObject {
-    public func weakKeyDictionary(valuesRetainedByKey: Bool = false) -> WeakKeyDictionary<Key, Value> {
-        return WeakKeyDictionary<Key, Value>(dictionary: dictionary(), valuesRetainedByKey: valuesRetainedByKey)
+public extension WeakDictionary where Key: AnyObject {
+    func weakKeyDictionary(valuesRetainedByKey: Bool = false) -> WeakKeyDictionary<Key, Value> {
+        WeakKeyDictionary<Key, Value>(dictionary: dictionary(), valuesRetainedByKey: valuesRetainedByKey)
     }
 }
 
-extension Dictionary where Key: AnyObject, Value: AnyObject {
-    public func weakKeyDictionary(valuesRetainedByKey: Bool = false) -> WeakKeyDictionary<Key, Value> {
-        return WeakKeyDictionary<Key, Value>(dictionary: self, valuesRetainedByKey: valuesRetainedByKey)
+public extension Dictionary where Key: AnyObject, Value: AnyObject {
+    func weakKeyDictionary(valuesRetainedByKey: Bool = false) -> WeakKeyDictionary<Key, Value> {
+        WeakKeyDictionary<Key, Value>(dictionary: self, valuesRetainedByKey: valuesRetainedByKey)
     }
 }

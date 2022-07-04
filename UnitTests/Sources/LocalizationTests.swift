@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import XCTest
 @testable import ElementX
+import XCTest
 
 class LocalizationTests: XCTestCase {
 

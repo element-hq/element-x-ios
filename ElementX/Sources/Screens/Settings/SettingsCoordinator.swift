@@ -109,7 +109,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
         add(childCoordinator: coordinator)
         coordinator.start()
-        self.parameters.navigationRouter.push(coordinator, animated: true) { [weak self] in
+        parameters.navigationRouter.push(coordinator, animated: true) { [weak self] in
             guard let self = self else { return }
 
             self.remove(childCoordinator: coordinator)

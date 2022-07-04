@@ -19,7 +19,7 @@ import Foundation
 @MainActor
 protocol ServerSelectionViewModelProtocol {
     
-    var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)? { get set }
+    var callback: (@MainActor(ServerSelectionViewModelAction) -> Void)? { get set }
     var context: ServerSelectionViewModelType.Context { get }
     
     /// Displays an error to the user.

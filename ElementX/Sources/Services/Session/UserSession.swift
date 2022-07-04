@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 class UserSession: UserSessionProtocol {
     private var cancellables = Set<AnyCancellable>()

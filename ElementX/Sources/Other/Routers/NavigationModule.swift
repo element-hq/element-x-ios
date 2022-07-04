@@ -30,7 +30,7 @@ struct NavigationModule {
 extension NavigationModule: CustomStringConvertible {
     
     var description: String {
-        return "NavigationModule: \(presentable), pop completion: \(String(describing: popCompletion))"
+        "NavigationModule: \(presentable), pop completion: \(String(describing: popCompletion))"
     }
     
 }

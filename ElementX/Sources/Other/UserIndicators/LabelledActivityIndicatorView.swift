@@ -49,15 +49,14 @@ final class LabelledActivityIndicatorView: UIView {
         return view
     }()
     
-    private let label: UILabel = {
-        UILabel()
-    }()
+    private let label = UILabel()
     
     init(text: String) {
         super.init(frame: .zero)
         setup(text: text)
     }
 
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

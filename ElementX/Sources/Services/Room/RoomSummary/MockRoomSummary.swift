@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import UIKit
 import Combine
+import UIKit
 
 struct MockRoomSummary: RoomSummaryProtocol {
     var id: String = UUID().uuidString
@@ -18,21 +18,19 @@ struct MockRoomSummary: RoomSummaryProtocol {
     
     var topic: String?
     
-    var isDirect: Bool = false
+    var isDirect = false
     
-    var isEncrypted: Bool = false
+    var isEncrypted = false
     
-    var isSpace: Bool = false
+    var isSpace = false
     
-    var isTombstoned: Bool = false
+    var isTombstoned = false
     
     var lastMessage: EventBrief?
     
     var avatar: UIImage?
     
-    func loadDetails() async {
-        
-    }
+    func loadDetails() async { }
     
     var callbacks = PassthroughSubject<RoomSummaryCallback, Never>()
 }

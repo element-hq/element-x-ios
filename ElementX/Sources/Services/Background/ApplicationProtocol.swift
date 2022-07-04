@@ -21,4 +21,4 @@ protocol ApplicationProtocol {
     var applicationState: UIApplication.State { get }
 }
 
-extension UIApplication: ApplicationProtocol {}
+extension UIApplication: ApplicationProtocol { }

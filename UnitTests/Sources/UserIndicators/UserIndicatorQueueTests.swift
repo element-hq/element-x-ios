@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
+@testable import ElementX
 import Foundation
 import XCTest
-@testable import ElementX
 
 class UserIndicatorQueueTests: XCTestCase {
     var indicators: [UserIndicator]!
@@ -28,7 +28,7 @@ class UserIndicatorQueueTests: XCTestCase {
     }
     
     func makeRequest() -> UserIndicatorRequest {
-        return UserIndicatorRequest(
+        UserIndicatorRequest(
             presenter: UserIndicatorPresenterSpy(),
             dismissal: .manual
         )

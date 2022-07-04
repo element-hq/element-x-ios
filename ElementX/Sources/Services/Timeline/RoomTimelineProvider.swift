@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
@@ -21,13 +21,13 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         self.roomProxy.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-            guard let self = self else { return }
+                guard let self = self else { return }
             
-            switch callback {
-            case .updatedMessages:
-                self.callbacks.send(.updatedMessages)
-            }
-        }.store(in: &cancellables)
+                switch callback {
+                case .updatedMessages:
+                    self.callbacks.send(.updatedMessages)
+                }
+            }.store(in: &cancellables)
     }
     
     var messages: [RoomMessageProtocol] {

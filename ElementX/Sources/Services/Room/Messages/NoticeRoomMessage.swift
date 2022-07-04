@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UIKit
 import MatrixRustSDK
+import UIKit
 
 struct NoticeRoomMessage: RoomMessageProtocol {
     private let message: MatrixRustSDK.NoticeMessage

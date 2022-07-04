@@ -12,18 +12,18 @@ import UIKit
 struct MockMediaProvider: MediaProviderProtocol {
     
     func imageFromSource(_ source: MediaSource?) -> UIImage? {
-        return nil
+        nil
     }
     
     func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
-        return .failure(.failedRetrievingImage)
+        .failure(.failedRetrievingImage)
     }
     
     func imageFromURLString(_ urlString: String?) -> UIImage? {
-        return nil
+        nil
     }
         
     func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError> {
-        return .failure(.failedRetrievingImage)
+        .failure(.failedRetrievingImage)
     }
 }

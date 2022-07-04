@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import MatrixRustSDK
+import SwiftUI
 
 struct SessionVerificationScreen: View {
     

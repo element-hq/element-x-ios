@@ -44,7 +44,7 @@ struct SettingsScreen: View {
                            role: .destructive) { context.send(viewAction: .crash)
                     }
 
-                           .accessibilityIdentifier("crashButton")
+                    .accessibilityIdentifier("crashButton")
                 }
             }
             .listRowBackground(rowBackgroundColor)

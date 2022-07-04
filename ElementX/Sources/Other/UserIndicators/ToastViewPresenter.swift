@@ -19,7 +19,7 @@ import UIKit
 /// A presenter responsible for showing / hiding a toast view for loading spinners or success messages.
 /// It is managed by an `UserIndicator`, meaning the `present` and `dismiss` methods will be called when the parent `UserIndicator` starts or completes.
 class ToastViewPresenter: UserIndicatorViewPresentable {
-    struct Constants {
+    enum Constants {
         static let navigationBarPatting = CGFloat(10)
     }
     

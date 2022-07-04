@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import UIKit
 import SwiftUI
+import UIKit
 
 class UITestsAppCoordinator: Coordinator {
     private let window: UIWindow

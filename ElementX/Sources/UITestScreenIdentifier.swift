@@ -26,7 +26,7 @@ enum UITestScreenIdentifier: String {
 
 extension UITestScreenIdentifier: CustomStringConvertible {
     var description: String {
-        return rawValue.titlecased()
+        rawValue.titlecased()
     }
 }
 
@@ -38,7 +38,7 @@ private extension String {
                              with: " $1",
                              options: .regularExpression,
                              range: range(of: self))
-        .trimmingCharacters(in: .whitespacesAndNewlines)
-        .capitalized
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .capitalized
     }
 }

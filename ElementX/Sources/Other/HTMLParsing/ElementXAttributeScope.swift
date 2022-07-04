@@ -26,6 +26,6 @@ extension AttributeScopes {
 
 extension AttributeDynamicLookup {
     subscript<T: AttributedStringKey>(dynamicMember keyPath: KeyPath<AttributeScopes.ElementXAttributes, T>) -> T {
-        return self[T.self]
+        self[T.self]
     }
 }

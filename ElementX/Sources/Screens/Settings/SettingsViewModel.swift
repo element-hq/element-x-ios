@@ -18,7 +18,7 @@ import SwiftUI
 
 @available(iOS 14, *)
 typealias SettingsViewModelType = StateStoreViewModel<SettingsViewState,
-                                                      SettingsViewAction>
+    SettingsViewAction>
 @available(iOS 14, *)
 class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
 

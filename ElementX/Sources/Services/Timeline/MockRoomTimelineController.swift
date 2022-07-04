@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
@@ -40,18 +40,12 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                                                                           senderDisplayName: "Bob")]
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        return .failure(.generic)
+        .failure(.generic)
     }
     
-    func processItemAppearance(_ itemId: String) async {
-        
-    }
+    func processItemAppearance(_ itemId: String) async { }
     
-    func processItemDisappearance(_ itemId: String) async {
-        
-    }
+    func processItemDisappearance(_ itemId: String) async { }
     
-    func sendMessage(_ message: String) async {
-        
-    }
+    func sendMessage(_ message: String) async { }
 }

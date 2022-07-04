@@ -7,14 +7,14 @@
 //
 
 import Foundation
-import Vision
 import UIKit
+import Vision
 
 enum ImageAnonymizerError: Error {
     case noCgImageBased
 }
 
-struct ImageAnonymizer {
+enum ImageAnonymizer {
 
     private static var allowedTextItems: [String] = [
         "#",
@@ -96,7 +96,7 @@ struct ImageAnonymizer {
                     continue
                 }
                 if let textObservation = observation as? VNRecognizedTextObservation,
-                    let text = textObservation.topCandidates(1).first?.string {
+                   let text = textObservation.topCandidates(1).first?.string {
                     if Double(text) != nil || Self.allowedTextItems.contains(text) {
                         continue
                     }

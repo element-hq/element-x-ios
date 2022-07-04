@@ -16,10 +16,10 @@ class MockBugReportService: BugReportServiceProtocol {
                          includeCrashLog: Bool,
                          githubLabels: [String],
                          files: [URL]) async throws -> SubmitBugReportResponse {
-        return SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
+        SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
     }
 
-    var crashedLastRun: Bool = false
+    var crashedLastRun = false
 
     func crash() {
         // no-op

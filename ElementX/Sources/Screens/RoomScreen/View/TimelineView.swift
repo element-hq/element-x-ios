@@ -6,9 +6,9 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 import Introspect
 

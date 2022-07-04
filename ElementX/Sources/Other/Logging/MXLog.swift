@@ -21,10 +21,10 @@ import SwiftyBeaver
 @objc public class MXLogConfiguration: NSObject {
     
     /// the desired log level. `.verbose` by default.
-    @objc public var logLevel: MXLogLevel = MXLogLevel.verbose
+    @objc public var logLevel = MXLogLevel.verbose
     
     /// whether logs should be written directly to files. `false` by default.
-    @objc public var redirectLogsToFiles: Bool = false
+    @objc public var redirectLogsToFiles = false
     
     /// the maximum total space to use for log files in bytes. `100MB` by default.
     @objc public var logFilesSizeLimit: UInt = 100 * 1024 * 1024 // 100MB
@@ -64,7 +64,7 @@ private var logger: SwiftyBeaver.Type = {
     /// Please see `MXLogConfiguration` for all available options.
     /// - Parameters:
     ///     - configuration: the `MXLogConfiguration` instance to use
-    @objc static public func configure(_ configuration: MXLogConfiguration) {
+    @objc public static func configure(_ configuration: MXLogConfiguration) {
         configureLogger(logger, withConfiguration: configuration)
     }
     
@@ -107,8 +107,8 @@ private var logger: SwiftyBeaver.Type = {
         logger.info(message, file, function, line: line)
     }
     
-    public static func warning(_ message: @autoclosure () -> Any, _
-                                file: String = #file,
+    public static func warning(_ message: @autoclosure () -> Any, _ file: String = #file,
+                               
                                _ function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
@@ -133,8 +133,8 @@ private var logger: SwiftyBeaver.Type = {
         logger.error(message, file, function, line: line)
     }
     
-    public static func failure(_ message: @autoclosure () -> Any, _
-                               file: String = #file,
+    public static func failure(_ message: @autoclosure () -> Any, _ file: String = #file,
+                               
                                _ function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {

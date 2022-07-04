@@ -23,6 +23,6 @@ struct MediaSource: Equatable {
     // MARK: - Equatable
     
     static func == (lhs: MediaSource, rhs: MediaSource) -> Bool {
-        return lhs.underlyingSource.url() == rhs.underlyingSource.url()
+        lhs.underlyingSource.url() == rhs.underlyingSource.url()
     }
 }

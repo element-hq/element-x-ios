@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct WeakDictionaryKey<Key: AnyObject & Hashable, Value: AnyObject> : Hashable {
+public struct WeakDictionaryKey<Key: AnyObject & Hashable, Value: AnyObject>: Hashable {
 
     private weak var baseKey: Key?
     private let hash: Int
@@ -22,7 +22,7 @@ public struct WeakDictionaryKey<Key: AnyObject & Hashable, Value: AnyObject> : H
     }
 
     public static func == (lhs: WeakDictionaryKey, rhs: WeakDictionaryKey) -> Bool {
-        return (lhs.baseKey != nil && rhs.baseKey != nil && lhs.baseKey == rhs.baseKey)
+        (lhs.baseKey != nil && rhs.baseKey != nil && lhs.baseKey == rhs.baseKey)
             || lhs.hashValue == rhs.hashValue
     }
 
@@ -35,6 +35,6 @@ public struct WeakDictionaryKey<Key: AnyObject & Hashable, Value: AnyObject> : H
     }
 
     public var key: Key? {
-        return baseKey
+        baseKey
     }
 }

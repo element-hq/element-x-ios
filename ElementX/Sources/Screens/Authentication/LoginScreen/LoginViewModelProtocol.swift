@@ -19,7 +19,7 @@ import Foundation
 @MainActor
 protocol LoginViewModelProtocol {
     
-    var callback: (@MainActor (LoginViewModelAction) -> Void)? { get set }
+    var callback: (@MainActor(LoginViewModelAction) -> Void)? { get set }
     var context: LoginViewModelType.Context { get }
     
     /// Update the view to reflect that a new homeserver is being loaded.

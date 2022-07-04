@@ -56,11 +56,9 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Public
 
-    func start() {
-        
-    }
+    func start() { }
     
     func toPresentable() -> UIViewController {
-        return self.roomScreenHostingController
+        roomScreenHostingController
     }
 }

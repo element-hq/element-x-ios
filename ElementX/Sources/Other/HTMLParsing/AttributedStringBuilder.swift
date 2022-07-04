@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
 import DTCoreText
+import Foundation
 
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
@@ -55,8 +55,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     func fromHTML(_ htmlString: String?) -> AttributedString? {
         guard let htmlString = htmlString,
               let data = htmlString.data(using: .utf8) else {
-                  return nil
-              }
+            return nil
+        }
         
         let defaultFont = UIFont.preferredFont(forTextStyle: .body)
         
@@ -65,7 +65,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             DTDefaultFontFamily: defaultFont.familyName,
             DTDefaultFontName: defaultFont.fontName,
             DTDefaultFontSize: defaultFont.pointSize,
-            DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: self.defaultCSS) as Any
+            DTDefaultStyleSheet: DTCSSStylesheet(styleBlock: defaultCSS) as Any
         ]
         
         guard let builder = DTHTMLAttributedStringBuilder(html: data, options: parsingOptions, documentAttributes: nil) else {
@@ -96,7 +96,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             return nil
         }
         
-        return attributedString.runs[\.blockquote].map { (value, range) in
+        return attributedString.runs[\.blockquote].map { value, range in
             var attributedString = AttributedString(attributedString[range])
             
             // Remove trailing new lines if any
@@ -119,8 +119,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             guard let value = value as? NSArray,
                   let dtTextBlock = value.firstObject as? DTTextBlock,
                   dtTextBlock.backgroundColor == temporaryBlockquoteMarkingColor else {
-                      return
-                  }
+                return
+            }
             
             attributedString.addAttribute(.MXBlockquote, value: true, range: range)
         }
@@ -128,8 +128,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             guard let value = value as? UIColor,
                   value == temporaryBlockquoteMarkingColor else {
-                      return
-                  }
+                return
+            }
             
             attributedString.removeAttribute(.backgroundColor, range: range)
             attributedString.addAttribute(.MXBlockquote, value: true, range: range)
@@ -212,22 +212,22 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     private var defaultCSS: String {
-"""
-        blockquote {
-            background: \(temporaryBlockquoteMarkingColor.toHexString());
-            display: block;
-        }
-        pre,code {
-            background-color: \(temporaryCodeBlockMarkingColor.toHexString());
-            display: inline;
-            font-family: monospace;
-            white-space: pre;
-            -coretext-fontname: Menlo-Regular;
-        }
-        h1,h2,h3 {
-            font-size: 1.2em;
-        }
-"""
+        """
+                blockquote {
+                    background: \(temporaryBlockquoteMarkingColor.toHexString());
+                    display: block;
+                }
+                pre,code {
+                    background-color: \(temporaryCodeBlockMarkingColor.toHexString());
+                    display: inline;
+                    font-family: monospace;
+                    white-space: pre;
+                    -coretext-fontname: Menlo-Regular;
+                }
+                h1,h2,h3 {
+                    font-size: 1.2em;
+                }
+        """
     }
 }
 
@@ -240,7 +240,7 @@ extension UIColor {
         
         getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         
-        let rgb: Int = (Int)(red*255)<<16 | (Int)(green*255)<<8 | (Int)(blue*255)<<0
+        let rgb = Int(red * 255) << 16 | Int(green * 255) << 8 | Int(blue * 255) << 0
         
         return NSString(format: "#%06x", rgb) as String
     }

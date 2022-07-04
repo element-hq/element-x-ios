@@ -6,9 +6,9 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
-import Combine
 
 enum ClientProxyCallback {
     case updatedRoomsList

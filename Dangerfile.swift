@@ -1,5 +1,5 @@
-import Foundation
 import Danger
+import Foundation
 
 SwiftLint.lint(inline: true)
 
@@ -19,7 +19,7 @@ if danger.github.pullRequest.body?.isEmpty ?? true {
 let editedFiles = danger.git.modifiedFiles + danger.git.createdFiles
 let changelogFiles = editedFiles.filter { $0.hasPrefix("changelog.d/") }
 
-if editedFiles.count > 0 && changelogFiles.isEmpty {
+if editedFiles.count > 0, changelogFiles.isEmpty {
     warn("Please add a changelog.")
 }
 
@@ -27,7 +27,7 @@ if editedFiles.count > 0 && changelogFiles.isEmpty {
 if let ticketNumberRegex = try? NSRegularExpression(pattern: "#\\d+") {
     let missingTicketNumber = !danger.git.commits.filter {
         !$0.message.contains("vector-im/element-x-ios/issues/") &&
-        ticketNumberRegex.firstMatch(in: $0.message, options: [], range: .init(location: 0, length: $0.message.utf16.count)) == nil
+            ticketNumberRegex.firstMatch(in: $0.message, options: [], range: .init(location: 0, length: $0.message.utf16.count)) == nil
     }.isEmpty
     
     if missingTicketNumber {
@@ -63,7 +63,7 @@ if requiresSignOff {
         !$0.message.contains(signOff)
     }.isEmpty
 
-    if !hasPRBodySignOff && isMissingCommitsSignOff {
+    if !hasPRBodySignOff, isMissingCommitsSignOff {
         fail("Please add a sign-off to either the PR description or to the commits themselves.")
     }
 }

@@ -32,9 +32,7 @@ struct SettingsViewState: BindableState {
     var bindings: SettingsViewStateBindings
 }
 
-struct SettingsViewStateBindings {
-    
-}
+struct SettingsViewStateBindings { }
 
 enum SettingsViewAction {
     case reportBug

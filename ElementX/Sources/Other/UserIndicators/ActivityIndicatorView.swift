@@ -29,14 +29,14 @@ final class ActivityIndicatorView: UIView {
     
     // MARK: Outlets
     
-    @IBOutlet private weak var activityIndicatorView: UIActivityIndicatorView!
-    @IBOutlet private weak var activityIndicatorBackgroundView: UIView!
+    @IBOutlet private var activityIndicatorView: UIActivityIndicatorView!
+    @IBOutlet private var activityIndicatorBackgroundView: UIView!
     
     // MARK: Public
     
     var color: UIColor? {
         get {
-            return activityIndicatorView.color
+            activityIndicatorView.color
         }
         set {
             activityIndicatorView.color = newValue
@@ -68,8 +68,8 @@ final class ActivityIndicatorView: UIView {
     // MARK: - Overrides
     
     override var intrinsicContentSize: CGSize {
-        return CGSize(width: activityIndicatorView.intrinsicContentSize.width + Constants.activityIndicatorMargin.width,
-                      height: activityIndicatorView.intrinsicContentSize.height + Constants.activityIndicatorMargin.height)
+        CGSize(width: activityIndicatorView.intrinsicContentSize.width + Constants.activityIndicatorMargin.width,
+               height: activityIndicatorView.intrinsicContentSize.height + Constants.activityIndicatorMargin.height)
     }
     
     override func layoutSubviews() {
@@ -91,22 +91,22 @@ final class ActivityIndicatorView: UIView {
 
 private extension UIView {
     static var nib: UINib {
-      return UINib(nibName: String(describing: self), bundle: Bundle(for: self))
+        UINib(nibName: String(describing: self), bundle: Bundle(for: self))
     }
     
     func loadNibContent() {
-      let layoutAttributes: [NSLayoutConstraint.Attribute] = [.top, .leading, .bottom, .trailing]
-      for case let view as UIView in type(of: self).nib.instantiate(withOwner: self, options: nil) {
-        view.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(view)
-        NSLayoutConstraint.activate(layoutAttributes.map { attribute in
-          NSLayoutConstraint(
-            item: view, attribute: attribute,
-            relatedBy: .equal,
-            toItem: self, attribute: attribute,
-            multiplier: 1, constant: 0.0
-          )
-        })
-      }
+        let layoutAttributes: [NSLayoutConstraint.Attribute] = [.top, .leading, .bottom, .trailing]
+        for case let view as UIView in type(of: self).nib.instantiate(withOwner: self, options: nil) {
+            view.translatesAutoresizingMaskIntoConstraints = false
+            addSubview(view)
+            NSLayoutConstraint.activate(layoutAttributes.map { attribute in
+                NSLayoutConstraint(
+                    item: view, attribute: attribute,
+                    relatedBy: .equal,
+                    toItem: self, attribute: attribute,
+                    multiplier: 1, constant: 0.0
+                )
+            })
+        }
     }
 }

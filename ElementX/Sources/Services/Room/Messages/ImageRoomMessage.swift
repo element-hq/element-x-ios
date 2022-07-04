@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import UIKit
 import MatrixRustSDK
+import UIKit
 
 struct ImageRoomMessage: RoomMessageProtocol {
     private let message: MatrixRustSDK.ImageMessage

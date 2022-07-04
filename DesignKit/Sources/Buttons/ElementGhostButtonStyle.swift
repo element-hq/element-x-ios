@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import DesignTokens
+import SwiftUI
 
 public extension ButtonStyle where Self == ElementGhostButtonStyle {
     /// The Ghost button style as defined in Compound.

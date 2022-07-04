@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import XCTest
 import Combine
+import XCTest
 
 @testable import ElementX
 

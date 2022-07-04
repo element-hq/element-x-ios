@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
 @testable import ElementX
+import Foundation
 
 class UserIndicatorPresenterSpy: UserIndicatorViewPresentable {
     var intel = [String]()

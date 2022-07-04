@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import MatrixRustSDK
+import SwiftUI
 
 struct LoginCoordinatorParameters {
     /// The service used to authenticate the user.
@@ -56,7 +56,7 @@ final class LoginCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: (@MainActor (LoginCoordinatorAction) -> Void)?
+    var callback: (@MainActor(LoginCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     

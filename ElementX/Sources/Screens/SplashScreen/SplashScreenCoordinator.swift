@@ -60,7 +60,7 @@ final class SplashScreenCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        return splashScreenHostingController
+        splashScreenHostingController
     }
     
     /// Stops any ongoing activities in the coordinator.

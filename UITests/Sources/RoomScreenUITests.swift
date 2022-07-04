@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import XCTest
 import ElementX
+import XCTest
 
 @MainActor
 class RoomScreenUITests: XCTestCase {

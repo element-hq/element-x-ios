@@ -16,6 +16,4 @@
 
 import XCTest
 
-class RoomScreenViewModelTests: XCTestCase {
-    
-}
+class RoomScreenViewModelTests: XCTestCase { }

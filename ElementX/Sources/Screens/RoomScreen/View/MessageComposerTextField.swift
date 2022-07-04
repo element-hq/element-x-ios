@@ -23,7 +23,7 @@ struct MessageComposerTextField: View {
 
     init(placeholder: String, text: Binding<String>, maxHeight: CGFloat) {
         self.placeholder = placeholder
-        self._text = text
+        _text = text
         self.maxHeight = maxHeight
     }
     
@@ -36,7 +36,7 @@ struct MessageComposerTextField: View {
     }
     
     private var borderWidth: CGFloat {
-        return isEditing ? 2.0 : 1.0
+        isEditing ? 2.0 : 1.0
     }
     
     var body: some View {
@@ -89,18 +89,18 @@ private struct UITextViewWrapper: UIViewRepresentable {
     }
 
     func updateUIView(_ view: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
-        if view.text != self.text {
-            view.text = self.text
+        if view.text != text {
+            view.text = text
         }
 
         UITextViewWrapper.recalculateHeight(view: view, result: $calculatedHeight, maxHeight: maxHeight)
     }
 
     func makeCoordinator() -> Coordinator {
-        return Coordinator(text: $text,
-                           height: $calculatedHeight,
-                           isEditing: $isEditing,
-                           maxHeight: maxHeight)
+        Coordinator(text: $text,
+                    height: $calculatedHeight,
+                    isEditing: $isEditing,
+                    maxHeight: maxHeight)
     }
     
     fileprivate static func recalculateHeight(view: UIView, result: Binding<CGFloat>, maxHeight: CGFloat) {
@@ -124,7 +124,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         init(text: Binding<String>, height: Binding<CGFloat>, isEditing: Binding<Bool>, maxHeight: CGFloat) {
             self.text = text
-            self.calculatedHeight = height
+            calculatedHeight = height
             self.isEditing = isEditing
             self.maxHeight = maxHeight
         }
@@ -137,7 +137,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
         
         func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            return true
+            true
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {

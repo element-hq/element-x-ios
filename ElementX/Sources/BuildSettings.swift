@@ -22,12 +22,12 @@ final class BuildSettings {
     static let bugReportApplicationId = "riot-ios"
     static let bugReportUISIId = "element-auto-uisi"
 
-    static let bugReportGHLabels: [String] = ["Element-X"]
+    static let bugReportGHLabels = ["Element-X"]
 
     // MARK: - Settings screen
 
-    static let settingsCrashButtonVisible: Bool = true
-    static let settingsShowTimelineStyle: Bool = true
+    static let settingsCrashButtonVisible = true
+    static let settingsShowTimelineStyle = true
 
     // MARK: - Room screen
 

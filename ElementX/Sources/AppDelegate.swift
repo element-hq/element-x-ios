@@ -15,7 +15,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
 
-        //  fixme: Use `Bundle.elementLanguage = ".."` when we have the functionality
+        //  FIXME: Use `Bundle.elementLanguage = ".."` when we have the functionality
         //  use `en` as fallback language
         Bundle.elementFallbackLanguage = "en"
 
@@ -34,17 +34,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private var isRunningUnitTests: Bool {
         #if DEBUG
-            ProcessInfo.processInfo.environment["IS_RUNNING_UNIT_TESTS"] == "1"
+        ProcessInfo.processInfo.environment["IS_RUNNING_UNIT_TESTS"] == "1"
         #else
-            false
+        false
         #endif
     }
     
     private var isRunningUITests: Bool {
         #if DEBUG
-            ProcessInfo.processInfo.environment["IS_RUNNING_UI_TESTS"] == "1"
+        ProcessInfo.processInfo.environment["IS_RUNNING_UI_TESTS"] == "1"
         #else
-            false
+        false
         #endif
     }
 }

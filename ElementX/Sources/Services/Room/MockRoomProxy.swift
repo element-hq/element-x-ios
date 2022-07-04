@@ -6,9 +6,9 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import Combine
 import Foundation
 import UIKit
-import Combine
 
 struct MockRoomProxy: RoomProxyProtocol {
     let id = UUID().uuidString
@@ -29,26 +29,24 @@ struct MockRoomProxy: RoomProxyProtocol {
     var callbacks = PassthroughSubject<RoomProxyCallback, Never>()
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        return .failure(.failedRetrievingMemberDisplayName)
+        .failure(.failedRetrievingMemberDisplayName)
     }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        return .failure(.failedRetrievingMemberAvatarURL)
+        .failure(.failedRetrievingMemberAvatarURL)
     }
     
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        return .failure(.failedRetrievingDisplayName)
+        .failure(.failedRetrievingDisplayName)
     }
     
-    func startLiveEventListener() {
-        
-    }
+    func startLiveEventListener() { }
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
-        return .failure(.backwardStreamNotAvailable)
+        .failure(.backwardStreamNotAvailable)
     }
         
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
-        return .failure(.failedSendingMessage)
+        .failure(.failedSendingMessage)
     }
 }

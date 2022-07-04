@@ -77,23 +77,23 @@ class AppCoordinatorStateMachine {
     
     init() {
         stateMachine = StateMachine(state: .initial) { machine in
-            machine.addRoutes(event: .startWithAuthentication, transitions: [ .initial => .signedOut ])
-            machine.addRoutes(event: .succeededSigningIn, transitions: [ .signedOut => .homeScreen ])
+            machine.addRoutes(event: .startWithAuthentication, transitions: [.initial => .signedOut])
+            machine.addRoutes(event: .succeededSigningIn, transitions: [.signedOut => .homeScreen])
             
-            machine.addRoutes(event: .startWithExistingSession, transitions: [ .initial => .restoringSession ])
-            machine.addRoutes(event: .succeededRestoringSession, transitions: [ .restoringSession => .homeScreen ])
-            machine.addRoutes(event: .failedRestoringSession, transitions: [ .restoringSession => .signedOut ])
+            machine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
+            machine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .homeScreen])
+            machine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
             
-            machine.addRoutes(event: .attemptSignOut, transitions: [ .settingsScreen => .signingOut ])
+            machine.addRoutes(event: .attemptSignOut, transitions: [.settingsScreen => .signingOut])
             
-            machine.addRoutes(event: .succeededSigningOut, transitions: [ .signingOut => .signedOut ])
-            machine.addRoutes(event: .failedSigningOut, transitions: [ .signingOut => .settingsScreen ])
+            machine.addRoutes(event: .succeededSigningOut, transitions: [.signingOut => .signedOut])
+            machine.addRoutes(event: .failedSigningOut, transitions: [.signingOut => .settingsScreen])
 
-            machine.addRoutes(event: .showSettingsScreen, transitions: [ .homeScreen => .settingsScreen ])
-            machine.addRoutes(event: .dismissedSettingsScreen, transitions: [ .settingsScreen => .homeScreen ])
+            machine.addRoutes(event: .showSettingsScreen, transitions: [.homeScreen => .settingsScreen])
+            machine.addRoutes(event: .dismissedSettingsScreen, transitions: [.settingsScreen => .homeScreen])
             
-            machine.addRoutes(event: .showSessionVerificationScreen, transitions: [ .homeScreen => .sessionVerificationScreen ])
-            machine.addRoutes(event: .dismissedSessionVerificationScreen, transitions: [ .sessionVerificationScreen => .homeScreen ])
+            machine.addRoutes(event: .showSessionVerificationScreen, transitions: [.homeScreen => .sessionVerificationScreen])
+            machine.addRoutes(event: .dismissedSessionVerificationScreen, transitions: [.sessionVerificationScreen => .homeScreen])
             
             // Transitions with associated values need to be handled through `addRouteMapping`
             machine.addRouteMapping { event, fromState, _ in

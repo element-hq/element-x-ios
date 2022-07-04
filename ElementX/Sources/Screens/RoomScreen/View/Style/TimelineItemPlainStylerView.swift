@@ -48,7 +48,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading) {
-            ForEach((1..<MockRoomTimelineController().timelineItems.count), id: \.self) { index in
+            ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
                 RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
             }

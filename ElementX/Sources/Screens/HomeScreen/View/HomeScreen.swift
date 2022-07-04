@@ -167,7 +167,7 @@ struct RoomCell: View {
     }
     
     private func roomName(_ room: HomeScreenRoom) -> String {
-        room.displayName ?? room.id + (room.isEncrypted ? "🛡": "")
+        room.displayName ?? room.id + (room.isEncrypted ? "🛡" : "")
     }
 }
 

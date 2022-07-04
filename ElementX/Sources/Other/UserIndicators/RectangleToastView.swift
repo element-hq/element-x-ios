@@ -20,7 +20,7 @@ import UIKit
 class RectangleToastView: UIView {
     
     private enum Constants {
-        static let padding: UIEdgeInsets = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
+        static let padding = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         static let cornerRadius: CGFloat = 8.0
     }
     
@@ -81,6 +81,7 @@ class RectangleToastView: UIView {
         layer.masksToBounds = true
     }
     
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
