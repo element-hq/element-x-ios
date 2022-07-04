@@ -22,7 +22,7 @@ class SessionVerificationUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.navigationBars["Verify this session"].exists)
+        XCTAssert(app.navigationBars[ElementL10n.verificationVerifyDevice].exists)
         
         XCTAssert(app.buttons["startButton"].exists)
         XCTAssert(app.buttons["dismissButton"].exists)
@@ -54,7 +54,7 @@ class SessionVerificationUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.navigationBars["Verify this session"].exists)
+        XCTAssert(app.navigationBars[ElementL10n.verificationVerifyDevice].exists)
         
         XCTAssert(app.buttons["startButton"].exists)
         XCTAssert(app.buttons["dismissButton"].exists)
@@ -82,7 +82,7 @@ class SessionVerificationUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.navigationBars["Verify this session"].exists)
+        XCTAssert(app.navigationBars[ElementL10n.verificationVerifyDevice].exists)
         
         XCTAssert(app.buttons["startButton"].exists)
         XCTAssert(app.buttons["dismissButton"].exists)
