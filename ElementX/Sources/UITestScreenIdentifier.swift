@@ -10,8 +10,9 @@ import Foundation
 
 enum UITestScreenIdentifier: String {
     case login
-    case loginOIDC
-    case loginUnsupported
+    case serverSelection
+    case serverSelectionNonModal
+    case authenticationFlow
     case simpleRegular
     case simpleUpgrade
     case settings

@@ -136,14 +136,11 @@ class LoginViewModelTests: XCTestCase {
         // Given the coordinator and view model results that contain passwords.
         let password = "supersecretpassword"
         let viewModelAction: LoginViewModelAction = .login(username: "Alice", password: password)
-        let coordinatorAction: LoginCoordinatorAction = .login(username: "Alice", password: password)
         
         // When creating a string representation of those results (e.g. for logging).
         let viewModelActionString = "\(viewModelAction)"
-        let coordinatorActionString = "\(coordinatorAction)"
         
         // Then the password should not be included in that string.
         XCTAssertFalse("\(viewModelActionString)".contains(password), "The password must not be included in any strings.")
-        XCTAssertFalse("\(coordinatorActionString)".contains(password), "The password must not be included in any strings.")
     }
 }

@@ -18,26 +18,17 @@ import SwiftUI
 import MatrixRustSDK
 
 struct LoginCoordinatorParameters {
+    /// The service used to authenticate the user.
+    let authenticationService: AuthenticationServiceProtocol
+    /// The navigation router used to present the server selection screen.
     let navigationRouter: NavigationRouterType
-    /// The homeserver to be shown initially.
-    let homeserver: LoginHomeserver
 }
 
-enum LoginCoordinatorAction: CustomStringConvertible {
-    /// Login with the associated username and password.
-    case login(username: String, password: String)
+enum LoginCoordinatorAction {
+    /// Login was successful.
+    case signedIn(UserSessionProtocol)
     /// Continue using OIDC.
     case continueWithOIDC
-    
-    /// A string representation of the action, ignoring any associated values that could leak PII.
-    var description: String {
-        switch self {
-        case .login:
-            return "login"
-        case .continueWithOIDC:
-            return "continueWithOIDC"
-        }
-    }
 }
 
 final class LoginCoordinator: Coordinator, Presentable {
@@ -56,6 +47,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         }
     }
     
+    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
     private var navigationRouter: NavigationRouterType { parameters.navigationRouter }
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var activityIndicator: UserIndicator?
@@ -71,7 +63,7 @@ final class LoginCoordinator: Coordinator, Presentable {
     init(parameters: LoginCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = LoginViewModel(homeserver: parameters.homeserver)
+        let viewModel = LoginViewModel(homeserver: parameters.authenticationService.homeserver)
         loginViewModel = viewModel
         
         let view = LoginScreen(context: viewModel.context)
@@ -135,56 +127,68 @@ final class LoginCoordinator: Coordinator, Presentable {
     }
     
     /// Processes an error to either update the flow or display it to the user.
-    private func handleError(_ error: Error) {
-        loginViewModel.displayError(.alert(error.localizedDescription))
+    private func handleError(_ error: AuthenticationServiceError) {
+        switch error {
+        case .invalidCredentials:
+            loginViewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
+        case .accountDeactivated:
+            loginViewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+        default:
+            loginViewModel.displayError(.alert(ElementL10n.unknownError))
+        }
     }
     
     /// Requests the authentication coordinator to log in using the specified credentials.
     private func login(username: String, password: String) {
-        var username = loginViewModel.context.username
+        startLoading(isInteractionBlocking: true)
         
-        if !isMXID(username: username) {
-            let homeserver = loginViewModel.context.viewState.homeserver
-            username = "@\(username):\(homeserver.address)"
+        Task {
+            switch await authenticationService.login(username: username, password: password) {
+            case .success(let userSession):
+                callback?(.signedIn(userSession))
+                stopLoading()
+            case .failure(let error):
+                stopLoading()
+                handleError(error)
+            }
         }
-        
-        callback?(.login(username: username, password: password))
     }
     
     /// Parses the specified username and looks up the homeserver when a Matrix ID is entered.
     private func parseUsername(_ username: String) {
-        guard isMXID(username: username) else { return }
+        guard username.isMatrixUserID else { return }
         
-        let domain = String(username.split(separator: ":")[1])
+        let homeserverDomain = String(username.split(separator: ":")[1])
         
-        let homeserver = LoginHomeserver(address: domain)
-        updateViewModel(homeserver: homeserver)
-        indicateSuccess()
-    }
-    
-    /// Checks whether the specified username is a Matrix ID or not.
-    private func isMXID(username: String) -> Bool {
-        let range = NSRange(location: 0, length: username.count)
+        startLoading(isInteractionBlocking: false)
         
-        let detector = try? NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
-        return detector?.numberOfMatches(in: username, range: range) ?? 0 > 0
+        Task {
+            switch await authenticationService.startLogin(for: homeserverDomain) {
+            case .success:
+                updateViewModel()
+                stopLoading()
+            case .failure(let error):
+                stopLoading()
+                handleError(error)
+            }
+        }
     }
     
     /// Updates the view model with a different homeserver.
-    private func updateViewModel(homeserver: LoginHomeserver) {
-        loginViewModel.update(homeserver: homeserver)
+    private func updateViewModel() {
+        loginViewModel.update(homeserver: authenticationService.homeserver)
         indicateSuccess()
     }
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
         MXLog.debug("[LoginCoordinator] presentServerSelectionScreen")
-        let parameters = ServerSelectionCoordinatorParameters(homeserver: loginViewModel.context.viewState.homeserver,
+        let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
                                                               hasModalPresentation: true)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self, weak coordinator] result in
+        coordinator.callback = { [weak self, weak coordinator] action in
             guard let self = self, let coordinator = coordinator else { return }
-            self.serverSelectionCoordinator(coordinator, didCompleteWith: result)
+            self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
         }
         
         coordinator.start()
@@ -198,10 +202,10 @@ final class LoginCoordinator: Coordinator, Presentable {
     
     /// Handles the result from the server selection modal, dismissing it after updating the view.
     private func serverSelectionCoordinator(_ coordinator: ServerSelectionCoordinator,
-                                            didCompleteWith result: ServerSelectionCoordinatorResult) {
+                                            didCompleteWith action: ServerSelectionCoordinatorAction) {
         navigationRouter.dismissModule(animated: true) { [weak self] in
-            if case let .selected(homeserver) = result {
-                self?.updateViewModel(homeserver: homeserver)
+            if action == .updated {
+                self?.updateViewModel()
             }
 
             self?.remove(childCoordinator: coordinator)

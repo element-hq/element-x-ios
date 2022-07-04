@@ -58,6 +58,7 @@ struct LoginServerInfoSection: View {
                         .padding(.vertical, 2)
                 }
                 .buttonStyle(.elementGhost())
+                .accessibilityIdentifier("editServerButton")
             }
         }
     }

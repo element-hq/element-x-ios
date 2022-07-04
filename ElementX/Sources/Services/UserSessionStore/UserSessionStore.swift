@@ -98,8 +98,6 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     private func setupProxyForClient(_ client: Client) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
-        Benchmark.endTrackingForIdentifier("Login", message: "Finished login")
-        
         do {
             let accessToken = try client.restoreToken()
             let userId = try client.userId()

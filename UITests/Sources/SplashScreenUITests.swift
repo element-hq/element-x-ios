@@ -27,7 +27,7 @@ class SplashScreenUITests: XCTestCase {
         XCTAssertEqual(getStartedButton.label, ElementL10n.loginSplashSubmit)
     }
     
-    func testSwipingBetweenPages() async throws {
+    func testSwipingBetweenPages() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.splash)
         
@@ -42,7 +42,6 @@ class SplashScreenUITests: XCTestCase {
         
         // When swiping to the next screen.
         page1TitleText.swipeLeft()
-        try await Task.sleep(nanoseconds: 200_000_000) // Wait for the animation.
         
         // Then the second screen should be shown.
         XCTAssertFalse(page1TitleText.isHittable, "The title from the first page of the carousel should be offscreen.")
@@ -50,7 +49,6 @@ class SplashScreenUITests: XCTestCase {
         
         // When swiping back to the previous screen.
         page2TitleText.swipeRight()
-        try await Task.sleep(nanoseconds: 200_000_000) // Wait for the animation.
         
         // Then the first screen should be shown again.
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be onscreen.")
@@ -58,7 +56,6 @@ class SplashScreenUITests: XCTestCase {
         
         // When swiping back to the previous screen.
         page1TitleText.swipeRight()
-        try await Task.sleep(nanoseconds: 200_000_000) // Wait for the animation.
         
         // Then the screen shouldn't change and the hidden screen should be ignored.
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be still be onscreen.")

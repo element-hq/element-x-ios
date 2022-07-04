@@ -18,7 +18,7 @@ import Foundation
 
 // MARK: View model
 
-enum ServerSelectionViewModelResult {
+enum ServerSelectionViewModelAction {
     /// The user would like to use the homeserver at the given address.
     case confirm(homeserverAddress: String)
     /// Dismiss the view without using the entered address.

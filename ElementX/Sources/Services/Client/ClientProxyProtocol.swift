@@ -19,6 +19,7 @@ enum ClientProxyError: Error {
     case failedRetrievingAvatarURL
     case failedRetrievingDisplayName
     case failedRetrievingSessionVerificationController
+    case failedLoadingMedia
 }
 
 protocol ClientProxyProtocol {

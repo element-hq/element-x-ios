@@ -11,28 +11,37 @@ import SwiftUI
 
 class UITestsAppCoordinator: Coordinator {
     private let window: UIWindow
-    private let mainNavigationController: UINavigationController
+    private let mainNavigationController: ElementNavigationController
+    private let navigationRouter: NavigationRouter
+    private var hostingController: UIViewController?
     
     var childCoordinators: [Coordinator] = []
     
     init() {
-        mainNavigationController = UINavigationController()
+        mainNavigationController = ElementNavigationController()
+        navigationRouter = NavigationRouter(navigationController: mainNavigationController)
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
         
+        UIView.setAnimationsEnabled(false)
+        
         let screens = mockScreens()
+        
         let rootView = UITestsRootView(mockScreens: screens) { id in
             guard let screen = screens.first(where: { $0.id == id }) else {
                 fatalError()
             }
             
             screen.coordinator.start()
-            
-            self.mainNavigationController.pushViewController(screen.coordinator.toPresentable(), animated: true)
+            self.navigationRouter.setRootModule(screen.coordinator)
         }
         
-        mainNavigationController.setViewControllers([UIHostingController(rootView: rootView)], animated: false)
+        let hostingController = UIHostingController(rootView: rootView)
+        self.hostingController = hostingController
+        
+        mainNavigationController.setViewControllers([hostingController], animated: false)
     }
     
     func start() {
@@ -40,34 +49,34 @@ class UITestsAppCoordinator: Coordinator {
     }
     
     private func mockScreens() -> [MockScreen] {
-        UITestScreenIdentifier.allCases.map { MockScreen(id: $0) }
+        UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationRouter: navigationRouter) }
     }
 }
 
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestScreenIdentifier
+    let navigationRouter: NavigationRouter
     lazy var coordinator: Coordinator & Presentable = {
         switch id {
         case .login:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return LoginCoordinator(parameters: .init(navigationRouter: router,
-                                                      homeserver: .mockMatrixDotOrg))
-        case .loginOIDC:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return LoginCoordinator(parameters: .init(navigationRouter: router,
-                                                      homeserver: .mockOIDC))
-        case .loginUnsupported:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return LoginCoordinator(parameters: .init(navigationRouter: router,
-                                                      homeserver: .mockUnsupported))
+            return LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+                                                      navigationRouter: navigationRouter))
+        case .serverSelection:
+            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+                                                                hasModalPresentation: true))
+        case .serverSelectionNonModal:
+            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+                                                                hasModalPresentation: false))
+        case .authenticationFlow:
+            return AuthenticationCoordinator(authenticationService: MockAuthenticationService(),
+                                             navigationRouter: navigationRouter)
         case .simpleRegular:
             return TemplateCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
             return TemplateCoordinator(parameters: .init(promptType: .upgrade))
         case .settings:
-            let router = NavigationRouter(navigationController: ElementNavigationController())
-            return SettingsCoordinator(parameters: .init(navigationRouter: router,
+            return SettingsCoordinator(parameters: .init(navigationRouter: navigationRouter,
                                                          bugReportService: MockBugReportService()))
         case .bugReport:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
@@ -95,7 +104,8 @@ class MockScreen: Identifiable {
         }
     }()
     
-    init(id: UITestScreenIdentifier) {
+    init(id: UITestScreenIdentifier, navigationRouter: NavigationRouter) {
         self.id = id
+        self.navigationRouter = navigationRouter
     }
 }

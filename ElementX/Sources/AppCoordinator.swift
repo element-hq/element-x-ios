@@ -89,23 +89,15 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     // MARK: - AuthenticationCoordinatorDelegate
     
-    func authenticationCoordinatorDidStartLoading(_ authenticationCoordinator: AuthenticationCoordinator) {
-        stateMachine.processEvent(.attemptedSignIn)
-    }
-    
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         remove(childCoordinator: authenticationCoordinator)
         stateMachine.processEvent(.succeededSigningIn)
     }
     
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didFailWithError error: AuthenticationCoordinatorError) {
-        stateMachine.processEvent(.failedSigningIn)
-    }
-    
     // MARK: - Private
     
-    // swiftlint:disable cyclomatic_complexity function_body_length
+    // swiftlint:disable cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self = self else { return }
@@ -113,13 +105,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
                 self.startAuthentication()
-            case (.signedOut, .attemptedSignIn, .signingIn):
-                self.showLoadingIndicator()
-            case (.signingIn, .failedSigningIn, .signedOut):
-                self.hideLoadingIndicator()
-                self.showLoginErrorToast()
-            case (.signingIn, .succeededSigningIn, .homeScreen):
-                self.hideLoadingIndicator()
+            case (.signedOut, .succeededSigningIn, .homeScreen):
                 self.presentHomeScreen()
                 
             case (.initial, .startWithExistingSession, .restoringSession):
@@ -179,7 +165,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func startAuthentication() {
-        let coordinator = AuthenticationCoordinator(userSessionStore: userSessionStore,
+        let authenticationService = AuthenticationService(userSessionStore: userSessionStore)
+        let coordinator = AuthenticationCoordinator(authenticationService: authenticationService,
                                                     navigationRouter: navigationRouter)
         coordinator.delegate = self
         
