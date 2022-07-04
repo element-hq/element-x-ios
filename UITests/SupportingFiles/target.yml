@@ -27,6 +27,8 @@ targets:
       linkType: static
     - package: Sentry
       linkType: static
+    - package: SnapshotTesting
+      linkType: static
 
     info:
       path: ../SupportingFiles/Info.plist
