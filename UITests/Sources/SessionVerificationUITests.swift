@@ -27,6 +27,8 @@ class SessionVerificationUITests: XCTestCase {
         XCTAssert(app.buttons["startButton"].exists)
         XCTAssert(app.buttons["dismissButton"].exists)
         XCTAssert(app.staticTexts["titleLabel"].exists)
+
+        app.assertScreenshot(.sessionVerification)
         
         app.buttons["startButton"].tap()
         

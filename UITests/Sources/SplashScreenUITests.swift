@@ -25,6 +25,8 @@ class SplashScreenUITests: XCTestCase {
         let getStartedButton = app.buttons["getStartedButton"]
         XCTAssertTrue(getStartedButton.exists, "The primary action button should be shown.")
         XCTAssertEqual(getStartedButton.label, ElementL10n.loginSplashSubmit)
+
+        app.assertScreenshot(.splash)
     }
     
     func testSwipingBetweenPages() {
@@ -32,8 +34,8 @@ class SplashScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.splash)
         
         // Given the splash screen in its initial state.
-        let page1TitleText = app.staticTexts["Own your conversations."]
-        let page2TitleText = app.staticTexts["You're in control."]
+        let page1TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselSecureTitle]
+        let page2TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselControlTitle]
         let hiddenPageTitleText = app.staticTexts["hiddenPage"].firstMatch
         
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be onscreen.")

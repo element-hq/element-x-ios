@@ -36,6 +36,8 @@ class LoginScreenUITests: XCTestCase {
         validateOIDCButtonIsHidden(for: state)
         validateNextButtonIsDisabled(for: state)
         validateUnsupportedServerTextIsHidden(for: state)
+
+        app.assertScreenshot(.login)
         
         // When typing in a username and password.
         app.textFields.element.tap()

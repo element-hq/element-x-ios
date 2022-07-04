@@ -35,5 +35,7 @@ class SettingsUITests: XCTestCase {
         let logoutButton = app.buttons["logoutButton"]
         XCTAssert(logoutButton.exists)
         XCTAssertEqual(logoutButton.label, ElementL10n.logout)
+
+        app.assertScreenshot(.settings)
     }
 }
