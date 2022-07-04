@@ -1627,6 +1627,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F1B67CF63C1231AEB14D70E6 /* Build configuration list for PBXNativeTarget "UITests" */;
 			buildPhases = (
+				17364E8B37FC780E07DDEAF7 /* Override Simulator Status Bars */,
 				BAD5CD7BE53A7C832569B67A /* Sources */,
 				86982BD498105258F3778110 /* Resources */,
 				CD30252A70288BD4BF476ED7 /* Frameworks */,
@@ -1870,6 +1871,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		17364E8B37FC780E07DDEAF7 /* Override Simulator Status Bars */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Override Simulator Status Bars";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "Tools/Scripts/bootTestSimulator.py 'iPhone 13 Pro Max'\nTools/Scripts/bootTestSimulator.py 'iPad (9th generation)'\n";
+		};
 		98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;

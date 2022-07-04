@@ -72,7 +72,18 @@ lane :adhoc do
 end
 
 lane :tests do
-  run_tests()
+  
+  run_tests(
+    project: "ElementX.xcodeproj",
+    scheme: "UnitTests"
+  )
+
+  run_tests(
+    project: "ElementX.xcodeproj",
+    scheme: "UITests",
+    devices: ["iPhone 13 Pro Max", "iPad (9th generation)"],
+    prelaunch_simulator: true
+  )
 
   slather(
     cobertura_xml: true,

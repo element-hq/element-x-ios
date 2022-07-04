@@ -1,5 +1,25 @@
 name: UITests
 
+schemes:
+  UITests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        UITests: all
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: true
+    test:
+      config: Debug
+      testPlans:
+        - path: UITests.xctestplan
+          defaultPlan: true
+
 targets:
   UITests:
     type: bundle.ui-testing
@@ -40,8 +60,18 @@ targets:
       debug:
       release:
 
+    preBuildScripts:
+      - name: Override Simulator Status Bars
+        runOnlyWhenInstalling: false
+        shell: /bin/sh
+        script: |
+          Tools/Scripts/bootTestSimulator.py 'iPhone 13 Pro Max'
+          Tools/Scripts/bootTestSimulator.py 'iPad (9th generation)'
+
     sources:
     - path: ../Sources
+      excludes:
+        - "**/__Snapshots__/**"
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
     - path: ../../ElementX/Sources/BuildSettings.swift
