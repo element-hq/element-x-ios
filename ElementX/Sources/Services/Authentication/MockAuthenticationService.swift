@@ -12,13 +12,6 @@ class MockAuthenticationService: AuthenticationServiceProtocol {
     let validCredentials = (username: "alice", password: "12345678")
     private(set) var homeserver: LoginHomeserver = .mockMatrixDotOrg
     
-    func usernameIsMatrixID(_ username: String) -> Bool {
-        let range = NSRange(location: 0, length: username.count)
-        
-        let detector = try? NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
-        return detector?.numberOfMatches(in: username, range: range) ?? 0 == 1
-    }
-    
     func startLogin(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
         // Map the address to the mock homeservers
         if LoginHomeserver.mockMatrixDotOrg.address.contains(homeserverAddress) {
@@ -33,10 +26,10 @@ class MockAuthenticationService: AuthenticationServiceProtocol {
         } else if LoginHomeserver.mockUnsupported.address.contains(homeserverAddress) {
             homeserver = .mockUnsupported
             return .success(())
+        } else {
+            // Otherwise fail with an invalid server.
+            return .failure(.invalidServer)
         }
-        
-        // Otherwise fail with an invalid server.
-        return .failure(.invalidServer)
     }
     
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {

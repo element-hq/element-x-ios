@@ -156,7 +156,7 @@ final class LoginCoordinator: Coordinator, Presentable {
     
     /// Parses the specified username and looks up the homeserver when a Matrix ID is entered.
     private func parseUsername(_ username: String) {
-        guard authenticationService.usernameIsMatrixID(username) else { return }
+        guard username.isMatrixUserID else { return }
         
         let homeserverDomain = String(username.split(separator: ":")[1])
         

@@ -26,13 +26,6 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: - Public
     
-    func usernameIsMatrixID(_ username: String) -> Bool {
-        let range = NSRange(location: 0, length: username.count)
-        
-        let detector = try? NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
-        return detector?.numberOfMatches(in: username, range: range) ?? 0 == 1
-    }
-    
     func startLogin(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
         homeserver = LoginHomeserver(address: homeserverAddress)
         return .success(())
@@ -42,7 +35,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
         // Workaround whilst the SDK requires a full MXID.
-        let username = usernameIsMatrixID(username) ? username : "@\(username):\(homeserver.address)"
+        let username = username.isMatrixUserID ? username : "@\(username):\(homeserver.address)"
         
         let basePath = userSessionStore.baseDirectoryPath(for: username)
         let builder = ClientBuilder()

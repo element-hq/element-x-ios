@@ -31,4 +31,12 @@ extension String {
         
         return string
     }
+    
+    /// Whether or not the string is a Matrix user ID.
+    var isMatrixUserID: Bool {
+        let range = NSRange(location: 0, length: count)
+        
+        let detector = try? NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
+        return detector?.numberOfMatches(in: self, range: range) ?? 0 == 1
+    }
 }

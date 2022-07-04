@@ -19,8 +19,6 @@ enum AuthenticationServiceError: Error {
 protocol AuthenticationServiceProtocol {
     var homeserver: LoginHomeserver { get }
     
-    /// Checks whether the specified username is a Matrix ID or not.
-    func usernameIsMatrixID(_ username: String) -> Bool
     /// Sets up the service for login on the specified homeserver address.
     func startLogin(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
