@@ -30,6 +30,7 @@ lane :alpha do
   update_app_icon(caption_text: "PR #{version}")
 
   build_ios_app(
+    scheme: "ElementX",
     clean: true,
     export_method: "ad-hoc",
     output_directory: "build",
