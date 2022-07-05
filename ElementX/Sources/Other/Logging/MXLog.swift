@@ -107,8 +107,8 @@ private var logger: SwiftyBeaver.Type = {
         logger.info(message, file, function, line: line)
     }
     
-    public static func warning(_ message: @autoclosure () -> Any, _ file: String = #file,
-                               
+    public static func warning(_ message: @autoclosure () -> Any,
+                               _ file: String = #file,
                                _ function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
@@ -133,8 +133,8 @@ private var logger: SwiftyBeaver.Type = {
         logger.error(message, file, function, line: line)
     }
     
-    public static func failure(_ message: @autoclosure () -> Any, _ file: String = #file,
-                               
+    public static func failure(_ message: @autoclosure () -> Any,
+                               _ file: String = #file,
                                _ function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {

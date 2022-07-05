@@ -16,8 +16,6 @@
 
 import SwiftUI
 
-// swiftlint:disable private_over_fileprivate
-
 /// Positions this view within an invisible frame that fills the width of its parent view,
 /// whilst limiting the width of the content to a readable size (which is customizable).
 private struct ReadableFrameModifier: ViewModifier {

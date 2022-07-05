@@ -50,12 +50,14 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     // MARK: - Private
     
     static var emojis: [SessionVerificationEmoji] {
-        [SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
-         SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
-         SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
-         SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
-         SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
-         SessionVerificationEmoji(symbol: "🏁", description: "Flag"),
-         SessionVerificationEmoji(symbol: "🌏", description: "Globe")]
+        [
+            SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
+            SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
+            SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
+            SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
+            SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
+            SessionVerificationEmoji(symbol: "🏁", description: "Flag"),
+            SessionVerificationEmoji(symbol: "🌏", description: "Globe")
+        ]
     }
 }
