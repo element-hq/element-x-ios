@@ -34,16 +34,19 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssert(h2AttributedString.runs.count == 1)
         XCTAssert(h3AttributedString.runs.count == 1)
         
-        let h1Font = h1AttributedString.runs.first?.uiKit.font
-        let h2Font = h2AttributedString.runs.first?.uiKit.font
-        let h3Font = h3AttributedString.runs.first?.uiKit.font
+        guard let h1Font = h1AttributedString.runs.first?.uiKit.font,
+              let h2Font = h2AttributedString.runs.first?.uiKit.font,
+              let h3Font = h3AttributedString.runs.first?.uiKit.font else {
+            XCTFail("Could not extract a font from the strings.")
+            return
+        }
     
         XCTAssertEqual(h1Font, h2Font)
         XCTAssertEqual(h2Font, h3Font)
         
-        XCTAssert(h1Font!.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
+        XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
         
-        XCTAssert(h1Font!.pointSize <= maxHeaderPointSize)
+        XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
     }
     
     func testRenderHTMLStringWithPreCode() {
@@ -57,7 +60,12 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(attributedString.runs.first?.uiKit.font?.fontName, "Menlo-Regular")
         
         let string = String(attributedString.characters)
-        let regex = try! NSRegularExpression(pattern: "\\R", options: [])
+        
+        guard let regex = try? NSRegularExpression(pattern: "\\R", options: []) else {
+            XCTFail("Could not build the regex for the test.")
+            return
+        }
+        
         XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 3)
     }
     
@@ -115,15 +123,18 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(h2AttributedString.runs.count, 1)
         XCTAssertEqual(h3AttributedString.runs.count, 1)
         
-        let h1Font = h1AttributedString.runs.first?.uiKit.font
-        let h2Font = h2AttributedString.runs.first?.uiKit.font
-        let h3Font = h3AttributedString.runs.first?.uiKit.font
-    
+        guard let h1Font = h1AttributedString.runs.first?.uiKit.font,
+              let h2Font = h2AttributedString.runs.first?.uiKit.font,
+              let h3Font = h3AttributedString.runs.first?.uiKit.font else {
+            XCTFail("Could not extract a font from the strings.")
+            return
+        }
+        
         XCTAssertEqual(h1Font, h2Font)
         XCTAssertEqual(h2Font, h3Font)
         
-        XCTAssert(h1Font!.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
-        XCTAssert(h1Font!.pointSize <= maxHeaderPointSize)
+        XCTAssert(h1Font.pointSize > UIFont.preferredFont(forTextStyle: .body).pointSize)
+        XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
         
         XCTAssertEqual(h1AttributedString.runs.first?.link?.host, "www.matrix.org")
         XCTAssertEqual(h2AttributedString.runs.first?.link?.host, "www.matrix.org")
@@ -200,6 +211,7 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testCustomForegroundColor() {
+        // swiftlint:disable:next line_length
         let htmlString = "<font color=\"#ff00be\">R</font><font color=\"#ff0082\">a</font><font color=\"#ff0047\">i</font><font color=\"#ff5800\">n </font><font color=\"#ffa300\">w</font><font color=\"#d2ba00\">w</font><font color=\"#97ca00\">w</font><font color=\"#3ed500\">.</font><font color=\"#00dd00\">m</font><font color=\"#00e251\">a</font><font color=\"#00e595\">t</font><font color=\"#00e7d6\">r</font><font color=\"#00e7ff\">i</font><font color=\"#00e6ff\">x</font><font color=\"#00e3ff\">.</font><font color=\"#00dbff\">o</font><font color=\"#00ceff\">r</font><font color=\"#00baff\">g</font><font color=\"#f477ff\"> b</font><font color=\"#ff3aff\">o</font><font color=\"#ff00fb\">w</font>"
         
         guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
@@ -244,6 +256,7 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTFail("Couldn't find blockquote")
     }
     
+    // swiftlint:disable line_length
     func testBlockquoteWithinText() {
         let htmlString = """
         The text before the blockquote
@@ -268,6 +281,8 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTFail("Couldn't find blockquote")
     }
+
+    // swiftlint:enable line_length
     
     func testBlockquoteWithLink() {
         let htmlString = "<blockquote>Blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>"
