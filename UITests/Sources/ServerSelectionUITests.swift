@@ -41,6 +41,8 @@ class ServerSelectionUITests: XCTestCase {
 
         let dismissButton = app.buttons["dismissButton"]
         XCTAssertTrue(dismissButton.exists, "The dismiss button should be shown during modal presentation.")
+
+        app.assertScreenshot(.serverSelection)
     }
 
     func testEmptyAddress() async {
@@ -95,5 +97,7 @@ class ServerSelectionUITests: XCTestCase {
 
         let confirmButton = app.buttons["confirmButton"]
         XCTAssertEqual(confirmButton.label, ElementL10n.actionNext, "The confirm button should say Next when not in modal presentation.")
+
+        app.assertScreenshot(.serverSelectionNonModal)
     }
 }

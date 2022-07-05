@@ -25,6 +25,8 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         app.typeText("alice\n")
         app.secureTextFields["passwordTextField"].tap()
         app.typeText("12345678")
+
+        app.assertScreenshot(.authenticationFlow)
         
         // Login Screen: Tap next
         app.buttons["nextButton"].tap()
