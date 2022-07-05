@@ -65,8 +65,8 @@ targets:
         runOnlyWhenInstalling: false
         shell: /bin/sh
         script: |
-          Tools/Scripts/bootTestSimulator.py 'iPhone 13 Pro Max'
-          Tools/Scripts/bootTestSimulator.py 'iPad (9th generation)'
+          python Tools/Scripts/bootTestSimulator.py 'iPhone 13 Pro Max'
+          python Tools/Scripts/bootTestSimulator.py 'iPad (9th generation)'
 
     sources:
     - path: ../Sources
