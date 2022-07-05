@@ -12,7 +12,7 @@ if len(sys.argv) != 2:
 simulator_name=sys.argv[1]
 
 os_version='15-5'
-runtimes_map=subprocess.check_output("xcrun simctl list --json devices available", shell=True)
+runtimes_map=subprocess.check_output("/usr/bin/xcrun simctl list --json devices available", shell=True)
 runtime='com.apple.CoreSimulator.SimRuntime.iOS-' + os_version
 json_object=json.loads(runtimes_map)
 devices=json_object['devices'][runtime]
