@@ -166,7 +166,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func startAuthentication() {
-        let authenticationService = AuthenticationService(userSessionStore: userSessionStore)
+        let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
         let coordinator = AuthenticationCoordinator(authenticationService: authenticationService,
                                                     navigationRouter: navigationRouter)
         coordinator.delegate = self

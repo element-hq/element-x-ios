@@ -60,16 +60,16 @@ class MockScreen: Identifiable {
     lazy var coordinator: Coordinator & Presentable = {
         switch id {
         case .login:
-            return LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+            return LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                       navigationRouter: navigationRouter))
         case .serverSelection:
-            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                 hasModalPresentation: true))
         case .serverSelectionNonModal:
-            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationService(),
+            return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                 hasModalPresentation: false))
         case .authenticationFlow:
-            return AuthenticationCoordinator(authenticationService: MockAuthenticationService(),
+            return AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
                                              navigationRouter: navigationRouter)
         case .simpleRegular:
             return TemplateCoordinator(parameters: .init(promptType: .regular))

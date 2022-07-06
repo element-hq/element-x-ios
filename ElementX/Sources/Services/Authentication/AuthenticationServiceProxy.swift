@@ -9,42 +9,59 @@
 import Foundation
 import MatrixRustSDK
 
-class AuthenticationService: AuthenticationServiceProtocol {
+class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: - Properties
     
     // MARK: Private
     
-    private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverURLString)
+    private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
+    
+    // MARK: Public
+    
+    private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverURLString, loginMode: .unknown)
     
     // MARK: - Setup
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore
+        authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectoryPath)
     }
     
     // MARK: - Public
     
-    func startLogin(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
-        homeserver = LoginHomeserver(address: homeserverAddress)
-        return .success(())
+    func useServer(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
+        let task = Task.detached { () -> LoginHomeserver in
+            var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
+            
+            try self.authenticationService.useServer(serverName: homeserver.address)
+            
+            if let authenticationIssuer = try self.authenticationService.authenticationIssuer(),
+               let issuerURL = URL(string: authenticationIssuer) {
+                homeserver.loginMode = .oidc(issuerURL)
+            } else if try self.authenticationService.supportsPasswordLogin() {
+                homeserver.loginMode = .password
+            } else {
+                homeserver.loginMode = .unsupported
+            }
+            
+            return homeserver
+        }
+        
+        switch await task.result {
+        case .success(let homeserver):
+            self.homeserver = homeserver
+            return .success(())
+        case .failure(let error):
+            return .failure(.invalidHomeserverAddress)
+        }
     }
     
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
-        // Workaround whilst the SDK requires a full MXID.
-        let username = username.isMatrixUserID ? username : "@\(username):\(homeserver.address)"
-        
-        let basePath = userSessionStore.baseDirectoryPath(for: username)
-        let builder = ClientBuilder()
-            .basePath(path: basePath)
-            .username(username: username)
-        
         let loginTask: Task<Client, Error> = Task.detached {
-            let client = try builder.build()
-            try client.login(username: username, password: password)
-            return client
+            try self.authenticationService.login(username: username, password: password)
         }
         
         switch await loginTask.result {

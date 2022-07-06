@@ -25,6 +25,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { !keychainController.accessTokens().isEmpty }
     
+    /// The base directory where all session data is stored.
+    var baseDirectoryPath: String { baseDirectory().path }
+    
     init(bundleIdentifier: String, backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(identifier: bundleIdentifier)
         self.backgroundTaskService = backgroundTaskService
@@ -48,7 +51,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             // On any restoration failure reset the token and restart
             keychainController.removeAllAccessTokens()
-            deleteBaseDirectory(for: usernameTokenTuple.username)
+            deleteSessionDirectory(for: usernameTokenTuple.username)
             
             return .failure(error)
         }
@@ -70,15 +73,14 @@ class UserSessionStore: UserSessionStoreProtocol {
     func logout(userSession: UserSessionProtocol) {
         let username = userSession.clientProxy.userIdentifier
         keychainController.removeAccessTokenForUsername(username)
-        deleteBaseDirectory(for: username)
+        deleteSessionDirectory(for: username)
     }
     
     private func restorePreviousLogin(_ usernameTokenTuple: (username: String, accessToken: String)) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
         
-        let basePath = baseDirectoryPath(for: usernameTokenTuple.username)
         let builder = ClientBuilder()
-            .basePath(path: basePath)
+            .basePath(path: baseDirectoryPath)
             .username(username: usernameTokenTuple.username)
         
         let loginTask: Task<Client, Error> = Task.detached {
@@ -112,25 +114,21 @@ class UserSessionStore: UserSessionStoreProtocol {
         return .success(clientProxy)
     }
     
-    func baseDirectoryPath(for username: String) -> String {
+    private func deleteSessionDirectory(for username: String) {
+        let url = baseDirectory().appendingPathComponent(username)
+        try? FileManager.default.removeItem(at: url)
+    }
+    
+    func baseDirectory() -> URL {
+        #warning("Is the caches directory the correct place? This will be cleared when space is low.")
         guard var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
             fatalError("Should always be able to retrieve the caches directory")
         }
         
-        url = url.appendingPathComponent(username)
+        url = url.appendingPathComponent("Sessions")
         
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         
-        return url.path
-    }
-    
-    private func deleteBaseDirectory(for username: String) {
-        guard var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            fatalError("Should always be able to retrieve the caches directory")
-        }
-        
-        url = url.appendingPathComponent(username)
-
-        try? FileManager.default.removeItem(at: url)
+        return url
     }
 }

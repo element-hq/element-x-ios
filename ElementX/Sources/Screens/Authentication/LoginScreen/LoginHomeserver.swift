@@ -23,17 +23,15 @@ struct LoginHomeserver: Equatable {
     /// Whether or not the homeserver is matrix.org.
     let isMatrixDotOrg: Bool
     /// The types login supported by the homeserver.
-    let loginMode: LoginMode
-}
-
-extension LoginHomeserver {
-    /// Temporary initialiser for use until the FFI has homeserver discovery etc.
-    init(address: String) {
+    var loginMode: LoginMode
+    
+    /// Creates a new homeserver value.
+    init(address: String, loginMode: LoginMode) {
         let address = Self.sanitized(address).components(separatedBy: "://").last ?? address
         
         self.address = address
+        self.loginMode = loginMode
         isMatrixDotOrg = address == "matrix.org"
-        loginMode = .password
     }
     
     /// Sanitizes a user entered homeserver address with the following rules
@@ -59,30 +57,23 @@ extension LoginHomeserver {
 extension LoginHomeserver {
     /// A mock homeserver that is configured just like matrix.org.
     static var mockMatrixDotOrg: LoginHomeserver {
-        LoginHomeserver(address: "matrix.org",
-                        isMatrixDotOrg: true,
-                        loginMode: .password)
+        LoginHomeserver(address: "matrix.org", loginMode: .password)
     }
     
     /// A mock homeserver that supports login and registration via a password but has no SSO providers.
     static var mockBasicServer: LoginHomeserver {
-        LoginHomeserver(address: "example.com",
-                        isMatrixDotOrg: false,
-                        loginMode: .password)
+        LoginHomeserver(address: "example.com", loginMode: .password)
     }
     
     /// A mock homeserver that supports only supports authentication via a single SSO provider.
     static var mockOIDC: LoginHomeserver {
-        LoginHomeserver(address: "company.com",
-                        isMatrixDotOrg: false,
-                        // swiftlint:disable:next force_unwrapping
-                        loginMode: .oidc(URL(string: "https://auth.company.com")!))
+        // swiftlint:disable:next force_unwrapping
+        let issuerURL = URL(string: "https://auth.company.com")!
+        return LoginHomeserver(address: "company.com", loginMode: .oidc(issuerURL))
     }
     
     /// A mock homeserver that only with no supported login flows.
     static var mockUnsupported: LoginHomeserver {
-        LoginHomeserver(address: "server.net",
-                        isMatrixDotOrg: false,
-                        loginMode: .unsupported)
+        LoginHomeserver(address: "server.net", loginMode: .unsupported)
     }
 }

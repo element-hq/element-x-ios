@@ -16,18 +16,21 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 }
 
 class AuthenticationCoordinator: Coordinator, Presentable {
-    private let authenticationService: AuthenticationServiceProtocol
+    private let authenticationService: AuthenticationServiceProxyProtocol
     private let navigationRouter: NavigationRouter
+    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
+    private var activityIndicator: UserIndicator?
     
-    private(set) var clientProxy: ClientProxyProtocol?
     var childCoordinators: [Coordinator] = []
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
-    init(authenticationService: AuthenticationServiceProtocol,
+    init(authenticationService: AuthenticationServiceProxyProtocol,
          navigationRouter: NavigationRouter) {
         self.authenticationService = authenticationService
         self.navigationRouter = navigationRouter
+        
+        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: navigationRouter.toPresentable())
     }
     
     func start() {
@@ -47,7 +50,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
             guard let self = self else { return }
             switch action {
             case .login:
-                self.showLoginScreen()
+                Task { await self.startAuthentication() }
             }
         }
         
@@ -59,19 +62,54 @@ class AuthenticationCoordinator: Coordinator, Presentable {
         }
     }
     
+    private func startAuthentication() async {
+        startLoading()
+        
+        switch await authenticationService.useServer(for: BuildSettings.defaultHomeserverURLString) {
+        case .success:
+            stopLoading()
+            showLoginScreen()
+        case .failure:
+            stopLoading()
+            showServerSelectionScreen()
+        }
+    }
+    
+    private func showServerSelectionScreen() {
+        let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
+                                                              hasModalPresentation: false)
+        let coordinator = ServerSelectionCoordinator(parameters: parameters)
+        
+        coordinator.callback = { [weak self] action in
+            guard let self = self else { return }
+            
+            switch action {
+            case .updated:
+                self.showLoginScreen()
+            case .dismiss:
+                MXLog.failure("[AuthenticationCoordinator] ServerSelectionScreen is requesting dismiss when part of a stack.")
+            }
+        }
+        
+        coordinator.start()
+        add(childCoordinator: coordinator)
+        
+        navigationRouter.push(coordinator) { [weak self] in
+            self?.remove(childCoordinator: coordinator)
+        }
+    }
+    
     private func showLoginScreen() {
         let parameters = LoginCoordinatorParameters(authenticationService: authenticationService,
                                                     navigationRouter: navigationRouter)
         let coordinator = LoginCoordinator(parameters: parameters)
         
-        coordinator.callback = { [weak self, weak coordinator] action in
-            guard let self = self, let coordinator = coordinator else { return }
+        coordinator.callback = { [weak self] action in
+            guard let self = self else { return }
             
             switch action {
             case .signedIn(let userSession):
                 self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
-                self.remove(childCoordinator: coordinator)
-                self.navigationRouter.dismissModule()
             case .continueWithOIDC:
                 break
             }
@@ -83,5 +121,15 @@ class AuthenticationCoordinator: Coordinator, Presentable {
         navigationRouter.push(coordinator) { [weak self] in
             self?.remove(childCoordinator: coordinator)
         }
+    }
+    
+    /// Show a blocking activity indicator.
+    private func startLoading() {
+        activityIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+    }
+    
+    /// Hide the currently displayed activity indicator.
+    private func stopLoading() {
+        activityIndicator = nil
     }
 }

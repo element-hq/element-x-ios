@@ -28,6 +28,9 @@ protocol UserSessionStoreProtocol {
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { get }
     
+    /// Returns the location to store user data for a particular username.
+    var baseDirectoryPath: String { get }
+    
     /// Restores an existing user session.
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError>
     
@@ -36,7 +39,4 @@ protocol UserSessionStoreProtocol {
     
     /// Logs out of the specified session.
     func logout(userSession: UserSessionProtocol)
-    
-    /// Returns the location to store user data for a particular username.
-    func baseDirectoryPath(for username: String) -> String
 }
