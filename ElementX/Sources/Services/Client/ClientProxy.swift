@@ -24,7 +24,6 @@ private class WeakClientProxyWrapper: ClientDelegate {
 }
 
 class ClientProxy: ClientProxyProtocol {
-    
     private let client: Client
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
@@ -71,7 +70,6 @@ class ClientProxy: ClientProxyProtocol {
             } catch {
                 return .failure(.failedRetrievingDisplayName)
             }
-            
         }
         .value
     }

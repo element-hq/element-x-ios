@@ -9,7 +9,6 @@
 import Foundation
 
 struct EventBriefFactory: EventBriefFactoryProtocol {
-    
     private let memberDetailProvider: MemberDetailProviderProtocol
     
     init(memberDetailProvider: MemberDetailProviderProtocol) {

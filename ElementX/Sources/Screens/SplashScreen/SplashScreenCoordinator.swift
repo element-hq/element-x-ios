@@ -17,7 +17,6 @@
 import SwiftUI
 
 final class SplashScreenCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

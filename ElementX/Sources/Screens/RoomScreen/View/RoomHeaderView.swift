@@ -13,7 +13,6 @@ import SwiftUI
 import Introspect
 
 struct RoomHeaderView: View {
-
     @ObservedObject var context: RoomScreenViewModel.Context
 
     var body: some View {
@@ -49,7 +48,6 @@ struct RoomHeaderView: View {
                 .accessibilityIdentifier("roomAvatarPlaceholderImage")
         }
     }
-
 }
 
 struct RoomHeaderView_Previews: PreviewProvider {

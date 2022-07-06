@@ -22,7 +22,6 @@ struct BugReportCoordinatorParameters {
 }
 
 final class BugReportCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

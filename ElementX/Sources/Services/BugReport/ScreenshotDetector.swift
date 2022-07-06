@@ -17,7 +17,6 @@ enum ScreenshotDetectorError: String, Error {
 
 @MainActor
 class ScreenshotDetector {
-
     var callback: (@MainActor(UIImage?, Error?) -> Void)?
 
     /// Flag to whether ask for photos authorization by default if needed.
@@ -80,11 +79,9 @@ class ScreenshotDetector {
     func fail(withError error: Error) {
         callback?(nil, error)
     }
-
 }
 
 private extension PHAsset {
-
     static func fetchLastScreenshot() -> PHAsset? {
         let options = PHFetchOptions()
 
@@ -99,7 +96,6 @@ private extension PHAsset {
 }
 
 private extension PHImageRequestOptions {
-
     static var highQualitySyncLocal: PHImageRequestOptions {
         let options = PHImageRequestOptions()
         options.deliveryMode = .highQualityFormat

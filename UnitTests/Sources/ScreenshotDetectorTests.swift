@@ -12,7 +12,6 @@ import Photos
 import XCTest
 
 class ScreenshotDetectorTests: XCTestCase {
-
     @MainActor func testDetection() async {
         async { expectation in
             let detector = ScreenshotDetector()
@@ -59,5 +58,4 @@ class ScreenshotDetectorTests: XCTestCase {
         block(expectation)
         waiter.wait(for: [expectation], timeout: timeout)
     }
-
 }

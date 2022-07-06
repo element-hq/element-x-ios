@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct PlaceholderAvatarImage: View {
-    
     private let textForImage: String
     
     var body: some View {

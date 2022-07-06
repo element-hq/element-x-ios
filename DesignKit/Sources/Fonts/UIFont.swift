@@ -17,7 +17,6 @@
 import UIKit
 
 public extension UIFont {
-    
     // MARK: - Convenient methods
     
     /// Update current font with a SymbolicTraits

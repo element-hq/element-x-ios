@@ -18,7 +18,6 @@ import Foundation
 import UIKit
 
 class RectangleToastView: UIView {
-    
     private enum Constants {
         static let padding = UIEdgeInsets(top: 16, left: 16, bottom: 16, right: 16)
         static let cornerRadius: CGFloat = 8.0

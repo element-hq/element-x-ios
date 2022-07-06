@@ -11,7 +11,6 @@ import UIKit
 
 /// /// UIKitBackgroundTaskService is a concrete implementation of BackgroundTaskServiceProtocol using a given `ApplicationProtocol`  instance.
 class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
-
     private let application: ApplicationProtocol?
     private var reusableTasks: WeakDictionary<String, UIKitBackgroundTask> = WeakDictionary()
 
@@ -91,7 +90,6 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         }
         return false
     }
-
 }
 
 private extension TimeInterval {

@@ -29,7 +29,6 @@ enum ServerSelectionCoordinatorAction {
 }
 
 final class ServerSelectionCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

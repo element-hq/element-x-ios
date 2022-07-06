@@ -70,7 +70,6 @@ class RoundedToastView: UIView {
     }
 
     private func setup(viewState: ToastViewState) {
-        
         backgroundColor = .clear
         clipsToBounds = true
         

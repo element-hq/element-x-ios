@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct MessageComposerTextField: View {
-    
     @Binding private var text: String
     @State private var dynamicHeight: CGFloat = 100
     @State private var isEditing = false

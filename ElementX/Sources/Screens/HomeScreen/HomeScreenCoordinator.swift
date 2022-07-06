@@ -30,7 +30,6 @@ enum HomeScreenCoordinatorAction {
 }
 
 final class HomeScreenCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

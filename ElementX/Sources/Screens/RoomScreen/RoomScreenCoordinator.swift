@@ -24,7 +24,6 @@ struct RoomScreenCoordinatorParameters {
 }
 
 final class RoomScreenCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

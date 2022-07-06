@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
-
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
 
@@ -96,7 +95,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         let opacity = colorScheme == .light ? 0.06 : 0.15
         return timelineItem.isOutgoing ? .element.accent.opacity(opacity) : .element.system
     }
-
 }
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider {

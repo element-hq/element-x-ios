@@ -18,7 +18,6 @@ import Foundation
 
 @MainActor
 protocol LoginViewModelProtocol {
-    
     var callback: (@MainActor(LoginViewModelAction) -> Void)? { get set }
     var context: LoginViewModelType.Context { get }
     

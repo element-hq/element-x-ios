@@ -10,7 +10,6 @@ import Foundation
 import MatrixRustSDK
 
 class AuthenticationService: AuthenticationServiceProtocol {
-    
     // MARK: - Properties
     
     // MARK: Private

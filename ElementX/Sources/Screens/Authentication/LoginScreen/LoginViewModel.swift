@@ -19,7 +19,6 @@ import SwiftUI
 typealias LoginViewModelType = StateStoreViewModel<LoginViewState, LoginViewAction>
 
 class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
-
     // MARK: - Properties
 
     // MARK: Public

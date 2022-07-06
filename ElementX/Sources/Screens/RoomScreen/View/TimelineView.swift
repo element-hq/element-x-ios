@@ -13,7 +13,6 @@ import SwiftUI
 import Introspect
 
 struct TimelineView: View {
-    
     @State private var bottomVisiblePublisher = PassthroughSubject<Bool, Never>()
     @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     @State private var scollToBottomButtonVisible = false

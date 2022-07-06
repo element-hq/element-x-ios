@@ -19,7 +19,6 @@ import XCTest
 
 @MainActor
 class RoomScreenUITests: XCTestCase {
-
     func testPlainNoAvatar() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomPlainNoAvatar)

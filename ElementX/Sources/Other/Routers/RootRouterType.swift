@@ -20,7 +20,6 @@ import UIKit
 /// Routers are used to be passed between coordinators. They handles only `physical` navigation.
 @MainActor
 protocol RootRouterType: AnyObject {
-    
     /// Update the root view controller
     ///
     /// - Parameter module: The new root view controller to set

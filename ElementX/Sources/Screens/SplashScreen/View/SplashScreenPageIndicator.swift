@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct SplashScreenPageIndicator: View {
-    
     // MARK: - Properties
     
     // MARK: Public

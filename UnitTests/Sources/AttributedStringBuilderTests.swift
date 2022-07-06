@@ -10,7 +10,6 @@
 import XCTest
 
 class AttributedStringBuilderTests: XCTestCase {
-
     let attributedStringBuilder = AttributedStringBuilder()
     let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
@@ -370,7 +369,6 @@ class AttributedStringBuilderTests: XCTestCase {
     // MARK: - Private
     
     private func checkMatrixEntityLinkIn(attributedString: AttributedString?, expected: String) {
-        
         guard let attributedString = attributedString else {
             XCTFail("Could not build the attributed string")
             return

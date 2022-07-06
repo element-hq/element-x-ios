@@ -9,7 +9,6 @@
 import Foundation
 
 public struct WeakDictionaryKey<Key: AnyObject & Hashable, Value: AnyObject>: Hashable {
-
     private weak var baseKey: Key?
     private let hash: Int
     private var retainedValue: Value?

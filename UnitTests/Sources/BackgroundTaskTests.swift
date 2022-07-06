@@ -11,7 +11,6 @@ import XCTest
 @testable import ElementX
 
 class BackgroundTaskTests: XCTestCase {
-
     private enum Constants {
         static let bgTaskName = "test"
     }
@@ -155,11 +154,9 @@ class BackgroundTaskTests: XCTestCase {
 
         XCTAssertNil(task, "Task should not be created")
     }
-
 }
 
 private extension UIApplication {
-
     static var mockHealty: ApplicationProtocol {
         MockApplication()
     }
@@ -175,11 +172,9 @@ private extension UIApplication {
                         backgroundTimeRemaining: 2,
                         allowTasks: false)
     }
-
 }
 
 private class MockApplication: ApplicationProtocol {
-
     let applicationState: UIApplication.State
     let backgroundTimeRemaining: TimeInterval
     private let allowTasks: Bool
@@ -223,5 +218,4 @@ private class MockApplication: ApplicationProtocol {
         }
         bgTasks.removeValue(forKey: identifier)
     }
-
 }

@@ -11,7 +11,6 @@ import SwiftUI
 
 /// Store Element specific app settings.
 final class ElementSettings: ObservableObject {
-
     // MARK: - Constants
 
     public enum UserDefaultsKeys: String {

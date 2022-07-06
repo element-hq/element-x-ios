@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct RoomScreen: View {
-    
     @ObservedObject var context: RoomScreenViewModel.Context
     
     var body: some View {

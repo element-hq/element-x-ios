@@ -10,7 +10,6 @@
 import XCTest
 
 class LocalizationTests: XCTestCase {
-
     /// Test ElementL10n considers app language changes
     func testAppLanguage() {
         //  set app language to English
@@ -101,5 +100,4 @@ class LocalizationTests: XCTestCase {
         XCTAssertEqual(ElementL10n.untranslatedPlural(1), "One untranslated item")
         XCTAssertEqual(ElementL10n.untranslatedPlural(5), "5 untranslated items")
     }
-
 }

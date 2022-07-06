@@ -18,7 +18,6 @@ import UIKit
 
 /// `NavigationRouter` is a concrete implementation of NavigationRouterType.
 final class NavigationRouter: NSObject, NavigationRouterType {
-    
     // MARK: - Properties
     
     // MARK: Private
@@ -117,7 +116,6 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
         
     func setModules(_ modules: [NavigationModule], hideNavigationBar: Bool, animated: Bool) {
-        
         MXLog.debug("[NavigationRouter] Set modules \(modules)")
         
         let controllers = modules.map { module -> UIViewController in
@@ -279,7 +277,6 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     func contains(_ module: Presentable) -> Bool {
-        
         let controller = module.toPresentable()
         return navigationController.viewControllers.contains(controller)
     }
@@ -293,7 +290,6 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     // MARK: - Private
     
     private func module(for viewController: UIViewController) -> Presentable {
-        
         guard let module = storedModules[viewController] as? Presentable else {
             return viewController
         }
@@ -339,7 +335,6 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     private func postNotification(withName name: Notification.Name, for viewController: UIViewController) {
-        
         let module = module(for: viewController)
         
         let userInfo: [String: Any] = [
@@ -354,14 +349,11 @@ final class NavigationRouter: NSObject, NavigationRouterType {
 // MARK: - UINavigationControllerDelegate
 
 extension NavigationRouter: UINavigationControllerDelegate {
-    
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        
         // Try to post `NavigationRouter.willPopModule` notification here
     }
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        
         // Ensure the view controller is popping
         guard let poppedViewController = navigationController.transitionCoordinator?.viewController(forKey: .from),
               !navigationController.viewControllers.contains(poppedViewController) else {
@@ -377,7 +369,6 @@ extension NavigationRouter: UINavigationControllerDelegate {
 // MARK: - NavigationRouter notification constants
 
 extension NavigationRouter {
-    
     // MARK: Notification names
     
     public static let willPushModule = Notification.Name("NavigationRouterWillPushModule")
@@ -391,7 +382,6 @@ extension NavigationRouter {
     // MARK: Notification keys
     
     public enum NotificationUserInfoKey {
-        
         /// The associated view controller (UIViewController).
         static let viewController = "viewController"
         

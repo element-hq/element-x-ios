@@ -9,7 +9,6 @@
 import Foundation
 
 public struct WeakDictionary<Key: Hashable, Value: AnyObject> {
-
     private var storage: [Key: WeakDictionaryReference<Value>]
 
     public init() {
@@ -48,7 +47,6 @@ public struct WeakDictionary<Key: Hashable, Value: AnyObject> {
 }
 
 extension WeakDictionary: Collection {
-
     public typealias Index = DictionaryIndex<Key, WeakDictionaryReference<Value>>
 
     public var startIndex: Index {

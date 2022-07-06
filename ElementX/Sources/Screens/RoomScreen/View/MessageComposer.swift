@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct MessageComposer: View {
-    
     @Binding var text: String
     var disabled: Bool
     let action: () -> Void

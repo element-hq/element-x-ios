@@ -73,7 +73,6 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
 /// we can do it in this centralised place.
 @MainActor
 class StateStoreViewModel<State: BindableState, ViewAction> {
-
     typealias Context = ViewModelContext<State, ViewAction>
 
     // MARK: - Properties

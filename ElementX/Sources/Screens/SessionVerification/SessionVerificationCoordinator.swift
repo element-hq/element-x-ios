@@ -21,7 +21,6 @@ struct SessionVerificationCoordinatorParameters {
 }
 
 final class SessionVerificationCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

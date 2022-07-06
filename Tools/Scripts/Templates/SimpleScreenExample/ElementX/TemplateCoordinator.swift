@@ -26,7 +26,6 @@ enum TemplateCoordinatorAction {
 }
 
 final class TemplateCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

@@ -32,7 +32,6 @@ enum LoginCoordinatorAction {
 }
 
 final class LoginCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private

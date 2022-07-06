@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct LoginScreen: View {
-
     // MARK: - Properties
     
     // MARK: Private
@@ -54,7 +53,6 @@ struct LoginScreen: View {
                 default:
                     loginUnavailableText
                 }
-                
             }
             .readableFrame()
             .padding(.horizontal, 16)

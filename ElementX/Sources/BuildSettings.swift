@@ -9,7 +9,6 @@
 import Foundation
 
 final class BuildSettings {
-    
     // MARK: - Servers
 
     static let defaultHomeserverURLString = "https://matrix.org"
@@ -32,5 +31,4 @@ final class BuildSettings {
     // MARK: - Room screen
 
     static let defaultRoomTimelineStyle: TimelineStyle = .bubbles
-
 }

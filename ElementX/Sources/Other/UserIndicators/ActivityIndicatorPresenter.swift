@@ -19,7 +19,6 @@ import UIKit
 
 /// Used to present activity indicator on a view
 final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
-    
     // MARK: - Constants
     
     private enum Constants {
@@ -131,7 +130,6 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
 }
 
 private extension UIView {
-    
     /// Add a subview matching parent view using autolayout
     @objc func vc_addSubViewMatchingParent(_ subView: UIView) {
         addSubview(subView)

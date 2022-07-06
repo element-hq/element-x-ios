@@ -20,7 +20,6 @@ import XCTest
 
 @MainActor
 class SettingsViewModelTests: XCTestCase {
-
     var viewModel: SettingsViewModelProtocol!
     var context: SettingsViewModelType.Context!
     
@@ -66,5 +65,4 @@ class SettingsViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssert(correctResult)
     }
-
 }

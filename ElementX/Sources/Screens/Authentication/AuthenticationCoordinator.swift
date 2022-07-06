@@ -16,7 +16,6 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 }
 
 class AuthenticationCoordinator: Coordinator, Presentable {
-    
     private let authenticationService: AuthenticationServiceProtocol
     private let navigationRouter: NavigationRouter
     

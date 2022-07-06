@@ -9,7 +9,6 @@
 import SwiftUI
 
 public struct TimelineItemContextMenu: View {
-    
     let contextMenuActions: [TimelineItemContextMenuAction]
     let callback: (TimelineItemContextMenuAction) -> Void
     

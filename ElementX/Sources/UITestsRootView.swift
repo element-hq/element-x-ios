@@ -9,7 +9,6 @@
 import SwiftUI
 
 struct UITestsRootView: View {
-    
     let mockScreens: [MockScreen]
     var selectionCallback: ((UITestScreenIdentifier) -> Void)?
     

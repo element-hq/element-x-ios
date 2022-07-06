@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 struct TimelineItemPlainStylerView<Content: View>: View {
-
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
 

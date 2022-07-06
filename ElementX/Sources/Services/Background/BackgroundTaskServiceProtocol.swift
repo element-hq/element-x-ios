@@ -9,15 +9,12 @@
 import Foundation
 
 protocol BackgroundTaskServiceProtocol {
-
     func startBackgroundTask(withName name: String,
                              isReusable: Bool,
                              expirationHandler: (() -> Void)?) -> BackgroundTaskProtocol?
-
 }
 
 extension BackgroundTaskServiceProtocol {
-
     func startBackgroundTask(withName name: String) -> BackgroundTaskProtocol? {
         startBackgroundTask(withName: name,
                             expirationHandler: nil)
@@ -36,5 +33,4 @@ extension BackgroundTaskServiceProtocol {
                             isReusable: false,
                             expirationHandler: expirationHandler)
     }
-
 }

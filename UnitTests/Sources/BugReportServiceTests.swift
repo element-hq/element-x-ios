@@ -11,7 +11,6 @@ import Foundation
 import XCTest
 
 class BugReportServiceTests: XCTestCase {
-
     let bugReportService = MockBugReportService()
 
     func testInitialStateWithMockService() {
@@ -49,11 +48,9 @@ class BugReportServiceTests: XCTestCase {
         
         XCTAssertEqual(result.reportUrl, "https://example.com/123")
     }
-
 }
 
 private class MockURLProtocol: URLProtocol {
-
     override func startLoading() {
         let response = "{\"report_url\":\"https://example.com/123\"}"
         if let data = response.data(using: .utf8) {
@@ -75,16 +72,13 @@ private class MockURLProtocol: URLProtocol {
     override class func canInit(with request: URLRequest) -> Bool {
         true
     }
-
 }
 
 private extension URLSession {
-
     static var mock: URLSession {
         let configuration = URLSessionConfiguration.default
         configuration.protocolClasses = [MockURLProtocol.self] + (configuration.protocolClasses ?? [])
         let result = URLSession(configuration: configuration)
         return result
     }
-
 }

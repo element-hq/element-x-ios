@@ -19,7 +19,6 @@ import SwiftyBeaver
 
 /// Various MXLog configuration options. Used in conjunction with `MXLog.configure()`
 @objc public class MXLogConfiguration: NSObject {
-    
     /// the desired log level. `.verbose` by default.
     @objc public var logLevel = MXLogLevel.verbose
     
@@ -58,7 +57,6 @@ private var logger: SwiftyBeaver.Type = {
  Please see `MXLog.h` for Objective-C options.
  */
 @objc public class MXLog: NSObject {
-    
     /// Method used to customize MXLog's behavior.
     /// Called automatically when first accessing the logger with the default values.
     /// Please see `MXLogConfiguration` for all available options.

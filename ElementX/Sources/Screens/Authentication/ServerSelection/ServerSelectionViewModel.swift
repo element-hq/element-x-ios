@@ -19,7 +19,6 @@ import SwiftUI
 typealias ServerSelectionViewModelType = StateStoreViewModel<ServerSelectionViewState, ServerSelectionViewAction>
 
 class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionViewModelProtocol {
-
     // MARK: - Properties
 
     // MARK: Private

@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 class MockBugReportService: BugReportServiceProtocol {
-
     func submitBugReport(text: String,
                          includeLogs: Bool,
                          includeCrashLog: Bool,
@@ -24,5 +23,4 @@ class MockBugReportService: BugReportServiceProtocol {
     func crash() {
         // no-op
     }
-
 }

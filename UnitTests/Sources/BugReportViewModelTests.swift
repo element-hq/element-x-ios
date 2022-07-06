@@ -20,7 +20,6 @@ import XCTest
 
 @MainActor
 class BugReportViewModelTests: XCTestCase {
-
     func testInitialState() {
         let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil)
         let context = viewModel.context
