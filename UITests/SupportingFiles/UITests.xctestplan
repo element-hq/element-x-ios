@@ -41,6 +41,12 @@
     "addressSanitizer" : {
       "enabled" : true
     },
+    "environmentVariableEntries" : [
+      {
+        "key" : "SNAPSHOT_ARTIFACTS",
+        "value" : "\/tmp\/__FailedScreenshots__"
+      }
+    ],
     "mainThreadCheckerEnabled" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:ElementX.xcodeproj",
