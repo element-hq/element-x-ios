@@ -7,10 +7,10 @@
 //
 
 import Foundation
-import MatrixRustSDK
-import UIKit
 import GZIP
+import MatrixRustSDK
 import Sentry
+import UIKit
 
 enum BugReportServiceError: Error {
     case invalidBaseUrlString
@@ -33,7 +33,7 @@ class BugReportService: BugReportServiceProtocol {
         guard !sentryEndpoint.isEmpty else {
             throw BugReportServiceError.invalidSentryEndpoint
         }
-        self.baseURL = url
+        baseURL = url
         self.sentryEndpoint = sentryEndpoint
         self.applicationId = applicationId
         self.session = session
@@ -69,7 +69,7 @@ class BugReportService: BugReportServiceProtocol {
     // MARK: - BugReportServiceProtocol
 
     var crashedLastRun: Bool {
-        return SentrySDK.crashedLastRun
+        SentrySDK.crashedLastRun
     }
 
     func crash() {
@@ -182,8 +182,8 @@ class BugReportService: BugReportServiceProtocol {
             filesToCompress.append(URL(fileURLWithPath: crashLogFile))
         }
 
-        var totalSize: Int = 0
-        var totalZippedSize: Int = 0
+        var totalSize = 0
+        var totalZippedSize = 0
         var zippedFiles: [URL] = []
 
         for url in filesToCompress {

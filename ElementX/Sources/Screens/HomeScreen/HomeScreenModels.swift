@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,14 +34,14 @@ struct HomeScreenViewState: BindableState {
     var userDisplayName: String?
     var userAvatar: UIImage?
     
-    var showSessionVerificationBanner: Bool = false
+    var showSessionVerificationBanner = false
     
     var rooms: [HomeScreenRoom] = []
     
-    var isLoadingRooms: Bool = false
+    var isLoadingRooms = false
     
     var visibleDMs: [HomeScreenRoom] {
-        searchFilteredRooms.filter { $0.isDirect }
+        searchFilteredRooms.filter(\.isDirect)
     }
 
     var visibleRooms: [HomeScreenRoom] {
@@ -62,7 +62,7 @@ struct HomeScreenViewState: BindableState {
 }
 
 struct HomeScreenViewStateBindings {
-    var searchQuery: String = ""
+    var searchQuery = ""
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

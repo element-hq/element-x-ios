@@ -20,7 +20,7 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     
-    private struct Constants {
+    private enum Constants {
         static let backPaginationPageSize: UInt = 30
     }
 
@@ -96,7 +96,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func buildTimelineViews() {
-        let stateItems = timelineController.timelineItems.map { item  in
+        let stateItems = timelineController.timelineItems.map { item in
             timelineViewFactory.buildTimelineViewFor(timelineItem: item)
         }
         
@@ -106,13 +106,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: ContextMenus
     
     private func buildContexMenuForItemId(_ itemId: String) -> TimelineItemContextMenu {
-        TimelineItemContextMenu(contextMenuActions: self.contextMenuActionsForItemId(itemId)) { [weak self] action in
+        TimelineItemContextMenu(contextMenuActions: contextMenuActionsForItemId(itemId)) { [weak self] action in
             self?.processContentMenuAction(action, itemId: itemId)
         }
     }
     
     private func contextMenuActionsForItemId(_ itemId: String) -> [TimelineItemContextMenuAction] {
-        guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               timelineItem is EventBasedTimelineItemProtocol else {
             return []
         }
@@ -121,7 +121,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
-        guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }

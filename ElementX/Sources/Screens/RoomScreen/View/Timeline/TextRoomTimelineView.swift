@@ -52,24 +52,24 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                                                         shouldShowSenderDetails: true,
                                                         isOutgoing: false,
                                                         senderId: "Bob"))
-            .timelineStyle(.plain)
+                .timelineStyle(.plain)
 
             TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
                                                         timestamp: "Later",
                                                         shouldShowSenderDetails: true,
                                                         isOutgoing: true,
                                                         senderId: "Anne"))
-            .timelineStyle(.plain)
+                .timelineStyle(.plain)
         }
         .padding(.horizontal, 8)
     }
     
     private static func itemWith(text: String, timestamp: String, shouldShowSenderDetails: Bool, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
-        return TextRoomTimelineItem(id: UUID().uuidString,
-                                    text: text,
-                                    timestamp: timestamp,
-                                    shouldShowSenderDetails: shouldShowSenderDetails,
-                                    isOutgoing: isOutgoing,
-                                    senderId: senderId)
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: text,
+                             timestamp: timestamp,
+                             shouldShowSenderDetails: shouldShowSenderDetails,
+                             isOutgoing: isOutgoing,
+                             senderId: senderId)
     }
 }

@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import DesignTokens
+import SwiftUI
 
 @available(iOS 15.0, *)
 public extension TextFieldStyle where Self == ElementTextFieldStyle {

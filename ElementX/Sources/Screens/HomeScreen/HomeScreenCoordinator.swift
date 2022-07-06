@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
@@ -108,12 +108,11 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     }
     
     // MARK: - Public
-    func start() {
-        
-    }
+
+    func start() { }
     
     func toPresentable() -> UIViewController {
-        return self.hostingController
+        hostingController
     }
     
     // MARK: - Private

@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import DesignTokens
 import Introspect
+import SwiftUI
 
 /// A bordered style of text input
 ///
@@ -48,7 +48,7 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
     }
     
     private var backgroundColor: Color {
-        if !isEnabled && colorScheme == .dark {
+        if !isEnabled, colorScheme == .dark {
             return .element.quinaryContent
         }
         return .element.background

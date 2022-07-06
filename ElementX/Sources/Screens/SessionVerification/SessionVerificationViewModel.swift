@@ -75,8 +75,8 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             callback?(.finished)
         case .cancel:
             guard stateMachine.state == .initial ||
-                    stateMachine.state == .verified ||
-                    stateMachine.state == .cancelled else {
+                stateMachine.state == .verified ||
+                stateMachine.state == .cancelled else {
                 stateMachine.processEvent(.cancel)
                 return
             }
@@ -119,7 +119,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
     private func requestVerification() {
         Task {
             switch await sessionVerificationControllerProxy.requestVerification() {
-            case.success:
+            case .success:
                 // Need to wait for the callback from the remote
                 break
             case .failure:
@@ -131,7 +131,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
     private func cancelVerification() {
         Task {
             switch await sessionVerificationControllerProxy.cancelVerification() {
-            case.success:
+            case .success:
                 stateMachine.processEvent(.didCancel)
             case .failure:
                 stateMachine.processEvent(.didFail)
@@ -142,7 +142,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
     private func acceptChallenge() {
         Task {
             switch await sessionVerificationControllerProxy.approveVerification() {
-            case.success:
+            case .success:
                 // Need to wait for the callback from the remote
                 break
             case .failure:
@@ -154,7 +154,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
     private func declineChallenge() {
         Task {
             switch await sessionVerificationControllerProxy.declineVerification() {
-            case.success:
+            case .success:
                 stateMachine.processEvent(.didCancel)
             case .failure:
                 stateMachine.processEvent(.didFail)

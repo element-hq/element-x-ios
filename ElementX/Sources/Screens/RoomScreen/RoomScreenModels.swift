@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +17,7 @@
 import Foundation
 import UIKit
 
-enum RoomScreenViewModelAction {
-
-}
+enum RoomScreenViewModelAction { }
 
 enum TimelineItemContextMenuAction: Hashable {
     case copy
@@ -35,14 +33,14 @@ enum RoomScreenViewAction {
 }
 
 struct RoomScreenViewState: BindableState {
-    var roomTitle: String = ""
+    var roomTitle = ""
     var roomAvatar: UIImage?
     var roomEncryptionBadge: UIImage?
     var items: [RoomTimelineViewProvider] = []
     var isBackPaginating = false
     var bindings: RoomScreenViewStateBindings
     
-    var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
+    var contextMenuBuilder: (@MainActor(_ itemId: String) -> TimelineItemContextMenu)?
     
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0

@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import Combine
+import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
@@ -65,7 +65,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         roomUpdateListeners.removeAll()
         
-        roomSummaries.forEach({ roomSummary  in
+        roomSummaries.forEach { roomSummary in
             roomSummary.callbacks
                 .receive(on: DispatchQueue.main)
                 .sink { [weak self] callback in
@@ -81,7 +81,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     }
                 }
                 .store(in: &roomUpdateListeners)
-        })
+        }
         
     }
     

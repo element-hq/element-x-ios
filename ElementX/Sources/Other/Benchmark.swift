@@ -9,9 +9,9 @@
 import Foundation
 
 struct Benchmark {
-    static private var trackingIdentifiers = [String: CFAbsoluteTime]()
+    private static var trackingIdentifiers = [String: CFAbsoluteTime]()
     
-    static public var trackingEnabled = false
+    public static var trackingEnabled = false
     
     static func startTrackingForIdentifier(_ identifier: String, message: String? = nil) {
         guard trackingEnabled else {

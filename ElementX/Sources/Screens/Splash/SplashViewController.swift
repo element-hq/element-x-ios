@@ -8,6 +8,4 @@
 
 import UIKit
 
-class SplashViewController: UIViewController {
-    
-}
+class SplashViewController: UIViewController { }

@@ -35,7 +35,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
             expirationHandler?()
             return nil
         }
-        var created: Bool = false
+        var created = false
         var result: BackgroundTaskProtocol?
 
         if isReusable {
@@ -47,10 +47,10 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
                                                      isReusable: isReusable,
                                                      application: application,
                                                      expirationHandler: { [weak self] task in
-                    guard let self = self else { return }
-                    self.reusableTasks[task.name] = nil
-                    expirationHandler?()
-                }) {
+                                                         guard let self = self else { return }
+                                                         self.reusableTasks[task.name] = nil
+                                                         expirationHandler?()
+                                                     }) {
                     created = true
                     reusableTasks[name] = newTask
                     result = newTask
@@ -61,8 +61,8 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
                                                  isReusable: isReusable,
                                                  application: application,
                                                  expirationHandler: { _ in
-                expirationHandler?()
-            }) {
+                                                     expirationHandler?()
+                                                 }) {
                 result = newTask
                 created = true
             }
@@ -85,8 +85,8 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
     }
 
     private func avoidStartingNewTasks(for application: ApplicationProtocol) -> Bool {
-        if application.applicationState == .background
-            && application.backgroundTimeRemaining < .backgroundTimeRemainingThresholdToStartTasks {
+        if application.applicationState == .background,
+           application.backgroundTimeRemaining < .backgroundTimeRemainingThresholdToStartTasks {
             return true
         }
         return false

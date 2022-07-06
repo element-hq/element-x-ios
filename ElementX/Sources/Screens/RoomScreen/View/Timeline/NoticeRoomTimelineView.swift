@@ -49,11 +49,11 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {
-        return NoticeRoomTimelineItem(id: UUID().uuidString,
-                                      text: text,
-                                      timestamp: timestamp,
-                                      shouldShowSenderDetails: true,
-                                      isOutgoing: false,
-                                      senderId: senderId)
+        NoticeRoomTimelineItem(id: UUID().uuidString,
+                               text: text,
+                               timestamp: timestamp,
+                               shouldShowSenderDetails: true,
+                               isOutgoing: false,
+                               senderId: senderId)
     }
 }

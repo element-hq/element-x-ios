@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import SwiftUI
 import DesignTokens
+import SwiftUI
 
 public extension ButtonStyle where Self == ElementActionButtonStyle {
     /// The CTA button style as defined in Compound.
@@ -70,17 +70,17 @@ public struct ElementActionButtonStyle_Previews: PreviewProvider {
             Button("Enabled") { /* preview */ }
                 .buttonStyle(ElementActionButtonStyle())
             
-            Button("Disabled") { /* preview */  }
+            Button("Disabled") { /* preview */ }
                 .buttonStyle(ElementActionButtonStyle())
                 .disabled(true)
             
-            Button { /* preview */  } label: {
+            Button { /* preview */ } label: {
                 Text("Clear BG")
                     .foregroundColor(.element.alert)
             }
             .buttonStyle(ElementActionButtonStyle(color: .clear))
             
-            Button("Red BG") { /* preview */  }
+            Button("Red BG") { /* preview */ }
                 .buttonStyle(ElementActionButtonStyle(color: .element.alert))
         }
         .padding()

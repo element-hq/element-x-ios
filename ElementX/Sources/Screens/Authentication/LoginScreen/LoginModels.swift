@@ -53,7 +53,7 @@ struct LoginViewState: BindableState {
     /// Data about the selected homeserver.
     var homeserver: LoginHomeserver
     /// Whether a new homeserver is currently being loaded.
-    var isLoading: Bool = false
+    var isLoading = false
     /// View state that can be bound to from SwiftUI.
     var bindings: LoginBindings
     

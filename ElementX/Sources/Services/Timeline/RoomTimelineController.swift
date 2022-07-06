@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 import UIKit
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
@@ -79,9 +79,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemDisappearance(_ itemId: String) {
-        
-    }
+    func processItemDisappearance(_ itemId: String) { }
     
     func sendMessage(_ message: String) async {
         switch await timelineProvider.sendMessage(message) {

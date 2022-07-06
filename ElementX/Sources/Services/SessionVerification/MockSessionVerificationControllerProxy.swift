@@ -6,14 +6,14 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
-import Combine
 
 struct MockSessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol {
     var callbacks = PassthroughSubject<SessionVerificationControllerProxyCallback, Never>()
     
-    var isVerified: Bool = false
+    var isVerified = false
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
@@ -50,13 +50,14 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     // MARK: - Private
     
     static var emojis: [SessionVerificationEmoji] {
-        [SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
-         SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
-         SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
-         SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
-         SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
-         SessionVerificationEmoji(symbol: "🏁", description: "Flag"),
-         SessionVerificationEmoji(symbol: "🌏", description: "Globe")
+        [
+            SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
+            SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
+            SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
+            SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
+            SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
+            SessionVerificationEmoji(symbol: "🏁", description: "Flag"),
+            SessionVerificationEmoji(symbol: "🌏", description: "Globe")
         ]
     }
 }

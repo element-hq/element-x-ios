@@ -18,7 +18,7 @@ import SwiftUI
 
 @available(iOS 14, *)
 typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState,
-                                                                  BugReportViewAction>
+    BugReportViewAction>
 @available(iOS 14, *)
 class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
 
@@ -50,7 +50,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
                                                                     files: files)
             MXLog.info("[BugReportViewModel] submitBugReport succeeded, result: \(result.reportUrl)")
             callback?(.submitFinished)
-        } catch let error {
+        } catch {
             MXLog.error("[BugReportViewModel] submitBugReport failed: \(error)")
             callback?(.submitFailed(error: error))
         }

@@ -13,7 +13,7 @@ import XCTest
 class BackgroundTaskTests: XCTestCase {
 
     private enum Constants {
-        static let bgTaskName: String = "test"
+        static let bgTaskName = "test"
     }
 
     func testInAnExtension() {
@@ -192,7 +192,7 @@ private class MockApplication: ApplicationProtocol {
         self.allowTasks = allowTasks
     }
 
-    private static var bgTaskIdentifier: Int = 0
+    private static var bgTaskIdentifier = 0
 
     private var bgTasks: [UIBackgroundTaskIdentifier: Bool] = [:]
 

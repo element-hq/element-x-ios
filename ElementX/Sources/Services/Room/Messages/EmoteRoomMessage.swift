@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UIKit
 import MatrixRustSDK
+import UIKit
 
 struct EmoteRoomMessage: RoomMessageProtocol {
     private let message: MatrixRustSDK.EmoteMessage

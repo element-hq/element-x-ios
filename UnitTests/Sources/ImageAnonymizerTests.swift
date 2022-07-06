@@ -6,8 +6,8 @@
 //  Copyright © 2022 element.io. All rights reserved.
 //
 
-import XCTest
 @testable import ElementX
+import XCTest
 
 enum ImageAnonymizerTestsError: String, Error {
     case screenshotNotFound
@@ -24,7 +24,7 @@ class ImageAnonymizerTests: XCTestCase {
     }
 
     func sampleScreenshot() throws -> UIImage {
-        let bundle = Bundle(for: self.classForCoder)
+        let bundle = Bundle(for: classForCoder)
         guard let path = bundle.path(forResource: "sample_screenshot", ofType: "png"),
               let image = UIImage(contentsOfFile: path) else {
             throw ImageAnonymizerTestsError.screenshotNotFound

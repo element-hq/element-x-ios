@@ -58,6 +58,16 @@ targets:
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         
     preBuildScripts:
+    - name: 🧹 SwiftFormat
+      runOnlyWhenInstalling: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which swiftformat >/dev/null; then
+            swiftformat $PROJECT_DIR
+        else
+            echo "warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat"
+        fi
     - name: 🛠 SwiftGen
       runOnlyWhenInstalling: false
       shell: /bin/sh

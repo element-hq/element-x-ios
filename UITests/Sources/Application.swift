@@ -19,11 +19,11 @@ struct Application {
 
 extension XCUIApplication {
     func goToScreenWithIdentifier(_ identifier: UITestScreenIdentifier) {
-        let button = self.buttons[identifier.rawValue]
+        let button = buttons[identifier.rawValue]
         let lastLabel = staticTexts["lastItem"]
         
-        while !button.isHittable && !lastLabel.isHittable {
-            self.tables.firstMatch.swipeUp()
+        while !button.isHittable, !lastLabel.isHittable {
+            tables.firstMatch.swipeUp()
         }
         
         button.tap()

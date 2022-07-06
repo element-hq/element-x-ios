@@ -6,9 +6,9 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import Combine
 import Foundation
 import MatrixRustSDK
-import Combine
 import UIKit
 
 private class WeakClientProxyWrapper: ClientDelegate {
@@ -128,7 +128,7 @@ class ClientProxy: ClientProxyProtocol {
         Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")
         
         Benchmark.startTrackingForIdentifier("ProcessingRooms", message: "Started processing \(sdkRooms.count) rooms")
-        let diff = sdkRooms.map({ $0.id() }).difference(from: currentRooms.map(\.id))
+        let diff = sdkRooms.map { $0.id() }.difference(from: currentRooms.map(\.id))
         
         for change in diff {
             switch change {

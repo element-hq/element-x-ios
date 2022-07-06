@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,9 +27,7 @@ extension BindableState where BindStateType == Void {
     /// We provide a default implementation for the Void type so that we can have `ViewState` that
     /// just doesn't include/take advantage of the bindings.
     var bindings: Void {
-        get {
-            
-        }
+        get { }
         set {
             fatalError("Can't bind to the default Void binding.")
         }

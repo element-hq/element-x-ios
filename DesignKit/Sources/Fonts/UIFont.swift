@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -44,14 +44,14 @@ public extension UIFont {
     // MARK: - Shortcuts
     
     var bold: UIFont {
-        return withTraits(.traitBold)
+        withTraits(.traitBold)
     }
     
     var semiBold: UIFont {
-        return withWeight(weight: .semibold)
+        withWeight(weight: .semibold)
     }
 
     var italic: UIFont {
-        return withTraits(.traitItalic)
+        withTraits(.traitItalic)
     }
 }

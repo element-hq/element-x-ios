@@ -46,6 +46,7 @@ final class SplashScreenCoordinator: Coordinator, Presentable {
     }
     
     // MARK: - Public
+
     func start() {
         MXLog.debug("[SplashScreenCoordinator] did start.")
         splashScreenViewModel.callback = { [weak self] action in
@@ -59,7 +60,7 @@ final class SplashScreenCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        return splashScreenHostingController
+        splashScreenHostingController
     }
     
     /// Stops any ongoing activities in the coordinator.

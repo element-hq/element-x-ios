@@ -36,15 +36,15 @@ public extension Bundle {
     }
 
     /// Preferred languages in the priority order.
-    static private(set) var preferredLanguages: [String] = calculatePreferredLanguages()
+    private(set) static var preferredLanguages: [String] = calculatePreferredLanguages()
 
     private static func calculatePreferredLanguages() -> [String] {
         var set = Set<String>()
         return ([Bundle.elementLanguage] +
-                Locale.preferredLanguages +
-                [Bundle.elementFallbackLanguage])
-        .compactMap { $0 }
-        .filter { set.insert($0).inserted }
+            Locale.preferredLanguages +
+            [Bundle.elementFallbackLanguage])
+            .compactMap { $0 }
+            .filter { set.insert($0).inserted }
     }
 
 }

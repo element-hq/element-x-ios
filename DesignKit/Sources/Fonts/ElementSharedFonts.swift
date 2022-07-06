@@ -35,110 +35,111 @@ public class ElementSharedFonts {
     
     /// Returns an instance of the font associated with the text style and scaled appropriately for the content size category defined in the trait collection.
     /// Keep this method private method at the moment and create a DesignKit.Fonts.TextStyle if needed.
-    fileprivate func font(forTextStyle textStyle: UIFont.TextStyle, compatibleWith traitCollection: UITraitCollection? = nil) -> UIFont {
-        return UIFont.preferredFont(forTextStyle: textStyle, compatibleWith: traitCollection)
+    private func font(forTextStyle textStyle: UIFont.TextStyle, compatibleWith traitCollection: UITraitCollection? = nil) -> UIFont {
+        UIFont.preferredFont(forTextStyle: textStyle, compatibleWith: traitCollection)
     }
 }
 
 // MARK: - Fonts protocol
-extension ElementSharedFonts {
+
+public extension ElementSharedFonts {
     
-    public var largeTitle: SharedFont {
+    var largeTitle: SharedFont {
         let uiFont = font(forTextStyle: .largeTitle)
         return SharedFont(uiFont: uiFont, font: .largeTitle)
     }
     
-    public var largeTitleB: SharedFont {
+    var largeTitleB: SharedFont {
         let uiFont = largeTitle.uiFont.bold
         return SharedFont(uiFont: uiFont, font: .largeTitle.bold())
     }
             
-    public var title1: SharedFont {
+    var title1: SharedFont {
         let uiFont = font(forTextStyle: .title1)
         return SharedFont(uiFont: uiFont, font: .title)
     }
     
-    public var title1B: SharedFont {
+    var title1B: SharedFont {
         let uiFont = title1.uiFont.bold
         return SharedFont(uiFont: uiFont, font: .title.bold())
     }
     
-    public var title2: SharedFont {
+    var title2: SharedFont {
         let uiFont = font(forTextStyle: .title2)
         return SharedFont(uiFont: uiFont, font: .title2)
     }
     
-    public var title2B: SharedFont {
+    var title2B: SharedFont {
         let uiFont = title2.uiFont.bold
         return SharedFont(uiFont: uiFont, font: .title2.bold())
     }
     
-    public var title3: SharedFont {
+    var title3: SharedFont {
         let uiFont = font(forTextStyle: .title3)
         return SharedFont(uiFont: uiFont, font: .title3)
     }
     
-    public var title3SB: SharedFont {
+    var title3SB: SharedFont {
         let uiFont = title3.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .title3.weight(.semibold))
     }
     
-    public var headline: SharedFont {
+    var headline: SharedFont {
         let uiFont = font(forTextStyle: .headline)
         return SharedFont(uiFont: uiFont, font: .headline)
     }
     
-    public var subheadline: SharedFont {
+    var subheadline: SharedFont {
         let uiFont = font(forTextStyle: .subheadline)
         return SharedFont(uiFont: uiFont, font: .subheadline)
     }
     
-    public var body: SharedFont {
+    var body: SharedFont {
         let uiFont = font(forTextStyle: .body)
         return SharedFont(uiFont: uiFont, font: .body)
     }
     
-    public var bodySB: SharedFont {
+    var bodySB: SharedFont {
         let uiFont = body.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .body.weight(.semibold))
     }
     
-    public var callout: SharedFont {
+    var callout: SharedFont {
         let uiFont = font(forTextStyle: .callout)
         return SharedFont(uiFont: uiFont, font: .callout)
     }
     
-    public var calloutSB: SharedFont {
+    var calloutSB: SharedFont {
         let uiFont = callout.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .callout.weight(.semibold))
     }
     
-    public var footnote: SharedFont {
+    var footnote: SharedFont {
         let uiFont = font(forTextStyle: .footnote)
         return SharedFont(uiFont: uiFont, font: .footnote)
     }
     
-    public var footnoteSB: SharedFont {
+    var footnoteSB: SharedFont {
         let uiFont = footnote.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .footnote.weight(.semibold))
     }
     
-    public var caption1: SharedFont {
+    var caption1: SharedFont {
         let uiFont = font(forTextStyle: .caption1)
         return SharedFont(uiFont: uiFont, font: .caption)
     }
     
-    public var caption1SB: SharedFont {
+    var caption1SB: SharedFont {
         let uiFont = caption1.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .caption.weight(.semibold))
     }
     
-    public var caption2: SharedFont {
+    var caption2: SharedFont {
         let uiFont = font(forTextStyle: .caption2)
         return SharedFont(uiFont: uiFont, font: .caption2)
     }
     
-    public var caption2SB: SharedFont {
+    var caption2SB: SharedFont {
         let uiFont = caption2.uiFont.semiBold
         return SharedFont(uiFont: uiFont, font: .caption2.weight(.semibold))
     }

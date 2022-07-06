@@ -18,7 +18,7 @@ public struct WeakDictionary<Key: Hashable, Value: AnyObject> {
 
     public init(dictionary: [Key: Value]) {
         var newStorage = [Key: WeakDictionaryReference<Value>]()
-        dictionary.forEach({ key, value in newStorage[key] = WeakDictionaryReference<Value>(value: value) })
+        dictionary.forEach { key, value in newStorage[key] = WeakDictionaryReference<Value>(value: value) }
         self.init(storage: newStorage)
     }
 
@@ -31,7 +31,7 @@ public struct WeakDictionary<Key: Hashable, Value: AnyObject> {
     }
 
     public func weakDictionary() -> WeakDictionary<Key, Value> {
-        return self[startIndex ..< endIndex]
+        self[startIndex..<endIndex]
     }
 
     public func dictionary() -> [Key: Value] {
@@ -52,15 +52,15 @@ extension WeakDictionary: Collection {
     public typealias Index = DictionaryIndex<Key, WeakDictionaryReference<Value>>
 
     public var startIndex: Index {
-        return storage.startIndex
+        storage.startIndex
     }
 
     public var endIndex: Index {
-        return storage.endIndex
+        storage.endIndex
     }
 
     public func index(after index: Index) -> Index {
-        return storage.index(after: index)
+        storage.index(after: index)
     }
 
     public subscript(position: Index) -> (Key, WeakDictionaryReference<Value>) {
@@ -87,18 +87,18 @@ extension WeakDictionary: Collection {
     }
 
     public subscript(bounds: Range<Index>) -> WeakDictionary<Key, Value> {
-        let subStorage = storage[bounds.lowerBound ..< bounds.upperBound]
+        let subStorage = storage[bounds.lowerBound..<bounds.upperBound]
         var newStorage = [Key: WeakDictionaryReference<Value>]()
 
-        subStorage.filter { _, value in return value.value != nil }
+        subStorage.filter { _, value in value.value != nil }
             .forEach { key, value in newStorage[key] = value }
 
         return WeakDictionary<Key, Value>(storage: newStorage)
     }
 }
 
-extension Dictionary where Value: AnyObject {
-    public func weakDictionary() -> WeakDictionary<Key, Value> {
-        return WeakDictionary<Key, Value>(dictionary: self)
+public extension Dictionary where Value: AnyObject {
+    func weakDictionary() -> WeakDictionary<Key, Value> {
+        WeakDictionary<Key, Value>(dictionary: self)
     }
 }

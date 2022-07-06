@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -167,7 +167,7 @@ struct RoomCell: View {
     }
     
     private func roomName(_ room: HomeScreenRoom) -> String {
-        room.displayName ?? room.id + (room.isEncrypted ? "🛡": "")
+        room.displayName ?? room.id + (room.isEncrypted ? "🛡" : "")
     }
 }
 

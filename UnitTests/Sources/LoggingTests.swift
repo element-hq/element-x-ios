@@ -6,8 +6,8 @@
 //  Copyright © 2022 element.io. All rights reserved.
 //
 
-import XCTest
 @testable import ElementX
+import XCTest
 
 class LoggingTests: XCTestCase {
 

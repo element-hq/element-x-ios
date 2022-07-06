@@ -16,6 +16,6 @@ public struct WeakDictionaryReference<Value: AnyObject> {
     }
 
     public var value: Value? {
-        return referencedValue
+        referencedValue
     }
 }

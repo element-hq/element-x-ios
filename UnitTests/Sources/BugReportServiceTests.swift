@@ -6,8 +6,8 @@
 //  Copyright © 2022 element.io. All rights reserved.
 //
 
-import Foundation
 @testable import ElementX
+import Foundation
 import XCTest
 
 class BugReportServiceTests: XCTestCase {
@@ -69,11 +69,11 @@ private class MockURLProtocol: URLProtocol {
     }
 
     override class func canonicalRequest(for request: URLRequest) -> URLRequest {
-        return request
+        request
     }
 
     override class func canInit(with request: URLRequest) -> Bool {
-        return true
+        true
     }
 
 }

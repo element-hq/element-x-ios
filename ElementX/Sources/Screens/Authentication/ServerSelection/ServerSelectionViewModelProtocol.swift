@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ import Foundation
 @MainActor
 protocol ServerSelectionViewModelProtocol {
     
-    var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)? { get set }
+    var callback: (@MainActor(ServerSelectionViewModelAction) -> Void)? { get set }
     var context: ServerSelectionViewModelType.Context { get }
     
     /// Displays an error to the user.

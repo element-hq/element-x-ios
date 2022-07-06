@@ -89,7 +89,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 
     private var shouldAvoidBubbling: Bool {
-        return timelineItem is ImageRoomTimelineItem
+        timelineItem is ImageRoomTimelineItem
     }
 
     private var bubbleColor: Color {
@@ -108,7 +108,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading) {
-            ForEach((1..<MockRoomTimelineController().timelineItems.count), id: \.self) { index in
+            ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
                 RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
             }

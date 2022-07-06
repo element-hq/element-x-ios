@@ -7,8 +7,8 @@
 //
 
 import Foundation
-import UIKit
 import Photos
+import UIKit
 
 enum ScreenshotDetectorError: String, Error {
     case loadFailed
@@ -18,7 +18,7 @@ enum ScreenshotDetectorError: String, Error {
 @MainActor
 class ScreenshotDetector {
 
-    var callback: (@MainActor (UIImage?, Error?) -> Void)?
+    var callback: (@MainActor(UIImage?, Error?) -> Void)?
 
     /// Flag to whether ask for photos authorization by default if needed.
     var autoRequestPHAuthorization = true
@@ -38,7 +38,7 @@ class ScreenshotDetector {
         let authStatus = PHPhotoLibrary.authorizationStatus(for: .readWrite)
         if authStatus == .authorized {
             findScreenshot()
-        } else if authStatus == .notDetermined && autoRequestPHAuthorization {
+        } else if authStatus == .notDetermined, autoRequestPHAuthorization {
             Task {
                 self.handleAuthStatus(await PHPhotoLibrary.requestAuthorization(for: .readWrite))
             }

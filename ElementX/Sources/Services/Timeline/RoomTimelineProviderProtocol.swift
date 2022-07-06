@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 enum RoomTimelineProviderCallback {
     case updatedMessages
@@ -26,5 +26,5 @@ protocol RoomTimelineProviderProtocol {
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError>
     
-    func sendMessage(_ message: String) async ->  Result<Void, RoomTimelineProviderError>
+    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError>
 }

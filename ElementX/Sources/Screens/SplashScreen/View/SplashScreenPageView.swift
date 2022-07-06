@@ -1,4 +1,4 @@
-// 
+//
 // Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,8 +33,8 @@ struct SplashScreenPageView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(maxWidth: 310) // This value is problematic. 300 results in dropped frames
-                                      // on iPhone 12/13 Mini. 305 the same on iPhone 12/13. As of
-                                      // iOS 15, 310 seems fine on all supported screen widths 🤞.
+                // on iPhone 12/13 Mini. 305 the same on iPhone 12/13. As of
+                // iOS 15, 310 seems fine on all supported screen widths 🤞.
                 .padding(20)
                 .accessibilityHidden(true)
             

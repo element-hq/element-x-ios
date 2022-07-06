@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import XCTest
 @testable import ElementX
+import XCTest
 
 class KeychainControllerTests: XCTestCase {
     var keychain: KeychainController!

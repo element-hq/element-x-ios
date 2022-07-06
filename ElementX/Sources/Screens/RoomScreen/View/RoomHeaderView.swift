@@ -6,9 +6,9 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import Combine
 import Foundation
 import SwiftUI
-import Combine
 
 import Introspect
 
@@ -65,8 +65,7 @@ struct RoomHeaderView_Previews: PreviewProvider {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             roomName: "Some Room name",
-                                            roomAvatar: Asset.Images.appLogo.image
-        )
+                                            roomAvatar: Asset.Images.appLogo.image)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)
@@ -79,8 +78,7 @@ struct RoomHeaderView_Previews: PreviewProvider {
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             roomName: "Some Room name",
                                             roomAvatar: nil,
-                                            roomEncryptionBadge: Asset.Images.encryptionTrusted.image
-        )
+                                            roomEncryptionBadge: Asset.Images.encryptionTrusted.image)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

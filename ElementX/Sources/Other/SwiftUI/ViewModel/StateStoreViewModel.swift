@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 /// A constrained and concise interface for interacting with the ViewModel.
 ///
@@ -96,8 +96,8 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     // MARK: Setup
 
     init(initialViewState: State) {
-        self.context = Context(initialViewState: initialViewState)
-        self.context.viewActions.sink { [weak self] action in
+        context = Context(initialViewState: initialViewState)
+        context.viewActions.sink { [weak self] action in
             guard let self = self else { return }
             
             Task { await self.process(viewAction: action) }

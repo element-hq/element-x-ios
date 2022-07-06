@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import XCTest
 @testable import ElementX
+import XCTest
 
 class LocalizationTests: XCTestCase {
 
@@ -70,9 +70,9 @@ class LocalizationTests: XCTestCase {
         //  set app language to Polish
         Bundle.elementLanguage = "pl"
 
-        XCTAssertEqual(ElementL10n.seconds(1), "1 sekunda")     //  one
-        XCTAssertEqual(ElementL10n.seconds(2), "2 sekundy")     //  few
-        XCTAssertEqual(ElementL10n.seconds(5), "5 sekund")      //  many, other
+        XCTAssertEqual(ElementL10n.seconds(1), "1 sekunda") //  one
+        XCTAssertEqual(ElementL10n.seconds(2), "2 sekundy") //  few
+        XCTAssertEqual(ElementL10n.seconds(5), "5 sekund") //  many, other
     }
 
     /// Test plurals fallback language for a language not supported at all

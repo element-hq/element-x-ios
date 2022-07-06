@@ -19,22 +19,22 @@ protocol BackgroundTaskServiceProtocol {
 extension BackgroundTaskServiceProtocol {
 
     func startBackgroundTask(withName name: String) -> BackgroundTaskProtocol? {
-        return startBackgroundTask(withName: name,
-                                   expirationHandler: nil)
+        startBackgroundTask(withName: name,
+                            expirationHandler: nil)
     }
 
     func startBackgroundTask(withName name: String,
                              isReusable: Bool) -> BackgroundTaskProtocol? {
-        return startBackgroundTask(withName: name,
-                                   isReusable: isReusable,
-                                   expirationHandler: nil)
+        startBackgroundTask(withName: name,
+                            isReusable: isReusable,
+                            expirationHandler: nil)
     }
 
     func startBackgroundTask(withName name: String,
                              expirationHandler: (() -> Void)?) -> BackgroundTaskProtocol? {
-        return startBackgroundTask(withName: name,
-                                   isReusable: false,
-                                   expirationHandler: expirationHandler)
+        startBackgroundTask(withName: name,
+                            isReusable: false,
+                            expirationHandler: expirationHandler)
     }
 
 }

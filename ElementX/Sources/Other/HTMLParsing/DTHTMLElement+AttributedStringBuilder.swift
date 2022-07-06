@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
 import DTCoreText
+import Foundation
 
 public extension DTHTMLElement {
     /// Sanitize the element using the given parameters.

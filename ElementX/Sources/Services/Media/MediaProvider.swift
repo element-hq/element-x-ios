@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import UIKit
 import Kingfisher
+import UIKit
 
 struct MediaProvider: MediaProviderProtocol {
     private let clientProxy: ClientProxyProtocol
@@ -21,7 +21,7 @@ struct MediaProvider: MediaProviderProtocol {
         self.clientProxy = clientProxy
         self.imageCache = imageCache
         self.backgroundTaskService = backgroundTaskService
-        self.processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue", attributes: .concurrent)
+        processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue", attributes: .concurrent)
     }
     
     func imageFromSource(_ source: MediaSource?) -> UIImage? {

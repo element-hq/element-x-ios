@@ -15,7 +15,7 @@ class AuthenticationService: AuthenticationServiceProtocol {
     
     // MARK: Private
     
-    private(set) var homeserver: LoginHomeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverURLString)
+    private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverURLString)
     private let userSessionStore: UserSessionStoreProtocol
     
     // MARK: - Setup

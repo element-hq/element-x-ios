@@ -33,9 +33,9 @@ final class RootRouter: RootRouterType {
     
     let window: UIWindow
     
-    /// The root view controller currently presented    
+    /// The root view controller currently presented
     var rootViewController: UIViewController? {
-        return self.window.rootViewController
+        window.rootViewController
     }
     
     // MARK: - Setup
@@ -47,23 +47,23 @@ final class RootRouter: RootRouterType {
     // MARK: - Public methods
     
     func setRootModule(_ module: Presentable) {
-        self.updateRootViewController(rootViewController: module.toPresentable(), animated: false, completion: nil)
-        self.window.makeKeyAndVisible()
+        updateRootViewController(rootViewController: module.toPresentable(), animated: false, completion: nil)
+        window.makeKeyAndVisible()
     }
     
     func dismissRootModule(animated: Bool, completion: (() -> Void)?) {
-        self.updateRootViewController(rootViewController: nil, animated: animated, completion: completion)
+        updateRootViewController(rootViewController: nil, animated: animated, completion: completion)
     }
     
     func presentModule(_ module: Presentable, animated: Bool, completion: (() -> Void)?) {
-        let viewControllerPresenter = self.rootViewController?.presentedViewController ?? self.rootViewController
+        let viewControllerPresenter = rootViewController?.presentedViewController ?? rootViewController
         
         viewControllerPresenter?.present(module.toPresentable(), animated: animated, completion: completion)
-        self.presentedModule = module
+        presentedModule = module
     }
     
     func dismissModule(animated: Bool, completion: (() -> Void)?) {
-        self.presentedModule?.toPresentable().dismiss(animated: animated, completion: completion)
+        presentedModule?.toPresentable().dismiss(animated: animated, completion: completion)
     }
     
     // MARK: - Private methods
@@ -76,11 +76,11 @@ final class RootRouter: RootRouterType {
                 UIView.setAnimationsEnabled(false)
                 self.window.rootViewController = rootViewController
                 UIView.setAnimationsEnabled(oldState)
-            }, completion: { (_: Bool) -> Void in
+            }, completion: { _ in
                 completion?()
             })
         } else {
-            self.window.rootViewController = rootViewController
+            window.rootViewController = rootViewController
             completion?()
         }
     }
