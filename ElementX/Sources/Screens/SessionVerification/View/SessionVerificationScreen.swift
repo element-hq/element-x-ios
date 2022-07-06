@@ -18,7 +18,6 @@ import MatrixRustSDK
 import SwiftUI
 
 struct SessionVerificationScreen: View {
-    
     @ObservedObject var context: SessionVerificationViewModel.Context
     
     // MARK: Views

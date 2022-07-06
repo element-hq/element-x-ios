@@ -18,7 +18,6 @@ import Foundation
 
 @MainActor
 protocol BugReportViewModelProtocol {
-    
     var callback: ((BugReportViewModelAction) -> Void)? { get set }
     @available(iOS 14, *)
     var context: BugReportViewModelType.Context { get }

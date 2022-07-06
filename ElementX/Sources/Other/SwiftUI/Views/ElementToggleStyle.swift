@@ -10,7 +10,6 @@ import SwiftUI
 
 /// A toggle style that uses a button, with a checked/unchecked image like a checkbox.
 struct ElementToggleStyle: ToggleStyle {
-
     func makeBody(configuration: Configuration) -> some View {
         Button { configuration.isOn.toggle() } label: {
             Image(systemName: configuration.isOn ? "checkmark.square.fill" : "square")

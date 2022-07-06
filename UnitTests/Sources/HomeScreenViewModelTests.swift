@@ -19,7 +19,6 @@ import XCTest
 @testable import ElementX
 
 class HomeScreenViewModelTests: XCTestCase {
-
     var viewModel: HomeScreenViewModelProtocol!
     var context: HomeScreenViewModelType.Context!
 
@@ -63,5 +62,4 @@ class HomeScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssert(correctResult)
     }
-
 }

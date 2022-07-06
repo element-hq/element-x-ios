@@ -10,7 +10,6 @@ import Foundation
 
 @MainActor
 class MemberDetailProviderManager {
-    
     private var memberDetailProviders: [String: MemberDetailProviderProtocol] = [:]
     
     func memberDetailProviderForRoomProxy(_ roomProxy: RoomProxyProtocol) -> MemberDetailProviderProtocol {

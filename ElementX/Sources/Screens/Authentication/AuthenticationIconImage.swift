@@ -18,7 +18,6 @@ import SwiftUI
 
 /// An image that is styled for use as the screen icon in the onboarding flow.
 struct AuthenticationIconImage: View {
-    
     let image: ImageAsset
     
     var body: some View {

@@ -10,7 +10,6 @@ import DTCoreText
 import Foundation
 
 struct AttributedStringBuilder: AttributedStringBuilderProtocol {
-    
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
@@ -159,7 +158,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     private func addLinks(_ attributedString: NSMutableAttributedString) {
-        
         let string = attributedString.string
         let range = NSRange(location: 0, length: attributedString.string.count)
         

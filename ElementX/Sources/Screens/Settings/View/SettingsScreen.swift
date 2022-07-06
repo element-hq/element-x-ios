@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-
     // MARK: Private
 
     @State private var showingLogoutConfirmation = false

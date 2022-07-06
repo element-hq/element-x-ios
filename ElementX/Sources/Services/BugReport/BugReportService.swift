@@ -213,7 +213,6 @@ class BugReportService: BugReportServiceProtocol {
 
         return zippedFiles
     }
-
 }
 
 private extension Data {

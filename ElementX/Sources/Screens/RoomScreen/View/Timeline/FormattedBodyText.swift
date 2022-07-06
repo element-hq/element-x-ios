@@ -39,7 +39,6 @@ struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
-        
     }
     
     @ViewBuilder

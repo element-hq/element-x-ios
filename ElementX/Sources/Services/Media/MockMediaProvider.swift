@@ -10,7 +10,6 @@ import Foundation
 import UIKit
 
 struct MockMediaProvider: MediaProviderProtocol {
-    
     func imageFromSource(_ source: MediaSource?) -> UIImage? {
         nil
     }

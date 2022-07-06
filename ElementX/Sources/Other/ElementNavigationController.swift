@@ -9,10 +9,8 @@
 import UIKit
 
 class ElementNavigationController: UINavigationController {
-
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         navigationBar.topItem?.backButtonDisplayMode = .minimal
     }
-
 }

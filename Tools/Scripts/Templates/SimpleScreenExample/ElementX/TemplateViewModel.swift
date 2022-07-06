@@ -19,7 +19,6 @@ import SwiftUI
 typealias TemplateViewModelType = StateStoreViewModel<TemplateViewState, TemplateViewAction>
 
 class TemplateViewModel: TemplateViewModelType, TemplateViewModelProtocol {
-
     // MARK: - Properties
 
     // MARK: Private

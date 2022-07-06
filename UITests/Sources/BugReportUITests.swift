@@ -18,7 +18,6 @@ import ElementX
 import XCTest
 
 class BugReportUITests: XCTestCase {
-
     func testInitialStateComponents() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.bugReport)
@@ -85,7 +84,6 @@ class BugReportUITests: XCTestCase {
         XCTAssertEqual(sendButton.label, ElementL10n.actionSend)
         XCTAssertFalse(sendButton.isEnabled)
     }
-
 }
 
 extension XCUIElement {

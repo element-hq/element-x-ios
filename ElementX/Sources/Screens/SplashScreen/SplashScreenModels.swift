@@ -38,7 +38,6 @@ enum SplashScreenViewModelAction {
 // MARK: View
 
 struct SplashScreenViewState: BindableState {
-    
     /// The colours of the background gradient shown behind the 4 pages.
     private let gradientColors = [
         Color(red: 0.95, green: 0.98, blue: 0.96),

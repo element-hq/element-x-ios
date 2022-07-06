@@ -19,7 +19,6 @@ import Kingfisher
 import MatrixRustSDK
 
 class UserSessionStore: UserSessionStoreProtocol {
-    
     private let keychainController: KeychainControllerProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     

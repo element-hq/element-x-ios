@@ -17,7 +17,6 @@
 import UIKit
 
 final class ActivityIndicatorView: UIView {
-    
     // MARK: - Constants
     
     private enum Constants {

@@ -19,7 +19,6 @@ import SwiftUI
 /// Fonts at  https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1362%3A0
 @objcMembers
 public class ElementSharedFonts {
-    
     // MARK: - Types
     
     /// A wrapper to provide both a `UIFont` and a SwiftUI `Font` in the same type.
@@ -43,7 +42,6 @@ public class ElementSharedFonts {
 // MARK: - Fonts protocol
 
 public extension ElementSharedFonts {
-    
     var largeTitle: SharedFont {
         let uiFont = font(forTextStyle: .largeTitle)
         return SharedFont(uiFont: uiFont, font: .largeTitle)

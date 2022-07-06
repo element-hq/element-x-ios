@@ -10,7 +10,6 @@ import Foundation
 import SwiftUI
 
 struct TimelineSenderAvatarView: View {
-
     let timelineItem: EventBasedTimelineItemProtocol
 
     @ScaledMetric private var avatarSize = 26
@@ -35,5 +34,4 @@ struct TimelineSenderAvatarView: View {
 
         .animation(.default, value: timelineItem.senderAvatar)
     }
-
 }

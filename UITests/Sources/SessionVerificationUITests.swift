@@ -18,7 +18,6 @@ import ElementX
 import XCTest
 
 class SessionVerificationUITests: XCTestCase {
-    
     func testChallengeMatches() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)

@@ -11,7 +11,6 @@ import Introspect
 import SwiftUI
 
 struct TimelineItemList: View {
-    
     @State private var tableViewObserver = ListTableViewAdapter()
     @State private var timelineItems: [RoomTimelineViewProvider] = []
     @State private var hasPendingChanges = false

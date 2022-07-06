@@ -10,7 +10,6 @@
 import XCTest
 
 class LoggingTests: XCTestCase {
-
     private enum Constants {
         static let genericFailure = "Test failed"
     }
@@ -92,5 +91,4 @@ class LoggingTests: XCTestCase {
 
         XCTAssertTrue(logFile.contains(subLogName))
     }
-
 }

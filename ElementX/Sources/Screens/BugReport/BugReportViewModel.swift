@@ -21,7 +21,6 @@ typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState,
     BugReportViewAction>
 @available(iOS 14, *)
 class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
-
     // MARK: - Properties
 
     let bugReportService: BugReportServiceProtocol

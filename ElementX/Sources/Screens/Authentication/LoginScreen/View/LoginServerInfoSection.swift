@@ -19,7 +19,6 @@ import SwiftUI
 /// A view that shows information about the chosen homeserver,
 /// along with an edit button to pick a different one.
 struct LoginServerInfoSection: View {
-    
     // MARK: - Public
     
     /// The address shown for the server.

@@ -18,7 +18,6 @@ import ElementX
 import XCTest
 
 class SettingsUITests: XCTestCase {
-
     func testInitialStateComponents() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.settings)
@@ -37,5 +36,4 @@ class SettingsUITests: XCTestCase {
         XCTAssert(logoutButton.exists)
         XCTAssertEqual(logoutButton.label, ElementL10n.logout)
     }
-
 }

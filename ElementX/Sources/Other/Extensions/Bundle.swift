@@ -9,7 +9,6 @@
 import Foundation
 
 public extension Bundle {
-
     /// Get an lproj language bundle from the receiver bundle.
     /// - Parameter language: The language to try to load.
     /// - Returns: The lproj bundle if found otherwise nil.
@@ -46,5 +45,4 @@ public extension Bundle {
             .compactMap { $0 }
             .filter { set.insert($0).inserted }
     }
-
 }

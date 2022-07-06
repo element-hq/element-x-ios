@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct BugReportScreen: View {
-
     // MARK: Private
     
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass

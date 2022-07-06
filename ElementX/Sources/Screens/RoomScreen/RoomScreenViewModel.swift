@@ -19,7 +19,6 @@ import SwiftUI
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
-    
     private enum Constants {
         static let backPaginationPageSize: UInt = 30
     }

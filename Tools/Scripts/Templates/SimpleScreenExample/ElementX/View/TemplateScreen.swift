@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct TemplateScreen: View {
-
     // MARK: Private
     
     @Environment(\.colorScheme) private var colorScheme

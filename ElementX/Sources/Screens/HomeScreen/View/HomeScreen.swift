@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct HomeScreen: View {
-    
     @ObservedObject var context: HomeScreenViewModel.Context
     
     // MARK: Views
@@ -30,7 +29,6 @@ struct HomeScreen: View {
                     ProgressView()
                 }
             } else {
-                
                 if context.viewState.showSessionVerificationBanner {
                     HStack {
                         Text(ElementL10n.verificationVerifyDevice)
@@ -115,7 +113,6 @@ struct HomeScreen: View {
 }
 
 struct RoomCell: View {
-    
     @ScaledMetric private var avatarSize = 32.0
     
     let room: HomeScreenRoom

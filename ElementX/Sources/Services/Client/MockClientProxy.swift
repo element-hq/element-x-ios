@@ -10,7 +10,6 @@ import Combine
 import MatrixRustSDK
 
 struct MockClientProxy: ClientProxyProtocol {
-    
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userIdentifier: String

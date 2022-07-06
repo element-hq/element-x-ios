@@ -18,7 +18,6 @@ import UIKit
 
 /// `NavigationRouterStore` enables to get a NavigationRouter from a UINavigationController instance.
 class NavigationRouterStore: NavigationRouterStoreProtocol {
-    
     // MARK: - Constants
     
     static let shared = NavigationRouterStore()
@@ -39,7 +38,6 @@ class NavigationRouterStore: NavigationRouterStoreProtocol {
     // MARK: - Public
     
     func navigationRouter(for navigationController: UINavigationController) -> NavigationRouterType {
-        
         if let existingNavigationRouter = findNavigationRouter(for: navigationController) {
             return existingNavigationRouter
         }
@@ -64,7 +62,6 @@ class NavigationRouterStore: NavigationRouterStoreProtocol {
     }
     
     @objc private func navigationRouterDidCreate(_ notification: Notification) {
-                
         guard let userInfo = notification.userInfo,
               let navigationRouter = userInfo[NavigationRouter.NotificationUserInfoKey.navigationRouter] as? NavigationRouterType,
               let navigationController = userInfo[NavigationRouter.NotificationUserInfoKey.navigationController] as? UINavigationController else {

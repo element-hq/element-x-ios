@@ -10,7 +10,6 @@ import Combine
 import Foundation
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
-    
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     var timelineItems: [RoomTimelineItemProtocol] = [SeparatorRoomTimelineItem(id: UUID().uuidString,

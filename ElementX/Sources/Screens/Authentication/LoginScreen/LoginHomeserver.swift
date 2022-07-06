@@ -85,5 +85,4 @@ extension LoginHomeserver {
                         isMatrixDotOrg: false,
                         loginMode: .unsupported)
     }
-
 }

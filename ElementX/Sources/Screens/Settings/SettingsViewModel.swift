@@ -21,7 +21,6 @@ typealias SettingsViewModelType = StateStoreViewModel<SettingsViewState,
     SettingsViewAction>
 @available(iOS 14, *)
 class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
-
     // MARK: - Properties
 
     // MARK: Private

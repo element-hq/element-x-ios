@@ -29,11 +29,9 @@ extension UIViewController: Presentable {
 }
 
 extension Presentable {
-    
     /// Returns a new module from the presentable without a pop completion block
     /// - Returns: Module
     func toModule() -> NavigationModule {
         NavigationModule(presentable: self, popCompletion: nil)
     }
-    
 }

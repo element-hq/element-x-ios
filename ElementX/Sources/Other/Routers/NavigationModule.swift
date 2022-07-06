@@ -28,9 +28,7 @@ struct NavigationModule {
 // MARK: - CustomStringConvertible
 
 extension NavigationModule: CustomStringConvertible {
-    
     var description: String {
         "NavigationModule: \(presentable), pop completion: \(String(describing: popCompletion))"
     }
-    
 }

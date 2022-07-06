@@ -15,7 +15,6 @@ enum ImageAnonymizerError: Error {
 }
 
 enum ImageAnonymizer {
-
     private static var allowedTextItems: [String] = [
         "#",
         "@",
@@ -113,5 +112,4 @@ enum ImageAnonymizer {
         }
         return result
     }
-
 }

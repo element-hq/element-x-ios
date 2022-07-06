@@ -20,7 +20,6 @@ import SwiftUI
 typealias SplashScreenViewModelType = StateStoreViewModel<SplashScreenViewState, SplashScreenViewAction>
 
 class SplashScreenViewModel: SplashScreenViewModelType, SplashScreenViewModelProtocol {
-
     // MARK: - Properties
 
     // MARK: Private

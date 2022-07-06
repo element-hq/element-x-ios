@@ -21,7 +21,6 @@ import XCTest
 
 @MainActor
 class SessionVerificationViewModelTests: XCTestCase {
-    
     var viewModel: SessionVerificationViewModelProtocol!
     var context: SessionVerificationViewModelType.Context!
     var sessionVerificationController: SessionVerificationControllerProxyProtocol!
@@ -70,7 +69,6 @@ class SessionVerificationViewModelTests: XCTestCase {
     }
     
     func testAcceptChallenge() {
-        
         setupChallengeReceived()
         
         let waitForAcceptance = XCTestExpectation(description: "Wait for acceptance")
@@ -98,7 +96,6 @@ class SessionVerificationViewModelTests: XCTestCase {
     }
     
     func testDeclineChallenge() {
-        
         setupChallengeReceived()
         
         let expectation = XCTestExpectation(description: "Wait for cancellation")

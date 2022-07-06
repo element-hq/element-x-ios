@@ -19,7 +19,6 @@ import SwiftUI
 typealias SessionVerificationViewModelType = StateStoreViewModel<SessionVerificationViewState, SessionVerificationViewAction>
 
 class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVerificationViewModelProtocol {
-
     // MARK: - Properties
 
     // MARK: Private
@@ -36,7 +35,6 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
          initialState: SessionVerificationViewState = SessionVerificationViewState()) {
-        
         self.sessionVerificationControllerProxy = sessionVerificationControllerProxy
         
         stateMachine = SessionVerificationStateMachine()

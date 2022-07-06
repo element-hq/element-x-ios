@@ -20,7 +20,6 @@ import SwiftUI
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
-    
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var roomUpdateListeners = Set<AnyCancellable>()
@@ -82,7 +81,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 }
                 .store(in: &roomUpdateListeners)
         }
-        
     }
     
     func updateWithUserAvatar(_ avatar: UIImage) {

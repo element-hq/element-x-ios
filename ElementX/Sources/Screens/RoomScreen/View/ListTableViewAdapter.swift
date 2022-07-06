@@ -10,7 +10,6 @@ import Combine
 import UIKit
 
 class ListTableViewAdapter: NSObject, UITableViewDelegate {
-    
     private enum ContentOffsetDetails {
         case topOffset(previousVisibleIndexPath: IndexPath, previousItemCount: Int)
         case bottomOffset

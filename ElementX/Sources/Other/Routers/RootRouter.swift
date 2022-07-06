@@ -18,7 +18,6 @@ import UIKit
 
 /// `RootRouter` is a concrete implementation of RootRouterType.
 final class RootRouter: RootRouterType {
-    
     // MARK: - Constants
     
     // `rootViewController` animation constants
@@ -69,7 +68,6 @@ final class RootRouter: RootRouterType {
     // MARK: - Private methods
     
     private func updateRootViewController(rootViewController: UIViewController?, animated: Bool, completion: (() -> Void)?) {
-        
         if animated {
             UIView.transition(with: window, duration: RootViewControllerUpdateAnimation.duration, options: RootViewControllerUpdateAnimation.options, animations: {
                 let oldState: Bool = UIView.areAnimationsEnabled

@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct ServerSelectionScreen: View {
-
     // MARK: - Properties
     
     // MARK: Private

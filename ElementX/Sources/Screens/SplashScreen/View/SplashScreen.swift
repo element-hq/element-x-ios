@@ -19,7 +19,6 @@ import SwiftUI
 
 /// The splash screen shown at the beginning of the onboarding flow.
 struct SplashScreen: View {
-
     // MARK: - Properties
     
     // MARK: Private
@@ -47,7 +46,6 @@ struct SplashScreen: View {
                 
                 // The main content of the carousel
                 HStack(alignment: .top, spacing: 0) {
-                    
                     // Add a hidden page at the start of the carousel duplicating the content of the last page
                     SplashScreenPageView(content: context.viewState.content[pageCount - 1])
                         .frame(width: geometry.size.width)
@@ -57,7 +55,6 @@ struct SplashScreen: View {
                         SplashScreenPageView(content: context.viewState.content[index])
                             .frame(width: geometry.size.width)
                     }
-                    
                 }
                 .offset(x: pageOffset(in: geometry))
                 

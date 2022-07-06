@@ -21,7 +21,6 @@ import UIKit
 /// It helps to isolate and reuse view controllers and pass dependencies down the navigation hierarchy.
 @MainActor
 protocol Coordinator: AnyObject {
-    
     /// Starts job of the coordinator.
     func start()
     
@@ -41,7 +40,6 @@ protocol Coordinator: AnyObject {
 
 // `Coordinator` default implementation
 extension Coordinator {
-    
     func add(childCoordinator coordinator: Coordinator) {
         childCoordinators.append(coordinator)
     }

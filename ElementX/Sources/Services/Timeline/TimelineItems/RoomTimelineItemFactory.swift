@@ -67,7 +67,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    _ showSenderDetails: Bool,
                                                    _ displayName: String?,
                                                    _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
-        
         var aspectRatio: CGFloat?
         if let width = message.width,
            let height = message.height {

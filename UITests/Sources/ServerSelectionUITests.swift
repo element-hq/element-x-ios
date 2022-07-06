@@ -19,7 +19,6 @@ import XCTest
 
 @MainActor
 class ServerSelectionUITests: XCTestCase {
-    
     let textFieldIdentifier = "addressTextField"
     
     func testNormalState() async {

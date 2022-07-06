@@ -26,7 +26,6 @@ enum SettingsCoordinatorAction {
 }
 
 final class SettingsCoordinator: Coordinator, Presentable {
-    
     // MARK: - Properties
     
     // MARK: Private
