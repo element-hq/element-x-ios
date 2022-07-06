@@ -6,8 +6,8 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import XCTest
 import SnapshotTesting
+import XCTest
 
 struct Application {
     static func launch() -> XCUIApplication {
@@ -38,7 +38,8 @@ extension XCUIApplication {
             matching: self,
             as: .image,
             named: identifier.rawValue,
-            testName: testName)
+            testName: testName
+        )
 
         if let failure = failure,
            !failure.contains("No reference was found on disk."),
@@ -64,7 +65,8 @@ extension XCUIApplication {
     }
 }
 
-extension Snapshotting where Value == XCUIElement, Format == UIImage {
-    public static let image: Snapshotting =
-    Snapshotting<UIImage, UIImage>.image.pullback { element in element.screenshot().image }
+public extension Snapshotting where Value == XCUIElement, Format == UIImage {
+    // swiftformat:disable:next redundanttype
+    static let image: Snapshotting =
+        Snapshotting<UIImage, UIImage>.image.pullback { element in element.screenshot().image }
 }
