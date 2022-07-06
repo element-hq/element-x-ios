@@ -24,4 +24,5 @@ for device in devices:
         os.system("/usr/bin/xcrun simctl boot '" + UDID + "' > /dev/null 2>&1")
         os.system("/usr/bin/xcrun simctl status_bar '" + UDID + "' override --time '2007-01-09T09:41:00+00:00' --dataNetwork 'wifi' --wifiMode 'active' --wifiBars 3 --cellularMode 'active' --cellularBars 4 --batteryState 'charged' --batteryLevel 100 > /dev/null 2>&1")
         os.system("/usr/bin/xcrun simctl status_bar '" + UDID + "' override --time '09:41' > /dev/null 2>&1")
+        print("Simulator booted and status bar overriden")
         break
