@@ -5,10 +5,6 @@
       "name" : "English",
       "options" : {
         "language" : "en",
-        "locationScenario" : {
-          "identifier" : "London, England",
-          "referenceType" : "built-in"
-        },
         "region" : "GB"
       }
     },
@@ -17,10 +13,6 @@
       "name" : "French",
       "options" : {
         "language" : "fr",
-        "locationScenario" : {
-          "identifier" : "London, England",
-          "referenceType" : "built-in"
-        },
         "region" : "FR"
       }
     },
@@ -29,10 +21,6 @@
       "name" : "German",
       "options" : {
         "language" : "de",
-        "locationScenario" : {
-          "identifier" : "London, England",
-          "referenceType" : "built-in"
-        },
         "region" : "DE"
       }
     }
@@ -47,6 +35,10 @@
         "value" : "\/tmp\/__FailedScreenshots__"
       }
     ],
+    "locationScenario" : {
+      "identifier" : "London, England",
+      "referenceType" : "built-in"
+    },
     "mainThreadCheckerEnabled" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:ElementX.xcodeproj",
