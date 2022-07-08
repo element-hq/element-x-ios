@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -281,6 +281,7 @@
 		EA31DD9043B91ECB8E45A9A6 /* ScreenshotDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C9D319676F3C0DC6B0203 /* ScreenshotDetectorTests.swift */; };
 		EA65360A0EC026DD83AC0CF5 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CA5F386C7701C129398945 /* AuthenticationCoordinator.swift */; };
 		EBD6C79705B3DDB2F7E5F554 /* UserSessionStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1B52D0ABBA7091A991CAFE /* UserSessionStoreProtocol.swift */; };
+		ECF270B128785CE50030E67F /* ElementAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF270B028785CE50030E67F /* ElementAnimations.swift */; };
 		EE4F5601356228FF72FC56B6 /* MockClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40F48279322E504153AB0D /* MockClientProxy.swift */; };
 		EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */; };
 		EEC40663922856C65D1E0DF5 /* KeychainControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C37196A4C79F24CE80C6 /* KeychainControllerTests.swift */; };
@@ -681,6 +682,7 @@
 		E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		E9D059BFE329BE09B6D96A9F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ro; path = ro.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EBE5502760CF6CA2D7201883 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ja; path = ja.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		ECF270B028785CE50030E67F /* ElementAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementAnimations.swift; sourceTree = "<group>"; };
 		ED1D792EB82506A19A72C8DE /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		EDAA4472821985BF868CC21C /* ServerSelectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionViewModelTests.swift; sourceTree = "<group>"; };
 		EDB6E40BAD4504D899FAAC9A /* TemplateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewModel.swift; sourceTree = "<group>"; };
@@ -759,6 +761,7 @@
 		052CC920F473C10B509F9FC1 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				ECF270AF28785CD40030E67F /* Animation */,
 				595B8797ED6A7489ABDCE384 /* ErrorHandling */,
 				CE2FBFD64A89F5DBE4EB30DB /* Layout */,
 				10578D9852BA78D309A1CBDF /* ViewModel */,
@@ -1567,6 +1570,14 @@
 			path = Background;
 			sourceTree = "<group>";
 		};
+		ECF270AF28785CD40030E67F /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				ECF270B028785CE50030E67F /* ElementAnimations.swift */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
 		F8474EB69289112888B65518 /* UserIndicators */ = {
 			isa = PBXGroup;
 			children = (
@@ -2178,6 +2189,7 @@
 				10866439ABA58CCDB5D1459D /* UserIndicatorQueue.swift in Sources */,
 				15D1F9C415D9C921643BA82E /* UserIndicatorRequest.swift in Sources */,
 				C052A8CDC7A8E7A2D906674F /* UserIndicatorStore.swift in Sources */,
+				ECF270B128785CE50030E67F /* ElementAnimations.swift in Sources */,
 				80E04BE80A89A78FBB4863BB /* UserIndicatorViewPresentable.swift in Sources */,
 				8AB8ED1051216546CB35FA0E /* UserSession.swift in Sources */,
 				978BB24F2A5D31EE59EEC249 /* UserSessionProtocol.swift in Sources */,

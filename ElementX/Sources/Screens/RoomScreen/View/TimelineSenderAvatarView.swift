@@ -32,6 +32,6 @@ struct TimelineSenderAvatarView: View {
                 .stroke(Color.element.background, lineWidth: 2)
         )
 
-        .animation(.default, value: timelineItem.senderAvatar)
+        .animation(.elementDefault, value: timelineItem.senderAvatar)
     }
 }
