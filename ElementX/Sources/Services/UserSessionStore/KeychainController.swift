@@ -33,13 +33,13 @@ class KeychainController: KeychainControllerProtocol {
         }
     }
     
-    func accessTokens() -> [(username: String, accessToken: String)] {
+    func accessTokens() -> [KeychainCredentials] {
         keychain.allKeys().compactMap { username in
             guard let accessToken = accessTokenForUsername(username) else {
                 return nil
             }
             
-            return (username, accessToken)
+            return KeychainCredentials(username: username, accessToken: accessToken)
         }
     }
     

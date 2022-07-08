@@ -76,16 +76,16 @@ class UserSessionStore: UserSessionStoreProtocol {
         deleteSessionDirectory(for: username)
     }
     
-    private func restorePreviousLogin(_ usernameTokenTuple: (username: String, accessToken: String)) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
+    private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
         
         let builder = ClientBuilder()
             .basePath(path: baseDirectoryPath)
-            .username(username: usernameTokenTuple.username)
+            .username(username: credentials.username)
         
         let loginTask: Task<Client, Error> = Task.detached {
             let client = try builder.build()
-            try client.restoreLogin(restoreToken: usernameTokenTuple.accessToken)
+            try client.restoreLogin(restoreToken: credentials.accessToken)
             return client
         }
         
@@ -115,8 +115,13 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     private func deleteSessionDirectory(for username: String) {
-        let url = baseDirectory().appendingPathComponent(username)
-        try? FileManager.default.removeItem(at: url)
+        let sanitisedUsername = username.replacingOccurrences(of: ":", with: "_")
+        let url = baseDirectory().appendingPathComponent(sanitisedUsername)
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            MXLog.failure("Failed deleting the session data: \(error)")
+        }
     }
     
     func baseDirectory() -> URL {
