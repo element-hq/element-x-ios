@@ -46,9 +46,7 @@ jobs:
         if: always()
         with:
           name: failed-screenshots
-          path: |
-            /tmp/__FailedScreenshots__
-            UITests/Sources/__Snapshots__
+          path: /tmp/__FailedScreenshots__
           retention-days: 7
           if-no-files-found: ignore
 
