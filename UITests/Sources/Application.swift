@@ -34,12 +34,16 @@ extension XCUIApplication {
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
     /// - Parameter identifier: Identifier of the UI test screen
     func assertScreenshot(_ identifier: UITestScreenIdentifier) {
-        let failure = verifySnapshot(
-            matching: self,
-            as: .image,
-            named: identifier.rawValue,
-            testName: testName
-        )
+        let failure = verifySnapshot(matching: screenshot().image,
+                                     as: .image(precision: 0.99, scale: nil),
+                                     named: identifier.rawValue,
+                                     testName: testName)
+//        let failure = verifySnapshot(
+//            matching: self,
+//            as: .image,
+//            named: identifier.rawValue,
+//            testName: testName
+//        )
 
         if let failure = failure,
            !failure.contains("No reference was found on disk."),
@@ -65,8 +69,8 @@ extension XCUIApplication {
     }
 }
 
-public extension Snapshotting where Value == XCUIElement, Format == UIImage {
-    // swiftformat:disable:next redundanttype
-    static let image: Snapshotting =
-        Snapshotting<UIImage, UIImage>.image.pullback { element in element.screenshot().image }
-}
+// public extension Snapshotting where Value == XCUIElement, Format == UIImage {
+//    // swiftformat:disable:next redundanttype
+//    static let image: Snapshotting =
+//        Snapshotting<UIImage, UIImage>.image.pullback { element in element.screenshot().image }
+// }
