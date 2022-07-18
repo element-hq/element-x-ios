@@ -54,18 +54,18 @@ struct MediaProvider: MediaProviderProtocol {
             loadImageBgTask?.stop()
         }
         
-        let cachedImageLoadResult = await withCheckedContinuation { continuation in
-            imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
-                continuation.resume(returning: result)
-            }
-        }
-        
-        if case let .success(cacheResult) = cachedImageLoadResult,
-           let image = cacheResult.image {
-            return .success(image)
-        }
-        
         return await Task.detached { () -> Result<UIImage, MediaProviderError> in
+            let cachedImageLoadResult = await withCheckedContinuation { continuation in
+                imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
+                    continuation.resume(returning: result)
+                }
+            }
+            
+            if case let .success(cacheResult) = cachedImageLoadResult,
+               let image = cacheResult.image {
+                return .success(image)
+            }
+            
             do {
                 let imageData = try clientProxy.loadMediaContentForSource(source.underlyingSource)
                 
