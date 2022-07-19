@@ -30,16 +30,17 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     // MARK: - Public
     
-    func useServer(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
+    func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
         let task = Task.detached { () -> LoginHomeserver in
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            try self.authenticationService.useServer(serverName: homeserver.address)
+            try self.authenticationService.configureHomeserver(serverName: homeserver.address)
             
-            if let authenticationIssuer = try self.authenticationService.authenticationIssuer(),
-               let issuerURL = URL(string: authenticationIssuer) {
+            guard let details = self.authenticationService.homeserverDetails() else { return homeserver }
+            
+            if let issuer = details.authenticationIssuer(), let issuerURL = URL(string: issuer) {
                 homeserver.loginMode = .oidc(issuerURL)
-            } else if try self.authenticationService.supportsPasswordLogin() {
+            } else if details.supportsPasswordLogin() {
                 homeserver.loginMode = .password
             } else {
                 homeserver.loginMode = .unsupported
@@ -52,7 +53,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         case .success(let homeserver):
             self.homeserver = homeserver
             return .success(())
-        case .failure(let error):
+        case .failure:
             return .failure(.invalidHomeserverAddress)
         }
     }

@@ -12,7 +12,7 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     let validCredentials = (username: "alice", password: "12345678")
     private(set) var homeserver: LoginHomeserver = .mockMatrixDotOrg
     
-    func useServer(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
+    func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
         // Map the address to the mock homeservers
         if LoginHomeserver.mockMatrixDotOrg.address.contains(homeserverAddress) {
             homeserver = .mockMatrixDotOrg

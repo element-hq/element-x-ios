@@ -103,7 +103,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
         startLoading()
         
         Task {
-            switch await authenticationService.useServer(for: homeserverAddress) {
+            switch await authenticationService.configure(for: homeserverAddress) {
             case .success:
                 callback?(.updated)
                 stopLoading()

@@ -21,7 +21,7 @@ protocol AuthenticationServiceProxyProtocol {
     var homeserver: LoginHomeserver { get }
     
     /// Sets up the service for login on the specified homeserver address.
-    func useServer(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
+    func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }

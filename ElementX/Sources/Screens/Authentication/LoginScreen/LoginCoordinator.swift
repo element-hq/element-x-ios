@@ -163,7 +163,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         startLoading(isInteractionBlocking: false)
         
         Task {
-            switch await authenticationService.useServer(for: homeserverDomain) {
+            switch await authenticationService.configure(for: homeserverDomain) {
             case .success:
                 updateViewModel()
                 stopLoading()
