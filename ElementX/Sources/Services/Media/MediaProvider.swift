@@ -55,13 +55,7 @@ struct MediaProvider: MediaProviderProtocol {
         }
         
         return await Task.detached { () -> Result<UIImage, MediaProviderError> in
-            let cachedImageLoadResult = await withCheckedContinuation { continuation in
-                imageCache.retrieveImage(forKey: source.underlyingSource.url()) { result in
-                    continuation.resume(returning: result)
-                }
-            }
-            
-            if case let .success(cacheResult) = cachedImageLoadResult,
+            if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: source.underlyingSource.url()),
                let image = cacheResult.image {
                 return .success(image)
             }
@@ -83,5 +77,15 @@ struct MediaProvider: MediaProviderProtocol {
             }
         }
         .value
+    }
+}
+
+private extension ImageCache {
+    func retrieveImage(forKey key: String) async -> Result<ImageCacheResult, KingfisherError> {
+        await withCheckedContinuation { continuation in
+            retrieveImage(forKey: key) { result in
+                continuation.resume(returning: result)
+            }
+        }
     }
 }
