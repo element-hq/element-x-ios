@@ -72,8 +72,7 @@ struct LoginScreen: View {
     
     /// The sever information section that includes a button to select a different server.
     var serverInfo: some View {
-        LoginServerInfoSection(address: context.viewState.homeserver.address,
-                               showMatrixDotOrgInfo: context.viewState.homeserver.isMatrixDotOrg) {
+        LoginServerInfoSection(address: context.viewState.homeserver.address) {
             context.send(viewAction: .selectServer)
         }
     }

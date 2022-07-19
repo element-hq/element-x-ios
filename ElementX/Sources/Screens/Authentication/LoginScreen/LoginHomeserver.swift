@@ -20,8 +20,6 @@ import Foundation
 struct LoginHomeserver: Equatable {
     /// The homeserver string to be shown to the user.
     let address: String
-    /// Whether or not the homeserver is matrix.org.
-    let isMatrixDotOrg: Bool
     /// The types login supported by the homeserver.
     var loginMode: LoginMode
     
@@ -31,7 +29,6 @@ struct LoginHomeserver: Equatable {
         
         self.address = address
         self.loginMode = loginMode
-        isMatrixDotOrg = address == "matrix.org"
     }
     
     /// Sanitizes a user entered homeserver address with the following rules

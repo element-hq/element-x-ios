@@ -23,8 +23,6 @@ struct LoginServerInfoSection: View {
     
     /// The address shown for the server.
     let address: String
-    /// Whether or not to show the matrix.org description.
-    let showMatrixDotOrgInfo: Bool
     /// The action performed when tapping the edit button.
     let editAction: () -> Void
     
@@ -37,18 +35,9 @@ struct LoginServerInfoSection: View {
                 .foregroundColor(.element.secondaryContent)
             
             HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(address)
-                        .font(.element.body)
-                        .foregroundColor(.element.primaryContent)
-                    
-                    if showMatrixDotOrgInfo {
-                        Text(ElementL10n.authenticationServerInfoMatrixDescription)
-                            .font(.element.caption1)
-                            .foregroundColor(.element.tertiaryContent)
-                            .accessibilityIdentifier("serverDescriptionText")
-                    }
-                }
+                Text(address)
+                    .font(.element.body)
+                    .foregroundColor(.element.primaryContent)
                 
                 Spacer()
                 
