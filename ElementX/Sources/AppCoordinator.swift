@@ -7,6 +7,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import UIKit
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
@@ -71,13 +72,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         setupStateMachine()
         
-        let loggerConfiguration = MXLogConfiguration()
-        loggerConfiguration.logLevel = .verbose
-        // Redirect NSLogs to files only if we are not debugging
-        if isatty(STDERR_FILENO) == 0 {
-            loggerConfiguration.redirectLogsToFiles = true
-        }
-        MXLog.configure(loggerConfiguration)
+        setupLogging()
         
         // Benchmark.trackingEnabled = true
     }
@@ -96,6 +91,25 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     // MARK: - Private
+    
+    private func setupLogging() {
+        let loggerConfiguration = MXLogConfiguration()
+        
+        #if DEBUG
+        setupTracing(configuration: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        loggerConfiguration.logLevel = .debug
+        #else
+        setupTracing(configuration: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        loggerConfiguration.logLevel = .info
+        #endif
+        
+        // Redirect NSLogs to files only if we are not debugging
+        if isatty(STDERR_FILENO) == 0 {
+            loggerConfiguration.redirectLogsToFiles = true
+        }
+      
+        MXLog.configure(loggerConfiguration)
+    }
     
     // swiftlint:disable cyclomatic_complexity
     private func setupStateMachine() {

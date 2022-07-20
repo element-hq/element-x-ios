@@ -24,12 +24,12 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
                              isReusable: Bool,
                              expirationHandler: (() -> Void)?) -> BackgroundTaskProtocol? {
         guard let application = application else {
-            MXLog.debug("[UIKitBackgroundTaskService] Do not start background task: \(name). Application is nil")
+            MXLog.verbose("[UIKitBackgroundTaskService] Do not start background task: \(name). Application is nil")
             return nil
         }
 
         if avoidStartingNewTasks(for: application) {
-            MXLog.debug("[UIKitBackgroundTaskService] Do not start background task: \(name), as not enough time exists")
+            MXLog.verbose("[UIKitBackgroundTaskService] Do not start background task: \(name), as not enough time exists")
             //  call expiration handler immediately
             expirationHandler?()
             return nil
@@ -70,7 +70,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         let appState = application.applicationState
         let remainingTime = readableBackgroundTimeRemaining(application.backgroundTimeRemaining)
 
-        MXLog.debug("[UIKitBackgroundTaskService] Background task \(name) \(created ? "started" : "reused") with app state: \(appState) and estimated background time remaining: \(remainingTime)")
+        MXLog.verbose("[UIKitBackgroundTaskService] Background task \(name) \(created ? "started" : "reused") with app state: \(appState) and estimated background time remaining: \(remainingTime)")
 
         return result
     }

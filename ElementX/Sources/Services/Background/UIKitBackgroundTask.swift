@@ -49,7 +49,7 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
         }
 
         if identifier == .invalid {
-            MXLog.debug("[UIKitBackgroundTask] Do not start background task: \(name), as OS declined")
+            MXLog.verbose("[UIKitBackgroundTask] Do not start background task: \(name), as OS declined")
             //  call expiration handler immediately
             expirationHandler?(self)
             return nil
@@ -60,7 +60,7 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
             reuse()
         }
 
-        MXLog.debug("[UIKitBackgroundTask] Start background task #\(identifier.rawValue) - \(name)")
+        MXLog.verbose("[UIKitBackgroundTask] Start background task #\(identifier.rawValue) - \(name)")
     }
 
     func reuse() {
@@ -83,7 +83,7 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
 
     private func endTask() {
         if identifier != .invalid {
-            MXLog.debug("[UIKitBackgroundTask] End background task #\(identifier.rawValue) - \(name) after \(readableElapsedTime)")
+            MXLog.verbose("[UIKitBackgroundTask] End background task #\(identifier.rawValue) - \(name) after \(readableElapsedTime)")
 
             application.endBackgroundTask(identifier)
             identifier = .invalid
