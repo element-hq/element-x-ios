@@ -6,6 +6,7 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import AppAuth
 import Foundation
 import MatrixRustSDK
 
@@ -20,6 +21,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: Public
     
     private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverAddress, loginMode: .unknown)
+    var oidcUserAgent: OIDExternalUserAgentIOS?
     
     // MARK: - Setup
     
@@ -56,6 +58,45 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         case .failure(let error):
             MXLog.error("Failed configuring a server: \(error)")
             return .failure(.invalidHomeserverAddress)
+        }
+    }
+    
+    func loginWithOIDC() async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        guard
+            let oidcUserAgent = oidcUserAgent,
+            case let .oidc(issuerURL) = homeserver.loginMode
+        else {
+            return .failure(.oidcError(.notSupported))
+        }
+        
+        let token: String
+        let deviceID = generateDeviceID()
+        do {
+            let oidcService = OIDCService(issuerURL: issuerURL)
+            let configuration = try await oidcService.metadata()
+            let registationResponse = try await oidcService.registerClient(metadata: configuration)
+            let authResponse = try await oidcService.presentWebAuthentication(metadata: configuration,
+                                                                              clientID: registationResponse.clientID,
+                                                                              scope: "urn:matrix:device:\(deviceID)",
+                                                                              userAgent: oidcUserAgent)
+            let tokenResponse = try await oidcService.redeemCodeForTokens(authResponse: authResponse)
+            
+            guard let accessToken = tokenResponse.accessToken else { return .failure(.oidcError(.unknown)) }
+            token = accessToken
+        } catch let error as OIDCError {
+            MXLog.error("Login with OIDC failed: \(error)")
+            return .failure(.oidcError(error))
+        } catch {
+            MXLog.error("Login with OIDC failed: \(error)")
+            return .failure(.failedLoggingIn)
+        }
+        
+        do {
+            let client = try authenticationService.restoreWithAccessToken(token: token, deviceId: deviceID)
+            return await userSession(for: client)
+        } catch {
+            MXLog.debug(error)
+            return .failure(.failedLoggingIn)
         }
     }
     
@@ -96,5 +137,14 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         case .failure:
             return .failure(.failedLoggingIn)
         }
+    }
+    
+    private func generateDeviceID() -> String {
+        var deviceID = ""
+        for _ in 0..<10 {
+            guard let scalar = UnicodeScalar(Int.random(in: 65...90)) else { fatalError() }
+            deviceID.append(Character(scalar))
+        }
+        return deviceID
     }
 }

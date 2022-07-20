@@ -84,7 +84,7 @@ struct HomeScreen: View {
             }
         }
     }
-
+    
     @ViewBuilder
     private var userAvatarImage: some View {
         if let avatar = context.viewState.userAvatar {
@@ -94,21 +94,14 @@ struct HomeScreen: View {
                 .frame(width: 32, height: 32, alignment: .center)
                 .clipShape(Circle())
                 .accessibilityIdentifier("userAvatarImage")
-        } else {
-            EmptyView()
         }
     }
-
-    @ViewBuilder
+    
     private var userDisplayNameView: some View {
-        if let displayName = context.viewState.userDisplayName {
-            Text(displayName)
-                .font(.headline)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-        } else {
-            EmptyView()
-        }
+        Text(context.viewState.userDisplayName ?? "Unknown user")
+            .font(.headline)
+            .fontWeight(.bold)
+            .foregroundColor(.primary)
     }
 }
 

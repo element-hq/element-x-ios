@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "appauth-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/openid/AppAuth-iOS",
+      "state" : {
+        "revision" : "33660c271c961f8ce1084cc13f2ea8195e864f7d",
+        "version" : "1.5.0"
+      }
+    },
+    {
       "identity" : "dtcoretext",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Cocoanetics/DTCoreText",

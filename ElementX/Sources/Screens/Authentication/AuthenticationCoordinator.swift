@@ -110,8 +110,6 @@ class AuthenticationCoordinator: Coordinator, Presentable {
             switch action {
             case .signedIn(let userSession):
                 self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
-            case .continueWithOIDC:
-                break
             }
         }
         
