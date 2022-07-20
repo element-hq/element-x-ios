@@ -59,7 +59,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         self.roomSummaries = roomSummaries
         
         state.rooms = roomSummaries.map { roomSummary in
-            buildOrUpdateRoomFromSummary(roomSummary)
+            buildOrUpdateRoomForSummary(roomSummary)
         }
         
         roomUpdateListeners.removeAll()
@@ -72,10 +72,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                         return
                     }
                     
-                    switch callback {
-                    case .updatedData:
-                        if let index = self.state.rooms.firstIndex(where: { $0.id == roomSummary.id }) {
-                            self.state.rooms[index] = self.buildOrUpdateRoomFromSummary(roomSummary)
+                    if let index = self.state.rooms.firstIndex(where: { $0.id == roomSummary.id }) {
+                        switch callback {
+                        case .updatedLastMessage:
+                            var room = self.state.rooms[index]
+                            room.lastMessage = self.lastMessageFromEventBrief(roomSummary.lastMessage)
+                            self.state.rooms[index] = room
+                        default:
+                            self.state.rooms[index] = self.buildOrUpdateRoomForSummary(roomSummary)
                         }
                     }
                 }
@@ -110,14 +114,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         Task { await roomSummary.loadDetails() }
     }
     
-    private func buildOrUpdateRoomFromSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {
-        let lastMessage = lastMessageFromEventBrief(roomSummary.lastMessage)
-        
+    private func buildOrUpdateRoomForSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {
         guard var room = state.rooms.first(where: { $0.id == roomSummary.id }) else {
             return HomeScreenRoom(id: roomSummary.id,
                                   displayName: roomSummary.displayName,
                                   topic: roomSummary.topic,
-                                  lastMessage: lastMessage,
+                                  lastMessage: lastMessageFromEventBrief(roomSummary.lastMessage),
                                   avatar: roomSummary.avatar,
                                   isDirect: roomSummary.isDirect,
                                   isEncrypted: roomSummary.isEncrypted,
@@ -127,8 +129,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         room.avatar = roomSummary.avatar
         room.displayName = roomSummary.displayName
-        room.lastMessage = lastMessage
-        
+        room.topic = roomSummary.topic
+                
         return room
     }
     

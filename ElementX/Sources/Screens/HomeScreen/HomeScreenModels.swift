@@ -70,7 +70,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var displayName: String?
     
-    let topic: String?
+    var topic: String?
     var lastMessage: String?
     
     var avatar: UIImage?

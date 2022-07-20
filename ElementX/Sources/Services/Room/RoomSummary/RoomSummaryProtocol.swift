@@ -10,7 +10,9 @@ import Combine
 import UIKit
 
 enum RoomSummaryCallback {
-    case updatedData
+    case updatedAvatar
+    case updatedDisplayName
+    case updatedLastMessage
 }
 
 @MainActor
