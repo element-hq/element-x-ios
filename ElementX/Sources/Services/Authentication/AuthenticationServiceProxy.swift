@@ -34,7 +34,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         let task = Task.detached { () -> LoginHomeserver in
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            try self.authenticationService.configureHomeserver(serverName: homeserver.address)
+            try self.authenticationService.configureHomeserver(serverName: homeserverAddress)
             
             guard let details = self.authenticationService.homeserverDetails() else { return homeserver }
             
@@ -53,7 +53,8 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         case .success(let homeserver):
             self.homeserver = homeserver
             return .success(())
-        case .failure:
+        case .failure(let error):
+            MXLog.error("Failed configuring a server: \(error)")
             return .failure(.invalidHomeserverAddress)
         }
     }
@@ -61,8 +62,6 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
-        // Not strictly necessary for login, but needed for the store path.
-        let username = username.isMatrixUserID ? username : "@\(username):\(homeserver.address)"
         let loginTask: Task<Client, Error> = Task.detached {
             try self.authenticationService.login(username: username, password: password)
         }

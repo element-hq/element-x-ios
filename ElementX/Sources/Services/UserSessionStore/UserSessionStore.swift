@@ -126,11 +126,12 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     func baseDirectory() -> URL {
         #warning("Is the caches directory the correct place? This will be cleared when space is low.")
-        guard var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            fatalError("Should always be able to retrieve the caches directory")
+        
+        guard let appGroupContainerURL = FileManager.default.appGroupContainerURL else {
+            fatalError("Should always be able to retrieve the container directory")
         }
         
-        url = url.appendingPathComponent("Sessions")
+        let url = appGroupContainerURL.appendingPathComponent("Sessions")
         
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         
