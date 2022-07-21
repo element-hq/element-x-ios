@@ -18,7 +18,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let memberDetailProvider: MemberDetailProviderProtocol
     
     private var cancellables = Set<AnyCancellable>()
-    private var timelineItemsUpdateTask: Task<Void, Never>?
+    private var timelineItemsUpdateTask: Task<Void, Never>? {
+        willSet {
+            timelineItemsUpdateTask?.cancel()
+        }
+    }
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -97,7 +101,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func updateTimelineItems() {
-        timelineItemsUpdateTask?.cancel()
         timelineItemsUpdateTask = Task {
             await asyncUpdateTimelineItems()
         }

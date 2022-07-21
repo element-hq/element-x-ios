@@ -48,7 +48,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                   _ showSenderDetails: Bool,
                                                   _ displayName: String?,
                                                   _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
-        let attributedText = (message.htmlBody != nil ? await attributedStringBuilder.fromHTML(message.htmlBody) : await attributedStringBuilder.fromPlain(message.body))
+        let attributedText = await (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return TextRoomTimelineItem(id: message.id,
@@ -94,7 +94,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                     _ showSenderDetails: Bool,
                                                     _ displayName: String?,
                                                     _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
-        let attributedText = (message.htmlBody != nil ? await attributedStringBuilder.fromHTML(message.htmlBody) : await attributedStringBuilder.fromPlain(message.body))
+        let attributedText = await (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return NoticeRoomTimelineItem(id: message.id,
@@ -113,7 +113,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    _ showSenderDetails: Bool,
                                                    _ displayName: String?,
                                                    _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
-        let attributedText = (message.htmlBody != nil ? await attributedStringBuilder.fromHTML(message.htmlBody) : await attributedStringBuilder.fromPlain(message.body))
+        let attributedText = await (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return EmoteRoomTimelineItem(id: message.id,

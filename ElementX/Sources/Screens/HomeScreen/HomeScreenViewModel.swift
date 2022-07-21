@@ -23,7 +23,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var roomUpdateListeners = Set<AnyCancellable>()
-    private var roomsUpdateTask: Task<Void, Never>?
+    private var roomsUpdateTask: Task<Void, Never>? {
+        willSet {
+            roomsUpdateTask?.cancel()
+        }
+    }
 
     private var roomSummaries: [RoomSummaryProtocol]? {
         didSet {
@@ -57,25 +61,27 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol]) {
-        self.roomSummaries = roomSummaries
-        
-        roomsUpdateTask?.cancel()
         roomsUpdateTask = Task {
-            var rooms = [HomeScreenRoom]()
-            for summary in roomSummaries {
-                if Task.isCancelled {
-                    return
-                }
-                
-                rooms.append(await buildOrUpdateRoomForSummary(summary))
-            }
-            
+            await updateWithRoomSummaries(roomSummaries)
+        }
+    }
+    
+    private func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol]) async {
+        var rooms = [HomeScreenRoom]()
+        for summary in roomSummaries {
             if Task.isCancelled {
                 return
             }
             
-            state.rooms = rooms
+            rooms.append(await buildOrUpdateRoomForSummary(summary))
         }
+        
+        if Task.isCancelled {
+            return
+        }
+        
+        state.rooms = rooms
+        self.roomSummaries = roomSummaries
         
         roomUpdateListeners.removeAll()
         roomSummaries.forEach { roomSummary in
