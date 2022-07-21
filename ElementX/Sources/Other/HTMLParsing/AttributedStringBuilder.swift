@@ -32,6 +32,12 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
+    func fromPlain(_ string: String?) async -> AttributedString? {
+        await Task.detached {
+            fromPlain(string)
+        }.value
+    }
+    
     func fromPlain(_ string: String?) -> AttributedString? {
         guard let string = string else {
             return nil
@@ -42,6 +48,12 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeLinkColors(mutableAttributedString)
         
         return try? AttributedString(mutableAttributedString, including: \.elementX)
+    }
+    
+    func fromHTML(_ htmlString: String?) async -> AttributedString? {
+        await Task.detached {
+            fromHTML(htmlString)
+        }.value
     }
     
     // Do not use the default HTML renderer of NSAttributedString because this method

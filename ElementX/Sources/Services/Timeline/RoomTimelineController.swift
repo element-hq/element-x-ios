@@ -18,6 +18,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let memberDetailProvider: MemberDetailProviderProtocol
     
     private var cancellables = Set<AnyCancellable>()
+    private var timelineItemsUpdateTask: Task<Void, Never>?
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -96,10 +97,21 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func updateTimelineItems() {
+        timelineItemsUpdateTask?.cancel()
+        timelineItemsUpdateTask = Task {
+            await asyncUpdateTimelineItems()
+        }
+    }
+    
+    private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         
         var previousMessage: RoomMessageProtocol?
         for message in timelineProvider.messages {
+            if Task.isCancelled {
+                return
+            }
+            
             let areMessagesFromTheSameDay = haveSameDay(lhs: previousMessage, rhs: message)
             let shouldAddSectionHeader = !areMessagesFromTheSameDay
             
@@ -111,11 +123,15 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
             let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
             
-            newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(message: message,
-                                                                             isOutgoing: message.sender == userId,
-                                                                             showSenderDetails: shouldShowSenderDetails))
+            newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(message: message,
+                                                                                   isOutgoing: message.sender == userId,
+                                                                                   showSenderDetails: shouldShowSenderDetails))
             
             previousMessage = message
+        }
+        
+        if Task.isCancelled {
+            return
         }
         
         timelineItems = newTimelineItems
