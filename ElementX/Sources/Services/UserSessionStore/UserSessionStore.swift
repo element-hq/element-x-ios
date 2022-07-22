@@ -23,7 +23,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     /// Whether or not there are sessions in the store.
-    var hasSessions: Bool { !keychainController.accessTokens().isEmpty }
+    var hasSessions: Bool { !keychainController.restoreTokens().isEmpty }
     
     /// The base directory where all session data is stored.
     var baseDirectoryPath: String { baseDirectory().path }
@@ -34,9 +34,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {
-        let availableAccessTokens = keychainController.accessTokens()
+        let availableRestoreTokens = keychainController.restoreTokens()
         
-        guard let usernameTokenTuple = availableAccessTokens.first else {
+        guard let usernameTokenTuple = availableRestoreTokens.first else {
             return .failure(.missingCredentials)
         }
         
@@ -50,7 +50,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.error("Failed restoring login with error: \(error)")
             
             // On any restoration failure reset the token and restart
-            keychainController.removeAllAccessTokens()
+            keychainController.removeAllRestoreTokens()
             deleteSessionDirectory(for: usernameTokenTuple.username)
             
             return .failure(error)
@@ -72,7 +72,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     func logout(userSession: UserSessionProtocol) {
         let username = userSession.clientProxy.userIdentifier
-        keychainController.removeAccessTokenForUsername(username)
+        keychainController.removeRestoreTokenForUsername(username)
         deleteSessionDirectory(for: username)
     }
     
@@ -85,7 +85,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let loginTask: Task<Client, Error> = Task.detached {
             let client = try builder.build()
-            try client.restoreLogin(restoreToken: credentials.accessToken)
+            try client.restoreLogin(restoreToken: credentials.restoreToken)
             return client
         }
         
@@ -103,7 +103,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             let accessToken = try client.restoreToken()
             let userId = try client.userId()
             
-            keychainController.setAccessToken(accessToken, forUsername: userId)
+            keychainController.setRestoreToken(accessToken, forUsername: userId)
         } catch {
             MXLog.error("Failed setting up user session with error: \(error)")
             return .failure(.failedSettingUpSession)

@@ -10,13 +10,13 @@ import Foundation
 
 struct KeychainCredentials {
     let username: String
-    let accessToken: String
+    let restoreToken: String
 }
 
 protocol KeychainControllerProtocol {
-    func setAccessToken(_ accessToken: String, forUsername username: String)
-    func accessTokenForUsername(_ username: String) -> String?
-    func accessTokens() -> [KeychainCredentials]
-    func removeAccessTokenForUsername(_ username: String)
-    func removeAllAccessTokens()
+    func setRestoreToken(_ accessToken: String, forUsername username: String)
+    func restoreTokenForUsername(_ username: String) -> String?
+    func restoreTokens() -> [KeychainCredentials]
+    func removeRestoreTokenForUsername(_ username: String)
+    func removeAllRestoreTokens()
 }
