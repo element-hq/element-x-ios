@@ -30,7 +30,7 @@ include:
 
 packages:
   MatrixRustSDK:
-    url: https://github.com/matrix-org/matrix-rust-components-swift.git
+    url: https://github.com/matrix-org/matrix-rust-components-swift
     exactVersion: 1.0.11-alpha
     # path: ../matrix-rust-components-swift
   DesignKit:
@@ -45,7 +45,7 @@ packages:
     url: https://github.com/onevcat/Kingfisher
     majorVersion: 7.2.0
   Introspect:
-    url: https://github.com/siteline/SwiftUI-Introspect.git
+    url: https://github.com/siteline/SwiftUI-Introspect
     majorVersion: 0.1.4
   SwiftyBeaver:
     url: https://github.com/SwiftyBeaver/SwiftyBeaver
@@ -57,5 +57,5 @@ packages:
     url: https://github.com/nicklockwood/GZIP
     majorVersion: 1.3.0
   Sentry:
-    url: https://github.com/getsentry/sentry-cocoa.git
+    url: https://github.com/getsentry/sentry-cocoa
     majorVersion: 7.15.0

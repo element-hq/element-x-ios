@@ -1779,11 +1779,11 @@
 			packageReferences = (
 				C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */,
 				701C7BEF8F70F7A83E852DCC /* XCRemoteSwiftPackageReference "GZIP" */,
-				A24ABD6F9CEE4D0749A6173E /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
+				9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				D283517192CAC3E2E6920765 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				4FCDA8D25C7415C8FB33490D /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
-				D94BF33F492E2443005F809A /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
+				A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				25B4484A6A20B9F1705DEEDA /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
 			);
@@ -2645,14 +2645,6 @@
 				minimumVersion = 1.9.5;
 			};
 		};
-		4FCDA8D25C7415C8FB33490D /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift.git";
-			requirement = {
-				kind = exactVersion;
-				version = "1.0.11-alpha";
-			};
-		};
 		61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
@@ -2677,12 +2669,28 @@
 				minimumVersion = 1.3.0;
 			};
 		};
-		A24ABD6F9CEE4D0749A6173E /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+		80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */ = {
 			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect.git";
+			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
+			requirement = {
+				kind = exactVersion;
+				version = "1.0.11-alpha";
+			};
+		};
+		9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/SwiftUI-Introspect";
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 0.1.4;
+			};
+		};
+		A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/getsentry/sentry-cocoa";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 7.15.0;
 			};
 		};
 		C13F55E4518415CB4C278E73 /* XCRemoteSwiftPackageReference "DTCoreText" */ = {
@@ -2701,14 +2709,6 @@
 				minimumVersion = 7.2.0;
 			};
 		};
-		D94BF33F492E2443005F809A /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.15.0;
-			};
-		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -2719,7 +2719,7 @@
 		};
 		04C28663564E008DB32B5972 /* Introspect */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A24ABD6F9CEE4D0749A6173E /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			package = 9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
 			productName = Introspect;
 		};
 		0DD568A494247444A4B56031 /* Kingfisher */ = {
@@ -2754,17 +2754,17 @@
 		};
 		5986E300FC849DEAB2EE7AEB /* Introspect */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = A24ABD6F9CEE4D0749A6173E /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
+			package = 9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */;
 			productName = Introspect;
 		};
 		67E7A6F388D3BF85767609D9 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D94BF33F492E2443005F809A /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			package = A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 		7731767AE437BA3BD2CC14A8 /* Sentry */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = D94BF33F492E2443005F809A /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
+			package = A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */;
 			productName = Sentry;
 		};
 		78A5A8DE1E2B09C978C7F3B0 /* KeychainAccess */ = {
@@ -2788,7 +2788,7 @@
 		};
 		A678E40E917620059695F067 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4FCDA8D25C7415C8FB33490D /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
+			package = 80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		A981A4CA233FB5C13B9CA690 /* SwiftyBeaver */ = {
@@ -2798,7 +2798,7 @@
 		};
 		B1E8B697DF78FE7F61FC6CA4 /* MatrixRustSDK */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4FCDA8D25C7415C8FB33490D /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
+			package = 80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */;
 			productName = MatrixRustSDK;
 		};
 		FD43A50D9B75C9D6D30F006B /* SwiftyBeaver */ = {
