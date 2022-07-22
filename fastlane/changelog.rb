@@ -11,6 +11,8 @@ require "date"
 # Helper methods to handle updates of the Changelog file
 #
 module Changelog
+  CHANGES_SEPARATOR_REGEX = /^\#\#\ Changes/.freeze
+  FILE = "CHANGES.md"
   
   # Update the topmost section of the changelog to put version+date in title + add entry for dependency updates
   #
@@ -39,6 +41,23 @@ module Changelog
 
     # Let towncrier update the change
     system("towncrier", "build", "--version", "#{version}", "--yes")
+  end
+  
+  # Returns the first section of the Changelog, corresponding to the changes in the latest version
+  #
+  def self.extract_first_section
+    lines = []
+    File.open(FILE, "r") do |file|
+      section_index = 0
+      file.each_line do |line|
+        is_separator_line = (line.chomp =~ CHANGES_SEPARATOR_REGEX)
+        section_index += 1 if is_separator_line
+        break if section_index >= 2
+
+        lines.append(line) if section_index == 1
+      end
+    end
+    lines[0..-2].join # Remove last line (title of section 2)
   end
 
 end

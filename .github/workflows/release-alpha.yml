@@ -81,18 +81,10 @@ jobs:
           DIAWI_API_TOKEN: ${{ secrets.DIAWI_API_TOKEN }}
           GITHUB_PR_NUMBER: ${{ github.event.number }}
 
-      - name: Read version_changes.md
-        id: read_changes
-        uses: juliangruber/read-file-action@v1
-        with:
-          path: ./version_changes.md
-
       - name: Add release notes and Diawi info
         uses: NejcZdovc/comment-pr@v1
         with:
           message: |
-            ${{ steps.read_changes.outputs.content }}
-
             :iphone: Scan the QR code below to install the build for this PR. 
             :lock: This build is for internal testing purpose. Only devices listed in the ad-hoc provisioning profile can install Element Alpha.  
 
