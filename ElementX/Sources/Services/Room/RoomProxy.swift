@@ -57,9 +57,7 @@ class RoomProxy: RoomProxyProtocol {
         room.setDelegate(delegate: nil)
     }
     
-    var id: String {
-        room.id()
-    }
+    lazy var id: String = room.id()
     
     var name: String? {
         room.name()

@@ -46,21 +46,21 @@ class RoomSummary: RoomSummaryProtocol {
         roomProxy.isTombstoned
     }
     
+    private(set) var avatar: UIImage? {
+        didSet {
+            callbacks.send(.updatedAvatar)
+        }
+    }
+    
     private(set) var displayName: String? {
         didSet {
-            callbacks.send(.updatedData)
+            callbacks.send(.updatedDisplayName)
         }
     }
     
     private(set) var lastMessage: EventBrief? {
         didSet {
-            callbacks.send(.updatedData)
-        }
-    }
-    
-    private(set) var avatar: UIImage? {
-        didSet {
-            callbacks.send(.updatedData)
+            callbacks.send(.updatedLastMessage)
         }
     }
     

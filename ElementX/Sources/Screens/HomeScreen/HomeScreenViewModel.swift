@@ -23,6 +23,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var roomUpdateListeners = Set<AnyCancellable>()
+    private var roomsUpdateTask: Task<Void, Never>? {
+        willSet {
+            roomsUpdateTask?.cancel()
+        }
+    }
 
     private var roomSummaries: [RoomSummaryProtocol]? {
         didSet {
@@ -56,14 +61,29 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol]) {
-        self.roomSummaries = roomSummaries
-        
-        state.rooms = roomSummaries.map { roomSummary in
-            buildOrUpdateRoomFromSummary(roomSummary)
+        roomsUpdateTask = Task {
+            await updateWithRoomSummaries(roomSummaries)
+        }
+    }
+    
+    private func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol]) async {
+        var rooms = [HomeScreenRoom]()
+        for summary in roomSummaries {
+            if Task.isCancelled {
+                return
+            }
+            
+            rooms.append(await buildOrUpdateRoomForSummary(summary))
         }
         
-        roomUpdateListeners.removeAll()
+        if Task.isCancelled {
+            return
+        }
         
+        state.rooms = rooms
+        self.roomSummaries = roomSummaries
+        
+        roomUpdateListeners.removeAll()
         roomSummaries.forEach { roomSummary in
             roomSummary.callbacks
                 .receive(on: DispatchQueue.main)
@@ -72,10 +92,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                         return
                     }
                     
-                    switch callback {
-                    case .updatedData:
+                    Task {
                         if let index = self.state.rooms.firstIndex(where: { $0.id == roomSummary.id }) {
-                            self.state.rooms[index] = self.buildOrUpdateRoomFromSummary(roomSummary)
+                            switch callback {
+                            case .updatedLastMessage:
+                                var room = self.state.rooms[index]
+                                room.lastMessage = await self.lastMessageFromEventBrief(roomSummary.lastMessage)
+                                self.state.rooms[index] = room
+                            default:
+                                self.state.rooms[index] = await self.buildOrUpdateRoomForSummary(roomSummary)
+                            }
                         }
                     }
                 }
@@ -110,14 +136,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         Task { await roomSummary.loadDetails() }
     }
     
-    private func buildOrUpdateRoomFromSummary(_ roomSummary: RoomSummaryProtocol) -> HomeScreenRoom {
-        let lastMessage = lastMessageFromEventBrief(roomSummary.lastMessage)
-        
+    private func buildOrUpdateRoomForSummary(_ roomSummary: RoomSummaryProtocol) async -> HomeScreenRoom {
         guard var room = state.rooms.first(where: { $0.id == roomSummary.id }) else {
             return HomeScreenRoom(id: roomSummary.id,
                                   displayName: roomSummary.displayName,
                                   topic: roomSummary.topic,
-                                  lastMessage: lastMessage,
+                                  lastMessage: await lastMessageFromEventBrief(roomSummary.lastMessage),
                                   avatar: roomSummary.avatar,
                                   isDirect: roomSummary.isDirect,
                                   isEncrypted: roomSummary.isEncrypted,
@@ -127,12 +151,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         room.avatar = roomSummary.avatar
         room.displayName = roomSummary.displayName
-        room.lastMessage = lastMessage
-        
+        room.topic = roomSummary.topic
+                
         return room
     }
     
-    private func lastMessageFromEventBrief(_ eventBrief: EventBrief?) -> String? {
+    private func lastMessageFromEventBrief(_ eventBrief: EventBrief?) async -> String? {
         guard let eventBrief = eventBrief else {
             return nil
         }
@@ -140,7 +164,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         let senderDisplayName = senderDisplayNameForBrief(eventBrief)
         
         if let htmlBody = eventBrief.htmlBody,
-           let lastMessageAttributedString = attributedStringBuilder.fromHTML(htmlBody) {
+           let lastMessageAttributedString = await attributedStringBuilder.fromHTML(htmlBody) {
             return "\(senderDisplayName): \(String(lastMessageAttributedString.characters))"
         } else {
             return "\(senderDisplayName): \(eventBrief.body)"
