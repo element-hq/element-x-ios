@@ -16,7 +16,8 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     var isVerified = false
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+        Task.detached {
+            try await Task.sleep(nanoseconds: 2_000_000_000)
             callbacks.send(.receivedVerificationData(Self.emojis))
         }
         
@@ -24,7 +25,8 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     }
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+        Task.detached {
+            try await Task.sleep(nanoseconds: 2_000_000_000)
             callbacks.send(.finished)
         }
         
