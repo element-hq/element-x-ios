@@ -23,7 +23,7 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
 
     // MARK: Public
 
-    var callback: (@MainActor(LoginViewModelAction) -> Void)?
+    var callback: (@MainActor (LoginViewModelAction) -> Void)?
 
     // MARK: - Setup
 

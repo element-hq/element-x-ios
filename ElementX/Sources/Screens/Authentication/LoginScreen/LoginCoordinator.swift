@@ -55,7 +55,7 @@ final class LoginCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: (@MainActor(LoginCoordinatorAction) -> Void)?
+    var callback: (@MainActor (LoginCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
