@@ -98,16 +98,16 @@ class UserIndicatorTests: XCTestCase {
     // MARK: - Dismissal
     
     func testDismissAfterTimeout() {
-        let indicator = makeIndicator(dismissal: .timeout(1.0))
+        let interval: TimeInterval = 0.01
+        let indicator = makeIndicator(dismissal: .timeout(interval))
         
         indicator.start()
         
-        let expectation = expectation(description: "Wait for the indicator to dismiss")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            expectation.fulfill()
+        let exp = expectation(description: "")
+        DispatchQueue.main.asyncAfter(deadline: .now() + interval) {
+            exp.fulfill()
         }
-        
-        wait(for: [expectation], timeout: 5.0)
+        waitForExpectations(timeout: 1)
         
         XCTAssertEqual(indicator.state, .completed)
     }
