@@ -1,6 +1,6 @@
 --swiftversion 5.6
 
---exclude ElementX/Sources/Generated
+--exclude ElementX/Sources/Generated,vendor
 
 --disable wrapMultiLineStatementBraces
 --disable hoistPatternLet
