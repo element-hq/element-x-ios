@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -281,7 +281,6 @@
 		EA31DD9043B91ECB8E45A9A6 /* ScreenshotDetectorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F03C9D319676F3C0DC6B0203 /* ScreenshotDetectorTests.swift */; };
 		EA65360A0EC026DD83AC0CF5 /* AuthenticationCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CA5F386C7701C129398945 /* AuthenticationCoordinator.swift */; };
 		EBD6C79705B3DDB2F7E5F554 /* UserSessionStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1B52D0ABBA7091A991CAFE /* UserSessionStoreProtocol.swift */; };
-		ECF270B128785CE50030E67F /* ElementAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECF270B028785CE50030E67F /* ElementAnimations.swift */; };
 		EE4F5601356228FF72FC56B6 /* MockClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40F48279322E504153AB0D /* MockClientProxy.swift */; };
 		EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */; };
 		EEC40663922856C65D1E0DF5 /* KeychainControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C37196A4C79F24CE80C6 /* KeychainControllerTests.swift */; };
@@ -297,6 +296,7 @@
 		FA9C427FFB11B1AA2DCC5602 /* RoomProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47111410B6E659A697D472B5 /* RoomProxyProtocol.swift */; };
 		FC6B7436C3A5B3D0565227D5 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF05352F28D4E7336228E9F4 /* ActivityIndicatorView.swift */; };
 		FCB640C576292BEAF7FA3B2E /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C9F395A2E917115C7AAF7F34 /* SplashViewController.swift */; };
+		FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1593DD87F974F8509BB619 /* ElementAnimations.swift */; };
 		FE79E2BCCF69E8BF4D21E15A /* RoomMessageFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA154570F693D93513E584C1 /* RoomMessageFactory.swift */; };
 		FFD3E4FF948E06C7585317FC /* TimelineStyler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 892E29C98C4E8182C9037F84 /* TimelineStyler.swift */; };
 /* End PBXBuildFile section */
@@ -682,12 +682,12 @@
 		E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		E9D059BFE329BE09B6D96A9F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ro; path = ro.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EBE5502760CF6CA2D7201883 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ja; path = ja.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		ECF270B028785CE50030E67F /* ElementAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementAnimations.swift; sourceTree = "<group>"; };
 		ED1D792EB82506A19A72C8DE /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		EDAA4472821985BF868CC21C /* ServerSelectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionViewModelTests.swift; sourceTree = "<group>"; };
 		EDB6E40BAD4504D899FAAC9A /* TemplateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewModel.swift; sourceTree = "<group>"; };
 		EE8BCD14EFED23459A43FDFF /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Localizable.strings; sourceTree = "<group>"; };
 		EEE384418EB1FEDFA62C9CD0 /* RoomTimelineViewFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineViewFactoryProtocol.swift; sourceTree = "<group>"; };
+		EF1593DD87F974F8509BB619 /* ElementAnimations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElementAnimations.swift; sourceTree = "<group>"; };
 		EF188681D6B6068CFAEAFC3F /* MXLogger.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MXLogger.m; sourceTree = "<group>"; };
 		EFF7BF82A950B91BC5469E91 /* ViewFrameReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewFrameReader.swift; sourceTree = "<group>"; };
 		EFFA5FD06AAAC4AF544B594E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -761,7 +761,7 @@
 		052CC920F473C10B509F9FC1 /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
-				ECF270AF28785CD40030E67F /* Animation */,
+				E2DA161C142B7AB8CC40F752 /* Animation */,
 				595B8797ED6A7489ABDCE384 /* ErrorHandling */,
 				CE2FBFD64A89F5DBE4EB30DB /* Layout */,
 				10578D9852BA78D309A1CBDF /* ViewModel */,
@@ -1504,6 +1504,14 @@
 			path = SessionVerification;
 			sourceTree = "<group>";
 		};
+		E2DA161C142B7AB8CC40F752 /* Animation */ = {
+			isa = PBXGroup;
+			children = (
+				EF1593DD87F974F8509BB619 /* ElementAnimations.swift */,
+			);
+			path = Animation;
+			sourceTree = "<group>";
+		};
 		E59565F441830B19DBAE567C /* Screens */ = {
 			isa = PBXGroup;
 			children = (
@@ -1568,14 +1576,6 @@
 				3DF1FFC3336EB23374BBBFCC /* UIKitBackgroundTaskService.swift */,
 			);
 			path = Background;
-			sourceTree = "<group>";
-		};
-		ECF270AF28785CD40030E67F /* Animation */ = {
-			isa = PBXGroup;
-			children = (
-				ECF270B028785CE50030E67F /* ElementAnimations.swift */,
-			);
-			path = Animation;
 			sourceTree = "<group>";
 		};
 		F8474EB69289112888B65518 /* UserIndicators */ = {
@@ -1820,8 +1820,8 @@
 				9A472EE0218FE7DCF5283429 /* XCRemoteSwiftPackageReference "SwiftUI-Introspect" */,
 				61916C63E3F5BD900F08DA0C /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 				D283517192CAC3E2E6920765 /* XCRemoteSwiftPackageReference "Kingfisher" */,
-				4FCDA8D25C7415C8FB33490D /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
-				D94BF33F492E2443005F809A /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
+				80B898A3AD2AC63F3ABFC218 /* XCRemoteSwiftPackageReference "matrix-rust-components-swift" */,
+				A08925A9D5E3770DEB9D8509 /* XCRemoteSwiftPackageReference "sentry-cocoa" */,
 				F34594223DB1E7DCE48F92B8 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 				6582B5AF3F104B0F7E031E7D /* XCRemoteSwiftPackageReference "SwiftState" */,
 				25B4484A6A20B9F1705DEEDA /* XCRemoteSwiftPackageReference "SwiftyBeaver" */,
@@ -2027,6 +2027,7 @@
 				DCB781BD227CA958809AFADF /* Coordinator.swift in Sources */,
 				C4F69156C31A447FEFF2A47C /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
 				EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */,
+				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
 				06E93B2E3B32740B40F47CC5 /* ElementNavigationController.swift in Sources */,
 				9738F894DB1BD383BE05767A /* ElementSettings.swift in Sources */,
 				D8CFF02C2730EE5BC4F17ABF /* ElementToggleStyle.swift in Sources */,
@@ -2189,7 +2190,6 @@
 				10866439ABA58CCDB5D1459D /* UserIndicatorQueue.swift in Sources */,
 				15D1F9C415D9C921643BA82E /* UserIndicatorRequest.swift in Sources */,
 				C052A8CDC7A8E7A2D906674F /* UserIndicatorStore.swift in Sources */,
-				ECF270B128785CE50030E67F /* ElementAnimations.swift in Sources */,
 				80E04BE80A89A78FBB4863BB /* UserIndicatorViewPresentable.swift in Sources */,
 				8AB8ED1051216546CB35FA0E /* UserSession.swift in Sources */,
 				978BB24F2A5D31EE59EEC249 /* UserSessionProtocol.swift in Sources */,
@@ -2777,14 +2777,6 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 7.2.0;
-			};
-		};
-		D94BF33F492E2443005F809A /* XCRemoteSwiftPackageReference "sentry-cocoa" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/getsentry/sentry-cocoa.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 7.15.0;
 			};
 		};
 		F34594223DB1E7DCE48F92B8 /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
