@@ -44,20 +44,20 @@ lane :alpha do
 
 end
 
-lane :build_and_publish_on_github do
+lane :release do
   ios_adhoc()
 
   upload_to_diawi()
 
-  # mac_adhoc()
-
   release_to_github()
+
+  prepare_next_release()
 
   upload_dsyms_to_sentry()
 
 end
 
-lane :ios_adhoc do
+lane :adhoc do
   build_ios_app(
       scheme: "ElementX",
       clean: true,
@@ -69,20 +69,6 @@ lane :ios_adhoc do
         }
       }
     )
-end
-
-lane :mac_adhoc do
-  build_mac_app(
-    scheme: "ElementX",
-    clean: true,
-    export_method: "mac-application",
-    output_directory: "build"
-  )
-
-  zip(
-    path: "build/ElementX.app",
-    output_path: "build/ElementX.app.zip"
-  )
 end
 
 lane :tests do
@@ -160,11 +146,31 @@ private_lane :release_to_github do
     ![QR code](#{diawi_qr_code_link})
     #{changes}"
   )
+
+end
+
+private_lane :prepare_next_release do 
+  target_file_path = "../ElementX/SupportingFiles/target.yml"
+  xcode_project_file_path = "../ElementX.xcodeproj"
+
+  data = YAML.load_file target_file_path
+  current_version = data["targets"]["ElementX"]["settings"]["base"]["MARKETING_VERSION"]
+  new_version = current_version.next
+  
+  # Bump the patch version. The empty string after -i is so that sed doesn't 
+  # create a backup file on macOS
+  sh("sed -i '' 's/#{current_version}/#{new_version}/g' #{target_file_path}")
+
+  xcodegen(spec: "project.yml")
+
+  sh("git add #{target_file_path} #{xcode_project_file_path}")
+
+  sh("git commit -m 'Prepare next release'")
 end
 
 private_lane :export_version_changes do |options|
   Dir.chdir("..") do
-    # Changelog.update_topmost_section(version: options[:version], additional_entries: {})
+    Changelog.update_topmost_section(version: options[:version], additional_entries: {})
     Changelog.extract_first_section
   end
 end
