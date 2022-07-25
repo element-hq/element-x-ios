@@ -25,7 +25,7 @@ class UITestsAppCoordinator: Coordinator {
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
         
-        UIView.setAnimationsEnabled(false)
+//        UIView.setAnimationsEnabled(false)
         
         let screens = mockScreens()
         
