@@ -45,8 +45,8 @@ jobs:
         uses: actions/upload-artifact@v3
         if: always()
         with:
-          name: xcode-test-result
-          path: ${{ env.SCAN_GENERATED_XCRESULT_PATH }}
+          name: test-output
+          path: fastlane/test_output
           retention-days: 7
           if-no-files-found: ignore
 

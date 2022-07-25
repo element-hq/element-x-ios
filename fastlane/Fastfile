@@ -84,7 +84,9 @@ lane :tests do
     scheme: "UITests",
     devices: ["iPhone 13 Pro Max (15.5)", "iPad (9th generation) (15.5)"],
     ensure_devices_found: true,
-    prelaunch_simulator: true
+    prelaunch_simulator: true,
+    output_directory: "fastlane/test_output/",
+    result_bundle: true
   )
 
   slather(
