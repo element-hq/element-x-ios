@@ -21,26 +21,18 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### build_and_publish_on_github
+### release
 
 ```sh
-[bundle exec] fastlane build_and_publish_on_github
+[bundle exec] fastlane release
 ```
 
 
 
-### ios_adhoc
+### adhoc
 
 ```sh
-[bundle exec] fastlane ios_adhoc
-```
-
-
-
-### mac_adhoc
-
-```sh
-[bundle exec] fastlane mac_adhoc
+[bundle exec] fastlane adhoc
 ```
 
 
