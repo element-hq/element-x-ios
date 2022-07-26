@@ -34,13 +34,13 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {
-        let availableRestoreTokens = keychainController.restoreTokens()
+        let availableCredentials = keychainController.restoreTokens()
         
-        guard let usernameTokenTuple = availableRestoreTokens.first else {
+        guard let credentials = availableCredentials.first else {
             return .failure(.missingCredentials)
         }
         
-        switch await restorePreviousLogin(usernameTokenTuple) {
+        switch await restorePreviousLogin(credentials) {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
                                         mediaProvider: MediaProvider(clientProxy: clientProxy,
@@ -51,7 +51,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             
             // On any restoration failure reset the token and restart
             keychainController.removeAllRestoreTokens()
-            deleteSessionDirectory(for: usernameTokenTuple.username)
+            deleteSessionDirectory(for: credentials.userID)
             
             return .failure(error)
         }
@@ -71,9 +71,9 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     func logout(userSession: UserSessionProtocol) {
-        let username = userSession.clientProxy.userIdentifier
-        keychainController.removeRestoreTokenForUsername(username)
-        deleteSessionDirectory(for: username)
+        let userID = userSession.clientProxy.userIdentifier
+        keychainController.removeRestoreTokenForUsername(userID)
+        deleteSessionDirectory(for: userID)
     }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
@@ -81,7 +81,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         let builder = ClientBuilder()
             .basePath(path: baseDirectoryPath)
-            .username(username: credentials.username)
+            .username(username: credentials.userID)
         
         let loginTask: Task<Client, Error> = Task.detached {
             let client = try builder.build()
@@ -114,9 +114,11 @@ class UserSessionStore: UserSessionStoreProtocol {
         return .success(clientProxy)
     }
     
-    private func deleteSessionDirectory(for username: String) {
-        let sanitisedUsername = username.replacingOccurrences(of: ":", with: "_")
-        let url = baseDirectory().appendingPathComponent(sanitisedUsername)
+    private func deleteSessionDirectory(for userID: String) {
+        // Rust sanitises the user ID replacing invalid characters with an _
+        let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
+        let url = baseDirectory().appendingPathComponent(sanitisedUserID)
+        
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
@@ -125,13 +127,14 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     func baseDirectory() -> URL {
-        #warning("Is the caches directory the correct place? This will be cleared when space is low.")
-        
         guard let appGroupContainerURL = FileManager.default.appGroupContainerURL else {
             fatalError("Should always be able to retrieve the container directory")
         }
         
-        let url = appGroupContainerURL.appendingPathComponent("Sessions")
+        let url = appGroupContainerURL
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("Caches", isDirectory: true)
+            .appendingPathComponent("Sessions", isDirectory: true)
         
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         

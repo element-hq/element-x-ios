@@ -9,7 +9,7 @@
 import Foundation
 
 struct KeychainCredentials {
-    let username: String
+    let userID: String
     let restoreToken: String
 }
 

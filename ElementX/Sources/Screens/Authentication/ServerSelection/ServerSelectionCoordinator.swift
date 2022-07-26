@@ -117,7 +117,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     /// Processes an error to either update the flow or display it to the user.
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
-        case .invalidServer:
+        case .invalidServer, .invalidHomeserverAddress:
             serverSelectionViewModel.displayError(.footerMessage(ElementL10n.loginErrorHomeserverNotFound))
         default:
             serverSelectionViewModel.displayError(.footerMessage(ElementL10n.unknownError))

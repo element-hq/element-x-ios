@@ -15,7 +15,7 @@ enum MatrixErrorCode: String, CaseIterable {
     case forbidden = "M_FORBIDDEN"
 }
 
-extension ClientError {
+extension AuthenticationError {
     var code: MatrixErrorCode {
         guard case let .Generic(message) = self else { return .unknown }
         

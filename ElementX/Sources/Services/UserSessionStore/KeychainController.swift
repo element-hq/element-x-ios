@@ -39,7 +39,7 @@ class KeychainController: KeychainControllerProtocol {
                 return nil
             }
             
-            return KeychainCredentials(username: username, restoreToken: restoreToken)
+            return KeychainCredentials(userID: username, restoreToken: restoreToken)
         }
     }
     

@@ -74,7 +74,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             Benchmark.endTrackingForIdentifier("Login", message: "Login failed")
             
             MXLog.error("Failed logging in with error: \(error)")
-            guard let error = error as? ClientError else { return .failure(.failedLoggingIn) }
+            guard let error = error as? AuthenticationError else { return .failure(.failedLoggingIn) }
             
             switch error.code {
             case .forbidden:
