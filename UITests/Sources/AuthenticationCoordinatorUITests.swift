@@ -52,7 +52,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         // Login Screen: Tap next
         app.buttons["nextButton"].tap()
 
-        try await Task.sleep(nanoseconds: 100_000_000)
+        try await Task.sleep(nanoseconds: 1_000_000_000)
         
         // Then login should fail.
         XCTAssertTrue(app.alerts.element.exists, "An error alert should be shown when attempting login with invalid credentials.")
