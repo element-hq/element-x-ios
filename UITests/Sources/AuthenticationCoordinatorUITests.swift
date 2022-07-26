@@ -46,7 +46,10 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         // Login Screen: Enter invalid credentials
         app.textFields["usernameTextField"].tap()
         app.typeText("alice\n")
-        app.typeText("87654321\n")
+        app.typeText("87654321")
+
+        // Login Screen: Tap next
+        app.buttons["nextButton"].tap()
         
         // Then login should fail.
         XCTAssertTrue(app.alerts.element.exists, "An error alert should be shown when attempting login with invalid credentials.")
