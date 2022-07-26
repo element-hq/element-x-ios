@@ -46,6 +46,7 @@ targets:
           UIInterfaceOrientationLandscapeLeft,
           UIInterfaceOrientationLandscapeRight
         ]
+        appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
 
     settings:
       base:
