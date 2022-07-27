@@ -19,7 +19,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     // MARK: Public
     
-    private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverURLString, loginMode: .unknown)
+    private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverAddress, loginMode: .unknown)
     
     // MARK: - Setup
     

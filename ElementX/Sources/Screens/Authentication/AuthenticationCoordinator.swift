@@ -65,7 +65,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
     private func startAuthentication() async {
         startLoading()
         
-        switch await authenticationService.configure(for: BuildSettings.defaultHomeserverURLString) {
+        switch await authenticationService.configure(for: BuildSettings.defaultHomeserverAddress) {
         case .success:
             stopLoading()
             showLoginScreen()
