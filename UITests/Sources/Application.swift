@@ -47,7 +47,7 @@ extension XCUIApplication {
     }
 
     private var testName: String {
-        languageCode + "-" + regionCode + "-" + deviceName
+        osVersion + "-" + languageCode + "-" + regionCode + "-" + deviceName
     }
 
     private var deviceName: String {
@@ -60,6 +60,10 @@ extension XCUIApplication {
 
     private var regionCode: String {
         Locale.current.regionCode ?? ""
+    }
+
+    private var osVersion: String {
+        UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "-")
     }
 }
 
