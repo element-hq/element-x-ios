@@ -7,6 +7,7 @@
 //
 
 import Combine
+import MatrixRustSDK
 import UIKit
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
@@ -71,13 +72,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         setupStateMachine()
         
-        let loggerConfiguration = MXLogConfiguration()
-        loggerConfiguration.logLevel = .verbose
-        // Redirect NSLogs to files only if we are not debugging
-        if isatty(STDERR_FILENO) == 0 {
-            loggerConfiguration.redirectLogsToFiles = true
-        }
-        MXLog.configure(loggerConfiguration)
+        setupLogging()
         
         // Benchmark.trackingEnabled = true
     }
@@ -96,6 +91,29 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     // MARK: - Private
+    
+    private func setupLogging() {
+        let loggerConfiguration = MXLogConfiguration()
+        
+        #if DEBUG
+        // This exposes the full Rust side tracing subscriber filter for more flexibility.
+        // We can filter by level, crate and even file. See more details here:
+        // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
+        setupTracing(configuration: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        
+        loggerConfiguration.logLevel = .debug
+        #else
+        setupTracing(configuration: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        loggerConfiguration.logLevel = .info
+        #endif
+        
+        // Avoid redirecting NSLogs to files if we are attached to a debugger.
+        if isatty(STDERR_FILENO) == 0 {
+            loggerConfiguration.redirectLogsToFiles = true
+        }
+      
+        MXLog.configure(loggerConfiguration)
+    }
     
     // swiftlint:disable cyclomatic_complexity
     private func setupStateMachine() {
