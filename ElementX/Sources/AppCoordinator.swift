@@ -103,7 +103,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         loggerConfiguration.logLevel = .info
         #endif
         
-        // Redirect NSLogs to files only if we are not debugging
+        // Avoid redirecting NSLogs to files if we are attached to a debugger.
         if isatty(STDERR_FILENO) == 0 {
             loggerConfiguration.redirectLogsToFiles = true
         }
