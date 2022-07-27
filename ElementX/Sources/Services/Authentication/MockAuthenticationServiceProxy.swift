@@ -34,7 +34,7 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
-    func loginWithOIDC() async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         .failure(.oidcError(.notSupported))
     }
     

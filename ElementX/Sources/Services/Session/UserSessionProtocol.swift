@@ -15,6 +15,8 @@ enum UserSessionCallback {
 }
 
 protocol UserSessionProtocol {
+    var userID: String { get }
+    
     var clientProxy: ClientProxyProtocol { get }
     var mediaProvider: MediaProviderProtocol { get }
     

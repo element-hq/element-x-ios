@@ -70,10 +70,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         loginHostingController = UIHostingController(rootView: view)
         
         indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: loginHostingController)
-        
         oidcUserAgent = OIDExternalUserAgentIOS(presenting: loginHostingController)
-        var service = authenticationService
-        service.oidcUserAgent = oidcUserAgent
     }
     
     // MARK: - Public
@@ -144,10 +141,12 @@ final class LoginCoordinator: Coordinator, Presentable {
     }
     
     private func loginWithOIDC() {
+        #warning("Show an error?")
+        guard let oidcUserAgent = oidcUserAgent else { return }
         startLoading(isInteractionBlocking: true)
         
         Task {
-            switch await authenticationService.loginWithOIDC() {
+            switch await authenticationService.loginWithOIDC(userAgent: oidcUserAgent) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))
                 stopLoading()

@@ -53,7 +53,8 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = HomeScreenViewModel(attributedStringBuilder: parameters.attributedStringBuilder)
+        viewModel = HomeScreenViewModel(initialDisplayName: parameters.userSession.userID,
+                                        attributedStringBuilder: parameters.attributedStringBuilder)
         
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)

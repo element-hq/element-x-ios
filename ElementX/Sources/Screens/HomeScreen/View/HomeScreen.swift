@@ -98,7 +98,7 @@ struct HomeScreen: View {
     }
     
     private var userDisplayNameView: some View {
-        Text(context.viewState.userDisplayName ?? "Unknown user")
+        Text(context.viewState.userDisplayName)
             .font(.headline)
             .fontWeight(.bold)
             .foregroundColor(.primary)
@@ -166,11 +166,14 @@ struct RoomCell: View {
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
+            .tint(.element.accent)
         body.preferredColorScheme(.dark)
+            .tint(.element.accent)
     }
 
     static var body: some View {
-        let viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
+        let viewModel = HomeScreenViewModel(initialDisplayName: "@username:server.com",
+                                            attributedStringBuilder: AttributedStringBuilder())
         
         let eventBrief = EventBrief(eventId: "id",
                                     senderId: "senderId",

@@ -22,12 +22,11 @@ enum AuthenticationServiceError: Error {
 @MainActor
 protocol AuthenticationServiceProxyProtocol {
     var homeserver: LoginHomeserver { get }
-    var oidcUserAgent: OIDExternalUserAgentIOS? { get set }
     
     /// Sets up the service for login on the specified homeserver address.
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError>
     /// Performs login using OIDC for the current homeserver.
-    func loginWithOIDC() async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }

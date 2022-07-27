@@ -8,13 +8,18 @@
 
 import AppAuth
 
+/// Errors thrown by the OIDC service.
 enum OIDCError: Error {
     case notSupported
     case metadataMissingRegistrationEndpoint
     case userCancellation
+    case missingTokenExchangeRequest
     case unknown
 }
 
+/// A proof of concept implementation of a service that assists with authentication via OIDC.
+/// It will be replaced by an implementation in the Rust SDK tracked in the following issue:
+/// https://github.com/matrix-org/matrix-rust-sdk/issues/859
 class OIDCService {
     private let issuerURL: URL
     private var authState: OIDAuthState
@@ -22,6 +27,7 @@ class OIDCService {
     private var metadata: OIDServiceConfiguration?
     /// Redirect URI for the request. Must match the `client_uri` in reverse DNS format.
     private let redirectURI = URL(string: "io.element:/callback")!
+    // swiftlint:disable:previous force_unwrapping
     
     /// Maintains a strong ref to the authorization session that's in progress.
     private var session: OIDExternalUserAgentSession?
@@ -62,13 +68,12 @@ class OIDCService {
         )
         
         let registrationResponse = try await OIDAuthorizationService.perform(nonTemplatizedRequest)
-
-        #warning("Remove me.")
-        let clientSecret = registrationResponse.clientSecret ?? ""
-        MXLog.info("Registration data retrieved successfully")
-        MXLog.debug("Created dynamic client: ID: \(registrationResponse.clientID), Secret: \(clientSecret)")
         
-        #warning("Persist the client ID for reuse.")
+        MXLog.info("Registration data retrieved successfully")
+        MXLog.debug("Created dynamic client: ID: \(registrationResponse.clientID)")
+        
+        // This is a PoC, a complete implementation would persist the client ID and secret for reuse.
+        
         return registrationResponse
     }
     
@@ -107,8 +112,8 @@ class OIDCService {
     
     /// Handle the authorization response, including the user closing the Chrome Custom Tab
     func redeemCodeForTokens(authResponse: OIDAuthorizationResponse) async throws -> OIDTokenResponse {
-        let request = authResponse.tokenExchangeRequest()
-        return try await OIDAuthorizationService.perform(request!, originalAuthorizationResponse: authResponse)
+        guard let request = authResponse.tokenExchangeRequest() else { throw OIDCError.missingTokenExchangeRequest }
+        return try await OIDAuthorizationService.perform(request, originalAuthorizationResponse: authResponse)
     }
     
     /// We can check for specific error codes to handle the user cancelling the ASWebAuthenticationSession window.

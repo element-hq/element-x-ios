@@ -13,6 +13,8 @@ class UserSession: UserSessionProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var checkForSessionVerificationControllerCancellable: AnyCancellable?
     
+    var userID: String { clientProxy.userIdentifier }
+    
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()

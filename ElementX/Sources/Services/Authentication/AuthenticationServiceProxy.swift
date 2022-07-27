@@ -21,7 +21,6 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: Public
     
     private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverAddress, loginMode: .unknown)
-    var oidcUserAgent: OIDExternalUserAgentIOS?
     
     // MARK: - Setup
     
@@ -61,11 +60,8 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
-    func loginWithOIDC() async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        guard
-            let oidcUserAgent = oidcUserAgent,
-            case let .oidc(issuerURL) = homeserver.loginMode
-        else {
+    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        guard case let .oidc(issuerURL) = homeserver.loginMode else {
             return .failure(.oidcError(.notSupported))
         }
         
@@ -78,7 +74,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             let authResponse = try await oidcService.presentWebAuthentication(metadata: configuration,
                                                                               clientID: registationResponse.clientID,
                                                                               scope: "urn:matrix:device:\(deviceID)",
-                                                                              userAgent: oidcUserAgent)
+                                                                              userAgent: userAgent)
             let tokenResponse = try await oidcService.redeemCodeForTokens(authResponse: authResponse)
             
             guard let accessToken = tokenResponse.accessToken else { return .failure(.oidcError(.unknown)) }
