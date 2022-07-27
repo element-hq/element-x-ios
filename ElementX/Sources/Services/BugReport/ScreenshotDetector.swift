@@ -17,7 +17,7 @@ enum ScreenshotDetectorError: String, Error {
 
 @MainActor
 class ScreenshotDetector {
-    var callback: (@MainActor (UIImage?, Error?) -> Void)?
+    var callback: (@MainActor(UIImage?, Error?) -> Void)?
 
     /// Flag to whether ask for photos authorization by default if needed.
     var autoRequestPHAuthorization = true

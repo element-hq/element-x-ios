@@ -64,7 +64,7 @@ extension XCUIApplication {
 }
 
 public extension Snapshotting where Value == XCUIElement, Format == UIImage {
-   // swiftformat:disable:next redundanttype
-   static let image: Snapshotting =
-       Snapshotting<UIImage, UIImage>.image.pullback { element in element.screenshot().image }
+    // swiftformat:disable:next redundanttype
+    static let image: Snapshotting =
+        Snapshotting<UIImage, UIImage>.image.pullback { element in element.screenshot().image }
 }

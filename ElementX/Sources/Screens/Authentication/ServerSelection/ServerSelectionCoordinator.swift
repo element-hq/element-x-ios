@@ -45,7 +45,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: (@MainActor (ServerSelectionCoordinatorAction) -> Void)?
+    var callback: (@MainActor(ServerSelectionCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
