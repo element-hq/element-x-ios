@@ -19,7 +19,7 @@ import SwiftUI
 
 struct LoginCoordinatorParameters {
     /// The service used to authenticate the user.
-    let authenticationService: AuthenticationServiceProtocol
+    let authenticationService: AuthenticationServiceProxyProtocol
     /// The navigation router used to present the server selection screen.
     let navigationRouter: NavigationRouterType
 }
@@ -46,7 +46,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         }
     }
     
-    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
+    private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     private var navigationRouter: NavigationRouterType { parameters.navigationRouter }
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var activityIndicator: UserIndicator?
@@ -163,7 +163,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         startLoading(isInteractionBlocking: false)
         
         Task {
-            switch await authenticationService.startLogin(for: homeserverDomain) {
+            switch await authenticationService.configure(for: homeserverDomain) {
             case .success:
                 updateViewModel()
                 stopLoading()

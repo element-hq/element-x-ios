@@ -27,5 +27,7 @@
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
 	</array>
+	<key>appGroupIdentifier</key>
+	<string>$(APP_GROUP_IDENTIFIER)</string>
 </dict>
 </plist>

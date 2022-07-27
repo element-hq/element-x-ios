@@ -18,7 +18,7 @@ import SwiftUI
 
 struct ServerSelectionCoordinatorParameters {
     /// The service used to authenticate the user.
-    let authenticationService: AuthenticationServiceProtocol
+    let authenticationService: AuthenticationServiceProxyProtocol
     /// Whether the screen is presented modally or within a navigation stack.
     let hasModalPresentation: Bool
 }
@@ -37,7 +37,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     private let serverSelectionHostingController: UIViewController
     private var serverSelectionViewModel: ServerSelectionViewModelProtocol
     
-    private var authenticationService: AuthenticationServiceProtocol { parameters.authenticationService }
+    private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     
@@ -103,7 +103,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
         startLoading()
         
         Task {
-            switch await authenticationService.startLogin(for: homeserverAddress) {
+            switch await authenticationService.configure(for: homeserverAddress) {
             case .success:
                 callback?(.updated)
                 stopLoading()
@@ -117,7 +117,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     /// Processes an error to either update the flow or display it to the user.
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
-        case .invalidServer:
+        case .invalidServer, .invalidHomeserverAddress:
             serverSelectionViewModel.displayError(.footerMessage(ElementL10n.loginErrorHomeserverNotFound))
         default:
             serverSelectionViewModel.displayError(.footerMessage(ElementL10n.unknownError))

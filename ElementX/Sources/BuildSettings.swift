@@ -11,7 +11,7 @@ import Foundation
 final class BuildSettings {
     // MARK: - Servers
 
-    static let defaultHomeserverURLString = "https://matrix.org"
+    static let defaultHomeserverAddress = "matrix.org"
 
     // MARK: - Bug report
 

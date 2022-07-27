@@ -32,7 +32,6 @@ class LoginScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.login)
         
         let state = "matrix.org"
-        validateServerDescriptionIsVisible(for: state)
         validateLoginFormIsVisible(for: state)
         validateOIDCButtonIsHidden(for: state)
         validateNextButtonIsDisabled(for: state)
@@ -61,7 +60,6 @@ class LoginScreenUITests: XCTestCase {
         // Then the screen should be configured for OIDC.
         let state = "an OIDC only server"
         validateOIDCButtonIsShown(for: state)
-        validateServerDescriptionIsHidden(for: state)
         validateLoginFormIsHidden(for: state)
         validateUnsupportedServerTextIsHidden(for: state)
     }
@@ -78,22 +76,8 @@ class LoginScreenUITests: XCTestCase {
         // Then the screen should not allow login to continue.
         let state = "an unsupported server"
         validateUnsupportedServerTextIsShown(for: state)
-        validateServerDescriptionIsHidden(for: state)
         validateLoginFormIsHidden(for: state)
         validateOIDCButtonIsHidden(for: state)
-    }
-    
-    /// Checks that the server description label is shown.
-    func validateServerDescriptionIsVisible(for state: String) {
-        let descriptionLabel = app.staticTexts["serverDescriptionText"]
-        XCTAssertTrue(descriptionLabel.exists, "The server description should be shown for \(state).")
-        XCTAssertEqual(descriptionLabel.label, ElementL10n.authenticationServerInfoMatrixDescription)
-    }
-    
-    /// Checks that the server description label is hidden.
-    func validateServerDescriptionIsHidden(for state: String) {
-        let descriptionLabel = app.staticTexts["serverDescriptionText"]
-        XCTAssertFalse(descriptionLabel.exists, "The server description should be hidden for \(state).")
     }
     
     /// Checks that the username and password text fields are shown along with the next button.

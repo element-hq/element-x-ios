@@ -22,6 +22,7 @@ internal enum ElementInfoPlist {
   internal static let cfBundleVersion: String = _document["CFBundleVersion"]
   internal static let uiLaunchStoryboardName: String = _document["UILaunchStoryboardName"]
   internal static let uiSupportedInterfaceOrientations: [String] = _document["UISupportedInterfaceOrientations"]
+  internal static let appGroupIdentifier: String = _document["appGroupIdentifier"]
 }
 // swiftlint:enable identifier_name line_length type_body_length
 

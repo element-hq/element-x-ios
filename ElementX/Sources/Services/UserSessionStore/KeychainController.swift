@@ -16,42 +16,42 @@ class KeychainController: KeychainControllerProtocol {
         keychain = Keychain(service: identifier)
     }
  
-    func setAccessToken(_ accessToken: String, forUsername username: String) {
+    func setRestoreToken(_ restoreToken: String, forUsername username: String) {
         do {
-            try keychain.set(accessToken, key: username)
+            try keychain.set(restoreToken, key: username)
         } catch {
-            MXLog.error("Failed storing user access token with error: \(error)")
+            MXLog.error("Failed storing user restore token with error: \(error)")
         }
     }
     
-    func accessTokenForUsername(_ username: String) -> String? {
+    func restoreTokenForUsername(_ username: String) -> String? {
         do {
             return try keychain.get(username)
         } catch {
-            MXLog.error("Failed retrieving user access token")
+            MXLog.error("Failed retrieving user restore token")
             return nil
         }
     }
     
-    func accessTokens() -> [(username: String, accessToken: String)] {
+    func restoreTokens() -> [KeychainCredentials] {
         keychain.allKeys().compactMap { username in
-            guard let accessToken = accessTokenForUsername(username) else {
+            guard let restoreToken = restoreTokenForUsername(username) else {
                 return nil
             }
             
-            return (username, accessToken)
+            return KeychainCredentials(userID: username, restoreToken: restoreToken)
         }
     }
     
-    func removeAccessTokenForUsername(_ username: String) {
+    func removeRestoreTokenForUsername(_ username: String) {
         do {
             try keychain.remove(username)
         } catch {
-            MXLog.error("Failed removing access token with error: \(error)")
+            MXLog.error("Failed removing restore token with error: \(error)")
         }
     }
     
-    func removeAllAccessTokens() {
+    func removeAllRestoreTokens() {
         do {
             try keychain.removeAll()
         } catch {

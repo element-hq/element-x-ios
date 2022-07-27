@@ -23,7 +23,10 @@ class UserSessionStore: UserSessionStoreProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     /// Whether or not there are sessions in the store.
-    var hasSessions: Bool { !keychainController.accessTokens().isEmpty }
+    var hasSessions: Bool { !keychainController.restoreTokens().isEmpty }
+    
+    /// The base directory where all session data is stored.
+    var baseDirectoryPath: String { baseDirectory().path }
     
     init(bundleIdentifier: String, backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(identifier: bundleIdentifier)
@@ -31,13 +34,13 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {
-        let availableAccessTokens = keychainController.accessTokens()
+        let availableCredentials = keychainController.restoreTokens()
         
-        guard let usernameTokenTuple = availableAccessTokens.first else {
+        guard let credentials = availableCredentials.first else {
             return .failure(.missingCredentials)
         }
         
-        switch await restorePreviousLogin(usernameTokenTuple) {
+        switch await restorePreviousLogin(credentials) {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
                                         mediaProvider: MediaProvider(clientProxy: clientProxy,
@@ -47,8 +50,8 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.error("Failed restoring login with error: \(error)")
             
             // On any restoration failure reset the token and restart
-            keychainController.removeAllAccessTokens()
-            deleteBaseDirectory(for: usernameTokenTuple.username)
+            keychainController.removeAllRestoreTokens()
+            deleteSessionDirectory(for: credentials.userID)
             
             return .failure(error)
         }
@@ -68,22 +71,21 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     func logout(userSession: UserSessionProtocol) {
-        let username = userSession.clientProxy.userIdentifier
-        keychainController.removeAccessTokenForUsername(username)
-        deleteBaseDirectory(for: username)
+        let userID = userSession.clientProxy.userIdentifier
+        keychainController.removeRestoreTokenForUsername(userID)
+        deleteSessionDirectory(for: userID)
     }
     
-    private func restorePreviousLogin(_ usernameTokenTuple: (username: String, accessToken: String)) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
+    private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
         
-        let basePath = baseDirectoryPath(for: usernameTokenTuple.username)
         let builder = ClientBuilder()
-            .basePath(path: basePath)
-            .username(username: usernameTokenTuple.username)
+            .basePath(path: baseDirectoryPath)
+            .username(username: credentials.userID)
         
         let loginTask: Task<Client, Error> = Task.detached {
             let client = try builder.build()
-            try client.restoreLogin(restoreToken: usernameTokenTuple.accessToken)
+            try client.restoreLogin(restoreToken: credentials.restoreToken)
             return client
         }
         
@@ -101,7 +103,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             let accessToken = try client.restoreToken()
             let userId = try client.userId()
             
-            keychainController.setAccessToken(accessToken, forUsername: userId)
+            keychainController.setRestoreToken(accessToken, forUsername: userId)
         } catch {
             MXLog.error("Failed setting up user session with error: \(error)")
             return .failure(.failedSettingUpSession)
@@ -112,25 +114,30 @@ class UserSessionStore: UserSessionStoreProtocol {
         return .success(clientProxy)
     }
     
-    func baseDirectoryPath(for username: String) -> String {
-        guard var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            fatalError("Should always be able to retrieve the caches directory")
+    private func deleteSessionDirectory(for userID: String) {
+        // Rust sanitises the user ID replacing invalid characters with an _
+        let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
+        let url = baseDirectory().appendingPathComponent(sanitisedUserID)
+        
+        do {
+            try FileManager.default.removeItem(at: url)
+        } catch {
+            MXLog.failure("Failed deleting the session data: \(error)")
+        }
+    }
+    
+    func baseDirectory() -> URL {
+        guard let appGroupContainerURL = FileManager.default.appGroupContainerURL else {
+            fatalError("Should always be able to retrieve the container directory")
         }
         
-        url = url.appendingPathComponent(username)
+        let url = appGroupContainerURL
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("Caches", isDirectory: true)
+            .appendingPathComponent("Sessions", isDirectory: true)
         
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         
-        return url.path
-    }
-    
-    private func deleteBaseDirectory(for username: String) {
-        guard var url = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
-            fatalError("Should always be able to retrieve the caches directory")
-        }
-        
-        url = url.appendingPathComponent(username)
-
-        try? FileManager.default.removeItem(at: url)
+        return url
     }
 }
