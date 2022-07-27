@@ -56,7 +56,7 @@ final class LoginCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: (@MainActor (LoginCoordinatorAction) -> Void)?
+    var callback: (@MainActor(LoginCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
@@ -141,8 +141,11 @@ final class LoginCoordinator: Coordinator, Presentable {
     }
     
     private func loginWithOIDC() {
-        #warning("Show an error?")
-        guard let oidcUserAgent = oidcUserAgent else { return }
+        guard let oidcUserAgent = oidcUserAgent else {
+            handleError(AuthenticationServiceError.oidcError(.notSupported))
+            return
+        }
+        
         startLoading(isInteractionBlocking: true)
         
         Task {

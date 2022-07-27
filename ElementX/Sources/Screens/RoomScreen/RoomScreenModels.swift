@@ -40,7 +40,7 @@ struct RoomScreenViewState: BindableState {
     var isBackPaginating = false
     var bindings: RoomScreenViewStateBindings
     
-    var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
+    var contextMenuBuilder: (@MainActor(_ itemId: String) -> TimelineItemContextMenu)?
     
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
