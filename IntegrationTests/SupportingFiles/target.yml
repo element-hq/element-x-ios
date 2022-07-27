@@ -1,0 +1,50 @@
+name: IntegrationTests
+
+targets:
+  IntegrationTests:
+    type: bundle.ui-testing
+    platform: iOS
+
+    dependencies:
+    - target: ElementX
+    - package: MatrixRustSDK
+      linkType: static
+    - package: DTCoreText
+      linkType: static
+    - package: KeychainAccess
+      linkType: static
+    - package: Kingfisher
+      linkType: static
+    - package: Introspect
+      linkType: static
+    - package: SwiftyBeaver
+      linkType: static
+    - package: SwiftState
+      linkType: static
+    - package: GZIP
+      linkType: static
+    - package: Sentry
+      linkType: static
+
+    info:
+      path: ../SupportingFiles/Info.plist
+
+    settings:
+      base:
+        PRODUCT_NAME: IntegrationTests
+        PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx.integration.tests
+      debug:
+      release:
+
+    scheme:
+      testTargets:
+        - IntegrationTests
+
+      environmentVariables:
+        INTEGRATION_TESTS_HOST: ${INTEGRATION_TESTS_HOST}
+        INTEGRATION_TESTS_USERNAME: ${INTEGRATION_TESTS_USERNAME}
+        INTEGRATION_TESTS_PASSWORD: ${INTEGRATION_TESTS_PASSWORD}
+
+    sources:
+    - path: ../Sources
+    - path: ../SupportingFiles

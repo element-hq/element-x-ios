@@ -12,7 +12,7 @@ options:
     iOS: "15.0"
     macOS: "12.0"
   groupOrdering: 
-    - order: [ElementX, UnitTests, UITests, Tools]
+    - order: [ElementX, UnitTests, UITests, IntegrationTests, Tools]
     - pattern: ElementX
       order: [Sources, Resources, SupportingFiles]
     - pattern: Sources
@@ -28,6 +28,7 @@ include:
   - path: ElementX/SupportingFiles/target.yml
   - path: UnitTests/SupportingFiles/target.yml
   - path: UITests/SupportingFiles/target.yml
+  - path: IntegrationTests/SupportingFiles/target.yml
 
 packages:
   MatrixRustSDK:

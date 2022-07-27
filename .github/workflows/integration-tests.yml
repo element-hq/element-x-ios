@@ -1,0 +1,42 @@
+name: Integration tests
+
+on:
+  schedule:
+    - cron:  '0 3 * * 1-5'
+
+  pull_request:
+    
+  workflow_dispatch:
+
+jobs:
+  integration_tests:
+    name: Integration Tests
+    runs-on: macos-12
+
+    concurrency:
+      # Only allow a single run of this workflow on each branch, automatically cancelling older runs.
+      group: integration-tests-${{ github.head_ref }}
+      cancel-in-progress: true
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/cache@v3
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-
+
+      - name: Bundle install
+        run: |
+          bundle config path vendor/bundle
+          bundle install --jobs 4 --retry 3
+      
+      - name: Run tests
+        run: bundle exec fastlane integration_tests
+        env:
+          INTEGRATION_TESTS_HOST: ${{ secrets.INTEGRATION_TESTS_HOST }}
+          INTEGRATION_TESTS_USERNAME: ${{ secrets.INTEGRATION_TESTS_USERNAME }}
+          INTEGRATION_TESTS_PASSWORD: ${{ secrets.INTEGRATION_TESTS_PASSWORD }}
+
