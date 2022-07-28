@@ -6,6 +6,7 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
+import AppAuth
 import Foundation
 import MatrixRustSDK
 
@@ -59,6 +60,42 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
+    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        guard case let .oidc(issuerURL) = homeserver.loginMode else {
+            return .failure(.oidcError(.notSupported))
+        }
+        
+        let token: String
+        let deviceID = generateDeviceID()
+        do {
+            let oidcService = OIDCService(issuerURL: issuerURL)
+            let configuration = try await oidcService.metadata()
+            let registationResponse = try await oidcService.registerClient(metadata: configuration)
+            let authResponse = try await oidcService.presentWebAuthentication(metadata: configuration,
+                                                                              clientID: registationResponse.clientID,
+                                                                              scope: "urn:matrix:device:\(deviceID)",
+                                                                              userAgent: userAgent)
+            let tokenResponse = try await oidcService.redeemCodeForTokens(authResponse: authResponse)
+            
+            guard let accessToken = tokenResponse.accessToken else { return .failure(.oidcError(.unknown)) }
+            token = accessToken
+        } catch let error as OIDCError {
+            MXLog.error("Login with OIDC failed: \(error)")
+            return .failure(.oidcError(error))
+        } catch {
+            MXLog.error("Login with OIDC failed: \(error)")
+            return .failure(.failedLoggingIn)
+        }
+        
+        do {
+            let client = try authenticationService.restoreWithAccessToken(token: token, deviceId: deviceID)
+            return await userSession(for: client)
+        } catch {
+            MXLog.debug(error)
+            return .failure(.failedLoggingIn)
+        }
+    }
+    
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
@@ -96,5 +133,14 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         case .failure:
             return .failure(.failedLoggingIn)
         }
+    }
+    
+    private func generateDeviceID() -> String {
+        var deviceID = ""
+        for _ in 0..<10 {
+            guard let scalar = UnicodeScalar(Int.random(in: 65...90)) else { fatalError() }
+            deviceID.append(Character(scalar))
+        }
+        return deviceID
     }
 }

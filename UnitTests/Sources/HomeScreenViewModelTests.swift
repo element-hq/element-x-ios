@@ -23,7 +23,8 @@ class HomeScreenViewModelTests: XCTestCase {
     var context: HomeScreenViewModelType.Context!
 
     @MainActor override func setUpWithError() throws {
-        viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
+        viewModel = HomeScreenViewModel(initialDisplayName: "@test:example.com",
+                                        attributedStringBuilder: AttributedStringBuilder())
         context = viewModel.context
     }
 

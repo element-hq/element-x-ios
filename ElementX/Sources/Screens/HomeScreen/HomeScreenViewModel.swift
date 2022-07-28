@@ -39,10 +39,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
-    init(attributedStringBuilder: AttributedStringBuilderProtocol) {
+    init(initialDisplayName: String, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.attributedStringBuilder = attributedStringBuilder
         
-        super.init(initialViewState: HomeScreenViewState(isLoadingRooms: true))
+        super.init(initialViewState: HomeScreenViewState(userDisplayName: initialDisplayName,
+                                                         isLoadingRooms: true))
     }
     
     // MARK: - Public

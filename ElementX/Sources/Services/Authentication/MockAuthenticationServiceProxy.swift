@@ -6,11 +6,13 @@
 //  Copyright © 2022 Element. All rights reserved.
 //
 
-import Foundation
+import AppAuth
 
 class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     let validCredentials = (username: "alice", password: "12345678")
+    
     private(set) var homeserver: LoginHomeserver = .mockMatrixDotOrg
+    var oidcUserAgent: OIDExternalUserAgentIOS?
     
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
         // Map the address to the mock homeservers
@@ -30,6 +32,10 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             // Otherwise fail with an invalid server.
             return .failure(.invalidServer)
         }
+    }
+    
+    func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+        .failure(.oidcError(.notSupported))
     }
     
     func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AppAuth
 import MatrixRustSDK
 import SwiftUI
 
@@ -27,8 +28,6 @@ struct LoginCoordinatorParameters {
 enum LoginCoordinatorAction {
     /// Login was successful.
     case signedIn(UserSessionProtocol)
-    /// Continue using OIDC.
-    case continueWithOIDC
 }
 
 final class LoginCoordinator: Coordinator, Presentable {
@@ -39,6 +38,8 @@ final class LoginCoordinator: Coordinator, Presentable {
     private let parameters: LoginCoordinatorParameters
     private let loginHostingController: UIViewController
     private var loginViewModel: LoginViewModelProtocol
+    /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
+    private let oidcUserAgent: OIDExternalUserAgentIOS?
     
     private var currentTask: Task<Void, Error>? {
         willSet {
@@ -69,6 +70,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         loginHostingController = UIHostingController(rootView: view)
         
         indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: loginHostingController)
+        oidcUserAgent = OIDExternalUserAgentIOS(presenting: loginHostingController)
     }
     
     // MARK: - Public
@@ -90,7 +92,7 @@ final class LoginCoordinator: Coordinator, Presentable {
             case .login(let username, let password):
                 self.login(username: username, password: password)
             case .continueWithOIDC:
-                self.callback?(.continueWithOIDC)
+                self.loginWithOIDC()
             }
         }
     }
@@ -135,6 +137,26 @@ final class LoginCoordinator: Coordinator, Presentable {
             loginViewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
         default:
             loginViewModel.displayError(.alert(ElementL10n.unknownError))
+        }
+    }
+    
+    private func loginWithOIDC() {
+        guard let oidcUserAgent = oidcUserAgent else {
+            handleError(AuthenticationServiceError.oidcError(.notSupported))
+            return
+        }
+        
+        startLoading(isInteractionBlocking: true)
+        
+        Task {
+            switch await authenticationService.loginWithOIDC(userAgent: oidcUserAgent) {
+            case .success(let userSession):
+                callback?(.signedIn(userSession))
+                stopLoading()
+            case .failure(let error):
+                stopLoading()
+                handleError(error)
+            }
         }
     }
     

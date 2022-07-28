@@ -9,6 +9,8 @@ targets:
     - target: ElementX
     - package: MatrixRustSDK
       linkType: static
+    - package: AppAuth
+      linkType: static
     - package: DTCoreText
       linkType: static
     - package: KeychainAccess

@@ -31,7 +31,7 @@ enum HomeScreenViewAction {
 }
 
 struct HomeScreenViewState: BindableState {
-    var userDisplayName: String?
+    var userDisplayName: String
     var userAvatar: UIImage?
     
     var showSessionVerificationBanner = false

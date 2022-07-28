@@ -84,7 +84,7 @@ struct HomeScreen: View {
             }
         }
     }
-
+    
     @ViewBuilder
     private var userAvatarImage: some View {
         if let avatar = context.viewState.userAvatar {
@@ -94,21 +94,14 @@ struct HomeScreen: View {
                 .frame(width: 32, height: 32, alignment: .center)
                 .clipShape(Circle())
                 .accessibilityIdentifier("userAvatarImage")
-        } else {
-            EmptyView()
         }
     }
-
-    @ViewBuilder
+    
     private var userDisplayNameView: some View {
-        if let displayName = context.viewState.userDisplayName {
-            Text(displayName)
-                .font(.headline)
-                .fontWeight(.bold)
-                .foregroundColor(.primary)
-        } else {
-            EmptyView()
-        }
+        Text(context.viewState.userDisplayName)
+            .font(.headline)
+            .fontWeight(.bold)
+            .foregroundColor(.primary)
     }
 }
 
@@ -173,11 +166,14 @@ struct RoomCell: View {
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
+            .tint(.element.accent)
         body.preferredColorScheme(.dark)
+            .tint(.element.accent)
     }
 
     static var body: some View {
-        let viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
+        let viewModel = HomeScreenViewModel(initialDisplayName: "@username:server.com",
+                                            attributedStringBuilder: AttributedStringBuilder())
         
         let eventBrief = EventBrief(eventId: "id",
                                     senderId: "senderId",
