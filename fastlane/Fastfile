@@ -45,7 +45,7 @@ lane :alpha do
 end
 
 lane :release do
-  ios_adhoc()
+  adhoc()
 
   upload_to_diawi()
 
