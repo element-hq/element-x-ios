@@ -33,7 +33,6 @@ struct RoomScreen: View {
                 RoomHeaderView(context: context)
             }
         }
-        .background(Color.element.background, ignoresSafeAreaEdges: .all)
     }
     
     private func sendMessage() {

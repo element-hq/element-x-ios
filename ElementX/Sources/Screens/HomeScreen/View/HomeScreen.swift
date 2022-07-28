@@ -63,7 +63,6 @@ struct HomeScreen: View {
             
             Spacer()
         }
-        .background(Color.element.background)
         .transition(.slide)
         .animation(.default, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
