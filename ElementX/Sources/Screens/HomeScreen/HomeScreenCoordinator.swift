@@ -119,7 +119,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     
     func updateRoomsList() {
         roomSummaries = parameters.userSession.clientProxy.rooms.compactMap { roomProxy in
-            guard !roomProxy.isSpace, !roomProxy.isTombstoned else {
+            guard roomProxy.isJoined, !roomProxy.isSpace, !roomProxy.isTombstoned else {
                 return nil
             }
             

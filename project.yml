@@ -31,7 +31,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.0.12-alpha
+    exactVersion: 1.0.13-alpha
     # path: ../matrix-rust-components-swift
   DesignKit:
     path: ./

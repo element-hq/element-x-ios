@@ -1,0 +1,1 @@
+Add a sync limit of 20 timeline items and prefill rooms with this number of events when calculating the last message.
