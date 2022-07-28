@@ -24,6 +24,9 @@ private class WeakClientProxyWrapper: ClientDelegate {
 }
 
 class ClientProxy: ClientProxyProtocol {
+    /// The maximum number of timeline events required during a sync request.
+    static let syncLimit: UInt16 = 20
+    
     private let client: Client
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
@@ -48,7 +51,7 @@ class ClientProxy: ClientProxyProtocol {
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         
         Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-        client.startSync()
+        client.startSync(timelineLimit: ClientProxy.syncLimit)
         
         Task { await updateRooms() }
     }

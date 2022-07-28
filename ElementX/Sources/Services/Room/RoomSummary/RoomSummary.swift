@@ -141,7 +141,8 @@ class RoomSummary: RoomSummaryProtocol {
             return
         }
         
-        switch await roomProxy.paginateBackwards(count: 1) {
+        // Pre-fill the room with some messages and use the last message in the response.
+        switch await roomProxy.paginateBackwards(count: UInt(ClientProxy.syncLimit)) {
         case .success:
             lastMessage = await eventBriefFactory.buildEventBriefFor(message: roomProxy.messages.last)
         case .failure(let error):

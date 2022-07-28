@@ -67,6 +67,10 @@ class RoomProxy: RoomProxyProtocol {
         room.topic()
     }
     
+    var isJoined: Bool {
+        room.membership() == .joined
+    }
+    
     var isDirect: Bool {
         room.isDirect()
     }
