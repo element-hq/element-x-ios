@@ -1,1 +1,0 @@
-Settings screen minimal implementation.

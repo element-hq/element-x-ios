@@ -1,1 +1,0 @@
-Implement rageshake service.

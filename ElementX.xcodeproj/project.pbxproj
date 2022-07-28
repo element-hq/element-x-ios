@@ -2391,7 +2391,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.element.elementx;
 				PRODUCT_NAME = ElementX;
 				SDKROOT = iphoneos;
@@ -2414,7 +2414,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = io.element.elementx;
 				PRODUCT_NAME = ElementX;
 				SDKROOT = iphoneos;
