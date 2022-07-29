@@ -1893,7 +1893,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.15.5'\npython $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.15.5'\n";
+			shellScript = "python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.15.5'\npython3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.15.5'\n";
 		};
 		98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;

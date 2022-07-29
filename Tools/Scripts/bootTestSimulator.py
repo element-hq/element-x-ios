@@ -1,9 +1,11 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 
+from encodings import utf_8
 import os
 import subprocess
 import json
 import argparse
+from datetime import datetime
 
 RUNTIME_PREFIX = 'com.apple.CoreSimulator.SimRuntime.'
 
@@ -34,8 +36,7 @@ if runtime in json_object['devices']:
             print("Found device UDID: " + UDID)
 
             dirname = os.path.dirname(os.path.abspath(__file__))
-            script_path = os.path.join(dirname, 'get_simulator_time.rb')
-            overridden_time = subprocess.check_output("ruby " + script_path, shell=True)
+            overridden_time = datetime(2007, 1, 9, 9, 41, 0).astimezone().isoformat()
             print("Will override simulator with time: " + overridden_time)
             os.system("/usr/bin/xcrun simctl boot '" + UDID + "' > /dev/null 2>&1")
             os.system("/usr/bin/xcrun simctl status_bar '" + UDID + "' override --time '" + overridden_time + "' --dataNetwork 'wifi' --wifiMode 'active' --wifiBars 3 --cellularMode 'active' --cellularBars 4 --batteryState 'charged' --batteryLevel 100 > /dev/null 2>&1")
