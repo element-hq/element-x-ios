@@ -30,7 +30,6 @@
       codeCoverageEnabled = "YES"
       onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES"
-      disableMainThreadChecker = "YES"
       systemAttachmentLifetime = "keepNever">
       <Testables>
          <TestableReference
@@ -65,8 +64,7 @@
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
-      allowLocationSimulation = "YES"
-      disableMainThreadChecker = "YES">
+      allowLocationSimulation = "YES">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"

@@ -13,7 +13,7 @@ schemes:
       config: Release
     run:
       config: Debug
-      disableMainThreadChecker: true
+      disableMainThreadChecker: false
     test:
       config: Debug
       testPlans:

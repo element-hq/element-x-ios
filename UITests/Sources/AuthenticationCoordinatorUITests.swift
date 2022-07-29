@@ -45,17 +45,15 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         
         // Login Screen: Enter invalid credentials
         app.textFields["usernameTextField"].tap()
-        app.typeText("alice\n")
+        app.typeText("alice")
         app.secureTextFields["passwordTextField"].tap()
         app.typeText("87654321")
 
         // Login Screen: Tap next
         app.buttons["nextButton"].tap()
-
-        try await Task.sleep(nanoseconds: 1_000_000_000)
         
         // Then login should fail.
-        XCTAssertTrue(app.alerts.element.exists, "An error alert should be shown when attempting login with invalid credentials.")
+        XCTAssertTrue(app.alerts.element.waitForExistence(timeout: 1), "An error alert should be shown when attempting login with invalid credentials.")
     }
     
     func testSelectingOIDCServer() {

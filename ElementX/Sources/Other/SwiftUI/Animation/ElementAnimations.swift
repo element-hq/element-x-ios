@@ -9,9 +9,26 @@
 import Foundation
 import SwiftUI
 
-extension Animation {
-    /// Disabled if running UI tests, otherwise `Animation.default`
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+public extension Animation {
+    /// Animation to be used to disable animations.
+    static let noAnimation: Animation = .linear(duration: 0)
+
+    /// `noAnimation` if running UI tests, otherwise `default` animation.
     static var elementDefault: Animation {
-        ProcessInfo.processInfo.environment["IS_RUNNING_UI_TESTS"] == "1" ? .linear(duration: 0) : .default
+        Tests.isRunningUITests ? .noAnimation : .default
     }
+}
+
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
+/// Returns the result of recomputing the view's body with the provided
+/// animation.
+/// - Parameters:
+///   - animation: Animation
+///   - body: operations to be animated
+public func withElementAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
+    if Tests.isRunningUITests {
+        return try withAnimation(.noAnimation, body)
+    }
+    return try withAnimation(animation, body)
 }

@@ -13,12 +13,12 @@ schemes:
       config: Release
     run:
       config: Debug
-      disableMainThreadChecker: true
+      disableMainThreadChecker: false
       environmentVariables:
         IS_RUNNING_UNIT_TESTS: "1"
     test:
       config: Debug
-      disableMainThreadChecker: true
+      disableMainThreadChecker: false
       captureScreenshotsAutomatically: false
       gatherCoverageData: true
       targets:

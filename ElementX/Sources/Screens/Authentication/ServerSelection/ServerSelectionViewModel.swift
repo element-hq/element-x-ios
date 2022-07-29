@@ -51,7 +51,7 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     func displayError(_ type: ServerSelectionErrorType) {
         switch type {
         case .footerMessage(let message):
-            withAnimation {
+            withElementAnimation {
                 state.footerErrorMessage = message
             }
         }
@@ -62,6 +62,6 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     /// Clear any errors shown in the text field footer.
     private func clearFooterError() {
         guard state.footerErrorMessage != nil else { return }
-        withAnimation { state.footerErrorMessage = nil }
+        withElementAnimation { state.footerErrorMessage = nil }
     }
 }

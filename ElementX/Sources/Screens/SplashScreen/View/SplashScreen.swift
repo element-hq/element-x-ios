@@ -123,11 +123,11 @@ struct SplashScreen: View {
             if context.pageIndex == pageCount - 1 {
                 showHiddenPage()
                 
-                withAnimation(.easeInOut(duration: 0.7)) {
+                withElementAnimation(.easeInOut(duration: 0.7)) {
                     showNextPage()
                 }
             } else {
-                withAnimation(.easeInOut(duration: 0.7)) {
+                withElementAnimation(.easeInOut(duration: 0.7)) {
                     showNextPage()
                 }
             }
@@ -185,7 +185,7 @@ struct SplashScreen: View {
         stopTimer()
         
         // Animate the change over a few frames to smooth out any stuttering.
-        withAnimation(.linear(duration: 0.05)) {
+        withElementAnimation(.linear(duration: 0.05)) {
             dragOffset = isLeftToRight ? drag.translation.width : -drag.translation.width
         }
     }
@@ -195,11 +195,11 @@ struct SplashScreen: View {
     private func handleDragGestureEnded(_ drag: DragGesture.Value, viewSize: CGSize) {
         guard shouldSwipeForTranslation(drag.predictedEndTranslation.width) else {
             // Reset the offset just in case.
-            withAnimation { dragOffset = 0 }
+            withElementAnimation { dragOffset = 0 }
             return
         }
         
-        withAnimation(.easeInOut(duration: 0.2)) {
+        withElementAnimation(.easeInOut(duration: 0.2)) {
             if drag.predictedEndTranslation.width < -viewSize.width / 2 {
                 showNextPage()
             } else if drag.predictedEndTranslation.width > viewSize.width / 2 {

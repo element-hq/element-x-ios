@@ -39,7 +39,6 @@
       "identifier" : "London, England",
       "referenceType" : "built-in"
     },
-    "mainThreadCheckerEnabled" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:ElementX.xcodeproj",
       "identifier" : "C0FAEB81CFD9776CD78CE489",

@@ -4,7 +4,8 @@
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
-      buildImplicitDependencies = "YES">
+      buildImplicitDependencies = "YES"
+      runPostActionsOnFailure = "NO">
       <BuildActionEntries>
          <BuildActionEntry
             buildForTesting = "YES"
@@ -26,7 +27,16 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      onlyGenerateCoverageForSpecifiedTargets = "NO"
       shouldUseLaunchSchemeArgsEnv = "YES">
+      <TestPlans>
+         <TestPlanReference
+            default = "YES"
+            reference = "container:UITests/SupportingFiles/UITests.xctestplan">
+         </TestPlanReference>
+      </TestPlans>
+      <Testables>
+      </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
@@ -36,18 +46,13 @@
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
-      <TestPlans>
-         <TestPlanReference
-            reference = "container:UITests/SupportingFiles/UITests.xctestplan"
-            default = "YES">
-         </TestPlanReference>
-      </TestPlans>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      disableMainThreadChecker = "YES"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -63,6 +68,8 @@
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -80,6 +87,8 @@
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <CommandLineArguments>
+      </CommandLineArguments>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
