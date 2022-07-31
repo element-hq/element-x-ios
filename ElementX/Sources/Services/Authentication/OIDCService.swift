@@ -53,8 +53,8 @@ class OIDCService {
         let extraParams = [
             "client_name": "ElementX iOS",
             "client_uri": "https://element.io",
-            "tos_uri": "https://example.com/tos",
-            "policy_uri": "https://example.com/policy"
+            "tos_uri": "https://element.io/user-terms-of-service",
+            "policy_uri": "https://element.io/privacy"
         ]
         
         let nonTemplatizedRequest = OIDRegistrationRequest(
