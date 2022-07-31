@@ -61,7 +61,7 @@ class OIDCService {
             configuration: metadata,
             redirectURIs: [redirectURI],
             responseTypes: nil,
-            grantTypes: [OIDGrantTypeAuthorizationCode],
+            grantTypes: [OIDGrantTypeAuthorizationCode, OIDGrantTypeRefreshToken],
             subjectType: nil,
             tokenEndpointAuthMethod: "none",
             additionalParameters: extraParams
