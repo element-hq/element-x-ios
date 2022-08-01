@@ -25,7 +25,7 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
 
     // MARK: Public
 
-    var callback: (@MainActor(ServerSelectionViewModelAction) -> Void)?
+    var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)?
 
     // MARK: - Setup
 
