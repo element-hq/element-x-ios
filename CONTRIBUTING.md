@@ -32,7 +32,7 @@ Please see our [pull request guide](https://github.com/vector-im/element-android
 
 ## Implementing a new screen
 
-New screen flows are currently using MVVM-Coordinator pattern. Please refer to the screen template under [Tools/Scripts/createSimpleScreen.sh](Tools/Scripts/createSimpleScreen.sh) to create a new screen or a new screen flow.
+New screen flows are currently using MVVM-Coordinator pattern. Please refer to the screen template under [Tools/Scripts/createScreen.sh](Tools/Scripts/createScreen.sh) to create a new screen or a new screen flow.
 
 ## Coding style
 
