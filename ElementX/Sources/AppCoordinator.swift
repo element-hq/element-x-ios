@@ -82,6 +82,22 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
     
+    func openDeeplinkURL(_ url: URL) -> Bool {
+        guard let destination = DeeplinkDestination(urlPathComponents: url.pathComponents) else {
+            return false
+        }
+        
+        switch destination {
+        case .room(let roomId):
+            MXLog.debug("open URL with roomId \(roomId)")
+            stateMachine.processEvent(.showRoomScreen(roomId: roomId))
+        case .user(let userId):
+            MXLog.debug("open URL with userId \(userId)")
+        }
+        
+        return true
+    }
+    
     // MARK: - AuthenticationCoordinatorDelegate
     
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {

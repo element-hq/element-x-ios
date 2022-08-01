@@ -36,6 +36,11 @@ protocol Coordinator: AnyObject {
     ///
     /// - Parameter childCoordinator: Child coordinator to remove.
     func remove(childCoordinator: Coordinator)
+    
+    /// Opens a deeplink URL.
+    ///
+    /// - Parameter url: The URL to open.
+    func openDeeplinkURL(_ url: URL) -> Bool
 }
 
 // `Coordinator` default implementation
@@ -46,5 +51,9 @@ extension Coordinator {
     
     func remove(childCoordinator: Coordinator) {
         childCoordinators = childCoordinators.filter { $0 !== childCoordinator }
+    }
+    
+    func openDeeplinkURL(_ url: URL) -> Bool {
+        true
     }
 }

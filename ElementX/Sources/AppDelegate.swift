@@ -29,6 +29,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
     
+    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
+        appCoordinator.openDeeplinkURL(url)
+    }
+    
     private var isRunningUnitTests: Bool {
         #if DEBUG
         ProcessInfo.processInfo.environment["IS_RUNNING_UNIT_TESTS"] == "1"
