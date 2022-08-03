@@ -9,21 +9,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  check-secret:
-    runs-on: macos-12
-    outputs:
-      out-key: ${{ steps.out-key.outputs.defined }}
-    steps:
-        - id: out-key
-          env:
-            P12_KEY: ${{ secrets.ALPHA_CERTIFICATES_P12 }}
-            P12_PASSWORD_KEY: ${{ secrets.ALPHA_CERTIFICATES_P12_PASSWORD }}
-          if: "${{ env.P12_KEY != '' || env.P12_PASSWORD_KEY != '' }}"
-          run: echo "::set-output name=defined::true"
   build:
-    # Run job if secrets are available (not available for forks).
-    needs: [check-secret]
-    if: needs.check-secret.outputs.out-key == 'true'
+    # Don't run for forks as secrets are unavailable.
+    if: github.repository == 'vector-im/element-x-ios'
     name: Release
     runs-on: macos-12
     
