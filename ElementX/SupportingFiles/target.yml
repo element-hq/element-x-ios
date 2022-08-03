@@ -70,18 +70,6 @@ targets:
         else
             echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
         fi
-    
-    postBuildScripts:
-    - name: ⚠️ SwiftLint
-      runOnlyWhenInstalling: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which swiftlint >/dev/null; then
-            swiftlint
-        else
-            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
-        fi
 
     - name: 🧹 SwiftFormat
       runOnlyWhenInstalling: false
@@ -97,7 +85,19 @@ targets:
         else
           echo "warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat"
         fi
-      
+
+    postBuildScripts:
+    - name: ⚠️ SwiftLint
+      runOnlyWhenInstalling: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which swiftlint >/dev/null; then
+            swiftlint
+        else
+            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+        fi
+
     dependencies:
     - package: MatrixRustSDK
     - package: DesignKit
