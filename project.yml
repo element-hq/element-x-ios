@@ -17,6 +17,7 @@ options:
       order: [Sources, Resources, SupportingFiles]
     - pattern: Sources
       order: [Services, Screens, Other]
+  postGenCommand: cd Tools/XcodeGen && sh postGenCommand.sh
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
