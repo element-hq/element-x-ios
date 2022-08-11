@@ -37,7 +37,7 @@ struct TimelineItemList: View {
                     Spacer()
                     ProgressView()
                         .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
-                        .animation(.default, value: context.viewState.isBackPaginating)
+                        .animation(.elementDefault, value: context.viewState.isBackPaginating)
                     Spacer()
                 }
                 .listRowBackground(Color.clear)

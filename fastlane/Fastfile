@@ -30,6 +30,7 @@ lane :alpha do
   update_app_icon(caption_text: "PR #{version}")
 
   build_ios_app(
+    scheme: "ElementX",
     clean: true,
     export_method: "ad-hoc",
     output_directory: "build",
@@ -72,7 +73,21 @@ lane :adhoc do
 end
 
 lane :tests do
-  run_tests()
+  
+  run_tests(
+    project: "ElementX.xcodeproj",
+    scheme: "UnitTests"
+  )
+
+  run_tests(
+    project: "ElementX.xcodeproj",
+    scheme: "UITests",
+    devices: ["iPhone 13 Pro Max (15.5)", "iPad (9th generation) (15.5)"],
+    ensure_devices_found: true,
+    prelaunch_simulator: true,
+    output_directory: "fastlane/test_output/",
+    result_bundle: true
+  )
 
   slather(
     cobertura_xml: true,

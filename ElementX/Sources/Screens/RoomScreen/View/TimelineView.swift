@@ -47,7 +47,7 @@ struct TimelineView: View {
             scollToBottomButtonVisible = !visible
         })
         .opacity(scollToBottomButtonVisible ? 1.0 : 0.0)
-        .animation(.default, value: scollToBottomButtonVisible)
+        .animation(.elementDefault, value: scollToBottomButtonVisible)
     }
 }
 

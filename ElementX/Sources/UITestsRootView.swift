@@ -31,5 +31,6 @@ struct UITestsRootView: View {
             .listStyle(.plain)
         }
         .navigationTitle("Screens")
+        .navigationViewStyle(.stack)
     }
 }

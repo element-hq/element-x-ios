@@ -53,6 +53,9 @@ struct SplashScreenViewState: BindableState {
     
     /// The background gradient for all 4 pages and the hidden page at the start of the carousel.
     var backgroundGradient: Gradient {
+        if Tests.isRunningUITests {
+            return Gradient(colors: [.white])
+        }
         // Include the extra stop for the hidden page at the start of the carousel.
         // (The last color is the right-hand stop, but we need the left-hand stop,
         // so take the last but one color from the array).

@@ -27,14 +27,36 @@ class ScreenshotDetectorTests: XCTestCase {
             detector.autoRequestPHAuthorization = false
             detector.callback = { image, error in
 
+                defer {
+                    expectation.fulfill()
+                }
+
                 if PHPhotoLibrary.authorizationStatus(for: .readWrite) == .authorized {
                     //  if Photos already authorized on the simulator
 
-                    //  we should get an image
-                    XCTAssertNotNil(image)
+                    if PHAsset.fetchLastScreenshot() != nil {
+                        //  we should get an image
+                        XCTAssertNotNil(image)
 
-                    //  we should not get an error
-                    XCTAssertNil(error)
+                        //  we should not get an error
+                        XCTAssertNil(error)
+                    } else {
+                        //  otherwise we should not get an image
+                        XCTAssertNil(image)
+
+                        //  and get an error
+                        guard let error = error else {
+                            XCTFail("Should get an error")
+                            return
+                        }
+
+                        switch error {
+                        case ScreenshotDetectorError.loadFailed:
+                            break
+                        default:
+                            XCTFail("Unknown error")
+                        }
+                    }
                 } else {
                     //  otherwise we should not get an image
                     XCTAssertNil(image)
@@ -52,8 +74,6 @@ class ScreenshotDetectorTests: XCTestCase {
                         XCTFail("Unknown error")
                     }
                 }
-
-                expectation.fulfill()
             }
 
             NotificationCenter.default.post(name: UIApplication.userDidTakeScreenshotNotification, object: nil)

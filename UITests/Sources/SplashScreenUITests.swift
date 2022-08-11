@@ -25,6 +25,8 @@ class SplashScreenUITests: XCTestCase {
         let getStartedButton = app.buttons["getStartedButton"]
         XCTAssertTrue(getStartedButton.exists, "The primary action button should be shown.")
         XCTAssertEqual(getStartedButton.label, ElementL10n.loginSplashSubmit)
+
+        app.assertScreenshot(.splash)
     }
     
     func testSwipingBetweenPages() {
@@ -32,8 +34,8 @@ class SplashScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.splash)
         
         // Given the splash screen in its initial state.
-        let page1TitleText = app.staticTexts["Own your conversations."]
-        let page2TitleText = app.staticTexts["You're in control."]
+        let page1TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselSecureTitle]
+        let page2TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselControlTitle]
         let hiddenPageTitleText = app.staticTexts["hiddenPage"].firstMatch
         
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be onscreen.")
@@ -41,21 +43,21 @@ class SplashScreenUITests: XCTestCase {
         XCTAssertFalse(hiddenPageTitleText.isHittable, "The hidden page of the carousel should be offscreen.")
         
         // When swiping to the next screen.
-        page1TitleText.swipeLeft()
+        page1TitleText.swipeLeft(velocity: .fast)
         
         // Then the second screen should be shown.
         XCTAssertFalse(page1TitleText.isHittable, "The title from the first page of the carousel should be offscreen.")
         XCTAssertTrue(page2TitleText.isHittable, "The title from the second page of the carousel should be onscreen.")
         
         // When swiping back to the previous screen.
-        page2TitleText.swipeRight()
+        page2TitleText.swipeRight(velocity: .fast)
         
         // Then the first screen should be shown again.
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be onscreen.")
         XCTAssertFalse(page2TitleText.isHittable, "The title from the second page of the carousel should be offscreen.")
         
         // When swiping back to the previous screen.
-        page1TitleText.swipeRight()
+        page1TitleText.swipeRight(velocity: .fast)
         
         // Then the screen shouldn't change and the hidden screen should be ignored.
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be still be onscreen.")

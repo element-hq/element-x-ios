@@ -77,7 +77,7 @@ if hasChangedViews {
 }
 
 // Check for pngs on resources
-let hasPngs = !editedFiles.filter { $0.lowercased().hasSuffix(".png") }.isEmpty
+let hasPngs = !editedFiles.filter { $0.lowercased().contains(".xcassets") && $0.lowercased().hasSuffix(".png") }.isEmpty
 if hasPngs {
-    warn("You seem to have made changes to some images. Please consider using an SVG or PDF.")
+    warn("You seem to have made changes to some resource images. Please consider using an SVG or PDF.")
 }

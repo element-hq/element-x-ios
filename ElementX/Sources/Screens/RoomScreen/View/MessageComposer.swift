@@ -36,7 +36,7 @@ struct MessageComposer: View {
             .padding(.bottom, 6.0)
             .disabled(disabled)
             .opacity(disabled ? 0.5 : 1.0)
-            .animation(.default, value: disabled)
+            .animation(.elementDefault, value: disabled)
             .keyboardShortcut(.return, modifiers: [.command])
         }
     }

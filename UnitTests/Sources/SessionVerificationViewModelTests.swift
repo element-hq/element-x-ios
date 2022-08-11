@@ -31,7 +31,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: sessionVerificationController)
         context = viewModel.context
     }
-    
+
     func testRequestVerification() async {
         XCTAssertEqual(context.viewState.verificationState, .initial)
         

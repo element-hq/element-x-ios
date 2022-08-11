@@ -57,7 +57,7 @@ struct MessageComposerTextField: View {
             .background(placeholderView, alignment: .topLeading)
             .clipShape(rect)
             .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
-            .animation(.default, value: isEditing)
+            .animation(.elementDefault, value: isEditing)
     }
     
     @ViewBuilder

@@ -64,7 +64,7 @@ struct HomeScreen: View {
             Spacer()
         }
         .transition(.slide)
-        .animation(.default, value: context.viewState.showSessionVerificationBanner)
+        .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -72,11 +72,11 @@ struct HomeScreen: View {
                 Button { context.send(viewAction: .tapUserAvatar) } label: {
                     HStack {
                         userAvatarImage
-                            .animation(.default, value: context.viewState.userAvatar)
+                            .animation(.elementDefault, value: context.viewState.userAvatar)
                             .transition(.opacity)
 
                         userDisplayNameView
-                            .animation(.default, value: context.viewState.userDisplayName)
+                            .animation(.elementDefault, value: context.viewState.userDisplayName)
                             .transition(.opacity)
                     }
                 }
@@ -147,7 +147,7 @@ struct RoomCell: View {
                     }
                 }
             }
-            .animation(.default, value: room)
+            .animation(.elementDefault, value: room)
             .frame(minHeight: 60.0)
             .task {
                 context.send(viewAction: .loadRoomData(roomIdentifier: room.id))

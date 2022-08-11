@@ -15,3 +15,11 @@ Usage:
 ```
 ./localizer.py
 ```
+
+## Boot Test Simulator
+Boots a desired simulator and makes status bar overrides on that.
+
+Usage:
+```
+./bootTestSimulator.py 'iPhone 13 Pro Max'
+```

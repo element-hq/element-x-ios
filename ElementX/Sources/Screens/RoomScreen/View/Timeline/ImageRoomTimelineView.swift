@@ -42,7 +42,7 @@ struct ImageRoomTimelineView: View {
                 }
             }
             .id(timelineItem.id)
-            .animation(.default, value: timelineItem.image)
+            .animation(.elementDefault, value: timelineItem.image)
             .frame(maxHeight: 1000.0)
         } else {
             TimelineStyler(timelineItem: timelineItem) {

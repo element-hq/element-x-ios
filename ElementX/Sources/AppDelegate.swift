@@ -18,7 +18,7 @@ import UIKit
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    private lazy var appCoordinator: Coordinator = isRunningUITests ? UITestsAppCoordinator() : AppCoordinator()
+    private lazy var appCoordinator: Coordinator = Tests.isRunningUITests ? UITestsAppCoordinator() : AppCoordinator()
 
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         //  use `en` as fallback language
@@ -28,28 +28,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        if isRunningUnitTests {
+        if Tests.isRunningUnitTests {
             return true
         }
         
         appCoordinator.start()
         
         return true
-    }
-    
-    private var isRunningUnitTests: Bool {
-        #if DEBUG
-        ProcessInfo.processInfo.environment["IS_RUNNING_UNIT_TESTS"] == "1"
-        #else
-        false
-        #endif
-    }
-    
-    private var isRunningUITests: Bool {
-        #if DEBUG
-        ProcessInfo.processInfo.environment["IS_RUNNING_UI_TESTS"] == "1"
-        #else
-        false
-        #endif
     }
 }

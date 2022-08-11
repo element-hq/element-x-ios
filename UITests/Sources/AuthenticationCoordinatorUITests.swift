@@ -33,6 +33,8 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         app.typeText("alice\n")
         app.secureTextFields["passwordTextField"].tap()
         app.typeText("12345678")
+
+        app.assertScreenshot(.authenticationFlow)
         
         // Login Screen: Tap next
         app.buttons["nextButton"].tap()
@@ -41,7 +43,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         XCTAssertFalse(app.alerts.element.exists, "No alert should be shown when logging in with valid credentials.")
     }
     
-    func testLoginWithIncorrectPassword() {
+    func testLoginWithIncorrectPassword() async throws {
         // Given the authentication flow.
         let app = Application.launch()
         app.goToScreenWithIdentifier(.authenticationFlow)
@@ -51,11 +53,15 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         
         // Login Screen: Enter invalid credentials
         app.textFields["usernameTextField"].tap()
-        app.typeText("alice\n")
-        app.typeText("87654321\n")
+        app.typeText("alice")
+        app.secureTextFields["passwordTextField"].tap()
+        app.typeText("87654321")
+
+        // Login Screen: Tap next
+        app.buttons["nextButton"].tap()
         
         // Then login should fail.
-        XCTAssertTrue(app.alerts.element.exists, "An error alert should be shown when attempting login with invalid credentials.")
+        XCTAssertTrue(app.alerts.element.waitForExistence(timeout: 1), "An error alert should be shown when attempting login with invalid credentials.")
     }
     
     func testSelectingOIDCServer() {

@@ -26,6 +26,8 @@ class TemplateScreenUITests: XCTestCase {
         XCTAssert(title.exists)
         
         XCTAssertEqual(title.label, "Make this chat public?")
+
+        app.assertScreenshot(.simpleRegular)
     }
     
     func testUpgradeScreen() {
@@ -36,5 +38,7 @@ class TemplateScreenUITests: XCTestCase {
         XCTAssert(title.exists)
         
         XCTAssertEqual(title.label, "Privacy warning")
+
+        app.assertScreenshot(.simpleUpgrade)
     }
 }

@@ -1,5 +1,29 @@
 name: UnitTests
 
+schemes:
+  UnitTests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        UnitTests: all
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: false
+      environmentVariables:
+        IS_RUNNING_UNIT_TESTS: "1"
+    test:
+      config: Debug
+      disableMainThreadChecker: false
+      captureScreenshotsAutomatically: false
+      gatherCoverageData: true
+      targets:
+      - UnitTests
+
 targets:
   UnitTests:
     type: bundle.unit-test

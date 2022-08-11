@@ -17,7 +17,14 @@ jobs:
       cancel-in-progress: true
 
     steps:
+      - name: Setup Xcode version
+        uses: maxim-lobanov/setup-xcode@v1.4.1
+        with:
+          xcode-version: '13.4'
+
       - uses: actions/checkout@v3
+        with:
+          lfs: true
 
       - uses: actions/cache@v3
         with:
@@ -33,6 +40,15 @@ jobs:
       
       - name: Run tests
         run: bundle exec fastlane tests
+      
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-output
+          path: fastlane/test_output
+          retention-days: 7
+          if-no-files-found: ignore
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
