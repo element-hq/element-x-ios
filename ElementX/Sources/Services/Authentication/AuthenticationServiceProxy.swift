@@ -81,7 +81,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             let registationResponse = try await oidcService.registerClient(metadata: configuration)
             let authResponse = try await oidcService.presentWebAuthentication(metadata: configuration,
                                                                               clientID: registationResponse.clientID,
-                                                                              scope: "urn:matrix:device:\(deviceID)",
+                                                                              scope: "openid urn:matrix:org.matrix.msc2967.client:api:* urn:matrix:org.matrix.msc2967.client:device:\(deviceID)",
                                                                               userAgent: userAgent)
             let tokenResponse = try await oidcService.redeemCodeForTokens(authResponse: authResponse)
             
