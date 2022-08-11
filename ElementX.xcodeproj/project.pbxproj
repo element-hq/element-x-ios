@@ -1671,11 +1671,11 @@
 			buildConfigurationList = B15427F8699AD5A5FC75C17E /* Build configuration list for PBXNativeTarget "ElementX" */;
 			buildPhases = (
 				A7130911BCB2DF3D249A1836 /* 🛠 SwiftGen */,
+				B35AB66424BB30087EEE408C /* 🧹 SwiftFormat */,
 				9797D588420FCBBC228A63C9 /* Sources */,
 				215E1D91B98672C856F559D0 /* Resources */,
 				EE878EAA342710DB973E0A87 /* Frameworks */,
 				98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */,
-				B35AB66424BB30087EEE408C /* 🧹 SwiftFormat */,
 			);
 			buildRules = (
 			);
