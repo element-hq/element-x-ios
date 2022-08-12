@@ -5,7 +5,7 @@ on: [pull_request]
 jobs:
   build:
     # Don't run for forks as secrets are unavailable.
-    if: github.repository == 'vector-im/element-x-ios'
+    if: github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     name: Danger
     steps:
