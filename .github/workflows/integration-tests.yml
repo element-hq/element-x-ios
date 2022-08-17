@@ -3,8 +3,6 @@ name: Integration tests
 on:
   schedule:
     - cron:  '0 3 * * 1-5'
-
-  pull_request:
     
   workflow_dispatch:
 
