@@ -92,7 +92,9 @@ class XCTestMeasurementParser {
             }
             
             // Print to stdout because stderr is piped
-            print("\(string)")
+            // swiftlint:disable print_deprecation
+            print.debug("\(string)")
+            // swiftlint:enable print_deprecation
         }
         
         block()
