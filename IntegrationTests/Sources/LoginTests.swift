@@ -9,8 +9,10 @@
 import XCTest
 
 class LoginTests: XCTestCase {
+    let expectedDuration = 30.0
+    
     func testLoginFlow() throws {
-        let parser = XCTestMeasurementParser()
+        let parser = TestMeasurementParser()
         parser.capture(testCase: self) {
             self.measure(metrics: [XCTClockMetric()]) {
                 self.runLoginLogoutFlow()
@@ -22,9 +24,7 @@ class LoginTests: XCTestCase {
             return
         }
         
-        let expectedDuration = 30.0
-        
-        XCTAssert(actualDuration <= expectedDuration, "Login-logout flow duration: \(actualDuration) greater than expected: \(expectedDuration)")
+        XCTAssertLessThanOrEqual(actualDuration, expectedDuration)
     }
     
     private func runLoginLogoutFlow() {
@@ -45,29 +45,29 @@ class LoginTests: XCTestCase {
         homeserverTextField.clearAndTypeText(app.homeserver)
         
         let confirmButton = app.buttons["confirmButton"]
-        XCTAssertTrue(confirmButton.waitForExistence(timeout: 5.0))
+        XCTAssertTrue(confirmButton.exists)
         confirmButton.tap()
         
         let usernameTextField = app.textFields["usernameTextField"]
-        XCTAssertTrue(usernameTextField.waitForExistence(timeout: 5.0))
+        XCTAssertTrue(usernameTextField.exists)
         
         usernameTextField.tap()
         usernameTextField.typeText(app.username)
         
         let passwordTextField = app.secureTextFields["passwordTextField"]
-        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5.0))
+        XCTAssertTrue(confirmButton.exists)
         
         passwordTextField.tap()
         passwordTextField.typeText(app.password)
         
         let nextButton = app.buttons["nextButton"]
-        XCTAssertTrue(nextButton.waitForExistence(timeout: 5.0))
+        XCTAssertTrue(nextButton.exists)
         XCTAssertTrue(nextButton.isEnabled)
         
         nextButton.tap()
         
         let profileButton = app.buttons["userDisplayNameView"]
-        XCTAssertTrue(profileButton.waitForExistence(timeout: 60.0))
+        XCTAssertTrue(profileButton.waitForExistence(timeout: expectedDuration))
         profileButton.tap()
         
         let logoutButton = app.buttons["logoutButton"]

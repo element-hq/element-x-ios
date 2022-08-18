@@ -65,5 +65,5 @@ packages:
     url: https://github.com/getsentry/sentry-cocoa
     majorVersion: 7.15.0
   SnapshotTesting:
-    url: https://github.com/pointfreeco/swift-snapshot-testing.git
+    url: https://github.com/pointfreeco/swift-snapshot-testing
     majorVersion: 1.9.0

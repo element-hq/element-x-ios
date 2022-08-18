@@ -1,5 +1,5 @@
 //
-//  MeasureParser.swift
+//  TestMeasurementParser.swift
 //  IntegrationTests
 //
 //  Created by Stefan Ceriu on 28/07/2022.
@@ -9,7 +9,7 @@
 import Foundation
 import XCTest
 
-enum XCTestMeasurementParserMetric: String {
+enum TestMeasurementParserMetric: String {
     case appLaunch = "Duration (AppLaunch)"
     case clockMonotonicTime = "Clock Monotonic Time"
     case cpuTime = "CPU Time"
@@ -31,7 +31,7 @@ enum XCTestMeasurementParserMetric: String {
 
 /// This class is responsible for extracting XCTest measurement run results from stderr in lieu of an official API
 /// Heavily inspired by https://stackoverflow.com/questions/54814422/how-to-extract-performance-metrics-measured-by-measureblock-in-xctest
-class XCTestMeasurementParser {
+class TestMeasurementParser {
     private let pipe = Pipe()
     private let regex: NSRegularExpression
     private var results = [String: Double]()

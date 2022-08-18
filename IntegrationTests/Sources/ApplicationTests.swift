@@ -10,7 +10,7 @@ import XCTest
 
 class ApplicationTests: XCTestCase {
     func testLaunchPerformance() throws {
-        let parser = XCTestMeasurementParser()
+        let parser = TestMeasurementParser()
         
         parser.capture(testCase: self) {
             self.measure(metrics: [XCTApplicationLaunchMetric()]) {
@@ -24,7 +24,6 @@ class ApplicationTests: XCTestCase {
         }
         
         let expectedDuration = 2.75
-        
-        XCTAssert(actualDuration <= expectedDuration, "App launch duration: \(actualDuration) greater than expected: \(expectedDuration)")
+        XCTAssertLessThanOrEqual(actualDuration, expectedDuration)
     }
 }

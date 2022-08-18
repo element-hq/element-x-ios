@@ -27,12 +27,10 @@ extension AuthenticationError {
     var code: MatrixErrorCode {
         guard case let .Generic(message) = self else { return .unknown }
         
-        for code in MatrixErrorCode.allCases {
-            if message.contains(code.rawValue) {
-                return code
-            }
+        guard let first = MatrixErrorCode.allCases.first(where: { message.contains($0.rawValue) }) else {
+            return .unknown
         }
-        
-        return .unknown
+
+        return first
     }
 }
