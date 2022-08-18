@@ -1,7 +1,7 @@
 import Danger
 import Foundation
 
-SwiftLint.lint(inline: true, configFile: ".swiftlint.yml")
+SwiftLint.lint(inline: true)
 
 let danger = Danger()
 
