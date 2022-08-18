@@ -35,7 +35,7 @@ jobs:
 
       - name: Brew bundle
         run:
-          brew bundle
+          brew update && brew bundle && brew upgrade
 
       - name: Bundle install
         run: |
