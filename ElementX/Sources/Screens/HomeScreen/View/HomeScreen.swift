@@ -101,6 +101,7 @@ struct HomeScreen: View {
             .font(.headline)
             .fontWeight(.bold)
             .foregroundColor(.primary)
+            .accessibilityIdentifier("userDisplayNameView")
     }
 }
 

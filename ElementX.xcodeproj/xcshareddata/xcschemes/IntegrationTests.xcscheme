@@ -15,9 +15,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-               BuildableName = "ElementX.app"
-               BlueprintName = "ElementX"
+               BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
+               BuildableName = "IntegrationTests.xctest"
+               BlueprintName = "IntegrationTests"
                ReferencedContainer = "container:ElementX.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -27,15 +27,14 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      shouldUseLaunchSchemeArgsEnv = "YES"
-      codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "YES">
+      shouldUseLaunchSchemeArgsEnv = "NO"
+      onlyGenerateCoverageForSpecifiedTargets = "NO">
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "ElementX.app"
-            BlueprintName = "ElementX"
+            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
+            BuildableName = "IntegrationTests.xctest"
+            BlueprintName = "IntegrationTests"
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -44,34 +43,32 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "32C23C8D224D46EFE62AFAD0"
-               BuildableName = "UnitTests.xctest"
-               BlueprintName = "UnitTests"
-               ReferencedContainer = "container:ElementX.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "0E28CD62691FDBC63147D5E3"
-               BuildableName = "UITests.xctest"
-               BlueprintName = "UITests"
+               BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
+               BuildableName = "IntegrationTests.xctest"
+               BlueprintName = "IntegrationTests"
                ReferencedContainer = "container:ElementX.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>
-      <CodeCoverageTargets>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "ElementX.app"
-            BlueprintName = "ElementX"
-            ReferencedContainer = "container:ElementX.xcodeproj">
-         </BuildableReference>
-      </CodeCoverageTargets>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_HOST"
+            value = "${INTEGRATION_TESTS_HOST}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_PASSWORD"
+            value = "${INTEGRATION_TESTS_PASSWORD}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_USERNAME"
+            value = "${INTEGRATION_TESTS_USERNAME}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
@@ -83,22 +80,38 @@
       debugDocumentVersioning = "YES"
       debugServiceExtension = "internal"
       allowLocationSimulation = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "ElementX.app"
-            BlueprintName = "ElementX"
+            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
+            BuildableName = "IntegrationTests.xctest"
+            BlueprintName = "IntegrationTests"
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
       <CommandLineArguments>
       </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_HOST"
+            value = "${INTEGRATION_TESTS_HOST}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_PASSWORD"
+            value = "${INTEGRATION_TESTS_PASSWORD}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_USERNAME"
+            value = "${INTEGRATION_TESTS_USERNAME}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
-      shouldUseLaunchSchemeArgsEnv = "YES"
+      shouldUseLaunchSchemeArgsEnv = "NO"
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
@@ -106,14 +119,31 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
-            BuildableName = "ElementX.app"
-            BlueprintName = "ElementX"
+            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
+            BuildableName = "IntegrationTests.xctest"
+            BlueprintName = "IntegrationTests"
             ReferencedContainer = "container:ElementX.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <CommandLineArguments>
       </CommandLineArguments>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_HOST"
+            value = "${INTEGRATION_TESTS_HOST}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_PASSWORD"
+            value = "${INTEGRATION_TESTS_PASSWORD}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "INTEGRATION_TESTS_USERNAME"
+            value = "${INTEGRATION_TESTS_USERNAME}"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

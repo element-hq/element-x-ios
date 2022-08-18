@@ -33,6 +33,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
+      - name: Brew bundle
+        run:
+          brew update && brew bundle && brew upgrade
+
       - name: Bundle install
         run: |
           bundle config path vendor/bundle

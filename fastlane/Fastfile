@@ -73,7 +73,6 @@ lane :adhoc do
 end
 
 lane :tests do
-  
   run_tests(
     project: "ElementX.xcodeproj",
     scheme: "UnitTests"
@@ -82,7 +81,7 @@ lane :tests do
   run_tests(
     project: "ElementX.xcodeproj",
     scheme: "UITests",
-    devices: ["iPhone 13 Pro Max (15.5)", "iPad (9th generation) (15.5)"],
+    devices: ["iPhone 13 Pro Max", "iPad (9th generation)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
     output_directory: "fastlane/test_output/",
@@ -96,6 +95,14 @@ lane :tests do
     scheme: "ElementX",
   )
 
+end
+
+lane :integration_tests do
+  run_tests(
+    scheme: "IntegrationTests",
+    devices: ["iPhone 13 Pro"],
+    ensure_devices_found: true,
+  )
 end
 
 private_lane :config_xcodegen_alpha do

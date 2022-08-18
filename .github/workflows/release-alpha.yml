@@ -1,4 +1,4 @@
-name: Build alpha release
+name: Alpha release
 
 on:
 
@@ -34,7 +34,7 @@ jobs:
       # Common setup
       - name: Brew bundle
         run:
-          brew bundle
+          brew update && brew bundle && brew upgrade
 
       - name: Bundle install
         run: |
