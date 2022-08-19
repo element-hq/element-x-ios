@@ -49,7 +49,6 @@ let allowList = ["stefanceriu",
                  "manuroe",
                  "gileluard",
                  "phlniji",
-                 "MaximeEvrard42",
                  "aringenbach"]
 
 let requiresSignOff = !allowList.contains(where: {
@@ -64,7 +63,7 @@ if requiresSignOff {
     }.isEmpty
 
     if !hasPRBodySignOff, isMissingCommitsSignOff {
-        fail("Please add a sign-off to either the PR description or to the commits themselves.")
+        warn("Please add a sign-off to either the PR description or to the commits themselves.")
     }
 }
 

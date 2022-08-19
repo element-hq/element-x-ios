@@ -8,6 +8,8 @@ on:
 
 jobs:
   integration_tests:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+
     name: Integration Tests
     runs-on: macos-12
 
