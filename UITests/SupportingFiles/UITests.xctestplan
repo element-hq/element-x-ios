@@ -29,6 +29,15 @@
     "addressSanitizer" : {
       "enabled" : true
     },
+    "codeCoverage" : {
+      "targets" : [
+        {
+          "containerPath" : "container:ElementX.xcodeproj",
+          "identifier" : "C0FAEB81CFD9776CD78CE489",
+          "name" : "ElementX"
+        }
+      ]
+    },
     "environmentVariableEntries" : [
       {
         "key" : "SNAPSHOT_ARTIFACTS",
@@ -41,8 +50,8 @@
     },
     "targetForVariableExpansion" : {
       "containerPath" : "container:ElementX.xcodeproj",
-      "identifier" : "C0FAEB81CFD9776CD78CE489",
-      "name" : "ElementX"
+      "identifier" : "0E28CD62691FDBC63147D5E3",
+      "name" : "UITests"
     },
     "uiTestingScreenshotsLifetime" : "keepNever",
     "undefinedBehaviorSanitizerEnabled" : true,

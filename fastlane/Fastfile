@@ -72,19 +72,25 @@ lane :adhoc do
     )
 end
 
-lane :tests do
+lane :unit_tests do
   run_tests(
-    project: "ElementX.xcodeproj",
     scheme: "UnitTests"
   )
 
+  slather(
+    cobertura_xml: true,
+    output_directory: "./fastlane/test_output",
+    proj: "ElementX.xcodeproj",
+    scheme: "UnitTests",
+  )
+end
+
+lane :ui_tests do 
   run_tests(
-    project: "ElementX.xcodeproj",
     scheme: "UITests",
-    devices: ["iPhone 13 Pro Max", "iPad (9th generation)"],
+    devices: ["iPhone 13 Pro Max (15.5)", "iPad (9th generation) (15.5)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
-    output_directory: "fastlane/test_output/",
     result_bundle: true
   )
 
@@ -92,9 +98,9 @@ lane :tests do
     cobertura_xml: true,
     output_directory: "./fastlane/test_output",
     proj: "ElementX.xcodeproj",
-    scheme: "ElementX",
+    scheme: "UITests",
+    binary_basename: "ElementX.app"
   )
-
 end
 
 lane :integration_tests do

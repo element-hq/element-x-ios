@@ -1,8 +1,11 @@
-name: Tests
+name: UI Tests
 
 on:
-  push:
-    branches: [ develop ]
+  workflow_dispatch:
+  
+  schedule:
+    - cron:  '0 0 * * 1-5'
+
   pull_request:
 
 jobs:
@@ -13,7 +16,7 @@ jobs:
     concurrency:
       # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
       # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
-      group: ${{ github.ref == 'refs/heads/develop' && format('tests-develop-{0}', github.sha) || format('tests-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/develop' && format('ui-tests-develop-{0}', github.sha) || format('ui-tests-{0}', github.ref) }}
       cancel-in-progress: true
 
     steps:
@@ -26,6 +29,10 @@ jobs:
         with:
           lfs: true
 
+      - name: Brew bundle
+        run:
+          brew update && brew bundle && brew upgrade
+
       - uses: actions/cache@v3
         with:
           path: vendor/bundle
@@ -33,17 +40,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
-      - name: Brew bundle
-        run:
-          brew update && brew bundle && brew upgrade
-
       - name: Bundle install
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
       
       - name: Run tests
-        run: bundle exec fastlane tests
+        run: bundle exec fastlane ui_tests
       
       - name: Archive artifacts
         uses: actions/upload-artifact@v3
