@@ -29,7 +29,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES"
       codeCoverageEnabled = "YES"
-      onlyGenerateCoverageForSpecifiedTargets = "NO"
+      onlyGenerateCoverageForSpecifiedTargets = "YES"
       systemAttachmentLifetime = "keepNever">
       <MacroExpansion>
          <BuildableReference
@@ -54,6 +54,15 @@
       </Testables>
       <CommandLineArguments>
       </CommandLineArguments>
+      <CodeCoverageTargets>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "C0FAEB81CFD9776CD78CE489"
+            BuildableName = "ElementX.app"
+            BlueprintName = "ElementX"
+            ReferencedContainer = "container:ElementX.xcodeproj">
+         </BuildableReference>
+      </CodeCoverageTargets>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"

@@ -2,7 +2,7 @@ name: Integration tests
 
 on:
   schedule:
-    - cron:  '0 3 * * 1-5'
+    - cron:  '0 2 * * 1-5'
     
   workflow_dispatch:
 
@@ -19,16 +19,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Brew bundle
+        run:
+          brew update && brew bundle && brew upgrade
+
       - uses: actions/cache@v3
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
-
-      - name: Brew bundle
-        run:
-          brew update && brew bundle && brew upgrade
 
       - name: Bundle install
         run: |

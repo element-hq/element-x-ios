@@ -1,4 +1,4 @@
-name: Tests
+name: Unit Tests
 
 on:
   push:
@@ -13,18 +13,15 @@ jobs:
     concurrency:
       # When running on develop, use the sha to allow all runs of this workflow to run concurrently.
       # Otherwise only allow a single run of this workflow on each branch, automatically cancelling older runs.
-      group: ${{ github.ref == 'refs/heads/develop' && format('tests-develop-{0}', github.sha) || format('tests-{0}', github.ref) }}
+      group: ${{ github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
 
     steps:
-      - name: Setup Xcode version
-        uses: maxim-lobanov/setup-xcode@v1.4.1
-        with:
-          xcode-version: '13.4'
-
       - uses: actions/checkout@v3
-        with:
-          lfs: true
+
+      - name: Brew bundle
+        run:
+          brew update && brew bundle && brew upgrade
 
       - uses: actions/cache@v3
         with:
@@ -33,26 +30,13 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-gems-
 
-      - name: Brew bundle
-        run:
-          brew update && brew bundle && brew upgrade
-
       - name: Bundle install
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
       
       - name: Run tests
-        run: bundle exec fastlane tests
+        run: bundle exec fastlane unit_tests
       
-      - name: Archive artifacts
-        uses: actions/upload-artifact@v3
-        if: always()
-        with:
-          name: test-output
-          path: fastlane/test_output
-          retention-days: 7
-          if-no-files-found: ignore
-
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

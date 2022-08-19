@@ -37,10 +37,18 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### tests
+### unit_tests
 
 ```sh
-[bundle exec] fastlane tests
+[bundle exec] fastlane unit_tests
+```
+
+
+
+### ui_tests
+
+```sh
+[bundle exec] fastlane ui_tests
 ```
 
 

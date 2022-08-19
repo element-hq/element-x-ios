@@ -21,6 +21,8 @@ schemes:
       disableMainThreadChecker: false
       captureScreenshotsAutomatically: false
       gatherCoverageData: true
+      coverageTargets:
+        - ElementX
       targets:
       - UnitTests
 
