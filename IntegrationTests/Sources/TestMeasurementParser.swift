@@ -40,14 +40,14 @@ class TestMeasurementParser {
         do {
             let pattern = """
             \\[(\
-            \(XCTestMeasurementParserMetric.appLaunch.regexValue)|\
-            \(XCTestMeasurementParserMetric.clockMonotonicTime.regexValue)|\
-            \(XCTestMeasurementParserMetric.cpuTime.regexValue)|\
-            \(XCTestMeasurementParserMetric.memoryPeakPhysical.regexValue)|\
-            \(XCTestMeasurementParserMetric.memoryPhysical.regexValue)|\
-            \(XCTestMeasurementParserMetric.cpuInstructionsRetired.regexValue)|\
-            \(XCTestMeasurementParserMetric.diskLogicalWrites.regexValue)|\
-            \(XCTestMeasurementParserMetric.cpuCycles.regexValue)\
+            \(TestMeasurementParserMetric.appLaunch.regexValue)|\
+            \(TestMeasurementParserMetric.clockMonotonicTime.regexValue)|\
+            \(TestMeasurementParserMetric.cpuTime.regexValue)|\
+            \(TestMeasurementParserMetric.memoryPeakPhysical.regexValue)|\
+            \(TestMeasurementParserMetric.memoryPhysical.regexValue)|\
+            \(TestMeasurementParserMetric.cpuInstructionsRetired.regexValue)|\
+            \(TestMeasurementParserMetric.diskLogicalWrites.regexValue)|\
+            \(TestMeasurementParserMetric.cpuCycles.regexValue)\
             ), \
             (s|kB|kI|kC)\\] \
             average: ([0-9\\.]*),
@@ -114,7 +114,7 @@ class TestMeasurementParser {
     /// Retrieve the recorded average value for a particular metric
     /// - Parameter metric: Needs to match one of the metrics passed in the XCTest measure metrics array
     /// - Returns: The resulting average value
-    func valueForMetric(_ metric: XCTestMeasurementParserMetric) -> Double? {
+    func valueForMetric(_ metric: TestMeasurementParserMetric) -> Double? {
         results[metric.rawValue]
     }
 }
