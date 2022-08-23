@@ -55,7 +55,7 @@ class LoginTests: XCTestCase {
         usernameTextField.typeText(app.username)
         
         let passwordTextField = app.secureTextFields["passwordTextField"]
-        XCTAssertTrue(confirmButton.exists)
+        XCTAssertTrue(passwordTextField.exists)
         
         passwordTextField.tap()
         passwordTextField.typeText(app.password)
