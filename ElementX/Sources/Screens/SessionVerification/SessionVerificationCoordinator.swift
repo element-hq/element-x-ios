@@ -49,7 +49,7 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
     // MARK: - Public
     
     func start() {
-        MXLog.debug("[SessionVerificationCoordinator] did start.")
+        MXLog.debug("Did start.")
         sessionVerificationViewModel.callback = { [weak self] action in
             guard let self = self else { return }
             

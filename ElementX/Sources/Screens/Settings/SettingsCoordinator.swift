@@ -58,7 +58,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
         settingsViewModel.callback = { [weak self] result in
             guard let self = self else { return }
-            MXLog.debug("[SettingsCoordinator] SettingsViewModel did complete with result: \(result).")
+            MXLog.debug("SettingsViewModel did complete with result: \(result).")
             switch result {
             case .reportBug:
                 self.presentBugReportScreen()

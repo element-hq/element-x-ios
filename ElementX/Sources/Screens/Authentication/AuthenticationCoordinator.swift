@@ -95,7 +95,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
             case .updated:
                 self.showLoginScreen()
             case .dismiss:
-                MXLog.failure("[AuthenticationCoordinator] ServerSelectionScreen is requesting dismiss when part of a stack.")
+                MXLog.failure("ServerSelectionScreen is requesting dismiss when part of a stack.")
             }
         }
         

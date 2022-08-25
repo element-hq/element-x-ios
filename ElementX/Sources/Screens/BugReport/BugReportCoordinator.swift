@@ -57,10 +57,10 @@ final class BugReportCoordinator: Coordinator, Presentable {
     // MARK: - Public
     
     func start() {
-        MXLog.debug("[BugReportCoordinator] did start.")
+        MXLog.debug("Did start.")
         bugReportViewModel.callback = { [weak self] result in
             guard let self = self else { return }
-            MXLog.debug("[BugReportCoordinator] BugReportViewModel did complete with result: \(result).")
+            MXLog.debug("BugReportViewModel did complete with result: \(result).")
             switch result {
             case .submitStarted:
                 self.startLoading()

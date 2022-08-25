@@ -51,7 +51,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
                 switch callback {
                 case .receivedVerificationData(let emojis):
                     guard self.stateMachine.state == .requestingVerification else {
-                        MXLog.warning("[SessionVerificationViewModel] callbacks: Ignoring receivedVerificationData due to invalid state.")
+                        MXLog.warning("Callbacks: Ignoring receivedVerificationData due to invalid state.")
                         return
                     }
                     

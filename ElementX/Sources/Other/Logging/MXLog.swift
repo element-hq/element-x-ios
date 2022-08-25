@@ -118,32 +118,57 @@ private var logger: SwiftyBeaver.Type = {
         logger.warning(message, file, function, line: line)
     }
     
-    public static func error(_ message: @autoclosure () -> Any,
+    /// Log error with additional details
+    ///
+    /// - Parameters:
+    ///     - message: Description of the error without any variables (this is to improve error aggregations by type)
+    ///     - context: Additional context-dependent details about the issue
+    public static func error(_ message: String,
                              _ file: String = #file,
                              _ function: String = #function,
                              line: Int = #line,
                              context: Any? = nil) {
-        logger.error(message(), file, function, line: line, context: context)
+        logger.error(message, file, function, line: line, context: context)
     }
     
     @available(swift, obsoleted: 5.4)
-    @objc public static func logError(_ message: String, file: String, function: String, line: Int) {
-        logger.error(message, file, function, line: line)
+    @objc public static func logError(_ message: String,
+                                      file: String,
+                                      function: String,
+                                      line: Int,
+                                      context: Any? = nil) {
+        logger.error(message, file, function, line: line, context: context)
     }
     
-    public static func failure(_ message: @autoclosure () -> Any,
+    /// Log failure with additional details
+    ///
+    /// A failure is any type of programming error which should never occur in production. In `DEBUG` configuration
+    /// any failure will raise `assertionFailure`
+    ///
+    /// - Parameters:
+    ///     - message: Description of the error without any variables (this is to improve error aggregations by type)
+    ///     - context: Additional context-dependent details about the issue
+    public static func failure(_ message: String,
                                _ file: String = #file,
                                _ function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
-        logger.error(message(), file, function, line: line, context: context)
-        assertionFailure("\(message())")
+        logger.error(message, file, function, line: line, context: context)
+        #if DEBUG
+        assertionFailure("\(message)")
+        #endif
     }
     
     @available(swift, obsoleted: 5.4)
-    @objc public static func logFailure(_ message: String, file: String, function: String, line: Int) {
-        logger.error(message, file, function, line: line)
-        assertionFailure(message)
+    @objc public static func logFailure(_ message: String,
+                                        file: String,
+                                        function: String,
+                                        line: Int,
+                                        context: Any? = nil) {
+        logger.error(message, file, function, line: line, context: context)
+        #if DEBUG
+        assertionFailure("\(message)")
+        #endif
     }
     
     // MARK: - Private
@@ -152,24 +177,27 @@ private var logger: SwiftyBeaver.Type = {
         if let subLogName = configuration.subLogName {
             MXLogger.setSubLogName(subLogName)
         }
-
+        
         MXLogger.redirectNSLog(toFiles: configuration.redirectLogsToFiles,
                                numberOfFiles: configuration.maxLogFilesCount,
                                sizeLimit: configuration.logFilesSizeLimit)
-
+        
         guard configuration.logLevel != .none else {
+            logger.removeAllDestinations()
             return
         }
+        
+        logger.removeAllDestinations()
         
         let consoleDestination = ConsoleDestination()
         consoleDestination.useNSLog = true
         consoleDestination.asynchronously = false
-        consoleDestination.format = "$M"
+        consoleDestination.format = "$C$N.$F:$l $M $X$c" // Format is `Color Message Context`, see https://docs.swiftybeaver.com/article/20-custom-format
         consoleDestination.levelColor.verbose = ""
         consoleDestination.levelColor.debug = ""
         consoleDestination.levelColor.info = ""
-        consoleDestination.levelColor.warning = "⚠️"
-        consoleDestination.levelColor.error = "🚨"
+        consoleDestination.levelColor.warning = "⚠️ "
+        consoleDestination.levelColor.error = "🚨 "
         
         switch configuration.logLevel {
         case .verbose:
@@ -185,8 +213,6 @@ private var logger: SwiftyBeaver.Type = {
         case .none:
             break
         }
-        
-        logger.removeAllDestinations()
         logger.addDestination(consoleDestination)
     }
 }

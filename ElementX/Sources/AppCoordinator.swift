@@ -327,7 +327,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
 
     private func processScreenshotDetection(image: UIImage?, error: Error?) {
-        MXLog.debug("[AppCoordinator] processScreenshotDetection: \(String(describing: image)), error: \(String(describing: error))")
+        MXLog.debug("Detected screenshot: \(String(describing: image)), error: \(String(describing: error))")
 
         let alert = UIAlertController(title: ElementL10n.screenshotDetectedTitle,
                                       message: ElementL10n.screenshotDetectedMessage,
@@ -363,7 +363,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
     @objc
     private func dismissBugReportScreen() {
-        MXLog.debug("[AppCoorrdinator] dismissBugReportScreen")
+        MXLog.debug("dismissBugReportScreen")
 
         guard let bugReportCoordinator = childCoordinators.first(where: { $0 is BugReportCoordinator }) else {
             return
