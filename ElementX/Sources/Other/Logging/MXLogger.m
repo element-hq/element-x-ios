@@ -17,7 +17,7 @@
 
 #import "MXLogger.h"
 #import "MXLog.h"
-#import "ElementX-Swift.h"
+#import "GeneratedInterface-Swift.h"
 
 // stderr so it can be restored
 int stderrSave = 0;

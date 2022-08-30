@@ -56,6 +56,7 @@ targets:
         DEVELOPMENT_TEAM: 7J4U792NQT
         CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements 
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
+        SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
         
     preBuildScripts:
     - name: 🛠 SwiftGen

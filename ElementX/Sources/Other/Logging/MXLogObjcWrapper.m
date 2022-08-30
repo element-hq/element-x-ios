@@ -15,7 +15,7 @@
 //
 
 #import "MXLogObjcWrapper.h"
-#import "ElementX-Swift.h"
+#import "GeneratedInterface-Swift.h"
 
 @implementation MXLogObjcWrapper
 
