@@ -143,7 +143,7 @@ static NSString *subLogName;
     }
 }
 
-+ (NSArray*)logFiles
++ (NSArray<NSString*>*)logFiles
 {
     NSMutableArray *logFiles = [NSMutableArray array];
 
