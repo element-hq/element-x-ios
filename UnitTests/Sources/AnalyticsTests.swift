@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
-import XCTest
-@testable import ElementX
 import AnalyticsEvents
+@testable import ElementX
+import XCTest
 
 class AnalyticsTests: XCTestCase {
     func testAnalyticsPromptNewUser() {

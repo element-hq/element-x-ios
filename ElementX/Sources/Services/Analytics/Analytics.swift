@@ -109,7 +109,7 @@ class Analytics {
         
         switch await service.settings() {
         case .success(let settings):
-            self.identify(with: settings)
+            identify(with: settings)
             self.service = nil
         case .failure:
             MXLog.error("Failed to use analytics settings. Will continue to run without analytics ID.")
@@ -165,10 +165,9 @@ class Analytics {
 
 // The following methods are exposed for compatibility with Objective-C as
 // the `capture` method and the generated events cannot be bridged from Swift.
-extension Analytics {
-}
+extension Analytics { }
 
 // MARK: - MXAnalyticsDelegate
 
-//extension Analytics: MXAnalyticsDelegate {
-//}
+// extension Analytics: MXAnalyticsDelegate {
+// }

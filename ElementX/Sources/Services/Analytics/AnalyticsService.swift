@@ -58,7 +58,7 @@ class AnalyticsService {
             
             let newSettings = AnalyticsSettings.new(currentEvent: settings)
             switch await session.clientProxy.setAccountData(content: newSettings, type: AnalyticsSettings.eventType) {
-            case .failure(let error):
+            case .failure:
                 MXLog.warning("Failed to update analytics settings.")
                 return .failure(.accountDataFailure)
             case .success:
