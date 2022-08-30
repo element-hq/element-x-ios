@@ -34,7 +34,7 @@ jobs:
       # Common setup
       - name: Brew bundle
         run:
-          brew update && brew bundle && brew upgrade
+          brew update && brew bundle && brew upgrade swiftformat
 
       - name: Bundle install
         run: |
