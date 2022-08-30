@@ -86,6 +86,7 @@ class BugReportService: BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
+    // swiftlint: disable function_body_length
     func submitBugReport(text: String,
                          includeLogs: Bool,
                          includeCrashLog: Bool,
@@ -153,7 +154,7 @@ class BugReportService: BugReportServiceProtocol {
         }
         
         return result
-    }
+    } // swiftlint: enable function_body_length
 
     // MARK: - Private
 

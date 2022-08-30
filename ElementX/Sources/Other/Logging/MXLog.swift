@@ -67,8 +67,8 @@ private var logger: SwiftyBeaver.Type = {
     }
     
     public static func verbose(_ message: @autoclosure () -> Any,
-                               _ file: String = #file,
-                               _ function: String = #function,
+                               file: String = #file,
+                               function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
         logger.verbose(message(), file, function, line: line, context: context)
@@ -80,8 +80,8 @@ private var logger: SwiftyBeaver.Type = {
     }
     
     public static func debug(_ message: @autoclosure () -> Any,
-                             _ file: String = #file,
-                             _ function: String = #function,
+                             file: String = #file,
+                             function: String = #function,
                              line: Int = #line,
                              context: Any? = nil) {
         logger.debug(message(), file, function, line: line, context: context)
@@ -93,8 +93,8 @@ private var logger: SwiftyBeaver.Type = {
     }
     
     public static func info(_ message: @autoclosure () -> Any,
-                            _ file: String = #file,
-                            _ function: String = #function,
+                            file: String = #file,
+                            function: String = #function,
                             line: Int = #line,
                             context: Any? = nil) {
         logger.info(message(), file, function, line: line, context: context)
@@ -106,8 +106,8 @@ private var logger: SwiftyBeaver.Type = {
     }
     
     public static func warning(_ message: @autoclosure () -> Any,
-                               _ file: String = #file,
-                               _ function: String = #function,
+                               file: String = #file,
+                               function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
         logger.warning(message(), file, function, line: line, context: context)
@@ -124,8 +124,8 @@ private var logger: SwiftyBeaver.Type = {
     ///     - message: Description of the error without any variables (this is to improve error aggregations by type)
     ///     - context: Additional context-dependent details about the issue
     public static func error(_ message: String,
-                             _ file: String = #file,
-                             _ function: String = #function,
+                             file: String = #file,
+                             function: String = #function,
                              line: Int = #line,
                              context: Any? = nil) {
         logger.error(message, file, function, line: line, context: context)
@@ -149,8 +149,8 @@ private var logger: SwiftyBeaver.Type = {
     ///     - message: Description of the error without any variables (this is to improve error aggregations by type)
     ///     - context: Additional context-dependent details about the issue
     public static func failure(_ message: String,
-                               _ file: String = #file,
-                               _ function: String = #function,
+                               file: String = #file,
+                               function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
         logger.error(message, file, function, line: line, context: context)
@@ -192,7 +192,7 @@ private var logger: SwiftyBeaver.Type = {
         let consoleDestination = ConsoleDestination()
         consoleDestination.useNSLog = true
         consoleDestination.asynchronously = false
-        consoleDestination.format = "$C$N.$F:$l $M $X$c" // Format is `Color Message Context`, see https://docs.swiftybeaver.com/article/20-custom-format
+        consoleDestination.format = "$C$N.$F:$l $M $X$c" // See https://docs.swiftybeaver.com/article/20-custom-format
         consoleDestination.levelColor.verbose = ""
         consoleDestination.levelColor.debug = ""
         consoleDestination.levelColor.info = ""
