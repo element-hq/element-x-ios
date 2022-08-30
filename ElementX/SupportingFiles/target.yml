@@ -95,11 +95,13 @@ targets:
     dependencies:
     - package: MatrixRustSDK
     - package: DesignKit
+    - package: AnalyticsEvents
     - package: AppAuth
     - package: DTCoreText
     - package: KeychainAccess
     - package: Kingfisher
     - package: Introspect
+    - package: PostHog
     - package: SwiftyBeaver
     - package: SwiftState
     - package: GZIP

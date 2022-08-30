@@ -74,7 +74,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        await Task.detached { () -> Result<String, ClientProxyError> in
+        await Task.detached {
             do {
                 let displayName = try self.client.displayName()
                 return .success(displayName)
@@ -86,7 +86,7 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
-        await Task.detached { () -> Result<String, ClientProxyError> in
+        await Task.detached {
             do {
                 let avatarURL = try self.client.avatarUrl()
                 return .success(avatarURL)
@@ -95,6 +95,14 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
         .value
+    }
+    
+    func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
+        .failure(.failedRetrievingAccountData)
+    }
+    
+    func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError> {
+        .failure(.failedSettingAccountData)
     }
     
     func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource {

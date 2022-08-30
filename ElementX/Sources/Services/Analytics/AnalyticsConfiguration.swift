@@ -14,13 +14,16 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
-    
-    var userID: String { clientProxy.userIdentifier }
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+/// A type that represents how to set up the analytics module in the app.
+struct AnalyticsConfiguration {
+    /// Whether or not analytics should be enabled.
+    let isEnabled: Bool
+    /// The host to use for PostHog analytics.
+    let host: String
+    /// The public key for submitting analytics.
+    let apiKey: String
+    /// The URL to open with more information about analytics terms.
+    let termsURL: URL
 }

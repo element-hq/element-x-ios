@@ -26,6 +26,8 @@ enum ClientProxyCallback {
 enum ClientProxyError: Error {
     case failedRetrievingAvatarURL
     case failedRetrievingDisplayName
+    case failedRetrievingAccountData
+    case failedSettingAccountData
     case failedRetrievingSessionVerificationController
     case failedLoadingMedia
 }
@@ -40,6 +42,10 @@ protocol ClientProxyProtocol {
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
         
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError>
+    
+    func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
+    
+    func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError>
     
     func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource
     

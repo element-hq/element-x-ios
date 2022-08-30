@@ -37,6 +37,9 @@ packages:
     # path: ../matrix-rust-components-swift
   DesignKit:
     path: ./
+  AnalyticsEvents:
+    url: https://github.com/matrix-org/matrix-analytics-events
+    branch: main
   AppAuth:
     url: https://github.com/openid/AppAuth-iOS
     majorVersion: 1.5.0
@@ -52,6 +55,9 @@ packages:
   Introspect:
     url: https://github.com/siteline/SwiftUI-Introspect
     majorVersion: 0.1.4
+  PostHog:
+    url: https://github.com/PostHog/posthog-ios
+    majorVersion: 1.4.4
   SwiftyBeaver:
     url: https://github.com/SwiftyBeaver/SwiftyBeaver
     majorVersion: 1.9.5
