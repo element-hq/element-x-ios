@@ -67,17 +67,17 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     // MARK: - Public
     
     func present(_ module: Presentable, animated: Bool = true) {
-        MXLog.debug("[NavigationRouter] Present \(module)")
+        MXLog.debug("Present \(module)")
         navigationController.present(module.toPresentable(), animated: animated, completion: nil)
     }
     
     func dismissModule(animated: Bool = true, completion: (() -> Void)? = nil) {
-        MXLog.debug("[NavigationRouter] Dismiss presented module")
+        MXLog.debug("Dismiss presented module")
         navigationController.dismiss(animated: animated, completion: completion)
     }
     
     func setRootModule(_ module: Presentable, hideNavigationBar: Bool = false, animated: Bool = false, popCompletion: (() -> Void)? = nil) {
-        MXLog.debug("[NavigationRouter] Set root module \(module)")
+        MXLog.debug("Set root module \(module)")
         
         let controller = module.toPresentable()
         
@@ -116,7 +116,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
         
     func setModules(_ modules: [NavigationModule], hideNavigationBar: Bool, animated: Bool) {
-        MXLog.debug("[NavigationRouter] Set modules \(modules)")
+        MXLog.debug("Set modules \(modules)")
         
         let controllers = modules.map { module -> UIViewController in
             let controller = module.presentable.toPresentable()
@@ -154,7 +154,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     func popToRootModule(animated: Bool) {
-        MXLog.debug("[NavigationRouter] Pop to root module")
+        MXLog.debug("Pop to root module")
         
         let controllers = navigationController.viewControllers
         
@@ -174,7 +174,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     func popToModule(_ module: Presentable, animated: Bool) {
-        MXLog.debug("[NavigationRouter] Pop to module \(module)")
+        MXLog.debug("Pop to module \(module)")
         
         let controller = module.toPresentable()
         let controllersBeforePop = navigationController.viewControllers
@@ -195,7 +195,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     func push(_ module: Presentable, animated: Bool = true, popCompletion: (() -> Void)? = nil) {
-        MXLog.debug("[NavigationRouter] Push module \(module)")
+        MXLog.debug("Push module \(module)")
         
         let controller = module.toPresentable()
         
@@ -219,7 +219,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     func push(_ modules: [NavigationModule], animated: Bool) {
-        MXLog.debug("[NavigationRouter] Push modules \(modules)")
+        MXLog.debug("Push modules \(modules)")
         
         // Avoid pushing any UINavigationController onto stack
         guard modules.first(where: { $0.presentable.toPresentable() is UINavigationController }) == nil else {
@@ -249,7 +249,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     func popModule(animated: Bool = true) {
-        MXLog.debug("[NavigationRouter] Pop module")
+        MXLog.debug("Pop module")
         
         if let lastController = navigationController.viewControllers.last {
             willPopViewController(lastController)
@@ -261,7 +261,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
     }
     
     func popAllModules(animated: Bool) {
-        MXLog.debug("[NavigationRouter] Pop all modules")
+        MXLog.debug("Pop all modules")
         
         let controllersToPop = navigationController.viewControllers.reversed()
         
@@ -360,7 +360,7 @@ extension NavigationRouter: UINavigationControllerDelegate {
             return
         }
         
-        MXLog.debug("[NavigationRouter] Popped module: \(poppedViewController)")
+        MXLog.debug("Popped module: \(poppedViewController)")
         
         didPopViewController(poppedViewController)
     }

@@ -59,10 +59,10 @@ final class TemplateCoordinator: Coordinator, Presentable {
     // MARK: - Public
     
     func start() {
-        MXLog.debug("[TemplateCoordinator] did start.")
+        MXLog.debug("Did start.")
         templateViewModel.callback = { [weak self] action in
             guard let self = self else { return }
-            MXLog.debug("[TemplateCoordinator] TemplateViewModel did complete with result: \(action).")
+            MXLog.debug("TemplateViewModel did complete with result: \(action).")
             switch action {
             case .accept:
                 self.callback?(.accept)

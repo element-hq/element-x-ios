@@ -76,11 +76,11 @@ final class LoginCoordinator: Coordinator, Presentable {
     // MARK: - Public
 
     func start() {
-        MXLog.debug("[LoginCoordinator] did start.")
+        MXLog.debug("Did start.")
         
         loginViewModel.callback = { [weak self] action in
             guard let self = self else { return }
-            MXLog.debug("[LoginCoordinator] LoginViewModel did callback with result: \(action).")
+            MXLog.debug("LoginViewModel did callback with result: \(action).")
             
             switch action {
             case .selectServer:
@@ -204,7 +204,7 @@ final class LoginCoordinator: Coordinator, Presentable {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        MXLog.debug("[LoginCoordinator] presentServerSelectionScreen")
+        MXLog.debug("PresentServerSelectionScreen")
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
                                                               hasModalPresentation: true)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)

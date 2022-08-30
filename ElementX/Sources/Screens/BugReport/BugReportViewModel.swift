@@ -47,10 +47,10 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
                                                                     includeCrashLog: true,
                                                                     githubLabels: BuildSettings.bugReportGHLabels,
                                                                     files: files)
-            MXLog.info("[BugReportViewModel] submitBugReport succeeded, result: \(result.reportUrl)")
+            MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")
             callback?(.submitFinished)
         } catch {
-            MXLog.error("[BugReportViewModel] submitBugReport failed: \(error)")
+            MXLog.error("SubmitBugReport failed: \(error)")
             callback?(.submitFailed(error: error))
         }
     }

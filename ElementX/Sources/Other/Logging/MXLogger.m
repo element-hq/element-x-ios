@@ -16,7 +16,8 @@
  */
 
 #import "MXLogger.h"
-#import <UIKit/UIKit.h>
+#import "MXLog.h"
+#import "GeneratedInterface-Swift.h"
 
 // stderr so it can be restored
 int stderrSave = 0;
@@ -80,24 +81,24 @@ static NSString *subLogName;
                 if ([fileManager fileExistsAtPath:nsLogPathOlder])
                 {
                     // Temp log
-                    [log appendFormat:@"[MXLogger] redirectNSLogToFiles: removeItemAtPath: %@\n", nsLogPathOlder];
+                    [log appendFormat:@"removeItemAtPath: %@\n", nsLogPathOlder];
 
                     NSError *error;
                     [fileManager removeItemAtPath:nsLogPathOlder error:&error];
                     if (error)
                     {
-                        [log appendFormat:@"[MXLogger] ERROR: removeItemAtPath: %@. Error: %@\n", nsLogPathOlder, error];
+                        [log appendFormat:@"removeItemAtPath: %@. Error: %@\n", nsLogPathOlder, error];
                     }
                 }
 
                 // Temp log
-                [log appendFormat:@"[MXLogger] redirectNSLogToFiles: moveItemAtPath: %@ toPath: %@\n", nsLogPathCurrent, nsLogPathOlder];
+                [log appendFormat:@"moveItemAtPath: %@ toPath: %@\n", nsLogPathCurrent, nsLogPathOlder];
 
                 NSError *error;
                 [fileManager moveItemAtPath:nsLogPathCurrent toPath:nsLogPathOlder error:&error];
                 if (error)
                 {
-                    [log appendFormat:@"[MXLogger] ERROR: moveItemAtPath: %@ toPath: %@. Error: %@\n", nsLogPathCurrent, nsLogPathOlder, error];
+                    [log appendFormat:@"moveItemAtPath: %@ toPath: %@. Error: %@\n", nsLogPathCurrent, nsLogPathOlder, error];
                 }
             }
         }
@@ -108,11 +109,11 @@ static NSString *subLogName;
         NSString *nsLogPath = [logsFolderPath stringByAppendingPathComponent:[NSString stringWithFormat:@"console%@.log", subLogName]];
         freopen([nsLogPath fileSystemRepresentation], "w+", stderr);
 
-//        MXLogDebug(@"[MXLogger] redirectNSLogToFiles: YES");
+        MXLogDebug(@"redirectNSLogToFiles: YES");
         if (log.length)
         {
             // We can now log into files
-//            MXLogDebug(@"%@", log);
+            MXLogDebug(@"%@", log);
         }
         
         [self removeExtraFilesFromCount:numberOfFiles];
@@ -162,7 +163,7 @@ static NSString *subLogName;
         }
     }
 
-//    MXLogDebug(@"[MXLogger] logFiles: %@", logFiles);
+    MXLogDebug(@"logFiles: %@", logFiles);
 
     return logFiles;
 }
@@ -200,13 +201,12 @@ static void handleUncaughtException(NSException *exception)
     NSString *version = [[NSProcessInfo processInfo] operatingSystemVersionString];
 #endif
     NSArray  *backtrace = [exception callStackSymbols];
-    NSString *description = [NSString stringWithFormat:@"%.0f - %@\n%@\nApplication: %@ (%@)\nApplication version: %@\nMatrix SDK version: %@\nBuild: %@\n%@ %@\n\nMain thread: %@\n%@\n",
+    NSString *description = [NSString stringWithFormat:@"%.0f - %@\n%@\nApplication: %@ (%@)\nApplication version: %@\nBuild: %@\n%@ %@\n\nMain thread: %@\n%@\n",
                              [[NSDate date] timeIntervalSince1970],
                              [NSDate date],
                              exception.description,
                              app, appId,
                              appVersion,
-                             @"",
                              buildVersion,
                              model, version,
                              [NSThread isMainThread] ? @"YES" : @"NO",
@@ -220,8 +220,9 @@ static void handleUncaughtException(NSException *exception)
                     encoding:NSStringEncodingConversionAllowLossy
                        error:nil];
 
-    NSLog(@"[MXLogger] handleUncaughtException:\n%@", description);
-//    MXLogError(@"[MXLogger] handleUncaughtException:\n%@", description);
+    MXLogErrorDetails(@"handleUncaughtException", @{
+        @"description": description ?: @"unknown"
+    });
 }
 
 // Signals emitted by the app are handled here
@@ -302,16 +303,16 @@ static NSString* crashLogPath(void)
 {
     NSString *logsFolderPath = nil;
 
-//    NSURL *sharedContainerURL = [[NSFileManager defaultManager] applicationGroupContainerURL];
-//    if (sharedContainerURL)
-//    {
-//        logsFolderPath = [sharedContainerURL path];
-//    }
-//    else
-//    {
+    NSURL *sharedContainerURL = [[NSFileManager defaultManager] appGroupContainerURL];
+    if (sharedContainerURL)
+    {
+        logsFolderPath = [sharedContainerURL path];
+    }
+    else
+    {
         NSArray<NSURL *> *paths = [[NSFileManager defaultManager] URLsForDirectory:NSDocumentDirectory inDomains:NSUserDomainMask];
         logsFolderPath = paths[0].path;
-//    }
+    }
 
     return logsFolderPath;
 }
@@ -332,7 +333,7 @@ static NSString* crashLogPath(void)
         if ([fileManager fileExistsAtPath:logFile])
         {
             [fileManager removeItemAtPath:logFile error:nil];
-//            MXLogDebug(@"[MXLogger] removeExtraFilesFromCount: %@. removeItemAtPath: %@\n", @(count), logFile);
+            MXLogDebug(@"removeExtraFilesFromCount: %@. removeItemAtPath: %@\n", @(count), logFile);
         }
         else
         {
@@ -374,19 +375,18 @@ static NSString* crashLogPath(void)
     
     if (removeFiles)
     {
-//        MXLogDebug(@"[MXLogger] removeFilesAfterSizeLimit: Remove files from index %@ because logs are too large (%@ for a limit of %@)\n",
-//              @(index),
-//              [NSByteCountFormatter stringFromByteCount:logSize countStyle:NSByteCountFormatterCountStyleBinary],
-//              [NSByteCountFormatter stringFromByteCount:sizeLimit countStyle:NSByteCountFormatterCountStyleBinary]);
+        MXLogDebug(@"removeFilesAfterSizeLimit: Remove files from index %@ because logs are too large (%@ for a limit of %@)\n",
+              @(index),
+              [NSByteCountFormatter stringFromByteCount:logSize countStyle:NSByteCountFormatterCountStyleBinary],
+              [NSByteCountFormatter stringFromByteCount:sizeLimit countStyle:NSByteCountFormatterCountStyleBinary]);
         [self removeExtraFilesFromCount:index];
     }
     else
     {
-//        MXLogDebug(@"[MXLogger] removeFilesAfterSizeLimit: No need: %@ for a limit of %@\n",
-//              [NSByteCountFormatter stringFromByteCount:logSize countStyle:NSByteCountFormatterCountStyleBinary],
-//              [NSByteCountFormatter stringFromByteCount:sizeLimit countStyle:NSByteCountFormatterCountStyleBinary]);
+        MXLogDebug(@"removeFilesAfterSizeLimit: No need: %@ for a limit of %@\n",
+              [NSByteCountFormatter stringFromByteCount:logSize countStyle:NSByteCountFormatterCountStyleBinary],
+              [NSByteCountFormatter stringFromByteCount:sizeLimit countStyle:NSByteCountFormatterCountStyleBinary]);
     }
     
 }
 @end
-

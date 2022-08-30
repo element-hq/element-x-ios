@@ -30,6 +30,7 @@ class BugReportService: BugReportServiceProtocol {
     private let sentryEndpoint: String
     private let applicationId: String
     private let session: URLSession
+    private var lastCrashEventId: String?
 
     init(withBaseUrlString baseUrlString: String,
          sentryEndpoint: String,
@@ -63,8 +64,9 @@ class BugReportService: BugReportServiceProtocol {
                 return event
             }
 
-            options.onCrashedLastRun = { event in
+            options.onCrashedLastRun = { [weak self] event in
                 MXLog.debug("Sentry detected application was crashed: \(event)")
+                self?.lastCrashEventId = event.eventId.sentryIdString
             }
         }
 
@@ -84,12 +86,13 @@ class BugReportService: BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
+    // swiftlint: disable function_body_length
     func submitBugReport(text: String,
                          includeLogs: Bool,
                          includeCrashLog: Bool,
                          githubLabels: [String],
                          files: [URL]) async throws -> SubmitBugReportResponse {
-        MXLog.debug("[BugReportService] submitBugReport")
+        MXLog.debug("submitBugReport")
 
         var params = [
             MultipartFormData(key: "text", type: .text(value: text))
@@ -106,6 +109,11 @@ class BugReportService: BugReportServiceProtocol {
                 params.append(MultipartFormData(key: "compressed-log", type: .file(url: url)))
             }
         }
+        
+        if let crashEventId = lastCrashEventId {
+            params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventId)>")))
+        }
+        
         for url in files {
             params.append(MultipartFormData(key: "file", type: .file(url: url)))
         }
@@ -142,9 +150,11 @@ class BugReportService: BugReportServiceProtocol {
 
         if !result.reportUrl.isEmpty {
             MXLogger.deleteCrashLog()
+            lastCrashEventId = nil
         }
+        
         return result
-    }
+    } // swiftlint: enable function_body_length
 
     // MARK: - Private
 
@@ -179,7 +189,7 @@ class BugReportService: BugReportServiceProtocol {
 
     private func zipFiles(includeLogs: Bool,
                           includeCrashLog: Bool) async throws -> [URL] {
-        MXLog.debug("[BugReportService] zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
+        MXLog.debug("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
 
         var filesToCompress: [URL] = []
         if includeLogs, let logFiles = MXLogger.logFiles() {
@@ -217,7 +227,7 @@ class BugReportService: BugReportServiceProtocol {
             zippedFiles.append(zippedFileURL)
         }
 
-        MXLog.debug("[BugReportService] zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
+        MXLog.debug("zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
 
         return zippedFiles
     }

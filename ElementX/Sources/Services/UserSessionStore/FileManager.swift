@@ -18,7 +18,7 @@ import Foundation
 
 extension FileManager {
     /// The URL of the primary app group container.
-    var appGroupContainerURL: URL? {
+    @objc var appGroupContainerURL: URL? {
         containerURL(forSecurityApplicationGroupIdentifier: ElementInfoPlist.appGroupIdentifier)
     }
 }
