@@ -21,7 +21,6 @@ struct MediaProvider: MediaProviderProtocol {
     private let clientProxy: ClientProxyProtocol
     private let imageCache: Kingfisher.ImageCache
     private let backgroundTaskService: BackgroundTaskServiceProtocol
-    private let processingQueue: DispatchQueue
     
     init(clientProxy: ClientProxyProtocol,
          imageCache: Kingfisher.ImageCache,
@@ -29,7 +28,6 @@ struct MediaProvider: MediaProviderProtocol {
         self.clientProxy = clientProxy
         self.imageCache = imageCache
         self.backgroundTaskService = backgroundTaskService
-        processingQueue = DispatchQueue(label: "MediaProviderProcessingQueue", attributes: .concurrent)
     }
     
     func imageFromSource(_ source: MediaSource?) -> UIImage? {

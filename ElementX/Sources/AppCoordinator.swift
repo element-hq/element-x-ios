@@ -52,8 +52,6 @@ class AppCoordinator: Coordinator {
         }
     }
     
-    private let memberDetailProviderManager: MemberDetailProviderManager
-
     private let bugReportService: BugReportServiceProtocol
     private let screenshotDetector: ScreenshotDetector
     private let backgroundTaskService: BackgroundTaskServiceProtocol
@@ -77,8 +75,6 @@ class AppCoordinator: Coordinator {
         window.tintColor = .element.accent
         
         navigationRouter = NavigationRouter(navigationController: mainNavigationController)
-        
-        memberDetailProviderManager = MemberDetailProviderManager()
         
         ServiceLocator.serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
         
@@ -131,7 +127,7 @@ class AppCoordinator: Coordinator {
         MXLog.configure(loggerConfiguration)
     }
     
-    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self = self else { return }
@@ -191,8 +187,6 @@ class AppCoordinator: Coordinator {
             fatalError("Failed transition with context: \(context)")
         }
     }
-
-    // swiftlint:enable cyclomatic_complexity function_body_length
     
     private func restoreUserSession() {
         Task {
@@ -298,8 +292,7 @@ class AppCoordinator: Coordinator {
     
     private func presentHomeScreen() {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         attributedStringBuilder: AttributedStringBuilder(),
-                                                         memberDetailProviderManager: memberDetailProviderManager)
+                                                         attributedStringBuilder: AttributedStringBuilder())
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
@@ -353,32 +346,29 @@ class AppCoordinator: Coordinator {
     // MARK: Rooms
 
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let roomProxy = userSession.clientProxy.rooms.first(where: { $0.id == roomIdentifier }) else {
+        guard let roomProxy = userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
             MXLog.error("Invalid room identifier: \(roomIdentifier)")
             return
         }
         let userId = userSession.clientProxy.userIdentifier
         
-        let memberDetailProvider = memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
-        
         let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
                                                           mediaProvider: userSession.mediaProvider,
-                                                          memberDetailProvider: memberDetailProvider,
+                                                          roomProxy: roomProxy,
                                                           attributedStringBuilder: AttributedStringBuilder())
-        
+
         let timelineController = RoomTimelineController(userId: userId,
                                                         roomId: roomIdentifier,
                                                         timelineProvider: roomProxy.timelineProvider,
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
-                                                        memberDetailProvider: memberDetailProvider)
-        
+                                                        roomProxy: roomProxy)
+
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
                                                          roomName: roomProxy.displayName ?? roomProxy.name,
-                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL),
-                                                         roomEncryptionBadge: roomProxy.encryptionBadgeImage)
+                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL))
         let coordinator = RoomScreenCoordinator(parameters: parameters)
-        
+
         add(childCoordinator: coordinator)
         navigationRouter.push(coordinator) { [weak self] in
             guard let self = self else { return }

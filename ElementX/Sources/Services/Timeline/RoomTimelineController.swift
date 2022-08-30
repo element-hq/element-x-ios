@@ -23,7 +23,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let memberDetailProvider: MemberDetailProviderProtocol
+    private let roomProxy: RoomProxyProtocol
     
     private var cancellables = Set<AnyCancellable>()
     private var timelineItemsUpdateTask: Task<Void, Never>? {
@@ -42,13 +42,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
-         memberDetailProvider: MemberDetailProviderProtocol) {
+         roomProxy: RoomProxyProtocol) {
         self.userId = userId
         self.roomId = roomId
         self.timelineProvider = timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
-        self.memberDetailProvider = memberDetailProvider
+        self.roomProxy = roomProxy
         
         self.timelineProvider
             .callbacks
@@ -196,7 +196,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        switch await memberDetailProvider.loadAvatarURLStringForUserId(timelineItem.senderId) {
+        switch await roomProxy.loadAvatarURLForUserId(timelineItem.senderId) {
         case .success(let avatarURLString):
             guard let avatarURLString = avatarURLString else {
                 return
@@ -226,7 +226,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        switch await memberDetailProvider.loadDisplayNameForUserId(timelineItem.senderId) {
+        switch await roomProxy.loadDisplayNameForUserId(timelineItem.senderId) {
         case .success(let displayName):
             guard let displayName = displayName,
                   let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),

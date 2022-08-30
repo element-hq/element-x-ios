@@ -20,7 +20,6 @@ import SwiftUI
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
-    let memberDetailProviderManager: MemberDetailProviderManager
 }
 
 enum HomeScreenCoordinatorAction {
@@ -40,8 +39,6 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     private let hostingController: UIViewController
     private var viewModel: HomeScreenViewModelProtocol
     
-    private var roomSummaries: [RoomSummary] = []
-    
     private var cancellables = Set<AnyCancellable>()
     
     // MARK: Public
@@ -55,7 +52,8 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = HomeScreenViewModel(attributedStringBuilder: parameters.attributedStringBuilder)
+        viewModel = HomeScreenViewModel(userSession: parameters.userSession,
+                                        attributedStringBuilder: parameters.attributedStringBuilder)
         
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)
@@ -72,42 +70,10 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
                 self.callback?(.verifySession)
             }
         }
-        
-        parameters.userSession.clientProxy
-            .callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                if case .updatedRoomsList = callback {
-                    self?.updateRoomsList()
-                }
-            }.store(in: &cancellables)
-        
-        parameters.userSession.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                switch callback {
-                case .sessionVerificationNeeded:
-                    self?.viewModel.showSessionVerificationBanner()
-                case .didVerifySession:
-                    self?.viewModel.hideSessionVerificationBanner()
-                default:
-                    break
-                }
-            }.store(in: &cancellables)
-        
-        updateRoomsList()
-        
-        Task {
-            if case let .success(userAvatarURLString) = await parameters.userSession.clientProxy.loadUserAvatarURLString() {
-                if case let .success(avatar) = await parameters.userSession.mediaProvider.loadImageFromURLString(userAvatarURLString) {
-                    self.viewModel.updateWithUserAvatar(avatar)
-                }
-            }
-        }
     }
     
     // MARK: - Public
-
+    
     func start() { }
     
     func toPresentable() -> UIViewController {
@@ -116,26 +82,6 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Private
     
-    func updateRoomsList() {
-        roomSummaries = parameters.userSession.clientProxy.rooms.compactMap { roomProxy in
-            guard roomProxy.isJoined, !roomProxy.isSpace, !roomProxy.isTombstoned else {
-                return nil
-            }
-            
-            if let summary = self.roomSummaries.first(where: { $0.id == roomProxy.id }) {
-                return summary
-            }
-            
-            let memberDetailProvider = parameters.memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
-            
-            return RoomSummary(roomProxy: roomProxy,
-                               mediaProvider: parameters.userSession.mediaProvider,
-                               eventBriefFactory: EventBriefFactory(memberDetailProvider: memberDetailProvider))
-        }
-        
-        viewModel.updateWithRoomSummaries(roomSummaries)
-    }
-
     private func processUserMenuAction(_ action: HomeScreenViewUserMenuAction) {
         switch action {
         case .settings:

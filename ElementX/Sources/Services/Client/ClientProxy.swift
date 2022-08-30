@@ -19,15 +19,19 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate {
+private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
         self.clientProxy = clientProxy
     }
     
+    // MARK: - ClientDelegate
+    
     func didReceiveSyncUpdate() {
-        clientProxy?.didReceiveSyncUpdate()
+        DispatchQueue.main.async {
+            self.clientProxy?.didReceiveSyncUpdate()
+        }
     }
 
     func didReceiveAuthError(isSoftLogout: Bool) {
@@ -36,6 +40,14 @@ private class WeakClientProxyWrapper: ClientDelegate {
 
     func didUpdateRestoreToken() {
         clientProxy?.didUpdateRestoreToken()
+    }
+    
+    // MARK: - SlidingSyncDelegate
+    
+    func didReceiveSyncUpdate(summary: UpdateSummary) {
+        DispatchQueue.main.async {
+            self.clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
+        }
     }
 }
 
@@ -47,14 +59,18 @@ class ClientProxy: ClientProxyProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
     
-    private(set) var rooms: [RoomProxy] = [] {
-        didSet {
-            callbacks.send(.updatedRoomsList)
-        }
-    }
+    private var slidingSyncObserverToken: StoppableSpawn?
+    private let slidingSync: SlidingSync
+    
+    private var roomProxies = [String: RoomProxyProtocol]()
+    
+    let roomSummaryProvider: RoomSummaryProviderProtocol
     
     deinit {
         client.setDelegate(delegate: nil)
+        
+        slidingSyncObserverToken?.cancel()
+        slidingSync.setObserver(observer: nil)
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -64,19 +80,38 @@ class ClientProxy: ClientProxyProtocol {
         self.client = client
         self.backgroundTaskService = backgroundTaskService
         
-        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-
+        do {
+            let slidingSyncBuilder = try client.slidingSync().homeserver(url: "https://slidingsync.lab.element.dev")
+            
+            let slidingSyncView = try SlidingSyncViewBuilder()
+                .timelineLimit(limit: 10)
+                .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: "")])
+                .name(name: "HomeScreenView")
+                .syncMode(mode: .fullSync)
+                .build()
+            
+            slidingSync = try slidingSyncBuilder
+                .addView(view: slidingSyncView)
+                .build()
+            
+            roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
+                                                      slidingSyncView: slidingSyncView)
+            
+            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+            
+            slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+            slidingSyncObserverToken = slidingSync.sync()
+        } catch {
+            fatalError("Failed configuring sliding sync")
+        }
+        
         #warning("Use isSoftLogout() api on next SDK release.")
+        // if !client.isSoftLogout()
+        // {
+        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
         client.startSync(timelineLimit: ClientProxy.syncLimit)
-
-        Task { await updateRooms() }
-//        if !client.isSoftLogout() {
-//            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-//            client.startSync(timelineLimit: ClientProxy.syncLimit)
-//
-//            Task { await updateRooms() }
-//        }
+        // }
     }
     
     var userIdentifier: String {
@@ -116,6 +151,28 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
+        if let roomProxy = roomProxies[identifier] {
+            return roomProxy
+        }
+        
+        do {
+            guard let room = try slidingSync.getRoom(roomId: identifier)?.fullRoom() else {
+                MXLog.error("Failed retrieving room with identifier: \(identifier)")
+                return nil
+            }
+            
+            let roomProxy = RoomProxy(room: room,
+                                      backgroundTaskService: backgroundTaskService)
+            roomProxies[identifier] = roomProxy
+            
+            return roomProxy
+        } catch {
+            MXLog.error("Failed retrieving room with identifier: \(identifier)")
+            return nil
+        }
+    }
+        
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         await Task.detached {
             do {
@@ -170,26 +227,16 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func logout() async {
-        do {
+//        do {
             #warning("Use logout() api on next SDK release.")
 //            try client.logout()
-        } catch {
-            MXLog.error("Failed logging out with error: \(error)")
-        }
+//        } catch {
+//            MXLog.error("Failed logging out with error: \(error)")
+//        }
     }
     
     // MARK: Private
     
-    fileprivate func didReceiveSyncUpdate() {
-        Benchmark.logElapsedDurationForIdentifier("ClientSync", message: "Received sync update")
-        
-        callbacks.send(.receivedSyncUpdate)
-        
-        Task.detached {
-            await self.updateRooms()
-        }
-    }
-
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
         callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
     }
@@ -198,32 +245,13 @@ class ClientProxy: ClientProxyProtocol {
         callbacks.send(.updatedRestoreToken)
     }
     
-    private func updateRooms() async {
-        var currentRooms = rooms
-        Benchmark.startTrackingForIdentifier("ClientRooms", message: "Fetching available rooms")
-        let sdkRooms = client.rooms()
-        Benchmark.endTrackingForIdentifier("ClientRooms", message: "Retrieved \(sdkRooms.count) rooms")
+    fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
+        roomSummaryProvider.updateRoomsWithIdentifiers(summary.rooms)
+    }
+    
+    fileprivate func didReceiveSyncUpdate() {
+        Benchmark.logElapsedDurationForIdentifier("ClientSync", message: "Received sync update")
         
-        Benchmark.startTrackingForIdentifier("ProcessingRooms", message: "Started processing \(sdkRooms.count) rooms")
-        let diff = sdkRooms.map { $0.id() }.difference(from: currentRooms.map(\.id))
-        
-        for change in diff {
-            switch change {
-            case .insert(_, let id, _):
-                guard let sdkRoom = sdkRooms.first(where: { $0.id() == id }) else {
-                    MXLog.error("Failed retrieving sdk room with id: \(id)")
-                    break
-                }
-                currentRooms.append(RoomProxy(room: sdkRoom,
-                                              roomMessageFactory: RoomMessageFactory(),
-                                              backgroundTaskService: backgroundTaskService))
-            case .remove(_, let id, _):
-                currentRooms.removeAll { $0.id == id }
-            }
-        }
-        
-        Benchmark.endTrackingForIdentifier("ProcessingRooms", message: "Finished processing \(sdkRooms.count) rooms")
-        
-        rooms = currentRooms
+        callbacks.send(.receivedSyncUpdate)
     }
 }

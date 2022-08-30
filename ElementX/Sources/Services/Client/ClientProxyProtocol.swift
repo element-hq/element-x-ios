@@ -19,7 +19,6 @@ import Foundation
 import MatrixRustSDK
 
 enum ClientProxyCallback {
-    case updatedRoomsList
     case receivedSyncUpdate
     case receivedAuthError(isSoftLogout: Bool)
     case updatedRestoreToken
@@ -47,7 +46,9 @@ protocol ClientProxyProtocol {
 
     var restoreToken: String? { get }
     
-    var rooms: [RoomProxy] { get }
+    var roomSummaryProvider: RoomSummaryProviderProtocol { get }
+    
+    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol?
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
         

@@ -26,7 +26,11 @@ struct MockClientProxy: ClientProxyProtocol {
     let homeserver = ""
     let restoreToken: String? = nil
     
-    let rooms = [RoomProxy]()
+    let roomSummaryProvider: RoomSummaryProviderProtocol = MockRoomSummaryProvider()
+    
+    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
+        nil
+    }
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         .failure(.failedRetrievingDisplayName)

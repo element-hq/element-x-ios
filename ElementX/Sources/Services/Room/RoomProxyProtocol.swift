@@ -45,7 +45,11 @@ protocol RoomProxyProtocol {
     
     var timelineProvider: RoomTimelineProviderProtocol { get }
     
+    func avatarURLStringForUserId(_ userId: String) -> String?
+    
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
+    
+    func displayNameForUserId(_ userId: String) -> String?
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     

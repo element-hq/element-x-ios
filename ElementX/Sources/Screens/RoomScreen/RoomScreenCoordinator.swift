@@ -20,7 +20,6 @@ struct RoomScreenCoordinatorParameters {
     let timelineController: RoomTimelineControllerProtocol
     let roomName: String?
     let roomAvatar: UIImage?
-    let roomEncryptionBadge: UIImage?
 }
 
 final class RoomScreenCoordinator: Coordinator, Presentable {
@@ -45,8 +44,7 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
         let viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             roomName: parameters.roomName,
-                                            roomAvatar: parameters.roomAvatar,
-                                            roomEncryptionBadge: parameters.roomEncryptionBadge)
+                                            roomAvatar: parameters.roomAvatar)
         
         let view = RoomScreen(context: viewModel.context)
         roomScreenViewModel = viewModel

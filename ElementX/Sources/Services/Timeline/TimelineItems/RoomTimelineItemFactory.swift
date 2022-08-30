@@ -19,7 +19,7 @@ import UIKit
 
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
-    private let memberDetailProvider: MemberDetailProviderProtocol
+    private let roomProxy: RoomProxyProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     /// The Matrix ID of the current user.
@@ -27,18 +27,18 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     init(userID: String,
          mediaProvider: MediaProviderProtocol,
-         memberDetailProvider: MemberDetailProviderProtocol,
+         roomProxy: RoomProxyProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userID = userID
         self.mediaProvider = mediaProvider
-        self.memberDetailProvider = memberDetailProvider
+        self.roomProxy = roomProxy
         self.attributedStringBuilder = attributedStringBuilder
     }
     
     func buildTimelineItemFor(eventItem: EventTimelineItem, showSenderDetails: Bool) async -> RoomTimelineItemProtocol {
         guard let messageContent = eventItem.content.asMessage() else { fatalError("Must be a message for now.") }
-        let displayName = memberDetailProvider.displayNameForUserId(eventItem.sender)
-        let avatarURL = memberDetailProvider.avatarURLStringForUserId(eventItem.sender)
+        let displayName = roomProxy.displayNameForUserId(eventItem.sender)
+        let avatarURL = roomProxy.avatarURLStringForUserId(eventItem.sender)
         let avatarImage = mediaProvider.imageFromURLString(avatarURL)
         let isOutgoing = eventItem.sender == userID
         

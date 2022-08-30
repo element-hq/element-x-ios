@@ -24,7 +24,7 @@ struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
         .failure(.failedPaginatingBackwards)
     }
     
-    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError> {
+    func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError> {
         .failure(.failedSendingMessage)
     }
     

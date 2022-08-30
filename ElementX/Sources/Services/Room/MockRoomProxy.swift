@@ -38,8 +38,16 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.failedRetrievingMemberDisplayName)
     }
     
+    func avatarURLStringForUserId(_ userId: String) -> String? {
+        nil
+    }
+    
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         .failure(.failedRetrievingMemberAvatarURL)
+    }
+    
+    func displayNameForUserId(_ userId: String) -> String? {
+        nil
     }
     
     func loadDisplayName() async -> Result<String, RoomProxyError> {

@@ -110,14 +110,12 @@ class MockScreen: Identifiable {
         case .roomPlainNoAvatar:
             let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
                                                              roomName: "Some room name",
-                                                             roomAvatar: nil,
-                                                             roomEncryptionBadge: nil)
+                                                             roomAvatar: nil)
             return RoomScreenCoordinator(parameters: parameters)
         case .roomEncryptedWithAvatar:
             let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
                                                              roomName: "Some room name",
-                                                             roomAvatar: Asset.Images.appLogo.image,
-                                                             roomEncryptionBadge: Asset.Images.encryptionTrusted.image)
+                                                             roomAvatar: Asset.Images.appLogo.image)
             return RoomScreenCoordinator(parameters: parameters)
         case .sessionVerification:
             let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy())

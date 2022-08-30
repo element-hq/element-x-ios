@@ -15,29 +15,20 @@
 //
 
 import Combine
-import UIKit
+import Foundation
 
-enum RoomSummaryCallback {
-    case updatedAvatar
-    case updatedDisplayName
-    case updatedLastMessage
+enum RoomSummaryProviderCallback {
+    case updatedRoomSummaries
 }
 
-@MainActor
-protocol RoomSummaryProtocol {
-    var id: String { get }
-    var name: String? { get }
-    var topic: String? { get }
-    var isDirect: Bool { get }
-    var isEncrypted: Bool { get }
-    var isSpace: Bool { get }
-    var isTombstoned: Bool { get }
+protocol RoomSummaryProviderProtocol {
+    var callbacks: PassthroughSubject<RoomSummaryProviderCallback, Never> { get }
     
-    var displayName: String? { get }
-    var lastMessage: EventBrief? { get }
-    var avatar: UIImage? { get }
+    /// The current list of rooms currently provided by the sliding sync view
+    var roomSummaries: [RoomSummary] { get }
     
-    var callbacks: PassthroughSubject<RoomSummaryCallback, Never> { get }
-    
-    func loadDetails() async
+    /// Invoked by the sliding sync controller whenever certain rooms have updated
+    /// without necessarily changing their position in the list
+    /// - Parameter identifiers: the identifiers for the rooms that have changed
+    func updateRoomsWithIdentifiers(_ identifiers: [String])
 }

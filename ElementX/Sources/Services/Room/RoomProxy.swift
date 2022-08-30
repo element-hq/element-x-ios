@@ -22,10 +22,12 @@ import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
     private let room: Room
-    private let roomMessageFactory: RoomMessageFactoryProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private var sendMessageBgTask: BackgroundTaskProtocol?
+    
+    private var memberAvatars = [String: String]()
+    private var memberDisplayNames = [String: String]()
     
     private(set) var displayName: String?
     
@@ -36,18 +38,16 @@ class RoomProxy: RoomProxyProtocol {
         return provider
     }()
     
-    init(room: Room,
-         roomMessageFactory: RoomMessageFactoryProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol) {
-        self.room = room
-        self.roomMessageFactory = roomMessageFactory
-        self.backgroundTaskService = backgroundTaskService
-    }
-    
     deinit {
         #warning("Should any timeline listeners be removed??")
     }
     
+    init(room: Room,
+         backgroundTaskService: BackgroundTaskServiceProtocol) {
+        self.room = room
+        self.backgroundTaskService = backgroundTaskService
+    }
+
     lazy var id: String = room.id()
     
     var name: String? {
@@ -95,10 +95,15 @@ class RoomProxy: RoomProxyProtocol {
         return Asset.Images.encryptionTrusted.image
     }
     
+    func avatarURLStringForUserId(_ userId: String) -> String? {
+        memberAvatars[userId]
+    }
+    
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await Task.detached { () -> Result<String?, RoomProxyError> in
+        await Task.detached { [weak self] () -> Result<String?, RoomProxyError> in
             do {
-                let avatarURL = try self.room.memberAvatarUrl(userId: userId)
+                let avatarURL = try self?.room.memberAvatarUrl(userId: userId)
+                self?.memberAvatars[userId] = avatarURL
                 return .success(avatarURL)
             } catch {
                 return .failure(.failedRetrievingMemberAvatarURL)
@@ -107,10 +112,15 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
     
+    func displayNameForUserId(_ userId: String) -> String? {
+        memberDisplayNames[userId]
+    }
+    
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await Task.detached { () -> Result<String?, RoomProxyError> in
+        await Task.detached { [weak self] () -> Result<String?, RoomProxyError> in
             do {
-                let displayName = try self.room.memberDisplayName(userId: userId)
+                let displayName = try self?.room.memberDisplayName(userId: userId)
+                self?.memberDisplayNames[userId] = displayName
                 return .success(displayName)
             } catch {
                 return .failure(.failedRetrievingMemberDisplayName)

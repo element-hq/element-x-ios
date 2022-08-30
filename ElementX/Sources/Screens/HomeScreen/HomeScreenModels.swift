@@ -44,24 +44,16 @@ struct HomeScreenViewState: BindableState {
     
     var rooms: [HomeScreenRoom] = []
     
-    var isLoadingRooms = false
-    
-    var visibleDMs: [HomeScreenRoom] {
-        searchFilteredRooms.filter(\.isDirect)
+    var isLoadingRooms: Bool {
+        rooms.isEmpty
     }
-
+    
     var visibleRooms: [HomeScreenRoom] {
-        searchFilteredRooms.filter { !$0.isDirect }
-    }
-    
-    private var searchFilteredRooms: LazyFilterSequence<LazySequence<[HomeScreenRoom]>.Elements> {
-        guard !bindings.searchQuery.isEmpty else {
-            // This extra filter is fine for now as there are always downstream filters
-            // but if that changes, this approach should be reconsidered.
-            return rooms.lazy.filter { _ in true }
+        if bindings.searchQuery.isEmpty {
+            return rooms
         }
         
-        return rooms.lazy.filter { $0.displayName?.localizedStandardContains(bindings.searchQuery) ?? false }
+        return rooms.lazy.filter { $0.name.localizedStandardContains(bindings.searchQuery) }
     }
     
     var bindings = HomeScreenViewStateBindings()
@@ -74,17 +66,15 @@ struct HomeScreenViewStateBindings {
 struct HomeScreenRoom: Identifiable, Equatable {
     let id: String
     
-    var displayName: String?
+    var name: String
     
-    var topic: String?
-    var lastMessage: String?
+    var lastMessage: AttributedString?
     
     var avatar: UIImage?
     
     let isDirect: Bool
-    let isEncrypted: Bool
-    let isSpace: Bool
-    let isTombstoned: Bool
+    
+    let unreadNotificationCount: UInt
 }
 
 extension MutableCollection where Element == HomeScreenRoom {

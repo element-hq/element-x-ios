@@ -15,34 +15,58 @@
 //
 
 import Combine
+import MatrixRustSDK
 import SwiftUI
 
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
+    private let userSession: UserSessionProtocol
+    private let roomSummaryProvider: RoomSummaryProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
-    
-    private var roomUpdateListeners = Set<AnyCancellable>()
-    private var roomsUpdateTask: Task<Void, Never>? {
-        willSet {
-            roomsUpdateTask?.cancel()
-        }
-    }
-
-    private var roomSummaries: [RoomSummaryProtocol]? {
-        didSet {
-            state.isLoadingRooms = (roomSummaries?.count ?? 0 == 0)
-        }
-    }
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
     // MARK: - Setup
     
-    init(attributedStringBuilder: AttributedStringBuilderProtocol) {
+    init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
+        self.userSession = userSession
+        roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         self.attributedStringBuilder = attributedStringBuilder
         
-        super.init(initialViewState: HomeScreenViewState(isLoadingRooms: true))
+        super.init(initialViewState: HomeScreenViewState())
+        
+        userSession.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                switch callback {
+                case .sessionVerificationNeeded:
+                    self?.state.showSessionVerificationBanner = true
+                case .didVerifySession:
+                    self?.state.showSessionVerificationBanner = false
+                default:
+                    break
+                }
+            }.store(in: &cancellables)
+        
+        roomSummaryProvider.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                switch callback {
+                case .updatedRoomSummaries:
+                    self?.updateRooms()
+                }
+            }.store(in: &cancellables)
+        
+        Task {
+            if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
+                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString) {
+                    state.userAvatar = avatar
+                }
+            }
+        }
+        
+        updateRooms()
     }
     
     // MARK: - Public
@@ -50,7 +74,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     override func process(viewAction: HomeScreenViewAction) async {
         switch viewAction {
         case .loadRoomData(let roomIdentifier):
-            loadRoomDataForIdentifier(roomIdentifier)
+            loadDataForRoomIdentifier(roomIdentifier)
         case .selectRoom(let roomIdentifier):
             callback?(.selectRoom(roomIdentifier: roomIdentifier))
         case .userMenu(let action):
@@ -60,114 +84,36 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
-    func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol]) {
-        roomsUpdateTask = Task {
-            await updateWithRoomSummaries(roomSummaries)
-        }
-    }
-    
-    private func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol]) async {
-        var rooms = [HomeScreenRoom]()
-        for summary in roomSummaries {
-            if Task.isCancelled {
-                return
-            }
-            
-            rooms.append(await buildOrUpdateRoomForSummary(summary))
-        }
-        
-        if Task.isCancelled {
-            return
-        }
-        
-        state.rooms = rooms
-        self.roomSummaries = roomSummaries
-        
-        roomUpdateListeners.removeAll()
-        roomSummaries.forEach { roomSummary in
-            roomSummary.callbacks
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] callback in
-                    guard let self = self else {
-                        return
-                    }
-                    
-                    Task {
-                        if let index = self.state.rooms.firstIndex(where: { $0.id == roomSummary.id }) {
-                            switch callback {
-                            case .updatedLastMessage:
-                                var room = self.state.rooms[index]
-                                room.lastMessage = await self.lastMessageFromEventBrief(roomSummary.lastMessage)
-                                self.state.rooms[index] = room
-                            default:
-                                self.state.rooms[index] = await self.buildOrUpdateRoomForSummary(roomSummary)
-                            }
-                        }
-                    }
-                }
-                .store(in: &roomUpdateListeners)
-        }
-    }
-    
-    func updateWithUserAvatar(_ avatar: UIImage) {
-        state.userAvatar = avatar
-    }
-
-    func showSessionVerificationBanner() {
-        state.showSessionVerificationBanner = true
-    }
-    
-    func hideSessionVerificationBanner() {
-        state.showSessionVerificationBanner = false
-    }
-    
     // MARK: - Private
     
-    private func loadRoomDataForIdentifier(_ roomIdentifier: String) {
-        guard let roomSummary = roomSummaries?.first(where: { $0.id == roomIdentifier }) else {
-            MXLog.error("Invalid room identifier")
+    private func loadDataForRoomIdentifier(_ identifier: String) {
+        guard let summary = roomSummaryProvider.roomSummaries.first(where: { $0.id == identifier }) else {
             return
         }
         
-        Task { await roomSummary.loadDetails() }
-    }
-    
-    private func buildOrUpdateRoomForSummary(_ roomSummary: RoomSummaryProtocol) async -> HomeScreenRoom {
-        guard var room = state.rooms.first(where: { $0.id == roomSummary.id }) else {
-            return HomeScreenRoom(id: roomSummary.id,
-                                  displayName: roomSummary.displayName,
-                                  topic: roomSummary.topic,
-                                  lastMessage: await lastMessageFromEventBrief(roomSummary.lastMessage),
-                                  avatar: roomSummary.avatar,
-                                  isDirect: roomSummary.isDirect,
-                                  isEncrypted: roomSummary.isEncrypted,
-                                  isSpace: roomSummary.isSpace,
-                                  isTombstoned: roomSummary.isTombstoned)
-        }
-        
-        room.avatar = roomSummary.avatar
-        room.displayName = roomSummary.displayName
-        room.topic = roomSummary.topic
-                
-        return room
-    }
-    
-    private func lastMessageFromEventBrief(_ eventBrief: EventBrief?) async -> String? {
-        guard let eventBrief = eventBrief else {
-            return nil
-        }
-        
-        let senderDisplayName = senderDisplayNameForBrief(eventBrief)
-        
-        if let htmlBody = eventBrief.htmlBody,
-           let lastMessageAttributedString = await attributedStringBuilder.fromHTML(htmlBody) {
-            return "\(senderDisplayName): \(String(lastMessageAttributedString.characters))"
-        } else {
-            return "\(senderDisplayName): \(eventBrief.body)"
+        if let avatarURLString = summary.avatarURLString {
+            Task {
+                let _ = await userSession.mediaProvider.loadImageFromURLString(avatarURLString)
+                updateRooms()
+            }
         }
     }
     
-    private func senderDisplayNameForBrief(_ brief: EventBrief) -> String {
-        brief.senderDisplayName ?? brief.senderId
+    private func updateRooms() {
+        state.rooms = roomSummaryProvider.roomSummaries.map { summary in
+            let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString)
+            
+            var lastMessage: AttributedString?
+            if let message = summary.lastMessage {
+                lastMessage = try? AttributedString(markdown: "**\(message.sender)**: \(message.body)")
+            }
+            
+            return HomeScreenRoom(id: summary.id,
+                                  name: summary.name,
+                                  lastMessage: lastMessage,
+                                  avatar: avatarImage,
+                                  isDirect: summary.isDirect,
+                                  unreadNotificationCount: summary.unreadNotificationCount)
+        }
     }
 }

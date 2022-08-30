@@ -22,10 +22,4 @@ protocol HomeScreenViewModelProtocol {
     var callback: ((HomeScreenViewModelAction) -> Void)? { get set }
     
     var context: HomeScreenViewModelType.Context { get }
-    
-    func updateWithUserAvatar(_ avatar: UIImage)
-    func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol])
-    
-    func showSessionVerificationBanner()
-    func hideSessionVerificationBanner()
 }
