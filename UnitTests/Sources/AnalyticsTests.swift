@@ -58,7 +58,10 @@ class AnalyticsTests: XCTestCase {
         XCTAssertNil(client.pendingUserProperties, "No user properties should have been set yet.")
         
         // When updating the user properties
-        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging, numFavouriteRooms: 4, numSpaces: 5))
+        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging,
+                                                                  numFavouriteRooms: 4,
+                                                                  numSpaces: 5,
+                                                                  allChatsActiveFilter: nil))
         
         // Then the properties should be cached
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
@@ -70,7 +73,10 @@ class AnalyticsTests: XCTestCase {
     func testMergingUserProperties() {
         // Given a client with a cached use case user properties
         let client = PostHogAnalyticsClient()
-        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging, numFavouriteRooms: nil, numSpaces: nil))
+        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging,
+                                                                  numFavouriteRooms: nil,
+                                                                  numSpaces: nil,
+                                                                  allChatsActiveFilter: nil))
         
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
         XCTAssertEqual(client.pendingUserProperties?.ftueUseCaseSelection, .PersonalMessaging, "The use case selection should match.")
@@ -78,7 +84,10 @@ class AnalyticsTests: XCTestCase {
         XCTAssertNil(client.pendingUserProperties?.numSpaces, "The number of spaces should not be set.")
         
         // When updating the number of spaced
-        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: nil, numFavouriteRooms: 4, numSpaces: 5))
+        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: nil,
+                                                                  numFavouriteRooms: 4,
+                                                                  numSpaces: 5,
+                                                                  allChatsActiveFilter: nil))
         
         // Then the new properties should be updated and the existing properties should remain unchanged
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
@@ -90,7 +99,10 @@ class AnalyticsTests: XCTestCase {
     func testSendingUserProperties() {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient()
-        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging, numFavouriteRooms: nil, numSpaces: nil))
+        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging,
+                                                                  numFavouriteRooms: nil,
+                                                                  numSpaces: nil,
+                                                                  allChatsActiveFilter: nil))
         client.start()
         
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
@@ -106,7 +118,10 @@ class AnalyticsTests: XCTestCase {
     func testSendingUserPropertiesWithIdentify() {
         // Given a client with user properties set
         let client = PostHogAnalyticsClient()
-        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging, numFavouriteRooms: nil, numSpaces: nil))
+        client.updateUserProperties(AnalyticsEvent.UserProperties(ftueUseCaseSelection: .PersonalMessaging,
+                                                                  numFavouriteRooms: nil,
+                                                                  numSpaces: nil,
+                                                                  allChatsActiveFilter: nil))
         client.start()
         
         XCTAssertNotNil(client.pendingUserProperties, "The user properties should be cached.")
