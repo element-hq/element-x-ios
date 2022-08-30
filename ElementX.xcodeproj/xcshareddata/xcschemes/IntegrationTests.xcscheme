@@ -115,16 +115,6 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
-            BuildableName = "IntegrationTests.xctest"
-            BlueprintName = "IntegrationTests"
-            ReferencedContainer = "container:ElementX.xcodeproj">
-         </BuildableReference>
-      </BuildableProductRunnable>
       <CommandLineArguments>
       </CommandLineArguments>
       <EnvironmentVariables>
@@ -144,6 +134,15 @@
             isEnabled = "YES">
          </EnvironmentVariable>
       </EnvironmentVariables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "D3DB351B7FBE0F49649171FC"
+            BuildableName = "IntegrationTests.xctest"
+            BlueprintName = "IntegrationTests"
+            ReferencedContainer = "container:ElementX.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">
