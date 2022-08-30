@@ -70,21 +70,6 @@ targets:
             echo "warning: SwiftGen not installed, download from https://github.com/SwiftGen/SwiftGen"
         fi
 
-    - name: 🧹 SwiftFormat
-      runOnlyWhenInstalling: false
-      shell: /bin/sh
-      script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which swiftformat >/dev/null; then
-          if [ $CONFIGURATION = "Debug" ]; then 
-            swiftformat --lint --lenient "$PROJECT_DIR"
-          else 
-            swiftformat --lint "$PROJECT_DIR"
-          fi
-        else
-          echo "warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat"
-        fi
-
     postBuildScripts:
     - name: ⚠️ SwiftLint
       runOnlyWhenInstalling: false
@@ -95,6 +80,16 @@ targets:
             swiftlint
         else
             echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
+        fi
+    - name: 🧹 SwiftFormat
+      runOnlyWhenInstalling: false
+      shell: /bin/sh
+      script: |
+        export PATH="$PATH:/opt/homebrew/bin"
+        if which swiftformat >/dev/null; then
+            swiftformat --lint --lenient "$PROJECT_DIR"
+        else
+            echo "warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat"
         fi
 
     dependencies:

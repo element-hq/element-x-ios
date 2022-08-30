@@ -1768,11 +1768,11 @@
 			buildConfigurationList = B15427F8699AD5A5FC75C17E /* Build configuration list for PBXNativeTarget "ElementX" */;
 			buildPhases = (
 				A7130911BCB2DF3D249A1836 /* 🛠 SwiftGen */,
-				B35AB66424BB30087EEE408C /* 🧹 SwiftFormat */,
 				9797D588420FCBBC228A63C9 /* Sources */,
 				215E1D91B98672C856F559D0 /* Resources */,
 				EE878EAA342710DB973E0A87 /* Frameworks */,
 				98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */,
+				B35AB66424BB30087EEE408C /* 🧹 SwiftFormat */,
 			);
 			buildRules = (
 			);
@@ -2073,7 +2073,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n  if [ $CONFIGURATION = \"Debug\" ]; then \n    swiftformat --lint --lenient \"$PROJECT_DIR\"\n  else \n    swiftformat --lint \"$PROJECT_DIR\"\n  fi\nelse\n  echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
+			shellScript = "export PATH=\"$PATH:/opt/homebrew/bin\"\nif which swiftformat >/dev/null; then\n    swiftformat --lint --lenient \"$PROJECT_DIR\"\nelse\n    echo \"warning: SwiftFormat not installed, download from https://github.com/nicklockwood/SwiftFormat\"\nfi\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
