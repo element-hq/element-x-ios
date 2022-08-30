@@ -1,1 +1,1 @@
-Use unstable MSC2967 values for OIDC scopes + client registration metadata updates.
+Run SwiftFormat as a post-build script locally, with an additional pre-build step on CI.
