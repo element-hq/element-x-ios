@@ -85,6 +85,8 @@ class MockScreen: Identifiable {
             return TemplateCoordinator(parameters: .init(promptType: .upgrade))
         case .settings:
             return SettingsCoordinator(parameters: .init(navigationRouter: navigationRouter,
+                                                         userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
+                                                                                      mediaProvider: MockMediaProvider()),
                                                          bugReportService: MockBugReportService()))
         case .bugReport:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
