@@ -61,6 +61,7 @@ struct AnalyticsPrompt: View {
         .navigationBarBackButtonHidden(true)
     }
     
+    /// The main content of the screen that is shown inside the scroll view.
     private var mainContent: some View {
         VStack {
             Image(uiImage: Asset.Images.analyticsLogo.image)
@@ -72,7 +73,7 @@ struct AnalyticsPrompt: View {
                 .foregroundColor(.element.primaryContent)
                 .padding(.bottom, 2)
             
-            messageText
+            Text(context.viewState.strings.optInContent)
                 .font(.element.body)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.secondaryContent)
@@ -82,18 +83,6 @@ struct AnalyticsPrompt: View {
                 .padding(.vertical, 28)
             
             checkmarkList
-        }
-    }
-    
-    /// The text that explains what analytics will do.
-    private var messageText: some View {
-        VStack {
-            // FIXME: Make the link tappable??
-            Text(ElementL10n.analyticsOptInContent(ElementInfoPlist.cfBundleName, ElementL10n.analyticsOptInContentLink))
-            
-            Button(ElementL10n.analyticsOptInContentLink) {
-                context.send(viewAction: .openTermsURL)
-            }
         }
     }
     

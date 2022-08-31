@@ -46,8 +46,6 @@ class AnalyticsPromptViewModel: AnalyticsPromptViewModelType, AnalyticsPromptVie
             callback?(.enable)
         case .disable:
             callback?(.disable)
-        case .openTermsURL:
-            await UIApplication.shared.open(termsURL)
         }
     }
 }

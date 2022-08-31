@@ -21,8 +21,6 @@ enum AnalyticsPromptViewAction {
     case enable
     /// Disable analytics.
     case disable
-    /// Open the service terms link.
-    case openTermsURL
 }
 
 enum AnalyticsPromptViewModelAction {
@@ -39,6 +37,27 @@ struct AnalyticsPromptViewState: BindableState {
 
 /// A collection of strings for the UI that need to be parsed from HTML
 struct AnalyticsPromptStrings {
+    let optInContent: AttributedString
     let point1 = AttributedStringBuilder().fromHTML(ElementL10n.analyticsOptInListItem1) ?? AttributedString(ElementL10n.analyticsOptInListItem1)
     let point2 = AttributedStringBuilder().fromHTML(ElementL10n.analyticsOptInListItem2) ?? AttributedString(ElementL10n.analyticsOptInListItem2)
+    
+    init() {
+        // Create the opt in content with a placeholder.
+        let linkPlaceholder = "{link}"
+        var optInContent = AttributedString(ElementL10n.analyticsOptInContent(ElementInfoPlist.cfBundleName, linkPlaceholder))
+        
+        guard let range = optInContent.range(of: linkPlaceholder) else {
+            self.optInContent = AttributedString(ElementL10n.analyticsOptInContent(ElementInfoPlist.cfBundleName,
+                                                                                   ElementL10n.analyticsOptInContentLink))
+            MXLog.failure("Failed to add a link attribute to the opt in content.")
+            return
+        }
+        
+        // Replace the placeholder with a link.
+        var link = AttributedString(ElementL10n.analyticsOptInContentLink)
+        link.link = BuildSettings.analyticsConfiguration.termsURL
+        optInContent.replaceSubrange(range, with: link)
+        
+        self.optInContent = optInContent
+    }
 }
