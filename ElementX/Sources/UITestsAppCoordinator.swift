@@ -76,6 +76,9 @@ class MockScreen: Identifiable {
         case .serverSelectionNonModal:
             return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                 hasModalPresentation: false))
+        case .analyticsPrompt:
+            return AnalyticsPromptCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
+                                                                                             mediaProvider: MockMediaProvider())))
         case .authenticationFlow:
             return AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
                                              navigationRouter: navigationRouter)

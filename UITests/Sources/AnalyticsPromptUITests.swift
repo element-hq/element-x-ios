@@ -14,35 +14,14 @@
 // limitations under the License.
 //
 
+import ElementX
 import XCTest
-import RiotSwiftUI
 
-class AnalyticsPromptUITests: MockScreenTestCase {
-    /// Verify that the prompt is displayed correctly for new users.
-    func testAnalyticsPromptNewUser() {
-        app.goToScreenWithIdentifier(MockAnalyticsPromptScreenState.promptType(.newUser).title)
-        
-        let enableButton = app.buttons["enableButton"]
-        let disableButton = app.buttons["disableButton"]
-        
-        XCTAssert(enableButton.exists)
-        XCTAssert(disableButton.exists)
-        
-        XCTAssertEqual(enableButton.label, VectorL10n.enable)
-        XCTAssertEqual(disableButton.label, VectorL10n.locationSharingInvalidAuthorizationNotNow)
-    }
-    
-    /// Verify that the prompt is displayed correctly for when upgrading from Matomo.
-    func testAnalyticsPromptUpgrade() {
-        app.goToScreenWithIdentifier(MockAnalyticsPromptScreenState.promptType(.upgrade).title)
-        
-        let enableButton = app.buttons["enableButton"]
-        let disableButton = app.buttons["disableButton"]
-        
-        XCTAssert(enableButton.exists)
-        XCTAssert(disableButton.exists)
-        
-        XCTAssertEqual(enableButton.label, VectorL10n.analyticsPromptYes)
-        XCTAssertEqual(disableButton.label, VectorL10n.analyticsPromptStop)
+class AnalyticsPromptUITests: XCTestCase {
+    /// Verify that the prompt is displayed correctly.
+    func testAnalyticsPrompt() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.analyticsPrompt)
+        app.assertScreenshot(.analyticsPrompt)
     }
 }
