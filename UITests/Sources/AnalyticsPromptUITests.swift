@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,32 +14,14 @@
 // limitations under the License.
 //
 
-import Foundation
+import ElementX
+import XCTest
 
-// MARK: - Coordinator
-
-// MARK: View model
-
-enum SettingsViewModelAction {
-    case toggleAnalytics
-    case reportBug
-    case crash
-    case logout
-}
-
-// MARK: View
-
-struct SettingsViewState: BindableState {
-    var bindings: SettingsViewStateBindings
-}
-
-struct SettingsViewStateBindings {
-    var enableAnalytics = ElementSettings.shared.enableAnalytics
-}
-
-enum SettingsViewAction {
-    case toggleAnalytics
-    case reportBug
-    case crash
-    case logout
+class AnalyticsPromptUITests: XCTestCase {
+    /// Verify that the prompt is displayed correctly.
+    func testAnalyticsPrompt() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.analyticsPrompt)
+        app.assertScreenshot(.analyticsPrompt)
+    }
 }

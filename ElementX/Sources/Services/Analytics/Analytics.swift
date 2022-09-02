@@ -56,14 +56,14 @@ class Analytics {
     
     // MARK: - Public
     
-    /// Opts in to analytics tracking with the supplied session.
-    /// - Parameter session: An optional session to use to when reading/generating the analytics ID.
+    /// Opts in to analytics tracking with the supplied user session.
+    /// - Parameter userSession: The user session to use to when reading/generating the analytics ID.
     ///  The session will be ignored if not running.
-    func optIn(with session: UserSessionProtocol) {
+    func optIn(with userSession: UserSessionProtocol) {
         ElementSettings.shared.enableAnalytics = true
         startIfEnabled()
         
-        Task { await useAnalyticsSettings(from: session) }
+        Task { await useAnalyticsSettings(from: userSession) }
     }
     
     /// Stops analytics tracking and calls `reset` to clear any IDs and event queues.
@@ -95,16 +95,16 @@ class Analytics {
 //        MXLogger.setBuildVersion(ElementInfoPlist.cfBundleShortVersionString)
     }
     
-    /// Use the analytics settings from the supplied session to configure analytics.
+    /// Use the analytics settings from the supplied user session to configure analytics.
     /// For now this is only used for (pseudonymous) identification.
-    /// - Parameter session: The session to read analytics settings from.
-    func useAnalyticsSettings(from session: UserSessionProtocol) async {
+    /// - Parameter userSession: The user session to read analytics settings from.
+    func useAnalyticsSettings(from userSession: UserSessionProtocol) async {
         guard
             ElementSettings.shared.enableAnalytics,
             !ElementSettings.shared.isIdentifiedForAnalytics
         else { return }
         
-        let service = AnalyticsService(session: session)
+        let service = AnalyticsService(userSession: userSession)
         self.service = service
         
         switch await service.settings() {

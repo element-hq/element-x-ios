@@ -286,6 +286,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private func presentSettingsScreen() {
         let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
+                                                       userSession: userSession,
                                                        bugReportService: bugReportService)
         let coordinator = SettingsCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] action in

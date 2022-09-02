@@ -25,6 +25,9 @@ struct UIConstants {
     /// The padding used between the footer and the bottom of the view.
     static let actionButtonBottomPadding: CGFloat = 24
     
+    /// The padding used to the top of the view for breaker screens that don't have a navigation bar.
+    static let onboardingBreakerScreenTopPadding: CGFloat = 80
+    
     /// The height to use for top/bottom spacers to pad the views to fit the `maxContentHeight`.
     static func spacerHeight(in geometry: GeometryProxy) -> CGFloat {
         max(0, (geometry.size.height - maxContentHeight) / 2)

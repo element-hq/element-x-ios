@@ -17,7 +17,7 @@
 import Foundation
 
 enum AnalyticsServiceError: Error {
-    /// The session supplied to the service does not have a state of `MXSessionStateRunning`.
+    /// The user session supplied to the service does not have a state of `MXSessionStateRunning`.
     case sessionIsNotRunning
     /// The service failed to get or update the analytics settings event from the user's account data.
     case accountDataFailure
@@ -25,12 +25,12 @@ enum AnalyticsServiceError: Error {
 
 /// A service responsible for handling the `im.vector.analytics` event from the user's account data.
 class AnalyticsService {
-    let session: UserSessionProtocol
+    let userSession: UserSessionProtocol
     
-    /// Creates an analytics service with the supplied session.
-    /// - Parameter session: The session to use when reading analytics settings from account data.
-    init(session: UserSessionProtocol) {
-        self.session = session
+    /// Creates an analytics service with the supplied user session.
+    /// - Parameter userSession: The user session to use when reading analytics settings from account data.
+    init(userSession: UserSessionProtocol) {
+        self.userSession = userSession
     }
     
     /// The analytics settings for the current user. Calling this method will check whether the settings already
@@ -41,12 +41,12 @@ class AnalyticsService {
     func settings() async -> Result<AnalyticsSettings, AnalyticsServiceError> {
         // Only use the session if it is running otherwise we could wipe out an existing analytics ID.
         fatalWithoutUnreachableCodeWarning()
-//        guard session.state == .running else {
+//        guard userSession.state == .running else {
 //            MXLog.warning("Aborting attempt to read analytics settings. The session may not be up-to-date.")
 //            return .failure(.sessionIsNotRunning)
 //        }
         
-        let result: Result<AnalyticsSettings?, ClientProxyError> = await session.clientProxy.accountDataEvent(type: AnalyticsSettings.eventType)
+        let result: Result<AnalyticsSettings?, ClientProxyError> = await userSession.clientProxy.accountDataEvent(type: AnalyticsSettings.eventType)
         switch result {
         case .failure:
             return .failure(.accountDataFailure)
@@ -57,7 +57,7 @@ class AnalyticsService {
             }
             
             let newSettings = AnalyticsSettings.new(currentEvent: settings)
-            switch await session.clientProxy.setAccountData(content: newSettings, type: AnalyticsSettings.eventType) {
+            switch await userSession.clientProxy.setAccountData(content: newSettings, type: AnalyticsSettings.eventType) {
             case .failure:
                 MXLog.warning("Failed to update analytics settings.")
                 return .failure(.accountDataFailure)

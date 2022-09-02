@@ -40,6 +40,8 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
 
     override func process(viewAction: SettingsViewAction) async {
         switch viewAction {
+        case .toggleAnalytics:
+            callback?(.toggleAnalytics)
         case .reportBug:
             callback?(.reportBug)
         case .crash:
