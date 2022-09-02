@@ -38,19 +38,11 @@ struct AnalyticsSettings: Codable {
 }
 
 extension AnalyticsSettings {
-    #warning("Probably unnecessary now.")
-    /// A dictionary representation of the settings.
-    var dictionary: [AnyHashable: Any] {
-        var dictionary = [AnyHashable: Any]()
-        dictionary[CodingKeys.id.rawValue] = id
-        dictionary[CodingKeys.webOptIn.rawValue] = webOptIn
-        
-        return dictionary
-    }
-}
-
-extension AnalyticsSettings {
-    #warning("This doesn't have the same level of protection as EI has…")
+    /// Generates a new AnalyticsSettings value (inc an ID if necessary) based upon an
+    /// existing value. This is the only way the type should be created so as to avoid wiping
+    /// out the `webOptIn` value that the user may already have set.
+    ///
+    /// **Note:** Please don't pass a `nil` literal to this method.
     static func new(currentEvent: AnalyticsSettings?) -> AnalyticsSettings {
         AnalyticsSettings(id: currentEvent?.id ?? UUID().uuidString,
                           webOptIn: currentEvent?.webOptIn)

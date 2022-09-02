@@ -40,7 +40,7 @@ class AnalyticsService {
     /// The request will fail if the service's session does not have the `MXSessionStateRunning` state.
     func settings() async -> Result<AnalyticsSettings, AnalyticsServiceError> {
         // Only use the session if it is running otherwise we could wipe out an existing analytics ID.
-        fatalError("Missing running state detection.")
+        fatalWithoutUnreachableCodeWarning()
 //        guard session.state == .running else {
 //            MXLog.warning("Aborting attempt to read analytics settings. The session may not be up-to-date.")
 //            return .failure(.sessionIsNotRunning)
@@ -66,5 +66,10 @@ class AnalyticsService {
                 return .success(newSettings)
             }
         }
+    }
+    
+    /// Silences a warning on some intentionally unreachable code.
+    func fatalWithoutUnreachableCodeWarning() {
+        fatalError("Missing running state detection.")
     }
 }
