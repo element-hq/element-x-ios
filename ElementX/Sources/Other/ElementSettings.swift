@@ -23,6 +23,8 @@ final class ElementSettings: ObservableObject {
 
     public enum UserDefaultsKeys: String {
         case timelineStyle
+        case enableAnalytics
+        case isIdentifiedForAnalytics
     }
 
     static let shared = ElementSettings()
@@ -35,8 +37,25 @@ final class ElementSettings: ObservableObject {
     private init() {
         // no-op
     }
+    
+    // MARK: - Analytics
+    
+    /// Whether the user has already been shown the PostHog analytics prompt.
+    var hasSeenAnalyticsPrompt: Bool {
+        Self.store.object(forKey: UserDefaultsKeys.enableAnalytics.rawValue) != nil
+    }
+    
+    /// `true` when the user has opted in to send analytics.
+    @AppStorage(UserDefaultsKeys.enableAnalytics.rawValue, store: store)
+    var enableAnalytics = false
+    
+    /// Indicates if the device has already called identify for this session to PostHog.
+    /// This is separate to `enableAnalytics` as logging out leaves analytics
+    /// enabled, but requires the next account to be identified separately.
+    @AppStorage(UserDefaultsKeys.isIdentifiedForAnalytics.rawValue, store: store)
+    var isIdentifiedForAnalytics = false
 
-    // MARK: -
+    // MARK: - Room Screen
 
     @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
     var timelineStyle = BuildSettings.defaultRoomTimelineStyle

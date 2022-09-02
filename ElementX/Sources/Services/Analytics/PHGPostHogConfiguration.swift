@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,16 @@
 // limitations under the License.
 //
 
-import Combine
+import PostHog
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
-    
-    var userID: String { clientProxy.userIdentifier }
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+extension PHGPostHogConfiguration {
+    static var standard: PHGPostHogConfiguration? {
+        let analyticsConfiguration = BuildSettings.analyticsConfiguration
+        guard analyticsConfiguration.isEnabled else { return nil }
+        
+        let postHogConfiguration = PHGPostHogConfiguration(apiKey: analyticsConfiguration.apiKey, host: analyticsConfiguration.host)
+        postHogConfiguration.shouldSendDeviceID = false
+        
+        return postHogConfiguration
+    }
 }

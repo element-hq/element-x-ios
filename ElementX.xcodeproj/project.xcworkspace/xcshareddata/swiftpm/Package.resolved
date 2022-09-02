@@ -64,12 +64,30 @@
       }
     },
     {
+      "identity" : "matrix-analytics-events",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/matrix-org/matrix-analytics-events",
+      "state" : {
+        "branch" : "main",
+        "revision" : "53ad46ba1ea1ee8f21139dda3c351890846a202f"
+      }
+    },
+    {
       "identity" : "matrix-rust-components-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
         "revision" : "1358c9c2a85cfb5fc1bfadce13565e02618725d4",
         "version" : "1.0.13-alpha"
+      }
+    },
+    {
+      "identity" : "posthog-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/PostHog/posthog-ios",
+      "state" : {
+        "revision" : "d3177a24686ead147f5e4ff4d7e284ca4be33870",
+        "version" : "1.4.4"
       }
     },
     {

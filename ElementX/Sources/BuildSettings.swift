@@ -30,6 +30,24 @@ final class BuildSettings {
     static let bugReportUISIId = "element-auto-uisi"
 
     static let bugReportGHLabels = ["Element-X"]
+    
+    // MARK: - Analytics
+    
+    #if DEBUG
+    /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
+    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
+    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: ElementInfoPlist.cfBundleIdentifier.starts(with: "io.element.elementx"),
+                                                               host: "https://posthog.element.dev",
+                                                               apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
+                                                               termsURL: URL(string: "https://element.io/cookie-policy")!) // swiftlint:disable:this force_unwrapping
+    #else
+    /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
+    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
+    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: ElementInfoPlist.cfBundleIdentifier.starts(with: "io.element.elementx"),
+                                                               host: "https://posthog.hss.element.io",
+                                                               apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
+                                                               termsURL: URL(string: "https://element.io/cookie-policy")!) // swiftlint:disable:this force_unwrapping
+    #endif
 
     // MARK: - Settings screen
 

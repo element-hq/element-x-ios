@@ -32,6 +32,14 @@ struct MockClientProxy: ClientProxyProtocol {
         .failure(.failedRetrievingAvatarURL)
     }
     
+    func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
+        .failure(.failedRetrievingAccountData)
+    }
+    
+    func setAccountData<Content>(content: Content, type: String) async -> Result<Void, ClientProxyError> where Content: Encodable {
+        .failure(.failedSettingAccountData)
+    }
+    
     func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource {
         MatrixRustSDK.mediaSourceFromUrl(url: urlString)
     }

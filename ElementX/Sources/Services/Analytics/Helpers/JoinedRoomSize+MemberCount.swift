@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2021 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,23 @@
 // limitations under the License.
 //
 
-import Combine
+import AnalyticsEvents
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
-    
-    var userID: String { clientProxy.userIdentifier }
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+extension AnalyticsEvent.JoinedRoom.RoomSize {
+    init?(memberCount: UInt) {
+        switch memberCount {
+        case 2:
+            self = .Two
+        case 3...10:
+            self = .ThreeToTen
+        case 11...100:
+            self = .ElevenToOneHundred
+        case 101...1000:
+            self = .OneHundredAndOneToAThousand
+        case 1001...:
+            self = .MoreThanAThousand
+        default:
+            return nil
+        }
+    }
 }
