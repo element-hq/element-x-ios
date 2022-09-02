@@ -18,6 +18,7 @@ import SwiftUI
 
 struct SettingsCoordinatorParameters {
     let navigationRouter: NavigationRouterType
+    let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
 }
 
@@ -60,6 +61,8 @@ final class SettingsCoordinator: Coordinator, Presentable {
             guard let self = self else { return }
             MXLog.debug("SettingsViewModel did complete with result: \(result).")
             switch result {
+            case .toggleAnalytics:
+                self.toggleAnalytics()
             case .reportBug:
                 self.presentBugReportScreen()
             case .crash:
@@ -82,17 +85,12 @@ final class SettingsCoordinator: Coordinator, Presentable {
     
     // MARK: - Private
     
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        loadingIndicator = nil
+    private func toggleAnalytics() {
+        if ElementSettings.shared.enableAnalytics {
+            Analytics.shared.optOut()
+        } else {
+            Analytics.shared.optIn(with: parameters.userSession)
+        }
     }
 
     private func presentBugReportScreen() {
@@ -113,6 +111,19 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
             self.remove(childCoordinator: coordinator)
         }
+    }
+    
+    /// Show an activity indicator whilst loading.
+    /// - Parameters:
+    ///   - label: The label to show on the indicator.
+    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
+    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
+        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
+    }
+    
+    /// Hide the currently displayed activity indicator.
+    private func stopLoading() {
+        loadingIndicator = nil
     }
 
     /// Show success indicator

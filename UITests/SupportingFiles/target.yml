@@ -29,6 +29,8 @@ targets:
     - target: ElementX
     - package: MatrixRustSDK
       linkType: static
+    - package: AnalyticsEvents
+      linkType: static
     - package: AppAuth
       linkType: static
     - package: DTCoreText
@@ -38,6 +40,8 @@ targets:
     - package: Kingfisher
       linkType: static
     - package: Introspect
+      linkType: static
+    - package: PostHog
       linkType: static
     - package: SwiftyBeaver
       linkType: static
@@ -76,8 +80,10 @@ targets:
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
     - path: ../../ElementX/Sources/BuildSettings.swift
     - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
+    - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConfiguration.swift
     - path: ../../ElementX/Sources/UITestScreenIdentifier.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
+    - path: ../../ElementX/Sources/Generated/InfoPlist.swift
     - path: ../../ElementX/Resources
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift

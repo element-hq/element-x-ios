@@ -51,6 +51,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
     
     // MARK: - Private
     
+    /// Shows the splash screen as the root view in the navigation stack.
     private func showSplashScreen() {
         let coordinator = SplashScreenCoordinator()
         
@@ -125,6 +126,23 @@ class AuthenticationCoordinator: Coordinator, Presentable {
         add(childCoordinator: coordinator)
         
         navigationRouter.push(coordinator) { [weak self] in
+            self?.remove(childCoordinator: coordinator)
+        }
+    }
+    
+    private func showAnalyticsPrompt(with userSession: UserSessionProtocol) {
+        let parameters = AnalyticsPromptCoordinatorParameters(userSession: userSession)
+        let coordinator = AnalyticsPromptCoordinator(parameters: parameters)
+        
+        coordinator.callback = { [weak self] in
+            guard let self = self else { return }
+            self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
+        }
+        
+        coordinator.start()
+        add(childCoordinator: coordinator)
+        
+        navigationRouter.setRootModule(coordinator, hideNavigationBar: true, animated: true) { [weak self] in
             self?.remove(childCoordinator: coordinator)
         }
     }

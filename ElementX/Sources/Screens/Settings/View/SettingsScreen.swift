@@ -31,43 +31,14 @@ struct SettingsScreen: View {
     
     var body: some View {
         Form {
-            Section {
-                Button { context.send(viewAction: .reportBug) } label: {
-                    Text(ElementL10n.sendBugReport)
-                }
-                .foregroundColor(Color.element.primaryContent)
-                .accessibilityIdentifier("reportBugButton")
-
-                if BuildSettings.settingsCrashButtonVisible {
-                    Button("Crash the app",
-                           role: .destructive) { context.send(viewAction: .crash)
-                    }
-
-                    .accessibilityIdentifier("crashButton")
-                }
-            }
-            .listRowBackground(rowBackgroundColor)
+            analyticsSection
+                .listRowBackground(rowBackgroundColor)
 
             userInterfaceSection
+                .listRowBackground(rowBackgroundColor)
 
-            Section {
-                Button { showingLogoutConfirmation = true } label: {
-                    Text(ElementL10n.actionSignOut)
-                }
-                .frame(maxWidth: .infinity)
-                .foregroundColor(Color.element.primaryContent)
-                .accessibilityIdentifier("logoutButton")
-                .confirmationDialog(ElementL10n.actionSignOutConfirmationSimple,
-                                    isPresented: $showingLogoutConfirmation,
-                                    titleVisibility: .visible) {
-                    Button(ElementL10n.actionSignOut,
-                           role: .destructive) { context.send(viewAction: .logout)
-                    }
-                }
-            } footer: {
-                versionText
-            }
-            .listRowBackground(rowBackgroundColor)
+            logoutSection
+                .listRowBackground(rowBackgroundColor)
         }
         .introspectTableView { tableView in
             tableView.backgroundColor = .clear
@@ -87,11 +58,28 @@ struct SettingsScreen: View {
     private var rowBackgroundColor: Color {
         colorScheme == .light ? .element.background : .element.system
     }
+    
+    private var analyticsSection: some View {
+        Section(ElementL10n.settingsAnalytics) {
+            Button { context.send(viewAction: .reportBug) } label: {
+                Text(ElementL10n.sendBugReport)
+            }
+            .foregroundColor(.element.primaryContent)
+            .accessibilityIdentifier("reportBugButton")
+
+            if BuildSettings.settingsCrashButtonVisible {
+                Button("Crash the app",
+                       role: .destructive) { context.send(viewAction: .crash)
+                }
+                .accessibilityIdentifier("crashButton")
+            }
+        }
+    }
 
     @ViewBuilder
     private var userInterfaceSection: some View {
         if BuildSettings.settingsShowTimelineStyle {
-            Section(header: Text(ElementL10n.settingsUserInterface)) {
+            Section(ElementL10n.settingsUserInterface) {
                 Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
                     ForEach(TimelineStyle.allCases, id: \.self) { style in
                         Text(style.description)
@@ -100,7 +88,26 @@ struct SettingsScreen: View {
                 }
                 .accessibilityIdentifier("timelineStylePicker")
             }
-            .listRowBackground(rowBackgroundColor)
+        }
+    }
+    
+    private var logoutSection: some View {
+        Section {
+            Button { showingLogoutConfirmation = true } label: {
+                Text(ElementL10n.actionSignOut)
+            }
+            .frame(maxWidth: .infinity)
+            .foregroundColor(.element.primaryContent)
+            .accessibilityIdentifier("logoutButton")
+            .confirmationDialog(ElementL10n.actionSignOutConfirmationSimple,
+                                isPresented: $showingLogoutConfirmation,
+                                titleVisibility: .visible) {
+                Button(ElementL10n.actionSignOut,
+                       role: .destructive) { context.send(viewAction: .logout)
+                }
+            }
+        } footer: {
+            versionText
         }
     }
 }
