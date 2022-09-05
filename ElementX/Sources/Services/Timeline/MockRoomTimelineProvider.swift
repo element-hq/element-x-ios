@@ -14,34 +14,21 @@
 // limitations under the License.
 //
 
-import Foundation
-import MatrixRustSDK
-import UIKit
+import Combine
 
-struct TextRoomMessage: RoomMessageProtocol {
-    private let message: MatrixRustSDK.TextMessage
+struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
+    var callbacks = PassthroughSubject<RoomTimelineProviderCallback, Never>()
+    var items = [RoomTimelineProviderItem]()
     
-    init(message: MatrixRustSDK.TextMessage) {
-        self.message = message
+    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
+        .failure(.failedPaginatingBackwards)
     }
     
-    var id: String {
-        message.baseMessage().id()
+    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError> {
+        .failure(.failedSendingMessage)
     }
     
-    var body: String {
-        message.baseMessage().body()
-    }
-    
-    var htmlBody: String? {
-        message.htmlBody()
-    }
-    
-    var sender: String {
-        message.baseMessage().sender()
-    }
-    
-    var originServerTs: Date {
-        Date(timeIntervalSince1970: TimeInterval(message.baseMessage().originServerTs()))
+    func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError> {
+        .failure(.failedRedactingItem)
     }
 }

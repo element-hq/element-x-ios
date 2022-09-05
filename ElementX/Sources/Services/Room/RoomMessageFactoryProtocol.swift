@@ -20,3 +20,6 @@ import MatrixRustSDK
 protocol RoomMessageFactoryProtocol {
     func buildRoomMessageFrom(_ message: AnyMessage) -> RoomMessageProtocol
 }
+
+#warning("Temporary protocol.")
+protocol AnyMessage { }

@@ -15,20 +15,17 @@
 //
 
 import Combine
-import UIKit
+import MatrixRustSDK
 
 enum RoomProxyError: Error {
     case failedRetrievingDisplayName
     case failedRetrievingAvatar
-    case backwardStreamNotAvailable
+    case noMoreMessagesToBackPaginate
+    case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
     case failedSendingMessage
     case failedRedactingEvent
-}
-
-enum RoomProxyCallback {
-    case updatedMessages
 }
 
 protocol RoomProxyProtocol {
@@ -43,9 +40,10 @@ protocol RoomProxyProtocol {
     var displayName: String? { get }
     
     var topic: String? { get }
-    var messages: [RoomMessageProtocol] { get }
     
     var avatarURL: String? { get }
+    
+    var timelineProvider: RoomTimelineProviderProtocol { get }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
@@ -58,8 +56,6 @@ protocol RoomProxyProtocol {
     func sendMessage(_ message: String, inReplyToEventId: String?) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
-    
-    var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
 }
 
 extension RoomProxyProtocol {

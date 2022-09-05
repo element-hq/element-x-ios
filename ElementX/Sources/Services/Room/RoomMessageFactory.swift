@@ -17,18 +17,16 @@
 import Foundation
 import MatrixRustSDK
 
+#warning("Remove this type")
+struct SomeRoomMessage: RoomMessageProtocol {
+    let id = UUID().uuidString
+    let body = ""
+    let sender = ""
+    let originServerTs: Date = .now
+}
+
 struct RoomMessageFactory: RoomMessageFactoryProtocol {
     func buildRoomMessageFrom(_ message: AnyMessage) -> RoomMessageProtocol {
-        if let textMessage = message.textMessage() {
-            return TextRoomMessage(message: textMessage)
-        } else if let imageMessage = message.imageMessage() {
-            return ImageRoomMessage(message: imageMessage)
-        } else if let noticeMessage = message.noticeMessage() {
-            return NoticeRoomMessage(message: noticeMessage)
-        } else if let emoteMessage = message.emoteMessage() {
-            return EmoteRoomMessage(message: emoteMessage)
-        } else {
-            fatalError("One of these must exist")
-        }
+        SomeRoomMessage()
     }
 }

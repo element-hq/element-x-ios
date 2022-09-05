@@ -28,18 +28,8 @@ struct EventBriefFactory: EventBriefFactoryProtocol {
             return nil
         }
         
-        switch message {
-        case is ImageRoomMessage:
-            return nil
-        case let message as TextRoomMessage:
-            return await buildEventBrief(message: message, htmlBody: message.htmlBody)
-        case let message as NoticeRoomMessage:
-            return await buildEventBrief(message: message, htmlBody: message.htmlBody)
-        case let message as EmoteRoomMessage:
-            return await buildEventBrief(message: message, htmlBody: message.htmlBody)
-        default:
-            fatalError("Unknown room message.")
-        }
+        #warning("Simplified whilst waiting for sliding sync.")
+        return await buildEventBrief(message: message, htmlBody: nil)
     }
     
     // MARK: - Private

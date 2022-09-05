@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import Foundation
+import MatrixRustSDK
 import UIKit
 
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
@@ -22,36 +22,68 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let memberDetailProvider: MemberDetailProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
-    init(mediaProvider: MediaProviderProtocol,
+    /// The Matrix ID of the current user.
+    private let userID: String
+    
+    init(userID: String,
+         mediaProvider: MediaProviderProtocol,
          memberDetailProvider: MemberDetailProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol) {
+        self.userID = userID
         self.mediaProvider = mediaProvider
         self.memberDetailProvider = memberDetailProvider
         self.attributedStringBuilder = attributedStringBuilder
     }
     
-    func buildTimelineItemFor(message: RoomMessageProtocol, isOutgoing: Bool, showSenderDetails: Bool) async -> RoomTimelineItemProtocol {
-        let displayName = memberDetailProvider.displayNameForUserId(message.sender)
-        let avatarURL = memberDetailProvider.avatarURLStringForUserId(message.sender)
+    func buildTimelineItemFor(eventItem: EventTimelineItem, showSenderDetails: Bool) async -> RoomTimelineItemProtocol {
+        guard let messageContent = eventItem.content.asMessage() else { fatalError("Must be a message for now.") }
+        let displayName = memberDetailProvider.displayNameForUserId(eventItem.sender)
+        let avatarURL = memberDetailProvider.avatarURLStringForUserId(eventItem.sender)
         let avatarImage = mediaProvider.imageFromURLString(avatarURL)
+        let isOutgoing = eventItem.sender == userID
         
-        switch message {
-        case let message as TextRoomMessage:
+        if let textContent = messageContent.msgtype().asText() {
+            let message = MessageTimelineItem(item: eventItem.item, content: textContent)
             return await buildTextTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
-        case let message as ImageRoomMessage:
+        } else if let imageContent = messageContent.msgtype().asImage() {
+            let message = MessageTimelineItem(item: eventItem.item, content: imageContent)
             return await buildImageTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
-        case let message as NoticeRoomMessage:
+        } else if let noticeContent = messageContent.msgtype().asNotice() {
+            let message = MessageTimelineItem(item: eventItem.item, content: noticeContent)
             return await buildNoticeTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
-        case let message as EmoteRoomMessage:
+        } else if let emoteContent = messageContent.msgtype().asEmote() {
+            let message = MessageTimelineItem(item: eventItem.item, content: emoteContent)
             return await buildEmoteTimelineItemFromMessage(message, isOutgoing, showSenderDetails, displayName, avatarImage)
-        default:
-            fatalError("Unknown room message.")
+        } else {
+            return await buildFallbackTimelineItemFromMessage(eventItem, messageContent.msgtype(), isOutgoing, showSenderDetails, displayName, avatarImage)
         }
     }
     
     // MARK: - Private
 
-    private func buildTextTimelineItemFromMessage(_ message: TextRoomMessage,
+    private func buildFallbackTimelineItemFromMessage(_ item: EventTimelineItem,
+                                                      _ content: MessageType,
+                                                      _ isOutgoing: Bool,
+                                                      _ showSenderDetails: Bool,
+                                                      _ displayName: String?,
+                                                      _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
+        let attributedText = await attributedStringBuilder.fromPlain(content.body())
+        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+        
+        return TextRoomTimelineItem(id: item.id,
+                                    text: content.body(),
+                                    attributedComponents: attributedComponents,
+                                    timestamp: item.originServerTs.formatted(date: .omitted, time: .shortened),
+                                    shouldShowSenderDetails: showSenderDetails,
+                                    isOutgoing: isOutgoing,
+                                    senderId: item.sender,
+                                    senderDisplayName: displayName,
+                                    senderAvatar: avatarImage,
+                                    properties: RoomTimelineItemProperties(isEdited: item.content.asMessage()?.isEdited() ?? false,
+                                                                           reactions: [])); #warning("Get the reactions properly here.")
+    }
+    
+    private func buildTextTimelineItemFromMessage(_ message: MessageTimelineItem<TextMessageContent>,
                                                   _ isOutgoing: Bool,
                                                   _ showSenderDetails: Bool,
                                                   _ displayName: String?,
@@ -67,10 +99,12 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isOutgoing: isOutgoing,
                                     senderId: message.sender,
                                     senderDisplayName: displayName,
-                                    senderAvatar: avatarImage)
+                                    senderAvatar: avatarImage,
+                                    properties: RoomTimelineItemProperties(isEdited: message.isEdited,
+                                                                           reactions: aggregateReactions(message.reactions)))
     }
     
-    private func buildImageTimelineItemFromMessage(_ message: ImageRoomMessage,
+    private func buildImageTimelineItemFromMessage(_ message: MessageTimelineItem<ImageMessageContent>,
                                                    _ isOutgoing: Bool,
                                                    _ showSenderDetails: Bool,
                                                    _ displayName: String?,
@@ -94,10 +128,12 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      width: message.width,
                                      height: message.height,
                                      aspectRatio: aspectRatio,
-                                     blurhash: message.blurhash)
+                                     blurhash: message.blurhash,
+                                     properties: RoomTimelineItemProperties(isEdited: message.isEdited,
+                                                                            reactions: aggregateReactions(message.reactions)))
     }
     
-    private func buildNoticeTimelineItemFromMessage(_ message: NoticeRoomMessage,
+    private func buildNoticeTimelineItemFromMessage(_ message: MessageTimelineItem<NoticeMessageContent>,
                                                     _ isOutgoing: Bool,
                                                     _ showSenderDetails: Bool,
                                                     _ displayName: String?,
@@ -113,10 +149,12 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                       isOutgoing: isOutgoing,
                                       senderId: message.sender,
                                       senderDisplayName: displayName,
-                                      senderAvatar: avatarImage)
+                                      senderAvatar: avatarImage,
+                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
+                                                                             reactions: aggregateReactions(message.reactions)))
     }
     
-    private func buildEmoteTimelineItemFromMessage(_ message: EmoteRoomMessage,
+    private func buildEmoteTimelineItemFromMessage(_ message: MessageTimelineItem<EmoteMessageContent>,
                                                    _ isOutgoing: Bool,
                                                    _ showSenderDetails: Bool,
                                                    _ displayName: String?,
@@ -132,6 +170,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      isOutgoing: isOutgoing,
                                      senderId: message.sender,
                                      senderDisplayName: displayName,
-                                     senderAvatar: avatarImage)
+                                     senderAvatar: avatarImage,
+                                     properties: RoomTimelineItemProperties(isEdited: message.isEdited,
+                                                                            reactions: aggregateReactions(message.reactions)))
+    }
+    
+    private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
+        return reactions.map { reaction in
+            let isHighlighted = false // reaction.details.contains(where: { $0.sender == userID })
+            return AggregatedReaction(key: reaction.key, count: Int(reaction.count), isHighlighted: isHighlighted)
+        }
     }
 }

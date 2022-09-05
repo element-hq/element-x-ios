@@ -15,8 +15,7 @@
 //
 
 import Combine
-import Foundation
-import UIKit
+import MatrixRustSDK
 
 struct MockRoomProxy: RoomProxyProtocol {
     let id = UUID().uuidString
@@ -24,7 +23,6 @@ struct MockRoomProxy: RoomProxyProtocol {
     let displayName: String?
     
     let topic: String? = nil
-    let messages: [RoomMessageProtocol] = []
     
     let avatarURL: String? = nil
     
@@ -34,7 +32,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     let isEncrypted = Bool.random()
     let isTombstoned = Bool.random()
     
-    var callbacks = PassthroughSubject<RoomProxyCallback, Never>()
+    let timelineProvider: RoomTimelineProviderProtocol = MockRoomTimelineProvider()
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         .failure(.failedRetrievingMemberDisplayName)
@@ -50,8 +48,10 @@ struct MockRoomProxy: RoomProxyProtocol {
     
     func startLiveEventListener() { }
     
+    func addTimelineListener(listener: TimelineListener) { }
+    
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
-        .failure(.backwardStreamNotAvailable)
+        .failure(.failedPaginatingBackwards)
     }
         
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {

@@ -134,28 +134,28 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         
-        var previousMessage: RoomMessageProtocol?
-        for message in timelineProvider.messages {
+        var previousMessage: EventTimelineItem?
+        for item in timelineProvider.items {
             if Task.isCancelled {
                 return
             }
             
-            let areMessagesFromTheSameDay = haveSameDay(lhs: previousMessage, rhs: message)
-            let shouldAddSectionHeader = !areMessagesFromTheSameDay
-            
-            if shouldAddSectionHeader {
-                newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
-                                                                  text: message.originServerTs.formatted(date: .complete, time: .omitted)))
+            switch item {
+            case .event(let eventItem):
+                guard eventItem.isMessage else { break } // To be handled in the future
+                let shouldShowSenderDetails = previousMessage?.sender == eventItem.sender
+                newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItem: eventItem,
+                                                                                       showSenderDetails: shouldShowSenderDetails))
+                previousMessage = eventItem
+            case .virtual(let virtualItem):
+//                newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
+//                                                                  text: message.originServerTs.formatted(date: .complete, time: .omitted)))
+                newTimelineItems.append(SeparatorRoomTimelineItem(id: UUID().uuidString, // FIXME: bad things will happen
+                                                                  text: "The day before"))
+                previousMessage = nil
+            case .other:
+                break
             }
-            
-            let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
-            let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
-            
-            newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(message: message,
-                                                                                   isOutgoing: message.sender == userId,
-                                                                                   showSenderDetails: shouldShowSenderDetails))
-            
-            previousMessage = message
         }
         
         if Task.isCancelled {
@@ -165,14 +165,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems)
-    }
-    
-    private func haveSameDay(lhs: RoomMessageProtocol?, rhs: RoomMessageProtocol?) -> Bool {
-        guard let lhs = lhs, let rhs = rhs else {
-            return false
-        }
-        
-        return Calendar.current.isDate(lhs.originServerTs, inSameDayAs: rhs.originServerTs)
     }
     
     private func loadImageForTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {

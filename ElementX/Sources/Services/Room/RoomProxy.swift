@@ -20,33 +20,21 @@ import UIKit
 
 import MatrixRustSDK
 
-private class WeakRoomProxyWrapper: RoomDelegate {
-    private weak var roomProxy: RoomProxy?
-    
-    init(roomProxy: RoomProxy) {
-        self.roomProxy = roomProxy
-    }
-    
-    // MARK: - RoomDelegate
-    
-    func didReceiveMessage(message: AnyMessage) {
-        roomProxy?.appendMessage(message)
-    }
-}
-
 class RoomProxy: RoomProxyProtocol {
     private let room: Room
     private let roomMessageFactory: RoomMessageFactoryProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private var backwardStream: BackwardsStreamProtocol?
     private var sendMessageBgTask: BackgroundTaskProtocol?
     
     private(set) var displayName: String?
     
-    let callbacks = PassthroughSubject<RoomProxyCallback, Never>()
-    
-    private(set) var messages: [RoomMessageProtocol]
+    private var backPaginationOutcome: PaginationOutcome?
+    private(set) lazy var timelineProvider: RoomTimelineProviderProtocol = {
+        let provider = RoomTimelineProvider(roomProxy: self)
+        addTimelineListener(listener: WeakRoomTimelineProviderWrapper(timelineProvider: provider))
+        return provider
+    }()
     
     init(room: Room,
          roomMessageFactory: RoomMessageFactoryProtocol,
@@ -54,15 +42,10 @@ class RoomProxy: RoomProxyProtocol {
         self.room = room
         self.roomMessageFactory = roomMessageFactory
         self.backgroundTaskService = backgroundTaskService
-        messages = []
-        
-        room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
-        
-        backwardStream = room.startLiveEventListener()
     }
     
     deinit {
-        room.setDelegate(delegate: nil)
+        #warning("Should any timeline listeners be removed??")
     }
     
     lazy var id: String = room.id()
@@ -154,23 +137,25 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
     
+    private func addTimelineListener(listener: TimelineListener) {
+        room.addTimelineListener(listener: listener)
+    }
+    
+    #warning("The count parameter is unused.")
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
-        await Task.detached { () -> Result<Void, RoomProxyError> in
-            guard let backwardStream = self.backwardStream else {
-                return .failure(RoomProxyError.backwardStreamNotAvailable)
+        guard backPaginationOutcome?.moreMessages != false else {
+            return .failure(.noMoreMessagesToBackPaginate)
+        }
+
+        return await Task.detached {
+            do {
+                Benchmark.startTrackingForIdentifier("BackPagination \(self.id)", message: "Backpaginating \(count) message(s) in room \(self.id)")
+                self.backPaginationOutcome = try self.room.paginateBackwards()
+                Benchmark.endTrackingForIdentifier("BackPagination \(self.id)", message: "Finished backpaginating \(count) message(s) in room \(self.id)")
+                return .success(())
+            } catch {
+                return .failure(.failedPaginatingBackwards)
             }
-
-            Benchmark.startTrackingForIdentifier("BackPagination \(self.id)", message: "Backpaginating \(count) message(s) in room \(self.id)")
-            let sdkMessages = backwardStream.paginateBackwards(count: UInt64(count))
-            Benchmark.endTrackingForIdentifier("BackPagination \(self.id)", message: "Finished backpaginating \(count) message(s) in room \(self.id)")
-
-            let messages = sdkMessages.map { message in
-                self.roomMessageFactory.buildRoomMessageFrom(message)
-            }.reversed()
-
-            self.messages.insert(contentsOf: messages, at: 0)
-            
-            return .success(())
         }
         .value
     }
@@ -215,13 +200,5 @@ class RoomProxy: RoomProxyProtocol {
 //            }
 //        }
 //        .value
-    }
-    
-    // MARK: - Private
-    
-    fileprivate func appendMessage(_ message: AnyMessage) {
-        let message = roomMessageFactory.buildRoomMessageFrom(message)
-        messages.append(message)
-        callbacks.send(.updatedMessages)
     }
 }

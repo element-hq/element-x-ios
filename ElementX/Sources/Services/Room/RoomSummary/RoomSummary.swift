@@ -80,24 +80,8 @@ class RoomSummary: RoomSummaryProtocol {
         self.eventBriefFactory = eventBriefFactory
         
         Task {
-            lastMessage = await eventBriefFactory.buildEventBriefFor(message: roomProxy.messages.last)
+            lastMessage = await self.lastRoomMessageBrief()
         }
-        
-        roomProxy.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                guard let self = self else {
-                    return
-                }
-                
-                switch callback {
-                case .updatedMessages:
-                    Task {
-                        self.lastMessage = await eventBriefFactory.buildEventBriefFor(message: roomProxy.messages.last)
-                    }
-                }
-            }
-            .store(in: &roomUpdateListeners)
     }
     
     func loadDetails() async {
@@ -145,16 +129,10 @@ class RoomSummary: RoomSummaryProtocol {
     }
     
     private func loadLastMessage() async {
-        guard roomProxy.messages.last == nil else {
-            return
-        }
-        
-        // Pre-fill the room with some messages and use the last message in the response.
-        switch await roomProxy.paginateBackwards(count: UInt(ClientProxy.syncLimit)) {
-        case .success:
-            lastMessage = await eventBriefFactory.buildEventBriefFor(message: roomProxy.messages.last)
-        case .failure(let error):
-            MXLog.error("Failed back paginating with error: \(error)")
-        }
+        #warning("No op whilst waiting for sliding sync.")
+    }
+    
+    private func lastRoomMessageBrief() async -> EventBrief? {
+        return nil
     }
 }

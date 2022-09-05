@@ -361,13 +361,14 @@ class AppCoordinator: Coordinator {
         
         let memberDetailProvider = memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
         
-        let timelineItemFactory = RoomTimelineItemFactory(mediaProvider: userSession.mediaProvider,
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
+                                                          mediaProvider: userSession.mediaProvider,
                                                           memberDetailProvider: memberDetailProvider,
                                                           attributedStringBuilder: AttributedStringBuilder())
         
         let timelineController = RoomTimelineController(userId: userId,
                                                         roomId: roomIdentifier,
-                                                        timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
+                                                        timelineProvider: roomProxy.timelineProvider,
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
                                                         memberDetailProvider: memberDetailProvider)
