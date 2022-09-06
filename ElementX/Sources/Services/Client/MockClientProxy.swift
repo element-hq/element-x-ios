@@ -51,4 +51,8 @@ struct MockClientProxy: ClientProxyProtocol {
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         .failure(.failedRetrievingSessionVerificationController)
     }
+
+    func logout() async {
+        // no-op
+    }
 }
