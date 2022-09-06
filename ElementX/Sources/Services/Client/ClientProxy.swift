@@ -125,6 +125,14 @@ class ClientProxy: ClientProxyProtocol {
         }
         .value
     }
+
+    func logout() async {
+        do {
+            try client.logout()
+        } catch {
+            MXLog.error("Failed logging out with error: \(error)")
+        }
+    }
     
     // MARK: Private
     
