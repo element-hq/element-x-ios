@@ -62,8 +62,11 @@ class AppCoordinatorStateMachine {
         
         /// Request sign out
         case signOut
+<<<<<<< develop
         /// Remote sign out.
         case remoteSignOut(isSoft: Bool)
+=======
+>>>>>>> Use logout from SDK, refactor logging out states
         /// Signing out completed
         case completedSigningOut
         
@@ -96,7 +99,6 @@ class AppCoordinatorStateMachine {
             machine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
             
             machine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
-
             machine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
 
             machine.addRoutes(event: .showSettingsScreen, transitions: [.homeScreen => .settingsScreen])
