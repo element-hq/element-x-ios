@@ -58,11 +58,9 @@ class AppCoordinatorStateMachine {
         case failedRestoringSession
         
         /// Request sign out
-        case attemptSignOut
-        /// Signing out succeeded
-        case succeededSigningOut
-        /// Signing out failed
-        case failedSigningOut
+        case signOut
+        /// Signing out completed
+        case completedSigningOut
         
         /// Request presentation for a particular room
         /// - Parameter roomId:the room identifier
@@ -92,10 +90,9 @@ class AppCoordinatorStateMachine {
             machine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .homeScreen])
             machine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
             
-            machine.addRoutes(event: .attemptSignOut, transitions: [.any => .signingOut])
-            
-            machine.addRoutes(event: .succeededSigningOut, transitions: [.signingOut => .signedOut])
-            machine.addRoutes(event: .failedSigningOut, transitions: [.signingOut => .settingsScreen])
+            machine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
+
+            machine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
 
             machine.addRoutes(event: .showSettingsScreen, transitions: [.homeScreen => .settingsScreen])
             machine.addRoutes(event: .dismissedSettingsScreen, transitions: [.settingsScreen => .homeScreen])
