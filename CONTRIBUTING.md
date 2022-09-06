@@ -20,6 +20,20 @@ Dependencies will be automatically fetched through the Swift Package Manager, in
 
 For instructions on how to setup the RustSDK in development mode please refer to the [matrix-rust-components-swift](https://github.com/matrix-org/matrix-rust-components-swift) repository.
 
+### Tools
+
+The project depends on some tools for the build process. These are all included in the `Brewfile` and can be easily installed by running
+
+```
+brew bundle
+```
+
+Git LFS is used to store UI test snapshots. After cloning the repo this can be configured by running
+
+```
+git lfs install
+```
+
 ### Continuous Integration
 
 ElementX uses Fastlane for running actions on the CI and tries to keep the configuration confined to either [fastlane](fastlane/Fastfile) or [xcodegen](project.yml). 
