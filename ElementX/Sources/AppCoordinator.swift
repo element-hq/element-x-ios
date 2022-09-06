@@ -155,13 +155,12 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 self.presentRoomWithIdentifier(roomId)
             case(.roomScreen, .dismissedRoomScreen, .homeScreen):
                 self.tearDownDismissedRoomScreen()
-            case (_, .attemptSignOut, .signingOut):
-                self.userSessionStore.logout(userSession: self.userSession)
-                self.stateMachine.processEvent(.succeededSigningOut)
-            case (.signingOut, .succeededSigningOut, .signedOut):
+            case (_, .signOut, .signingOut):
+                self.showLoadingIndicator()
                 self.tearDownUserSession()
-            case (.signingOut, .failedSigningOut, _):
-                self.showLogoutErrorToast()
+            case (.signingOut, .completedSigningOut, .signedOut):
+                self.presentSplashScreen()
+                self.hideLoadingIndicator()
             
             case (.homeScreen, .showSettingsScreen, .settingsScreen):
                 self.presentSettingsScreen()
@@ -209,14 +208,26 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func tearDownUserSession() {
+        Task {
+            //  first log out from the server
+            _ = await userSession.clientProxy.logout()
+
+            //  regardless of the result, clear user data
+            userSessionStore.logout(userSession: userSession)
+            userSession = nil
+
+            //  complete logging out
+            stateMachine.processEvent(.completedSigningOut)
+        }
+    }
+
+    private func presentSplashScreen() {
         if let presentedCoordinator = childCoordinators.first {
             remove(childCoordinator: presentedCoordinator)
         }
-        
-        userSession = nil
-        
+
         mainNavigationController.setViewControllers([splashViewController], animated: false)
-        
+
         startAuthentication()
     }
     
@@ -305,7 +316,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             guard let self = self else { return }
             switch action {
             case .logout:
-                self.stateMachine.processEvent(.attemptSignOut)
+                self.stateMachine.processEvent(.signOut)
             }
         }
 
@@ -443,9 +454,5 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private func showLoginErrorToast() {
         statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging in"))
-    }
-    
-    private func showLogoutErrorToast() {
-        statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging out"))
     }
 }
