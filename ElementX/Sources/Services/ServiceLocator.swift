@@ -15,3 +15,7 @@
 //
 
 import Foundation
+
+struct ServiceLocator {
+    let userIndicatorPresenter: UserIndicatorTypePresenter
+}

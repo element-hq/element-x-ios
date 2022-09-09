@@ -18,6 +18,15 @@ import Combine
 import MatrixRustSDK
 import UIKit
 
+private var serviceLocator: ServiceLocator?
+var sharedServiceLocator: ServiceLocator {
+    guard let serviceLocator = serviceLocator else {
+        fatalError("The service locator should be setup at this point")
+    }
+    
+    return serviceLocator
+}
+
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let window: UIWindow
     
@@ -38,7 +47,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let screenshotDetector: ScreenshotDetector
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     private var statusIndicator: UserIndicator?
     
@@ -46,7 +54,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     init() {
         stateMachine = AppCoordinatorStateMachine()
-
+        
         do {
             bugReportService = try BugReportService(withBaseUrlString: BuildSettings.bugReportServiceBaseUrlString,
                                                     sentryEndpoint: BuildSettings.bugReportSentryEndpoint)
@@ -64,7 +72,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         memberDetailProviderManager = MemberDetailProviderManager()
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: mainNavigationController)
+        serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
@@ -410,7 +418,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     // MARK: Toasts and loading indicators
     
     private func showLoadingIndicator() {
-        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        loadingIndicator = sharedServiceLocator.userIndicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
     }
     
     private func hideLoadingIndicator() {
@@ -418,10 +426,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoginErrorToast() {
-        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
+        statusIndicator = sharedServiceLocator.userIndicatorPresenter.present(.error(label: "Failed logging in"))
     }
     
     private func showLogoutErrorToast() {
-        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging out"))
+        statusIndicator = sharedServiceLocator.userIndicatorPresenter.present(.error(label: "Failed logging out"))
     }
 }

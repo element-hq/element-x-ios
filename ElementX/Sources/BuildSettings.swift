@@ -60,7 +60,11 @@ final class BuildSettings {
     
     // MARK: - Other
     
-    // swiftlint:disable force_unwrapping
-    static let matrixDotToUrl = URL(string: "https://matrix.to")!
-    // swiftlint:enable force_unwrapping
+    static var matrixDotToUrl: URL {
+        guard let url = URL(string: "https://matrix.to") else {
+            fatalError("The matrix.to link should never fail parsing")
+        }
+        
+        return url
+    }
 }
