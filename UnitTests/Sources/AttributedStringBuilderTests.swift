@@ -254,10 +254,8 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
         
-        for run in attributedString.runs {
-            if run.elementX.blockquote != nil {
-                return
-            }
+        for run in attributedString.runs where run.elementX.blockquote ?? false {
+            return
         }
         
         XCTFail("Couldn't find blockquote")
@@ -280,10 +278,8 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 3)
         
-        for run in attributedString.runs {
-            if run.elementX.blockquote != nil {
-                return
-            }
+        for run in attributedString.runs where run.elementX.blockquote ?? false {
+            return
         }
         
         XCTFail("Couldn't find blockquote")
@@ -310,10 +306,8 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(coalescedComponents.first?.attributedString.runs.count, 3, "Link not present in the component")
         
         var foundBlockquoteAndLink = false
-        for run in attributedString.runs {
-            if run.elementX.blockquote != nil, run.link != nil {
-                foundBlockquoteAndLink = true
-            }
+        for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
+            foundBlockquoteAndLink = true
         }
         
         XCTAssertNotNil(foundBlockquoteAndLink, "Couldn't find blockquote or link")
@@ -336,10 +330,8 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
         
         var numberOfBlockquotes = 0
-        for run in attributedString.runs {
-            if run.elementX.blockquote != nil, run.link != nil {
-                numberOfBlockquotes += 1
-            }
+        for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
+            numberOfBlockquotes += 1
         }
         
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
@@ -365,10 +357,8 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 6)
         
         var numberOfBlockquotes = 0
-        for run in attributedString.runs {
-            if run.elementX.blockquote != nil, run.link != nil {
-                numberOfBlockquotes += 1
-            }
+        for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
+            numberOfBlockquotes += 1
         }
         
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
@@ -384,11 +374,9 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        for run in attributedString.runs {
-            if run.link != nil {
-                XCTAssertEqual(run.link?.path, expected)
-                return
-            }
+        for run in attributedString.runs where run.link != nil {
+            XCTAssertEqual(run.link?.path, expected)
+            return
         }
         
         XCTFail("Couldn't find expected value.")
