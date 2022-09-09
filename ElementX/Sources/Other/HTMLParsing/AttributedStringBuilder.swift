@@ -22,24 +22,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
     
-    private let userIdDetector: NSRegularExpression
-    private let roomIdDetector: NSRegularExpression
-    private let eventIdDetector: NSRegularExpression
-    private let roomAliasDetector: NSRegularExpression
-    private let linkDetector: NSDataDetector
-    
-    init() {
-        do {
-            userIdDetector = try NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
-            roomIdDetector = try NSRegularExpression(pattern: MatrixEntityRegex.roomId.rawValue, options: .caseInsensitive)
-            eventIdDetector = try NSRegularExpression(pattern: MatrixEntityRegex.eventId.rawValue, options: .caseInsensitive)
-            roomAliasDetector = try NSRegularExpression(pattern: MatrixEntityRegex.roomAlias.rawValue, options: .caseInsensitive)
-            linkDetector = try NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
-        } catch {
-            fatalError()
-        }
-    }
-    
     func fromPlain(_ string: String?) async -> AttributedString? {
         await Task.detached {
             fromPlain(string)
@@ -181,11 +163,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let string = attributedString.string
         let range = NSRange(location: 0, length: attributedString.string.count)
         
-        var matches = userIdDetector.matches(in: string, options: [], range: range)
-        matches.append(contentsOf: roomIdDetector.matches(in: string, options: [], range: range))
-        matches.append(contentsOf: eventIdDetector.matches(in: string, options: [], range: range))
-        matches.append(contentsOf: roomAliasDetector.matches(in: string, options: [], range: range))
-        matches.append(contentsOf: linkDetector.matches(in: string, options: [], range: range))
+        var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: [], range: range)
+        matches.append(contentsOf: MatrixEntityRegex.roomIdentifierRegex.matches(in: string, options: [], range: range))
+        matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: [], range: range))
+        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: [], range: range))
+        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: [], range: range))
         
         guard matches.count > 0 else {
             return

@@ -30,7 +30,7 @@ final class BuildSettings {
     static let bugReportUISIId = "element-auto-uisi"
 
     static let bugReportGHLabels = ["Element-X"]
-    
+
     // MARK: - Analytics
     
     #if DEBUG
@@ -57,4 +57,10 @@ final class BuildSettings {
     // MARK: - Room screen
 
     static let defaultRoomTimelineStyle: TimelineStyle = .bubbles
+    
+    // MARK: - Other
+    
+    // swiftlint:disable force_unwrapping
+    static let matrixDotToUrl = URL(string: "https://matrix.to")!
+    // swiftlint:enable force_unwrapping
 }

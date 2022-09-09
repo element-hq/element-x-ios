@@ -116,7 +116,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return []
         }
         
-        return [.copy, .quote]
+        return [.copy, .quote, .copyPermalink]
     }
     
     private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
@@ -130,6 +130,22 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             UIPasteboard.general.string = item.text
         case .quote:
             state.bindings.composerText = "> \(item.text)"
+        case .copyPermalink:
+            do {
+                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomId)
+                UIPasteboard.general.url = permalink
+            } catch {
+                displayError(.alert("Failed creating the permalink"))
+            }
+        }
+    }
+    
+    private func displayError(_ type: RoomScreenErrorType) {
+        switch type {
+        case .alert(let message):
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: ElementL10n.dialogTitleError,
+                                                 message: message)
         }
     }
 }

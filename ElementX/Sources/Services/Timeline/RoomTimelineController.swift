@@ -32,16 +32,19 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
+    let roomId: String
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
     
     init(userId: String,
+         roomId: String,
          timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          memberDetailProvider: MemberDetailProviderProtocol) {
         self.userId = userId
+        self.roomId = roomId
         self.timelineProvider = timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider

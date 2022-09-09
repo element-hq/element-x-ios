@@ -256,6 +256,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                           attributedStringBuilder: AttributedStringBuilder())
         
         let timelineController = RoomTimelineController(userId: userId,
+                                                        roomId: roomIdentifier,
                                                         timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,

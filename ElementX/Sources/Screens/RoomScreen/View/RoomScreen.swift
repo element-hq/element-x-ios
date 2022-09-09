@@ -33,6 +33,7 @@ struct RoomScreen: View {
                 RoomHeaderView(context: context)
             }
         }
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     private func sendMessage() {

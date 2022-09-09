@@ -181,7 +181,7 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     func testEventIdLink() async {
-        let eventId = "$eventidentifier:matrix.org"
+        let eventId = "$eventidentifier"
         let string = "The event is \(eventId)."
         checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromHTML(string), expected: eventId)
         checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromPlain(string), expected: eventId)
