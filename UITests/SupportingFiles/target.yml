@@ -87,3 +87,4 @@ targets:
     - path: ../../ElementX/Sources/Generated/InfoPlist.swift
     - path: ../../ElementX/Resources
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/Extensions/URL.swift

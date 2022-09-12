@@ -16,6 +16,7 @@
 
 import Foundation
 
+// https://spec.matrix.org/latest/appendices/#identifier-grammar
 enum MatrixEntityRegex: String {
     case homeserver
     case userId
@@ -34,7 +35,56 @@ enum MatrixEntityRegex: String {
         case .roomId:
             return "![A-Z0-9]+:" + MatrixEntityRegex.homeserver.rawValue
         case .eventId:
-            return "\\$[A-Z0-9]+:" + MatrixEntityRegex.homeserver.rawValue
+            return "\\$[A-Z0-9\\/+]+"
         }
+    }
+    
+    // swiftlint:disable force_try
+    static var homeserverRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.homeserver.rawValue, options: .caseInsensitive)
+    static var userIdentifierRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
+    static var roomAliasRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.roomAlias.rawValue, options: .caseInsensitive)
+    static var roomIdentifierRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.roomId.rawValue, options: .caseInsensitive)
+    static var eventIdentifierRegex = try! NSRegularExpression(pattern: MatrixEntityRegex.eventId.rawValue, options: .caseInsensitive)
+    static var linkRegex = try! NSDataDetector(types: NSTextCheckingResult.CheckingType.link.rawValue)
+    // swiftlint:enable force_try
+    
+    static func isMatrixHomeserver(_ homeserver: String) -> Bool {
+        guard let match = userIdentifierRegex.firstMatch(in: homeserver, range: .init(location: 0, length: homeserver.count)) else {
+            return false
+        }
+        
+        return match.range.length == homeserver.count
+    }
+    
+    static func isMatrixUserIdentifier(_ identifier: String) -> Bool {
+        guard let match = userIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+            return false
+        }
+        
+        return match.range.length == identifier.count
+    }
+    
+    static func isMatrixRoomAlias(_ alias: String) -> Bool {
+        guard let match = roomAliasRegex.firstMatch(in: alias, range: .init(location: 0, length: alias.count)) else {
+            return false
+        }
+        
+        return match.range.length == alias.count
+    }
+    
+    static func isMatrixRoomIdentifier(_ identifier: String) -> Bool {
+        guard let match = roomIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+            return false
+        }
+        
+        return match.range.length == identifier.count
+    }
+        
+    static func isMatrixEventIdentifier(_ identifier: String) -> Bool {
+        guard let match = eventIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+            return false
+        }
+        
+        return match.range.length == identifier.count
     }
 }

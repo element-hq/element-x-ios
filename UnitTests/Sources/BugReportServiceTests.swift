@@ -33,21 +33,21 @@ class BugReportServiceTests: XCTestCase {
                                                                 files: [])
         XCTAssertFalse(result.reportUrl.isEmpty)
     }
-
+    
     func testInitialStateWithRealService() throws {
-        let service = try BugReportService(withBaseUrlString: "https://www.example.com",
-                                           sentryEndpoint: "mock_sentry_dsn",
-                                           applicationId: "mock_app_id",
-                                           session: .mock)
+        let service = BugReportService(withBaseURL: URL(staticString: "https://www.example.com"),
+                                       sentryURL: URL(staticString: "https://1234@sentry.com/1234"),
+                                       applicationId: "mock_app_id",
+                                       session: .mock)
         XCTAssertFalse(service.crashedLastRun)
     }
-
+    
     @MainActor func testSubmitBugReportWithRealService() async throws {
-        let service = try BugReportService(withBaseUrlString: "https://www.example.com",
-                                           sentryEndpoint: "mock_sentry_dsn",
-                                           applicationId: "mock_app_id",
-                                           session: .mock)
-
+        let service = BugReportService(withBaseURL: URL(staticString: "https://www.example.com"),
+                                       sentryURL: URL(staticString: "https://1234@sentry.com/1234"),
+                                       applicationId: "mock_app_id",
+                                       session: .mock)
+        
         let result = try await service.submitBugReport(text: "i cannot send message",
                                                        includeLogs: true,
                                                        includeCrashLog: true,

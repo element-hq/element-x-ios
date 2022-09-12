@@ -23,14 +23,14 @@ final class BuildSettings {
 
     // MARK: - Bug report
 
-    static let bugReportServiceBaseUrlString = "https://riot.im/bugreports"
-    static let bugReportSentryEndpoint = "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44"
+    static let bugReportServiceBaseURL = URL(staticString: "https://riot.im/bugreports")
+    static let bugReportSentryURL = URL(staticString: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44")
     // Use the name allocated by the bug report server
     static let bugReportApplicationId = "riot-ios"
     static let bugReportUISIId = "element-auto-uisi"
 
     static let bugReportGHLabels = ["Element-X"]
-    
+
     // MARK: - Analytics
     
     #if DEBUG
@@ -57,4 +57,8 @@ final class BuildSettings {
     // MARK: - Room screen
 
     static let defaultRoomTimelineStyle: TimelineStyle = .bubbles
+    
+    // MARK: - Other
+    
+    static var permalinkBaseURL = URL(staticString: "https://matrix.to")
 }

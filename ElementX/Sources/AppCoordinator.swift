@@ -18,6 +18,19 @@ import Combine
 import MatrixRustSDK
 import UIKit
 
+struct ServiceLocator {
+    fileprivate static var serviceLocator: ServiceLocator?
+    static var shared: ServiceLocator {
+        guard let serviceLocator = serviceLocator else {
+            fatalError("The service locator should be setup at this point")
+        }
+        
+        return serviceLocator
+    }
+    
+    let userIndicatorPresenter: UserIndicatorTypePresenter
+}
+
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let window: UIWindow
     
@@ -38,7 +51,6 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     private let screenshotDetector: ScreenshotDetector
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     private var statusIndicator: UserIndicator?
     
@@ -46,13 +58,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     init() {
         stateMachine = AppCoordinatorStateMachine()
-
-        do {
-            bugReportService = try BugReportService(withBaseUrlString: BuildSettings.bugReportServiceBaseUrlString,
-                                                    sentryEndpoint: BuildSettings.bugReportSentryEndpoint)
-        } catch {
-            fatalError(error.localizedDescription)
-        }
+        
+        bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
         splashViewController = SplashViewController()
         mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
@@ -64,7 +71,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         memberDetailProviderManager = MemberDetailProviderManager()
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: mainNavigationController)
+        ServiceLocator.serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
@@ -256,6 +263,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                                                           attributedStringBuilder: AttributedStringBuilder())
         
         let timelineController = RoomTimelineController(userId: userId,
+                                                        roomId: roomIdentifier,
                                                         timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
@@ -409,7 +417,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     // MARK: Toasts and loading indicators
     
     private func showLoadingIndicator() {
-        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        loadingIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
     }
     
     private func hideLoadingIndicator() {
@@ -417,10 +425,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoginErrorToast() {
-        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging in"))
+        statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging in"))
     }
     
     private func showLogoutErrorToast() {
-        statusIndicator = indicatorPresenter.present(.error(label: "Failed logging out"))
+        statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging out"))
     }
 }

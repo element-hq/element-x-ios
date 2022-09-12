@@ -22,6 +22,7 @@ enum RoomScreenViewModelAction { }
 enum TimelineItemContextMenuAction: Hashable {
     case copy
     case quote
+    case copyPermalink
 }
 
 enum RoomScreenViewAction {
@@ -49,4 +50,12 @@ struct RoomScreenViewState: BindableState {
 
 struct RoomScreenViewStateBindings {
     var composerText: String
+    
+    /// Information describing the currently displayed alert.
+    var alertInfo: AlertInfo<RoomScreenErrorType>?
+}
+
+enum RoomScreenErrorType: Hashable {
+    /// A specific error message shown in an alert.
+    case alert(String)
 }

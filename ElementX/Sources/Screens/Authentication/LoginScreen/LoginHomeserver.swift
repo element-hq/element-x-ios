@@ -64,8 +64,10 @@ extension LoginHomeserver {
     
     /// A mock homeserver that supports only supports authentication via a single SSO provider.
     static var mockOIDC: LoginHomeserver {
-        // swiftlint:disable:next force_unwrapping
-        let issuerURL = URL(string: "https://auth.company.com")!
+        guard let issuerURL = URL(string: "https://auth.company.com") else {
+            fatalError("This shoud never fail parsing")
+        }
+        
         return LoginHomeserver(address: "company.com", loginMode: .oidc(issuerURL))
     }
     

@@ -34,8 +34,7 @@ class OIDCService {
     
     private var metadata: OIDServiceConfiguration?
     /// Redirect URI for the request. Must match the `client_uri` in reverse DNS format.
-    private let redirectURI = URL(string: "io.element:/callback")!
-    // swiftlint:disable:previous force_unwrapping
+    private var redirectURI = URL(staticString: "io.element:/callback")
     
     /// Maintains a strong ref to the authorization session that's in progress.
     private var session: OIDExternalUserAgentSession?

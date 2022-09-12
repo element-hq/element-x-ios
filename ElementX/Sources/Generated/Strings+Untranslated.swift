@@ -22,6 +22,8 @@ extension ElementL10n {
   public static let authenticationServerInfoMatrixDescription = ElementL10n.tr("Untranslated", "authentication_server_info_matrix_description")
   /// Choose your server to store your data
   public static let authenticationServerInfoTitle = ElementL10n.tr("Untranslated", "authentication_server_info_title")
+  /// Failed creating the permalink
+  public static let roomTimelinePermalinkCreationFailure = ElementL10n.tr("Untranslated", "room_timeline_permalink_creation_failure")
   /// Bubbled Timeline
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
   /// Plain Timeline
