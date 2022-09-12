@@ -31,7 +31,7 @@ struct ServiceLocator {
     let userIndicatorPresenter: UserIndicatorTypePresenter
 }
 
-class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
+class AppCoordinator: Coordinator {
     private let window: UIWindow
     
     private let stateMachine: AppCoordinatorStateMachine
@@ -43,7 +43,13 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private let userSessionStore: UserSessionStoreProtocol
     
-    private var userSession: UserSessionProtocol!
+    private var userSession: UserSessionProtocol! {
+        didSet {
+            if userSession != nil {
+                observeUserSessionChanges()
+            }
+        }
+    }
     
     private let memberDetailProviderManager: MemberDetailProviderManager
 
@@ -53,6 +59,8 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
 
     private var loadingIndicator: UserIndicator?
     private var statusIndicator: UserIndicator?
+
+    private var cancellables = Set<AnyCancellable>()
     
     var childCoordinators: [Coordinator] = []
     
@@ -96,15 +104,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         window.makeKeyAndVisible()
         stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
-    
-    // MARK: - AuthenticationCoordinatorDelegate
-    
-    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
-        self.userSession = userSession
-        remove(childCoordinator: authenticationCoordinator)
-        stateMachine.processEvent(.succeededSigningIn)
-    }
-    
+
     // MARK: - Private
     
     private func setupLogging() {
@@ -147,6 +147,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 self.hideLoadingIndicator()
                 self.showLoginErrorToast()
+                self.startAuthentication()
             case (.restoringSession, .succeededRestoringSession, .homeScreen):
                 self.hideLoadingIndicator()
                 self.presentHomeScreen()
@@ -155,11 +156,19 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
                 self.presentRoomWithIdentifier(roomId)
             case(.roomScreen, .dismissedRoomScreen, .homeScreen):
                 self.tearDownDismissedRoomScreen()
+
             case (_, .signOut, .signingOut):
                 self.showLoadingIndicator()
                 self.tearDownUserSession()
             case (.signingOut, .completedSigningOut, .signedOut):
                 self.presentSplashScreen()
+                self.hideLoadingIndicator()
+
+            case (_, .remoteSignOut(let isSoft), .remoteSigningOut):
+                self.showLoadingIndicator()
+                self.tearDownUserSession(isSoftLogout: isSoft)
+            case (.remoteSigningOut(let isSoft), .completedSigningOut, .signedOut):
+                self.presentSplashScreen(isSoftLogout: isSoft)
                 self.hideLoadingIndicator()
             
             case (.homeScreen, .showSettingsScreen, .settingsScreen):
@@ -189,7 +198,11 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
             switch await userSessionStore.restoreUserSession() {
             case .success(let userSession):
                 self.userSession = userSession
-                stateMachine.processEvent(.succeededRestoringSession)
+                if userSession.isSoftLogout {
+                    stateMachine.processEvent(.remoteSignOut(isSoft: true))
+                } else {
+                    stateMachine.processEvent(.succeededRestoringSession)
+                }
             case .failure:
                 MXLog.error("Failed to restore an existing session.")
                 stateMachine.processEvent(.failedRestoringSession)
@@ -206,29 +219,76 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         add(childCoordinator: coordinator)
         coordinator.start()
     }
+
+    private func startAuthenticationSoftLogout() {
+        Task {
+            var displayName = ""
+            if case .success(let name) = await userSession.clientProxy.loadUserDisplayName() {
+                displayName = name
+            }
+
+            let credentials = SoftLogoutCredentials(userId: userSession.userID,
+                                                    homeserverName: userSession.homeserver,
+                                                    userDisplayName: displayName,
+                                                    deviceId: userSession.deviceId)
+
+            let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
+            _ = await authenticationService.configure(for: userSession.homeserver)
+            
+            let parameters = SoftLogoutCoordinatorParameters(authenticationService: authenticationService,
+                                                             credentials: credentials,
+                                                             keyBackupNeeded: false)
+            let coordinator = SoftLogoutCoordinator(parameters: parameters)
+            coordinator.callback = { result in
+                switch result {
+                case .signedIn(let session):
+                    self.userSession = session
+                    self.remove(childCoordinator: coordinator)
+                    self.stateMachine.processEvent(.succeededSigningIn)
+                case .clearAllData:
+                    //  clear user data
+                    self.userSessionStore.logout(userSession: self.userSession)
+                    self.userSession = nil
+                    self.remove(childCoordinator: coordinator)
+                    self.startAuthentication()
+                }
+            }
+
+            add(childCoordinator: coordinator)
+            coordinator.start()
+
+            navigationRouter.setRootModule(coordinator)
+        }
+    }
     
-    private func tearDownUserSession() {
+    private func tearDownUserSession(isSoftLogout: Bool = false) {
         Task {
             //  first log out from the server
             _ = await userSession.clientProxy.logout()
 
-            //  regardless of the result, clear user data
-            userSessionStore.logout(userSession: userSession)
-            userSession = nil
+            if !isSoftLogout {
+                //  regardless of the result, clear user data
+                userSessionStore.logout(userSession: userSession)
+                userSession = nil
+            }
 
             //  complete logging out
             stateMachine.processEvent(.completedSigningOut)
         }
     }
 
-    private func presentSplashScreen() {
+    private func presentSplashScreen(isSoftLogout: Bool = false) {
         if let presentedCoordinator = childCoordinators.first {
             remove(childCoordinator: presentedCoordinator)
         }
 
         mainNavigationController.setViewControllers([splashViewController], animated: false)
 
-        startAuthentication()
+        if isSoftLogout {
+            startAuthenticationSoftLogout()
+        } else {
+            startAuthentication()
+        }
     }
     
     private func presentHomeScreen() {
@@ -260,6 +320,22 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         if bugReportService.crashedLastRun {
             showCrashPopup()
         }
+    }
+
+    private func observeUserSessionChanges() {
+        userSession.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                guard let self = self else { return }
+                switch callback {
+                case .didReceiveAuthError(let isSoftLogout):
+                    self.stateMachine.processEvent(.remoteSignOut(isSoft: isSoftLogout))
+                case .updateRestoreTokenNeeded:
+                    _ = self.userSessionStore.refreshRestoreToken(for: self.userSession)
+                default:
+                    break
+                }
+            }.store(in: &cancellables)
     }
     
     // MARK: Rooms
@@ -454,5 +530,15 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     
     private func showLoginErrorToast() {
         statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging in"))
+    }
+}
+
+// MARK: - AuthenticationCoordinatorDelegate
+
+extension AppCoordinator: AuthenticationCoordinatorDelegate {
+    func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
+        self.userSession = userSession
+        remove(childCoordinator: authenticationCoordinator)
+        stateMachine.processEvent(.succeededSigningIn)
     }
 }
