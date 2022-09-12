@@ -40,6 +40,10 @@ public struct TimelineItemContextMenu: View {
                 Button(role: .destructive) { callback(item) } label: {
                     Label(ElementL10n.messageActionItemRedact, systemImage: "trash")
                 }
+            case .reply:
+                Button(ElementL10n.reply) {
+                    callback(item)
+                }
             }
         }
     }

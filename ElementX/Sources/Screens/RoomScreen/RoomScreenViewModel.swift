@@ -120,7 +120,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         let actions: [TimelineItemContextMenuAction] = [
-            .copy, .quote, .copyPermalink
+            .copy, .quote, .copyPermalink, .reply
         ]
         
         #warning("Outgoing actions to be handled with the new Timeline API.")
@@ -151,6 +151,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .redact:
             redact(itemId)
+        case .reply:
+            state.composerType = .reply(item)
         }
     }
     

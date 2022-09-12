@@ -24,6 +24,12 @@ enum TimelineItemContextMenuAction: Hashable {
     case quote
     case copyPermalink
     case redact
+    case reply
+}
+
+enum RoomScreenComposerType {
+    case `default`
+    case reply(RoomTimelineItemProtocol)
 }
 
 enum RoomScreenViewAction {
@@ -44,6 +50,8 @@ struct RoomScreenViewState: BindableState {
     var bindings: RoomScreenViewStateBindings
     
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
+    
+    var composerType: RoomScreenComposerType = .default
     
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0

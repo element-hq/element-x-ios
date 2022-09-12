@@ -24,7 +24,8 @@ struct RoomScreen: View {
             TimelineView()
                 .environmentObject(context)
             
-            MessageComposer(text: $context.composerText, disabled: context.viewState.sendButtonDisabled) {
+            MessageComposer(text: $context.composerText,
+                            disabled: context.viewState.sendButtonDisabled) {
                 sendMessage()
             }
             .padding()
