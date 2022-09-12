@@ -36,5 +36,5 @@ protocol AuthenticationServiceProxyProtocol {
     /// Performs login using OIDC for the current homeserver.
     func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError>
     /// Performs a password login using the current homeserver.
-    func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError>
+    func login(username: String, password: String, initialDeviceName: String, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError>
 }

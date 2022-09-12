@@ -90,6 +90,8 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
                     self?.viewModel.showSessionVerificationBanner()
                 case .didVerifySession:
                     self?.viewModel.hideSessionVerificationBanner()
+                default:
+                    break
                 }
             }.store(in: &cancellables)
         

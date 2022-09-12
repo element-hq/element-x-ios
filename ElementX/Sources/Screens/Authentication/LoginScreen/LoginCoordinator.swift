@@ -165,7 +165,10 @@ final class LoginCoordinator: Coordinator, Presentable {
         startLoading(isInteractionBlocking: true)
         
         Task {
-            switch await authenticationService.login(username: username, password: password) {
+            switch await authenticationService.login(username: username,
+                                                     password: password,
+                                                     initialDeviceName: UIDevice.current.initialDisplayName,
+                                                     deviceId: nil) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))
                 stopLoading()
