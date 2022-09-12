@@ -62,11 +62,8 @@ class AppCoordinatorStateMachine {
         
         /// Request sign out
         case signOut
-<<<<<<< develop
         /// Remote sign out.
         case remoteSignOut(isSoft: Bool)
-=======
->>>>>>> Use logout from SDK, refactor logging out states
         /// Signing out completed
         case completedSigningOut
         
