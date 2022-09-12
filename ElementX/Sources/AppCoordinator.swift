@@ -18,13 +18,17 @@ import Combine
 import MatrixRustSDK
 import UIKit
 
-private var serviceLocator: ServiceLocator?
-var sharedServiceLocator: ServiceLocator {
-    guard let serviceLocator = serviceLocator else {
-        fatalError("The service locator should be setup at this point")
+struct ServiceLocator {
+    fileprivate static var serviceLocator: ServiceLocator?
+    static var shared: ServiceLocator {
+        guard let serviceLocator = serviceLocator else {
+            fatalError("The service locator should be setup at this point")
+        }
+        
+        return serviceLocator
     }
     
-    return serviceLocator
+    let userIndicatorPresenter: UserIndicatorTypePresenter
 }
 
 class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
@@ -55,12 +59,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     init() {
         stateMachine = AppCoordinatorStateMachine()
         
-        do {
-            bugReportService = try BugReportService(withBaseUrlString: BuildSettings.bugReportServiceBaseUrlString,
-                                                    sentryEndpoint: BuildSettings.bugReportSentryEndpoint)
-        } catch {
-            fatalError(error.localizedDescription)
-        }
+        bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
         splashViewController = SplashViewController()
         mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
@@ -72,7 +71,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
         
         memberDetailProviderManager = MemberDetailProviderManager()
         
-        serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
+        ServiceLocator.serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
@@ -418,7 +417,7 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     // MARK: Toasts and loading indicators
     
     private func showLoadingIndicator() {
-        loadingIndicator = sharedServiceLocator.userIndicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        loadingIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
     }
     
     private func hideLoadingIndicator() {
@@ -426,10 +425,10 @@ class AppCoordinator: AuthenticationCoordinatorDelegate, Coordinator {
     }
     
     private func showLoginErrorToast() {
-        statusIndicator = sharedServiceLocator.userIndicatorPresenter.present(.error(label: "Failed logging in"))
+        statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging in"))
     }
     
     private func showLogoutErrorToast() {
-        statusIndicator = sharedServiceLocator.userIndicatorPresenter.present(.error(label: "Failed logging out"))
+        statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging out"))
     }
 }

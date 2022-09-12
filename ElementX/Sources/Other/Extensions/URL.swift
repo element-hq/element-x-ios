@@ -16,6 +16,12 @@
 
 import Foundation
 
-//struct ServiceLocator {
-//    let userIndicatorPresenter: UserIndicatorTypePresenter
-//}
+extension URL {
+    init(staticString: StaticString) {
+        guard let url = URL(string: "\(staticString)") else {
+            fatalError("The static string used to create this URL is invalid")
+        }
+        
+        self = url
+    }
+}

@@ -11,6 +11,8 @@
 "room_timeline_style_plain_long_description" = "Plain Timeline";
 "room_timeline_style_bubbled_long_description" = "Bubbled Timeline";
 
+"room_timeline_permalink_creation_failure" = "Failed creating the permalink";
+
 // MARK: - Authentication
 
 "authentication_login_title" = "Welcome back!";

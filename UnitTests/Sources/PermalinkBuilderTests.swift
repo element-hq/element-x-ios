@@ -23,7 +23,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(userIdentifier: userId)
-            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.matrixDotToUrl)/#/\(userId)"))
+            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.permalinkBaseURL)/#/\(userId)"))
         } catch {
             XCTFail("User identifier must be valid: \(error)")
         }
@@ -32,6 +32,7 @@ class PermalinkBuilderTests: XCTestCase {
     func testInvalidUserIdentifier() {
         do {
             _ = try PermalinkBuilder.permalinkTo(userIdentifier: "This1sN0tV4lid!@#$%^&*()")
+            XCTFail("A permalink should not be created.")
         } catch {
             XCTAssertEqual(error as? PermalinkBuilderError, PermalinkBuilderError.invalidUserIdentifier)
         }
@@ -42,7 +43,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(roomIdentifier: roomId)
-            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.matrixDotToUrl)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org"))
+            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org"))
         } catch {
             XCTFail("Room identifier must be valid: \(error)")
         }
@@ -51,6 +52,7 @@ class PermalinkBuilderTests: XCTestCase {
     func testInvalidRoomIdentifier() {
         do {
             _ = try PermalinkBuilder.permalinkTo(roomIdentifier: "This1sN0tV4lid!@#$%^&*()")
+            XCTFail("A permalink should not be created.")
         } catch {
             XCTAssertEqual(error as? PermalinkBuilderError, PermalinkBuilderError.invalidRoomIdentifier)
         }
@@ -61,7 +63,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(roomAlias: roomAlias)
-            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.matrixDotToUrl)/#/%23abcdefghijklmnopqrstuvwxyz-_.1234567890%3Amatrix.org"))
+            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.permalinkBaseURL)/#/%23abcdefghijklmnopqrstuvwxyz-_.1234567890%3Amatrix.org"))
         } catch {
             XCTFail("Room alias must be valid: \(error)")
         }
@@ -70,6 +72,7 @@ class PermalinkBuilderTests: XCTestCase {
     func testInvalidRoomAlias() {
         do {
             _ = try PermalinkBuilder.permalinkTo(roomAlias: "This1sN0tV4lid!@#$%^&*()")
+            XCTFail("A permalink should not be created.")
         } catch {
             XCTAssertEqual(error as? PermalinkBuilderError, PermalinkBuilderError.invalidRoomAlias)
         }
@@ -81,7 +84,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventId, roomIdentifier: roomId)
-            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.matrixDotToUrl)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org/%24abcdefghijklmnopqrstuvwxyz1234567890"))
+            XCTAssertEqual(permalink, URL(string: "\(BuildSettings.permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org/%24abcdefghijklmnopqrstuvwxyz1234567890"))
         } catch {
             XCTFail("Room and event identifiers must be valid: \(error)")
         }
@@ -90,6 +93,7 @@ class PermalinkBuilderTests: XCTestCase {
     func testInvalidEventIdentifier() {
         do {
             _ = try PermalinkBuilder.permalinkTo(eventIdentifier: "This1sN0tV4lid!@#$%^&*()", roomIdentifier: "")
+            XCTFail("A permalink should not be created.")
         } catch {
             XCTAssertEqual(error as? PermalinkBuilderError, PermalinkBuilderError.invalidEventIdentifier)
         }

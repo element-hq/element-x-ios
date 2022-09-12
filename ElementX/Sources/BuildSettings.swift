@@ -23,8 +23,8 @@ final class BuildSettings {
 
     // MARK: - Bug report
 
-    static let bugReportServiceBaseUrlString = "https://riot.im/bugreports"
-    static let bugReportSentryEndpoint = "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44"
+    static let bugReportServiceBaseURL = URL(staticString: "https://riot.im/bugreports")
+    static let bugReportSentryURL = URL(staticString: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44")
     // Use the name allocated by the bug report server
     static let bugReportApplicationId = "riot-ios"
     static let bugReportUISIId = "element-auto-uisi"
@@ -60,11 +60,5 @@ final class BuildSettings {
     
     // MARK: - Other
     
-    static var matrixDotToUrl: URL {
-        guard let url = URL(string: "https://matrix.to") else {
-            fatalError("The matrix.to link should never fail parsing")
-        }
-        
-        return url
-    }
+    static var permalinkBaseURL = URL(staticString: "https://matrix.to")
 }

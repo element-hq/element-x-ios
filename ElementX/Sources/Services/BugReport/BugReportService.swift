@@ -20,40 +20,29 @@ import MatrixRustSDK
 import Sentry
 import UIKit
 
-enum BugReportServiceError: Error {
-    case invalidBaseUrlString
-    case invalidSentryEndpoint
-}
-
 class BugReportService: BugReportServiceProtocol {
     private let baseURL: URL
-    private let sentryEndpoint: String
+    private let sentryURL: URL
     private let applicationId: String
     private let session: URLSession
     private var lastCrashEventId: String?
-
-    init(withBaseUrlString baseUrlString: String,
-         sentryEndpoint: String,
+    
+    init(withBaseURL baseURL: URL,
+         sentryURL: URL,
          applicationId: String = BuildSettings.bugReportApplicationId,
-         session: URLSession = .shared) throws {
-        guard let url = URL(string: baseUrlString) else {
-            throw BugReportServiceError.invalidBaseUrlString
-        }
-        guard !sentryEndpoint.isEmpty else {
-            throw BugReportServiceError.invalidSentryEndpoint
-        }
-        baseURL = url
-        self.sentryEndpoint = sentryEndpoint
+         session: URLSession = .shared) {
+        self.baseURL = baseURL
+        self.sentryURL = sentryURL
         self.applicationId = applicationId
         self.session = session
-
+        
         //  enable SentrySDK
         SentrySDK.start { options in
             #if DEBUG
             options.enabled = false
             #endif
 
-            options.dsn = sentryEndpoint
+            options.dsn = sentryURL.absoluteString
 
             // Set tracesSampleRate to 1.0 to capture 100% of transactions for performance monitoring.
             // We recommend adjusting this value in production.

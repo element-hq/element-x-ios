@@ -34,13 +34,7 @@ class OIDCService {
     
     private var metadata: OIDServiceConfiguration?
     /// Redirect URI for the request. Must match the `client_uri` in reverse DNS format.
-    private var redirectURI: URL {
-        guard let url = URL(string: "io.element:/callback") else {
-            fatalError("The redirect URI should never fail parsing")
-        }
-        
-        return url
-    }
+    private var redirectURI = URL(staticString: "io.element:/callback")
     
     /// Maintains a strong ref to the authorization session that's in progress.
     private var session: OIDExternalUserAgentSession?

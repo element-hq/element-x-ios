@@ -26,7 +26,7 @@ enum PermalinkBuilderError: Error {
 }
 
 enum PermalinkBuilder {
-    static var uriComponentCharset: CharacterSet = {
+    static var uriComponentCharacterSet: CharacterSet = {
         var charset = CharacterSet.alphanumerics
         charset.insert(charactersIn: "-_.!~*'()")
         return charset
@@ -37,7 +37,7 @@ enum PermalinkBuilder {
             throw PermalinkBuilderError.invalidUserIdentifier
         }
         
-        let urlString = "\(BuildSettings.matrixDotToUrl)/#/\(userIdentifier)"
+        let urlString = "\(BuildSettings.permalinkBaseURL)/#/\(userIdentifier)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL
@@ -70,12 +70,12 @@ enum PermalinkBuilder {
             throw PermalinkBuilderError.invalidRoomIdentifier
         }
         
-        guard let roomId = roomIdentifier.addingPercentEncoding(withAllowedCharacters: uriComponentCharset),
-              let eventId = eventIdentifier.addingPercentEncoding(withAllowedCharacters: uriComponentCharset) else {
+        guard let roomId = roomIdentifier.addingPercentEncoding(withAllowedCharacters: uriComponentCharacterSet),
+              let eventId = eventIdentifier.addingPercentEncoding(withAllowedCharacters: uriComponentCharacterSet) else {
             throw PermalinkBuilderError.failedAddingPercentEncoding
         }
         
-        let urlString = "\(BuildSettings.matrixDotToUrl)/#/\(roomId)/\(eventId)"
+        let urlString = "\(BuildSettings.permalinkBaseURL)/#/\(roomId)/\(eventId)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL
@@ -87,11 +87,11 @@ enum PermalinkBuilder {
     // MARK: - Private
     
     private static func permalinkTo(roomIdentifierOrAlias: String) throws -> URL {
-        guard let identifier = roomIdentifierOrAlias.addingPercentEncoding(withAllowedCharacters: uriComponentCharset) else {
+        guard let identifier = roomIdentifierOrAlias.addingPercentEncoding(withAllowedCharacters: uriComponentCharacterSet) else {
             throw PermalinkBuilderError.failedAddingPercentEncoding
         }
         
-        let urlString = "\(BuildSettings.matrixDotToUrl)/#/\(identifier)"
+        let urlString = "\(BuildSettings.permalinkBaseURL)/#/\(identifier)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL

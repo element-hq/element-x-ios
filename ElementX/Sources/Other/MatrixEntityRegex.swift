@@ -49,22 +49,42 @@ enum MatrixEntityRegex: String {
     // swiftlint:enable force_try
     
     static func isMatrixHomeserver(_ homeserver: String) -> Bool {
-        userIdentifierRegex.matches(in: homeserver, range: .init(location: 0, length: homeserver.count)).count == 1
+        guard let match = userIdentifierRegex.firstMatch(in: homeserver, range: .init(location: 0, length: homeserver.count)) else {
+            return false
+        }
+        
+        return match.range.length == homeserver.count
     }
     
     static func isMatrixUserIdentifier(_ identifier: String) -> Bool {
-        userIdentifierRegex.matches(in: identifier, range: .init(location: 0, length: identifier.count)).count == 1
+        guard let match = userIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+            return false
+        }
+        
+        return match.range.length == identifier.count
     }
     
     static func isMatrixRoomAlias(_ alias: String) -> Bool {
-        roomAliasRegex.matches(in: alias, range: .init(location: 0, length: alias.count)).count == 1
+        guard let match = roomAliasRegex.firstMatch(in: alias, range: .init(location: 0, length: alias.count)) else {
+            return false
+        }
+        
+        return match.range.length == alias.count
     }
     
     static func isMatrixRoomIdentifier(_ identifier: String) -> Bool {
-        roomIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) != nil
+        guard let match = roomIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+            return false
+        }
+        
+        return match.range.length == identifier.count
     }
         
     static func isMatrixEventIdentifier(_ identifier: String) -> Bool {
-        eventIdentifierRegex.matches(in: identifier, range: .init(location: 0, length: identifier.count)).count == 1
+        guard let match = eventIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+            return false
+        }
+        
+        return match.range.length == identifier.count
     }
 }

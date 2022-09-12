@@ -25,7 +25,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
-    private var statusIndicator: UserIndicator?
 
     // MARK: - Setup
     
@@ -129,16 +128,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch action {
         case .copy:
             UIPasteboard.general.string = item.text
-            statusIndicator = sharedServiceLocator.userIndicatorPresenter.present(.success(label: ElementL10n.copiedToClipboard))
         case .quote:
             state.bindings.composerText = "> \(item.text)"
         case .copyPermalink:
             do {
                 let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomId)
                 UIPasteboard.general.url = permalink
-                statusIndicator = sharedServiceLocator.userIndicatorPresenter.present(.success(label: ElementL10n.linkCopiedToClipboard))
             } catch {
-                displayError(.alert("Failed creating the permalink"))
+                displayError(.alert(ElementL10n.roomTimelinePermalinkCreationFailure))
             }
         }
     }
