@@ -69,6 +69,16 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(error)
         }
     }
+
+    func refreshRestoreToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError> {
+        guard let accessToken = userSession.clientProxy.restoreToken else {
+            return .failure(.failedRefreshingRestoreToken)
+        }
+
+        keychainController.setRestoreToken(accessToken, forUsername: userSession.clientProxy.userIdentifier)
+
+        return .success(())
+    }
     
     func logout(userSession: UserSessionProtocol) {
         let userID = userSession.clientProxy.userIdentifier
