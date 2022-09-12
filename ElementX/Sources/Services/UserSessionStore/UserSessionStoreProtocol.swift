@@ -21,6 +21,7 @@ enum UserSessionStoreError: Error {
     case missingCredentials
     case failedRestoringLogin
     case failedSettingUpSession
+    case failedRefreshingRestoreToken
 }
 
 @MainActor
@@ -36,6 +37,9 @@ protocol UserSessionStoreProtocol {
     
     /// Creates a user session for a new client from the SDK.
     func userSession(for client: Client) async -> Result<UserSession, UserSessionStoreError>
+
+    /// Refresh the restore token of the client for a given session.
+    func refreshRestoreToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError>
     
     /// Logs out of the specified session.
     func logout(userSession: UserSessionProtocol)
