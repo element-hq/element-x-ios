@@ -21,6 +21,9 @@ struct MockUserSession: UserSessionProtocol {
     let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
     
     var userID: String { clientProxy.userIdentifier }
+    var isSoftLogout: Bool { clientProxy.isSoftLogout }
+    var deviceId: String? { clientProxy.deviceId }
+    var homeserver: String { clientProxy.homeserver }
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }

@@ -20,10 +20,15 @@ import Foundation
 enum UserSessionCallback {
     case sessionVerificationNeeded
     case didVerifySession
+    case didReceiveAuthError(isSoftLogout: Bool)
+    case updateRestoreTokenNeeded
 }
 
 protocol UserSessionProtocol {
     var userID: String { get }
+    var isSoftLogout: Bool { get }
+    var deviceId: String? { get }
+    var homeserver: String { get }
     
     var clientProxy: ClientProxyProtocol { get }
     var mediaProvider: MediaProviderProtocol { get }
