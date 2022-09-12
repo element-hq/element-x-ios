@@ -41,6 +41,9 @@ class AppCoordinatorStateMachine {
         
         /// Processing a sign out request
         case signingOut
+
+        /// Processing a remote sign out
+        case remoteSigningOut(isSoft: Bool)
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -59,6 +62,8 @@ class AppCoordinatorStateMachine {
         
         /// Request sign out
         case signOut
+        /// Remote sign out.
+        case remoteSignOut(isSoft: Bool)
         /// Signing out completed
         case completedSigningOut
         
@@ -107,6 +112,10 @@ class AppCoordinatorStateMachine {
                     return .roomScreen(roomId: roomId)
                 case (.dismissedRoomScreen, .roomScreen):
                     return .homeScreen
+                case (.remoteSignOut(let isSoft), _):
+                    return .remoteSigningOut(isSoft: isSoft)
+                case (.completedSigningOut, .remoteSigningOut):
+                    return .signedOut
                 default:
                     return nil
                 }
