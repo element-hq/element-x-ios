@@ -45,8 +45,8 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     func loginWithOIDC(userAgent: OIDExternalUserAgentIOS) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         .failure(.oidcError(.notSupported))
     }
-    
-    func login(username: String, password: String) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+
+    func login(username: String, password: String, initialDeviceName: String, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         // Login only succeeds if the username and password match the valid credentials property
         guard username == validCredentials.username, password == validCredentials.password else {
             return .failure(.invalidCredentials)
