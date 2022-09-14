@@ -65,7 +65,7 @@ struct LoginScreen: View {
     /// The header containing a Welcome Back title.
     var header: some View {
         Text(ElementL10n.authenticationLoginTitle)
-            .font(.element.title2B)
+            .font(.element.title2Bold)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
     }

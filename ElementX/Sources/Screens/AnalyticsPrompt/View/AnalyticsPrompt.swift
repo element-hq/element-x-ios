@@ -68,7 +68,7 @@ struct AnalyticsPrompt: View {
                 .padding(.bottom, 25)
             
             Text(ElementL10n.analyticsOptInTitle(ElementInfoPlist.cfBundleName))
-                .font(.element.title2B)
+                .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
                 .padding(.bottom, 2)
@@ -104,14 +104,14 @@ struct AnalyticsPrompt: View {
         VStack {
             Button { context.send(viewAction: .enable) } label: {
                 Text(ElementL10n.actionEnable)
-                    .font(.element.bodySB)
+                    .font(.element.bodyBold)
             }
             .buttonStyle(.elementAction(.xLarge))
             .accessibilityIdentifier("enableButton")
             
             Button { context.send(viewAction: .disable) } label: {
                 Text(ElementL10n.actionNotNow)
-                    .font(.element.bodySB)
+                    .font(.element.bodyBold)
                     .padding(12)
             }
             .accessibilityIdentifier("disableButton")
