@@ -35,7 +35,13 @@ protocol RoomTimelineProviderProtocol {
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError>
     
-    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError>
+    func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError>
+}
+
+extension RoomTimelineProviderProtocol {
+    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError> {
+        await sendMessage(message, inReplyToItemId: nil)
+    }
 }

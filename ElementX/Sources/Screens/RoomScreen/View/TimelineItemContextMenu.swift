@@ -36,6 +36,10 @@ public struct TimelineItemContextMenu: View {
                 Button { callback(item) } label: {
                     Label(ElementL10n.permalink, systemImage: "link")
                 }
+            case .reply:
+                Button { callback(item) } label: {
+                    Label(ElementL10n.reply, systemImage: "arrow.uturn.left")
+                }
             case .redact:
                 Button(role: .destructive) { callback(item) } label: {
                     Label(ElementL10n.messageActionItemRedact, systemImage: "trash")

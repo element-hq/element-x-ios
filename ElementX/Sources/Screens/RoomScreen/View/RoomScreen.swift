@@ -24,10 +24,16 @@ struct RoomScreen: View {
             TimelineView()
                 .environmentObject(context)
             
-            MessageComposer(text: $context.composerText, disabled: context.viewState.sendButtonDisabled) {
+            MessageComposer(text: $context.composerText,
+                            focused: $context.composerFocused,
+                            sendingDisabled: context.viewState.sendButtonDisabled,
+                            type: context.viewState.composerMode) {
                 sendMessage()
+            } replyCancellationAction: {
+                context.send(viewAction: .cancelReply)
             }
             .padding()
+            .opacity(context.viewState.messageComposerDisabled ? 0.5 : 1.0)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

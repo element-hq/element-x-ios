@@ -13,6 +13,8 @@
 
 "room_timeline_permalink_creation_failure" = "Failed creating the permalink";
 
+"room_timeline_replying_to" = "Replying to %@";
+
 // MARK: - Authentication
 
 "authentication_login_title" = "Welcome back!";

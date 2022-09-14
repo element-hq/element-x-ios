@@ -24,6 +24,12 @@ enum TimelineItemContextMenuAction: Hashable {
     case quote
     case copyPermalink
     case redact
+    case reply
+}
+
+enum RoomScreenComposerMode: Equatable {
+    case `default`
+    case reply(id: String, displayName: String)
 }
 
 enum RoomScreenViewAction {
@@ -33,6 +39,7 @@ enum RoomScreenViewAction {
     case linkClicked(url: URL)
     case sendMessage
     case sendReaction(key: String, eventID: String)
+    case cancelReply
 }
 
 struct RoomScreenViewState: BindableState {
@@ -45,6 +52,9 @@ struct RoomScreenViewState: BindableState {
     
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
     
+    var composerMode: RoomScreenComposerMode = .default
+    
+    var messageComposerDisabled = false // Remove this when we have local echoes
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
     }
@@ -52,6 +62,7 @@ struct RoomScreenViewState: BindableState {
 
 struct RoomScreenViewStateBindings {
     var composerText: String
+    var composerFocused: Bool
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?

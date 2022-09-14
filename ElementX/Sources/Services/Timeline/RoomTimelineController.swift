@@ -104,13 +104,20 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
+    func sendReply(_ message: String, to itemId: String) async {
+        switch await timelineProvider.sendMessage(message, inReplyToItemId: itemId) {
+        default:
+            break
+        }
+    }
+    
     func redact(_ eventID: String) async {
         switch await timelineProvider.redact(eventID) {
         default:
             break
         }
     }
-    
+
     // MARK: - Private
     
     @objc private func contentSizeCategoryDidChange() {

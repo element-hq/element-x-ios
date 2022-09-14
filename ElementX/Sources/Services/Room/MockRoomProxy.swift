@@ -54,7 +54,7 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.backwardStreamNotAvailable)
     }
         
-    func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
+    func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
     

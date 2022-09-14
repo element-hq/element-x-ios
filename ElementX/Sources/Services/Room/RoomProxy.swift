@@ -175,17 +175,24 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
     
-    func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
+    func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
         defer {
             sendMessageBgTask?.stop()
         }
-        let messageContent = messageEventContentFromMarkdown(md: message)
+
         let transactionId = genTransactionId()
         
         return await Task(priority: .high) { () -> Result<Void, RoomProxyError> in
             do {
+                // Disabled until available in Rust
+                //                if let inReplyToEventId = inReplyToEventId {
+                //                    #warning("Markdown support when available in Ruma")
+                //                    try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
+                //                } else {
+                let messageContent = messageEventContentFromMarkdown(md: message)
                 try self.room.send(msg: messageContent, txnId: transactionId)
+                //                }
                 return .success(())
             } catch {
                 return .failure(.failedSendingMessage)

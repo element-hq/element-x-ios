@@ -51,8 +51,8 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
     }
     
-    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError> {
-        switch await roomProxy.sendMessage(message) {
+    func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError> {
+        switch await roomProxy.sendMessage(message, inReplyToEventId: inReplyToItemId) {
         case .success:
             return .success(())
         case .failure:
