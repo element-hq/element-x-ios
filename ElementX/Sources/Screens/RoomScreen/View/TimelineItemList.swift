@@ -144,7 +144,7 @@ struct TimelineItemList: View {
     }
     
     private func opacityForItem(_ item: RoomTimelineViewProvider) -> Double {
-        guard case let .reply(selectedItemId, _) = context.viewState.composerType else {
+        guard case let .reply(selectedItemId, _) = context.viewState.composerMode else {
             return 1.0
         }
         

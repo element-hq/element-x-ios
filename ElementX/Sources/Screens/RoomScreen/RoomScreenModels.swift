@@ -27,7 +27,7 @@ enum TimelineItemContextMenuAction: Hashable {
     case reply
 }
 
-enum RoomScreenComposerType: Equatable {
+enum RoomScreenComposerMode: Equatable {
     case `default`
     case reply(id: String, displayName: String)
 }
@@ -52,9 +52,9 @@ struct RoomScreenViewState: BindableState {
     
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
     
-    var composerType: RoomScreenComposerType = .default
+    var composerMode: RoomScreenComposerMode = .default
     
-    var messageComposerDisabled = false
+    var messageComposerDisabled = false // Remove this when we have local echoes
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
     }

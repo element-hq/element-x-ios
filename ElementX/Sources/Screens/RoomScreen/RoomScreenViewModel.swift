@@ -87,7 +87,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             #warning("Reaction implementation awaiting SDK support.")
             MXLog.warning("React with \(key) failed. Not implemented.")
         case .cancelReply:
-            state.composerType = .default
+            state.composerMode = .default
         }
     }
     
@@ -102,21 +102,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func sendCurrentMessage() async {
-        guard state.bindings.composerText.count > 0 else {
+        guard !state.bindings.composerText.isEmpty else {
             fatalError("This message should never be empty")
         }
         
         state.messageComposerDisabled = true
         
-        switch state.composerType {
-        case .reply(let id, _):
-            await timelineController.sendReplyTo(id, state.bindings.composerText)
+        switch state.composerMode {
+        case .reply(let itemId, _):
+            await timelineController.sendReply(state.bindings.composerText, to: itemId)
         default:
             await timelineController.sendMessage(state.bindings.composerText)
         }
         
         state.bindings.composerText = ""
-        state.composerType = .default
+        state.composerMode = .default
         
         state.messageComposerDisabled = false
     }
@@ -179,13 +179,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             redact(itemId)
         case .reply:
             state.bindings.composerFocused = true
+            state.composerMode = .reply(id: item.id, displayName: item.senderDisplayName ?? item.senderId)
         }
         
         switch action {
         case .reply:
-            state.composerType = .reply(id: item.id, displayName: item.senderDisplayName ?? item.senderId)
+            break
         default:
-            state.composerType = .default
+            state.composerMode = .default
         }
     }
     

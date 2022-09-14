@@ -104,7 +104,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendReplyTo(_ itemId: String, _ message: String) async {
+    func sendReply(_ message: String, to itemId: String) async {
         switch await timelineProvider.sendMessage(message, inReplyToItemId: itemId) {
         default:
             break

@@ -66,7 +66,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func sendMessage(_ message: String) async { }
     
-    func sendReplyTo(_ itemId: String, _ message: String) async { }
+    func sendReply(_ message: String, to itemId: String) async { }
     
     func redact(_ eventID: String) async { }
 }

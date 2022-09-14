@@ -27,13 +27,12 @@ struct RoomScreen: View {
             MessageComposer(text: $context.composerText,
                             focused: $context.composerFocused,
                             sendingDisabled: context.viewState.sendButtonDisabled,
-                            type: context.viewState.composerType) {
+                            type: context.viewState.composerMode) {
                 sendMessage()
             } replyCancellationAction: {
                 context.send(viewAction: .cancelReply)
             }
             .padding()
-            // Remove this once we have local echoes
             .opacity(context.viewState.messageComposerDisabled ? 0.5 : 1.0)
         }
         .navigationBarTitleDisplayMode(.inline)

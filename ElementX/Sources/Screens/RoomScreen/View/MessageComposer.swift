@@ -20,7 +20,7 @@ struct MessageComposer: View {
     @Binding var text: String
     @Binding var focused: Bool
     let sendingDisabled: Bool
-    let type: RoomScreenComposerType
+    let type: RoomScreenComposerMode
     
     let sendAction: () -> Void
     let replyCancellationAction: () -> Void
@@ -30,22 +30,7 @@ struct MessageComposer: View {
             let rect = RoundedRectangle(cornerRadius: 8.0)
             VStack(alignment: .leading, spacing: 2.0) {
                 if case let .reply(_, displayName) = type {
-                    HStack(alignment: .center) {
-                        Text("\(Image(systemName: "arrow.uturn.left")) \(ElementL10n.roomTimelineReplyingTo(displayName))")
-                            .font(.element.caption2)
-                            .foregroundColor(.element.secondaryContent)
-                            .lineLimit(1)
-                        Spacer()
-                        Button {
-                            replyCancellationAction()
-                        } label: {
-                            Image(systemName: "xmark")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 12.0, height: 12.0)
-                                .padding(4.0)
-                        }
-                    }
+                    MessageComposerReplyHeader(displayName: displayName, action: replyCancellationAction)
                 }
                 MessageComposerTextField(placeholder: "Send a message",
                                          text: $text,
@@ -81,6 +66,28 @@ struct MessageComposer: View {
     
     private var borderWidth: CGFloat {
         focused ? 2.0 : 1.0
+    }
+}
+
+private struct MessageComposerReplyHeader: View {
+    let displayName: String
+    let action: () -> Void
+    
+    var body: some View {
+        HStack(alignment: .center) {
+            Label(ElementL10n.roomTimelineReplyingTo(displayName), systemImage: "arrow.uturn.left")
+                .font(.element.caption2)
+                .foregroundColor(.element.secondaryContent)
+                .lineLimit(1)
+            Spacer()
+            Button {
+                action()
+            } label: {
+                Image(systemName: "xmark")
+                    .font(.element.caption2)
+                    .padding(4.0)
+            }
+        }
     }
 }
 
