@@ -32,8 +32,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/element-design-tokens.git",
       "state" : {
-        "revision" : "02ba42d9ec02f90370a6cfc35a68d7312696636c",
-        "version" : "0.0.2"
+        "revision" : "63e40f10b336c136d6d05f7967e4565e37d3d760",
+        "version" : "0.0.3"
       }
     },
     {
