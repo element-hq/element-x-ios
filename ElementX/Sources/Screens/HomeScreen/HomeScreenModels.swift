@@ -35,6 +35,7 @@ enum HomeScreenViewAction {
     case selectRoom(roomIdentifier: String)
     case userMenu(action: HomeScreenViewUserMenuAction)
     case verifySession
+    case skipSessionVerification
 }
 
 struct HomeScreenViewState: BindableState {
