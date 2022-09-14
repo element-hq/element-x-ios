@@ -147,7 +147,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 displayError(.alert(ElementL10n.roomTimelinePermalinkCreationFailure))
             }
         case .redact:
-            redactItem(itemId)
+            redact(itemId)
         }
     }
     
@@ -160,9 +160,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func redactItem(_ itemID: String) {
+    private func redact(_ eventID: String) {
         Task {
-            await timelineController.redactItem(itemID)
+            await timelineController.redact(eventID)
         }
     }
 }
