@@ -26,7 +26,9 @@ struct HomeScreenCoordinatorParameters {
 enum HomeScreenCoordinatorAction {
     case presentRoom(roomIdentifier: String)
     case presentSettings
+    case presentBugReport
     case verifySession
+    case signOut
 }
 
 final class HomeScreenCoordinator: Coordinator, Presentable {
@@ -65,8 +67,8 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
             switch action {
             case .selectRoom(let roomIdentifier):
                 self.callback?(.presentRoom(roomIdentifier: roomIdentifier))
-            case .tapUserAvatar:
-                self.callback?(.presentSettings)
+            case .userMenu(let action):
+                self.processUserMenuAction(action)
             case .verifySession:
                 self.callback?(.verifySession)
             }
@@ -135,5 +137,27 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         }
         
         viewModel.updateWithRoomSummaries(roomSummaries)
+    }
+
+    private func processUserMenuAction(_ action: HomeScreenViewUserMenuAction) {
+        switch action {
+        case .settings:
+            callback?(.presentSettings)
+        case .inviteFriends:
+            presentInviteFriends()
+        case .feedback:
+            callback?(.presentBugReport)
+        case .signOut:
+            callback?(.signOut)
+        }
+    }
+
+    private func presentInviteFriends() {
+        guard let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: parameters.userSession.userID).absoluteString else {
+            return
+        }
+        let shareText = ElementL10n.inviteFriendsText(ElementInfoPlist.cfBundleName, permalink)
+        let vc = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
+        hostingController.present(vc, animated: true)
     }
 }

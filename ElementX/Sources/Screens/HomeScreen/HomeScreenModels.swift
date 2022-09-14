@@ -19,14 +19,21 @@ import UIKit
 
 enum HomeScreenViewModelAction {
     case selectRoom(roomIdentifier: String)
-    case tapUserAvatar
+    case userMenu(action: HomeScreenViewUserMenuAction)
     case verifySession
+}
+
+enum HomeScreenViewUserMenuAction {
+    case settings
+    case inviteFriends
+    case feedback
+    case signOut
 }
 
 enum HomeScreenViewAction {
     case loadRoomData(roomIdentifier: String)
     case selectRoom(roomIdentifier: String)
-    case tapUserAvatar
+    case userMenu(action: HomeScreenViewUserMenuAction)
     case verifySession
 }
 
