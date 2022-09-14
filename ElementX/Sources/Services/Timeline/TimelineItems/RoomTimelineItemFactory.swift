@@ -67,8 +67,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isOutgoing: isOutgoing,
                                     senderId: message.sender,
                                     senderDisplayName: displayName,
-                                    senderAvatar: avatarImage,
-                                    properties: RoomTimelineItemProperties())
+                                    senderAvatar: avatarImage)
     }
     
     private func buildImageTimelineItemFromMessage(_ message: ImageRoomMessage,
@@ -95,8 +94,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      width: message.width,
                                      height: message.height,
                                      aspectRatio: aspectRatio,
-                                     blurhash: message.blurhash,
-                                     properties: RoomTimelineItemProperties())
+                                     blurhash: message.blurhash)
     }
     
     private func buildNoticeTimelineItemFromMessage(_ message: NoticeRoomMessage,
@@ -115,8 +113,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                       isOutgoing: isOutgoing,
                                       senderId: message.sender,
                                       senderDisplayName: displayName,
-                                      senderAvatar: avatarImage,
-                                      properties: RoomTimelineItemProperties())
+                                      senderAvatar: avatarImage)
     }
     
     private func buildEmoteTimelineItemFromMessage(_ message: EmoteRoomMessage,
@@ -135,7 +132,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      isOutgoing: isOutgoing,
                                      senderId: message.sender,
                                      senderDisplayName: displayName,
-                                     senderAvatar: avatarImage,
-                                     properties: RoomTimelineItemProperties())
+                                     senderAvatar: avatarImage)
     }
 }
