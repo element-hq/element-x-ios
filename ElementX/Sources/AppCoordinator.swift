@@ -331,7 +331,9 @@ class AppCoordinator: Coordinator {
                 case .didReceiveAuthError(let isSoftLogout):
                     self.stateMachine.processEvent(.remoteSignOut(isSoft: isSoftLogout))
                 case .updateRestoreTokenNeeded:
-                    _ = self.userSessionStore.refreshRestoreToken(for: self.userSession)
+                    if let userSession = self.userSession {
+                        _ = self.userSessionStore.refreshRestoreToken(for: userSession)
+                    }
                 default:
                     break
                 }
