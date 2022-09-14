@@ -61,7 +61,6 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
                                timestamp: timestamp,
                                shouldShowSenderDetails: true,
                                isOutgoing: false,
-                               senderId: senderId,
-                               properties: RoomTimelineItemProperties())
+                               senderId: senderId)
     }
 }

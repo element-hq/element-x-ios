@@ -36,5 +36,5 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equa
     var aspectRatio: CGFloat?
     var blurhash: String?
     
-    let properties: RoomTimelineItemProperties
+    var properties = RoomTimelineItemProperties()
 }

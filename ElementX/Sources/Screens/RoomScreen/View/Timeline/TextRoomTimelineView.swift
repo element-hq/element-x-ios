@@ -76,7 +76,6 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                              timestamp: timestamp,
                              shouldShowSenderDetails: shouldShowSenderDetails,
                              isOutgoing: isOutgoing,
-                             senderId: senderId,
-                             properties: RoomTimelineItemProperties())
+                             senderId: senderId)
     }
 }

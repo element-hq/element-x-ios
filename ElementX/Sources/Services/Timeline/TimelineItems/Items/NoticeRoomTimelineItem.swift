@@ -29,5 +29,5 @@ struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equ
     var senderDisplayName: String?
     var senderAvatar: UIImage?
     
-    let properties: RoomTimelineItemProperties
+    var properties = RoomTimelineItemProperties()
 }

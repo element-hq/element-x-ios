@@ -73,8 +73,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
-                                                                      image: UIImage(systemName: "photo"),
-                                                                      properties: RoomTimelineItemProperties()))
+                                                                      image: UIImage(systemName: "photo")))
 
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Some other image",
@@ -83,8 +82,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
-                                                                      image: nil,
-                                                                      properties: RoomTimelineItemProperties()))
+                                                                      image: nil))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Blurhashed image",
@@ -95,8 +93,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       source: nil,
                                                                       image: nil,
                                                                       aspectRatio: 0.7,
-                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
-                                                                      properties: RoomTimelineItemProperties()))
+                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }
     }
 }
