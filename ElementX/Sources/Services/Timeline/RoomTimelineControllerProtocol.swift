@@ -40,4 +40,6 @@ protocol RoomTimelineControllerProtocol {
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError>
     
     func sendMessage(_ message: String) async
+    
+    func redactItem(_ itemId: String) async
 }
