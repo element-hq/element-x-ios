@@ -104,7 +104,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         }
     }
     
-    func login(username: String, password: String, initialDeviceName: String, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
+    func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
         let loginTask: Task<Client, Error> = Task.detached {
