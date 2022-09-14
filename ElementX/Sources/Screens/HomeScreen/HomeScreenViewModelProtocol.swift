@@ -24,7 +24,6 @@ protocol HomeScreenViewModelProtocol {
     var context: HomeScreenViewModelType.Context { get }
     
     func updateWithUserAvatar(_ avatar: UIImage)
-    func updateWithUserDisplayName(_ displayName: String)
     func updateWithRoomSummaries(_ roomSummaries: [RoomSummaryProtocol])
     
     func showSessionVerificationBanner()

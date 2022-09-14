@@ -119,14 +119,6 @@ struct HomeScreen: View {
             return .empty
         }
     }
-    
-    private var userDisplayNameView: some View {
-        Text(context.viewState.userDisplayName)
-            .font(.headline)
-            .fontWeight(.bold)
-            .foregroundColor(.primary)
-            .accessibilityIdentifier("userDisplayNameView")
-    }
 
     private func settings() {
         context.send(viewAction: .userMenu(action: .settings))
@@ -212,8 +204,7 @@ struct HomeScreen_Previews: PreviewProvider {
     }
 
     static var body: some View {
-        let viewModel = HomeScreenViewModel(initialDisplayName: "@username:server.com",
-                                            attributedStringBuilder: AttributedStringBuilder())
+        let viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
         
         let eventBrief = EventBrief(eventId: "id",
                                     senderId: "senderId",
@@ -227,7 +218,6 @@ struct HomeScreen_Previews: PreviewProvider {
                              MockRoomSummary(displayName: "Omega", lastMessage: eventBrief)]
         
         viewModel.updateWithRoomSummaries(roomSummaries)
-        viewModel.updateWithUserDisplayName("username")
         
         if let avatarImage = UIImage(systemName: "person.fill") {
             viewModel.updateWithUserAvatar(avatarImage)

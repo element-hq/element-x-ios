@@ -55,8 +55,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = HomeScreenViewModel(initialDisplayName: parameters.userSession.userID,
-                                        attributedStringBuilder: parameters.attributedStringBuilder)
+        viewModel = HomeScreenViewModel(attributedStringBuilder: parameters.attributedStringBuilder)
         
         let view = HomeScreen(context: viewModel.context)
         hostingController = UIHostingController(rootView: view)
@@ -101,10 +100,6 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
                 if case let .success(avatar) = await parameters.userSession.mediaProvider.loadImageFromURLString(userAvatarURLString) {
                     self.viewModel.updateWithUserAvatar(avatar)
                 }
-            }
-            
-            if case let .success(userDisplayName) = await parameters.userSession.clientProxy.loadUserDisplayName() {
-                self.viewModel.updateWithUserDisplayName(userDisplayName)
             }
         }
     }
