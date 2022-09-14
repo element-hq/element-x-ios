@@ -18,52 +18,56 @@ import SwiftUI
 
 public extension Font {
     /// The fonts used by Element as defined in https://www.figma.com/file/X4XTH9iS2KGJ2wFKDqkyed/Compound?node-id=1362%3A0
-    static let element = ElementFonts(values: ElementSharedFonts())
+    static let element = ElementFonts(values: ElementBaseFonts())
 }
 
 /// Struct for holding fonts for use in SwiftUI.
 public struct ElementFonts: Fonts {
     public let largeTitle: Font
-    public let largeTitleB: Font
+    public let largeTitleBold: Font
     public let title1: Font
-    public let title1B: Font
+    public let title1Bold: Font
     public let title2: Font
-    public let title2B: Font
+    public let title2Bold: Font
     public let title3: Font
-    public let title3SB: Font
+    public let title3Bold: Font
     public let headline: Font
-    public let subheadline: Font
+    public let headlineBold: Font
     public let body: Font
-    public let bodySB: Font
+    public let bodyBold: Font
     public let callout: Font
-    public let calloutSB: Font
+    public let calloutBold: Font
+    public let subheadline: Font
+    public let subheadlineBold: Font
     public let footnote: Font
-    public let footnoteSB: Font
+    public let footnoteBold: Font
     public let caption1: Font
-    public let caption1SB: Font
+    public let caption1Bold: Font
     public let caption2: Font
-    public let caption2SB: Font
+    public let caption2Bold: Font
     
-    public init(values: ElementSharedFonts) {
+    public init(values: ElementBaseFonts) {
         largeTitle = values.largeTitle.font
-        largeTitleB = values.largeTitleB.font
+        largeTitleBold = values.largeTitle.font.bold()
         title1 = values.title1.font
-        title1B = values.title1B.font
+        title1Bold = values.title1.font.bold()
         title2 = values.title2.font
-        title2B = values.title2B.font
+        title2Bold = values.title2.font.bold()
         title3 = values.title3.font
-        title3SB = values.title3SB.font
+        title3Bold = values.title3.font.bold()
         headline = values.headline.font
-        subheadline = values.subheadline.font
+        headlineBold = values.headline.font.bold()
         body = values.body.font
-        bodySB = values.bodySB.font
+        bodyBold = values.body.font.bold()
         callout = values.callout.font
-        calloutSB = values.calloutSB.font
+        calloutBold = values.callout.font.bold()
+        subheadline = values.subheadline.font
+        subheadlineBold = values.subheadline.font.bold()
         footnote = values.footnote.font
-        footnoteSB = values.footnoteSB.font
+        footnoteBold = values.footnote.font.bold()
         caption1 = values.caption1.font
-        caption1SB = values.caption1SB.font
+        caption1Bold = values.caption1.font.bold()
         caption2 = values.caption2.font
-        caption2SB = values.caption2SB.font
+        caption2Bold = values.caption2.font.bold()
     }
 }

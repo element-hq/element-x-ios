@@ -53,7 +53,7 @@ struct ServerSelectionScreen: View {
                 .padding(.bottom, 8)
             
             Text(ElementL10n.serverSelectionTitle)
-                .font(.element.title2B)
+                .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
             
