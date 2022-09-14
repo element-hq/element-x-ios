@@ -50,6 +50,10 @@ extension ElementL10n {
   public static let serverSelectionServerUrl = ElementL10n.tr("Untranslated", "server_selection_server_url")
   /// Choose your server
   public static let serverSelectionTitle = ElementL10n.tr("Untranslated", "server_selection_title")
+  /// Looks like you’re using a new device. Verify its you.
+  public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")
+  /// Help keep your messages secure
+  public static let sessionVerificationBannerTitle = ElementL10n.tr("Untranslated", "session_verification_banner_title")
   /// Timeline Style
   public static let settingsTimelineStyle = ElementL10n.tr("Untranslated", "settings_timeline_style")
   /// Untranslated

@@ -30,16 +30,7 @@ struct HomeScreen: View {
                 }
             } else {
                 if context.viewState.showSessionVerificationBanner {
-                    HStack {
-                        Text(ElementL10n.verificationVerifyDevice)
-                        Spacer()
-                        Button(ElementL10n.startVerification) {
-                            context.send(viewAction: .verifySession)
-                        }
-                    }
-                    .padding()
-                    .background(Color.element.quaternaryContent)
-                    .padding(.top, 1)
+                    sessionVerificationBanner
                 }
                 
                 List {
@@ -110,6 +101,37 @@ struct HomeScreen: View {
         } else {
             return .empty
         }
+    }
+    
+    private var sessionVerificationBanner: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(ElementL10n.sessionVerificationBannerTitle)
+                    .font(.element.subheadlineBold)
+                    .foregroundColor(.element.systemPrimaryLabel)
+                Text(ElementL10n.sessionVerificationBannerMessage)
+                    .font(.element.footnote)
+                    .foregroundColor(.element.systemSecondaryLabel.opacity(0.6))
+            }
+            
+            HStack(spacing: 16) {
+                Button(ElementL10n.actionSkip) {
+                    context.send(viewAction: .skipSessionVerification)
+                }
+                .frame(maxWidth: .infinity)
+                .buttonStyle(.elementCapsule)
+                
+                Button(ElementL10n.continue) {
+                    context.send(viewAction: .verifySession)
+                }
+                .frame(maxWidth: .infinity)
+                .buttonStyle(.elementCapsuleProminent)
+            }
+        }
+        .padding(16)
+        .background(Color.element.systemSecondaryBackground)
+        .cornerRadius(14)
+        .padding(.horizontal, 16)
     }
 
     private func settings() {
