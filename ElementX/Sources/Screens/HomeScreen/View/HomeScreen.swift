@@ -69,21 +69,40 @@ struct HomeScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button { context.send(viewAction: .tapUserAvatar) } label: {
-                    HStack {
-                        userAvatarImage
-                            .animation(.elementDefault, value: context.viewState.userAvatar)
-                            .transition(.opacity)
-
-                        userDisplayNameView
-                            .animation(.elementDefault, value: context.viewState.userDisplayName)
-                            .transition(.opacity)
-                    }
-                }
+                userMenuButton
             }
         }
     }
-    
+
+    @ViewBuilder
+    private var userMenuButton: some View {
+        Menu {
+            Button(action: settings) {
+                Label(ElementL10n.settings, systemImage: "gearshape")
+            }
+            Button(action: inviteFriends) {
+                Label(ElementL10n.inviteFriends, systemImage: "square.and.arrow.up")
+            }
+            Button(action: feedback) {
+                Label(ElementL10n.feedback, systemImage: "questionmark.circle")
+            }
+            Button(role: .destructive, action: signOut) {
+                Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                    .foregroundColor(.element.alert)
+            }
+        } label: {
+            HStack {
+                userAvatarImage
+                    .animation(.elementDefault, value: context.viewState.userAvatar)
+                    .transition(.opacity)
+
+                userDisplayNameView
+                    .animation(.elementDefault, value: context.viewState.userDisplayName)
+                    .transition(.opacity)
+            }
+        }
+    }
+
     @ViewBuilder
     private var userAvatarImage: some View {
         if let avatar = context.viewState.userAvatar {
@@ -102,6 +121,22 @@ struct HomeScreen: View {
             .fontWeight(.bold)
             .foregroundColor(.primary)
             .accessibilityIdentifier("userDisplayNameView")
+    }
+
+    private func settings() {
+        context.send(viewAction: .userMenu(action: .settings))
+    }
+
+    private func inviteFriends() {
+        context.send(viewAction: .userMenu(action: .inviteFriends))
+    }
+
+    private func feedback() {
+        context.send(viewAction: .userMenu(action: .feedback))
+    }
+
+    private func signOut() {
+        context.send(viewAction: .userMenu(action: .signOut))
     }
 }
 
