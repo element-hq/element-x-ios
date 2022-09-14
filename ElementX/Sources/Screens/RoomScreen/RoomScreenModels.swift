@@ -31,6 +31,7 @@ enum RoomScreenViewAction {
     case itemDisappeared(id: String)
     case linkClicked(url: URL)
     case sendMessage
+    case sendReaction(key: String, eventID: String)
 }
 
 struct RoomScreenViewState: BindableState {

@@ -21,7 +21,9 @@ struct RoomScreen: View {
     
     var body: some View {
         VStack(spacing: 0.0) {
-            TimelineView(context: context)
+            TimelineView()
+                .environmentObject(context)
+            
             MessageComposer(text: $context.composerText, disabled: context.viewState.sendButtonDisabled) {
                 sendMessage()
             }

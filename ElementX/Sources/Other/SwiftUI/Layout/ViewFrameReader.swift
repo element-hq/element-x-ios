@@ -35,8 +35,9 @@ struct ViewFrameReader: View {
                 .preference(key: FramePreferenceKey.self,
                             value: geometry.frame(in: .local))
         }
-        .onPreferenceChange(FramePreferenceKey.self) {
-            frame = $0
+        .onPreferenceChange(FramePreferenceKey.self) { newValue in
+            guard frame != newValue else { return }
+            frame = newValue
         }
     }
 }

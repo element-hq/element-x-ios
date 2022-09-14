@@ -30,14 +30,18 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                                                                           shouldShowSenderDetails: true,
                                                                           isOutgoing: false,
                                                                           senderId: "",
-                                                                          senderDisplayName: "Some user with a really long long long long long display name"),
+                                                                          senderDisplayName: "Some user with a really long long long long long display name",
+                                                                          properties: RoomTimelineItemProperties(isEdited: true)),
                                                      TextRoomTimelineItem(id: UUID().uuidString,
                                                                           text: "You also rule!",
                                                                           timestamp: "10:11 AM",
                                                                           shouldShowSenderDetails: false,
                                                                           isOutgoing: false,
                                                                           senderId: "",
-                                                                          senderDisplayName: "Alice"),
+                                                                          senderDisplayName: "Alice",
+                                                                          properties: RoomTimelineItemProperties(reactions: [
+                                                                              AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
+                                                                          ])),
                                                      SeparatorRoomTimelineItem(id: UUID().uuidString,
                                                                                text: "Today"),
                                                      TextRoomTimelineItem(id: UUID().uuidString,
@@ -46,7 +50,11 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                                                                           shouldShowSenderDetails: false,
                                                                           isOutgoing: true,
                                                                           senderId: "",
-                                                                          senderDisplayName: "Bob")]
+                                                                          senderDisplayName: "Bob",
+                                                                          properties: RoomTimelineItemProperties(reactions: [
+                                                                              AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
+                                                                              AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
+                                                                          ]))]
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
         .failure(.generic)

@@ -18,6 +18,8 @@ import Foundation
 import SwiftUI
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
 
@@ -25,7 +27,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ScaledMetric private var minBubbleWidth = 44
 
     var body: some View {
-        VStack(alignment: timelineItem.isOutgoing ? .trailing : .leading, spacing: -5) {
+        VStack(alignment: alignment, spacing: -5) {
             if !timelineItem.isOutgoing {
                 header
                     .zIndex(1)
@@ -33,18 +35,18 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             if timelineItem.isOutgoing {
                 HStack {
                     Spacer()
-                    styledContent
+                    styledContentWithReactions
                 }
                 .padding(.trailing, 16)
                 .padding(.leading, 51)
             } else {
-                styledContent
+                styledContentWithReactions
                     .padding(.leading, 16)
                     .padding(.trailing, 51)
             }
         }
     }
-
+    
     @ViewBuilder
     private var header: some View {
         if timelineItem.shouldShowSenderDetails {
@@ -59,6 +61,22 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .fontWeight(.semibold)
                         .lineLimit(1)
                 }
+            }
+        }
+    }
+    
+    private var styledContentWithReactions: some View {
+        // Figma has a spacing of -4 but it doesn't take into account
+        // the centre aligned stroke width so we use -5 here
+        VStack(alignment: alignment, spacing: -5) {
+            styledContent
+            
+            if !timelineItem.properties.reactions.isEmpty {
+                TimelineReactionsView(reactions: timelineItem.properties.reactions,
+                                      alignment: alignment) { key in
+                    context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
+                }
+                .padding(.horizontal, 12)
             }
         }
     }
@@ -84,9 +102,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 content()
                     .frame(minWidth: minBubbleWidth, alignment: .leading)
 
-                Text(timelineItem.timestamp)
-                    .foregroundColor(Color.element.tertiaryContent)
-                    .font(.element.caption2)
+                if timelineItem.properties.isEdited {
+                    Text(ElementL10n.editedSuffix)
+                        .font(.element.caption2)
+                        .foregroundColor(.element.tertiaryContent)
+                }
             }
             .padding(EdgeInsets(top: 8, leading: 8, bottom: 4, trailing: 8))
             .clipped()
@@ -102,6 +122,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     private var bubbleColor: Color {
         let opacity = colorScheme == .light ? 0.06 : 0.15
         return timelineItem.isOutgoing ? .element.accent.opacity(opacity) : .element.system
+    }
+    
+    private var alignment: HorizontalAlignment {
+        timelineItem.isOutgoing ? .trailing : .leading
     }
 }
 

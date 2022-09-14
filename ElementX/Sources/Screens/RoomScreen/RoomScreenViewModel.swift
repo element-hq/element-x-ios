@@ -89,6 +89,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             await timelineController.sendMessage(state.bindings.composerText)
             state.bindings.composerText = ""
+        case .sendReaction(let key, _):
+            #warning("Reaction implementation awaiting SDK support.")
+            MXLog.warning("React with \(key) failed. Not implemented.")
         }
     }
     

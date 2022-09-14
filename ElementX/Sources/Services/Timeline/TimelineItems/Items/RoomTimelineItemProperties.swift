@@ -15,19 +15,11 @@
 //
 
 import Foundation
-import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
-    let id: String
-    let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
-    let timestamp: String
-    let shouldShowSenderDetails: Bool
-    let isOutgoing: Bool
-    
-    let senderId: String
-    var senderDisplayName: String?
-    var senderAvatar: UIImage?
-    
-    let properties: RoomTimelineItemProperties
+/// Properties of a matrix event that are common between all timeline items.
+struct RoomTimelineItemProperties: Equatable {
+    /// Whether the item has been edited.
+    var isEdited = false
+    /// The aggregated reactions that have been sent for this item.
+    var reactions: [AggregatedReaction] = []
 }

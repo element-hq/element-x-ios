@@ -25,9 +25,7 @@ struct TextRoomTimelineView: View {
             if let attributedComponents = timelineItem.attributedComponents {
                 FormattedBodyText(attributedComponents: attributedComponents)
             } else {
-                Text(timelineItem.text)
-                    .font(.body)
-                    .multilineTextAlignment(.leading)
+                FormattedBodyText(text: timelineItem.text)
             }
         }
         .id(timelineItem.id)
@@ -78,6 +76,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                              timestamp: timestamp,
                              shouldShowSenderDetails: shouldShowSenderDetails,
                              isOutgoing: isOutgoing,
-                             senderId: senderId)
+                             senderId: senderId,
+                             properties: RoomTimelineItemProperties())
     }
 }
