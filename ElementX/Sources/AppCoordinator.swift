@@ -435,7 +435,7 @@ class AppCoordinator: Coordinator {
 
         alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { [weak self] _ in
-            self?.stateMachine.processEvent(.attemptSignOut)
+            self?.stateMachine.processEvent(.signOut)
         })
 
         navigationRouter.present(alert, animated: true)
