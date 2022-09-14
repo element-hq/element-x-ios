@@ -24,7 +24,7 @@ struct TimelineItemList: View {
     @State private var hasPendingChanges = false
     @ObservedObject private var settings = ElementSettings.shared
     
-    @ObservedObject var context: RoomScreenViewModel.Context
+    @EnvironmentObject var context: RoomScreenViewModel.Context
     
     let bottomVisiblePublisher: PassthroughSubject<Bool, Never>
     let scrollToBottomPublisher: PassthroughSubject<Void, Never>
@@ -163,6 +163,7 @@ struct TimelineItemList_Previews: PreviewProvider {
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             roomName: nil)
         
-        TimelineItemList(context: viewModel.context, bottomVisiblePublisher: PassthroughSubject(), scrollToBottomPublisher: PassthroughSubject())
+        TimelineItemList(bottomVisiblePublisher: PassthroughSubject(), scrollToBottomPublisher: PassthroughSubject())
+            .environmentObject(viewModel.context)
     }
 }

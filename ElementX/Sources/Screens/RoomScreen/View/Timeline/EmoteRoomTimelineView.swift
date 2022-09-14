@@ -27,8 +27,7 @@ struct EmoteRoomTimelineView: View {
                 if let attributedComponents = timelineItem.attributedComponents {
                     FormattedBodyText(attributedComponents: attributedComponents)
                 } else {
-                    Text(timelineItem.text)
-                        .foregroundColor(.element.primaryContent)
+                    FormattedBodyText(text: timelineItem.text)
                 }
             }
         }
@@ -61,6 +60,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
                               timestamp: timestamp,
                               shouldShowSenderDetails: true,
                               isOutgoing: false,
-                              senderId: senderId)
+                              senderId: senderId,
+                              properties: RoomTimelineItemProperties())
     }
 }

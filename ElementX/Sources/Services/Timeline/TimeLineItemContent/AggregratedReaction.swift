@@ -15,19 +15,13 @@
 //
 
 import Foundation
-import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
-    let id: String
-    let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
-    let timestamp: String
-    let shouldShowSenderDetails: Bool
-    let isOutgoing: Bool
-    
-    let senderId: String
-    var senderDisplayName: String?
-    var senderAvatar: UIImage?
-    
-    let properties: RoomTimelineItemProperties
+/// Represents all reactions of the same type for a single event.
+struct AggregatedReaction: Equatable, Hashable {
+    /// The reaction that was sent.
+    let key: String
+    /// The number of times this reactions was sent.
+    let count: Int
+    /// Whether to highlight the reaction, indicating that the current user sent this reaction.
+    let isHighlighted: Bool
 }

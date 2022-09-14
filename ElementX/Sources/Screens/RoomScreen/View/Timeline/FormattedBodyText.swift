@@ -43,6 +43,12 @@ struct FormattedBodyText: View {
     }
 }
 
+extension FormattedBodyText {
+    init(text: String) {
+        attributedComponents = [.init(attributedString: AttributedString(text), isBlockquote: false)]
+    }
+}
+
 struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
@@ -74,6 +80,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
         ]
         
         let attributedStringBuilder = AttributedStringBuilder()
+        
         VStack(alignment: .leading, spacing: 24.0) {
             ForEach(htmlStrings, id: \.self) { htmlString in
                 let attributedString = attributedStringBuilder.fromHTML(htmlString)
@@ -83,6 +90,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
                         .fixedSize()
                 }
             }
+            FormattedBodyText(text: "Some plain text that's not an attributed component.")
         }
     }
 }

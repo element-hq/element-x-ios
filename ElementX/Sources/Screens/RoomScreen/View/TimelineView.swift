@@ -25,11 +25,9 @@ struct TimelineView: View {
     @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     @State private var scollToBottomButtonVisible = false
     
-    @ObservedObject var context: RoomScreenViewModel.Context
-    
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            TimelineItemList(context: context, bottomVisiblePublisher: bottomVisiblePublisher, scrollToBottomPublisher: scrollToBottomPublisher)
+            TimelineItemList(bottomVisiblePublisher: bottomVisiblePublisher, scrollToBottomPublisher: scrollToBottomPublisher)
             scrollToBottomButton
         }
     }
@@ -63,6 +61,7 @@ struct TimelineView_Previews: PreviewProvider {
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             roomName: nil)
         
-        TimelineView(context: viewModel.context)
+        TimelineView()
+            .environmentObject(viewModel.context)
     }
 }

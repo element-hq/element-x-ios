@@ -18,13 +18,19 @@ import Foundation
 import SwiftUI
 
 struct TimelineItemPlainStylerView<Content: View>: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
 
     var body: some View {
         VStack(alignment: .leading) {
             header
-            content()
+            
+            VStack(alignment: .leading, spacing: 4) {
+                content()
+                supplementaryViews
+            }
         }
     }
 
@@ -41,6 +47,24 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                 Text(timelineItem.timestamp)
                     .foregroundColor(Color.element.tertiaryContent)
                     .font(.element.caption2)
+            }
+        }
+    }
+    
+    @ViewBuilder
+    private var supplementaryViews: some View {
+        VStack {
+            if timelineItem.properties.isEdited {
+                Text(ElementL10n.editedSuffix)
+                    .font(.element.footnote)
+                    .foregroundColor(.element.tertiaryContent)
+            }
+            
+            if !timelineItem.properties.reactions.isEmpty {
+                TimelineReactionsView(reactions: timelineItem.properties.reactions,
+                                      alignment: .leading) { key in
+                    context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
+                }
             }
         }
     }
