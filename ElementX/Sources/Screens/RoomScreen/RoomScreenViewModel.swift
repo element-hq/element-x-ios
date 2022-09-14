@@ -116,7 +116,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return []
         }
         
-        return [.copy, .quote, .copyPermalink]
+        let actions: [TimelineItemContextMenuAction] = [
+            .copy, .quote, .copyPermalink
+        ]
+        
+        #warning("Outgoing actions to be handled with the new Timeline API.")
+//        if timelineItem.isOutgoing {
+//            actions.append(.redact)
+//        }
+        
+        return actions
     }
     
     private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
@@ -137,6 +146,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             } catch {
                 displayError(.alert(ElementL10n.roomTimelinePermalinkCreationFailure))
             }
+        case .redact:
+            redactItem(itemId)
         }
     }
     
@@ -146,6 +157,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: ElementL10n.dialogTitleError,
                                                  message: message)
+        }
+    }
+    
+    private func redactItem(_ itemID: String) {
+        Task {
+            await timelineController.redactItem(itemID)
         }
     }
 }

@@ -23,6 +23,7 @@ enum RoomTimelineProviderCallback {
 
 enum RoomTimelineProviderError: Error {
     case failedSendingMessage
+    case failedRedactingItem
     case generic
 }
 
@@ -35,4 +36,6 @@ protocol RoomTimelineProviderProtocol {
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError>
     
     func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError>
+    
+    func redactItem(_ itemID: String) async -> Result<Void, RoomTimelineProviderError>
 }
