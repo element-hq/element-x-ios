@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 52;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -333,7 +333,6 @@
 		EBD6C79705B3DDB2F7E5F554 /* UserSessionStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF1B52D0ABBA7091A991CAFE /* UserSessionStoreProtocol.swift */; };
 		EC280623A42904341363EAAF /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 886A0A498FA01E8EDD451D05 /* Sentry */; };
 		EC4C31963E755EEC77BD778C /* AnalyticsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B362E695A7103C11F64B185 /* AnalyticsSettings.swift */; };
-		EC5CBC8A28CB87B300DC4C53 /* UIDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC5CBC8928CB87B300DC4C53 /* UIDevice.swift */; };
 		EE4F5601356228FF72FC56B6 /* MockClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40F48279322E504153AB0D /* MockClientProxy.swift */; };
 		EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */; };
 		EEC40663922856C65D1E0DF5 /* KeychainControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C37196A4C79F24CE80C6 /* KeychainControllerTests.swift */; };
@@ -630,7 +629,7 @@
 		8C37FB986891D90BEAA93EAE /* UserSessionStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionStore.swift; sourceTree = "<group>"; };
 		8D8169443E5AC5FF71BFB3DB /* cs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = cs; path = cs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		8DC2C9E0E15C79BBDA80F0A2 /* TimelineStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineStyle.swift; sourceTree = "<group>"; };
-		8E088F2A1B9EC529D3221931 /* UITests.xctestplan */ = {isa = PBXFileReference; lastKnownFileType = text; path = UITests.xctestplan; sourceTree = "<group>"; };
+		8E088F2A1B9EC529D3221931 /* UITests.xctestplan */ = {isa = PBXFileReference; path = UITests.xctestplan; sourceTree = "<group>"; };
 		9010EE0CC913D095887EF36E /* OIDCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCService.swift; sourceTree = "<group>"; };
 		90733775209F4D4D366A268F /* RootRouterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouterType.swift; sourceTree = "<group>"; };
 		92B61C243325DC76D3086494 /* EventBriefFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventBriefFactoryProtocol.swift; sourceTree = "<group>"; };
@@ -791,7 +790,6 @@
 		E8CA187FE656EE5A3F6C7DE5 /* UIFont+AttributedStringBuilder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIFont+AttributedStringBuilder.m"; sourceTree = "<group>"; };
 		E9D059BFE329BE09B6D96A9F /* ro */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ro; path = ro.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		EBE5502760CF6CA2D7201883 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ja; path = ja.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		EC5CBC8928CB87B300DC4C53 /* UIDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIDevice.swift; sourceTree = "<group>"; };
 		ED1D792EB82506A19A72C8DE /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		EDAA4472821985BF868CC21C /* ServerSelectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionViewModelTests.swift; sourceTree = "<group>"; };
 		EDB6E40BAD4504D899FAAC9A /* TemplateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateViewModel.swift; sourceTree = "<group>"; };
@@ -1101,7 +1099,6 @@
 				40B21E611DADDEF00307E7AC /* String.swift */,
 				287FC98AF2664EAD79C0D902 /* UIDevice.swift */,
 				227AC5D71A4CE43512062243 /* URL.swift */,
-				EC5CBC8928CB87B300DC4C53 /* UIDevice.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2455,7 +2452,6 @@
 				462813B93C39DF93B1249403 /* RoundedToastView.swift in Sources */,
 				CC736DA1AA8F8B9FD8785009 /* ScreenshotDetector.swift in Sources */,
 				1281625B25371BE53D36CB3A /* SeparatorRoomTimelineItem.swift in Sources */,
-				EC5CBC8A28CB87B300DC4C53 /* UIDevice.swift in Sources */,
 				49F2E7DD8CAACE09CEECE3E6 /* SeparatorRoomTimelineView.swift in Sources */,
 				87756CA950ED55870A1AAE8F /* ServerSelectionCoordinator.swift in Sources */,
 				6AC1DC1EAD9F7568360DA1BA /* ServerSelectionModels.swift in Sources */,
