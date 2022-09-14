@@ -77,41 +77,46 @@ struct HomeScreen: View {
     @ViewBuilder
     private var userMenuButton: some View {
         Menu {
-            Button(action: settings) {
-                Label(ElementL10n.settings, systemImage: "gearshape")
+            Section {
+                Button(action: settings) {
+                    Label(ElementL10n.settingsUserSettings, systemImage: "gearshape")
+                }
             }
-            Button(action: inviteFriends) {
-                Label(ElementL10n.inviteFriends, systemImage: "square.and.arrow.up")
+            Section {
+                Button(action: inviteFriends) {
+                    Label(ElementL10n.inviteFriends, systemImage: "square.and.arrow.up")
+                }
+                Button(action: feedback) {
+                    Label(ElementL10n.feedback, systemImage: "questionmark.circle")
+                }
             }
-            Button(action: feedback) {
-                Label(ElementL10n.feedback, systemImage: "questionmark.circle")
-            }
-            Button(role: .destructive, action: signOut) {
-                Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
-                    .foregroundColor(.element.alert)
+            Section {
+                Button(role: .destructive, action: signOut) {
+                    Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                }
             }
         } label: {
-            HStack {
-                userAvatarImage
-                    .animation(.elementDefault, value: context.viewState.userAvatar)
-                    .transition(.opacity)
-
-                userDisplayNameView
-                    .animation(.elementDefault, value: context.viewState.userDisplayName)
-                    .transition(.opacity)
-            }
+            userAvatarImageView
+                .animation(.elementDefault, value: context.viewState.userAvatar)
+                .transition(.opacity)
         }
     }
 
     @ViewBuilder
-    private var userAvatarImage: some View {
+    private var userAvatarImageView: some View {
+        userAvatarImage
+            .resizable()
+            .scaledToFill()
+            .frame(width: 32, height: 32, alignment: .center)
+            .clipShape(Circle())
+            .accessibilityIdentifier("userAvatarImage")
+    }
+
+    private var userAvatarImage: Image {
         if let avatar = context.viewState.userAvatar {
-            Image(uiImage: avatar)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 32, height: 32, alignment: .center)
-                .clipShape(Circle())
-                .accessibilityIdentifier("userAvatarImage")
+            return Image(uiImage: avatar)
+        } else {
+            return .empty
         }
     }
     
