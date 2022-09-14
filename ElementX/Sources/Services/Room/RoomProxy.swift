@@ -194,7 +194,7 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
     
-    func redactItem(_ eventID: String) async -> Result<Void, RoomProxyError> {
+    func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         #warning("Redactions to be enabled on next SDK release.")
         return .failure(.failedRedactingEvent)
 //        let transactionID = genTransactionId()
