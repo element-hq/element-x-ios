@@ -48,6 +48,7 @@ struct TimelineItemList: View {
                         .contextMenu(menuItems: {
                             context.viewState.contextMenuBuilder?(timelineItem.id)
                         })
+                        .opacity(opacityForItem(timelineItem))
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
                         .listRowInsets(settings.timelineStyle.listRowInsets)
@@ -140,6 +141,14 @@ struct TimelineItemList: View {
         }
         
         context.send(viewAction: .loadPreviousPage)
+    }
+    
+    private func opacityForItem(_ item: RoomTimelineViewProvider) -> Double {
+        guard case let .reply(selectedItemId, _) = context.viewState.composerType else {
+            return 1.0
+        }
+        
+        return selectedItemId == item.id ? 1.0 : 0.5
     }
     
     private var isPreview: Bool {

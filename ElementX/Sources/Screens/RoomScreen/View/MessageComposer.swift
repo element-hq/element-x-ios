@@ -18,27 +18,69 @@ import SwiftUI
 
 struct MessageComposer: View {
     @Binding var text: String
-    var disabled: Bool
-    let action: () -> Void
+    @Binding var focused: Bool
+    let sendingDisabled: Bool
+    let type: RoomScreenComposerType
+    
+    let sendAction: () -> Void
+    let replyCancellationAction: () -> Void
     
     var body: some View {
         HStack(alignment: .bottom) {
-            MessageComposerTextField(placeholder: "Send a message", text: $text, maxHeight: 300)
+            let rect = RoundedRectangle(cornerRadius: 8.0)
+            VStack(alignment: .leading, spacing: 2.0) {
+                if case let .reply(_, displayName) = type {
+                    HStack(alignment: .center) {
+                        Text("\(Image(systemName: "arrow.uturn.left")) \(ElementL10n.roomTimelineReplyingTo(displayName))")
+                            .font(.element.caption2)
+                            .foregroundColor(.element.secondaryContent)
+                            .lineLimit(1)
+                        Spacer()
+                        Button {
+                            replyCancellationAction()
+                        } label: {
+                            Image(systemName: "xmark")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 12.0, height: 12.0)
+                                .padding(4.0)
+                        }
+                    }
+                }
+                MessageComposerTextField(placeholder: "Send a message",
+                                         text: $text,
+                                         focused: $focused,
+                                         maxHeight: 300)
+            }
+            .padding(4.0)
+            .frame(minHeight: 44.0)
+            .clipShape(rect)
+            .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
+            .animation(.elementDefault, value: type)
+            .animation(.elementDefault, value: borderWidth)
+
             Button {
-                action()
+                sendAction()
             } label: {
                 Image(uiImage: Asset.Images.timelineComposerSendMessage.image)
                     .background(Circle()
                         .foregroundColor(.global.white)
-                        .padding(2)
                     )
             }
             .padding(.bottom, 6.0)
-            .disabled(disabled)
-            .opacity(disabled ? 0.5 : 1.0)
-            .animation(.elementDefault, value: disabled)
+            .disabled(sendingDisabled)
+            .opacity(sendingDisabled ? 0.5 : 1.0)
+            .animation(.elementDefault, value: sendingDisabled)
             .keyboardShortcut(.return, modifiers: [.command])
         }
+    }
+    
+    private var borderColor: Color {
+        .element.accent
+    }
+    
+    private var borderWidth: CGFloat {
+        focused ? 2.0 : 1.0
     }
 }
 
@@ -51,8 +93,20 @@ struct MessageComposer_Previews: PreviewProvider {
     @ViewBuilder
     static var body: some View {
         VStack {
-            MessageComposer(text: .constant(""), disabled: true) { }
-            MessageComposer(text: .constant("Some message"), disabled: false) { }
+            MessageComposer(text: .constant(""),
+                            focused: .constant(false),
+                            sendingDisabled: true,
+                            type: .default,
+                            sendAction: { },
+                            replyCancellationAction: { })
+            
+            MessageComposer(text: .constant("Some message"),
+                            focused: .constant(false),
+                            sendingDisabled: false,
+                            type: .reply(id: UUID().uuidString,
+                                         displayName: "John Doe"),
+                            sendAction: { },
+                            replyCancellationAction: { })
         }
         .tint(.element.accent)
     }

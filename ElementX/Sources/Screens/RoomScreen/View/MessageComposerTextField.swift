@@ -18,8 +18,9 @@ import SwiftUI
 
 struct MessageComposerTextField: View {
     @Binding private var text: String
+    @Binding private var focused: Bool
+    
     @State private var dynamicHeight: CGFloat = 100
-    @State private var isEditing = false
     
     private let placeholder: String
     private let maxHeight: CGFloat
@@ -28,36 +29,24 @@ struct MessageComposerTextField: View {
         text.isEmpty
     }
 
-    init(placeholder: String, text: Binding<String>, maxHeight: CGFloat) {
+    init(placeholder: String, text: Binding<String>, focused: Binding<Bool>, maxHeight: CGFloat) {
         self.placeholder = placeholder
         _text = text
+        _focused = focused
         self.maxHeight = maxHeight
     }
     
     private var placeholderColor: Color {
-        .gray
-    }
-    
-    private var borderColor: Color {
-        .element.accent
-    }
-    
-    private var borderWidth: CGFloat {
-        isEditing ? 2.0 : 1.0
+        .element.secondaryContent
     }
     
     var body: some View {
-        let rect = RoundedRectangle(cornerRadius: 8.0)
-        return UITextViewWrapper(text: $text,
-                                 calculatedHeight: $dynamicHeight,
-                                 isEditing: $isEditing,
-                                 maxHeight: maxHeight)
+        UITextViewWrapper(text: $text,
+                          calculatedHeight: $dynamicHeight,
+                          focused: $focused,
+                          maxHeight: maxHeight)
             .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
-            .padding(4.0)
             .background(placeholderView, alignment: .topLeading)
-            .clipShape(rect)
-            .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
-            .animation(.elementDefault, value: isEditing)
     }
     
     @ViewBuilder
@@ -65,8 +54,6 @@ struct MessageComposerTextField: View {
         if showingPlaceholder {
             Text(placeholder)
                 .foregroundColor(placeholderColor)
-                .padding(.leading, 8.0)
-                .padding(.top, 12.0)
         }
     }
 }
@@ -76,7 +63,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     @Binding var text: String
     @Binding var calculatedHeight: CGFloat
-    @Binding var isEditing: Bool
+    @Binding var focused: Bool
     
     let maxHeight: CGFloat
 
@@ -90,23 +77,33 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.isUserInteractionEnabled = true
         textView.backgroundColor = UIColor.clear
         textView.returnKeyType = .default
+        textView.textContainer.lineFragmentPadding = 0.0
+        textView.textContainerInset = .zero
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+                
         return textView
     }
 
-    func updateUIView(_ view: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
-        if view.text != text {
-            view.text = text
+    func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
+        if textView.text != text {
+            textView.text = text
         }
-
-        UITextViewWrapper.recalculateHeight(view: view, result: $calculatedHeight, maxHeight: maxHeight)
+        
+        UITextViewWrapper.recalculateHeight(view: textView, result: $calculatedHeight, maxHeight: maxHeight)
+        
+        if focused, textView.window != nil, !textView.isFirstResponder {
+            // Avoid cycle detected through attribute warnings
+            DispatchQueue.main.async {
+                textView.becomeFirstResponder()
+            }
+        }
     }
 
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
                     height: $calculatedHeight,
-                    isEditing: $isEditing,
+                    focused: $focused,
                     maxHeight: maxHeight)
     }
     
@@ -117,22 +114,22 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         if result.wrappedValue != height {
             DispatchQueue.main.async {
-                result.wrappedValue = height // !! must be called asynchronously
+                result.wrappedValue = height // Must be called asynchronously
             }
         }
     }
     
     final class Coordinator: NSObject, UITextViewDelegate {
-        var text: Binding<String>
-        var calculatedHeight: Binding<CGFloat>
-        var isEditing: Binding<Bool>
+        private var text: Binding<String>
+        private var calculatedHeight: Binding<CGFloat>
+        private var focused: Binding<Bool>
         
-        let maxHeight: CGFloat
+        private let maxHeight: CGFloat
         
-        init(text: Binding<String>, height: Binding<CGFloat>, isEditing: Binding<Bool>, maxHeight: CGFloat) {
+        init(text: Binding<String>, height: Binding<CGFloat>, focused: Binding<Bool>, maxHeight: CGFloat) {
             self.text = text
             calculatedHeight = height
-            self.isEditing = isEditing
+            self.focused = focused
             self.maxHeight = maxHeight
         }
         
@@ -143,16 +140,12 @@ private struct UITextViewWrapper: UIViewRepresentable {
                                                 maxHeight: maxHeight)
         }
         
-        func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
-            true
-        }
-        
         func textViewDidBeginEditing(_ textView: UITextView) {
-            isEditing.wrappedValue = true
+            focused.wrappedValue = true
         }
         
         func textViewDidEndEditing(_ textView: UITextView) {
-            isEditing.wrappedValue = false
+            focused.wrappedValue = false
         }
     }
 }
@@ -173,13 +166,15 @@ struct MessageComposerTextField_Previews: PreviewProvider {
     
     struct PreviewWrapper: View {
         @State var text: String
+        @State var focused: Bool
         
         init(text: String) {
             _text = .init(initialValue: text)
+            _focused = .init(initialValue: false)
         }
         
         var body: some View {
-            MessageComposerTextField(placeholder: "Placeholder", text: $text, maxHeight: 300)
+            MessageComposerTextField(placeholder: "Placeholder", text: $text, focused: $focused, maxHeight: 300)
         }
     }
 }

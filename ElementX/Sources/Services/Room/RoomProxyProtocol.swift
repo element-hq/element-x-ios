@@ -55,9 +55,15 @@ protocol RoomProxyProtocol {
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError>
     
-    func sendMessage(_ message: String) async -> Result<Void, RoomProxyError>
+    func sendMessage(_ message: String, inReplyToEventId: String?) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
     var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
+}
+
+extension RoomProxyProtocol {
+    func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
+        await sendMessage(message, inReplyToEventId: nil)
+    }
 }

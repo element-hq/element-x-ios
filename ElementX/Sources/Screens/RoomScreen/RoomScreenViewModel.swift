@@ -39,7 +39,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatar: roomAvatar,
                                                          roomEncryptionBadge: roomEncryptionBadge,
-                                                         bindings: .init(composerText: "")))
+                                                         bindings: .init(composerText: "", composerFocused: false)))
         
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
@@ -75,7 +75,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             default:
                 state.isBackPaginating = false
             }
-            
         case .itemAppeared(let id):
             await timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):
@@ -83,15 +82,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
-            guard state.bindings.composerText.count > 0 else {
-                return
-            }
-            
-            await timelineController.sendMessage(state.bindings.composerText)
-            state.bindings.composerText = ""
+            await sendCurrentMessage()
         case .sendReaction(let key, _):
             #warning("Reaction implementation awaiting SDK support.")
             MXLog.warning("React with \(key) failed. Not implemented.")
+        case .cancelReply:
+            state.composerType = .default
         }
     }
     
@@ -103,6 +99,35 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         state.items = stateItems
+    }
+    
+    private func sendCurrentMessage() async {
+        guard state.bindings.composerText.count > 0 else {
+            fatalError("This message should never be empty")
+        }
+        
+        state.messageComposerDisabled = true
+        
+        switch state.composerType {
+        case .reply(let id, _):
+            await timelineController.sendReplyTo(id, state.bindings.composerText)
+        default:
+            await timelineController.sendMessage(state.bindings.composerText)
+        }
+        
+        state.bindings.composerText = ""
+        state.composerType = .default
+        
+        state.messageComposerDisabled = false
+    }
+    
+    private func displayError(_ type: RoomScreenErrorType) {
+        switch type {
+        case .alert(let message):
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: ElementL10n.dialogTitleError,
+                                                 message: message)
+        }
     }
     
     // MARK: ContextMenus
@@ -141,6 +166,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .copy:
             UIPasteboard.general.string = item.text
         case .quote:
+            state.bindings.composerFocused = true
             state.bindings.composerText = "> \(item.text)"
         case .copyPermalink:
             do {
@@ -152,16 +178,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .redact:
             redact(itemId)
         case .reply:
-            state.composerType = .reply(item)
+            state.bindings.composerFocused = true
         }
-    }
-    
-    private func displayError(_ type: RoomScreenErrorType) {
-        switch type {
-        case .alert(let message):
-            state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: ElementL10n.dialogTitleError,
-                                                 message: message)
+        
+        switch action {
+        case .reply:
+            state.composerType = .reply(id: item.id, displayName: item.senderDisplayName ?? item.senderId)
+        default:
+            state.composerType = .default
         }
     }
     

@@ -24,6 +24,10 @@ extension ElementL10n {
   public static let authenticationServerInfoTitle = ElementL10n.tr("Untranslated", "authentication_server_info_title")
   /// Failed creating the permalink
   public static let roomTimelinePermalinkCreationFailure = ElementL10n.tr("Untranslated", "room_timeline_permalink_creation_failure")
+  /// Replying to %@
+  public static func roomTimelineReplyingTo(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "room_timeline_replying_to", String(describing: p1))
+  }
   /// Bubbled Timeline
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
   /// Plain Timeline
