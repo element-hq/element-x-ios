@@ -24,6 +24,7 @@ enum RoomProxyError: Error {
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
     case failedSendingMessage
+    case failedRedactingEvent
 }
 
 enum RoomProxyCallback {
@@ -55,6 +56,8 @@ protocol RoomProxyProtocol {
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError>
     
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError>
+    
+    func redactItem(_ itemId: String) async -> Result<Void, RoomProxyError>
     
     var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
 }

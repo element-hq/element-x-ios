@@ -65,4 +65,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func processItemDisappearance(_ itemId: String) async { }
     
     func sendMessage(_ message: String) async { }
+    
+    func redactItem(_ itemId: String) async { }
 }
