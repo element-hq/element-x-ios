@@ -57,7 +57,7 @@ protocol RoomProxyProtocol {
     
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError>
     
-    func redactItem(_ itemId: String) async -> Result<Void, RoomProxyError>
+    func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
     
     var callbacks: PassthroughSubject<RoomProxyCallback, Never> { get }
 }

@@ -37,5 +37,5 @@ protocol RoomTimelineProviderProtocol {
     
     func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError>
     
-    func redactItem(_ itemID: String) async -> Result<Void, RoomTimelineProviderError>
+    func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError>
 }

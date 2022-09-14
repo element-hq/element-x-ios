@@ -104,8 +104,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func redactItem(_ itemId: String) async {
-        switch await timelineProvider.redactItem(itemId) {
+    func redact(_ eventID: String) async {
+        switch await timelineProvider.redact(eventID) {
         default:
             break
         }

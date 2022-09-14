@@ -41,5 +41,5 @@ protocol RoomTimelineControllerProtocol {
     
     func sendMessage(_ message: String) async
     
-    func redactItem(_ itemId: String) async
+    func redact(_ eventID: String) async
 }
