@@ -26,20 +26,30 @@ public extension Color {
 public struct ElementColors {
     // MARK: - Compound
     
-    public var accent: Color { .primary }
-    public var alert: Color { .global.vermillon }
-    public var links: Color { .global.links }
-    public var primaryContent: Color { .primary }
-    public var secondaryContent: Color { .secondary }
-    public var tertiaryContent: Color { Color(.tertiaryLabel) }
-    public var quaternaryContent: Color { Color(.quaternaryLabel) }
-    public var quinaryContent: Color { Color(.secondarySystemBackground) }
-    public var system: Color { Color(.separator) }
-    public var background: Color { Color(.systemBackground) }
+    private let compound = CompoundColors()
     
-    public let contentAndAvatars: [Color] = CompoundColors().contentAndAvatars
+    public var accent: Color { systemPrimaryLabel }
+    public var alert: Color { compound.alert }
+    public var links: Color { compound.links }
+    public var primaryContent: Color { compound.primaryContent }
+    public var secondaryContent: Color { compound.secondaryContent }
+    public var tertiaryContent: Color { compound.tertiaryContent }
+    public var quaternaryContent: Color { compound.quaternaryContent }
+    public var quinaryContent: Color { compound.quinaryContent }
+    public var system: Color { compound.system }
+    public var background: Color { compound.background }
+    
+    public var contentAndAvatars: [Color] { compound.contentAndAvatars }
     
     // MARK: - System
+    
+    public var systemPrimaryLabel: Color { .primary }
+    public var systemSecondaryLabel: Color { .secondary }
+    public var systemTertiaryLabel: Color { Color(.tertiaryLabel) }
+    public var systemQuaternaryLabel: Color { Color(.quaternaryLabel) }
+    
+    public var systemPrimaryBackground: Color { Color(.systemBackground) }
+    public var systemSecondaryBackground: Color { Color(.secondarySystemBackground) }
     
     public var systemGray: Color { Color(.systemGray) }
     public var systemGray2: Color { Color(.systemGray2) }
@@ -47,8 +57,6 @@ public struct ElementColors {
     public var systemGray4: Color { Color(.systemGray4) }
     public var systemGray5: Color { Color(.systemGray5) }
     public var systemGray6: Color { Color(.systemGray6) }
-    
-    public var secondaryBackground: Color { Color(.secondarySystemBackground) }
     
     // MARK: - Temp
     
@@ -80,20 +88,30 @@ public extension UIColor {
 @objcMembers public class ElementUIColors: NSObject {
     // MARK: - Compound
     
-    public var accent: UIColor { .label }
-    public var alert: UIColor { .global.vermillon }
-    public var links: UIColor { .global.links }
-    public var primaryContent: UIColor { .label }
-    public var secondaryContent: UIColor { .secondaryLabel }
-    public var tertiaryContent: UIColor { .tertiaryLabel }
-    public var quaternaryContent: UIColor { .quaternaryLabel }
-    public var quinaryContent: UIColor { .secondarySystemBackground }
-    public var system: UIColor { .separator }
-    public var background: UIColor { .systemBackground }
+    private let compound = CompoundUIColors()
     
-    public let contentAndAvatars: [UIColor] = CompoundUIColors().contentAndAvatars
+    public var accent: UIColor { systemPrimaryLabel }
+    public var alert: UIColor { compound.alert }
+    public var links: UIColor { compound.links }
+    public var primaryContent: UIColor { compound.primaryContent }
+    public var secondaryContent: UIColor { compound.secondaryContent }
+    public var tertiaryContent: UIColor { compound.tertiaryContent }
+    public var quaternaryContent: UIColor { compound.quaternaryContent }
+    public var quinaryContent: UIColor { compound.quinaryContent }
+    public var system: UIColor { compound.system }
+    public var background: UIColor { compound.background }
+    
+    public var contentAndAvatars: [UIColor] { compound.contentAndAvatars }
     
     // MARK: - System
+    
+    public var systemPrimaryLabel: UIColor { .label }
+    public var systemSecondaryLabel: UIColor { .secondaryLabel }
+    public var systemTertiaryLabel: UIColor { .tertiaryLabel }
+    public var systemQuaternaryLabel: UIColor { .quaternaryLabel }
+    
+    public var systemPrimaryBackground: UIColor { .systemBackground }
+    public var systemSecondaryBackground: UIColor { .secondarySystemBackground }
     
     public var systemGray: UIColor { .systemGray }
     public var systemGray2: UIColor { .systemGray2 }
@@ -101,8 +119,6 @@ public extension UIColor {
     public var systemGray4: UIColor { .systemGray4 }
     public var systemGray5: UIColor { .systemGray5 }
     public var systemGray6: UIColor { .systemGray6 }
-    
-    public var secondaryBackground: UIColor { .secondarySystemBackground }
     
     // MARK: - Temp
     
