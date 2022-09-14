@@ -39,11 +39,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
-    init(initialDisplayName: String, attributedStringBuilder: AttributedStringBuilderProtocol) {
+    init(attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.attributedStringBuilder = attributedStringBuilder
         
-        super.init(initialViewState: HomeScreenViewState(userDisplayName: initialDisplayName,
-                                                         isLoadingRooms: true))
+        super.init(initialViewState: HomeScreenViewState(isLoadingRooms: true))
     }
     
     // MARK: - Public
@@ -54,8 +53,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             loadRoomDataForIdentifier(roomIdentifier)
         case .selectRoom(let roomIdentifier):
             callback?(.selectRoom(roomIdentifier: roomIdentifier))
-        case .tapUserAvatar:
-            callback?(.tapUserAvatar)
+        case .userMenu(let action):
+            callback?(.userMenu(action: action))
         case .verifySession:
             callback?(.verifySession)
         }
@@ -113,11 +112,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     func updateWithUserAvatar(_ avatar: UIImage) {
         state.userAvatar = avatar
     }
-    
-    func updateWithUserDisplayName(_ displayName: String) {
-        state.userDisplayName = displayName
-    }
-    
+
     func showSessionVerificationBanner() {
         state.showSessionVerificationBanner = true
     }

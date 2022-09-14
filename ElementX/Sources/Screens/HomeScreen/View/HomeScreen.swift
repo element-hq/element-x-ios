@@ -69,39 +69,71 @@ struct HomeScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button { context.send(viewAction: .tapUserAvatar) } label: {
-                    HStack {
-                        userAvatarImage
-                            .animation(.elementDefault, value: context.viewState.userAvatar)
-                            .transition(.opacity)
-
-                        userDisplayNameView
-                            .animation(.elementDefault, value: context.viewState.userDisplayName)
-                            .transition(.opacity)
-                    }
-                }
+                userMenuButton
             }
         }
     }
-    
+
     @ViewBuilder
-    private var userAvatarImage: some View {
-        if let avatar = context.viewState.userAvatar {
-            Image(uiImage: avatar)
-                .resizable()
-                .scaledToFill()
-                .frame(width: 32, height: 32, alignment: .center)
-                .clipShape(Circle())
-                .accessibilityIdentifier("userAvatarImage")
+    private var userMenuButton: some View {
+        Menu {
+            Section {
+                Button(action: settings) {
+                    Label(ElementL10n.settingsUserSettings, systemImage: "gearshape")
+                }
+            }
+            Section {
+                Button(action: inviteFriends) {
+                    Label(ElementL10n.inviteFriends, systemImage: "square.and.arrow.up")
+                }
+                Button(action: feedback) {
+                    Label(ElementL10n.feedback, systemImage: "questionmark.circle")
+                }
+            }
+            Section {
+                Button(role: .destructive, action: signOut) {
+                    Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                }
+            }
+        } label: {
+            userAvatarImageView
+                .animation(.elementDefault, value: context.viewState.userAvatar)
+                .transition(.opacity)
         }
     }
-    
-    private var userDisplayNameView: some View {
-        Text(context.viewState.userDisplayName)
-            .font(.headline)
-            .fontWeight(.bold)
-            .foregroundColor(.primary)
-            .accessibilityIdentifier("userDisplayNameView")
+
+    @ViewBuilder
+    private var userAvatarImageView: some View {
+        userAvatarImage
+            .resizable()
+            .scaledToFill()
+            .frame(width: 32, height: 32, alignment: .center)
+            .clipShape(Circle())
+            .accessibilityIdentifier("userAvatarImage")
+    }
+
+    private var userAvatarImage: Image {
+        if let avatar = context.viewState.userAvatar {
+            return Image(uiImage: avatar)
+        } else {
+            return .empty
+        }
+    }
+
+    private func settings() {
+        context.send(viewAction: .userMenu(action: .settings))
+    }
+
+    private func inviteFriends() {
+        context.send(viewAction: .userMenu(action: .inviteFriends))
+    }
+
+    private func feedback() {
+        context.send(viewAction: .userMenu(action: .feedback))
+    }
+
+    private func signOut() {
+        context.send(viewAction: .userMenu(action: .signOut))
     }
 }
 
@@ -172,8 +204,7 @@ struct HomeScreen_Previews: PreviewProvider {
     }
 
     static var body: some View {
-        let viewModel = HomeScreenViewModel(initialDisplayName: "@username:server.com",
-                                            attributedStringBuilder: AttributedStringBuilder())
+        let viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
         
         let eventBrief = EventBrief(eventId: "id",
                                     senderId: "senderId",
@@ -187,7 +218,6 @@ struct HomeScreen_Previews: PreviewProvider {
                              MockRoomSummary(displayName: "Omega", lastMessage: eventBrief)]
         
         viewModel.updateWithRoomSummaries(roomSummaries)
-        viewModel.updateWithUserDisplayName("username")
         
         if let avatarImage = UIImage(systemName: "person.fill") {
             viewModel.updateWithUserAvatar(avatarImage)
