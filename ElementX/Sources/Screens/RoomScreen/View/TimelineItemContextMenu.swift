@@ -25,20 +25,16 @@ public struct TimelineItemContextMenu: View {
         ForEach(contextMenuActions, id: \.self) { item in
             switch item {
             case .copy:
-                Button { callback(item) } label: {
-                    Label(ElementL10n.actionCopy, systemImage: "doc.on.doc")
+                Button(ElementL10n.actionCopy) {
+                    callback(item)
                 }
             case .quote:
-                Button { callback(item) } label: {
-                    Label(ElementL10n.actionQuote, systemImage: "quote.bubble")
+                Button(ElementL10n.actionQuote) {
+                    callback(item)
                 }
             case .copyPermalink:
-                Button { callback(item) } label: {
-                    Label(ElementL10n.permalink, systemImage: "link")
-                }
-            case .redact:
-                Button(role: .destructive) { callback(item) } label: {
-                    Label(ElementL10n.messageActionItemRedact, systemImage: "trash")
+                Button(ElementL10n.permalink) {
+                    callback(item)
                 }
             }
         }

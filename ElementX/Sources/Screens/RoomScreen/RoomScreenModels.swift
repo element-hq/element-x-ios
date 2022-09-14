@@ -23,7 +23,6 @@ enum TimelineItemContextMenuAction: Hashable {
     case copy
     case quote
     case copyPermalink
-    case redact
 }
 
 enum RoomScreenViewAction {
