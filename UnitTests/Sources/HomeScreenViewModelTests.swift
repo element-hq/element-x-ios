@@ -52,14 +52,14 @@ class HomeScreenViewModelTests: XCTestCase {
         var correctResult = false
         viewModel.callback = { result in
             switch result {
-            case .tapUserAvatar:
-                correctResult = true
+            case .userMenu(let action):
+                correctResult = action == .settings
             default:
                 break
             }
         }
 
-        context.send(viewAction: .tapUserAvatar)
+        context.send(viewAction: .userMenu(action: .settings))
         await Task.yield()
         XCTAssert(correctResult)
     }
