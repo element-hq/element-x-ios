@@ -110,7 +110,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         let loginTask: Task<Client, Error> = Task.detached {
             #warning("Use new api on next SDK release.")
             return try self.authenticationService.login(username: username,
-                                                 password: password)
+                                                        password: password)
 //            try self.authenticationService.login(username: username,
 //                                                 password: password,
 //                                                 initialDeviceName: initialDeviceName,

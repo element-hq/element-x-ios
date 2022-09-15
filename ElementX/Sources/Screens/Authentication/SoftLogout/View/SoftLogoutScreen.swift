@@ -61,7 +61,7 @@ struct SoftLogoutScreen: View {
     var header: some View {
         VStack(alignment: .leading, spacing: 16) {
             Text(ElementL10n.softLogoutSigninTitle)
-                .font(.element.title2B)
+                .font(.element.title2Bold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("titleLabel")
@@ -133,7 +133,7 @@ struct SoftLogoutScreen: View {
     var clearDataForm: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text(ElementL10n.softLogoutClearDataTitle)
-                .font(.element.title2B)
+                .font(.element.title2Bold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("clearDataTitleLabel")
