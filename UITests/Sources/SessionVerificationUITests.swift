@@ -22,10 +22,8 @@ class SessionVerificationUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.navigationBars[ElementL10n.verificationVerifyDevice].exists)
-        
         XCTAssert(app.buttons["startButton"].exists)
-        XCTAssert(app.buttons["dismissButton"].exists)
+        XCTAssert(app.buttons["closeButton"].exists)
         XCTAssert(app.staticTexts["titleLabel"].exists)
 
         app.assertScreenshot(.sessionVerification)
@@ -33,72 +31,63 @@ class SessionVerificationUITests: XCTestCase {
         app.buttons["startButton"].tap()
         
         XCTAssert(app.activityIndicators["requestingVerificationProgressView"].exists)
-        XCTAssert(app.buttons["cancelButton"].exists)
         
         XCTAssert(app.buttons["challengeAcceptButton"].waitForExistence(timeout: 5.0))
         XCTAssert(app.buttons["challengeDeclineButton"].waitForExistence(timeout: 5.0))
-        XCTAssert(app.buttons["cancelButton"].waitForExistence(timeout: 5.0))
         
         app.buttons["challengeAcceptButton"].tap()
                   
         XCTAssert(app.activityIndicators["acceptingChallengeProgressView"].exists)
-        XCTAssert(app.buttons["cancelButton"].exists)
         
         XCTAssert(app.images["sessionVerificationSucceededIcon"].waitForExistence(timeout: 5.0))
         
-        XCTAssert(app.buttons["dismissButton"].exists)
-        app.buttons["dismissButton"].tap()
+        XCTAssert(app.buttons["finishButton"].exists)
+        XCTAssert(app.buttons["closeButton"].exists)
+        app.buttons["closeButton"].tap()
     }
     
     func testChallengeDoesNotMatch() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.navigationBars[ElementL10n.verificationVerifyDevice].exists)
-        
         XCTAssert(app.buttons["startButton"].exists)
-        XCTAssert(app.buttons["dismissButton"].exists)
+        XCTAssert(app.buttons["closeButton"].exists)
         XCTAssert(app.staticTexts["titleLabel"].exists)
         
         app.buttons["startButton"].tap()
         
         XCTAssert(app.activityIndicators["requestingVerificationProgressView"].exists)
-        XCTAssert(app.buttons["cancelButton"].exists)
         
         XCTAssert(app.buttons["challengeAcceptButton"].waitForExistence(timeout: 5.0))
         XCTAssert(app.buttons["challengeDeclineButton"].waitForExistence(timeout: 5.0))
-        XCTAssert(app.buttons["cancelButton"].waitForExistence(timeout: 5.0))
         
         app.buttons["challengeDeclineButton"].tap()
                           
         XCTAssert(app.images["sessionVerificationFailedIcon"].exists)
         XCTAssert(app.buttons["restartButton"].exists)
         
-        XCTAssert(app.buttons["dismissButton"].exists)
-        app.buttons["dismissButton"].tap()
+        XCTAssert(app.buttons["closeButton"].exists)
+        app.buttons["closeButton"].tap()
     }
     
     func testSessionVerificationCancelation() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.navigationBars[ElementL10n.verificationVerifyDevice].exists)
-        
         XCTAssert(app.buttons["startButton"].exists)
-        XCTAssert(app.buttons["dismissButton"].exists)
+        XCTAssert(app.buttons["closeButton"].exists)
         XCTAssert(app.staticTexts["titleLabel"].exists)
         
         app.buttons["startButton"].tap()
         
         XCTAssert(app.activityIndicators["requestingVerificationProgressView"].waitForExistence(timeout: 1))
-        XCTAssert(app.buttons["cancelButton"].exists)
         
-        app.buttons["cancelButton"].tap()
+        app.buttons["closeButton"].tap()
         
         XCTAssert(app.images["sessionVerificationFailedIcon"].waitForExistence(timeout: 1))
         XCTAssert(app.buttons["restartButton"].exists)
         
-        XCTAssert(app.buttons["dismissButton"].exists)
-        app.buttons["dismissButton"].tap()
+        XCTAssert(app.buttons["closeButton"].exists)
+        app.buttons["closeButton"].tap()
     }
 }

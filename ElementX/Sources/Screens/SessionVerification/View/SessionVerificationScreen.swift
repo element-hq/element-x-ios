@@ -132,7 +132,7 @@ struct SessionVerificationScreen: View {
                 context.send(viewAction: .close)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("restartButton")
+            .accessibilityIdentifier("finishButton")
         
         default:
             EmptyView()
@@ -147,7 +147,7 @@ struct SessionVerificationScreen: View {
             }
             .font(.element.bodyBold)
             .foregroundColor(.element.systemSecondaryLabel)
-            .accessibilityIdentifier("cancelButton")
+            .accessibilityIdentifier("closeButton")
         }
     }
     

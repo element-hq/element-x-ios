@@ -81,7 +81,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         case .verifySession:
             callback?(.verifySession)
         case .skipSessionVerification:
-            hideSessionVerificationBanner()
+            state.showSessionVerificationBanner = false
         }
     }
     
