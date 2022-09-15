@@ -60,20 +60,20 @@ struct SoftLogoutScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(ElementL10n.authSoftlogoutSignIn)
+            Text(ElementL10n.softLogoutSigninTitle)
                 .font(.element.title2B)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("titleLabel")
 
-            Text(ElementL10n.authSoftlogoutReason(context.viewState.credentials.homeserverName, context.viewState.credentials.userDisplayName, context.viewState.credentials.userId))
+            Text(ElementL10n.softLogoutSigninNotice(context.viewState.credentials.homeserverName, context.viewState.credentials.userDisplayName, context.viewState.credentials.userId))
                 .font(.element.body)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("messageLabel1")
 
             if context.viewState.showRecoverEncryptionKeysMessage {
-                Text(ElementL10n.authSoftlogoutRecoverEncryptionKeys)
+                Text(ElementL10n.softLogoutSigninE2eWarningNotice)
                     .font(.element.body)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.element.primaryContent)
@@ -132,27 +132,21 @@ struct SoftLogoutScreen: View {
     /// The text field and submit button where the user enters an email address.
     var clearDataForm: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(ElementL10n.authSoftlogoutClearData)
+            Text(ElementL10n.softLogoutClearDataTitle)
                 .font(.element.title2B)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("clearDataTitleLabel")
 
-            Text(ElementL10n.authSoftlogoutClearDataMessage1)
+            Text(ElementL10n.softLogoutClearDataNotice)
                 .font(.element.body)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("clearDataMessage1Label")
-
-            Text(ElementL10n.authSoftlogoutClearDataMessage2)
-                .font(.element.body)
-                .multilineTextAlignment(.leading)
-                .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("clearDataMessage2Label")
+                .accessibilityIdentifier("clearDataMessageLabel")
                 .padding(.bottom, 12)
 
             Button(action: clearData) {
-                Text(ElementL10n.authSoftlogoutClearDataButton)
+                Text(ElementL10n.softLogoutClearDataSubmit)
             }
             .buttonStyle(.elementAction(.xLarge, color: .element.alert))
             .accessibilityIdentifier("clearDataButton")
