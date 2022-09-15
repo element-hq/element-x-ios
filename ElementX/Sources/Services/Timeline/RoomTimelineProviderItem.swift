@@ -51,6 +51,10 @@ struct EventTimelineItem {
         }
     }
     
+    var body: String? {
+        item.content().asMessage()?.msgtype().body()
+    }
+    
     var isMessage: Bool {
         item.content().asMessage() != nil
     }

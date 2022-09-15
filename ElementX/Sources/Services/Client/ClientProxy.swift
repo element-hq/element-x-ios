@@ -105,13 +105,11 @@ class ClientProxy: ClientProxyProtocol {
             fatalError("Failed configuring sliding sync")
         }
         
-        #warning("Use isSoftLogout() api on next SDK release.")
-        // if !client.isSoftLogout()
-        // {
-//        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-//        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-//        client.startSync(timelineLimit: ClientProxy.syncLimit)
-        // }
+        if !client.isSoftLogout() {
+            client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+            client.startSync(timelineLimit: ClientProxy.syncLimit)
+        }
     }
     
     var userIdentifier: String {
@@ -124,9 +122,7 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSoftLogout: Bool {
-        #warning("Use isSoftLogout() api on next SDK release.")
-        return false
-//        client.isSoftLogout()
+        client.isSoftLogout()
     }
 
     var deviceId: String? {
@@ -229,12 +225,11 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func logout() async {
-//        do {
-        #warning("Use logout() api on next SDK release.")
-//            try client.logout()
-//        } catch {
-//            MXLog.error("Failed logging out with error: \(error)")
-//        }
+        do {
+            try client.logout()
+        } catch {
+            MXLog.error("Failed logging out with error: \(error)")
+        }
     }
     
     // MARK: Private

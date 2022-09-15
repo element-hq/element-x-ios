@@ -17,16 +17,15 @@
 import Foundation
 import MatrixRustSDK
 
-#warning("Remove this type")
 struct SomeRoomMessage: RoomMessageProtocol {
-    let id = UUID().uuidString
-    let body = ""
-    let sender = ""
-    let originServerTs: Date = .now
+    let id: String
+    let body: String
+    let sender: String
+    let originServerTs: Date
 }
 
 struct RoomMessageFactory: RoomMessageFactoryProtocol {
-    func buildRoomMessageFrom(_ message: AnyMessage) -> RoomMessageProtocol {
-        SomeRoomMessage()
+    func buildRoomMessageFrom(_ eventItem: EventTimelineItem) -> RoomMessageProtocol {
+        SomeRoomMessage(id: eventItem.id, body: eventItem.body ?? "", sender: eventItem.sender, originServerTs: eventItem.originServerTs)
     }
 }

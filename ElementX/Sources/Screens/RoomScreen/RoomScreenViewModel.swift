@@ -144,14 +144,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return []
         }
         
-        let actions: [TimelineItemContextMenuAction] = [
+        var actions: [TimelineItemContextMenuAction] = [
             .copy, .quote, .copyPermalink, .reply
         ]
         
-        #warning("Outgoing actions to be handled with the new Timeline API.")
-//        if timelineItem.isOutgoing {
-//            actions.append(.redact)
-//        }
+        if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isOutgoing {
+            actions.append(.redact)
+        }
         
         return actions
     }

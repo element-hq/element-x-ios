@@ -32,9 +32,9 @@ include:
 
 packages:
   MatrixRustSDK:
-    # url: https://github.com/matrix-org/matrix-rust-components-swift
-    # exactVersion: 1.0.13-sliding-sync
-    path: ../matrix-rust-components-swift
+    url: https://github.com/matrix-org/matrix-rust-components-swift
+    exactVersion: 0.0.1-demo
+    # path: ../matrix-rust-components-swift
   DesignKit:
     path: ./
   AnalyticsEvents:

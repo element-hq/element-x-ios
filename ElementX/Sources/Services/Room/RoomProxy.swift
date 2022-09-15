@@ -178,19 +178,17 @@ class RoomProxy: RoomProxyProtocol {
         defer {
             sendMessageBgTask?.stop()
         }
-
+        
         let transactionId = genTransactionId()
         
         return await Task(priority: .high) { () -> Result<Void, RoomProxyError> in
             do {
-                // Disabled until available in Rust
-                //                if let inReplyToEventId = inReplyToEventId {
-                //                    #warning("Markdown support when available in Ruma")
-                //                    try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
-                //                } else {
-                let messageContent = messageEventContentFromMarkdown(md: message)
-                try self.room.send(msg: messageContent, txnId: transactionId)
-                //                }
+                if let inReplyToEventId = inReplyToEventId {
+                    try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
+                } else {
+                    let messageContent = messageEventContentFromMarkdown(md: message)
+                    try self.room.send(msg: messageContent, txnId: transactionId)
+                }
                 return .success(())
             } catch {
                 return .failure(.failedSendingMessage)
@@ -200,18 +198,16 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        #warning("Redactions to be enabled on next SDK release.")
-        return .failure(.failedRedactingEvent)
-//        let transactionID = genTransactionId()
-//
-//        return await Task {
-//            do {
-//                try room.redact(eventId: eventID, reason: nil, txnId: transactionID)
-//                return .success(())
-//            } catch {
-//                return .failure(.failedRedactingEvent)
-//            }
-//        }
-//        .value
+        let transactionID = genTransactionId()
+        
+        return await Task {
+            do {
+                try room.redact(eventId: eventID, reason: nil, txnId: transactionID)
+                return .success(())
+            } catch {
+                return .failure(.failedRedactingEvent)
+            }
+        }
+        .value
     }
 }

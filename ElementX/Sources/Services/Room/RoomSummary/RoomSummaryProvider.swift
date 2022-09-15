@@ -136,9 +136,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         var lastMessage: RoomMessageProtocol?
-//        if let message = room.latestRoomMessage() {
-//            lastMessage = roomMessageFactory.buildRoomMessageFrom(message)
-//        }
+        if let message = room.latestRoomMessage() {
+            lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItem(item: message))
+        }
                
         return RoomSummary(id: room.roomId(),
                            name: room.name() ?? room.roomId(),

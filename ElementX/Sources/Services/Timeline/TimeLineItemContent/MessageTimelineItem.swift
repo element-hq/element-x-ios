@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 
 /// A protocol that contains the base `m.room.message` event content properties.
-protocol MessageContentProtocol: MessageEventContentProtocol {
+protocol MessageContentProtocol: RoomMessageEventContentProtocol {
     var body: String { get }
 }
 
