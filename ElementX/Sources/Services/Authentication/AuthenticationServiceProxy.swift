@@ -108,10 +108,13 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
         let loginTask: Task<Client, Error> = Task.detached {
-            try self.authenticationService.login(username: username,
-                                                 password: password,
-                                                 initialDeviceName: initialDeviceName,
-                                                 deviceId: deviceId)
+            #warning("Use new api on next SDK release.")
+            return try self.authenticationService.login(username: username,
+                                                 password: password)
+//            try self.authenticationService.login(username: username,
+//                                                 password: password,
+//                                                 initialDeviceName: initialDeviceName,
+//                                                 deviceId: deviceId)
         }
         
         switch await loginTask.result {

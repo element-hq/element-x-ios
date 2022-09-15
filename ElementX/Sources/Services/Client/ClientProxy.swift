@@ -66,12 +66,17 @@ class ClientProxy: ClientProxyProtocol {
         
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
 
-        if !client.isSoftLogout() {
-            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-            client.startSync(timelineLimit: ClientProxy.syncLimit)
+        #warning("Use isSoftLogout() api on next SDK release.")
+        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+        client.startSync(timelineLimit: ClientProxy.syncLimit)
 
-            Task { await updateRooms() }
-        }
+        Task { await updateRooms() }
+//        if !client.isSoftLogout() {
+//            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+//            client.startSync(timelineLimit: ClientProxy.syncLimit)
+//
+//            Task { await updateRooms() }
+//        }
     }
     
     var userIdentifier: String {
@@ -84,7 +89,9 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     var isSoftLogout: Bool {
-        client.isSoftLogout()
+        #warning("Use isSoftLogout() api on next SDK release.")
+        return false
+//        client.isSoftLogout()
     }
 
     var deviceId: String? {
@@ -164,7 +171,8 @@ class ClientProxy: ClientProxyProtocol {
 
     func logout() async {
         do {
-            try client.logout()
+            #warning("Use logout() api on next SDK release.")
+//            try client.logout()
         } catch {
             MXLog.error("Failed logging out with error: \(error)")
         }
