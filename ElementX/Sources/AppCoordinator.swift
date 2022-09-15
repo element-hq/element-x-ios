@@ -247,11 +247,13 @@ class AppCoordinator: Coordinator {
                     self.remove(childCoordinator: coordinator)
                     self.stateMachine.processEvent(.succeededSigningIn)
                 case .clearAllData:
-                    //  clear user data
-                    self.userSessionStore.logout(userSession: self.userSession)
-                    self.userSession = nil
-                    self.remove(childCoordinator: coordinator)
-                    self.startAuthentication()
+                    self.confirmClearAllData {
+                        //  clear user data
+                        self.userSessionStore.logout(userSession: self.userSession)
+                        self.userSession = nil
+                        self.remove(childCoordinator: coordinator)
+                        self.startAuthentication()
+                    }
                 }
             }
 
@@ -269,7 +271,7 @@ class AppCoordinator: Coordinator {
             if !isSoftLogout {
                 //  first log out from the server
                 _ = await userSession.clientProxy.logout()
-                
+
                 //  regardless of the result, clear user data
                 userSessionStore.logout(userSession: userSession)
                 userSession = nil
@@ -444,6 +446,19 @@ class AppCoordinator: Coordinator {
         alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { [weak self] _ in
             self?.stateMachine.processEvent(.signOut)
+        })
+
+        navigationRouter.present(alert, animated: true)
+    }
+
+    /// Shows a confirmation to clear all data, and proceeds to do so if the user confirms.
+    private func confirmClearAllData(_ confirmed: @escaping () -> Void) {
+        let alert = UIAlertController(title: ElementL10n.softLogoutClearDataDialogTitle,
+                                      message: ElementL10n.softLogoutClearDataDialogContent,
+                                      preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { _ in
+            confirmed()
         })
 
         navigationRouter.present(alert, animated: true)
