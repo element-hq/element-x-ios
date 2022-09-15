@@ -14,16 +14,12 @@
 // limitations under the License.
 //
 
-import Combine
+import Foundation
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
+protocol SoftLogoutViewModelProtocol {
+    var callback: (@MainActor (SoftLogoutViewModelAction) -> Void)? { get set }
+    var context: SoftLogoutViewModelType.Context { get }
     
-    var userID: String { clientProxy.userIdentifier }
-    var isSoftLogout: Bool { clientProxy.isSoftLogout }
-    var deviceId: String? { clientProxy.deviceId }
-    var homeserver: String { clientProxy.homeserver }
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+    /// Display an error to the user.
+    @MainActor func displayError(_ type: SoftLogoutErrorType)
 }

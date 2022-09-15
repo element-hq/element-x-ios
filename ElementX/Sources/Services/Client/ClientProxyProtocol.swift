@@ -21,6 +21,8 @@ import MatrixRustSDK
 enum ClientProxyCallback {
     case updatedRoomsList
     case receivedSyncUpdate
+    case receivedAuthError(isSoftLogout: Bool)
+    case updatedRestoreToken
 }
 
 enum ClientProxyError: Error {
@@ -36,6 +38,14 @@ protocol ClientProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
     var userIdentifier: String { get }
+
+    var isSoftLogout: Bool { get }
+
+    var deviceId: String? { get }
+
+    var homeserver: String { get }
+
+    var restoreToken: String? { get }
     
     var rooms: [RoomProxy] { get }
     
@@ -52,4 +62,6 @@ protocol ClientProxyProtocol {
     func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
+
+    func logout() async
 }

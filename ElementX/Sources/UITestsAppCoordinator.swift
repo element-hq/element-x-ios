@@ -82,6 +82,14 @@ class MockScreen: Identifiable {
         case .authenticationFlow:
             return AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
                                              navigationRouter: navigationRouter)
+        case .softLogout:
+            let credentials = SoftLogoutCredentials(userId: "@mock:matrix.org",
+                                                    homeserverName: "matrix.org",
+                                                    userDisplayName: "mock",
+                                                    deviceId: "ABCDEFGH")
+            return SoftLogoutCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                           credentials: credentials,
+                                                           keyBackupNeeded: false))
         case .simpleRegular:
             return TemplateCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:

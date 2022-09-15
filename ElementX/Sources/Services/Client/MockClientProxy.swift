@@ -21,6 +21,10 @@ struct MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userIdentifier: String
+    let isSoftLogout = false
+    let deviceId: String? = nil
+    let homeserver = ""
+    let restoreToken: String? = nil
     
     let rooms = [RoomProxy]()
     
@@ -50,5 +54,9 @@ struct MockClientProxy: ClientProxyProtocol {
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         .failure(.failedRetrievingSessionVerificationController)
+    }
+
+    func logout() async {
+        // no-op
     }
 }

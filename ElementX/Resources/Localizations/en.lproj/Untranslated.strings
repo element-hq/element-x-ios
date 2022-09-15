@@ -28,3 +28,6 @@
 "server_selection_server_url" = "Server URL";
 "server_selection_server_footer" = "You can only connect to a server that has already been set up";
 "server_selection_generic_error" = "Cannot find a server at this URL, please check it is correct.";
+
+"login_mobile_device" = "Mobile";
+"login_tablet_device" = "Tablet";

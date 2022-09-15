@@ -29,6 +29,14 @@ private class WeakClientProxyWrapper: ClientDelegate {
     func didReceiveSyncUpdate() {
         clientProxy?.didReceiveSyncUpdate()
     }
+
+    func didReceiveAuthError(isSoftLogout: Bool) {
+        clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
+    }
+
+    func didUpdateRestoreToken() {
+        clientProxy?.didUpdateRestoreToken()
+    }
 }
 
 class ClientProxy: ClientProxyProtocol {
@@ -57,11 +65,18 @@ class ClientProxy: ClientProxyProtocol {
         self.backgroundTaskService = backgroundTaskService
         
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-        
+
+        #warning("Use isSoftLogout() api on next SDK release.")
         Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
         client.startSync(timelineLimit: ClientProxy.syncLimit)
-        
+
         Task { await updateRooms() }
+//        if !client.isSoftLogout() {
+//            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+//            client.startSync(timelineLimit: ClientProxy.syncLimit)
+//
+//            Task { await updateRooms() }
+//        }
     }
     
     var userIdentifier: String {
@@ -70,6 +85,34 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             MXLog.error("Failed retrieving room info with error: \(error)")
             return "Unknown user identifier"
+        }
+    }
+
+    var isSoftLogout: Bool {
+        #warning("Use isSoftLogout() api on next SDK release.")
+        return false
+//        client.isSoftLogout()
+    }
+
+    var deviceId: String? {
+        do {
+            return try client.deviceId()
+        } catch {
+            MXLog.error("Failed retrieving device id with error: \(error)")
+            return nil
+        }
+    }
+
+    var homeserver: String {
+        client.homeserver()
+    }
+
+    var restoreToken: String? {
+        do {
+            return try client.restoreToken()
+        } catch {
+            MXLog.error("Failed retrieving restore token with error: \(error)")
+            return nil
         }
     }
     
@@ -91,7 +134,7 @@ class ClientProxy: ClientProxyProtocol {
                 let avatarURL = try self.client.avatarUrl()
                 return .success(avatarURL)
             } catch {
-                return .failure(.failedRetrievingDisplayName)
+                return .failure(.failedRetrievingAvatarURL)
             }
         }
         .value
@@ -125,6 +168,15 @@ class ClientProxy: ClientProxyProtocol {
         }
         .value
     }
+
+    func logout() async {
+        do {
+            #warning("Use logout() api on next SDK release.")
+//            try client.logout()
+        } catch {
+            MXLog.error("Failed logging out with error: \(error)")
+        }
+    }
     
     // MARK: Private
     
@@ -136,6 +188,14 @@ class ClientProxy: ClientProxyProtocol {
         Task.detached {
             await self.updateRooms()
         }
+    }
+
+    fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
+        callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
+    }
+
+    fileprivate func didUpdateRestoreToken() {
+        callbacks.send(.updatedRestoreToken)
     }
     
     private func updateRooms() async {

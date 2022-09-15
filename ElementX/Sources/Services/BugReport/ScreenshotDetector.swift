@@ -28,7 +28,7 @@ class ScreenshotDetector {
     var callback: (@MainActor (UIImage?, Error?) -> Void)?
 
     /// Flag to whether ask for photos authorization by default if needed.
-    var autoRequestPHAuthorization = true
+    var autoRequestPHAuthorization = false
 
     init() {
         startObservingScreenshots()

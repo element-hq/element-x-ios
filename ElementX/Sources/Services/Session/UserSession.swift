@@ -20,9 +20,14 @@ import Foundation
 class UserSession: UserSessionProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var checkForSessionVerificationControllerCancellable: AnyCancellable?
+    private var authErrorCancellable: AnyCancellable?
+    private var restoreTokenUpdateCancellable: AnyCancellable?
     
     var userID: String { clientProxy.userIdentifier }
-    
+    var isSoftLogout: Bool { clientProxy.isSoftLogout }
+    var deviceId: String? { clientProxy.deviceId }
+    var homeserver: String { clientProxy.homeserver }
+
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
@@ -33,6 +38,8 @@ class UserSession: UserSessionProtocol {
         self.mediaProvider = mediaProvider
         
         setupSessionVerificationWatchdog()
+        setupAuthErrorWatchdog()
+        setupRestoreTokenUpdateWatchdog()
     }
     
     // MARK: - Private
@@ -76,5 +83,39 @@ class UserSession: UserSessionProtocol {
     
     private func tearDownSessionVerificationControllerWatchdog() {
         checkForSessionVerificationControllerCancellable = nil
+    }
+
+    // MARK: Auth Error Watchdog
+
+    private func setupAuthErrorWatchdog() {
+        authErrorCancellable = clientProxy.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                if case .receivedAuthError(let isSoftLogout) = callback {
+                    self?.callbacks.send(.didReceiveAuthError(isSoftLogout: isSoftLogout))
+                    self?.tearDownAuthErrorWatchdog()
+                }
+            }
+    }
+
+    private func tearDownAuthErrorWatchdog() {
+        authErrorCancellable = nil
+    }
+
+    // MARK: Restore Token Update Watchdog
+
+    private func setupRestoreTokenUpdateWatchdog() {
+        restoreTokenUpdateCancellable = clientProxy.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                if case .updatedRestoreToken = callback {
+                    self?.callbacks.send(.updateRestoreTokenNeeded)
+                    self?.tearDownRestoreTokenUpdateWatchdog()
+                }
+            }
+    }
+
+    private func tearDownRestoreTokenUpdateWatchdog() {
+        restoreTokenUpdateCancellable = nil
     }
 }

@@ -14,16 +14,16 @@
 // limitations under the License.
 //
 
-import Combine
+import UIKit
 
-struct MockUserSession: UserSessionProtocol {
-    let callbacks = PassthroughSubject<UserSessionCallback, Never>()
-    let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
-    
-    var userID: String { clientProxy.userIdentifier }
-    var isSoftLogout: Bool { clientProxy.isSoftLogout }
-    var deviceId: String? { clientProxy.deviceId }
-    var homeserver: String { clientProxy.homeserver }
-    let clientProxy: ClientProxyProtocol
-    let mediaProvider: MediaProviderProtocol
+extension UIDevice {
+    /// Returns if the device is a Phone
+    var isPhone: Bool {
+        userInterfaceIdiom == .phone
+    }
+
+    var initialDisplayName: String {
+        let string = isPhone ? ElementL10n.loginMobileDevice : ElementL10n.loginTabletDevice
+        return "X \(string)"
+    }
 }
