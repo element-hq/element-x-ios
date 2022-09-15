@@ -45,7 +45,8 @@ class AppCoordinator: Coordinator {
     
     private var userSession: UserSessionProtocol! {
         didSet {
-            if userSession != nil {
+            deobserveUserSessionChanges()
+            if let userSession = userSession, !userSession.isSoftLogout {
                 observeUserSessionChanges()
             }
         }
@@ -263,10 +264,12 @@ class AppCoordinator: Coordinator {
     
     private func tearDownUserSession(isSoftLogout: Bool = false) {
         Task {
-            //  first log out from the server
-            _ = await userSession.clientProxy.logout()
+            deobserveUserSessionChanges()
 
             if !isSoftLogout {
+                //  first log out from the server
+                _ = await userSession.clientProxy.logout()
+                
                 //  regardless of the result, clear user data
                 userSessionStore.logout(userSession: userSession)
                 userSession = nil
@@ -338,6 +341,11 @@ class AppCoordinator: Coordinator {
                     break
                 }
             }.store(in: &cancellables)
+    }
+
+    private func deobserveUserSessionChanges() {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
     }
     
     // MARK: Rooms
