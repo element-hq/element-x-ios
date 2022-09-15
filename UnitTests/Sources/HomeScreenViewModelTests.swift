@@ -21,12 +21,14 @@ import XCTest
 class HomeScreenViewModelTests: XCTestCase {
     var viewModel: HomeScreenViewModelProtocol!
     var context: HomeScreenViewModelType.Context!
-
+    
     @MainActor override func setUpWithError() throws {
-        viewModel = HomeScreenViewModel(attributedStringBuilder: AttributedStringBuilder())
+        viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
+                                                                     mediaProvider: MockMediaProvider()),
+                                        attributedStringBuilder: AttributedStringBuilder())
         context = viewModel.context
     }
-
+    
     @MainActor func testSelectRoom() async throws {
         let mockRoomId = "mock_room_id"
         var correctResult = false

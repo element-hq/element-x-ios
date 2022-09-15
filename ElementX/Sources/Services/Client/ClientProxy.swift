@@ -147,7 +147,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
+    @MainActor func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
         if let roomProxy = roomProxies[identifier] {
             return roomProxy
         }

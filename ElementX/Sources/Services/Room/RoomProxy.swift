@@ -104,9 +104,13 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         await Task.detached { [weak self] () -> Result<String?, RoomProxyError> in
+            guard let self = self else {
+                return .failure(.failedRetrievingMemberAvatarURL)
+            }
+            
             do {
-                let avatarURL = try self?.room.memberAvatarUrl(userId: userId)
-                self?.memberAvatars[userId] = avatarURL
+                let avatarURL = try self.room.memberAvatarUrl(userId: userId)
+                await self.update(avatarURL: avatarURL, forUserId: userId)
                 return .success(avatarURL)
             } catch {
                 return .failure(.failedRetrievingMemberAvatarURL)
@@ -121,9 +125,13 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         await Task.detached { [weak self] () -> Result<String?, RoomProxyError> in
+            guard let self = self else {
+                return .failure(.failedRetrievingMemberDisplayName)
+            }
+            
             do {
-                let displayName = try self?.room.memberDisplayName(userId: userId)
-                self?.memberDisplayNames[userId] = displayName
+                let displayName = try self.room.memberDisplayName(userId: userId)
+                await self.update(displayName: displayName, forUserId: userId)
                 return .success(displayName)
             } catch {
                 return .failure(.failedRetrievingMemberDisplayName)
@@ -133,15 +141,18 @@ class RoomProxy: RoomProxyProtocol {
     }
         
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        await Task.detached { () -> Result<String, RoomProxyError> in
-            if let displayName = self.displayName {
+        await Task.detached { [weak self] () -> Result<String, RoomProxyError> in
+            guard let self = self else {
+                return .failure(.failedRetrievingDisplayName)
+            }
+            
+            if let displayName = await self.displayName {
                 return .success(displayName)
             }
             
             do {
                 let displayName = try self.room.displayName()
-                self.displayName = displayName
-                
+                await self.update(displayName: displayName)
                 return .success(displayName)
             } catch {
                 return .failure(.failedRetrievingDisplayName)
@@ -160,11 +171,17 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.noMoreMessagesToBackPaginate)
         }
 
-        return await Task.detached {
+        return await Task.detached { [weak self] in
+            guard let self = self else {
+                return .failure(.failedPaginatingBackwards)
+            }
+            
             do {
-                Benchmark.startTrackingForIdentifier("BackPagination \(self.id)", message: "Backpaginating \(count) message(s) in room \(self.id)")
-                self.backPaginationOutcome = try self.room.paginateBackwards()
-                Benchmark.endTrackingForIdentifier("BackPagination \(self.id)", message: "Finished backpaginating \(count) message(s) in room \(self.id)")
+                let id = await self.id
+                
+                Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
+                await self.update(backPaginationOutcome: try self.room.paginateBackwards())
+                Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
                 return .success(())
             } catch {
                 return .failure(.failedPaginatingBackwards)
@@ -209,5 +226,21 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
         .value
+    }
+    
+    func update(avatarURL: String?, forUserId userId: String) async {
+        memberAvatars[userId] = avatarURL
+    }
+    
+    func update(displayName: String?, forUserId userId: String) async {
+        memberDisplayNames[userId] = displayName
+    }
+    
+    func update(displayName: String) {
+        self.displayName = displayName
+    }
+    
+    func update(backPaginationOutcome: PaginationOutcome) {
+        self.backPaginationOutcome = backPaginationOutcome
     }
 }
