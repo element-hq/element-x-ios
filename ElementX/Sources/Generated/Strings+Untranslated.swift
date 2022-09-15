@@ -12,6 +12,8 @@ import Foundation
 extension ElementL10n {
   /// Confirm
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
+  /// Match
+  public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
   /// Next
   public static let actionNext = ElementL10n.tr("Untranslated", "action_next")
   /// Forgot password
@@ -54,6 +56,10 @@ extension ElementL10n {
   public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")
   /// Help keep your messages secure
   public static let sessionVerificationBannerTitle = ElementL10n.tr("Untranslated", "session_verification_banner_title")
+  /// Open Element on one of your other sessions to compare.
+  public static let sessionVerificationScreenEmojisMessage = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_message")
+  /// Lets check if these
+  public static let sessionVerificationScreenEmojisTitle = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_title")
   /// Timeline Style
   public static let settingsTimelineStyle = ElementL10n.tr("Untranslated", "settings_timeline_style")
   /// Untranslated

@@ -47,7 +47,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         context.send(viewAction: .start)
         
-        context.send(viewAction: .cancel)
+        context.send(viewAction: .close)
         
         await Task.yield()
         

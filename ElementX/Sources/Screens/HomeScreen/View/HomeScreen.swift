@@ -111,7 +111,7 @@ struct HomeScreen: View {
                     .foregroundColor(.element.systemPrimaryLabel)
                 Text(ElementL10n.sessionVerificationBannerMessage)
                     .font(.element.footnote)
-                    .foregroundColor(.element.systemSecondaryLabel.opacity(0.6))
+                    .foregroundColor(.element.systemSecondaryLabel)
             }
             
             HStack(spacing: 16) {
