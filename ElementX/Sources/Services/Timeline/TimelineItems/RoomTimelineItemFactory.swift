@@ -61,6 +61,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     // MARK: - Private
 
+    // swiftlint:disable:next function_parameter_count
     private func buildFallbackTimelineItemFromMessage(_ item: EventTimelineItem,
                                                       _ content: MessageType,
                                                       _ isOutgoing: Bool,
@@ -176,7 +177,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
-        return reactions.map { reaction in
+        reactions.map { reaction in
             let isHighlighted = false // reaction.details.contains(where: { $0.sender == userID })
             return AggregatedReaction(key: reaction.key, count: Int(reaction.count), isHighlighted: isHighlighted)
         }

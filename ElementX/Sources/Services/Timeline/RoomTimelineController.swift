@@ -147,10 +147,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItem: eventItem,
                                                                                        showSenderDetails: shouldShowSenderDetails))
                 previousMessage = eventItem
-            case .virtual(let virtualItem):
+            case .virtual:
+//            case .virtual(let virtualItem):
 //                newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
 //                                                                  text: message.originServerTs.formatted(date: .complete, time: .omitted)))
-                newTimelineItems.append(SeparatorRoomTimelineItem(id: UUID().uuidString, // FIXME: bad things will happen
+                #warning("Fix the UUID or \"bad things will happen\"")
+                newTimelineItems.append(SeparatorRoomTimelineItem(id: UUID().uuidString,
                                                                   text: "The day before"))
                 previousMessage = nil
             case .other:

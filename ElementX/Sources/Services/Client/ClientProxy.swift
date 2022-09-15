@@ -55,7 +55,7 @@ class ClientProxy: ClientProxyProtocol {
     /// The maximum number of timeline events required during a sync request.
     static let syncLimit: UInt16 = 20
     
-    private let client: Client
+    private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
     
@@ -75,7 +75,7 @@ class ClientProxy: ClientProxyProtocol {
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
-    init(client: Client,
+    init(client: ClientProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.client = client
         self.backgroundTaskService = backgroundTaskService
@@ -108,9 +108,9 @@ class ClientProxy: ClientProxyProtocol {
         #warning("Use isSoftLogout() api on next SDK release.")
         // if !client.isSoftLogout()
         // {
-        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-        client.startSync(timelineLimit: ClientProxy.syncLimit)
+//        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+//        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+//        client.startSync(timelineLimit: ClientProxy.syncLimit)
         // }
     }
     
@@ -157,12 +157,14 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            guard let room = try slidingSync.getRoom(roomId: identifier)?.fullRoom() else {
+            guard let slidingSyncRoom = try slidingSync.getRoom(roomId: identifier),
+                  let room = slidingSyncRoom.fullRoom() else {
                 MXLog.error("Failed retrieving room with identifier: \(identifier)")
                 return nil
             }
             
-            let roomProxy = RoomProxy(room: room,
+            let roomProxy = RoomProxy(slidingSyncRoom: slidingSyncRoom,
+                                      room: room,
                                       backgroundTaskService: backgroundTaskService)
             roomProxies[identifier] = roomProxy
             
@@ -228,7 +230,7 @@ class ClientProxy: ClientProxyProtocol {
 
     func logout() async {
 //        do {
-            #warning("Use logout() api on next SDK release.")
+        #warning("Use logout() api on next SDK release.")
 //            try client.logout()
 //        } catch {
 //            MXLog.error("Failed logging out with error: \(error)")

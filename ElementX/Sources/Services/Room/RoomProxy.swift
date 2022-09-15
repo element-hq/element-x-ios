@@ -21,7 +21,8 @@ import UIKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
-    private let room: Room
+    private let slidingSyncRoom: SlidingSyncRoomProtocol
+    private let room: RoomProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     private var sendMessageBgTask: BackgroundTaskProtocol?
@@ -42,8 +43,10 @@ class RoomProxy: RoomProxyProtocol {
         #warning("Should any timeline listeners be removed??")
     }
     
-    init(room: Room,
+    init(slidingSyncRoom: SlidingSyncRoomProtocol,
+         room: RoomProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
+        self.slidingSyncRoom = slidingSyncRoom
         self.room = room
         self.backgroundTaskService = backgroundTaskService
     }
@@ -51,7 +54,7 @@ class RoomProxy: RoomProxyProtocol {
     lazy var id: String = room.id()
     
     var name: String? {
-        room.name()
+        slidingSyncRoom.name()
     }
         
     var topic: String? {
