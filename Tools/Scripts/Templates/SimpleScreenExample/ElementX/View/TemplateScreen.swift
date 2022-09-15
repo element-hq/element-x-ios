@@ -51,7 +51,7 @@ struct TemplateScreen: View {
     var mainContent: some View {
         VStack(spacing: 36) {
             Text(context.viewState.promptType.title)
-                .font(.element.title2B)
+                .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier("title")

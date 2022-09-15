@@ -39,7 +39,7 @@ struct SplashScreenPageView: View {
             
             VStack(spacing: 8) {
                 Text(content.title)
-                    .font(.element.title2B)
+                    .font(.element.title2Bold)
                     .foregroundColor(.element.primaryContent)
                 Text(content.message)
                     .font(.element.body)

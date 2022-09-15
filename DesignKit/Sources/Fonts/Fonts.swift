@@ -26,59 +26,65 @@ public protocol Fonts {
     var largeTitle: FontType { get }
     
     /// `largeTitle` with a Bold weight.
-    var largeTitleB: FontType { get }
+    var largeTitleBold: FontType { get }
     
     /// The font for first-level hierarchical headings.
     var title1: FontType { get }
         
     /// `title1` with a Bold weight.
-    var title1B: FontType { get }
+    var title1Bold: FontType { get }
     
     /// The font for second-level hierarchical headings.
     var title2: FontType { get }
     
     /// `title2` with a Bold weight.
-    var title2B: FontType { get }
+    var title2Bold: FontType { get }
     
     /// The font for third-level hierarchical headings.
     var title3: FontType { get }
     
-    /// `title3` with a Semi Bold weight.
-    var title3SB: FontType { get }
+    /// `title3` with a Bold weight.
+    var title3Bold: FontType { get }
     
     /// The font for headings.
     var headline: FontType { get }
     
-    /// The font for subheadings.
-    var subheadline: FontType { get }
+    /// `headline` with a Bold weight.
+    var headlineBold: FontType { get }
     
     /// The font for body text.
     var body: FontType { get }
     
-    /// `body` with a Semi Bold weight.
-    var bodySB: FontType { get }
+    /// `body` with a Bold weight.
+    var bodyBold: FontType { get }
     
     /// The font for callouts.
     var callout: FontType { get }
     
-    /// `callout` with a Semi Bold weight.
-    var calloutSB: FontType { get }
+    /// `callout` with a Bold weight.
+    var calloutBold: FontType { get }
+    
+    /// The font for subheadings.
+    var subheadline: FontType { get }
+    
+    /// `subheadline` with a Bold weight.
+    var subheadlineBold: FontType { get }
     
     /// The font for footnotes.
     var footnote: FontType { get }
     
-    /// `footnote` with a Semi Bold weight.
-    var footnoteSB: FontType { get }
+    /// `footnote` with a Bold weight.
+    var footnoteBold: FontType { get }
     
     /// The font for standard captions.
     var caption1: FontType { get }
 
-    /// `caption1` with a Semi Bold weight.
-    var caption1SB: FontType { get }
+    /// `caption1` with a Bold weight.
+    var caption1Bold: FontType { get }
     
     /// The font for alternate captions.
     var caption2: FontType { get }
     
-    /// `caption2` with a Semi Bold weight.
-    var caption2SB: FontType { get }
+    /// `caption2` with a Bold weight.
+    var caption2Bold: FontType { get }
 }
