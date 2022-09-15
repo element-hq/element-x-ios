@@ -33,8 +33,7 @@ class SoftLogoutUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["titleLabel"].exists, "The title should be shown.")
         XCTAssertTrue(app.staticTexts["messageLabel1"].exists, "The message 1 should be shown.")
         XCTAssertTrue(app.staticTexts["clearDataTitleLabel"].exists, "The clear data title should be shown.")
-        XCTAssertTrue(app.staticTexts["clearDataMessage1Label"].exists, "The clear data message 1 should be shown.")
-        XCTAssertTrue(app.staticTexts["clearDataMessage2Label"].exists, "The clear data message 2 should be shown.")
+        XCTAssertTrue(app.staticTexts["clearDataMessageLabel"].exists, "The clear data message should be shown.")
         
         let passwordTextField = app.secureTextFields["passwordTextField"]
         XCTAssertTrue(passwordTextField.exists, "The password text field should be shown.")
