@@ -29,17 +29,5 @@
 "server_selection_server_footer" = "You can only connect to a server that has already been set up";
 "server_selection_generic_error" = "Cannot find a server at this URL, please check it is correct.";
 
-"auth_softlogout_signed_out" = "You’re signed out";
-"auth_softlogout_sign_in" = "Sign In";
-"auth_softlogout_reason" = "Your homeserver (%1$@) admin has signed you out of your account %2$@ (%3$@).";
-"auth_softlogout_recover_encryption_keys" = "Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.";
-"auth_softlogout_clear_data" = "Clear personal data";
-"auth_softlogout_clear_data_message_1" = "Warning: Your personal data (including encryption keys) is still stored on this device.";
-"auth_softlogout_clear_data_message_2" = "Clear it if you're finished using this device, or want to sign in to another account.";
-"auth_softlogout_clear_data_button" = "Clear all data";
-"auth_softlogout_clear_data_sign_out_title" = "Are you sure?";
-"auth_softlogout_clear_data_sign_out_msg" = "Are you sure you want to clear all data currently stored on this device? Sign in again to access your account data and messages.";
-"auth_softlogout_clear_data_sign_out" = "Sign out";
-
 "login_mobile_device" = "Mobile";
 "login_tablet_device" = "Tablet";

@@ -14,30 +14,6 @@ extension ElementL10n {
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
   /// Next
   public static let actionNext = ElementL10n.tr("Untranslated", "action_next")
-  /// Clear personal data
-  public static let authSoftlogoutClearData = ElementL10n.tr("Untranslated", "auth_softlogout_clear_data")
-  /// Clear all data
-  public static let authSoftlogoutClearDataButton = ElementL10n.tr("Untranslated", "auth_softlogout_clear_data_button")
-  /// Warning: Your personal data (including encryption keys) is still stored on this device.
-  public static let authSoftlogoutClearDataMessage1 = ElementL10n.tr("Untranslated", "auth_softlogout_clear_data_message_1")
-  /// Clear it if you're finished using this device, or want to sign in to another account.
-  public static let authSoftlogoutClearDataMessage2 = ElementL10n.tr("Untranslated", "auth_softlogout_clear_data_message_2")
-  /// Sign out
-  public static let authSoftlogoutClearDataSignOut = ElementL10n.tr("Untranslated", "auth_softlogout_clear_data_sign_out")
-  /// Are you sure you want to clear all data currently stored on this device? Sign in again to access your account data and messages.
-  public static let authSoftlogoutClearDataSignOutMsg = ElementL10n.tr("Untranslated", "auth_softlogout_clear_data_sign_out_msg")
-  /// Are you sure?
-  public static let authSoftlogoutClearDataSignOutTitle = ElementL10n.tr("Untranslated", "auth_softlogout_clear_data_sign_out_title")
-  /// Your homeserver (%1$@) admin has signed you out of your account %2$@ (%3$@).
-  public static func authSoftlogoutReason(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
-    return ElementL10n.tr("Untranslated", "auth_softlogout_reason", String(describing: p1), String(describing: p2), String(describing: p3))
-  }
-  /// Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.
-  public static let authSoftlogoutRecoverEncryptionKeys = ElementL10n.tr("Untranslated", "auth_softlogout_recover_encryption_keys")
-  /// Sign In
-  public static let authSoftlogoutSignIn = ElementL10n.tr("Untranslated", "auth_softlogout_sign_in")
-  /// You’re signed out
-  public static let authSoftlogoutSignedOut = ElementL10n.tr("Untranslated", "auth_softlogout_signed_out")
   /// Forgot password
   public static let authenticationLoginForgotPassword = ElementL10n.tr("Untranslated", "authentication_login_forgot_password")
   /// Welcome back!
