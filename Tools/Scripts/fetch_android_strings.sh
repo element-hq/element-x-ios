@@ -11,5 +11,5 @@ git clone \
 ;
 cd element-android
 git checkout develop
-git sparse-checkout set vector/src/main/res/values*
+git sparse-checkout set library/ui-strings/src/main/res/values*
 cd ..

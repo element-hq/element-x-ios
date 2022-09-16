@@ -123,7 +123,7 @@ def convert_file(input, output):
 
 print('\nAndroid strings fetched.\n')
 
-res_folder = 'element-android/vector/src/main/res'
+res_folder = 'element-android/library/ui-strings/src/main/res'
 
 for subdir, dirs, files in os.walk(res_folder):
     for dir in dirs:
