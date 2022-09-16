@@ -103,11 +103,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await Task.detached { [weak self] () -> Result<String?, RoomProxyError> in
-            guard let self = self else {
-                return .failure(.failedRetrievingMemberAvatarURL)
-            }
-            
+        await Task.detached { () -> Result<String?, RoomProxyError> in
             do {
                 let avatarURL = try self.room.memberAvatarUrl(userId: userId)
                 await self.update(avatarURL: avatarURL, forUserId: userId)
@@ -124,11 +120,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await Task.detached { [weak self] () -> Result<String?, RoomProxyError> in
-            guard let self = self else {
-                return .failure(.failedRetrievingMemberDisplayName)
-            }
-            
+        await Task.detached { () -> Result<String?, RoomProxyError> in
             do {
                 let displayName = try self.room.memberDisplayName(userId: userId)
                 await self.update(displayName: displayName, forUserId: userId)
@@ -141,11 +133,7 @@ class RoomProxy: RoomProxyProtocol {
     }
         
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        await Task.detached { [weak self] () -> Result<String, RoomProxyError> in
-            guard let self = self else {
-                return .failure(.failedRetrievingDisplayName)
-            }
-            
+        await Task.detached { () -> Result<String, RoomProxyError> in
             if let displayName = await self.displayName {
                 return .success(displayName)
             }
@@ -171,11 +159,7 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.noMoreMessagesToBackPaginate)
         }
 
-        return await Task.detached { [weak self] in
-            guard let self = self else {
-                return .failure(.failedPaginatingBackwards)
-            }
-            
+        return await Task.detached {
             do {
                 let id = await self.id
                 
