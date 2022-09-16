@@ -24,25 +24,30 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric private var minBubbleWidth = 44
+    @Environment(\.timelineWidth) private var timelineWidth
+    @ScaledMetric private var senderNameVerticalPadding = 3
+    private let bubbleWidthPercentIncoming = 0.72   // 281/390
+    private let bubbleWidthPercentOutgoing = 0.68   // 267/390
 
     var body: some View {
-        VStack(alignment: alignment, spacing: -5) {
+        VStack(alignment: alignment, spacing: -12) {
             if !timelineItem.isOutgoing {
                 header
                     .zIndex(1)
             }
-            if timelineItem.isOutgoing {
-                HStack {
-                    Spacer()
-                    styledContentWithReactions
-                }
-                .padding(.trailing, 16)
-                .padding(.leading, 51)
-            } else {
-                styledContentWithReactions
+            VStack(alignment: alignment) {
+                if timelineItem.isOutgoing {
+                    HStack {
+                        Spacer()
+                        styledContentWithReactions
+                    }
+                    .padding(.trailing, 16)
                     .padding(.leading, 16)
-                    .padding(.trailing, 51)
+                } else {
+                    styledContentWithReactions
+                        .padding(.leading, 24)
+                        .padding(.trailing, 24)
+                }
             }
         }
     }
@@ -56,10 +61,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 HStack(alignment: .top, spacing: 4) {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
                     Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
-                        .font(.body)
+                        .font(.element.footnoteBold)
                         .foregroundColor(.element.primaryContent)
-                        .fontWeight(.semibold)
                         .lineLimit(1)
+                        .padding(.vertical, senderNameVerticalPadding)
                 }
             }
         }
@@ -73,9 +78,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
-                                      alignment: alignment) { key in
+                                      alignment: .leading) { key in
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
+                .frame(width: bubbleWidth - 24)
                 .padding(.horizontal, 12)
             }
         }
@@ -83,24 +89,23 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContent: some View {
+        if timelineItem.isOutgoing {
+            styledContentOutgoing
+        } else {
+            styledContentIncoming
+        }
+    }
+
+    @ViewBuilder
+    var styledContentOutgoing: some View {
         if shouldAvoidBubbling {
-            ZStack(alignment: .bottomTrailing) {
-                content()
-                    .clipped()
-                    .cornerRadius(8)
-                Text(timelineItem.timestamp)
-                    .foregroundColor(.global.white)
-                    .font(.element.caption2)
-                    .padding(4)
-                    .background(Color(white: 0, opacity: 0.7))
-                    .clipped()
-                    .cornerRadius(8)
-                    .offset(x: -8, y: -8)
-            }
+            content()
+                .frame(width: bubbleWidth)
+                .cornerRadius(12, inGroupState: timelineItem.inGroupState)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
-                    .frame(minWidth: minBubbleWidth, alignment: .leading)
+                    .frame(width: bubbleWidth - 24, alignment: .leading)
 
                 if timelineItem.properties.isEdited {
                     Text(ElementL10n.editedSuffix)
@@ -108,24 +113,47 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .foregroundColor(.element.tertiaryContent)
                 }
             }
-            .padding(EdgeInsets(top: 8, leading: 8, bottom: 4, trailing: 8))
-            .clipped()
-            .background(bubbleColor)
-            .cornerRadius(12)
+            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
+            .background(Color.element.systemGray5)
+            .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+        }
+    }
+
+    @ViewBuilder
+    var styledContentIncoming: some View {
+        if shouldAvoidBubbling {
+            content()
+                .frame(width: bubbleWidth)
+                .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+        } else {
+            VStack(alignment: .trailing, spacing: 4) {
+                content()
+                    .frame(width: bubbleWidth - 24, alignment: .leading)
+
+                if timelineItem.properties.isEdited {
+                    Text(ElementL10n.editedSuffix)
+                        .font(.element.caption2)
+                        .foregroundColor(.element.tertiaryContent)
+                }
+            }
+            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
+            .overlay(
+                RoundedCorner(radius: 18, inGroupState: timelineItem.inGroupState)
+                    .stroke(Color.element.systemGray5)
+            )
         }
     }
 
     private var shouldAvoidBubbling: Bool {
         timelineItem is ImageRoomTimelineItem
     }
-
-    private var bubbleColor: Color {
-        let opacity = colorScheme == .light ? 0.06 : 0.15
-        return timelineItem.isOutgoing ? .element.accent.opacity(opacity) : .element.system
-    }
     
     private var alignment: HorizontalAlignment {
         timelineItem.isOutgoing ? .trailing : .leading
+    }
+
+    private var bubbleWidth: CGFloat {
+        timelineWidth * (timelineItem.isOutgoing ? bubbleWidthPercentOutgoing : bubbleWidthPercentIncoming)
     }
 }
 
@@ -144,6 +172,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
             }
         }
         .timelineStyle(.bubbles)
+        .timelineWidth(390)
         .padding(.horizontal, 8)
         .previewLayout(.sizeThatFits)
     }
