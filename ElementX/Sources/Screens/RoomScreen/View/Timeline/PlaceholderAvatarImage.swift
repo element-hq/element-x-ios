@@ -24,7 +24,7 @@ struct PlaceholderAvatarImage: View {
             Color.element.accent
             Text(textForImage)
                 .padding(4)
-                .foregroundColor(.element.systemGray3)
+                .foregroundColor(.element.background)
                 // Make the text resizable (i.e. Make it large and then allow it to scale down)
                 .font(.system(size: 200).weight(.semibold))
                 .minimumScaleFactor(0.001)
