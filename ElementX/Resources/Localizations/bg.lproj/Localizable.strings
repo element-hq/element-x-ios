@@ -40,11 +40,10 @@
 "initial_sync_start_importing_account" = "Начална синхронизация:\nИмпортиране на профил…";
 "initial_sync_start_importing_account_crypto" = "Начална синхронизация:\nИмпортиране на данни за шифроване";
 "initial_sync_start_importing_account_rooms" = "Начална синхронизация:\nИмпортиране на стаи";
-"initial_sync_start_importing_account_joined_rooms" = "Начална синхронизация:\nИмпортиране на стаи, от които съм част";
-"initial_sync_start_importing_account_invited_rooms" = "Начална синхронизация:\nИмпортиране на стаи, към които съм поканен";
-"initial_sync_start_importing_account_left_rooms" = "Начална синхронизация:\nИмпортиране на стаи, които съм напуснал";
-"initial_sync_start_importing_account_groups" = "Начална синхронизация:\nИмпортиране на общности";
-"initial_sync_start_importing_account_data" = "Начална синхронизация:\nИмпортиране на данни за профила";
+"initial_sync_start_importing_account_joined_rooms" = "Начална синхронизация.\nЗареждане на моите разговори\nИмпортиране на стаи, от които съм част";
+"initial_sync_start_importing_account_invited_rooms" = "Начална синхронизация.\nИмпортиране на стаи, към които съм поканен";
+"initial_sync_start_importing_account_left_rooms" = "Начална синхронизация.\nИмпортиране на стаи, които съм напуснал";
+"initial_sync_start_importing_account_data" = "Начална синхронизация.\nИмпортиране на данни за профила";
 "notice_room_update" = "%@ обнови тази стая.";
 "event_status_sending_message" = "Изпращане на съобщение…";
 "notice_room_third_party_revoked_invite" = "%1$@ оттегли поканата за присъединяване на %2$@ към стаята";
@@ -214,7 +213,6 @@
 "matrix_only_filter" = "Само потребители на Matrix";
 "no_result_placeholder" = "Няма резултати";
 "rooms_header" = "Стаи";
-"groups_header" = "Общности";
 "send_bug_report_include_logs" = "Изпращане на логове";
 "send_bug_report_include_crash_logs" = "Изпращане на логове за забивания";
 "send_bug_report_include_screenshot" = "Изпращане на снимка на екрана";
@@ -247,7 +245,6 @@
 "auth_email_already_defined" = "Този имейл адрес е вече използван.";
 "auth_forgot_password" = "Забравена парола?";
 "auth_recaptcha_message" = "Този Home сървър би искал да се увери, че не сте робот";
-"auth_reset_password_missing_email" = "Имейл адресът, свързан с профила Ви, трябва да бъде въведен.";
 "auth_reset_password_error_unauthorized" = "Неуспешно потвърждаване на имейл адреса: уверете се, че сте кликнали върху връзката в имейла";
 "send_bug_report_progress" = "Напредък (%@%%)";
 "login_error_invalid_home_server" = "Въведете валиден URL адрес";
@@ -339,7 +336,6 @@
 "settings_password_updated" = "Вашата парола беше обновена";
 "settings_unignore_user" = "Показване на всички съобщения от %@\?\n\nИмайте предвид, че това действие ще рестартира приложението, което може да отнеме известно време.";
 "settings_select_country" = "Избор на държава";
-"settings_flair" = "Значка";
 "media_saving_period_3_days" = "3 дни";
 "media_saving_period_1_week" = "1 седмица";
 "media_saving_period_1_month" = "1 месец";
@@ -359,7 +355,7 @@
 "settings_theme" = "Тема";
 "encryption_information_decryption_error" = "Грешка при разшифроване";
 "encryption_information_device_name" = "Публично име";
-"encryption_information_device_id" = "Сесийно ID";
+"device_manager_session_details_session_id" = "Сесийно ID";
 "encryption_information_device_key" = "Ключ на устройство";
 "encryption_export_e2e_room_keys" = "Експортирай E2E ключове за стая";
 "encryption_export_room_keys" = "Експортиране на ключове за стая";
@@ -724,7 +720,6 @@
 "action_change" = "Промени";
 "change_room_directory_network" = "Промени мрежата";
 "please_wait" = "Изчакайте…";
-"group_all_communities" = "Всички общности";
 "room_preview_no_preview" = "Тази стая не може да бъде прегледана";
 "fab_menu_create_room" = "Стаи";
 "fab_menu_create_chat" = "Директни съобщения";
@@ -835,7 +830,6 @@
 "three_users_read" = "%1$@, %2$@ и %3$@ прочетоха";
 "two_users_read" = "%1$@ и %2$@ прочетоха";
 "one_user_read" = "%@ прочете";
-"error_attachment" = "Възникна грешка при извличане на прикачения файл.";
 "attachment_type_file" = "Файл";
 "attachment_type_contact" = "Контакт";
 "attachment_type_camera" = "Камера";
@@ -968,7 +962,7 @@
 "login_signup_submit" = "Напред";
 "login_signup_error_user_in_use" = "Това потребителско име е заето";
 "login_signup_cancel_confirmation_title" = "Внимание";
-"login_signup_cancel_confirmation_content" = "Профила ви все още не е създаден.\n\nПрекратяване на процеса на регистрация\?";
+"login_signup_cancel_confirmation_content" = "Профила ви все още не е създаден. Прекратяване на процеса на регистрация\?";
 "login_a11y_choose_matrix_org" = "Избери matrix.org";
 "login_a11y_choose_modular" = "Избери Element Matrix Services";
 "login_a11y_choose_other" = "Избери собствен сървър";
@@ -1492,9 +1486,9 @@
 "notice_room_server_acl_updated_ip_literals_not_allowed" = "• Сървърите съдържащи IP адреси ще бъдат блокирани.";
 "notice_room_server_acl_updated_ip_literals_allowed" = "• Сървърите съдържащи IP адреси ще бъдат разрешени.";
 "notice_room_server_acl_updated_was_allowed" = "• Сървърите съдържащи %@ бяха премахнати от списъка с разрешени.";
-"notice_room_server_acl_updated_allowed" = "• Сървърите съдържащи %@ ще бъдат разрешени.";
-"notice_room_server_acl_updated_was_banned" = "• Сървърите съдържащи  %@ бяха премахнати от списъка с блокирани.";
-"notice_room_server_acl_updated_banned" = "• Сървърите съдържащи  %@ ще бъдат блокирани.";
+"notice_room_server_acl_updated_allowed" = "• Сървърите съдържащи %@ сега ще бъдат разрешени.";
+"notice_room_server_acl_updated_was_banned" = "• Сървърите съдържащи %@ бяха премахнати от списъка с блокирани.";
+"notice_room_server_acl_updated_banned" = "• Сървърите съдържащи %@ сега ще бъдат блокирани.";
 "notice_room_server_acl_updated_title_by_you" = "Променихте сървърните разрешения (ACL) за тази стая.";
 "notice_room_server_acl_updated_title" = "%@ промени разрешенията (ACL) за тази стая.";
 "notice_room_server_acl_set_ip_literals_not_allowed" = "• Сървърите съдържащи IP адрес са блокирани.";
@@ -1503,3 +1497,5 @@
 "notice_room_server_acl_set_banned" = "• Сървърите съдържащи %@ са блокирани.";
 "notice_room_server_acl_set_title_by_you" = "Настроихте сървърните разрешения (ACL) за тази стая.";
 "notice_room_server_acl_set_title" = "%@ настрой разрешенията (ACL) за тази стая.";
+"initial_sync_request_title" = "Първоначална заявка за синхронизация";
+"room_error_access_unauthorized" = "Нямате права да се присъедините към тази стая";

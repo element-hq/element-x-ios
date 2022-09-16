@@ -125,7 +125,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Đã khôi phục bản sao lưu với % d chìa khóa.</string>
+			<string>Đã khôi phục bản sao lưu với %d chìa khóa.</string>
 		</dict>
 	</dict>
 	<key>keys_backup_restore_success_description_part2</key>
@@ -419,7 +419,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>Đã bỏ %1$d phiếu bầu. Bỏ phiếu để xem kết quả</string>
+			<string>%1$d phiếu bầu. Bỏ phiếu để xem kết quả</string>
 		</dict>
 	</dict>
 	<key>poll_total_vote_count_before_ended_and_voted</key>

@@ -107,7 +107,6 @@
 "auth_email_already_defined" = "Den emailadresse er allerede i brug.";
 "auth_forgot_password" = "Glemt adgangskode?";
 "auth_recaptcha_message" = "Denne Home Server vil gerne være sikker på du ikke er en robot";
-"auth_reset_password_missing_email" = "Emailadressen forbundet til din konto skal skrives.";
 "auth_reset_password_error_unauthorized" = "Kunne ikke verificere emailadresse: vær sikker på du klikkede på linket i emailen";
 "login_error_invalid_home_server" = "Skriv gyldig URL";
 "login_error_bad_json" = "Fejlformet JSON";
@@ -165,7 +164,6 @@
 "ssl_expected_existing_expl" = "Certifikatet er ændret fra et tidligere betroet, til et der ikke er betroet. Serveren kan have fornyet sit certifikat. Kontakt server administratoren for det forventede fingeraftryk.";
 "ssl_only_accept" = "Accepter kun certifikatet hvis server administratoren har publiceret et fingeraftryk der matcher det ovenstående.";
 "loading" = "Loader…";
-"groups_header" = "Communities";
 "start_voice_call_prompt_msg" = "Er du sikker på, at du ønsker at starte et opkald?";
 "start_video_call_prompt_msg" = "Er du sikker på, at du ønsker at starte et videoopkald\?";
 "list_members" = "Medlemsoversigt";

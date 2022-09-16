@@ -13,7 +13,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>已启用 %d 个挂件</string>
+			<string>%d个启用的挂件</string>
 		</dict>
 	</dict>
 	<key>call_active_status</key>
@@ -139,7 +139,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 个新密钥已被添加到此设备中。</string>
+			<string>%d个新密钥已被添加到此会话中。</string>
 		</dict>
 	</dict>
 	<key>login_error_limit_exceeded_retry_after</key>
@@ -167,7 +167,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 位成员的状态发生了变化</string>
+			<string>%d个成员状态变动</string>
+		</dict>
+	</dict>
+	<key>message_reaction_show_more</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>还有%1$d个</string>
 		</dict>
 	</dict>
 	<key>missed_audio_call</key>
@@ -209,7 +223,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@ 新增了 %2$@ 为此聊天室的地址。</string>
+			<string>%1$@ 新增了 %2$@ 为此房间的地址。</string>
 		</dict>
 	</dict>
 	<key>notice_room_aliases_added_by_you</key>
@@ -223,7 +237,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>你新增了 %1$@ 为此聊天室的地址。</string>
+			<string>你新增了 %1$@ 为此房间的地址。</string>
 		</dict>
 	</dict>
 	<key>notice_room_aliases_removed</key>
@@ -237,7 +251,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@ 移除了 %2$@ 作为此聊天室额地址。</string>
+			<string>%1$@ 移除了 %2$@ 作为此房间额地址。</string>
 		</dict>
 	</dict>
 	<key>notice_room_aliases_removed_by_you</key>
@@ -251,7 +265,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>你移除了此聊天室的 %1$@ 地址。</string>
+			<string>你移除了此房间的 %1$@ 地址。</string>
 		</dict>
 	</dict>
 	<key>notice_room_canonical_alias_alternative_added</key>
@@ -265,7 +279,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@ 已为此聊天室添加了备用地址 %2$@。</string>
+			<string>%1$@ 已为此房间添加了备用地址 %2$@。</string>
 		</dict>
 	</dict>
 	<key>notice_room_canonical_alias_alternative_added_by_you</key>
@@ -279,7 +293,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>你已为此聊天室添加了备用地址 %1$@。</string>
+			<string>你已为此房间添加了备用地址 %1$@。</string>
 		</dict>
 	</dict>
 	<key>notice_room_canonical_alias_alternative_removed</key>
@@ -293,7 +307,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@ 已为此聊天室移除了备用地址 %2$@。</string>
+			<string>%1$@ 已为此房间移除了备用地址 %2$@。</string>
 		</dict>
 	</dict>
 	<key>notice_room_canonical_alias_alternative_removed_by_you</key>
@@ -307,7 +321,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>你已为此聊天室移除了备用地址 %1$@。</string>
+			<string>你已为此房间移除了备用地址 %1$@。</string>
 		</dict>
 	</dict>
 	<key>notice_room_server_acl_changes</key>
@@ -335,7 +349,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%1$@: %2$d 条消息</string>
+			<string>%1$@：%2$d条消息</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_title</key>
@@ -377,7 +391,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 条未读消息</string>
+			<string>%d条未读的已通知消息</string>
 		</dict>
 	</dict>
 	<key>notification_unread_notified_messages_in_room_rooms</key>
@@ -391,7 +405,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 个聊天室</string>
+			<string>%d 个房间</string>
 		</dict>
 	</dict>
 	<key>poll_option_vote_count</key>
@@ -433,7 +447,7 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>已投了 %1$d 票。投票查看结果</string>
+			<string>已投了 %1$d 票。投票以查看结果</string>
 		</dict>
 	</dict>
 	<key>poll_total_vote_count_before_ended_and_voted</key>
@@ -506,6 +520,20 @@
 			<string>%1$d 人</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%d条消息已移除</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -531,7 +559,21 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>other</key>
-			<string>%d 位成员</string>
+			<string>%d个成员</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>%1$@与其他%2$d人</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -602,6 +644,20 @@
 			<string>d</string>
 			<key>other</key>
 			<string>%d 个活动会话</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>other</key>
+			<string>找到%d种方式。</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

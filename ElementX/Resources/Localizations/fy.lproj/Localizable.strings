@@ -67,7 +67,6 @@
 "matrix_only_filter" = "Allinnich Matrix-kontakten";
 "no_result_placeholder" = "Gjin resultaten";
 "rooms_header" = "Petearen";
-"groups_header" = "Mienskippen";
 "send_bug_report_include_logs" = "Lochboek ferstjoere";
 "send_bug_report_include_crash_logs" = "Ungeloklochboek ferstjoere";
 "send_bug_report_include_screenshot" = "Skermôfdruk ferstjoere";
@@ -100,7 +99,6 @@
 "event_status_sending_message" = "Berjocht oan it fersjoeren…";
 "event_status_sent_message" = "Berjocht ferstjoerd";
 "initial_sync_start_importing_account_data" = "Inisjele syngronisaasje:\nAccountgegevens ymportearje";
-"initial_sync_start_importing_account_groups" = "Inisjele Syngronisaasje:\nMienskippen ymportearje";
 "initial_sync_start_importing_account_left_rooms" = "Inisjele Syngronisaasje:\nFerlitten keamers ymportearje";
 "initial_sync_start_importing_account_invited_rooms" = "Inisjele syngronisaasje:\nKeamers dêr’t jo foar útnûge binne ymportearje";
 "initial_sync_start_importing_account_joined_rooms" = "Inisjele syngronisaasje:\nJo petearen lade\nAs jo yn in protte keamers binne kin dit efkes duorje";
@@ -127,7 +125,6 @@
 "notice_room_visibility_joined" = "alle dielnimmers, fan it momint ôf dat se de keamer ynkaam binne.";
 "notice_room_visibility_invited" = "alle dielnimmers oan it petear, fan it momint ôf dat se útnûge binne.";
 "space_type_public_desc" = "Iepen foar eltsenien, it beste foar mienskippen";
-"group_all_communities" = "Alle mienskippen";
 "dialog_title_success" = "Sukses";
 "room_settings_enable_encryption_no_permission" = "Jo hawwe gjin tastimming om fersifering yn dizze keamer yn te skeakeljen.";
 "sound_device_phone" = "Telefoan";
@@ -214,7 +211,6 @@
 "call_camera_back" = "Efterkant";
 "call_camera_front" = "Foarkant";
 "auth_recaptcha_message" = "Dizze thússerver wol der graach wis fan wêze dat jo gjin robot binne";
-"auth_reset_password_missing_email" = "It e-mailadres dat oan jo account keppele is moat ynfierd wurde.";
 "settings_security_and_privacy" = "Befeiliging & privacy";
 "room_widget_resource_grant_permission" = "Tastean";
 "room_settings_room_version_title" = "Keamerferzje";
@@ -330,7 +326,6 @@
 "attachment_type_contact" = "Kontakt";
 "attachment_type_file" = "Bestân";
 "attachment_type_dialog_title" = "Ofbylding tafoegje út";
-"error_attachment" = "Der is in flater bard wylst de bylage ophelle waard.";
 "a11y_jump_to_bottom" = "Spring nei it ein";
 "a11y_image" = "Ofbylding";
 "a11y_create_room" = "Nije keamer oanmeitsje";
@@ -882,3 +877,6 @@
 "room_one_user_is_typing" = "%@ is oan it typen…";
 "room_participants_unban_prompt_msg" = "Troch dizze brûker net mear te ferballen kin dy opnij oan it petear meidwaan.";
 "space_participants_unban_prompt_msg" = "Troch dizze brûker net mear te ferballen kin dy opnij yn de romte komme.";
+"initial_sync_request_reason_unignored_users" = "- Beskate brûkers binne net mear negearre";
+"initial_sync_request_title" = "Inisjele syngronisaasje oanfreegje";
+"room_error_access_unauthorized" = "It is jo net tastien dizze keamer binnen te gean";

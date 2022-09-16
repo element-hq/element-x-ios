@@ -71,7 +71,6 @@
 "auth_invalid_email" = "Ovo ne izgleda kao validna adresa elektronske pošte";
 "auth_email_already_defined" = "Ova adresa elektronske pošte je već definisana.";
 "auth_forgot_password" = "Zaboravili ste lozinku\?";
-"auth_reset_password_missing_email" = "Morate uneti adresu elektronske pošte povezane sa vašim nalogom.";
 "login_error_limit_exceeded" = "Poslato je previše zahteva";
 "compression_opt_list_original" = "Original";
 "compression_opt_list_large" = "Veliko";

@@ -708,6 +708,26 @@
 			<string>Один участник</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Удалено %d сообщения</string>
+			<key>many</key>
+			<string>Удалено %d сообщений</string>
+			<key>one</key>
+			<string>Удалено %d сообщение</string>
+			<key>other</key>
+			<string>Удалено %d сообщений</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -836,6 +856,26 @@
 			<string>%d сессий активно</string>
 			<key>one</key>
 			<string>%d сессия активна</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Найдено %d способа.</string>
+			<key>many</key>
+			<string>Найдено %d способов.</string>
+			<key>one</key>
+			<string>Найден %d способ.</string>
+			<key>other</key>
+			<string>Найдено %d способов.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

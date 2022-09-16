@@ -668,6 +668,24 @@
 			<string>%1$d osôb</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d správy odstránené</string>
+			<key>one</key>
+			<string>%d správa odstránená</string>
+			<key>other</key>
+			<string>%d správ odstránených</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -702,6 +720,24 @@
 			<string>1 člen</string>
 			<key>other</key>
 			<string>%d členov</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ a %2$d ďalší</string>
+			<key>one</key>
+			<string>%1$@ a %2$d ďalší</string>
+			<key>other</key>
+			<string>%1$@ a %2$d ďalších</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -792,6 +828,24 @@
 			<string>%d aktívna relácia</string>
 			<key>other</key>
 			<string>%d aktívnych relácií</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Nájdené %d spôsoby.</string>
+			<key>one</key>
+			<string>Nájdený %d spôsob.</string>
+			<key>other</key>
+			<string>Nájdených %d spôsobov.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

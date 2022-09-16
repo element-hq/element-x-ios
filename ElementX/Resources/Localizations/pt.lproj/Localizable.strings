@@ -103,7 +103,6 @@
 "auth_email_already_defined" = "Este endereço de email já está registado.";
 "auth_forgot_password" = "Esqueceu-se da palavra-passe?";
 "auth_recaptcha_message" = "Este servidor quer ter a certeza de que você não é um robô";
-"auth_reset_password_missing_email" = "O endereço de e-mail associado à sua conta tem que ser introduzido.";
 "auth_reset_password_error_unauthorized" = "Falha ao verificar o endereço de e-mail: verifique se clicou no link no e-mail";
 "login_error_invalid_home_server" = "Introduza um URL válido";
 "login_error_bad_json" = "JSON mal formatado";
@@ -228,7 +227,7 @@
 "room_settings_unset_main_address" = "Retirar este endereço como principal";
 "encryption_information_decryption_error" = "Erro de decifragem";
 "encryption_information_device_name" = "Nome do dispositivo";
-"encryption_information_device_id" = "ID do dispositivo";
+"device_manager_session_details_session_id" = "ID do dispositivo";
 "encryption_information_device_key" = "Chave do dispositivo";
 "encryption_export_e2e_room_keys" = "Exportar chaves E2E da sala";
 "encryption_export_room_keys" = "Exportar chaves de sala";
@@ -295,7 +294,6 @@
 "action_download" = "Descarregar";
 "dialog_title_error" = "Erro";
 "system_alerts_header" = "Alertas de Sistema";
-"groups_header" = "Comunidades";
 "send_bug_report_description_in_english" = "Se possível, escrever a descrição em inglês.";
 "send_bug_report_rage_shake" = "Agitar furiosamente para relatar um erro";
 "option_send_voice" = "Enviar voz";
@@ -323,7 +321,6 @@
 "settings_analytics" = "Estatísticas de uso";
 "settings_opt_in_of_analytics" = "Enviar dados de análise de estatísticas";
 "settings_opt_in_of_analytics_summary" = "O %@ recolhe dados anónimos de análise de estatísticas para ajudar a melhorar a aplicação.";
-"settings_flair" = "Insígnias";
 "encryption_export_notice" = "Por favor, crie uma frase-passe para cifrar as chaves exportadas. Precisará de usar a mesma frase-passe para conseguir importar as chaves.";
 "passphrase_create_passphrase" = "Criar frase-passe";
 "passphrase_passphrase_does_not_match" = "As frase-passes devem coincidir";

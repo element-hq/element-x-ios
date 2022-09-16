@@ -39,10 +39,9 @@
 "initial_sync_start_importing_account" = "Komenca spegulado:\nEnportante konton…";
 "initial_sync_start_importing_account_crypto" = "Komenca spegulado:\nEnportante ĉifrilojn";
 "initial_sync_start_importing_account_rooms" = "Komenca spegulado:\nEnportante ĉambrojn";
-"initial_sync_start_importing_account_joined_rooms" = "Komenca spegulado:\nEnportante aliĝitajn ĉambrojn";
+"initial_sync_start_importing_account_joined_rooms" = "Komenca spegulado:\nEnportante viajn konversaciojn\nSe vi aliĝis tre multaj ĉambroj, tiu eble daŭras longe";
 "initial_sync_start_importing_account_invited_rooms" = "Komenca spegulado:\nEnportante ĉambrojn de invitoj";
 "initial_sync_start_importing_account_left_rooms" = "Komenca spegulado:\nEnportante forlasitajn ĉambrojn";
-"initial_sync_start_importing_account_groups" = "Komenca spegulado:\nEnportante komunumojn";
 "initial_sync_start_importing_account_data" = "Komenca spegulado:\nEnportante datumojn de konto";
 "event_status_sending_message" = "Sendante mesaĝon…";
 "notice_avatar_changed_too" = "(ankaŭ profilbildo ŝanĝiĝis)";
@@ -177,7 +176,7 @@
 "view_decrypted_source" = "Vidi malĉifritan fonton";
 "action_delete" = "Forigi";
 "action_rename" = "Alinomi";
-"report_content" = "Raporti enhavon";
+"report_content" = "Raporti Enhavon";
 "send_bug_report" = "Raporti eraron";
 "or" = "aŭ";
 "action_invite" = "Inviti";
@@ -224,7 +223,6 @@
 "direct_chats_header" = "Interparoloj";
 "no_result_placeholder" = "Neniuj rezultoj";
 "rooms_header" = "Ĉambroj";
-"groups_header" = "Komunumoj";
 "send_bug_report_include_logs" = "Sendi protokolon";
 "send_bug_report_include_crash_logs" = "Sendi protokolon pri fiasko";
 "send_bug_report_include_screenshot" = "Sendi ekrankopion";
@@ -258,7 +256,6 @@
 "auth_email_already_defined" = "Ĉi tiu retpoŝtadreso jam estas difinita.";
 "auth_forgot_password" = "Ĉu vi forgesis pasvorton\?";
 "auth_recaptcha_message" = "Ĉi tiu hejmservilo volas certiĝi, ke vi ne estas roboto";
-"auth_reset_password_missing_email" = "Necesas enigi la retpoŝtadreson ligitan al via konto.";
 "auth_reset_password_error_unauthorized" = "Malsukcesis kontroli retpoŝtadreson: certiĝu, ke vi klakis la ligilon en la retletero";
 "auth_accept_policies" = "Bonvolu tralegi kaj akcepti la politikojn de ĉi tiu hejmservilo:";
 "compression_opt_list_original" = "Originala";
@@ -497,7 +494,7 @@
 "login_a11y_choose_other" = "Elekti propran hejmservilon";
 "login_a11y_choose_modular" = "Elekti Element Matrix Services";
 "login_a11y_choose_matrix_org" = "Elekti matrix.org";
-"login_signup_cancel_confirmation_content" = "Via konto ankoraŭ ne estas kreita.\n\nĈu haltigi la registriĝon\?";
+"login_signup_cancel_confirmation_content" = "Via konto ankoraŭ ne estas kreita. Ĉu haltigi la registriĝon\?";
 "login_signup_cancel_confirmation_title" = "Averto";
 "login_signup_error_user_in_use" = "Tiu uzantonomo jam estas prenita";
 "login_signup_submit" = "Pluen";
@@ -606,7 +603,6 @@
 "attachment_type_camera" = "Filmilo";
 "attachment_type_contact" = "Kontakto";
 "attachment_type_file" = "Dosiero";
-"error_attachment" = "Eraris akirado de la kunsendaĵo.";
 "one_user_read" = "%@ legis";
 "two_users_read" = "%1$@ kaj %2$@ legis";
 "three_users_read" = "%1$@, %2$@ kaj %3$@ legis";
@@ -693,7 +689,6 @@
 "fab_menu_create_chat" = "Individuaj ĉambroj";
 "fab_menu_create_room" = "Ĉambroj";
 "room_preview_no_preview" = "Ne eblas antaŭrigardi ĉi tiun ĉambron";
-"group_all_communities" = "Ĉiuj komunumoj";
 "please_wait" = "Bonvolu atendi…";
 "change_room_directory_network" = "Ŝanĝi reton";
 "action_change" = "Ŝanĝi";
@@ -934,7 +929,7 @@
 "encryption_export_room_keys" = "Elporti ŝlosilojn de ĉambroj";
 "encryption_export_e2e_room_keys" = "Elporti tutvoje ĉifrajn ŝlosilojn de ĉambroj";
 "encryption_information_device_key" = "Ŝlosilo de salutaĵo";
-"encryption_information_device_id" = "Identigilo de salutaĵo";
+"device_manager_session_details_session_id" = "Identigilo de salutaĵo";
 "encryption_information_device_name" = "Publika nomo";
 "encryption_information_decryption_error" = "Eraris malĉifrado";
 "settings_theme" = "Haŭto";
@@ -960,7 +955,6 @@
 "media_saving_period_1_month" = "1 monato";
 "media_saving_period_1_week" = "1 semajno";
 "media_saving_period_3_days" = "3 tagoj";
-"settings_flair" = "Insigno";
 "settings_play_shutter_sound" = "Ludi sonon de fotkovrilo";
 "media_source_choose" = "Elekti";
 "settings_default_media_source" = "Implicita fonto de vidaŭdaĵoj";
@@ -1523,7 +1517,7 @@
 "notice_room_canonical_alias_alternative_changed_by_you" = "Vi ŝanĝis la alternativajn adresojn por ĉi tiu ĉambro.";
 "notice_room_canonical_alias_alternative_changed" = "%1$@ ŝanĝis la alternativajn adresojn por ĉi tiu ĉambro.";
 "initial_sync_start_downloading" = "Komenca spegulado:\nElŝutante datumojn…";
-"initial_sync_start_server_computing" = "Komenca spegulado:\nAtendante respondon de servilo…";
+"initial_sync_start_server_computing" = "Komenca Spegulado:\nAtendante respondon de servilo…";
 "room_displayname_empty_room_was" = "Malplena ĉambro (estis %@)";
 "room_displayname_4_members" = "%1$@, %2$@, %3$@ kaj %4$@";
 "room_displayname_3_members" = "%1$@, %2$@ kaj %3$@";
@@ -1866,10 +1860,6 @@
 "denied_permission_generic" = "Iuj permesoj necesaj por ĉi tiu ago mankas. Bonvolu doni la permesojn per la sistemaj agordoj.";
 "space_add_existing_spaces" = "Aldoni jamajn arojn";
 "space_add_existing_rooms_only" = "Aldoni jamajn ĉambrojn";
-"pick_tings_to_leave" = "Elektu, de kie vi foriru";
-"leave_specific_ones" = "Foriri de iuj ĉambroj kaj aroj…";
-"dont_leave_any" = "Foriri de neniuj ĉambroj kaj aroj";
-"leave_all_rooms_and_spaces" = "Foriri de ĉiuj ĉambroj kaj aroj";
 "space_leave_prompt_msg_with_name" = "Ĉu vi certe volas foriri de %@\?";
 "discovery_section" = "Trovado (%@)";
 "invite_by_username_or_mail" = "Inviti laŭ uzantonomo aŭ retpoŝtadreso";
@@ -1902,7 +1892,6 @@
 "room_settings_room_notifications_notify_me" = "Sciigu min pri";
 "settings_mentions_and_keywords_encryption_notice" = "VI ne ricevos sciigojn al poŝtelefono pri mencioj kaj ĉefvortoj en ĉifritaj ĉambroj.";
 "settings_messages_containing_keywords" = "Ĉefvortoj";
-"settings_mentions_at_room" = "";
 "settings_notification_keyword_contains_invalid_character" = "Ĉefvortoj ne povas enhavi «%@»";
 "settings_notification_keyword_contains_dot" = "Ĉefvortoj ne povas eki per «.»";
 "settings_notification_new_keyword" = "Aldoni novan ĉefvorton";
@@ -1932,3 +1921,4 @@
 "video_call_with_participant" = "Vidvoko kun %@";
 "call_ringing" = "Sonorante…";
 "spaces" = "Aroj";
+"initial_sync_request_reason_unignored_users" = "- Iom uzantoj reatentita";

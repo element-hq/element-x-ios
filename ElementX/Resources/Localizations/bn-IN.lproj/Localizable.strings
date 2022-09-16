@@ -93,7 +93,6 @@
 "initial_sync_start_importing_account_joined_rooms" = "প্রাথমিক সিঙ্ক:\nযোগ করা কক্ষগুলিতে আমদানি করা হিচ্ছে";
 "initial_sync_start_importing_account_invited_rooms" = "প্রাথমিক সিঙ্ক:\nআমন্ত্রিত করা কক্ষগুলিতে আমদানি করা হিচ্ছে";
 "initial_sync_start_importing_account_left_rooms" = "প্রাথমিক সিঙ্ক:\nছেড়ে দেওয়া কক্ষগুলিতে আমদানি করা হিচ্ছে";
-"initial_sync_start_importing_account_groups" = "প্রাথমিক সিঙ্ক:\nসম্প্রদায়গুলি আমদানি করা হচ্ছে";
 "initial_sync_start_importing_account_data" = "প্রাথমিক সিঙ্ক:\nঅ্যাকাউন্ট ডেটা আমদানি করা হচ্ছে";
 "event_status_sending_message" = "বার্তা প্রেরণ করা হচ্ছে …";
 "notice_room_invite_no_invitee_with_reason" = "%1$@ এর আমন্ত্রণ। কারণ: %2$@";
@@ -195,7 +194,6 @@
 "matrix_only_filter" = "শুধুমাত্র ম্যাট্রিক্সের যোগাযোগগুলি";
 "no_result_placeholder" = "কোন ফলাফল নেই";
 "rooms_header" = "রুমগুলি";
-"groups_header" = "সম্প্রদায়গুলি";
 "send_bug_report_include_logs" = "লগগুলি পাঠান";
 "send_bug_report_include_crash_logs" = "ক্র্যাশ লগগুলি পাঠান";
 "send_bug_report_include_screenshot" = "স্ক্রিনশট পাঠান";
@@ -235,7 +233,6 @@
 "auth_email_already_defined" = "এই ইমেইল ঠিকানা ইতিমধ্যে সংজ্ঞায়িত করা হয়।";
 "auth_forgot_password" = "পাসওয়ার্ড ভুলে গেছেন\?";
 "auth_recaptcha_message" = "এই হোম সার্ভার আপনি একটি রোবট না সেটা নিশ্চিত করবে";
-"auth_reset_password_missing_email" = "আপনার অ্যাকাউন্টের সাথে যুক্ত ইমেল ঠিকানা প্রবেশ করা আবশ্যক।";
 "auth_reset_password_error_unauthorized" = "ইমেল ঠিকানা যাচাই করতে ব্যর্থ: ইমেলটিতে লিঙ্কে আপনি ক্লিক করেছেন তা নিশ্চিত করুন";
 "auth_accept_policies" = "পর্যালোচনা করুন এবং এই হোমসার্ভার এর নীতিগুলি গ্রহণ করুন:";
 "login_error_invalid_home_server" = "একটি বৈধ URL প্রবেশ করুন";
@@ -464,7 +461,6 @@
 "settings_default_media_source" = "ডিফল্ট মিডিয়া উৎস";
 "media_source_choose" = "চয়ন";
 "settings_play_shutter_sound" = "শাটার শব্দ চালান";
-"settings_flair" = "ফ্লেয়ার";
 "media_saving_period_3_days" = "৩ দিন";
 "media_saving_period_1_week" = "১ সপ্তা";
 "media_saving_period_1_month" = "১ মাস";
@@ -485,7 +481,7 @@
 "room_settings_unset_main_address" = "প্রধান ঠিকানা হিসাবে আনসেট করুন";
 "encryption_information_decryption_error" = "ডিক্রিপশন সমস্যা";
 "encryption_information_device_name" = "সর্বজনীন নাম";
-"encryption_information_device_id" = "আইডি";
+"device_manager_session_details_session_id" = "আইডি";
 "encryption_information_device_key" = "সেশানের কুঞ্জি";
 "encryption_export_e2e_room_keys" = "শেষ থেকে শেষ রুমের কুঞ্জিগুলি এক্সপোর্ট করুন";
 "encryption_export_room_keys" = "রুমের কুঞ্জিগুলি এক্সপোর্ট করুন";

@@ -734,6 +734,26 @@
 			<string>%1$d осіб</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d повідомлення вилучені</string>
+			<key>many</key>
+			<string>%d повідомлень вилучені</string>
+			<key>one</key>
+			<string>%d повідомлення вилучене</string>
+			<key>other</key>
+			<string>%d повідомлень вилучені</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -772,6 +792,26 @@
 			<string>%d учасник</string>
 			<key>other</key>
 			<string>%d учасників</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ і %2$d інші</string>
+			<key>many</key>
+			<string>%1$@ і %2$d інших</string>
+			<key>one</key>
+			<string>%1$@ і %2$d інший</string>
+			<key>other</key>
+			<string>%1$@ і %2$d інших</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -872,6 +912,26 @@
 			<string>%d активний сеанс</string>
 			<key>other</key>
 			<string>%d активних сеансів</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Знайдені %d методи.</string>
+			<key>many</key>
+			<string>Знайдені %d методів.</string>
+			<key>one</key>
+			<string>Знайдений %d метод.</string>
+			<key>other</key>
+			<string>Знайдені %d методів.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

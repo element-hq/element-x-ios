@@ -594,6 +594,22 @@
 			<string>%1$d نفر</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>۱ پیام برداشته شد</string>
+			<key>other</key>
+			<string>%d پیام برداشته شد</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -624,6 +640,22 @@
 			<string>%d عضو</string>
 			<key>other</key>
 			<string>%d عضو</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ و ۱ والد دیگر</string>
+			<key>other</key>
+			<string>%1$@ و %2$d والد دیگر</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -704,6 +736,22 @@
 			<string>۱ نشست فعّال</string>
 			<key>other</key>
 			<string>%d نشست فعّال</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>۱ روش پیدا شد.</string>
+			<key>other</key>
+			<string>%d روش پیدا شد.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

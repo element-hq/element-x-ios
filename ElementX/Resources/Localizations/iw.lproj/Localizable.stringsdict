@@ -277,7 +277,7 @@
 			<key>one</key>
 			<string>שיחה שלא נענתה</string>
 			<key>other</key>
-			<string>שיחה שלא נענתה</string>
+			<string>%d שיחות שלא נענו</string>
 			<key>two</key>
 			<string>%d שיחות שלא נענו</string>
 		</dict>
@@ -297,7 +297,7 @@
 			<key>one</key>
 			<string>שיחת וידאו שלא נענתה</string>
 			<key>other</key>
-			<string>שיחת וידאו שלא נענתה</string>
+			<string>%d שיחות וידאו שלא נענו</string>
 			<key>two</key>
 			<string>%d שיחות וידאו שלא נענו</string>
 		</dict>

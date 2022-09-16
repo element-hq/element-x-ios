@@ -732,6 +732,26 @@
 			<string>%1$d osób</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d wiadomości usunięte</string>
+			<key>many</key>
+			<string>%d wiadomości usuniętych</string>
+			<key>one</key>
+			<string>%d wiadomość usunięta</string>
+			<key>other</key>
+			<string>%d wiadomości usuniętych</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -770,6 +790,26 @@
 			<string>%d członek</string>
 			<key>other</key>
 			<string>%d członków</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%1$@ i %2$d inne</string>
+			<key>many</key>
+			<string>%1$@ i %2$d innych</string>
+			<key>one</key>
+			<string>%1$@ i %2$d inny</string>
+			<key>other</key>
+			<string>%1$@ i %2$d innych</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -870,6 +910,26 @@
 			<string>%d aktywna sesja</string>
 			<key>other</key>
 			<string>%d aktywnych sesji</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>Znaleziono %d dostawców.</string>
+			<key>many</key>
+			<string>Znaleziono %d dostawdów.</string>
+			<key>one</key>
+			<string>Znaleziono %d dostawcę.</string>
+			<key>other</key>
+			<string>Znaleziono %d dostawdów.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

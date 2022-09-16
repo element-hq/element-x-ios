@@ -14,3 +14,6 @@
 "settings_troubleshoot_test_battery_success" = "%@ is not affected by Battery Optimisation.";
 "settings_troubleshoot_test_battery_title" = "Battery Optimisation";
 "error_unauthorized" = "Unauthorised, missing valid authentication credentials";
+"command_description_rainbow_emote" = "Sends the given emote coloured as a rainbow";
+"command_description_rainbow" = "Sends the given message coloured as a rainbow";
+"settings_system_preferences_summary" = "Choose LED colour, vibration, sound…";

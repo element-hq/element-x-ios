@@ -40,7 +40,6 @@
 "low_priority_header" = "Lavprioritet";
 "no_result_placeholder" = "Ingen treff";
 "rooms_header" = "Rom";
-"groups_header" = "Samfunn";
 "send_bug_report" = "Meld fra om en bug";
 "send_bug_report_progress" = "Fremgang (%@%%)";
 "join_room" = "Bli med i rommet";
@@ -105,7 +104,6 @@
 "settings_media" = "Medier";
 "compression_opt_list_choose" = "Velg";
 "media_source_choose" = "Velg";
-"settings_flair" = "Merkeskilt";
 "media_saving_period_3_days" = "3 dager";
 "media_saving_period_1_week" = "1 uke";
 "media_saving_period_1_month" = "1 måned";
@@ -115,7 +113,7 @@
 "room_settings_banned_users_title" = "Bannlyste brukere";
 "room_settings_category_advanced_title" = "Avansert";
 "settings_theme" = "Tema";
-"encryption_information_device_id" = "Økt-ID";
+"device_manager_session_details_session_id" = "Økt-ID";
 "encryption_information_device_key" = "Øktnøkkel";
 "encryption_export_export" = "Eksporter";
 "encryption_import_import" = "Importer";
@@ -483,7 +481,6 @@
 "event_redacted" = "Meldingen ble slettet";
 "settings_show_redacted" = "Vis fjernede meldinger";
 "settings_show_redacted_summary" = "Vis en stattholder for fjernede meldinger";
-"group_all_communities" = "Alle samfunn";
 "settings_sdk_version" = "Matrix SDK-versjon";
 "send_suggestion" = "Send inn et forslag";
 "send_file_step_encrypting_file" = "Krypterer filen …";
@@ -562,7 +559,6 @@
 "action_reset" = "Tilbakestill";
 "auth_accept_policies" = "Vennligst gjennomgå og godta retningslinjene til denne hjemmeserveren:";
 "auth_reset_password_error_unauthorized" = "Klarte ikke verifisere e-postadressen: Pass på at du har klikket på lenken i e-posten";
-"auth_reset_password_missing_email" = "Du må skrive inn e-postadressen som er knyttet til din konto.";
 "auth_recaptcha_message" = "Denne hjemmetjeneren vil vite om du er en robot";
 "call_failed_no_connection_description" = "Klarte ikke å starte en sanntidskopling.\nVennligst be hjemmetjeneradministratoren din om å sette opp en TURN server så samtaler blir mer stabile.";
 "login_error_not_json" = "Inneholdt ikke gyldig JSON";
@@ -763,7 +759,6 @@
 "a11y_create_menu_close" = "Lukk menyen for opprett rom…";
 "a11y_create_direct_message" = "Lag en ny direkte samtale";
 "a11y_jump_to_bottom" = "Gå til bunnen";
-"error_attachment" = "Det oppstod en feil under henting av vedlegget.";
 "attachment_type_dialog_title" = "Legg til bilde fra";
 "rotate_and_crop_screen_title" = "Roter og beskjær";
 "error_handling_incoming_share" = "Kunne ikke håndtere delingsdata";
@@ -794,7 +789,7 @@
 "login_reset_password_warning_content" = "Hvis du endrer passordet, tilbakestilles alle krypteringsnøkler fra ende-til-ende på alle øktene dine, noe som gjør kryptert chatlogg uleselig. Konfigurer sikkerhetskopiering av nøkkel eller eksporter romnøklene fra en annen økt før du tilbakestiller passordet.";
 "login_reset_password_success_notice_2" = "Du er logget ut av alle økter og vil ikke lenger motta push-varsler. Logg på igjen på hver enhet for å aktivere varsler på nytt.";
 "login_reset_password_cancel_confirmation_content" = "Passordet ditt er ikke endret ennå.\n\nStoppe passordendringsprosessen\?";
-"login_signup_cancel_confirmation_content" = "Kontoen din er ikke opprettet ennå.\n\nStoppe registreringsprosessen\?";
+"login_signup_cancel_confirmation_content" = "Kontoen din er ikke opprettet ennå. Stoppe registreringsprosessen\?";
 "login_a11y_choose_other" = "Velg en tilpasset hjemmeserver";
 "login_a11y_captcha_container" = "Vennligst utfør captcha-utfordringen";
 "login_wait_for_email_notice" = "Vi har nettopp sendt en e-post til %1$@.\nKlikk på lenken den inneholder for å fortsette opprettelsen av kontoen.";

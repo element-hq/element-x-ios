@@ -25,7 +25,6 @@
 "invitations_header" = "คำเชิญ";
 "system_alerts_header" = "การแจ้งเตือนจากระบบ";
 "no_result_placeholder" = "ไม่มีผลลัพธ์";
-"groups_header" = "ชุมชน";
 "send_bug_report_description_in_english" = "ถ้าเป็นไปได้ โปรดเขียนคำอธิบายเป็นภาษาอังกฤษ";
 "send_bug_report_placeholder" = "อธิบายปัญหาของคุณที่นี่";
 "join_room" = "เข้าร่วมห้อง";

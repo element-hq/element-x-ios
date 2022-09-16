@@ -44,7 +44,6 @@
 "initial_sync_start_importing_account_joined_rooms" = "Njëkohësimi Fillestar:\nPo ngarkohen bisedat tuaja\nNëse keni hyrë në shumë dhoma, kjo mund të zgjasë ca";
 "initial_sync_start_importing_account_invited_rooms" = "Njëkohësimi fillestar:\nPo importohen dhoma me ftesë";
 "initial_sync_start_importing_account_left_rooms" = "Njëkohësimi fillestar:\nPo importohen dhoma të braktisura";
-"initial_sync_start_importing_account_groups" = "Njëkohësimi fillestar:\nPo importohen bashkësi";
 "initial_sync_start_importing_account_data" = "Njëkohësimi fillestar:\nPo importohet të dhëna llogarie";
 "event_status_sending_message" = "Po dërgohet mesazh…";
 "notice_room_third_party_revoked_invite" = "%1$@ shfuqizoi ftesën për %2$@ për pjesëmarrje te dhoma";
@@ -219,7 +218,6 @@
 "matrix_only_filter" = "Vetëm kontakte të Matrix-it";
 "no_result_placeholder" = "S’ka përfundime";
 "rooms_header" = "Dhoma";
-"groups_header" = "Bashkësi";
 "send_bug_report_include_logs" = "Dërgo regjistra";
 "send_bug_report_include_crash_logs" = "Dërgoni regjistrime vithisjesh";
 "send_bug_report_include_screenshot" = "Dërgo foto ekrani";
@@ -246,7 +244,6 @@
 "auth_email_already_defined" = "Kjo adresë email është e përkufizuar tashmë.";
 "auth_forgot_password" = "Harruat fjalëkalimin?";
 "auth_recaptcha_message" = "Ky shërbyes Home do të donte të sigurohej se s’jeni robot";
-"auth_reset_password_missing_email" = "Duhet dhënë adresa email e lidhur me llogarinë tuaj.";
 "login_error_invalid_home_server" = "Ju lutemi, jepni një URL të vlefshme";
 "login_error_bad_json" = "JSON e keqformuar";
 "login_error_not_json" = "S’përmbante JSON të vlefshëm";
@@ -384,7 +381,7 @@
 "settings_theme" = "Temë";
 "encryption_information_decryption_error" = "Gabim shfshehtëzimi";
 "encryption_information_device_name" = "Emër publik";
-"encryption_information_device_id" = "ID Sesioni";
+"device_manager_session_details_session_id" = "ID Sesioni";
 "encryption_information_device_key" = "Kyç sesioni";
 "encryption_export_e2e_room_keys" = "Eksporto kyçe dhome E2E";
 "encryption_export_room_keys" = "Eksporto kyçe dhome";
@@ -535,7 +532,6 @@
 "settings_call_ringtone_use_app_ringtone" = "Për thirrje ardhëse përdor zilen parazgjedhje të %@-it";
 "settings_call_ringtone_title" = "Zile thirrjesh ardhëse";
 "settings_call_ringtone_dialog_title" = "Përzgjidhni zile për thirrjet:";
-"settings_flair" = "Simbole";
 "action_accept" = "Pranoje";
 "auth_accept_policies" = "Ju lutemi, merrni në shqyrtim dhe pranoni rregullat e këtij shërbyesi Home:";
 "settings_notification_troubleshoot" = "Diagnostikoni Njoftime";
@@ -742,7 +738,6 @@
 "action_change" = "Ndryshoje";
 "change_room_directory_network" = "Ndryshoni rrjetin";
 "please_wait" = "Ju lutemi, pritni…";
-"group_all_communities" = "Krejt Bashkësitë";
 "room_preview_no_preview" = "Kjo dhomë s’mund të parashihet";
 "fab_menu_create_room" = "Dhoma";
 "fab_menu_create_chat" = "Mesazhe të Drejtpërdrejtë";
@@ -851,7 +846,6 @@
 "three_users_read" = "%1$@, %2$@ dhe %3$@ të lexuar";
 "two_users_read" = "%1$@ dhe %2$@ të lexuar";
 "one_user_read" = "%@ i lexuar";
-"error_attachment" = "Ndodhi një gabim gjatë marrjes së bashkëngjitjes.";
 "attachment_type_file" = "Kartelë";
 "attachment_type_contact" = "Kontakt";
 "attachment_type_camera" = "Kamerë";
@@ -983,7 +977,7 @@
 "login_signup_submit" = "Pasuesi";
 "login_signup_error_user_in_use" = "Ai emër përdoruesi është i zënë";
 "login_signup_cancel_confirmation_title" = "Kujdes";
-"login_signup_cancel_confirmation_content" = "Llogaria juaj s’është krijuar ende.\n\nTë ndalet procesi i regjistrimit\?";
+"login_signup_cancel_confirmation_content" = "Llogaria juaj s’është krijuar ende. Të ndalet procesi i regjistrimit\?";
 "login_a11y_choose_matrix_org" = "Përzgjidhni matrix.org";
 "login_a11y_choose_modular" = "Përzgjidhni Element Matrix Services";
 "login_a11y_choose_other" = "Përzgjidhni një shërbyes Home vetjak";
@@ -1189,7 +1183,6 @@
 "settings_troubleshoot_title" = "Diagnostikoje";
 "command_description_plain" = "E dërgon një mesazh si tekst të thjeshtë, pa interpretuar elementët Markdown";
 "auth_invalid_login_param_space_in_password" = "Emër përdoruesi dhe/ose fjalëkalim i pasaktë. Fjalëkalimi i dhënë fillon ose mbaron me hapësirë, ju lutemi, kontrollojeni.";
-"settings_rageshake" = "";
 "bootstrap_crosssigning_progress_initializing" = "Po publikohen kyçe të krijuar identiteti";
 "room_message_placeholder" = "Mesazh…";
 "upgrade_security" = "Ka të gatshëm përmirësim fshehtëzimi";
@@ -1317,7 +1310,7 @@
 "room_participants_action_ignore_title" = "Shpërfille përdoruesin";
 "room_participants_action_ignore_prompt_msg" = "Shpërfillja e këtij përdoruesi do të heqë mesazhet e tij prej dhomave që ndani me të.\n\nKëtë veprim mund ta zhbëni në çfarëdo kohe, te rregullimet e përgjithshme.";
 "room_participants_action_unignore_title" = "Hiqe shpërfilljen e përdoruesit";
-"room_participants_action_unignore_prompt_msg" = "Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.";
+"room_participants_action_unignore_prompt_msg" = "Heqja e shpërfilljes së këtij përdoruesi do të shfaqë sërish krejt mesazhet prej tij.\n\nKini parasysh se ky veprim do të sjellë rinisjen e aplikacionit dhe do të hajë ca kohë.";
 "room_participants_action_cancel_invite_title" = "Anuloje ftesën";
 "room_participants_action_cancel_invite_prompt_msg" = "Jeni i sigurt se doni të anulohet ftesa për këtë përdorues\?";
 "room_participants_remove_title" = "Përzëre përdoruesin";
@@ -1910,10 +1903,6 @@
 "space_add_space_to_any_space_you_manage" = "Shtoni një hapësirë te cilado hapësirë që administroni.";
 "space_add_existing_spaces" = "Shtoni hapësira ekzistuese";
 "space_add_existing_rooms_only" = "Shtoni dhoma ekzistuese";
-"pick_tings_to_leave" = "Zgjidhni gjëra që duhen braktisur";
-"leave_specific_ones" = "Braktisni dhoma dhe hapësira të përcaktuara…";
-"dont_leave_any" = "Mos braktis ndonjë dhomë dhe hapësirë";
-"leave_all_rooms_and_spaces" = "Braktis krejt dhomat dhe hapësirat";
 "space_leave_prompt_msg_with_name" = "Jeni i sigurt se doni të dilni nga \'%@\?";
 "discovery_section" = "Zbulim (%@)";
 "finish_setup" = "Përfundoje ujdisjen";
@@ -2026,9 +2015,6 @@
 "ftue_auth_carousel_control_title" = "Kontrollin e keni ju.";
 "ftue_auth_carousel_secure_title" = "Jini zot i bisedave tuaja.";
 "tooltip_attachment_location" = "Jepe vendndodhjen";
-"settings_enable_location_sharing" = "Aktivizoni dhënie vendndodhjeje";
-"location_share" = "Jepe vendndodhjen";
-"a11y_location_share_icon" = "Jepe vendndodhjen";
 "location_activity_title_preview" = "Vendndodhje";
 "location_activity_title_static_sharing" = "Jepe vendndodhjen";
 "closed_poll_option_description" = "Përfundimet shfaqen vetëm kur përfundoni anketimin";
@@ -2041,8 +2027,6 @@
 "ftue_auth_carousel_encrypted_body" = "I fshehtëzuar skaj më skaj dhe pa u dashur numër telefoni. Pa reklama, apo shfrytëzim të dhënash.";
 "ftue_auth_carousel_control_body" = "Zgjidhni ku mbahen bisedat tuaja, duke ju dhënë kontroll dhe pavarësi. Të lidhur përmes Matrix-i.";
 "ftue_auth_carousel_secure_body" = "Komunikim i sigurt dhe i pavarur, që ju jep të njëjtën shkallë privatësie si biseda kokë më kokë, në shtëpinë tuaj.";
-"labs_render_locations_in_timeline" = "Trego vendndodhje përdoruesi në rrjedhën kohore";
-"settings_enable_location_sharing_summary" = "Pasi të aktivizohet, do të jeni në gjendje të dërgoni vendndodhjen tuaj në çfarëdo dhome";
 "location_share_external" = "Hape me";
 "location_not_available_dialog_content" = "%@ s’njohu dot vendndodhjen tuaj. Ju lutemi, riprovoni më vonë.";
 "location_not_available_dialog_title" = "%@ s’mësoi dot vendndodhjen tuaj";
@@ -2072,7 +2056,7 @@
 "ftue_auth_use_case_title" = "Me kë do të bisedoni më shumë\?";
 "navigate_to_thread_when_already_in_the_thread" = "Po e shihni tashmë këtë rrjedhë!";
 "view_in_room" = "Shiheni në Dhomë";
-"reply_in_thread" = "Përgjigjuni Te Rrjedha";
+"reply_in_thread" = "Përgjigjuni te rrjedha";
 "command_not_supported_in_threads" = "Urdhri “%@” njihet, por nuk mbulohet në rrjedha.";
 "search_thread_from_a_thread" = "Nga një Rrjedhë";
 "thread_list_empty_notice" = "Ndihmëz: Prekni pakëz gjatë një mesazh dhe përdorni “%@”.";
@@ -2098,8 +2082,6 @@
 "message_reaction_show_less" = "Shfaq më pak";
 "location_share_live_stop" = "Ndale";
 "location_share_live_enabled" = "Vendndodhje Drejtpërsëdrejti e aktivizuar";
-"location_in_background_missing_permission_dialog_content" = "Nëse do të donit të tregonit Vendndodhjen tuaj Drejtpërsëdrejti, %@ lyp njohje të vendndodhjes gjithë kohën, kur aplikacioni gjenden në prapaskenë.\nDo ta njohim vendndodhjen tuaj vetëm për kohëzgjatjen që zgjidhni ju.";
-"location_in_background_missing_permission_dialog_title" = "Lejoni hyrje";
 "a11y_location_share_option_pinned_icon" = "Tregoje këtë vendndodhje";
 "location_share_option_pinned" = "Tregoje këtë vendndodhje";
 "a11y_location_share_option_user_current_icon" = "Tregoje vendndodhjen time të tanishme";
@@ -2121,10 +2103,35 @@
 "ftue_profile_picture_title" = "Shtoni një foto profili";
 "ftue_display_name_entry_footer" = "Këtë mund ta ndryshoni më vonë";
 "ftue_display_name_entry_title" = "Emër Në Ekran";
-"ftue_display_name_subtitle" = "Kjo do të shfaqet kur dërgoni mesazhe.";
 "ftue_display_name_title" = "Zgjidhni një emër për në ekran";
 "ftue_account_created_subtitle" = "Llogaria juaj %@ u krijua.";
 "ftue_account_created_congratulations_title" = "Përgëzime!";
 "ftue_account_created_take_me_home" = "Shpjemëni në shtëpi";
 "ftue_account_created_personalize" = "Personalizoni profil";
 "action_disable" = "Çaktivizoje";
+"send_feedback_threads_title" = "Përshtypje për Beta-n e Rrjedhave";
+"settings_presence_user_always_appears_offline_summary" = "Në u aktivizoftë, përdoruesve të tjerë do t’u dukeni në linjë, madje edhe kur përdoret aplikacioni.";
+"threads_labs_enable_notice_message" = "Shërbyesi juaj Home aktualisht s’mbulon rrjedha, ndaj kjo veçori mund të jetë e paqëndrueshme. Disa mesazhe rrjedhash mund të mos jenë të përdorshëm. %@Doni të aktivizohen rrjedhat, sido qoftë\?";
+"threads_labs_enable_notice_title" = "Beta Rrjedhash";
+"threads_beta_enable_notice_message" = "Rrjedhat ju ndihmojnë t’i mbani bisedat tuaja brenda temës dhe ndjekjen e tyre të lehtë. %@Aktivizimi i rrjedhave do të sjellë rifreskimin e aplikacionit. Për disa llogari, kjo mund të zgjasë më shumë.";
+"threads_beta_enable_notice_title" = "Beta Rrjedhash";
+"send_feedback_threads_info" = "Rrjedhat janë në përpunim të vazhdueshëm, me veçori të reja, ngazëlluese, të ardhshme, bie fjala, njoftime. Do të donim fort të dëgjonim mendimin tuaj!";
+"location_share_live_select_duration_option_3" = "8 orë";
+"location_share_live_select_duration_option_2" = "1 orë";
+"location_share_live_select_duration_option_1" = "15 minuta";
+"location_share_live_select_duration_title" = "Tregoni vendndodhjen tuaj drejtpërsëdrejti për";
+"audio_message_file_size" = "(%1$@)";
+"audio_message_reply_content" = "%1$@ (%2$@)";
+"error_audio_message_unable_to_play" = "S’arrihet të luhet %1$@";
+"a11y_pause_audio_message" = "Ndale %1$@";
+"a11y_play_audio_message" = "Luaje %1$@";
+"a11y_audio_playback_duration" = "%1$d minuta %2$d sekonda";
+"a11y_audio_message_item" = "%1$@, %2$@, %3$@";
+"ftue_auth_carousel_workplace_body" = "%@ është gjithashtu i goditur për në punë. Është i besuar nga entet më të sigurta të botës.";
+"beta" = "BETA";
+"give_feedback_threads" = "Jepni Përshtypje";
+"beta_title_bottom_sheet_action" = "BETA";
+"settings_presence_user_always_appears_offline" = "Mënyra <em>offline</em>";
+"settings_presence" = "Prani";
+"action_learn_more" = "Mësoni më tepër";
+"action_try_it_out" = "Provojeni";
