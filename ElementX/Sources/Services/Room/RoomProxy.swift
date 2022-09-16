@@ -228,11 +228,11 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
     
-    func update(avatarURL: String?, forUserId userId: String) async {
+    func update(avatarURL: String?, forUserId userId: String) {
         memberAvatars[userId] = avatarURL
     }
     
-    func update(displayName: String?, forUserId userId: String) async {
+    func update(displayName: String?, forUserId userId: String) {
         memberDisplayNames[userId] = displayName
     }
     

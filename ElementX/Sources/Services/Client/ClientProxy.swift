@@ -104,16 +104,19 @@ class ClientProxy: ClientProxyProtocol {
             Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
             
             slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
-            slidingSyncObserverToken = slidingSync.sync()
         } catch {
             fatalError("Failed configuring sliding sync")
         }
         
-        if !client.isSoftLogout() {
-            client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-            client.startSync(timelineLimit: ClientProxy.syncLimit)
+        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+        
+        guard !client.isSoftLogout() else {
+            return
         }
+        
+        slidingSyncObserverToken = slidingSync.sync()
+        client.startSync(timelineLimit: ClientProxy.syncLimit)
     }
     
     var userIdentifier: String {
