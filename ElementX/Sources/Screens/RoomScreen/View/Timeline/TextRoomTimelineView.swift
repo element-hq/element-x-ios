@@ -75,6 +75,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                              text: text,
                              timestamp: timestamp,
                              shouldShowSenderDetails: shouldShowSenderDetails,
+                             inGroupState: .single,
                              isOutgoing: isOutgoing,
                              senderId: senderId)
     }
