@@ -22,6 +22,7 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equa
     let text: String
     let timestamp: String
     let shouldShowSenderDetails: Bool
+    let inGroupState: TimelineItemInGroupState
     let isOutgoing: Bool
     
     let senderId: String

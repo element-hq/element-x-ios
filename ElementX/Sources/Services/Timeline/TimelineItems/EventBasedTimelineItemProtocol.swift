@@ -17,10 +17,40 @@
 import Foundation
 import UIKit
 
+enum TimelineItemInGroupState {
+    case single
+    case beginning
+    case middle
+    case end
+
+    var roundedCorners: UIRectCorner {
+        switch self {
+        case .single:
+            return .allCorners
+        case .beginning:
+            return [.topLeft, .topRight]
+        case .middle:
+            return []
+        case .end:
+            return [.bottomLeft, .bottomRight]
+        }
+    }
+
+    var shouldShowSenderDetails: Bool {
+        switch self {
+        case .single, .beginning:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
     var text: String { get }
     var timestamp: String { get }
     var shouldShowSenderDetails: Bool { get }
+    var inGroupState: TimelineItemInGroupState { get }
     var isOutgoing: Bool { get }
     
     var senderId: String { get }
