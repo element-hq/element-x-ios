@@ -35,18 +35,22 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     }
 
     func didReceiveAuthError(isSoftLogout: Bool) {
-        clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
+        Task {
+            await clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
+        }
     }
 
     func didUpdateRestoreToken() {
-        clientProxy?.didUpdateRestoreToken()
+        Task {
+            await clientProxy?.didUpdateRestoreToken()
+        }
     }
     
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
-        DispatchQueue.main.async {
-            self.clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
+        Task {
+            await self.clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
         }
     }
 }
@@ -147,7 +151,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    @MainActor func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
+    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
         if let roomProxy = roomProxies[identifier] {
             return roomProxy
         }

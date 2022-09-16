@@ -24,6 +24,7 @@ enum UserSessionCallback {
     case updateRestoreTokenNeeded
 }
 
+@MainActor
 protocol UserSessionProtocol {
     var userID: String { get }
     var isSoftLogout: Bool { get }
