@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import MatrixRustSDK
 import UIKit
 
 @MainActor

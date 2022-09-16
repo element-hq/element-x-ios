@@ -15,7 +15,6 @@
 //
 
 import AppAuth
-import MatrixRustSDK
 import SwiftUI
 
 struct LoginCoordinatorParameters {
