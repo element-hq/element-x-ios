@@ -113,7 +113,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
         }
         
         stateMachine.addErrorHandler { context in
-            fatalError("Failed transition with context: \(context)")
+            MXLog.error("Failed transition with context: \(context)")
         }
     }
     
