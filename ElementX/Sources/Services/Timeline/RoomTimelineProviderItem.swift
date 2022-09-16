@@ -31,6 +31,14 @@ enum RoomTimelineProviderItem {
             self = .other(item)
         }
     }
+
+    func canBeGrouped(with prevItem: RoomTimelineProviderItem) -> Bool {
+        guard case let .event(selfEventItem) = self, case let .event(prevEventItem) = prevItem else {
+            return false
+        }
+        //  can be improved by adding a date threshold
+        return prevEventItem.reactions.isEmpty && selfEventItem.sender == prevEventItem.sender
+    }
 }
 
 /// A light wrapper around event timeline items returned from Rust, used in `RoomTimelineProviderItem`.
@@ -65,6 +73,10 @@ struct EventTimelineItem {
     
     var sender: String {
         item.sender()
+    }
+
+    var reactions: [Reaction] {
+        item.reactions()
     }
     
     var originServerTs: Date {
