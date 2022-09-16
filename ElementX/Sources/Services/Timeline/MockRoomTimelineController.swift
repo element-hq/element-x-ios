@@ -43,7 +43,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              senderId: "",
                              senderDisplayName: "Helena",
                              properties: RoomTimelineItemProperties(reactions: [
-                                AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
+                                 AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
                              ])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/",
@@ -54,8 +54,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              senderId: "",
                              senderDisplayName: "Helena",
                              properties: RoomTimelineItemProperties(reactions: [
-                                AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
-                                AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
+                                 AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
+                                 AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
                              ])),
         SeparatorRoomTimelineItem(id: UUID().uuidString,
                                   text: "Today"),
@@ -86,8 +86,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              senderId: "",
                              senderDisplayName: "Bob",
                              properties: RoomTimelineItemProperties(reactions: [
-                                AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
-                                AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
+                                 AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
+                                 AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
                              ]))
     ]
     
