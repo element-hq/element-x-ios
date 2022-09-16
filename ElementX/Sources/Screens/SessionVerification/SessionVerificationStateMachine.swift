@@ -66,22 +66,10 @@ class SessionVerificationStateMachine {
         stateMachine.state
     }
 
-    // swiftlint:disable cyclomatic_complexity
     init() {
         stateMachine = StateMachine(state: .initial) { machine in
             machine.addRoutes(event: .requestVerification, transitions: [.initial => .requestingVerification])
             machine.addRoutes(event: .didFail, transitions: [.requestingVerification => .initial])
-            
-            machine.addRoutes(event: .cancel, transitions: [.requestingVerification => .cancelling])
-            machine.addRoutes(event: .didCancel, transitions: [.requestingVerification => .cancelled])
-            
-            // Cancellation request from the other party should either take us from `.cancelling`
-            // to `.cancelled` or keep us in `.cancelled` if already there. There is more `.didCancel`
-            // handling in `addRouteMapping` for states containing associated values
-            machine.addRoutes(event: .didCancel, transitions: [.cancelling => .cancelled])
-            machine.addRoutes(event: .didCancel, transitions: [.cancelled => .cancelled])
-            machine.addRoutes(event: .didFail, transitions: [.cancelled => .cancelled])
-            
             machine.addRoutes(event: .restart, transitions: [.cancelled => .initial])
             
             // Transitions with associated values need to be handled through `addRouteMapping`
@@ -103,18 +91,9 @@ class SessionVerificationStateMachine {
                 case (.didFail, .decliningChallenge(let emojis)):
                     return .showingChallenge(emojis: emojis)
                 
-                case (.cancel, .showingChallenge):
+                case (.cancel, _):
                     return .cancelling
-                case (.cancel, .acceptingChallenge):
-                    return .cancelling
-                case (.cancel, .decliningChallenge):
-                    return .cancelling
-                
-                case (.didCancel, .showingChallenge):
-                    return .cancelled
-                case (.didCancel, .acceptingChallenge):
-                    return .cancelled
-                case (.didCancel, .decliningChallenge):
+                case (.didCancel, _):
                     return .cancelled
                     
                 default:
@@ -123,8 +102,6 @@ class SessionVerificationStateMachine {
             }
         }
     }
-
-    // swiftlint:enable cyclomatic_complexity
     
     /// Attempt to move the state machine to another state through an event
     /// It will either invoke the `transitionHandler` or the `errorHandler` depending on its current state
