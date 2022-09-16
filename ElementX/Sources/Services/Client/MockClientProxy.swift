@@ -28,6 +28,10 @@ struct MockClientProxy: ClientProxyProtocol {
     
     let roomSummaryProvider: RoomSummaryProviderProtocol = MockRoomSummaryProvider()
     
+    func startSync() { }
+    
+    func stopSync() { }
+    
     func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
         nil
     }

@@ -259,21 +259,23 @@ class AppCoordinator: Coordinator {
     }
     
     private func tearDownUserSession(isSoftLogout: Bool = false) {
-        Task {
-            deobserveUserSessionChanges()
-
-            if !isSoftLogout {
+        userSession.clientProxy.stopSync()
+        
+        deobserveUserSessionChanges()
+        
+        if !isSoftLogout {
+            Task {
                 //  first log out from the server
                 _ = await userSession.clientProxy.logout()
-
-                //  regardless of the result, clear user data
-                userSessionStore.logout(userSession: userSession)
-                userSession = nil
             }
-
-            //  complete logging out
-            stateMachine.processEvent(.completedSigningOut)
+            
+            //  regardless of the result, clear user data
+            userSessionStore.logout(userSession: userSession)
+            userSession = nil
         }
+        
+        //  complete logging out
+        stateMachine.processEvent(.completedSigningOut)
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
@@ -291,6 +293,8 @@ class AppCoordinator: Coordinator {
     }
     
     private func presentHomeScreen() {
+        userSession.clientProxy.startSync()
+        
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          attributedStringBuilder: AttributedStringBuilder())
         let coordinator = HomeScreenCoordinator(parameters: parameters)

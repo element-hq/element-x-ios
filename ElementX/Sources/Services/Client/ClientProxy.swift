@@ -29,8 +29,8 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     // MARK: - ClientDelegate
     
     func didReceiveSyncUpdate() {
-        DispatchQueue.main.async {
-            self.clientProxy?.didReceiveSyncUpdate()
+        Task {
+            await self.clientProxy?.didReceiveSyncUpdate()
         }
     }
 
@@ -71,8 +71,9 @@ class ClientProxy: ClientProxyProtocol {
     let roomSummaryProvider: RoomSummaryProviderProtocol
     
     deinit {
+        // These need to be inlined instead of using stopSync()
+        // as we can't call async methods safely from deinit
         client.setDelegate(delegate: nil)
-        
         slidingSyncObserverToken?.cancel()
         slidingSync.setObserver(observer: nil)
     }
@@ -85,7 +86,7 @@ class ClientProxy: ClientProxyProtocol {
         self.backgroundTaskService = backgroundTaskService
         
         do {
-            let slidingSyncBuilder = try client.slidingSync().homeserver(url: "https://slidingsync.lab.element.dev")
+            let slidingSyncBuilder = try client.slidingSync().homeserver(url: BuildSettings.slidingSyncProxyBaseURL.absoluteString)
             
             let slidingSyncView = try SlidingSyncViewBuilder()
                 .timelineLimit(limit: 10)
@@ -99,24 +100,11 @@ class ClientProxy: ClientProxyProtocol {
                 .build()
             
             roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
-                                                      slidingSyncView: slidingSyncView)
-            
-            Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-            
-            slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+                                                      slidingSyncView: slidingSyncView,
+                                                      roomMessageFactory: RoomMessageFactory())
         } catch {
             fatalError("Failed configuring sliding sync")
         }
-        
-        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-        
-        guard !client.isSoftLogout() else {
-            return
-        }
-        
-        slidingSyncObserverToken = slidingSync.sync()
-        client.startSync(timelineLimit: ClientProxy.syncLimit)
     }
     
     var userIdentifier: String {
@@ -152,6 +140,27 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed retrieving restore token with error: \(error)")
             return nil
         }
+    }
+    
+    func startSync() {
+        guard !client.isSoftLogout() else {
+            return
+        }
+        
+        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
+        
+        slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+        slidingSyncObserverToken = slidingSync.sync()
+        
+        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+        client.startSync(timelineLimit: ClientProxy.syncLimit)
+    }
+    
+    func stopSync() {
+        client.setDelegate(delegate: nil)
+        
+        slidingSyncObserverToken?.cancel()
+        slidingSync.setObserver(observer: nil)
     }
     
     func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {

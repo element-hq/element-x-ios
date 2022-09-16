@@ -19,6 +19,8 @@ import Foundation
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     var callbacks = PassthroughSubject<RoomSummaryProviderCallback, Never>()
+    var stateUpdatePublisher = CurrentValueSubject<RoomSummaryProviderState, Never>(.cold)
+    var countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
     
     var roomSummaries: [RoomSummary] = [
         RoomSummary(id: "1", name: "First room", isDirect: true, avatarURLString: nil, lastMessage: nil, unreadNotificationCount: 4),

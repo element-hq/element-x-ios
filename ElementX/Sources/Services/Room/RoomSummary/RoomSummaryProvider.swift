@@ -18,11 +18,17 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, SlidingSyncViewStateObserver {
+private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, SlidingSyncViewStateObserver, SlidingSyncViewRoomsCountObserver {
     private weak var roomSummaryProvider: RoomSummaryProvider?
     
+    /// Publishes room list diffs as they come in through sliding sync
     let roomListDiffPublisher = PassthroughSubject<SlidingSyncViewRoomsListDiff, Never>()
+    
+    /// Publishes the current state of sliding sync, such as whether its catching up or live.
     let stateUpdatePublisher = CurrentValueSubject<SlidingSyncState, Never>(.cold)
+    
+    /// Publishes the number of available rooms
+    let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
     
     init(roomSummaryProvider: RoomSummaryProvider) {
         self.roomSummaryProvider = roomSummaryProvider
@@ -39,13 +45,18 @@ private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, S
     func didReceiveUpdate(newState: SlidingSyncState) {
         stateUpdatePublisher.send(newState)
     }
+    
+    // MARK: - SlidingSyncViewRoomsCountObserver
+    
+    func didReceiveUpdate(count: UInt32) {
+        countUpdatePublisher.send(UInt(count))
+    }
 }
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let slidingSyncController: SlidingSyncProtocol
     private let slidingSyncView: SlidingSyncViewProtocol
-    private let roomMessageFactory = RoomMessageFactory()
-    private var stateUpdatePublisher: CurrentValueSubject<SlidingSyncState, Never>?
+    private let roomMessageFactory: RoomMessageFactoryProtocol
     
     private var listUpdateObserverToken: StoppableSpawn?
     private var stateUpdateObserverToken: StoppableSpawn?
@@ -53,6 +64,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
         
     let callbacks = PassthroughSubject<RoomSummaryProviderCallback, Never>()
+    let stateUpdatePublisher = CurrentValueSubject<RoomSummaryProviderState, Never>(.cold)
+    let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
     
     private(set) var roomSummaries: [RoomSummary] = [] {
         didSet {
@@ -65,12 +78,21 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         stateUpdateObserverToken?.cancel()
     }
     
-    init(slidingSyncController: SlidingSyncProtocol, slidingSyncView: SlidingSyncViewProtocol) {
+    init(slidingSyncController: SlidingSyncProtocol, slidingSyncView: SlidingSyncViewProtocol, roomMessageFactory: RoomMessageFactoryProtocol) {
         self.slidingSyncView = slidingSyncView
         self.slidingSyncController = slidingSyncController
+        self.roomMessageFactory = roomMessageFactory
         
         let weakProvider = WeakRoomSummaryProviderWrapper(roomSummaryProvider: self)
-        stateUpdatePublisher = weakProvider.stateUpdatePublisher
+        
+        weakProvider.stateUpdatePublisher
+            .map(RoomSummaryProviderState.init)
+            .subscribe(stateUpdatePublisher)
+            .store(in: &cancellables)
+        
+        weakProvider.countUpdatePublisher
+            .subscribe(countUpdatePublisher)
+            .store(in: &cancellables)
         
         weakProvider.roomListDiffPublisher
             .collect(.byTime(DispatchQueue.main, 0.5))
@@ -82,7 +104,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) {
-        guard stateUpdatePublisher?.value == .live else {
+        guard stateUpdatePublisher.value == .live else {
             return
         }
         
@@ -116,7 +138,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
         roomSummaries = diffs
-            .compactMap { buildDiffFrom($0) }
+            .compactMap(buildDiff)
             .reduce(roomSummaries) { $0.applying($1) ?? $0 }
     }
     
@@ -159,18 +181,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    // swiftlint:disable cyclomatic_complexity
-    private func buildDiffFrom(_ diff: SlidingSyncViewRoomsListDiff) -> CollectionDifference<RoomSummary>? {
-        switch diff {
-        case .push(let value), .updateAt(_, let value), .insertAt(_, let value):
-            switch value {
-            case .invalidated:
-                return nil
-            default:
-                break
-            }
-        default:
-            break
+    private func buildDiff(from diff: SlidingSyncViewRoomsListDiff) -> CollectionDifference<RoomSummary>? {
+        // Invalidations are a no-op for the moment
+        if diff.isInvalidation {
+            return nil
         }
         
         var changes = [CollectionDifference<RoomSummary>.Change]()
@@ -208,5 +222,33 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         return CollectionDifference(changes)
     }
-    // swiftlint:enable cyclomatic_complexity
+}
+
+extension SlidingSyncViewRoomsListDiff {
+    var isInvalidation: Bool {
+        switch self {
+        case .push(let value), .updateAt(_, let value), .insertAt(_, let value):
+            switch value {
+            case .invalidated:
+                return true
+            default:
+                return false
+            }
+        default:
+            return false
+        }
+    }
+}
+
+extension RoomSummaryProviderState {
+    init(slidingSyncState: SlidingSyncState) {
+        switch slidingSyncState {
+        case .catchingUp:
+            self = .live
+        case .live:
+            self = .live
+        default:
+            self = .cold
+        }
+    }
 }

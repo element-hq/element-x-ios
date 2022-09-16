@@ -21,8 +21,19 @@ enum RoomSummaryProviderCallback {
     case updatedRoomSummaries
 }
 
+enum RoomSummaryProviderState {
+    case cold
+    case live
+}
+
 protocol RoomSummaryProviderProtocol {
     var callbacks: PassthroughSubject<RoomSummaryProviderCallback, Never> { get }
+    
+    /// Publishes the current state the summary provider is finding itself in
+    var stateUpdatePublisher: CurrentValueSubject<RoomSummaryProviderState, Never> { get }
+    
+    /// Publishes the total number of rooms
+    var countUpdatePublisher: CurrentValueSubject<UInt, Never> { get }
     
     /// The current list of rooms currently provided by the sliding sync view
     var roomSummaries: [RoomSummary] { get }

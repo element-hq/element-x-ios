@@ -49,6 +49,10 @@ protocol ClientProxyProtocol {
     
     var roomSummaryProvider: RoomSummaryProviderProtocol { get }
     
+    func startSync()
+    
+    func stopSync()
+    
     func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol?
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
