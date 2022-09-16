@@ -18,19 +18,32 @@ import Foundation
 import SwiftUI
 
 struct FormattedBodyText: View {
+    #warning("this is a dirty fix for demo, should be refactored after new timeline api")
+    let isOutgoing: Bool
     let attributedComponents: [AttributedStringBuilderComponent]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8.0) {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    HStack(spacing: 4.0) {
-                        Rectangle()
-                            .foregroundColor(Color.red)
-                            .frame(width: 4.0)
+                    if isOutgoing {
                         Text(component.attributedString)
                             .fixedSize(horizontal: false, vertical: true)
                             .foregroundColor(.element.primaryContent)
+                            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
+                            .clipped()
+                            .background(Color.element.systemGray4)
+                            .cornerRadius(13)
+                    } else {
+                        Text(component.attributedString)
+                            .fixedSize(horizontal: false, vertical: true)
+                            .foregroundColor(.element.primaryContent)
+                            .padding(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
+                            .clipped()
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 13)
+                                    .stroke(Color.element.systemGray5)
+                            )
                     }
                 } else {
                     Text(component.attributedString)
@@ -44,7 +57,8 @@ struct FormattedBodyText: View {
 }
 
 extension FormattedBodyText {
-    init(text: String) {
+    init(isOutgoing: Bool, text: String) {
+        self.isOutgoing = isOutgoing
         attributedComponents = [.init(attributedString: AttributedString(text), isBlockquote: false)]
     }
 }
@@ -86,11 +100,11 @@ struct FormattedBodyText_Previews: PreviewProvider {
                 let attributedString = attributedStringBuilder.fromHTML(htmlString)
                 
                 if let components = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) {
-                    FormattedBodyText(attributedComponents: components)
+                    FormattedBodyText(isOutgoing: true, attributedComponents: components)
                         .fixedSize()
                 }
             }
-            FormattedBodyText(text: "Some plain text that's not an attributed component.")
+            FormattedBodyText(isOutgoing: true, text: "Some plain text that's not an attributed component.")
         }
     }
 }

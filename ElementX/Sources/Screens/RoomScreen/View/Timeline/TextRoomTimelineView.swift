@@ -23,9 +23,9 @@ struct TextRoomTimelineView: View {
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
             if let attributedComponents = timelineItem.attributedComponents {
-                FormattedBodyText(attributedComponents: attributedComponents)
+                FormattedBodyText(isOutgoing: timelineItem.isOutgoing, attributedComponents: attributedComponents)
             } else {
-                FormattedBodyText(text: timelineItem.text)
+                FormattedBodyText(isOutgoing: timelineItem.isOutgoing, text: timelineItem.text)
             }
         }
         .id(timelineItem.id)
