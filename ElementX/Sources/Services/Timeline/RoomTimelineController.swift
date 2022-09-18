@@ -143,7 +143,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             switch item {
             case .event(let eventItem):
                 guard eventItem.isMessage else { break } // To be handled in the future
-                let shouldShowSenderDetails = previousMessage?.sender == eventItem.sender
+                let shouldShowSenderDetails = previousMessage?.sender != eventItem.sender
                 newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItem: eventItem,
                                                                                        showSenderDetails: shouldShowSenderDetails))
                 previousMessage = eventItem
