@@ -223,9 +223,11 @@ class ClientProxy: ClientProxyProtocol {
         MatrixRustSDK.mediaSourceFromUrl(url: urlString)
     }
     
-    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data {
-        let bytes = try client.getMediaContent(source: source)
-        return Data(bytes: bytes, count: bytes.count)
+    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
+        try await Task.detached {
+            let bytes = try self.client.getMediaContent(source: source)
+            return Data(bytes: bytes, count: bytes.count)
+        }.value
     }
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {

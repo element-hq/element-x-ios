@@ -56,7 +56,7 @@ struct MockClientProxy: ClientProxyProtocol {
         MatrixRustSDK.mediaSourceFromUrl(url: urlString)
     }
     
-    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data {
+    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
         throw ClientProxyError.failedLoadingMedia
     }
     
