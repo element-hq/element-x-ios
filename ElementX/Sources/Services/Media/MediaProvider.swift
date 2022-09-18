@@ -67,7 +67,9 @@ struct MediaProvider: MediaProviderProtocol {
             }
             
             do {
-                let imageData = try await clientProxy.loadMediaContentForSource(source.underlyingSource)
+                let imageData = try await Task.detached {
+                    try await clientProxy.loadMediaContentForSource(source.underlyingSource)
+                }.value
                 
                 guard let image = UIImage(data: imageData) else {
                     MXLog.error("Invalid image data")
