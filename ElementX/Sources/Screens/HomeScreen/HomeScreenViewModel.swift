@@ -103,15 +103,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func updateRooms() {
         state.rooms = roomSummaryProvider.roomSummaries.map { summary in
             let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString)
-            
-            var lastMessage: AttributedString?
-            if let message = summary.lastMessage {
-                lastMessage = try? AttributedString(markdown: "**\(message.sender)**: \(message.body)")
-            }
-            
+
             return HomeScreenRoom(id: summary.id,
                                   name: summary.name,
-                                  lastMessage: lastMessage,
+                                  lastMessage: summary.lastMessage,
                                   avatar: avatarImage,
                                   isDirect: summary.isDirect,
                                   unreadNotificationCount: summary.unreadNotificationCount)

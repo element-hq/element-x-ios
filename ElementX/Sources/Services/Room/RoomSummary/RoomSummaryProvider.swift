@@ -95,7 +95,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
         
         weakProvider.roomListDiffPublisher
-            .collect(.byTime(DispatchQueue.main, 0.5))
+            .collect(.byTime(DispatchQueue.global(qos: .background), 0.5))
             .sink { self.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
                 
@@ -157,16 +157,17 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             return buildEmptyRoomSummary(forIdentifier: identifier)
         }
         
-        var lastMessage: RoomMessageProtocol?
+        var attributedLastMessage: AttributedString?
         if let message = room.latestRoomMessage() {
-            lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItem(item: message))
+            let lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItem(item: message))
+            attributedLastMessage = try? AttributedString(markdown: "**\(lastMessage.sender)**: \(lastMessage.body)")
         }
                
         return RoomSummary(id: room.roomId(),
                            name: room.name() ?? room.roomId(),
                            isDirect: room.isDm() ?? false,
                            avatarURLString: room.fullRoom()?.avatarUrl(),
-                           lastMessage: lastMessage,
+                           lastMessage: attributedLastMessage,
                            unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
     }
     

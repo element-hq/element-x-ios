@@ -21,6 +21,6 @@ struct RoomSummary {
     let name: String
     let isDirect: Bool
     let avatarURLString: String?
-    let lastMessage: RoomMessageProtocol?
+    let lastMessage: AttributedString?
     let unreadNotificationCount: UInt
 }
