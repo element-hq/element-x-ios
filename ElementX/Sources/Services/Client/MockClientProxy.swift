@@ -60,6 +60,10 @@ struct MockClientProxy: ClientProxyProtocol {
         throw ClientProxyError.failedLoadingMedia
     }
     
+    func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
+        throw ClientProxyError.failedLoadingMedia
+    }
+    
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         .failure(.failedRetrievingSessionVerificationController)
     }

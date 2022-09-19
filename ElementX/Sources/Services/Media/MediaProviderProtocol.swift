@@ -22,13 +22,33 @@ enum MediaProviderError: Error {
     case invalidImageData
 }
 
+let MediaProviderDefaultAvatarSize = CGSize(width: 44.0, height: 44.0)
+
 @MainActor
 protocol MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSource?) -> UIImage?
+    func imageFromSource(_ source: MediaSource?, size: CGSize?) -> UIImage?
     
-    @discardableResult func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromSource(_ source: MediaSource, size: CGSize?) async -> Result<UIImage, MediaProviderError>
     
-    func imageFromURLString(_ urlString: String?) -> UIImage?
+    func imageFromURLString(_ urlString: String?, size: CGSize?) -> UIImage?
     
-    @discardableResult func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromURLString(_ urlString: String, size: CGSize?) async -> Result<UIImage, MediaProviderError>
+}
+
+extension MediaProviderProtocol {
+    func imageFromSource(_ source: MediaSource?) -> UIImage? {
+        imageFromSource(source, size: nil)
+    }
+    
+    @discardableResult func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromSource(source, size: nil)
+    }
+    
+    func imageFromURLString(_ urlString: String?) -> UIImage? {
+        imageFromURLString(urlString, size: nil)
+    }
+    
+    @discardableResult func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromURLString(urlString, size: nil)
+    }
 }

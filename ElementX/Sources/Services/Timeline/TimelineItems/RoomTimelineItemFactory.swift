@@ -39,7 +39,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         guard let messageContent = eventItem.content.asMessage() else { fatalError("Must be a message for now.") }
         let displayName = roomProxy.displayNameForUserId(eventItem.sender)
         let avatarURL = roomProxy.avatarURLStringForUserId(eventItem.sender)
-        let avatarImage = mediaProvider.imageFromURLString(avatarURL)
+        let avatarImage = mediaProvider.imageFromURLString(avatarURL, size: MediaProviderDefaultAvatarSize)
         let isOutgoing = eventItem.sender == userID
         
         if let textContent = messageContent.msgtype().asText() {

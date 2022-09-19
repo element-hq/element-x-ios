@@ -373,7 +373,7 @@ class AppCoordinator: Coordinator {
 
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
                                                          roomName: roomProxy.displayName ?? roomProxy.name,
-                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL))
+                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL, size: MediaProviderDefaultAvatarSize))
         let coordinator = RoomScreenCoordinator(parameters: parameters)
 
         add(childCoordinator: coordinator)

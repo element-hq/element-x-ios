@@ -230,6 +230,13 @@ class ClientProxy: ClientProxyProtocol {
         }.value
     }
     
+    func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
+        try await Task.detached {
+            let bytes = try self.client.getMediaThumbnail(source: source, width: UInt64(width), height: UInt64(height))
+            return Data(bytes: bytes, count: bytes.count)
+        }.value
+    }
+    
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         await Task.detached {
             do {

@@ -30,28 +30,28 @@ struct MediaProvider: MediaProviderProtocol {
         self.backgroundTaskService = backgroundTaskService
     }
     
-    func imageFromSource(_ source: MediaSource?) -> UIImage? {
+    func imageFromSource(_ source: MediaSource?, size: CGSize?) -> UIImage? {
         guard let source = source else {
             return nil
         }
-
-        return imageCache.retrieveImageInMemoryCache(forKey: source.underlyingSource.url(), options: nil)
+        let cacheKey = cacheKeyForURLString(source.underlyingSource.url(), size: size)
+        return imageCache.retrieveImageInMemoryCache(forKey: cacheKey, options: nil)
     }
     
-    func imageFromURLString(_ urlString: String?) -> UIImage? {
+    func imageFromURLString(_ urlString: String?, size: CGSize?) -> UIImage? {
         guard let urlString = urlString else {
             return nil
         }
         
-        return imageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)))
+        return imageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)), size: size)
     }
     
-    func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)))
+    func loadImageFromURLString(_ urlString: String, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)), size: size)
     }
     
-    func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
-        if let image = imageFromSource(source) {
+    func loadImageFromSource(_ source: MediaSource, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
+        if let image = imageFromSource(source, size: size) {
             return .success(image)
         }
 
@@ -60,15 +60,22 @@ struct MediaProvider: MediaProviderProtocol {
             loadImageBgTask?.stop()
         }
         
+        let cacheKey = cacheKeyForURLString(source.underlyingSource.url(), size: size)
+        
         return await Task.detached { () -> Result<UIImage, MediaProviderError> in
-            if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: source.underlyingSource.url()),
+            if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: cacheKey),
                let image = cacheResult.image {
                 return .success(image)
             }
             
             do {
-                let imageData = try await Task.detached {
-                    try await clientProxy.loadMediaContentForSource(source.underlyingSource)
+                let imageData = try await Task.detached { () -> Data in
+                    if let size = size {
+                        return try await clientProxy.loadMediaThumbnailForSource(source.underlyingSource, width: UInt(size.width), height: UInt(size.height))
+                    } else {
+                        return try await clientProxy.loadMediaContentForSource(source.underlyingSource)
+                    }
+                    
                 }.value
                 
                 guard let image = UIImage(data: imageData) else {
@@ -76,7 +83,7 @@ struct MediaProvider: MediaProviderProtocol {
                     return .failure(.invalidImageData)
                 }
                 
-                imageCache.store(image, forKey: source.underlyingSource.url())
+                imageCache.store(image, forKey: cacheKey)
                 
                 return .success(image)
             } catch {
@@ -85,6 +92,16 @@ struct MediaProvider: MediaProviderProtocol {
             }
         }
         .value
+    }
+    
+    // MARK: - Private
+    
+    private func cacheKeyForURLString(_ urlString: String, size: CGSize?) -> String {
+        if let size = size {
+            return "\(urlString){\(size.width),\(size.height)}"
+        } else {
+            return urlString
+        }
     }
 }
 

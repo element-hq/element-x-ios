@@ -59,7 +59,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         Task {
             if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
-                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString) {
+                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, size: MediaProviderDefaultAvatarSize) {
                     state.userAvatar = avatar
                 }
             }
@@ -94,7 +94,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         if let avatarURLString = summary.avatarURLString {
             Task {
-                let _ = await userSession.mediaProvider.loadImageFromURLString(avatarURLString)
+                let _ = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, size: MediaProviderDefaultAvatarSize)
                 updateRooms()
             }
         }
@@ -102,7 +102,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private func updateRooms() {
         state.rooms = roomSummaryProvider.roomSummaries.map { summary in
-            let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString)
+            let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString, size: MediaProviderDefaultAvatarSize)
             
             var timestamp: String?
             if let lastMessageTimestamp = summary.lastMessageTimestamp {
