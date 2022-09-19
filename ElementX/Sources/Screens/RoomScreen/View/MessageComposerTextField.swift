@@ -92,9 +92,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         UITextViewWrapper.recalculateHeight(view: textView, result: $calculatedHeight, maxHeight: maxHeight)
         
-        if focused, textView.window != nil, !textView.isFirstResponder {
-            // Avoid cycle detected through attribute warnings
-            DispatchQueue.main.async {
+        DispatchQueue.main.async { // Avoid cycle detected through attribute warnings
+            if focused, textView.window != nil, !textView.isFirstResponder {
                 textView.becomeFirstResponder()
             }
         }
