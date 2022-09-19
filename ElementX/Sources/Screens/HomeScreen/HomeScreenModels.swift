@@ -67,15 +67,15 @@ struct HomeScreenViewStateBindings {
 struct HomeScreenRoom: Identifiable, Equatable {
     let id: String
     
-    var name: String
+    let name: String
+    
+    let hasUnreads: Bool
+    
+    let timestamp: String?
     
     var lastMessage: AttributedString?
     
     var avatar: UIImage?
-    
-    let isDirect: Bool
-    
-    let unreadNotificationCount: UInt
 }
 
 extension MutableCollection where Element == HomeScreenRoom {

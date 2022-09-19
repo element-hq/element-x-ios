@@ -69,7 +69,10 @@ class AppCoordinator: Coordinator {
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
         splashViewController = SplashViewController()
+        
         mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
+        mainNavigationController.navigationBar.prefersLargeTitles = true
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
