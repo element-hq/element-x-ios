@@ -29,11 +29,15 @@ struct HomeScreen: View {
                     ProgressView()
                 }
             } else {
-                if context.viewState.showSessionVerificationBanner {
-                    sessionVerificationBanner
-                }
-                
                 List {
+                    Section {
+                        if context.viewState.showSessionVerificationBanner {
+                            sessionVerificationBanner
+                                .padding(.horizontal, -16.0)
+                                .listRowSeparator(.hidden)
+                        }
+                    }
+                    
                     ForEach(context.viewState.visibleRooms) { room in
                         HomeScreenRoomCell(room: room, context: context)
                             .listRowBackground(Color.clear)
