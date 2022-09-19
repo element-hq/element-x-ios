@@ -1,4 +1,4 @@
-#!/usr/bin/python2.7
+#!/usr/bin/python3
 
 import sys
 import os
@@ -36,6 +36,7 @@ def normalize_str(e):
     quote = '"'
     escaping_quote = '\\"'
     result = str(e).encode(encoding).strip()                    # convert input to a encoded string object and strip
+    result = result.decode()
     result = result.replace(escaping_quote, unique_tmp_val)     # replace escaping quotes with a temp value
     result = result.replace(quote, '')                          # remove all quotes
     result = result.replace(unique_tmp_val, escaping_quote)     # revert temp values to escaping quotes back
@@ -67,7 +68,8 @@ def convert_file(input, output):
 
     for node in root.findall('string'):
         key = node.get('name')
-        value = ET.tostring(node, encoding=encoding)
+        value = bytes(ET.tostring(node, encoding=encoding))
+        value = value.decode()
         value = value.replace('</string>', '')
         end_of_string_tag = value.find('>')
         if end_of_string_tag != -1:
@@ -123,7 +125,7 @@ def convert_file(input, output):
 
 print('\nAndroid strings fetched.\n')
 
-res_folder = 'element-android/vector/src/main/res'
+res_folder = 'element-android/library/ui-strings/src/main/res'
 
 for subdir, dirs, files in os.walk(res_folder):
     for dir in dirs:

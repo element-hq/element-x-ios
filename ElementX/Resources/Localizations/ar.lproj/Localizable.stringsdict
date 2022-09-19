@@ -74,6 +74,30 @@
 			<string>لا مكالمات فائة</string>
 		</dict>
 	</dict>
+	<key>missed_video_call</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>few</key>
+			<string>%d مكالمات مرئية فائتة</string>
+			<key>many</key>
+			<string>%d مكالمة مرئية فائتة</string>
+			<key>one</key>
+			<string>مكالمة مرئية فائتة</string>
+			<key>other</key>
+			<string>%d مكالمة مرئية فائتة</string>
+			<key>two</key>
+			<string>مكالمتان مرئيتان فائتتان</string>
+			<key>zero</key>
+			<string>لا مكالمات مرئية فائتة</string>
+		</dict>
+	</dict>
 	<key>notice_room_aliases_added</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -351,7 +375,7 @@
 			<key>few</key>
 			<string>%d أعضاء</string>
 			<key>many</key>
-			<string>%d عضوا</string>
+			<string>%d عضو</string>
 			<key>one</key>
 			<string>عضو واحد</string>
 			<key>other</key>

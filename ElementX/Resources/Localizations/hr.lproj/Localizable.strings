@@ -67,7 +67,6 @@
 "matrix_only_filter" = "Samo kontakti u Matrixu";
 "no_result_placeholder" = "Nema rezultata";
 "rooms_header" = "Sobe";
-"groups_header" = "Zajednice";
 "send_bug_report_include_logs" = "Pošalji zapise";
 "send_bug_report_include_crash_logs" = "Pošalji zapise o rušenju";
 "send_bug_report_include_screenshot" = "Pošalji sliku zaslona";
@@ -106,7 +105,6 @@
 "auth_email_already_defined" = "Ova je adresa e-pošte već određena.";
 "auth_forgot_password" = "Zaboravljena lozinka\?";
 "auth_recaptcha_message" = "Vaš poslužitelj želi provjeriti jeste li robot";
-"auth_reset_password_missing_email" = "Nužan je unos adrese e-pošte vezane za Vaš račun.";
 "auth_reset_password_error_unauthorized" = "Neuspješna provjera adrese e-pošte: pobrinite se kliknuti na poveznicu u e-pošti";
 "auth_accept_policies" = "Pročitajte i prihvatite pravila ovog poslužitelja:";
 "login_error_invalid_home_server" = "Unesite ispravan URL";
@@ -458,7 +456,6 @@
 "action_change" = "Promijeni";
 "change_room_directory_network" = "Promijeni mrežu";
 "please_wait" = "Pričekajte…";
-"group_all_communities" = "Sve zajednice";
 "room_preview_no_preview" = "Nije moguće pregledati sobu";
 "fab_menu_create_room" = "Sobe";
 "fab_menu_create_chat" = "Izravne poruke";
@@ -509,7 +506,6 @@
 "a11y_create_room" = "Izradi novu sobu";
 "settings_rageshake" = "Gnjevno drmanje";
 "settings_integrations_summary" = "Koristite upravitelja integracijama kako biste rukovali botovima, mostovima, grafičkim elementima i paketima naljepnica.\nUpravitelji integracijama primaju konfiguracijske podatke i mogu mijenjati grafičke elemente, slati pozivnice za pridruživanje u sobe i postavljati razine upravljanja u Vaše ime.";
-"settings_flair" = "Sklonost";
 "room_settings_room_read_history_rules_pref_title" = "Čitljivost sobne povijesti";
 "room_settings_room_read_history_rules_pref_dialog_title" = "Tko može čitati povijest\?";
 "room_settings_read_history_entry_anyone" = "Bilo tko";
@@ -526,7 +522,7 @@
 "settings_theme" = "Tema";
 "encryption_information_decryption_error" = "Greška u dešifriranju";
 "encryption_information_device_name" = "Javni naziv";
-"encryption_information_device_id" = "Identitet";
+"device_manager_session_details_session_id" = "Identitet";
 "encryption_information_device_key" = "Ključ sesije";
 "encryption_export_e2e_room_keys" = "Izvezi sobne ključeve za E2E";
 "encryption_export_room_keys" = "Izvezi sobne ključeve";
@@ -735,3 +731,25 @@
 "message_action_item_redact" = "Ukloni…";
 "delete_event_dialog_title" = "Potvrda uklanjanja";
 "delete_event_dialog_content" = "Jeste li sigurni da želite ukloniti (izbrisati) ovaj događaj\? Ukoliko izbrišete naziv sobe ili promjenu teme, to može poništiti promjenu.";
+"notice_avatar_url_changed_by_you" = "Ti si promijenio svoj avatar";
+"notice_avatar_url_changed" = "%1$@ je promijenio svoj avatar";
+"notice_room_remove_by_you" = "Ti si maknuo %1$@";
+"notice_room_remove" = "%1$@ je maknuo %2$@";
+"notice_room_reject_by_you" = "Ti si odbio pozivnicu";
+"notice_room_reject" = "%1$@ je odbio pozivnicu";
+"notice_direct_room_leave_by_you" = "Ti si napustio sobu";
+"notice_direct_room_leave" = "%1$@ je napustio sobu";
+"notice_room_leave_by_you" = "Ti si napustio sobu";
+"notice_room_leave" = "%1$@ je napustio sobu";
+"notice_direct_room_join_by_you" = "Ti si ušao";
+"notice_direct_room_join" = "%1$@ je ušao";
+"notice_room_join_by_you" = "Ti si ušao u sobu";
+"notice_room_join" = "%1$@ je ušao u sobu";
+"notice_room_invite_you" = "%1$@ te je pozvao";
+"notice_room_invite_by_you" = "Ti si pozvao %1$@";
+"notice_room_invite" = "%1$@ je pozvao %2$@";
+"notice_direct_room_created_by_you" = "Ti si kreirao razgovor";
+"notice_direct_room_created" = "%1$@ je kreirao razgovor";
+"notice_room_created_by_you" = "Ti si kreirao sobu";
+"notice_room_created" = "%1$@ je kreirao sobu";
+"notice_room_invite_no_invitee_by_you" = "Tvoja pozivnica";

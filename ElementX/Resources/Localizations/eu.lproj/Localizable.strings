@@ -43,7 +43,6 @@
 "initial_sync_start_importing_account_joined_rooms" = "Hasierako sinkronizazioa:\nElkartutako gelak inportatzen";
 "initial_sync_start_importing_account_invited_rooms" = "Hasierako sinkronizazioa:\nGonbidatutako gelak inportatzen";
 "initial_sync_start_importing_account_left_rooms" = "Hasierako sinkronizazioa:\nUtzitako gelak inportatzen";
-"initial_sync_start_importing_account_groups" = "Hasierako sinkronizazioa:\nKomunitateak inportatzen";
 "initial_sync_start_importing_account_data" = "Hasierako sinkronizazioa:\nKontuaren datuak inportatzen";
 "notice_room_update" = "%@ erabiltzaileak gela hau eguneratu du.";
 "event_status_sending_message" = "Mezua bidaltzen…";
@@ -132,7 +131,6 @@
 "auth_email_already_defined" = "E-mail helbide hau zehaztuta dago aurretik.";
 "auth_forgot_password" = "Pasahitza ahaztuta\?";
 "auth_recaptcha_message" = "Hasiera zerbitzari honek robot bat ez zarela egiaztatu nahi du";
-"auth_reset_password_missing_email" = "Zure kontura gehitutako e-mail helbidea sartu behar da.";
 "auth_reset_password_error_unauthorized" = "Huts egin du e-mail helbidearen egiaztaketak, egin klik e-mailean zetorren estekan";
 "login_error_invalid_home_server" = "Sartu baliozko URL bat";
 "login_error_bad_json" = "Gaizki osatutako JSON";
@@ -270,7 +268,7 @@
 "room_settings_unset_main_address" = "Kendu helbide nagusi ezarpena";
 "encryption_information_decryption_error" = "Deszifratze errorea";
 "encryption_information_device_name" = "Izen publikoa";
-"encryption_information_device_id" = "IDa";
+"device_manager_session_details_session_id" = "IDa";
 "encryption_information_device_key" = "Saioaren gakoa";
 "encryption_export_e2e_room_keys" = "Esportatu E2E geletako gakoak";
 "encryption_export_room_keys" = "Esportatu geletako gakoak";
@@ -335,7 +333,6 @@
 "option_take_video" = "Grabatu bideoa";
 "call" = "Deia";
 "loading" = "Kargatzen…";
-"groups_header" = "Komunitateak";
 "start_voice_call_prompt_msg" = "Ziur ahots-dei bat hasi nahi duzula?";
 "start_video_call_prompt_msg" = "Ziur bideo-dei bat hasi nahi duzula?";
 "room_participants_ban_prompt_msg" = "Ziur erabiltzaile hau txat honetan debekatu nahi duzula?";
@@ -350,7 +347,6 @@
 "has_been_removed" = "%1$@ gelatik kanporatu zaitu %2$@ erabiltzaileak";
 "has_been_banned" = "%1$@ gelatik debekatu zaitu %2$@ erabiltzaileak";
 "reason_colon" = "Arrazoia: %1$@";
-"settings_flair" = "Ikurra";
 "send_bug_report_rage_shake" = "Astindu amorruz akatsaren berri emateko";
 "list_members" = "Zerrendatu kideak";
 "notification_unread_notified_messages_in_room" = "%1$@ : %2$@";
@@ -638,7 +634,6 @@
 "action_change" = "Aldatu";
 "change_room_directory_network" = "Aldatu sarea";
 "please_wait" = "Itxaron mesedez…";
-"group_all_communities" = "Komunitate guztiak";
 "room_preview_no_preview" = "Gela hau ezin da aurreikusi";
 "fab_menu_create_room" = "Gelak";
 "fab_menu_create_chat" = "Mezu zuzenak";
@@ -749,7 +744,6 @@
 "three_users_read" = "%1$@, %2$@ eta%3$@ erabiltzaileek irakurria";
 "two_users_read" = "%1$@ eta %2$@ erabiltzaileek irakurria";
 "one_user_read" = "%@ erabiltzaileak irakurria";
-"error_attachment" = "Errore bat gertatu da eranskina eskuratzean.";
 "attachment_type_file" = "Fitxategia";
 "attachment_type_contact" = "Kontaktua";
 "attachment_type_camera" = "Kamera";
@@ -882,7 +876,7 @@
 "login_signup_submit" = "Hurrengoa";
 "login_signup_error_user_in_use" = "Erabiltzaile-izen hori hartuta dago";
 "login_signup_cancel_confirmation_title" = "Abisua";
-"login_signup_cancel_confirmation_content" = "Zure kontua ez da oraindik sortu.\n\nUtzi erregistratze prozesua\?";
+"login_signup_cancel_confirmation_content" = "Zure kontua ez da oraindik sortu. Utzi erregistratze prozesua\?";
 "login_a11y_choose_matrix_org" = "Hautatu matrix.org";
 "login_a11y_choose_modular" = "Hautatu Element Matrix Services";
 "login_a11y_choose_other" = "Hautatu hasiera-zerbitzari pertsonalizatu bat";

@@ -94,7 +94,6 @@
 "initial_sync_start_importing_account_joined_rooms" = "Amtawi n tazwara:\nAktar n texxamin iɣer terniḍ";
 "initial_sync_start_importing_account_invited_rooms" = "Amtawi n tazwara:\nAktar n texxamin iɣer tettwanecdeḍ";
 "initial_sync_start_importing_account_left_rooms" = "Amtawi n tazwara:\nAktar n texxamin i teǧǧiḍ";
-"initial_sync_start_importing_account_groups" = "Amtawi n tazwara:\nAktar n tmezdagnutin";
 "initial_sync_start_importing_account_data" = "Amtawi n tazwara:\nAktar n yisefka n umiḍan";
 "event_status_sending_message" = "Tuzzna n yizen…";
 "notice_room_invite_no_invitee_with_reason" = "Tinubga n %1$@. Tamentilt: %2$@";
@@ -181,7 +180,6 @@
 "system_alerts_header" = "Ilɣa n unagraw";
 "no_result_placeholder" = "Ulac igmad";
 "rooms_header" = "Tixxamin";
-"groups_header" = "Tamɣiwnin";
 "send_bug_report_include_logs" = "Azen iɣmisen";
 "join_room" = "Rnu ɣer texxamt";
 "username" = "Isem n useqdac";
@@ -257,7 +255,6 @@
 "settings_new_password" = "Awal uffir amaynut";
 "compression_opt_list_choose" = "Fren";
 "media_source_choose" = "Fren";
-"settings_flair" = "Lbenna";
 "media_saving_period_forever" = "Yal tikkelt";
 "room_settings_room_read_history_rules_pref_dialog_title" = "Anwa i izemren ad d-iɣer amazray\?";
 "room_settings_read_history_entry_anyone" = "Yal yiwen";
@@ -268,7 +265,7 @@
 "room_settings_category_advanced_title" = "Talqayt";
 "room_settings_labs_pref_title" = "Tinarimin";
 "settings_theme" = "Asentel";
-"encryption_information_device_id" = "Asulay n tqimit";
+"device_manager_session_details_session_id" = "Asulay n tqimit";
 "encryption_information_device_key" = "Tasarut n tɣimit";
 "encryption_export_e2e_room_keys" = "Sifeḍ tisura n texxamt E2E";
 "encryption_export_room_keys" = "Sifeḍ tisura n texxamt";
@@ -514,7 +511,6 @@
 "auth_email_already_defined" = "Tansa-a n yimayl tettuseqdec yakan.";
 "auth_forgot_password" = "Tettuḍ awal uffir\?";
 "auth_recaptcha_message" = "Aqeddac-a agejdan yesra ad iẓer ma mačči d aṛubut i telliḍ";
-"auth_reset_password_missing_email" = "Tansa n yimayl i icudden ɣer umiḍan-ik·im ilaq ad tettwasekcem.";
 "auth_accept_policies" = "Ttxil-k·m senqed syen qbel tisertiyin n uqeddac-a agejdan:";
 "login_error_invalid_home_server" = "Ttxil-k·m sekcem URL ameɣtu";
 "login_error_no_homeserver_found" = "Tagi mačči d tansa n uqeddac n Matrix ameɣtu";
@@ -648,7 +644,6 @@
 "action_agree" = "Qbel";
 "create_new_room" = "Rnu taxxamt tamaynut";
 "change_room_directory_network" = "Snifel azeṭṭa";
-"group_all_communities" = "Meṛṛa timɣiwnin";
 "create_room_action_create" = "RNU";
 "create_room_name_hint" = "Isem";
 "create_room_public_description" = "Yal yiwen yezmer ad yernu ɣer texxamt-a";
@@ -674,7 +669,6 @@
 "three_users_read" = "Taɣuri n %1$@, %2$@ d %3$@";
 "two_users_read" = "Taɣuri n %1$@ d %2$@";
 "one_user_read" = "Taɣuri n %@";
-"error_attachment" = "Tuccḍa deg tuqqna lawan n uneɛruḍ n uceqquf yeddan.";
 "attachment_type_sticker" = "Astiker";
 "error_handling_incoming_share" = "Ur yezmir ara ad ttusqedcen deg yisefka n beṭṭu";
 "uploads_media_title" = "AMIDYA";
@@ -1215,7 +1209,7 @@
 "login_msisdn_notice" = "Ma ulac aɣilif seqdec amasal agreɣlan (uṭṭun n tiliɣri ilaq ad yebdu s \'+\')";
 "login_msisdn_error_not_international" = "Uṭṭun n tiliɣri agreɣlan ilaq ad yebdu s \'+\'";
 "login_msisdn_error_other" = "Uṭṭun n tiliɣri yettban-d d arameɣtu. Ma ulac aɣilif senqed-it";
-"login_signup_cancel_confirmation_content" = "Amiḍan-ik·im mazal ur yettwarna ara ar tura.\n\nSeḥbes akala n usekles\?";
+"login_signup_cancel_confirmation_content" = "Amiḍan-ik·im mazal ur yettwarna ara ar tura. Seḥbes akala n usekles\?";
 "login_wait_for_email_notice" = "Aql-aɣ akken nuzen imayl ɣer %1$@.\nMa ulac aɣilif sit ɣef useɣwen i yellan deg-s i wakken ad tkemmleḍ timerna.";
 "login_validation_code_is_not_correct" = "Tangalt yettwaskecmen d tarameɣtut. Ma ulac aɣilif senqed.";
 "login_error_outdated_homeserver_title" = "Aqeddac agejdan d aqbur";

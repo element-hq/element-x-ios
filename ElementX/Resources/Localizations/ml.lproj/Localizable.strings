@@ -369,7 +369,6 @@
 "notice_room_invite_no_invitee_with_reason" = "%1$@ ന്റെ ക്ഷണം. കാരണം: %2$@";
 "event_status_sending_message" = "സന്ദേശം അയയ്ക്കുന്നു…";
 "initial_sync_start_importing_account_data" = "പ്രാരംഭ സമന്വയം:\nഅക്കൗണ്ട് ഡാറ്റ ഇറക്കുമതി ചെയ്യുന്നു";
-"initial_sync_start_importing_account_groups" = "പ്രാരംഭ സമന്വയം:\nജനസമൂഹങ്ങൾ ഇറക്കുമതി ചെയ്യുന്നു";
 "initial_sync_start_importing_account_left_rooms" = "പ്രാരംഭ സമന്വയം:\nഉപേക്ഷിച്ച മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
 "initial_sync_start_importing_account_invited_rooms" = "പ്രാരംഭ സമന്വയം:\nക്ഷണിക്കപ്പെട്ട മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
 "initial_sync_start_importing_account_joined_rooms" = "പ്രാരംഭ സമന്വയം:\nചേർന്ന മുറികൾ ഇറക്കുമതി ചെയ്യുന്നു";
@@ -422,7 +421,6 @@
 "call_camera_front" = "മുന്നിലുള്ള";
 "call_camera_back" = "പിന്നിലുള്ള";
 "sound_device_headset" = "ഹെഡ്‌സെറ്റ്";
-"groups_header" = "കമ്മ്യൂണിറ്റികൾ";
 "dialog_title_error" = "പിശക്";
 "action_disconnect" = "വിച്ഛേദിക്കുക";
 "action_revoke" = "അസാധുവാക്കുക";
@@ -633,4 +631,3 @@
 "direct_room_user_list_suggestions_title" = "നിർദ്ദേശങ്ങൾ";
 "encryption_import_import" = "ഇമ്പോർട്ട്";
 "encryption_export_export" = "എക്സ്പോർട്ട്";
-"settings_flair" = "ഫ്ലെയർ";

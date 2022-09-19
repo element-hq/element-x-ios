@@ -86,7 +86,6 @@
 "matrix_only_filter" = "Berre Matrix-kontaktar";
 "no_result_placeholder" = "Ingen treff";
 "rooms_header" = "Rom";
-"groups_header" = "Fellesskap";
 "send_bug_report_include_logs" = "Send loggar";
 "send_bug_report_include_crash_logs" = "Send krasjrapportar";
 "send_bug_report_include_screenshot" = "Send skjermbilde";
@@ -125,7 +124,6 @@
 "auth_email_already_defined" = "Denne e-postadressa er allereie i bruk.";
 "auth_forgot_password" = "Gløymt passord\?";
 "auth_recaptcha_message" = "Heimtenaren ynskjer å stadfeste at du ikkje er ein robot";
-"auth_reset_password_missing_email" = "Du må skriva inn e-postadressa som er knytt til brukaren din.";
 "auth_reset_password_error_unauthorized" = "Fekk ikkje til å stadfesta e-postadressa: sjå til at du klikka på lenken i e-posten";
 "login_error_invalid_home_server" = "Skriv inn ein gyldig URL";
 "login_error_bad_json" = "Feilformatert JSON";
@@ -260,7 +258,6 @@
 "settings_password_updated" = "Passordet ditt vart oppdatert";
 "settings_unignore_user" = "Vis alle meldingane frå %@\? Merk at denne handlinga gjer at applikasjonen startar på nytt og kan taka litt tid.";
 "settings_select_country" = "Vel eit land";
-"settings_flair" = "Etikett";
 "media_saving_period_3_days" = "3 dagar";
 "media_saving_period_1_week" = "1 veke";
 "media_saving_period_1_month" = "1 månad";
@@ -282,7 +279,7 @@
 "settings_theme" = "Preg";
 "encryption_information_decryption_error" = "Noko gjekk gale med dekrypteringa";
 "encryption_information_device_name" = "Offentleg namn";
-"encryption_information_device_id" = "Økt-ID";
+"device_manager_session_details_session_id" = "Økt-ID";
 "encryption_information_device_key" = "Sesjonsnøkkel";
 "encryption_export_e2e_room_keys" = "Eksporter E2E-romnøkklar";
 "encryption_export_room_keys" = "Eksporter romnøkklar";

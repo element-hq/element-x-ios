@@ -46,7 +46,6 @@
 "initial_sync_start_importing_account_joined_rooms" = "İlkin sinxronizasiya:\nOtaqlara daxil olmaq";
 "initial_sync_start_importing_account_invited_rooms" = "İlkin sinxronizasiya:\nDəvət olunmuş otaqların idxalı";
 "initial_sync_start_importing_account_left_rooms" = "İlkin sinxronizasiya:\nTərk olunmuş otaqların idxalı";
-"initial_sync_start_importing_account_groups" = "İlkin sinxronizasiya:\nİcmaların idxalı";
 "initial_sync_start_importing_account_data" = "İlkin sinxronizasiya:\nHesab məlumatlarının idxalı";
 "event_status_sending_message" = "Mesaj göndərilir…";
 "notice_room_invite_no_invitee_with_reason" = "%1$@-nin dəvəti. Səbəb: %2$@";

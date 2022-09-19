@@ -102,7 +102,6 @@
 "auth_email_already_defined" = "Este correo electrónico ya está ocupado.";
 "auth_forgot_password" = "¿Olvidaste tu contraseña?";
 "auth_recaptcha_message" = "Este servidor quiere verificar que no seas robot";
-"auth_reset_password_missing_email" = "El correo electrónico de esta cuenta es requrido.";
 "auth_reset_password_error_unauthorized" = "Falló la verificación de correo electrónico: asegúrese de haber hecho clic en el correo";
 "login_error_invalid_home_server" = "Escribe un enlace válido";
 "login_error_bad_json" = "JSON malformado";
@@ -227,7 +226,7 @@
 "room_settings_unset_main_address" = "Desescojer como Dirección Principal";
 "encryption_information_decryption_error" = "Error en descifrar";
 "encryption_information_device_name" = "Nombre del dispositivo";
-"encryption_information_device_id" = "Identificación del dispositivo";
+"device_manager_session_details_session_id" = "Identificación del dispositivo";
 "encryption_information_device_key" = "Clave del dispositivo";
 "encryption_export_e2e_room_keys" = "Exportar claves de cifrado de extremo-a-extremo de salas";
 "encryption_export_room_keys" = "Exportar claves de salas";
@@ -252,7 +251,6 @@
 "directory_server_native_rooms" = "All native %@ rooms";
 "loading" = "Cargando…";
 "action_download" = "Descargar";
-"groups_header" = "Comunidades";
 "option_send_voice" = "Enviar audio";
 "option_send_sticker" = "Enviar sticker";
 "option_take_photo" = "Tomar foto";

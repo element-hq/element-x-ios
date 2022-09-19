@@ -2,7 +2,6 @@
 "untranslated" = "Untranslated";
 
 "action_confirm" = "Confirm";
-"action_next" = "Next";
 
 "screenshot_detected_title" = "You took a screenshot";
 "screenshot_detected_message" = "Would you like to submit a bug report?";

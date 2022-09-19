@@ -75,7 +75,6 @@
 "auth_email_already_defined" = "Ova email adresa je već definisana.";
 "auth_forgot_password" = "Zaboravljena lozinka?";
 "auth_recaptcha_message" = "Ovaj lokalni server provjerava da niste robot";
-"auth_reset_password_missing_email" = "Email adresa povezana sa vašim računom mora biti unešena.";
 "auth_reset_password_error_unauthorized" = "Neuspješna verifikacija email adrese: provjerite da li ste kliknuli link u emailu";
 "login_error_invalid_home_server" = "Unesite ispravan URL";
 "login_error_bad_json" = "Neispravno formatiran JSON";

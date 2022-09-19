@@ -46,7 +46,6 @@
 "matrix_only_filter" = "Sadece Matrix kullanıcıları";
 "no_result_placeholder" = "Sonuç bulunamadı";
 "rooms_header" = "Odalar";
-"groups_header" = "Topluluk";
 "send_bug_report_include_logs" = "Sistem günlüğünü (log) gönder";
 "send_bug_report_include_crash_logs" = "Çökme günlüğünü (crash log) gönder";
 "send_bug_report_include_screenshot" = "Ekran görüntüsünü gönder";
@@ -111,7 +110,6 @@
 "auth_email_already_defined" = "Bu e-posta adresi zaten tanımlanmış.";
 "auth_forgot_password" = "Şifreni mi unuttun\?";
 "auth_recaptcha_message" = "Bu ana sunucu bir robot olmadığından emin olmak istiyor";
-"auth_reset_password_missing_email" = "Hesaba bağlı e-posta adresi mutlaka girilmeli.";
 "auth_reset_password_error_unauthorized" = "E-posta doğrulaması başarısız: e-postanızdaki bağlantıya tıkladığınızdan emin olun";
 "auth_accept_policies" = "Lütfen ana sunucunun ilkelerini gözden geçirin ve kabul edin:";
 "login_error_invalid_home_server" = "Lütfen geçerli bir URL girin";
@@ -319,7 +317,6 @@
 "settings_password_updated" = "Şifren güncellendi";
 "settings_unignore_user" = "%@ den/dan tüm mesajlar gösterilsin mi\?\n\nNot bu eylem uygulamayı yeniden başlatacak ve biraz zaman alabilir.";
 "settings_select_country" = "Ülke seç";
-"settings_flair" = "Kabiliyet";
 "media_saving_period_3_days" = "3 gün";
 "media_saving_period_1_week" = "1 hafta";
 "media_saving_period_1_month" = "1 ay";
@@ -341,7 +338,7 @@
 "settings_theme" = "Tema";
 "encryption_information_decryption_error" = "Çözme hatası";
 "encryption_information_device_name" = "Görünür Ad";
-"encryption_information_device_id" = "Oturum kimliği";
+"device_manager_session_details_session_id" = "Oturum kimliği";
 "encryption_information_device_key" = "Oturum anahtarı";
 "encryption_export_e2e_room_keys" = "E2E Oda anahtarlarını dışa aktar";
 "encryption_export_room_keys" = "Oda anahtarlarını dışa aktar";
@@ -607,7 +604,6 @@
 "action_change" = "Değiştir";
 "change_room_directory_network" = "Ağı değiştir";
 "please_wait" = "Lütfen bekleyin…";
-"group_all_communities" = "Tüm Topluluklar";
 "room_preview_no_preview" = "Bu oda ön izlenemez";
 "fab_menu_create_room" = "Odalar";
 "fab_menu_create_chat" = "Doğrudan Mesajlar";
@@ -892,7 +888,6 @@
 "uploads_media_no_result" = "Bu odada medya yok";
 "rotate_and_crop_screen_title" = "Döndür ve kırp";
 "attachment_type_dialog_title" = "Şuradan resim ekle";
-"error_attachment" = "Ek alınırken bir hata oluştu.";
 "a11y_jump_to_bottom" = "Aşağıya git";
 "a11y_create_room" = "Yeni bir oda oluşturun";
 "a11y_create_direct_message" = "Yeni bir direkt sohbet oluşturun";
@@ -928,7 +923,7 @@
 "login_a11y_choose_other" = "Özel bir ana sunucu seçin";
 "login_a11y_choose_modular" = "Element Matric Hizmetleri\'ni seç";
 "login_a11y_choose_matrix_org" = "Matrix.org sunucusunu seç";
-"login_signup_cancel_confirmation_content" = "Hesabınız henüz oluşturulmadı.\n\nKayıt işlemini durdurmak istiyor musunuz\?";
+"login_signup_cancel_confirmation_content" = "Hesabınız henüz oluşturulmadı. Kayıt işlemini durdurmak istiyor musunuz\?";
 "login_signup_cancel_confirmation_title" = "Uyarı";
 "login_signup_error_user_in_use" = "Bu kullanıcı adı alınmış";
 "login_signup_submit" = "İleri";
@@ -1186,7 +1181,6 @@
 "notice_room_invite_no_invitee_with_reason" = "%1$@\'in davetiyesi. Neden: %2$@";
 "event_status_sent_message" = "Mesajı gönderildi";
 "initial_sync_start_importing_account_data" = "İlk senkronizasyon:\nHesap verilerini içe aktarma";
-"initial_sync_start_importing_account_groups" = "İlk senkronizasyon:\nToplulukları içe aktarma";
 "initial_sync_start_importing_account_left_rooms" = "İlk senkronizasyon:\nSol odalar içe aktarılıyor";
 "initial_sync_start_importing_account_invited_rooms" = "İlk senkronizasyon:\nDavetli odaları içe aktarma";
 "initial_sync_start_importing_account_joined_rooms" = "İlk senkronizasyon:\nKonuşmalarınız yükleniyor\nÇok sayıda odaya katıldıysanız, bu biraz zaman alabilir";
@@ -1523,3 +1517,5 @@
 "action_thread_copy_link_to_thread" = "Konu bağlantısını kopyala";
 "action_thread_view_in_room" = "Odada görüntüle";
 "action_view_threads" = "Konuları Görüntüle";
+"initial_sync_request_title" = "Başlangıç eşitleme isteği";
+"all_chats" = "Tüm Sohbetler";

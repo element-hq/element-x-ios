@@ -12,8 +12,6 @@ import Foundation
 extension ElementL10n {
   /// Confirm
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
-  /// Next
-  public static let actionNext = ElementL10n.tr("Untranslated", "action_next")
   /// Forgot password
   public static let authenticationLoginForgotPassword = ElementL10n.tr("Untranslated", "authentication_login_forgot_password")
   /// Welcome back!

@@ -28,30 +28,46 @@ public enum ElementL10n {
   public static var a11yCloseEmojiPicker: String { return ElementL10n.tr("Localizable", "a11y_close_emoji_picker") }
   /// Close keys backup banner
   public static var a11yCloseKeysBackupBanner: String { return ElementL10n.tr("Localizable", "a11y_close_keys_backup_banner") }
+  /// Collapse %@ children
+  public static func a11yCollapseSpaceChildren(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "a11y_collapse_space_children", String(describing: p1))
+  }
   /// Create a new direct conversation
   public static var a11yCreateDirectMessage: String { return ElementL10n.tr("Localizable", "a11y_create_direct_message") }
   /// Close the create room menu…
   public static var a11yCreateMenuClose: String { return ElementL10n.tr("Localizable", "a11y_create_menu_close") }
   /// Open the create room menu
   public static var a11yCreateMenuOpen: String { return ElementL10n.tr("Localizable", "a11y_create_menu_open") }
+  /// Create a new conversation or room
+  public static var a11yCreateMessage: String { return ElementL10n.tr("Localizable", "a11y_create_message") }
   /// Create a new room
   public static var a11yCreateRoom: String { return ElementL10n.tr("Localizable", "a11y_create_room") }
   /// Delete avatar
   public static var a11yDeleteAvatar: String { return ElementL10n.tr("Localizable", "a11y_delete_avatar") }
   /// Delete recording
   public static var a11yDeleteRecordedVoiceMessage: String { return ElementL10n.tr("Localizable", "a11y_delete_recorded_voice_message") }
+  /// Desktop
+  public static var a11yDeviceManagerDeviceTypeDesktop: String { return ElementL10n.tr("Localizable", "a11y_device_manager_device_type_desktop") }
+  /// Mobile
+  public static var a11yDeviceManagerDeviceTypeMobile: String { return ElementL10n.tr("Localizable", "a11y_device_manager_device_type_mobile") }
+  /// Unknown device type
+  public static var a11yDeviceManagerDeviceTypeUnknown: String { return ElementL10n.tr("Localizable", "a11y_device_manager_device_type_unknown") }
+  /// Web
+  public static var a11yDeviceManagerDeviceTypeWeb: String { return ElementL10n.tr("Localizable", "a11y_device_manager_device_type_web") }
   /// Message not sent due to error
   public static var a11yErrorMessageNotSent: String { return ElementL10n.tr("Localizable", "a11y_error_message_not_sent") }
   /// Some messages have not been sent
   public static var a11yErrorSomeMessageNotSent: String { return ElementL10n.tr("Localizable", "a11y_error_some_message_not_sent") }
+  /// Expand %@ children
+  public static func a11yExpandSpaceChildren(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "a11y_expand_space_children", String(describing: p1))
+  }
   /// Image
   public static var a11yImage: String { return ElementL10n.tr("Localizable", "a11y_image") }
   /// Import key from file
   public static var a11yImportKeyFromFile: String { return ElementL10n.tr("Localizable", "a11y_import_key_from_file") }
   /// Jump to bottom
   public static var a11yJumpToBottom: String { return ElementL10n.tr("Localizable", "a11y_jump_to_bottom") }
-  /// Share location
-  public static var a11yLocationShareIcon: String { return ElementL10n.tr("Localizable", "a11y_location_share_icon") }
   /// Zoom to current location
   public static var a11yLocationShareLocateButton: String { return ElementL10n.tr("Localizable", "a11y_location_share_locate_button") }
   /// Share this location
@@ -70,6 +86,10 @@ public enum ElementL10n {
   public static var a11yOpenDrawer: String { return ElementL10n.tr("Localizable", "a11y_open_drawer") }
   /// Open Emoji picker
   public static var a11yOpenEmojiPicker: String { return ElementL10n.tr("Localizable", "a11y_open_emoji_picker") }
+  /// Open settings
+  public static var a11yOpenSettings: String { return ElementL10n.tr("Localizable", "a11y_open_settings") }
+  /// Open spaces list
+  public static var a11yOpenSpaces: String { return ElementL10n.tr("Localizable", "a11y_open_spaces") }
   /// Open widgets
   public static var a11yOpenWidget: String { return ElementL10n.tr("Localizable", "a11y_open_widget") }
   /// Pause %1$@
@@ -86,11 +106,13 @@ public enum ElementL10n {
   public static var a11yPlayVoiceMessage: String { return ElementL10n.tr("Localizable", "a11y_play_voice_message") }
   /// winner option
   public static var a11yPollWinnerOption: String { return ElementL10n.tr("Localizable", "a11y_poll_winner_option") }
+  /// Busy
+  public static var a11yPresenceBusy: String { return ElementL10n.tr("Localizable", "a11y_presence_busy") }
   /// Offline
   public static var a11yPresenceOffline: String { return ElementL10n.tr("Localizable", "a11y_presence_offline") }
   /// Online
   public static var a11yPresenceOnline: String { return ElementL10n.tr("Localizable", "a11y_presence_online") }
-  /// Unavailable
+  /// Away
   public static var a11yPresenceUnavailable: String { return ElementL10n.tr("Localizable", "a11y_presence_unavailable") }
   /// Public room
   public static var a11yPublicRoom: String { return ElementL10n.tr("Localizable", "a11y_public_room") }
@@ -182,6 +204,8 @@ public enum ElementL10n {
   public static var actionMarkAllAsRead: String { return ElementL10n.tr("Localizable", "action_mark_all_as_read") }
   /// Mark as read
   public static var actionMarkRoomRead: String { return ElementL10n.tr("Localizable", "action_mark_room_read") }
+  /// Next
+  public static var actionNext: String { return ElementL10n.tr("Localizable", "action_next") }
   /// Not now
   public static var actionNotNow: String { return ElementL10n.tr("Localizable", "action_not_now") }
   /// Open
@@ -256,6 +280,8 @@ public enum ElementL10n {
   public static var alertPushAreDisabledDescription: String { return ElementL10n.tr("Localizable", "alert_push_are_disabled_description") }
   /// Push notifications are disabled
   public static var alertPushAreDisabledTitle: String { return ElementL10n.tr("Localizable", "alert_push_are_disabled_title") }
+  /// All Chats
+  public static var allChats: String { return ElementL10n.tr("Localizable", "all_chats") }
   /// All rooms you’re in will be shown in Home.
   public static var allRoomsYoureInWillBeShownInHome: String { return ElementL10n.tr("Localizable", "all_rooms_youre_in_will_be_shown_in_home") }
   /// Allow space members to find and access.
@@ -328,6 +354,8 @@ public enum ElementL10n {
   public static var audioVideoMeetingDescription: String { return ElementL10n.tr("Localizable", "audio_video_meeting_description") }
   /// Please review and accept the policies of this homeserver:
   public static var authAcceptPolicies: String { return ElementL10n.tr("Localizable", "auth_accept_policies") }
+  /// Biometric authentication was disabled because a new biometric authentication method was recently added. You can enable it again in Settings.
+  public static var authBiometricKeyInvalidatedMessage: String { return ElementL10n.tr("Localizable", "auth_biometric_key_invalidated_message") }
   /// This email address is already defined.
   public static var authEmailAlreadyDefined: String { return ElementL10n.tr("Localizable", "auth_email_already_defined") }
   /// Forgot password?
@@ -360,8 +388,8 @@ public enum ElementL10n {
   public static var authRecaptchaMessage: String { return ElementL10n.tr("Localizable", "auth_recaptcha_message") }
   /// Failed to verify email address: make sure you clicked the link in the email
   public static var authResetPasswordErrorUnauthorized: String { return ElementL10n.tr("Localizable", "auth_reset_password_error_unauthorized") }
-  /// The email address linked to your account must be entered.
-  public static var authResetPasswordMissingEmail: String { return ElementL10n.tr("Localizable", "auth_reset_password_missing_email") }
+  /// Email not verified, check your inbox
+  public static var authResetPasswordErrorUnverified: String { return ElementL10n.tr("Localizable", "auth_reset_password_error_unverified") }
   /// Submit
   public static var authSubmit: String { return ElementL10n.tr("Localizable", "auth_submit") }
   /// Failed to authenticate
@@ -637,6 +665,8 @@ public enum ElementL10n {
   public static var changePasswordSummary: String { return ElementL10n.tr("Localizable", "change_password_summary") }
   /// Change network
   public static var changeRoomDirectoryNetwork: String { return ElementL10n.tr("Localizable", "change_room_directory_network") }
+  /// Change Space
+  public static var changeSpace: String { return ElementL10n.tr("Localizable", "change_space") }
   /// Current language
   public static var chooseLocaleCurrentLocaleTitle: String { return ElementL10n.tr("Localizable", "choose_locale_current_locale_title") }
   /// Loading available languages…
@@ -799,8 +829,12 @@ public enum ElementL10n {
   public static var createPollQuestionTitle: String { return ElementL10n.tr("Localizable", "create_poll_question_title") }
   /// Create Poll
   public static var createPollTitle: String { return ElementL10n.tr("Localizable", "create_poll_title") }
+  /// Create Room
+  public static var createRoom: String { return ElementL10n.tr("Localizable", "create_room") }
   /// CREATE
   public static var createRoomActionCreate: String { return ElementL10n.tr("Localizable", "create_room_action_create") }
+  /// Go
+  public static var createRoomActionGo: String { return ElementL10n.tr("Localizable", "create_room_action_go") }
   /// This address is already in use
   public static var createRoomAliasAlreadyInUse: String { return ElementL10n.tr("Localizable", "create_room_alias_already_in_use") }
   /// Please provide a room address
@@ -905,9 +939,13 @@ public enum ElementL10n {
   public static var crossSigningVerifyByEmoji: String { return ElementL10n.tr("Localizable", "cross_signing_verify_by_emoji") }
   /// Manually Verify by Text
   public static var crossSigningVerifyByText: String { return ElementL10n.tr("Localizable", "cross_signing_verify_by_text") }
+  /// Unable to verify this device
+  public static var crosssigningCannotVerifyThisSession: String { return ElementL10n.tr("Localizable", "crosssigning_cannot_verify_this_session") }
+  /// You won’t be able to access encrypted message history. Reset your Secure Message Backup and verification keys to start fresh.
+  public static var crosssigningCannotVerifyThisSessionDesc: String { return ElementL10n.tr("Localizable", "crosssigning_cannot_verify_this_session_desc") }
   /// Verify login
   public static var crosssigningVerifySession: String { return ElementL10n.tr("Localizable", "crosssigning_verify_session") }
-  /// Verify this login
+  /// Verify this device
   public static var crosssigningVerifyThisSession: String { return ElementL10n.tr("Localizable", "crosssigning_verify_this_session") }
   /// You cannot access this message because you have been blocked by the sender
   public static var cryptoErrorWithheldBlacklisted: String { return ElementL10n.tr("Localizable", "crypto_error_withheld_blacklisted") }
@@ -993,6 +1031,82 @@ public enum ElementL10n {
   public static var devToolsSuccessEvent: String { return ElementL10n.tr("Localizable", "dev_tools_success_event") }
   /// State event sent!
   public static var devToolsSuccessStateEvent: String { return ElementL10n.tr("Localizable", "dev_tools_success_state_event") }
+  /// Current Session
+  public static var deviceManagerCurrentSessionTitle: String { return ElementL10n.tr("Localizable", "device_manager_current_session_title") }
+  /// Device
+  public static var deviceManagerDeviceTitle: String { return ElementL10n.tr("Localizable", "device_manager_device_title") }
+  /// Current Session
+  public static var deviceManagerHeaderSectionCurrentSession: String { return ElementL10n.tr("Localizable", "device_manager_header_section_current_session") }
+  /// Improve your account security by following these recommendations.
+  public static var deviceManagerHeaderSectionSecurityRecommendationsDescription: String { return ElementL10n.tr("Localizable", "device_manager_header_section_security_recommendations_description") }
+  /// Security recommendations
+  public static var deviceManagerHeaderSectionSecurityRecommendationsTitle: String { return ElementL10n.tr("Localizable", "device_manager_header_section_security_recommendations_title") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func deviceManagerInactiveSessionsDescription(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "device_manager_inactive_sessions_description", p1)
+  }
+  /// Inactive sessions
+  public static var deviceManagerInactiveSessionsTitle: String { return ElementL10n.tr("Localizable", "device_manager_inactive_sessions_title") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func deviceManagerOtherSessionsDescriptionInactive(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "device_manager_other_sessions_description_inactive", p1)
+  }
+  /// Unverified · Last activity %1$@
+  public static func deviceManagerOtherSessionsDescriptionUnverified(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "device_manager_other_sessions_description_unverified", String(describing: p1))
+  }
+  /// Verified · Last activity %1$@
+  public static func deviceManagerOtherSessionsDescriptionVerified(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "device_manager_other_sessions_description_verified", String(describing: p1))
+  }
+  /// View All (%1$d)
+  public static func deviceManagerOtherSessionsViewAll(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "device_manager_other_sessions_view_all", p1)
+  }
+  /// Application, device, and activity information.
+  public static var deviceManagerSessionDetailsDescription: String { return ElementL10n.tr("Localizable", "device_manager_session_details_description") }
+  /// IP address
+  public static var deviceManagerSessionDetailsDeviceIpAddress: String { return ElementL10n.tr("Localizable", "device_manager_session_details_device_ip_address") }
+  /// Session ID
+  public static var deviceManagerSessionDetailsSessionId: String { return ElementL10n.tr("Localizable", "device_manager_session_details_session_id") }
+  /// Last activity
+  public static var deviceManagerSessionDetailsSessionLastActivity: String { return ElementL10n.tr("Localizable", "device_manager_session_details_session_last_activity") }
+  /// Session name
+  public static var deviceManagerSessionDetailsSessionName: String { return ElementL10n.tr("Localizable", "device_manager_session_details_session_name") }
+  /// Session details
+  public static var deviceManagerSessionDetailsTitle: String { return ElementL10n.tr("Localizable", "device_manager_session_details_title") }
+  /// Last activity %1$@
+  public static func deviceManagerSessionLastActivity(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "device_manager_session_last_activity", String(describing: p1))
+  }
+  /// Session
+  public static var deviceManagerSessionTitle: String { return ElementL10n.tr("Localizable", "device_manager_session_title") }
+  /// Show All Sessions (V2, WIP)
+  public static var deviceManagerSettingsActiveSessionsShowAll: String { return ElementL10n.tr("Localizable", "device_manager_settings_active_sessions_show_all") }
+  /// Verify or sign out from unverified sessions.
+  public static var deviceManagerUnverifiedSessionsDescription: String { return ElementL10n.tr("Localizable", "device_manager_unverified_sessions_description") }
+  /// Unverified sessions
+  public static var deviceManagerUnverifiedSessionsTitle: String { return ElementL10n.tr("Localizable", "device_manager_unverified_sessions_title") }
+  /// Verify your current session for enhanced secure messaging.
+  public static var deviceManagerVerificationStatusDetailCurrentSessionUnverified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_detail_current_session_unverified") }
+  /// Your current session is ready for secure messaging.
+  public static var deviceManagerVerificationStatusDetailCurrentSessionVerified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_detail_current_session_verified") }
+  /// Verify or sign out from this session for best security and reliability.
+  public static var deviceManagerVerificationStatusDetailOtherSessionUnverified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_detail_other_session_unverified") }
+  /// This session is ready for secure messaging.
+  public static var deviceManagerVerificationStatusDetailOtherSessionVerified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_detail_other_session_verified") }
+  /// Verify your current session for enhanced secure messaging.
+  public static var deviceManagerVerificationStatusDetailUnverified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_detail_unverified") }
+  /// Your current session is ready for secure messaging.
+  public static var deviceManagerVerificationStatusDetailVerified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_detail_verified") }
+  /// Unverified session
+  public static var deviceManagerVerificationStatusUnverified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_unverified") }
+  /// Verified session
+  public static var deviceManagerVerificationStatusVerified: String { return ElementL10n.tr("Localizable", "device_manager_verification_status_verified") }
+  /// Verify Session
+  public static var deviceManagerVerifySession: String { return ElementL10n.tr("Localizable", "device_manager_verify_session") }
+  /// View Details
+  public static var deviceManagerViewDetails: String { return ElementL10n.tr("Localizable", "device_manager_view_details") }
   /// Current session
   public static var devicesCurrentDevice: String { return ElementL10n.tr("Localizable", "devices_current_device") }
   /// Authentication
@@ -1035,8 +1149,10 @@ public enum ElementL10n {
   }
   /// You joined.
   public static var directRoomCreatedSummaryItemByYou: String { return ElementL10n.tr("Localizable", "direct_room_created_summary_item_by_you") }
-  /// Messages in this room are end-to-end encrypted.
+  /// Messages in this chat are end-to-end encrypted.
   public static var directRoomEncryptionEnabledTileDescription: String { return ElementL10n.tr("Localizable", "direct_room_encryption_enabled_tile_description") }
+  /// Messages in this chat will be end-to-end encrypted.
+  public static var directRoomEncryptionEnabledTileDescriptionFuture: String { return ElementL10n.tr("Localizable", "direct_room_encryption_enabled_tile_description_future") }
   /// %1$@ made this invite only.
   public static func directRoomJoinRulesInvite(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "direct_room_join_rules_invite", String(describing: p1))
@@ -1105,8 +1221,6 @@ public enum ElementL10n {
   public static var doesNotLookLikeValidEmail: String { return ElementL10n.tr("Localizable", "does_not_look_like_valid_email") }
   /// Done
   public static var done: String { return ElementL10n.tr("Localizable", "done") }
-  /// Don’t leave any rooms and spaces
-  public static var dontLeaveAny: String { return ElementL10n.tr("Localizable", "dont_leave_any") }
   /// File %1$@ has been downloaded!
   public static func downloadedFile(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "downloaded_file", String(describing: p1))
@@ -1165,8 +1279,6 @@ public enum ElementL10n {
   public static var encryptionInformationCrossSigningState: String { return ElementL10n.tr("Localizable", "encryption_information_cross_signing_state") }
   /// Decryption error
   public static var encryptionInformationDecryptionError: String { return ElementL10n.tr("Localizable", "encryption_information_decryption_error") }
-  /// Session ID
-  public static var encryptionInformationDeviceId: String { return ElementL10n.tr("Localizable", "encryption_information_device_id") }
   /// Session key
   public static var encryptionInformationDeviceKey: String { return ElementL10n.tr("Localizable", "encryption_information_device_key") }
   /// Public name
@@ -1231,8 +1343,6 @@ public enum ElementL10n {
   public static func entries(_ p1: Int) -> String {
     return ElementL10n.tr("Localizable", "entries", p1)
   }
-  /// An error occurred while retrieving the attachment.
-  public static var errorAttachment: String { return ElementL10n.tr("Localizable", "error_attachment") }
   /// Unable to play %1$@
   public static func errorAudioMessageUnableToPlay(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "error_audio_message_unable_to_play", String(describing: p1))
@@ -1285,7 +1395,7 @@ public enum ElementL10n {
   public static var errorVoiceMessageUnableToPlay: String { return ElementL10n.tr("Localizable", "error_voice_message_unable_to_play") }
   /// Cannot record a voice message
   public static var errorVoiceMessageUnableToRecord: String { return ElementL10n.tr("Localizable", "error_voice_message_unable_to_record") }
-  /// Message deleted
+  /// Message removed
   public static var eventRedacted: String { return ElementL10n.tr("Localizable", "event_redacted") }
   /// Event moderated by room admin
   public static var eventRedactedByAdminReason: String { return ElementL10n.tr("Localizable", "event_redacted_by_admin_reason") }
@@ -1319,6 +1429,8 @@ public enum ElementL10n {
   public static var eventStatusSendingMessage: String { return ElementL10n.tr("Localizable", "event_status_sending_message") }
   /// Message sent
   public static var eventStatusSentMessage: String { return ElementL10n.tr("Localizable", "event_status_sent_message") }
+  /// Explore Rooms
+  public static var exploreRooms: String { return ElementL10n.tr("Localizable", "explore_rooms") }
   /// The link %1$@ is taking you to another site: %2$@.
   /// 
   /// Are you sure you want to continue?
@@ -1361,16 +1473,26 @@ public enum ElementL10n {
   public static var finishSetup: String { return ElementL10n.tr("Localizable", "finish_setup") }
   /// Font size
   public static var fontSize: String { return ElementL10n.tr("Localizable", "font_size") }
+  /// Set automatically
+  public static var fontSizeSectionAuto: String { return ElementL10n.tr("Localizable", "font_size_section_auto") }
+  /// Choose manually
+  public static var fontSizeSectionManually: String { return ElementL10n.tr("Localizable", "font_size_section_manually") }
+  /// Choose font size
+  public static var fontSizeTitle: String { return ElementL10n.tr("Localizable", "font_size_title") }
+  /// Use system default
+  public static var fontSizeUseSystem: String { return ElementL10n.tr("Localizable", "font_size_use_system") }
   /// Congratulations!
   public static var ftueAccountCreatedCongratulationsTitle: String { return ElementL10n.tr("Localizable", "ftue_account_created_congratulations_title") }
   /// Personalize profile
   public static var ftueAccountCreatedPersonalize: String { return ElementL10n.tr("Localizable", "ftue_account_created_personalize") }
-  /// Your account %@ has been created.
+  /// Your account %@ has been created
   public static func ftueAccountCreatedSubtitle(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "ftue_account_created_subtitle", String(describing: p1))
   }
   /// Take me home
   public static var ftueAccountCreatedTakeMeHome: String { return ElementL10n.tr("Localizable", "ftue_account_created_take_me_home") }
+  /// Are you a human?
+  public static var ftueAuthCaptchaTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_captcha_title") }
   /// Choose where your conversations are kept, giving you control and independence. Connected via Matrix.
   public static var ftueAuthCarouselControlBody: String { return ElementL10n.tr("Localizable", "ftue_auth_carousel_control_body") }
   /// You're in control.
@@ -1389,6 +1511,104 @@ public enum ElementL10n {
   }
   /// Messaging for your team.
   public static var ftueAuthCarouselWorkplaceTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_carousel_workplace_title") }
+  /// Get in touch
+  public static var ftueAuthChooseServerEmsCta: String { return ElementL10n.tr("Localizable", "ftue_auth_choose_server_ems_cta") }
+  /// Element Matrix Services (EMS) is a robust and reliable hosting service for fast, secure and real time communication. Find out how on <a href=${ftue_ems_url}>element.io/ems</a>
+  public static var ftueAuthChooseServerEmsSubtitle: String { return ElementL10n.tr("Localizable", "ftue_auth_choose_server_ems_subtitle") }
+  /// Want to host your own server?
+  public static var ftueAuthChooseServerEmsTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_choose_server_ems_title") }
+  /// Server URL
+  public static var ftueAuthChooseServerEntryHint: String { return ElementL10n.tr("Localizable", "ftue_auth_choose_server_entry_hint") }
+  /// What is the address of your server?
+  public static var ftueAuthChooseServerSignInSubtitle: String { return ElementL10n.tr("Localizable", "ftue_auth_choose_server_sign_in_subtitle") }
+  /// What is the address of your server? This is like a home for all your data
+  public static var ftueAuthChooseServerSubtitle: String { return ElementL10n.tr("Localizable", "ftue_auth_choose_server_subtitle") }
+  /// Select your server
+  public static var ftueAuthChooseServerTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_choose_server_title") }
+  /// Where your conversations will live
+  public static var ftueAuthCreateAccountChooseServerHeader: String { return ElementL10n.tr("Localizable", "ftue_auth_create_account_choose_server_header") }
+  /// Edit
+  public static var ftueAuthCreateAccountEditServerSelection: String { return ElementL10n.tr("Localizable", "ftue_auth_create_account_edit_server_selection") }
+  /// Must be 8 characters or more
+  public static var ftueAuthCreateAccountPasswordEntryFooter: String { return ElementL10n.tr("Localizable", "ftue_auth_create_account_password_entry_footer") }
+  /// Or
+  public static var ftueAuthCreateAccountSsoSectionHeader: String { return ElementL10n.tr("Localizable", "ftue_auth_create_account_sso_section_header") }
+  /// Create your account
+  public static var ftueAuthCreateAccountTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_create_account_title") }
+  /// Others can discover you %@
+  public static func ftueAuthCreateAccountUsernameEntryFooter(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_create_account_username_entry_footer", String(describing: p1))
+  }
+  /// Email
+  public static var ftueAuthEmailEntryTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_email_entry_title") }
+  /// Resend email
+  public static var ftueAuthEmailResendEmail: String { return ElementL10n.tr("Localizable", "ftue_auth_email_resend_email") }
+  /// %@ needs to verify your account
+  public static func ftueAuthEmailSubtitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_email_subtitle", String(describing: p1))
+  }
+  /// Enter your email
+  public static var ftueAuthEmailTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_email_title") }
+  /// Did not receive an email?
+  public static var ftueAuthEmailVerificationFooter: String { return ElementL10n.tr("Localizable", "ftue_auth_email_verification_footer") }
+  /// Follow the instructions sent to %@
+  public static func ftueAuthEmailVerificationSubtitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_email_verification_subtitle", String(describing: p1))
+  }
+  /// Verify your email
+  public static var ftueAuthEmailVerificationTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_email_verification_title") }
+  /// Forgot password
+  public static var ftueAuthForgotPassword: String { return ElementL10n.tr("Localizable", "ftue_auth_forgot_password") }
+  /// Username / Email / Phone
+  public static var ftueAuthLoginUsernameEntry: String { return ElementL10n.tr("Localizable", "ftue_auth_login_username_entry") }
+  /// New Password
+  public static var ftueAuthNewPasswordEntryTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_new_password_entry_title") }
+  /// Make sure it's 8 characters or more.
+  public static var ftueAuthNewPasswordSubtitle: String { return ElementL10n.tr("Localizable", "ftue_auth_new_password_subtitle") }
+  /// Choose a new password
+  public static var ftueAuthNewPasswordTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_new_password_title") }
+  /// Password reset
+  public static var ftueAuthPasswordResetConfirmation: String { return ElementL10n.tr("Localizable", "ftue_auth_password_reset_confirmation") }
+  /// Follow the instructions send to %@
+  public static func ftueAuthPasswordResetEmailConfirmationSubtitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_password_reset_email_confirmation_subtitle", String(describing: p1))
+  }
+  /// Confirmation code
+  public static var ftueAuthPhoneConfirmationEntryTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_phone_confirmation_entry_title") }
+  /// Resend code
+  public static var ftueAuthPhoneConfirmationResendCode: String { return ElementL10n.tr("Localizable", "ftue_auth_phone_confirmation_resend_code") }
+  /// A code was sent to %@
+  public static func ftueAuthPhoneConfirmationSubtitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_phone_confirmation_subtitle", String(describing: p1))
+  }
+  /// Confirm your phone number
+  public static var ftueAuthPhoneConfirmationTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_phone_confirmation_title") }
+  /// Phone Number
+  public static var ftueAuthPhoneEntryTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_phone_entry_title") }
+  /// %@ needs to verify your account
+  public static func ftueAuthPhoneSubtitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_phone_subtitle", String(describing: p1))
+  }
+  /// Enter your phone number
+  public static var ftueAuthPhoneTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_phone_title") }
+  /// Reset password
+  public static var ftueAuthResetPassword: String { return ElementL10n.tr("Localizable", "ftue_auth_reset_password") }
+  /// Check your email.
+  public static var ftueAuthResetPasswordBreakerTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_reset_password_breaker_title") }
+  /// %@ will send you a verification link
+  public static func ftueAuthResetPasswordEmailSubtitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_reset_password_email_subtitle", String(describing: p1))
+  }
+  /// Where your conversations live
+  public static var ftueAuthSignInChooseServerHeader: String { return ElementL10n.tr("Localizable", "ftue_auth_sign_in_choose_server_header") }
+  /// Sign out all devices
+  public static var ftueAuthSignOutAllDevices: String { return ElementL10n.tr("Localizable", "ftue_auth_sign_out_all_devices") }
+  /// Please read through %@'s terms and policies
+  public static func ftueAuthTermsSubtitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "ftue_auth_terms_subtitle", String(describing: p1))
+  }
+  /// Server policies
+  public static var ftueAuthTermsTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_terms_title") }
   /// Connect to server
   public static var ftueAuthUseCaseConnectToServer: String { return ElementL10n.tr("Localizable", "ftue_auth_use_case_connect_to_server") }
   /// Looking to join an existing server?
@@ -1399,27 +1619,27 @@ public enum ElementL10n {
   public static var ftueAuthUseCaseOptionThree: String { return ElementL10n.tr("Localizable", "ftue_auth_use_case_option_three") }
   /// Teams
   public static var ftueAuthUseCaseOptionTwo: String { return ElementL10n.tr("Localizable", "ftue_auth_use_case_option_two") }
-  /// Not sure yet? You can %@
+  /// Not sure yet? %@
   public static func ftueAuthUseCaseSkip(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "ftue_auth_use_case_skip", String(describing: p1))
   }
-  /// skip this question
+  /// Skip this question
   public static var ftueAuthUseCaseSkipPartial: String { return ElementL10n.tr("Localizable", "ftue_auth_use_case_skip_partial") }
-  /// We'll help you get connected.
+  /// We'll help you get connected
   public static var ftueAuthUseCaseSubtitle: String { return ElementL10n.tr("Localizable", "ftue_auth_use_case_subtitle") }
   /// Who will you chat to the most?
   public static var ftueAuthUseCaseTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_use_case_title") }
+  /// Welcome back!
+  public static var ftueAuthWelcomeBackTitle: String { return ElementL10n.tr("Localizable", "ftue_auth_welcome_back_title") }
   /// You can change this later
   public static var ftueDisplayNameEntryFooter: String { return ElementL10n.tr("Localizable", "ftue_display_name_entry_footer") }
   /// Display Name
   public static var ftueDisplayNameEntryTitle: String { return ElementL10n.tr("Localizable", "ftue_display_name_entry_title") }
-  /// This will be shown when you send messages.
-  public static var ftueDisplayNameSubtitle: String { return ElementL10n.tr("Localizable", "ftue_display_name_subtitle") }
   /// Choose a display name
   public static var ftueDisplayNameTitle: String { return ElementL10n.tr("Localizable", "ftue_display_name_title") }
-  /// Your preferences have been saved.
+  /// Head to settings anytime to update your profile
   public static var ftuePersonalizeCompleteSubtitle: String { return ElementL10n.tr("Localizable", "ftue_personalize_complete_subtitle") }
-  /// You're all set!
+  /// Looking good!
   public static var ftuePersonalizeCompleteTitle: String { return ElementL10n.tr("Localizable", "ftue_personalize_complete_title") }
   /// Let's go
   public static var ftuePersonalizeLetsGo: String { return ElementL10n.tr("Localizable", "ftue_personalize_lets_go") }
@@ -1427,7 +1647,7 @@ public enum ElementL10n {
   public static var ftuePersonalizeSkipThisStep: String { return ElementL10n.tr("Localizable", "ftue_personalize_skip_this_step") }
   /// Save and continue
   public static var ftuePersonalizeSubmit: String { return ElementL10n.tr("Localizable", "ftue_personalize_submit") }
-  /// You can change this anytime.
+  /// Time to put a face to the name
   public static var ftueProfilePictureSubtitle: String { return ElementL10n.tr("Localizable", "ftue_profile_picture_subtitle") }
   /// Add a profile picture
   public static var ftueProfilePictureTitle: String { return ElementL10n.tr("Localizable", "ftue_profile_picture_title") }
@@ -1441,12 +1661,8 @@ public enum ElementL10n {
   public static var giveFeedbackThreads: String { return ElementL10n.tr("Localizable", "give_feedback_threads") }
   /// Retry
   public static var globalRetry: String { return ElementL10n.tr("Localizable", "global_retry") }
-  /// All Communities
-  public static var groupAllCommunities: String { return ElementL10n.tr("Localizable", "group_all_communities") }
   /// Home
   public static var groupDetailsHome: String { return ElementL10n.tr("Localizable", "group_details_home") }
-  /// Communities
-  public static var groupsHeader: String { return ElementL10n.tr("Localizable", "groups_header") }
   /// You have been banned from %1$@ by %2$@
   public static func hasBeenBanned(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "has_been_banned", String(describing: p1), String(describing: p2))
@@ -1459,8 +1675,38 @@ public enum ElementL10n {
   public static var helpLongClickOnRoomForMoreOptions: String { return ElementL10n.tr("Localizable", "help_long_click_on_room_for_more_options") }
   /// Hide advanced
   public static var hideAdvanced: String { return ElementL10n.tr("Localizable", "hide_advanced") }
+  /// The all-in-one secure chat app for teams, friends and organisations. Create a chat, or join an existing room, to get started.
+  public static var homeEmptyNoRoomsMessage: String { return ElementL10n.tr("Localizable", "home_empty_no_rooms_message") }
+  /// Welcome to %@,
+  /// %@.
+  public static func homeEmptyNoRoomsTitle(_ p1: Any, _ p2: Any) -> String {
+    return ElementL10n.tr("Localizable", "home_empty_no_rooms_title", String(describing: p1), String(describing: p2))
+  }
+  /// This is where your unread messages will show up, when you have some.
+  public static var homeEmptyNoUnreadsMessage: String { return ElementL10n.tr("Localizable", "home_empty_no_unreads_message") }
+  /// Nothing to report.
+  public static var homeEmptyNoUnreadsTitle: String { return ElementL10n.tr("Localizable", "home_empty_no_unreads_title") }
+  /// Spaces are a new way to group rooms and people. Add an existing room, or create a new one, using the bottom-right button.
+  public static var homeEmptySpaceNoRoomsMessage: String { return ElementL10n.tr("Localizable", "home_empty_space_no_rooms_message") }
+  /// %@
+  /// is looking a little empty.
+  public static func homeEmptySpaceNoRoomsTitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "home_empty_space_no_rooms_title", String(describing: p1))
+  }
   /// Filter room names
   public static var homeFilterPlaceholderHome: String { return ElementL10n.tr("Localizable", "home_filter_placeholder_home") }
+  /// Layout preferences
+  public static var homeLayoutPreferences: String { return ElementL10n.tr("Localizable", "home_layout_preferences") }
+  /// Show filters
+  public static var homeLayoutPreferencesFilters: String { return ElementL10n.tr("Localizable", "home_layout_preferences_filters") }
+  /// Show recents
+  public static var homeLayoutPreferencesRecents: String { return ElementL10n.tr("Localizable", "home_layout_preferences_recents") }
+  /// Activity
+  public static var homeLayoutPreferencesSortActivity: String { return ElementL10n.tr("Localizable", "home_layout_preferences_sort_activity") }
+  /// Sort by
+  public static var homeLayoutPreferencesSortBy: String { return ElementL10n.tr("Localizable", "home_layout_preferences_sort_by") }
+  /// A - Z
+  public static var homeLayoutPreferencesSortName: String { return ElementL10n.tr("Localizable", "home_layout_preferences_sort_name") }
   /// Homeserver API URL
   public static var hsClientUrl: String { return ElementL10n.tr("Localizable", "hs_client_url") }
   /// Homeserver URL
@@ -1546,9 +1792,6 @@ public enum ElementL10n {
   /// Initial sync:
   /// Importing account data
   public static var initialSyncStartImportingAccountData: String { return ElementL10n.tr("Localizable", "initial_sync_start_importing_account_data") }
-  /// Initial sync:
-  /// Importing communities
-  public static var initialSyncStartImportingAccountGroups: String { return ElementL10n.tr("Localizable", "initial_sync_start_importing_account_groups") }
   /// Initial sync:
   /// Importing invited rooms
   public static var initialSyncStartImportingAccountInvitedRooms: String { return ElementL10n.tr("Localizable", "initial_sync_start_importing_account_invited_rooms") }
@@ -1637,6 +1880,12 @@ public enum ElementL10n {
   public static func invitedBy(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "invited_by", String(describing: p1))
   }
+  /// This is where your new requests and invites will be.
+  public static var invitesEmptyMessage: String { return ElementL10n.tr("Localizable", "invites_empty_message") }
+  /// Nothing new.
+  public static var invitesEmptyTitle: String { return ElementL10n.tr("Localizable", "invites_empty_title") }
+  /// Invites
+  public static var invitesTitle: String { return ElementL10n.tr("Localizable", "invites_title") }
   /// Inviting users…
   public static var invitingUsersToRoom: String { return ElementL10n.tr("Localizable", "inviting_users_to_room") }
   /// Please be patient, it may take some time.
@@ -1749,6 +1998,8 @@ public enum ElementL10n {
   }
   /// Restore from Backup
   public static var keysBackupSettingsRestoreBackupButton: String { return ElementL10n.tr("Localizable", "keys_backup_settings_restore_backup_button") }
+  /// Backup has a valid signature from this user.
+  public static var keysBackupSettingsSignatureFromThisUser: String { return ElementL10n.tr("Localizable", "keys_backup_settings_signature_from_this_user") }
   /// Backup has a signature from unknown session with ID %@.
   public static func keysBackupSettingsSignatureFromUnknownDevice(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "keys_backup_settings_signature_from_unknown_device", String(describing: p1))
@@ -1848,14 +2099,28 @@ public enum ElementL10n {
   public static var labsAutoReportUisi: String { return ElementL10n.tr("Localizable", "labs_auto_report_uisi") }
   /// Your system will automatically send logs when an unable to decrypt error occurs
   public static var labsAutoReportUisiDesc: String { return ElementL10n.tr("Localizable", "labs_auto_report_uisi_desc") }
+  /// Enable Element Call permission shortcuts
+  public static var labsEnableElementCallPermissionShortcuts: String { return ElementL10n.tr("Localizable", "labs_enable_element_call_permission_shortcuts") }
+  /// Auto-approve Element Call widgets and grant camera / mic access
+  public static var labsEnableElementCallPermissionShortcutsSummary: String { return ElementL10n.tr("Localizable", "labs_enable_element_call_permission_shortcuts_summary") }
   /// Enable LaTeX mathematics
   public static var labsEnableLatexMaths: String { return ElementL10n.tr("Localizable", "labs_enable_latex_maths") }
+  /// Enable Live Location Sharing
+  public static var labsEnableLiveLocation: String { return ElementL10n.tr("Localizable", "labs_enable_live_location") }
+  /// Temporary implementation: locations persist in room history
+  public static var labsEnableLiveLocationSummary: String { return ElementL10n.tr("Localizable", "labs_enable_live_location_summary") }
+  /// MSC3061: Sharing room keys for past messages
+  public static var labsEnableMsc3061ShareHistory: String { return ElementL10n.tr("Localizable", "labs_enable_msc3061_share_history") }
+  /// When inviting in an encrypted room that is sharing history, encrypted history will be visible.
+  public static var labsEnableMsc3061ShareHistoryDesc: String { return ElementL10n.tr("Localizable", "labs_enable_msc3061_share_history_desc") }
+  /// A simplified Element with optional tabs
+  public static var labsEnableNewAppLayoutSummary: String { return ElementL10n.tr("Localizable", "labs_enable_new_app_layout_summary") }
+  /// Enable new layout
+  public static var labsEnableNewAppLayoutTitle: String { return ElementL10n.tr("Localizable", "labs_enable_new_app_layout_title") }
   /// Enable Thread Messages
   public static var labsEnableThreadMessages: String { return ElementL10n.tr("Localizable", "labs_enable_thread_messages") }
   /// Note: app will be restarted
   public static var labsEnableThreadMessagesDesc: String { return ElementL10n.tr("Localizable", "labs_enable_thread_messages_desc") }
-  /// Render user locations in the timeline
-  public static var labsRenderLocationsInTimeline: String { return ElementL10n.tr("Localizable", "labs_render_locations_in_timeline") }
   /// Add a dedicated tab for unread notifications on main screen.
   public static var labsShowUnreadNotificationsAsTab: String { return ElementL10n.tr("Localizable", "labs_show_unread_notifications_as_tab") }
   /// Enable swipe to reply in timeline
@@ -1868,12 +2133,8 @@ public enum ElementL10n {
   public static var largest: String { return ElementL10n.tr("Localizable", "largest") }
   /// Later
   public static var later: String { return ElementL10n.tr("Localizable", "later") }
-  /// Leave all rooms and spaces
-  public static var leaveAllRoomsAndSpaces: String { return ElementL10n.tr("Localizable", "leave_all_rooms_and_spaces") }
   /// Leave
   public static var leaveSpace: String { return ElementL10n.tr("Localizable", "leave_space") }
-  /// Leave specific rooms and spaces…
-  public static var leaveSpecificOnes: String { return ElementL10n.tr("Localizable", "leave_specific_ones") }
   /// %@ policy
   public static func legalsApplicationTitle(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "legals_application_title", String(describing: p1))
@@ -1898,6 +2159,24 @@ public enum ElementL10n {
   }
   /// Members
   public static var listMembers: String { return ElementL10n.tr("Localizable", "list_members") }
+  /// Updated %1$@ ago
+  public static func liveLocationBottomSheetLastUpdatedAt(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "live_location_bottom_sheet_last_updated_at", String(describing: p1))
+  }
+  /// Live location
+  public static var liveLocationDescription: String { return ElementL10n.tr("Localizable", "live_location_description") }
+  /// Please note: this is a labs feature using a temporary implementation. This means you will not be able to delete your location history, and advanced users will be able to see your location history even after you stop sharing your live location with this room.
+  public static var liveLocationLabsPromotionDescription: String { return ElementL10n.tr("Localizable", "live_location_labs_promotion_description") }
+  /// Enable location sharing
+  public static var liveLocationLabsPromotionSwitchTitle: String { return ElementL10n.tr("Localizable", "live_location_labs_promotion_switch_title") }
+  /// Live location sharing
+  public static var liveLocationLabsPromotionTitle: String { return ElementL10n.tr("Localizable", "live_location_labs_promotion_title") }
+  /// You need to have the right permissions in order to share live location in this room.
+  public static var liveLocationNotEnoughPermissionDialogDescription: String { return ElementL10n.tr("Localizable", "live_location_not_enough_permission_dialog_description") }
+  /// You don’t have permission to share live location
+  public static var liveLocationNotEnoughPermissionDialogTitle: String { return ElementL10n.tr("Localizable", "live_location_not_enough_permission_dialog_title") }
+  /// Share location
+  public static var liveLocationShareLocationItemShare: String { return ElementL10n.tr("Localizable", "live_location_share_location_item_share") }
   /// Location sharing is in progress
   public static var liveLocationSharingNotificationDescription: String { return ElementL10n.tr("Localizable", "live_location_sharing_notification_description") }
   /// %@ Live Location
@@ -1912,13 +2191,6 @@ public enum ElementL10n {
   public static var locationActivityTitlePreview: String { return ElementL10n.tr("Localizable", "location_activity_title_preview") }
   /// Share location
   public static var locationActivityTitleStaticSharing: String { return ElementL10n.tr("Localizable", "location_activity_title_static_sharing") }
-  /// If you’d like to share your Live location, %@ needs location access all the time when the app is in the background.
-  /// We will only access your location for the duration that you choose.
-  public static func locationInBackgroundMissingPermissionDialogContent(_ p1: Any) -> String {
-    return ElementL10n.tr("Localizable", "location_in_background_missing_permission_dialog_content", String(describing: p1))
-  }
-  /// Allow access
-  public static var locationInBackgroundMissingPermissionDialogTitle: String { return ElementL10n.tr("Localizable", "location_in_background_missing_permission_dialog_title") }
   /// %@ could not access your location. Please try again later.
   public static func locationNotAvailableDialogContent(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "location_not_available_dialog_content", String(describing: p1))
@@ -1927,12 +2199,16 @@ public enum ElementL10n {
   public static func locationNotAvailableDialogTitle(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "location_not_available_dialog_title", String(describing: p1))
   }
-  /// Share location
-  public static var locationShare: String { return ElementL10n.tr("Localizable", "location_share") }
   /// Open with
   public static var locationShareExternal: String { return ElementL10n.tr("Localizable", "location_share_external") }
   /// Live location enabled
   public static var locationShareLiveEnabled: String { return ElementL10n.tr("Localizable", "location_share_live_enabled") }
+  /// Live location ended
+  public static var locationShareLiveEnded: String { return ElementL10n.tr("Localizable", "location_share_live_ended") }
+  /// %1$@ left
+  public static func locationShareLiveRemainingTime(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "location_share_live_remaining_time", String(describing: p1))
+  }
   /// 15 minutes
   public static var locationShareLiveSelectDurationOption1: String { return ElementL10n.tr("Localizable", "location_share_live_select_duration_option_1") }
   /// 1 hour
@@ -1945,6 +2221,15 @@ public enum ElementL10n {
   public static var locationShareLiveStarted: String { return ElementL10n.tr("Localizable", "location_share_live_started") }
   /// Stop
   public static var locationShareLiveStop: String { return ElementL10n.tr("Localizable", "location_share_live_stop") }
+  /// Live until %1$@
+  public static func locationShareLiveUntil(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "location_share_live_until", String(describing: p1))
+  }
+  /// View live location
+  public static var locationShareLiveView: String { return ElementL10n.tr("Localizable", "location_share_live_view") }
+  /// Unable to load map
+  /// This home server may not be configured to display maps.
+  public static var locationShareLoadingMapError: String { return ElementL10n.tr("Localizable", "location_share_loading_map_error") }
   /// Share this location
   public static var locationShareOptionPinned: String { return ElementL10n.tr("Localizable", "location_share_option_pinned") }
   /// Share my current location
@@ -2155,9 +2440,7 @@ public enum ElementL10n {
   public static var loginSigninUsernameHint: String { return ElementL10n.tr("Localizable", "login_signin_username_hint") }
   /// Sign Up
   public static var loginSignup: String { return ElementL10n.tr("Localizable", "login_signup") }
-  /// Your account is not created yet.
-  /// 
-  /// Stop the registration process?
+  /// Your account is not created yet. Stop the registration process?
   public static var loginSignupCancelConfirmationContent: String { return ElementL10n.tr("Localizable", "login_signup_cancel_confirmation_content") }
   /// Warning
   public static var loginSignupCancelConfirmationTitle: String { return ElementL10n.tr("Localizable", "login_signup_cancel_confirmation_title") }
@@ -2994,6 +3277,22 @@ public enum ElementL10n {
   }
   /// OK
   public static var ok: String { return ElementL10n.tr("Localizable", "ok") }
+  /// Try it out
+  public static var onboardingNewAppLayoutButtonTry: String { return ElementL10n.tr("Localizable", "onboarding_new_app_layout_button_try") }
+  /// Tap top right to see the option to feedback.
+  public static var onboardingNewAppLayoutFeedbackMessage: String { return ElementL10n.tr("Localizable", "onboarding_new_app_layout_feedback_message") }
+  /// Give Feedback
+  public static var onboardingNewAppLayoutFeedbackTitle: String { return ElementL10n.tr("Localizable", "onboarding_new_app_layout_feedback_title") }
+  /// Access your Spaces (bottom-right) faster and easier than ever before.
+  public static var onboardingNewAppLayoutSpacesMessage: String { return ElementL10n.tr("Localizable", "onboarding_new_app_layout_spaces_message") }
+  /// Access Spaces
+  public static var onboardingNewAppLayoutSpacesTitle: String { return ElementL10n.tr("Localizable", "onboarding_new_app_layout_spaces_title") }
+  /// To simplify your %@, tabs are now optional. Manage them using the top-right menu.
+  public static func onboardingNewAppLayoutWelcomeMessage(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "onboarding_new_app_layout_welcome_message", String(describing: p1))
+  }
+  /// Welcome to a new view!
+  public static var onboardingNewAppLayoutWelcomeTitle: String { return ElementL10n.tr("Localizable", "onboarding_new_app_layout_welcome_title") }
   /// %@ read
   public static func oneUserRead(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "one_user_read", String(describing: p1))
@@ -3046,6 +3345,8 @@ public enum ElementL10n {
   public static var permalink: String { return ElementL10n.tr("Localizable", "permalink") }
   /// Your matrix.to link was malformed
   public static var permalinkMalformed: String { return ElementL10n.tr("Localizable", "permalink_malformed") }
+  /// Cannot open this link: communities have been replaced by spaces
+  public static var permalinkUnsupportedGroups: String { return ElementL10n.tr("Localizable", "permalink_unsupported_groups") }
   /// Allow permission to access your contacts.
   public static var permissionsDeniedAddContact: String { return ElementL10n.tr("Localizable", "permissions_denied_add_contact") }
   /// To scan a QR code, you need to allow camera access.
@@ -3064,8 +3365,6 @@ public enum ElementL10n {
   public static var permissionsRationalePopupTitle: String { return ElementL10n.tr("Localizable", "permissions_rationale_popup_title") }
   /// Search for contacts on Matrix
   public static var phoneBookPerformLookup: String { return ElementL10n.tr("Localizable", "phone_book_perform_lookup") }
-  /// Pick things to leave
-  public static var pickTingsToLeave: String { return ElementL10n.tr("Localizable", "pick_tings_to_leave") }
   /// Please wait…
   public static var pleaseWait: String { return ElementL10n.tr("Localizable", "please_wait") }
   /// End poll
@@ -3094,6 +3393,8 @@ public enum ElementL10n {
   }
   /// Poll type
   public static var pollTypeTitle: String { return ElementL10n.tr("Localizable", "poll_type_title") }
+  /// Results will be visible when the poll is ended
+  public static var pollUndisclosedNotEnded: String { return ElementL10n.tr("Localizable", "poll_undisclosed_not_ended") }
   /// Admin
   public static var powerLevelAdmin: String { return ElementL10n.tr("Localizable", "power_level_admin") }
   /// Custom (%1$d)
@@ -3142,6 +3443,8 @@ public enum ElementL10n {
   public static var pushGatewayItemDeviceName: String { return ElementL10n.tr("Localizable", "push_gateway_item_device_name") }
   /// Format:
   public static var pushGatewayItemFormat: String { return ElementL10n.tr("Localizable", "push_gateway_item_format") }
+  /// Profile tag:
+  public static var pushGatewayItemProfileTag: String { return ElementL10n.tr("Localizable", "push_gateway_item_profile_tag") }
   /// push_key:
   public static var pushGatewayItemPushKey: String { return ElementL10n.tr("Localizable", "push_gateway_item_push_key") }
   /// Url:
@@ -3377,7 +3680,15 @@ public enum ElementL10n {
   public static var roomListCatchupEmptyBody: String { return ElementL10n.tr("Localizable", "room_list_catchup_empty_body") }
   /// You’re all caught up!
   public static var roomListCatchupEmptyTitle: String { return ElementL10n.tr("Localizable", "room_list_catchup_empty_title") }
-  /// Your direct message conversations will be displayed here. Tap the + bottom right to start some.
+  /// All
+  public static var roomListFilterAll: String { return ElementL10n.tr("Localizable", "room_list_filter_all") }
+  /// Favourites
+  public static var roomListFilterFavourites: String { return ElementL10n.tr("Localizable", "room_list_filter_favourites") }
+  /// People
+  public static var roomListFilterPeople: String { return ElementL10n.tr("Localizable", "room_list_filter_people") }
+  /// Unreads
+  public static var roomListFilterUnreads: String { return ElementL10n.tr("Localizable", "room_list_filter_unreads") }
+  /// Your direct message conversations will be displayed here. Tap the + at the bottom right to start some.
   public static var roomListPeopleEmptyBody: String { return ElementL10n.tr("Localizable", "room_list_people_empty_body") }
   /// Conversations
   public static var roomListPeopleEmptyTitle: String { return ElementL10n.tr("Localizable", "room_list_people_empty_title") }
@@ -3403,7 +3714,7 @@ public enum ElementL10n {
   public static var roomListQuickActionsRoomSettings: String { return ElementL10n.tr("Localizable", "room_list_quick_actions_room_settings") }
   /// Settings
   public static var roomListQuickActionsSettings: String { return ElementL10n.tr("Localizable", "room_list_quick_actions_settings") }
-  /// Your rooms will be displayed here. Tap the + bottom right to find existing ones or start some of your own.
+  /// Your rooms will be displayed here. Tap the + at the bottom right to find existing ones or start some of your own.
   public static var roomListRoomsEmptyBody: String { return ElementL10n.tr("Localizable", "room_list_rooms_empty_body") }
   /// Rooms
   public static var roomListRoomsEmptyTitle: String { return ElementL10n.tr("Localizable", "room_list_rooms_empty_title") }
@@ -3417,7 +3728,7 @@ public enum ElementL10n {
   public static var roomMemberJumpToReadReceipt: String { return ElementL10n.tr("Localizable", "room_member_jump_to_read_receipt") }
   /// Direct message
   public static var roomMemberOpenOrCreateDm: String { return ElementL10n.tr("Localizable", "room_member_open_or_create_dm") }
-  /// Override nick color
+  /// Override display name color
   public static var roomMemberOverrideNickColor: String { return ElementL10n.tr("Localizable", "room_member_override_nick_color") }
   /// Admin in %1$@
   public static func roomMemberPowerLevelAdminIn(_ p1: Any) -> String {
@@ -3629,6 +3940,10 @@ public enum ElementL10n {
   public static var roomProfileSectionSecurity: String { return ElementL10n.tr("Localizable", "room_profile_section_security") }
   /// Learn more
   public static var roomProfileSectionSecurityLearnMore: String { return ElementL10n.tr("Localizable", "room_profile_section_security_learn_more") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func roomRemovedMessages(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "room_removed_messages", p1)
+  }
   /// Who can access?
   public static var roomSettingsAccessRulesPrefDialogTitle: String { return ElementL10n.tr("Localizable", "room_settings_access_rules_pref_dialog_title") }
   /// Add to Home screen
@@ -3854,6 +4169,14 @@ public enum ElementL10n {
   public static var searchMembersHint: String { return ElementL10n.tr("Localizable", "search_members_hint") }
   /// No results
   public static var searchNoResults: String { return ElementL10n.tr("Localizable", "search_no_results") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func searchSpaceMultipleParents(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "search_space_multiple_parents", p1)
+  }
+  /// %1$@ and %2$@
+  public static func searchSpaceTwoParents(_ p1: Any, _ p2: Any) -> String {
+    return ElementL10n.tr("Localizable", "search_space_two_parents", String(describing: p1), String(describing: p2))
+  }
   /// From a Thread
   public static var searchThreadFromAThread: String { return ElementL10n.tr("Localizable", "search_thread_from_a_thread") }
   /// Plural format key: "%#@VARIABLE@"
@@ -3976,6 +4299,10 @@ public enum ElementL10n {
   }
   /// Sent you an invitation
   public static var sendYouInvite: String { return ElementL10n.tr("Localizable", "send_you_invite") }
+  /// Send your first message to invite %@ to chat
+  public static func sendYourFirstMsgToInvite(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "send_your_first_msg_to_invite", String(describing: p1))
+  }
   /// File
   public static var sentAFile: String { return ElementL10n.tr("Localizable", "sent_a_file") }
   /// Poll
@@ -4050,6 +4377,10 @@ public enum ElementL10n {
   public static var settingsAppInfoLinkTitle: String { return ElementL10n.tr("Localizable", "settings_app_info_link_title") }
   /// Terms & conditions
   public static var settingsAppTermConditions: String { return ElementL10n.tr("Localizable", "settings_app_term_conditions") }
+  /// Play animated images in the timeline as soon as they are visible
+  public static var settingsAutoplayAnimatedImagesSummary: String { return ElementL10n.tr("Localizable", "settings_autoplay_animated_images_summary") }
+  /// Autoplay animated images
+  public static var settingsAutoplayAnimatedImagesTitle: String { return ElementL10n.tr("Localizable", "settings_autoplay_animated_images_title") }
   /// Background Sync Mode
   public static var settingsBackgroundFdroidSyncMode: String { return ElementL10n.tr("Localizable", "settings_background_fdroid_sync_mode") }
   /// Optimized for battery
@@ -4216,10 +4547,6 @@ public enum ElementL10n {
   public static var settingsEmailsEmpty: String { return ElementL10n.tr("Localizable", "settings_emails_empty") }
   /// Enable notifications for this account
   public static var settingsEnableAllNotif: String { return ElementL10n.tr("Localizable", "settings_enable_all_notif") }
-  /// Enable location sharing
-  public static var settingsEnableLocationSharing: String { return ElementL10n.tr("Localizable", "settings_enable_location_sharing") }
-  /// Once enabled you will be able to send your location to any room
-  public static var settingsEnableLocationSharingSummary: String { return ElementL10n.tr("Localizable", "settings_enable_location_sharing_summary") }
   /// Enable notifications for this session
   public static var settingsEnableThisDevice: String { return ElementL10n.tr("Localizable", "settings_enable_this_device") }
   /// Encrypted direct messages
@@ -4234,8 +4561,6 @@ public enum ElementL10n {
   public static var settingsFailToUpdatePasswordInvalidCurrentPassword: String { return ElementL10n.tr("Localizable", "settings_fail_to_update_password_invalid_current_password") }
   /// No cryptographic information available
   public static var settingsFailedToGetCryptoDeviceInfo: String { return ElementL10n.tr("Localizable", "settings_failed_to_get_crypto_device_info") }
-  /// Flair
-  public static var settingsFlair: String { return ElementL10n.tr("Localizable", "settings_flair") }
   /// General
   public static var settingsGeneralTitle: String { return ElementL10n.tr("Localizable", "settings_general_title") }
   /// Group messages
@@ -4337,6 +4662,8 @@ public enum ElementL10n {
   }
   /// Mentions and Keywords
   public static var settingsNotificationMentionsAndKeywords: String { return ElementL10n.tr("Localizable", "settings_notification_mentions_and_keywords") }
+  /// Notification method
+  public static var settingsNotificationMethod: String { return ElementL10n.tr("Localizable", "settings_notification_method") }
   /// Add new keyword
   public static var settingsNotificationNewKeyword: String { return ElementL10n.tr("Localizable", "settings_notification_new_keyword") }
   /// Notify me for
@@ -4463,6 +4790,8 @@ public enum ElementL10n {
   public static var settingsSecurityPinCodeSummary: String { return ElementL10n.tr("Localizable", "settings_security_pin_code_summary") }
   /// Enable PIN
   public static var settingsSecurityPinCodeTitle: String { return ElementL10n.tr("Localizable", "settings_security_pin_code_title") }
+  /// Could not enable biometric authentication.
+  public static var settingsSecurityPinCodeUseBiometricsError: String { return ElementL10n.tr("Localizable", "settings_security_pin_code_use_biometrics_error") }
   /// PIN code is the only way to unlock %@.
   public static func settingsSecurityPinCodeUseBiometricsSummaryOff(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "settings_security_pin_code_use_biometrics_summary_off", String(describing: p1))
@@ -4511,6 +4840,12 @@ public enum ElementL10n {
   public static var settingsServerUploadSizeUnknown: String { return ElementL10n.tr("Localizable", "settings_server_upload_size_unknown") }
   /// Server version
   public static var settingsServerVersion: String { return ElementL10n.tr("Localizable", "settings_server_version") }
+  /// Sessions
+  public static var settingsSessionsList: String { return ElementL10n.tr("Localizable", "settings_sessions_list") }
+  /// For best security, verify your sessions and sign out from any session that you don’t recognize or use anymore.
+  public static var settingsSessionsOtherDescription: String { return ElementL10n.tr("Localizable", "settings_sessions_other_description") }
+  /// Other sessions
+  public static var settingsSessionsOtherTitle: String { return ElementL10n.tr("Localizable", "settings_sessions_other_title") }
   /// Delay between each Sync
   public static var settingsSetSyncDelay: String { return ElementL10n.tr("Localizable", "settings_set_sync_delay") }
   /// Sync request timeout
@@ -4527,6 +4862,10 @@ public enum ElementL10n {
   public static var settingsShowJoinLeaveMessages: String { return ElementL10n.tr("Localizable", "settings_show_join_leave_messages") }
   /// Invites, removes, and bans are unaffected.
   public static var settingsShowJoinLeaveMessagesSummary: String { return ElementL10n.tr("Localizable", "settings_show_join_leave_messages_summary") }
+  /// Show latest user info
+  public static var settingsShowLatestProfile: String { return ElementL10n.tr("Localizable", "settings_show_latest_profile") }
+  /// Show the latest profile info (avatar and display name) for all the messages.
+  public static var settingsShowLatestProfileDescription: String { return ElementL10n.tr("Localizable", "settings_show_latest_profile_description") }
   /// Show read receipts
   public static var settingsShowReadReceipts: String { return ElementL10n.tr("Localizable", "settings_show_read_receipts") }
   /// Click on the read receipts for a detailed list.
@@ -4607,6 +4946,26 @@ public enum ElementL10n {
   public static var settingsTroubleshootTestBingSettingsSuccessWithWarn: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_bing_settings_success_with_warn") }
   /// Custom Settings.
   public static var settingsTroubleshootTestBingSettingsTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_bing_settings_title") }
+  /// Currently using %@.
+  public static func settingsTroubleshootTestCurrentDistributor(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "settings_troubleshoot_test_current_distributor", String(describing: p1))
+  }
+  /// Method
+  public static var settingsTroubleshootTestCurrentDistributorTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_current_distributor_title") }
+  /// Cannot find the endpoint.
+  public static var settingsTroubleshootTestCurrentEndpointFailed: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_current_endpoint_failed") }
+  /// Current endpoint: %@
+  public static func settingsTroubleshootTestCurrentEndpointSuccess(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "settings_troubleshoot_test_current_endpoint_success", String(describing: p1))
+  }
+  /// Endpoint
+  public static var settingsTroubleshootTestCurrentEndpointTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_current_endpoint_title") }
+  /// Current gateway: %@
+  public static func settingsTroubleshootTestCurrentGateway(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "settings_troubleshoot_test_current_gateway", String(describing: p1))
+  }
+  /// Gateway
+  public static var settingsTroubleshootTestCurrentGatewayTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_current_gateway_title") }
   /// Notifications are not enabled for this session.
   /// Please check the %@ settings.
   public static func settingsTroubleshootTestDeviceSettingsFailed(_ p1: Any) -> String {
@@ -4618,6 +4977,27 @@ public enum ElementL10n {
   public static var settingsTroubleshootTestDeviceSettingsSuccess: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_device_settings_success") }
   /// Session Settings.
   public static var settingsTroubleshootTestDeviceSettingsTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_device_settings_title") }
+  /// No other method than background synchronization found.
+  public static var settingsTroubleshootTestDistributorsFdroid: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_distributors_fdroid") }
+  /// No other method than Google Play Service found.
+  public static var settingsTroubleshootTestDistributorsGplay: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_distributors_gplay") }
+  /// Plural format key: "%#@VARIABLE@"
+  public static func settingsTroubleshootTestDistributorsMany(_ p1: Int) -> String {
+    return ElementL10n.tr("Localizable", "settings_troubleshoot_test_distributors_many", p1)
+  }
+  /// Available methods
+  public static var settingsTroubleshootTestDistributorsTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_distributors_title") }
+  /// Failed to register endpoint token to homeserver:
+  /// %1$@
+  public static func settingsTroubleshootTestEndpointRegistrationFailed(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "settings_troubleshoot_test_endpoint_registration_failed", String(describing: p1))
+  }
+  /// Reset notification method
+  public static var settingsTroubleshootTestEndpointRegistrationQuickFix: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_endpoint_registration_quick_fix") }
+  /// Endpoint successfully registered to homeserver.
+  public static var settingsTroubleshootTestEndpointRegistrationSuccess: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_endpoint_registration_success") }
+  /// Endpoint Registration
+  public static var settingsTroubleshootTestEndpointRegistrationTitle: String { return ElementL10n.tr("Localizable", "settings_troubleshoot_test_endpoint_registration_title") }
   /// Failed to retrieved FCM token:
   /// %1$@
   public static func settingsTroubleshootTestFcmFailed(_ p1: Any) -> String {
@@ -4818,6 +5198,10 @@ public enum ElementL10n {
   public static var spaceAddSpaceToAnySpaceYouManage: String { return ElementL10n.tr("Localizable", "space_add_space_to_any_space_you_manage") }
   /// Explore rooms
   public static var spaceExploreActivityTitle: String { return ElementL10n.tr("Localizable", "space_explore_activity_title") }
+  /// Some results may be hidden because they’re private and you need an invite to them.
+  public static var spaceExploreFilterNoResultDescription: String { return ElementL10n.tr("Localizable", "space_explore_filter_no_result_description") }
+  /// No results found
+  public static var spaceExploreFilterNoResultTitle: String { return ElementL10n.tr("Localizable", "space_explore_filter_no_result_title") }
   /// You're the only admin of this space. Leaving it will mean no one has control over it.
   public static var spaceLeavePromptMsgAsAdmin: String { return ElementL10n.tr("Localizable", "space_leave_prompt_msg_as_admin") }
   /// You are the only person here. If you leave, no one will be able to join in the future, including you.
@@ -4828,6 +5212,16 @@ public enum ElementL10n {
   public static func spaceLeavePromptMsgWithName(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "space_leave_prompt_msg_with_name", String(describing: p1))
   }
+  /// Leave all
+  public static var spaceLeaveRadioButtonAll: String { return ElementL10n.tr("Localizable", "space_leave_radio_button_all") }
+  /// Leave none
+  public static var spaceLeaveRadioButtonNone: String { return ElementL10n.tr("Localizable", "space_leave_radio_button_none") }
+  /// Things in this space
+  public static var spaceLeaveRadioButtonsTitle: String { return ElementL10n.tr("Localizable", "space_leave_radio_buttons_title") }
+  /// Spaces are a new way to group rooms and people. Create a space to get started.
+  public static var spaceListEmptyMessage: String { return ElementL10n.tr("Localizable", "space_list_empty_message") }
+  /// No spaces yet.
+  public static var spaceListEmptyTitle: String { return ElementL10n.tr("Localizable", "space_list_empty_title") }
   /// Manage rooms and spaces
   public static var spaceManageRoomsAndSpaces: String { return ElementL10n.tr("Localizable", "space_manage_rooms_and_spaces") }
   /// Mark as not suggested
@@ -4913,6 +5307,8 @@ public enum ElementL10n {
   public static var sslTrust: String { return ElementL10n.tr("Localizable", "ssl_trust") }
   /// The certificate has changed from one that was trusted by your phone. This is HIGHLY UNUSUAL. It is recommended that you DO NOT ACCEPT this new certificate.
   public static var sslUnexpectedExistingExpl: String { return ElementL10n.tr("Localizable", "ssl_unexpected_existing_expl") }
+  /// Start Chat
+  public static var startChat: String { return ElementL10n.tr("Localizable", "start_chat") }
   /// Start Chatting
   public static var startChatting: String { return ElementL10n.tr("Localizable", "start_chatting") }
   /// Start verification
@@ -5016,6 +5412,17 @@ public enum ElementL10n {
   public static func threeUsersRead(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
     return ElementL10n.tr("Localizable", "three_users_read", String(describing: p1), String(describing: p2), String(describing: p3))
   }
+  /// h
+  public static var timeUnitHourShort: String { return ElementL10n.tr("Localizable", "time_unit_hour_short") }
+  /// min
+  public static var timeUnitMinuteShort: String { return ElementL10n.tr("Localizable", "time_unit_minute_short") }
+  /// sec
+  public static var timeUnitSecondShort: String { return ElementL10n.tr("Localizable", "time_unit_second_short") }
+  /// Sorry, this room has not been found.
+  /// Please retry later.%@
+  public static func timelineErrorRoomNotFound(_ p1: Any) -> String {
+    return ElementL10n.tr("Localizable", "timeline_error_room_not_found", String(describing: p1))
+  }
   /// Unread messages
   public static var timelineUnreadMessages: String { return ElementL10n.tr("Localizable", "timeline_unread_messages") }
   /// Tiny
@@ -5066,6 +5473,12 @@ public enum ElementL10n {
   public static var unencrypted: String { return ElementL10n.tr("Localizable", "unencrypted") }
   /// Unexpected error
   public static var unexpectedError: String { return ElementL10n.tr("Localizable", "unexpected_error") }
+  /// Background synchronization
+  public static var unifiedpushDistributorBackgroundSync: String { return ElementL10n.tr("Localizable", "unifiedpush_distributor_background_sync") }
+  /// Google Services
+  public static var unifiedpushDistributorFcmFallback: String { return ElementL10n.tr("Localizable", "unifiedpush_distributor_fcm_fallback") }
+  /// Choose how to receive notifications
+  public static var unifiedpushGetdistributorsDialogTitle: String { return ElementL10n.tr("Localizable", "unifiedpush_getdistributors_dialog_title") }
   /// Unignore
   public static var unignore: String { return ElementL10n.tr("Localizable", "unignore") }
   /// The link was malformed
@@ -5078,6 +5491,8 @@ public enum ElementL10n {
   public static func unrecognizedCommand(_ p1: Any) -> String {
     return ElementL10n.tr("Localizable", "unrecognized_command", String(describing: p1))
   }
+  /// Updating your data…
+  public static var updatingYourData: String { return ElementL10n.tr("Localizable", "updating_your_data") }
   /// Upgrade
   public static var upgrade: String { return ElementL10n.tr("Localizable", "upgrade") }
   /// Upgrade private room
@@ -5265,6 +5680,8 @@ public enum ElementL10n {
   /// This session is unable to share this verification with your other sessions.
   /// The verification will be saved locally and shared in a future version of the app.
   public static var verifyCannotCrossSign: String { return ElementL10n.tr("Localizable", "verify_cannot_cross_sign") }
+  /// This QR code looks malformed. Please try to verify with another method.
+  public static var verifyInvalidQrNotice: String { return ElementL10n.tr("Localizable", "verify_invalid_qr_notice") }
   /// Your account may be compromised
   public static var verifyNewSessionCompromized: String { return ElementL10n.tr("Localizable", "verify_new_session_compromized") }
   /// Use this session to verify your new one, granting it access to encrypted messages.
@@ -5350,7 +5767,7 @@ public enum ElementL10n {
   public static func wrongPinMessageRemainingAttempts(_ p1: Int) -> String {
     return ElementL10n.tr("Localizable", "wrong_pin_message_remaining_attempts", p1)
   }
-  /// %d+
+  /// +%d
   public static func xPlus(_ p1: Int) -> String {
     return ElementL10n.tr("Localizable", "x_plus", p1)
   }

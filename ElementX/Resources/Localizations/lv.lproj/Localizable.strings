@@ -108,7 +108,6 @@
 "notice_room_invite_no_invitee_with_reason" = "%1$@ uzaicinājums. Iemesls: %2$@";
 "event_status_sending_message" = "Sūta ziņu…";
 "initial_sync_start_importing_account_data" = "Sākotnējā sinhronizācija:\nImportē konta datus";
-"initial_sync_start_importing_account_groups" = "Sākotnējā sinhronizācija:\nImportē kopienas";
 "initial_sync_start_importing_account_left_rooms" = "Sākotnējā sinhronizācija:\nImportē pamestās istabas";
 "initial_sync_start_importing_account_invited_rooms" = "Sākotnējā sinhronizācija:\nImportē istabas, uz kurām uzaicināts";
 "initial_sync_start_importing_account_joined_rooms" = "Sākotnējā sinhronizācija:\nLādē jūsu sarunas\nJa esat pievienojies daudzām istabām, tas var aizņemt kādu laiku.";
@@ -220,7 +219,6 @@
 "notification_silent_notifications" = "Klusi paziņojumi";
 "title_activity_bug_report" = "Kļūdas atskaite";
 "loading" = "Ielādējas…";
-"groups_header" = "Kopienas";
 "start_voice_call_prompt_msg" = "Tiešām vēlies uzsākt balss zvanu\?";
 "start_video_call_prompt_msg" = "Tiešām vēlies uzsākt video zvanu\?";
 "option_take_photo" = "Uzņemt foto";
@@ -230,7 +228,6 @@
 "auth_email_already_defined" = "Šī epasta adrese jau tiek izmantota.";
 "auth_forgot_password" = "Aizmirsāt paroli\?";
 "auth_recaptcha_message" = "Mājasservers vēlas pārbaudīt, vai neesat robots";
-"auth_reset_password_missing_email" = "Ir jābūt ievadītai kontam piesaistītajai epasta adresei.";
 "auth_reset_password_error_unauthorized" = "Neizdevās verificēt epasta adresi: pārbaudiet, vai esi noklikšķinājis(usi) uz saiti atsūtītajā epastā";
 "login_error_invalid_home_server" = "Ievadi korektu URL adresi";
 "login_error_bad_json" = "Bojāts JSON";
@@ -357,7 +354,6 @@
 "settings_password_updated" = "Parole nomainīta";
 "settings_unignore_user" = "Rādīt visas ziņas no %@\?\n\nŅemiet vērā, ka ar šo darbību tiks pārstartēta lietotne, un tas var aizņemt kādu laiku.";
 "settings_select_country" = "Izvēlies valsti";
-"settings_flair" = "Gaidas";
 "media_saving_period_3_days" = "3 dienas";
 "media_saving_period_1_week" = "1 nedēļa";
 "media_saving_period_1_month" = "1 mēnesis";
@@ -381,7 +377,7 @@
 "settings_theme" = "Tēma";
 "encryption_information_decryption_error" = "Atšifrēšanas kļūda";
 "encryption_information_device_name" = "Ierīces nosaukums";
-"encryption_information_device_id" = "Sesijas ID";
+"device_manager_session_details_session_id" = "Sesijas ID";
 "encryption_information_device_key" = "Sesijas atslēga";
 "encryption_export_e2e_room_keys" = "Eksportēt istabas šifrēšanas atslēgas";
 "encryption_export_room_keys" = "Eksportēt istabas atslēgas";
@@ -584,7 +580,6 @@
 "fab_menu_create_chat" = "Tiešās ziņas";
 "fab_menu_create_room" = "Istabas";
 "room_preview_no_preview" = "Šo istabu nevar priekšskatīt";
-"group_all_communities" = "Visas kopienas";
 "event_redacted" = "Ziņa ir dzēsta";
 "reactions" = "Reaģēšana";
 "title_activity_emoji_reaction_picker" = "Reaģēšana";
@@ -928,7 +923,7 @@
 "login_a11y_choose_other" = "Izvēlēties pielāgotu bāzes serveri";
 "login_a11y_choose_modular" = "Izvēlēties Element Matrix Services";
 "login_a11y_choose_matrix_org" = "Izvēlēties matrix.org";
-"login_signup_cancel_confirmation_content" = "Jūsu konts vēl nav izveidots..\n\nVai pārtraukt reģistrēšanos\?";
+"login_signup_cancel_confirmation_content" = "Jūsu konts vēl nav izveidots.. Vai pārtraukt reģistrēšanos\?";
 "login_set_msisdn_notice2" = "Lūdzu, izmantojiet starptautisko formātu.";
 "login_set_msisdn_notice" = "Iestatiet tālruņa numuru,lai pēc izvēles ļaut jums zināmiem cilvēkiem atrast.";
 "login_set_msisdn_title" = "Iestatiet tālruņa numuru";
@@ -1669,7 +1664,6 @@
 "uploads_media_no_result" = "Šajā istabā nav multivides";
 "uploads_media_title" = "Multivide";
 "error_handling_incoming_share" = "Nevarēja apstrādāt kopīgošanas datus";
-"error_attachment" = "Iegūstot pielikumu, radās kļūda.";
 "error_file_too_big_simple" = "Fails ir pārāk liels, lai tos augšupielādētu.";
 "a11y_create_direct_message" = "Izveidot jaunu tiešo sarunu";
 "a11y_create_menu_close" = "Aizveriet telpas izveides izvēlni…";
