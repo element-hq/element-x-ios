@@ -31,9 +31,9 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
     var id: String {
         #warning("Handle txid properly")
         switch item.key() {
-        case .localOnly(let txnID):
+        case .transactionId(let txnID):
             return txnID
-        case .synced(let eventID):
+        case .eventId(let eventID):
             return eventID
         }
     }
@@ -59,7 +59,11 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
     }
 
     var originServerTs: Date {
-        Date(timeIntervalSince1970: TimeInterval(item.originServerTs() / 1000))
+        if let timestamp = item.originServerTs() {
+            return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+        } else {
+            return .now
+        }
     }
 }
 

@@ -3115,7 +3115,7 @@
 			repositoryURL = "https://github.com/matrix-org/matrix-rust-components-swift";
 			requirement = {
 				kind = exactVersion;
-				version = "0.0.1-demo";
+				version = "0.0.2-demo";
 			};
 		};
 		96495DD8554E2F39D3954354 /* XCRemoteSwiftPackageReference "posthog-ios" */ = {

@@ -44,9 +44,9 @@ struct EventTimelineItem {
     var id: String {
         #warning("Handle txid in a better way")
         switch item.key() {
-        case .localOnly(let txnID):
+        case .transactionId(let txnID):
             return txnID
-        case .synced(let eventID):
+        case .eventId(let eventID):
             return eventID
         }
     }
@@ -68,6 +68,10 @@ struct EventTimelineItem {
     }
     
     var originServerTs: Date {
-        Date(timeIntervalSince1970: TimeInterval(item.originServerTs() / 1000))
+        if let timestamp = item.originServerTs() {
+            return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+        } else {
+            return .now
+        }
     }
 }
