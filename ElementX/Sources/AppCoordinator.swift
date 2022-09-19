@@ -270,11 +270,11 @@ class AppCoordinator: Coordinator {
             Task {
                 //  first log out from the server
                 _ = await userSession.clientProxy.logout()
+                
+                //  regardless of the result, clear user data
+                userSessionStore.logout(userSession: userSession)
+                userSession = nil
             }
-            
-            //  regardless of the result, clear user data
-            userSessionStore.logout(userSession: userSession)
-            userSession = nil
         }
         
         //  complete logging out
