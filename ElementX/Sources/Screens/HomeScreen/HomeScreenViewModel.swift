@@ -53,7 +53,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] callback in
                 switch callback {
                 case .updatedRoomSummaries:
-                    self?.updateRooms()
+                    Task {
+                        await self?.updateRooms()
+                    }
                 }
             }.store(in: &cancellables)
         
@@ -63,9 +65,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     state.userAvatar = avatar
                 }
             }
+            
+            await updateRooms()
         }
-        
-        updateRooms()
     }
     
     // MARK: - Public
@@ -88,33 +90,48 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {
-        guard let summary = roomSummaryProvider.roomSummaries.first(where: { $0.id == identifier }) else {
+        guard let summary = roomSummaryProvider.roomSummaries.first(where: { $0.id == identifier }),
+              var room = state.rooms.first(where: { $0.id == identifier }) else {
+            return
+        }
+        
+        if room.avatar != nil {
             return
         }
         
         if let avatarURLString = summary.avatarURLString {
             Task {
-                let _ = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, size: MediaProviderDefaultAvatarSize)
-                updateRooms()
+                if case let .success(image) = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, size: MediaProviderDefaultAvatarSize) {
+                    if let index = state.rooms.firstIndex(of: room) {
+                        room.avatar = image
+                        state.rooms[index] = room
+                    }
+                }
             }
         }
     }
     
-    private func updateRooms() {
-        state.rooms = roomSummaryProvider.roomSummaries.map { summary in
-            let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString, size: MediaProviderDefaultAvatarSize)
+    private func updateRooms() async {
+        state.rooms = await Task.detached {
+            var rooms = [HomeScreenRoom]()
             
-            var timestamp: String?
-            if let lastMessageTimestamp = summary.lastMessageTimestamp {
-                timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+            for summary in self.roomSummaryProvider.roomSummaries {
+                let avatarImage = await self.userSession.mediaProvider.imageFromURLString(summary.avatarURLString, size: MediaProviderDefaultAvatarSize)
+                
+                var timestamp: String?
+                if let lastMessageTimestamp = summary.lastMessageTimestamp {
+                    timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+                }
+                
+                rooms.append(HomeScreenRoom(id: summary.id,
+                                            name: summary.name,
+                                            hasUnreads: summary.unreadNotificationCount > 0,
+                                            timestamp: timestamp,
+                                            lastMessage: summary.lastMessage,
+                                            avatar: avatarImage))
             }
-
-            return HomeScreenRoom(id: summary.id,
-                                  name: summary.name,
-                                  hasUnreads: summary.unreadNotificationCount > 0,
-                                  timestamp: timestamp,
-                                  lastMessage: summary.lastMessage,
-                                  avatar: avatarImage)
-        }
+            
+            return rooms
+        }.value
     }
 }
