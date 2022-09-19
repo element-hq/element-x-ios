@@ -35,8 +35,9 @@ struct HomeScreen: View {
                 
                 List {
                     ForEach(context.viewState.visibleRooms) { room in
-                        RoomCell(room: room, context: context)
+                        HomeScreenRoomCell(room: room, context: context)
                             .listRowBackground(Color.clear)
+                            .listRowSeparator(.hidden)
                     }
                 }
                 .listStyle(.plain)
@@ -49,7 +50,7 @@ struct HomeScreen: View {
         .transition(.slide)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
-        .navigationBarTitleDisplayMode(.inline)
+        .navigationTitle(ElementL10n.homeScreenAllChats)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
@@ -151,74 +152,6 @@ struct HomeScreen: View {
     }
 }
 
-struct RoomCell: View {
-    @ScaledMetric private var avatarSize = 32.0
-    
-    let room: HomeScreenRoom
-    let context: HomeScreenViewModel.Context
-    
-    var body: some View {
-        Button {
-            context.send(viewAction: .selectRoom(roomIdentifier: room.id))
-        } label: {
-            HStack(spacing: 16.0) {
-                if let avatar = room.avatar {
-                    Image(uiImage: avatar)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: avatarSize, height: avatarSize)
-                        .clipShape(Circle())
-                } else {
-                    PlaceholderAvatarImage(text: room.name)
-                        .clipShape(Circle())
-                        .frame(width: avatarSize, height: avatarSize)
-                }
-                
-                VStack(alignment: .leading, spacing: 2.0) {
-                    Text(room.name)
-                        .font(.element.callout)
-                        .foregroundColor(.element.primaryContent)
-                    
-                    if let lastMessage = room.lastMessage {
-                        Text(lastMessage)
-                            .font(.element.subheadline)
-                            .foregroundColor(.element.secondaryContent)
-                            .lineLimit(2)
-                            .padding(.top, 2)
-                            .animation(nil, value: UUID()) // Text animations look ugly
-                    }
-                }
-                
-                Spacer()
-            }
-            .frame(minHeight: 60.0)
-            .overlay(Badge(count: room.unreadNotificationCount))
-            .task {
-                context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
-            }
-        }
-    }
-}
-
-struct Badge: View {
-    let count: UInt
-
-    var body: some View {
-        ZStack(alignment: .topTrailing) {
-            Color.clear
-            Text(String(count))
-                .font(.element.footnote)
-                .padding(6)
-                .foregroundColor(.element.primaryContent)
-                .background(Color.element.quaternaryContent)
-                .clipShape(Circle())
-                // custom positioning in the top-right corner
-                .alignmentGuide(.trailing) { $0[.trailing] - $0.width * 0.25 }
-        }
-        .opacity(count == 0 ? 0.0 : 1.0)
-    }
-}
-
 // MARK: - Previews
 
 struct HomeScreen_Previews: PreviewProvider {
@@ -230,8 +163,11 @@ struct HomeScreen_Previews: PreviewProvider {
     }
     
     static var body: some View {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe"), mediaProvider: MockMediaProvider())
-        let viewModel = HomeScreenViewModel(userSession: userSession, attributedStringBuilder: AttributedStringBuilder())
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe"),
+                                          mediaProvider: MockMediaProvider())
+        
+        let viewModel = HomeScreenViewModel(userSession: userSession,
+                                            attributedStringBuilder: AttributedStringBuilder())
         
         return NavigationView {
             HomeScreen(context: viewModel.context)

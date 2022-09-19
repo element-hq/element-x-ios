@@ -21,6 +21,8 @@
 "session_verification_screen_emojis_title" = "Lets check if these";
 "session_verification_screen_emojis_message" = "Open Element on one of your other sessions to compare.";
 
+"home_screen_all_chats" = "All Chats";
+
 // MARK: - Authentication
 
 "authentication_login_title" = "Welcome back!";

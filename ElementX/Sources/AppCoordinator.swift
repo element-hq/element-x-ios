@@ -69,7 +69,10 @@ class AppCoordinator: Coordinator {
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
         splashViewController = SplashViewController()
+        
         mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
+        mainNavigationController.navigationBar.prefersLargeTitles = true
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
@@ -267,11 +270,11 @@ class AppCoordinator: Coordinator {
             Task {
                 //  first log out from the server
                 _ = await userSession.clientProxy.logout()
+                
+                //  regardless of the result, clear user data
+                userSessionStore.logout(userSession: userSession)
+                userSession = nil
             }
-            
-            //  regardless of the result, clear user data
-            userSessionStore.logout(userSession: userSession)
-            userSession = nil
         }
         
         //  complete logging out

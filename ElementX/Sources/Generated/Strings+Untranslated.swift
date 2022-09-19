@@ -24,6 +24,8 @@ extension ElementL10n {
   public static let authenticationServerInfoMatrixDescription = ElementL10n.tr("Untranslated", "authentication_server_info_matrix_description")
   /// Choose your server to store your data
   public static let authenticationServerInfoTitle = ElementL10n.tr("Untranslated", "authentication_server_info_title")
+  /// All Chats
+  public static let homeScreenAllChats = ElementL10n.tr("Untranslated", "home_screen_all_chats")
   /// Mobile
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet

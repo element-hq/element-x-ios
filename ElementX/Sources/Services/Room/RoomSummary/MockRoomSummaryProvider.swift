@@ -23,9 +23,26 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     var countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
     
     var roomSummaries: [RoomSummary] = [
-        RoomSummary(id: "1", name: "First room", isDirect: true, avatarURLString: nil, lastMessage: nil, unreadNotificationCount: 4),
-        RoomSummary(id: "2", name: "Second room", isDirect: true, avatarURLString: nil, lastMessage: nil, unreadNotificationCount: 0),
-        RoomSummary(id: "3", name: "Third room", isDirect: true, avatarURLString: nil, lastMessage: nil, unreadNotificationCount: 100)
+        RoomSummary(id: "1", name: "First room",
+                    isDirect: true,
+                    avatarURLString: nil,
+                    lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
+                    lastMessageTimestamp: .now,
+                    unreadNotificationCount: 4),
+        RoomSummary(id: "2",
+                    name: "Second room",
+                    isDirect: true,
+                    avatarURLString: "mockImageURLString",
+                    lastMessage: nil,
+                    lastMessageTimestamp: nil,
+                    unreadNotificationCount: 1),
+        RoomSummary(id: "3",
+                    name: "Third room",
+                    isDirect: true,
+                    avatarURLString: nil,
+                    lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
+                    lastMessageTimestamp: .now,
+                    unreadNotificationCount: 0)
     ]
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) { }

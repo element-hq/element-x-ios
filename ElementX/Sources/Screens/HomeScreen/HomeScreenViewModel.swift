@@ -103,13 +103,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func updateRooms() {
         state.rooms = roomSummaryProvider.roomSummaries.map { summary in
             let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString)
+            
+            var timestamp: String?
+            if let lastMessageTimestamp = summary.lastMessageTimestamp {
+                timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+            }
 
             return HomeScreenRoom(id: summary.id,
                                   name: summary.name,
+                                  hasUnreads: summary.unreadNotificationCount > 0,
+                                  timestamp: timestamp,
                                   lastMessage: summary.lastMessage,
-                                  avatar: avatarImage,
-                                  isDirect: summary.isDirect,
-                                  unreadNotificationCount: summary.unreadNotificationCount)
+                                  avatar: avatarImage)
         }
     }
 }

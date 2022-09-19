@@ -148,6 +148,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     isDirect: false,
                     avatarURLString: nil,
                     lastMessage: nil,
+                    lastMessageTimestamp: nil,
                     unreadNotificationCount: 0)
     }
     
@@ -158,9 +159,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         var attributedLastMessage: AttributedString?
-        if let message = room.latestRoomMessage() {
-            let lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItem(item: message))
+        var lastMessageTimestamp: Date?
+        if let latestRoomMessage = room.latestRoomMessage() {
+            let lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItem(item: latestRoomMessage))
             attributedLastMessage = try? AttributedString(markdown: "**\(lastMessage.sender)**: \(lastMessage.body)")
+            lastMessageTimestamp = lastMessage.originServerTs
         }
                
         return RoomSummary(id: room.roomId(),
@@ -168,6 +171,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                            isDirect: room.isDm() ?? false,
                            avatarURLString: room.fullRoom()?.avatarUrl(),
                            lastMessage: attributedLastMessage,
+                           lastMessageTimestamp: lastMessageTimestamp,
                            unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
     }
     
