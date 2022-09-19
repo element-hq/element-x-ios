@@ -25,6 +25,8 @@ class RoomProxy: RoomProxyProtocol {
     private let room: RoomProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
+    private let concurrentDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy", attributes: .concurrent)
+    
     private var sendMessageBgTask: BackgroundTaskProtocol?
     
     private var memberAvatars = [String: String]()
@@ -182,7 +184,7 @@ class RoomProxy: RoomProxyProtocol {
         
         let transactionId = genTransactionId()
         
-        return await Task(priority: .high) { () -> Result<Void, RoomProxyError> in
+        return await Task.dispatched(on: concurrentDispatchQueue, operation: {
             do {
                 if let inReplyToEventId = inReplyToEventId {
                     try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
@@ -194,7 +196,7 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 return .failure(.failedSendingMessage)
             }
-        }
+        })
         .value
     }
     

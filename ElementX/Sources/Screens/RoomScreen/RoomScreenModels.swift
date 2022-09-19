@@ -54,7 +54,6 @@ struct RoomScreenViewState: BindableState {
     
     var composerMode: RoomScreenComposerMode = .default
     
-    var messageComposerDisabled = false // Remove this when we have local echoes
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
     }
