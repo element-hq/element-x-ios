@@ -152,8 +152,8 @@ class ClientProxy: ClientProxyProtocol {
         slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
         slidingSyncObserverToken = slidingSync.sync()
         
-//        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-//        client.startSync(timelineLimit: ClientProxy.syncLimit)
+        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
+        client.startSync(timelineLimit: ClientProxy.syncLimit)
     }
     
     func stopSync() {
