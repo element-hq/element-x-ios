@@ -60,6 +60,8 @@ extension ElementL10n {
   public static let sessionVerificationScreenEmojisMessage = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_message")
   /// Lets check if these
   public static let sessionVerificationScreenEmojisTitle = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_title")
+  /// Appearance
+  public static let settingsAppearance = ElementL10n.tr("Untranslated", "settings_appearance")
   /// Timeline Style
   public static let settingsTimelineStyle = ElementL10n.tr("Untranslated", "settings_timeline_style")
   /// Untranslated
