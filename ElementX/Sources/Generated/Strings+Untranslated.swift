@@ -14,8 +14,6 @@ extension ElementL10n {
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
   /// Match
   public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
-  /// Next
-  public static let actionNext = ElementL10n.tr("Untranslated", "action_next")
   /// Forgot password
   public static let authenticationLoginForgotPassword = ElementL10n.tr("Untranslated", "authentication_login_forgot_password")
   /// Welcome back!

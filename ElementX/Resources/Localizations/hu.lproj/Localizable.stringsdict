@@ -594,6 +594,22 @@
 			<string>%1$d felhasználó</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d üzenet eltávolítva</string>
+			<key>other</key>
+			<string>%d üzenet eltávolítva</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -624,6 +640,22 @@
 			<string>%d tag</string>
 			<key>other</key>
 			<string>%d tag</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ és %2$d másik</string>
+			<key>other</key>
+			<string>%1$@ és %2$d másik</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -704,6 +736,22 @@
 			<string>%d aktív munkamenet</string>
 			<key>other</key>
 			<string>%d aktív munkamenet</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d mód található.</string>
+			<key>other</key>
+			<string>%d mód található.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

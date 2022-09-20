@@ -218,7 +218,6 @@
 "attachment_type_contact" = "Contact";
 "attachment_type_file" = "Fichier";
 "attachment_type_dialog_title" = "Ajouter une image à partir de";
-"error_attachment" = "Une erreur est survenue pendant la récupération de la pièce jointe.";
 "one_user_read" = "%@ a lu";
 "two_users_read" = "%1$@ et %2$@ ont lu";
 "three_users_read" = "%1$@, %2$@ et %3$@ ont lu";
@@ -321,7 +320,6 @@
 "room_preview_no_preview_join" = "Impossible d’afficher un aperçu du salon. Voulez-vous le rejoindre \?";
 "room_preview_not_found" = "Ce salon n’est pas accessible en ce moment.\nRéessayez plus tard, ou demandez à un administrateur de ce salon de vérifier que vous pouvez y accéder.";
 "room_preview_no_preview" = "Impossible d’avoir un aperçu de ce salon";
-"group_all_communities" = "Toutes les communautés";
 "please_wait" = "Veuillez patienter…";
 "change_room_directory_network" = "Changer de réseau";
 "action_change" = "Changer";
@@ -400,7 +398,6 @@
 "auth_reset_password_error_unauthorized" = "Impossible de vérifier l’adresse courriel : assurez-vous d’avoir cliqué sur le lien dans l’courriel";
 "settings_emails_empty" = "Aucune adresse courriel n’a été ajoutée à votre compte";
 "auth_email_already_defined" = "Cette adresse courriel est déjà utilisée.";
-"auth_reset_password_missing_email" = "L’adresse courriel liée à votre compte doit être saisie.";
 "notice_crypto_unable_to_decrypt_final" = "Vous n’avez pas accès à ce message";
 "room_settings_set_avatar" = "Définir l’avatar";
 "room_settings_save_success" = "Vous avez bien changé les paramètres du salon";
@@ -603,7 +600,7 @@
 "encryption_export_room_keys" = "Exporter les clés des salons";
 "encryption_export_e2e_room_keys" = "Exporter les clés E2E des salons";
 "encryption_information_device_key" = "Clé de la session";
-"encryption_information_device_id" = "Identifiant de session";
+"device_manager_session_details_session_id" = "Identifiant de session";
 "encryption_information_device_name" = "Nom public";
 "encryption_information_decryption_error" = "Erreur de déchiffrement";
 "settings_theme" = "Thème";
@@ -647,7 +644,6 @@
 "media_saving_period_1_month" = "1 mois";
 "media_saving_period_1_week" = "1 semaine";
 "media_saving_period_3_days" = "3 jours";
-"settings_flair" = "Badge";
 "settings_play_shutter_sound" = "Jouer le son de l’obturateur";
 "media_source_choose" = "Choisir";
 "settings_default_media_source" = "Source de médias par défaut";
@@ -713,7 +709,7 @@
 "login_a11y_choose_other" = "Sélectionner un serveur d’accueil personnalisé";
 "login_a11y_choose_modular" = "Sélectionner Element Matrix Services";
 "login_a11y_choose_matrix_org" = "Sélectionner matrix.org";
-"login_signup_cancel_confirmation_content" = "Votre compte n’est pas encore crée.\n\nArrêter le processus de création \?";
+"login_signup_cancel_confirmation_content" = "Votre compte n’est pas encore crée. Arrêter le processus de création \?";
 "login_signup_cancel_confirmation_title" = "Attention";
 "login_signup_error_user_in_use" = "Ce nom d’utilisateur est déjà pris";
 "login_signup_submit" = "Suivant";
@@ -1231,7 +1227,6 @@
 "send_bug_report_include_key_share_history" = "Inclure l’historique d’échange de clés";
 "send_bug_report_include_crash_logs" = "Envoyer les journaux d’erreur";
 "send_bug_report_include_logs" = "Envoyer les journaux";
-"groups_header" = "Communautés";
 "settings_room_directory_show_all_rooms_summary" = "Afficher tous les salons dans le répertoire, y compris ceux au contenu choquant.";
 "settings_room_directory_show_all_rooms" = "Afficher les salons au contenu choquant";
 "settings_category_room_directory" = "Répertoire des salons";
@@ -1509,7 +1504,6 @@
 "event_status_sending_message" = "Envoi du message…";
 "event_status_sent_message" = "Message envoyé";
 "initial_sync_start_importing_account_data" = "Synchronisation initiale :\nImportation des données du compte";
-"initial_sync_start_importing_account_groups" = "Synchronisation initiale :\nImportation des communautés";
 "initial_sync_start_importing_account_left_rooms" = "Synchronisation initiale :\nImportation des salons que vous avez quittés";
 "initial_sync_start_importing_account_invited_rooms" = "Synchronisation initiale :\nImportation des salons où vous avez été invité";
 "initial_sync_start_importing_account_joined_rooms" = "Synchronisation initiale :\nImportation des salons que vous avez rejoints";
@@ -1804,3 +1798,5 @@
 "missing_permissions_title" = "Permissions manquantes";
 "denied_permission_voice_message" = "Pour envoyer des messages vocaux, veuillez accorder la permission Microphone.";
 "denied_permission_camera" = "Pour effectuer cette action, veuillez autoriser la permission Caméra depuis les réglages système.";
+"initial_sync_request_content" = "%@ a besoin d’effacer le cache pour la mise-à-jour, pour la raison suivante :\n%@\n\nCette action va redémarrer l’application et pourra prendre du temps.";
+"initial_sync_request_title" = "Requête de synchronisation initiale";

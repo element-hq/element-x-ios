@@ -34,6 +34,22 @@
 			<string>%1$d llamadas activas·</string>
 		</dict>
 	</dict>
+	<key>create_poll_not_enough_options_error</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Al menos %1$@ opción es requerida</string>
+			<key>other</key>
+			<string>Al menos %1$@ opciones son requeridas</string>
+		</dict>
+	</dict>
 	<key>encryption_import_room_keys_success</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -176,6 +192,22 @@
 			<string>%d cambio de membresía</string>
 			<key>other</key>
 			<string>%d cambios de membresía</string>
+		</dict>
+	</dict>
+	<key>message_reaction_show_more</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d más</string>
+			<key>other</key>
+			<string>%1$d más</string>
 		</dict>
 	</dict>
 	<key>missed_audio_call</key>
@@ -338,6 +370,22 @@
 			<string>Eliminaste los alias alternativos %1$@ para esta sala.</string>
 		</dict>
 	</dict>
+	<key>notice_room_server_acl_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d cambio de ACL del servidor</string>
+			<key>other</key>
+			<string>%d cambios de ALC de los servidores</string>
+		</dict>
+	</dict>
 	<key>notification_compat_summary_line_for_room</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -416,6 +464,70 @@
 			<string>%d sala</string>
 			<key>other</key>
 			<string>%d salas</string>
+		</dict>
+	</dict>
+	<key>poll_option_vote_count</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d voto</string>
+			<key>other</key>
+			<string>%1$d votos</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_after_ended</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Resultado final basado en %1$d voto</string>
+			<key>other</key>
+			<string>Resultado final basado en %1$d votos</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_not_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d voto enviado. Vota para ver los resultados</string>
+			<key>other</key>
+			<string>%1$d votos enviados. Vota para ver los resultados</string>
+		</dict>
+	</dict>
+	<key>poll_total_vote_count_before_ended_and_voted</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Basado en %1$d voto</string>
+			<key>other</key>
+			<string>Basado en %1$d votos</string>
 		</dict>
 	</dict>
 	<key>room_details_selected</key>
@@ -592,6 +704,22 @@
 			<string>%d sesión activa</string>
 			<key>other</key>
 			<string>%d sesiones activas</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Se encontró %d método.</string>
+			<key>other</key>
+			<string>Se encontraron %d métodos.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

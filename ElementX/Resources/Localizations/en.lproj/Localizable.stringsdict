@@ -50,6 +50,38 @@
 			<string>At least %1$@ options are required</string>
 		</dict>
 	</dict>
+	<key>device_manager_inactive_sessions_description</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Consider signing out from old sessions (%1$d day or more) that you don’t use anymore.</string>
+			<key>other</key>
+			<string>Consider signing out from old sessions (%1$d days or more) that you don’t use anymore.</string>
+		</dict>
+	</dict>
+	<key>device_manager_other_sessions_description_inactive</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Inactive for %1$d+ day (%2$@)</string>
+			<key>other</key>
+			<string>Inactive for %1$d+ days (%2$@)</string>
+		</dict>
+	</dict>
 	<key>encryption_import_room_keys_success</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -594,6 +626,22 @@
 			<string>%1$d people</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d message removed</string>
+			<key>other</key>
+			<string>%d messages removed</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -624,6 +672,22 @@
 			<string>%d member</string>
 			<key>other</key>
 			<string>%d members</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ and %2$d other</string>
+			<key>other</key>
+			<string>%1$@ and %2$d others</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -704,6 +768,22 @@
 			<string>%d active session</string>
 			<key>other</key>
 			<string>%d active sessions</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Found %d method.</string>
+			<key>other</key>
+			<string>Found %d methods.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

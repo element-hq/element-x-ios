@@ -43,7 +43,6 @@
 "initial_sync_start_importing_account_joined_rooms" = "Initiële synchronisoasje:\nDeelgenoomn gesprekken wordn geïmporteerd";
 "initial_sync_start_importing_account_invited_rooms" = "Initiële synchronisoasje:\nUutgenodigde gesprekkn wordn geïmporteerd";
 "initial_sync_start_importing_account_left_rooms" = "Initiële synchronisoasje:\nVerloatn gesprekkn wordn geïmporteerd";
-"initial_sync_start_importing_account_groups" = "Initiële synchronisoasje:\nGemeenschappn wordn geïmporteerd";
 "initial_sync_start_importing_account_data" = "Initiële synchronisoasje:\nAccountgegeevns wordn geïmporteerd";
 "notice_room_update" = "%@ èt da gesprek hier ipgewoardeerd.";
 "event_status_sending_message" = "Bericht wor verstuurd…";

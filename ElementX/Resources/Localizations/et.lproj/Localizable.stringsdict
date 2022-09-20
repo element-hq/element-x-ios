@@ -589,9 +589,25 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>Üks inimene</string>
+			<string>Üks osaleja</string>
 			<key>other</key>
-			<string>%1$d inimest</string>
+			<string>%1$d osalejat</string>
+		</dict>
+	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d sõnum on eemaldatud</string>
+			<key>other</key>
+			<string>%d sõnumit on eemaldatud</string>
 		</dict>
 	</dict>
 	<key>room_settings_banned_users_count</key>
@@ -624,6 +640,22 @@
 			<string>%d osaleja</string>
 			<key>other</key>
 			<string>%d osalejat</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ ja veel %2$d</string>
+			<key>other</key>
+			<string>%1$@ ja veel %2$d muud</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -704,6 +736,22 @@
 			<string>%d aktiivne sessioon</string>
 			<key>other</key>
 			<string>%d aktiivset sessiooni</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>Leidsin %d meetodi.</string>
+			<key>other</key>
+			<string>Leidsin %d meetodit.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>

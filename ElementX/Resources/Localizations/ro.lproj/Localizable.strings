@@ -242,7 +242,6 @@
 "event_status_sending_message" = "Mesajul se trimite…";
 "event_status_sent_message" = "Mesaj trimis";
 "initial_sync_start_importing_account_data" = "Sincronizare inițială:\nSe importă datele contului";
-"initial_sync_start_importing_account_groups" = "Sincronizare inițială:\nSe importă comunitățile";
 "initial_sync_start_importing_account_left_rooms" = "Sincronizare inițială:\nSe importă camerele pe care le-ați părăsit";
 "initial_sync_start_importing_account_invited_rooms" = "Sincronizare inițială:\nSe importă camerele la care a-ți primit invitații";
 "initial_sync_start_importing_account_joined_rooms" = "Sincronizare inițială:\nSe încarcă conversațiile tale\nDacă te-ai alăturat mai multe camere, ar putea dura puțin mai mult";

@@ -90,7 +90,6 @@
 "matrix_only_filter" = "Μόνο οι επαφές Matrix";
 "no_result_placeholder" = "Δεν βρέθηκαν αποτελέσματα";
 "rooms_header" = "Δωμάτια";
-"groups_header" = "Κοινότητες";
 "send_bug_report_include_crash_logs" = "Αποστολή καταγραφών σφαλμάτων";
 "send_bug_report" = "Αναφορά σφάλματος";
 "send_bug_report_description_in_english" = "Εφόσον είναι δυνατό, παρακαλώ γράψτε την περιγραφή στα αγγλικά.";
@@ -169,7 +168,7 @@
 "settings_theme" = "Θέμα";
 "encryption_information_decryption_error" = "Σφάλμα αποκρυπτογράφησης";
 "encryption_information_device_name" = "Όνομα συσκευής";
-"encryption_information_device_id" = "Αναγνωριστικό συσκευής";
+"device_manager_session_details_session_id" = "Αναγνωριστικό συσκευής";
 "encryption_export_export" = "Εξαγωγή";
 "encryption_import_import" = "Εισαγωγή";
 "select_room_directory" = "Επιλέξτε ένα ευρετήριο δωματίων";

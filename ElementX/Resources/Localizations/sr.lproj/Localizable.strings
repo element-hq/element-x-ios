@@ -108,7 +108,6 @@
 "notice_room_invite_no_invitee_with_reason_by_you" = "Ваша позивница. Разлог: %1$@";
 "notice_room_invite_no_invitee_with_reason" = "%1$@ - позивница. Разлог: %2$@";
 "initial_sync_start_importing_account_data" = "Почетна синхронизација:\nувозим податке о налогу";
-"initial_sync_start_importing_account_groups" = "Почетна синхронизација:\nувозим заједнице";
 "initial_sync_start_importing_account_left_rooms" = "Почетна синхронизација:\nувозим напуштене собе";
 "initial_sync_start_importing_account_invited_rooms" = "Почетна синхронизација:\nувозим собе са позивницом";
 "initial_sync_start_importing_account_joined_rooms" = "Почетна синхронизација:\nувозим собе у којима сте";
@@ -270,7 +269,6 @@
 "send_bug_report_include_screenshot" = "Шаљи снимак екрана";
 "send_bug_report_include_crash_logs" = "Слање записника грешке";
 "send_bug_report_include_logs" = "Слање записника";
-"groups_header" = "Заједнице";
 "no_more_results" = "Нема више резултата";
 "system_alerts_header" = "Системска упозорења";
 "bottom_action_notification" = "Обавештења";
@@ -324,7 +322,6 @@
 "send_bug_report_include_key_share_history" = "Укључите историју размене кључева";
 "audio_video_meeting_description" = "Састанци користе Jitsi безбедносне и допунске политике. Сви људи тренутно у соби видеће позив да се придруже састанку.";
 "auth_reset_password_error_unauthorized" = "Није успело верификовати имејл адресу: обавезно кликните на линк из примљеног имејла";
-"auth_reset_password_missing_email" = "Мора се унети имејл адреса коришћена са вашим налогом.";
 "auth_recaptcha_message" = "Овај кућни сервер жели да се увери да нисте робот";
 "auth_forgot_password" = "Заборавили сте лозинку\?";
 "auth_msisdn_already_defined" = "Овај број телефона је већ коришћен.";

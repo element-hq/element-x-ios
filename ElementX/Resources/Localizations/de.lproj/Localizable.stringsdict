@@ -594,6 +594,22 @@
 			<string>%1$d Personen</string>
 		</dict>
 	</dict>
+	<key>room_removed_messages</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d Nachricht gelöscht</string>
+			<key>other</key>
+			<string>%d Nachrichten gelöscht</string>
+		</dict>
+	</dict>
 	<key>room_settings_banned_users_count</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
@@ -624,6 +640,22 @@
 			<string>%d Mitglied</string>
 			<key>other</key>
 			<string>%d Mitglieder</string>
+		</dict>
+	</dict>
+	<key>search_space_multiple_parents</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$@ und %2$d anderer</string>
+			<key>other</key>
+			<string>%1$@ und %2$d andere</string>
 		</dict>
 	</dict>
 	<key>seconds</key>
@@ -704,6 +736,22 @@
 			<string>Eine aktive Sitzung</string>
 			<key>other</key>
 			<string>%d aktive Sitzungen</string>
+		</dict>
+	</dict>
+	<key>settings_troubleshoot_test_distributors_many</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%d Methode gefunden.</string>
+			<key>other</key>
+			<string>%d Methoden gefunden.</string>
 		</dict>
 	</dict>
 	<key>space_people_you_know</key>
