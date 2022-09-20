@@ -25,21 +25,38 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
 
     // MARK: Private
 
+    private let userSession: UserSessionProtocol
+
     // MARK: Public
 
     var callback: ((SettingsViewModelAction) -> Void)?
 
     // MARK: - Setup
 
-    init() {
+    init(withUserSession userSession: UserSessionProtocol) {
+        self.userSession = userSession
         let bindings = SettingsViewStateBindings()
-        super.init(initialViewState: .init(bindings: bindings))
+        super.init(initialViewState: .init(bindings: bindings, userID: userSession.userID))
+
+        Task {
+            if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
+                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, size: MediaProviderDefaultAvatarSize) {
+                    state.userAvatar = avatar
+                }
+            }
+
+            if case let .success(userDisplayName) = await self.userSession.clientProxy.loadUserDisplayName() {
+                state.userDisplayName = userDisplayName
+            }
+        }
     }
 
     // MARK: - Public
 
     override func process(viewAction: SettingsViewAction) async {
         switch viewAction {
+        case .close:
+            callback?(.close)
         case .toggleAnalytics:
             callback?(.toggleAnalytics)
         case .reportBug:
