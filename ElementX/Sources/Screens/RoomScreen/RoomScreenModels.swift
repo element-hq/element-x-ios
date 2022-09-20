@@ -43,6 +43,7 @@ enum RoomScreenViewAction {
 }
 
 struct RoomScreenViewState: BindableState {
+    var roomId: String
     var roomTitle = ""
     var roomAvatar: UIImage?
     var roomEncryptionBadge: UIImage?

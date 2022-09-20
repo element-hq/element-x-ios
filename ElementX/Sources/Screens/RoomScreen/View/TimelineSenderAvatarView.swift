@@ -30,7 +30,8 @@ struct TimelineSenderAvatarView: View {
                     .scaledToFill()
                     .overlay(Circle().stroke(Color.element.accent))
             } else {
-                PlaceholderAvatarImage(text: timelineItem.senderDisplayName ?? timelineItem.senderId)
+                PlaceholderAvatarImage(text: timelineItem.senderDisplayName ?? timelineItem.senderId,
+                                       contentId: timelineItem.senderId)
             }
         }
         .clipShape(Circle())

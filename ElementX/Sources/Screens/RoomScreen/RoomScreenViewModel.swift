@@ -36,7 +36,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         
-        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥",
+        super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomId,
+                                                         roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatar: roomAvatar,
                                                          roomEncryptionBadge: roomEncryptionBadge,
                                                          bindings: .init(composerText: "", composerFocused: false)))
