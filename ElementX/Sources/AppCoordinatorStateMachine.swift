@@ -35,10 +35,7 @@ class AppCoordinatorStateMachine {
         
         /// Showing the session verification flows
         case sessionVerificationScreen
-    
-        /// Showing the settings screen
-        case settingsScreen
-        
+
         /// Processing a sign out request
         case signingOut
 
@@ -77,11 +74,6 @@ class AppCoordinatorStateMachine {
         case showSessionVerificationScreen
         /// Session verification has finished
         case dismissedSessionVerificationScreen
-        
-        /// Request settings screen presentation
-        case showSettingsScreen
-        /// The settings screen has been dismissed
-        case dismissedSettingsScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -97,9 +89,6 @@ class AppCoordinatorStateMachine {
             
             machine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
             machine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
-
-            machine.addRoutes(event: .showSettingsScreen, transitions: [.homeScreen => .settingsScreen])
-            machine.addRoutes(event: .dismissedSettingsScreen, transitions: [.settingsScreen => .homeScreen])
             
             machine.addRoutes(event: .showSessionVerificationScreen, transitions: [.homeScreen => .sessionVerificationScreen])
             machine.addRoutes(event: .dismissedSessionVerificationScreen, transitions: [.sessionVerificationScreen => .homeScreen])
