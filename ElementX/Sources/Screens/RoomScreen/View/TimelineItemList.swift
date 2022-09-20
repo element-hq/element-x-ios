@@ -45,9 +45,9 @@ struct TimelineItemList: View {
                 // No idea why previews don't work otherwise
                 ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in
                     timelineItem
-                        .contextMenu(menuItems: {
+                        .contextMenu {
                             context.viewState.contextMenuBuilder?(timelineItem.id)
-                        })
+                        }
                         .opacity(opacityForItem(timelineItem))
                         .listRowBackground(Color.clear)
                         .listRowSeparator(.hidden)
@@ -83,24 +83,24 @@ struct TimelineItemList: View {
                 // Check if there are enough items. Otherwise ask for more
                 attemptBackPagination()
             }
-            .onAppear(perform: {
+            .onAppear {
                 if timelineItems != context.viewState.items {
                     timelineItems = context.viewState.items
                 }
-            })
-            .onReceive(scrollToBottomPublisher, perform: {
+            }
+            .onReceive(scrollToBottomPublisher) {
                 tableViewObserver.scrollToBottom(animated: true)
-            })
-            .onReceive(tableViewObserver.scrollViewTopVisiblePublisher, perform: { isTopVisible in
+            }
+            .onReceive(tableViewObserver.scrollViewTopVisiblePublisher) { isTopVisible in
                 if !isTopVisible || context.viewState.isBackPaginating {
                     return
                 }
                 
                 attemptBackPagination()
-            })
-            .onReceive(tableViewObserver.scrollViewBottomVisiblePublisher, perform: { isBottomVisible in
+            }
+            .onReceive(tableViewObserver.scrollViewBottomVisiblePublisher) { isBottomVisible in
                 bottomVisiblePublisher.send(isBottomVisible)
-            })
+            }
             .onChange(of: context.viewState.items) { _ in
                 // Don't update the list while moving
                 if tableViewObserver.isDecelerating || tableViewObserver.isTracking {
@@ -111,7 +111,7 @@ struct TimelineItemList: View {
                 tableViewObserver.saveCurrentOffset()
                 timelineItems = context.viewState.items
             }
-            .onReceive(tableViewObserver.scrollViewDidRestPublisher, perform: {
+            .onReceive(tableViewObserver.scrollViewDidRestPublisher) {
                 if hasPendingChanges == false {
                     return
                 }
@@ -119,13 +119,13 @@ struct TimelineItemList: View {
                 tableViewObserver.saveCurrentOffset()
                 timelineItems = context.viewState.items
                 hasPendingChanges = false
-            })
-            .onChange(of: timelineItems, perform: { _ in
+            }
+            .onChange(of: timelineItems) { _ in
                 tableViewObserver.restoreSavedOffset()
                 
                 // Check if there are enough items. Otherwise ask for more
                 attemptBackPagination()
-            })
+            }
         }
     }
     

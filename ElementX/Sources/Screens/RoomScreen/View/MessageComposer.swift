@@ -55,7 +55,7 @@ struct MessageComposer: View {
                 .padding(4.0)
             }
         }
-        .padding(.horizontal, 12.0)
+        .padding(.leading, 12.0)
         .background(.thinMaterial)
         .clipShape(rect)
         .animation(.elementDefault, value: type)
