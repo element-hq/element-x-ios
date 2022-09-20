@@ -133,20 +133,24 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
-        
-        var previousMessage: EventTimelineItem?
-        for item in timelineProvider.items {
+
+        for (index, item) in timelineProvider.items.enumerated() {
             if Task.isCancelled {
                 return
             }
+
+            let previousItem = timelineProvider.items[safe: index - 1]
+            let nextItem = timelineProvider.items[safe: index + 1]
+
+            let inGroupState = inGroupState(for: item, previousItem: previousItem, nextItem: nextItem)
             
             switch item {
             case .event(let eventItem):
                 guard eventItem.isMessage else { break } // To be handled in the future
-                let shouldShowSenderDetails = previousMessage?.sender != eventItem.sender
+
                 newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItem: eventItem,
-                                                                                       showSenderDetails: shouldShowSenderDetails))
-                previousMessage = eventItem
+                                                                                       showSenderDetails: inGroupState.shouldShowSenderDetails,
+                                                                                       inGroupState: inGroupState))
             case .virtual:
 //            case .virtual(let virtualItem):
 //                newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
@@ -154,7 +158,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 #warning("Fix the UUID or \"bad things will happen\"")
                 newTimelineItems.append(SeparatorRoomTimelineItem(id: UUID().uuidString,
                                                                   text: "The day before"))
-                previousMessage = nil
             case .other:
                 break
             }
@@ -167,6 +170,51 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems)
+    }
+
+    private func inGroupState(for item: RoomTimelineProviderItem,
+                              previousItem: RoomTimelineProviderItem?,
+                              nextItem: RoomTimelineProviderItem?) -> TimelineItemInGroupState {
+        guard let previousItem = previousItem else {
+            //  no previous item, check next item
+            guard let nextItem = nextItem else {
+                //  no next item neither, this is single
+                return .single
+            }
+            guard nextItem.canBeGrouped(with: item) else {
+                //  there is a next item but can't be grouped, this is single
+                return .single
+            }
+            //  next will be grouped with this one, this is the start
+            return .beginning
+        }
+
+        guard let nextItem = nextItem else {
+            //  no next item
+            guard item.canBeGrouped(with: previousItem) else {
+                //  there is a previous item but can't be grouped, this is single
+                return .single
+            }
+            //  will be grouped with previous, this is the end
+            return .end
+        }
+
+        guard item.canBeGrouped(with: previousItem) else {
+            guard nextItem.canBeGrouped(with: item) else {
+                //  there is a next item but can't be grouped, this is single
+                return .single
+            }
+            //  next will be grouped with this one, this is the start
+            return .beginning
+        }
+
+        guard nextItem.canBeGrouped(with: item) else {
+            //  there is a next item but can't be grouped, this is the end
+            return .end
+        }
+
+        //  next will be grouped with this one, this is the start
+        return .middle
     }
     
     private func loadImageForTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {

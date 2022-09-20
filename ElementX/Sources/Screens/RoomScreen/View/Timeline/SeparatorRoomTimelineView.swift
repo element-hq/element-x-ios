@@ -21,33 +21,12 @@ struct SeparatorRoomTimelineView: View {
     let timelineItem: SeparatorRoomTimelineItem
     
     var body: some View {
-        LabelledDivider(label: timelineItem.text)
+        Text(timelineItem.text)
+            .font(.element.footnote)
+            .foregroundColor(.element.secondaryContent)
             .id(timelineItem.id)
             .padding(.vertical, 8)
-    }
-}
-
-struct LabelledDivider: View {
-    let label: String
-    let color: Color
-
-    init(label: String, color: Color = Color.element.secondaryContent) {
-        self.label = label
-        self.color = color
-    }
-
-    var body: some View {
-        HStack {
-            line
-            Text(label)
-                .foregroundColor(color)
-                .fixedSize()
-            line
-        }
-    }
-
-    var line: some View {
-        VStack { Divider().background(color) }
+            .frame(maxWidth: .infinity)
     }
 }
 

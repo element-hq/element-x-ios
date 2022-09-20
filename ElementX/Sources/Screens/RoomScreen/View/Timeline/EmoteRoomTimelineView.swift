@@ -25,9 +25,9 @@ struct EmoteRoomTimelineView: View {
             HStack(alignment: .top) {
                 Image(systemName: "face.dashed").padding(.top, 1.0)
                 if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(attributedComponents: attributedComponents)
+                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, attributedComponents: attributedComponents)
                 } else {
-                    FormattedBodyText(text: timelineItem.text)
+                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, text: timelineItem.text)
                 }
             }
         }
@@ -59,6 +59,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
                               text: text,
                               timestamp: timestamp,
                               shouldShowSenderDetails: true,
+                              inGroupState: .single,
                               isOutgoing: false,
                               senderId: senderId)
     }

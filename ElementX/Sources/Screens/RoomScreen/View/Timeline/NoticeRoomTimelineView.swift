@@ -25,9 +25,9 @@ struct NoticeRoomTimelineView: View {
             HStack(alignment: .top) {
                 Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
                 if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(attributedComponents: attributedComponents)
+                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, attributedComponents: attributedComponents)
                 } else {
-                    FormattedBodyText(text: timelineItem.text)
+                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, text: timelineItem.text)
                 }
             }
         }
@@ -60,6 +60,7 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
                                text: text,
                                timestamp: timestamp,
                                shouldShowSenderDetails: true,
+                               inGroupState: .single,
                                isOutgoing: false,
                                senderId: senderId)
     }

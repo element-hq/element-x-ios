@@ -15,20 +15,10 @@
 //
 
 import Foundation
-import UIKit
 
-struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
-    let id: String
-    let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
-    let timestamp: String
-    let shouldShowSenderDetails: Bool
-    let inGroupState: TimelineItemInGroupState
-    let isOutgoing: Bool
-    
-    let senderId: String
-    var senderDisplayName: String?
-    var senderAvatar: UIImage?
-    
-    var properties = RoomTimelineItemProperties()
+extension Collection {
+    /// Returns the element at the specified index if it is within bounds, otherwise nil.
+    subscript(safe index: Index) -> Element? {
+        indices.contains(index) ? self[index] : nil
+    }
 }

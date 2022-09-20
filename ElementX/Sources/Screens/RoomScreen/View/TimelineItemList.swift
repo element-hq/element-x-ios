@@ -28,7 +28,9 @@ struct TimelineItemList: View {
     
     let bottomVisiblePublisher: PassthroughSubject<Bool, Never>
     let scrollToBottomPublisher: PassthroughSubject<Void, Never>
-    
+
+    @State private var viewFrame: CGRect = .zero
+
     var body: some View {
         // The observer behaves differently when not in an reader
         ScrollViewReader { _ in
@@ -65,6 +67,8 @@ struct TimelineItemList: View {
                 }
             }
             .listStyle(.plain)
+            .background(ViewFrameReader(frame: $viewFrame))
+            .environment(\.timelineWidth, viewFrame.width)
             .timelineStyle(settings.timelineStyle)
             .environment(\.defaultMinListRowHeight, 0.0)
             .introspectTableView { tableView in
