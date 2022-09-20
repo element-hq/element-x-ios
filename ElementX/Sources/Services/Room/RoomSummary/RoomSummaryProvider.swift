@@ -104,34 +104,36 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) {
-        guard stateUpdatePublisher.value == .live else {
-            return
-        }
-        
-        var changes = [CollectionDifference<RoomSummary>.Change]()
-        for identifier in identifiers {
-            guard let oldSummary = roomSummaries.first(where: { $0.id == identifier }),
-                  let index = roomSummaries.firstIndex(where: { $0.id == identifier }) else {
-                continue
+        Task.detached {
+            guard self.stateUpdatePublisher.value == .live else {
+                return
             }
             
-            let newSummary = buildRoomSummaryForIdentifier(identifier)
+            var changes = [CollectionDifference<RoomSummary>.Change]()
+            for identifier in identifiers {
+                guard let oldSummary = self.roomSummaries.first(where: { $0.id == identifier }),
+                      let index = self.roomSummaries.firstIndex(where: { $0.id == identifier }) else {
+                    continue
+                }
+                
+                let newSummary = self.buildRoomSummaryForIdentifier(identifier)
+                
+                changes.append(.remove(offset: index, element: oldSummary, associatedWith: nil))
+                changes.append(.insert(offset: index, element: newSummary, associatedWith: nil))
+            }
             
-            changes.append(.remove(offset: index, element: oldSummary, associatedWith: nil))
-            changes.append(.insert(offset: index, element: newSummary, associatedWith: nil))
+            guard let diff = CollectionDifference(changes) else {
+                MXLog.error("Failed creating diff from changes: \(changes)")
+                return
+            }
+            
+            guard let newSummaries = self.roomSummaries.applying(diff) else {
+                MXLog.error("Failed applying diff: \(diff)")
+                return
+            }
+            
+            self.roomSummaries = newSummaries
         }
-        
-        guard let diff = CollectionDifference(changes) else {
-            MXLog.error("Failed creating diff from changes: \(changes)")
-            return
-        }
-        
-        guard let newSummaries = roomSummaries.applying(diff) else {
-            MXLog.error("Failed applying diff: \(diff)")
-            return
-        }
-        
-        roomSummaries = newSummaries
     }
     
     // MARK: - Private

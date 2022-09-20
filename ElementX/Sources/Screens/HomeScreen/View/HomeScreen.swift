@@ -29,24 +29,20 @@ struct HomeScreen: View {
                     ProgressView()
                 }
             } else {
-                List {
-                    Section {
-                        if context.viewState.showSessionVerificationBanner {
-                            sessionVerificationBanner
-                                .padding(.horizontal, -16.0)
-                                .listRowSeparator(.hidden)
-                        }
+                ScrollView {
+                    if context.viewState.showSessionVerificationBanner {
+                        sessionVerificationBanner
                     }
                     
-                    ForEach(context.viewState.visibleRooms) { room in
-                        HomeScreenRoomCell(room: room, context: context)
-                            .listRowBackground(Color.clear)
-                            .listRowSeparator(.hidden)
+                    LazyVStack {
+                        ForEach(context.viewState.visibleRooms) { room in
+                            HomeScreenRoomCell(room: room, context: context)
+                        }
                     }
+                    .searchable(text: $context.searchQuery)
+                    .animation(.default, value: context.viewState.visibleRooms)
+                    .padding(.horizontal)
                 }
-                .listStyle(.plain)
-                .animation(.default, value: context.viewState.visibleRooms)
-                .searchable(text: $context.searchQuery)
             }
             
             Spacer()
