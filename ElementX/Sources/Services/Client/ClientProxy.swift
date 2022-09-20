@@ -53,7 +53,7 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
 
 class ClientProxy: ClientProxyProtocol {
     /// The maximum number of timeline events required during a sync request.
-    static let syncLimit: UInt16 = 20
+    static let syncLimit: UInt16 = 50
     
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol

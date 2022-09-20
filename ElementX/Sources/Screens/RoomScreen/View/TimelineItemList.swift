@@ -35,14 +35,12 @@ struct TimelineItemList: View {
         // The observer behaves differently when not in an reader
         ScrollViewReader { _ in
             List {
-                HStack {
-                    Spacer()
-                    ProgressView()
-                        .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
-                        .animation(.elementDefault, value: context.viewState.isBackPaginating)
-                    Spacer()
-                }
-                .listRowBackground(Color.clear)
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
+                    .animation(.elementDefault, value: context.viewState.isBackPaginating)
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
                 
                 // No idea why previews don't work otherwise
                 ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in

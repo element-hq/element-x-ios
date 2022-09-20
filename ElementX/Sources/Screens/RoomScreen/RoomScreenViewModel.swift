@@ -20,7 +20,7 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
-        static let backPaginationPageSize: UInt = 30
+        static let backPaginationPageSize: UInt = 50
     }
 
     private let timelineController: RoomTimelineControllerProtocol

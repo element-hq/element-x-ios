@@ -159,7 +159,8 @@ class RoomProxy: RoomProxyProtocol {
         guard backPaginationOutcome?.moreMessages != false else {
             return .failure(.noMoreMessagesToBackPaginate)
         }
-
+        
+        MXLog.debug("BackPagination")
         return await Task.detached {
             do {
                 let id = await self.id
