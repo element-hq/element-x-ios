@@ -389,32 +389,39 @@ class AppCoordinator: Coordinator {
     // MARK: Settings
     
     private func presentSettingsScreen() {
-        let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
+        let navController = ElementNavigationController()
+        let newNavigationRouter = NavigationRouter(navigationController: navController)
+
+        let parameters = SettingsCoordinatorParameters(navigationRouter: newNavigationRouter,
                                                        userSession: userSession,
                                                        bugReportService: bugReportService)
         let coordinator = SettingsCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] action in
             guard let self = self else { return }
             switch action {
+            case .dismiss:
+                self.dismissSettingsScreen()
             case .logout:
+                self.dismissSettingsScreen()
                 self.stateMachine.processEvent(.signOut)
             }
         }
 
         add(childCoordinator: coordinator)
         coordinator.start()
-        navigationRouter.push(coordinator) { [weak self] in
-            guard let self = self else { return }
-
-            self.stateMachine.processEvent(.dismissedSettingsScreen)
-        }
+        navController.viewControllers = [coordinator.toPresentable()]
+        navigationRouter.present(navController, animated: true)
     }
-        
-    private func tearDownDismissedSettingsScreen() {
-        guard let coordinator = childCoordinators.last as? SettingsCoordinator else {
-            fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
+
+    @objc
+    private func dismissSettingsScreen() {
+        MXLog.debug("dismissSettingsScreen")
+
+        guard let coordinator = childCoordinators.first(where: { $0 is SettingsCoordinator }) else {
+            return
         }
 
+        navigationRouter.dismissModule()
         remove(childCoordinator: coordinator)
     }
     
