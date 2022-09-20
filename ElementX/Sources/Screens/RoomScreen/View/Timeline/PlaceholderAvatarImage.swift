@@ -18,22 +18,32 @@ import SwiftUI
 
 struct PlaceholderAvatarImage: View {
     private let textForImage: String
+    private let contentId: String?
     
     var body: some View {
         ZStack {
-            Color.element.accent
+            bgColor
             Text(textForImage)
                 .padding(4)
                 .foregroundColor(.element.background)
-                // Make the text resizable (i.e. Make it large and then allow it to scale down)
-                .font(.system(size: 200).weight(.semibold))
-                .minimumScaleFactor(0.001)
+                .font(.title2.bold())
         }
         .aspectRatio(1, contentMode: .fill)
     }
 
-    init(text: String) {
+    init(text: String, contentId: String? = nil) {
         textForImage = text.first?.uppercased() ?? ""
+        self.contentId = contentId
+    }
+
+    private var bgColor: Color {
+        guard let contentId = contentId else {
+            return .element.accent
+        }
+
+        let colors = Color.element.contentAndAvatars
+        let colorIndex = Int(contentId.hashCode % Int32(colors.count))
+        return Color.element.contentAndAvatars[colorIndex % colors.count]
     }
 }
 
@@ -45,7 +55,7 @@ struct PlaceholderAvatarImage_Previews: PreviewProvider {
     
     @ViewBuilder
     static var body: some View {
-        PlaceholderAvatarImage(text: "X")
+        PlaceholderAvatarImage(text: "X", contentId: "@userid:matrix.org")
             .clipShape(Circle())
             .frame(width: 150, height: 100)
     }
