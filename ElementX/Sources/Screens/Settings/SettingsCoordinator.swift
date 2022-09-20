@@ -23,6 +23,7 @@ struct SettingsCoordinatorParameters {
 }
 
 enum SettingsCoordinatorAction {
+    case dismiss
     case logout
 }
 
@@ -38,6 +39,8 @@ final class SettingsCoordinator: Coordinator, Presentable {
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     private var statusIndicator: UserIndicator?
+
+    private var navigationRouter: NavigationRouterType { parameters.navigationRouter }
     
     // MARK: Public
 
@@ -50,7 +53,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
     init(parameters: SettingsCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = SettingsViewModel()
+        let viewModel = SettingsViewModel(withUserSession: parameters.userSession)
         let view = SettingsScreen(context: viewModel.context)
         settingsViewModel = viewModel
         settingsHostingController = UIHostingController(rootView: view)
@@ -61,6 +64,8 @@ final class SettingsCoordinator: Coordinator, Presentable {
             guard let self = self else { return }
             MXLog.debug("SettingsViewModel did complete with result: \(result).")
             switch result {
+            case .close:
+                self.callback?(.dismiss)
             case .toggleAnalytics:
                 self.toggleAnalytics()
             case .reportBug:
@@ -68,7 +73,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
             case .crash:
                 self.parameters.bugReportService.crash()
             case .logout:
-                self.callback?(.logout)
+                self.confirmSignOut()
             }
         }
     }
@@ -106,11 +111,24 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
         add(childCoordinator: coordinator)
         coordinator.start()
-        parameters.navigationRouter.push(coordinator, animated: true) { [weak self] in
+        navigationRouter.push(coordinator, animated: true) { [weak self] in
             guard let self = self else { return }
 
             self.remove(childCoordinator: coordinator)
         }
+    }
+
+    private func confirmSignOut() {
+        let alert = UIAlertController(title: ElementL10n.actionSignOut,
+                                      message: ElementL10n.actionSignOutConfirmationSimple,
+                                      preferredStyle: .alert)
+
+        alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel))
+        alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { [weak self] _ in
+            self?.callback?(.logout)
+        })
+
+        navigationRouter.present(alert, animated: true)
     }
     
     /// Show an activity indicator whilst loading.

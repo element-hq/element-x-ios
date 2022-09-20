@@ -15,12 +15,14 @@
 //
 
 import Foundation
+import UIKit
 
 // MARK: - Coordinator
 
 // MARK: View model
 
 enum SettingsViewModelAction {
+    case close
     case toggleAnalytics
     case reportBug
     case crash
@@ -31,6 +33,9 @@ enum SettingsViewModelAction {
 
 struct SettingsViewState: BindableState {
     var bindings: SettingsViewStateBindings
+    var userID: String
+    var userAvatar: UIImage?
+    var userDisplayName: String?
 }
 
 struct SettingsViewStateBindings {
@@ -38,6 +43,7 @@ struct SettingsViewStateBindings {
 }
 
 enum SettingsViewAction {
+    case close
     case toggleAnalytics
     case reportBug
     case crash
