@@ -34,7 +34,7 @@ struct HomeScreenRoomCell: View {
                         .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
                 } else {
-                    PlaceholderAvatarImage(text: room.name)
+                    PlaceholderAvatarImage(text: room.name, contentId: room.id)
                         .clipShape(Circle())
                         .frame(width: avatarSize, height: avatarSize)
                 }

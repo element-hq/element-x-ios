@@ -52,7 +52,8 @@ struct RoomHeaderView: View {
                 .scaledToFill()
                 .accessibilityIdentifier("roomAvatarImage")
         } else {
-            PlaceholderAvatarImage(text: context.viewState.roomTitle)
+            PlaceholderAvatarImage(text: context.viewState.roomTitle,
+                                   contentId: context.viewState.roomId)
                 .accessibilityIdentifier("roomAvatarPlaceholderImage")
         }
     }
