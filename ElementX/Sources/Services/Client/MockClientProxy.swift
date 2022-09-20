@@ -37,7 +37,7 @@ struct MockClientProxy: ClientProxyProtocol {
     }
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        .failure(.failedRetrievingDisplayName)
+        .success("User display name")
     }
     
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
