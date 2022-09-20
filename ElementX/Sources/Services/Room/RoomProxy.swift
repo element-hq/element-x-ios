@@ -155,7 +155,6 @@ class RoomProxy: RoomProxyProtocol {
         room.addTimelineListener(listener: listener)
     }
     
-    #warning("The count parameter is unused.")
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
         guard backPaginationOutcome?.moreMessages != false else {
             return .failure(.noMoreMessagesToBackPaginate)
@@ -166,7 +165,7 @@ class RoomProxy: RoomProxyProtocol {
                 let id = await self.id
                 
                 Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
-                await self.update(backPaginationOutcome: try self.room.paginateBackwards())
+                await self.update(backPaginationOutcome: try self.room.paginateBackwards(limit: UInt16(count)))
                 Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
                 return .success(())
             } catch {
