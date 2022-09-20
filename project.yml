@@ -33,7 +33,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 0.0.2-demo
+    exactVersion: 0.0.4-demo
     # path: ../matrix-rust-components-swift
   DesignKit:
     path: ./
