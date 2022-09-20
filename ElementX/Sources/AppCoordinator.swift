@@ -170,12 +170,7 @@ class AppCoordinator: Coordinator {
             case (.remoteSigningOut(let isSoft), .completedSigningOut, .signedOut):
                 self.presentSplashScreen(isSoftLogout: isSoft)
                 self.hideLoadingIndicator()
-            
-            case (.homeScreen, .showSettingsScreen, .settingsScreen):
-                self.presentSettingsScreen()
-            case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
-                self.tearDownDismissedSettingsScreen()
-                
+
             case (.homeScreen, .showSessionVerificationScreen, .sessionVerificationScreen):
                 self.presentSessionVerification()
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .homeScreen):
@@ -309,7 +304,7 @@ class AppCoordinator: Coordinator {
             case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
             case .presentSettings:
-                self.stateMachine.processEvent(.showSettingsScreen)
+                self.presentSettingsScreen()
             case .presentBugReport:
                 self.presentBugReportScreen()
             case .verifySession:
