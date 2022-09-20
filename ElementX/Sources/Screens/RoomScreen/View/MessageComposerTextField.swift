@@ -71,6 +71,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         let textView = UITextView()
         textView.delegate = context.coordinator
 
+        textView.textColor = .element.primaryContent
         textView.isEditable = true
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.isSelectable = true

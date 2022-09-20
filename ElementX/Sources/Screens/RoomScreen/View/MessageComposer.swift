@@ -26,46 +26,48 @@ struct MessageComposer: View {
     let replyCancellationAction: () -> Void
     
     var body: some View {
-        HStack(alignment: .bottom) {
-            let rect = RoundedRectangle(cornerRadius: 8.0)
-            VStack(alignment: .leading, spacing: 2.0) {
-                if case let .reply(_, displayName) = type {
-                    MessageComposerReplyHeader(displayName: displayName, action: replyCancellationAction)
-                }
+        let rect = RoundedRectangle(cornerRadius: borderRadius)
+        VStack(alignment: .leading, spacing: 4.0) {
+            if case let .reply(_, displayName) = type {
+                MessageComposerReplyHeader(displayName: displayName, action: replyCancellationAction)
+            }
+            HStack(alignment: .center) {
                 MessageComposerTextField(placeholder: "Send a message",
                                          text: $text,
                                          focused: $focused,
                                          maxHeight: 300)
+                
+                Button {
+                    sendAction()
+                } label: {
+                    Image(systemName: "paperplane")
+                        .font(.element.title3)
+                        .foregroundColor(sendingDisabled ? .element.tempActionBackground : .element.tempActionForeground)
+                        .padding(8.0)
+                        .background(
+                            Circle()
+                                .foregroundColor(sendingDisabled ? .clear : .element.tempActionBackground)
+                        )
+                }
+                .disabled(sendingDisabled)
+                .animation(.elementDefault, value: sendingDisabled)
+                .keyboardShortcut(.return, modifiers: [.command])
+                .padding(4.0)
             }
-            .padding(4.0)
-            .frame(minHeight: 44.0)
-            .clipShape(rect)
-            .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
-            .animation(.elementDefault, value: type)
-            .animation(.elementDefault, value: borderWidth)
-
-            Button {
-                sendAction()
-            } label: {
-                Image(uiImage: Asset.Images.timelineComposerSendMessage.image)
-                    .background(Circle()
-                        .foregroundColor(.global.white)
-                    )
-            }
-            .padding(.bottom, 6.0)
-            .disabled(sendingDisabled)
-            .opacity(sendingDisabled ? 0.5 : 1.0)
-            .animation(.elementDefault, value: sendingDisabled)
-            .keyboardShortcut(.return, modifiers: [.command])
         }
+        .padding(.horizontal, 12.0)
+        .background(.thinMaterial)
+        .clipShape(rect)
+        .animation(.elementDefault, value: type)
     }
     
-    private var borderColor: Color {
-        .element.accent
-    }
-    
-    private var borderWidth: CGFloat {
-        focused ? 2.0 : 1.0
+    private var borderRadius: CGFloat {
+        switch type {
+        case .default:
+            return 28.0
+        case .reply:
+            return 12.0
+        }
     }
 }
 
@@ -83,8 +85,9 @@ private struct MessageComposerReplyHeader: View {
             Button {
                 action()
             } label: {
-                Image(systemName: "xmark")
-                    .font(.element.caption2)
+                Image(systemName: "x.circle")
+                    .font(.element.callout)
+                    .foregroundColor(.element.secondaryContent)
                     .padding(4.0)
             }
         }
