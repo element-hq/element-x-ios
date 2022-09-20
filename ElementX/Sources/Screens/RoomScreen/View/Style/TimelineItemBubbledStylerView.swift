@@ -141,10 +141,12 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
             .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
-            .overlay(
-                RoundedCorner(radius: 18, inGroupState: timelineItem.inGroupState)
-                    .stroke(Color.element.systemGray5)
-            )
+            .background(Color.element.systemGray6) // Demo time!
+            .cornerRadius(12, inGroupState: timelineItem.inGroupState) // Demo time!
+//            .overlay(
+//                RoundedCorner(radius: 18, inGroupState: timelineItem.inGroupState)
+//                    .stroke(Color.element.systemGray5)
+//            )
         }
     }
 

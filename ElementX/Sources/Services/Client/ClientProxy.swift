@@ -28,11 +28,7 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     
     // MARK: - ClientDelegate
     
-    func didReceiveSyncUpdate() {
-        Task {
-            await self.clientProxy?.didReceiveSyncUpdate()
-        }
-    }
+    func didReceiveSyncUpdate() { }
 
     func didReceiveAuthError(isSoftLogout: Bool) {
         Task {
@@ -97,6 +93,7 @@ class ClientProxy: ClientProxyProtocol {
             
             slidingSync = try slidingSyncBuilder
                 .addView(view: slidingSyncView)
+//                .withCommonExtensions()
                 .build()
             
             roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
@@ -105,6 +102,8 @@ class ClientProxy: ClientProxyProtocol {
         } catch {
             fatalError("Failed configuring sliding sync")
         }
+        
+        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
     }
     
     var userIdentifier: String {
@@ -147,13 +146,8 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        Benchmark.startTrackingForIdentifier("ClientSync", message: "Started sync.")
-        
         slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
         slidingSyncObserverToken = slidingSync.sync()
-        
-        client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
-        client.startSync(timelineLimit: ClientProxy.syncLimit)
     }
     
     func stopSync() {
@@ -269,11 +263,7 @@ class ClientProxy: ClientProxyProtocol {
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         roomSummaryProvider.updateRoomsWithIdentifiers(summary.rooms)
-    }
-    
-    fileprivate func didReceiveSyncUpdate() {
-        Benchmark.logElapsedDurationForIdentifier("ClientSync", message: "Received sync update")
         
-        callbacks.send(.receivedSyncUpdate)
+//        callbacks.send(.receivedSyncUpdate)
     }
 }

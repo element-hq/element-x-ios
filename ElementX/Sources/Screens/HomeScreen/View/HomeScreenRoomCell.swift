@@ -44,6 +44,7 @@ struct HomeScreenRoomCell: View {
                         Text(room.name)
                             .font(.element.callout.bold())
                             .foregroundColor(.element.primaryContent)
+                            .lineLimit(1)
                         
                         if let lastMessage = room.lastMessage {
                             Text(lastMessage)
