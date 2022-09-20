@@ -98,6 +98,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContentOutgoing: some View {
+        if timelineItem.inGroupState == .single || timelineItem.inGroupState == .beginning {
+            Spacer()
+                .frame(height: 8)
+        }
         if shouldAvoidBubbling {
             content()
                 .frame(width: bubbleWidth)
