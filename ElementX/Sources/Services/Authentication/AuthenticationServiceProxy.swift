@@ -40,29 +40,26 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: - Public
     
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
-        let task = Task.dispatched(on: .global()) { () -> LoginHomeserver in
+        do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            try self.authenticationService.configureHomeserver(serverName: homeserverAddress)
-            
-            guard let details = self.authenticationService.homeserverDetails() else { return homeserver }
-            
-            if let issuer = details.authenticationIssuer(), let issuerURL = URL(string: issuer) {
-                homeserver.loginMode = .oidc(issuerURL)
-            } else if details.supportsPasswordLogin() {
-                homeserver.loginMode = .password
-            } else {
-                homeserver.loginMode = .unsupported
+            try await withCheckedThrowingContinuation(on: .global()) {
+                try self.authenticationService.configureHomeserver(serverName: homeserverAddress)
             }
             
-            return homeserver
-        }
-        
-        switch await task.result {
-        case .success(let homeserver):
+            if let details = self.authenticationService.homeserverDetails() {
+                if let issuer = details.authenticationIssuer(), let issuerURL = URL(string: issuer) {
+                    homeserver.loginMode = .oidc(issuerURL)
+                } else if details.supportsPasswordLogin() {
+                    homeserver.loginMode = .password
+                } else {
+                    homeserver.loginMode = .unsupported
+                }
+            }
+            
             self.homeserver = homeserver
             return .success(())
-        case .failure(let error):
+        } catch {
             MXLog.error("Failed configuring a server: \(error)")
             return .failure(.invalidHomeserverAddress)
         }
@@ -105,20 +102,19 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     }
     
     func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
+        do {
+            Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
-        let loginTask: Task<Client, Error> = Task.dispatched(on: .global()) {
-            try self.authenticationService.login(username: username,
-                                                 password: password,
-                                                 initialDeviceName: initialDeviceName,
-                                                 deviceId: deviceId)
-        }
-        
-        switch await loginTask.result {
-        case .success(let client):
+            let client = try await withCheckedThrowingContinuation(on: .global()) {
+                try self.authenticationService.login(username: username,
+                                                     password: password,
+                                                     initialDeviceName: initialDeviceName,
+                                                     deviceId: deviceId)
+            }
+            
             Benchmark.endTrackingForIdentifier("Login", message: "Finished login")
             return await userSession(for: client)
-        case .failure(let error):
+        } catch {
             Benchmark.endTrackingForIdentifier("Login", message: "Login failed")
             
             MXLog.error("Failed logging in with error: \(error)")

@@ -105,15 +105,13 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        let task = Task.dispatched(on: .global()) {
-            try self.room.memberAvatarUrl(userId: userId)
-        }
-        
-        switch await task.result {
-        case .success(let avatarURL):
+        do {
+            let avatarURL = try await withCheckedThrowingContinuation(on: .global()) {
+                try self.room.memberAvatarUrl(userId: userId)
+            }
             update(avatarURL: avatarURL, forUserId: userId)
             return .success(avatarURL)
-        case .failure:
+        } catch {
             return .failure(.failedRetrievingMemberAvatarURL)
         }
     }
@@ -123,15 +121,13 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        let task = Task.dispatched(on: .global()) {
-            try self.room.memberDisplayName(userId: userId)
-        }
-        
-        switch await task.result {
-        case .success(let displayName):
+        do {
+            let displayName = try await withCheckedThrowingContinuation(on: .global()) {
+                try self.room.memberDisplayName(userId: userId)
+            }
             update(displayName: displayName, forUserId: userId)
             return .success(displayName)
-        case .failure:
+        } catch {
             return .failure(.failedRetrievingMemberDisplayName)
         }
     }
@@ -139,15 +135,13 @@ class RoomProxy: RoomProxyProtocol {
     func loadDisplayName() async -> Result<String, RoomProxyError> {
         if let displayName = displayName { return .success(displayName) }
         
-        let task = Task.dispatched(on: .global()) {
-            try self.room.displayName()
-        }
-        
-        switch await task.result {
-        case .success(let displayName):
+        do {
+            let displayName = try await withCheckedThrowingContinuation(on: .global()) {
+                try self.room.displayName()
+            }
             update(displayName: displayName)
             return .success(displayName)
-        case .failure:
+        } catch {
             return .failure(.failedRetrievingDisplayName)
         }
     }
@@ -163,18 +157,16 @@ class RoomProxy: RoomProxyProtocol {
         
         let id = id // Copy the ID into the Task as its mutable.
         
-        let task = Task.dispatched(on: .global()) { () -> PaginationOutcome in
-            Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
-            let outcome = try self.room.paginateBackwards(limit: UInt16(count))
-            Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
-            return outcome
-        }
-        
-        switch await task.result {
-        case .success(let outcome):
+        do {
+            let outcome = try await withCheckedThrowingContinuation(on: .global()) { () -> PaginationOutcome in
+                Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
+                let outcome = try self.room.paginateBackwards(limit: UInt16(count))
+                Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
+                return outcome
+            }
             update(backPaginationOutcome: outcome)
             return .success(())
-        case .failure:
+        } catch {
             return .failure(.failedPaginatingBackwards)
         }
     }
@@ -187,20 +179,19 @@ class RoomProxy: RoomProxyProtocol {
         
         let transactionId = genTransactionId()
         
-        return await Task.dispatched(on: concurrentDispatchQueue, operation: {
-            do {
+        do {
+            try await withCheckedThrowingContinuation(on: .global()) {
                 if let inReplyToEventId = inReplyToEventId {
                     try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
                 } else {
                     let messageContent = messageEventContentFromMarkdown(md: message)
                     try self.room.send(msg: messageContent, txnId: transactionId)
                 }
-                return .success(())
-            } catch {
-                return .failure(.failedSendingMessage)
             }
-        })
-        .value
+            return .success(())
+        } catch {
+            return .failure(.failedSendingMessage)
+        }
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {

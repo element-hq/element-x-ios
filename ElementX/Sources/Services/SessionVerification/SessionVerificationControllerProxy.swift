@@ -63,51 +63,47 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatched(on: .global()) {
-            do {
+        do {
+            try await withCheckedThrowingContinuation(on: .global()) {
                 try self.sessionVerificationController.requestVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedRequestingVerification)
             }
+            return .success(())
+        } catch {
+            return .failure(.failedRequestingVerification)
         }
-        .value
     }
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatched(on: .global()) {
-            do {
+        do {
+            try await withCheckedThrowingContinuation(on: .global()) {
                 try self.sessionVerificationController.approveVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedApprovingVerification)
             }
+            return .success(())
+        } catch {
+            return .failure(.failedApprovingVerification)
         }
-        .value
     }
     
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatched(on: .global()) {
-            do {
+        do {
+            try await withCheckedThrowingContinuation(on: .global()) {
                 try self.sessionVerificationController.declineVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedDecliningVerification)
             }
+            return .success(())
+        } catch {
+            return .failure(.failedDecliningVerification)
         }
-        .value
     }
     
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatched(on: .global()) {
-            do {
+        do {
+            try await withCheckedThrowingContinuation(on: .global()) {
                 try self.sessionVerificationController.cancelVerification()
-                return .success(())
-            } catch {
-                return .failure(.failedCancellingVerification)
             }
+            return .success(())
+        } catch {
+            return .failure(.failedCancellingVerification)
         }
-        .value
     }
     
     // MARK: - Private

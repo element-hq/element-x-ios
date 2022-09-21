@@ -182,27 +182,25 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        await Task.dispatched(on: .global()) {
-            do {
-                let displayName = try self.client.displayName()
-                return .success(displayName)
-            } catch {
-                return .failure(.failedRetrievingDisplayName)
+        do {
+            let displayName = try await withCheckedThrowingContinuation(on: .global()) {
+                try self.client.displayName()
             }
+            return .success(displayName)
+        } catch {
+            return .failure(.failedRetrievingDisplayName)
         }
-        .value
     }
         
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
-        await Task.dispatched(on: .global()) {
-            do {
-                let avatarURL = try self.client.avatarUrl()
-                return .success(avatarURL)
-            } catch {
-                return .failure(.failedRetrievingAvatarURL)
+        do {
+            let avatarURL = try await withCheckedThrowingContinuation(on: .global()) {
+                try self.client.avatarUrl()
             }
+            return .success(avatarURL)
+        } catch {
+            return .failure(.failedRetrievingAvatarURL)
         }
-        .value
     }
     
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
@@ -218,29 +216,28 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
-        try await Task.dispatched(on: .global()) {
+        try await withCheckedThrowingContinuation(on: .global()) {
             let bytes = try self.client.getMediaContent(source: source)
             return Data(bytes: bytes, count: bytes.count)
-        }.value
+        }
     }
     
     func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
-        try await Task.dispatched(on: .global()) {
+        try await withCheckedThrowingContinuation(on: .global()) {
             let bytes = try self.client.getMediaThumbnail(source: source, width: UInt64(width), height: UInt64(height))
             return Data(bytes: bytes, count: bytes.count)
-        }.value
+        }
     }
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        await Task.dispatched(on: .global()) {
-            do {
-                let sessionVerificationController = try self.client.getSessionVerificationController()
-                return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
-            } catch {
-                return .failure(.failedRetrievingSessionVerificationController)
+        do {
+            let sessionVerificationController = try await withCheckedThrowingContinuation(on: .global()) {
+                try self.client.getSessionVerificationController()
             }
+            return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
+        } catch {
+            return .failure(.failedRetrievingSessionVerificationController)
         }
-        .value
     }
 
     func logout() async {
