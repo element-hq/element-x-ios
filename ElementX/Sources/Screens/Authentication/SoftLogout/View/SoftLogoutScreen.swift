@@ -20,6 +20,7 @@ struct SoftLogoutScreen: View {
     // MARK: - Properties
     
     // MARK: Private
+
     @State private var showingClearDataConfirmation = false
 
     /// The focus state of the password text field.
