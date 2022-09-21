@@ -73,7 +73,7 @@ final class SettingsCoordinator: Coordinator, Presentable {
             case .crash:
                 self.parameters.bugReportService.crash()
             case .logout:
-                self.confirmSignOut()
+                self.callback?(.logout)
             }
         }
     }
@@ -118,19 +118,6 @@ final class SettingsCoordinator: Coordinator, Presentable {
         }
     }
 
-    private func confirmSignOut() {
-        let alert = UIAlertController(title: ElementL10n.actionSignOut,
-                                      message: ElementL10n.actionSignOutConfirmationSimple,
-                                      preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { [weak self] _ in
-            self?.callback?(.logout)
-        })
-
-        navigationRouter.present(alert, animated: true)
-    }
-    
     /// Show an activity indicator whilst loading.
     /// - Parameters:
     ///   - label: The label to show on the indicator.
