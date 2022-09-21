@@ -17,6 +17,18 @@
 import Foundation
 
 extension Task where Failure == Never {
+    /// Runs the given nonthrowing **blocking** operation asynchronously
+    /// on the given dispatch queue and awaits the result in a new top-level task.
+    ///
+    /// This avoids blocking all of the available Task workers with blocking operations,
+    /// but still allows us to await the operation.
+    ///
+    /// - Parameters:
+    ///   - queue: The queue to run the operation on.
+    ///   - priority: The priority of the task.
+    ///   - operation: The operation to perform.
+    ///
+    /// - Returns: A reference to the task.
     static func dispatched(on queue: DispatchQueue,
                            priority: TaskPriority? = nil,
                            operation: @escaping @Sendable () -> Success) -> Task<Success, Failure> {
@@ -31,6 +43,20 @@ extension Task where Failure == Never {
 }
 
 extension Task where Failure == Error {
+    /// Runs the given throwing **blocking** operation asynchronously
+    /// on the given dispatch queue and awaits the result in a new top-level task.
+    ///
+    /// If the operation throws an error, this method propagates that error.
+    ///
+    /// This avoids blocking all of the available Task workers with blocking operations,
+    /// but still allows us to await the operation.
+    ///
+    /// - Parameters:
+    ///   - queue: The queue to run the operation on.
+    ///   - priority: The priority of the task.
+    ///   - operation: The operation to perform.
+    ///
+    /// - Returns: A reference to the task.
     static func dispatched(on queue: DispatchQueue,
                            priority: TaskPriority? = nil,
                            operation: @escaping @Sendable () throws -> Success) -> Task<Success, Failure> {

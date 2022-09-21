@@ -40,7 +40,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: - Public
     
     func configure(for homeserverAddress: String) async -> Result<Void, AuthenticationServiceError> {
-        let task = Task.detached { () -> LoginHomeserver in
+        let task = Task.dispatched(on: .global()) { () -> LoginHomeserver in
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
             try self.authenticationService.configureHomeserver(serverName: homeserverAddress)
@@ -107,7 +107,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
-        let loginTask: Task<Client, Error> = Task.detached {
+        let loginTask: Task<Client, Error> = Task.dispatched(on: .global()) {
             try self.authenticationService.login(username: username,
                                                  password: password,
                                                  initialDeviceName: initialDeviceName,

@@ -23,9 +23,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let linkColor = UIColor.blue
     
     func fromPlain(_ string: String?) async -> AttributedString? {
-        await Task.detached {
+        await Task.dispatched(on: .global()) {
             fromPlain(string)
-        }.value
+        }
+        .value
     }
     
     func fromPlain(_ string: String?) -> AttributedString? {
@@ -41,9 +42,10 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     func fromHTML(_ htmlString: String?) async -> AttributedString? {
-        await Task.detached {
+        await Task.dispatched(on: .global()) {
             fromHTML(htmlString)
-        }.value
+        }
+        .value
     }
     
     // Do not use the default HTML renderer of NSAttributedString because this method

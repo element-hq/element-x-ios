@@ -93,7 +93,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             .basePath(path: baseDirectoryPath)
             .username(username: credentials.userID)
         
-        let loginTask: Task<Client, Error> = Task.detached {
+        let loginTask: Task<Client, Error> = Task.dispatched(on: .global()) {
             let client = try builder.build()
             try client.restoreLogin(restoreToken: credentials.restoreToken)
             return client

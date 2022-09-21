@@ -105,16 +105,17 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await Task.detached { () -> Result<String?, RoomProxyError> in
-            do {
-                let avatarURL = try self.room.memberAvatarUrl(userId: userId)
-                await self.update(avatarURL: avatarURL, forUserId: userId)
-                return .success(avatarURL)
-            } catch {
-                return .failure(.failedRetrievingMemberAvatarURL)
-            }
+        let task = Task.dispatched(on: .global()) {
+            try self.room.memberAvatarUrl(userId: userId)
         }
-        .value
+        
+        switch await task.result {
+        case .success(let avatarURL):
+            update(avatarURL: avatarURL, forUserId: userId)
+            return .success(avatarURL)
+        case .failure:
+            return .failure(.failedRetrievingMemberAvatarURL)
+        }
     }
     
     func displayNameForUserId(_ userId: String) -> String? {
@@ -122,33 +123,33 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await Task.detached { () -> Result<String?, RoomProxyError> in
-            do {
-                let displayName = try self.room.memberDisplayName(userId: userId)
-                await self.update(displayName: displayName, forUserId: userId)
-                return .success(displayName)
-            } catch {
-                return .failure(.failedRetrievingMemberDisplayName)
-            }
+        let task = Task.dispatched(on: .global()) {
+            try self.room.memberDisplayName(userId: userId)
         }
-        .value
+        
+        switch await task.result {
+        case .success(let displayName):
+            update(displayName: displayName, forUserId: userId)
+            return .success(displayName)
+        case .failure:
+            return .failure(.failedRetrievingMemberDisplayName)
+        }
     }
         
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        await Task.detached { () -> Result<String, RoomProxyError> in
-            if let displayName = await self.displayName {
-                return .success(displayName)
-            }
-            
-            do {
-                let displayName = try self.room.displayName()
-                await self.update(displayName: displayName)
-                return .success(displayName)
-            } catch {
-                return .failure(.failedRetrievingDisplayName)
-            }
+        if let displayName = displayName { return .success(displayName) }
+        
+        let task = Task.dispatched(on: .global()) {
+            try self.room.displayName()
         }
-        .value
+        
+        switch await task.result {
+        case .success(let displayName):
+            update(displayName: displayName)
+            return .success(displayName)
+        case .failure:
+            return .failure(.failedRetrievingDisplayName)
+        }
     }
     
     private func addTimelineListener(listener: TimelineListener) {
@@ -160,20 +161,22 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.noMoreMessagesToBackPaginate)
         }
         
-        MXLog.debug("BackPagination")
-        return await Task.detached {
-            do {
-                let id = await self.id
-                
-                Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
-                await self.update(backPaginationOutcome: try self.room.paginateBackwards(limit: UInt16(count)))
-                Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
-                return .success(())
-            } catch {
-                return .failure(.failedPaginatingBackwards)
-            }
+        let id = id // Copy the ID into the Task as its mutable.
+        
+        let task = Task.dispatched(on: .global()) { () -> PaginationOutcome in
+            Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
+            let outcome = try self.room.paginateBackwards(limit: UInt16(count))
+            Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
+            return outcome
         }
-        .value
+        
+        switch await task.result {
+        case .success(let outcome):
+            update(backPaginationOutcome: outcome)
+            return .success(())
+        case .failure:
+            return .failure(.failedPaginatingBackwards)
+        }
     }
     
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
