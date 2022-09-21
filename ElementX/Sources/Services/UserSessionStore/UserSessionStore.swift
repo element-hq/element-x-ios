@@ -26,7 +26,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     var hasSessions: Bool { !keychainController.restoreTokens().isEmpty }
     
     /// The base directory where all session data is stored.
-    var baseDirectoryPath: String { baseDirectory().path }
+    var baseDirectoryPath: String { baseDirectory.path }
     
     init(bundleIdentifier: String, backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(identifier: bundleIdentifier)
@@ -127,7 +127,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     private func deleteSessionDirectory(for userID: String) {
         // Rust sanitises the user ID replacing invalid characters with an _
         let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
-        let url = baseDirectory().appendingPathComponent(sanitisedUserID)
+        let url = baseDirectory.appendingPathComponent(sanitisedUserID)
         
         do {
             try FileManager.default.removeItem(at: url)
@@ -136,7 +136,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    func baseDirectory() -> URL {
+    lazy var baseDirectory: URL = {
         guard let appGroupContainerURL = FileManager.default.appGroupContainerURL else {
             fatalError("Should always be able to retrieve the container directory")
         }
@@ -148,6 +148,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
         
+        MXLog.debug("Setup base directory at: \(url)")
+        
         return url
-    }
+    }()
 }
