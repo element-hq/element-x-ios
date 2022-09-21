@@ -16,33 +16,46 @@
 
 import Foundation
 
-extension Task where Failure == Never {
-    static func dispatched(on queue: DispatchQueue,
-                           priority: TaskPriority? = nil,
-                           operation: @escaping @Sendable () -> Success) -> Task<Success, Failure> {
-        Task.detached(priority: priority) {
-            await withCheckedContinuation { continuation in
-                queue.async {
-                    continuation.resume(returning: operation())
-                }
+public extension Task where Success == Never, Failure == Never {
+    /// Dispatches the given closure onto the given queue, wrapped within
+    /// a continuation to make it non-blocking and awaitable.
+    ///
+    /// Use this method to `await` blocking calls to the SDK from a `Task`.
+    ///
+    /// - Parameters:
+    ///   - queue: The queue to run the closure on.
+    ///   - function: A string identifying the declaration that is the notional
+    ///     source for the continuation, used to identify the continuation in
+    ///     runtime diagnostics related to misuse of this continuation.
+    ///   - body: A sendable closure. Use of sendable won't work as it isn't
+    ///     async, but is added to enforce actor semantics.
+    static func dispatch<T>(on queue: DispatchQueue, function: String = #function, _ body: @escaping @Sendable () -> T) async -> T {
+        await withCheckedContinuation(function: function) { continuation in
+            queue.async {
+                continuation.resume(returning: body())
             }
         }
     }
-}
 
-extension Task where Failure == Error {
-    static func dispatched(on queue: DispatchQueue,
-                           priority: TaskPriority? = nil,
-                           operation: @escaping @Sendable () throws -> Success) -> Task<Success, Failure> {
-        Task.detached(priority: priority) {
-            try await withCheckedThrowingContinuation { continuation in
-                queue.async {
-                    do {
-                        let result = try operation()
-                        continuation.resume(returning: result)
-                    } catch {
-                        continuation.resume(throwing: error)
-                    }
+    /// Dispatches the given throwing closure onto the given queue, wrapped within
+    /// a continuation to make it non-blocking and awaitable.
+    ///
+    /// Use this method to `await` blocking calls to the SDK from a `Task`.
+    ///
+    /// - Parameters:
+    ///   - queue: The queue to run the closure on.
+    ///   - function: A string identifying the declaration that is the notional
+    ///     source for the continuation, used to identify the continuation in
+    ///     runtime diagnostics related to misuse of this continuation.
+    ///   - body: A sendable closure. Use of sendable won't work as it isn't
+    ///     async, but is added to enforce actor semantics.
+    static func dispatch<T>(on queue: DispatchQueue, function: String = #function, _ body: @escaping @Sendable () throws -> T) async throws -> T {
+        try await withCheckedThrowingContinuation(function: function) { continuation in
+            queue.async {
+                do {
+                    continuation.resume(returning: try body())
+                } catch {
+                    continuation.resume(throwing: error)
                 }
             }
         }

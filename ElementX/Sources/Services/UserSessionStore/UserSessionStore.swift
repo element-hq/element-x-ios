@@ -93,16 +93,14 @@ class UserSessionStore: UserSessionStoreProtocol {
             .basePath(path: baseDirectoryPath)
             .username(username: credentials.userID)
         
-        let loginTask: Task<Client, Error> = Task.detached {
-            let client = try builder.build()
-            try client.restoreLogin(restoreToken: credentials.restoreToken)
-            return client
-        }
-        
-        switch await loginTask.result {
-        case .success(let client):
+        do {
+            let client: Client = try await Task.dispatch(on: .global()) {
+                let client = try builder.build()
+                try client.restoreLogin(restoreToken: credentials.restoreToken)
+                return client
+            }
             return await setupProxyForClient(client)
-        case .failure(let error):
+        } catch {
             MXLog.error("Failed restoring login with error: \(error)")
             return .failure(.failedRestoringLogin)
         }
