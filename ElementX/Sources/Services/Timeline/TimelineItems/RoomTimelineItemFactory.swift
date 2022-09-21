@@ -42,7 +42,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let displayName = roomProxy.displayNameForUserId(eventItem.sender)
         let avatarURL = roomProxy.avatarURLStringForUserId(eventItem.sender)
         let avatarImage = mediaProvider.imageFromURLString(avatarURL, size: MediaProviderDefaultAvatarSize)
-        let isOutgoing = eventItem.sender == userID
+        let isOutgoing = eventItem.isOwn
         
         switch messageContent.msgtype() {
         case .text(content: let content):
