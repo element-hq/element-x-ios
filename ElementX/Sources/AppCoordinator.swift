@@ -310,7 +310,7 @@ class AppCoordinator: Coordinator {
             case .verifySession:
                 self.stateMachine.processEvent(.showSessionVerificationScreen)
             case .signOut:
-                self.confirmSignOut()
+                self.stateMachine.processEvent(.signOut)
             }
         }
         
@@ -433,19 +433,6 @@ class AppCoordinator: Coordinator {
         alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
             self?.presentBugReportScreen()
-        })
-
-        navigationRouter.present(alert, animated: true)
-    }
-
-    private func confirmSignOut() {
-        let alert = UIAlertController(title: ElementL10n.actionSignOut,
-                                      message: ElementL10n.actionSignOutConfirmationSimple,
-                                      preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { [weak self] _ in
-            self?.stateMachine.processEvent(.signOut)
         })
 
         navigationRouter.present(alert, animated: true)

@@ -17,6 +17,7 @@
 import SwiftUI
 
 struct HomeScreen: View {
+    @State private var showingLogoutConfirmation = false
     @ObservedObject var context: HomeScreenViewModel.Context
     
     // MARK: Views
@@ -75,7 +76,9 @@ struct HomeScreen: View {
                 }
             }
             Section {
-                Button(role: .destructive, action: signOut) {
+                Button(role: .destructive) {
+                    showingLogoutConfirmation = true
+                } label: {
                     Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
                 }
             }
@@ -83,6 +86,14 @@ struct HomeScreen: View {
             userAvatarImageView
                 .animation(.elementDefault, value: context.viewState.userAvatar)
                 .transition(.opacity)
+        }
+        .alert(ElementL10n.actionSignOut,
+               isPresented: $showingLogoutConfirmation) {
+            Button(ElementL10n.actionSignOut,
+                   role: .destructive,
+                   action: signOut)
+        } message: {
+            Text(ElementL10n.actionSignOutConfirmationSimple)
         }
     }
 
