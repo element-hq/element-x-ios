@@ -38,11 +38,16 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     func buildTimelineItemFor(eventItem: EventTimelineItem,
                               showSenderDetails: Bool,
                               inGroupState: TimelineItemInGroupState) async -> RoomTimelineItemProtocol {
-        guard let messageContent = eventItem.content.asMessage() else { fatalError("Must be a message for now.") }
         let displayName = roomProxy.displayNameForUserId(eventItem.sender)
         let avatarURL = roomProxy.avatarURLStringForUserId(eventItem.sender)
         let avatarImage = mediaProvider.imageFromURLString(avatarURL, size: MediaProviderDefaultAvatarSize)
         let isOutgoing = eventItem.isOwn
+
+        if eventItem.isRedacted {
+            return buildRedactedTimelineItemFromEvent(eventItem, isOutgoing, showSenderDetails, inGroupState, displayName, avatarImage)
+        }
+
+        guard let messageContent = eventItem.content.asMessage() else { fatalError("Must be a message for now.") }
         
         switch messageContent.msgtype() {
         case .text(content: let content):
@@ -66,6 +71,24 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
 
     // swiftformat:disable function_parameter_count
     // swiftlint:disable function_parameter_count
+    private func buildRedactedTimelineItemFromEvent(_ event: EventTimelineItem,
+                                                    _ isOutgoing: Bool,
+                                                    _ showSenderDetails: Bool,
+                                                    _ inGroupState: TimelineItemInGroupState,
+                                                    _ displayName: String?,
+                                                    _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        RedactedRoomTimelineItem(id: event.id,
+                                 text: ElementL10n.eventRedacted,
+                                 timestamp: event.originServerTs.formatted(date: .omitted, time: .shortened),
+                                 shouldShowSenderDetails: showSenderDetails,
+                                 inGroupState: inGroupState,
+                                 isOutgoing: isOutgoing,
+                                 senderId: event.sender,
+                                 senderDisplayName: displayName,
+                                 senderAvatar: avatarImage,
+                                 properties: RoomTimelineItemProperties())
+    }
+
     private func buildFallbackTimelineItem(_ item: EventTimelineItem,
                                            _ isOutgoing: Bool,
                                            _ showSenderDetails: Bool,
