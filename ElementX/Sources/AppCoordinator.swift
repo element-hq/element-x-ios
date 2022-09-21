@@ -154,8 +154,8 @@ class AppCoordinator: Coordinator {
             
             case(_, _, .roomScreen(let roomId)):
                 self.presentRoomWithIdentifier(roomId)
-            case(.roomScreen, .dismissedRoomScreen, .homeScreen):
-                self.tearDownDismissedRoomScreen()
+            case(.roomScreen(let roomId), .dismissedRoomScreen, .homeScreen):
+                self.tearDownDismissedRoomScreen(roomId)
 
             case (_, .signOut, .signingOut):
                 self.showLoadingIndicator()
@@ -376,12 +376,13 @@ class AppCoordinator: Coordinator {
         }
     }
     
-    private func tearDownDismissedRoomScreen() {
+    private func tearDownDismissedRoomScreen(_ roomId: String) {
         guard let coordinator = childCoordinators.last as? RoomScreenCoordinator else {
             fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
         }
         
         remove(childCoordinator: coordinator)
+        userSession.clientProxy.clearRoom(for: roomId)
     }
     
     // MARK: Settings
