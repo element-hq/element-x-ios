@@ -180,6 +180,10 @@ class ClientProxy: ClientProxyProtocol {
             return nil
         }
     }
+
+    func clearRoom(for identifier: String) {
+        roomProxies.removeValue(forKey: identifier)
+    }
         
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: .global()) {

@@ -35,6 +35,8 @@ struct MockClientProxy: ClientProxyProtocol {
     func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
         nil
     }
+
+    func clearRoom(for identifier: String) { }
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         .success("User display name")
