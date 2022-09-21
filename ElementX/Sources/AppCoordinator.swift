@@ -239,13 +239,11 @@ class AppCoordinator: Coordinator {
                     self.remove(childCoordinator: coordinator)
                     self.stateMachine.processEvent(.succeededSigningIn)
                 case .clearAllData:
-                    self.confirmClearAllData {
-                        //  clear user data
-                        self.userSessionStore.logout(userSession: self.userSession)
-                        self.userSession = nil
-                        self.remove(childCoordinator: coordinator)
-                        self.startAuthentication()
-                    }
+                    //  clear user data
+                    self.userSessionStore.logout(userSession: self.userSession)
+                    self.userSession = nil
+                    self.remove(childCoordinator: coordinator)
+                    self.startAuthentication()
                 }
             }
 
@@ -433,19 +431,6 @@ class AppCoordinator: Coordinator {
         alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
             self?.presentBugReportScreen()
-        })
-
-        navigationRouter.present(alert, animated: true)
-    }
-
-    /// Shows a confirmation to clear all data, and proceeds to do so if the user confirms.
-    private func confirmClearAllData(_ confirmed: @escaping () -> Void) {
-        let alert = UIAlertController(title: ElementL10n.softLogoutClearDataDialogTitle,
-                                      message: ElementL10n.softLogoutClearDataDialogContent,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { _ in
-            confirmed()
         })
 
         navigationRouter.present(alert, animated: true)

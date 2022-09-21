@@ -20,6 +20,7 @@ struct SoftLogoutScreen: View {
     // MARK: - Properties
     
     // MARK: Private
+    @State private var showingClearDataConfirmation = false
 
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
@@ -150,6 +151,14 @@ struct SoftLogoutScreen: View {
             }
             .buttonStyle(.elementAction(.xLarge, color: .element.alert))
             .accessibilityIdentifier("clearDataButton")
+            .alert(ElementL10n.softLogoutClearDataDialogTitle,
+                   isPresented: $showingClearDataConfirmation) {
+                Button(ElementL10n.actionSignOut,
+                       role: .destructive,
+                       action: clearData)
+            } message: {
+                Text(ElementL10n.softLogoutClearDataDialogContent)
+            }
         }
     }
 
