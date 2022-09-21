@@ -29,6 +29,8 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .notice(item)
         case let item as EmoteRoomTimelineItem:
             return .emote(item)
+        case let item as RedactedRoomTimelineItem:
+            return .redacted(item)
         default:
             fatalError("Unknown timeline item")
         }
