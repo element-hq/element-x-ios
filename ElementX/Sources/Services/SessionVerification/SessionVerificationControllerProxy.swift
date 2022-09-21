@@ -63,7 +63,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 try self.sessionVerificationController.requestVerification()
                 return .success(())
@@ -74,7 +74,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 try self.sessionVerificationController.approveVerification()
                 return .success(())
@@ -85,7 +85,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 try self.sessionVerificationController.declineVerification()
                 return .success(())
@@ -96,7 +96,7 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 try self.sessionVerificationController.cancelVerification()
                 return .success(())

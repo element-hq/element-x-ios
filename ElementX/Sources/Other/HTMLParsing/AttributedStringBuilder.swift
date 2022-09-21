@@ -23,7 +23,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let linkColor = UIColor.blue
     
     func fromPlain(_ string: String?) async -> AttributedString? {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             fromPlain(string)
         }
     }
@@ -41,7 +41,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     func fromHTML(_ htmlString: String?) async -> AttributedString? {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             fromHTML(htmlString)
         }
     }

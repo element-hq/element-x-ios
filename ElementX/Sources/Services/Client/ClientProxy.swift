@@ -182,7 +182,7 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 let displayName = try self.client.displayName()
                 return .success(displayName)
@@ -193,7 +193,7 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 let avatarURL = try self.client.avatarUrl()
                 return .success(avatarURL)
@@ -216,21 +216,21 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
-        try await DispatchQueue.throwingAwaitable(on: .global()) {
+        try await Task.dispatch(on: .global()) {
             let bytes = try self.client.getMediaContent(source: source)
             return Data(bytes: bytes, count: bytes.count)
         }
     }
     
     func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
-        try await DispatchQueue.throwingAwaitable(on: .global()) {
+        try await Task.dispatch(on: .global()) {
             let bytes = try self.client.getMediaThumbnail(source: source, width: UInt64(width), height: UInt64(height))
             return Data(bytes: bytes, count: bytes.count)
         }
     }
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
+        await Task.dispatch(on: .global()) {
             do {
                 let sessionVerificationController = try self.client.getSessionVerificationController()
                 return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))

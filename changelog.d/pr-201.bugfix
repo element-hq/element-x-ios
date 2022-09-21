@@ -1,1 +1,1 @@
-Replace blocking detached tasks with a custom DispatchQueue.awaitable implementation.
+Replace blocking detached tasks with Task.dispatch(on:).

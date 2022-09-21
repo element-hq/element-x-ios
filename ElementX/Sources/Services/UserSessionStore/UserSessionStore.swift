@@ -94,7 +94,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             .username(username: credentials.userID)
         
         do {
-            let client: Client = try await DispatchQueue.throwingAwaitable(on: .global()) {
+            let client: Client = try await Task.dispatch(on: .global()) {
                 let client = try builder.build()
                 try client.restoreLogin(restoreToken: credentials.restoreToken)
                 return client

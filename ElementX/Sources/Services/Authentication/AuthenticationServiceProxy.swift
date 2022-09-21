@@ -43,7 +43,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         do {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
-            try await DispatchQueue.throwingAwaitable(on: .global()) {
+            try await Task.dispatch(on: .global()) {
                 try self.authenticationService.configureHomeserver(serverName: homeserverAddress)
             }
             
@@ -105,7 +105,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         do {
             Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
         
-            let client = try await DispatchQueue.throwingAwaitable(on: .global()) {
+            let client = try await Task.dispatch(on: .global()) {
                 try self.authenticationService.login(username: username,
                                                      password: password,
                                                      initialDeviceName: initialDeviceName,

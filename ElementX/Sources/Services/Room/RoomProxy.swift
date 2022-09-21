@@ -106,7 +106,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         do {
-            let avatarURL = try await DispatchQueue.throwingAwaitable(on: .global()) {
+            let avatarURL = try await Task.dispatch(on: .global()) {
                 try self.room.memberAvatarUrl(userId: userId)
             }
             update(avatarURL: avatarURL, forUserId: userId)
@@ -122,7 +122,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         do {
-            let displayName = try await DispatchQueue.throwingAwaitable(on: .global()) {
+            let displayName = try await Task.dispatch(on: .global()) {
                 try self.room.memberDisplayName(userId: userId)
             }
             update(displayName: displayName, forUserId: userId)
@@ -136,7 +136,7 @@ class RoomProxy: RoomProxyProtocol {
         if let displayName = displayName { return .success(displayName) }
         
         do {
-            let displayName = try await DispatchQueue.throwingAwaitable(on: .global()) {
+            let displayName = try await Task.dispatch(on: .global()) {
                 try self.room.displayName()
             }
             update(displayName: displayName)
@@ -158,7 +158,7 @@ class RoomProxy: RoomProxyProtocol {
         let id = id // Copy the ID due to @Sendable requirement.
         
         do {
-            let outcome: PaginationOutcome = try await DispatchQueue.throwingAwaitable(on: .global()) {
+            let outcome: PaginationOutcome = try await Task.dispatch(on: .global()) {
                 Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
                 let outcome = try self.room.paginateBackwards(limit: UInt16(count))
                 Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
@@ -179,7 +179,7 @@ class RoomProxy: RoomProxyProtocol {
         
         let transactionId = genTransactionId()
         
-        return await DispatchQueue.awaitable(on: .global()) {
+        return await Task.dispatch(on: .global()) {
             do {
                 if let inReplyToEventId = inReplyToEventId {
                     try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
