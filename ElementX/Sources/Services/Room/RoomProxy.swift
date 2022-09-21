@@ -105,14 +105,14 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        do {
-            let avatarURL = try await withCheckedThrowingContinuation(on: .global()) {
-                try self.room.memberAvatarUrl(userId: userId)
+        await DispatchQueue.awaitable(on: .global()) {
+            do {
+                let avatarURL = try self.room.memberAvatarUrl(userId: userId)
+                self.update(avatarURL: avatarURL, forUserId: userId)
+                return .success(avatarURL)
+            } catch {
+                return .failure(.failedRetrievingMemberAvatarURL)
             }
-            update(avatarURL: avatarURL, forUserId: userId)
-            return .success(avatarURL)
-        } catch {
-            return .failure(.failedRetrievingMemberAvatarURL)
         }
     }
     
@@ -121,28 +121,28 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        do {
-            let displayName = try await withCheckedThrowingContinuation(on: .global()) {
-                try self.room.memberDisplayName(userId: userId)
+        await DispatchQueue.awaitable(on: .global()) {
+            do {
+                let displayName = try self.room.memberDisplayName(userId: userId)
+                self.update(displayName: displayName, forUserId: userId)
+                return .success(displayName)
+            } catch {
+                return .failure(.failedRetrievingMemberDisplayName)
             }
-            update(displayName: displayName, forUserId: userId)
-            return .success(displayName)
-        } catch {
-            return .failure(.failedRetrievingMemberDisplayName)
         }
     }
-        
+    
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        if let displayName = displayName { return .success(displayName) }
-        
-        do {
-            let displayName = try await withCheckedThrowingContinuation(on: .global()) {
-                try self.room.displayName()
+        await DispatchQueue.awaitable(on: .global()) {
+            if let displayName = self.displayName { return .success(displayName) }
+            
+            do {
+                let displayName = try self.room.displayName()
+                self.update(displayName: displayName)
+                return .success(displayName)
+            } catch {
+                return .failure(.failedRetrievingDisplayName)
             }
-            update(displayName: displayName)
-            return .success(displayName)
-        } catch {
-            return .failure(.failedRetrievingDisplayName)
         }
     }
     
@@ -157,17 +157,16 @@ class RoomProxy: RoomProxyProtocol {
         
         let id = id // Copy the ID into the Task as its mutable.
         
-        do {
-            let outcome = try await withCheckedThrowingContinuation(on: .global()) { () -> PaginationOutcome in
+        return await DispatchQueue.awaitable(on: .global()) {
+            do {
                 Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
                 let outcome = try self.room.paginateBackwards(limit: UInt16(count))
                 Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
-                return outcome
+                self.update(backPaginationOutcome: outcome)
+                return .success(())
+            } catch {
+                return .failure(.failedPaginatingBackwards)
             }
-            update(backPaginationOutcome: outcome)
-            return .success(())
-        } catch {
-            return .failure(.failedPaginatingBackwards)
         }
     }
     
@@ -179,18 +178,18 @@ class RoomProxy: RoomProxyProtocol {
         
         let transactionId = genTransactionId()
         
-        do {
-            try await withCheckedThrowingContinuation(on: .global()) {
+        return await DispatchQueue.awaitable(on: .global()) {
+            do {
                 if let inReplyToEventId = inReplyToEventId {
                     try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
                 } else {
                     let messageContent = messageEventContentFromMarkdown(md: message)
                     try self.room.send(msg: messageContent, txnId: transactionId)
                 }
+                return .success(())
+            } catch {
+                return .failure(.failedSendingMessage)
             }
-            return .success(())
-        } catch {
-            return .failure(.failedSendingMessage)
         }
     }
     

@@ -182,24 +182,24 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        do {
-            let displayName = try await withCheckedThrowingContinuation(on: .global()) {
-                try self.client.displayName()
+        await DispatchQueue.awaitable(on: .global()) {
+            do {
+                let displayName = try self.client.displayName()
+                return .success(displayName)
+            } catch {
+                return .failure(.failedRetrievingDisplayName)
             }
-            return .success(displayName)
-        } catch {
-            return .failure(.failedRetrievingDisplayName)
         }
     }
         
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
-        do {
-            let avatarURL = try await withCheckedThrowingContinuation(on: .global()) {
-                try self.client.avatarUrl()
+        await DispatchQueue.awaitable(on: .global()) {
+            do {
+                let avatarURL = try self.client.avatarUrl()
+                return .success(avatarURL)
+            } catch {
+                return .failure(.failedRetrievingAvatarURL)
             }
-            return .success(avatarURL)
-        } catch {
-            return .failure(.failedRetrievingAvatarURL)
         }
     }
     
@@ -216,27 +216,27 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
-        try await withCheckedThrowingContinuation(on: .global()) {
+        try await DispatchQueue.throwingAwaitable(on: .global()) {
             let bytes = try self.client.getMediaContent(source: source)
             return Data(bytes: bytes, count: bytes.count)
         }
     }
     
     func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
-        try await withCheckedThrowingContinuation(on: .global()) {
+        try await DispatchQueue.throwingAwaitable(on: .global()) {
             let bytes = try self.client.getMediaThumbnail(source: source, width: UInt64(width), height: UInt64(height))
             return Data(bytes: bytes, count: bytes.count)
         }
     }
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        do {
-            let sessionVerificationController = try await withCheckedThrowingContinuation(on: .global()) {
-                try self.client.getSessionVerificationController()
+        await DispatchQueue.awaitable(on: .global()) {
+            do {
+                let sessionVerificationController = try self.client.getSessionVerificationController()
+                return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
+            } catch {
+                return .failure(.failedRetrievingSessionVerificationController)
             }
-            return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
-        } catch {
-            return .failure(.failedRetrievingSessionVerificationController)
         }
     }
 
