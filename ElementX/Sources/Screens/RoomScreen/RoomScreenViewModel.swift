@@ -107,16 +107,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             fatalError("This message should never be empty")
         }
         
-        let message = state.bindings.composerText
-        
+        let currentMessage = state.bindings.composerText
+        let currentComposerState = state.composerMode
+
         state.bindings.composerText = ""
         state.composerMode = .default
-        
-        switch state.composerMode {
+
+        switch currentComposerState {
         case .reply(let itemId, _):
-            await timelineController.sendReply(message, to: itemId)
+            await timelineController.sendReply(currentMessage, to: itemId)
         default:
-            await timelineController.sendMessage(message)
+            await timelineController.sendMessage(currentMessage)
         }
     }
     
