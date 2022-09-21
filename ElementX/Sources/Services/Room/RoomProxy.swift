@@ -105,14 +105,14 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
-            do {
-                let avatarURL = try self.room.memberAvatarUrl(userId: userId)
-                self.update(avatarURL: avatarURL, forUserId: userId)
-                return .success(avatarURL)
-            } catch {
-                return .failure(.failedRetrievingMemberAvatarURL)
+        do {
+            let avatarURL = try await DispatchQueue.throwingAwaitable(on: .global()) {
+                try self.room.memberAvatarUrl(userId: userId)
             }
+            update(avatarURL: avatarURL, forUserId: userId)
+            return .success(avatarURL)
+        } catch {
+            return .failure(.failedRetrievingMemberAvatarURL)
         }
     }
     
@@ -121,28 +121,28 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
-            do {
-                let displayName = try self.room.memberDisplayName(userId: userId)
-                self.update(displayName: displayName, forUserId: userId)
-                return .success(displayName)
-            } catch {
-                return .failure(.failedRetrievingMemberDisplayName)
+        do {
+            let displayName = try await DispatchQueue.throwingAwaitable(on: .global()) {
+                try self.room.memberDisplayName(userId: userId)
             }
+            update(displayName: displayName, forUserId: userId)
+            return .success(displayName)
+        } catch {
+            return .failure(.failedRetrievingMemberDisplayName)
         }
     }
     
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        await DispatchQueue.awaitable(on: .global()) {
-            if let displayName = self.displayName { return .success(displayName) }
-            
-            do {
-                let displayName = try self.room.displayName()
-                self.update(displayName: displayName)
-                return .success(displayName)
-            } catch {
-                return .failure(.failedRetrievingDisplayName)
+        if let displayName = displayName { return .success(displayName) }
+        
+        do {
+            let displayName = try await DispatchQueue.throwingAwaitable(on: .global()) {
+                try self.room.displayName()
             }
+            update(displayName: displayName)
+            return .success(displayName)
+        } catch {
+            return .failure(.failedRetrievingDisplayName)
         }
     }
     
@@ -155,18 +155,19 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.noMoreMessagesToBackPaginate)
         }
         
-        let id = id // Copy the ID into the Task as its mutable.
+        let id = id // Copy the ID due to @Sendable requirement.
         
-        return await DispatchQueue.awaitable(on: .global()) {
-            do {
+        do {
+            let outcome: PaginationOutcome = try await DispatchQueue.throwingAwaitable(on: .global()) {
                 Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
                 let outcome = try self.room.paginateBackwards(limit: UInt16(count))
                 Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
-                self.update(backPaginationOutcome: outcome)
-                return .success(())
-            } catch {
-                return .failure(.failedPaginatingBackwards)
+                return outcome
             }
+            update(backPaginationOutcome: outcome)
+            return .success(())
+        } catch {
+            return .failure(.failedPaginatingBackwards)
         }
     }
     

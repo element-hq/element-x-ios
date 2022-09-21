@@ -47,7 +47,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                 try self.authenticationService.configureHomeserver(serverName: homeserverAddress)
             }
             
-            if let details = self.authenticationService.homeserverDetails() {
+            if let details = authenticationService.homeserverDetails() {
                 if let issuer = details.authenticationIssuer(), let issuerURL = URL(string: issuer) {
                     homeserver.loginMode = .oidc(issuerURL)
                 } else if details.supportsPasswordLogin() {

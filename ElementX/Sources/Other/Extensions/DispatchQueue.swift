@@ -17,17 +17,17 @@
 import Foundation
 
 public extension DispatchQueue {
-    /// Dispatches the given closure onto the given queue within a continuation,
-    /// making it awaitable.
+    /// Dispatches the given closure onto the given queue, wrapped within
+    /// a continuation to make it non-blocking and awaitable.
     ///
     /// - Parameters:
     ///   - queue: The queue to run the closure on.
     ///   - function: A string identifying the declaration that is the notional
     ///     source for the continuation, used to identify the continuation in
     ///     runtime diagnostics related to misuse of this continuation.
-    ///   - body: A closure that takes a `CheckedContinuation` parameter.
-    ///     You must resume the continuation exactly once.
-    static func awaitable<T>(on queue: DispatchQueue, function: String = #function, _ body: @escaping () -> T) async -> T {
+    ///   - body: A sendable closure. Use of sendable won't work as it isn't
+    ///     async, but is added to enforce actor semantics.
+    static func awaitable<T>(on queue: DispatchQueue, function: String = #function, _ body: @escaping @Sendable () -> T) async -> T {
         await withCheckedContinuation(function: function) { continuation in
             queue.async {
                 continuation.resume(returning: body())
@@ -35,20 +35,17 @@ public extension DispatchQueue {
         }
     }
 
-    /// Dispatches the given closure onto the given queue within a continuation,
-    /// making it awaitable.
+    /// Dispatches the given throwing closure onto the given queue, wrapped within
+    /// a continuation to make it non-blocking and awaitable.
     ///
     /// - Parameters:
     ///   - queue: The queue to run the closure on.
     ///   - function: A string identifying the declaration that is the notional
     ///     source for the continuation, used to identify the continuation in
     ///     runtime diagnostics related to misuse of this continuation.
-    ///   - body: A closure that takes an `UnsafeContinuation` parameter.
-    ///     You must resume the continuation exactly once.
-    ///
-    /// If `resume(throwing:)` is called on the continuation,
-    /// this function throws that error.
-    static func throwingAwaitable<T>(on queue: DispatchQueue, function: String = #function, _ body: @escaping () throws -> T) async throws -> T {
+    ///   - body: A sendable closure. Use of sendable won't work as it isn't
+    ///     async, but is added to enforce actor semantics.
+    static func throwingAwaitable<T>(on queue: DispatchQueue, function: String = #function, _ body: @escaping @Sendable () throws -> T) async throws -> T {
         try await withCheckedThrowingContinuation(function: function) { continuation in
             queue.async {
                 do {
