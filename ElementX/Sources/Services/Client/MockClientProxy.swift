@@ -26,10 +26,18 @@ struct MockClientProxy: ClientProxyProtocol {
     let homeserver = ""
     let restoreToken: String? = nil
     
-    let rooms = [RoomProxy]()
+    let roomSummaryProvider: RoomSummaryProviderProtocol = MockRoomSummaryProvider()
+    
+    func startSync() { }
+    
+    func stopSync() { }
+    
+    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
+        nil
+    }
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        .failure(.failedRetrievingDisplayName)
+        .success("User display name")
     }
     
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
@@ -48,7 +56,11 @@ struct MockClientProxy: ClientProxyProtocol {
         MatrixRustSDK.mediaSourceFromUrl(url: urlString)
     }
     
-    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) throws -> Data {
+    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
+        throw ClientProxyError.failedLoadingMedia
+    }
+    
+    func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
         throw ClientProxyError.failedLoadingMedia
     }
     

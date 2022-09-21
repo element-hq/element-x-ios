@@ -18,5 +18,5 @@ import Foundation
 import MatrixRustSDK
 
 protocol RoomMessageFactoryProtocol {
-    func buildRoomMessageFrom(_ message: AnyMessage) -> RoomMessageProtocol
+    func buildRoomMessageFrom(_ message: EventTimelineItem) -> RoomMessageProtocol
 }

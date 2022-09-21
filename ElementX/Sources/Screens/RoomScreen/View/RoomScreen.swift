@@ -33,7 +33,6 @@ struct RoomScreen: View {
                 context.send(viewAction: .cancelReply)
             }
             .padding()
-            .opacity(context.viewState.messageComposerDisabled ? 0.5 : 1.0)
         }
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {

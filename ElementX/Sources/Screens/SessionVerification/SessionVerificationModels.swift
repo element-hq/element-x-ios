@@ -27,12 +27,34 @@ enum SessionVerificationViewModelAction {
 struct SessionVerificationViewState: BindableState {
     var verificationState: SessionVerificationStateMachine.State = .initial
     
-    var shouldDisableDismissButton: Bool {
-        verificationState != .verified
+    var title: String? {
+        switch verificationState {
+        case .showingChallenge:
+            return ElementL10n.sessionVerificationScreenEmojisTitle
+        default:
+            return nil
+        }
     }
     
-    var shouldDisableCancelButton: Bool {
-        verificationState == .verified
+    var message: String {
+        switch verificationState {
+        case .initial:
+            return ElementL10n.verificationOpenOtherToVerify
+        case .requestingVerification:
+            return ElementL10n.verificationRequestWaiting
+        case .acceptingChallenge:
+            return ElementL10n.verificationRequestWaiting
+        case .decliningChallenge:
+            return ElementL10n.verificationRequestWaiting
+        case .cancelling:
+            return ElementL10n.verificationRequestWaiting
+        case .showingChallenge:
+            return ElementL10n.sessionVerificationScreenEmojisMessage
+        case .verified:
+            return ElementL10n.verificationConclusionOkSelfNotice
+        case .cancelled:
+            return ElementL10n.verificationCancelled
+        }
     }
 }
 
@@ -41,6 +63,5 @@ enum SessionVerificationViewAction {
     case restart
     case accept
     case decline
-    case dismiss
-    case cancel
+    case close
 }

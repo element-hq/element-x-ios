@@ -71,6 +71,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         let textView = UITextView()
         textView.delegate = context.coordinator
 
+        textView.textColor = .element.primaryContent
         textView.isEditable = true
         textView.font = UIFont.preferredFont(forTextStyle: .body)
         textView.isSelectable = true
@@ -92,9 +93,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         UITextViewWrapper.recalculateHeight(view: textView, result: $calculatedHeight, maxHeight: maxHeight)
         
-        if focused, textView.window != nil, !textView.isFirstResponder {
-            // Avoid cycle detected through attribute warnings
-            DispatchQueue.main.async {
+        DispatchQueue.main.async { // Avoid cycle detected through attribute warnings
+            if focused, textView.window != nil, !textView.isFirstResponder {
                 textView.becomeFirstResponder()
             }
         }

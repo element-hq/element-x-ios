@@ -19,9 +19,12 @@ import SwiftUI
 struct SettingsScreen: View {
     // MARK: Private
 
-    @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
     @ObservedObject private var settings = ElementSettings.shared
+
+    @ScaledMetric private var avatarSize = 60.0
+    @ScaledMetric private var menuIconSize = 30.0
+    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
     // MARK: Public
     
@@ -31,6 +34,12 @@ struct SettingsScreen: View {
     
     var body: some View {
         Form {
+            userSection
+                .listRowBackground(rowBackgroundColor)
+
+            appearanceSection
+                .listRowBackground(rowBackgroundColor)
+
             analyticsSection
                 .listRowBackground(rowBackgroundColor)
 
@@ -44,7 +53,13 @@ struct SettingsScreen: View {
             tableView.backgroundColor = .clear
         }
         .navigationTitle(ElementL10n.settings)
+        .navigationBarTitleDisplayMode(.inline)
         .background(backgroundColor, ignoresSafeAreaEdges: .all)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                closeButton
+            }
+        }
     }
 
     private var versionText: some View {
@@ -52,25 +67,85 @@ struct SettingsScreen: View {
     }
 
     private var backgroundColor: Color {
-        colorScheme == .light ? .element.system : .element.background
+        .element.systemGray6
     }
 
     private var rowBackgroundColor: Color {
         colorScheme == .light ? .element.background : .element.system
     }
+
+    private var userSection: some View {
+        Section {
+            HStack(spacing: 13) {
+                userAvatar
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(context.viewState.userDisplayName ?? "")
+                        .font(.title3)
+                    Text(context.viewState.userID)
+                        .font(.subheadline)
+                }
+            }
+            .listRowInsets(listRowInsets)
+        }
+    }
+
+    private var appearanceSection: some View {
+        Section {
+            Button(action: appearance) {
+                HStack {
+                    Image(systemName: "paintpalette")
+                        .foregroundColor(.element.systemGray)
+                        .padding(4)
+                        .background(Color.element.systemGray6)
+                        .clipShape(Circle())
+                        .frame(width: menuIconSize, height: menuIconSize)
+                    Text(ElementL10n.settingsAppearance)
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                        .foregroundColor(.element.tertiaryContent)
+                }
+            }
+            .listRowInsets(listRowInsets)
+            .foregroundColor(.element.primaryContent)
+            .accessibilityIdentifier("appearanceButton")
+        }
+    }
+
+    @ViewBuilder
+    private var userAvatar: some View {
+        if let avatar = context.viewState.userAvatar {
+            Image(uiImage: avatar)
+                .resizable()
+                .scaledToFill()
+                .frame(width: avatarSize, height: avatarSize)
+                .clipShape(Circle())
+        } else {
+            PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID, contentId: context.viewState.userID)
+                .clipShape(Circle())
+                .frame(width: avatarSize, height: avatarSize)
+        }
+    }
     
     private var analyticsSection: some View {
-        Section(ElementL10n.settingsAnalytics) {
+        Section {
             Button { context.send(viewAction: .reportBug) } label: {
-                Text(ElementL10n.sendBugReport)
+                HStack {
+                    Text(ElementL10n.sendBugReport)
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                        .foregroundColor(.element.tertiaryContent)
+                }
             }
+            .listRowInsets(listRowInsets)
+            .listRowSeparator(.hidden)
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier("reportBugButton")
 
             if BuildSettings.settingsCrashButtonVisible {
-                Button("Crash the app",
+                Button("Crash app",
                        role: .destructive) { context.send(viewAction: .crash)
                 }
+                .listRowInsets(listRowInsets)
                 .accessibilityIdentifier("crashButton")
             }
         }
@@ -79,13 +154,14 @@ struct SettingsScreen: View {
     @ViewBuilder
     private var userInterfaceSection: some View {
         if BuildSettings.settingsShowTimelineStyle {
-            Section(ElementL10n.settingsUserInterface) {
+            Section {
                 Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
                     ForEach(TimelineStyle.allCases, id: \.self) { style in
                         Text(style.description)
                             .tag(style)
                     }
                 }
+                .listRowInsets(listRowInsets)
                 .accessibilityIdentifier("timelineStylePicker")
             }
         }
@@ -93,22 +169,51 @@ struct SettingsScreen: View {
     
     private var logoutSection: some View {
         Section {
-            Button { showingLogoutConfirmation = true } label: {
-                Text(ElementL10n.actionSignOut)
-            }
-            .frame(maxWidth: .infinity)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("logoutButton")
-            .confirmationDialog(ElementL10n.actionSignOutConfirmationSimple,
-                                isPresented: $showingLogoutConfirmation,
-                                titleVisibility: .visible) {
-                Button(ElementL10n.actionSignOut,
-                       role: .destructive) { context.send(viewAction: .logout)
+            Button(action: logout) {
+                HStack {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                        .foregroundColor(.element.systemGray)
+                        .padding(4)
+                        .background(Color.element.systemGray6)
+                        .clipShape(Circle())
+                        .frame(width: menuIconSize, height: menuIconSize)
+                    Text(ElementL10n.actionSignOut)
+                    Spacer()
+                    Image(systemName: "chevron.forward")
+                        .foregroundColor(.element.tertiaryContent)
                 }
             }
+            .listRowInsets(listRowInsets)
+            .foregroundColor(.element.primaryContent)
+            .accessibilityIdentifier("logoutButton")
         } footer: {
             versionText
+                .frame(maxWidth: .infinity)
         }
+    }
+
+    private var closeButton: some View {
+        Button(action: close) {
+            HStack {
+                Image(systemName: "xmark")
+                    .font(.title3.bold())
+                    .foregroundColor(.element.secondaryContent)
+                    .padding(4)
+            }
+        }
+        .accessibilityIdentifier("closeButton")
+    }
+
+    private func appearance() {
+        #warning("Not implemented")
+    }
+
+    private func close() {
+        context.send(viewAction: .close)
+    }
+
+    private func logout() {
+        context.send(viewAction: .logout)
     }
 }
 
@@ -133,8 +238,13 @@ struct Settings_Previews: PreviewProvider {
 
     @ViewBuilder
     static var body: some View {
-        let viewModel = SettingsViewModel()
-        SettingsScreen(context: viewModel.context)
-            .previewInterfaceOrientation(.portrait)
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@userid:example.com"),
+                                          mediaProvider: MockMediaProvider())
+        let viewModel = SettingsViewModel(withUserSession: userSession)
+
+        return NavigationView {
+            SettingsScreen(context: viewModel.context)
+                .previewInterfaceOrientation(.portrait)
+        }
     }
 }

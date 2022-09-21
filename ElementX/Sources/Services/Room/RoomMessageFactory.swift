@@ -17,18 +17,15 @@
 import Foundation
 import MatrixRustSDK
 
+struct SomeRoomMessage: RoomMessageProtocol {
+    let id: String
+    let body: String
+    let sender: String
+    let originServerTs: Date
+}
+
 struct RoomMessageFactory: RoomMessageFactoryProtocol {
-    func buildRoomMessageFrom(_ message: AnyMessage) -> RoomMessageProtocol {
-        if let textMessage = message.textMessage() {
-            return TextRoomMessage(message: textMessage)
-        } else if let imageMessage = message.imageMessage() {
-            return ImageRoomMessage(message: imageMessage)
-        } else if let noticeMessage = message.noticeMessage() {
-            return NoticeRoomMessage(message: noticeMessage)
-        } else if let emoteMessage = message.emoteMessage() {
-            return EmoteRoomMessage(message: emoteMessage)
-        } else {
-            fatalError("One of these must exist")
-        }
+    func buildRoomMessageFrom(_ eventItem: EventTimelineItem) -> RoomMessageProtocol {
+        SomeRoomMessage(id: eventItem.id, body: eventItem.body ?? "", sender: eventItem.sender, originServerTs: eventItem.originServerTs)
     }
 }

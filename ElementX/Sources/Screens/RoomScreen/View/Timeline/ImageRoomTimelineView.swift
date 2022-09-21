@@ -21,39 +21,32 @@ struct ImageRoomTimelineView: View {
     let timelineItem: ImageRoomTimelineItem
     
     var body: some View {
-        if timelineItem.image != nil || timelineItem.blurhash != nil { // Fixes view heights after loading finishes
-            TimelineStyler(timelineItem: timelineItem) {
-                if let image = timelineItem.image {
-                    if let aspectRatio = timelineItem.aspectRatio {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(aspectRatio, contentMode: .fit)
-                    } else {
-                        Image(uiImage: image)
-                            .resizable()
-                            .scaledToFit()
-                    }
-                } else if let blurhash = timelineItem.blurhash,
-                          // Build a small blurhash image so that it's fast
-                          let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
-                }
-            }
-            .id(timelineItem.id)
-            .animation(.elementDefault, value: timelineItem.image)
-            .frame(maxHeight: 1000.0)
-        } else {
-            TimelineStyler(timelineItem: timelineItem) {
-                HStack {
-                    Spacer()
+        TimelineStyler(timelineItem: timelineItem) {
+            if let image = timelineItem.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+            } else if let blurhash = timelineItem.blurhash,
+                      // Build a small blurhash image so that it's fast
+                      let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+            } else {
+                ZStack {
+                    Rectangle()
+                        .foregroundColor(.element.systemGray6)
+                        .opacity(0.3)
+                    
                     ProgressView("Loading")
-                    Spacer()
+                        .frame(maxWidth: .infinity)
                 }
+                .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
             }
-            .id(timelineItem.id)
         }
+        .id(timelineItem.id)
+        .animation(.elementDefault, value: timelineItem.image)
+        .frame(maxHeight: 1000.0)
     }
 }
 
@@ -70,6 +63,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Some image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      inGroupState: .single,
                                                                       isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
@@ -79,6 +73,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Some other image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      inGroupState: .single,
                                                                       isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
@@ -88,6 +83,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       text: "Blurhashed image",
                                                                       timestamp: "Now",
                                                                       shouldShowSenderDetails: false,
+                                                                      inGroupState: .single,
                                                                       isOutgoing: false,
                                                                       senderId: "Bob",
                                                                       source: nil,

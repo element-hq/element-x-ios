@@ -34,12 +34,14 @@ public struct ElementActionButtonStyle: ButtonStyle {
     public var size: ElementControlSize
     public var color: Color
     
-    private var verticalPadding: CGFloat { size == .xLarge ? 12 : 4 }
+    private var cornerRadius: CGFloat { size == .xLarge ? 14 : 8 }
+    private var verticalPadding: CGFloat { size == .xLarge ? 14 : 4 }
     private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
     
     private var fontColor: Color {
         // Always white unless disabled with a dark theme.
-        .white.opacity(colorScheme == .dark && !isEnabled ? 0.3 : 1.0)
+        Color.element.systemPrimaryBackground
+            .opacity(colorScheme == .dark && !isEnabled ? 0.3 : 1.0)
     }
     
     public init(size: ElementControlSize = .regular, color: Color = .element.accent) {
@@ -53,9 +55,9 @@ public struct ElementActionButtonStyle: ButtonStyle {
             .padding(.vertical, verticalPadding)
             .frame(maxWidth: maxWidth)
             .foregroundColor(fontColor)
-            .font(.element.body)
+            .font(.element.bodyBold)
             .background(color.opacity(backgroundOpacity(when: configuration.isPressed)))
-            .cornerRadius(8.0)
+            .cornerRadius(cornerRadius)
     }
     
     private func backgroundOpacity(when isPressed: Bool) -> CGFloat {

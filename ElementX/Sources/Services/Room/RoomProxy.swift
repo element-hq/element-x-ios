@@ -20,55 +20,43 @@ import UIKit
 
 import MatrixRustSDK
 
-private class WeakRoomProxyWrapper: RoomDelegate {
-    private weak var roomProxy: RoomProxy?
-    
-    init(roomProxy: RoomProxy) {
-        self.roomProxy = roomProxy
-    }
-    
-    // MARK: - RoomDelegate
-    
-    func didReceiveMessage(message: AnyMessage) {
-        roomProxy?.appendMessage(message)
-    }
-}
-
 class RoomProxy: RoomProxyProtocol {
-    private let room: Room
-    private let roomMessageFactory: RoomMessageFactoryProtocol
+    private let slidingSyncRoom: SlidingSyncRoomProtocol
+    private let room: RoomProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private var backwardStream: BackwardsStreamProtocol?
+    private let concurrentDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy", attributes: .concurrent)
+    
     private var sendMessageBgTask: BackgroundTaskProtocol?
+    
+    private var memberAvatars = [String: String]()
+    private var memberDisplayNames = [String: String]()
     
     private(set) var displayName: String?
     
-    let callbacks = PassthroughSubject<RoomProxyCallback, Never>()
-    
-    private(set) var messages: [RoomMessageProtocol]
-    
-    init(room: Room,
-         roomMessageFactory: RoomMessageFactoryProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol) {
-        self.room = room
-        self.roomMessageFactory = roomMessageFactory
-        self.backgroundTaskService = backgroundTaskService
-        messages = []
-        
-        room.setDelegate(delegate: WeakRoomProxyWrapper(roomProxy: self))
-        
-        backwardStream = room.startLiveEventListener()
-    }
+    private var backPaginationOutcome: PaginationOutcome?
+    private(set) lazy var timelineProvider: RoomTimelineProviderProtocol = {
+        let provider = RoomTimelineProvider(roomProxy: self)
+        addTimelineListener(listener: WeakRoomTimelineProviderWrapper(timelineProvider: provider))
+        return provider
+    }()
     
     deinit {
-        room.setDelegate(delegate: nil)
+        #warning("Should any timeline listeners be removed??")
     }
     
+    init(slidingSyncRoom: SlidingSyncRoomProtocol,
+         room: RoomProtocol,
+         backgroundTaskService: BackgroundTaskServiceProtocol) {
+        self.slidingSyncRoom = slidingSyncRoom
+        self.room = room
+        self.backgroundTaskService = backgroundTaskService
+    }
+
     lazy var id: String = room.id()
     
     var name: String? {
-        room.name()
+        slidingSyncRoom.name()
     }
         
     var topic: String? {
@@ -112,10 +100,15 @@ class RoomProxy: RoomProxyProtocol {
         return Asset.Images.encryptionTrusted.image
     }
     
+    func avatarURLStringForUserId(_ userId: String) -> String? {
+        memberAvatars[userId]
+    }
+    
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         await Task.detached { () -> Result<String?, RoomProxyError> in
             do {
                 let avatarURL = try self.room.memberAvatarUrl(userId: userId)
+                await self.update(avatarURL: avatarURL, forUserId: userId)
                 return .success(avatarURL)
             } catch {
                 return .failure(.failedRetrievingMemberAvatarURL)
@@ -124,10 +117,15 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
     
+    func displayNameForUserId(_ userId: String) -> String? {
+        memberDisplayNames[userId]
+    }
+    
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         await Task.detached { () -> Result<String?, RoomProxyError> in
             do {
                 let displayName = try self.room.memberDisplayName(userId: userId)
+                await self.update(displayName: displayName, forUserId: userId)
                 return .success(displayName)
             } catch {
                 return .failure(.failedRetrievingMemberDisplayName)
@@ -138,14 +136,13 @@ class RoomProxy: RoomProxyProtocol {
         
     func loadDisplayName() async -> Result<String, RoomProxyError> {
         await Task.detached { () -> Result<String, RoomProxyError> in
-            if let displayName = self.displayName {
+            if let displayName = await self.displayName {
                 return .success(displayName)
             }
             
             do {
                 let displayName = try self.room.displayName()
-                self.displayName = displayName
-                
+                await self.update(displayName: displayName)
                 return .success(displayName)
             } catch {
                 return .failure(.failedRetrievingDisplayName)
@@ -154,23 +151,27 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
     
+    private func addTimelineListener(listener: TimelineListener) {
+        room.addTimelineListener(listener: listener)
+    }
+    
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
-        await Task.detached { () -> Result<Void, RoomProxyError> in
-            guard let backwardStream = self.backwardStream else {
-                return .failure(RoomProxyError.backwardStreamNotAvailable)
+        guard backPaginationOutcome?.moreMessages != false else {
+            return .failure(.noMoreMessagesToBackPaginate)
+        }
+        
+        MXLog.debug("BackPagination")
+        return await Task.detached {
+            do {
+                let id = await self.id
+                
+                Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
+                await self.update(backPaginationOutcome: try self.room.paginateBackwards(limit: UInt16(count)))
+                Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
+                return .success(())
+            } catch {
+                return .failure(.failedPaginatingBackwards)
             }
-
-            Benchmark.startTrackingForIdentifier("BackPagination \(self.id)", message: "Backpaginating \(count) message(s) in room \(self.id)")
-            let sdkMessages = backwardStream.paginateBackwards(count: UInt64(count))
-            Benchmark.endTrackingForIdentifier("BackPagination \(self.id)", message: "Finished backpaginating \(count) message(s) in room \(self.id)")
-
-            let messages = sdkMessages.map { message in
-                self.roomMessageFactory.buildRoomMessageFrom(message)
-            }.reversed()
-
-            self.messages.insert(contentsOf: messages, at: 0)
-            
-            return .success(())
         }
         .value
     }
@@ -180,48 +181,52 @@ class RoomProxy: RoomProxyProtocol {
         defer {
             sendMessageBgTask?.stop()
         }
-
+        
         let transactionId = genTransactionId()
         
-        return await Task(priority: .high) { () -> Result<Void, RoomProxyError> in
+        return await Task.dispatched(on: concurrentDispatchQueue, operation: {
             do {
-                // Disabled until available in Rust
-                //                if let inReplyToEventId = inReplyToEventId {
-                //                    #warning("Markdown support when available in Ruma")
-                //                    try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
-                //                } else {
-                let messageContent = messageEventContentFromMarkdown(md: message)
-                try self.room.send(msg: messageContent, txnId: transactionId)
-                //                }
+                if let inReplyToEventId = inReplyToEventId {
+                    try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
+                } else {
+                    let messageContent = messageEventContentFromMarkdown(md: message)
+                    try self.room.send(msg: messageContent, txnId: transactionId)
+                }
                 return .success(())
             } catch {
                 return .failure(.failedSendingMessage)
+            }
+        })
+        .value
+    }
+    
+    func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
+        let transactionID = genTransactionId()
+        
+        return await Task {
+            do {
+                try room.redact(eventId: eventID, reason: nil, txnId: transactionID)
+                return .success(())
+            } catch {
+                return .failure(.failedRedactingEvent)
             }
         }
         .value
     }
     
-    func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
-        #warning("Redactions to be enabled on next SDK release.")
-        return .failure(.failedRedactingEvent)
-//        let transactionID = genTransactionId()
-//
-//        return await Task {
-//            do {
-//                try room.redact(eventId: eventID, reason: nil, txnId: transactionID)
-//                return .success(())
-//            } catch {
-//                return .failure(.failedRedactingEvent)
-//            }
-//        }
-//        .value
+    func update(avatarURL: String?, forUserId userId: String) {
+        memberAvatars[userId] = avatarURL
     }
     
-    // MARK: - Private
+    func update(displayName: String?, forUserId userId: String) {
+        memberDisplayNames[userId] = displayName
+    }
     
-    fileprivate func appendMessage(_ message: AnyMessage) {
-        let message = roomMessageFactory.buildRoomMessageFrom(message)
-        messages.append(message)
-        callbacks.send(.updatedMessages)
+    func update(displayName: String) {
+        self.displayName = displayName
+    }
+    
+    func update(backPaginationOutcome: PaginationOutcome) {
+        self.backPaginationOutcome = backPaginationOutcome
     }
 }

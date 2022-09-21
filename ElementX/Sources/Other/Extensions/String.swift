@@ -39,4 +39,16 @@ extension String {
         let detector = try? NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
         return detector?.numberOfMatches(in: self, range: range) ?? 0 == 1
     }
+
+    /// Calculates a numeric hash same as Element Web
+    /// See original function here https://github.com/matrix-org/matrix-react-sdk/blob/321dd49db4fbe360fc2ff109ac117305c955b061/src/utils/FormattingUtils.js#L47
+    var hashCode: Int32 {
+        var hash: Int32 = 0
+
+        for character in self {
+            let shiftedHash = hash << 5
+            hash = shiftedHash.subtractingReportingOverflow(hash).partialValue + Int32(character.unicodeScalars[character.unicodeScalars.startIndex].value)
+        }
+        return abs(hash)
+    }
 }

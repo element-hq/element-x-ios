@@ -50,3 +50,22 @@ extension View {
         environment(\.timelineStyle, style)
     }
 }
+
+// MARK: - Timeline Width
+
+private struct TimelineWidthKey: EnvironmentKey {
+    static let defaultValue: CGFloat = 0
+}
+
+extension EnvironmentValues {
+    var timelineWidth: CGFloat {
+        get { self[TimelineWidthKey.self] }
+        set { self[TimelineWidthKey.self] = newValue }
+    }
+}
+
+extension View {
+    func timelineWidth(_ width: CGFloat) -> some View {
+        environment(\.timelineWidth, width)
+    }
+}

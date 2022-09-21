@@ -74,9 +74,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             stateMachine.processEvent(.requestVerification)
         case .restart:
             stateMachine.processEvent(.restart)
-        case .dismiss:
-            callback?(.finished)
-        case .cancel:
+        case .close:
             guard stateMachine.state == .initial ||
                 stateMachine.state == .verified ||
                 stateMachine.state == .cancelled else {
@@ -115,7 +113,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
         }
         
         stateMachine.addErrorHandler { context in
-            fatalError("Failed transition with context: \(context)")
+            MXLog.error("Failed transition with context: \(context)")
         }
     }
     

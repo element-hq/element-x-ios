@@ -2,10 +2,12 @@
 "untranslated" = "Untranslated";
 
 "action_confirm" = "Confirm";
+"action_match" = "Match";
 
 "screenshot_detected_title" = "You took a screenshot";
 "screenshot_detected_message" = "Would you like to submit a bug report?";
 
+"settings_appearance" = "Appearance";
 "settings_timeline_style" = "Timeline Style";
 "room_timeline_style_plain_long_description" = "Plain Timeline";
 "room_timeline_style_bubbled_long_description" = "Bubbled Timeline";
@@ -13,6 +15,13 @@
 "room_timeline_permalink_creation_failure" = "Failed creating the permalink";
 
 "room_timeline_replying_to" = "Replying to %@";
+
+"session_verification_banner_title" = "Help keep your messages secure";
+"session_verification_banner_message" = "Looks like you’re using a new device. Verify its you.";
+"session_verification_screen_emojis_title" = "Lets check if these";
+"session_verification_screen_emojis_message" = "Open Element on one of your other sessions to compare.";
+
+"home_screen_all_chats" = "All Chats";
 
 // MARK: - Authentication
 

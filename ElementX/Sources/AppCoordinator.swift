@@ -52,8 +52,6 @@ class AppCoordinator: Coordinator {
         }
     }
     
-    private let memberDetailProviderManager: MemberDetailProviderManager
-
     private let bugReportService: BugReportServiceProtocol
     private let screenshotDetector: ScreenshotDetector
     private let backgroundTaskService: BackgroundTaskServiceProtocol
@@ -71,14 +69,15 @@ class AppCoordinator: Coordinator {
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
         splashViewController = SplashViewController()
+        
         mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
+        mainNavigationController.navigationBar.prefersLargeTitles = true
+        
         window = UIWindow(frame: UIScreen.main.bounds)
         window.rootViewController = mainNavigationController
         window.tintColor = .element.accent
         
         navigationRouter = NavigationRouter(navigationController: mainNavigationController)
-        
-        memberDetailProviderManager = MemberDetailProviderManager()
         
         ServiceLocator.serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
         
@@ -115,7 +114,7 @@ class AppCoordinator: Coordinator {
         // This exposes the full Rust side tracing subscriber filter for more flexibility.
         // We can filter by level, crate and even file. See more details here:
         // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
-        setupTracing(configuration: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        setupTracing(configuration: "warn,hyper=warn,sled=warn,matrix_sdk_sled=warn")
         
         loggerConfiguration.logLevel = .debug
         #else
@@ -131,7 +130,7 @@ class AppCoordinator: Coordinator {
         MXLog.configure(loggerConfiguration)
     }
     
-    // swiftlint:disable cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self = self else { return }
@@ -171,12 +170,7 @@ class AppCoordinator: Coordinator {
             case (.remoteSigningOut(let isSoft), .completedSigningOut, .signedOut):
                 self.presentSplashScreen(isSoftLogout: isSoft)
                 self.hideLoadingIndicator()
-            
-            case (.homeScreen, .showSettingsScreen, .settingsScreen):
-                self.presentSettingsScreen()
-            case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
-                self.tearDownDismissedSettingsScreen()
-                
+
             case (.homeScreen, .showSessionVerificationScreen, .sessionVerificationScreen):
                 self.presentSessionVerification()
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .homeScreen):
@@ -191,8 +185,6 @@ class AppCoordinator: Coordinator {
             fatalError("Failed transition with context: \(context)")
         }
     }
-
-    // swiftlint:enable cyclomatic_complexity function_body_length
     
     private func restoreUserSession() {
         Task {
@@ -265,21 +257,23 @@ class AppCoordinator: Coordinator {
     }
     
     private func tearDownUserSession(isSoftLogout: Bool = false) {
-        Task {
-            deobserveUserSessionChanges()
-
-            if !isSoftLogout {
+        userSession.clientProxy.stopSync()
+        
+        deobserveUserSessionChanges()
+        
+        if !isSoftLogout {
+            Task {
                 //  first log out from the server
                 _ = await userSession.clientProxy.logout()
-
+                
                 //  regardless of the result, clear user data
                 userSessionStore.logout(userSession: userSession)
                 userSession = nil
             }
-
-            //  complete logging out
-            stateMachine.processEvent(.completedSigningOut)
         }
+        
+        //  complete logging out
+        stateMachine.processEvent(.completedSigningOut)
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
@@ -297,9 +291,10 @@ class AppCoordinator: Coordinator {
     }
     
     private func presentHomeScreen() {
+        userSession.clientProxy.startSync()
+        
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         attributedStringBuilder: AttributedStringBuilder(),
-                                                         memberDetailProviderManager: memberDetailProviderManager)
+                                                         attributedStringBuilder: AttributedStringBuilder())
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
@@ -309,7 +304,7 @@ class AppCoordinator: Coordinator {
             case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
             case .presentSettings:
-                self.stateMachine.processEvent(.showSettingsScreen)
+                self.presentSettingsScreen()
             case .presentBugReport:
                 self.presentBugReportScreen()
             case .verifySession:
@@ -353,31 +348,29 @@ class AppCoordinator: Coordinator {
     // MARK: Rooms
 
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let roomProxy = userSession.clientProxy.rooms.first(where: { $0.id == roomIdentifier }) else {
+        guard let roomProxy = userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
             MXLog.error("Invalid room identifier: \(roomIdentifier)")
             return
         }
         let userId = userSession.clientProxy.userIdentifier
         
-        let memberDetailProvider = memberDetailProviderManager.memberDetailProviderForRoomProxy(roomProxy)
-        
-        let timelineItemFactory = RoomTimelineItemFactory(mediaProvider: userSession.mediaProvider,
-                                                          memberDetailProvider: memberDetailProvider,
+        let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
+                                                          mediaProvider: userSession.mediaProvider,
+                                                          roomProxy: roomProxy,
                                                           attributedStringBuilder: AttributedStringBuilder())
-        
+
         let timelineController = RoomTimelineController(userId: userId,
                                                         roomId: roomIdentifier,
-                                                        timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
+                                                        timelineProvider: roomProxy.timelineProvider,
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
-                                                        memberDetailProvider: memberDetailProvider)
-        
+                                                        roomProxy: roomProxy)
+
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
                                                          roomName: roomProxy.displayName ?? roomProxy.name,
-                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL),
-                                                         roomEncryptionBadge: roomProxy.encryptionBadgeImage)
+                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL, size: MediaProviderDefaultAvatarSize))
         let coordinator = RoomScreenCoordinator(parameters: parameters)
-        
+
         add(childCoordinator: coordinator)
         navigationRouter.push(coordinator) { [weak self] in
             guard let self = self else { return }
@@ -396,32 +389,39 @@ class AppCoordinator: Coordinator {
     // MARK: Settings
     
     private func presentSettingsScreen() {
-        let parameters = SettingsCoordinatorParameters(navigationRouter: navigationRouter,
+        let navController = ElementNavigationController()
+        let newNavigationRouter = NavigationRouter(navigationController: navController)
+
+        let parameters = SettingsCoordinatorParameters(navigationRouter: newNavigationRouter,
                                                        userSession: userSession,
                                                        bugReportService: bugReportService)
         let coordinator = SettingsCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] action in
             guard let self = self else { return }
             switch action {
+            case .dismiss:
+                self.dismissSettingsScreen()
             case .logout:
+                self.dismissSettingsScreen()
                 self.stateMachine.processEvent(.signOut)
             }
         }
 
         add(childCoordinator: coordinator)
         coordinator.start()
-        navigationRouter.push(coordinator) { [weak self] in
-            guard let self = self else { return }
-
-            self.stateMachine.processEvent(.dismissedSettingsScreen)
-        }
+        navController.viewControllers = [coordinator.toPresentable()]
+        navigationRouter.present(navController, animated: true)
     }
-        
-    private func tearDownDismissedSettingsScreen() {
-        guard let coordinator = childCoordinators.last as? SettingsCoordinator else {
-            fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
+
+    @objc
+    private func dismissSettingsScreen() {
+        MXLog.debug("dismissSettingsScreen")
+
+        guard let coordinator = childCoordinators.first(where: { $0 is SettingsCoordinator }) else {
+            return
         }
 
+        navigationRouter.dismissModule()
         remove(childCoordinator: coordinator)
     }
     

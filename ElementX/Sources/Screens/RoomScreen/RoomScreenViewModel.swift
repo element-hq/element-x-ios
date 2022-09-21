@@ -20,7 +20,7 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
-        static let backPaginationPageSize: UInt = 30
+        static let backPaginationPageSize: UInt = 50
     }
 
     private let timelineController: RoomTimelineControllerProtocol
@@ -36,7 +36,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         
-        super.init(initialViewState: RoomScreenViewState(roomTitle: roomName ?? "Unknown room 💥",
+        super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomId,
+                                                         roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatar: roomAvatar,
                                                          roomEncryptionBadge: roomEncryptionBadge,
                                                          bindings: .init(composerText: "", composerFocused: false)))
@@ -106,19 +107,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             fatalError("This message should never be empty")
         }
         
-        state.messageComposerDisabled = true
-        
-        switch state.composerMode {
-        case .reply(let itemId, _):
-            await timelineController.sendReply(state.bindings.composerText, to: itemId)
-        default:
-            await timelineController.sendMessage(state.bindings.composerText)
-        }
+        let message = state.bindings.composerText
         
         state.bindings.composerText = ""
         state.composerMode = .default
         
-        state.messageComposerDisabled = false
+        switch state.composerMode {
+        case .reply(let itemId, _):
+            await timelineController.sendReply(message, to: itemId)
+        default:
+            await timelineController.sendMessage(message)
+        }
     }
     
     private func displayError(_ type: RoomScreenErrorType) {
@@ -144,14 +143,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return []
         }
         
-        let actions: [TimelineItemContextMenuAction] = [
+        var actions: [TimelineItemContextMenuAction] = [
             .copy, .quote, .copyPermalink, .reply
         ]
         
-        #warning("Outgoing actions to be handled with the new Timeline API.")
-//        if timelineItem.isOutgoing {
-//            actions.append(.redact)
-//        }
+        if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isOutgoing {
+            actions.append(.redact)
+        }
         
         return actions
     }

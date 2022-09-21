@@ -43,6 +43,7 @@ enum RoomScreenViewAction {
 }
 
 struct RoomScreenViewState: BindableState {
+    var roomId: String
     var roomTitle = ""
     var roomAvatar: UIImage?
     var roomEncryptionBadge: UIImage?
@@ -54,7 +55,6 @@ struct RoomScreenViewState: BindableState {
     
     var composerMode: RoomScreenComposerMode = .default
     
-    var messageComposerDisabled = false // Remove this when we have local echoes
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
     }

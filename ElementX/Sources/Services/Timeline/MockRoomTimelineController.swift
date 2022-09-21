@@ -22,39 +22,74 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
-    var timelineItems: [RoomTimelineItemProtocol] = [SeparatorRoomTimelineItem(id: UUID().uuidString,
-                                                                               text: "Yesterday"),
-                                                     TextRoomTimelineItem(id: UUID().uuidString,
-                                                                          text: "You rock!",
-                                                                          timestamp: "10:10 AM",
-                                                                          shouldShowSenderDetails: true,
-                                                                          isOutgoing: false,
-                                                                          senderId: "",
-                                                                          senderDisplayName: "Some user with a really long long long long long display name",
-                                                                          properties: RoomTimelineItemProperties(isEdited: true)),
-                                                     TextRoomTimelineItem(id: UUID().uuidString,
-                                                                          text: "You also rule!",
-                                                                          timestamp: "10:11 AM",
-                                                                          shouldShowSenderDetails: false,
-                                                                          isOutgoing: false,
-                                                                          senderId: "",
-                                                                          senderDisplayName: "Alice",
-                                                                          properties: RoomTimelineItemProperties(reactions: [
-                                                                              AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
-                                                                          ])),
-                                                     SeparatorRoomTimelineItem(id: UUID().uuidString,
-                                                                               text: "Today"),
-                                                     TextRoomTimelineItem(id: UUID().uuidString,
-                                                                          text: "You too!",
-                                                                          timestamp: "5 PM",
-                                                                          shouldShowSenderDetails: false,
-                                                                          isOutgoing: true,
-                                                                          senderId: "",
-                                                                          senderDisplayName: "Bob",
-                                                                          properties: RoomTimelineItemProperties(reactions: [
-                                                                              AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
-                                                                              AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
-                                                                          ]))]
+    var timelineItems: [RoomTimelineItemProtocol] = [
+        SeparatorRoomTimelineItem(id: UUID().uuidString,
+                                  text: "Yesterday"),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "That looks so good!",
+                             timestamp: "10:10 AM",
+                             shouldShowSenderDetails: true,
+                             inGroupState: .single,
+                             isOutgoing: false,
+                             senderId: "",
+                             senderDisplayName: "Jacob",
+                             properties: RoomTimelineItemProperties(isEdited: true)),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗",
+                             timestamp: "10:11 AM",
+                             shouldShowSenderDetails: true,
+                             inGroupState: .beginning,
+                             isOutgoing: false,
+                             senderId: "",
+                             senderDisplayName: "Helena",
+                             properties: RoomTimelineItemProperties(reactions: [
+                                 AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
+                             ])),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/",
+                             timestamp: "10:11 AM",
+                             shouldShowSenderDetails: false,
+                             inGroupState: .middle,
+                             isOutgoing: false,
+                             senderId: "",
+                             senderDisplayName: "Helena",
+                             properties: RoomTimelineItemProperties(reactions: [
+                                 AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
+                                 AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
+                             ])),
+        SeparatorRoomTimelineItem(id: UUID().uuidString,
+                                  text: "Today"),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!",
+                             timestamp: "5 PM",
+                             shouldShowSenderDetails: false,
+                             inGroupState: .end,
+                             isOutgoing: false,
+                             senderId: "",
+                             senderDisplayName: "Helena",
+                             properties: RoomTimelineItemProperties()),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "And John's speech was amazing!",
+                             timestamp: "5 PM",
+                             shouldShowSenderDetails: false,
+                             inGroupState: .single,
+                             isOutgoing: true,
+                             senderId: "",
+                             senderDisplayName: "Bob",
+                             properties: RoomTimelineItemProperties()),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "New home office set up!",
+                             timestamp: "5 PM",
+                             shouldShowSenderDetails: false,
+                             inGroupState: .single,
+                             isOutgoing: true,
+                             senderId: "",
+                             senderDisplayName: "Bob",
+                             properties: RoomTimelineItemProperties(reactions: [
+                                 AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
+                                 AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
+                             ]))
+    ]
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
         .failure(.generic)

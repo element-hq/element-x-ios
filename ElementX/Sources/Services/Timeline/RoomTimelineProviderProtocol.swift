@@ -22,16 +22,17 @@ enum RoomTimelineProviderCallback {
 }
 
 enum RoomTimelineProviderError: Error {
+    case noMoreMessagesToBackPaginate
+    case failedPaginatingBackwards
     case failedSendingMessage
     case failedRedactingItem
     case generic
 }
 
-@MainActor
 protocol RoomTimelineProviderProtocol {
     var callbacks: PassthroughSubject<RoomTimelineProviderCallback, Never> { get }
     
-    var messages: [RoomMessageProtocol] { get }
+    var items: [RoomTimelineProviderItem] { get }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError>
     

@@ -76,7 +76,7 @@ class UserSession: UserSessionProtocol {
                 }.store(in: &cancellables)
                 
             case .failure(let error):
-                MXLog.error("Failed getting session verification controller with error: \(error). Will retry on the next sync update.")
+                MXLog.info("Failed getting session verification controller with error: \(error). Will retry on the next sync update.")
             }
         }
     }

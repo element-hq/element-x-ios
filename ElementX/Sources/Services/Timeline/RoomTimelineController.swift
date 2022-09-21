@@ -23,7 +23,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let memberDetailProvider: MemberDetailProviderProtocol
+    private let roomProxy: RoomProxyProtocol
     
     private var cancellables = Set<AnyCancellable>()
     private var timelineItemsUpdateTask: Task<Void, Never>? {
@@ -42,13 +42,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
          timelineProvider: RoomTimelineProviderProtocol,
          timelineItemFactory: RoomTimelineItemFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
-         memberDetailProvider: MemberDetailProviderProtocol) {
+         roomProxy: RoomProxyProtocol) {
         self.userId = userId
         self.roomId = roomId
         self.timelineProvider = timelineProvider
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
-        self.memberDetailProvider = memberDetailProvider
+        self.roomProxy = roomProxy
         
         self.timelineProvider
             .callbacks
@@ -133,29 +133,34 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
-        
-        var previousMessage: RoomMessageProtocol?
-        for message in timelineProvider.messages {
+
+        for (index, item) in timelineProvider.items.enumerated() {
             if Task.isCancelled {
                 return
             }
+
+            let previousItem = timelineProvider.items[safe: index - 1]
+            let nextItem = timelineProvider.items[safe: index + 1]
+
+            let inGroupState = inGroupState(for: item, previousItem: previousItem, nextItem: nextItem)
             
-            let areMessagesFromTheSameDay = haveSameDay(lhs: previousMessage, rhs: message)
-            let shouldAddSectionHeader = !areMessagesFromTheSameDay
-            
-            if shouldAddSectionHeader {
-                newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
-                                                                  text: message.originServerTs.formatted(date: .complete, time: .omitted)))
+            switch item {
+            case .event(let eventItem):
+                guard eventItem.isMessage else { break } // To be handled in the future
+
+                newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItem: eventItem,
+                                                                                       showSenderDetails: inGroupState.shouldShowSenderDetails,
+                                                                                       inGroupState: inGroupState))
+            case .virtual:
+//            case .virtual(let virtualItem):
+//                newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
+//                                                                  text: message.originServerTs.formatted(date: .complete, time: .omitted)))
+                #warning("Fix the UUID or \"bad things will happen\"")
+                newTimelineItems.append(SeparatorRoomTimelineItem(id: UUID().uuidString,
+                                                                  text: "The day before"))
+            case .other:
+                break
             }
-            
-            let areMessagesFromTheSameSender = (previousMessage?.sender == message.sender)
-            let shouldShowSenderDetails = !areMessagesFromTheSameSender || !areMessagesFromTheSameDay
-            
-            newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(message: message,
-                                                                                   isOutgoing: message.sender == userId,
-                                                                                   showSenderDetails: shouldShowSenderDetails))
-            
-            previousMessage = message
         }
         
         if Task.isCancelled {
@@ -166,13 +171,50 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         callbacks.send(.updatedTimelineItems)
     }
-    
-    private func haveSameDay(lhs: RoomMessageProtocol?, rhs: RoomMessageProtocol?) -> Bool {
-        guard let lhs = lhs, let rhs = rhs else {
-            return false
+
+    private func inGroupState(for item: RoomTimelineProviderItem,
+                              previousItem: RoomTimelineProviderItem?,
+                              nextItem: RoomTimelineProviderItem?) -> TimelineItemInGroupState {
+        guard let previousItem = previousItem else {
+            //  no previous item, check next item
+            guard let nextItem = nextItem else {
+                //  no next item neither, this is single
+                return .single
+            }
+            guard nextItem.canBeGrouped(with: item) else {
+                //  there is a next item but can't be grouped, this is single
+                return .single
+            }
+            //  next will be grouped with this one, this is the start
+            return .beginning
         }
-        
-        return Calendar.current.isDate(lhs.originServerTs, inSameDayAs: rhs.originServerTs)
+
+        guard let nextItem = nextItem else {
+            //  no next item
+            guard item.canBeGrouped(with: previousItem) else {
+                //  there is a previous item but can't be grouped, this is single
+                return .single
+            }
+            //  will be grouped with previous, this is the end
+            return .end
+        }
+
+        guard item.canBeGrouped(with: previousItem) else {
+            guard nextItem.canBeGrouped(with: item) else {
+                //  there is a next item but can't be grouped, this is single
+                return .single
+            }
+            //  next will be grouped with this one, this is the start
+            return .beginning
+        }
+
+        guard nextItem.canBeGrouped(with: item) else {
+            //  there is a next item but can't be grouped, this is the end
+            return .end
+        }
+
+        //  next will be grouped with this one, this is the start
+        return .middle
     }
     
     private func loadImageForTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
@@ -204,13 +246,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        switch await memberDetailProvider.loadAvatarURLStringForUserId(timelineItem.senderId) {
+        switch await roomProxy.loadAvatarURLForUserId(timelineItem.senderId) {
         case .success(let avatarURLString):
             guard let avatarURLString = avatarURLString else {
                 return
             }
             
-            switch await mediaProvider.loadImageFromURLString(avatarURLString) {
+            switch await mediaProvider.loadImageFromURLString(avatarURLString, size: MediaProviderDefaultAvatarSize) {
             case .success(let avatar):
                 guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                       var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
@@ -234,7 +276,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        switch await memberDetailProvider.loadDisplayNameForUserId(timelineItem.senderId) {
+        switch await roomProxy.loadDisplayNameForUserId(timelineItem.senderId) {
         case .success(let displayName):
             guard let displayName = displayName,
                   let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),

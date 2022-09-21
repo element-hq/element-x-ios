@@ -15,7 +15,20 @@
 //
 
 import Combine
-import Foundation
+import MatrixRustSDK
+
+#warning("Rename to RoomTimelineListener???")
+class WeakRoomTimelineProviderWrapper: TimelineListener {
+    private weak var timelineProvider: RoomTimelineProvider?
+    
+    init(timelineProvider: RoomTimelineProvider) {
+        self.timelineProvider = timelineProvider
+    }
+    
+    func onUpdate(update: TimelineDiff) {
+        timelineProvider?.onUpdate(update: update)
+    }
+}
 
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
@@ -23,31 +36,20 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     let callbacks = PassthroughSubject<RoomTimelineProviderCallback, Never>()
     
+    private(set) var items: [RoomTimelineProviderItem]
+    
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
-        
-        self.roomProxy.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                guard let self = self else { return }
-            
-                switch callback {
-                case .updatedMessages:
-                    self.callbacks.send(.updatedMessages)
-                }
-            }.store(in: &cancellables)
-    }
-    
-    var messages: [RoomMessageProtocol] {
-        roomProxy.messages
+        items = []
     }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
         switch await roomProxy.paginateBackwards(count: count) {
         case .success:
             return .success(())
-        case .failure:
-            return .failure(.generic)
+        case .failure(let error):
+            if error == .noMoreMessagesToBackPaginate { return .failure(.noMoreMessagesToBackPaginate) }
+            return .failure(.failedPaginatingBackwards)
         }
     }
     
@@ -67,5 +69,75 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .failure:
             return .failure(.failedRedactingItem)
         }
+    }
+}
+
+// MARK: - TimelineListener
+
+private extension RoomTimelineProvider {
+    func onUpdate(update: TimelineDiff) {
+        let change = update.change()
+        MXLog.verbose("Change: \(change)")
+        
+        switch change {
+        case .replace:
+            replaceItems(update.replace())
+        case .insertAt:
+            insertItem(update.insertAt())
+        case .updateAt:
+            updateItem(update.updateAt())
+        case .removeAt:
+            removeItem(at: update.removeAt())
+        case .move:
+            moveItem(update.move())
+        case .push:
+            pushItem(update.push())
+        case .pop:
+            popItem()
+        case .clear:
+            clearAllItems()
+        }
+        
+        callbacks.send(.updatedMessages)
+    }
+    
+    private func replaceItems(_ items: [MatrixRustSDK.TimelineItem]?) {
+        guard let items = items else { return }
+        self.items = items.map(RoomTimelineProviderItem.init)
+    }
+    
+    private func insertItem(_ data: InsertAtData?) {
+        guard let data = data else { return }
+        let item = RoomTimelineProviderItem(item: data.item)
+        items.insert(item, at: Int(data.index))
+    }
+    
+    private func updateItem(_ data: UpdateAtData?) {
+        guard let data = data else { return }
+        let item = RoomTimelineProviderItem(item: data.item)
+        items[Int(data.index)] = item
+    }
+    
+    private func removeItem(at index: UInt32?) {
+        guard let index = index else { return }
+        items.remove(at: Int(index))
+    }
+    
+    private func moveItem(_ data: MoveData?) {
+        guard let data = data else { return }
+        items.move(fromOffsets: IndexSet(integer: Int(data.oldIndex)), toOffset: Int(data.newIndex))
+    }
+    
+    private func pushItem(_ item: MatrixRustSDK.TimelineItem?) {
+        guard let item = item else { return }
+        items.append(RoomTimelineProviderItem(item: item))
+    }
+    
+    private func popItem() {
+        items.removeLast()
+    }
+    
+    private func clearAllItems() {
+        items.removeAll()
     }
 }

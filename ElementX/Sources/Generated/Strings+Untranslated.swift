@@ -12,6 +12,8 @@ import Foundation
 extension ElementL10n {
   /// Confirm
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
+  /// Match
+  public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
   /// Forgot password
   public static let authenticationLoginForgotPassword = ElementL10n.tr("Untranslated", "authentication_login_forgot_password")
   /// Welcome back!
@@ -20,6 +22,8 @@ extension ElementL10n {
   public static let authenticationServerInfoMatrixDescription = ElementL10n.tr("Untranslated", "authentication_server_info_matrix_description")
   /// Choose your server to store your data
   public static let authenticationServerInfoTitle = ElementL10n.tr("Untranslated", "authentication_server_info_title")
+  /// All Chats
+  public static let homeScreenAllChats = ElementL10n.tr("Untranslated", "home_screen_all_chats")
   /// Mobile
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet
@@ -48,6 +52,16 @@ extension ElementL10n {
   public static let serverSelectionServerUrl = ElementL10n.tr("Untranslated", "server_selection_server_url")
   /// Choose your server
   public static let serverSelectionTitle = ElementL10n.tr("Untranslated", "server_selection_title")
+  /// Looks like you’re using a new device. Verify its you.
+  public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")
+  /// Help keep your messages secure
+  public static let sessionVerificationBannerTitle = ElementL10n.tr("Untranslated", "session_verification_banner_title")
+  /// Open Element on one of your other sessions to compare.
+  public static let sessionVerificationScreenEmojisMessage = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_message")
+  /// Lets check if these
+  public static let sessionVerificationScreenEmojisTitle = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_title")
+  /// Appearance
+  public static let settingsAppearance = ElementL10n.tr("Untranslated", "settings_appearance")
   /// Timeline Style
   public static let settingsTimelineStyle = ElementL10n.tr("Untranslated", "settings_timeline_style")
   /// Untranslated
