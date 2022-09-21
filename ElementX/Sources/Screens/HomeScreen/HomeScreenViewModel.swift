@@ -33,7 +33,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         self.attributedStringBuilder = attributedStringBuilder
         
-        super.init(initialViewState: HomeScreenViewState())
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID))
         
         userSession.callbacks
             .receive(on: DispatchQueue.main)
@@ -64,6 +64,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, size: MediaProviderDefaultAvatarSize) {
                     state.userAvatar = avatar
                 }
+            }
+
+            if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
+                state.userDisplayName = userDisplayName
             }
             
             await updateRooms()
