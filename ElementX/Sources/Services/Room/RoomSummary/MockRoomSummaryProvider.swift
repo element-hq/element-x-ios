@@ -32,7 +32,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         RoomSummary(id: "2",
                     name: "Second room",
                     isDirect: true,
-                    avatarURLString: "mockImageURLString",
+                    avatarURLString: nil,
                     lastMessage: nil,
                     lastMessageTimestamp: nil,
                     unreadNotificationCount: 1),

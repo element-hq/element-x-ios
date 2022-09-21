@@ -27,6 +27,7 @@ class UITestsAppCoordinator: Coordinator {
     
     init() {
         mainNavigationController = ElementNavigationController()
+        mainNavigationController.navigationBar.prefersLargeTitles = true
         navigationRouter = NavigationRouter(navigationController: mainNavigationController)
         
         window = UIWindow(frame: UIScreen.main.bounds)
@@ -94,6 +95,10 @@ class MockScreen: Identifiable {
             return TemplateCoordinator(parameters: .init(promptType: .regular))
         case .simpleUpgrade:
             return TemplateCoordinator(parameters: .init(promptType: .upgrade))
+        case .home:
+            let session = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:matrix.org"),
+                                          mediaProvider: MockMediaProvider())
+            return HomeScreenCoordinator(parameters: .init(userSession: session, attributedStringBuilder: AttributedStringBuilder()))
         case .settings:
             return SettingsCoordinator(parameters: .init(navigationRouter: navigationRouter,
                                                          userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
