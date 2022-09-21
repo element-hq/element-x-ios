@@ -82,7 +82,7 @@ extension MatrixRustSDK.NoticeMessageContent: FormattedMessageContentProtocol { 
 /// the `msgtype` would likely contain a formatted body.
 extension MessageTimelineItem where Content: FormattedMessageContentProtocol {
     var htmlBody: String? {
-        #warning("Should this check the formatted type?")
+        guard content.formatted?.format == .html else { return nil }
         return content.formatted?.body
     }
 }
