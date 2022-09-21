@@ -70,6 +70,14 @@ struct EventTimelineItem {
     var content: TimelineItemContent {
         item.content()
     }
+
+    var isRedacted: Bool {
+        content.isRedactedMessage()
+    }
+
+    var isOwn: Bool {
+        item.isOwn()
+    }
     
     var sender: String {
         item.sender()

@@ -146,7 +146,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             
             switch item {
             case .event(let eventItem):
-                guard eventItem.isMessage else { break } // To be handled in the future
+                guard eventItem.isMessage || eventItem.isRedacted else { break } // To be handled in the future
 
                 newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItem: eventItem,
                                                                                        showSenderDetails: inGroupState.shouldShowSenderDetails,
