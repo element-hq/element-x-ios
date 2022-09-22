@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct RoundedCorner: Shape {
+struct RoundedCornerShape: Shape {
     let radius: CGFloat
     let corners: UIRectCorner
 
@@ -39,10 +39,10 @@ struct RoundedCorner: Shape {
 
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
-        clipShape(RoundedCorner(radius: radius, corners: corners))
+        clipShape(RoundedCornerShape(radius: radius, corners: corners))
     }
 
     func cornerRadius(_ radius: CGFloat, inGroupState: TimelineItemInGroupState) -> some View {
-        clipShape(RoundedCorner(radius: radius, inGroupState: inGroupState))
+        clipShape(RoundedCornerShape(radius: radius, inGroupState: inGroupState))
     }
 }
