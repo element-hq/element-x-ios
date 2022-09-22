@@ -30,7 +30,7 @@ protocol UserSessionStoreProtocol {
     var hasSessions: Bool { get }
     
     /// Returns the location to store user data for a particular username.
-    var baseDirectoryPath: String { get }
+    var baseDirectory: URL { get }
     
     /// Restores an existing user session.
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError>

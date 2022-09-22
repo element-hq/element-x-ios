@@ -26,7 +26,22 @@ class UserSessionStore: UserSessionStoreProtocol {
     var hasSessions: Bool { !keychainController.restoreTokens().isEmpty }
     
     /// The base directory where all session data is stored.
-    var baseDirectoryPath: String { baseDirectory().path }
+    private(set) lazy var baseDirectory: URL = {
+        guard let appGroupContainerURL = FileManager.default.appGroupContainerURL else {
+            fatalError("Should always be able to retrieve the container directory")
+        }
+        
+        let url = appGroupContainerURL
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("Caches", isDirectory: true)
+            .appendingPathComponent("Sessions", isDirectory: true)
+        
+        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
+        
+        MXLog.debug("Setup base directory at: \(url)")
+        
+        return url
+    }()
     
     init(bundleIdentifier: String, backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(identifier: bundleIdentifier)
@@ -86,11 +101,13 @@ class UserSessionStore: UserSessionStoreProtocol {
         deleteSessionDirectory(for: userID)
     }
     
+    // MARK: - Private
+    
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
         
         let builder = ClientBuilder()
-            .basePath(path: baseDirectoryPath)
+            .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
         
         do {
@@ -125,27 +142,12 @@ class UserSessionStore: UserSessionStoreProtocol {
     private func deleteSessionDirectory(for userID: String) {
         // Rust sanitises the user ID replacing invalid characters with an _
         let sanitisedUserID = userID.replacingOccurrences(of: ":", with: "_")
-        let url = baseDirectory().appendingPathComponent(sanitisedUserID)
+        let url = baseDirectory.appendingPathComponent(sanitisedUserID)
         
         do {
             try FileManager.default.removeItem(at: url)
         } catch {
             MXLog.failure("Failed deleting the session data: \(error)")
         }
-    }
-    
-    func baseDirectory() -> URL {
-        guard let appGroupContainerURL = FileManager.default.appGroupContainerURL else {
-            fatalError("Should always be able to retrieve the container directory")
-        }
-        
-        let url = appGroupContainerURL
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Caches", isDirectory: true)
-            .appendingPathComponent("Sessions", isDirectory: true)
-        
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
-        
-        return url
     }
 }
