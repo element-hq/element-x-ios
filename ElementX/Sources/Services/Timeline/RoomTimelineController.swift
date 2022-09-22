@@ -134,21 +134,21 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
 
-        for (index, item) in timelineProvider.items.enumerated() {
+        for (index, itemProxy) in timelineProvider.itemProxies.enumerated() {
             if Task.isCancelled {
                 return
             }
 
-            let previousItem = timelineProvider.items[safe: index - 1]
-            let nextItem = timelineProvider.items[safe: index + 1]
+            let previousItemProxy = timelineProvider.itemProxies[safe: index - 1]
+            let nextItemProxy = timelineProvider.itemProxies[safe: index + 1]
 
-            let inGroupState = inGroupState(for: item, previousItem: previousItem, nextItem: nextItem)
+            let inGroupState = inGroupState(for: itemProxy, previousItemProxy: previousItemProxy, nextItemProxy: nextItemProxy)
             
-            switch item {
+            switch itemProxy {
             case .event(let eventItem):
                 guard eventItem.isMessage || eventItem.isRedacted else { break } // To be handled in the future
 
-                newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItem: eventItem,
+                newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
                                                                                        showSenderDetails: inGroupState.shouldShowSenderDetails,
                                                                                        inGroupState: inGroupState))
             case .virtual:
@@ -172,16 +172,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.updatedTimelineItems)
     }
 
-    private func inGroupState(for item: RoomTimelineProviderItem,
-                              previousItem: RoomTimelineProviderItem?,
-                              nextItem: RoomTimelineProviderItem?) -> TimelineItemInGroupState {
-        guard let previousItem = previousItem else {
+    private func inGroupState(for itemProxy: TimelineItemProxy,
+                              previousItemProxy: TimelineItemProxy?,
+                              nextItemProxy: TimelineItemProxy?) -> TimelineItemInGroupState {
+        guard let previousItem = previousItemProxy else {
             //  no previous item, check next item
-            guard let nextItem = nextItem else {
+            guard let nextItem = nextItemProxy else {
                 //  no next item neither, this is single
                 return .single
             }
-            guard nextItem.canBeGrouped(with: item) else {
+            guard nextItem.canBeGrouped(with: itemProxy) else {
                 //  there is a next item but can't be grouped, this is single
                 return .single
             }
@@ -189,9 +189,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return .beginning
         }
 
-        guard let nextItem = nextItem else {
+        guard let nextItem = nextItemProxy else {
             //  no next item
-            guard item.canBeGrouped(with: previousItem) else {
+            guard itemProxy.canBeGrouped(with: previousItem) else {
                 //  there is a previous item but can't be grouped, this is single
                 return .single
             }
@@ -199,8 +199,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return .end
         }
 
-        guard item.canBeGrouped(with: previousItem) else {
-            guard nextItem.canBeGrouped(with: item) else {
+        guard itemProxy.canBeGrouped(with: previousItem) else {
+            guard nextItem.canBeGrouped(with: itemProxy) else {
                 //  there is a next item but can't be grouped, this is single
                 return .single
             }
@@ -208,7 +208,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return .beginning
         }
 
-        guard nextItem.canBeGrouped(with: item) else {
+        guard nextItem.canBeGrouped(with: itemProxy) else {
             //  there is a next item but can't be grouped, this is the end
             return .end
         }

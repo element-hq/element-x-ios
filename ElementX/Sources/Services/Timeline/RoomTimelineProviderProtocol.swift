@@ -32,7 +32,7 @@ enum RoomTimelineProviderError: Error {
 protocol RoomTimelineProviderProtocol {
     var callbacks: PassthroughSubject<RoomTimelineProviderCallback, Never> { get }
     
-    var items: [RoomTimelineProviderItem] { get }
+    var itemProxies: [TimelineItemProxy] { get }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError>
     

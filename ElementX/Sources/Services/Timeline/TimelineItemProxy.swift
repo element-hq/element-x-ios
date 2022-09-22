@@ -16,15 +16,15 @@
 
 import MatrixRustSDK
 
-/// A light wrapper around timeline items returned from Rust for use in `RoomTimelineProvider`.
-enum RoomTimelineProviderItem {
-    case event(EventTimelineItem)
+/// A light wrapper around timeline items returned from Rust.
+enum TimelineItemProxy {
+    case event(EventTimelineItemProxy)
     case virtual(MatrixRustSDK.VirtualTimelineItem)
     case other(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
-            self = .event(EventTimelineItem(item: eventItem))
+            self = .event(EventTimelineItemProxy(item: eventItem))
         } else if let virtualItem = item.asVirtual() {
             self = .virtual(virtualItem)
         } else {
@@ -32,17 +32,17 @@ enum RoomTimelineProviderItem {
         }
     }
 
-    func canBeGrouped(with prevItem: RoomTimelineProviderItem) -> Bool {
-        guard case let .event(selfEventItem) = self, case let .event(prevEventItem) = prevItem else {
+    func canBeGrouped(with previousItemProxy: TimelineItemProxy) -> Bool {
+        guard case let .event(selfEventItemProxy) = self, case let .event(previousEventItemProxy) = previousItemProxy else {
             return false
         }
         //  can be improved by adding a date threshold
-        return prevEventItem.reactions.isEmpty && selfEventItem.sender == prevEventItem.sender
+        return previousEventItemProxy.reactions.isEmpty && selfEventItemProxy.sender == previousEventItemProxy.sender
     }
 }
 
-/// A light wrapper around event timeline items returned from Rust, used in `RoomTimelineProviderItem`.
-struct EventTimelineItem {
+/// A light wrapper around event timeline items returned from Rust.
+struct EventTimelineItemProxy {
     let item: MatrixRustSDK.EventTimelineItem
     
     init(item: MatrixRustSDK.EventTimelineItem) {
