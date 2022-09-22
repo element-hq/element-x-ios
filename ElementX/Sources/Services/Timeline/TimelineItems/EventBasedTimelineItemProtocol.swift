@@ -59,3 +59,9 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
     
     var properties: RoomTimelineItemProperties { get }
 }
+
+extension EventBasedTimelineItemProtocol {
+    var shouldShowSenderDetails: Bool {
+        inGroupState.shouldShowSenderDetails
+    }
+}

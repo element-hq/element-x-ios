@@ -58,7 +58,6 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
         EmoteRoomTimelineItem(id: UUID().uuidString,
                               text: text,
                               timestamp: timestamp,
-                              shouldShowSenderDetails: true,
                               inGroupState: .single,
                               isOutgoing: false,
                               senderId: senderId)

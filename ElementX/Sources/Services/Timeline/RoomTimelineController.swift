@@ -149,7 +149,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 guard eventItem.isMessage || eventItem.isRedacted else { break } // To be handled in the future
 
                 newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
-                                                                                       showSenderDetails: inGroupState.shouldShowSenderDetails,
                                                                                        inGroupState: inGroupState))
             case .virtual:
 //            case .virtual(let virtualItem):
