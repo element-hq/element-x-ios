@@ -59,7 +59,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
                                         mediaProvider: MediaProvider(clientProxy: clientProxy,
-                                                                     imageCache: ImageCache.default,
+                                                                     imageCache: .onlyInMemory,
                                                                      backgroundTaskService: backgroundTaskService)))
         case .failure(let error):
             MXLog.error("Failed restoring login with error: \(error)")
@@ -77,7 +77,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
                                         mediaProvider: MediaProvider(clientProxy: clientProxy,
-                                                                     imageCache: ImageCache.default,
+                                                                     imageCache: .onlyInMemory,
                                                                      backgroundTaskService: backgroundTaskService)))
         case .failure(let error):
             MXLog.error("Failed creating user session with error: \(error)")
