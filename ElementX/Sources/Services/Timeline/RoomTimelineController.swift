@@ -60,7 +60,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 case .updatedMessages:
                     self.updateTimelineItems()
                 }
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
         
         updateTimelineItems()
         

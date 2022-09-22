@@ -17,26 +17,35 @@
 import Combine
 import Foundation
 
-enum RoomSummaryProviderCallback {
-    case updatedRoomSummaries
-}
-
 enum RoomSummaryProviderState {
     case cold
+    case preload
+    case catchingUp
     case live
 }
 
+enum RoomSummaryProviderRoom {
+    case empty(id: String)
+    case filled(roomSummary: RoomSummary)
+    
+    var asFilled: RoomSummary? {
+        guard case let .filled(details) = self else {
+            return nil
+        }
+        
+        return details
+    }
+}
+
 protocol RoomSummaryProviderProtocol {
-    var callbacks: PassthroughSubject<RoomSummaryProviderCallback, Never> { get }
+    /// Publishes the currently available room summaries
+    var roomListUpdatePublisher: CurrentValueSubject<[RoomSummaryProviderRoom], Never> { get }
     
     /// Publishes the current state the summary provider is finding itself in
     var stateUpdatePublisher: CurrentValueSubject<RoomSummaryProviderState, Never> { get }
     
     /// Publishes the total number of rooms
     var countUpdatePublisher: CurrentValueSubject<UInt, Never> { get }
-    
-    /// The current list of rooms currently provided by the sliding sync view
-    var roomSummaries: [RoomSummary] { get }
     
     /// Invoked by the sliding sync controller whenever certain rooms have updated
     /// without necessarily changing their position in the list

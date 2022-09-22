@@ -60,22 +60,24 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     private var listUpdateObserverToken: StoppableSpawn?
     private var stateUpdateObserverToken: StoppableSpawn?
+    private var countUpdateObserverToken: StoppableSpawn?
     
     private var cancellables = Set<AnyCancellable>()
-        
-    let callbacks = PassthroughSubject<RoomSummaryProviderCallback, Never>()
+    
+    let roomListUpdatePublisher = CurrentValueSubject<[RoomSummaryProviderRoom], Never>([])
     let stateUpdatePublisher = CurrentValueSubject<RoomSummaryProviderState, Never>(.cold)
     let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
     
-    private(set) var roomSummaries: [RoomSummary] = [] {
+    private var rooms: [RoomSummaryProviderRoom] = [] {
         didSet {
-            callbacks.send(.updatedRoomSummaries)
+            roomListUpdatePublisher.send(rooms)
         }
     }
     
     deinit {
         listUpdateObserverToken?.cancel()
         stateUpdateObserverToken?.cancel()
+        countUpdateObserverToken?.cancel()
     }
     
     init(slidingSyncController: SlidingSyncProtocol, slidingSyncView: SlidingSyncViewProtocol, roomMessageFactory: RoomMessageFactoryProtocol) {
@@ -98,9 +100,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .collect(.byTime(DispatchQueue.global(qos: .background), 0.5))
             .sink { self.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
-                
+        
         listUpdateObserverToken = slidingSyncView.observeRoomList(observer: weakProvider)
         stateUpdateObserverToken = slidingSyncView.observeState(observer: weakProvider)
+        countUpdateObserverToken = slidingSyncView.observeRoomsCount(observer: weakProvider)
     }
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) {
@@ -109,17 +112,23 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 return
             }
             
-            var changes = [CollectionDifference<RoomSummary>.Change]()
+            var changes = [CollectionDifference<RoomSummaryProviderRoom>.Change]()
             for identifier in identifiers {
-                guard let oldSummary = self.roomSummaries.first(where: { $0.id == identifier }),
-                      let index = self.roomSummaries.firstIndex(where: { $0.id == identifier }) else {
+                guard let index = self.rooms.firstIndex(where: { room in
+                    switch room {
+                    case .empty(let id):
+                        return id == identifier
+                    case .filled(let summary):
+                        return summary.id == identifier
+                    }
+                }), let oldRoom = self.rooms[safe: index] else {
                     continue
                 }
                 
-                let newSummary = self.buildRoomSummaryForIdentifier(identifier)
+                let newRoom = self.buildRoomSummaryForIdentifier(identifier)
                 
-                changes.append(.remove(offset: index, element: oldSummary, associatedWith: nil))
-                changes.append(.insert(offset: index, element: newSummary, associatedWith: nil))
+                changes.append(.remove(offset: index, element: oldRoom, associatedWith: nil))
+                changes.append(.insert(offset: index, element: newRoom, associatedWith: nil))
             }
             
             guard let diff = CollectionDifference(changes) else {
@@ -127,34 +136,28 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 return
             }
             
-            guard let newSummaries = self.roomSummaries.applying(diff) else {
+            guard let newSummaries = self.rooms.applying(diff) else {
                 MXLog.error("Failed applying diff: \(diff)")
                 return
             }
             
-            self.roomSummaries = newSummaries
+            self.rooms = newSummaries
         }
     }
     
     // MARK: - Private
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
-        roomSummaries = diffs
+        rooms = diffs
             .compactMap(buildDiff)
-            .reduce(roomSummaries) { $0.applying($1) ?? $0 }
+            .reduce(rooms) { $0.applying($1) ?? $0 }
     }
     
-    private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummary {
-        RoomSummary(id: identifier,
-                    name: "",
-                    isDirect: false,
-                    avatarURLString: nil,
-                    lastMessage: nil,
-                    lastMessageTimestamp: nil,
-                    unreadNotificationCount: 0)
+    private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummaryProviderRoom {
+        .empty(id: identifier)
     }
     
-    private func buildRoomSummaryForIdentifier(_ identifier: String) -> RoomSummary {
+    private func buildRoomSummaryForIdentifier(_ identifier: String) -> RoomSummaryProviderRoom {
         guard let room = try? slidingSyncController.getRoom(roomId: identifier) else {
             MXLog.error("Failed finding room with id: \(identifier)")
             return buildEmptyRoomSummary(forIdentifier: identifier)
@@ -170,17 +173,17 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
             lastMessageTimestamp = lastMessage.originServerTs
         }
-               
-        return RoomSummary(id: room.roomId(),
-                           name: room.name() ?? room.roomId(),
-                           isDirect: room.isDm() ?? false,
-                           avatarURLString: room.fullRoom()?.avatarUrl(),
-                           lastMessage: attributedLastMessage,
-                           lastMessageTimestamp: lastMessageTimestamp,
-                           unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
+        
+        return .filled(roomSummary: RoomSummary(id: room.roomId(),
+                                                name: room.name() ?? room.roomId(),
+                                                isDirect: room.isDm() ?? false,
+                                                avatarURLString: room.fullRoom()?.avatarUrl(),
+                                                lastMessage: attributedLastMessage,
+                                                lastMessageTimestamp: lastMessageTimestamp,
+                                                unreadNotificationCount: UInt(room.unreadNotifications().notificationCount())))
     }
     
-    private func buildSummaryForRoomListEntry(_ entry: RoomListEntry) -> RoomSummary {
+    private func buildSummaryForRoomListEntry(_ entry: RoomListEntry) -> RoomSummaryProviderRoom {
         switch entry {
         case .empty:
             return buildEmptyRoomSummary()
@@ -191,18 +194,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    private func buildDiff(from diff: SlidingSyncViewRoomsListDiff) -> CollectionDifference<RoomSummary>? {
+    private func buildDiff(from diff: SlidingSyncViewRoomsListDiff) -> CollectionDifference<RoomSummaryProviderRoom>? {
         // Invalidations are a no-op for the moment
         if diff.isInvalidation {
             return nil
         }
         
-        var changes = [CollectionDifference<RoomSummary>.Change]()
+        var changes = [CollectionDifference<RoomSummaryProviderRoom>.Change]()
         
         switch diff {
         case .push(value: let value):
             let summary = buildSummaryForRoomListEntry(value)
-            changes.append(.insert(offset: Int(roomSummaries.count), element: summary, associatedWith: nil))
+            changes.append(.insert(offset: Int(rooms.count), element: summary, associatedWith: nil))
         case .updateAt(let index, let value):
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
@@ -211,14 +214,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .move(let oldIndex, let newIndex):
-            let summary = roomSummaries[Int(oldIndex)]
+            let summary = rooms[Int(oldIndex)]
             changes.append(.remove(offset: Int(oldIndex), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(newIndex), element: summary, associatedWith: nil))
         case .removeAt(let index):
-            let summary = roomSummaries[Int(index)]
+            let summary = rooms[Int(index)]
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .replace(let values):
-            for (index, summary) in roomSummaries.enumerated() {
+            for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }
             
@@ -253,12 +256,14 @@ extension SlidingSyncViewRoomsListDiff {
 extension RoomSummaryProviderState {
     init(slidingSyncState: SlidingSyncState) {
         switch slidingSyncState {
+        case .cold:
+            self = .cold
+        case .preload:
+            self = .preload
         case .catchingUp:
-            self = .live
+            self = .catchingUp
         case .live:
             self = .live
-        default:
-            self = .cold
         }
     }
 }

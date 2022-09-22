@@ -63,7 +63,8 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
                 case .failed:
                     self.stateMachine.processEvent(.didFail)
                 }
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
     }
     
     // MARK: - Public

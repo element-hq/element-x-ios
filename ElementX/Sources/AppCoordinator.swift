@@ -334,7 +334,8 @@ class AppCoordinator: Coordinator {
                 default:
                     break
                 }
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
     }
 
     private func deobserveUserSessionChanges() {

@@ -38,6 +38,11 @@ enum HomeScreenViewAction {
     case skipSessionVerification
 }
 
+enum HomeScreenRoomListMode {
+    case skeletons
+    case rooms
+}
+
 struct HomeScreenViewState: BindableState {
     var userID: String
     var userDisplayName: String?
@@ -47,26 +52,61 @@ struct HomeScreenViewState: BindableState {
     
     var rooms: [HomeScreenRoom] = []
     
-    var isLoadingRooms: Bool {
-        rooms.isEmpty
-    }
+    var roomListMode: HomeScreenRoomListMode = .rooms
     
     var visibleRooms: [HomeScreenRoom] {
+        if roomListMode == .skeletons {
+            return placeholderRooms
+        }
+        
         if bindings.searchQuery.isEmpty {
             return rooms
         }
         
-        return rooms.lazy.filter { $0.name.localizedStandardContains(bindings.searchQuery) }
+        return rooms.lazy.filter {
+            switch $0 {
+            case .empty:
+                return false
+            case .filled(let room):
+                return room.name.localizedStandardContains(bindings.searchQuery)
+            }
+        }
     }
     
     var bindings = HomeScreenViewStateBindings()
+    
+    var placeholderRooms: [HomeScreenRoom] {
+        (1...10).map { index in
+            HomeScreenRoom.empty(HomeScreenRoomDetails.placeholder(id: "\(index)"))
+        }
+    }
 }
 
 struct HomeScreenViewStateBindings {
     var searchQuery = ""
 }
 
-struct HomeScreenRoom: Identifiable, Equatable {
+enum HomeScreenRoom: Identifiable, Equatable {
+    case empty(HomeScreenRoomDetails)
+    case filled(HomeScreenRoomDetails)
+    
+    var id: String {
+        switch self {
+        case .filled(let room), .empty(let room):
+            return room.id
+        }
+    }
+    
+    var asFilled: HomeScreenRoomDetails? {
+        guard case let .filled(details) = self else {
+            return nil
+        }
+        
+        return details
+    }
+}
+
+struct HomeScreenRoomDetails: Identifiable, Equatable {
     let id: String
     
     let name: String
@@ -78,12 +118,13 @@ struct HomeScreenRoom: Identifiable, Equatable {
     var lastMessage: AttributedString?
     
     var avatar: UIImage?
-}
-
-extension MutableCollection where Element == HomeScreenRoom {
-    mutating func updateEach(_ update: (inout Element) -> Void) {
-        for index in indices {
-            update(&self[index])
-        }
+    
+    static func placeholder(id: String) -> HomeScreenRoomDetails {
+        HomeScreenRoomDetails(id: id,
+                              name: "Placeholder room name",
+                              hasUnreads: false,
+                              timestamp: "Now",
+                              lastMessage: AttributedString("Last message"),
+                              avatar: UIImage(systemName: "photo"))
     }
 }

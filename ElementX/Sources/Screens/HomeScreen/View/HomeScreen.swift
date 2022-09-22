@@ -23,32 +23,29 @@ struct HomeScreen: View {
     // MARK: Views
     
     var body: some View {
-        VStack(spacing: 0.0) {
-            if context.viewState.isLoadingRooms {
-                VStack {
-                    Text(ElementL10n.loading)
-                    ProgressView()
-                }
-            } else {
-                ScrollView {
-                    if context.viewState.showSessionVerificationBanner {
-                        sessionVerificationBanner
-                    }
-                    
-                    LazyVStack {
-                        ForEach(context.viewState.visibleRooms) { room in
-                            HomeScreenRoomCell(room: room, context: context)
-                        }
-                    }
-                    .searchable(text: $context.searchQuery)
-                    .animation(.default, value: context.viewState.visibleRooms)
-                    .padding(.horizontal)
-                }
+        ScrollView {
+            if context.viewState.showSessionVerificationBanner {
+                sessionVerificationBanner
             }
             
-            Spacer()
+            LazyVStack {
+                ForEach(context.viewState.visibleRooms) { room in
+                    switch room {
+                    case .empty(let someRoom):
+                        HomeScreenRoomCell(details: someRoom, context: context)
+                            .redacted(reason: .placeholder)
+                            .disabled(true)
+                    case .filled(let someRoom):
+                        HomeScreenRoomCell(details: someRoom, context: context)
+                    }
+                }
+            }
+            .animation(.default, value: context.viewState.visibleRooms)
+            .padding(.horizontal)
+            .searchable(text: $context.searchQuery)
         }
-        .transition(.slide)
+        .disabled(context.viewState.roomListMode == .skeletons)
+        .animation(.elementDefault, value: context.viewState.roomListMode)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
         .navigationTitle(ElementL10n.allChats)
@@ -169,14 +166,19 @@ struct HomeScreen: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
+        body(.loading).preferredColorScheme(.light)
             .tint(.element.accent)
-        body.preferredColorScheme(.dark)
+        body(.loading).preferredColorScheme(.dark)
+            .tint(.element.accent)
+        body(.loaded).preferredColorScheme(.light)
+            .tint(.element.accent)
+        body(.loaded).preferredColorScheme(.dark)
             .tint(.element.accent)
     }
     
-    static var body: some View {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe"),
+    static func body(_ state: MockRoomSummaryProviderState) -> some View {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe",
+                                                                       roomSummaryProvider: MockRoomSummaryProvider(state: state)),
                                           mediaProvider: MockMediaProvider())
         
         let viewModel = HomeScreenViewModel(userSession: userSession,

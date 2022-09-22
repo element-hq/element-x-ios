@@ -19,34 +19,34 @@ import SwiftUI
 struct HomeScreenRoomCell: View {
     @ScaledMetric private var avatarSize = AvatarSize.room(on: .home).value
     
-    let room: HomeScreenRoom
+    let details: HomeScreenRoomDetails
     let context: HomeScreenViewModel.Context
     
     var body: some View {
         Button {
-            context.send(viewAction: .selectRoom(roomIdentifier: room.id))
+            context.send(viewAction: .selectRoom(roomIdentifier: details.id))
         } label: {
             HStack(spacing: 16.0) {
-                if let avatar = room.avatar {
+                if let avatar = details.avatar {
                     Image(uiImage: avatar)
                         .resizable()
                         .scaledToFill()
                         .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
                 } else {
-                    PlaceholderAvatarImage(text: room.name, contentId: room.id)
+                    PlaceholderAvatarImage(text: details.name, contentId: details.id)
                         .clipShape(Circle())
                         .frame(width: avatarSize, height: avatarSize)
                 }
                 
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2.0) {
-                        Text(room.name)
+                        Text(details.name)
                             .font(.element.callout.bold())
                             .foregroundColor(.element.primaryContent)
                             .lineLimit(1)
                         
-                        if let lastMessage = room.lastMessage {
+                        if let lastMessage = details.lastMessage {
                             Text(lastMessage)
                                 .font(lastMessageFont)
                                 .foregroundColor(lastMessageForegroundColor)
@@ -60,13 +60,13 @@ struct HomeScreenRoomCell: View {
                     Spacer()
                   
                     VStack(alignment: .trailing, spacing: 3.0) {
-                        if let timestamp = room.timestamp {
+                        if let timestamp = details.timestamp {
                             Text(timestamp)
                                 .font(.element.caption1)
                                 .foregroundColor(.element.secondaryContent)
                         }
                         
-                        if room.hasUnreads {
+                        if details.hasUnreads {
                             Rectangle()
                                 .frame(width: 12, height: 12)
                                 .foregroundColor(.element.primaryContent)
@@ -77,13 +77,13 @@ struct HomeScreenRoomCell: View {
             }
             .frame(minHeight: 64.0)
             .task {
-                context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
+                context.send(viewAction: .loadRoomData(roomIdentifier: details.id))
             }
         }
     }
     
     var lastMessageFont: Font {
-        if room.hasUnreads {
+        if details.hasUnreads {
             return .element.subheadline.bold()
         } else {
             return .element.subheadline
@@ -91,7 +91,7 @@ struct HomeScreenRoomCell: View {
     }
     
     var lastMessageForegroundColor: Color {
-        if room.hasUnreads {
+        if details.hasUnreads {
             return .element.primaryContent
         } else {
             return .element.secondaryContent
@@ -108,7 +108,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
     }
     
     static var body: some View {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe"),
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe",
+                                                                       roomSummaryProvider: MockRoomSummaryProvider()),
                                           mediaProvider: MockMediaProvider())
         
         let viewModel = HomeScreenViewModel(userSession: userSession,
@@ -116,7 +117,10 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
         
         return VStack {
             ForEach(viewModel.context.viewState.rooms) { room in
-                HomeScreenRoomCell(room: room, context: viewModel.context)
+                switch room {
+                case .empty(let details), .filled(let details):
+                    HomeScreenRoomCell(details: details, context: viewModel.context)
+                }
             }
         }
     }
