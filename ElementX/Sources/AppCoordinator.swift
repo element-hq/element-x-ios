@@ -147,7 +147,6 @@ class AppCoordinator: Coordinator {
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 self.hideLoadingIndicator()
                 self.showLoginErrorToast()
-                self.startAuthentication()
             case (.restoringSession, .succeededRestoringSession, .homeScreen):
                 self.hideLoadingIndicator()
                 self.presentHomeScreen()
