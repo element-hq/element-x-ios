@@ -36,11 +36,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     let callbacks = PassthroughSubject<RoomTimelineProviderCallback, Never>()
     
-    private(set) var items: [RoomTimelineProviderItem]
+    private(set) var itemProxies: [TimelineItemProxy]
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
-        items = []
+        itemProxies = []
     }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
@@ -103,41 +103,41 @@ private extension RoomTimelineProvider {
     
     private func replaceItems(_ items: [MatrixRustSDK.TimelineItem]?) {
         guard let items = items else { return }
-        self.items = items.map(RoomTimelineProviderItem.init)
+        itemProxies = items.map(TimelineItemProxy.init)
     }
     
     private func insertItem(_ data: InsertAtData?) {
         guard let data = data else { return }
-        let item = RoomTimelineProviderItem(item: data.item)
-        items.insert(item, at: Int(data.index))
+        let itemProxy = TimelineItemProxy(item: data.item)
+        itemProxies.insert(itemProxy, at: Int(data.index))
     }
     
     private func updateItem(_ data: UpdateAtData?) {
         guard let data = data else { return }
-        let item = RoomTimelineProviderItem(item: data.item)
-        items[Int(data.index)] = item
+        let itemProxy = TimelineItemProxy(item: data.item)
+        itemProxies[Int(data.index)] = itemProxy
     }
     
     private func removeItem(at index: UInt32?) {
         guard let index = index else { return }
-        items.remove(at: Int(index))
+        itemProxies.remove(at: Int(index))
     }
     
     private func moveItem(_ data: MoveData?) {
         guard let data = data else { return }
-        items.move(fromOffsets: IndexSet(integer: Int(data.oldIndex)), toOffset: Int(data.newIndex))
+        itemProxies.move(fromOffsets: IndexSet(integer: Int(data.oldIndex)), toOffset: Int(data.newIndex))
     }
     
     private func pushItem(_ item: MatrixRustSDK.TimelineItem?) {
         guard let item = item else { return }
-        items.append(RoomTimelineProviderItem(item: item))
+        itemProxies.append(TimelineItemProxy(item: item))
     }
     
     private func popItem() {
-        items.removeLast()
+        itemProxies.removeLast()
     }
     
     private func clearAllItems() {
-        items.removeAll()
+        itemProxies.removeAll()
     }
 }

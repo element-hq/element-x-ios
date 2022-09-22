@@ -163,7 +163,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var attributedLastMessage: AttributedString?
         var lastMessageTimestamp: Date?
         if let latestRoomMessage = room.latestRoomMessage() {
-            let lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItem(item: latestRoomMessage))
+            let lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItemProxy(item: latestRoomMessage))
             if let lastMessageSender = try? AttributedString(markdown: "**\(lastMessage.sender)**") {
                 // Don't include the message body in the markdown otherwise it makes tappable links.
                 attributedLastMessage = lastMessageSender + ": " + AttributedString(lastMessage.body)

@@ -25,7 +25,10 @@ struct SomeRoomMessage: RoomMessageProtocol {
 }
 
 struct RoomMessageFactory: RoomMessageFactoryProtocol {
-    func buildRoomMessageFrom(_ eventItem: EventTimelineItem) -> RoomMessageProtocol {
-        SomeRoomMessage(id: eventItem.id, body: eventItem.body ?? "", sender: eventItem.sender, originServerTs: eventItem.originServerTs)
+    func buildRoomMessageFrom(_ eventItemProxy: EventTimelineItemProxy) -> RoomMessageProtocol {
+        SomeRoomMessage(id: eventItemProxy.id,
+                        body: eventItemProxy.body ?? "",
+                        sender: eventItemProxy.sender,
+                        originServerTs: eventItemProxy.originServerTs)
     }
 }
