@@ -40,7 +40,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               inGroupState: TimelineItemInGroupState) async -> RoomTimelineItemProtocol {
         let displayName = roomProxy.displayNameForUserId(eventItemProxy.sender)
         let avatarURL = roomProxy.avatarURLStringForUserId(eventItemProxy.sender)
-        let avatarImage = mediaProvider.imageFromURLString(avatarURL, size: MediaProviderDefaultAvatarSize)
+        let avatarImage = mediaProvider.imageFromURLString(avatarURL, size: .user(on: .timeline))
         let isOutgoing = eventItemProxy.isOwn
 
         if eventItemProxy.isRedacted {
