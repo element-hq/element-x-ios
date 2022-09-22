@@ -63,14 +63,7 @@ struct HomeScreenViewState: BindableState {
             return rooms
         }
         
-        return rooms.lazy.filter {
-            switch $0 {
-            case .empty:
-                return false
-            case .filled(let room):
-                return room.name.localizedStandardContains(bindings.searchQuery)
-            }
-        }
+        return rooms.lazy.filter { $0.asFilled?.name.localizedStandardContains(bindings.searchQuery) ?? false }
     }
     
     var bindings = HomeScreenViewStateBindings()
