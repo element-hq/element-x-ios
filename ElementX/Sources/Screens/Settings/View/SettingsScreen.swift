@@ -242,7 +242,7 @@ struct Settings_Previews: PreviewProvider {
                                           mediaProvider: MockMediaProvider())
         let viewModel = SettingsViewModel(withUserSession: userSession)
 
-        return NavigationView {
+        NavigationView {
             SettingsScreen(context: viewModel.context)
                 .previewInterfaceOrientation(.portrait)
         }
