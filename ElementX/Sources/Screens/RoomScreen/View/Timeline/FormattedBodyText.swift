@@ -26,25 +26,13 @@ struct FormattedBodyText: View {
         VStack(alignment: .leading, spacing: 8.0) {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    if isOutgoing {
-                        Text(component.attributedString)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .foregroundColor(.element.primaryContent)
-                            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
-                            .clipped()
-                            .background(Color.element.systemGray4)
-                            .cornerRadius(13)
-                    } else {
-                        Text(component.attributedString)
-                            .fixedSize(horizontal: false, vertical: true)
-                            .foregroundColor(.element.primaryContent)
-                            .padding(EdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12))
-                            .clipped()
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 13)
-                                    .stroke(Color.element.systemGray5)
-                            )
-                    }
+                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(.element.primaryContent)
+                        .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
+                        .clipped()
+                        .background(Color.element.systemGray4)
+                        .cornerRadius(13)
                 } else {
                     Text(component.attributedString)
                         .fixedSize(horizontal: false, vertical: true)
@@ -53,6 +41,12 @@ struct FormattedBodyText: View {
             }
         }
         .tint(.element.accent)
+    }
+
+    private var blockquoteAttributes: AttributeContainer {
+        var container = AttributeContainer()
+        container.font = .element.caption1
+        return container
     }
 }
 
