@@ -100,7 +100,7 @@ struct HomeScreen: View {
     @ViewBuilder
     private var userAvatarImageView: some View {
         userAvatarImage
-            .frame(width: 32, height: 32, alignment: .center)
+            .frame(width: AvatarSize.user(on: .home).value, height: AvatarSize.user(on: .home).value, alignment: .center)
             .clipShape(Circle())
             .accessibilityIdentifier("userAvatarImage")
     }

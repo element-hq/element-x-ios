@@ -42,7 +42,7 @@ struct RoomHeaderView: View {
                     .accessibilityIdentifier("encryptionBadgeIcon")
             }
         }
-        .frame(width: 32.0, height: 32.0)
+        .frame(width: AvatarSize.room(on: .timeline).value, height: AvatarSize.room(on: .timeline).value)
     }
 
     @ViewBuilder private var roomAvatarImage: some View {

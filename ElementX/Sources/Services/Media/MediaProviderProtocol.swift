@@ -22,17 +22,15 @@ enum MediaProviderError: Error {
     case invalidImageData
 }
 
-let MediaProviderDefaultAvatarSize = CGSize(width: 44.0, height: 44.0)
-
 @MainActor
 protocol MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSource?, size: CGSize?) -> UIImage?
+    func imageFromSource(_ source: MediaSource?, size: AvatarSize?) -> UIImage?
     
-    @discardableResult func loadImageFromSource(_ source: MediaSource, size: CGSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromSource(_ source: MediaSource, size: AvatarSize?) async -> Result<UIImage, MediaProviderError>
     
-    func imageFromURLString(_ urlString: String?, size: CGSize?) -> UIImage?
+    func imageFromURLString(_ urlString: String?, size: AvatarSize?) -> UIImage?
     
-    @discardableResult func loadImageFromURLString(_ urlString: String, size: CGSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromURLString(_ urlString: String, size: AvatarSize?) async -> Result<UIImage, MediaProviderError>
 }
 
 extension MediaProviderProtocol {

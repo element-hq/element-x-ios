@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
-    @ScaledMetric private var avatarSize = 44.0
+    @ScaledMetric private var avatarSize = AvatarSize.room(on: .home).value
     
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context

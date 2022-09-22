@@ -40,7 +40,7 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
 
         Task {
             if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
-                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, size: MediaProviderDefaultAvatarSize) {
+                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, size: .user(on: .settings)) {
                     state.userAvatar = avatar
                 }
             }

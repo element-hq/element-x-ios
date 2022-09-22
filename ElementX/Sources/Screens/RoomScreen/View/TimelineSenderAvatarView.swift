@@ -20,7 +20,7 @@ import SwiftUI
 struct TimelineSenderAvatarView: View {
     let timelineItem: EventBasedTimelineItemProtocol
 
-    @ScaledMetric private var avatarSize = 32
+    @ScaledMetric private var avatarSize = AvatarSize.user(on: .timeline).value
 
     var body: some View {
         ZStack(alignment: .center) {
