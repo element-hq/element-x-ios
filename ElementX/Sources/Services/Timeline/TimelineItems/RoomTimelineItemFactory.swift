@@ -68,8 +68,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     // MARK: - Private
 
-    // swiftformat:disable function_parameter_count
-    // swiftlint:disable function_parameter_count
     private func buildRedactedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                            _ isOutgoing: Bool,
                                            _ inGroupState: TimelineItemInGroupState,
@@ -198,9 +196,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(message.reactions)))
     }
-    
-    // swiftlint:enable function_parameter_count
-    // swiftformat:enable function_parameter_count
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in

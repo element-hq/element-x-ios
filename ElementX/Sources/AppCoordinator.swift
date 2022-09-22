@@ -130,7 +130,7 @@ class AppCoordinator: Coordinator {
         MXLog.configure(loggerConfiguration)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self = self else { return }
