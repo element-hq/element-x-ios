@@ -44,7 +44,9 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
                     state.userAvatar = avatar
                 }
             }
+        }
 
+        Task {
             if case let .success(userDisplayName) = await self.userSession.clientProxy.loadUserDisplayName() {
                 state.userDisplayName = userDisplayName
             }

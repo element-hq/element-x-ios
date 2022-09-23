@@ -42,7 +42,7 @@ class RoomProxy: RoomProxyProtocol {
     }()
     
     deinit {
-        #warning("Should any timeline listeners be removed??")
+        room.removeTimeline()
     }
     
     init(slidingSyncRoom: SlidingSyncRoomProtocol,

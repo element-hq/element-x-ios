@@ -62,8 +62,6 @@ class ClientProxy: ClientProxyProtocol {
     private var slidingSyncObserverToken: StoppableSpawn?
     private let slidingSync: SlidingSync
     
-    private var roomProxies = [String: RoomProxyProtocol]()
-    
     let roomSummaryProvider: RoomSummaryProviderProtocol
     
     deinit {
@@ -158,10 +156,6 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
-        if let roomProxy = roomProxies[identifier] {
-            return roomProxy
-        }
-        
         do {
             guard let slidingSyncRoom = try slidingSync.getRoom(roomId: identifier),
                   let room = slidingSyncRoom.fullRoom() else {
@@ -172,7 +166,6 @@ class ClientProxy: ClientProxyProtocol {
             let roomProxy = RoomProxy(slidingSyncRoom: slidingSyncRoom,
                                       room: room,
                                       backgroundTaskService: backgroundTaskService)
-            roomProxies[identifier] = roomProxy
             
             return roomProxy
         } catch {
@@ -181,10 +174,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func clearRoom(for identifier: String) {
-        roomProxies.removeValue(forKey: identifier)
-    }
-        
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: .global()) {
             do {

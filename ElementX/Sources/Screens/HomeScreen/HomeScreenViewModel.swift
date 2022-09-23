@@ -66,11 +66,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 }
             }
 
+            await updateRooms()
+        }
+
+        Task {
             if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
                 state.userDisplayName = userDisplayName
             }
-            
-            await updateRooms()
         }
     }
     

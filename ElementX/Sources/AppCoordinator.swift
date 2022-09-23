@@ -381,7 +381,6 @@ class AppCoordinator: Coordinator {
         }
         
         remove(childCoordinator: coordinator)
-        userSession.clientProxy.clearRoom(for: roomId)
     }
     
     // MARK: Settings

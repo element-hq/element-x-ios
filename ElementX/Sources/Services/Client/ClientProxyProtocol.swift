@@ -54,8 +54,6 @@ protocol ClientProxyProtocol {
     func stopSync()
     
     func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol?
-
-    func clearRoom(for identifier: String)
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
         
