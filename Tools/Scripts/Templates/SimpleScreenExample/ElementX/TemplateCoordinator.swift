@@ -75,6 +75,10 @@ final class TemplateCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         templateHostingController
     }
+
+    func stop() {
+        stopLoading()
+    }
     
     // MARK: - Private
     

@@ -82,6 +82,10 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         serverSelectionHostingController
     }
+
+    func stop() {
+        stopLoading()
+    }
     
     // MARK: - Private
     

@@ -77,6 +77,10 @@ final class BugReportCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         bugReportHostingController
     }
+
+    func stop() {
+        stopLoading()
+    }
     
     // MARK: - Private
     
