@@ -60,6 +60,6 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     }
 
     func stop() {
-        roomScreenViewModel.context.send(viewAction: .stop)
+        roomScreenViewModel.stop()
     }
 }

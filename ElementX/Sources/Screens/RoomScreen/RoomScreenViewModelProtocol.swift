@@ -19,4 +19,6 @@ import Foundation
 @MainActor
 protocol RoomScreenViewModelProtocol {
     var context: RoomScreenViewModelType.Context { get }
+
+    func stop()
 }
