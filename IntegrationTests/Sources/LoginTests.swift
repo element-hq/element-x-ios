@@ -66,16 +66,18 @@ class LoginTests: XCTestCase {
         
         nextButton.tap()
         
-        let profileButton = app.buttons["userDisplayNameView"]
+        let profileButton = app.buttons["userAvatarImage"]
         XCTAssertTrue(profileButton.waitForExistence(timeout: expectedDuration))
         profileButton.tap()
         
-        let logoutButton = app.buttons["logoutButton"]
-        XCTAssertTrue(logoutButton.waitForExistence(timeout: 5.0))
-        logoutButton.tap()
+        let menuLogoutButton = app.buttons["Sign out"]
+        XCTAssertTrue(menuLogoutButton.waitForExistence(timeout: 5.0))
+        menuLogoutButton.tap()
         
-        let logoutSheetButton = app.buttons["Sign out"].firstMatch
-        XCTAssertTrue(logoutSheetButton.waitForExistence(timeout: 5.0))
-        logoutSheetButton.tap()
+        let alertLogoutButton = app.buttons["Sign out"]
+        XCTAssertTrue(alertLogoutButton.waitForExistence(timeout: 5.0))
+        alertLogoutButton.tap()
+        
+        XCTAssertTrue(getStartedButton.waitForExistence(timeout: 5.0))
     }
 }
