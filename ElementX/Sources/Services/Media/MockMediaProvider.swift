@@ -27,11 +27,19 @@ struct MockMediaProvider: MediaProviderProtocol {
     }
     
     func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage? {
-        if urlString != nil {
-            return UIImage(systemName: "photo")
+        guard urlString != nil else {
+            return nil
         }
-        
-        return nil
+
+        if let avatarSize = avatarSize {
+            switch avatarSize {
+            case .room:
+                return Asset.Images.appLogo.image
+            default:
+                return UIImage(systemName: "photo")
+            }
+        }
+        return UIImage(systemName: "photo")
     }
         
     func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
