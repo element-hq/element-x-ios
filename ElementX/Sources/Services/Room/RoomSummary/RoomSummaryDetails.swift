@@ -16,7 +16,7 @@
 
 import Foundation
 
-struct RoomSummary {
+struct RoomSummaryDetails {
     let id: String
     let name: String
     let isDirect: Bool

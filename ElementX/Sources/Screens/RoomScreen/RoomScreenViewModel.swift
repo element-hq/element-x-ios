@@ -58,7 +58,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     
                     self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
                 }
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
         
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
         

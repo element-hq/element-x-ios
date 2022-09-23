@@ -38,6 +38,11 @@ enum HomeScreenViewAction {
     case skipSessionVerification
 }
 
+enum HomeScreenRoomListMode {
+    case skeletons
+    case rooms
+}
+
 struct HomeScreenViewState: BindableState {
     var userID: String
     var userDisplayName: String?
@@ -47,11 +52,13 @@ struct HomeScreenViewState: BindableState {
     
     var rooms: [HomeScreenRoom] = []
     
-    var isLoadingRooms: Bool {
-        rooms.isEmpty
-    }
+    var roomListMode: HomeScreenRoomListMode = .rooms
     
     var visibleRooms: [HomeScreenRoom] {
+        if roomListMode == .skeletons {
+            return placeholderRooms
+        }
+        
         if bindings.searchQuery.isEmpty {
             return rooms
         }
@@ -60,6 +67,12 @@ struct HomeScreenViewState: BindableState {
     }
     
     var bindings = HomeScreenViewStateBindings()
+    
+    var placeholderRooms: [HomeScreenRoom] {
+        (1...10).map { index in
+            HomeScreenRoom.placeholder(id: "\(index)")
+        }
+    }
 }
 
 struct HomeScreenViewStateBindings {
@@ -78,12 +91,16 @@ struct HomeScreenRoom: Identifiable, Equatable {
     var lastMessage: AttributedString?
     
     var avatar: UIImage?
-}
-
-extension MutableCollection where Element == HomeScreenRoom {
-    mutating func updateEach(_ update: (inout Element) -> Void) {
-        for index in indices {
-            update(&self[index])
-        }
+    
+    var isPlaceholder = false
+    
+    static func placeholder(id: String) -> HomeScreenRoom {
+        HomeScreenRoom(id: id,
+                       name: "Placeholder room name",
+                       hasUnreads: false,
+                       timestamp: "Now",
+                       lastMessage: AttributedString("Last message"),
+                       avatar: UIImage(systemName: "photo"),
+                       isPlaceholder: true)
     }
 }

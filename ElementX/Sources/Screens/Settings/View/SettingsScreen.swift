@@ -242,13 +242,13 @@ struct Settings_Previews: PreviewProvider {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
     }
-
+    
     @ViewBuilder
     static var body: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
         let viewModel = SettingsViewModel(withUserSession: userSession)
-
+        
         NavigationView {
             SettingsScreen(context: viewModel.context)
                 .previewInterfaceOrientation(.portrait)

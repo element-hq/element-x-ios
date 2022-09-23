@@ -108,14 +108,27 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
     }
     
     static var body: some View {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe"),
+        let summaryProvider = MockRoomSummaryProvider(state: .loaded)
+        
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe", roomSummaryProvider: summaryProvider),
                                           mediaProvider: MockMediaProvider())
         
         let viewModel = HomeScreenViewModel(userSession: userSession,
                                             attributedStringBuilder: AttributedStringBuilder())
         
+        let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary in
+            guard let summary = summary.asFilled else {
+                return nil
+            }
+            
+            return HomeScreenRoom(id: summary.id,
+                                  name: summary.name,
+                                  hasUnreads: summary.unreadNotificationCount > 0,
+                                  timestamp: Date.now.formatted(date: .omitted, time: .shortened))
+        }
+                
         return VStack {
-            ForEach(viewModel.context.viewState.rooms) { room in
+            ForEach(rooms) { room in
                 HomeScreenRoomCell(room: room, context: viewModel.context)
             }
         }

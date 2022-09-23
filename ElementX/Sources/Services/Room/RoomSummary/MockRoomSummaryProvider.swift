@@ -17,33 +17,58 @@
 import Combine
 import Foundation
 
+enum MockRoomSummaryProviderState {
+    case loading
+    case loaded
+}
+
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
-    var callbacks = PassthroughSubject<RoomSummaryProviderCallback, Never>()
-    var stateUpdatePublisher = CurrentValueSubject<RoomSummaryProviderState, Never>(.cold)
-    var countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
-    
-    var roomSummaries: [RoomSummary] = [
-        RoomSummary(id: "1", name: "First room",
-                    isDirect: true,
-                    avatarURLString: nil,
-                    lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
-                    lastMessageTimestamp: .now,
-                    unreadNotificationCount: 4),
-        RoomSummary(id: "2",
-                    name: "Second room",
-                    isDirect: true,
-                    avatarURLString: nil,
-                    lastMessage: nil,
-                    lastMessageTimestamp: nil,
-                    unreadNotificationCount: 1),
-        RoomSummary(id: "3",
-                    name: "Third room",
-                    isDirect: true,
-                    avatarURLString: nil,
-                    lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
-                    lastMessageTimestamp: .now,
-                    unreadNotificationCount: 0)
-    ]
+    let roomListPublisher: CurrentValueSubject<[RoomSummary], Never>
+    let statePublisher: CurrentValueSubject<RoomSummaryProviderState, Never>
+    let countPublisher: CurrentValueSubject<UInt, Never>
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) { }
+    
+    convenience init() {
+        self.init(state: .loading)
+    }
+    
+    init(state: MockRoomSummaryProviderState) {
+        switch state {
+        case .loading:
+            roomListPublisher = .init([])
+            statePublisher = .init(.cold)
+            countPublisher = .init(0)
+        case .loaded:
+            roomListPublisher = .init(Self.rooms)
+            statePublisher = .init(.live)
+            countPublisher = .init(UInt(Self.rooms.count))
+        }
+    }
+    
+    // MARK: - Private
+    
+    static let rooms: [RoomSummary] = [
+        .filled(details: RoomSummaryDetails(id: "1", name: "First room",
+                                            isDirect: true,
+                                            avatarURLString: nil,
+                                            lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
+                                            lastMessageTimestamp: .now,
+                                            unreadNotificationCount: 4)),
+        .filled(details: RoomSummaryDetails(id: "2",
+                                            name: "Second room",
+                                            isDirect: true,
+                                            avatarURLString: "mockImageURLString",
+                                            lastMessage: nil,
+                                            lastMessageTimestamp: nil,
+                                            unreadNotificationCount: 1)),
+        .filled(details: RoomSummaryDetails(id: "3",
+                                            name: "Third room",
+                                            isDirect: true,
+                                            avatarURLString: nil,
+                                            lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
+                                            lastMessageTimestamp: .now,
+                                            unreadNotificationCount: 0)),
+        .empty(id: "3")
+    ]
 }

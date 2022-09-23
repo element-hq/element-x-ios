@@ -28,6 +28,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
+    // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
         roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
@@ -46,18 +47,36 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 default:
                     break
                 }
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
         
-        roomSummaryProvider.callbacks
+        Publishers.CombineLatest3(roomSummaryProvider.statePublisher,
+                                  roomSummaryProvider.countPublisher,
+                                  roomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                switch callback {
-                case .updatedRoomSummaries:
-                    Task {
-                        await self?.updateRooms()
+            .sink { [weak self] state, totalCount, rooms in
+                if state != .live {
+                    if totalCount == 0 || rooms.count != totalCount {
+                        self?.state.roomListMode = .skeletons
+                    } else {
+                        self?.state.roomListMode = .rooms
                     }
+                } else if totalCount == 0 {
+                    #warning("Empty state but it never happens because SS never goes into live for empty accounts")
+                } else {
+                    self?.state.roomListMode = .rooms
                 }
-            }.store(in: &cancellables)
+            }
+            .store(in: &cancellables)
+        
+        roomSummaryProvider.roomListPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                Task {
+                    await self?.updateRooms()
+                }
+            }
+            .store(in: &cancellables)
         
         Task {
             if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
@@ -65,14 +84,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     state.userAvatar = avatar
                 }
             }
-
-            await updateRooms()
         }
-
+        
         Task {
             if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
                 state.userDisplayName = userDisplayName
             }
+        }
+        
+        Task {
+            await updateRooms()
         }
     }
     
@@ -96,23 +117,22 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {
-        guard let summary = roomSummaryProvider.roomSummaries.first(where: { $0.id == identifier }),
-              var room = state.rooms.first(where: { $0.id == identifier }) else {
+        guard let summary = roomSummaryProvider.roomListPublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
+              let homeRoomIndex = state.rooms.firstIndex(where: { $0.id == identifier }) else {
             return
         }
         
-        if room.avatar != nil {
+        var details = state.rooms[homeRoomIndex]
+            
+        guard details.avatar == nil,
+              let avatarURLString = summary.avatarURLString else {
             return
         }
         
-        if let avatarURLString = summary.avatarURLString {
-            Task {
-                if case let .success(image) = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .room(on: .home)) {
-                    if let index = state.rooms.firstIndex(of: room) {
-                        room.avatar = image
-                        state.rooms[index] = room
-                    }
-                }
+        Task {
+            if case let .success(image) = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .room(on: .home)) {
+                details.avatar = image
+                state.rooms[homeRoomIndex] = details
             }
         }
     }
@@ -121,20 +141,25 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         state.rooms = await Task.detached {
             var rooms = [HomeScreenRoom]()
             
-            for summary in self.roomSummaryProvider.roomSummaries {
-                let avatarImage = await self.userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
-                
-                var timestamp: String?
-                if let lastMessageTimestamp = summary.lastMessageTimestamp {
-                    timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+            for summary in self.roomSummaryProvider.roomListPublisher.value {
+                switch summary {
+                case .empty(let id):
+                    rooms.append(HomeScreenRoom.placeholder(id: id))
+                case .filled(let summary):
+                    let avatarImage = await self.userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
+                    
+                    var timestamp: String?
+                    if let lastMessageTimestamp = summary.lastMessageTimestamp {
+                        timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+                    }
+                    
+                    rooms.append(HomeScreenRoom(id: summary.id,
+                                                name: summary.name,
+                                                hasUnreads: summary.unreadNotificationCount > 0,
+                                                timestamp: timestamp,
+                                                lastMessage: summary.lastMessage,
+                                                avatar: avatarImage))
                 }
-                
-                rooms.append(HomeScreenRoom(id: summary.id,
-                                            name: summary.name,
-                                            hasUnreads: summary.unreadNotificationCount > 0,
-                                            timestamp: timestamp,
-                                            lastMessage: summary.lastMessage,
-                                            avatar: avatarImage))
             }
             
             return rooms
