@@ -52,12 +52,12 @@ struct ServerSelectionScreen: View {
             AuthenticationIconImage(image: Asset.Images.serverSelectionIcon)
                 .padding(.bottom, 8)
             
-            Text(ElementL10n.serverSelectionTitle)
+            Text(ElementL10n.ftueAuthChooseServerTitle)
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
             
-            Text(ElementL10n.serverSelectionMessage)
+            Text(ElementL10n.ftueAuthChooseServerSubtitle)
                 .font(.element.body)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.secondaryContent)
@@ -67,7 +67,7 @@ struct ServerSelectionScreen: View {
     /// The text field and confirm button where the user enters a server URL.
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 12) {
-            TextField(ElementL10n.serverSelectionServerUrl, text: $context.homeserverAddress)
+            TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
                 .focused($isTextFieldFocused)
                 .textFieldStyle(.elementInput(footerText: context.viewState.footerMessage,
                                               isError: context.viewState.isShowingFooterError))

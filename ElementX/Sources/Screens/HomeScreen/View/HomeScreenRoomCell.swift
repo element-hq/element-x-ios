@@ -33,10 +33,12 @@ struct HomeScreenRoomCell: View {
                         .scaledToFill()
                         .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
+                        .accessibilityHidden(true)
                 } else {
                     PlaceholderAvatarImage(text: room.name, contentId: room.id)
                         .clipShape(Circle())
                         .frame(width: avatarSize, height: avatarSize)
+                        .accessibilityHidden(true)
                 }
                 
                 HStack(alignment: .top) {
@@ -76,6 +78,7 @@ struct HomeScreenRoomCell: View {
                 }
             }
             .frame(minHeight: 64.0)
+            .accessibilityElement(children: .combine)
             .task {
                 context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
             }

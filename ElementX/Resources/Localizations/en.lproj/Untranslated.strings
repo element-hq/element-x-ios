@@ -21,19 +21,9 @@
 "session_verification_screen_emojis_title" = "Lets check if these";
 "session_verification_screen_emojis_message" = "Open Element on one of your other sessions to compare.";
 
-// MARK: - Authentication
-
-"authentication_login_title" = "Welcome back!";
-"authentication_login_forgot_password" = "Forgot password";
-
-"authentication_server_info_title" = "Choose your server to store your data";
-"authentication_server_info_matrix_description" = "Join millions for free on the largest public server";
-
-"server_selection_title" = "Choose your server";
-"server_selection_message" = "What is the address of your server? A server is like a home for all your data.";
-"server_selection_server_url" = "Server URL";
 "server_selection_server_footer" = "You can only connect to a server that has already been set up";
-"server_selection_generic_error" = "Cannot find a server at this URL, please check it is correct.";
 
 "login_mobile_device" = "Mobile";
 "login_tablet_device" = "Tablet";
+
+"a11y_all_chats_user_avatar_menu" = "Main menu";

@@ -49,7 +49,6 @@ struct BugReportScreen: View {
             }
             .navigationTitle(ElementL10n.titleActivityBugReport)
         }
-        .background(Color.element.background, ignoresSafeAreaEdges: .all)
     }
     
     /// The main content of the view to be shown in a scroll view.

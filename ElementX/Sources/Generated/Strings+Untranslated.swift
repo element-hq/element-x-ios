@@ -10,18 +10,12 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 extension ElementL10n {
+  /// Main menu
+  public static let a11yAllChatsUserAvatarMenu = ElementL10n.tr("Untranslated", "a11y_all_chats_user_avatar_menu")
   /// Confirm
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
   /// Match
   public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
-  /// Forgot password
-  public static let authenticationLoginForgotPassword = ElementL10n.tr("Untranslated", "authentication_login_forgot_password")
-  /// Welcome back!
-  public static let authenticationLoginTitle = ElementL10n.tr("Untranslated", "authentication_login_title")
-  /// Join millions for free on the largest public server
-  public static let authenticationServerInfoMatrixDescription = ElementL10n.tr("Untranslated", "authentication_server_info_matrix_description")
-  /// Choose your server to store your data
-  public static let authenticationServerInfoTitle = ElementL10n.tr("Untranslated", "authentication_server_info_title")
   /// Mobile
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet
@@ -40,16 +34,8 @@ extension ElementL10n {
   public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
   /// You took a screenshot
   public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
-  /// Cannot find a server at this URL, please check it is correct.
-  public static let serverSelectionGenericError = ElementL10n.tr("Untranslated", "server_selection_generic_error")
-  /// What is the address of your server? A server is like a home for all your data.
-  public static let serverSelectionMessage = ElementL10n.tr("Untranslated", "server_selection_message")
   /// You can only connect to a server that has already been set up
   public static let serverSelectionServerFooter = ElementL10n.tr("Untranslated", "server_selection_server_footer")
-  /// Server URL
-  public static let serverSelectionServerUrl = ElementL10n.tr("Untranslated", "server_selection_server_url")
-  /// Choose your server
-  public static let serverSelectionTitle = ElementL10n.tr("Untranslated", "server_selection_title")
   /// Looks like you’re using a new device. Verify its you.
   public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")
   /// Help keep your messages secure
