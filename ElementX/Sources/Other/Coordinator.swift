@@ -48,6 +48,7 @@ extension Coordinator {
     }
     
     func remove(childCoordinator: Coordinator) {
+        childCoordinator.stop()
         childCoordinators = childCoordinators.filter { $0 !== childCoordinator }
     }
 }
