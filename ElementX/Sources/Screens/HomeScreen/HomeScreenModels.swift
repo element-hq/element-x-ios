@@ -63,14 +63,14 @@ struct HomeScreenViewState: BindableState {
             return rooms
         }
         
-        return rooms.lazy.filter { $0.asFilled?.name.localizedStandardContains(bindings.searchQuery) ?? false }
+        return rooms.lazy.filter { $0.name.localizedStandardContains(bindings.searchQuery) }
     }
     
     var bindings = HomeScreenViewStateBindings()
     
     var placeholderRooms: [HomeScreenRoom] {
         (1...10).map { index in
-            HomeScreenRoom.empty(HomeScreenRoomDetails.placeholder(id: "\(index)"))
+            HomeScreenRoom.placeholder(id: "\(index)")
         }
     }
 }
@@ -79,27 +79,7 @@ struct HomeScreenViewStateBindings {
     var searchQuery = ""
 }
 
-enum HomeScreenRoom: Identifiable, Equatable {
-    case empty(HomeScreenRoomDetails)
-    case filled(HomeScreenRoomDetails)
-    
-    var id: String {
-        switch self {
-        case .filled(let room), .empty(let room):
-            return room.id
-        }
-    }
-    
-    var asFilled: HomeScreenRoomDetails? {
-        guard case let .filled(details) = self else {
-            return nil
-        }
-        
-        return details
-    }
-}
-
-struct HomeScreenRoomDetails: Identifiable, Equatable {
+struct HomeScreenRoom: Identifiable, Equatable {
     let id: String
     
     let name: String
@@ -112,12 +92,15 @@ struct HomeScreenRoomDetails: Identifiable, Equatable {
     
     var avatar: UIImage?
     
-    static func placeholder(id: String) -> HomeScreenRoomDetails {
-        HomeScreenRoomDetails(id: id,
-                              name: "Placeholder room name",
-                              hasUnreads: false,
-                              timestamp: "Now",
-                              lastMessage: AttributedString("Last message"),
-                              avatar: UIImage(systemName: "photo"))
+    var isPlaceholder = false
+    
+    static func placeholder(id: String) -> HomeScreenRoom {
+        HomeScreenRoom(id: id,
+                       name: "Placeholder room name",
+                       hasUnreads: false,
+                       timestamp: "Now",
+                       lastMessage: AttributedString("Last message"),
+                       avatar: UIImage(systemName: "photo"),
+                       isPlaceholder: true)
     }
 }

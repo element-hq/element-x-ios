@@ -23,9 +23,9 @@ enum MockRoomSummaryProviderState {
 }
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
-    let roomListUpdatePublisher: CurrentValueSubject<[RoomSummaryProviderRoom], Never>
-    let stateUpdatePublisher: CurrentValueSubject<RoomSummaryProviderState, Never>
-    let countUpdatePublisher: CurrentValueSubject<UInt, Never>
+    let roomListPublisher: CurrentValueSubject<[RoomSummary], Never>
+    let statePublisher: CurrentValueSubject<RoomSummaryProviderState, Never>
+    let countPublisher: CurrentValueSubject<UInt, Never>
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) { }
     
@@ -36,39 +36,39 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     init(state: MockRoomSummaryProviderState) {
         switch state {
         case .loading:
-            roomListUpdatePublisher = .init([])
-            stateUpdatePublisher = .init(.cold)
-            countUpdatePublisher = .init(0)
+            roomListPublisher = .init([])
+            statePublisher = .init(.cold)
+            countPublisher = .init(0)
         case .loaded:
-            roomListUpdatePublisher = .init(Self.rooms)
-            stateUpdatePublisher = .init(.live)
-            countUpdatePublisher = .init(UInt(Self.rooms.count))
+            roomListPublisher = .init(Self.rooms)
+            statePublisher = .init(.live)
+            countPublisher = .init(UInt(Self.rooms.count))
         }
     }
     
     // MARK: - Private
     
-    static let rooms: [RoomSummaryProviderRoom] = [
-        .filled(roomSummary: RoomSummary(id: "1", name: "First room",
-                                         isDirect: true,
-                                         avatarURLString: nil,
-                                         lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
-                                         lastMessageTimestamp: .now,
-                                         unreadNotificationCount: 4)),
-        .filled(roomSummary: RoomSummary(id: "2",
-                                         name: "Second room",
-                                         isDirect: true,
-                                         avatarURLString: "mockImageURLString",
-                                         lastMessage: nil,
-                                         lastMessageTimestamp: nil,
-                                         unreadNotificationCount: 1)),
-        .filled(roomSummary: RoomSummary(id: "3",
-                                         name: "Third room",
-                                         isDirect: true,
-                                         avatarURLString: nil,
-                                         lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
-                                         lastMessageTimestamp: .now,
-                                         unreadNotificationCount: 0)),
+    static let rooms: [RoomSummary] = [
+        .filled(details: RoomSummaryDetails(id: "1", name: "First room",
+                                            isDirect: true,
+                                            avatarURLString: nil,
+                                            lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
+                                            lastMessageTimestamp: .now,
+                                            unreadNotificationCount: 4)),
+        .filled(details: RoomSummaryDetails(id: "2",
+                                            name: "Second room",
+                                            isDirect: true,
+                                            avatarURLString: "mockImageURLString",
+                                            lastMessage: nil,
+                                            lastMessageTimestamp: nil,
+                                            unreadNotificationCount: 1)),
+        .filled(details: RoomSummaryDetails(id: "3",
+                                            name: "Third room",
+                                            isDirect: true,
+                                            avatarURLString: nil,
+                                            lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
+                                            lastMessageTimestamp: .now,
+                                            unreadNotificationCount: 0)),
         .empty(id: "3")
     ]
 }

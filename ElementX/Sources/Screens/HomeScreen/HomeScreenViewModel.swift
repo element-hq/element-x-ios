@@ -50,9 +50,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        Publishers.CombineLatest3(roomSummaryProvider.stateUpdatePublisher,
-                                  roomSummaryProvider.countUpdatePublisher,
-                                  roomSummaryProvider.roomListUpdatePublisher)
+        Publishers.CombineLatest3(roomSummaryProvider.statePublisher,
+                                  roomSummaryProvider.countPublisher,
+                                  roomSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state, totalCount, rooms in
                 if state != .live {
@@ -63,11 +63,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     }
                 } else if totalCount == 0 {
                     #warning("Empty state but it never happens because SS never goes into live for empty accounts")
+                } else {
+                    self?.state.roomListMode = .rooms
                 }
             }
             .store(in: &cancellables)
         
-        roomSummaryProvider.roomListUpdatePublisher
+        roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 Task {
@@ -115,10 +117,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {
-        guard let summary = roomSummaryProvider.roomListUpdatePublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
-              let homeRoomIndex = state.rooms.firstIndex(where: { $0.asFilled?.id == identifier }),
-              var details = state.rooms[homeRoomIndex].asFilled,
-              details.avatar == nil,
+        guard let summary = roomSummaryProvider.roomListPublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
+              let homeRoomIndex = state.rooms.firstIndex(where: { $0.id == identifier }) else {
+            return
+        }
+        
+        var details = state.rooms[homeRoomIndex]
+            
+        guard details.avatar == nil,
               let avatarURLString = summary.avatarURLString else {
             return
         }
@@ -126,7 +132,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         Task {
             if case let .success(image) = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .room(on: .home)) {
                 details.avatar = image
-                state.rooms[homeRoomIndex] = .filled(details)
+                state.rooms[homeRoomIndex] = details
             }
         }
     }
@@ -135,11 +141,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         state.rooms = await Task.detached {
             var rooms = [HomeScreenRoom]()
             
-            for summary in self.roomSummaryProvider.roomListUpdatePublisher.value {
+            for summary in self.roomSummaryProvider.roomListPublisher.value {
                 switch summary {
                 case .empty(let id):
-                    rooms.append(HomeScreenRoom.empty(HomeScreenRoomDetails.placeholder(id: id)))
-                    continue
+                    rooms.append(HomeScreenRoom.placeholder(id: id))
                 case .filled(let summary):
                     let avatarImage = await self.userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
                     
@@ -148,12 +153,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                         timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
                     }
                     
-                    rooms.append(HomeScreenRoom.filled(HomeScreenRoomDetails(id: summary.id,
-                                                                             name: summary.name,
-                                                                             hasUnreads: summary.unreadNotificationCount > 0,
-                                                                             timestamp: timestamp,
-                                                                             lastMessage: summary.lastMessage,
-                                                                             avatar: avatarImage)))
+                    rooms.append(HomeScreenRoom(id: summary.id,
+                                                name: summary.name,
+                                                hasUnreads: summary.unreadNotificationCount > 0,
+                                                timestamp: timestamp,
+                                                lastMessage: summary.lastMessage,
+                                                avatar: avatarImage))
                 }
             }
             

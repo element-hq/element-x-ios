@@ -24,11 +24,20 @@ enum RoomSummaryProviderState {
     case live
 }
 
-enum RoomSummaryProviderRoom {
+enum RoomSummary: Identifiable {
     case empty(id: String)
-    case filled(roomSummary: RoomSummary)
+    case filled(details: RoomSummaryDetails)
     
-    var asFilled: RoomSummary? {
+    var id: String {
+        switch self {
+        case .empty(let id):
+            return id
+        case .filled(let summary):
+            return summary.id
+        }
+    }
+    
+    var asFilled: RoomSummaryDetails? {
         guard case let .filled(details) = self else {
             return nil
         }
@@ -39,13 +48,13 @@ enum RoomSummaryProviderRoom {
 
 protocol RoomSummaryProviderProtocol {
     /// Publishes the currently available room summaries
-    var roomListUpdatePublisher: CurrentValueSubject<[RoomSummaryProviderRoom], Never> { get }
+    var roomListPublisher: CurrentValueSubject<[RoomSummary], Never> { get }
     
     /// Publishes the current state the summary provider is finding itself in
-    var stateUpdatePublisher: CurrentValueSubject<RoomSummaryProviderState, Never> { get }
+    var statePublisher: CurrentValueSubject<RoomSummaryProviderState, Never> { get }
     
     /// Publishes the total number of rooms
-    var countUpdatePublisher: CurrentValueSubject<UInt, Never> { get }
+    var countPublisher: CurrentValueSubject<UInt, Never> { get }
     
     /// Invoked by the sliding sync controller whenever certain rooms have updated
     /// without necessarily changing their position in the list

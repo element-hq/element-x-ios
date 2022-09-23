@@ -30,13 +30,12 @@ struct HomeScreen: View {
             
             LazyVStack {
                 ForEach(context.viewState.visibleRooms) { room in
-                    switch room {
-                    case .empty(let someRoom):
-                        HomeScreenRoomCell(details: someRoom, context: context)
+                    if room.isPlaceholder {
+                        HomeScreenRoomCell(room: room, context: context)
                             .redacted(reason: .placeholder)
                             .disabled(true)
-                    case .filled(let someRoom):
-                        HomeScreenRoomCell(details: someRoom, context: context)
+                    } else {
+                        HomeScreenRoomCell(room: room, context: context)
                     }
                 }
             }

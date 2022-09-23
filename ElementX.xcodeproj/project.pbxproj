@@ -138,7 +138,6 @@
 		54C774874BED4A8FAD1F22FE /* AnalyticsConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77B3D4950F1707E66E4A45A /* AnalyticsConfiguration.swift */; };
 		563A05B43207D00A6B698211 /* OIDCService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9010EE0CC913D095887EF36E /* OIDCService.swift */; };
 		56F0A22972A3BB519DA2261C /* HomeScreenViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24F5530B2212862FA4BEFF2D /* HomeScreenViewModelProtocol.swift */; };
-		59C41313AED7566C3AC51163 /* RoomSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 29A953B6C0C431DBF4DD00B4 /* RoomSummary.swift */; };
 		5B2C4C17888FC095ED6880B2 /* SplashViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 48971F1FFD7FC5C466889FC7 /* SplashViewController.xib */; };
 		5C8AFBF168A41E20835F3B86 /* LoginScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB34B0C74CD242FED9DD069 /* LoginScreenUITests.swift */; };
 		5D430CDE11EAC3E8E6B80A66 /* RoomTimelineViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEE631F3A4AFDC6652DD9DA /* RoomTimelineViewFactory.swift */; };
@@ -255,6 +254,7 @@
 		A663FE6704CB500EBE782AE1 /* AnalyticsPromptCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DE1CF8F5EFD353B1A5E36F /* AnalyticsPromptCoordinator.swift */; };
 		A6DEC1ADEC8FEEC206A0FA37 /* AttributedStringBuilderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 72F37B5DA798C9AE436F2C2C /* AttributedStringBuilderProtocol.swift */; };
 		A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
+		A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */; };
 		A851635B3255C6DC07034A12 /* RoomScreenCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = B8108C8F0ACF6A7EB72D0117 /* RoomScreenCoordinator.swift */; };
 		A8EC7C9D886244DAE9433E37 /* SessionVerificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C18FAAD59AE7F1462D817E /* SessionVerificationViewModel.swift */; };
 		AA050DF4AEE54A641BA7CA22 /* RoomSummaryProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CC626F97AD70FF0420C115 /* RoomSummaryProviderProtocol.swift */; };
@@ -421,6 +421,7 @@
 		124D85E85505B6B81845235F /* fy */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = fy; path = fy.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		12A626D74BBE9F4A60763B45 /* ImageAnonymizer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAnonymizer.swift; sourceTree = "<group>"; };
 		13802897C7AFA360EA74C0B0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = en; path = en.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
+		142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummaryDetails.swift; sourceTree = "<group>"; };
 		167521635A1CC27624FCEB7F /* ServerSelectionViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionViewModel.swift; sourceTree = "<group>"; };
 		16DC8C5B2991724903F1FA6A /* AppIcon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = AppIcon.pdf; sourceTree = "<group>"; };
 		1715E3D7F53C0748AA50C91C /* PostHogAnalyticsClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostHogAnalyticsClient.swift; sourceTree = "<group>"; };
@@ -451,7 +452,6 @@
 		28959C7DB36C7688A01D4045 /* BugReportViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportViewModelProtocol.swift; sourceTree = "<group>"; };
 		289FA233E896FBC5956C67E0 /* RoomTimelineItemProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProperties.swift; sourceTree = "<group>"; };
 		28EA8BE9EEDBD17555141C7E /* el */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = el; path = el.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
-		29A953B6C0C431DBF4DD00B4 /* RoomSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomSummary.swift; sourceTree = "<group>"; };
 		2A5C6FBF97B6EED3D4FA5EFF /* AttributedStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AttributedStringBuilder.swift; sourceTree = "<group>"; };
 		2AE83A3DD63BCFBB956FE5CB /* nl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = nl; path = nl.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		2AEA20A6B4883E60469ACF8F /* SoftLogoutCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutCoordinator.swift; sourceTree = "<group>"; };
@@ -1284,7 +1284,7 @@
 			isa = PBXGroup;
 			children = (
 				8F7D42E66E939B709C1EC390 /* MockRoomSummaryProvider.swift */,
-				29A953B6C0C431DBF4DD00B4 /* RoomSummary.swift */,
+				142808B69851451AC32A2CEA /* RoomSummaryDetails.swift */,
 				CDB3227C7A74B734924942E9 /* RoomSummaryProvider.swift */,
 				10CC626F97AD70FF0420C115 /* RoomSummaryProviderProtocol.swift */,
 			);
@@ -2441,7 +2441,7 @@
 				352C439BE0F75E101EF11FB1 /* RoomScreenModels.swift in Sources */,
 				7BB31E67648CF32D2AB5E502 /* RoomScreenViewModel.swift in Sources */,
 				617624A97BDBB75ED3DD8156 /* RoomScreenViewModelProtocol.swift in Sources */,
-				59C41313AED7566C3AC51163 /* RoomSummary.swift in Sources */,
+				A7FD7B992E6EE6E5A8429197 /* RoomSummaryDetails.swift in Sources */,
 				983896D611ABF52A5C37498D /* RoomSummaryProvider.swift in Sources */,
 				AA050DF4AEE54A641BA7CA22 /* RoomSummaryProviderProtocol.swift in Sources */,
 				78B71D53C1FC55FB7A9B75F0 /* RoomTimelineController.swift in Sources */,
