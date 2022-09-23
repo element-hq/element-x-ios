@@ -16,8 +16,8 @@
 
 import UIKit
 
-protocol UserSessionFlowCoordinatorDelegate: AnyObject {
-    func userSessionFlowCoordinatorDidRequestSignOut(_ userSessionFlowCoordinator: UserSessionFlowCoordinator)
+enum UserSessionFlowCoordinatorAction {
+    case signOut
 }
 
 class UserSessionFlowCoordinator: Coordinator, Presentable {
@@ -29,7 +29,7 @@ class UserSessionFlowCoordinator: Coordinator, Presentable {
     
     var childCoordinators: [Coordinator] = []
     
-    weak var delegate: UserSessionFlowCoordinatorDelegate?
+    var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
     init(userSession: UserSessionProtocol, navigationRouter: NavigationRouterType, bugReportService: BugReportServiceProtocol) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
@@ -105,7 +105,7 @@ class UserSessionFlowCoordinator: Coordinator, Presentable {
             case .verifySession:
                 self.stateMachine.processEvent(.showSessionVerificationScreen)
             case .signOut:
-                self.delegate?.userSessionFlowCoordinatorDidRequestSignOut(self)
+                self.callback?(.signOut)
             }
         }
         
@@ -176,7 +176,7 @@ class UserSessionFlowCoordinator: Coordinator, Presentable {
                 self.dismissSettingsScreen()
             case .logout:
                 self.dismissSettingsScreen()
-                self.delegate?.userSessionFlowCoordinatorDidRequestSignOut(self)
+                self.callback?(.signOut)
             }
         }
 

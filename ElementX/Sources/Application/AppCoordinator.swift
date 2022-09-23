@@ -31,7 +31,7 @@ struct ServiceLocator {
     let userIndicatorPresenter: UserIndicatorTypePresenter
 }
 
-class AppCoordinator: Coordinator, UserSessionFlowCoordinatorDelegate {
+class AppCoordinator: Coordinator {
     private let window: UIWindow
     
     private let stateMachine: AppCoordinatorStateMachine
@@ -107,12 +107,6 @@ class AppCoordinator: Coordinator, UserSessionFlowCoordinatorDelegate {
         hideLoadingIndicator()
     }
     
-    // MARK: - UserSessionFlowCoordinatorDelegate
-    
-    func userSessionFlowCoordinatorDidRequestSignOut(_ userSessionFlowCoordinator: UserSessionFlowCoordinator) {
-        stateMachine.processEvent(.signOut)
-    }
-
     // MARK: - Private
     
     private func setupLogging() {
@@ -251,7 +245,14 @@ class AppCoordinator: Coordinator, UserSessionFlowCoordinatorDelegate {
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationRouter: navigationRouter,
                                                                     bugReportService: bugReportService)
-        userSessionFlowCoordinator.delegate = self
+        
+        userSessionFlowCoordinator.callback = { [weak self] action in
+            switch action {
+            case .signOut:
+                self?.stateMachine.processEvent(.signOut)
+            }
+        }
+        
         userSessionFlowCoordinator.start()
         
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
