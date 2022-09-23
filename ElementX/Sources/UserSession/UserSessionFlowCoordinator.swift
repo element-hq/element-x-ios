@@ -20,7 +20,7 @@ enum UserSessionFlowCoordinatorAction {
     case signOut
 }
 
-class UserSessionFlowCoordinator: Coordinator, Presentable {
+class UserSessionFlowCoordinator: Coordinator {
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
     private let userSession: UserSessionProtocol
@@ -45,11 +45,7 @@ class UserSessionFlowCoordinator: Coordinator, Presentable {
     }
     
     func stop() { }
-    
-    func toPresentable() -> UIViewController {
-        navigationRouter.toPresentable()
-    }
-    
+        
     // MARK: - Private
     
     private func setupStateMachine() {
