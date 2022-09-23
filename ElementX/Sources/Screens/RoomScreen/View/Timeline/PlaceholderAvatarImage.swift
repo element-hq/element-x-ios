@@ -26,7 +26,8 @@ struct PlaceholderAvatarImage: View {
             Text(textForImage)
                 .padding(4)
                 .foregroundColor(.white)
-                .font(.title2.bold())
+                .font(.system(size: 200).weight(.semibold))
+                .minimumScaleFactor(0.001)
         }
         .aspectRatio(1, contentMode: .fill)
     }
