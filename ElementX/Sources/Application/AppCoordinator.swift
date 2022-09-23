@@ -254,8 +254,6 @@ class AppCoordinator: Coordinator, UserSessionFlowCoordinatorDelegate {
         userSessionFlowCoordinator.delegate = self
         userSessionFlowCoordinator.start()
         
-        navigationRouter.setRootModule(userSessionFlowCoordinator)
-        
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
     }
     

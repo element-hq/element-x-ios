@@ -245,21 +245,6 @@ class UserSessionFlowCoordinator: Coordinator, Presentable {
         navigationRouter.present(alert, animated: true)
     }
 
-    private func processScreenshotDetection(image: UIImage?, error: Error?) {
-        MXLog.debug("Detected screenshot: \(String(describing: image)), error: \(String(describing: error))")
-
-        let alert = UIAlertController(title: ElementL10n.screenshotDetectedTitle,
-                                      message: ElementL10n.screenshotDetectedMessage,
-                                      preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
-        alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
-            self?.presentBugReportScreen(for: image)
-        })
-
-        navigationRouter.present(alert, animated: true)
-    }
-
     private func presentBugReportScreen(for image: UIImage? = nil) {
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
                                                         screenshot: image)
