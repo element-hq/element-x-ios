@@ -1,1 +1,0 @@
-Disable danger for external forks due to missing secret and run SwiftFormat as a pre-build step to fail early on CI.

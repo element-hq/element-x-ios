@@ -1,3 +1,50 @@
+## Changes in 1.0.3 (2022-09-23)
+
+✨ Features
+
+- UITests: Add screenshot tests. ([#9](https://github.com/vector-im/element-x-ios/issues/9))
+- Logout from the server & implement soft logout flow. ([#104](https://github.com/vector-im/element-x-ios/issues/104))
+- Implemented timeline item repyling ([#114](https://github.com/vector-im/element-x-ios/issues/114))
+- Room: New bubbles design implementation. ([#177](https://github.com/vector-im/element-x-ios/issues/177))
+- HomeScreen: Add user options menu to avatar and display name. ([#179](https://github.com/vector-im/element-x-ios/issues/179))
+- Settings screen: Implement new design. ([#180](https://github.com/vector-im/element-x-ios/issues/180))
+
+🙌 Improvements
+
+- Use unstable MSC2967 values for OIDC scopes + client registration metadata updates. ([#154](https://github.com/vector-im/element-x-ios/pull/154))
+- DesignKit: Update design tokens and add system colours to a local copy of ElementColors. ([#186](https://github.com/vector-im/element-x-ios/pull/186))
+- DesignKit: Update fonts to match Figma. ([#187](https://github.com/vector-im/element-x-ios/pull/187))
+- Include redacted events in the timeline. ([#199](https://github.com/vector-im/element-x-ios/pull/199))
+- Rename RoomTimelineProviderItem to TimelineItemProxy for clarity. ([#162](https://github.com/vector-im/element-x-ios/issues/162))
+- Style the session verification banner to match Figma. ([#181](https://github.com/vector-im/element-x-ios/issues/181))
+
+🐛 Bugfixes
+
+- Replace blocking detached tasks with Task.dispatch(on:). ([#201](https://github.com/vector-im/element-x-ios/pull/201))
+
+🧱 Build
+
+- Disable danger for external forks due to missing secret and run SwiftFormat as a pre-build step to fail early on CI. ([#157](https://github.com/vector-im/element-x-ios/pull/157))
+- Run SwiftFormat as a post-build script locally, with an additional pre-build step on CI. ([#167](https://github.com/vector-im/element-x-ios/pull/167))
+- Add validate-lfs.sh check from Element Android. ([#203](https://github.com/vector-im/element-x-ios/pull/203))
+- Python 3 support for localizer script. ([#191](https://github.com/vector-im/element-x-ios/issues/191))
+
+📄 Documentation
+
+- CONTRIBUTING.md: Fix broken link to the `createScreen.sh` script. ([#153](https://github.com/vector-im/element-x-ios/pull/153))
+
+🚧 In development 🚧
+
+- Begin adding the same Analytics used in Element iOS. ([#106](https://github.com/vector-im/element-x-ios/issues/106))
+- Add isEdited and reactions properties to timeline items. ([#111](https://github.com/vector-im/element-x-ios/issues/111))
+- Add a redactions context menu item (disabled for now whilst waiting for SDK releases). ([#178](https://github.com/vector-im/element-x-ios/issues/178))
+
+Others
+
+- Add a pull request template. ([#156](https://github.com/vector-im/element-x-ios/pull/156))
+- Use standard file headers. ([#150](https://github.com/vector-im/element-x-ios/issues/150))
+
+
 ## Changes in 1.0.2 (2022-07-28)
 
 ✨ Features
