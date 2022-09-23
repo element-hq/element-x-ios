@@ -36,15 +36,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     func buildTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
-                              showSenderDetails: Bool,
                               inGroupState: TimelineItemInGroupState) async -> RoomTimelineItemProtocol {
         let displayName = roomProxy.displayNameForUserId(eventItemProxy.sender)
         let avatarURL = roomProxy.avatarURLStringForUserId(eventItemProxy.sender)
-        let avatarImage = mediaProvider.imageFromURLString(avatarURL, size: MediaProviderDefaultAvatarSize)
+        let avatarImage = mediaProvider.imageFromURLString(avatarURL, avatarSize: .user(on: .timeline))
         let isOutgoing = eventItemProxy.isOwn
 
         if eventItemProxy.isRedacted {
-            return buildRedactedTimelineItem(eventItemProxy, isOutgoing, showSenderDetails, inGroupState, displayName, avatarImage)
+            return buildRedactedTimelineItem(eventItemProxy, isOutgoing, inGroupState, displayName, avatarImage)
         }
 
         guard let messageContent = eventItemProxy.content.asMessage() else { fatalError("Must be a message for now.") }
@@ -52,35 +51,31 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         switch messageContent.msgtype() {
         case .text(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildTextTimelineItemFromMessage(message, isOutgoing, showSenderDetails, inGroupState, displayName, avatarImage)
+            return await buildTextTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .image(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildImageTimelineItemFromMessage(message, isOutgoing, showSenderDetails, inGroupState, displayName, avatarImage)
+            return await buildImageTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .notice(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildNoticeTimelineItemFromMessage(message, isOutgoing, showSenderDetails, inGroupState, displayName, avatarImage)
+            return await buildNoticeTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .emote(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildEmoteTimelineItemFromMessage(message, isOutgoing, showSenderDetails, inGroupState, displayName, avatarImage)
+            return await buildEmoteTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .none:
-            return await buildFallbackTimelineItem(eventItemProxy, isOutgoing, showSenderDetails, inGroupState, displayName, avatarImage)
+            return await buildFallbackTimelineItem(eventItemProxy, isOutgoing, inGroupState, displayName, avatarImage)
         }
     }
     
     // MARK: - Private
 
-    // swiftformat:disable function_parameter_count
-    // swiftlint:disable function_parameter_count
     private func buildRedactedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                            _ isOutgoing: Bool,
-                                           _ showSenderDetails: Bool,
                                            _ inGroupState: TimelineItemInGroupState,
                                            _ displayName: String?,
                                            _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
         RedactedRoomTimelineItem(id: eventItemProxy.id,
                                  text: ElementL10n.eventRedacted,
                                  timestamp: eventItemProxy.originServerTs.formatted(date: .omitted, time: .shortened),
-                                 shouldShowSenderDetails: showSenderDetails,
                                  inGroupState: inGroupState,
                                  isOutgoing: isOutgoing,
                                  senderId: eventItemProxy.sender,
@@ -91,7 +86,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
 
     private func buildFallbackTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                            _ isOutgoing: Bool,
-                                           _ showSenderDetails: Bool,
                                            _ inGroupState: TimelineItemInGroupState,
                                            _ displayName: String?,
                                            _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
@@ -102,7 +96,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     text: eventItemProxy.body ?? "",
                                     attributedComponents: attributedComponents,
                                     timestamp: eventItemProxy.originServerTs.formatted(date: .omitted, time: .shortened),
-                                    shouldShowSenderDetails: showSenderDetails,
                                     inGroupState: inGroupState,
                                     isOutgoing: isOutgoing,
                                     senderId: eventItemProxy.sender,
@@ -114,7 +107,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildTextTimelineItemFromMessage(_ message: MessageTimelineItem<TextMessageContent>,
                                                   _ isOutgoing: Bool,
-                                                  _ showSenderDetails: Bool,
                                                   _ inGroupState: TimelineItemInGroupState,
                                                   _ displayName: String?,
                                                   _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
@@ -125,7 +117,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     text: message.body,
                                     attributedComponents: attributedComponents,
                                     timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
-                                    shouldShowSenderDetails: showSenderDetails,
                                     inGroupState: inGroupState,
                                     isOutgoing: isOutgoing,
                                     senderId: message.sender,
@@ -137,7 +128,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildImageTimelineItemFromMessage(_ message: MessageTimelineItem<ImageMessageContent>,
                                                    _ isOutgoing: Bool,
-                                                   _ showSenderDetails: Bool,
                                                    _ inGroupState: TimelineItemInGroupState,
                                                    _ displayName: String?,
                                                    _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
@@ -150,7 +140,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         return ImageRoomTimelineItem(id: message.id,
                                      text: message.body,
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
-                                     shouldShowSenderDetails: showSenderDetails,
                                      inGroupState: inGroupState,
                                      isOutgoing: isOutgoing,
                                      senderId: message.sender,
@@ -168,7 +157,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildNoticeTimelineItemFromMessage(_ message: MessageTimelineItem<NoticeMessageContent>,
                                                     _ isOutgoing: Bool,
-                                                    _ showSenderDetails: Bool,
                                                     _ inGroupState: TimelineItemInGroupState,
                                                     _ displayName: String?,
                                                     _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
@@ -179,7 +167,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                       text: message.body,
                                       attributedComponents: attributedComponents,
                                       timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
-                                      shouldShowSenderDetails: showSenderDetails,
                                       inGroupState: inGroupState,
                                       isOutgoing: isOutgoing,
                                       senderId: message.sender,
@@ -191,7 +178,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildEmoteTimelineItemFromMessage(_ message: MessageTimelineItem<EmoteMessageContent>,
                                                    _ isOutgoing: Bool,
-                                                   _ showSenderDetails: Bool,
                                                    _ inGroupState: TimelineItemInGroupState,
                                                    _ displayName: String?,
                                                    _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
@@ -202,7 +188,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      text: message.body,
                                      attributedComponents: attributedComponents,
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
-                                     shouldShowSenderDetails: showSenderDetails,
                                      inGroupState: inGroupState,
                                      isOutgoing: isOutgoing,
                                      senderId: message.sender,
@@ -211,9 +196,6 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(message.reactions)))
     }
-    
-    // swiftlint:enable function_parameter_count
-    // swiftformat:enable function_parameter_count
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
         reactions.map { reaction in

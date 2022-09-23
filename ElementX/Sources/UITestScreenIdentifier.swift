@@ -25,6 +25,7 @@ enum UITestScreenIdentifier: String {
     case analyticsPrompt
     case simpleRegular
     case simpleUpgrade
+    case home
     case settings
     case bugReport
     case bugReportWithScreenshot

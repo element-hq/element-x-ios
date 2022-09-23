@@ -144,7 +144,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .background(Color.element.systemGray6) // Demo time!
             .cornerRadius(12, inGroupState: timelineItem.inGroupState) // Demo time!
 //            .overlay(
-//                RoundedCorner(radius: 18, inGroupState: timelineItem.inGroupState)
+//                RoundedCornerShape(radius: 18, inGroupState: timelineItem.inGroupState)
 //                    .stroke(Color.element.systemGray5)
 //            )
         }

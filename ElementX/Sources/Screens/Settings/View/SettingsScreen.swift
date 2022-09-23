@@ -19,10 +19,11 @@ import SwiftUI
 struct SettingsScreen: View {
     // MARK: Private
 
+    @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
     @ObservedObject private var settings = ElementSettings.shared
 
-    @ScaledMetric private var avatarSize = 60.0
+    @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
@@ -169,7 +170,7 @@ struct SettingsScreen: View {
     
     private var logoutSection: some View {
         Section {
-            Button(action: logout) {
+            Button { showingLogoutConfirmation = true } label: {
                 HStack {
                     Image(systemName: "rectangle.portrait.and.arrow.right")
                         .foregroundColor(.element.systemGray)
@@ -186,6 +187,14 @@ struct SettingsScreen: View {
             .listRowInsets(listRowInsets)
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier("logoutButton")
+            .alert(ElementL10n.actionSignOut,
+                   isPresented: $showingLogoutConfirmation) {
+                Button(ElementL10n.actionSignOut,
+                       role: .destructive,
+                       action: logout)
+            } message: {
+                Text(ElementL10n.actionSignOutConfirmationSimple)
+            }
         } footer: {
             versionText
                 .frame(maxWidth: .infinity)
@@ -194,12 +203,10 @@ struct SettingsScreen: View {
 
     private var closeButton: some View {
         Button(action: close) {
-            HStack {
-                Image(systemName: "xmark")
-                    .font(.title3.bold())
-                    .foregroundColor(.element.secondaryContent)
-                    .padding(4)
-            }
+            Image(systemName: "xmark")
+                .font(.title3.bold())
+                .foregroundColor(.element.secondaryContent)
+                .padding(4)
         }
         .accessibilityIdentifier("closeButton")
     }

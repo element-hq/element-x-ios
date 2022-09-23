@@ -130,7 +130,7 @@ class AppCoordinator: Coordinator {
         MXLog.configure(loggerConfiguration)
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self = self else { return }
@@ -147,15 +147,14 @@ class AppCoordinator: Coordinator {
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 self.hideLoadingIndicator()
                 self.showLoginErrorToast()
-                self.startAuthentication()
             case (.restoringSession, .succeededRestoringSession, .homeScreen):
                 self.hideLoadingIndicator()
                 self.presentHomeScreen()
             
             case(_, _, .roomScreen(let roomId)):
                 self.presentRoomWithIdentifier(roomId)
-            case(.roomScreen, .dismissedRoomScreen, .homeScreen):
-                self.tearDownDismissedRoomScreen()
+            case(.roomScreen(let roomId), .dismissedRoomScreen, .homeScreen):
+                self.tearDownDismissedRoomScreen(roomId)
 
             case (_, .signOut, .signingOut):
                 self.showLoadingIndicator()
@@ -239,13 +238,11 @@ class AppCoordinator: Coordinator {
                     self.remove(childCoordinator: coordinator)
                     self.stateMachine.processEvent(.succeededSigningIn)
                 case .clearAllData:
-                    self.confirmClearAllData {
-                        //  clear user data
-                        self.userSessionStore.logout(userSession: self.userSession)
-                        self.userSession = nil
-                        self.remove(childCoordinator: coordinator)
-                        self.startAuthentication()
-                    }
+                    //  clear user data
+                    self.userSessionStore.logout(userSession: self.userSession)
+                    self.userSession = nil
+                    self.remove(childCoordinator: coordinator)
+                    self.startAuthentication()
                 }
             }
 
@@ -310,7 +307,7 @@ class AppCoordinator: Coordinator {
             case .verifySession:
                 self.stateMachine.processEvent(.showSessionVerificationScreen)
             case .signOut:
-                self.confirmSignOut()
+                self.stateMachine.processEvent(.signOut)
             }
         }
         
@@ -368,7 +365,7 @@ class AppCoordinator: Coordinator {
 
         let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
                                                          roomName: roomProxy.displayName ?? roomProxy.name,
-                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL, size: MediaProviderDefaultAvatarSize))
+                                                         roomAvatar: userSession.mediaProvider.imageFromURLString(roomProxy.avatarURL, avatarSize: .room(on: .timeline)))
         let coordinator = RoomScreenCoordinator(parameters: parameters)
 
         add(childCoordinator: coordinator)
@@ -378,7 +375,7 @@ class AppCoordinator: Coordinator {
         }
     }
     
-    private func tearDownDismissedRoomScreen() {
+    private func tearDownDismissedRoomScreen(_ roomId: String) {
         guard let coordinator = childCoordinators.last as? RoomScreenCoordinator else {
             fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
         }
@@ -433,32 +430,6 @@ class AppCoordinator: Coordinator {
         alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
             self?.presentBugReportScreen()
-        })
-
-        navigationRouter.present(alert, animated: true)
-    }
-
-    private func confirmSignOut() {
-        let alert = UIAlertController(title: ElementL10n.actionSignOut,
-                                      message: ElementL10n.actionSignOutConfirmationSimple,
-                                      preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel))
-        alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { [weak self] _ in
-            self?.stateMachine.processEvent(.signOut)
-        })
-
-        navigationRouter.present(alert, animated: true)
-    }
-
-    /// Shows a confirmation to clear all data, and proceeds to do so if the user confirms.
-    private func confirmClearAllData(_ confirmed: @escaping () -> Void) {
-        let alert = UIAlertController(title: ElementL10n.softLogoutClearDataDialogTitle,
-                                      message: ElementL10n.softLogoutClearDataDialogContent,
-                                      preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: ElementL10n.actionCancel, style: .cancel, handler: nil))
-        alert.addAction(UIAlertAction(title: ElementL10n.actionSignOut, style: .destructive) { _ in
-            confirmed()
         })
 
         navigationRouter.present(alert, animated: true)

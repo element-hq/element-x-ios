@@ -149,7 +149,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 guard eventItem.isMessage || eventItem.isRedacted else { break } // To be handled in the future
 
                 newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
-                                                                                       showSenderDetails: inGroupState.shouldShowSenderDetails,
                                                                                        inGroupState: inGroupState))
             case .virtual:
 //            case .virtual(let virtualItem):
@@ -252,7 +251,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
             
-            switch await mediaProvider.loadImageFromURLString(avatarURLString, size: MediaProviderDefaultAvatarSize) {
+            switch await mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .user(on: .timeline)) {
             case .success(let avatar):
                 guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                       var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {

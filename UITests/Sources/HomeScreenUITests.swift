@@ -15,3 +15,14 @@
 //
 
 import XCTest
+
+class HomeScreenUITests: XCTestCase {
+    func testInitialStateComponents() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.home)
+
+        XCTAssert(app.navigationBars[ElementL10n.allChats].exists)
+
+        app.assertScreenshot(.home)
+    }
+}

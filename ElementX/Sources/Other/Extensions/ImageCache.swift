@@ -15,9 +15,12 @@
 //
 
 import Foundation
+import Kingfisher
 
-@MainActor
-protocol RoomTimelineItemFactoryProtocol {
-    func buildTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
-                              inGroupState: TimelineItemInGroupState) async -> RoomTimelineItemProtocol
+extension ImageCache {
+    static var onlyInMemory: ImageCache {
+        let result = ImageCache.default
+        result.diskStorage.config.sizeLimit = 1
+        return result
+    }
 }

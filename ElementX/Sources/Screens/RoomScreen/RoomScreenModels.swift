@@ -40,6 +40,7 @@ enum RoomScreenViewAction {
     case sendMessage
     case sendReaction(key: String, eventID: String)
     case cancelReply
+    case viewDisappeared
 }
 
 struct RoomScreenViewState: BindableState {

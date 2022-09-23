@@ -17,6 +17,7 @@
 import SwiftUI
 
 struct HomeScreen: View {
+    @State private var showingLogoutConfirmation = false
     @ObservedObject var context: HomeScreenViewModel.Context
     
     // MARK: Views
@@ -50,7 +51,7 @@ struct HomeScreen: View {
         .transition(.slide)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
-        .navigationTitle(ElementL10n.homeScreenAllChats)
+        .navigationTitle(ElementL10n.allChats)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
@@ -75,7 +76,9 @@ struct HomeScreen: View {
                 }
             }
             Section {
-                Button(role: .destructive, action: signOut) {
+                Button(role: .destructive) {
+                    showingLogoutConfirmation = true
+                } label: {
                     Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
                 }
             }
@@ -84,23 +87,33 @@ struct HomeScreen: View {
                 .animation(.elementDefault, value: context.viewState.userAvatar)
                 .transition(.opacity)
         }
+        .alert(ElementL10n.actionSignOut,
+               isPresented: $showingLogoutConfirmation) {
+            Button(ElementL10n.actionSignOut,
+                   role: .destructive,
+                   action: signOut)
+        } message: {
+            Text(ElementL10n.actionSignOutConfirmationSimple)
+        }
     }
 
     @ViewBuilder
     private var userAvatarImageView: some View {
         userAvatarImage
-            .resizable()
-            .scaledToFill()
-            .frame(width: 32, height: 32, alignment: .center)
+            .frame(width: AvatarSize.user(on: .home).value, height: AvatarSize.user(on: .home).value, alignment: .center)
             .clipShape(Circle())
             .accessibilityIdentifier("userAvatarImage")
     }
 
-    private var userAvatarImage: Image {
+    @ViewBuilder
+    private var userAvatarImage: some View {
         if let avatar = context.viewState.userAvatar {
-            return Image(uiImage: avatar)
+            Image(uiImage: avatar)
+                .resizable()
+                .scaledToFill()
         } else {
-            return .empty
+            PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID,
+                                   contentId: context.viewState.userID)
         }
     }
     

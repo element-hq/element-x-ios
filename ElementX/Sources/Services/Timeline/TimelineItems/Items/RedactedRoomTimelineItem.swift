@@ -21,7 +21,6 @@ struct RedactedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, E
     let id: String
     let text: String
     let timestamp: String
-    let shouldShowSenderDetails: Bool
     let inGroupState: TimelineItemInGroupState
     let isOutgoing: Bool
     

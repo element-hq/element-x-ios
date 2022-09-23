@@ -22,7 +22,6 @@ struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equ
     let text: String
     var attributedComponents: [AttributedStringBuilderComponent]?
     let timestamp: String
-    let shouldShowSenderDetails: Bool
     let inGroupState: TimelineItemInGroupState
     let isOutgoing: Bool
     
