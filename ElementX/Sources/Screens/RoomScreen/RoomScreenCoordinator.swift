@@ -59,5 +59,7 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
         roomScreenHostingController
     }
 
-    func stop() { }
+    func stop() {
+        roomScreenViewModel.context.send(viewAction: .stop)
+    }
 }
