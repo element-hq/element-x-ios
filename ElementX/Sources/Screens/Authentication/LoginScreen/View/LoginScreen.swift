@@ -64,7 +64,7 @@ struct LoginScreen: View {
     
     /// The header containing a Welcome Back title.
     var header: some View {
-        Text(ElementL10n.authenticationLoginTitle)
+        Text(ElementL10n.ftueAuthWelcomeBackTitle)
             .font(.element.title2Bold)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
@@ -102,7 +102,7 @@ struct LoginScreen: View {
                 .accessibilityIdentifier("passwordTextField")
             
             Button { context.send(viewAction: .forgotPassword) } label: {
-                Text(ElementL10n.authenticationLoginForgotPassword)
+                Text(ElementL10n.ftueAuthForgotPassword)
                     .font(.element.body)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)

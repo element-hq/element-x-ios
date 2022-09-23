@@ -91,6 +91,7 @@ struct HomeScreen: View {
         } message: {
             Text(ElementL10n.actionSignOutConfirmationSimple)
         }
+        .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
     }
 
     @ViewBuilder

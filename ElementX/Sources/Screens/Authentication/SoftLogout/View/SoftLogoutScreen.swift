@@ -96,7 +96,7 @@ struct SoftLogoutScreen: View {
                 .accessibilityIdentifier("passwordTextField")
 
             Button { context.send(viewAction: .forgotPassword) } label: {
-                Text(ElementL10n.authenticationLoginForgotPassword)
+                Text(ElementL10n.ftueAuthForgotPassword)
                     .font(.element.body)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)

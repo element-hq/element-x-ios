@@ -60,12 +60,14 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     .frame(height: 8)
                 HStack(alignment: .top, spacing: 4) {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
+                        .accessibilityHidden(true)
                     Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
                         .font(.element.footnoteBold)
                         .foregroundColor(.element.primaryContent)
                         .lineLimit(1)
                         .padding(.vertical, senderNameVerticalPadding)
                 }
+                .accessibilityElement(children: .combine)
             }
         }
     }
@@ -75,6 +77,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         // the centre aligned stroke width so we use -5 here
         VStack(alignment: alignment, spacing: -5) {
             styledContent
+                .accessibilityElement(children: .combine)
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
@@ -98,14 +101,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContentOutgoing: some View {
-        if timelineItem.inGroupState == .single || timelineItem.inGroupState == .beginning {
-            Spacer()
-                .frame(height: 8)
-        }
+        let topPadding: CGFloat? = timelineItem.inGroupState == .single || timelineItem.inGroupState == .beginning ? 8 : 0
+        
         if shouldAvoidBubbling {
             content()
                 .frame(width: bubbleWidth)
                 .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+                .padding(.top, topPadding)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
@@ -120,6 +122,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
             .background(Color.element.systemGray5)
             .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+            .padding(.top, topPadding)
         }
     }
 
@@ -171,7 +174,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
 
     @ViewBuilder
     static var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 2) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
                 RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)

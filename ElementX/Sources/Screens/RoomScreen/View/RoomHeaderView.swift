@@ -26,6 +26,7 @@ struct RoomHeaderView: View {
     var body: some View {
         HStack(spacing: 8) {
             roomAvatar
+                .accessibilityHidden(true)
             Text(context.viewState.roomTitle)
                 .font(.element.headline)
                 .accessibilityIdentifier("roomNameLabel")
