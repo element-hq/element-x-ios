@@ -57,6 +57,11 @@ public struct ElementColors {
     public var systemGray4: Color { Color(.systemGray4) }
     public var systemGray5: Color { Color(.systemGray5) }
     public var systemGray6: Color { Color(.systemGray6) }
+
+    public func avatarBackground(for contentId: String) -> Color {
+        let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))
+        return contentAndAvatars[colorIndex % contentAndAvatars.count]
+    }
     
     // MARK: - Temp
     
@@ -119,6 +124,11 @@ public extension UIColor {
     public var systemGray4: UIColor { .systemGray4 }
     public var systemGray5: UIColor { .systemGray5 }
     public var systemGray6: UIColor { .systemGray6 }
+
+    public func avatarBackground(for contentId: String) -> UIColor {
+        let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))
+        return contentAndAvatars[colorIndex % contentAndAvatars.count]
+    }
     
     // MARK: - Temp
     
@@ -138,4 +148,18 @@ public extension UIColor {
     
     public var tempActionBackgroundTint: UIColor { tempActionBackground.withAlphaComponent(0.2) }
     public var tempActionForegroundTint: UIColor { tempActionForeground.withAlphaComponent(0.2) }
+}
+
+private extension String {
+    /// Calculates a numeric hash same as Element Web
+    /// See original function here https://github.com/matrix-org/matrix-react-sdk/blob/321dd49db4fbe360fc2ff109ac117305c955b061/src/utils/FormattingUtils.js#L47
+    var hashCode: Int32 {
+        var hash: Int32 = 0
+
+        for character in self {
+            let shiftedHash = hash << 5
+            hash = shiftedHash.subtractingReportingOverflow(hash).partialValue + Int32(character.unicodeScalars[character.unicodeScalars.startIndex].value)
+        }
+        return abs(hash)
+    }
 }

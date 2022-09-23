@@ -42,9 +42,7 @@ struct PlaceholderAvatarImage: View {
             return .element.accent
         }
 
-        let colors = Color.element.contentAndAvatars
-        let colorIndex = Int(contentId.hashCode % Int32(colors.count))
-        return Color.element.contentAndAvatars[colorIndex % colors.count]
+        return .element.avatarBackground(for: contentId)
     }
 }
 
