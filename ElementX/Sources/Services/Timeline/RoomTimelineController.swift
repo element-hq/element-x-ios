@@ -251,7 +251,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
             
-            switch await mediaProvider.loadImageFromURLString(avatarURLString, size: .user(on: .timeline)) {
+            switch await mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .user(on: .timeline)) {
             case .success(let avatar):
                 guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                       var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {

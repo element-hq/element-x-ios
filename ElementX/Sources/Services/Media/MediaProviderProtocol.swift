@@ -24,29 +24,29 @@ enum MediaProviderError: Error {
 
 @MainActor
 protocol MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSource?, size: AvatarSize?) -> UIImage?
+    func imageFromSource(_ source: MediaSource?, avatarSize: AvatarSize?) -> UIImage?
     
-    @discardableResult func loadImageFromSource(_ source: MediaSource, size: AvatarSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromSource(_ source: MediaSource, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
     
-    func imageFromURLString(_ urlString: String?, size: AvatarSize?) -> UIImage?
+    func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage?
     
-    @discardableResult func loadImageFromURLString(_ urlString: String, size: AvatarSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
 }
 
 extension MediaProviderProtocol {
     func imageFromSource(_ source: MediaSource?) -> UIImage? {
-        imageFromSource(source, size: nil)
+        imageFromSource(source, avatarSize: nil)
     }
     
     @discardableResult func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(source, size: nil)
+        await loadImageFromSource(source, avatarSize: nil)
     }
     
     func imageFromURLString(_ urlString: String?) -> UIImage? {
-        imageFromURLString(urlString, size: nil)
+        imageFromURLString(urlString, avatarSize: nil)
     }
     
     @discardableResult func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromURLString(urlString, size: nil)
+        await loadImageFromURLString(urlString, avatarSize: nil)
     }
 }

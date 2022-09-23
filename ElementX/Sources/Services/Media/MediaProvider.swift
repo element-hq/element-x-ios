@@ -30,28 +30,28 @@ struct MediaProvider: MediaProviderProtocol {
         self.backgroundTaskService = backgroundTaskService
     }
     
-    func imageFromSource(_ source: MediaSource?, size: AvatarSize?) -> UIImage? {
+    func imageFromSource(_ source: MediaSource?, avatarSize: AvatarSize?) -> UIImage? {
         guard let source = source else {
             return nil
         }
-        let cacheKey = cacheKeyForURLString(source.underlyingSource.url(), size: size)
+        let cacheKey = cacheKeyForURLString(source.underlyingSource.url(), avatarSize: avatarSize)
         return imageCache.retrieveImageInMemoryCache(forKey: cacheKey, options: nil)
     }
     
-    func imageFromURLString(_ urlString: String?, size: AvatarSize?) -> UIImage? {
+    func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage? {
         guard let urlString = urlString else {
             return nil
         }
         
-        return imageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)), size: size)
+        return imageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)), avatarSize: avatarSize)
     }
     
-    func loadImageFromURLString(_ urlString: String, size: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)), size: size)
+    func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)), avatarSize: avatarSize)
     }
     
-    func loadImageFromSource(_ source: MediaSource, size: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
-        if let image = imageFromSource(source, size: size) {
+    func loadImageFromSource(_ source: MediaSource, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
+        if let image = imageFromSource(source, avatarSize: avatarSize) {
             return .success(image)
         }
 
@@ -60,7 +60,7 @@ struct MediaProvider: MediaProviderProtocol {
             loadImageBgTask?.stop()
         }
         
-        let cacheKey = cacheKeyForURLString(source.underlyingSource.url(), size: size)
+        let cacheKey = cacheKeyForURLString(source.underlyingSource.url(), avatarSize: avatarSize)
         
         return await Task.detached { () -> Result<UIImage, MediaProviderError> in
             if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: cacheKey),
@@ -70,8 +70,8 @@ struct MediaProvider: MediaProviderProtocol {
             
             do {
                 let imageData = try await Task.detached { () -> Data in
-                    if let size = size {
-                        return try await clientProxy.loadMediaThumbnailForSource(source.underlyingSource, width: UInt(size.scaledValue), height: UInt(size.scaledValue))
+                    if let avatarSize = avatarSize {
+                        return try await clientProxy.loadMediaThumbnailForSource(source.underlyingSource, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
                     } else {
                         return try await clientProxy.loadMediaContentForSource(source.underlyingSource)
                     }
@@ -96,9 +96,9 @@ struct MediaProvider: MediaProviderProtocol {
     
     // MARK: - Private
     
-    private func cacheKeyForURLString(_ urlString: String, size: AvatarSize?) -> String {
-        if let size = size {
-            return "\(urlString){\(size.scaledValue),\(size.scaledValue)}"
+    private func cacheKeyForURLString(_ urlString: String, avatarSize: AvatarSize?) -> String {
+        if let avatarSize = avatarSize {
+            return "\(urlString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
         } else {
             return urlString
         }
