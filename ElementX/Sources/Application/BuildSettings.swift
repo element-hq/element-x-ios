@@ -40,14 +40,14 @@ final class BuildSettings {
     static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: ElementInfoPlist.cfBundleIdentifier.starts(with: "io.element.elementx"),
                                                                host: "https://posthog.element.dev",
                                                                apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
-                                                               termsURL: URL(string: "https://element.io/cookie-policy")!) // swiftlint:disable:this force_unwrapping
+                                                               termsURL: URL(staticString: "https://element.io/cookie-policy"))
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
     static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: ElementInfoPlist.cfBundleIdentifier.starts(with: "io.element.elementx"),
                                                                host: "https://posthog.hss.element.io",
                                                                apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
-                                                               termsURL: URL(string: "https://element.io/cookie-policy")!) // swiftlint:disable:this force_unwrapping
+                                                               termsURL: URL(staticString: "https://element.io/cookie-policy"))
     #endif
 
     // MARK: - Settings screen
