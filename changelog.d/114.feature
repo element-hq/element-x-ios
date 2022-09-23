@@ -1,1 +1,0 @@
-Implemented timeline item repyling

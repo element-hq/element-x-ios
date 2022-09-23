@@ -1,1 +1,0 @@
-UITests: Add screenshot tests.
