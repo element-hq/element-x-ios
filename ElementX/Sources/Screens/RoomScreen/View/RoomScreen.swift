@@ -41,9 +41,6 @@ struct RoomScreen: View {
             }
         }
         .alert(item: $context.alertInfo) { $0.alert }
-        .onDisappear {
-            context.send(viewAction: .viewDisappeared)
-        }
     }
     
     private func sendMessage() {

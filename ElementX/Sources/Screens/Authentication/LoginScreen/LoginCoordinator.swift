@@ -99,6 +99,10 @@ final class LoginCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         loginHostingController
     }
+
+    func stop() {
+        stopLoading()
+    }
     
     // MARK: - Private
     

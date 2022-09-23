@@ -90,11 +90,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.warning("React with \(key) failed. Not implemented.")
         case .cancelReply:
             state.composerMode = .default
-        case .viewDisappeared:
-            cancellables.forEach { $0.cancel() }
-            cancellables.removeAll()
-            state.contextMenuBuilder = nil
         }
+    }
+
+    func stop() {
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+        state.contextMenuBuilder = nil
     }
     
     // MARK: - Private

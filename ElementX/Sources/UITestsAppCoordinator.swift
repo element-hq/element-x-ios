@@ -60,6 +60,8 @@ class UITestsAppCoordinator: Coordinator {
     private func mockScreens() -> [MockScreen] {
         UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationRouter: navigationRouter) }
     }
+
+    func stop() { }
 }
 
 @MainActor

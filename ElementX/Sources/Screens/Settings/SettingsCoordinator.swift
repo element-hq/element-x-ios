@@ -87,6 +87,8 @@ final class SettingsCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         settingsHostingController
     }
+
+    func stop() { }
     
     // MARK: - Private
     

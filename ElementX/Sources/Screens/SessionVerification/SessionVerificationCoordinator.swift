@@ -63,4 +63,6 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         sessionVerificationHostingController
     }
+
+    func stop() { }
 }

@@ -79,6 +79,8 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         hostingController
     }
+
+    func stop() { }
     
     // MARK: - Private
     

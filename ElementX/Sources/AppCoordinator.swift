@@ -105,6 +105,10 @@ class AppCoordinator: Coordinator {
         stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
 
+    func stop() {
+        hideLoadingIndicator()
+    }
+
     // MARK: - Private
     
     private func setupLogging() {

@@ -47,6 +47,10 @@ class AuthenticationCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         navigationRouter.toPresentable()
     }
+
+    func stop() {
+        stopLoading()
+    }
     
     // MARK: - Private
     

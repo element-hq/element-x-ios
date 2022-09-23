@@ -36,6 +36,9 @@ protocol Coordinator: AnyObject {
     ///
     /// - Parameter childCoordinator: Child coordinator to remove.
     func remove(childCoordinator: Coordinator)
+
+    /// Stops job of the coordinator. Can be used to clear some resources. Will be automatically called when the coordinator removed.
+    func stop()
 }
 
 // `Coordinator` default implementation
@@ -45,6 +48,7 @@ extension Coordinator {
     }
     
     func remove(childCoordinator: Coordinator) {
+        childCoordinator.stop()
         childCoordinators = childCoordinators.filter { $0 !== childCoordinator }
     }
 }

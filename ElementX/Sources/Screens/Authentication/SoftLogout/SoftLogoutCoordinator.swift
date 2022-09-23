@@ -108,6 +108,10 @@ final class SoftLogoutCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         softLogoutHostingController
     }
+
+    func stop() {
+        stopLoading()
+    }
     
     // MARK: - Private
     

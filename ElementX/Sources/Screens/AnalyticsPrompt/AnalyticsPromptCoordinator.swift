@@ -70,4 +70,6 @@ final class AnalyticsPromptCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController { analyticsPromptHostingController }
+
+    func stop() { }
 }

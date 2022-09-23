@@ -58,4 +58,8 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     func toPresentable() -> UIViewController {
         roomScreenHostingController
     }
+
+    func stop() {
+        roomScreenViewModel.stop()
+    }
 }
