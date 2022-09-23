@@ -71,8 +71,9 @@ struct RoomHeaderView_Previews: PreviewProvider {
     static var bodyPlain: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
+                                            mediaProvider: MockMediaProvider(),
                                             roomName: "Some Room name",
-                                            roomAvatar: Asset.Images.appLogo.image)
+                                            roomAvatarUrl: "mock_url")
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)
@@ -83,8 +84,9 @@ struct RoomHeaderView_Previews: PreviewProvider {
     static var bodyEncrypted: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
+                                            mediaProvider: MockMediaProvider(),
                                             roomName: "Some Room name",
-                                            roomAvatar: nil,
+                                            roomAvatarUrl: nil,
                                             roomEncryptionBadge: Asset.Images.encryptionTrusted.image)
 
         RoomHeaderView(context: viewModel.context)

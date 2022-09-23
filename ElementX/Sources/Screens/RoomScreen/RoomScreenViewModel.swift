@@ -25,20 +25,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
+    private let mediaProvider: MediaProviderProtocol
 
     // MARK: - Setup
     
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
+         mediaProvider: MediaProviderProtocol,
          roomName: String?,
-         roomAvatar: UIImage? = nil,
+         roomAvatarUrl: String? = nil,
          roomEncryptionBadge: UIImage? = nil) {
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
+        self.mediaProvider = mediaProvider
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomId,
                                                          roomTitle: roomName ?? "Unknown room 💥",
-                                                         roomAvatar: roomAvatar,
+                                                         roomAvatar: nil,
                                                          roomEncryptionBadge: roomEncryptionBadge,
                                                          bindings: .init(composerText: "", composerFocused: false)))
         
@@ -64,6 +67,15 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
         
         buildTimelineViews()
+
+        if let roomAvatarUrl = roomAvatarUrl {
+            Task {
+                if case let .success(avatar) = await mediaProvider.loadImageFromURLString(roomAvatarUrl,
+                                                                                          avatarSize: .room(on: .timeline)) {
+                    state.roomAvatar = avatar
+                }
+            }
+        }
     }
     
     // MARK: - Public

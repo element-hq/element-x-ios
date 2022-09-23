@@ -172,6 +172,7 @@ struct TimelineItemList_Previews: PreviewProvider {
     static var body: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
+                                            mediaProvider: MockMediaProvider(),
                                             roomName: nil)
         
         TimelineItemList(bottomVisiblePublisher: PassthroughSubject(), scrollToBottomPublisher: PassthroughSubject())
