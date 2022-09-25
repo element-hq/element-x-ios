@@ -26,15 +26,9 @@ class AppCoordinatorStateMachine {
         case signedOut
         /// Opening an existing session.
         case restoringSession
-        /// Showing the home screen
-        case homeScreen
         
-        /// Showing a particular room's timeline
-        /// - Parameter roomId: that room's identifier
-        case roomScreen(roomId: String)
-        
-        /// Showing the session verification flows
-        case sessionVerificationScreen
+        /// User session started
+        case signedIn
 
         /// Processing a sign out request
         case signingOut
@@ -63,17 +57,6 @@ class AppCoordinatorStateMachine {
         case remoteSignOut(isSoft: Bool)
         /// Signing out completed
         case completedSigningOut
-        
-        /// Request presentation for a particular room
-        /// - Parameter roomId:the room identifier
-        case showRoomScreen(roomId: String)
-        /// The room screen has been dismissed
-        case dismissedRoomScreen
-        
-        /// Request the start of the session verification flow
-        case showSessionVerificationScreen
-        /// Session verification has finished
-        case dismissedSessionVerificationScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -81,25 +64,18 @@ class AppCoordinatorStateMachine {
     init() {
         stateMachine = StateMachine(state: .initial) { machine in
             machine.addRoutes(event: .startWithAuthentication, transitions: [.initial => .signedOut])
-            machine.addRoutes(event: .succeededSigningIn, transitions: [.signedOut => .homeScreen])
+            machine.addRoutes(event: .succeededSigningIn, transitions: [.signedOut => .signedIn])
             
             machine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
-            machine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .homeScreen])
+            machine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .signedIn])
             machine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
             
             machine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
             machine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
-            
-            machine.addRoutes(event: .showSessionVerificationScreen, transitions: [.homeScreen => .sessionVerificationScreen])
-            machine.addRoutes(event: .dismissedSessionVerificationScreen, transitions: [.sessionVerificationScreen => .homeScreen])
-            
+                        
             // Transitions with associated values need to be handled through `addRouteMapping`
             machine.addRouteMapping { event, fromState, _ in
                 switch (event, fromState) {
-                case (.showRoomScreen(let roomId), .homeScreen):
-                    return .roomScreen(roomId: roomId)
-                case (.dismissedRoomScreen, .roomScreen):
-                    return .homeScreen
                 case (.remoteSignOut(let isSoft), _):
                     return .remoteSigningOut(isSoft: isSoft)
                 case (.completedSigningOut, .remoteSigningOut):

@@ -10,7 +10,7 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 extension ElementL10n {
-  /// Main menu
+  /// User menu
   public static let a11yAllChatsUserAvatarMenu = ElementL10n.tr("Untranslated", "a11y_all_chats_user_avatar_menu")
   /// Confirm
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")

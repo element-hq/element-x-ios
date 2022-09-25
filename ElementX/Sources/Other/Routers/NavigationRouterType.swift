@@ -128,4 +128,16 @@ extension NavigationRouterType {
         push(modules.map { $0.toModule() },
              animated: animated)
     }
+    
+    func dismissModule(animated: Bool = true, completion: (() -> Void)? = nil) {
+        dismissModule(animated: animated, completion: completion)
+    }
+    
+    func push(_ module: Presentable, animated: Bool = true, popCompletion: (() -> Void)? = nil) {
+        push(module, animated: animated, popCompletion: popCompletion)
+    }
+    
+    func present(_ module: Presentable, animated: Bool = true) {
+        present(module, animated: animated)
+    }
 }
