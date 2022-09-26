@@ -37,11 +37,6 @@ struct RoomHeaderView: View {
         ZStack(alignment: .bottomTrailing) {
             roomAvatarImage
                 .clipShape(Circle())
-
-            if let encryptionBadge = context.viewState.roomEncryptionBadge {
-                Image(uiImage: encryptionBadge)
-                    .accessibilityIdentifier("encryptionBadgeIcon")
-            }
         }
         .frame(width: AvatarSize.room(on: .timeline).value, height: AvatarSize.room(on: .timeline).value)
     }
@@ -87,8 +82,7 @@ struct RoomHeaderView_Previews: PreviewProvider {
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             mediaProvider: MockMediaProvider(),
                                             roomName: "Some Room name",
-                                            roomAvatarUrl: nil,
-                                            roomEncryptionBadge: Asset.Images.encryptionTrusted.image)
+                                            roomAvatarUrl: nil)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

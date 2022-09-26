@@ -56,7 +56,7 @@ class ServerSelectionUITests: XCTestCase {
         
         // Then the screen should not allow the user to continue.
         let serverTextField = app.textFields.element
-        XCTAssertEqual(serverTextField.value as? String, ElementL10n.serverSelectionServerUrl, "The text field should show placeholder text in this state.")
+        XCTAssertEqual(serverTextField.value as? String, ElementL10n.ftueAuthChooseServerEntryHint, "The text field should show placeholder text in this state.")
 
         let confirmButton = app.buttons["confirmButton"]
         XCTAssertTrue(confirmButton.exists, "The confirm button should always be shown.")

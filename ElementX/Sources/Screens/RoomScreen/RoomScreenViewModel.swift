@@ -33,8 +33,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          roomName: String?,
-         roomAvatarUrl: String? = nil,
-         roomEncryptionBadge: UIImage? = nil) {
+         roomAvatarUrl: String? = nil) {
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         self.mediaProvider = mediaProvider
@@ -42,7 +41,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomId,
                                                          roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatar: nil,
-                                                         roomEncryptionBadge: roomEncryptionBadge,
                                                          bindings: .init(composerText: "", composerFocused: false)))
         
         timelineController.callbacks

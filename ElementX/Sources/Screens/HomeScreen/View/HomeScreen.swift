@@ -39,7 +39,7 @@ struct HomeScreen: View {
                     }
                 }
             }
-            .animation(.default, value: context.viewState.visibleRooms)
+            .animation(.elementDefault, value: context.viewState.visibleRooms)
             .padding(.horizontal)
             .searchable(text: $context.searchQuery)
         }

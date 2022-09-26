@@ -25,7 +25,6 @@ class RoomScreenUITests: XCTestCase {
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
         XCTAssert(app.staticTexts["roomAvatarPlaceholderImage"].exists)
-        XCTAssertFalse(app.images["encryptionBadgeIcon"].exists)
 
         app.assertScreenshot(.roomPlainNoAvatar)
     }
@@ -36,7 +35,6 @@ class RoomScreenUITests: XCTestCase {
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
         XCTAssert(app.images["roomAvatarImage"].exists)
-        XCTAssert(app.images["encryptionBadgeIcon"].exists)
 
         app.assertScreenshot(.roomEncryptedWithAvatar)
     }

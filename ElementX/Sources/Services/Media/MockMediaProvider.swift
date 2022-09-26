@@ -43,6 +43,10 @@ struct MockMediaProvider: MediaProviderProtocol {
     }
         
     func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
-        .failure(.failedRetrievingImage)
+        guard let image = UIImage(systemName: "photo") else {
+            fatalError()
+        }
+        
+        return .success(image)
     }
 }
