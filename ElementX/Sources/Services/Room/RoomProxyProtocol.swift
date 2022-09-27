@@ -29,7 +29,7 @@ enum RoomProxyError: Error {
 }
 
 @MainActor
-protocol RoomProxyProtocol {
+protocol RoomProxyProtocol: AnyObject {
     var id: String { get }
     var isDirect: Bool { get }
     var isPublic: Bool { get }

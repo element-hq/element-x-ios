@@ -31,7 +31,7 @@ class WeakRoomTimelineProviderWrapper: TimelineListener {
 }
 
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
-    private let roomProxy: RoomProxyProtocol
+    private unowned let roomProxy: RoomProxyProtocol!
     private var cancellables = Set<AnyCancellable>()
     
     let callbacks = PassthroughSubject<RoomTimelineProviderCallback, Never>()

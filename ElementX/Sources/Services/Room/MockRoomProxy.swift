@@ -17,10 +17,10 @@
 import Combine
 import MatrixRustSDK
 
-struct MockRoomProxy: RoomProxyProtocol {
+class MockRoomProxy: RoomProxyProtocol {
     let id = UUID().uuidString
     let name: String? = nil
-    let displayName: String?
+    let displayName: String? = nil
     
     let topic: String? = nil
     
