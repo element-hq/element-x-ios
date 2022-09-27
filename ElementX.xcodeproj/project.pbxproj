@@ -484,6 +484,7 @@
 		398817652FA8ABAE0A31AC6D /* ReadableFrameModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReadableFrameModifier.swift; sourceTree = "<group>"; };
 		399427358A80BA2848E698A2 /* es-MX */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "es-MX"; path = "es-MX.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		39EBB6903EFD4236B8D11A42 /* fr-CA */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "fr-CA"; path = "fr-CA.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
+		3A008A7A3B4DF58C1A7AD142 /* changelog.d */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.dtrace; path = changelog.d; sourceTree = "<group>"; };
 		3A4427F9E0571B4E6E048A2B /* KeychainController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainController.swift; sourceTree = "<group>"; };
 		3ACBDC1D28EFB7789EB467E0 /* MockRoomProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockRoomProxy.swift; sourceTree = "<group>"; };
 		3B5B535DA49C54523FF7A412 /* nn */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = nn; path = nn.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -550,6 +551,7 @@
 		562B0F8048BB22FB0C086CB8 /* UserSessionFlowCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSessionFlowCoordinator.swift; sourceTree = "<group>"; };
 		56F01DD1BBD4450E18115916 /* LabelledActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledActivityIndicatorView.swift; sourceTree = "<group>"; };
 		5773C86AF04AEF26515AD00C /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		5797304227A0D0BADB35ADF3 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		5872785B9C7934940146BFBA /* MXLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MXLogger.h; sourceTree = "<group>"; };
 		5B2F9D5C39A4494D19F33E38 /* SettingsViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelProtocol.swift; sourceTree = "<group>"; };
 		5B9D5F812E5AD6DC786DBC9B /* NavigationRouterStoreProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouterStoreProtocol.swift; sourceTree = "<group>"; };
@@ -661,6 +663,7 @@
 		997783054A2E95F9E624217E /* kaa */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = kaa; path = kaa.lproj/Localizable.strings; sourceTree = "<group>"; };
 		99DE232F24EAD72A3DF7EF1A /* kab */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = kab; path = kab.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		9A68BCE6438873D2661D93D0 /* BugReportServiceProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BugReportServiceProtocol.swift; sourceTree = "<group>"; };
+		9B2001EE5513A936021F1D65 /* CHANGES.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGES.md; sourceTree = "<group>"; };
 		9B577F829C693B8DFB7014FD /* RedactedRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RedactedRoomTimelineItem.swift; sourceTree = "<group>"; };
 		9C4048041C1A6B20CB97FD18 /* TestMeasurementParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestMeasurementParser.swift; sourceTree = "<group>"; };
 		9C5E81214D27A6B898FC397D /* ElementX.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = ElementX.entitlements; sourceTree = "<group>"; };
@@ -1096,7 +1099,10 @@
 		405B00F139AEE3994601B36A = {
 			isa = PBXGroup;
 			children = (
+				3A008A7A3B4DF58C1A7AD142 /* changelog.d */,
+				9B2001EE5513A936021F1D65 /* CHANGES.md */,
 				5D26A086A8278D39B5756D6F /* project.yml */,
+				5797304227A0D0BADB35ADF3 /* README.md */,
 				99B9B46F2D621380428E68F7 /* ElementX */,
 				A4852B57D55D71EEBFCD931D /* UnitTests */,
 				C0FAC17D4DD7D3A502822550 /* UITests */,
