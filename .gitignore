@@ -34,7 +34,7 @@ version_changes.md
 
 build
 Tools/Scripts/element-android
-vendor/
+/vendor/
 
 ## macOS Files
 .DS_Store
