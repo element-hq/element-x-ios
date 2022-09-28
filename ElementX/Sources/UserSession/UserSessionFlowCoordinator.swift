@@ -126,10 +126,10 @@ class UserSessionFlowCoordinator: Coordinator {
                                                           mediaProvider: userSession.mediaProvider,
                                                           roomProxy: roomProxy,
                                                           attributedStringBuilder: AttributedStringBuilder())
-
+        
         let timelineController = RoomTimelineController(userId: userId,
                                                         roomId: roomIdentifier,
-                                                        timelineProvider: roomProxy.timelineProvider,
+                                                        timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
                                                         timelineItemFactory: timelineItemFactory,
                                                         mediaProvider: userSession.mediaProvider,
                                                         roomProxy: roomProxy)

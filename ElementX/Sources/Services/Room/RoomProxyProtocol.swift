@@ -44,8 +44,6 @@ protocol RoomProxyProtocol {
     
     var avatarURL: String? { get }
     
-    var timelineProvider: RoomTimelineProviderProtocol { get }
-    
     func avatarURLStringForUserId(_ userId: String) -> String?
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
@@ -55,6 +53,8 @@ protocol RoomProxyProtocol {
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
     func loadDisplayName() async -> Result<String, RoomProxyError>
+    
+    func addTimelineListener(listener: TimelineListener)
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError>
     
