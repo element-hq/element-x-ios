@@ -1,0 +1,1 @@
+Files copied over from [nicholascross/WeakDictionary](https://github.com/nicholascross/WeakDictionary) because of a lack SPM support.
