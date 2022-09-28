@@ -35,11 +35,6 @@ class RoomProxy: RoomProxyProtocol {
     private(set) var displayName: String?
     
     private var backPaginationOutcome: PaginationOutcome?
-    private(set) lazy var timelineProvider: RoomTimelineProviderProtocol = {
-        let provider = RoomTimelineProvider(roomProxy: self)
-        addTimelineListener(listener: WeakRoomTimelineProviderWrapper(timelineProvider: provider))
-        return provider
-    }()
     
     deinit {
         room.removeTimeline()
@@ -146,7 +141,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    private func addTimelineListener(listener: TimelineListener) {
+    func addTimelineListener(listener: TimelineListener) {
         room.addTimelineListener(listener: listener)
     }
     

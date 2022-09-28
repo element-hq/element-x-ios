@@ -41,6 +41,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         itemProxies = []
+        
+        Task {
+            await roomProxy.addTimelineListener(listener: WeakRoomTimelineProviderWrapper(timelineProvider: self))
+        }
     }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
