@@ -3,9 +3,6 @@ attributes:
   ORGANIZATIONNAME: Element
 
 fileGroups:
-    - README.md
-    - CHANGES.md
-    - project.yml
     - changelog.d
 
 options:
