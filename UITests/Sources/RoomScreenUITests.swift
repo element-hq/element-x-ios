@@ -34,7 +34,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomEncryptedWithAvatar)
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
-        XCTAssert(app.images["roomAvatarImage"].exists)
+        XCTAssert(app.images["roomAvatarImage"].waitForExistence(timeout: 1))
 
         app.assertScreenshot(.roomEncryptedWithAvatar)
     }
