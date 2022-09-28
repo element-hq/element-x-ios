@@ -3,6 +3,7 @@ attributes:
   ORGANIZATIONNAME: Element
 
 fileGroups:
+    - project.yml
     - changelog.d
 
 options:
