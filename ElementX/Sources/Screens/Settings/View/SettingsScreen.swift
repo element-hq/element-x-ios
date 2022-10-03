@@ -27,6 +27,8 @@ struct SettingsScreen: View {
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
+    @AppStorage("NiqueBubbleWidth") var bubbleWidthRatio = 0.8
+    
     // MARK: Public
     
     @ObservedObject var context: SettingsViewModel.Context
@@ -109,6 +111,12 @@ struct SettingsScreen: View {
             .listRowInsets(listRowInsets)
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier("appearanceButton")
+            
+            HStack {
+                Text("\(Int((bubbleWidthRatio * 100).rounded()))%")
+                    .monospacedDigit()
+                Slider(value: $bubbleWidthRatio, in: 0.2...1.0)
+            }
         }
     }
 

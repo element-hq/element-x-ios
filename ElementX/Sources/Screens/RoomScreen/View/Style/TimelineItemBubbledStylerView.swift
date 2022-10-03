@@ -26,8 +26,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.timelineWidth) private var timelineWidth
     @ScaledMetric private var senderNameVerticalPadding = 3
-    private let bubbleWidthPercentIncoming = 0.72 // 281/390
-    private let bubbleWidthPercentOutgoing = 0.68 // 267/390
+    
+    @AppStorage("NiqueBubbleWidth") var bubbleWidthRatio = 0.8
 
     var body: some View {
         VStack(alignment: alignment, spacing: -12) {
@@ -162,7 +162,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 
     private var bubbleWidth: CGFloat {
-        timelineWidth * (timelineItem.isOutgoing ? bubbleWidthPercentOutgoing : bubbleWidthPercentIncoming)
+        timelineWidth * bubbleWidthRatio
     }
 }
 
