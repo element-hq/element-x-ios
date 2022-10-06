@@ -51,4 +51,15 @@ extension String {
         }
         return abs(hash)
     }
+    
+    func asciified() -> String {
+        guard !canBeConverted(to: .ascii) else {
+            return self
+        }
+        let mutableString = NSMutableString(string: self)
+        guard CFStringTransform(mutableString, nil, "Any-Latin; Latin-ASCII; [:^ASCII:] Remove" as CFString, false) else {
+            return self
+        }
+        return mutableString as String
+    }
 }

@@ -33,6 +33,8 @@ targets:
       linkType: static
     - package: AppAuth
       linkType: static
+    - package: DeviceKit
+      linkType: static
     - package: DTCoreText
       linkType: static
     - package: KeychainAccess

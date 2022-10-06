@@ -36,6 +36,7 @@ targets:
       path: ../SupportingFiles/Info.plist
       properties:
         UILaunchStoryboardName: LaunchScreen
+        CFBundleDisplayName: $(PRODUCT_NAME)
         CFBundleShortVersionString: $(MARKETING_VERSION)
         CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UISupportedInterfaceOrientations: [
@@ -97,6 +98,7 @@ targets:
     - package: DesignKit
     - package: AnalyticsEvents
     - package: AppAuth
+    - package: DeviceKit
     - package: DTCoreText
     - package: KeychainAccess
     - package: Kingfisher

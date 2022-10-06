@@ -109,7 +109,8 @@ class UserSessionStore: UserSessionStoreProtocol {
         let builder = ClientBuilder()
             .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
-        
+            .userAgent(userAgent: UserAgentFactory.makeASCIIUserAgent())
+
         do {
             let client: Client = try await Task.dispatch(on: .global()) {
                 let client = try builder.build()
