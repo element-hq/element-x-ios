@@ -16,6 +16,10 @@ extension ElementL10n {
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
   /// Match
   public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
+  /// %@ iOS
+  public static func defaultSessionDisplayName(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "default_session_display_name", String(describing: p1))
+  }
   /// Mobile
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet
