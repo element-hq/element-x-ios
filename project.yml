@@ -4,14 +4,13 @@ attributes:
 
 fileGroups:
     - project.yml
-    - changelog.d
 
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
   deploymentTarget:
-    iOS: "15.0"
-    macOS: "12.0"
+    iOS: "16.0"
+    macOS: "13.0"
   groupOrdering: 
     - order: [ElementX, UnitTests, UITests, IntegrationTests, Tools]
     - pattern: ElementX

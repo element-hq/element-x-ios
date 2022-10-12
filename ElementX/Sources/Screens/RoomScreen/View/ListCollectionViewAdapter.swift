@@ -17,7 +17,7 @@
 import Combine
 import UIKit
 
-class ListTableViewAdapter: NSObject, UITableViewDelegate {
+class ListCollectionViewAdapter: NSObject, UICollectionViewDelegate {
     private enum ContentOffsetDetails {
         case topOffset(previousVisibleIndexPath: IndexPath, previousItemCount: Int)
         case bottomOffset
@@ -34,7 +34,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     private var isAnimatingKeyboardAppearance = false
     private var previousFrame: CGRect = .zero
     
-    private(set) var tableView: UITableView?
+    private(set) var collectionView: UICollectionView?
         
     let scrollViewDidRestPublisher = PassthroughSubject<Void, Never>()
     let scrollViewTopVisiblePublisher = CurrentValueSubject<Bool, Never>(false)
@@ -45,38 +45,36 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
         bottomDetectionOffset = 0.0
     }
     
-    init(tableView: UITableView, topDetectionOffset: CGFloat, bottomDetectionOffset: CGFloat) {
-        self.tableView = tableView
+    init(collectionView: UICollectionView, topDetectionOffset: CGFloat, bottomDetectionOffset: CGFloat) {
+        self.collectionView = collectionView
         self.topDetectionOffset = topDetectionOffset
         self.bottomDetectionOffset = bottomDetectionOffset
         
         super.init()
         
-        tableView.clipsToBounds = true
-        tableView.keyboardDismissMode = .onDrag
+        collectionView.clipsToBounds = true
+        collectionView.keyboardDismissMode = .onDrag
         
-        registerContentOfffsetObserver()
+        registerContentOffsetObserver()
         registerBoundsObserver()
         
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardDidShow(notification:)), name: UIResponder.keyboardDidShowNotification, object: nil)
 
-        tableView.panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture(_:)))
+        collectionView.panGestureRecognizer.addTarget(self, action: #selector(handlePanGesture(_:)))
     }
     
     func saveCurrentOffset() {
-        guard let tableView = tableView,
-              tableView.numberOfSections > 0 else {
+        guard let collectionView = collectionView,
+              collectionView.numberOfSections > 0 else {
             return
         }
     
         if computeIsBottomVisible() {
             offsetDetails = .bottomOffset
-        } else if computeIsTopVisible() {
-            if let topIndexPath = tableView.indexPathsForVisibleRows?.first {
-                offsetDetails = .topOffset(previousVisibleIndexPath: topIndexPath,
-                                           previousItemCount: tableView.numberOfRows(inSection: 0))
-            }
+        } else if computeIsTopVisible(), let topIndexPath = collectionView.indexPathsForVisibleItems.first {
+            offsetDetails = .topOffset(previousVisibleIndexPath: topIndexPath,
+                                       previousItemCount: collectionView.numberOfItems(inSection: 0))
         }
     }
     
@@ -85,20 +83,20 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
             offsetDetails = nil
         }
         
-        guard let tableView = tableView,
-              tableView.numberOfSections > 0 else {
+        guard let collectionView = collectionView,
+              collectionView.numberOfSections > 0 else {
             return
         }
         
-        let currentItemCount = tableView.numberOfRows(inSection: 0)
+        let currentItemCount = collectionView.numberOfItems(inSection: 0)
         
         switch offsetDetails {
         case .bottomOffset:
-            tableView.scrollToRow(at: .init(row: max(0, currentItemCount - 1), section: 0), at: .bottom, animated: false)
+            collectionView.scrollToItem(at: .init(item: max(0, currentItemCount - 1), section: 0), at: .bottom, animated: false)
         case .topOffset(let indexPath, let previousItemCount):
-            let row = indexPath.row + max(0, currentItemCount - previousItemCount)
-            if row < currentItemCount {
-                tableView.scrollToRow(at: .init(row: row, section: 0), at: .top, animated: false)
+            let item = indexPath.item + max(0, currentItemCount - previousItemCount)
+            if item < currentItemCount {
+                collectionView.scrollToItem(at: .init(item: item, section: 0), at: .top, animated: false)
             }
         case .none:
             break
@@ -106,35 +104,35 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     }
     
     var isTracking: Bool {
-        tableView?.isTracking == true
+        collectionView?.isTracking == true
     }
     
     var isDecelerating: Bool {
-        tableView?.isDecelerating == true
+        collectionView?.isDecelerating == true
     }
     
     func scrollToBottom(animated: Bool = false) {
-        guard let tableView = tableView,
-              tableView.numberOfSections > 0 else {
+        guard let collectionView = collectionView,
+              collectionView.numberOfSections > 0 else {
             return
         }
         
-        let currentItemCount = tableView.numberOfRows(inSection: 0)
+        let currentItemCount = collectionView.numberOfItems(inSection: 0)
         guard currentItemCount > 1 else {
             return
         }
         
-        tableView.scrollToRow(at: .init(row: currentItemCount - 1, section: 0), at: .bottom, animated: animated)
+        collectionView.scrollToItem(at: .init(item: currentItemCount - 1, section: 0), at: .bottom, animated: animated)
     }
     
     // MARK: - Private
     
-    private func registerContentOfffsetObserver() {
-        // Don't attempt stealing the UITableView delegate away from the List.
+    private func registerContentOffsetObserver() {
+        // Don't attempt stealing the UICollectionView delegate away from the List.
         // Doing so results in undefined behavior e.g. context menus not working
-        contentOffsetObserverToken = tableView?.observe(\.contentOffset, options: .new, changeHandler: { [weak self] _, _ in
+        contentOffsetObserverToken = collectionView?.observe(\.contentOffset, options: .new) { [weak self] _, _ in
             self?.handleScrollViewScroll()
-        })
+        }
     }
     
     private func deregisterContentOffsetObserver() {
@@ -142,10 +140,10 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     }
     
     private func registerBoundsObserver() {
-        boundsObserverToken = tableView?.observe(\.frame, options: .new, changeHandler: { [weak self] tableView, _ in
-            self?.previousFrame = tableView.frame
+        boundsObserverToken = collectionView?.observe(\.frame, options: .new) { [weak self] collectionView, _ in
+            self?.previousFrame = collectionView.frame
             self?.handleScrollViewScroll()
-        })
+        }
     }
     
     private func deregisterBoundsObserver() {
@@ -161,18 +159,18 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     }
     
     private func handleScrollViewScroll() {
-        guard let tableView = tableView else {
+        guard let collectionView = collectionView else {
             return
         }
         
-        let hasScrolledBecauseOfFrameChange = (previousFrame != tableView.frame)
+        let hasScrolledBecauseOfFrameChange = (previousFrame != collectionView.frame)
         let shouldPinToBottom = scrollViewBottomVisiblePublisher.value && (isAnimatingKeyboardAppearance || hasScrolledBecauseOfFrameChange)
         
         if shouldPinToBottom {
             deregisterContentOffsetObserver()
             scrollToBottom()
             DispatchQueue.main.async {
-                self.registerContentOfffsetObserver()
+                self.registerContentOffsetObserver()
             }
             return
         }
@@ -187,19 +185,19 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
             scrollViewBottomVisiblePublisher.send(isBottomVisible)
         }
         
-        if !draggingInitiated, tableView.isDragging {
+        if !draggingInitiated, collectionView.isDragging {
             draggingInitiated = true
-        } else if draggingInitiated, !tableView.isDragging {
+        } else if draggingInitiated, !collectionView.isDragging {
             draggingInitiated = false
             scrollViewDidRestPublisher.send(())
         }
     }
     
     @objc private func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        guard let tableView = tableView,
+        guard let collectionView = collectionView,
               sender.state == .ended,
-              draggingInitiated == true,
-              !tableView.isDecelerating else {
+              draggingInitiated,
+              !collectionView.isDecelerating else {
             return
         }
         
@@ -208,7 +206,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     }
     
     private func computeIsTopVisible() -> Bool {
-        guard let scrollView = tableView else {
+        guard let scrollView = collectionView else {
             return false
         }
 
@@ -216,7 +214,7 @@ class ListTableViewAdapter: NSObject, UITableViewDelegate {
     }
     
     private func computeIsBottomVisible() -> Bool {
-        guard let scrollView = tableView else {
+        guard let scrollView = collectionView else {
             return false
         }
 

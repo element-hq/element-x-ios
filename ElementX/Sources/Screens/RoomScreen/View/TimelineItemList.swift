@@ -19,7 +19,7 @@ import Introspect
 import SwiftUI
 
 struct TimelineItemList: View {
-    @State private var tableViewObserver = ListTableViewAdapter()
+    @State private var collectionViewObserver = ListCollectionViewAdapter()
     @State private var timelineItems: [RoomTimelineViewProvider] = []
     @State private var hasPendingChanges = false
     @ObservedObject private var settings = ElementSettings.shared
@@ -69,16 +69,14 @@ struct TimelineItemList: View {
             .environment(\.timelineWidth, viewFrame.width)
             .timelineStyle(settings.timelineStyle)
             .environment(\.defaultMinListRowHeight, 0.0)
-            .introspectTableView { tableView in
-                if tableView == tableViewObserver.tableView {
-                    return
-                }
+            .introspectCollectionView { collectionView in
+                if collectionView == collectionViewObserver.collectionView { return }
                 
-                tableViewObserver = ListTableViewAdapter(tableView: tableView,
-                                                         topDetectionOffset: tableView.bounds.size.height / 3.0,
-                                                         bottomDetectionOffset: 10.0)
+                collectionViewObserver = ListCollectionViewAdapter(collectionView: collectionView,
+                                                                   topDetectionOffset: collectionView.bounds.size.height / 3.0,
+                                                                   bottomDetectionOffset: 10.0)
                 
-                tableViewObserver.scrollToBottom()
+                collectionViewObserver.scrollToBottom()
                 
                 // Check if there are enough items. Otherwise ask for more
                 attemptBackPagination()
@@ -89,39 +87,45 @@ struct TimelineItemList: View {
                 }
             }
             .onReceive(scrollToBottomPublisher) {
-                tableViewObserver.scrollToBottom(animated: true)
+                collectionViewObserver.scrollToBottom(animated: true)
             }
-            .onReceive(tableViewObserver.scrollViewTopVisiblePublisher) { isTopVisible in
+            .onReceive(collectionViewObserver.scrollViewTopVisiblePublisher) { isTopVisible in
                 if !isTopVisible || context.viewState.isBackPaginating {
                     return
                 }
                 
                 attemptBackPagination()
             }
-            .onReceive(tableViewObserver.scrollViewBottomVisiblePublisher) { isBottomVisible in
+            .onReceive(collectionViewObserver.scrollViewBottomVisiblePublisher) { isBottomVisible in
                 bottomVisiblePublisher.send(isBottomVisible)
             }
             .onChange(of: context.viewState.items) { _ in
+                // If the count hasn't changed then don't observe a pagination
+                guard context.viewState.items.count != timelineItems.count else {
+                    timelineItems = context.viewState.items
+                    return
+                }
+                
                 // Don't update the list while moving
-                if tableViewObserver.isDecelerating || tableViewObserver.isTracking {
+                if collectionViewObserver.isDecelerating || collectionViewObserver.isTracking {
                     hasPendingChanges = true
                     return
                 }
                 
-                tableViewObserver.saveCurrentOffset()
+                collectionViewObserver.saveCurrentOffset()
                 timelineItems = context.viewState.items
             }
-            .onReceive(tableViewObserver.scrollViewDidRestPublisher) {
+            .onReceive(collectionViewObserver.scrollViewDidRestPublisher) {
                 if hasPendingChanges == false {
                     return
                 }
                 
-                tableViewObserver.saveCurrentOffset()
+                collectionViewObserver.saveCurrentOffset()
                 timelineItems = context.viewState.items
                 hasPendingChanges = false
             }
-            .onChange(of: timelineItems) { _ in
-                tableViewObserver.restoreSavedOffset()
+            .onChange(of: timelineItems.count) { _ in
+                collectionViewObserver.restoreSavedOffset()
                 
                 // Check if there are enough items. Otherwise ask for more
                 attemptBackPagination()
@@ -130,7 +134,7 @@ struct TimelineItemList: View {
     }
     
     func scrollToBottom(animated: Bool = false) {
-        tableViewObserver.scrollToBottom(animated: animated)
+        collectionViewObserver.scrollToBottom(animated: animated)
     }
     
     private func attemptBackPagination() {
@@ -138,7 +142,7 @@ struct TimelineItemList: View {
             return
         }
         
-        if tableViewObserver.scrollViewTopVisiblePublisher.value == false {
+        if collectionViewObserver.scrollViewTopVisiblePublisher.value == false {
             return
         }
         
