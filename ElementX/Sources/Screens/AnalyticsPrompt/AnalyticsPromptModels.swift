@@ -44,10 +44,10 @@ struct AnalyticsPromptStrings {
     init() {
         // Create the opt in content with a placeholder.
         let linkPlaceholder = "{link}"
-        var optInContent = AttributedString(ElementL10n.analyticsOptInContent(ElementInfoPlist.cfBundleName, linkPlaceholder))
+        var optInContent = AttributedString(ElementL10n.analyticsOptInContent(ElementInfoPlist.cfBundleDisplayName, linkPlaceholder))
         
         guard let range = optInContent.range(of: linkPlaceholder) else {
-            self.optInContent = AttributedString(ElementL10n.analyticsOptInContent(ElementInfoPlist.cfBundleName,
+            self.optInContent = AttributedString(ElementL10n.analyticsOptInContent(ElementInfoPlist.cfBundleDisplayName,
                                                                                    ElementL10n.analyticsOptInContentLink))
             MXLog.failure("Failed to add a link attribute to the opt in content.")
             return
