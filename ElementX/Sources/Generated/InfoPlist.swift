@@ -13,6 +13,7 @@ internal enum ElementInfoPlist {
   private static let _document = PlistDocument(path: "Info.plist")
 
   internal static let cfBundleDevelopmentRegion: String = _document["CFBundleDevelopmentRegion"]
+  internal static let cfBundleDisplayName: String = _document["CFBundleDisplayName"]
   internal static let cfBundleExecutable: String = _document["CFBundleExecutable"]
   internal static let cfBundleIdentifier: String = _document["CFBundleIdentifier"]
   internal static let cfBundleInfoDictionaryVersion: String = _document["CFBundleInfoDictionaryVersion"]
