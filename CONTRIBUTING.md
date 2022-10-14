@@ -40,6 +40,10 @@ ElementX uses Fastlane for running actions on the CI and tries to keep the confi
 
 Please run `bundle exec fastlane` to see available options.
 
+### Network debugging proxy
+
+It's possible to debug the app's network traffic with a proxy server by setting the `HTTPS_PROXY` environment variable in the ElementX scheme to the proxy's address (e.g. localhost:8080 for mitmproxy).
+
 ## Pull requests
 
 Please see our [pull request guide](https://github.com/vector-im/element-android/blob/develop/docs/pull_request.md).
