@@ -70,7 +70,7 @@ struct MediaProvider: MediaProviderProtocol {
             
             do {
                 let imageData = try await Task.detached { () -> Data in
-                    if let avatarSize = avatarSize {
+                    if let avatarSize {
                         return try await clientProxy.loadMediaThumbnailForSource(source.underlyingSource, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
                     } else {
                         return try await clientProxy.loadMediaContentForSource(source.underlyingSource)
@@ -97,7 +97,7 @@ struct MediaProvider: MediaProviderProtocol {
     // MARK: - Private
     
     private func cacheKeyForURLString(_ urlString: String, avatarSize: AvatarSize?) -> String {
-        if let avatarSize = avatarSize {
+        if let avatarSize {
             return "\(urlString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
         } else {
             return urlString

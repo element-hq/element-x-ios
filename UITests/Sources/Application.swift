@@ -47,7 +47,7 @@ extension XCUIApplication {
                                      named: identifier.rawValue,
                                      testName: testName)
 
-        if let failure = failure,
+        if let failure,
            !failure.contains("No reference was found on disk."),
            !failure.contains("to test against the newly-recorded snapshot") {
             XCTFail(failure)

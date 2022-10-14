@@ -66,7 +66,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         buildTimelineViews()
 
-        if let roomAvatarUrl = roomAvatarUrl {
+        if let roomAvatarUrl {
             Task {
                 if case let .success(avatar) = await mediaProvider.loadImageFromURLString(roomAvatarUrl,
                                                                                           avatarSize: .room(on: .timeline)) {

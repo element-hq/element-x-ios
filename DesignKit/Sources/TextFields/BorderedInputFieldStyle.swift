@@ -85,7 +85,7 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
             .clipShape(rect)
             .overlay(rect.stroke(borderColor, lineWidth: borderWidth))
             .introspectTextField { textField in
-                if let returnKey = returnKey {
+                if let returnKey {
                     textField.returnKeyType = returnKey
                 }
                 

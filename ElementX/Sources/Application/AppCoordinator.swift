@@ -46,7 +46,7 @@ class AppCoordinator: Coordinator {
     private var userSession: UserSessionProtocol! {
         didSet {
             deobserveUserSessionChanges()
-            if let userSession = userSession, !userSession.isSoftLogout {
+            if let userSession, !userSession.isSoftLogout {
                 observeUserSessionChanges()
             }
         }

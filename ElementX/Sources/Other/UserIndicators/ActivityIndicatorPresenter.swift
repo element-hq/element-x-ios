@@ -41,7 +41,7 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
     
     func presentActivityIndicator(on view: UIView, animated: Bool, completion: (() -> Void)? = nil) {
         if presentingView != nil {
-            if let completion = completion {
+            if let completion {
                 completion()
             }
             return

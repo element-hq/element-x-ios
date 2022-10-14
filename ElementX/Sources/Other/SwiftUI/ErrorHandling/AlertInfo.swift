@@ -67,7 +67,7 @@ extension AlertInfo {
     /// Returns a SwiftUI `Alert` created from this alert info, using default button
     /// styles for both primary and (if set) secondary buttons.
     var alert: Alert {
-        if let secondaryButton = secondaryButton {
+        if let secondaryButton {
             return Alert(title: Text(title),
                          message: messageText,
                          primaryButton: alertButton(for: primaryButton),
