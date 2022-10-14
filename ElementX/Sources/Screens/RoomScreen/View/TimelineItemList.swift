@@ -32,104 +32,101 @@ struct TimelineItemList: View {
     @State private var viewFrame: CGRect = .zero
 
     var body: some View {
-        // The observer behaves differently when not in an reader
-        ScrollViewReader { _ in
-            List {
-                ProgressView()
-                    .frame(maxWidth: .infinity)
-                    .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
-                    .animation(.elementDefault, value: context.viewState.isBackPaginating)
+        List {
+            ProgressView()
+                .frame(maxWidth: .infinity)
+                .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
+                .animation(.elementDefault, value: context.viewState.isBackPaginating)
+                .listRowBackground(Color.clear)
+                .listRowSeparator(.hidden)
+            
+            // timelineItems won't be set for static Xcode Previews until they're run.
+            ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in
+                timelineItem
+                    .contextMenu {
+                        context.viewState.contextMenuBuilder?(timelineItem.id)
+                    }
+                    .opacity(opacityForItem(timelineItem))
                     .listRowBackground(Color.clear)
                     .listRowSeparator(.hidden)
-                
-                // No idea why previews don't work otherwise
-                ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in
-                    timelineItem
-                        .contextMenu {
-                            context.viewState.contextMenuBuilder?(timelineItem.id)
-                        }
-                        .opacity(opacityForItem(timelineItem))
-                        .listRowBackground(Color.clear)
-                        .listRowSeparator(.hidden)
-                        .listRowInsets(settings.timelineStyle.listRowInsets)
-                        .onAppear {
-                            context.send(viewAction: .itemAppeared(id: timelineItem.id))
-                        }
-                        .onDisappear {
-                            context.send(viewAction: .itemDisappeared(id: timelineItem.id))
-                        }
-                        .environment(\.openURL, OpenURLAction { url in
-                            context.send(viewAction: .linkClicked(url: url))
-                            return .systemAction
-                        })
-                }
+                    .listRowInsets(settings.timelineStyle.listRowInsets)
+                    .onAppear {
+                        context.send(viewAction: .itemAppeared(id: timelineItem.id))
+                    }
+                    .onDisappear {
+                        context.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                    }
+                    .environment(\.openURL, OpenURLAction { url in
+                        context.send(viewAction: .linkClicked(url: url))
+                        return .systemAction
+                    })
             }
-            .listStyle(.plain)
-            .background(ViewFrameReader(frame: $viewFrame))
-            .environment(\.timelineWidth, viewFrame.width)
-            .timelineStyle(settings.timelineStyle)
-            .environment(\.defaultMinListRowHeight, 0.0)
-            .introspectCollectionView { collectionView in
-                if collectionView == collectionViewObserver.collectionView { return }
-                
-                collectionViewObserver = ListCollectionViewAdapter(collectionView: collectionView,
-                                                                   topDetectionOffset: collectionView.bounds.size.height / 3.0,
-                                                                   bottomDetectionOffset: 10.0)
-                
-                collectionViewObserver.scrollToBottom()
-                
-                // Check if there are enough items. Otherwise ask for more
-                attemptBackPagination()
-            }
-            .onAppear {
-                if timelineItems != context.viewState.items {
-                    timelineItems = context.viewState.items
-                }
-            }
-            .onReceive(scrollToBottomPublisher) {
-                collectionViewObserver.scrollToBottom(animated: true)
-            }
-            .onReceive(collectionViewObserver.scrollViewTopVisiblePublisher) { isTopVisible in
-                if !isTopVisible || context.viewState.isBackPaginating {
-                    return
-                }
-                
-                attemptBackPagination()
-            }
-            .onReceive(collectionViewObserver.scrollViewBottomVisiblePublisher) { isBottomVisible in
-                bottomVisiblePublisher.send(isBottomVisible)
-            }
-            .onChange(of: context.viewState.items) { _ in
-                // If the count hasn't changed then don't observe a pagination
-                guard context.viewState.items.count != timelineItems.count else {
-                    timelineItems = context.viewState.items
-                    return
-                }
-                
-                // Don't update the list while moving
-                if collectionViewObserver.isDecelerating || collectionViewObserver.isTracking {
-                    hasPendingChanges = true
-                    return
-                }
-                
-                collectionViewObserver.saveCurrentOffset()
+        }
+        .listStyle(.plain)
+        .background(ViewFrameReader(frame: $viewFrame))
+        .environment(\.timelineWidth, viewFrame.width)
+        .timelineStyle(settings.timelineStyle)
+        .environment(\.defaultMinListRowHeight, 0.0)
+        .introspectCollectionView { collectionView in
+            if collectionView == collectionViewObserver.collectionView { return }
+            
+            collectionViewObserver = ListCollectionViewAdapter(collectionView: collectionView,
+                                                               topDetectionOffset: collectionView.bounds.size.height / 3.0,
+                                                               bottomDetectionOffset: 10.0)
+            
+            collectionViewObserver.scrollToBottom()
+            
+            // Check if there are enough items. Otherwise ask for more
+            attemptBackPagination()
+        }
+        .onAppear {
+            if timelineItems != context.viewState.items {
                 timelineItems = context.viewState.items
             }
-            .onReceive(collectionViewObserver.scrollViewDidRestPublisher) {
-                if hasPendingChanges == false {
-                    return
-                }
-                
-                collectionViewObserver.saveCurrentOffset()
+        }
+        .onReceive(scrollToBottomPublisher) {
+            collectionViewObserver.scrollToBottom(animated: true)
+        }
+        .onReceive(collectionViewObserver.scrollViewTopVisiblePublisher) { isTopVisible in
+            if !isTopVisible || context.viewState.isBackPaginating {
+                return
+            }
+            
+            attemptBackPagination()
+        }
+        .onReceive(collectionViewObserver.scrollViewBottomVisiblePublisher) { isBottomVisible in
+            bottomVisiblePublisher.send(isBottomVisible)
+        }
+        .onChange(of: context.viewState.items) { _ in
+            // If the count hasn't changed then don't observe a pagination
+            guard context.viewState.items.count != timelineItems.count else {
                 timelineItems = context.viewState.items
-                hasPendingChanges = false
+                return
             }
-            .onChange(of: timelineItems.count) { _ in
-                collectionViewObserver.restoreSavedOffset()
-                
-                // Check if there are enough items. Otherwise ask for more
-                attemptBackPagination()
+            
+            // Don't update the list while moving
+            if collectionViewObserver.isDecelerating || collectionViewObserver.isTracking {
+                hasPendingChanges = true
+                return
             }
+            
+            collectionViewObserver.saveCurrentOffset()
+            timelineItems = context.viewState.items
+        }
+        .onReceive(collectionViewObserver.scrollViewDidRestPublisher) {
+            if hasPendingChanges == false {
+                return
+            }
+            
+            collectionViewObserver.saveCurrentOffset()
+            timelineItems = context.viewState.items
+            hasPendingChanges = false
+        }
+        .onChange(of: timelineItems.count) { _ in
+            collectionViewObserver.restoreSavedOffset()
+            
+            // Check if there are enough items. Otherwise ask for more
+            attemptBackPagination()
         }
     }
     
