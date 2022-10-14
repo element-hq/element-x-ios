@@ -5,6 +5,7 @@
 source "https://rubygems.org"
 
 gem 'fastlane'
+gem "xcode-install"
 gem 'slather'
 
 plugins_path = File.join(File.dirname(__FILE__), 'fastlane', 'Pluginfile')

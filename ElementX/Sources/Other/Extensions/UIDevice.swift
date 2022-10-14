@@ -23,7 +23,6 @@ extension UIDevice {
     }
 
     var initialDisplayName: String {
-        let string = isPhone ? ElementL10n.loginMobileDevice : ElementL10n.loginTabletDevice
-        return "X \(string)"
+        ElementL10n.defaultSessionDisplayName(ElementInfoPlist.cfBundleDisplayName)
     }
 }

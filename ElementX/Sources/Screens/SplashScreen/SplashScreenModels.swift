@@ -79,7 +79,7 @@ struct SplashScreenViewState: BindableState {
                                     message: ElementL10n.ftueAuthCarouselEncryptedBody,
                                     image: Asset.Images.splashScreenPage3),
             SplashScreenPageContent(title: page4Title.tinting("."),
-                                    message: ElementL10n.ftueAuthCarouselWorkplaceBody(ElementInfoPlist.cfBundleName),
+                                    message: ElementL10n.ftueAuthCarouselWorkplaceBody(ElementInfoPlist.cfBundleDisplayName),
                                     image: Asset.Images.splashScreenPage4)
         ]
         bindings = SplashScreenBindings()
