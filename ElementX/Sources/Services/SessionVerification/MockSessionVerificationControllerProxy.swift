@@ -42,7 +42,8 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     }
     
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+        Task.detached {
+            try await Task.sleep(nanoseconds: 2_000_000_000)
             callbacks.send(.cancelled)
         }
         
@@ -50,7 +51,8 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     }
     
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        DispatchQueue.global(qos: .background).asyncAfter(deadline: .now() + 2.0) {
+        Task.detached {
+            try await Task.sleep(nanoseconds: 2_000_000_000)
             callbacks.send(.cancelled)
         }
         

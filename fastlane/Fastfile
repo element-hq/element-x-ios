@@ -1,6 +1,10 @@
 require 'yaml'
 require_relative 'changelog'
 
+before_all do
+  xcversion(version: "~> 13.4")
+end
+
 lane :alpha do
 
   config_xcodegen_alpha()
