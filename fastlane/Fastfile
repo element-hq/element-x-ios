@@ -141,6 +141,21 @@ lane :integration_tests do
   )
 end
 
+lane :config_nightly do
+  target_file_path = "../ElementX/SupportingFiles/target.yml"
+  data = YAML.load_file target_file_path
+  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX Nightly"
+  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
+  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+
+  bump_build_number()
+
+  release_version = get_version_number()
+  build_version = get_build_number()
+
+  update_app_icon(caption_text: "Nightly #{release_version}.#{build_version}")
+end
+
 private_lane :bump_build_number do
   # Increment build number to current date
   build_number = Time.now.strftime("%Y%m%d%H%M")
