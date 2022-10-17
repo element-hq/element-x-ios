@@ -36,7 +36,7 @@ jobs:
       # Common setup
       - name: Brew bundle
         run:
-          brew update && brew bundle && brew upgrade swiftformat
+          brew bundle
 
       - name: SwiftFormat
         run:
@@ -46,13 +46,6 @@ jobs:
         run: |
           bundle config path vendor/bundle
           bundle install --jobs 4 --retry 3
-
-      - uses: actions/setup-python@v3
-        with:
-          python-version: '3.x'
-          cache: 'pip'
-          
-      - run: pip install -r requirements.txt
       
       # Import alpha release private signing certificate
       - name: Import signing certificate
@@ -85,7 +78,5 @@ jobs:
             ![QR code](${{ env.DIAWI_QR_CODE_LINK }})  
 
             If you can't scan the QR code you can install the build via this link: ${{ env.DIAWI_FILE_LINK }}
-          # Enables to identify and update existing Ad-hoc release message on new commit in the PR
-          identifier: "GITHUB_COMMENT_ADHOC_RELEASE"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
