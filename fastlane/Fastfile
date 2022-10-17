@@ -148,6 +148,8 @@ lane :config_nightly do
   data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
+  xcodegen(spec: "project.yml")
+
   bump_build_number()
 
   release_version = get_version_number()
