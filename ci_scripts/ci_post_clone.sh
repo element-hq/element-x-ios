@@ -7,7 +7,7 @@ set -e
 # move to the project root
 cd ..
 
-brew bundle
+brew bundle --file=XcodeCloudBrewfile
 
 bundle config path vendor/bundle
 bundle install --jobs 4 --retry 3
