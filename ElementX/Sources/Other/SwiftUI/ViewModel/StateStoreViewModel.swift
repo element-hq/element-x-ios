@@ -97,7 +97,7 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     init(initialViewState: State) {
         context = Context(initialViewState: initialViewState)
         context.viewActions.sink { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             
             Task { await self.process(viewAction: action) }
         }

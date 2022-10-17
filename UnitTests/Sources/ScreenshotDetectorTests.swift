@@ -45,7 +45,7 @@ class ScreenshotDetectorTests: XCTestCase {
                         XCTAssertNil(image)
 
                         //  and get an error
-                        guard let error = error else {
+                        guard let error else {
                             XCTFail("Should get an error")
                             return
                         }
@@ -62,7 +62,7 @@ class ScreenshotDetectorTests: XCTestCase {
                     XCTAssertNil(image)
 
                     //  and get an error
-                    guard let error = error else {
+                    guard let error else {
                         XCTFail("Should get an error")
                         return
                     }

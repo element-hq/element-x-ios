@@ -60,7 +60,7 @@ extension AlertInfo {
 
 extension AlertInfo {
     private var messageText: Text? {
-        guard let message = message else { return nil }
+        guard let message else { return nil }
         return Text(message)
     }
     

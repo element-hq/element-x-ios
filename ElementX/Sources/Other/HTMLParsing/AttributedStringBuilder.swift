@@ -29,7 +29,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     func fromPlain(_ string: String?) -> AttributedString? {
-        guard let string = string else {
+        guard let string else {
             return nil
         }
 
@@ -54,7 +54,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     // that could happen with the default HTML renderer of NSAttributedString which is a
     // webview.
     func fromHTML(_ htmlString: String?) -> AttributedString? {
-        guard let htmlString = htmlString,
+        guard let htmlString,
               let data = htmlString.data(using: .utf8) else {
             return nil
         }
@@ -93,7 +93,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     func blockquoteCoalescedComponentsFrom(_ attributedString: AttributedString?) -> [AttributedStringBuilderComponent]? {
-        guard let attributedString = attributedString else {
+        guard let attributedString else {
             return nil
         }
         

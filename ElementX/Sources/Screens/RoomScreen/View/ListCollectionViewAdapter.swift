@@ -65,7 +65,7 @@ class ListCollectionViewAdapter: NSObject, UICollectionViewDelegate {
     }
     
     func saveCurrentOffset() {
-        guard let collectionView = collectionView,
+        guard let collectionView,
               collectionView.numberOfSections > 0 else {
             return
         }
@@ -83,7 +83,7 @@ class ListCollectionViewAdapter: NSObject, UICollectionViewDelegate {
             offsetDetails = nil
         }
         
-        guard let collectionView = collectionView,
+        guard let collectionView,
               collectionView.numberOfSections > 0 else {
             return
         }
@@ -112,7 +112,7 @@ class ListCollectionViewAdapter: NSObject, UICollectionViewDelegate {
     }
     
     func scrollToBottom(animated: Bool = false) {
-        guard let collectionView = collectionView,
+        guard let collectionView,
               collectionView.numberOfSections > 0 else {
             return
         }
@@ -159,7 +159,7 @@ class ListCollectionViewAdapter: NSObject, UICollectionViewDelegate {
     }
     
     private func handleScrollViewScroll() {
-        guard let collectionView = collectionView else {
+        guard let collectionView else {
             return
         }
         
@@ -194,7 +194,7 @@ class ListCollectionViewAdapter: NSObject, UICollectionViewDelegate {
     }
     
     @objc private func handlePanGesture(_ sender: UIPanGestureRecognizer) {
-        guard let collectionView = collectionView,
+        guard let collectionView,
               sender.state == .ended,
               draggingInitiated,
               !collectionView.isDecelerating else {

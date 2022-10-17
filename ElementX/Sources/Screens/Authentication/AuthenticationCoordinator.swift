@@ -59,7 +59,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
         let coordinator = SplashScreenCoordinator()
         
         coordinator.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             switch action {
             case .login:
                 Task { await self.startAuthentication() }
@@ -93,7 +93,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch action {
             case .updated:
@@ -117,7 +117,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
         let coordinator = LoginCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch action {
             case .signedIn(let userSession):
@@ -138,7 +138,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
         let coordinator = AnalyticsPromptCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
         }
         

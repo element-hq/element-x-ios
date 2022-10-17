@@ -31,7 +31,7 @@ struct MediaProvider: MediaProviderProtocol {
     }
     
     func imageFromSource(_ source: MediaSource?, avatarSize: AvatarSize?) -> UIImage? {
-        guard let source = source else {
+        guard let source else {
             return nil
         }
         let cacheKey = cacheKeyForURLString(source.underlyingSource.url(), avatarSize: avatarSize)
@@ -39,7 +39,7 @@ struct MediaProvider: MediaProviderProtocol {
     }
     
     func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage? {
-        guard let urlString = urlString else {
+        guard let urlString else {
             return nil
         }
         

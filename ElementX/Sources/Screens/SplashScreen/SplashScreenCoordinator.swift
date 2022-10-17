@@ -50,7 +50,7 @@ final class SplashScreenCoordinator: Coordinator, Presentable {
         MXLog.debug("Did start.")
         splashScreenViewModel.callback = { [weak self] action in
             MXLog.debug("SplashScreenViewModel did complete with result: \(action).")
-            guard let self = self else { return }
+            guard let self else { return }
             switch action {
             case .login:
                 self.callback?(.login)

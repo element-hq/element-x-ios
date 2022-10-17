@@ -69,7 +69,7 @@ class ScreenshotDetector {
                                       targetSize: PHImageManagerMaximumSize,
                                       contentMode: .default,
                                       options: PHImageRequestOptions.highQualitySyncLocal) { [weak self] image, _ in
-                guard let image = image else {
+                guard let image else {
                     self?.fail(withError: ScreenshotDetectorError.loadFailed)
                     return
                 }

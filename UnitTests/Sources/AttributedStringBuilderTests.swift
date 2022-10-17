@@ -367,7 +367,7 @@ class AttributedStringBuilderTests: XCTestCase {
     // MARK: - Private
     
     private func checkMatrixEntityLinkIn(attributedString: AttributedString?, expected: String) {
-        guard let attributedString = attributedString else {
+        guard let attributedString else {
             XCTFail("Could not build the attributed string")
             return
         }
