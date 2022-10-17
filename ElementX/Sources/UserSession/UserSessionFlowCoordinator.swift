@@ -38,6 +38,7 @@ class UserSessionFlowCoordinator: Coordinator {
         self.bugReportService = bugReportService
         
         setupStateMachine()
+        startObservingApplicationState()
     }
     
     func start() {
@@ -48,6 +49,7 @@ class UserSessionFlowCoordinator: Coordinator {
         
     // MARK: - Private
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
@@ -56,7 +58,7 @@ class UserSessionFlowCoordinator: Coordinator {
             case (.initial, .start, .homeScreen):
                 self.presentHomeScreen()
                 
-            case(_, _, .roomScreen(let roomId)):
+            case(.homeScreen, .showRoomScreen, .roomScreen(let roomId)):
                 self.presentRoomWithIdentifier(roomId)
             case(.roomScreen(let roomId), .dismissedRoomScreen, .homeScreen):
                 self.tearDownDismissedRoomScreen(roomId)
@@ -70,6 +72,10 @@ class UserSessionFlowCoordinator: Coordinator {
                 self.presentSettingsScreen()
             case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
                 self.dismissSettingsScreen()
+            case (_, .resignActive, .suspended):
+                self.pause()
+            case (_, .becomeActive, _):
+                self.resume()
                 
             default:
                 fatalError("Unknown transition: \(context)")
@@ -79,6 +85,17 @@ class UserSessionFlowCoordinator: Coordinator {
         stateMachine.addErrorHandler { context in
             fatalError("Failed transition with context: \(context)")
         }
+    }
+
+    private func startObservingApplicationState() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
     }
     
     private func presentHomeScreen() {
@@ -271,5 +288,25 @@ class UserSessionFlowCoordinator: Coordinator {
 
         navigationRouter.dismissModule()
         remove(childCoordinator: bugReportCoordinator)
+    }
+
+    // MARK: - Application State
+
+    private func pause() {
+        userSession.clientProxy.stopSync()
+    }
+
+    private func resume() {
+        userSession.clientProxy.startSync()
+    }
+
+    @objc
+    private func applicationWillResignActive() {
+        stateMachine.processEvent(.resignActive)
+    }
+
+    @objc
+    private func applicationDidBecomeActive() {
+        stateMachine.processEvent(.becomeActive)
     }
 }
