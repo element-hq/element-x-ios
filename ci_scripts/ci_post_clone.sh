@@ -9,6 +9,7 @@ cd ..
 
 brew bundle --file=XcodeCloudBrewfile
 
+gem install bundler
 bundle config path vendor/bundle
 bundle install --jobs 4 --retry 3
 
