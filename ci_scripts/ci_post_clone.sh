@@ -4,6 +4,9 @@
 # a nonzero exit code.
 set -e
 
+# move to the project root
+cd ..
+
 brew bundle
 
 bundle config path vendor/bundle
