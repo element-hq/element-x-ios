@@ -78,7 +78,7 @@ final class LoginCoordinator: Coordinator, Presentable {
         MXLog.debug("Did start.")
         
         loginViewModel.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             MXLog.debug("LoginViewModel did callback with result: \(action).")
             
             switch action {
@@ -144,7 +144,7 @@ final class LoginCoordinator: Coordinator, Presentable {
     }
     
     private func loginWithOIDC() {
-        guard let oidcUserAgent = oidcUserAgent else {
+        guard let oidcUserAgent else {
             handleError(AuthenticationServiceError.oidcError(.notSupported))
             return
         }
@@ -215,7 +215,7 @@ final class LoginCoordinator: Coordinator, Presentable {
                                                               hasModalPresentation: true)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] action in
-            guard let self = self, let coordinator = coordinator else { return }
+            guard let self, let coordinator = coordinator else { return }
             self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
         }
         

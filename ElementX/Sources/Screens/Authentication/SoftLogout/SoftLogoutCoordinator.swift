@@ -89,7 +89,7 @@ final class SoftLogoutCoordinator: Coordinator, Presentable {
         MXLog.debug("[SoftLogoutCoordinator] did start.")
 
         softLogoutViewModel.callback = { [weak self] result in
-            guard let self = self else { return }
+            guard let self else { return }
             MXLog.debug("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(result).")
 
             switch result {
@@ -154,7 +154,7 @@ final class SoftLogoutCoordinator: Coordinator, Presentable {
     }
 
     private func loginWithOIDC() {
-        guard let oidcUserAgent = oidcUserAgent else {
+        guard let oidcUserAgent else {
             handleError(AuthenticationServiceError.oidcError(.notSupported))
             return
         }

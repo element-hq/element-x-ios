@@ -31,7 +31,7 @@ struct MockMediaProvider: MediaProviderProtocol {
             return nil
         }
 
-        if let avatarSize = avatarSize {
+        if let avatarSize {
             switch avatarSize {
             case .room:
                 return Asset.Images.appLogo.image

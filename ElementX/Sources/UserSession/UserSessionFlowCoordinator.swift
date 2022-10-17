@@ -50,7 +50,7 @@ class UserSessionFlowCoordinator: Coordinator {
     
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .start, .homeScreen):
@@ -89,7 +89,7 @@ class UserSessionFlowCoordinator: Coordinator {
         let coordinator = HomeScreenCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch action {
             case .presentRoom(let roomIdentifier):
@@ -142,7 +142,7 @@ class UserSessionFlowCoordinator: Coordinator {
 
         add(childCoordinator: coordinator)
         navigationRouter.push(coordinator) { [weak self] in
-            guard let self = self else { return }
+            guard let self else { return }
             self.stateMachine.processEvent(.dismissedRoomScreen)
         }
     }
@@ -166,7 +166,7 @@ class UserSessionFlowCoordinator: Coordinator {
                                                        bugReportService: bugReportService)
         let coordinator = SettingsCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             switch action {
             case .dismiss:
                 self.dismissSettingsScreen()
@@ -246,7 +246,7 @@ class UserSessionFlowCoordinator: Coordinator {
                                                         screenshot: image)
         let coordinator = BugReportCoordinator(parameters: parameters)
         coordinator.completion = { [weak self, weak coordinator] in
-            guard let self = self, let coordinator = coordinator else { return }
+            guard let self, let coordinator = coordinator else { return }
             self.navigationRouter.dismissModule(animated: true)
             self.remove(childCoordinator: coordinator)
         }

@@ -59,7 +59,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         hostingController = UIHostingController(rootView: view)
         
         viewModel.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch action {
             case .selectRoom(let roomIdentifier):

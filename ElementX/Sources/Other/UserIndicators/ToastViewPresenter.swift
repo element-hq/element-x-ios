@@ -66,7 +66,7 @@ class ToastViewPresenter: UserIndicatorViewPresentable {
     }
     
     func dismiss() {
-        guard let view = view, view.superview != nil else {
+        guard let view, view.superview != nil else {
             return
         }
         

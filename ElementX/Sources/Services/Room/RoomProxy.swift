@@ -128,7 +128,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func loadDisplayName() async -> Result<String, RoomProxyError> {
-        if let displayName = displayName { return .success(displayName) }
+        if let displayName { return .success(displayName) }
         
         do {
             let displayName = try await Task.dispatch(on: .global()) {
@@ -176,7 +176,7 @@ class RoomProxy: RoomProxyProtocol {
         
         return await Task.dispatch(on: .global()) {
             do {
-                if let inReplyToEventId = inReplyToEventId {
+                if let inReplyToEventId {
                     try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
                 } else {
                     let messageContent = messageEventContentFromMarkdown(md: message)

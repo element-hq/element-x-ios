@@ -54,7 +54,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             .callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-                guard let self = self else { return }
+                guard let self else { return }
                 
                 switch callback {
                 case .updatedMessages:
@@ -248,7 +248,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         switch await roomProxy.loadAvatarURLForUserId(timelineItem.senderId) {
         case .success(let avatarURLString):
-            guard let avatarURLString = avatarURLString else {
+            guard let avatarURLString else {
                 return
             }
             
@@ -278,7 +278,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         switch await roomProxy.loadDisplayNameForUserId(timelineItem.senderId) {
         case .success(let displayName):
-            guard let displayName = displayName,
+            guard let displayName,
                   let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                   var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
                 return

@@ -52,7 +52,7 @@ class AnalyticsService {
             return .failure(.accountDataFailure)
         case .success(let settings):
             // The id has already be set so we are done here.
-            if let settings = settings, settings.id != nil {
+            if let settings, settings.id != nil {
                 return .success(settings)
             }
             

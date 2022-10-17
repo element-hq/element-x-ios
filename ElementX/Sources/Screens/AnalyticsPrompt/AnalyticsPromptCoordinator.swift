@@ -56,7 +56,7 @@ final class AnalyticsPromptCoordinator: Coordinator, Presentable {
         analyticsPromptViewModel.callback = { [weak self] result in
             MXLog.debug("AnalyticsPromptViewModel did complete with result: \(result).")
             
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch result {
             case .enable:

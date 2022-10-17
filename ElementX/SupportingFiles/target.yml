@@ -62,6 +62,7 @@ targets:
     preBuildScripts:
     - name: 🛠 SwiftGen
       runOnlyWhenInstalling: false
+      basedOnDependencyAnalysis: false
       shell: /bin/sh
       script: |
         export PATH="$PATH:/opt/homebrew/bin"
@@ -74,6 +75,7 @@ targets:
     postBuildScripts:
     - name: ⚠️ SwiftLint
       runOnlyWhenInstalling: false
+      basedOnDependencyAnalysis: false
       shell: /bin/sh
       script: |
         export PATH="$PATH:/opt/homebrew/bin"
@@ -84,6 +86,7 @@ targets:
         fi
     - name: 🧹 SwiftFormat
       runOnlyWhenInstalling: false
+      basedOnDependencyAnalysis: false
       shell: /bin/sh
       script: |
         export PATH="$PATH:/opt/homebrew/bin"

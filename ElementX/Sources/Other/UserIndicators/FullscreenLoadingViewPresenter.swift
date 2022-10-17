@@ -35,7 +35,7 @@ class FullscreenLoadingViewPresenter: UserIndicatorViewPresentable {
         while presentingController?.navigationController != nil {
             presentingController = presentingController?.navigationController
         }
-        guard let presentingController = presentingController else {
+        guard let presentingController else {
             return
         }
         
@@ -59,7 +59,7 @@ class FullscreenLoadingViewPresenter: UserIndicatorViewPresentable {
     }
     
     func dismiss() {
-        guard let view = view, view.superview != nil else {
+        guard let view, view.superview != nil else {
             return
         }
         

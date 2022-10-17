@@ -38,7 +38,7 @@ struct PlaceholderAvatarImage: View {
     }
 
     private var bgColor: Color {
-        guard let contentId = contentId else {
+        guard let contentId else {
             return .element.accent
         }
 

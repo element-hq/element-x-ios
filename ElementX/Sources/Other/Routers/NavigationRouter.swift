@@ -95,7 +95,7 @@ final class NavigationRouter: NSObject, NavigationRouterType {
             self.willPopViewController($0)
         }
         
-        if let popCompletion = popCompletion {
+        if let popCompletion {
             completions[controller] = popCompletion
         }
         
