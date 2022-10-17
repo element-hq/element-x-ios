@@ -35,6 +35,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         /// Showing the settings screen
         case settingsScreen
+
+        /// Application has been suspended
+        case suspended
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -57,24 +60,37 @@ class UserSessionFlowCoordinatorStateMachine {
         case showSettingsScreen
         /// The settings screen has been dismissed
         case dismissedSettingsScreen
+
+        /// Application goes into inactive state
+        case resignActive
+        /// Application goes into active state
+        case becomeActive
     }
     
     private let stateMachine: StateMachine<State, Event>
+    private var stateBeforeSuspension: State = .initial
     
     init() {
-        stateMachine = StateMachine(state: .initial) { machine in
-            machine.addRoutes(event: .start, transitions: [.initial => .homeScreen])
+        stateMachine = StateMachine(state: .initial)
+        configure()
+    }
 
-            // Transitions with associated values need to be handled through `addRouteMapping`
-            machine.addRouteMapping { event, fromState, _ in
-                switch (event, fromState) {
-                case (.showRoomScreen(let roomId), .homeScreen):
-                    return .roomScreen(roomId: roomId)
-                case (.dismissedRoomScreen, .roomScreen):
-                    return .homeScreen
-                default:
-                    return nil
-                }
+    private func configure() {
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .homeScreen])
+
+        stateMachine.addRouteMapping { event, fromState, _ in
+            switch (event, fromState) {
+            case (.showRoomScreen(let roomId), .homeScreen):
+                return .roomScreen(roomId: roomId)
+            case (.dismissedRoomScreen, .roomScreen):
+                return .homeScreen
+            case (.resignActive, _):
+                self.stateBeforeSuspension = fromState
+                return .suspended
+            case (.becomeActive, .suspended):
+                return self.stateBeforeSuspension
+            default:
+                return nil
             }
         }
     }
