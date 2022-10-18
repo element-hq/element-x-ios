@@ -21,26 +21,10 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
-### github_release
-
-```sh
-[bundle exec] fastlane github_release
-```
-
-
-
 ### app_store_release
 
 ```sh
 [bundle exec] fastlane app_store_release
-```
-
-
-
-### build_adhoc
-
-```sh
-[bundle exec] fastlane build_adhoc
 ```
 
 
@@ -89,6 +73,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 ```sh
 [bundle exec] fastlane upload_dsyms_to_sentry
+```
+
+
+
+### release_to_github
+
+```sh
+[bundle exec] fastlane release_to_github
+```
+
+Create GitHub Release
+
+### prepare_next_release
+
+```sh
+[bundle exec] fastlane prepare_next_release
 ```
 
 

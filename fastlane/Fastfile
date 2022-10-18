@@ -43,18 +43,6 @@ lane :alpha do
 
 end
 
-lane :github_release do
-  build_adhoc()
-
-  upload_to_diawi()
-
-  release_to_github()
-
-  prepare_next_release()
-
-  upload_dsyms_to_sentry(dsym_path: './build/ElementX.app.dSYM.zip')
-end
-
 lane :app_store_release do
   build_release()
 
@@ -63,23 +51,6 @@ lane :app_store_release do
   prepare_next_release()
 
   upload_dsyms_to_sentry(dsym_path: './build/ElementX.app.dSYM.zip')
-end
-
-
-lane :build_adhoc do
-  bump_build_number()
-
-  build_ios_app(
-    scheme: "ElementX",
-    clean: true,
-    export_method: "ad-hoc",
-    output_directory: "build",
-    export_options: {
-      provisioningProfiles: { 
-        "io.element.elementx" => "ElementX Ad Hoc",
-      }
-    }
-  )
 end
 
 lane :build_release do
@@ -187,7 +158,6 @@ private_lane :config_xcodegen_alpha do
   bump_build_number()
 end
 
-desc "Upload IPA to Diawi"
 private_lane :upload_to_diawi do
   api_token = ENV["DIAWI_API_TOKEN"]
   UI.user_error!("Invalid Diawi API token.") unless !api_token.to_s.empty?
@@ -212,8 +182,7 @@ private_lane :upload_to_diawi do
   sh("echo DIAWI_QR_CODE_LINK=#{diawi_qr_code_link} >> $GITHUB_ENV")
 end
 
-desc "Create GitHub Release"
-private_lane :release_to_github do
+lane :release_to_github do
   api_token = ENV["GITHUB_TOKEN"]
   UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
 
@@ -248,7 +217,7 @@ private_lane :release_to_github do
 
 end
 
-private_lane :prepare_next_release do 
+lane :prepare_next_release do 
   target_file_path = "../ElementX/SupportingFiles/target.yml"
   xcode_project_file_path = "../ElementX.xcodeproj"
 
@@ -265,6 +234,8 @@ private_lane :prepare_next_release do
   sh("git add #{target_file_path} #{xcode_project_file_path}")
 
   sh("git commit -m 'Prepare next release'")
+
+  sh("git push")  
 end
 
 private_lane :export_version_changes do |options|
