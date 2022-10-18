@@ -134,11 +134,6 @@ lane :integration_tests do
 end
 
 lane :config_nightly do
-  target_file_path = "../ElementX/SupportingFiles/target.yml"
-  data = YAML.load_file target_file_path
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX Nightly"
-  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
-
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
   data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
@@ -178,12 +173,7 @@ private_lane :bump_build_number do
 end
 
 private_lane :config_xcodegen_alpha do
-  target_file_path = "../ElementX/SupportingFiles/target.yml"
-  data = YAML.load_file target_file_path
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX PR"
-  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
-
-  arget_file_path = "../project.yml"
+  target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
   data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
