@@ -22,6 +22,9 @@ options:
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
   ENABLE_BITCODE: NO
+  APP_GROUP_IDENTIFIER: group.io.element
+  BASE_BUNDLE_IDENTIFIER: io.element.elementx
+  KEYCHAIN_ACCESS_GROUP: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER).keychain.shared
 
 
 include:

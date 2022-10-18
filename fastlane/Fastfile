@@ -9,8 +9,6 @@ lane :alpha do
 
   config_xcodegen_alpha()
 
-  xcodegen(spec: "project.yml")
-
   provisioning_profile_name = "ElementX PR Ad Hoc"
   bundle_identifier = "io.element.elementx.pr"
   code_signing_identity = "Apple Distribution: Vector Creations Limited (7J4U792NQT)"
@@ -28,12 +26,6 @@ lane :alpha do
     ignore_profiles_with_different_name: true,
     adhoc: true 
   )
-
-  version = ENV["GITHUB_PR_NUMBER"]
-
-  update_app_icon(caption_text: "PR #{version}")
-
-  bump_build_number()
 
   build_ios_app(
     scheme: "ElementX",
@@ -145,17 +137,22 @@ lane :config_nightly do
   target_file_path = "../ElementX/SupportingFiles/target.yml"
   data = YAML.load_file target_file_path
   data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX Nightly"
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
+  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+
+  target_file_path = "../project.yml"
+  data = YAML.load_file target_file_path
+  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
   xcodegen(spec: "project.yml")
 
-  bump_build_number()
+  # Automatically done by Xcode Cloud. Cannot override
+  # https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds
+  # bump_build_number()
 
   release_version = get_version_number()
-  build_version = get_build_number()
 
-  update_app_icon(caption_text: "Nightly #{release_version}.#{build_version}")
+  update_app_icon(caption_text: "Nightly #{release_version}", modulate: "100,20,100")
 end
 
 private_lane :bump_build_number do
@@ -168,8 +165,20 @@ private_lane :config_xcodegen_alpha do
   target_file_path = "../ElementX/SupportingFiles/target.yml"
   data = YAML.load_file target_file_path
   data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX PR"
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+
+  arget_file_path = "../project.yml"
+  data = YAML.load_file target_file_path
+  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
+  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+
+  xcodegen(spec: "project.yml")
+
+  version = ENV["GITHUB_PR_NUMBER"]
+
+  update_app_icon(caption_text: "PR #{version}", modulate: "100,100,200")
+
+  bump_build_number()
 end
 
 desc "Upload IPA to Diawi"
@@ -263,9 +272,12 @@ private_lane :update_app_icon do |options|
   caption_text = options[:caption_text]
   UI.user_error!("Invalid caption text.") unless !caption_text.to_s.empty?
 
+  modulate = options[:modulate]
+  UI.user_error!("Invalid icon modulate parameters.") unless !modulate.to_s.empty?
+
   Dir.glob("../ElementX/Resources/Assets.xcassets/AppIcon.appiconset/**/*.png") do |file_name|
     # Change the icons color
-    sh("convert '#{file_name}' -modulate 100,100,200 '#{file_name}'")
+    sh("convert '#{file_name}' -modulate #{modulate} '#{file_name}'")
 
     caption_width = sh("identify -format %w '#{file_name}'")
     caption_height = file_name.end_with?("@2x.png") ? 60 : 30

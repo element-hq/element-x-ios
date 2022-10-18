@@ -32,7 +32,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: IntegrationTests
-        PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx.integration.tests
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.integration.tests
       debug:
       release:
 

@@ -12,7 +12,7 @@
 	<true/>
 	<key>keychain-access-groups</key>
 	<array>
-		<string>$(AppIdentifierPrefix)io.element.elementx</string>
+		<string>$(KEYCHAIN_ACCESS_GROUP)</string>
 	</array>
 </dict>
 </plist>
