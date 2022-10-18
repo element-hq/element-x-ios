@@ -52,7 +52,7 @@ lane :github_release do
 
   prepare_next_release()
 
-  upload_dsyms_to_sentry()
+  upload_dsyms_to_sentry(dsym_path: './build/ElementX.app.dSYM.zip')
 end
 
 lane :app_store_release do
@@ -62,7 +62,7 @@ lane :app_store_release do
 
   prepare_next_release()
 
-  upload_dsyms_to_sentry()
+  upload_dsyms_to_sentry(dsym_path: './build/ElementX.app.dSYM.zip')
 end
 
 
@@ -153,6 +153,22 @@ lane :config_nightly do
   release_version = get_version_number()
 
   update_app_icon(caption_text: "Nightly #{release_version}", modulate: "100,20,100")
+end
+
+lane :upload_dsyms_to_sentry do |options|
+  auth_token = ENV["SENTRY_AUTH_TOKEN"]
+  UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
+
+  dsym_path = options[:dsym_path]
+  UI.user_error!("Invalid DSYM path.") unless !dsym_path.to_s.empty?
+
+  sentry_upload_dif(
+    auth_token: auth_token,
+    org_slug: 'element',
+    project_slug: 'elementx',
+    url: 'https://sentry.tools.element.io/',
+    path: dsym_path,
+  )
 end
 
 private_lane :bump_build_number do
@@ -287,17 +303,4 @@ private_lane :update_app_icon do |options|
       sh("convert -background '#0008' -fill white -gravity center -size '#{caption_width}'x'#{caption_height}' caption:'#{caption_text}' '#{file_name}' +swap -gravity south -composite '#{file_name}'")
     end
   end
-end
-
-private_lane :upload_dsyms_to_sentry do
-  auth_token = ENV["SENTRY_AUTH_TOKEN"]
-  UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
-
-  sentry_upload_dif(
-    auth_token: auth_token,
-    org_slug: 'element',
-    project_slug: 'elementx',
-    url: 'https://sentry.tools.element.io/',
-    path: './build/ElementX.app.dSYM.zip',
-  )
 end

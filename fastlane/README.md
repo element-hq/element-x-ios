@@ -77,6 +77,22 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 
 
+### config_nightly
+
+```sh
+[bundle exec] fastlane config_nightly
+```
+
+
+
+### upload_dsyms_to_sentry
+
+```sh
+[bundle exec] fastlane upload_dsyms_to_sentry
+```
+
+
+
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.
