@@ -69,8 +69,8 @@ targets:
         runOnlyWhenInstalling: false
         shell: /bin/sh
         script: |
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.15.5'
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.15.5'
+          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.16.1'
+          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.16.1'
 
     sources:
     - path: ../Sources
