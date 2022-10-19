@@ -16,7 +16,7 @@ def runtime_name(runtime):
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--name', type=str, help='Simulator name (like \'iPhone 13 Pro Max\')', required=True)
-parser.add_argument('--version', type=str, default='iOS.16.1', help='OS version (defaults to \'iOS.16.1\')', required=False)
+parser.add_argument('--version', type=str, default='iOS.16.0', help='OS version (defaults to \'iOS.16.0\')', required=False)
 
 args = vars(parser.parse_args())
 
