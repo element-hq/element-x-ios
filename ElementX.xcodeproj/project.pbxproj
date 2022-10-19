@@ -2242,6 +2242,7 @@
 /* Begin PBXShellScriptBuildPhase section */
 		17364E8B37FC780E07DDEAF7 /* Override Simulator Status Bars */ = {
 			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
 			files = (
 			);
@@ -2256,7 +2257,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.15.5'\npython3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.15.5'\n";
+			shellScript = "python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.16.0'\npython3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.16.0'\n";
 		};
 		98CA896D84BFD53B2554E891 /* ⚠️ SwiftLint */ = {
 			isa = PBXShellScriptBuildPhase;
