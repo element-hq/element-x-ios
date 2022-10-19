@@ -83,7 +83,7 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 [bundle exec] fastlane release_to_github
 ```
 
-Create GitHub Release
+
 
 ### prepare_next_release
 
