@@ -5,17 +5,20 @@
 set -e
 
 # Prevent installing dependencies in system directories
-echo 'export GEM_HOME=$HOME/gems' >>~/.bash_profile
-echo 'export PATH=$HOME/gems/bin:$PATH' >>~/.bash_profile
-export GEM_HOME=$HOME/gems
-export PATH="$GEM_HOME/bin:$PATH"
+echo 'export GEM_HOME=$HOME/.gem' >>~/.zshrc
+echo 'export PATH=$GEM_HOME/bin:$PATH' >>~/.zshrc
+echo 'export PATH="/usr/local/opt/ruby@2.7/bin:$PATH"' >> ~/.zshrc
+
+export GEM_HOME=$HOME/.gem
+export PATH=$GEM_HOME/bin:$PATH
+export PATH="/usr/local/opt/ruby@2.7/bin:$PATH"
 
 # Move to the project root
 cd ..
 
 brew bundle --file=XcodeCloudBrewfile
 
-gem install bundler --install-dir $GEM_HOME
+gem install bundler
 
 bundle config path vendor/bundle
 bundle install --jobs 4 --retry 3
