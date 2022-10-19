@@ -23,7 +23,7 @@ gem install bundler
 bundle config path vendor/bundle
 bundle install --jobs 4 --retry 3
 
-pip install -r requirements.txt
+pip3 install -r requirements.txt
 
 if [ "$CI_WORKFLOW" = "Nightly" ]; then
     bundle exec fastlane config_nightly
