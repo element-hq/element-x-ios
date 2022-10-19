@@ -20,6 +20,8 @@ gem install bundler --install-dir $GEM_HOME
 bundle config path vendor/bundle
 bundle install --jobs 4 --retry 3
 
+pip install -r requirements.txt
+
 if [ "$CI_WORKFLOW" = "Nightly" ]; then
     bundle exec fastlane config_nightly
 elif [ "$CI_WORKFLOW" = "Release" ]; then
