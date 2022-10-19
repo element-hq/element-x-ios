@@ -2,7 +2,7 @@ require 'yaml'
 require_relative 'changelog'
 
 before_all do
-  xcversion(version: "~> 14.0")
+  xcversion(version: "~> 14.1.0")
 end
 
 lane :alpha do
