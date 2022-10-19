@@ -67,6 +67,7 @@ targets:
     preBuildScripts:
       - name: Override Simulator Status Bars
         runOnlyWhenInstalling: false
+        basedOnDependencyAnalysis: false
         shell: /bin/sh
         script: |
           python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.16.1'

@@ -44,9 +44,9 @@ Tools/Scripts/element-android
 # ignore all
 /UITests/Sources/__Snapshots__/Application/*
 # but keep the references
-!/UITests/Sources/__Snapshots__/Application/15-5-de-DE-iPad-9th-generation.*.png
-!/UITests/Sources/__Snapshots__/Application/15-5-fr-FR-iPad-9th-generation.*.png
-!/UITests/Sources/__Snapshots__/Application/15-5-en-GB-iPad-9th-generation.*.png
-!/UITests/Sources/__Snapshots__/Application/15-5-de-DE-iPhone-13-Pro-Max.*.png
-!/UITests/Sources/__Snapshots__/Application/15-5-fr-FR-iPhone-13-Pro-Max.*.png
-!/UITests/Sources/__Snapshots__/Application/15-5-en-GB-iPhone-13-Pro-Max.*.png
+!/UITests/Sources/__Snapshots__/Application/16-1-de-DE-iPad-9th-generation.*.png
+!/UITests/Sources/__Snapshots__/Application/16-1-fr-FR-iPad-9th-generation.*.png
+!/UITests/Sources/__Snapshots__/Application/16-1-en-GB-iPad-9th-generation.*.png
+!/UITests/Sources/__Snapshots__/Application/16-1-de-DE-iPhone-13-Pro-Max.*.png
+!/UITests/Sources/__Snapshots__/Application/16-1-fr-FR-iPhone-13-Pro-Max.*.png
+!/UITests/Sources/__Snapshots__/Application/16-1-en-GB-iPhone-13-Pro-Max.*.png

@@ -27,11 +27,12 @@ class SettingsUITests: XCTestCase {
         XCTAssert(reportBugButton.exists)
         XCTAssertEqual(reportBugButton.label, ElementL10n.sendBugReport)
         XCTAssertEqual(app.buttons["crashButton"].exists, BuildSettings.settingsCrashButtonVisible)
-        let timelineStylePicker = app.buttons["timelineStylePicker"]
-        XCTAssertEqual(timelineStylePicker.exists, BuildSettings.settingsShowTimelineStyle)
+
+        XCTAssertEqual(app.buttons["timelineStylePicker"].exists, BuildSettings.settingsShowTimelineStyle)
         if BuildSettings.settingsShowTimelineStyle {
-            XCTAssertEqual(timelineStylePicker.staticTexts.firstMatch.label, ElementL10n.settingsTimelineStyle)
+            XCTAssertTrue(app.staticTexts[ElementL10n.settingsTimelineStyle].exists)
         }
+        
         let logoutButton = app.buttons["logoutButton"]
         XCTAssert(logoutButton.exists)
         XCTAssertEqual(logoutButton.label, ElementL10n.logout)
