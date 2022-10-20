@@ -31,11 +31,7 @@ class LoggingTests: XCTestCase {
     }
 
     func testFileLogging() throws {
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-        XCTAssertTrue(logFiles.isEmpty)
+        XCTAssertTrue(MXLogger.logFiles.isEmpty)
 
         let log = UUID().uuidString
 
@@ -43,22 +39,18 @@ class LoggingTests: XCTestCase {
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
         MXLog.debug(log)
-        guard let logFile = MXLogger.logFiles().first else {
+        guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
 
-        let content = try String(contentsOfFile: logFile)
+        let content = try String(contentsOf: logFile)
         XCTAssert(content.contains(log))
     }
     
     func testFileRotationOnLaunch() throws {
         // Given a fresh launch with no logs.
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-        XCTAssertTrue(logFiles.isEmpty)
+        XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
         // When launching the app 5 times.
         let launchCount = 5
@@ -70,22 +62,15 @@ class LoggingTests: XCTestCase {
         }
         
         // Then 5 log files should be created each with the correct contents.
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
+        let logFiles = MXLogger.logFiles
         
         XCTAssertEqual(logFiles.count, launchCount, "The number of log files should match the number of launches.")
-        try verifyContents(of: logFiles.map { URL(filePath: $0) }, after: launchCount)
+        try verifyContents(of: logFiles, after: launchCount)
     }
     
     func testMaxLogFileCount() throws {
         // Given a fresh launch with no logs.
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-        XCTAssertTrue(logFiles.isEmpty)
+        XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
         // When launching the app 10 times, with a maxLogCount of 5.
         let launchCount = 10
@@ -99,22 +84,15 @@ class LoggingTests: XCTestCase {
         }
         
         // Then only 5 log files should be stored on disk, with the contents of launches 6 to 10.
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
+        let logFiles = MXLogger.logFiles
         
         XCTAssertEqual(logFiles.count, logFileCount, "The number of log files should match the number of launches.")
-        try verifyContents(of: logFiles.map { URL(filePath: $0) }, after: launchCount)
+        try verifyContents(of: logFiles, after: launchCount)
     }
     
     func testLogFileSizeLimit() throws {
         // Given a fresh launch with no logs.
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-        XCTAssertTrue(logFiles.isEmpty)
+        XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
         // When launching the app 10 times, with a max total log size of 25KB and logging ~5KB data each time.
         let launchCount = 10
@@ -134,13 +112,11 @@ class LoggingTests: XCTestCase {
         }
         
         // Then only the most recent log files should be stored on disk.
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
+        let logFiles = MXLogger.logFiles
         
+        XCTAssertGreaterThan(logFiles.count, 0, "There should be at least one log file created.")
         XCTAssertLessThan(logFiles.count, launchCount, "Some of the log files should have been removed trimmed.")
-        try verifyContents(of: logFiles.map { URL(filePath: $0) }, after: launchCount)
+        try verifyContents(of: logFiles, after: launchCount)
     }
     
     /// Verifies that the log files all contain the correct `Launch #` based on the index
@@ -161,11 +137,7 @@ class LoggingTests: XCTestCase {
     }
 
     func testLogLevels() throws {
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-        XCTAssert(logFiles.isEmpty)
+        XCTAssert(MXLogger.logFiles.isEmpty)
 
         let log = UUID().uuidString
 
@@ -174,21 +146,17 @@ class LoggingTests: XCTestCase {
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
         MXLog.debug(log)
-        guard let logFile = MXLogger.logFiles().first else {
+        guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
 
-        let content = try String(contentsOfFile: logFile)
+        let content = try String(contentsOf: logFile)
         XCTAssertFalse(content.contains(log))
     }
 
     func testSubLogName() {
-        guard let logFiles = MXLogger.logFiles() else {
-            XCTFail(Constants.genericFailure)
-            return
-        }
-        XCTAssert(logFiles.isEmpty)
+        XCTAssert(MXLogger.logFiles.isEmpty)
 
         let subLogName = "nse"
 
@@ -197,11 +165,11 @@ class LoggingTests: XCTestCase {
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
         MXLog.debug(UUID().uuidString)
-        guard let logFile = MXLogger.logFiles().first else {
+        guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
 
-        XCTAssertTrue(logFile.contains(subLogName))
+        XCTAssertTrue(logFile.lastPathComponent.contains(subLogName))
     }
 }
