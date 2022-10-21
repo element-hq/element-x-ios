@@ -40,7 +40,7 @@ struct FormattedBodyText: View {
                 }
             }
         }
-        .tint(.element.accent)
+        .tintColorURLInteraction(.element.accent, selectedOpacity: 0.5)
     }
 
     private var blockquoteAttributes: AttributeContainer {
