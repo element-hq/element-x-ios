@@ -1,5 +1,7 @@
 #!/bin/sh
 
+source ci_common.sh
+
 setup_environment
 
 if [ "$CI_WORKFLOW" = "Release" ]; then
