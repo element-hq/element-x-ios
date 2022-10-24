@@ -1,6 +1,6 @@
 #!/bin/sh
 
-setup_environment() {
+setup_environment () {
     # Return on failures
     # Fail when expanding unset variables
     # Trace each command before executing it
@@ -27,11 +27,11 @@ setup_environment() {
     bundle install --jobs 4 --retry 3
 }
 
-install_brew_dependencies() {
+install_brew_dependencies () {
     brew "xcodegen"
     brew "imagemagick"
 }
 
-install_python_dependencies() {
+install_python_dependencies () {
     pip3 install -r requirements.txt # Install towncrier for generating changelogs
 }
