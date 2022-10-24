@@ -28,8 +28,8 @@ setup_environment () {
 }
 
 install_brew_dependencies () {
-    brew "xcodegen"
-    brew "imagemagick"
+    brew install "xcodegen"
+    brew install "imagemagick"
 }
 
 install_python_dependencies () {
