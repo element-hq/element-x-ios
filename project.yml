@@ -22,10 +22,9 @@ options:
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
   ENABLE_BITCODE: NO
-  APP_GROUP_IDENTIFIER: group.$(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
+  BASE_APP_GROUP_IDENTIFIER: io.element
+  APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   BASE_BUNDLE_IDENTIFIER: io.element.elementx
-  KEYCHAIN_ACCESS_GROUP: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER).keychain.shared
-
 
 include:
   - path: ElementX/SupportingFiles/target.yml

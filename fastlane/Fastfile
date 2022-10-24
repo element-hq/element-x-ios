@@ -105,6 +105,7 @@ end
 lane :config_nightly do
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
+  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.nightly"
   data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
@@ -194,6 +195,7 @@ end
 private_lane :config_xcodegen_alpha do
   target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
+  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.pr"
   data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
 
