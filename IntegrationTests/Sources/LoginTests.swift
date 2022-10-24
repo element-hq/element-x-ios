@@ -19,7 +19,7 @@ import XCTest
 class LoginTests: XCTestCase {
     let expectedDuration = 30.0
     
-    func testLoginFlow() throws {
+    func disabled_testLoginFlow() throws {
         let parser = TestMeasurementParser()
         parser.capture(testCase: self) {
             self.measure(metrics: [XCTClockMetric()]) {
