@@ -31,7 +31,7 @@ struct URLInteractionModifier: ViewModifier {
     func body(content: Content) -> some View {
         content
             .tint(didTapUrl ? selectedTintColor : normalTintColor)
-            .environment(\.openURL, OpenURLAction(handler: { url in
+            .environment(\.openURL, OpenURLAction(handler: { _ in
                 withAnimation(.linear(duration: animationDuration)) {
                     didTapUrl = true
                 }
@@ -44,11 +44,7 @@ struct URLInteractionModifier: ViewModifier {
 }
 
 extension View {
-    func tintColorURLInteraction(_ tintColor: Color?, selectedOpacity opacity: Double) -> some View {
-        modifier(URLInteractionModifier(normalTintColor: tintColor, selectedTintColor: tintColor?.opacity(opacity)))
-    }
-    
-    func tintColorURLInteraction(_ normalTintColor: Color?, selectedTintColor: Color?) -> some View {
+    func urlInteractionTintColor(_ normalTintColor: Color?, selectedTintColor: Color?) -> some View {
         modifier(URLInteractionModifier(normalTintColor: normalTintColor, selectedTintColor: selectedTintColor))
     }
 }
