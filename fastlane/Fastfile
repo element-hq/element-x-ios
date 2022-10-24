@@ -6,10 +6,7 @@ before_all do
 end
 
 lane :alpha do
-
   config_xcodegen_alpha()
-
-  xcodegen(spec: "project.yml")
 
   provisioning_profile_name = "ElementX PR Ad Hoc"
   bundle_identifier = "io.element.elementx.pr"
@@ -29,12 +26,6 @@ lane :alpha do
     adhoc: true 
   )
 
-  version = ENV["GITHUB_PR_NUMBER"]
-
-  update_app_icon(caption_text: "PR #{version}")
-
-  bump_build_number()
-
   build_ios_app(
     scheme: "ElementX",
     clean: true,
@@ -48,19 +39,6 @@ lane :alpha do
   )
 
   upload_to_diawi()
-
-end
-
-lane :github_release do
-  build_adhoc()
-
-  upload_to_diawi()
-
-  release_to_github()
-
-  prepare_next_release()
-
-  upload_dsyms_to_sentry()
 end
 
 lane :app_store_release do
@@ -70,24 +48,7 @@ lane :app_store_release do
 
   prepare_next_release()
 
-  upload_dsyms_to_sentry()
-end
-
-
-lane :build_adhoc do
-  bump_build_number()
-
-  build_ios_app(
-    scheme: "ElementX",
-    clean: true,
-    export_method: "ad-hoc",
-    output_directory: "build",
-    export_options: {
-      provisioningProfiles: { 
-        "io.element.elementx" => "ElementX Ad Hoc",
-      }
-    }
-  )
+  upload_dsyms_to_sentry(dsym_path: './build/ElementX.app.dSYM.zip')
 end
 
 lane :build_release do
@@ -141,47 +102,41 @@ lane :integration_tests do
   )
 end
 
-private_lane :bump_build_number do
-  # Increment build number to current date
-  build_number = Time.now.strftime("%Y%m%d%H%M")
-  increment_build_number(build_number: build_number)
-end
-
-private_lane :config_xcodegen_alpha do
-  target_file_path = "../ElementX/SupportingFiles/target.yml"
+lane :config_nightly do
+  target_file_path = "../project.yml"
   data = YAML.load_file target_file_path
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_NAME"] = "ElementX PR"
-  data["targets"]["ElementX"]["settings"]["base"]["PRODUCT_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
+  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.nightly"
+  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.nightly"
   File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+
+  xcodegen(spec: "project.yml")
+
+  # Automatically done by Xcode Cloud. Cannot override
+  # https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds
+  # bump_build_number()
+
+  release_version = get_version_number()
+
+  update_app_icon(caption_text: "Nightly #{release_version}", modulate: "100,20,100")
 end
 
-desc "Upload IPA to Diawi"
-private_lane :upload_to_diawi do
-  api_token = ENV["DIAWI_API_TOKEN"]
-  UI.user_error!("Invalid Diawi API token.") unless !api_token.to_s.empty?
+lane :upload_dsyms_to_sentry do |options|
+  auth_token = ENV["SENTRY_AUTH_TOKEN"]
+  UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
 
-  # Upload to Diawi
-  diawi(
-    token: api_token,
-    wall_of_apps: false,
-    file: lane_context[SharedValues::IPA_OUTPUT_PATH]
+  dsym_path = options[:dsym_path]
+  UI.user_error!("Invalid DSYM path.") unless !dsym_path.to_s.empty?
+
+  sentry_upload_dif(
+    auth_token: auth_token,
+    org_slug: 'element',
+    project_slug: 'elementx',
+    url: 'https://sentry.tools.element.io/',
+    path: dsym_path,
   )
-
-  # Get the Diawi link from Diawi action shared value
-  diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
-  UI.command_output("Diawi link: " + diawi_link.to_s)
-
-  # Generate the Diawi QR code file link
-  diawi_app_id = URI(diawi_link).path.split('/').last
-  diawi_qr_code_link = "https://www.diawi.com/qrcode/link/#{diawi_app_id}"
-
-  # Set "DIAWI_FILE_LINK" to GitHub environment variables for Github actions
-  sh("echo DIAWI_FILE_LINK=#{diawi_link} >> $GITHUB_ENV")
-  sh("echo DIAWI_QR_CODE_LINK=#{diawi_qr_code_link} >> $GITHUB_ENV")
 end
 
-desc "Create GitHub Release"
-private_lane :release_to_github do
+lane :release_to_github do
   api_token = ENV["GITHUB_TOKEN"]
   UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
 
@@ -216,7 +171,7 @@ private_lane :release_to_github do
 
 end
 
-private_lane :prepare_next_release do 
+lane :prepare_next_release do 
   target_file_path = "../ElementX/SupportingFiles/target.yml"
   xcode_project_file_path = "../ElementX.xcodeproj"
 
@@ -233,6 +188,54 @@ private_lane :prepare_next_release do
   sh("git add #{target_file_path} #{xcode_project_file_path}")
 
   sh("git commit -m 'Prepare next release'")
+
+  sh("git push")  
+end
+
+private_lane :config_xcodegen_alpha do
+  target_file_path = "../project.yml"
+  data = YAML.load_file target_file_path
+  data["settings"]["BASE_APP_GROUP_IDENTIFIER"] = "io.element.pr"
+  data["settings"]["BASE_BUNDLE_IDENTIFIER"] = "io.element.elementx.pr"
+  File.open(target_file_path, 'w') { |f| YAML.dump(data, f) }
+
+  xcodegen(spec: "project.yml")
+
+  version = ENV["GITHUB_PR_NUMBER"]
+
+  update_app_icon(caption_text: "PR #{version}", modulate: "100,100,200")
+
+  bump_build_number()
+end
+
+private_lane :upload_to_diawi do
+  api_token = ENV["DIAWI_API_TOKEN"]
+  UI.user_error!("Invalid Diawi API token.") unless !api_token.to_s.empty?
+
+  # Upload to Diawi
+  diawi(
+    token: api_token,
+    wall_of_apps: false,
+    file: lane_context[SharedValues::IPA_OUTPUT_PATH]
+  )
+
+  # Get the Diawi link from Diawi action shared value
+  diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
+  UI.command_output("Diawi link: " + diawi_link.to_s)
+
+  # Generate the Diawi QR code file link
+  diawi_app_id = URI(diawi_link).path.split('/').last
+  diawi_qr_code_link = "https://www.diawi.com/qrcode/link/#{diawi_app_id}"
+
+  # Set "DIAWI_FILE_LINK" to GitHub environment variables for Github actions
+  sh("echo DIAWI_FILE_LINK=#{diawi_link} >> $GITHUB_ENV")
+  sh("echo DIAWI_QR_CODE_LINK=#{diawi_qr_code_link} >> $GITHUB_ENV")
+end
+
+private_lane :bump_build_number do
+  # Increment build number to current date
+  build_number = Time.now.strftime("%Y%m%d%H%M")
+  increment_build_number(build_number: build_number)
 end
 
 private_lane :export_version_changes do |options|
@@ -246,9 +249,12 @@ private_lane :update_app_icon do |options|
   caption_text = options[:caption_text]
   UI.user_error!("Invalid caption text.") unless !caption_text.to_s.empty?
 
+  modulate = options[:modulate]
+  UI.user_error!("Invalid icon modulate parameters.") unless !modulate.to_s.empty?
+
   Dir.glob("../ElementX/Resources/Assets.xcassets/AppIcon.appiconset/**/*.png") do |file_name|
     # Change the icons color
-    sh("convert '#{file_name}' -modulate 100,100,200 '#{file_name}'")
+    sh("convert '#{file_name}' -modulate #{modulate} '#{file_name}'")
 
     caption_width = sh("identify -format %w '#{file_name}'")
     caption_height = file_name.end_with?("@2x.png") ? 60 : 30
@@ -258,17 +264,4 @@ private_lane :update_app_icon do |options|
       sh("convert -background '#0008' -fill white -gravity center -size '#{caption_width}'x'#{caption_height}' caption:'#{caption_text}' '#{file_name}' +swap -gravity south -composite '#{file_name}'")
     end
   end
-end
-
-private_lane :upload_dsyms_to_sentry do
-  auth_token = ENV["SENTRY_AUTH_TOKEN"]
-  UI.user_error!("Invalid Sentry Auth token.") unless !auth_token.to_s.empty?
-
-  sentry_upload_dif(
-    auth_token: auth_token,
-    org_slug: 'element',
-    project_slug: 'elementx',
-    url: 'https://sentry.tools.element.io/',
-    path: './build/ElementX.app.dSYM.zip',
-  )
 end

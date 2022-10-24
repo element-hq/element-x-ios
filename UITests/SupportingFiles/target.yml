@@ -60,7 +60,7 @@ targets:
     settings:
       base:
         PRODUCT_NAME: UITests
-        PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx.ui.tests
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.ui.tests
       debug:
       release:
 
