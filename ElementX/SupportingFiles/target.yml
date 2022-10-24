@@ -46,6 +46,7 @@ targets:
           UIInterfaceOrientationLandscapeRight
         ]
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
+        ITSAppUsesNonExemptEncryption: false
 
     settings:
       base:
