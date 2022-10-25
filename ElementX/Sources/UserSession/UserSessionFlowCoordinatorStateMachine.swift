@@ -89,6 +89,14 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .suspended
             case (.becomeActive, .suspended):
                 return self.stateBeforeSuspension
+            case (.showSettingsScreen, .homeScreen):
+                return .settingsScreen
+            case (.dismissedSettingsScreen, .settingsScreen):
+                return .homeScreen
+            case (.showSessionVerificationScreen, .homeScreen):
+                return .sessionVerificationScreen
+            case (.dismissedSessionVerificationScreen, .sessionVerificationScreen):
+                return .homeScreen
             default:
                 return nil
             }

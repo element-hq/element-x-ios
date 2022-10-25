@@ -91,7 +91,7 @@ class ClientProxy: ClientProxyProtocol {
             
             slidingSync = try slidingSyncBuilder
                 .addView(view: slidingSyncView)
-//                .withCommonExtensions()
+                .withCommonExtensions()
                 .build()
             
             roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
@@ -254,6 +254,6 @@ class ClientProxy: ClientProxyProtocol {
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         roomSummaryProvider.updateRoomsWithIdentifiers(summary.rooms)
         
-//        callbacks.send(.receivedSyncUpdate)
+        callbacks.send(.receivedSyncUpdate)
     }
 }
