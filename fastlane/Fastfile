@@ -171,7 +171,10 @@ lane :release_to_github do
 
 end
 
-lane :prepare_next_release do 
+lane :prepare_next_release do
+  api_token = ENV["GITHUB_TOKEN"]
+  UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
+
   target_file_path = "../ElementX/SupportingFiles/target.yml"
   xcode_project_file_path = "../ElementX.xcodeproj"
 
@@ -185,11 +188,18 @@ lane :prepare_next_release do
 
   xcodegen(spec: "project.yml")
 
+  sh("git config --global user.name 'Element CI'")
+  sh("git config --global user.email 'ci@element.io'")
+
   sh("git add #{target_file_path} #{xcode_project_file_path}")
 
   sh("git commit -m 'Prepare next release'")
 
-  sh("git push")  
+  # Get repo url path, without `http` or `git@` prefixes
+  repo_url = sh("git ls-remote --get-url origin | sed 's#http://##g' | sed 's#https:\/\/##g' | sed 's#git@##g\'")
+
+  # Use the access token for write access
+  sh("git push https://#{api_token}@#{repo_url}")
 end
 
 private_lane :config_xcodegen_alpha do
