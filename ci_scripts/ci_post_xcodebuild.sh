@@ -8,6 +8,7 @@ if [ "$CI_WORKFLOW" = "Release" ]; then
     install_python_dependencies
 
     bundle exec fastlane release_to_github
+    bundle exec fastlane prepare_next_release
 fi
 
 # Upload dsyms no matter the workflow
