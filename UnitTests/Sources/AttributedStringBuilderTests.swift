@@ -64,7 +64,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(attributedString.runs.first?.uiKit.font?.fontName, "Menlo-Regular")
+        XCTAssertEqual(attributedString.runs.first?.uiKit.font?.fontName, ".AppleSystemUIFontMonospaced-Regular")
         
         let string = String(attributedString.characters)
         
