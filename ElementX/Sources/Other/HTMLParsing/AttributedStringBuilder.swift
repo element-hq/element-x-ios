@@ -220,6 +220,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 pre,code {
                     background-color: \(temporaryCodeBlockMarkingColor.toHexString());
                     display: inline;
+                    white-space: pre;
                     font-size: 0.9em;
                     -coretext-fontname: .AppleSystemUIFontMonospaced-Regular;
                 }
