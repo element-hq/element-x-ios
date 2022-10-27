@@ -21,7 +21,7 @@ import UIKit
 import DeviceKit
 #endif
 
-final class UserAgentFactory {
+final class UserAgentBuilder {
     class func makeASCIIUserAgent() -> String? {
         makeUserAgent()?.asciified()
     }

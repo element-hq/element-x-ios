@@ -18,18 +18,18 @@ import XCTest
 
 @testable import ElementX
 
-class UserAgentFactoryTests: XCTestCase {
+class UserAgentBuilderTests: XCTestCase {
     func testIsNotNil() {
-        XCTAssertNotNil(UserAgentFactory.makeASCIIUserAgent())
+        XCTAssertNotNil(UserAgentBuilder.makeASCIIUserAgent())
     }
     
     func testContainsClientName() {
-        let userAgent = UserAgentFactory.makeASCIIUserAgent()
+        let userAgent = UserAgentBuilder.makeASCIIUserAgent()
         XCTAssert(userAgent?.contains(ElementInfoPlist.cfBundleDisplayName) == true, "\(userAgent ?? "nil") does not contain client name")
     }
     
     func testContainsClientVersion() {
-        let userAgent = UserAgentFactory.makeASCIIUserAgent()
+        let userAgent = UserAgentBuilder.makeASCIIUserAgent()
         XCTAssert(userAgent?.contains(ElementInfoPlist.cfBundleShortVersionString) == true, "\(userAgent ?? "nil") does not contain client version")
     }
 }
