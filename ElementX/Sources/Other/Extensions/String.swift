@@ -53,7 +53,7 @@ extension String {
     }
     
     var isASCII: Bool {
-        allSatisfy { $0.isASCII }
+        allSatisfy(\.isASCII)
     }
     
     func asciified() -> String? {
