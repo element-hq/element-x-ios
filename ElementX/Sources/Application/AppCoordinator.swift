@@ -21,7 +21,7 @@ import UIKit
 struct ServiceLocator {
     fileprivate static var serviceLocator: ServiceLocator?
     static var shared: ServiceLocator {
-        guard let serviceLocator = serviceLocator else {
+        guard let serviceLocator else {
             fatalError("The service locator should be setup at this point")
         }
         
@@ -46,7 +46,7 @@ class AppCoordinator: Coordinator {
     private var userSession: UserSessionProtocol! {
         didSet {
             deobserveUserSessionChanges()
-            if let userSession = userSession, !userSession.isSoftLogout {
+            if let userSession, !userSession.isSoftLogout {
                 observeUserSessionChanges()
             }
         }
@@ -135,7 +135,7 @@ class AppCoordinator: Coordinator {
     // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
@@ -297,7 +297,7 @@ class AppCoordinator: Coordinator {
         userSession.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-                guard let self = self else { return }
+                guard let self else { return }
                 switch callback {
                 case .didReceiveAuthError(let isSoftLogout):
                     self.stateMachine.processEvent(.remoteSignOut(isSoft: isSoftLogout))

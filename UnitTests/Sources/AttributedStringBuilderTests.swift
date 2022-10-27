@@ -64,7 +64,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        XCTAssertEqual(attributedString.runs.first?.uiKit.font?.fontName, "Menlo-Regular")
+        XCTAssertEqual(attributedString.runs.first?.uiKit.font?.fontName, ".AppleSystemUIFontMonospaced-Regular")
         
         let string = String(attributedString.characters)
         
@@ -367,7 +367,7 @@ class AttributedStringBuilderTests: XCTestCase {
     // MARK: - Private
     
     private func checkMatrixEntityLinkIn(attributedString: AttributedString?, expected: String) {
-        guard let attributedString = attributedString else {
+        guard let attributedString else {
             XCTFail("Could not build the attributed string")
             return
         }

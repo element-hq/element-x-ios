@@ -21,6 +21,7 @@ internal enum ElementInfoPlist {
   internal static let cfBundlePackageType: String = _document["CFBundlePackageType"]
   internal static let cfBundleShortVersionString: String = _document["CFBundleShortVersionString"]
   internal static let cfBundleVersion: String = _document["CFBundleVersion"]
+  internal static let itsAppUsesNonExemptEncryption: Bool = _document["ITSAppUsesNonExemptEncryption"]
   internal static let uiLaunchStoryboardName: String = _document["UILaunchStoryboardName"]
   internal static let uiSupportedInterfaceOrientations: [String] = _document["UISupportedInterfaceOrientations"]
   internal static let appGroupIdentifier: String = _document["appGroupIdentifier"]

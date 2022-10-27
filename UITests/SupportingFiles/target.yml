@@ -62,17 +62,18 @@ targets:
     settings:
       base:
         PRODUCT_NAME: UITests
-        PRODUCT_BUNDLE_IDENTIFIER: io.element.elementx.ui.tests
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.ui.tests
       debug:
       release:
 
     preBuildScripts:
       - name: Override Simulator Status Bars
         runOnlyWhenInstalling: false
+        basedOnDependencyAnalysis: false
         shell: /bin/sh
         script: |
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.15.5'
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.15.5'
+          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.16.0'
+          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.16.0'
 
     sources:
     - path: ../Sources

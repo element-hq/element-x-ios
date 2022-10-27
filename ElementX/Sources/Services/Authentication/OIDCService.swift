@@ -100,8 +100,8 @@ class OIDCService {
                                               additionalParameters: nil)
         let result: OIDAuthorizationResponse = try await withCheckedThrowingContinuation { continuation in
             self.session = OIDAuthorizationService.present(request, externalUserAgent: userAgent) { response, error in
-                guard let response = response else {
-                    if let error = error {
+                guard let response else {
+                    if let error {
                         MXLog.info("User cancelled the ASWebAuthenticationSession window")
                         continuation.resume(with: .failure(self.isUserCancellationError(error) ? OIDCError.userCancellation : error))
                     } else {
@@ -136,7 +136,7 @@ extension OIDAuthorizationService {
                        originalAuthorizationResponse authorizationResponse: OIDAuthorizationResponse?) async throws -> OIDTokenResponse {
         try await withCheckedThrowingContinuation { continuation in
             perform(request, originalAuthorizationResponse: authorizationResponse) { response, error in
-                guard let response = response else {
+                guard let response else {
                     continuation.resume(with: .failure(error ?? OIDCError.unknown))
                     return
                 }

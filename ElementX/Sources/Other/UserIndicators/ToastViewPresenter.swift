@@ -19,10 +19,6 @@ import UIKit
 /// A presenter responsible for showing / hiding a toast view for loading spinners or success messages.
 /// It is managed by an `UserIndicator`, meaning the `present` and `dismiss` methods will be called when the parent `UserIndicator` starts or completes.
 class ToastViewPresenter: UserIndicatorViewPresentable {
-    enum Constants {
-        static let navigationBarPatting = CGFloat(10)
-    }
-    
     private let viewState: ToastViewState
     private let presentationContext: UserIndicatorPresentationContext
     private weak var view: UIView?
@@ -42,19 +38,11 @@ class ToastViewPresenter: UserIndicatorViewPresentable {
         self.view = view
         
         view.translatesAutoresizingMaskIntoConstraints = false
-        if let navigation = viewController.topNavigationController {
-            navigation.view.addSubview(view)
-            NSLayoutConstraint.activate([
-                view.centerXAnchor.constraint(equalTo: navigation.view.centerXAnchor),
-                view.topAnchor.constraint(equalTo: navigation.navigationBar.safeAreaLayoutGuide.bottomAnchor, constant: -Constants.navigationBarPatting)
-            ])
-        } else {
-            viewController.view.addSubview(view)
-            NSLayoutConstraint.activate([
-                view.centerXAnchor.constraint(equalTo: viewController.view.centerXAnchor),
-                view.topAnchor.constraint(equalTo: viewController.view.topAnchor)
-            ])
-        }
+        viewController.view.addSubview(view)
+        NSLayoutConstraint.activate([
+            view.centerXAnchor.constraint(equalTo: viewController.view.centerXAnchor),
+            view.topAnchor.constraint(equalTo: viewController.view.safeAreaLayoutGuide.topAnchor)
+        ])
         
         view.alpha = 0
         view.transform = .init(translationX: 0, y: 5)
@@ -66,7 +54,7 @@ class ToastViewPresenter: UserIndicatorViewPresentable {
     }
     
     func dismiss() {
-        guard let view = view, view.superview != nil else {
+        guard let view, view.superview != nil else {
             return
         }
         
@@ -79,15 +67,5 @@ class ToastViewPresenter: UserIndicatorViewPresentable {
             view.removeFromSuperview()
         }
         animator?.startAnimation()
-    }
-}
-
-private extension UIViewController {
-    var topNavigationController: UINavigationController? {
-        var controller: UINavigationController? = self as? UINavigationController ?? navigationController
-        while controller?.navigationController != nil {
-            controller = controller?.navigationController
-        }
-        return controller
     }
 }

@@ -22,7 +22,7 @@ public extension DTHTMLElement {
     /// - Parameters:
     ///   - font: The default font to use when resetting the content of any unsupported tags.
     @objc func sanitize(font: UIFont) {
-        if let name = name, !Self.allowedHTMLTags.contains(name) {
+        if let name, !Self.allowedHTMLTags.contains(name) {
             // This is an unsupported tag.
             // Remove any attachments to fix rendering.
             textAttachment = nil

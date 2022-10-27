@@ -106,34 +106,34 @@ private extension RoomTimelineProvider {
     }
     
     private func replaceItems(_ items: [MatrixRustSDK.TimelineItem]?) {
-        guard let items = items else { return }
+        guard let items else { return }
         itemProxies = items.map(TimelineItemProxy.init)
     }
     
     private func insertItem(_ data: InsertAtData?) {
-        guard let data = data else { return }
+        guard let data else { return }
         let itemProxy = TimelineItemProxy(item: data.item)
         itemProxies.insert(itemProxy, at: Int(data.index))
     }
     
     private func updateItem(_ data: UpdateAtData?) {
-        guard let data = data else { return }
+        guard let data else { return }
         let itemProxy = TimelineItemProxy(item: data.item)
         itemProxies[Int(data.index)] = itemProxy
     }
     
     private func removeItem(at index: UInt32?) {
-        guard let index = index else { return }
+        guard let index else { return }
         itemProxies.remove(at: Int(index))
     }
     
     private func moveItem(_ data: MoveData?) {
-        guard let data = data else { return }
+        guard let data else { return }
         itemProxies.move(fromOffsets: IndexSet(integer: Int(data.oldIndex)), toOffset: Int(data.newIndex))
     }
     
     private func pushItem(_ item: MatrixRustSDK.TimelineItem?) {
-        guard let item = item else { return }
+        guard let item else { return }
         itemProxies.append(TimelineItemProxy(item: item))
     }
     

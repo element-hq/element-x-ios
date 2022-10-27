@@ -4,14 +4,13 @@ attributes:
 
 fileGroups:
     - project.yml
-    - changelog.d
 
 options:
   groupSortPosition: bottom
   createIntermediateGroups: true
   deploymentTarget:
-    iOS: "15.0"
-    macOS: "12.0"
+    iOS: "16.0"
+    macOS: "13.0"
   groupOrdering: 
     - order: [ElementX, UnitTests, UITests, IntegrationTests, Tools]
     - pattern: ElementX
@@ -23,7 +22,9 @@ options:
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
   ENABLE_BITCODE: NO
-
+  BASE_APP_GROUP_IDENTIFIER: io.element
+  APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
+  BASE_BUNDLE_IDENTIFIER: io.element.elementx
 
 include:
   - path: ElementX/SupportingFiles/target.yml
@@ -34,7 +35,7 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 0.0.4-demo
+    exactVersion: 1.0.14-alpha
     # path: ../matrix-rust-components-swift
   DesignKit:
     path: ./

@@ -31,7 +31,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
     func startBackgroundTask(withName name: String,
                              isReusable: Bool,
                              expirationHandler: (() -> Void)?) -> BackgroundTaskProtocol? {
-        guard let application = application else {
+        guard let application else {
             MXLog.verbose("Do not start background task: \(name). Application is nil")
             return nil
         }
@@ -54,7 +54,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
                                                      isReusable: isReusable,
                                                      application: application,
                                                      expirationHandler: { [weak self] task in
-                                                         guard let self = self else { return }
+                                                         guard let self else { return }
                                                          self.reusableTasks[task.name] = nil
                                                          expirationHandler?()
                                                      }) {

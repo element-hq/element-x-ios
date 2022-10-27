@@ -31,7 +31,7 @@ class ApplicationTests: XCTestCase {
             return
         }
         
-        let expectedDuration = 2.75
+        let expectedDuration = 4.0
         XCTAssertLessThanOrEqual(actualDuration, expectedDuration)
     }
 }

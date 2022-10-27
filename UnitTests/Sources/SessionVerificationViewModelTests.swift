@@ -42,7 +42,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.verificationState, .requestingVerification)
     }
     
-    func testVerificationCancellation() async {
+    func testVerificationCancellation() async throws {
         XCTAssertEqual(context.viewState.verificationState, .initial)
         
         context.send(viewAction: .start)
@@ -53,7 +53,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.verificationState, .cancelling)
         
-        await Task.yield()
+        try await Task.sleep(nanoseconds: 100_000_000)
         
         XCTAssertEqual(context.viewState.verificationState, .cancelled)
         

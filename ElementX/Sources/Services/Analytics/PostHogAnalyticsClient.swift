@@ -73,7 +73,7 @@ class PostHogAnalyticsClient: AnalyticsClientProtocol {
     }
     
     func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
-        guard let pendingUserProperties = pendingUserProperties else {
+        guard let pendingUserProperties else {
             pendingUserProperties = userProperties
             return
         }

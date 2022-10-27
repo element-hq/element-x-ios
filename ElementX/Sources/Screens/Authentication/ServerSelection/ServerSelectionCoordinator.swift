@@ -67,7 +67,7 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
         MXLog.debug("Did start.")
         
         serverSelectionViewModel.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             MXLog.debug("ServerSelectionViewModel did callback with action: \(action).")
             
             switch action {

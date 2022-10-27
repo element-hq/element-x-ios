@@ -53,7 +53,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     public func _body(configuration: TextField<_Label>) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            if let labelText = labelText {
+            if let labelText {
                 Text(labelText)
                     .font(.element.subheadline)
                     .foregroundColor(labelColor)
@@ -63,7 +63,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                 .textFieldStyle(BorderedInputFieldStyle(isEditing: isFocused, isError: isError, returnKey: nil))
                 .focused($isFocused)
             
-            if let footerText = footerText {
+            if let footerText {
                 Text(footerText)
                     .font(.element.footnote)
                     .foregroundColor(footerColor)

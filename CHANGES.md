@@ -1,3 +1,23 @@
+## Changes in 1.0.4 (2022-10-25)
+
+🙌 Improvements
+
+- Build with Xcode 14.0 and fix introspection on the timeline List. ([#163](https://github.com/vector-im/element-x-ios/issues/163))
+- Include app name in default session display name ([#227](https://github.com/vector-im/element-x-ios/issues/227))
+
+🐛 Bugfixes
+
+- Fix strong reference cycle between RoomProxy and RoomTimelineProvider ([#216](https://github.com/vector-im/element-x-ios/issues/216))
+
+📄 Documentation
+
+- Add notes for how to debug the network traffic ([#223](https://github.com/vector-im/element-x-ios/issues/223))
+
+Others
+
+- Include changelog.d in Xcode project ([#218](https://github.com/vector-im/element-x-ios/issues/218))
+
+
 ## Changes in 1.0.3 (2022-09-23)
 
 ✨ Features

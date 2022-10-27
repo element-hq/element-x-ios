@@ -84,7 +84,7 @@ class TestMeasurementParser {
         dup2(pipe.fileHandleForWriting.fileDescriptor, STDERR_FILENO)
         
         pipe.fileHandleForReading.readabilityHandler = { [weak self] handle in
-            guard let self = self else {
+            guard let self else {
                 return
             }
             

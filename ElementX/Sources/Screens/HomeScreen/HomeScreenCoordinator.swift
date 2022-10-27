@@ -59,7 +59,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         hostingController = UIHostingController(rootView: view)
         
         viewModel.callback = { [weak self] action in
-            guard let self = self else { return }
+            guard let self else { return }
             
             switch action {
             case .selectRoom(let roomIdentifier):
@@ -101,7 +101,7 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
         guard let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: parameters.userSession.userID).absoluteString else {
             return
         }
-        let shareText = ElementL10n.inviteFriendsText(ElementInfoPlist.cfBundleName, permalink)
+        let shareText = ElementL10n.inviteFriendsText(ElementInfoPlist.cfBundleDisplayName, permalink)
         let vc = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
         hostingController.present(vc, animated: true)
     }

@@ -63,7 +63,7 @@ class RectangleToastView: UIView {
          image: UIImage? = nil) {
         super.init(frame: .zero)
         
-        if let image = image {
+        if let image {
             imageView.image = image
             NSLayoutConstraint.activate([
                 imageView.widthAnchor.constraint(equalToConstant: image.size.width),

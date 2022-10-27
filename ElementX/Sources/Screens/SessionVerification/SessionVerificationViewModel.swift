@@ -46,7 +46,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
         sessionVerificationControllerProxy.callbacks
             .receive(on: DispatchQueue.main)
             .sink { [weak self] callback in
-                guard let self = self else { return }
+                guard let self else { return }
                 
                 switch callback {
                 case .receivedVerificationData(let emojis):
@@ -95,7 +95,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
     
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
-            guard let self = self else { return }
+            guard let self else { return }
                 
             self.state.verificationState = context.toState
             

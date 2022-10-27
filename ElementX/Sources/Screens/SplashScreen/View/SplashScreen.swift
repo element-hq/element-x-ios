@@ -136,7 +136,7 @@ struct SplashScreen: View {
     
     /// Stops the animation timer for manual interaction.
     private func stopTimer() {
-        guard let pageTimer = pageTimer else { return }
+        guard let pageTimer else { return }
         
         self.pageTimer = nil
         pageTimer.invalidate()

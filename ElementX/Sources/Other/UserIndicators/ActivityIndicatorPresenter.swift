@@ -41,7 +41,7 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
     
     func presentActivityIndicator(on view: UIView, animated: Bool, completion: (() -> Void)? = nil) {
         if presentingView != nil {
-            if let completion = completion {
+            if let completion {
                 completion()
             }
             return
@@ -88,7 +88,7 @@ final class ActivityIndicatorPresenter: ActivityIndicatorPresenterType {
     }
     
     func removeCurrentActivityIndicator(animated: Bool, completion: (() -> Void)? = nil) {
-        guard let presentingView = presentingView,
+        guard let presentingView,
               let backgroundOverlayView = backgroundOverlayView,
               let activityIndicatorView = activityIndicatorView else {
             return
