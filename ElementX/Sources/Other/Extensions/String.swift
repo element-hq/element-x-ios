@@ -52,7 +52,14 @@ extension String {
         return abs(hash)
     }
     
+    var isASCII: Bool {
+        reduce(true) { $0 && $1.isASCII }
+    }
+    
     func asciified() -> String? {
+        guard !isASCII else {
+            return self
+        }
         guard !canBeConverted(to: .ascii) else {
             return nil
         }

@@ -19,6 +19,26 @@ import XCTest
 @testable import ElementX
 
 class StringTests: XCTestCase {
+    func testEmptyIsAscii() {
+        XCTAssertTrue("".isASCII)
+    }
+    
+    func testSpaceIsAscii() {
+        XCTAssertTrue("".isASCII)
+    }
+
+    func testJohnnyIsAscii() {
+        XCTAssertTrue("johnny".isASCII)
+    }
+    
+    func testJöhnnyIsNotAscii() {
+        XCTAssertFalse("jöhnny".isASCII)
+    }
+    
+    func testJ🅾️hnnyIsNotAscii() {
+        XCTAssertFalse("j🅾️hnny".isASCII)
+    }
+
     func testAsciiStaysAscii() {
         XCTAssertEqual("johnny".asciified(), "johnny")
     }
