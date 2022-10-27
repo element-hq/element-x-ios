@@ -60,6 +60,6 @@ extension String {
         guard CFStringTransform(mutableString, nil, "Any-Latin; Latin-ASCII; [:^ASCII:] Remove" as CFString, false) else {
             return nil
         }
-        return mutableString as String
+        return mutableString.trimmingCharacters(in: .whitespaces)
     }
 }

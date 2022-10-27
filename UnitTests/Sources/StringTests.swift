@@ -34,4 +34,8 @@ class StringTests: XCTestCase {
     func test1️⃣2️⃣3️⃣Becomes123() {
         XCTAssertEqual("1️⃣2️⃣3️⃣".asciified(), "123")
     }
+    
+    func testStripsTheHeartbreakHotel() {
+        XCTAssertEqual("Heartbreak Hotel 🏩".asciified(), "Heartbreak Hotel")
+    }
 }
