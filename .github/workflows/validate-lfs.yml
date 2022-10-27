@@ -1,6 +1,10 @@
 name: Validate Git LFS
 
-on: [pull_request]
+on:
+  workflow_dispatch:
+  
+  schedule:
+    - cron:  '0 0 * * 1-5'
 
 jobs:
   build:
