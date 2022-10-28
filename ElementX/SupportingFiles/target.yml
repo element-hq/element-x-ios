@@ -101,6 +101,7 @@ targets:
     - package: DesignKit
     - package: AnalyticsEvents
     - package: AppAuth
+    - package: DeviceKit
     - package: DTCoreText
     - package: KeychainAccess
     - package: Kingfisher
