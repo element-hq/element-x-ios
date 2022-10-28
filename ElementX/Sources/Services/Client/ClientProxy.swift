@@ -84,14 +84,15 @@ class ClientProxy: ClientProxyProtocol {
             
             let slidingSyncView = try SlidingSyncViewBuilder()
                 .timelineLimit(limit: 10)
-                .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: "")])
+                .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
+                                               RequiredState(key: "m.room.encryption", value: "")])
                 .name(name: "HomeScreenView")
                 .syncMode(mode: .fullSync)
                 .build()
             
             slidingSync = try slidingSyncBuilder
                 .addView(view: slidingSyncView)
-//                .withCommonExtensions()
+                .withCommonExtensions()
                 .build()
             
             roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
@@ -254,6 +255,6 @@ class ClientProxy: ClientProxyProtocol {
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         roomSummaryProvider.updateRoomsWithIdentifiers(summary.rooms)
         
-//        callbacks.send(.receivedSyncUpdate)
+        callbacks.send(.receivedSyncUpdate)
     }
 }

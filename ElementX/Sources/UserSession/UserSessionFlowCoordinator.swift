@@ -112,7 +112,7 @@ class UserSessionFlowCoordinator: Coordinator {
             case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
             case .presentSettings:
-                self.presentSettingsScreen()
+                self.stateMachine.processEvent(.showSettingsScreen)
             case .presentBugReport:
                 self.presentBugReportScreen()
             case .verifySession:
@@ -209,6 +209,8 @@ class UserSessionFlowCoordinator: Coordinator {
 
         navigationRouter.dismissModule()
         remove(childCoordinator: coordinator)
+        
+        stateMachine.processEvent(.dismissedSettingsScreen)
     }
     
     // MARK: Session verification

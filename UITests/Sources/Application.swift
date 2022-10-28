@@ -63,11 +63,11 @@ extension XCUIApplication {
     }
 
     private var languageCode: String {
-        Locale.current.languageCode ?? ""
+        Locale.current.language.languageCode?.identifier ?? ""
     }
 
     private var regionCode: String {
-        Locale.current.regionCode ?? ""
+        Locale.current.language.region?.identifier ?? ""
     }
 
     private var osVersion: String {
