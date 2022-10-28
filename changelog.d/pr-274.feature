@@ -1,1 +1,0 @@
-Enable e2e encryption support

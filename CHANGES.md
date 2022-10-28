@@ -1,3 +1,15 @@
+## Changes in 1.0.5 (2022-10-28)
+
+✨ Features
+
+- Enable e2e encryption support ([#274](https://github.com/vector-im/element-x-ios/pull/274))
+
+🙌 Improvements
+
+- Reduce code block font size and switch to SanFrancisco Monospaced ([#267](https://github.com/vector-im/element-x-ios/pull/267))
+- Set a proper user agent ([#225](https://github.com/vector-im/element-x-ios/issues/225))
+
+
 ## Changes in 1.0.4 (2022-10-25)
 
 🙌 Improvements
