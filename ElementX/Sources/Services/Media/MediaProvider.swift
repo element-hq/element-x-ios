@@ -20,11 +20,11 @@ import UIKit
 struct MediaProvider: MediaProviderProtocol {
     private let mediaProxy: MediaProxyProtocol
     private let imageCache: Kingfisher.ImageCache
-    private let backgroundTaskService: BackgroundTaskServiceProtocol
+    private let backgroundTaskService: BackgroundTaskServiceProtocol?
     
     init(mediaProxy: MediaProxyProtocol,
          imageCache: Kingfisher.ImageCache,
-         backgroundTaskService: BackgroundTaskServiceProtocol) {
+         backgroundTaskService: BackgroundTaskServiceProtocol?) {
         self.mediaProxy = mediaProxy
         self.imageCache = imageCache
         self.backgroundTaskService = backgroundTaskService
@@ -55,7 +55,7 @@ struct MediaProvider: MediaProviderProtocol {
             return .success(image)
         }
 
-        let loadImageBgTask = backgroundTaskService.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
+        let loadImageBgTask = backgroundTaskService?.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
         defer {
             loadImageBgTask?.stop()
         }
