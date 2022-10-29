@@ -33,5 +33,7 @@
 	</array>
 	<key>appGroupIdentifier</key>
 	<string>$(APP_GROUP_IDENTIFIER)</string>
+	<key>baseBundleIdentifier</key>
+	<string>$(BASE_BUNDLE_IDENTIFIER)</string>
 </dict>
 </plist>

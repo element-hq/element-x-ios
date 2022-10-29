@@ -26,26 +26,14 @@ class UserSessionStore: UserSessionStoreProtocol {
     var hasSessions: Bool { !keychainController.restoreTokens().isEmpty }
     
     /// The base directory where all session data is stored.
-    private(set) lazy var baseDirectory: URL = {
-        guard let appGroupContainerURL = FileManager.default.appGroupContainerURL else {
-            fatalError("Should always be able to retrieve the container directory")
-        }
-        
-        let url = appGroupContainerURL
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Caches", isDirectory: true)
-            .appendingPathComponent("Sessions", isDirectory: true)
-        
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
-        
-        MXLog.debug("Setup base directory at: \(url)")
-        
-        return url
-    }()
+    let baseDirectory: URL
     
-    init(bundleIdentifier: String, backgroundTaskService: BackgroundTaskServiceProtocol) {
-        keychainController = KeychainController(identifier: bundleIdentifier)
+    init(backgroundTaskService: BackgroundTaskServiceProtocol) {
+        keychainController = KeychainController(service: .sessions,
+                                                accessGroup: Bundle.appGroupIdentifier)
         self.backgroundTaskService = backgroundTaskService
+        baseDirectory = FileManager.default.sessionsBaseDirectory
+        MXLog.debug("Setup base directory at: \(baseDirectory)")
     }
     
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {

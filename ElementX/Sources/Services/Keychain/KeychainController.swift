@@ -17,11 +17,21 @@
 import Foundation
 import KeychainAccess
 
+enum KeychainControllerService: String {
+    case sessions
+    case tests
+
+    var identifier: String {
+        Bundle.baseBundleIdentifier + "." + rawValue
+    }
+}
+
 class KeychainController: KeychainControllerProtocol {
     private let keychain: Keychain
     
-    init(identifier: String) {
-        keychain = Keychain(service: identifier)
+    init(service: KeychainControllerService,
+         accessGroup: String) {
+        keychain = Keychain(service: service.identifier, accessGroup: accessGroup)
     }
  
     func setRestoreToken(_ restoreToken: String, forUsername username: String) {

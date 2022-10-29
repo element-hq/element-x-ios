@@ -53,4 +53,18 @@ public extension Bundle {
             .compactMap { $0 }
             .filter { set.insert($0).inserted }
     }
+
+    static var appGroupIdentifier: String {
+        guard let result = Bundle.main.object(forInfoDictionaryKey: "appGroupIdentifier") as? String else {
+            fatalError("Add appGroupIdentifier into your target's Info.plst")
+        }
+        return result
+    }
+
+    static var baseBundleIdentifier: String {
+        guard let result = Bundle.main.object(forInfoDictionaryKey: "baseBundleIdentifier") as? String else {
+            fatalError("Add baseBundleIdentifier into your target's Info.plst")
+        }
+        return result
+    }
 }
