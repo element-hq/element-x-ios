@@ -18,6 +18,7 @@
 #import "MXLogger.h"
 #import "MXLog.h"
 #import "GeneratedInterface-Swift.h"
+#import <UIKit/UIKit.h>
 
 // stderr so it can be restored
 int stderrSave = 0;

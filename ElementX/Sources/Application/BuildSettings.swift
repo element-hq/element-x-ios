@@ -17,10 +17,21 @@
 import Foundation
 
 final class BuildSettings {
+    // MARK: - Bundle Settings
+
+    static var pusherAppId: String {
+        #if DEBUG
+        Bundle.baseBundleIdentifier + ".ios.dev"
+        #else
+        Bundle.baseBundleIdentifier + ".ios.prod"
+        #endif
+    }
+
     // MARK: - Servers
 
     static let defaultHomeserverAddress = "matrix.org"
     static let slidingSyncProxyBaseURL = URL(staticString: "https://slidingsync.lab.element.dev")
+    static let pushGatewayBaseURL = URL(staticString: "https://matrix.org/_matrix/push/v1/notify")
 
     // MARK: - Bug report
 
@@ -62,4 +73,8 @@ final class BuildSettings {
     // MARK: - Other
     
     static var permalinkBaseURL = URL(staticString: "https://matrix.to")
+
+    // MARK: - Notifications
+
+    static let enableNotifications = true
 }

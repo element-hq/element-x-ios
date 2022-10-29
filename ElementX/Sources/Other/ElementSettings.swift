@@ -25,6 +25,8 @@ final class ElementSettings: ObservableObject {
         case timelineStyle
         case enableAnalytics
         case isIdentifiedForAnalytics
+        case enableInAppNotifications
+        case pusherProfileTag
     }
 
     static let shared = ElementSettings()
@@ -59,4 +61,12 @@ final class ElementSettings: ObservableObject {
 
     @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
     var timelineStyle = BuildSettings.defaultRoomTimelineStyle
+
+    // MARK: - Notifications
+
+    @AppStorage(UserDefaultsKeys.enableInAppNotifications.rawValue, store: store)
+    var enableInAppNotifications = true
+
+    @AppStorage(UserDefaultsKeys.pusherProfileTag.rawValue, store: store)
+    var pusherProfileTag: String?
 }

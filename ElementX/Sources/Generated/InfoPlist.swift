@@ -22,9 +22,11 @@ internal enum ElementInfoPlist {
   internal static let cfBundleShortVersionString: String = _document["CFBundleShortVersionString"]
   internal static let cfBundleVersion: String = _document["CFBundleVersion"]
   internal static let itsAppUsesNonExemptEncryption: Bool = _document["ITSAppUsesNonExemptEncryption"]
+  internal static let nsUserActivityTypes: [String] = _document["NSUserActivityTypes"]
   internal static let uiLaunchStoryboardName: String = _document["UILaunchStoryboardName"]
   internal static let uiSupportedInterfaceOrientations: [String] = _document["UISupportedInterfaceOrientations"]
   internal static let appGroupIdentifier: String = _document["appGroupIdentifier"]
+  internal static let baseBundleIdentifier: String = _document["baseBundleIdentifier"]
 }
 // swiftlint:enable identifier_name line_length type_body_length
 

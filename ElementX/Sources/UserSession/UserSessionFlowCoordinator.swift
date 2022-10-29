@@ -46,6 +46,14 @@ class UserSessionFlowCoordinator: Coordinator {
     }
     
     func stop() { }
+
+    func isDisplayingRoomScreen(withRoomId roomId: String) -> Bool {
+        stateMachine.isDisplayingRoomScreen(withRoomId: roomId)
+    }
+
+    func tryDisplayingRoomScreen(roomId: String) {
+        stateMachine.processEvent(.showRoomScreen(roomId: roomId))
+    }
         
     // MARK: - Private
     
