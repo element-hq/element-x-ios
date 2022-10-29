@@ -33,6 +33,31 @@ enum ClientProxyError: Error {
     case failedLoadingMedia
 }
 
+enum PusherKind {
+    case http
+    case email
+
+    var rustValue: MatrixRustSDK.PusherKind {
+        switch self {
+        case .http:
+            return .http
+        case .email:
+            return .email
+        }
+    }
+}
+
+enum PushFormat {
+    case eventIdOnly
+
+    var rustValue: MatrixRustSDK.PushFormat {
+        switch self {
+        case .eventIdOnly:
+            return .eventIdOnly
+        }
+    }
+}
+
 @MainActor
 protocol ClientProxyProtocol: MediaProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
@@ -66,4 +91,16 @@ protocol ClientProxyProtocol: MediaProxyProtocol {
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
     func logout() async
+
+    // swiftlint:disable:next function_parameter_count
+    func setPusher(pushkey: String,
+                   kind: PusherKind?,
+                   appId: String,
+                   appDisplayName: String,
+                   deviceDisplayName: String,
+                   profileTag: String?,
+                   lang: String,
+                   url: String?,
+                   format: PushFormat?,
+                   defaultPayload: [AnyHashable: Any]?) async throws
 }

@@ -71,4 +71,18 @@ struct MockClientProxy: ClientProxyProtocol {
     func logout() async {
         // no-op
     }
+
+    // swiftlint:disable:next function_parameter_count
+    func setPusher(pushkey: String,
+                   kind: PusherKind?,
+                   appId: String,
+                   appDisplayName: String,
+                   deviceDisplayName: String,
+                   profileTag: String?,
+                   lang: String,
+                   url: String?,
+                   format: PushFormat?,
+                   defaultPayload: [AnyHashable: Any]?) async throws {
+        // no-op
+    }
 }

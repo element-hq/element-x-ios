@@ -225,6 +225,32 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed logging out with error: \(error)")
         }
     }
+
+    // swiftlint:disable:next function_parameter_count
+    func setPusher(pushkey: String,
+                   kind: PusherKind?,
+                   appId: String,
+                   appDisplayName: String,
+                   deviceDisplayName: String,
+                   profileTag: String?,
+                   lang: String,
+                   url: String?,
+                   format: PushFormat?,
+                   defaultPayload: [AnyHashable: Any]?) async throws {
+        let defaultPayloadString = jsonString(from: defaultPayload)
+        try await Task.dispatch(on: .global()) {
+            try self.client.setPusher(pushkey: pushkey,
+                                      kind: kind?.rustValue,
+                                      appId: appId,
+                                      appDisplayName: appDisplayName,
+                                      deviceDisplayName: deviceDisplayName,
+                                      profileTag: profileTag,
+                                      lang: lang,
+                                      url: url,
+                                      format: format?.rustValue,
+                                      defaultPayload: defaultPayloadString)
+        }
+    }
     
     // MARK: Private
     
@@ -241,6 +267,19 @@ class ClientProxy: ClientProxyProtocol {
         
         callbacks.send(.receivedSyncUpdate)
     }
+
+    /// Convenience method to get the json string of an Encodable
+    private func jsonString(from dictionary: [AnyHashable: Any]?) -> String? {
+        guard let dictionary,
+              let data = try? JSONSerialization.data(withJSONObject: dictionary,
+                                                     options: [.fragmentsAllowed]) else {
+            return nil
+        }
+
+        return String(data: data, encoding: .utf8)
+    }
+}
+
 extension ClientProxy: MediaProxyProtocol {
     func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
         mediaProxy.mediaSourceForURLString(urlString)
