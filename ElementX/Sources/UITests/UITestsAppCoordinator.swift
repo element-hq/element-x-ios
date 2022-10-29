@@ -17,13 +17,14 @@
 import SwiftUI
 import UIKit
 
-class UITestsAppCoordinator: Coordinator {
+class UITestsAppCoordinator: AppCoordinatorProtocol {
     private let window: UIWindow
     private let mainNavigationController: ElementNavigationController
     private let navigationRouter: NavigationRouter
     private var hostingController: UIViewController?
     
     var childCoordinators: [Coordinator] = []
+    let notificationManager: NotificationManagerProtocol? = nil
     
     init() {
         mainNavigationController = ElementNavigationController()

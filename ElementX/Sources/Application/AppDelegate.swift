@@ -17,17 +17,23 @@
 import UIKit
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    private lazy var appCoordinator: Coordinator = Tests.isRunningUITests ? UITestsAppCoordinator() : AppCoordinator()
+class AppDelegate: UIResponder {
+    private lazy var appCoordinator: AppCoordinatorProtocol = Tests.isRunningUITests ? UITestsAppCoordinator() : AppCoordinator()
+}
 
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+// MARK: - UIApplicationDelegate
+
+extension AppDelegate: UIApplicationDelegate {
+    func application(_ application: UIApplication,
+                     willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         //  use `en` as fallback language
         Bundle.elementFallbackLanguage = "en"
 
         return true
     }
-    
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+
+    func application(_ application: UIApplication,
+                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         if Tests.isRunningUnitTests {
             return true
         }
@@ -35,5 +41,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         appCoordinator.start()
         
         return true
+    }
+
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        appCoordinator.notificationManager?.register(with: deviceToken)
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        appCoordinator.notificationManager?.registrationFailed(with: error)
     }
 }
