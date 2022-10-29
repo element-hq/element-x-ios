@@ -58,7 +58,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         switch await restorePreviousLogin(credentials) {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
-                                        mediaProvider: MediaProvider(clientProxy: clientProxy,
+                                        mediaProvider: MediaProvider(mediaProxy: clientProxy,
                                                                      imageCache: .onlyInMemory,
                                                                      backgroundTaskService: backgroundTaskService)))
         case .failure(let error):
@@ -76,7 +76,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         switch await setupProxyForClient(client) {
         case .success(let clientProxy):
             return .success(UserSession(clientProxy: clientProxy,
-                                        mediaProvider: MediaProvider(clientProxy: clientProxy,
+                                        mediaProvider: MediaProvider(mediaProxy: clientProxy,
                                                                      imageCache: .onlyInMemory,
                                                                      backgroundTaskService: backgroundTaskService)))
         case .failure(let error):

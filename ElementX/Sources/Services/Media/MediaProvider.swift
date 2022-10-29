@@ -18,14 +18,14 @@ import Kingfisher
 import UIKit
 
 struct MediaProvider: MediaProviderProtocol {
-    private let clientProxy: ClientProxyProtocol
+    private let mediaProxy: MediaProxyProtocol
     private let imageCache: Kingfisher.ImageCache
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    init(clientProxy: ClientProxyProtocol,
+    init(mediaProxy: MediaProxyProtocol,
          imageCache: Kingfisher.ImageCache,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
-        self.clientProxy = clientProxy
+        self.mediaProxy = mediaProxy
         self.imageCache = imageCache
         self.backgroundTaskService = backgroundTaskService
     }
@@ -55,7 +55,7 @@ struct MediaProvider: MediaProviderProtocol {
             return .success(image)
         }
 
-        let loadImageBgTask = backgroundTaskService.startBackgroundTask(withName: "LoadImage: \(source.underlyingSource.url().hashValue)")
+        let loadImageBgTask = backgroundTaskService.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
         defer {
             loadImageBgTask?.stop()
         }
@@ -71,9 +71,9 @@ struct MediaProvider: MediaProviderProtocol {
             do {
                 let imageData = try await Task.detached { () -> Data in
                     if let avatarSize {
-                        return try await clientProxy.loadMediaThumbnailForSource(source, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
+                        return try await mediaProxy.loadMediaThumbnailForSource(source, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
                     } else {
-                        return try await clientProxy.loadMediaContentForSource(source)
+                        return try await mediaProxy.loadMediaContentForSource(source)
                     }
                     
                 }.value

@@ -58,6 +58,7 @@ class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
+    private let mediaProxy: MediaProxyProtocol
     
     private var slidingSyncObserverToken: StoppableSpawn?
     private let slidingSync: SlidingSync
@@ -78,6 +79,7 @@ class ClientProxy: ClientProxyProtocol {
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.client = client
         self.backgroundTaskService = backgroundTaskService
+        mediaProxy = MediaProxy(client: client)
         
         do {
             let slidingSyncBuilder = try client.slidingSync().homeserver(url: BuildSettings.slidingSyncProxyBaseURL.absoluteString)
@@ -205,24 +207,6 @@ class ClientProxy: ClientProxyProtocol {
         .failure(.failedSettingAccountData)
     }
     
-    func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource {
-        MatrixRustSDK.mediaSourceFromUrl(url: urlString)
-    }
-    
-    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
-        try await Task.dispatch(on: .global()) {
-            let bytes = try self.client.getMediaContent(source: source)
-            return Data(bytes: bytes, count: bytes.count)
-        }
-    }
-    
-    func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
-        try await Task.dispatch(on: .global()) {
-            let bytes = try self.client.getMediaThumbnail(source: source, width: UInt64(width), height: UInt64(height))
-            return Data(bytes: bytes, count: bytes.count)
-        }
-    }
-    
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         await Task.dispatch(on: .global()) {
             do {
@@ -256,5 +240,17 @@ class ClientProxy: ClientProxyProtocol {
         roomSummaryProvider.updateRoomsWithIdentifiers(summary.rooms)
         
         callbacks.send(.receivedSyncUpdate)
+    }
+extension ClientProxy: MediaProxyProtocol {
+    func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
+        mediaProxy.mediaSourceForURLString(urlString)
+    }
+
+    func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
+        try await mediaProxy.loadMediaContentForSource(source)
+    }
+
+    func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
+        try await mediaProxy.loadMediaThumbnailForSource(source, width: width, height: height)
     }
 }

@@ -34,7 +34,7 @@ enum ClientProxyError: Error {
 }
 
 @MainActor
-protocol ClientProxyProtocol {
+protocol ClientProxyProtocol: MediaProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
     var userIdentifier: String { get }
@@ -62,12 +62,6 @@ protocol ClientProxyProtocol {
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     
     func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError>
-    
-    func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource
-    
-    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data
-    
-    func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data
     
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
