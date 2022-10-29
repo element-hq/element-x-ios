@@ -17,20 +17,24 @@
 import Foundation
 import MatrixRustSDK
 
-struct MediaSource: Equatable {
-    let underlyingSource: MatrixRustSDK.MediaSource
+struct MediaSourceProxy: Equatable {
+    let underlyingSource: MediaSource
     
-    init(source: MatrixRustSDK.MediaSource) {
+    init(source: MediaSource) {
         underlyingSource = source
     }
     
     init(urlString: String) {
-        underlyingSource = MatrixRustSDK.mediaSourceFromUrl(url: urlString)
+        underlyingSource = mediaSourceFromUrl(url: urlString)
+    }
+
+    var url: String {
+        underlyingSource.url()
     }
     
     // MARK: - Equatable
     
-    static func == (lhs: MediaSource, rhs: MediaSource) -> Bool {
-        lhs.underlyingSource.url() == rhs.underlyingSource.url()
+    static func == (lhs: MediaSourceProxy, rhs: MediaSourceProxy) -> Bool {
+        lhs.url == rhs.url
     }
 }

@@ -18,11 +18,11 @@ import Foundation
 import UIKit
 
 struct MockMediaProvider: MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSource?, avatarSize: AvatarSize?) -> UIImage? {
+    func imageFromSource(_ source: MediaSourceProxy?, avatarSize: AvatarSize?) -> UIImage? {
         nil
     }
     
-    func loadImageFromSource(_ source: MediaSource, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
+    func loadImageFromSource(_ source: MediaSourceProxy, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
         .failure(.failedRetrievingImage)
     }
     

@@ -93,8 +93,8 @@ extension MatrixRustSDK.ImageMessageContent: MessageContentProtocol { }
 
 /// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.image`.
 extension MessageTimelineItem where Content == MatrixRustSDK.ImageMessageContent {
-    var source: MediaSource {
-        MediaSource(source: content.source)
+    var source: MediaSourceProxy {
+        .init(source: content.source)
     }
 
     var width: CGFloat? {

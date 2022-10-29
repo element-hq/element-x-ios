@@ -24,9 +24,9 @@ enum MediaProviderError: Error {
 
 @MainActor
 protocol MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSource?, avatarSize: AvatarSize?) -> UIImage?
+    func imageFromSource(_ source: MediaSourceProxy?, avatarSize: AvatarSize?) -> UIImage?
     
-    @discardableResult func loadImageFromSource(_ source: MediaSource, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromSource(_ source: MediaSourceProxy, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
     
     func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage?
     
@@ -34,11 +34,11 @@ protocol MediaProviderProtocol {
 }
 
 extension MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSource?) -> UIImage? {
+    func imageFromSource(_ source: MediaSourceProxy?) -> UIImage? {
         imageFromSource(source, avatarSize: nil)
     }
     
-    @discardableResult func loadImageFromSource(_ source: MediaSource) async -> Result<UIImage, MediaProviderError> {
+    @discardableResult func loadImageFromSource(_ source: MediaSourceProxy) async -> Result<UIImage, MediaProviderError> {
         await loadImageFromSource(source, avatarSize: nil)
     }
     
