@@ -28,6 +28,17 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNMutableNotificationContent?
 
+    /// Memory formatter, uses exact 2 fraction digits and no grouping
+    private static var numberFormatter: NumberFormatter {
+        let formatter = NumberFormatter()
+        formatter.alwaysShowsDecimalSeparator = true
+        formatter.decimalSeparator = "."
+        formatter.groupingSeparator = ""
+        formatter.maximumFractionDigits = 2
+        formatter.minimumFractionDigits = 2
+        return formatter
+    }
+
     override init() {
         //  use `en` as fallback language
         Bundle.elementFallbackLanguage = "en"
@@ -35,10 +46,21 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         super.init()
     }
 
+    private var formattedMemoryAvailable: String {
+        let freeBytes = os_proc_available_memory()
+        let freeMB = Double(freeBytes) / 1024 / 1024
+        guard let formattedStr = Self.numberFormatter.string(from: NSNumber(value: freeMB)) else {
+            return ""
+        }
+        return "\(formattedStr) MB"
+    }
+
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         self.contentHandler = contentHandler
         bestAttemptContent = request.content.mutableCopy() as? UNMutableNotificationContent
+
+        print("Available memory: \(formattedMemoryAvailable)")
 
         guard !DataProtectionManager.isDeviceInRebootedAndLockedState(containerURL: FileManager.default.appGroupContainerURL) else {
             contentHandler(request.content)
