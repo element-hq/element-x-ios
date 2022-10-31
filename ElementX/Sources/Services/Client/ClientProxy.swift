@@ -93,7 +93,7 @@ class ClientProxy: ClientProxyProtocol {
                 .build()
             
             slidingSync = try slidingSyncBuilder
-                .addView(view: slidingSyncView)
+                .addView(v: slidingSyncView)
                 .withCommonExtensions()
                 .build()
             
