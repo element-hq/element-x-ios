@@ -35,7 +35,6 @@ targets:
       - package: MatrixRustSDK
       - package: SwiftyBeaver
       - package: KeychainAccess
-      - package: Kingfisher
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -71,8 +70,6 @@ targets:
     - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationServiceProxy.swift
     - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationItemProxy.swift
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
-    - path: ../../ElementX/Sources/Services/Media/MediaProviderProtocol.swift
-    - path: ../../ElementX/Sources/Services/Media/MediaProvider.swift
     - path: ../../ElementX/Sources/Services/Media/MediaProxyProtocol.swift
     - path: ../../ElementX/Sources/Services/Media/MediaProxy.swift
     - path: ../../ElementX/Sources/Services/Media/MediaSourceProxy.swift
