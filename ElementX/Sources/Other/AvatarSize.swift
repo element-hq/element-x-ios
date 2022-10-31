@@ -61,12 +61,15 @@ enum UserAvatarSizeOnScreen {
 enum RoomAvatarSizeOnScreen {
     case timeline
     case home
+    case notification
 
     var value: CGFloat {
         switch self {
         case .timeline:
             return 32
         case .home:
+            return 44
+        case .notification:
             return 44
         }
     }

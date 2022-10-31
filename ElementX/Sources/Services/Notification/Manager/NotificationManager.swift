@@ -41,7 +41,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
     func start() {
         let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
-                                                        title: ElementL10n.roomMessagePlaceholder,
+                                                        title: ElementL10n.actionQuickReply,
                                                         options: [])
         let replyCategory = UNNotificationCategory(identifier: NotificationConstants.Category.reply,
                                                    actions: [replyAction],

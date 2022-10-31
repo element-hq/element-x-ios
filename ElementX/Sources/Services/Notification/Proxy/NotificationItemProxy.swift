@@ -43,4 +43,11 @@ struct NotificationItemProxy {
     var avatarUrl: String? {
         notificationItem.avatarUrl
     }
+
+    var avatarMediaSource: MediaSourceProxy? {
+        guard let avatarUrl else {
+            return nil
+        }
+        return .init(urlString: avatarUrl)
+    }
 }
