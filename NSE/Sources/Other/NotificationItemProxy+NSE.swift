@@ -20,7 +20,7 @@ import UserNotifications
 
 extension NotificationItemProxy {
     var requiresMediaProxy: Bool {
-        false
+//        return false
         if avatarUrl != nil {
             return true
         }
