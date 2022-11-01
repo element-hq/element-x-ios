@@ -44,6 +44,7 @@ struct TimelineItemList: View {
                         item
                             .contextMenu {
                                 context.viewState.contextMenuBuilder?(item.id)
+                                    .id(item.id)
                             }
                             .opacity(opacityForItem(item))
                             .padding(settings.timelineStyle.rowInsets)
