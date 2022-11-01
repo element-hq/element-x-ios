@@ -24,7 +24,7 @@ struct RedactedRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             HStack {
                 Image(systemName: "trash")
-                FormattedBodyText(isOutgoing: timelineItem.isOutgoing, text: timelineItem.text)
+                FormattedBodyText(text: timelineItem.text)
             }
         }
         .id(timelineItem.id)

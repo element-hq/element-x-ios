@@ -157,16 +157,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             case .event(let eventItem):
                 guard eventItem.isMessage || eventItem.isRedacted else { break } // To be handled in the future
 
-                newTimelineItems.append(await timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
-                                                                                       inGroupState: inGroupState))
-            case .virtual:
-//            case .virtual(let virtualItem):
-//                newTimelineItems.append(SeparatorRoomTimelineItem(id: message.originServerTs.ISO8601Format(),
-//                                                                  text: message.originServerTs.formatted(date: .complete, time: .omitted)))
-                #warning("Fix the UUID or \"bad things will happen\"")
-                newTimelineItems.append(SeparatorRoomTimelineItem(id: UUID().uuidString,
-                                                                  text: "The day before"))
-            case .other:
+                newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
+                                                                                 inGroupState: inGroupState))
+            default:
                 break
             }
         }

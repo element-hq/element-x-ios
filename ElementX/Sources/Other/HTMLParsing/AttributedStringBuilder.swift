@@ -21,13 +21,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     private let temporaryBlockquoteMarkingColor = UIColor.magenta
     private let temporaryCodeBlockMarkingColor = UIColor.cyan
     private let linkColor = UIColor.blue
-    
-    func fromPlain(_ string: String?) async -> AttributedString? {
-        await Task.dispatch(on: .global()) {
-            fromPlain(string)
-        }
-    }
-    
+        
     func fromPlain(_ string: String?) -> AttributedString? {
         guard let string else {
             return nil
@@ -39,13 +33,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         return try? AttributedString(mutableAttributedString, including: \.elementX)
     }
-    
-    func fromHTML(_ htmlString: String?) async -> AttributedString? {
-        await Task.dispatch(on: .global()) {
-            fromHTML(htmlString)
-        }
-    }
-    
+        
     // Do not use the default HTML renderer of NSAttributedString because this method
     // runs on the UI thread which we want to avoid because renderHTMLString is called
     // most of the time from a background thread.

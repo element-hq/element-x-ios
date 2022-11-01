@@ -18,8 +18,6 @@ import Foundation
 import SwiftUI
 
 struct FormattedBodyText: View {
-    #warning("this is a dirty fix for demo, should be refactored after new timeline api")
-    let isOutgoing: Bool
     let attributedComponents: [AttributedStringBuilderComponent]
     
     var body: some View {
@@ -51,8 +49,7 @@ struct FormattedBodyText: View {
 }
 
 extension FormattedBodyText {
-    init(isOutgoing: Bool, text: String) {
-        self.isOutgoing = isOutgoing
+    init(text: String) {
         attributedComponents = [.init(attributedString: AttributedString(text), isBlockquote: false)]
     }
 }
@@ -94,11 +91,11 @@ struct FormattedBodyText_Previews: PreviewProvider {
                 let attributedString = attributedStringBuilder.fromHTML(htmlString)
                 
                 if let components = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) {
-                    FormattedBodyText(isOutgoing: true, attributedComponents: components)
+                    FormattedBodyText(attributedComponents: components)
                         .fixedSize()
                 }
             }
-            FormattedBodyText(isOutgoing: true, text: "Some plain text that's not an attributed component.")
+            FormattedBodyText(text: "Some plain text that's not an attributed component.")
         }
     }
 }

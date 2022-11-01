@@ -25,9 +25,9 @@ struct NoticeRoomTimelineView: View {
             HStack(alignment: .top) {
                 Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
                 if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, attributedComponents: attributedComponents)
+                    FormattedBodyText(attributedComponents: attributedComponents)
                 } else {
-                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, text: timelineItem.text)
+                    FormattedBodyText(text: timelineItem.text)
                 }
             }
         }
