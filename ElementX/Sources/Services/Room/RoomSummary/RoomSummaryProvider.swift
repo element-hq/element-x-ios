@@ -19,8 +19,6 @@ import Foundation
 import MatrixRustSDK
 
 private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, SlidingSyncViewStateObserver, SlidingSyncViewRoomsCountObserver {
-    private weak var roomSummaryProvider: RoomSummaryProvider?
-    
     /// Publishes room list diffs as they come in through sliding sync
     let roomListDiffPublisher = PassthroughSubject<SlidingSyncViewRoomsListDiff, Never>()
     
@@ -29,11 +27,7 @@ private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, S
     
     /// Publishes the number of available rooms
     let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
-    
-    init(roomSummaryProvider: RoomSummaryProvider) {
-        self.roomSummaryProvider = roomSummaryProvider
-    }
-    
+        
     // MARK: - SlidingSyncViewRoomListObserver
     
     func didReceiveUpdate(diff: SlidingSyncViewRoomsListDiff) {
@@ -85,7 +79,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.slidingSyncController = slidingSyncController
         self.roomMessageFactory = roomMessageFactory
         
-        let weakProvider = WeakRoomSummaryProviderWrapper(roomSummaryProvider: self)
+        let weakProvider = WeakRoomSummaryProviderWrapper()
         
         weakProvider.stateUpdatePublisher
             .map(RoomSummaryProviderState.init)

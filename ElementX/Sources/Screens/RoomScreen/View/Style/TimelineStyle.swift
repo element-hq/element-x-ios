@@ -22,7 +22,7 @@ enum TimelineStyle: String, CaseIterable {
     case bubbles
 
     /// List row insets for a timeline
-    var listRowInsets: EdgeInsets {
+    var rowInsets: EdgeInsets {
         switch self {
         case .plain:
             return EdgeInsets(top: 4, leading: 20, bottom: 4, trailing: 20)

@@ -17,10 +17,6 @@
 import Combine
 import Foundation
 
-enum RoomTimelineProviderCallback {
-    case updatedMessages
-}
-
 enum RoomTimelineProviderError: Error {
     case noMoreMessagesToBackPaginate
     case failedPaginatingBackwards
@@ -30,9 +26,9 @@ enum RoomTimelineProviderError: Error {
 }
 
 protocol RoomTimelineProviderProtocol {
-    var callbacks: PassthroughSubject<RoomTimelineProviderCallback, Never> { get }
+    var itemsPublisher: CurrentValueSubject<[TimelineItemProxy], Never> { get }
     
-    var itemProxies: [TimelineItemProxy] { get }
+    var backPaginationPublisher: CurrentValueSubject<Bool, Never> { get }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError>
     

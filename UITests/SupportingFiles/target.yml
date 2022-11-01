@@ -41,8 +41,6 @@ targets:
       linkType: static
     - package: Kingfisher
       linkType: static
-    - package: Introspect
-      linkType: static
     - package: PostHog
       linkType: static
     - package: SwiftyBeaver

@@ -17,16 +17,11 @@
 import Combine
 import MatrixRustSDK
 
-#warning("Rename to RoomTimelineListener???")
-class WeakRoomTimelineProviderWrapper: TimelineListener {
-    private weak var timelineProvider: RoomTimelineProvider?
-    
-    init(timelineProvider: RoomTimelineProvider) {
-        self.timelineProvider = timelineProvider
-    }
+private class RoomTimelineListener: TimelineListener {
+    let itemsUpdatePublisher = PassthroughSubject<TimelineDiff, Never>()
     
     func onUpdate(update: TimelineDiff) {
-        timelineProvider?.onUpdate(update: update)
+        itemsUpdatePublisher.send(update)
     }
 }
 
@@ -34,25 +29,49 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
     private var cancellables = Set<AnyCancellable>()
     
-    let callbacks = PassthroughSubject<RoomTimelineProviderCallback, Never>()
+    let itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
+    let backPaginationPublisher = CurrentValueSubject<Bool, Never>(false)
     
-    private(set) var itemProxies: [TimelineItemProxy]
+    private var itemProxies: [TimelineItemProxy] {
+        didSet {
+            itemsPublisher.send(itemProxies)
+            
+            if backPaginationPublisher.value == true {
+                backPaginationPublisher.send(false)
+            }
+        }
+    }
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         itemProxies = []
         
         Task {
-            await roomProxy.addTimelineListener(listener: WeakRoomTimelineProviderWrapper(timelineProvider: self))
+            let roomTimelineListener = RoomTimelineListener()
+            await roomProxy.addTimelineListener(listener: roomTimelineListener)
+            
+            roomTimelineListener
+                .itemsUpdatePublisher
+                .collect(.byTime(DispatchQueue.global(qos: .background), 0.5))
+                .sink { self.updateItemsWithDiffs($0) }
+                .store(in: &cancellables)
         }
     }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
+        // Set this back to false after actually updating the items or if failed
+        backPaginationPublisher.send(true)
+        
         switch await roomProxy.paginateBackwards(count: count) {
         case .success:
             return .success(())
         case .failure(let error):
-            if error == .noMoreMessagesToBackPaginate { return .failure(.noMoreMessagesToBackPaginate) }
+            backPaginationPublisher.send(false)
+            
+            if error == .noMoreMessagesToBackPaginate {
+                return .failure(.noMoreMessagesToBackPaginate)
+            }
+            
             return .failure(.failedPaginatingBackwards)
         }
     }
@@ -74,74 +93,70 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             return .failure(.failedRedactingItem)
         }
     }
-}
+    
+    // MARK: - Private
 
-// MARK: - TimelineListener
-
-private extension RoomTimelineProvider {
-    func onUpdate(update: TimelineDiff) {
-        let change = update.change()
-        MXLog.verbose("Change: \(change)")
+    private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
+        itemProxies = diffs
+            .compactMap(buildDiff)
+            .reduce(itemProxies) { $0.applying($1) ?? $0 }
+    }
+     
+    // swiftlint:disable:next cyclomatic_complexity
+    private func buildDiff(from diff: TimelineDiff) -> CollectionDifference<TimelineItemProxy>? {
+        var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
-        switch change {
-        case .replace:
-            replaceItems(update.replace())
-        case .insertAt:
-            insertItem(update.insertAt())
-        case .updateAt:
-            updateItem(update.updateAt())
-        case .removeAt:
-            removeItem(at: update.removeAt())
-        case .move:
-            moveItem(update.move())
+        switch diff.change() {
         case .push:
-            pushItem(update.push())
-        case .pop:
-            popItem()
+            if let item = diff.push() {
+                let itemProxy = TimelineItemProxy(item: item)
+                changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
+            }
+        case .updateAt:
+            if let update = diff.updateAt() {
+                let itemProxy = TimelineItemProxy(item: update.item)
+                changes.append(.remove(offset: Int(update.index), element: itemProxy, associatedWith: nil))
+                changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
+            }
+        case .insertAt:
+            if let update = diff.insertAt() {
+                let itemProxy = TimelineItemProxy(item: update.item)
+                changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
+            }
+        case .move:
+            if let update = diff.move() {
+                let itemProxy = itemProxies[Int(update.oldIndex)]
+                changes.append(.remove(offset: Int(update.oldIndex), element: itemProxy, associatedWith: nil))
+                changes.append(.insert(offset: Int(update.newIndex), element: itemProxy, associatedWith: nil))
+            }
+        case .removeAt:
+            if let index = diff.removeAt() {
+                let itemProxy = itemProxies[Int(index)]
+                changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
+            }
+        case .replace:
+            if let items = diff.replace() {
+                for (index, itemProxy) in itemProxies.enumerated() {
+                    changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
+                }
+                
+                items
+                    .reversed()
+                    .map { TimelineItemProxy(item: $0) }
+                    .forEach { itemProxy in
+                        changes.append(.insert(offset: 0, element: itemProxy, associatedWith: nil))
+                    }
+            }
         case .clear:
-            clearAllItems()
+            for (index, itemProxy) in itemProxies.enumerated() {
+                changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
+            }
+        case .pop:
+            if let itemProxy = itemProxies.last {
+                changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
+            }
         }
         
-        callbacks.send(.updatedMessages)
-    }
-    
-    private func replaceItems(_ items: [MatrixRustSDK.TimelineItem]?) {
-        guard let items else { return }
-        itemProxies = items.map(TimelineItemProxy.init)
-    }
-    
-    private func insertItem(_ data: InsertAtData?) {
-        guard let data else { return }
-        let itemProxy = TimelineItemProxy(item: data.item)
-        itemProxies.insert(itemProxy, at: Int(data.index))
-    }
-    
-    private func updateItem(_ data: UpdateAtData?) {
-        guard let data else { return }
-        let itemProxy = TimelineItemProxy(item: data.item)
-        itemProxies[Int(data.index)] = itemProxy
-    }
-    
-    private func removeItem(at index: UInt32?) {
-        guard let index else { return }
-        itemProxies.remove(at: Int(index))
-    }
-    
-    private func moveItem(_ data: MoveData?) {
-        guard let data else { return }
-        itemProxies.move(fromOffsets: IndexSet(integer: Int(data.oldIndex)), toOffset: Int(data.newIndex))
-    }
-    
-    private func pushItem(_ item: MatrixRustSDK.TimelineItem?) {
-        guard let item else { return }
-        itemProxies.append(TimelineItemProxy(item: item))
-    }
-    
-    private func popItem() {
-        itemProxies.removeLast()
-    }
-    
-    private func clearAllItems() {
-        itemProxies.removeAll()
+        return CollectionDifference(changes)
     }
 }

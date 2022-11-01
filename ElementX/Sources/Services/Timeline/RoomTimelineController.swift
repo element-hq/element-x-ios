@@ -51,14 +51,23 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         self.roomProxy = roomProxy
         
         self.timelineProvider
-            .callbacks
+            .itemsPublisher
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
+            .sink { [weak self] _ in
                 guard let self else { return }
                 
-                switch callback {
-                case .updatedMessages:
-                    self.updateTimelineItems()
+                self.updateTimelineItems()
+            }
+            .store(in: &cancellables)
+        
+        self.timelineProvider
+            .backPaginationPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] value in
+                if value {
+                    self?.callbacks.send(.startedBackPaginating)
+                } else {
+                    self?.callbacks.send(.finishedBackPaginating)
                 }
             }
             .store(in: &cancellables)
@@ -71,7 +80,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
         switch await timelineProvider.paginateBackwards(count) {
         case .success:
-            updateTimelineItems()
             return .success(())
         case .failure:
             return .failure(.generic)
@@ -135,13 +143,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
 
-        for (index, itemProxy) in timelineProvider.itemProxies.enumerated() {
+        for (index, itemProxy) in timelineProvider.itemsPublisher.value.enumerated() {
             if Task.isCancelled {
                 return
             }
 
-            let previousItemProxy = timelineProvider.itemProxies[safe: index - 1]
-            let nextItemProxy = timelineProvider.itemProxies[safe: index + 1]
+            let previousItemProxy = timelineProvider.itemsPublisher.value[safe: index - 1]
+            let nextItemProxy = timelineProvider.itemsPublisher.value[safe: index + 1]
 
             let inGroupState = inGroupState(for: itemProxy, previousItemProxy: previousItemProxy, nextItemProxy: nextItemProxy)
             
