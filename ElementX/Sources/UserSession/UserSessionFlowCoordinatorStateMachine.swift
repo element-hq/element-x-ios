@@ -34,7 +34,7 @@ class UserSessionFlowCoordinatorStateMachine {
         case sessionVerificationScreen
         
         /// Showing the session verification flows
-        case bugReportScreen
+        case feedbackScreen
         
         /// Showing the settings screen
         case settingsScreen
@@ -59,10 +59,10 @@ class UserSessionFlowCoordinatorStateMachine {
         /// The settings screen has been dismissed
         case dismissedSettingsScreen
         
-        /// Request presentation of the settings screen
-        case showBugReportScreen
-        /// The settings screen has been dismissed
-        case dismissedBugReportScreen
+        /// Request presentation of the feedback screen
+        case feedbackScreen
+        /// The feedback screen has been dismissed
+        case dismissedFeedbackScreen
         
         /// Request the start of the session verification flow
         case showSessionVerificationScreen
@@ -99,9 +99,9 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.dismissedSettingsScreen, .settingsScreen):
                 return .homeScreen
                 
-            case (.showBugReportScreen, .homeScreen):
-                return .bugReportScreen
-            case (.dismissedBugReportScreen, .bugReportScreen):
+            case (.feedbackScreen, .homeScreen):
+                return .feedbackScreen
+            case (.dismissedFeedbackScreen, .feedbackScreen):
                 return .homeScreen
                 
             case (.showSessionVerificationScreen, .homeScreen):
