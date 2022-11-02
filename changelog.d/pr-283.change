@@ -1,1 +1,0 @@
-Move Rust client operations into a dedicated concurrent queue, make sure not used on main thread.
