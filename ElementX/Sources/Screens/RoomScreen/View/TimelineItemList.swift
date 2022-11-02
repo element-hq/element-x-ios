@@ -39,7 +39,7 @@ struct TimelineItemList: View {
                     .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
                     .animation(.elementDefault, value: context.viewState.isBackPaginating)
                 
-                LazyVStack(spacing: 0.0) {
+                LazyVStack(alignment: .leading, spacing: 0.0) {
                     ForEach(isRunningPreviews ? context.viewState.items : timelineItems) { item in
                         item
                             .contextMenu {

@@ -62,16 +62,14 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              inGroupState: .single,
                              isOutgoing: false,
                              senderId: "",
-                             senderDisplayName: "Helena",
-                             properties: RoomTimelineItemProperties()),
+                             senderDisplayName: "Helena"),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "And John's speech was amazing!",
                              timestamp: "5 PM",
                              inGroupState: .beginning,
                              isOutgoing: true,
                              senderId: "",
-                             senderDisplayName: "Bob",
-                             properties: RoomTimelineItemProperties()),
+                             senderDisplayName: "Bob"),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "New home office set up!",
                              timestamp: "5 PM",
@@ -82,7 +80,19 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
-                             ]))
+                             ])),
+        TextRoomTimelineItem(id: UUID().uuidString,
+                             text: "",
+                             attributedComponents: [
+                                 AttributedStringBuilderComponent(attributedString: "Hol' up", isBlockquote: false),
+                                 AttributedStringBuilderComponent(attributedString: "New home office set up!", isBlockquote: true),
+                                 AttributedStringBuilderComponent(attributedString: "That's amazing! Congrats 🥳", isBlockquote: false)
+                             ],
+                             timestamp: "5 PM",
+                             inGroupState: .single,
+                             isOutgoing: false,
+                             senderId: "",
+                             senderDisplayName: "Helena")
     ]
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {

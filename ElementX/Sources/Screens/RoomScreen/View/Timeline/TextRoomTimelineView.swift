@@ -36,6 +36,10 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
+        body.preferredColorScheme(.light)
+            .timelineStyle(.plain)
+        body.preferredColorScheme(.dark)
+            .timelineStyle(.plain)
     }
     
     @ViewBuilder
@@ -55,15 +59,13 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                                                         timestamp: "Now",
                                                         isOutgoing: false,
                                                         senderId: "Bob"))
-                .timelineStyle(.plain)
 
             TextRoomTimelineView(timelineItem: itemWith(text: "Some other text",
                                                         timestamp: "Later",
                                                         isOutgoing: true,
                                                         senderId: "Anne"))
-                .timelineStyle(.plain)
         }
-        .padding(.horizontal, 8)
+        .environment(\.timelineWidth, 400)
     }
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {

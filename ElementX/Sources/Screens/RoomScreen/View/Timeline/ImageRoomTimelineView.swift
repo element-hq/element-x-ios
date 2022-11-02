@@ -54,6 +54,10 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
+        body.preferredColorScheme(.light)
+            .timelineStyle(.plain)
+        body.preferredColorScheme(.dark)
+            .timelineStyle(.plain)
     }
      
     @ViewBuilder
@@ -88,5 +92,6 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       aspectRatio: 0.7,
                                                                       blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }
+        .environment(\.timelineWidth, 400)
     }
 }
