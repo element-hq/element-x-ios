@@ -27,7 +27,6 @@ enum AuthenticationServiceError: Error {
     case failedLoggingIn
 }
 
-@MainActor
 protocol AuthenticationServiceProxyProtocol {
     var homeserver: LoginHomeserver { get }
     

@@ -33,7 +33,6 @@ enum ClientProxyError: Error {
     case failedLoadingMedia
 }
 
-@MainActor
 protocol ClientProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     

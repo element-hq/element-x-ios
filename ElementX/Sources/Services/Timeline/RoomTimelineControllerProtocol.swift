@@ -28,7 +28,6 @@ enum RoomTimelineControllerError: Error {
     case generic
 }
 
-@MainActor
 protocol RoomTimelineControllerProtocol {
     var roomId: String { get }
     
