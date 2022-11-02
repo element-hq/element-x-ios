@@ -24,7 +24,6 @@ enum UserSessionStoreError: Error {
     case failedRefreshingRestoreToken
 }
 
-@MainActor
 protocol UserSessionStoreProtocol {
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { get }

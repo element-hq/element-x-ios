@@ -152,6 +152,11 @@ struct TimelineItemList: View {
             // Otherwise just update the items
             timelineItems = context.viewState.items
         }
+        .onChange(of: context.viewState.items, perform: { items in
+            if timelineItems != items {
+                timelineItems = items
+            }
+        })
         .background(GeometryReader { geo in
             Color.clear.preference(key: ViewFramePreferenceKey.self, value: [geo.frame(in: .global)])
         })

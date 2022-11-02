@@ -45,11 +45,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         itemProxies = []
-        
+
         Task {
             let roomTimelineListener = RoomTimelineListener()
             await roomProxy.addTimelineListener(listener: roomTimelineListener)
-            
+
             roomTimelineListener
                 .itemsUpdatePublisher
                 .collect(.byTime(DispatchQueue.global(qos: .background), 0.5))

@@ -33,7 +33,6 @@ enum ClientProxyError: Error {
     case failedLoadingMedia
 }
 
-@MainActor
 protocol ClientProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
@@ -53,7 +52,7 @@ protocol ClientProxyProtocol {
     
     func stopSync()
     
-    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol?
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
         

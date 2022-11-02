@@ -32,7 +32,7 @@ struct MockClientProxy: ClientProxyProtocol {
     
     func stopSync() { }
     
-    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         nil
     }
     

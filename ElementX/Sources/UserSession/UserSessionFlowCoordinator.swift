@@ -139,34 +139,36 @@ class UserSessionFlowCoordinator: Coordinator {
     // MARK: Rooms
 
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let roomProxy = userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
-            MXLog.error("Invalid room identifier: \(roomIdentifier)")
-            return
-        }
-        let userId = userSession.clientProxy.userIdentifier
-        
-        let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
-                                                          mediaProvider: userSession.mediaProvider,
-                                                          roomProxy: roomProxy,
-                                                          attributedStringBuilder: AttributedStringBuilder())
-        
-        let timelineController = RoomTimelineController(userId: userId,
-                                                        roomId: roomIdentifier,
-                                                        timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
-                                                        timelineItemFactory: timelineItemFactory,
-                                                        mediaProvider: userSession.mediaProvider,
-                                                        roomProxy: roomProxy)
+        Task { @MainActor in
+            guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                MXLog.error("Invalid room identifier: \(roomIdentifier)")
+                return
+            }
+            let userId = userSession.clientProxy.userIdentifier
 
-        let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
-                                                         mediaProvider: userSession.mediaProvider,
-                                                         roomName: roomProxy.displayName ?? roomProxy.name,
-                                                         roomAvatarUrl: roomProxy.avatarURL)
-        let coordinator = RoomScreenCoordinator(parameters: parameters)
+            let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
+                                                              mediaProvider: userSession.mediaProvider,
+                                                              roomProxy: roomProxy,
+                                                              attributedStringBuilder: AttributedStringBuilder())
 
-        add(childCoordinator: coordinator)
-        navigationRouter.push(coordinator) { [weak self] in
-            guard let self else { return }
-            self.stateMachine.processEvent(.dismissedRoomScreen)
+            let timelineController = RoomTimelineController(userId: userId,
+                                                            roomId: roomIdentifier,
+                                                            timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
+                                                            timelineItemFactory: timelineItemFactory,
+                                                            mediaProvider: userSession.mediaProvider,
+                                                            roomProxy: roomProxy)
+
+            let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
+                                                             mediaProvider: userSession.mediaProvider,
+                                                             roomName: roomProxy.displayName ?? roomProxy.name,
+                                                             roomAvatarUrl: roomProxy.avatarURL)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+
+            add(childCoordinator: coordinator)
+            navigationRouter.push(coordinator) { [weak self] in
+                guard let self else { return }
+                self.stateMachine.processEvent(.dismissedRoomScreen)
+            }
         }
     }
     
@@ -222,25 +224,23 @@ class UserSessionFlowCoordinator: Coordinator {
     // MARK: Session verification
         
     private func presentSessionVerification() {
-        Task {
-            guard let sessionVerificationController = userSession.sessionVerificationController else {
-                fatalError("The sessionVerificationController should aways be valid at this point")
-            }
-            
-            let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
-            
-            let coordinator = SessionVerificationCoordinator(parameters: parameters)
-            
-            coordinator.callback = { [weak self] in
-                self?.navigationRouter.dismissModule()
-                self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
-            }
-            
-            add(childCoordinator: coordinator)
-            navigationRouter.present(coordinator)
-
-            coordinator.start()
+        guard let sessionVerificationController = userSession.sessionVerificationController else {
+            fatalError("The sessionVerificationController should aways be valid at this point")
         }
+        
+        let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        
+        let coordinator = SessionVerificationCoordinator(parameters: parameters)
+        
+        coordinator.callback = { [weak self] in
+            self?.navigationRouter.dismissModule()
+            self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
+        }
+        
+        add(childCoordinator: coordinator)
+        navigationRouter.present(coordinator)
+        
+        coordinator.start()
     }
     
     private func tearDownDismissedSessionVerificationScreen() {
