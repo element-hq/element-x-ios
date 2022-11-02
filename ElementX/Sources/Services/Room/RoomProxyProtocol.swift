@@ -28,7 +28,6 @@ enum RoomProxyError: Error {
     case failedRedactingEvent
 }
 
-@MainActor
 protocol RoomProxyProtocol {
     var id: String { get }
     var isDirect: Bool { get }
