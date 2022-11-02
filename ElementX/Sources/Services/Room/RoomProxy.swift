@@ -167,7 +167,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
-        sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        sendMessageBgTask = await backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
         defer {
             sendMessageBgTask?.stop()
         }

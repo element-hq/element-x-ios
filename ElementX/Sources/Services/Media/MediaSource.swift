@@ -19,6 +19,10 @@ import MatrixRustSDK
 
 struct MediaSource: Equatable {
     let underlyingSource: MatrixRustSDK.MediaSource
+
+    var url: String {
+        underlyingSource.url()
+    }
     
     init(source: MatrixRustSDK.MediaSource) {
         underlyingSource = source
