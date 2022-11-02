@@ -72,9 +72,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         roomSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                Task {
-                    await self?.updateRooms()
-                }
+                self?.updateRooms()
             }
             .store(in: &cancellables)
         
@@ -91,10 +89,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 state.userDisplayName = userDisplayName
             }
         }
-        
-        Task {
-            await updateRooms()
-        }
+
+        updateRooms()
     }
     
     // MARK: - Public
@@ -137,7 +133,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
-    private func updateRooms() async {
+    private func updateRooms() {
         var rooms = [HomeScreenRoom]()
 
         for summary in roomSummaryProvider.roomListPublisher.value {

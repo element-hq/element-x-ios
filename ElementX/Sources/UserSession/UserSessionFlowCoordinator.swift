@@ -222,25 +222,23 @@ class UserSessionFlowCoordinator: Coordinator {
     // MARK: Session verification
         
     private func presentSessionVerification() {
-        Task {
-            guard let sessionVerificationController = userSession.sessionVerificationController else {
-                fatalError("The sessionVerificationController should aways be valid at this point")
-            }
-            
-            let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
-            
-            let coordinator = SessionVerificationCoordinator(parameters: parameters)
-            
-            coordinator.callback = { [weak self] in
-                self?.navigationRouter.dismissModule()
-                self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
-            }
-            
-            add(childCoordinator: coordinator)
-            navigationRouter.present(coordinator)
-
-            coordinator.start()
+        guard let sessionVerificationController = userSession.sessionVerificationController else {
+            fatalError("The sessionVerificationController should aways be valid at this point")
         }
+        
+        let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        
+        let coordinator = SessionVerificationCoordinator(parameters: parameters)
+        
+        coordinator.callback = { [weak self] in
+            self?.navigationRouter.dismissModule()
+            self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
+        }
+        
+        add(childCoordinator: coordinator)
+        navigationRouter.present(coordinator)
+        
+        coordinator.start()
     }
     
     private func tearDownDismissedSessionVerificationScreen() {

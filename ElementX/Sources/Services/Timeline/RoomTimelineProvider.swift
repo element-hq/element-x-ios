@@ -45,17 +45,15 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
         itemProxies = []
-        
-        Task {
-            let roomTimelineListener = RoomTimelineListener()
-            roomProxy.addTimelineListener(listener: roomTimelineListener)
-            
-            roomTimelineListener
-                .itemsUpdatePublisher
-                .collect(.byTime(DispatchQueue.global(qos: .background), 0.5))
-                .sink { self.updateItemsWithDiffs($0) }
-                .store(in: &cancellables)
-        }
+
+        let roomTimelineListener = RoomTimelineListener()
+        roomProxy.addTimelineListener(listener: roomTimelineListener)
+
+        roomTimelineListener
+            .itemsUpdatePublisher
+            .collect(.byTime(DispatchQueue.global(qos: .background), 0.5))
+            .sink { self.updateItemsWithDiffs($0) }
+            .store(in: &cancellables)
     }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
