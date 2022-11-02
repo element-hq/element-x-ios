@@ -48,7 +48,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         
         Task {
             let roomTimelineListener = RoomTimelineListener()
-            await roomProxy.addTimelineListener(listener: roomTimelineListener)
+            roomProxy.addTimelineListener(listener: roomTimelineListener)
             
             roomTimelineListener
                 .itemsUpdatePublisher
