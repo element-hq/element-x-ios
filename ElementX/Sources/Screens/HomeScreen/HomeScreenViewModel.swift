@@ -23,6 +23,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userSession: UserSessionProtocol
     private let roomSummaryProvider: RoomSummaryProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
+    private var roomsForIdentifiers = [String: HomeScreenRoom]()
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
@@ -113,50 +114,58 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {
-        guard let summary = roomSummaryProvider.roomListPublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
-              let homeRoomIndex = state.rooms.firstIndex(where: { $0.id == identifier }) else {
+        guard let roomSummary = roomSummaryProvider.roomListPublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
+              let roomIndex = state.rooms.firstIndex(where: { $0.id == identifier }) else {
             return
         }
         
-        var details = state.rooms[homeRoomIndex]
+        var room = state.rooms[roomIndex]
             
-        guard details.avatar == nil,
-              let avatarURLString = summary.avatarURLString else {
+        guard room.avatar == nil,
+              let avatarURLString = roomSummary.avatarURLString else {
             return
         }
         
         Task {
             if case let .success(image) = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .room(on: .home)) {
-                details.avatar = image
-                state.rooms[homeRoomIndex] = details
+                room.avatar = image
+                state.rooms[roomIndex] = room
+                roomsForIdentifiers[roomSummary.id] = room
             }
         }
     }
     
     private func updateRooms() {
         var rooms = [HomeScreenRoom]()
-
+        var newRoomsForIdentifiers = [String: HomeScreenRoom]()
+        
         for summary in roomSummaryProvider.roomListPublisher.value {
             switch summary {
             case .empty(let id):
                 rooms.append(HomeScreenRoom.placeholder(id: id))
             case .filled(let summary):
+                let oldRoom = roomsForIdentifiers[summary.id]
+                
                 let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
-
+                
                 var timestamp: String?
                 if let lastMessageTimestamp = summary.lastMessageTimestamp {
                     timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
                 }
-
-                rooms.append(HomeScreenRoom(id: summary.id,
-                                            name: summary.name,
-                                            hasUnreads: summary.unreadNotificationCount > 0,
-                                            timestamp: timestamp,
-                                            lastMessage: summary.lastMessage,
-                                            avatar: avatarImage))
+                
+                let room = HomeScreenRoom(id: summary.id,
+                                          name: summary.name,
+                                          hasUnreads: summary.unreadNotificationCount > 0,
+                                          timestamp: timestamp ?? oldRoom?.timestamp,
+                                          lastMessage: summary.lastMessage ?? oldRoom?.lastMessage,
+                                          avatar: avatarImage ?? oldRoom?.avatar)
+                
+                rooms.append(room)
+                newRoomsForIdentifiers[summary.id] = room
             }
         }
-
+        
         state.rooms = rooms
+        roomsForIdentifiers = newRoomsForIdentifiers
     }
 }
