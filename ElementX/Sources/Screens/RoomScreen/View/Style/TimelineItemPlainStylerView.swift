@@ -44,6 +44,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     .foregroundColor(.element.primaryContent)
                     .fontWeight(.semibold)
                     .lineLimit(1)
+                Spacer()
                 Text(timelineItem.timestamp)
                     .foregroundColor(Color.element.tertiaryContent)
                     .font(.element.caption2)

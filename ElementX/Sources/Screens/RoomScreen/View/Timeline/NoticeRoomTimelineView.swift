@@ -39,6 +39,10 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
+        body.preferredColorScheme(.light)
+            .timelineStyle(.plain)
+        body.preferredColorScheme(.dark)
+            .timelineStyle(.plain)
     }
     
     @ViewBuilder
@@ -52,7 +56,7 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
                                                           timestamp: "Later",
                                                           senderId: "Anne"))
         }
-        .padding()
+        .environment(\.timelineWidth, 400)
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {

@@ -18,19 +18,32 @@ import Foundation
 import SwiftUI
 
 struct FormattedBodyText: View {
+    @Environment(\.timelineStyle) private var timelineStyle
+    
     let attributedComponents: [AttributedStringBuilderComponent]
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8.0) {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                    if timelineStyle == .plain {
+                        HStack(spacing: 4.0) {
+                            Rectangle()
+                                .foregroundColor(Color.red)
+                                .frame(width: 4.0)
+                            Text(component.attributedString)
+                                .foregroundColor(.element.primaryContent)
+                        }
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.element.primaryContent)
-                        .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
-                        .clipped()
-                        .background(Color.element.systemGray4)
-                        .cornerRadius(13)
+                    } else {
+                        Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                            .fixedSize(horizontal: false, vertical: true)
+                            .foregroundColor(.element.primaryContent)
+                            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
+                            .clipped()
+                            .background(Color.element.systemGray4)
+                            .cornerRadius(13)
+                    }
                 } else {
                     Text(component.attributedString)
                         .fixedSize(horizontal: false, vertical: true)
@@ -58,6 +71,10 @@ struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
+        body.preferredColorScheme(.light)
+            .timelineStyle(.plain)
+        body.preferredColorScheme(.dark)
+            .timelineStyle(.plain)
     }
     
     @ViewBuilder
