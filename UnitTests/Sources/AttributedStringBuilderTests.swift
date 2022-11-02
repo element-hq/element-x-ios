@@ -21,14 +21,14 @@ class AttributedStringBuilderTests: XCTestCase {
     let attributedStringBuilder = AttributedStringBuilder()
     let maxHeaderPointSize = ceil(UIFont.preferredFont(forTextStyle: .body).pointSize * 1.2)
     
-    func testRenderHTMLStringWithHeaders() async {
+    func testRenderHTMLStringWithHeaders() {
         let h1HTMLString = "<h1>Large Heading</h1>"
         let h2HTMLString = "<h2>Smaller Heading</h2>"
         let h3HTMLString = "<h3>Acceptable Heading</h3>"
         
-        guard let h1AttributedString = await attributedStringBuilder.fromHTML(h1HTMLString),
-              let h2AttributedString = await attributedStringBuilder.fromHTML(h2HTMLString),
-              let h3AttributedString = await attributedStringBuilder.fromHTML(h3HTMLString) else {
+        guard let h1AttributedString = attributedStringBuilder.fromHTML(h1HTMLString),
+              let h2AttributedString = attributedStringBuilder.fromHTML(h2HTMLString),
+              let h3AttributedString = attributedStringBuilder.fromHTML(h3HTMLString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -56,10 +56,10 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssert(h1Font.pointSize <= maxHeaderPointSize)
     }
     
-    func testRenderHTMLStringWithPreCode() async {
+    func testRenderHTMLStringWithPreCode() {
         let htmlString = "<pre><code>1\n2\n3\n4\n</code></pre>"
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -76,10 +76,10 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(regex.numberOfMatches(in: string, options: [], range: .init(location: 0, length: string.count)), 3)
     }
     
-    func testRenderHTMLStringWithLink() async {
+    func testRenderHTMLStringWithLink() {
         let htmlString = "This text contains a <a href=\"https://www.matrix.org/\">link</a>."
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -93,10 +93,10 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(link?.host, "www.matrix.org")
     }
     
-    func testRenderPlainStringWithLink() async {
+    func testRenderPlainStringWithLink() {
         let plainString = "This text contains a https://www.matrix.org link."
         
-        guard let attributedString = await attributedStringBuilder.fromPlain(plainString) else {
+        guard let attributedString = attributedStringBuilder.fromPlain(plainString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -110,14 +110,14 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(link?.host, "www.matrix.org")
     }
     
-    func testRenderHTMLStringWithLinkInHeader() async {
+    func testRenderHTMLStringWithLinkInHeader() {
         let h1HTMLString = "<h1><a href=\"https://www.matrix.org/\">Matrix.org</a></h1>"
         let h2HTMLString = "<h2><a href=\"https://www.matrix.org/\">Matrix.org</a></h2>"
         let h3HTMLString = "<h3><a href=\"https://www.matrix.org/\">Matrix.org</a></h3>"
         
-        guard let h1AttributedString = await attributedStringBuilder.fromHTML(h1HTMLString),
-              let h2AttributedString = await attributedStringBuilder.fromHTML(h2HTMLString),
-              let h3AttributedString = await attributedStringBuilder.fromHTML(h3HTMLString) else {
+        guard let h1AttributedString = attributedStringBuilder.fromHTML(h1HTMLString),
+              let h2AttributedString = attributedStringBuilder.fromHTML(h2HTMLString),
+              let h3AttributedString = attributedStringBuilder.fromHTML(h3HTMLString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -148,10 +148,10 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(h3AttributedString.runs.first?.link?.host, "www.matrix.org")
     }
     
-    func testRenderHTMLStringWithIFrame() async {
+    func testRenderHTMLStringWithIFrame() {
         let htmlString = "<iframe src=\"https://www.matrix.org/\"></iframe>"
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -159,38 +159,38 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertNil(attributedString.uiKit.attachment, "iFrame attachments should be removed as they're not included in the allowedHTMLTags array.")
     }
     
-    func testUserIdLink() async {
+    func testUserIdLink() {
         let userId = "@user:matrix.org"
         let string = "The user is \(userId)."
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromHTML(string), expected: userId)
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromPlain(string), expected: userId)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: userId)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: userId)
     }
     
-    func testRoomAliasLink() async {
+    func testRoomAliasLink() {
         let roomAlias = "#matrix:matrix.org"
         let string = "The room alias is \(roomAlias)."
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromHTML(string), expected: roomAlias)
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromPlain(string), expected: roomAlias)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: roomAlias)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: roomAlias)
     }
     
-    func testRoomIdLink() async {
+    func testRoomIdLink() {
         let roomId = "!roomidentifier:matrix.org"
         let string = "The room is \(roomId)."
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromHTML(string), expected: roomId)
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromPlain(string), expected: roomId)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: roomId)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: roomId)
     }
     
-    func testEventIdLink() async {
+    func testEventIdLink() {
         let eventId = "$eventidentifier"
         let string = "The event is \(eventId)."
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromHTML(string), expected: eventId)
-        checkMatrixEntityLinkIn(attributedString: await attributedStringBuilder.fromPlain(string), expected: eventId)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: eventId)
+        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: eventId)
     }
     
-    func testDefaultFont() async {
+    func testDefaultFont() {
         let htmlString = "<b>Test</b> <i>string</i>."
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -202,10 +202,10 @@ class AttributedStringBuilderTests: XCTestCase {
         }
     }
     
-    func testDefaultForegroundColor() async {
+    func testDefaultForegroundColor() {
         let htmlString = "<b>Test</b> <i>string</i>."
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -217,11 +217,11 @@ class AttributedStringBuilderTests: XCTestCase {
         }
     }
     
-    func testCustomForegroundColor() async {
+    func testCustomForegroundColor() {
         // swiftlint:disable:next line_length
         let htmlString = "<font color=\"#ff00be\">R</font><font color=\"#ff0082\">a</font><font color=\"#ff0047\">i</font><font color=\"#ff5800\">n </font><font color=\"#ffa300\">w</font><font color=\"#d2ba00\">w</font><font color=\"#97ca00\">w</font><font color=\"#3ed500\">.</font><font color=\"#00dd00\">m</font><font color=\"#00e251\">a</font><font color=\"#00e595\">t</font><font color=\"#00e7d6\">r</font><font color=\"#00e7ff\">i</font><font color=\"#00e6ff\">x</font><font color=\"#00e3ff\">.</font><font color=\"#00dbff\">o</font><font color=\"#00ceff\">r</font><font color=\"#00baff\">g</font><font color=\"#f477ff\"> b</font><font color=\"#ff3aff\">o</font><font color=\"#ff00fb\">w</font>"
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -242,10 +242,10 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertTrue(foundLink)
     }
     
-    func testSingleBlockquote() async {
+    func testSingleBlockquote() {
         let htmlString = "<blockquote>Blockquote</blockquote>"
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -262,14 +262,14 @@ class AttributedStringBuilderTests: XCTestCase {
     }
     
     // swiftlint:disable line_length
-    func testBlockquoteWithinText() async {
+    func testBlockquoteWithinText() {
         let htmlString = """
         The text before the blockquote
         <blockquote> For 50 years, WWF has been protecting the future of nature. The world's leading conservation organization, WWF works in 100 countries and is supported by 1.2 million members in the United States and close to 5 million globally.</blockquote>
         The text after the blockquote
         """
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -287,10 +287,10 @@ class AttributedStringBuilderTests: XCTestCase {
 
     // swiftlint:enable line_length
     
-    func testBlockquoteWithLink() async {
+    func testBlockquoteWithLink() {
         let htmlString = "<blockquote>Blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>"
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -313,14 +313,14 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertNotNil(foundBlockquoteAndLink, "Couldn't find blockquote or link")
     }
     
-    func testMultipleGroupedBlockquotes() async {
+    func testMultipleGroupedBlockquotes() {
         let htmlString = """
         <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
         <blockquote>Second blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
         <blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
         """
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
@@ -337,7 +337,7 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertEqual(numberOfBlockquotes, 3, "Couldn't find all the blockquotes")
     }
     
-    func testMultipleSeparatedBlockquotes() async {
+    func testMultipleSeparatedBlockquotes() {
         let htmlString = """
         First
         <blockquote>blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
@@ -347,7 +347,7 @@ class AttributedStringBuilderTests: XCTestCase {
         <blockquote>blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
         """
         
-        guard let attributedString = await attributedStringBuilder.fromHTML(htmlString) else {
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
             XCTFail("Could not build the attributed string")
             return
         }
