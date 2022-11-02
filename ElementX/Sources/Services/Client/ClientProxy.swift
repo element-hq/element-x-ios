@@ -161,23 +161,18 @@ class ClientProxy: ClientProxyProtocol {
         slidingSync.setObserver(observer: nil)
     }
     
-    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
-        do {
-            guard let slidingSyncRoom = try slidingSync.getRoom(roomId: identifier),
-                  let room = slidingSyncRoom.fullRoom() else {
-                MXLog.error("Failed retrieving room with identifier: \(identifier)")
-                return nil
-            }
-            
-            let roomProxy = RoomProxy(slidingSyncRoom: slidingSyncRoom,
-                                      room: room,
-                                      backgroundTaskService: backgroundTaskService)
-            
-            return roomProxy
-        } catch {
-            MXLog.error("Failed retrieving room with identifier: \(identifier)")
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
+        let (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
+            self.roomTupleForIdentifier(identifier)
+        }
+
+        guard let slidingSyncRoom, let room else {
             return nil
         }
+
+        return await RoomProxy(slidingSyncRoom: slidingSyncRoom,
+                               room: room,
+                               backgroundTaskService: backgroundTaskService)
     }
 
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
@@ -254,6 +249,18 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
+
+    private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {
+        do {
+            let slidingSyncRoom = try slidingSync.getRoom(roomId: identifier)
+            let fullRoom = slidingSyncRoom?.fullRoom()
+
+            return (slidingSyncRoom, fullRoom)
+        } catch {
+            MXLog.error("Failed retrieving room with identifier: \(identifier)")
+            return (nil, nil)
+        }
+    }
     
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
         callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
