@@ -1,0 +1,1 @@
+Fix state machine crashes when backgrounding the app before the user session is setup

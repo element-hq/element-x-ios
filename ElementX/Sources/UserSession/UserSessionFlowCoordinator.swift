@@ -72,6 +72,12 @@ class UserSessionFlowCoordinator: Coordinator {
                 self.presentSettingsScreen()
             case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
                 self.dismissSettingsScreen()
+                
+            case (.homeScreen, .showBugReportScreen, .bugReportScreen):
+                self.presentBugReportScreen()
+            case (.bugReportScreen, .dismissedBugReportScreen, .homeScreen):
+                self.dismissBugReportScreen()
+                
             case (_, .resignActive, .suspended):
                 self.pause()
             case (_, .becomeActive, _):
@@ -114,7 +120,7 @@ class UserSessionFlowCoordinator: Coordinator {
             case .presentSettings:
                 self.stateMachine.processEvent(.showSettingsScreen)
             case .presentBugReport:
-                self.presentBugReportScreen()
+                self.stateMachine.processEvent(.showBugReportScreen)
             case .verifySession:
                 self.stateMachine.processEvent(.showSessionVerificationScreen)
             case .signOut:
@@ -254,7 +260,7 @@ class UserSessionFlowCoordinator: Coordinator {
 
         alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
-            self?.presentBugReportScreen()
+            self?.stateMachine.processEvent(.showBugReportScreen)
         })
 
         navigationRouter.present(alert, animated: true)
@@ -264,10 +270,8 @@ class UserSessionFlowCoordinator: Coordinator {
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
                                                         screenshot: image)
         let coordinator = BugReportCoordinator(parameters: parameters)
-        coordinator.completion = { [weak self, weak coordinator] in
-            guard let self, let coordinator = coordinator else { return }
-            self.navigationRouter.dismissModule(animated: true)
-            self.remove(childCoordinator: coordinator)
+        coordinator.completion = { [weak self] in
+            self?.stateMachine.processEvent(.dismissedBugReportScreen)
         }
 
         add(childCoordinator: coordinator)
@@ -275,19 +279,21 @@ class UserSessionFlowCoordinator: Coordinator {
         let navController = ElementNavigationController(rootViewController: coordinator.toPresentable())
         navController.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                                                  target: self,
-                                                                                 action: #selector(dismissBugReportScreen))
+                                                                                 action: #selector(handleBugReportScreenCancellation))
         navController.isModalInPresentation = true
         navigationRouter.present(navController, animated: true)
     }
     
     @objc
+    private func handleBugReportScreenCancellation() {
+        stateMachine.processEvent(.dismissedBugReportScreen)
+    }
+    
     private func dismissBugReportScreen() {
-        MXLog.debug("dismissBugReportScreen")
-
         guard let bugReportCoordinator = childCoordinators.first(where: { $0 is BugReportCoordinator }) else {
             return
         }
-
+        
         navigationRouter.dismissModule()
         remove(childCoordinator: bugReportCoordinator)
     }
