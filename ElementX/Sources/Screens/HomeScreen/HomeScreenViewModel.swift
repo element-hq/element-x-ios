@@ -138,31 +138,29 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateRooms() async {
-        state.rooms = await Task.detached {
-            var rooms = [HomeScreenRoom]()
-            
-            for summary in self.roomSummaryProvider.roomListPublisher.value {
-                switch summary {
-                case .empty(let id):
-                    rooms.append(HomeScreenRoom.placeholder(id: id))
-                case .filled(let summary):
-                    let avatarImage = await self.userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
-                    
-                    var timestamp: String?
-                    if let lastMessageTimestamp = summary.lastMessageTimestamp {
-                        timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
-                    }
-                    
-                    rooms.append(HomeScreenRoom(id: summary.id,
-                                                name: summary.name,
-                                                hasUnreads: summary.unreadNotificationCount > 0,
-                                                timestamp: timestamp,
-                                                lastMessage: summary.lastMessage,
-                                                avatar: avatarImage))
+        var rooms = [HomeScreenRoom]()
+
+        for summary in roomSummaryProvider.roomListPublisher.value {
+            switch summary {
+            case .empty(let id):
+                rooms.append(HomeScreenRoom.placeholder(id: id))
+            case .filled(let summary):
+                let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
+
+                var timestamp: String?
+                if let lastMessageTimestamp = summary.lastMessageTimestamp {
+                    timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
                 }
+
+                rooms.append(HomeScreenRoom(id: summary.id,
+                                            name: summary.name,
+                                            hasUnreads: summary.unreadNotificationCount > 0,
+                                            timestamp: timestamp,
+                                            lastMessage: summary.lastMessage,
+                                            avatar: avatarImage))
             }
-            
-            return rooms
-        }.value
+        }
+
+        state.rooms = rooms
     }
 }

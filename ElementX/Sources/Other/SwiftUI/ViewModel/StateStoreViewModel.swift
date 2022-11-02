@@ -96,12 +96,14 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
 
     init(initialViewState: State) {
         context = Context(initialViewState: initialViewState)
-        context.viewActions.sink { [weak self] action in
-            guard let self else { return }
-            
-            Task { await self.process(viewAction: action) }
-        }
-        .store(in: &cancellables)
+        context.viewActions
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] action in
+                guard let self else { return }
+
+                Task { await self.process(viewAction: action) }
+            }
+            .store(in: &cancellables)
     }
 
     /// Override to handles incoming `ViewAction`s from the `ViewModel`.
