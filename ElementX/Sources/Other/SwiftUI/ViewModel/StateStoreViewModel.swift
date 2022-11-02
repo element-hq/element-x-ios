@@ -97,7 +97,6 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
     init(initialViewState: State) {
         context = Context(initialViewState: initialViewState)
         context.viewActions
-            .receive(on: DispatchQueue.main)
             .sink { [weak self] action in
                 guard let self else { return }
 

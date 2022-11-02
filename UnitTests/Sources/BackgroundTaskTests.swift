@@ -18,6 +18,7 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 class BackgroundTaskTests: XCTestCase {
     private enum Constants {
         static let bgTaskName = "test"
