@@ -52,6 +52,58 @@ Please see our [pull request guide](https://github.com/vector-im/element-android
 
 New screen flows are currently using MVVM-Coordinator pattern. Please refer to the screen template under [Tools/Scripts/createScreen.sh](Tools/Scripts/createScreen.sh) to create a new screen or a new screen flow.
 
+## Changelog
+
+All changes, even minor ones, need a corresponding changelog / newsfragment
+entry. These are managed by [Towncrier](https://github.com/twisted/towncrier).
+
+To create a changelog entry, make a new file in the `changelog.d` directory
+named in the format of `ElementXiOSIssueNumber.type`. The type can be one of the
+following:
+
+- `feature` for a new feature
+- `change` for updates to an existing feature
+- `bugfix` for bug fix
+- `api` for an api break
+- `i18n` for translations
+- `build` for changes related to build, tools, CI/CD
+- `doc` for updates to the documentation
+- `wip` for anything that isn't ready to ship and will be enabled at a later date
+- `misc` for other changes
+
+This file will become part of our [changelog](CHANGES.md) at the next
+release, so the content of the file should be a short description of your
+change in the same style as the rest of the changelog. The file must only
+contain one line. It can contain Markdown formatting. It should start with the
+area of the change (screen, module, ...) and end with a full stop (.) or an
+exclamation mark (!) for consistency.
+
+Adding credits to the changelog is encouraged, we value your
+contributions and would like to have you shouted out in the release notes!
+
+For example, a fix for an issue #1234 would have its changelog entry in
+`changelog.d/1234.bugfix`, and contain content like:
+
+> Voice Messages: Fix a crash when sending a voice message. Contributed by
+> Jane Matrix.
+
+If there are multiple pull requests involved in a single bugfix/feature/etc,
+then the content for each `changelog.d` file should be the same. Towncrier will
+merge the matching files together into a single changelog entry when we come to
+release.
+
+There are exceptions on the `ElementXiOSIssueNumber.type` entry format. Even if
+it is not encouraged, you can use:
+
+- `pr-[PRNumber].type` for a PR with no related issue
+- `x-nolink-[AnyNumber].type` for a PR with a change entry that will not have a link automatically appended. It must be used for internal project update only. `AnyNumber` should be a value that does not clash with existing files.
+
+To preview the changelog for pending changelog entries, use:
+
+```bash
+$ towncrier build --draft --version 1.2.3
+```
+
 ## Coding style
 
 For Swift coding style we use [SwiftLint](https://github.com/realm/SwiftLint) to check some conventions at compile time (rules are located in the `.swiftlint.yml` file). 

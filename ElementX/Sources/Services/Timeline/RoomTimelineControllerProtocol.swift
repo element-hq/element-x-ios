@@ -20,6 +20,8 @@ import Foundation
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems
     case updatedTimelineItem(_ itemId: String)
+    case startedBackPaginating
+    case finishedBackPaginating
 }
 
 enum RoomTimelineControllerError: Error {

@@ -15,134 +15,167 @@
 //
 
 import Combine
-import Introspect
 import SwiftUI
 
 struct TimelineItemList: View {
-    @State private var collectionViewObserver = ListCollectionViewAdapter()
-    @State private var timelineItems: [RoomTimelineViewProvider] = []
-    @State private var hasPendingChanges = false
     @ObservedObject private var settings = ElementSettings.shared
+    
+    @State private var timelineItems: [RoomTimelineViewProvider] = []
+    @State private var viewFrame: CGRect = .zero
+    @State private var pinnedItem: PinnedItem?
+    @State private var visibleItemIdentifiers: Set<String> = []
+    @State private var topVisiblePublisher = CurrentValueSubject<Bool, Never>(false)
     
     @EnvironmentObject var context: RoomScreenViewModel.Context
     
-    let bottomVisiblePublisher: PassthroughSubject<Bool, Never>
+    let bottomVisiblePublisher: CurrentValueSubject<Bool, Never>
     let scrollToBottomPublisher: PassthroughSubject<Void, Never>
 
-    @State private var viewFrame: CGRect = .zero
-
     var body: some View {
-        List {
-            ProgressView()
-                .frame(maxWidth: .infinity)
-                .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
-                .animation(.elementDefault, value: context.viewState.isBackPaginating)
-                .listRowBackground(Color.clear)
-                .listRowSeparator(.hidden)
-            
-            // timelineItems won't be set for static Xcode Previews until they're run.
-            ForEach(isPreview ? context.viewState.items : timelineItems) { timelineItem in
-                timelineItem
-                    .contextMenu {
-                        context.viewState.contextMenuBuilder?(timelineItem.id)
+        ScrollViewReader { proxy in
+            ReversedScrollView(.vertical) {
+                ProgressView()
+                    .frame(maxWidth: .infinity)
+                    .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
+                    .animation(.elementDefault, value: context.viewState.isBackPaginating)
+                
+                LazyVStack(spacing: 0.0) {
+                    ForEach(isRunningPreviews ? context.viewState.items : timelineItems) { item in
+                        item
+                            .contextMenu {
+                                context.viewState.contextMenuBuilder?(item.id)
+                                    .id(item.id)
+                            }
+                            .opacity(opacityForItem(item))
+                            .padding(settings.timelineStyle.rowInsets)
+                            .onAppear {
+                                context.send(viewAction: .itemAppeared(id: item.id))
+                                visibleItemIdentifiers.insert(item.id)
+                                
+                                if timelineItems.first == item {
+                                    topVisiblePublisher.send(true)
+                                }
+                                
+                                if timelineItems.last == item {
+                                    bottomVisiblePublisher.send(true)
+                                }
+                            }
+                            .onDisappear {
+                                context.send(viewAction: .itemDisappeared(id: item.id))
+                                visibleItemIdentifiers.remove(item.id)
+                                
+                                if timelineItems.first == item {
+                                    topVisiblePublisher.send(false)
+                                }
+                                
+                                if timelineItems.last == item {
+                                    bottomVisiblePublisher.send(false)
+                                }
+                            }
+                            .environment(\.openURL, OpenURLAction { url in
+                                context.send(viewAction: .linkClicked(url: url))
+                                return .systemAction
+                            })
                     }
-                    .opacity(opacityForItem(timelineItem))
-                    .listRowBackground(Color.clear)
-                    .listRowSeparator(.hidden)
-                    .listRowInsets(settings.timelineStyle.listRowInsets)
-                    .onAppear {
-                        context.send(viewAction: .itemAppeared(id: timelineItem.id))
+                }
+            }
+            .onChange(of: pinnedItem) { item in
+                guard let item else {
+                    return
+                }
+                
+                if item.animated {
+                    withAnimation(Animation.elementDefault) {
+                        proxy.scrollTo(item.id, anchor: item.anchor)
                     }
-                    .onDisappear {
-                        context.send(viewAction: .itemDisappeared(id: timelineItem.id))
-                    }
-                    .environment(\.openURL, OpenURLAction { url in
-                        context.send(viewAction: .linkClicked(url: url))
-                        return .systemAction
-                    })
+                } else {
+                    proxy.scrollTo(item.id, anchor: item.anchor)
+                }
+                
+                pinnedItem = nil
             }
         }
-        .listStyle(.plain)
+        .scrollDismissesKeyboard(.immediately)
         .background(ViewFrameReader(frame: $viewFrame))
         .environment(\.timelineWidth, viewFrame.width)
         .timelineStyle(settings.timelineStyle)
-        .environment(\.defaultMinListRowHeight, 0.0)
-        .introspectCollectionView { collectionView in
-            if collectionView == collectionViewObserver.collectionView { return }
-            
-            collectionViewObserver = ListCollectionViewAdapter(collectionView: collectionView,
-                                                               topDetectionOffset: collectionView.bounds.size.height / 3.0,
-                                                               bottomDetectionOffset: 10.0)
-            
-            collectionViewObserver.scrollToBottom()
-            
-            // Check if there are enough items. Otherwise ask for more
-            attemptBackPagination()
-        }
         .onAppear {
-            if timelineItems != context.viewState.items {
-                timelineItems = context.viewState.items
+            requestBackPagination()
+        }
+        // Allow SwiftUI to layout the views properly before checking if the top is visible
+        .onReceive(topVisiblePublisher.collect(.byTime(DispatchQueue.main, 0.5))) { values in
+            if values.last == true {
+                requestBackPagination()
             }
         }
         .onReceive(scrollToBottomPublisher) {
-            collectionViewObserver.scrollToBottom(animated: true)
+            scrollToBottom(animated: true)
         }
-        .onReceive(collectionViewObserver.scrollViewTopVisiblePublisher) { isTopVisible in
-            if !isTopVisible || context.viewState.isBackPaginating {
+        .onChange(of: context.viewState.items.count) { _ in
+            guard !context.viewState.items.isEmpty,
+                  context.viewState.items.count != timelineItems.count else {
                 return
             }
             
-            attemptBackPagination()
-        }
-        .onReceive(collectionViewObserver.scrollViewBottomVisiblePublisher) { isBottomVisible in
-            bottomVisiblePublisher.send(isBottomVisible)
-        }
-        .onChange(of: context.viewState.items) { _ in
-            // If the count hasn't changed then don't observe a pagination
-            guard context.viewState.items.count != timelineItems.count else {
+            // Pin to the bottom if empty
+            if timelineItems.isEmpty {
+                if let lastItem = context.viewState.items.last {
+                    let pinnedItem = PinnedItem(id: lastItem.id, anchor: .bottom, animated: false)
+                    timelineItems = context.viewState.items
+                    self.pinnedItem = pinnedItem
+                }
+                
+                return
+            }
+            
+            // Pin to the new bottom if visible
+            if let currentLastItem = timelineItems.last,
+               visibleItemIdentifiers.contains(currentLastItem.id),
+               let newLastItem = context.viewState.items.last {
+                let pinnedItem = PinnedItem(id: newLastItem.id, anchor: .bottom, animated: false)
                 timelineItems = context.viewState.items
+                self.pinnedItem = pinnedItem
+                
                 return
             }
             
-            // Don't update the list while moving
-            if collectionViewObserver.isDecelerating || collectionViewObserver.isTracking {
-                hasPendingChanges = true
+            // Pin to the old topmost visible
+            if let currentFirstItem = timelineItems.first,
+               visibleItemIdentifiers.contains(currentFirstItem.id) {
+                let pinnedItem = PinnedItem(id: currentFirstItem.id, anchor: .top, animated: false)
+                timelineItems = context.viewState.items
+                self.pinnedItem = pinnedItem
+                
                 return
             }
             
-            collectionViewObserver.saveCurrentOffset()
+            // Otherwise just update the items
             timelineItems = context.viewState.items
         }
-        .onReceive(collectionViewObserver.scrollViewDidRestPublisher) {
-            if hasPendingChanges == false {
+        .background(GeometryReader { geo in
+            Color.clear.preference(key: ViewFramePreferenceKey.self, value: [geo.frame(in: .global)])
+        })
+        .onPreferenceChange(ViewFramePreferenceKey.self) { _ in
+            guard bottomVisiblePublisher.value == true else {
                 return
             }
             
-            collectionViewObserver.saveCurrentOffset()
-            timelineItems = context.viewState.items
-            hasPendingChanges = false
-        }
-        .onChange(of: timelineItems.count) { _ in
-            collectionViewObserver.restoreSavedOffset()
-            
-            // Check if there are enough items. Otherwise ask for more
-            attemptBackPagination()
+            // Pin the timeline to the bottom if was there on the frame change
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                scrollToBottom(animated: true)
+            }
         }
     }
     
-    func scrollToBottom(animated: Bool = false) {
-        collectionViewObserver.scrollToBottom(animated: animated)
+    // MARK: - Private
+    
+    private func scrollToBottom(animated: Bool = false) {
+        if let lastItem = timelineItems.last {
+            pinnedItem = PinnedItem(id: lastItem.id, anchor: .bottom, animated: animated)
+        }
     }
     
-    private func attemptBackPagination() {
-        if context.viewState.isBackPaginating {
-            return
-        }
-        
-        if collectionViewObserver.scrollViewTopVisiblePublisher.value == false {
-            return
-        }
-        
+    private func requestBackPagination() {
         context.send(viewAction: .loadPreviousPage)
     }
     
@@ -154,12 +187,26 @@ struct TimelineItemList: View {
         return selectedItemId == item.id ? 1.0 : 0.5
     }
     
-    private var isPreview: Bool {
+    private var isRunningPreviews: Bool {
         #if DEBUG
         return ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] == "1"
         #else
         return false
         #endif
+    }
+}
+
+private struct PinnedItem: Equatable {
+    let id: String
+    let anchor: UnitPoint
+    let animated: Bool
+}
+
+private struct ViewFramePreferenceKey: PreferenceKey {
+    static var defaultValue = [CGRect]() // Doesn't work with plain CGRects
+    
+    static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {
+        value += nextValue()
     }
 }
 
@@ -176,7 +223,7 @@ struct TimelineItemList_Previews: PreviewProvider {
                                             mediaProvider: MockMediaProvider(),
                                             roomName: nil)
         
-        TimelineItemList(bottomVisiblePublisher: PassthroughSubject(), scrollToBottomPublisher: PassthroughSubject())
+        TimelineItemList(bottomVisiblePublisher: CurrentValueSubject(false), scrollToBottomPublisher: PassthroughSubject())
             .environmentObject(viewModel.context)
     }
 }

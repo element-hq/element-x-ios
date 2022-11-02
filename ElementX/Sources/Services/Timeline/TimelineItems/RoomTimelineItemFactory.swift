@@ -36,7 +36,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     func buildTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
-                              inGroupState: TimelineItemInGroupState) async -> RoomTimelineItemProtocol {
+                              inGroupState: TimelineItemInGroupState) -> RoomTimelineItemProtocol {
         let displayName = roomProxy.displayNameForUserId(eventItemProxy.sender)
         let avatarURL = roomProxy.avatarURLStringForUserId(eventItemProxy.sender)
         let avatarImage = mediaProvider.imageFromURLString(avatarURL, avatarSize: .user(on: .timeline))
@@ -51,18 +51,18 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         switch messageContent.msgtype() {
         case .text(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildTextTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
+            return buildTextTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .image(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildImageTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
+            return buildImageTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .notice(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildNoticeTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
+            return buildNoticeTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .emote(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
-            return await buildEmoteTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
+            return buildEmoteTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .none:
-            return await buildFallbackTimelineItem(eventItemProxy, isOutgoing, inGroupState, displayName, avatarImage)
+            return buildFallbackTimelineItem(eventItemProxy, isOutgoing, inGroupState, displayName, avatarImage)
         }
     }
     
@@ -88,8 +88,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                            _ isOutgoing: Bool,
                                            _ inGroupState: TimelineItemInGroupState,
                                            _ displayName: String?,
-                                           _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
-        let attributedText = await attributedStringBuilder.fromPlain(eventItemProxy.body)
+                                           _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        let attributedText = attributedStringBuilder.fromPlain(eventItemProxy.body)
         let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return TextRoomTimelineItem(id: eventItemProxy.id,
@@ -109,8 +109,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                   _ isOutgoing: Bool,
                                                   _ inGroupState: TimelineItemInGroupState,
                                                   _ displayName: String?,
-                                                  _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
-        let attributedText = await (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
+                                                  _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return TextRoomTimelineItem(id: message.id,
@@ -130,7 +130,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    _ isOutgoing: Bool,
                                                    _ inGroupState: TimelineItemInGroupState,
                                                    _ displayName: String?,
-                                                   _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
+                                                   _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
         var aspectRatio: CGFloat?
         if let width = message.width,
            let height = message.height {
@@ -159,8 +159,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                     _ isOutgoing: Bool,
                                                     _ inGroupState: TimelineItemInGroupState,
                                                     _ displayName: String?,
-                                                    _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
-        let attributedText = await (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
+                                                    _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return NoticeRoomTimelineItem(id: message.id,
@@ -180,8 +180,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    _ isOutgoing: Bool,
                                                    _ inGroupState: TimelineItemInGroupState,
                                                    _ displayName: String?,
-                                                   _ avatarImage: UIImage?) async -> RoomTimelineItemProtocol {
-        let attributedText = await (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
+                                                   _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return EmoteRoomTimelineItem(id: message.id,

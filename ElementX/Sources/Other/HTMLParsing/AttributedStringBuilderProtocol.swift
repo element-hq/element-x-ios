@@ -23,10 +23,8 @@ struct AttributedStringBuilderComponent: Hashable {
 
 protocol AttributedStringBuilderProtocol {
     func fromPlain(_ string: String?) -> AttributedString?
-    func fromPlain(_ string: String?) async -> AttributedString?
     
     func fromHTML(_ htmlString: String?) -> AttributedString?
-    func fromHTML(_ htmlString: String?) async -> AttributedString?
     
     func blockquoteCoalescedComponentsFrom(_ attributedString: AttributedString?) -> [AttributedStringBuilderComponent]?
 }
