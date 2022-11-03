@@ -31,23 +31,17 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     func didReceiveSyncUpdate() { }
 
     func didReceiveAuthError(isSoftLogout: Bool) {
-        Task {
-            await clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
-        }
+        clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
     func didUpdateRestoreToken() {
-        Task {
-            await clientProxy?.didUpdateRestoreToken()
-        }
+        clientProxy?.didUpdateRestoreToken()
     }
     
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
-        Task {
-            await self.clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
-        }
+        clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
     }
 }
 
@@ -59,11 +53,18 @@ class ClientProxy: ClientProxyProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
     private let mediaProxy: MediaProxyProtocol
+    private let clientQueue: DispatchQueue
     
     private var slidingSyncObserverToken: StoppableSpawn?
-    private let slidingSync: SlidingSync
+    private var slidingSync: SlidingSync!
     
-    let roomSummaryProvider: RoomSummaryProviderProtocol
+    var roomSummaryProviderInternal: RoomSummaryProviderProtocol!
+    var roomSummaryProvider: RoomSummaryProviderProtocol {
+        guard let roomSummaryProviderInternal else {
+            fatalError("There is an issue with ClientProxy object initialization")
+        }
+        return roomSummaryProviderInternal
+    }
     
     deinit {
         // These need to be inlined instead of using stopSync()
@@ -76,34 +77,39 @@ class ClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     init(client: ClientProtocol,
-         backgroundTaskService: BackgroundTaskServiceProtocol) {
+         backgroundTaskService: BackgroundTaskServiceProtocol) async {
         self.client = client
         self.backgroundTaskService = backgroundTaskService
-        mediaProxy = MediaProxy(client: client)
-        
-        do {
-            let slidingSyncBuilder = try client.slidingSync().homeserver(url: BuildSettings.slidingSyncProxyBaseURL.absoluteString)
-            
-            let slidingSyncView = try SlidingSyncViewBuilder()
-                .timelineLimit(limit: 10)
-                .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
-                                               RequiredState(key: "m.room.encryption", value: "")])
-                .name(name: "HomeScreenView")
-                .syncMode(mode: .fullSync)
-                .build()
-            
-            slidingSync = try slidingSyncBuilder
-                .addView(v: slidingSyncView)
-                .withCommonExtensions()
-                .build()
-            
-            roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
-                                                      slidingSyncView: slidingSyncView,
-                                                      roomMessageFactory: RoomMessageFactory())
-        } catch {
-            fatalError("Failed configuring sliding sync")
+        clientQueue = .init(label: "ClientProxyQueue",
+                            attributes: .concurrent)
+        mediaProxy = MediaProxy(client: client,
+                                clientQueue: clientQueue)
+
+        await Task.dispatch(on: clientQueue) {
+            do {
+                let slidingSyncBuilder = try client.slidingSync().homeserver(url: BuildSettings.slidingSyncProxyBaseURL.absoluteString)
+
+                let slidingSyncView = try SlidingSyncViewBuilder()
+                    .timelineLimit(limit: 10)
+                    .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
+                                                   RequiredState(key: "m.room.encryption", value: "")])
+                    .name(name: "HomeScreenView")
+                    .syncMode(mode: .fullSync)
+                    .build()
+
+                self.slidingSync = try slidingSyncBuilder
+                    .addView(v: slidingSyncView)
+                    .withCommonExtensions()
+                    .build()
+
+                self.roomSummaryProviderInternal = RoomSummaryProvider(slidingSyncController: self.slidingSync,
+                                                                       slidingSyncView: slidingSyncView,
+                                                                       roomMessageFactory: RoomMessageFactory())
+            } catch {
+                fatalError("Failed configuring sliding sync")
+            }
         }
-        
+
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
     }
     
@@ -158,27 +164,22 @@ class ClientProxy: ClientProxyProtocol {
         slidingSync.setObserver(observer: nil)
     }
     
-    func roomForIdentifier(_ identifier: String) -> RoomProxyProtocol? {
-        do {
-            guard let slidingSyncRoom = try slidingSync.getRoom(roomId: identifier),
-                  let room = slidingSyncRoom.fullRoom() else {
-                MXLog.error("Failed retrieving room with identifier: \(identifier)")
-                return nil
-            }
-            
-            let roomProxy = RoomProxy(slidingSyncRoom: slidingSyncRoom,
-                                      room: room,
-                                      backgroundTaskService: backgroundTaskService)
-            
-            return roomProxy
-        } catch {
-            MXLog.error("Failed retrieving room with identifier: \(identifier)")
+    func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
+        let (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
+            self.roomTupleForIdentifier(identifier)
+        }
+
+        guard let slidingSyncRoom, let room else {
             return nil
         }
+
+        return await RoomProxy(slidingSyncRoom: slidingSyncRoom,
+                               room: room,
+                               backgroundTaskService: backgroundTaskService)
     }
 
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
-        await Task.dispatch(on: .global()) {
+        await Task.dispatch(on: clientQueue) {
             do {
                 let displayName = try self.client.displayName()
                 return .success(displayName)
@@ -189,7 +190,7 @@ class ClientProxy: ClientProxyProtocol {
     }
         
     func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
-        await Task.dispatch(on: .global()) {
+        await Task.dispatch(on: clientQueue) {
             do {
                 let avatarURL = try self.client.avatarUrl()
                 return .success(avatarURL)
@@ -200,15 +201,19 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
-        .failure(.failedRetrievingAccountData)
+        await Task.dispatch(on: clientQueue) {
+            .failure(.failedRetrievingAccountData)
+        }
     }
     
     func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError> {
-        .failure(.failedSettingAccountData)
+        await Task.dispatch(on: clientQueue) {
+            .failure(.failedSettingAccountData)
+        }
     }
-    
+
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        await Task.dispatch(on: .global()) {
+        await Task.dispatch(on: clientQueue) {
             do {
                 let sessionVerificationController = try self.client.getSessionVerificationController()
                 return .success(SessionVerificationControllerProxy(sessionVerificationController: sessionVerificationController))
@@ -219,10 +224,12 @@ class ClientProxy: ClientProxyProtocol {
     }
 
     func logout() async {
-        do {
-            try client.logout()
-        } catch {
-            MXLog.error("Failed logging out with error: \(error)")
+        await Task.dispatch(on: clientQueue) {
+            do {
+                try self.client.logout()
+            } catch {
+                MXLog.error("Failed logging out with error: \(error)")
+            }
         }
     }
 
@@ -253,6 +260,18 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
+
+    private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {
+        do {
+            let slidingSyncRoom = try slidingSync.getRoom(roomId: identifier)
+            let fullRoom = slidingSyncRoom?.fullRoom()
+
+            return (slidingSyncRoom, fullRoom)
+        } catch {
+            MXLog.error("Failed retrieving room with identifier: \(identifier)")
+            return (nil, nil)
+        }
+    }
     
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
         callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))

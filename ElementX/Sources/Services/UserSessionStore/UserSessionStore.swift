@@ -123,7 +123,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.failedSettingUpSession)
         }
         
-        let clientProxy = ClientProxy(client: client, backgroundTaskService: backgroundTaskService)
+        let clientProxy = await ClientProxy(client: client, backgroundTaskService: backgroundTaskService)
         
         return .success(clientProxy)
     }

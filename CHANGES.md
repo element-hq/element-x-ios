@@ -1,3 +1,16 @@
+## Changes in 1.0.6 (2022-11-02)
+
+🙌 Improvements
+
+- Move Rust client operations into a dedicated concurrent queue, make sure not used on main thread. ([#283](https://github.com/vector-im/element-x-ios/pull/283))
+- Rebuilt the timeline scrolling behavior on top of a more SwiftUI centric approach ([#276](https://github.com/vector-im/element-x-ios/issues/276))
+
+🐛 Bugfixes
+
+- Fix state machine crashes when backgrounding the app before the user session is setup ([#277](https://github.com/vector-im/element-x-ios/issues/277))
+- Fixed blockquote and item layout when using the plain timeline ([#279](https://github.com/vector-im/element-x-ios/issues/279))
+
+
 ## Changes in 1.0.5 (2022-10-28)
 
 ✨ Features

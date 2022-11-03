@@ -24,7 +24,7 @@ struct RedactedRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             HStack {
                 Image(systemName: "trash")
-                FormattedBodyText(isOutgoing: timelineItem.isOutgoing, text: timelineItem.text)
+                FormattedBodyText(text: timelineItem.text)
             }
         }
         .id(timelineItem.id)
@@ -44,7 +44,7 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider {
                                                             timestamp: "Later",
                                                             senderId: "Anne"))
         }
-        .padding()
+        .environment(\.timelineWidth, 400)
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> RedactedRoomTimelineItem {

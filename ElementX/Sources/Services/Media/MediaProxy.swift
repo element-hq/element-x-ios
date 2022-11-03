@@ -21,9 +21,12 @@ import UIKit
 
 class MediaProxy: MediaProxyProtocol {
     private let client: ClientProtocol
+    private let clientQueue: DispatchQueue
 
-    init(client: ClientProtocol) {
+    init(client: ClientProtocol,
+         clientQueue: DispatchQueue = .global()) {
         self.client = client
+        self.clientQueue = clientQueue
     }
 
     func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
@@ -31,14 +34,14 @@ class MediaProxy: MediaProxyProtocol {
     }
 
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
-        try await Task.dispatch(on: .global()) {
+        try await Task.dispatch(on: clientQueue) {
             let bytes = try self.client.getMediaContent(source: source.underlyingSource)
             return Data(bytes: bytes, count: bytes.count)
         }
     }
 
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
-        try await Task.dispatch(on: .global()) {
+        try await Task.dispatch(on: clientQueue) {
             let bytes = try self.client.getMediaThumbnail(source: source.underlyingSource, width: UInt64(width), height: UInt64(height))
             return Data(bytes: bytes, count: bytes.count)
         }

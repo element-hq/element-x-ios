@@ -395,8 +395,8 @@ extension AppCoordinator: NotificationManagerDelegate {
         guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
             return
         }
-        let roomProxy = userSession.clientProxy.roomForIdentifier(roomId)
         Task {
+            let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
             _ = await roomProxy?.sendMessage(replyText)
             completionHandler()
         }

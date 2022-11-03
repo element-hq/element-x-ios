@@ -90,7 +90,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                 return
             }
             if itemProxy.requiresMediaProxy {
-                mediaProxy = try await createMediaProxy(credentials)
+                mediaProxy = try createMediaProxy(credentials)
             }
             process(itemProxy: itemProxy,
                     roomId: roomId,
@@ -135,14 +135,14 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
     }
 
-    private func createMediaProxy(_ credentials: KeychainCredentials) async throws -> MediaProxyProtocol {
+    private func createMediaProxy(_ credentials: KeychainCredentials) throws -> MediaProxyProtocol {
         let builder = ClientBuilder()
             .basePath(path: FileManager.default.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
 
         let client = try builder.build()
         try client.restoreLogin(restoreToken: credentials.restoreToken)
-        return await MediaProxy(client: client)
+        return MediaProxy(client: client)
     }
 
     private func fallback() {

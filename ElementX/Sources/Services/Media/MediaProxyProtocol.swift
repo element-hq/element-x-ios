@@ -16,7 +16,6 @@
 
 import Foundation
 
-@MainActor
 protocol MediaProxyProtocol {
     func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy
 

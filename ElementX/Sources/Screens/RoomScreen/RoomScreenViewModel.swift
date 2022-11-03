@@ -58,6 +58,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     }
                     
                     self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
+                case .startedBackPaginating:
+                    self.state.isBackPaginating = true
+                case .finishedBackPaginating:
+                    self.state.isBackPaginating = false
                 }
             }
             .store(in: &cancellables)
@@ -81,11 +85,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
         case .loadPreviousPage:
-            state.isBackPaginating = true
+            guard !state.isBackPaginating else {
+                return
+            }
             
             switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
             default:
-                state.isBackPaginating = false
+                #warning("Treat errors")
             }
         case .itemAppeared(let id):
             await timelineController.processItemAppearance(id)

@@ -80,6 +80,12 @@ class UserSessionFlowCoordinator: Coordinator {
                 self.presentSettingsScreen()
             case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
                 self.dismissSettingsScreen()
+                
+            case (.homeScreen, .feedbackScreen, .feedbackScreen):
+                self.presentFeedbackScreen()
+            case (.feedbackScreen, .dismissedFeedbackScreen, .homeScreen):
+                self.dismissFeedbackScreen()
+                
             case (_, .resignActive, .suspended):
                 self.pause()
             case (_, .becomeActive, _):
@@ -117,13 +123,13 @@ class UserSessionFlowCoordinator: Coordinator {
             guard let self else { return }
             
             switch action {
-            case .presentRoom(let roomIdentifier):
+            case .presentRoomScreen(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
-            case .presentSettings:
+            case .presentSettingsScreen:
                 self.stateMachine.processEvent(.showSettingsScreen)
-            case .presentBugReport:
-                self.presentBugReportScreen()
-            case .verifySession:
+            case .presentFeedbackScreen:
+                self.stateMachine.processEvent(.feedbackScreen)
+            case .presentSessionVerificationScreen:
                 self.stateMachine.processEvent(.showSessionVerificationScreen)
             case .signOut:
                 self.callback?(.signOut)
@@ -141,34 +147,36 @@ class UserSessionFlowCoordinator: Coordinator {
     // MARK: Rooms
 
     private func presentRoomWithIdentifier(_ roomIdentifier: String) {
-        guard let roomProxy = userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
-            MXLog.error("Invalid room identifier: \(roomIdentifier)")
-            return
-        }
-        let userId = userSession.clientProxy.userIdentifier
-        
-        let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
-                                                          mediaProvider: userSession.mediaProvider,
-                                                          roomProxy: roomProxy,
-                                                          attributedStringBuilder: AttributedStringBuilder())
-        
-        let timelineController = RoomTimelineController(userId: userId,
-                                                        roomId: roomIdentifier,
-                                                        timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
-                                                        timelineItemFactory: timelineItemFactory,
-                                                        mediaProvider: userSession.mediaProvider,
-                                                        roomProxy: roomProxy)
+        Task { @MainActor in
+            guard let roomProxy = await userSession.clientProxy.roomForIdentifier(roomIdentifier) else {
+                MXLog.error("Invalid room identifier: \(roomIdentifier)")
+                return
+            }
+            let userId = userSession.clientProxy.userIdentifier
 
-        let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
-                                                         mediaProvider: userSession.mediaProvider,
-                                                         roomName: roomProxy.displayName ?? roomProxy.name,
-                                                         roomAvatarUrl: roomProxy.avatarURL)
-        let coordinator = RoomScreenCoordinator(parameters: parameters)
+            let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
+                                                              mediaProvider: userSession.mediaProvider,
+                                                              roomProxy: roomProxy,
+                                                              attributedStringBuilder: AttributedStringBuilder())
 
-        add(childCoordinator: coordinator)
-        navigationRouter.push(coordinator) { [weak self] in
-            guard let self else { return }
-            self.stateMachine.processEvent(.dismissedRoomScreen)
+            let timelineController = RoomTimelineController(userId: userId,
+                                                            roomId: roomIdentifier,
+                                                            timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
+                                                            timelineItemFactory: timelineItemFactory,
+                                                            mediaProvider: userSession.mediaProvider,
+                                                            roomProxy: roomProxy)
+
+            let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
+                                                             mediaProvider: userSession.mediaProvider,
+                                                             roomName: roomProxy.displayName ?? roomProxy.name,
+                                                             roomAvatarUrl: roomProxy.avatarURL)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+
+            add(childCoordinator: coordinator)
+            navigationRouter.push(coordinator) { [weak self] in
+                guard let self else { return }
+                self.stateMachine.processEvent(.dismissedRoomScreen)
+            }
         }
     }
     
@@ -224,25 +232,23 @@ class UserSessionFlowCoordinator: Coordinator {
     // MARK: Session verification
         
     private func presentSessionVerification() {
-        Task {
-            guard let sessionVerificationController = userSession.sessionVerificationController else {
-                fatalError("The sessionVerificationController should aways be valid at this point")
-            }
-            
-            let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
-            
-            let coordinator = SessionVerificationCoordinator(parameters: parameters)
-            
-            coordinator.callback = { [weak self] in
-                self?.navigationRouter.dismissModule()
-                self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
-            }
-            
-            add(childCoordinator: coordinator)
-            navigationRouter.present(coordinator)
-
-            coordinator.start()
+        guard let sessionVerificationController = userSession.sessionVerificationController else {
+            fatalError("The sessionVerificationController should aways be valid at this point")
         }
+        
+        let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        
+        let coordinator = SessionVerificationCoordinator(parameters: parameters)
+        
+        coordinator.callback = { [weak self] in
+            self?.navigationRouter.dismissModule()
+            self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
+        }
+        
+        add(childCoordinator: coordinator)
+        navigationRouter.present(coordinator)
+        
+        coordinator.start()
     }
     
     private func tearDownDismissedSessionVerificationScreen() {
@@ -262,20 +268,18 @@ class UserSessionFlowCoordinator: Coordinator {
 
         alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
         alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
-            self?.presentBugReportScreen()
+            self?.stateMachine.processEvent(.feedbackScreen)
         })
 
         navigationRouter.present(alert, animated: true)
     }
 
-    private func presentBugReportScreen(for image: UIImage? = nil) {
+    private func presentFeedbackScreen(for image: UIImage? = nil) {
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
                                                         screenshot: image)
         let coordinator = BugReportCoordinator(parameters: parameters)
-        coordinator.completion = { [weak self, weak coordinator] in
-            guard let self, let coordinator = coordinator else { return }
-            self.navigationRouter.dismissModule(animated: true)
-            self.remove(childCoordinator: coordinator)
+        coordinator.completion = { [weak self] in
+            self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
 
         add(childCoordinator: coordinator)
@@ -283,21 +287,23 @@ class UserSessionFlowCoordinator: Coordinator {
         let navController = ElementNavigationController(rootViewController: coordinator.toPresentable())
         navController.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
                                                                                  target: self,
-                                                                                 action: #selector(dismissBugReportScreen))
+                                                                                 action: #selector(handleFeedbackScreenCancellation))
         navController.isModalInPresentation = true
         navigationRouter.present(navController, animated: true)
     }
     
     @objc
-    private func dismissBugReportScreen() {
-        MXLog.debug("dismissBugReportScreen")
-
-        guard let bugReportCoordinator = childCoordinators.first(where: { $0 is BugReportCoordinator }) else {
+    private func handleFeedbackScreenCancellation() {
+        stateMachine.processEvent(.dismissedFeedbackScreen)
+    }
+    
+    private func dismissFeedbackScreen() {
+        guard let coordinator = childCoordinators.first(where: { $0 is BugReportCoordinator }) else {
             return
         }
-
+        
         navigationRouter.dismissModule()
-        remove(childCoordinator: bugReportCoordinator)
+        remove(childCoordinator: coordinator)
     }
 
     // MARK: - Application State

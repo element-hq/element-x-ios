@@ -25,9 +25,9 @@ struct EmoteRoomTimelineView: View {
             HStack(alignment: .top) {
                 Image(systemName: "face.dashed").padding(.top, 1.0)
                 if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, attributedComponents: attributedComponents)
+                    FormattedBodyText(attributedComponents: attributedComponents)
                 } else {
-                    FormattedBodyText(isOutgoing: timelineItem.isOutgoing, text: timelineItem.text)
+                    FormattedBodyText(text: timelineItem.text)
                 }
             }
         }
@@ -39,6 +39,10 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
         body.preferredColorScheme(.dark)
+        body.preferredColorScheme(.light)
+            .timelineStyle(.plain)
+        body.preferredColorScheme(.dark)
+            .timelineStyle(.plain)
     }
     
     @ViewBuilder
@@ -52,6 +56,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
                                                          timestamp: "Later",
                                                          senderId: "Anne"))
         }
+        .environment(\.timelineWidth, 400)
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> EmoteRoomTimelineItem {

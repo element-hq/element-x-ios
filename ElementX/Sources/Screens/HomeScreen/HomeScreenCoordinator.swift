@@ -23,10 +23,10 @@ struct HomeScreenCoordinatorParameters {
 }
 
 enum HomeScreenCoordinatorAction {
-    case presentRoom(roomIdentifier: String)
-    case presentSettings
-    case presentBugReport
-    case verifySession
+    case presentRoomScreen(roomIdentifier: String)
+    case presentSettingsScreen
+    case presentFeedbackScreen
+    case presentSessionVerificationScreen
     case signOut
 }
 
@@ -63,11 +63,11 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
             
             switch action {
             case .selectRoom(let roomIdentifier):
-                self.callback?(.presentRoom(roomIdentifier: roomIdentifier))
+                self.callback?(.presentRoomScreen(roomIdentifier: roomIdentifier))
             case .userMenu(let action):
                 self.processUserMenuAction(action)
             case .verifySession:
-                self.callback?(.verifySession)
+                self.callback?(.presentSessionVerificationScreen)
             }
         }
     }
@@ -87,11 +87,11 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     private func processUserMenuAction(_ action: HomeScreenViewUserMenuAction) {
         switch action {
         case .settings:
-            callback?(.presentSettings)
+            callback?(.presentSettingsScreen)
         case .inviteFriends:
             presentInviteFriends()
         case .feedback:
-            callback?(.presentBugReport)
+            callback?(.presentFeedbackScreen)
         case .signOut:
             callback?(.signOut)
         }

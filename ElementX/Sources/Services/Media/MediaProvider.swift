@@ -55,43 +55,38 @@ struct MediaProvider: MediaProviderProtocol {
             return .success(image)
         }
 
-        let loadImageBgTask = backgroundTaskService?.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
+        let loadImageBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
         defer {
             loadImageBgTask?.stop()
         }
         
         let cacheKey = cacheKeyForURLString(source.url, avatarSize: avatarSize)
-        
-        return await Task.detached { () -> Result<UIImage, MediaProviderError> in
-            if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: cacheKey),
-               let image = cacheResult.image {
-                return .success(image)
-            }
-            
-            do {
-                let imageData = try await Task.detached { () -> Data in
-                    if let avatarSize {
-                        return try await mediaProxy.loadMediaThumbnailForSource(source, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
-                    } else {
-                        return try await mediaProxy.loadMediaContentForSource(source)
-                    }
-                    
-                }.value
-                
-                guard let image = UIImage(data: imageData) else {
-                    MXLog.error("Invalid image data")
-                    return .failure(.invalidImageData)
-                }
-                
-                imageCache.store(image, forKey: cacheKey)
-                
-                return .success(image)
-            } catch {
-                MXLog.error("Failed retrieving image with error: \(error)")
-                return .failure(.failedRetrievingImage)
-            }
+
+        if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: cacheKey),
+           let image = cacheResult.image {
+            return .success(image)
         }
-        .value
+
+        do {
+            let imageData: Data
+            if let avatarSize {
+                imageData = try await mediaProxy.loadMediaThumbnailForSource(source, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
+            } else {
+                imageData = try await mediaProxy.loadMediaContentForSource(source)
+            }
+
+            guard let image = UIImage(data: imageData) else {
+                MXLog.error("Invalid image data")
+                return .failure(.invalidImageData)
+            }
+
+            imageCache.store(image, forKey: cacheKey)
+
+            return .success(image)
+        } catch {
+            MXLog.error("Failed retrieving image with error: \(error)")
+            return .failure(.failedRetrievingImage)
+        }
     }
     
     // MARK: - Private

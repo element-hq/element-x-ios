@@ -16,6 +16,7 @@
 
 import Foundation
 
+@MainActor
 protocol BackgroundTaskServiceProtocol {
     func startBackgroundTask(withName name: String,
                              isReusable: Bool,

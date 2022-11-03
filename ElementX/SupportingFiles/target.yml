@@ -110,7 +110,6 @@ targets:
     - package: DTCoreText
     - package: KeychainAccess
     - package: Kingfisher
-    - package: Introspect
     - package: PostHog
     - package: SwiftyBeaver
     - package: SwiftState
