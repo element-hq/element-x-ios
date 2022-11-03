@@ -26,7 +26,7 @@ extension NotificationItemProxy {
         }
         switch timelineItemProxy {
         case .event(let eventItem):
-            guard eventItem.isMessage || eventItem.isRedacted else {
+            guard eventItem.isMessage else {
                 // To be handled in the future
                 return false
             }
@@ -46,10 +46,42 @@ extension NotificationItemProxy {
         }
     }
 
-    func process(with message: Message,
-                 senderId: String,
-                 roomId: String,
-                 mediaProxy: MediaProxyProtocol?) async throws -> UNMutableNotificationContent {
+    /// Process the receiver item proxy
+    /// - Parameters:
+    ///   - roomId: Room identifier
+    ///   - mediaProxy: Media proxy to process also media. May be passed nil to ignore media operations.
+    /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
+    func process(with roomId: String,
+                 mediaProxy: MediaProxyProtocol?) async throws -> UNMutableNotificationContent? {
+        switch timelineItemProxy {
+        case .event(let eventItem):
+            guard eventItem.isMessage else {
+                // To be handled in the future
+                return nil
+            }
+            guard let message = eventItem.content.asMessage() else {
+                fatalError("Item must be a message")
+            }
+
+            return try await process(message: message,
+                                     senderId: eventItem.sender,
+                                     roomId: roomId,
+                                     mediaProxy: mediaProxy)
+        case .virtual:
+            return nil
+        case .other:
+            return nil
+        }
+    }
+
+    // MARK: - Private
+
+    // MARK: Common
+
+    private func process(message: Message,
+                         senderId: String,
+                         roomId: String,
+                         mediaProxy: MediaProxyProtocol?) async throws -> UNMutableNotificationContent? {
         switch message.msgtype() {
         case .text(content: let content):
             return try await processText(content: content,
@@ -72,11 +104,9 @@ extension NotificationItemProxy {
                                           roomId: roomId,
                                           mediaProxy: mediaProxy)
         case .none:
-            return UNMutableNotificationContent()
+            return nil
         }
     }
-
-    // MARK: - Private
 
     private func processCommon(senderId: String,
                                roomId: String,
@@ -99,6 +129,8 @@ extension NotificationItemProxy {
         return notification
     }
 
+    // MARK: Message Types
+
     private func processText(content: TextMessageContent,
                              senderId: String,
                              roomId: String,
@@ -118,7 +150,7 @@ extension NotificationItemProxy {
         var notification = try await processCommon(senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProxy: mediaProxy)
-        notification.body = content.body
+        notification.body = "📷 " + content.body
 
         notification = try await notification.addImageAttachment(using: mediaProxy,
                                                                  mediaSource: .init(source: content.source))

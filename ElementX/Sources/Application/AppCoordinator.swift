@@ -109,6 +109,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private func setupLogging() {
         let loggerConfiguration = MXLogConfiguration()
+        loggerConfiguration.maxLogFilesCount = 10
         
         #if DEBUG
         // This exposes the full Rust side tracing subscriber filter for more flexibility.

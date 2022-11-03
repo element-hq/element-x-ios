@@ -20,7 +20,7 @@ final class DataProtectionManager {
     /// Detects after reboot, before unlocked state. Does this by trying to write a file to the filesystem (to the Caches directory) and read it back.
     /// - Parameter containerURL: Container url to write the file.
     /// - Returns: true if the state detected
-    static func isDeviceInRebootedAndLockedState(containerURL: URL) -> Bool {
+    static func isDeviceLockedAfterReboot(containerURL: URL) -> Bool {
         let dummyString = ProcessInfo.processInfo.globallyUniqueString
         guard let dummyData = dummyString.data(using: .utf8) else {
             return true

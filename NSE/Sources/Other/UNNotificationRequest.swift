@@ -15,20 +15,18 @@
 //
 
 import Foundation
+import UserNotifications
 
-enum NotificationConstants {
-    enum UserInfoKey {
-        static let roomIdentifier = "room_id"
-        static let eventIdentifier = "event_id"
-        static let unreadCount = "unread_count"
+extension UNNotificationRequest {
+    var roomId: String? {
+        content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String
     }
 
-    enum Category {
-        static let discard = "discard"
-        static let reply = "reply"
+    var eventId: String? {
+        content.userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
     }
 
-    enum Action {
-        static let inlineReply = "inline-reply"
+    var unreadCount: Int? {
+        content.userInfo[NotificationConstants.UserInfoKey.unreadCount] as? Int
     }
 }

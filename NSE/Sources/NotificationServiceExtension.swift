@@ -19,142 +19,144 @@ import MatrixRustSDK
 import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
-    private var service: NotificationServiceProxyProtocol?
-    private var mediaProxy: MediaProxyProtocol?
-    private lazy var keychainController: KeychainControllerProtocol = KeychainController(service: .sessions,
-                                                                                         accessGroup: Bundle.appGroupIdentifier)
-
-    private static var isLoggerInitialized = false
-    var contentHandler: ((UNNotificationContent) -> Void)?
-    var bestAttemptContent: UNMutableNotificationContent?
-
-    /// Memory formatter, uses exact 2 fraction digits and no grouping
-    private static var numberFormatter: NumberFormatter {
-        let formatter = NumberFormatter()
-        formatter.alwaysShowsDecimalSeparator = true
-        formatter.decimalSeparator = "."
-        formatter.groupingSeparator = ""
-        formatter.maximumFractionDigits = 2
-        formatter.minimumFractionDigits = 2
-        return formatter
-    }
+    private lazy var keychainController = KeychainController(service: .sessions,
+                                                             accessGroup: Bundle.appGroupIdentifier)
+    var handler: ((UNNotificationContent) -> Void)?
+    var modifiedContent: UNMutableNotificationContent?
 
     override init() {
-        //  use `en` as fallback language
+        //  Use `en` as fallback language
         Bundle.elementFallbackLanguage = "en"
 
         super.init()
     }
 
-    private var formattedMemoryAvailable: String {
-        let freeBytes = os_proc_available_memory()
-        let freeMB = Double(freeBytes) / 1024 / 1024
-        guard let formattedStr = Self.numberFormatter.string(from: NSNumber(value: freeMB)) else {
-            return ""
-        }
-        return "\(formattedStr) MB"
-    }
-
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        self.contentHandler = contentHandler
-        bestAttemptContent = request.content.mutableCopy() as? UNMutableNotificationContent
+        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: FileManager.default.appGroupContainerURL),
+              let roomId = request.roomId,
+              let eventId = request.eventId,
+              let credentials = keychainController.restoreTokens().first else {
+            // We cannot process this notification, it might be due to one of these:
+            // - Device rebooted and locked
+            // - Not a Matrix notification
+            // - User is not signed in
+            return contentHandler(request.content)
+        }
 
-        print("Available memory: \(formattedMemoryAvailable)")
-
-        guard !DataProtectionManager.isDeviceInRebootedAndLockedState(containerURL: FileManager.default.appGroupContainerURL) else {
-            fallback()
-            return
-        }
-        guard let credentials = keychainController.restoreTokens().first else {
-            // user not logged-in
-            fallback()
-            return
-        }
-        guard let roomId = request.content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String,
-              let eventId = request.content.userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String else {
-            // not a Matrix notification
-            fallback()
-            return
-        }
+        handler = contentHandler
+        modifiedContent = request.content.mutableCopy() as? UNMutableNotificationContent
 
         NSELogger.configure()
 
-        service = NotificationServiceProxy(basePath: FileManager.default.sessionsBaseDirectory.path,
-                                           userId: credentials.userID)
+        NSELogger.logMemory(with: tag)
 
-        Task { @MainActor in
-            guard let itemProxy = try await service?.getNotificationItem(roomId: roomId,
-                                                                         eventId: eventId) else {
-                fallback()
-                return
-            }
-            if itemProxy.requiresMediaProxy {
-                mediaProxy = try createMediaProxy(credentials)
-            }
-            process(itemProxy: itemProxy,
-                    roomId: roomId,
-                    contentHandler: contentHandler)
+        MXLog.debug("\(tag) #########################################")
+        MXLog.debug("\(tag) Payload came: \(request.content.userInfo)")
+
+        Task {
+            try await run(with: credentials,
+                          roomId: roomId,
+                          eventId: eventId)
         }
     }
     
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-        fallback()
+        MXLog.debug("\(tag) serviceExtensionTimeWillExpire")
+        notify()
     }
 
-    private func process(itemProxy: NotificationItemProxy,
-                         roomId: String,
-                         contentHandler: @escaping (UNNotificationContent) -> Void) {
-        switch itemProxy.timelineItemProxy {
-        case .event(let eventItem):
-            guard eventItem.isMessage || eventItem.isRedacted else {
-                // To be handled in the future
-                discard()
-                return
-            }
-            guard let message = eventItem.content.asMessage() else {
-                fatalError("Only handled messages")
-            }
-            Task {
-                do {
-                    let content = try await itemProxy.process(with: message,
-                                                              senderId: eventItem.sender,
-                                                              roomId: roomId,
-                                                              mediaProxy: mediaProxy)
-                    contentHandler(content)
-                } catch {
-                    fallback()
-                }
-            }
-        case .virtual:
-            discard()
-        case .other:
-            discard()
+    private func run(with credentials: KeychainCredentials,
+                     roomId: String,
+                     eventId: String) async throws {
+        MXLog.debug("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
+
+        let service = NotificationServiceProxy(basePath: FileManager.default.sessionsBaseDirectory.path,
+                                               userId: credentials.userID)
+
+        guard let itemProxy = try await service.getNotificationItem(roomId: roomId,
+                                                                    eventId: eventId) else {
+            MXLog.debug("\(tag) got no notification item")
+
+            // Notification should be discarded
+            return discard()
+        }
+
+        // First process without a media proxy.
+        // After this some properties of the notification should be set, like title, subtitle, sound etc.
+        guard let firstContent = try await itemProxy.process(with: roomId,
+                                                             mediaProxy: nil) else {
+            MXLog.debug("\(tag) not even first content")
+
+            // Notification should be discarded
+            return discard()
+        }
+
+        // After the first processing, update the modified content
+        modifiedContent = firstContent
+
+        guard itemProxy.requiresMediaProxy else {
+            MXLog.debug("\(tag) no media needed")
+
+            // We've processed the item and no media operations needed, so no need to go further
+            return notify()
+        }
+
+        MXLog.debug("\(tag) process with media")
+
+        // There is some media to load, process it again
+        if let latestContent = try await itemProxy.process(with: roomId,
+                                                           mediaProxy: try createMediaProxy(with: credentials)) {
+            // Processing finished, hopefully with some media
+            modifiedContent = latestContent
+            return notify()
+        } else {
+            // This is not very likely, as it should discard the notification sooner
+            return discard()
         }
     }
 
-    private func createMediaProxy(_ credentials: KeychainCredentials) throws -> MediaProxyProtocol {
+    private func createMediaProxy(with credentials: KeychainCredentials) throws -> MediaProxyProtocol {
         let builder = ClientBuilder()
             .basePath(path: FileManager.default.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
 
         let client = try builder.build()
         try client.restoreLogin(restoreToken: credentials.restoreToken)
+
+        MXLog.debug("\(tag) creating media proxy")
+
         return MediaProxy(client: client)
     }
 
-    private func fallback() {
-        guard let bestAttemptContent else {
+    private func notify() {
+        MXLog.debug("\(tag) notify")
+
+        guard let modifiedContent else {
+            MXLog.debug("\(tag) notify: no modified content")
             return
         }
-        contentHandler?(bestAttemptContent)
-        contentHandler = nil
+        handler?(modifiedContent)
+        handler = nil
+        self.modifiedContent = nil
     }
 
     private func discard() {
-        contentHandler?(UNMutableNotificationContent())
-        contentHandler = nil
+        MXLog.debug("\(tag) discard")
+
+        handler?(UNMutableNotificationContent())
+        handler = nil
+        modifiedContent = nil
+    }
+
+    private var tag: String {
+        "[NSE][\(Unmanaged.passUnretained(self).toOpaque())][\(Unmanaged.passUnretained(Thread.current).toOpaque())]"
+    }
+
+    deinit {
+        NSELogger.logMemory(with: tag)
+        MXLog.debug("\(tag) deinit")
     }
 }
