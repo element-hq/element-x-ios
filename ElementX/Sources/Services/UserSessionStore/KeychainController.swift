@@ -24,34 +24,51 @@ class KeychainController: KeychainControllerProtocol {
         keychain = Keychain(service: identifier)
     }
  
-    func setRestoreToken(_ restoreToken: String, forUsername username: String) {
+    func setRestorationToken(_ restorationToken: RestorationToken, forUsername username: String) {
         do {
-            try keychain.set(restoreToken, key: username)
+            let tokenData = try JSONEncoder().encode(restorationToken)
+            try keychain.set(tokenData, key: username)
         } catch {
             MXLog.error("Failed storing user restore token with error: \(error)")
         }
     }
     
-    func restoreTokenForUsername(_ username: String) -> String? {
+    func restorationTokenForUsername(_ username: String) -> RestorationToken? {
         do {
-            return try keychain.get(username)
+            guard let tokenData = try keychain.getData(username) else {
+                return nil
+            }
+
+            #warning("Remove this in a couple of releases - sceriu 03.11.2022")
+            // Handle previous restoration token formats
+            // Didn't want users to have to log in again
+            if let legacyRestorationToken = try? JSONDecoder().decode(LegacyRestorationToken.self, from: tokenData) {
+                return .init(session: .init(accessToken: legacyRestorationToken.session.accessToken,
+                                            refreshToken: nil,
+                                            userId: legacyRestorationToken.session.userId,
+                                            deviceId: legacyRestorationToken.session.deviceId,
+                                            homeserverUrl: legacyRestorationToken.homeURL,
+                                            isSoftLogout: legacyRestorationToken.isSoftLogout ?? false))
+            }
+            
+            return try JSONDecoder().decode(RestorationToken.self, from: tokenData)
         } catch {
             MXLog.error("Failed retrieving user restore token")
             return nil
         }
     }
     
-    func restoreTokens() -> [KeychainCredentials] {
+    func restorationTokens() -> [KeychainCredentials] {
         keychain.allKeys().compactMap { username in
-            guard let restoreToken = restoreTokenForUsername(username) else {
+            guard let restorationToken = restorationTokenForUsername(username) else {
                 return nil
             }
             
-            return KeychainCredentials(userID: username, restoreToken: restoreToken)
+            return KeychainCredentials(userID: username, restorationToken: restorationToken)
         }
     }
     
-    func removeRestoreTokenForUsername(_ username: String) {
+    func removeRestorationTokenForUsername(_ username: String) {
         do {
             try keychain.remove(username)
         } catch {
@@ -59,7 +76,7 @@ class KeychainController: KeychainControllerProtocol {
         }
     }
     
-    func removeAllRestoreTokens() {
+    func removeAllRestorationTokens() {
         do {
             try keychain.removeAll()
         } catch {
