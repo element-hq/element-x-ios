@@ -97,7 +97,6 @@ struct TimelineItemList: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .background(ViewFrameReader(frame: $viewFrame))
-        .environment(\.timelineWidth, viewFrame.width)
         .timelineStyle(settings.timelineStyle)
         .onAppear {
             requestBackPagination()
