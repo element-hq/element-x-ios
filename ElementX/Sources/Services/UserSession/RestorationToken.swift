@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct RestorationToken: Codable {
+struct RestorationToken: Codable, Equatable {
     let session: MatrixRustSDK.Session
 }
 
