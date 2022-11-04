@@ -39,9 +39,8 @@ class KeychainController: KeychainControllerProtocol {
                 return nil
             }
 
-            #warning("Remove this in a couple of releases - sceriu 03.11.2022")
-            // Handle previous restoration token formats
-            // Didn't want users to have to log in again
+            // Handle the previous restoration token format as we don't want users to have to log in again
+            // It will automatically be updated to the new version after login
             if let legacyRestorationToken = try? JSONDecoder().decode(LegacyRestorationToken.self, from: tokenData) {
                 return .init(session: .init(accessToken: legacyRestorationToken.session.accessToken,
                                             refreshToken: nil,

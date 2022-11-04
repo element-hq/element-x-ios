@@ -47,6 +47,7 @@ extension MatrixRustSDK.Session: Codable {
     }
 }
 
+#warning("Remove this in a couple of releases - sceriu 03.11.2022")
 struct LegacyRestorationToken: Decodable {
     let isGuest: Bool?
     let isSoftLogout: Bool?
