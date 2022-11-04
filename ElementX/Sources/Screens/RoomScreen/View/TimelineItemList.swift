@@ -99,6 +99,7 @@ struct TimelineItemList: View {
         .background(ViewFrameReader(frame: $viewFrame))
         .timelineStyle(settings.timelineStyle)
         .onAppear {
+            timelineItems = context.viewState.items
             requestBackPagination()
         }
         // Allow SwiftUI to layout the views properly before checking if the top is visible
