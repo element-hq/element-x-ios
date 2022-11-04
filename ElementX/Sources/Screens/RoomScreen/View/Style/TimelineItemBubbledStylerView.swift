@@ -24,10 +24,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     @Environment(\.colorScheme) private var colorScheme
-    @Environment(\.timelineWidth) private var timelineWidth
     @ScaledMetric private var senderNameVerticalPadding = 3
-    private let bubbleWidthPercentIncoming = 0.72 // 281/390
-    private let bubbleWidthPercentOutgoing = 0.68 // 267/390
 
     var body: some View {
         VStack(alignment: alignment, spacing: -12) {
@@ -84,7 +81,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                       alignment: .leading) { key in
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
-                .frame(width: bubbleWidth - 24)
                 .padding(.horizontal, 12)
             }
         }
@@ -105,13 +101,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         
         if shouldAvoidBubbling {
             content()
-                .frame(width: bubbleWidth)
                 .cornerRadius(12, inGroupState: timelineItem.inGroupState)
                 .padding(.top, topPadding)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
-                    .frame(width: bubbleWidth - 24, alignment: .leading)
 
                 if timelineItem.properties.isEdited {
                     Text(ElementL10n.editedSuffix)
@@ -130,12 +124,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var styledContentIncoming: some View {
         if shouldAvoidBubbling {
             content()
-                .frame(width: bubbleWidth)
                 .cornerRadius(12, inGroupState: timelineItem.inGroupState)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
-                    .frame(width: bubbleWidth - 24, alignment: .leading)
 
                 if timelineItem.properties.isEdited {
                     Text(ElementL10n.editedSuffix)
@@ -145,11 +137,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
             .background(Color.element.systemGray6) // Demo time!
-            .cornerRadius(12, inGroupState: timelineItem.inGroupState) // Demo time!
-//            .overlay(
-//                RoundedCornerShape(radius: 18, inGroupState: timelineItem.inGroupState)
-//                    .stroke(Color.element.systemGray5)
-//            )
+            .cornerRadius(12, inGroupState: timelineItem.inGroupState)
         }
     }
 
@@ -159,10 +147,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     private var alignment: HorizontalAlignment {
         timelineItem.isOutgoing ? .trailing : .leading
-    }
-
-    private var bubbleWidth: CGFloat {
-        timelineWidth * (timelineItem.isOutgoing ? bubbleWidthPercentOutgoing : bubbleWidthPercentIncoming)
     }
 }
 
@@ -181,7 +165,6 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
             }
         }
         .timelineStyle(.bubbles)
-        .timelineWidth(390)
         .padding(.horizontal, 8)
         .previewLayout(.sizeThatFits)
     }

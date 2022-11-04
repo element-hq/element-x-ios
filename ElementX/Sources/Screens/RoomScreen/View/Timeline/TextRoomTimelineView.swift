@@ -65,7 +65,6 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                                                         isOutgoing: true,
                                                         senderId: "Anne"))
         }
-        .environment(\.timelineWidth, 400)
     }
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> TextRoomTimelineItem {
