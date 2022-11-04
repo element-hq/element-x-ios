@@ -18,13 +18,13 @@ import Foundation
 
 struct KeychainCredentials {
     let userID: String
-    let restoreToken: String
+    let restorationToken: RestorationToken
 }
 
 protocol KeychainControllerProtocol {
-    func setRestoreToken(_ accessToken: String, forUsername username: String)
-    func restoreTokenForUsername(_ username: String) -> String?
-    func restoreTokens() -> [KeychainCredentials]
-    func removeRestoreTokenForUsername(_ username: String)
-    func removeAllRestoreTokens()
+    func setRestorationToken(_ restorationToken: RestorationToken, forUsername: String)
+    func restorationTokenForUsername(_ username: String) -> RestorationToken?
+    func restorationTokens() -> [KeychainCredentials]
+    func removeRestorationTokenForUsername(_ username: String)
+    func removeAllRestorationTokens()
 }

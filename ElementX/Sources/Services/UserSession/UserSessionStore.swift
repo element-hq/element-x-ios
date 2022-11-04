@@ -23,7 +23,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     /// Whether or not there are sessions in the store.
-    var hasSessions: Bool { !keychainController.restoreTokens().isEmpty }
+    var hasSessions: Bool { !keychainController.restorationTokens().isEmpty }
     
     /// The base directory where all session data is stored.
     private(set) lazy var baseDirectory: URL = {
@@ -49,7 +49,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {
-        let availableCredentials = keychainController.restoreTokens()
+        let availableCredentials = keychainController.restorationTokens()
         
         guard let credentials = availableCredentials.first else {
             return .failure(.missingCredentials)
@@ -65,7 +65,7 @@ class UserSessionStore: UserSessionStoreProtocol {
             MXLog.error("Failed restoring login with error: \(error)")
             
             // On any restoration failure reset the token and restart
-            keychainController.removeAllRestoreTokens()
+            keychainController.removeAllRestorationTokens()
             deleteSessionDirectory(for: credentials.userID)
             
             return .failure(error)
@@ -85,19 +85,19 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
 
-    func refreshRestoreToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError> {
-        guard let accessToken = userSession.clientProxy.restoreToken else {
+    func refreshRestorationToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError> {
+        guard let restorationToken = userSession.clientProxy.restorationToken else {
             return .failure(.failedRefreshingRestoreToken)
         }
 
-        keychainController.setRestoreToken(accessToken, forUsername: userSession.clientProxy.userIdentifier)
+        keychainController.setRestorationToken(restorationToken, forUsername: userSession.clientProxy.userIdentifier)
 
         return .success(())
     }
     
     func logout(userSession: UserSessionProtocol) {
         let userID = userSession.clientProxy.userIdentifier
-        keychainController.removeRestoreTokenForUsername(userID)
+        keychainController.removeRestorationTokenForUsername(userID)
         deleteSessionDirectory(for: userID)
     }
     
@@ -109,12 +109,13 @@ class UserSessionStore: UserSessionStoreProtocol {
         let builder = ClientBuilder()
             .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
+            .homeserverUrl(url: credentials.restorationToken.session.homeserverUrl)
             .userAgent(userAgent: UserAgentBuilder.makeASCIIUserAgent() ?? "unknown")
 
         do {
             let client: Client = try await Task.dispatch(on: .global()) {
                 let client = try builder.build()
-                try client.restoreLogin(restoreToken: credentials.restoreToken)
+                try client.restoreSession(session: credentials.restorationToken.session)
                 return client
             }
             return await setupProxyForClient(client)
@@ -126,10 +127,10 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     private func setupProxyForClient(_ client: Client) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         do {
-            let accessToken = try client.restoreToken()
+            let session = try client.session()
             let userId = try client.userId()
             
-            keychainController.setRestoreToken(accessToken, forUsername: userId)
+            keychainController.setRestorationToken(RestorationToken(session: session), forUsername: userId)
         } catch {
             MXLog.error("Failed setting up user session with error: \(error)")
             return .failure(.failedSettingUpSession)
