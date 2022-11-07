@@ -21,6 +21,7 @@ enum RoomScreenViewModelAction { }
 
 enum TimelineItemContextMenuAction: Identifiable, Hashable {
     case copy
+    case edit
     case quote
     case copyPermalink
     case redact
@@ -32,6 +33,7 @@ enum TimelineItemContextMenuAction: Identifiable, Hashable {
 enum RoomScreenComposerMode: Equatable {
     case `default`
     case reply(id: String, displayName: String)
+    case edit(originalItemId: String)
 }
 
 enum RoomScreenViewAction {
@@ -42,6 +44,7 @@ enum RoomScreenViewAction {
     case sendMessage
     case sendReaction(key: String, eventID: String)
     case cancelReply
+    case cancelEdit
 }
 
 struct RoomScreenViewState: BindableState {

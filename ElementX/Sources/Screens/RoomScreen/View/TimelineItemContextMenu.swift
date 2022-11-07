@@ -28,6 +28,10 @@ public struct TimelineItemContextMenu: View {
                 Button { callback(item) } label: {
                     Label(ElementL10n.actionCopy, systemImage: "doc.on.doc")
                 }
+            case .edit:
+                Button { callback(item) } label: {
+                    Label(ElementL10n.edit, systemImage: "pencil")
+                }
             case .quote:
                 Button { callback(item) } label: {
                     Label(ElementL10n.actionQuote, systemImage: "quote.bubble")
