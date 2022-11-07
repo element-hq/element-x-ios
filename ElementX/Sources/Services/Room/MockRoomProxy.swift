@@ -65,6 +65,10 @@ struct MockRoomProxy: RoomProxyProtocol {
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
+
+    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
+        .failure(.failedSendingMessage)
+    }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         .failure(.failedRedactingEvent)

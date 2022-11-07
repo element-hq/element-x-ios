@@ -119,6 +119,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             break
         }
     }
+
+    func editMessage(_ newMessage: String, of itemId: String) async {
+        switch await timelineProvider.editMessage(newMessage, originalItemId: itemId) {
+        default:
+            break
+        }
+    }
     
     func redact(_ eventID: String) async {
         switch await timelineProvider.redact(eventID) {
