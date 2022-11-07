@@ -97,9 +97,9 @@ struct TimelineItemList: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .background(ViewFrameReader(frame: $viewFrame))
-        .environment(\.timelineWidth, viewFrame.width)
         .timelineStyle(settings.timelineStyle)
         .onAppear {
+            timelineItems = context.viewState.items
             requestBackPagination()
         }
         // Allow SwiftUI to layout the views properly before checking if the top is visible

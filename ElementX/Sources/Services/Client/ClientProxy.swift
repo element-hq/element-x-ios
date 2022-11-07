@@ -139,9 +139,9 @@ class ClientProxy: ClientProxyProtocol {
         client.homeserver()
     }
 
-    var restoreToken: String? {
+    var restorationToken: RestorationToken? {
         do {
-            return try client.restoreToken()
+            return try RestorationToken(session: client.session())
         } catch {
             MXLog.error("Failed retrieving restore token with error: \(error)")
             return nil

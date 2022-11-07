@@ -69,7 +69,7 @@ protocol ClientProxyProtocol: MediaProxyProtocol {
 
     var homeserver: String { get }
 
-    var restoreToken: String? { get }
+    var restorationToken: RestorationToken? { get }
     
     var roomSummaryProvider: RoomSummaryProviderProtocol { get }
     

@@ -26,65 +26,67 @@ class KeychainControllerTests: XCTestCase {
         keychain.removeAllRestoreTokens()
     }
     
-    func testAddRestoreToken() {
+    func testAddRestorationToken() {
         // Given an empty keychain.
-        XCTAssertTrue(keychain.restoreTokens().isEmpty, "The keychain should be empty to begin with.")
+        XCTAssertTrue(keychain.restorationTokens().isEmpty, "The keychain should be empty to begin with.")
         
-        // When adding an restore token.
+        // When adding an restoration token.
         let username = "@test:example.com"
-        let restoreToken = UUID().uuidString
-        keychain.setRestoreToken(restoreToken, forUsername: username)
+        let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+        keychain.setRestorationToken(restorationToken, forUsername: username)
         
-        // Then the restore token should be stored in the keychain.
-        XCTAssertEqual(keychain.restoreTokenForUsername(username), restoreToken, "The retrieved restore token should match the value that was stored.")
+        // Then the restoration token should be stored in the keychain.
+        XCTAssertEqual(keychain.restorationTokenForUsername(username), restorationToken, "The retrieved restoration token should match the value that was stored.")
     }
     
-    func testRemovingRestoreToken() {
-        // Given a keychain with a stored restore token.
+    func testRemovingRestorationToken() {
+        // Given a keychain with a stored restoration token.
         let username = "@test:example.com"
-        let restoreToken = UUID().uuidString
-        keychain.setRestoreToken(restoreToken, forUsername: username)
-        XCTAssertEqual(keychain.restoreTokens().count, 1, "The keychain should have 1 restore token.")
-        XCTAssertEqual(keychain.restoreTokenForUsername(username), restoreToken, "The initial restore token should match the value that was stored.")
+        let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+        keychain.setRestorationToken(restorationToken, forUsername: username)
+        XCTAssertEqual(keychain.restorationTokens().count, 1, "The keychain should have 1 restoration token.")
+        XCTAssertEqual(keychain.restorationTokenForUsername(username), restorationToken, "The initial restoration token should match the value that was stored.")
         
-        // When deleting the restore token.
-        keychain.removeRestoreTokenForUsername(username)
+        // When deleting the restoration token.
+        keychain.removeRestorationTokenForUsername(username)
         
         // Then the keychain should be empty.
-        XCTAssertTrue(keychain.restoreTokens().isEmpty, "The keychain should be empty after deleting the token.")
-        XCTAssertNil(keychain.restoreTokenForUsername(username), "There restore token should not be returned after removal.")
+        XCTAssertTrue(keychain.restorationTokens().isEmpty, "The keychain should be empty after deleting the token.")
+        XCTAssertNil(keychain.restorationTokenForUsername(username), "There restoration token should not be returned after removal.")
     }
     
-    func testRemovingAllRestoreTokens() {
-        // Given a keychain with 5 stored restore tokens.
+    func testRemovingAllRestorationTokens() {
+        // Given a keychain with 5 stored restoration tokens.
         for index in 0..<5 {
-            keychain.setRestoreToken(UUID().uuidString, forUsername: "@test\(index):example.com")
+            let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+            keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
         }
-        XCTAssertEqual(keychain.restoreTokens().count, 5, "The keychain should have 5 restore tokens.")
+        XCTAssertEqual(keychain.restorationTokens().count, 5, "The keychain should have 5 restoration tokens.")
         
-        // When deleting all of the restore tokens.
-        keychain.removeAllRestoreTokens()
+        // When deleting all of the restoration tokens.
+        keychain.removeAllRestorationTokens()
         
         // Then the keychain should be empty.
-        XCTAssertTrue(keychain.restoreTokens().isEmpty, "The keychain should be empty after deleting the token.")
+        XCTAssertTrue(keychain.restorationTokens().isEmpty, "The keychain should be empty after deleting the token.")
     }
     
-    func testRemovingSingleRestoreTokens() {
-        // Given a keychain with 5 stored restore tokens.
+    func testRemovingSingleRestorationTokens() {
+        // Given a keychain with 5 stored restoration tokens.
         for index in 0..<5 {
-            keychain.setRestoreToken(UUID().uuidString, forUsername: "@test\(index):example.com")
+            let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+            keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
         }
-        XCTAssertEqual(keychain.restoreTokens().count, 5, "The keychain should have 5 restore tokens.")
+        XCTAssertEqual(keychain.restorationTokens().count, 5, "The keychain should have 5 restoration tokens.")
         
-        // When deleting one of the restore tokens.
-        keychain.removeRestoreTokenForUsername("@test2:example.com")
+        // When deleting one of the restoration tokens.
+        keychain.removeRestorationTokenForUsername("@test2:example.com")
         
         // Then the other 4 items should remain untouched.
-        XCTAssertEqual(keychain.restoreTokens().count, 4, "The keychain have 4 remaining restore tokens.")
-        XCTAssertNotNil(keychain.restoreTokenForUsername("@test0:example.com"), "The restore token should not have been deleted.")
-        XCTAssertNotNil(keychain.restoreTokenForUsername("@test1:example.com"), "The restore token should not have been deleted.")
-        XCTAssertNil(keychain.restoreTokenForUsername("@test2:example.com"), "The restore token should have been deleted.")
-        XCTAssertNotNil(keychain.restoreTokenForUsername("@test3:example.com"), "The restore token should not have been deleted.")
-        XCTAssertNotNil(keychain.restoreTokenForUsername("@test4:example.com"), "The restore token should not have been deleted.")
+        XCTAssertEqual(keychain.restorationTokens().count, 4, "The keychain have 4 remaining restoration tokens.")
+        XCTAssertNotNil(keychain.restorationTokenForUsername("@test0:example.com"), "The restoration token should not have been deleted.")
+        XCTAssertNotNil(keychain.restorationTokenForUsername("@test1:example.com"), "The restoration token should not have been deleted.")
+        XCTAssertNil(keychain.restorationTokenForUsername("@test2:example.com"), "The restoration token should have been deleted.")
+        XCTAssertNotNil(keychain.restorationTokenForUsername("@test3:example.com"), "The restoration token should not have been deleted.")
+        XCTAssertNotNil(keychain.restorationTokenForUsername("@test4:example.com"), "The restoration token should not have been deleted.")
     }
 }

@@ -320,7 +320,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                     self.stateMachine.processEvent(.remoteSignOut(isSoft: isSoftLogout))
                 case .updateRestoreTokenNeeded:
                     if let userSession = self.userSession {
-                        _ = self.userSessionStore.refreshRestoreToken(for: userSession)
+                        _ = self.userSessionStore.refreshRestorationToken(for: userSession)
                     }
                 default:
                     break

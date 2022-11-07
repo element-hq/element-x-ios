@@ -44,7 +44,6 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider {
                                                             timestamp: "Later",
                                                             senderId: "Anne"))
         }
-        .environment(\.timelineWidth, 400)
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> RedactedRoomTimelineItem {

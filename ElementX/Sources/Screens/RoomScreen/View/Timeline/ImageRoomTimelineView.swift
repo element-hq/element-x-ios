@@ -92,6 +92,5 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       aspectRatio: 0.7,
                                                                       blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }
-        .environment(\.timelineWidth, 400)
     }
 }

@@ -39,12 +39,10 @@ struct HomeScreen: View {
                     }
                 }
             }
-            .animation(.elementDefault, value: context.viewState.visibleRooms)
             .padding(.horizontal)
             .searchable(text: $context.searchQuery)
         }
         .disabled(context.viewState.roomListMode == .skeletons)
-        .animation(.elementDefault, value: context.viewState.roomListMode)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
         .navigationTitle(ElementL10n.allChats)
