@@ -55,6 +55,7 @@
 		19839F3526CE8C35AAF241AD /* ServerSelectionViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BF30D12BA3BD3D3DBB8F /* ServerSelectionViewModelProtocol.swift */; };
 		1A70A2199394B5EC660934A5 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = A678E40E917620059695F067 /* MatrixRustSDK */; };
 		1AE4AEA0FA8DEF52671832E0 /* RoomTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED1D792EB82506A19A72C8DE /* RoomTimelineItemProtocol.swift */; };
+		1CF18DE71D5D23C61BD88852 /* DebugScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9238D3A3A00F45E841FE4EFF /* DebugScreen.swift */; };
 		1E59B77A0B2CE83DCC1B203C /* LoginViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A05707BF550D770168A406DB /* LoginViewModelTests.swift */; };
 		1F3232BD368DF430AB433907 /* DesignKit in Frameworks */ = {isa = PBXBuildFile; productRef = A5A56C4F47C368EBE5C5E870 /* DesignKit */; };
 		1FEC0A4EC6E6DF693C16B32A /* StringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2CEBCB9676FCD1D0F13188DD /* StringTests.swift */; };
@@ -653,6 +654,7 @@
 		8FC803282F9268D49F4ABF14 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		9010EE0CC913D095887EF36E /* OIDCService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OIDCService.swift; sourceTree = "<group>"; };
 		90733775209F4D4D366A268F /* RootRouterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootRouterType.swift; sourceTree = "<group>"; };
+		9238D3A3A00F45E841FE4EFF /* DebugScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugScreen.swift; sourceTree = "<group>"; };
 		92FCD9116ADDE820E4E30F92 /* UIKitBackgroundTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIKitBackgroundTask.swift; sourceTree = "<group>"; };
 		9349F590E35CE514A71E6764 /* LoginHomeserver.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginHomeserver.swift; sourceTree = "<group>"; };
 		938BD1FCD9E6FF3FCFA7AB4C /* zh-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = "zh-CN"; path = "zh-CN.lproj/Localizable.stringsdict"; sourceTree = "<group>"; };
@@ -1410,6 +1412,7 @@
 		79023E5904B155E8E2B8B502 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				9238D3A3A00F45E841FE4EFF /* DebugScreen.swift */,
 				E18CF12478983A5EB390FB26 /* MessageComposer.swift */,
 				BE6C10032A77AE7DC5AA4C50 /* MessageComposerTextField.swift */,
 				422724361B6555364C43281E /* RoomHeaderView.swift */,
@@ -2411,6 +2414,7 @@
 				663E198678778F7426A9B27D /* Collection.swift in Sources */,
 				DCB781BD227CA958809AFADF /* Coordinator.swift in Sources */,
 				C4F69156C31A447FEFF2A47C /* DTHTMLElement+AttributedStringBuilder.swift in Sources */,
+				1CF18DE71D5D23C61BD88852 /* DebugScreen.swift in Sources */,
 				EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */,
 				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
 				06E93B2E3B32740B40F47CC5 /* ElementNavigationController.swift in Sources */,

@@ -126,6 +126,25 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             break
         }
     }
+    
+    // Handle this paralel to the timeline items so we're not forced
+    // to bundle the Rust side objects within them
+    func debugDescriptionFor(_ itemId: String) -> String {
+        var description = "Unknown item"
+        timelineProvider.itemsPublisher.value.forEach { timelineItemProxy in
+            switch timelineItemProxy {
+            case .event(let item):
+                if item.id == itemId {
+                    description = item.debugDescription
+                    return
+                }
+            default:
+                break
+            }
+        }
+        
+        return description
+    }
 
     // MARK: - Private
     

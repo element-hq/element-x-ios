@@ -41,6 +41,7 @@ struct RoomScreen: View {
             }
         }
         .alert(item: $context.alertInfo) { $0.alert }
+        .sheet(item: $context.debugInfo) { DebugScreen(info: $0) }
     }
     
     private func sendMessage() {
