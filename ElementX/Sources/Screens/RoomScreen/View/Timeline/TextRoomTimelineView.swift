@@ -73,6 +73,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                              timestamp: timestamp,
                              inGroupState: .single,
                              isOutgoing: isOutgoing,
+                             isEditable: isOutgoing,
                              senderId: senderId)
     }
 }
