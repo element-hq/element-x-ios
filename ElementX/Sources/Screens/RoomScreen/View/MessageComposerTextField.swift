@@ -80,6 +80,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.returnKeyType = .default
         textView.textContainer.lineFragmentPadding = 0.0
         textView.textContainerInset = .zero
+        textView.keyboardType = .twitter
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
                 
@@ -89,6 +90,17 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
         if textView.text != text {
             textView.text = text
+
+            if text.isEmpty {
+                // text cleared, probably because the written text is sent
+                // reload keyboard type
+                if textView.isFirstResponder {
+                    textView.keyboardType = .default
+                    textView.reloadInputViews()
+                    textView.keyboardType = .twitter
+                    textView.reloadInputViews()
+                }
+            }
         }
         
         UITextViewWrapper.recalculateHeight(view: textView, result: $calculatedHeight, maxHeight: maxHeight)
