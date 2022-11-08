@@ -41,6 +41,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let avatarURL = roomProxy.avatarURLStringForUserId(eventItemProxy.sender)
         let avatarImage = mediaProvider.imageFromURLString(avatarURL, avatarSize: .user(on: .timeline))
         let isOutgoing = eventItemProxy.isOwn
+        
+        if let encryptedMessage = eventItemProxy.content.asUnableToDecrypt() {
+            return buildEncryptedTimelineItem(eventItemProxy, encryptedMessage, isOutgoing, inGroupState, displayName, avatarImage)
+        }
 
         if eventItemProxy.isRedacted {
             return buildRedactedTimelineItem(eventItemProxy, isOutgoing, inGroupState, displayName, avatarImage)
@@ -67,7 +71,37 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     }
     
     // MARK: - Private
-
+    
+    // swiftlint:disable:next function_parameter_count
+    private func buildEncryptedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
+                                            _ encryptedMessage: EncryptedMessage,
+                                            _ isOutgoing: Bool,
+                                            _ inGroupState: TimelineItemInGroupState,
+                                            _ displayName: String?,
+                                            _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        var encryptionType = EncryptedRoomTimelineItem.EncryptionType.unknown
+        switch encryptedMessage {
+        case .megolmV1AesSha2(let sessionId):
+            encryptionType = .megolmV1AesSha2(sessionId: sessionId)
+        case .olmV1Curve25519AesSha2(let senderKey):
+            encryptionType = .olmV1Curve25519AesSha2(senderKey: senderKey)
+        default:
+            break
+        }
+        
+        return EncryptedRoomTimelineItem(id: eventItemProxy.id,
+                                         text: ElementL10n.encryptionInformationDecryptionError,
+                                         encryptionType: encryptionType,
+                                         timestamp: eventItemProxy.originServerTs.formatted(date: .omitted, time: .shortened),
+                                         inGroupState: inGroupState,
+                                         isOutgoing: isOutgoing,
+                                         isEditable: eventItemProxy.isEditable,
+                                         senderId: eventItemProxy.sender,
+                                         senderDisplayName: displayName,
+                                         senderAvatar: avatarImage,
+                                         properties: RoomTimelineItemProperties())
+    }
+    
     private func buildRedactedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                            _ isOutgoing: Bool,
                                            _ inGroupState: TimelineItemInGroupState,

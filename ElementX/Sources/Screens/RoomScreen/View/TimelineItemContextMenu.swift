@@ -16,13 +16,39 @@
 
 import SwiftUI
 
+struct TimelineItemContextMenuActions {
+    let actions: [TimelineItemContextMenuAction]
+    let debugActions: [TimelineItemContextMenuAction] = [.viewSource]
+}
+
+enum TimelineItemContextMenuAction: Identifiable, Hashable {
+    case copy
+    case edit
+    case quote
+    case copyPermalink
+    case redact
+    case reply
+    case viewSource
+    
+    var id: Self { self }
+}
+
 public struct TimelineItemContextMenu: View {
-    let contextMenuActions: [TimelineItemContextMenuAction]
+    let contextMenuActions: TimelineItemContextMenuActions
     let callback: (TimelineItemContextMenuAction) -> Void
     
     @ViewBuilder
     public var body: some View {
-        ForEach(contextMenuActions, id: \.self) { item in
+        viewsForActions(contextMenuActions.actions)
+        Menu {
+            viewsForActions(contextMenuActions.debugActions)
+        } label: {
+            Label("Developer", systemImage: "hammer")
+        }
+    }
+    
+    private func viewsForActions(_ actions: [TimelineItemContextMenuAction]) -> some View {
+        ForEach(actions, id: \.self) { item in
             switch item {
             case .copy:
                 Button { callback(item) } label: {
@@ -47,6 +73,10 @@ public struct TimelineItemContextMenu: View {
             case .redact:
                 Button(role: .destructive) { callback(item) } label: {
                     Label(ElementL10n.messageActionItemRedact, systemImage: "trash")
+                }
+            case .viewSource:
+                Button { callback(item) } label: {
+                    Label(ElementL10n.viewSource, systemImage: "doc.text.below.ecg")
                 }
             }
         }
