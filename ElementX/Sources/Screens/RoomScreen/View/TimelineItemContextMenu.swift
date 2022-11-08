@@ -71,7 +71,7 @@ public struct TimelineItemContextMenu: View {
                 }
             case .viewSource:
                 Button { callback(item) } label: {
-                    Label("View source", systemImage: "doc.text.below.ecg")
+                    Label(ElementL10n.viewSource, systemImage: "doc.text.below.ecg")
                 }
             }
         }
