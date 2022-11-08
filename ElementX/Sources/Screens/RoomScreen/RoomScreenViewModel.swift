@@ -161,10 +161,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func contextMenuActionsForItemId(_ itemId: String) -> [TimelineItemContextMenuAction] {
+    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               timelineItem is EventBasedTimelineItemProtocol else {
-            return []
+            return .init(actions: [])
         }
         
         var actions: [TimelineItemContextMenuAction] = [
@@ -175,7 +175,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.redact)
         }
         
-        return actions
+        return .init(actions: actions)
     }
     
     private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
@@ -202,6 +202,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .reply:
             state.bindings.composerFocused = true
             state.composerMode = .reply(id: item.id, displayName: item.senderDisplayName ?? item.senderId)
+        case .viewSource:
+            let debugDescription = timelineController.debugDescriptionFor(item.id)
+            MXLog.info(debugDescription)
+            state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
         }
         
         switch action {

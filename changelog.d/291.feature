@@ -1,0 +1,1 @@
+Added support for non-decryptable timeline items

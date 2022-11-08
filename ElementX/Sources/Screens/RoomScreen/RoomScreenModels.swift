@@ -19,16 +19,6 @@ import UIKit
 
 enum RoomScreenViewModelAction { }
 
-enum TimelineItemContextMenuAction: Identifiable, Hashable {
-    case copy
-    case quote
-    case copyPermalink
-    case redact
-    case reply
-    
-    var id: Self { self }
-}
-
 enum RoomScreenComposerMode: Equatable {
     case `default`
     case reply(id: String, displayName: String)
@@ -67,6 +57,8 @@ struct RoomScreenViewStateBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
+    
+    var debugInfo: DebugScreen.DebugInfo?
 }
 
 enum RoomScreenErrorType: Hashable {
