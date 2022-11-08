@@ -17,6 +17,12 @@
 import SwiftUI
 
 struct DebugScreen: View {
+    struct DebugInfo: Identifiable {
+        let id = UUID()
+        let title: String
+        var content: String
+    }
+    
     @Environment(\.presentationMode) private var presentationMode
     
     let info: DebugInfo

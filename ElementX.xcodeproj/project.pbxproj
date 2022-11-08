@@ -278,6 +278,7 @@
 		B3357B00F1AA930E54F76609 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EBB5D698CE9A25BB553A2D /* Strings.swift */; };
 		B4AAB3257A83B73F53FB2689 /* StateStoreViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F3DFE5B444F131648066F05 /* StateStoreViewModel.swift */; };
 		B5111BAF5F601C139EBBD8BB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 01C4C7DB37597D7D8379511A /* Assets.xcassets */; };
+		B5903E48CF43259836BF2DBF /* EncryptedRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56C1BCB9E83B09A45387FCA2 /* EncryptedRoomTimelineView.swift */; };
 		B6DA66EFC13A90846B625836 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 91DE43B8815918E590912DDA /* InfoPlist.strings */; };
 		B6DF6B6FA8734B70F9BF261E /* BlurHashDecode.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5272BC4A60B6AD7553BACA1 /* BlurHashDecode.swift */; };
 		B6F92EBE04D4AABF30B9E73A /* AnalyticsPromptModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA8BA82CF99D843FEF680E91 /* AnalyticsPromptModels.swift */; };
@@ -354,6 +355,7 @@
 		F508683B76EF7B23BB2CBD6D /* TimelineItemPlainStylerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94BCC8A9C73C1F838122C645 /* TimelineItemPlainStylerView.swift */; };
 		F56261126E368C831B3DE976 /* NavigationRouterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 752DEC02D93AFF46BC13313A /* NavigationRouterType.swift */; };
 		F656F92A63D3DC1978D79427 /* AnalyticsEvents in Frameworks */ = {isa = PBXBuildFile; productRef = 2A3F7BCCB18C15B30CCA39A9 /* AnalyticsEvents */; };
+		F6E860FF7B18B81DF43B30B8 /* EncryptedRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FA7C8D4EF2B1873C180ED7 /* EncryptedRoomTimelineItem.swift */; };
 		F6F49E37272AD7397CD29A01 /* HomeScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505208F28007C0FEC14E1FF0 /* HomeScreenViewModelTests.swift */; };
 		F7567DD6635434E8C563BF85 /* AnalyticsClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B97591B2D3D4D67553506D /* AnalyticsClientProtocol.swift */; };
 		F75C4222D52B643214D5E623 /* UITestsRootView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81740EEAFDF0D34C5E10D0DF /* UITestsRootView.swift */; };
@@ -559,6 +561,7 @@
 		55BC11560C8A2598964FFA4C /* bs */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = bs; path = bs.lproj/Localizable.strings; sourceTree = "<group>"; };
 		55D7187F6B0C0A651AC3DFFA /* in */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = in; path = in.lproj/Localizable.strings; sourceTree = "<group>"; };
 		55F30E764BED111C81739844 /* SoftLogoutUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoftLogoutUITests.swift; sourceTree = "<group>"; };
+		56C1BCB9E83B09A45387FCA2 /* EncryptedRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedRoomTimelineView.swift; sourceTree = "<group>"; };
 		56F01DD1BBD4450E18115916 /* LabelledActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LabelledActivityIndicatorView.swift; sourceTree = "<group>"; };
 		5773C86AF04AEF26515AD00C /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		5872785B9C7934940146BFBA /* MXLogger.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MXLogger.h; sourceTree = "<group>"; };
@@ -721,6 +724,7 @@
 		B1183B55FF4B01022DA721CB /* en-GB */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "en-GB"; path = "en-GB.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		B1D1532B5D9FB0C8461A1453 /* UserIndicatorDismissal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserIndicatorDismissal.swift; sourceTree = "<group>"; };
 		B3069ADED46D063202FE7698 /* SessionVerificationViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationViewModelProtocol.swift; sourceTree = "<group>"; };
+		B3FA7C8D4EF2B1873C180ED7 /* EncryptedRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedRoomTimelineItem.swift; sourceTree = "<group>"; };
 		B4173A48FD8542CD4AD3645C /* NavigationRouter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationRouter.swift; sourceTree = "<group>"; };
 		B43AF03660F5FD4FFFA7F1CE /* TimelineItemContextMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimelineItemContextMenu.swift; sourceTree = "<group>"; };
 		B4C18FAAD59AE7F1462D817E /* SessionVerificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SessionVerificationViewModel.swift; sourceTree = "<group>"; };
@@ -1377,6 +1381,7 @@
 			isa = PBXGroup;
 			children = (
 				F77C060C2ACC4CB7336A29E7 /* EmoteRoomTimelineItem.swift */,
+				B3FA7C8D4EF2B1873C180ED7 /* EncryptedRoomTimelineItem.swift */,
 				1A63815AD6A5C306453342F2 /* ImageRoomTimelineItem.swift */,
 				4F49CDE349C490D617332770 /* NoticeRoomTimelineItem.swift */,
 				9B577F829C693B8DFB7014FD /* RedactedRoomTimelineItem.swift */,
@@ -1684,6 +1689,7 @@
 			isa = PBXGroup;
 			children = (
 				471EB7D96AFEA8D787659686 /* EmoteRoomTimelineView.swift */,
+				56C1BCB9E83B09A45387FCA2 /* EncryptedRoomTimelineView.swift */,
 				F73FF1A33198F5FAE9D34B1F /* FormattedBodyText.swift */,
 				D0A45283CF1DB96E583BECA6 /* ImageRoomTimelineView.swift */,
 				B5B243E7818E5E9F6A4EDC7A /* NoticeRoomTimelineView.swift */,
@@ -2423,6 +2429,8 @@
 				7C1A7B594B2F8143F0DD0005 /* ElementXAttributeScope.swift in Sources */,
 				6647430A45B4A8E692909A8F /* EmoteRoomTimelineItem.swift in Sources */,
 				68AC3C84E2B438036B174E30 /* EmoteRoomTimelineView.swift in Sources */,
+				F6E860FF7B18B81DF43B30B8 /* EncryptedRoomTimelineItem.swift in Sources */,
+				B5903E48CF43259836BF2DBF /* EncryptedRoomTimelineView.swift in Sources */,
 				02D8DF8EB7537EB4E9019DDB /* EventBasedTimelineItemProtocol.swift in Sources */,
 				FD4706DC752744A0C91ED6FE /* FileManager.swift in Sources */,
 				A0A0D2A9564BDA3FDE2E360F /* FormattedBodyText.swift in Sources */,

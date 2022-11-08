@@ -24,6 +24,7 @@ enum RoomTimelineViewProvider: Identifiable, Equatable {
     case emote(EmoteRoomTimelineItem)
     case notice(NoticeRoomTimelineItem)
     case redacted(RedactedRoomTimelineItem)
+    case encrypted(EncryptedRoomTimelineItem)
     
     var id: String {
         switch self {
@@ -38,6 +39,8 @@ enum RoomTimelineViewProvider: Identifiable, Equatable {
         case .notice(let item):
             return item.id
         case .redacted(let item):
+            return item.id
+        case .encrypted(let item):
             return item.id
         }
     }
@@ -58,6 +61,8 @@ extension RoomTimelineViewProvider: View {
             NoticeRoomTimelineView(timelineItem: item)
         case .redacted(let item):
             RedactedRoomTimelineView(timelineItem: item)
+        case .encrypted(let item):
+            EncryptedRoomTimelineView(timelineItem: item)
         }
     }
 }

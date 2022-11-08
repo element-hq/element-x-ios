@@ -174,8 +174,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             
             switch itemProxy {
             case .event(let eventItem):
-                guard eventItem.isMessage || eventItem.isRedacted else { break } // To be handled in the future
-
                 newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
                                                                                  inGroupState: inGroupState))
             default:

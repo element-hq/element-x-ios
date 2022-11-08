@@ -110,6 +110,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func redact(_ eventID: String) async { }
     
     func debugDescriptionFor(_ itemId: String) -> String {
-        return "Mock debug description"
+        "Mock debug description"
     }
 }

@@ -58,16 +58,10 @@ struct RoomScreenViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
     
-    var debugInfo: DebugInfo?
+    var debugInfo: DebugScreen.DebugInfo?
 }
 
 enum RoomScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
-}
-
-struct DebugInfo: Identifiable {
-    let id = UUID()
-    let title: String
-    var content: String
 }

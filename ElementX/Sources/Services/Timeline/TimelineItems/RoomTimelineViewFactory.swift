@@ -31,6 +31,8 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .emote(item)
         case let item as RedactedRoomTimelineItem:
             return .redacted(item)
+        case let item as EncryptedRoomTimelineItem:
+            return .encrypted(item)
         default:
             fatalError("Unknown timeline item")
         }
