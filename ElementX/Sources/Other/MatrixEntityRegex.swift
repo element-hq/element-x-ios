@@ -49,7 +49,7 @@ enum MatrixEntityRegex: String {
     // swiftlint:enable force_try
     
     static func isMatrixHomeserver(_ homeserver: String) -> Bool {
-        guard let match = userIdentifierRegex.firstMatch(in: homeserver, range: .init(location: 0, length: homeserver.count)) else {
+        guard let match = homeserverRegex.firstMatch(in: homeserver, range: .init(location: 0, length: homeserver.count)) else {
             return false
         }
         
