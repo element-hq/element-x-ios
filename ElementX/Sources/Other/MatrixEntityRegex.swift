@@ -35,7 +35,7 @@ enum MatrixEntityRegex: String {
         case .roomId:
             return "![A-Z0-9]+:" + MatrixEntityRegex.homeserver.rawValue
         case .eventId:
-            return "\\$[A-Z0-9-_.]+"
+            return "\\$[a-z0-9_\\-\\/]+(:[a-z0-9]+\\.[a-z0-9]+)?"
         }
     }
     

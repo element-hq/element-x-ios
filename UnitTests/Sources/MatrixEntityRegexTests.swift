@@ -46,8 +46,22 @@ class MatrixEntityRegexTests: XCTestCase {
     }
 
     func testEventId() {
-        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$shlXuTEUoMpcJqwqsDjIu33PY9bZny6US5EnX8mkMjc"))
-        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$8dDBOeRGpH3I-Mup6ypy2HA4MgkadFGG2h0R_pK_ebs"))
-        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$8dDBOeRGpH3I-Mup6ypy2HA4MgkadFGG2h0R_pK_ebs?"))
+        // room version 1
+        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8:example.com"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8:example."))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8:"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$h29iv0s8?"))
+
+        // room version 3
+        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk."))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk:"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$acR1l0raoZnm60CBwAVgqbZqoO/mYU81xysh1u7XcJk?"))
+
+        // room version 4
+        XCTAssertTrue(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg."))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg:"))
+        XCTAssertFalse(MatrixEntityRegex.isMatrixEventIdentifier("$Rqnc-F-dvnEYJTyHq_iKxU2bZ1CI92-kuZq3a5lr5Zg?"))
     }
 }
