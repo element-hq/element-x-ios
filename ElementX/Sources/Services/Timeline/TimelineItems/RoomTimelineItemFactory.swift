@@ -59,6 +59,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .image(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
             return buildImageTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
+        case .video(let content):
+            let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
+            return buildVideoTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .notice(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
             return buildNoticeTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
@@ -180,6 +183,37 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      senderAvatar: avatarImage,
                                      source: message.source,
                                      image: mediaProvider.imageFromSource(message.source),
+                                     width: message.width,
+                                     height: message.height,
+                                     aspectRatio: aspectRatio,
+                                     blurhash: message.blurhash,
+                                     properties: RoomTimelineItemProperties(isEdited: message.isEdited,
+                                                                            reactions: aggregateReactions(message.reactions)))
+    }
+
+    private func buildVideoTimelineItemFromMessage(_ message: MessageTimelineItem<VideoMessageContent>,
+                                                   _ isOutgoing: Bool,
+                                                   _ inGroupState: TimelineItemInGroupState,
+                                                   _ displayName: String?,
+                                                   _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        var aspectRatio: CGFloat?
+        if let width = message.width,
+           let height = message.height {
+            aspectRatio = width / height
+        }
+        
+        return VideoRoomTimelineItem(id: message.id,
+                                     text: message.body,
+                                     timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
+                                     inGroupState: inGroupState,
+                                     isOutgoing: isOutgoing,
+                                     senderId: message.sender,
+                                     senderDisplayName: displayName,
+                                     senderAvatar: avatarImage,
+                                     duration: message.duration,
+                                     source: message.source,
+                                     thumbnailSource: message.thumbnailSource,
+                                     image: mediaProvider.imageFromSource(message.thumbnailSource),
                                      width: message.width,
                                      height: message.height,
                                      aspectRatio: aspectRatio,

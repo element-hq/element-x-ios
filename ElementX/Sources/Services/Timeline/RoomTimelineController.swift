@@ -98,7 +98,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            await loadImageForTimelineItem(item)
+            await loadImageForImageTimelineItem(item)
+        case let item as VideoRoomTimelineItem:
+            await loadImageForVideoTimelineItem(item)
         default:
             break
         }
@@ -235,7 +237,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         return .middle
     }
     
-    private func loadImageForTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
+    private func loadImageForImageTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
         if timelineItem.image != nil {
             return
         }
@@ -251,6 +253,30 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
             
+            item.image = image
+            timelineItems[index] = item
+            callbacks.send(.updatedTimelineItem(timelineItem.id))
+        case .failure:
+            break
+        }
+    }
+
+    private func loadImageForVideoTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
+        if timelineItem.image != nil {
+            return
+        }
+
+        guard let source = timelineItem.thumbnailSource else {
+            return
+        }
+
+        switch await mediaProvider.loadImageFromSource(source) {
+        case .success(let image):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? ImageRoomTimelineItem else {
+                return
+            }
+
             item.image = image
             timelineItems[index] = item
             callbacks.send(.updatedTimelineItem(timelineItem.id))

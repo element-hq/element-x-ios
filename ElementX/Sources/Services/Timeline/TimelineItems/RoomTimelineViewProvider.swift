@@ -21,6 +21,7 @@ enum RoomTimelineViewProvider: Identifiable, Equatable {
     case text(TextRoomTimelineItem)
     case separator(SeparatorRoomTimelineItem)
     case image(ImageRoomTimelineItem)
+    case video(VideoRoomTimelineItem)
     case emote(EmoteRoomTimelineItem)
     case notice(NoticeRoomTimelineItem)
     case redacted(RedactedRoomTimelineItem)
@@ -33,6 +34,8 @@ enum RoomTimelineViewProvider: Identifiable, Equatable {
         case .separator(let item):
             return item.id
         case .image(let item):
+            return item.id
+        case .video(let item):
             return item.id
         case .emote(let item):
             return item.id
@@ -55,6 +58,8 @@ extension RoomTimelineViewProvider: View {
             SeparatorRoomTimelineView(timelineItem: item)
         case .image(let item):
             ImageRoomTimelineView(timelineItem: item)
+        case .video(let item):
+            VideoRoomTimelineView(timelineItem: item)
         case .emote(let item):
             EmoteRoomTimelineView(timelineItem: item)
         case .notice(let item):

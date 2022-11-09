@@ -142,7 +142,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 
     private var shouldAvoidBubbling: Bool {
-        timelineItem is ImageRoomTimelineItem
+        timelineItem is ImageRoomTimelineItem || timelineItem is VideoRoomTimelineItem
     }
     
     private var alignment: HorizontalAlignment {
