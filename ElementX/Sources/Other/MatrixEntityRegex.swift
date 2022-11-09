@@ -35,7 +35,7 @@ enum MatrixEntityRegex: String {
         case .roomId:
             return "![A-Z0-9]+:" + MatrixEntityRegex.homeserver.rawValue
         case .eventId:
-            return "\\$[A-Z0-9\\/+]+"
+            return "\\$[a-z0-9_\\-\\/]+(:[a-z0-9]+\\.[a-z0-9]+)?"
         }
     }
     
@@ -49,7 +49,7 @@ enum MatrixEntityRegex: String {
     // swiftlint:enable force_try
     
     static func isMatrixHomeserver(_ homeserver: String) -> Bool {
-        guard let match = userIdentifierRegex.firstMatch(in: homeserver, range: .init(location: 0, length: homeserver.count)) else {
+        guard let match = homeserverRegex.firstMatch(in: homeserver, range: .init(location: 0, length: homeserver.count)) else {
             return false
         }
         
