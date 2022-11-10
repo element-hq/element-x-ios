@@ -280,7 +280,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch await mediaProvider.loadImageFromSource(source) {
         case .success(let image):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? ImageRoomTimelineItem else {
+                  var item = timelineItems[index] as? VideoRoomTimelineItem else {
                 return
             }
 
