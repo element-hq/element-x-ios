@@ -22,6 +22,7 @@ enum RoomScreenViewModelAction { }
 enum RoomScreenComposerMode: Equatable {
     case `default`
     case reply(id: String, displayName: String)
+    case edit(originalItemId: String)
 }
 
 enum RoomScreenViewAction {
@@ -32,6 +33,7 @@ enum RoomScreenViewAction {
     case sendMessage
     case sendReaction(key: String, eventID: String)
     case cancelReply
+    case cancelEdit
 }
 
 struct RoomScreenViewState: BindableState {

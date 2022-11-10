@@ -188,6 +188,24 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
+
+    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        defer {
+            sendMessageBgTask?.stop()
+        }
+
+        let transactionId = genTransactionId()
+
+        return await Task.dispatch(on: .global()) {
+            do {
+                try self.room.edit(newMsg: newMessage, originalEventId: originalEventId, txnId: transactionId)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingMessage)
+            }
+        }
+    }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         let transactionID = genTransactionId()

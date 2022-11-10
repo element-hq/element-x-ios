@@ -31,6 +31,8 @@ struct RoomScreen: View {
                 sendMessage()
             } replyCancellationAction: {
                 context.send(viewAction: .cancelReply)
+            } editCancellationAction: {
+                context.send(viewAction: .cancelEdit)
             }
             .padding()
         }

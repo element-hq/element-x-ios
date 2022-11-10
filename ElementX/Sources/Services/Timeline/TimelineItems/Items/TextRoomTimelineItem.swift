@@ -24,6 +24,7 @@ struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equat
     let timestamp: String
     let inGroupState: TimelineItemInGroupState
     let isOutgoing: Bool
+    let isEditable: Bool
     
     let senderId: String
     var senderDisplayName: String?

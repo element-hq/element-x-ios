@@ -30,6 +30,10 @@ struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
     func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError> {
         .failure(.failedSendingMessage)
     }
+
+    func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError> {
+        .failure(.failedSendingMessage)
+    }
     
     func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError> {
         .failure(.failedRedactingItem)

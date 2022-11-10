@@ -45,6 +45,10 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
     var isEdited: Bool {
         item.content().asMessage()?.isEdited() == true
     }
+
+    var isEditable: Bool {
+        item.isEditable()
+    }
     
     var inReplyTo: String? {
         item.content().asMessage()?.inReplyTo()

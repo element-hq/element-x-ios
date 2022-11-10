@@ -52,6 +52,7 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
     var shouldShowSenderDetails: Bool { get }
     var inGroupState: TimelineItemInGroupState { get }
     var isOutgoing: Bool { get }
+    var isEditable: Bool { get }
     
     var senderId: String { get }
     var senderDisplayName: String? { get set }

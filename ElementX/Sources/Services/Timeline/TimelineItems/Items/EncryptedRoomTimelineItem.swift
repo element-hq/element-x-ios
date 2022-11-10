@@ -29,6 +29,7 @@ struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, 
     let timestamp: String
     let inGroupState: TimelineItemInGroupState
     let isOutgoing: Bool
+    let isEditable: Bool
     
     let senderId: String
     var senderDisplayName: String?

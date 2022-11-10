@@ -121,6 +121,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             break
         }
     }
+
+    func editMessage(_ newMessage: String, of itemId: String) async {
+        switch await timelineProvider.editMessage(newMessage, originalItemId: itemId) {
+        default:
+            break
+        }
+    }
     
     func redact(_ eventID: String) async {
         switch await timelineProvider.redact(eventID) {
@@ -273,7 +280,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch await mediaProvider.loadImageFromSource(source) {
         case .success(let image):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? ImageRoomTimelineItem else {
+                  var item = timelineItems[index] as? VideoRoomTimelineItem else {
                 return
             }
 

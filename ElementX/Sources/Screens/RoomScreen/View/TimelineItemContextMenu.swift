@@ -23,6 +23,7 @@ struct TimelineItemContextMenuActions {
 
 enum TimelineItemContextMenuAction: Identifiable, Hashable {
     case copy
+    case edit
     case quote
     case copyPermalink
     case redact
@@ -30,6 +31,15 @@ enum TimelineItemContextMenuAction: Identifiable, Hashable {
     case viewSource
     
     var id: Self { self }
+
+    var switchToDefaultComposer: Bool {
+        switch self {
+        case .reply, .edit:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
 public struct TimelineItemContextMenu: View {
@@ -52,6 +62,10 @@ public struct TimelineItemContextMenu: View {
             case .copy:
                 Button { callback(item) } label: {
                     Label(ElementL10n.actionCopy, systemImage: "doc.on.doc")
+                }
+            case .edit:
+                Button { callback(item) } label: {
+                    Label(ElementL10n.edit, systemImage: "pencil")
                 }
             case .quote:
                 Button { callback(item) } label: {

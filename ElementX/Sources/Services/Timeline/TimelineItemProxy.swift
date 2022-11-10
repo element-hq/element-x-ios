@@ -78,6 +78,10 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     var isOwn: Bool {
         item.isOwn()
     }
+
+    var isEditable: Bool {
+        item.isEditable()
+    }
     
     var sender: String {
         item.sender()

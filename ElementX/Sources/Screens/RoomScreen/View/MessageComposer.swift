@@ -24,15 +24,14 @@ struct MessageComposer: View {
     
     let sendAction: () -> Void
     let replyCancellationAction: () -> Void
+    let editCancellationAction: () -> Void
     
     var body: some View {
         let rect = RoundedRectangle(cornerRadius: borderRadius)
         VStack(alignment: .leading, spacing: 4.0) {
-            if case let .reply(_, displayName) = type {
-                MessageComposerReplyHeader(displayName: displayName, action: replyCancellationAction)
-            }
+            header
             HStack(alignment: .center) {
-                MessageComposerTextField(placeholder: "Send a message",
+                MessageComposerTextField(placeholder: ElementL10n.roomMessagePlaceholder,
                                          text: $text,
                                          focused: $focused,
                                          maxHeight: 300)
@@ -60,12 +59,24 @@ struct MessageComposer: View {
         .clipShape(rect)
         .animation(.elementDefault, value: type)
     }
+
+    @ViewBuilder
+    private var header: some View {
+        switch type {
+        case .reply(_, let displayName):
+            MessageComposerReplyHeader(displayName: displayName, action: replyCancellationAction)
+        case .edit:
+            MessageComposerEditHeader(action: editCancellationAction)
+        case .default:
+            EmptyView()
+        }
+    }
     
     private var borderRadius: CGFloat {
         switch type {
         case .default:
             return 28.0
-        case .reply:
+        case .reply, .edit:
             return 12.0
         }
     }
@@ -78,6 +89,28 @@ private struct MessageComposerReplyHeader: View {
     var body: some View {
         HStack(alignment: .center) {
             Label(ElementL10n.roomTimelineReplyingTo(displayName), systemImage: "arrow.uturn.left")
+                .font(.element.caption2)
+                .foregroundColor(.element.secondaryContent)
+                .lineLimit(1)
+            Spacer()
+            Button {
+                action()
+            } label: {
+                Image(systemName: "x.circle")
+                    .font(.element.callout)
+                    .foregroundColor(.element.secondaryContent)
+                    .padding(4.0)
+            }
+        }
+    }
+}
+
+private struct MessageComposerEditHeader: View {
+    let action: () -> Void
+
+    var body: some View {
+        HStack(alignment: .center) {
+            Label(ElementL10n.roomTimelineEditing, systemImage: "pencil")
                 .font(.element.caption2)
                 .foregroundColor(.element.secondaryContent)
                 .lineLimit(1)
@@ -108,7 +141,8 @@ struct MessageComposer_Previews: PreviewProvider {
                             sendingDisabled: true,
                             type: .default,
                             sendAction: { },
-                            replyCancellationAction: { })
+                            replyCancellationAction: { },
+                            editCancellationAction: { })
             
             MessageComposer(text: .constant("Some message"),
                             focused: .constant(false),
@@ -116,7 +150,16 @@ struct MessageComposer_Previews: PreviewProvider {
                             type: .reply(id: UUID().uuidString,
                                          displayName: "John Doe"),
                             sendAction: { },
-                            replyCancellationAction: { })
+                            replyCancellationAction: { },
+                            editCancellationAction: { })
+
+            MessageComposer(text: .constant("Some message"),
+                            focused: .constant(false),
+                            sendingDisabled: false,
+                            type: .edit(originalItemId: UUID().uuidString),
+                            sendAction: { },
+                            replyCancellationAction: { },
+                            editCancellationAction: { })
         }
         .tint(.element.accent)
     }
