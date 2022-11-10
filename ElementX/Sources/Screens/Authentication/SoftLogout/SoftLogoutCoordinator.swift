@@ -40,55 +40,40 @@ enum SoftLogoutCoordinatorResult: CustomStringConvertible {
     }
 }
 
-final class SoftLogoutCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class SoftLogoutCoordinator: CoordinatorProtocol {
     private let parameters: SoftLogoutCoordinatorParameters
-    private let softLogoutHostingController: UIViewController
-    private var softLogoutViewModel: SoftLogoutViewModelProtocol
+    private var viewModel: SoftLogoutViewModelProtocol
+    private let hostingController: UIViewController
     /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
     private let oidcUserAgent: OIDExternalUserAgentIOS?
-    
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
+//    
+//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var loadingIndicator: UserIndicator?
     private var successIndicator: UserIndicator?
     
     /// The wizard used to handle the registration flow.
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
-    
-    // MARK: Public
 
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: (@MainActor (SoftLogoutCoordinatorResult) -> Void)?
-    
-    // MARK: - Setup
     
     @MainActor init(parameters: SoftLogoutCoordinatorParameters) {
         self.parameters = parameters
 
         let homeserver = parameters.authenticationService.homeserver
         
-        let viewModel = SoftLogoutViewModel(credentials: parameters.credentials,
-                                            homeserver: homeserver,
-                                            keyBackupNeeded: parameters.keyBackupNeeded)
-        softLogoutViewModel = viewModel
-
-        let view = SoftLogoutScreen(context: viewModel.context)
-        softLogoutHostingController = UIHostingController(rootView: view)
+        viewModel = SoftLogoutViewModel(credentials: parameters.credentials,
+                                        homeserver: homeserver,
+                                        keyBackupNeeded: parameters.keyBackupNeeded)
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: softLogoutHostingController)
-        oidcUserAgent = OIDExternalUserAgentIOS(presenting: softLogoutHostingController)
+//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: softLogoutHostingController)
+        hostingController = UIHostingController(rootView: SoftLogoutScreen(context: viewModel.context))
+        oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("[SoftLogoutCoordinator] did start.")
-
-        softLogoutViewModel.callback = { [weak self] result in
+        viewModel.callback = { [weak self] result in
             guard let self else { return }
             MXLog.debug("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(result).")
 
@@ -105,31 +90,31 @@ final class SoftLogoutCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController {
-        softLogoutHostingController
-    }
-
     func stop() {
         stopLoading()
+    }
+    
+    func toPresentable() -> AnyView {
+        AnyView(SoftLogoutScreen(context: viewModel.context))
     }
     
     // MARK: - Private
     
     /// Show an activity indicator whilst loading.
     @MainActor private func startLoading() {
-        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+//        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
     }
     
     /// Hide the currently displayed activity indicator.
     @MainActor private func stopLoading() {
-        loadingIndicator = nil
+//        loadingIndicator = nil
     }
 
     /// Shows the forgot password screen.
     @MainActor private func showForgotPasswordScreen() {
         MXLog.debug("[SoftLogoutCoordinator] showForgotPasswordScreen")
 
-        softLogoutViewModel.displayError(.alert("Not implemented."))
+        viewModel.displayError(.alert("Not implemented."))
     }
 
     /// Login with the supplied username and password.
@@ -177,11 +162,11 @@ final class SoftLogoutCoordinator: Coordinator, Presentable {
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
         case .invalidCredentials:
-            softLogoutViewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
+            viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
         case .accountDeactivated:
-            softLogoutViewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+            viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
         default:
-            softLogoutViewModel.displayError(.alert(ElementL10n.unknownError))
+            viewModel.displayError(.alert(ElementL10n.unknownError))
         }
     }
 }

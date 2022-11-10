@@ -14,6 +14,21 @@
 // limitations under the License.
 //
 
-import UIKit
+import SwiftUI
 
-class SplashViewController: UIViewController { }
+@MainActor
+protocol CoordinatorProtocol {
+    func start()
+    func stop()
+    func toPresentable() -> AnyView
+}
+
+extension CoordinatorProtocol {
+    func start() { }
+
+    func stop() { }
+
+    func toPresentable() -> AnyView {
+        AnyView(Text("View not configured"))
+    }
+}

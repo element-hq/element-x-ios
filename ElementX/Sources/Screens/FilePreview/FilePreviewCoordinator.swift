@@ -25,42 +25,22 @@ enum FilePreviewCoordinatorAction {
     case cancel
 }
 
-final class FilePreviewCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class FilePreviewCoordinator: CoordinatorProtocol {
     private let parameters: FilePreviewCoordinatorParameters
-    private let filePreviewHostingController: UIViewController
-    private var filePreviewViewModel: FilePreviewViewModelProtocol
-    
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
-    
-    // MARK: Public
+    private var viewModel: FilePreviewViewModelProtocol
 
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: ((FilePreviewCoordinatorAction) -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: FilePreviewCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = FilePreviewViewModel(fileURL: parameters.fileURL, title: parameters.title)
-        let view = FilePreviewScreen(context: viewModel.context)
-        filePreviewViewModel = viewModel
-        filePreviewHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: filePreviewHostingController)
+        viewModel = FilePreviewViewModel(fileURL: parameters.fileURL, title: parameters.title)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-        filePreviewViewModel.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("FilePreviewViewModel did complete with result: \(action).")
             switch action {
@@ -70,26 +50,7 @@ final class FilePreviewCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController {
-        filePreviewHostingController
-    }
-
-    func stop() {
-        stopLoading()
-    }
-    
-    // MARK: - Private
-    
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        activityIndicator = nil
+    func toPresentable() -> AnyView {
+        AnyView(FilePreviewScreen(context: viewModel.context))
     }
 }

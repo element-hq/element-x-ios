@@ -14,26 +14,44 @@
 // limitations under the License.
 //
 
-import UIKit
+import SwiftUI
 
 @main
-class AppDelegate: UIResponder, UIApplicationDelegate {
-    private lazy var appCoordinator: Coordinator = Tests.isRunningUITests ? UITestsAppCoordinator() : AppCoordinator()
+struct Application: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
+    private let navigationController: NavigationController
+    private let applicationCoordinator: CoordinatorProtocol
+        
+    init() {
+        navigationController = NavigationController()
+        
+        if Tests.isRunningUITests {
+            applicationCoordinator = UITestsAppCoordinator(navigationController: navigationController)
+        } else {
+            applicationCoordinator = AppCoordinator(navigationController: navigationController)
+        }
+        
+        navigationController.setRootCoordinator(applicationCoordinator)
+    }
 
+    var body: some Scene {
+        WindowGroup {
+            if Tests.isRunningUnitTests {
+                EmptyView()
+            } else {
+                navigationController
+                    .toPresentable()
+                    .tint(.element.accent)
+            }
+        }
+    }
+}
+
+class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         //  use `en` as fallback language
         Bundle.elementFallbackLanguage = "en"
 
-        return true
-    }
-    
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        if Tests.isRunningUnitTests {
-            return true
-        }
-        
-        appCoordinator.start()
-        
         return true
     }
 }

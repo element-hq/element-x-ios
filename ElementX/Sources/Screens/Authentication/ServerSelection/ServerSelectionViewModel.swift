@@ -28,13 +28,13 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)?
 
     // MARK: - Setup
-
-    init(homeserverAddress: String, hasModalPresentation: Bool) {
+    
+    init(homeserverAddress: String, isModallyPresented: Bool) {
         let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress)
         super.init(initialViewState: ServerSelectionViewState(bindings: bindings,
-                                                              hasModalPresentation: hasModalPresentation))
+                                                              isModallyPresented: isModallyPresented))
     }
-
+    
     // MARK: - Public
 
     override func process(viewAction: ServerSelectionViewAction) async {

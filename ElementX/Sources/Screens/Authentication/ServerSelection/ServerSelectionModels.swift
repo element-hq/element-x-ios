@@ -33,7 +33,7 @@ struct ServerSelectionViewState: BindableState {
     /// An error message to be shown in the text field footer.
     var footerErrorMessage: String?
     /// Whether the screen is presented modally or within a navigation stack.
-    var hasModalPresentation: Bool
+    var isModallyPresented: Bool
     
     /// The message to show in the text field footer.
     var footerMessage: String {
@@ -42,7 +42,7 @@ struct ServerSelectionViewState: BindableState {
     
     /// The title shown on the confirm button.
     var buttonTitle: String {
-        hasModalPresentation ? ElementL10n.actionConfirm : ElementL10n.actionNext
+        isModallyPresented ? ElementL10n.actionConfirm : ElementL10n.actionNext
     }
     
     /// The text field is showing an error.

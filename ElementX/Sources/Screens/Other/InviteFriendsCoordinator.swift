@@ -14,11 +14,19 @@
 // limitations under the License.
 //
 
-import UIKit
+import SwiftUI
 
-class ElementNavigationController: UINavigationController {
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        navigationBar.topItem?.backButtonDisplayMode = .minimal
+struct InviteFriendsCoordinator: CoordinatorProtocol {
+    let userId: String
+    
+    func toPresentable() -> AnyView {
+        guard let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userId).absoluteString else {
+            return AnyView(EmptyView())
+        }
+        let shareText = ElementL10n.inviteFriendsText(ElementInfoPlist.cfBundleDisplayName, permalink)
+        
+        return AnyView(UIActivityViewControllerWrapper(activityItems: [shareText])
+            .presentationDetents([.medium])
+            .ignoresSafeArea())
     }
 }

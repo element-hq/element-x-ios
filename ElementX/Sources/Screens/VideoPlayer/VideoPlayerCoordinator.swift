@@ -25,45 +25,30 @@ enum VideoPlayerCoordinatorAction {
     case cancel
 }
 
-final class VideoPlayerCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class VideoPlayerCoordinator: CoordinatorProtocol {
     private let parameters: VideoPlayerCoordinatorParameters
-    private let videoPlayerHostingController: UIViewController
-    private var videoPlayerViewModel: VideoPlayerViewModelProtocol
+    private var viewModel: VideoPlayerViewModelProtocol
     
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
+    #warning("FIXME INDICATORS")
+//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var activityIndicator: UserIndicator?
     
-    // MARK: Public
-
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: ((VideoPlayerCoordinatorAction) -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: VideoPlayerCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
-        let view = VideoPlayerScreen(context: viewModel.context)
-        videoPlayerViewModel = viewModel
-        videoPlayerHostingController = UIHostingController(rootView: view)
+        viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: videoPlayerHostingController)
+        //indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: videoPlayerHostingController)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-
         configureAudioSession(.sharedInstance())
 
-        videoPlayerViewModel.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("VideoPlayerViewModel did complete with result: \(action).")
             switch action {
@@ -73,8 +58,8 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController {
-        videoPlayerHostingController
+    func toPresentable() -> AnyView {
+        AnyView(VideoPlayerScreen(context: viewModel.context))
     }
 
     func stop() {
@@ -99,11 +84,11 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
     ///   - label: The label to show on the indicator.
     ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
     private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
+//        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        activityIndicator = nil
+//        activityIndicator = nil
     }
 }

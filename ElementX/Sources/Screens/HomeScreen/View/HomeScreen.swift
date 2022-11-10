@@ -45,6 +45,7 @@ struct HomeScreen: View {
         .disabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .ignoresSafeArea(.all, edges: .bottom)
+        .alert(item: $context.alertInfo) { $0.alert }
         .navigationTitle(ElementL10n.allChats)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {

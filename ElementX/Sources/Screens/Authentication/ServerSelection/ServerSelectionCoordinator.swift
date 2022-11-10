@@ -20,7 +20,7 @@ struct ServerSelectionCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
     /// Whether the screen is presented modally or within a navigation stack.
-    let hasModalPresentation: Bool
+    let isModallyPresented: Bool
 }
 
 enum ServerSelectionCoordinatorAction {
@@ -28,45 +28,29 @@ enum ServerSelectionCoordinatorAction {
     case dismiss
 }
 
-final class ServerSelectionCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class ServerSelectionCoordinator: CoordinatorProtocol {
     private let parameters: ServerSelectionCoordinatorParameters
-    private let serverSelectionHostingController: UIViewController
-    private var serverSelectionViewModel: ServerSelectionViewModelProtocol
+    private var viewModel: ServerSelectionViewModelProtocol
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var loadingIndicator: UserIndicator?
-    
-    // MARK: Public
+//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
+//    private var loadingIndicator: UserIndicator?
 
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: (@MainActor (ServerSelectionCoordinatorAction) -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: ServerSelectionCoordinatorParameters) {
         self.parameters = parameters
+
+        viewModel = ServerSelectionViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
+                                             isModallyPresented: parameters.isModallyPresented)
         
-        let viewModel = ServerSelectionViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
-                                                 hasModalPresentation: parameters.hasModalPresentation)
-        let view = ServerSelectionScreen(context: viewModel.context)
-        serverSelectionViewModel = viewModel
-        serverSelectionHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: serverSelectionHostingController)
+//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: serverSelectionHostingController)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-        
-        serverSelectionViewModel.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("ServerSelectionViewModel did callback with action: \(action).")
             
@@ -79,12 +63,12 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController {
-        serverSelectionHostingController
-    }
-
     func stop() {
         stopLoading()
+    }
+    
+    func toPresentable() -> AnyView {
+        AnyView(ServerSelectionScreen(context: viewModel.context))
     }
     
     // MARK: - Private
@@ -94,12 +78,12 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     ///   - label: The label to show on the indicator.
     ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
     private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
+//        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        loadingIndicator = nil
+//        loadingIndicator = nil
     }
     
     /// Updates the login flow using the supplied homeserver address, or shows an error when this isn't possible.
@@ -122,9 +106,9 @@ final class ServerSelectionCoordinator: Coordinator, Presentable {
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
         case .invalidServer, .invalidHomeserverAddress:
-            serverSelectionViewModel.displayError(.footerMessage(ElementL10n.loginErrorHomeserverNotFound))
+            viewModel.displayError(.footerMessage(ElementL10n.loginErrorHomeserverNotFound))
         default:
-            serverSelectionViewModel.displayError(.footerMessage(ElementL10n.unknownError))
+            viewModel.displayError(.footerMessage(ElementL10n.unknownError))
         }
     }
 }

@@ -91,7 +91,7 @@ struct ServerSelectionScreen: View {
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            if context.viewState.hasModalPresentation {
+            if context.viewState.isModallyPresented {
                 Button { context.send(viewAction: .dismiss) } label: {
                     Text(ElementL10n.actionCancel)
                 }

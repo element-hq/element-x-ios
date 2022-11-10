@@ -111,6 +111,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
+    func presentAlert(_ alertInfo: AlertInfo<UUID>) {
+        state.bindings.alertInfo = alertInfo
+    }
+    
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {

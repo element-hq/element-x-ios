@@ -21,7 +21,7 @@ struct LoginCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
     /// The navigation router used to present the server selection screen.
-    let navigationRouter: NavigationRouterType
+    let navigationController: NavigationController
 }
 
 enum LoginCoordinatorAction {
@@ -29,14 +29,10 @@ enum LoginCoordinatorAction {
     case signedIn(UserSessionProtocol)
 }
 
-final class LoginCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class LoginCoordinator: CoordinatorProtocol {
     private let parameters: LoginCoordinatorParameters
-    private let loginHostingController: UIViewController
-    private var loginViewModel: LoginViewModelProtocol
+    private var viewModel: LoginViewModelProtocol
+    private let hostingController: UIViewController
     /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
     private let oidcUserAgent: OIDExternalUserAgentIOS?
     
@@ -47,14 +43,10 @@ final class LoginCoordinator: Coordinator, Presentable {
     }
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
-    private var navigationRouter: NavigationRouterType { parameters.navigationRouter }
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
-    
-    // MARK: Public
+    private var navigationController: NavigationController { parameters.navigationController }
+//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
+//    private var activityIndicator: UserIndicator?
 
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: (@MainActor (LoginCoordinatorAction) -> Void)?
     
     // MARK: - Setup
@@ -62,22 +54,17 @@ final class LoginCoordinator: Coordinator, Presentable {
     init(parameters: LoginCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = LoginViewModel(homeserver: parameters.authenticationService.homeserver)
-        loginViewModel = viewModel
+        viewModel = LoginViewModel(homeserver: parameters.authenticationService.homeserver)
         
-        let view = LoginScreen(context: viewModel.context)
-        loginHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: loginHostingController)
-        oidcUserAgent = OIDExternalUserAgentIOS(presenting: loginHostingController)
+//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: loginHostingController)
+        hostingController = UIHostingController(rootView: LoginScreen(context: viewModel.context))
+        oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)
     }
     
     // MARK: - Public
 
     func start() {
-        MXLog.debug("Did start.")
-        
-        loginViewModel.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("LoginViewModel did callback with result: \(action).")
             
@@ -95,51 +82,51 @@ final class LoginCoordinator: Coordinator, Presentable {
             }
         }
     }
-    
-    func toPresentable() -> UIViewController {
-        loginHostingController
-    }
 
     func stop() {
         stopLoading()
+    }
+    
+    func toPresentable() -> AnyView {
+        AnyView(LoginScreen(context: viewModel.context))
     }
     
     // MARK: - Private
     
     /// Show a blocking activity indicator whilst saving.
     private func startLoading(isInteractionBlocking: Bool) {
-        activityIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: isInteractionBlocking))
+//        activityIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: isInteractionBlocking))
         
         if !isInteractionBlocking {
-            loginViewModel.update(isLoading: true)
+            viewModel.update(isLoading: true)
         }
     }
     
     /// Show a non-blocking indicator that an operation was successful.
     private func indicateSuccess() {
-        activityIndicator = indicatorPresenter.present(.success(label: ElementL10n.dialogTitleSuccess))
+//        activityIndicator = indicatorPresenter.present(.success(label: ElementL10n.dialogTitleSuccess))
     }
     
     /// Show a non-blocking indicator that an operation failed.
     private func indicateFailure() {
-        activityIndicator = indicatorPresenter.present(.error(label: ElementL10n.dialogTitleError))
+//        activityIndicator = indicatorPresenter.present(.error(label: ElementL10n.dialogTitleError))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        loginViewModel.update(isLoading: false)
-        activityIndicator = nil
+        viewModel.update(isLoading: false)
+//        activityIndicator = nil
     }
     
     /// Processes an error to either update the flow or display it to the user.
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
         case .invalidCredentials:
-            loginViewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
+            viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
         case .accountDeactivated:
-            loginViewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+            viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
         default:
-            loginViewModel.displayError(.alert(ElementL10n.unknownError))
+            viewModel.displayError(.alert(ElementL10n.unknownError))
         }
     }
     
@@ -204,44 +191,39 @@ final class LoginCoordinator: Coordinator, Presentable {
     
     /// Updates the view model with a different homeserver.
     private func updateViewModel() {
-        loginViewModel.update(homeserver: authenticationService.homeserver)
+        viewModel.update(homeserver: authenticationService.homeserver)
         indicateSuccess()
     }
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        MXLog.debug("PresentServerSelectionScreen")
+        let serverSelectionNavigationController = NavigationController()
+        
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              hasModalPresentation: true)
+                                                              isModallyPresented: true)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] action in
             guard let self, let coordinator = coordinator else { return }
             self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
         }
         
-        coordinator.start()
-        add(childCoordinator: coordinator)
-        
-        let modalRouter = NavigationRouter(navigationController: ElementNavigationController())
-        modalRouter.setRootModule(coordinator)
-        
-        navigationRouter.present(modalRouter, animated: true)
+        serverSelectionNavigationController.setRootCoordinator(coordinator)
+
+        navigationController.presentSheet(serverSelectionNavigationController)
     }
     
     /// Handles the result from the server selection modal, dismissing it after updating the view.
     private func serverSelectionCoordinator(_ coordinator: ServerSelectionCoordinator,
                                             didCompleteWith action: ServerSelectionCoordinatorAction) {
-        navigationRouter.dismissModule(animated: true) { [weak self] in
-            if action == .updated {
-                self?.updateViewModel()
-            }
-
-            self?.remove(childCoordinator: coordinator)
+        if action == .updated {
+            updateViewModel()
         }
+        
+        navigationController.dismissSheet()
     }
 
     /// Shows the forgot password screen.
     private func showForgotPasswordScreen() {
-        loginViewModel.displayError(.alert("Not implemented."))
+        viewModel.displayError(.alert("Not implemented."))
     }
 }

@@ -77,6 +77,8 @@ struct HomeScreenViewState: BindableState {
 
 struct HomeScreenViewStateBindings {
     var searchQuery = ""
+    
+    var alertInfo: AlertInfo<UUID>?
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {

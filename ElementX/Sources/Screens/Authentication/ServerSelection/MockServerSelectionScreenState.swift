@@ -27,18 +27,18 @@ enum MockServerSelectionScreenState: CaseIterable {
         switch self {
         case .matrix:
             return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
-                                            hasModalPresentation: true)
+                                            isModallyPresented: true)
         case .emptyAddress:
             return ServerSelectionViewModel(homeserverAddress: "",
-                                            hasModalPresentation: true)
+                                            isModallyPresented: true)
         case .invalidAddress:
             let viewModel = ServerSelectionViewModel(homeserverAddress: "thisisbad",
-                                                     hasModalPresentation: true)
+                                                     isModallyPresented: true)
             viewModel.displayError(.footerMessage(ElementL10n.unknownError))
             return viewModel
         case .nonModal:
             return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",
-                                            hasModalPresentation: false)
+                                            isModallyPresented: false)
         }
     }
 }

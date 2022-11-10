@@ -14,21 +14,15 @@
 // limitations under the License.
 //
 
-import Foundation
+import SwiftUI
 
-/// Structure used to pass modules to routers with pop completion blocks.
-struct NavigationModule {
-    /// Actual presentable of the module
-    let presentable: Presentable
+struct UIActivityViewControllerWrapper: UIViewControllerRepresentable {
+    var activityItems: [Any]
+    var applicationActivities: [UIActivity]?
     
-    /// Block to be called when the module is popped
-    let popCompletion: (() -> Void)?
-}
-
-// MARK: - CustomStringConvertible
-
-extension NavigationModule: CustomStringConvertible {
-    var description: String {
-        "NavigationModule: \(presentable), pop completion: \(String(describing: popCompletion))"
+    func makeUIViewController(context: UIViewControllerRepresentableContext<UIActivityViewControllerWrapper>) -> UIActivityViewController {
+        return UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
     }
+    
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<UIActivityViewControllerWrapper>) { }
 }
