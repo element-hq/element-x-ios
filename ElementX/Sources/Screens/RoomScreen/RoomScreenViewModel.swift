@@ -220,10 +220,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
         }
         
-        switch action {
-        case .reply, .edit:
-            break
-        default:
+        if action.switchToDefaultComposer {
             state.composerMode = .default
         }
     }

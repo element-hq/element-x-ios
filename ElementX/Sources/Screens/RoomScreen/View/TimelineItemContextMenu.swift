@@ -31,6 +31,15 @@ enum TimelineItemContextMenuAction: Identifiable, Hashable {
     case viewSource
     
     var id: Self { self }
+
+    var switchToDefaultComposer: Bool {
+        switch self {
+        case .reply, .edit:
+            return false
+        default:
+            return true
+        }
+    }
 }
 
 public struct TimelineItemContextMenu: View {
