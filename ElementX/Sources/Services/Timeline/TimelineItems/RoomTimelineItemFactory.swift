@@ -212,6 +212,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
                                      inGroupState: inGroupState,
                                      isOutgoing: isOutgoing,
+                                     isEditable: message.isEditable,
                                      senderId: message.sender,
                                      senderDisplayName: displayName,
                                      senderAvatar: avatarImage,
