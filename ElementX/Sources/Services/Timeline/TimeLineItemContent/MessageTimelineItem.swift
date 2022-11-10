@@ -109,3 +109,35 @@ extension MessageTimelineItem where Content == MatrixRustSDK.ImageMessageContent
         content.info?.blurhash
     }
 }
+
+extension MatrixRustSDK.VideoMessageContent: MessageContentProtocol { }
+
+/// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.image`.
+extension MessageTimelineItem where Content == MatrixRustSDK.VideoMessageContent {
+    var source: MediaSource {
+        MediaSource(source: content.source)
+    }
+
+    var thumbnailSource: MediaSource? {
+        guard let src = content.info?.thumbnailSource else {
+            return nil
+        }
+        return MediaSource(source: src)
+    }
+
+    var duration: UInt64 {
+        content.info?.duration ?? 0
+    }
+
+    var width: CGFloat? {
+        content.info?.width.map(CGFloat.init)
+    }
+
+    var height: CGFloat? {
+        content.info?.height.map(CGFloat.init)
+    }
+
+    var blurhash: String? {
+        content.info?.blurhash
+    }
+}
