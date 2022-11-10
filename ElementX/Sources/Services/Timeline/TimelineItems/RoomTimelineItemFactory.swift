@@ -59,6 +59,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .image(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
             return buildImageTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
+        case .video:
+            fatalError("Handled in a separate PR")
         case .notice(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
             return buildNoticeTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
