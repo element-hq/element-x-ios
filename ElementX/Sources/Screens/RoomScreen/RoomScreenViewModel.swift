@@ -125,6 +125,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch action {
         case .displayMedia(let mediaURL):
             callback?(.displayMedia(mediaURL: mediaURL))
+        case .displayFile(let fileURL, let title):
+            callback?(.displayFile(fileURL: fileURL, title: title))
         case .none:
             break
         }

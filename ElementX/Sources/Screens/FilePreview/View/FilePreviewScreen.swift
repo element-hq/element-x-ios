@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
+import QuickLook
 import SwiftUI
 import UIKit
-import QuickLook
 
 struct FilePreviewScreen: View {
     // MARK: Private

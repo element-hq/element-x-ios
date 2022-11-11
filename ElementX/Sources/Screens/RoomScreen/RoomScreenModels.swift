@@ -19,6 +19,7 @@ import UIKit
 
 enum RoomScreenViewModelAction {
     case displayMedia(mediaURL: URL)
+    case displayFile(fileURL: URL, title: String?)
 }
 
 enum RoomScreenComposerMode: Equatable {
