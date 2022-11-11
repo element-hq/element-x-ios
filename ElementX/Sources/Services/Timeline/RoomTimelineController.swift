@@ -98,15 +98,36 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            await loadImageForImageTimelineItem(item)
+            await loadThumbnailForImageTimelineItem(item)
         case let item as VideoRoomTimelineItem:
-            await loadImageForVideoTimelineItem(item)
+            await loadThumbnailForVideoTimelineItem(item)
         default:
             break
         }
     }
     
     func processItemDisappearance(_ itemId: String) { }
+
+    func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction {
+        guard let timelineItem = timelineItems.first(where: { $0.id == itemId }) else {
+            return .none
+        }
+
+        switch timelineItem {
+        case let item as VideoRoomTimelineItem:
+            await loadVideoForTimelineItem(item)
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemId }),
+                  let item = timelineItems[index] as? VideoRoomTimelineItem else {
+                return .none
+            }
+            if let mediaURL = item.cachedMediaURL {
+                return .displayMedia(mediaURL: mediaURL)
+            }
+            return .none
+        default:
+            return .none
+        }
+    }
     
     func sendMessage(_ message: String) async {
         switch await timelineProvider.sendMessage(message) {
@@ -244,7 +265,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         return .middle
     }
     
-    private func loadImageForImageTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
+    private func loadThumbnailForImageTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
         if timelineItem.image != nil {
             return
         }
@@ -268,7 +289,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
 
-    private func loadImageForVideoTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
+    private func loadThumbnailForVideoTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
         if timelineItem.image != nil {
             return
         }
@@ -287,6 +308,32 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             item.image = image
             timelineItems[index] = item
             callbacks.send(.updatedTimelineItem(timelineItem.id))
+        case .failure:
+            break
+        }
+    }
+
+    private func loadVideoForTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
+        if timelineItem.cachedMediaURL != nil {
+            // already cached
+            return
+        }
+
+        guard let source = timelineItem.source else {
+            return
+        }
+
+        // This is not great. We could better estimate file extension from the mimetype.
+        let fileExtension = String(timelineItem.text.split(separator: ".").last ?? "mp4")
+        switch await mediaProvider.loadFileFromSource(source, fileExtension: fileExtension) {
+        case .success(let fileURL):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? VideoRoomTimelineItem else {
+                return
+            }
+
+            item.cachedMediaURL = fileURL
+            timelineItems[index] = item
         case .failure:
             break
         }

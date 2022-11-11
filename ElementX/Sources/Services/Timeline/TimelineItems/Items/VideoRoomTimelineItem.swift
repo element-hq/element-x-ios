@@ -33,6 +33,7 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equa
     let source: MediaSource?
     let thumbnailSource: MediaSource?
     var image: UIImage?
+    var cachedMediaURL: URL?
     
     var width: CGFloat?
     var height: CGFloat?
