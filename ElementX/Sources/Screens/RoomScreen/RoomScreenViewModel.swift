@@ -81,14 +81,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Public
+
+    var callback: ((RoomScreenViewModelAction) -> Void)?
     
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
         case .loadPreviousPage:
-            guard !state.isBackPaginating else {
-                return
-            }
-            
             switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
             default:
                 #warning("Treat errors")
@@ -97,6 +95,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):
             await timelineController.processItemDisappearance(id)
+        case .itemTapped(let id):
+            await itemTapped(with: id)
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
@@ -118,6 +118,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Private
+
+    private func itemTapped(with itemId: String) async {
+        let action = await timelineController.processItemTap(itemId)
+
+        switch action {
+        case .displayMedia(let mediaURL):
+            callback?(.displayMedia(mediaURL: mediaURL))
+        case .none:
+            break
+        }
+    }
     
     private func buildTimelineViews() {
         let stateItems = timelineController.timelineItems.map { item in

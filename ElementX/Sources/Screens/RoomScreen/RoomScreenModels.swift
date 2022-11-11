@@ -17,7 +17,9 @@
 import Foundation
 import UIKit
 
-enum RoomScreenViewModelAction { }
+enum RoomScreenViewModelAction {
+    case displayMedia(mediaURL: URL)
+}
 
 enum RoomScreenComposerMode: Equatable {
     case `default`
@@ -29,6 +31,7 @@ enum RoomScreenViewAction {
     case loadPreviousPage
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
+    case itemTapped(id: String)
     case linkClicked(url: URL)
     case sendMessage
     case sendReaction(key: String, eventID: String)

@@ -76,6 +76,9 @@ struct TimelineItemList: View {
                                 context.send(viewAction: .linkClicked(url: url))
                                 return .systemAction
                             })
+                            .onTapGesture {
+                                context.send(viewAction: .itemTapped(id: item.id))
+                            }
                     }
                 }
             }
@@ -173,6 +176,9 @@ struct TimelineItemList: View {
     }
     
     private func requestBackPagination() {
+        guard !context.viewState.isBackPaginating else {
+            return
+        }
         context.send(viewAction: .loadPreviousPage)
     }
     
