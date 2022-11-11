@@ -158,13 +158,15 @@ class UserSessionFlowCoordinator: Coordinator {
                                                             mediaProvider: userSession.mediaProvider,
                                                             roomProxy: roomProxy)
 
-            let parameters = RoomScreenCoordinatorParameters(timelineController: timelineController,
+            let parameters = RoomScreenCoordinatorParameters(navigationRouter: navigationRouter,
+                                                             timelineController: timelineController,
                                                              mediaProvider: userSession.mediaProvider,
                                                              roomName: roomProxy.displayName ?? roomProxy.name,
                                                              roomAvatarUrl: roomProxy.avatarURL)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
             add(childCoordinator: coordinator)
+            coordinator.start()
             navigationRouter.push(coordinator) { [weak self] in
                 guard let self else { return }
                 self.stateMachine.processEvent(.dismissedRoomScreen)
