@@ -62,6 +62,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .video(let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
             return buildVideoTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
+        case .file(let content):
+            let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
+            return buildFileTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
         case .notice(content: let content):
             let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
             return buildNoticeTimelineItemFromMessage(message, isOutgoing, inGroupState, displayName, avatarImage)
@@ -226,6 +229,26 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      blurhash: message.blurhash,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(message.reactions)))
+    }
+
+    private func buildFileTimelineItemFromMessage(_ message: MessageTimelineItem<FileMessageContent>,
+                                                  _ isOutgoing: Bool,
+                                                  _ inGroupState: TimelineItemInGroupState,
+                                                  _ displayName: String?,
+                                                  _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
+        FileRoomTimelineItem(id: message.id,
+                             text: message.body,
+                             timestamp: message.originServerTs.formatted(date: .omitted, time: .shortened),
+                             inGroupState: inGroupState,
+                             isOutgoing: isOutgoing,
+                             isEditable: message.isEditable,
+                             senderId: message.sender,
+                             senderDisplayName: displayName,
+                             senderAvatar: avatarImage,
+                             source: message.source,
+                             thumbnailSource: message.thumbnailSource,
+                             properties: RoomTimelineItemProperties(isEdited: message.isEdited,
+                                                                    reactions: aggregateReactions(message.reactions)))
     }
     
     private func buildNoticeTimelineItemFromMessage(_ message: MessageTimelineItem<NoticeMessageContent>,

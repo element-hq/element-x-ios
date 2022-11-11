@@ -15,22 +15,23 @@
 //
 
 import Foundation
+import UIKit
 
-// MARK: - Coordinator
+struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
+    let id: String
+    let text: String
+    let timestamp: String
+    let inGroupState: TimelineItemInGroupState
+    let isOutgoing: Bool
+    let isEditable: Bool
+    
+    let senderId: String
+    var senderDisplayName: String?
+    var senderAvatar: UIImage?
 
-// MARK: View model
-
-enum MediaPlayerViewModelAction {
-    case cancel
-}
-
-// MARK: View
-
-struct MediaPlayerViewState: BindableState {
-    let mediaURL: URL
-    let autoplay: Bool
-}
-
-enum MediaPlayerViewAction {
-    case cancel
+    let source: MediaSource?
+    let thumbnailSource: MediaSource?
+    var cachedFileURL: URL?
+    
+    var properties = RoomTimelineItemProperties()
 }
