@@ -71,6 +71,14 @@ class NavigationController: ObservableObject, CoordinatorProtocol {
         internalRootCoordinator?.coordinator
     }
     
+    var coordinators: [CoordinatorProtocol] {
+        internalNavigationStack.map(\.coordinator)
+    }
+    
+    var sheetCoordinator: CoordinatorProtocol? {
+        internalSheetCoordinator?.coordinator
+    }
+    
     func setRootCoordinator(_ coordinator: any CoordinatorProtocol) {
         popToRoot(animated: false)
         internalRootCoordinator = AnyCoordinator(coordinator)
@@ -102,7 +110,7 @@ class NavigationController: ObservableObject, CoordinatorProtocol {
         internalNavigationStack.removeAll()
         
         if !animated {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25)  {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                 UIView.setAnimationsEnabled(true)
             }
         }

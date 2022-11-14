@@ -31,7 +31,7 @@ struct AlertInfo<T: Hashable>: Identifiable {
     /// The alert's message (optional).
     var message: String?
     /// The alert's primary button title and action. Defaults to an Ok button with no action.
-    var primaryButton: AlertButton = AlertButton(title: ElementL10n.ok, action: nil)
+    var primaryButton = AlertButton(title: ElementL10n.ok, action: nil)
     /// The alert's secondary button title and action.
     var secondaryButton: AlertButton?
 }

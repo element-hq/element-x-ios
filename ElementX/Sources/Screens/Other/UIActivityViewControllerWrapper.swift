@@ -21,7 +21,7 @@ struct UIActivityViewControllerWrapper: UIViewControllerRepresentable {
     var applicationActivities: [UIActivity]?
     
     func makeUIViewController(context: UIViewControllerRepresentableContext<UIActivityViewControllerWrapper>) -> UIActivityViewController {
-        return UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
+        UIActivityViewController(activityItems: activityItems, applicationActivities: applicationActivities)
     }
     
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: UIViewControllerRepresentableContext<UIActivityViewControllerWrapper>) { }
