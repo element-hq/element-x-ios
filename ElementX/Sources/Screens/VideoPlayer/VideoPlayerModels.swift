@@ -16,10 +16,21 @@
 
 import Foundation
 
-@MainActor
-protocol RoomScreenViewModelProtocol {
-    var callback: ((RoomScreenViewModelAction) -> Void)? { get set }
-    var context: RoomScreenViewModelType.Context { get }
+// MARK: - Coordinator
 
-    func stop()
+// MARK: View model
+
+enum VideoPlayerViewModelAction {
+    case cancel
+}
+
+// MARK: View
+
+struct VideoPlayerViewState: BindableState {
+    var videoURL: URL
+    var autoplay: Bool
+}
+
+enum VideoPlayerViewAction {
+    case cancel
 }

@@ -20,13 +20,16 @@ import UIKit
 struct MediaProvider: MediaProviderProtocol {
     private let clientProxy: ClientProxyProtocol
     private let imageCache: Kingfisher.ImageCache
+    private let fileCache: FileCache
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
     init(clientProxy: ClientProxyProtocol,
          imageCache: Kingfisher.ImageCache,
+         fileCache: FileCache,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
         self.clientProxy = clientProxy
         self.imageCache = imageCache
+        self.fileCache = fileCache
         self.backgroundTaskService = backgroundTaskService
     }
     
@@ -88,6 +91,51 @@ struct MediaProvider: MediaProviderProtocol {
             return .failure(.failedRetrievingImage)
         }
     }
+
+    func fileFromSource(_ source: MediaSource?, fileExtension: String) -> URL? {
+        guard let source else {
+            return nil
+        }
+        let cacheKey = fileCacheKeyForURLString(source.underlyingSource.url())
+        return fileCache.file(forKey: cacheKey, fileExtension: fileExtension)
+    }
+
+    @discardableResult func loadFileFromSource(_ source: MediaSource, fileExtension: String) async -> Result<URL, MediaProviderError> {
+        if let url = fileFromSource(source, fileExtension: fileExtension) {
+            return .success(url)
+        }
+
+        let loadFileBgTask = await backgroundTaskService.startBackgroundTask(withName: "LoadFile: \(source.url.hashValue)")
+        defer {
+            loadFileBgTask?.stop()
+        }
+
+        let cacheKey = fileCacheKeyForURLString(source.url)
+
+        do {
+            let data = try await clientProxy.loadMediaContentForSource(source.underlyingSource)
+
+            let url = try fileCache.store(data, with: fileExtension, forKey: cacheKey)
+            return .success(url)
+        } catch {
+            MXLog.error("Failed retrieving file with error: \(error)")
+            return .failure(.failedRetrievingImage)
+        }
+    }
+
+    func fileFromURLString(_ urlString: String?, fileExtension: String) -> URL? {
+        guard let urlString else {
+            return nil
+        }
+
+        return fileFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)),
+                              fileExtension: fileExtension)
+    }
+
+    func loadFileFromURLString(_ urlString: String, fileExtension: String) async -> Result<URL, MediaProviderError> {
+        await loadFileFromSource(MediaSource(source: clientProxy.mediaSourceForURLString(urlString)),
+                                 fileExtension: fileExtension)
+    }
     
     // MARK: - Private
     
@@ -97,6 +145,13 @@ struct MediaProvider: MediaProviderProtocol {
         } else {
             return urlString
         }
+    }
+
+    private func fileCacheKeyForURLString(_ urlString: String) -> String {
+        guard let component = urlString.split(separator: "/").last else {
+            return urlString
+        }
+        return String(component)
     }
 }
 

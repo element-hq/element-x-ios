@@ -109,6 +109,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func processItemAppearance(_ itemId: String) async { }
     
     func processItemDisappearance(_ itemId: String) async { }
+
+    func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction { .none }
     
     func sendMessage(_ message: String) async { }
     

@@ -24,6 +24,11 @@ enum RoomTimelineControllerCallback {
     case finishedBackPaginating
 }
 
+enum RoomTimelineControllerAction {
+    case displayVideo(videoURL: URL)
+    case none
+}
+
 enum RoomTimelineControllerError: Error {
     case generic
 }
@@ -38,6 +43,8 @@ protocol RoomTimelineControllerProtocol {
     func processItemAppearance(_ itemId: String) async
     
     func processItemDisappearance(_ itemId: String) async
+
+    func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError>
     

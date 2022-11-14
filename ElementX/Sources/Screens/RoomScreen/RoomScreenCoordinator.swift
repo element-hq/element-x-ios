@@ -17,6 +17,7 @@
 import SwiftUI
 
 struct RoomScreenCoordinatorParameters {
+    let navigationRouter: NavigationRouterType
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let roomName: String?
@@ -31,6 +32,7 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     private let parameters: RoomScreenCoordinatorParameters
     private let roomScreenHostingController: UIViewController
     private var roomScreenViewModel: RoomScreenViewModelProtocol
+    private var navigationRouter: NavigationRouterType { parameters.navigationRouter }
     
     // MARK: Public
 
@@ -55,7 +57,17 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Public
 
-    func start() { }
+    func start() {
+        MXLog.debug("Did start.")
+        roomScreenViewModel.callback = { [weak self] result in
+            guard let self else { return }
+            MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
+            switch result {
+            case .displayVideo(let videoURL):
+                self.displayVideo(for: videoURL)
+            }
+        }
+    }
     
     func toPresentable() -> UIViewController {
         roomScreenHostingController
@@ -63,5 +75,23 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
 
     func stop() {
         roomScreenViewModel.stop()
+    }
+
+    // MARK: - Private
+
+    private func displayVideo(for videoURL: URL) {
+        let params = VideoPlayerCoordinatorParameters(videoURL: videoURL)
+        let coordinator = VideoPlayerCoordinator(parameters: params)
+        coordinator.callback = { [weak self, weak coordinator] _ in
+            guard let self, let coordinator = coordinator else { return }
+            self.navigationRouter.popModule(animated: true)
+            self.remove(childCoordinator: coordinator)
+        }
+
+        add(childCoordinator: coordinator)
+        coordinator.start()
+        navigationRouter.push(coordinator) { [weak self] in
+            self?.remove(childCoordinator: coordinator)
+        }
     }
 }

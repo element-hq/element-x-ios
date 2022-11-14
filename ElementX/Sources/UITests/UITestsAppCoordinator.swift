@@ -115,13 +115,15 @@ class MockScreen: Identifiable {
         case .splash:
             return SplashScreenCoordinator()
         case .roomPlainNoAvatar:
-            let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+            let parameters = RoomScreenCoordinatorParameters(navigationRouter: navigationRouter,
+                                                             timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
                                                              roomAvatarUrl: nil)
             return RoomScreenCoordinator(parameters: parameters)
         case .roomEncryptedWithAvatar:
-            let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+            let parameters = RoomScreenCoordinatorParameters(navigationRouter: navigationRouter,
+                                                             timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
                                                              roomAvatarUrl: "mock_url")
