@@ -19,12 +19,12 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class MediaPlayerScreenViewModelTests: XCTestCase {
-    var viewModel: MediaPlayerViewModelProtocol!
-    var context: MediaPlayerViewModelType.Context!
+class VideoPlayerScreenViewModelTests: XCTestCase {
+    var viewModel: VideoPlayerViewModelProtocol!
+    var context: VideoPlayerViewModelType.Context!
     
     @MainActor override func setUpWithError() throws {
-        viewModel = MediaPlayerViewModel(mediaURL: URL(staticString: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"), autoplay: true)
+        viewModel = VideoPlayerViewModel(videoURL: URL(staticString: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"), autoplay: true)
         context = viewModel.context
     }
 

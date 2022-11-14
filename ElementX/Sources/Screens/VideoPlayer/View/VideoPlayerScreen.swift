@@ -17,10 +17,10 @@
 import AVKit
 import SwiftUI
 
-struct MediaPlayerScreen: View {
+struct VideoPlayerScreen: View {
     // MARK: Public
     
-    @ObservedObject var context: MediaPlayerViewModel.Context
+    @ObservedObject var context: VideoPlayerViewModel.Context
     
     // MARK: Views
 
@@ -30,7 +30,7 @@ struct MediaPlayerScreen: View {
     }
 
     private func player() -> AVPlayer {
-        let player = AVPlayer(url: context.viewState.mediaURL)
+        let player = AVPlayer(url: context.viewState.videoURL)
         if context.viewState.autoplay {
             player.play()
         }
@@ -40,12 +40,12 @@ struct MediaPlayerScreen: View {
 
 // MARK: - Previews
 
-struct MediaPlayer_Previews: PreviewProvider {
+struct VideoPlayer_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = MediaPlayerViewModel(mediaURL: URL(staticString: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
+            let viewModel = VideoPlayerViewModel(videoURL: URL(staticString: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"),
                                                  autoplay: false)
-            MediaPlayerScreen(context: viewModel.context)
+            VideoPlayerScreen(context: viewModel.context)
         }
         .tint(.element.accent)
     }

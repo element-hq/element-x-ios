@@ -16,22 +16,22 @@
 
 import SwiftUI
 
-struct MediaPlayerCoordinatorParameters {
-    let mediaURL: URL
+struct VideoPlayerCoordinatorParameters {
+    let videoURL: URL
 }
 
-enum MediaPlayerCoordinatorAction {
+enum VideoPlayerCoordinatorAction {
     case cancel
 }
 
-final class MediaPlayerCoordinator: Coordinator, Presentable {
+final class VideoPlayerCoordinator: Coordinator, Presentable {
     // MARK: - Properties
     
     // MARK: Private
     
-    private let parameters: MediaPlayerCoordinatorParameters
-    private let mediaPlayerHostingController: UIViewController
-    private var mediaPlayerViewModel: MediaPlayerViewModelProtocol
+    private let parameters: VideoPlayerCoordinatorParameters
+    private let videoPlayerHostingController: UIViewController
+    private var videoPlayerViewModel: VideoPlayerViewModelProtocol
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var activityIndicator: UserIndicator?
@@ -40,28 +40,28 @@ final class MediaPlayerCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: ((MediaPlayerCoordinatorAction) -> Void)?
+    var callback: ((VideoPlayerCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
-    init(parameters: MediaPlayerCoordinatorParameters) {
+    init(parameters: VideoPlayerCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = MediaPlayerViewModel(mediaURL: parameters.mediaURL)
-        let view = MediaPlayerScreen(context: viewModel.context)
-        mediaPlayerViewModel = viewModel
-        mediaPlayerHostingController = UIHostingController(rootView: view)
+        let viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
+        let view = VideoPlayerScreen(context: viewModel.context)
+        videoPlayerViewModel = viewModel
+        videoPlayerHostingController = UIHostingController(rootView: view)
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: mediaPlayerHostingController)
+        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: videoPlayerHostingController)
     }
     
     // MARK: - Public
     
     func start() {
         MXLog.debug("Did start.")
-        mediaPlayerViewModel.callback = { [weak self] action in
+        videoPlayerViewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("MediaPlayerViewModel did complete with result: \(action).")
+            MXLog.debug("VideoPlayerViewModel did complete with result: \(action).")
             switch action {
             case .cancel:
                 self.callback?(.cancel)
@@ -70,7 +70,7 @@ final class MediaPlayerCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        mediaPlayerHostingController
+        videoPlayerHostingController
     }
 
     func stop() {

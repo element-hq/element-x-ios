@@ -123,8 +123,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         let action = await timelineController.processItemTap(itemId)
 
         switch action {
-        case .displayMedia(let mediaURL):
-            callback?(.displayMedia(mediaURL: mediaURL))
+        case .displayVideo(let videoURL):
+            callback?(.displayVideo(videoURL: videoURL))
         case .none:
             break
         }

@@ -18,7 +18,7 @@ import Foundation
 import UIKit
 
 enum RoomScreenViewModelAction {
-    case displayMedia(mediaURL: URL)
+    case displayVideo(videoURL: URL)
 }
 
 enum RoomScreenComposerMode: Equatable {

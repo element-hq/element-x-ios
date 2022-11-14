@@ -16,21 +16,8 @@
 
 import Foundation
 
-// MARK: - Coordinator
-
-// MARK: View model
-
-enum MediaPlayerViewModelAction {
-    case cancel
-}
-
-// MARK: View
-
-struct MediaPlayerViewState: BindableState {
-    var mediaURL: URL
-    var autoplay: Bool
-}
-
-enum MediaPlayerViewAction {
-    case cancel
+@MainActor
+protocol VideoPlayerViewModelProtocol {
+    var callback: ((VideoPlayerViewModelAction) -> Void)? { get set }
+    var context: VideoPlayerViewModelType.Context { get }
 }
