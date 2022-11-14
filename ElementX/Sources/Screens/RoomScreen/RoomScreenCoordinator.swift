@@ -63,8 +63,8 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
             guard let self else { return }
             MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
             switch result {
-            case .displayMedia(let mediaURL):
-                self.displayMedia(for: mediaURL)
+            case .displayVideo(let videoURL):
+                self.displayVideo(for: videoURL)
             case .displayFile(let fileURL, let title):
                 self.displayFile(for: fileURL, with: title)
             }
@@ -81,9 +81,9 @@ final class RoomScreenCoordinator: Coordinator, Presentable {
 
     // MARK: - Private
 
-    private func displayMedia(for mediaURL: URL) {
-        let params = MediaPlayerCoordinatorParameters(mediaURL: mediaURL)
-        let coordinator = MediaPlayerCoordinator(parameters: params)
+    private func displayVideo(for videoURL: URL) {
+        let params = VideoPlayerCoordinatorParameters(videoURL: videoURL)
+        let coordinator = VideoPlayerCoordinator(parameters: params)
         coordinator.callback = { [weak self, weak coordinator] _ in
             guard let self, let coordinator = coordinator else { return }
             self.navigationRouter.popModule(animated: true)

@@ -120,8 +120,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                   let item = timelineItems[index] as? VideoRoomTimelineItem else {
                 return .none
             }
-            if let mediaURL = item.cachedMediaURL {
-                return .displayMedia(mediaURL: mediaURL)
+            if let videoURL = item.cachedVideoURL {
+                return .displayVideo(videoURL: videoURL)
             }
             return .none
         case let item as FileRoomTimelineItem:
@@ -324,7 +324,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
 
     private func loadVideoForTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
-        if timelineItem.cachedMediaURL != nil {
+        if timelineItem.cachedVideoURL != nil {
             // already cached
             return
         }
@@ -342,7 +342,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
 
-            item.cachedMediaURL = fileURL
+            item.cachedVideoURL = fileURL
             timelineItems[index] = item
         case .failure:
             break

@@ -18,7 +18,7 @@ import Foundation
 import UIKit
 
 enum RoomScreenViewModelAction {
-    case displayMedia(mediaURL: URL)
+    case displayVideo(videoURL: URL)
     case displayFile(fileURL: URL, title: String?)
 }
 
@@ -46,6 +46,7 @@ struct RoomScreenViewState: BindableState {
     var roomAvatar: UIImage?
     var items: [RoomTimelineViewProvider] = []
     var isBackPaginating = false
+    var showLoading = false
     var bindings: RoomScreenViewStateBindings
     
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?

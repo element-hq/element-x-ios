@@ -120,16 +120,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
 
     private func itemTapped(with itemId: String) async {
+        state.showLoading = true
         let action = await timelineController.processItemTap(itemId)
 
         switch action {
-        case .displayMedia(let mediaURL):
-            callback?(.displayMedia(mediaURL: mediaURL))
+        case .displayVideo(let videoURL):
+            callback?(.displayVideo(videoURL: videoURL))
         case .displayFile(let fileURL, let title):
             callback?(.displayFile(fileURL: fileURL, title: title))
         case .none:
             break
         }
+        state.showLoading = false
     }
     
     private func buildTimelineViews() {
