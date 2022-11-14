@@ -23,19 +23,6 @@ enum TimelineItemInGroupState {
     case middle
     case end
 
-    var roundedCorners: UIRectCorner {
-        switch self {
-        case .single:
-            return .allCorners
-        case .beginning:
-            return [.topLeft, .topRight]
-        case .middle:
-            return []
-        case .end:
-            return [.bottomLeft, .bottomRight]
-        }
-    }
-
     var shouldShowSenderDetails: Bool {
         switch self {
         case .single, .beginning:
@@ -64,5 +51,26 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
 extension EventBasedTimelineItemProtocol {
     var shouldShowSenderDetails: Bool {
         inGroupState.shouldShowSenderDetails
+    }
+    
+    var roundedCorners: UIRectCorner {
+        switch inGroupState {
+        case .single:
+            return .allCorners
+        case .beginning:
+            if isOutgoing {
+                return [.topLeft, .topRight, .bottomLeft]
+            } else {
+                return [.topLeft, .topRight, .bottomRight]
+            }
+        case .middle:
+            return isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
+        case .end:
+            if isOutgoing {
+                return [.topLeft, .bottomLeft, .bottomRight]
+            } else {
+                return [.topRight, .bottomLeft, .bottomRight]
+            }
+        }
     }
 }
