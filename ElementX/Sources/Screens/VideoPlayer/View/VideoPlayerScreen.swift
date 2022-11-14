@@ -27,6 +27,19 @@ struct VideoPlayerScreen: View {
     var body: some View {
         VideoPlayer(player: player())
             .ignoresSafeArea()
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden()
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button {
+                        context.send(viewAction: .cancel)
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                            .foregroundColor(.white)
+                            .fontWeight(.semibold)
+                    }
+                }
+            }
     }
 
     private func player() -> AVPlayer {
