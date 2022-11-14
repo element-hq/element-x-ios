@@ -120,6 +120,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
 
     private func itemTapped(with itemId: String) async {
+        state.showLoading = true
         let action = await timelineController.processItemTap(itemId)
 
         switch action {
@@ -128,6 +129,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .none:
             break
         }
+
+        state.showLoading = false
     }
     
     private func buildTimelineViews() {
