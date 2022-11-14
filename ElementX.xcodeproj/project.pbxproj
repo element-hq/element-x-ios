@@ -357,6 +357,7 @@
 		EC280623A42904341363EAAF /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 886A0A498FA01E8EDD451D05 /* Sentry */; };
 		EC4C31963E755EEC77BD778C /* AnalyticsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B362E695A7103C11F64B185 /* AnalyticsSettings.swift */; };
 		ECDDA9CD291E6F4100FC93E6 /* FileCacheTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECDDA9CC291E6F4100FC93E6 /* FileCacheTests.swift */; };
+		ECDDA9D3292233B600FC93E6 /* Swipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = ECDDA9D2292233B600FC93E6 /* Swipe.swift */; };
 		EE4F5601356228FF72FC56B6 /* MockClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40F48279322E504153AB0D /* MockClientProxy.swift */; };
 		EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */; };
 		EEC40663922856C65D1E0DF5 /* KeychainControllerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = FDB9C37196A4C79F24CE80C6 /* KeychainControllerTests.swift */; };
@@ -844,6 +845,7 @@
 		EB3B237387B8288A5A938F1B /* UserAgentBuilderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserAgentBuilderTests.swift; sourceTree = "<group>"; };
 		EBE5502760CF6CA2D7201883 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = ja; path = ja.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
 		ECDDA9CC291E6F4100FC93E6 /* FileCacheTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileCacheTests.swift; sourceTree = "<group>"; };
+		ECDDA9D2292233B600FC93E6 /* Swipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Swipe.swift; sourceTree = "<group>"; };
 		ED044D00F2176681CC02CD54 /* HomeScreenRoomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeScreenRoomCell.swift; sourceTree = "<group>"; };
 		ED1D792EB82506A19A72C8DE /* RoomTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		EDAA4472821985BF868CC21C /* ServerSelectionViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServerSelectionViewModelTests.swift; sourceTree = "<group>"; };
@@ -1172,6 +1174,7 @@
 				A40C19719687984FD9478FBE /* Task.swift */,
 				287FC98AF2664EAD79C0D902 /* UIDevice.swift */,
 				227AC5D71A4CE43512062243 /* URL.swift */,
+				ECDDA9D2292233B600FC93E6 /* Swipe.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -2521,6 +2524,7 @@
 				BCEC41FB1F2BB663183863E4 /* LoginServerInfoSection.swift in Sources */,
 				49E9B99CB6A275C7744351F0 /* LoginViewModel.swift in Sources */,
 				2F30EFEB7BD39242D1AD96F3 /* LoginViewModelProtocol.swift in Sources */,
+				ECDDA9D3292233B600FC93E6 /* Swipe.swift in Sources */,
 				B94368839BDB69172E28E245 /* MXLog.swift in Sources */,
 				2A90D9F91A836E30B7D78838 /* MXLogObjcWrapper.m in Sources */,
 				BCC3EDB7AD0902797CB4BBC2 /* MXLogger.m in Sources */,

@@ -40,6 +40,9 @@ struct VideoPlayerScreen: View {
                     }
                 }
             }
+            .onSwipeGesture(minimumDistance: 3.0, right: {
+                context.send(viewAction: .cancel)
+            })
     }
 
     private func player() -> AVPlayer {
