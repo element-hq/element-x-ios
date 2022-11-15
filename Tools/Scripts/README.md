@@ -24,7 +24,7 @@ Usage:
 ./bootTestSimulator.py 'iPhone 13 Pro Max'
 ```
 ## Create screen templates
-New screen flows are currently using MVVM-Coordinator pattern. Run [Tools/Scripts/createScreen.sh](Tools/Scripts/createScreen.sh) to create a new screen or a new screen flow.
+New screen flows are currently using the MVVM-Coordinator pattern. Run [Tools/Scripts/createScreen.sh](Tools/Scripts/createScreen.sh) to create a new screen and all its required dependencies.
 
 Usage:
 ```
