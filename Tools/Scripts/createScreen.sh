@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ ! $# -eq 2 ]; then
-    echo "Usage: ./createSwiftUISimpleScreen.sh Folder MyScreenName"
+    echo "Usage: ./createScreen.sh Folder MyScreenName"
     exit 1
 fi
 

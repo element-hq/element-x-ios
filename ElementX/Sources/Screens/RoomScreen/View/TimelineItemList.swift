@@ -114,17 +114,17 @@ struct TimelineItemList: View {
         .onReceive(scrollToBottomPublisher) {
             scrollToBottom(animated: true)
         }
-        .onChange(of: context.viewState.items) { items in
-            defer {
-                // update the items anyway
-                timelineItems = items
+        .onChange(of: context.viewState.items.count) { _ in
+            guard !context.viewState.items.isEmpty,
+                  context.viewState.items.count != timelineItems.count else {
+                return
             }
             
             // Pin to the bottom if empty
             if timelineItems.isEmpty {
-                if let lastItem = items.last {
+                if let lastItem = context.viewState.items.last {
                     let pinnedItem = PinnedItem(id: lastItem.id, anchor: .bottom, animated: false)
-                    timelineItems = items
+                    timelineItems = context.viewState.items
                     self.pinnedItem = pinnedItem
                 }
                 
@@ -134,9 +134,9 @@ struct TimelineItemList: View {
             // Pin to the new bottom if visible
             if let currentLastItem = timelineItems.last,
                visibleItemIdentifiers.contains(currentLastItem.id),
-               let newLastItem = items.last {
+               let newLastItem = context.viewState.items.last {
                 let pinnedItem = PinnedItem(id: newLastItem.id, anchor: .bottom, animated: false)
-                timelineItems = items
+                timelineItems = context.viewState.items
                 self.pinnedItem = pinnedItem
                 
                 return
@@ -146,12 +146,20 @@ struct TimelineItemList: View {
             if let currentFirstItem = timelineItems.first,
                visibleItemIdentifiers.contains(currentFirstItem.id) {
                 let pinnedItem = PinnedItem(id: currentFirstItem.id, anchor: .top, animated: false)
-                timelineItems = items
+                timelineItems = context.viewState.items
                 self.pinnedItem = pinnedItem
                 
                 return
             }
+            
+            // Otherwise just update the items
+            timelineItems = context.viewState.items
         }
+        .onChange(of: context.viewState.items, perform: { items in
+            if timelineItems != items {
+                timelineItems = items
+            }
+        })
         .background(GeometryReader { geo in
             Color.clear.preference(key: ViewFramePreferenceKey.self, value: [geo.frame(in: .global)])
         })
