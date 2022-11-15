@@ -16,13 +16,10 @@
 
 import Foundation
 
-/// A request used to create an underlying `UserIndicator`, allowing clients to only specify the visual aspects of an indicator.
-public struct UserIndicatorRequest {
-    internal let presenter: UserIndicatorViewPresentable
-    internal let dismissal: UserIndicatorDismissal
+struct MockUserNotificationController: UserNotificationControllerProtocol {
+    func submitNotification(_ notification: UserNotification) { }
     
-    public init(presenter: UserIndicatorViewPresentable, dismissal: UserIndicatorDismissal) {
-        self.presenter = presenter
-        self.dismissal = dismissal
-    }
+    func retractNotificationWithId(_ id: String) { }
+    
+    func retractAllNotifications() { }
 }

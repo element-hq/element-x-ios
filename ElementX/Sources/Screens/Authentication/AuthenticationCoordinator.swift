@@ -25,8 +25,6 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 class AuthenticationCoordinator: CoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
     private let navigationController: NavigationController
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
@@ -34,8 +32,6 @@ class AuthenticationCoordinator: CoordinatorProtocol {
          navigationController: NavigationController) {
         self.authenticationService = authenticationService
         self.navigationController = navigationController
-        
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: navigationRouter.toPresentable())
     }
     
     func start() {
@@ -78,6 +74,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showServerSelectionScreen() {
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
+                                                              userNotificationController: ServiceLocator.shared.userNotificationController,
                                                               isModallyPresented: false)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         
@@ -126,11 +123,14 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     /// Show a blocking activity indicator.
     private func startLoading() {
-//        activityIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "AuthenticationCoordinatorLoading",
+                                                                                             type: .modal,
+                                                                                             title: ElementL10n.loading,
+                                                                                             persistent: true))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-//        activityIndicator = nil
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId("AuthenticationCoordinatorLoading")
     }
 }

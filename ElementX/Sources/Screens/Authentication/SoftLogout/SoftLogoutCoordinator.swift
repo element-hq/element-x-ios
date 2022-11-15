@@ -46,10 +46,6 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     private let hostingController: UIViewController
     /// Passed to the OIDC service to provide a view controller from which to present the authentication session.
     private let oidcUserAgent: OIDExternalUserAgentIOS?
-//    
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var loadingIndicator: UserIndicator?
-    private var successIndicator: UserIndicator?
     
     /// The wizard used to handle the registration flow.
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
@@ -65,7 +61,6 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
                                         homeserver: homeserver,
                                         keyBackupNeeded: parameters.keyBackupNeeded)
         
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: softLogoutHostingController)
         hostingController = UIHostingController(rootView: SoftLogoutScreen(context: viewModel.context))
         oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)
     }
@@ -102,12 +97,15 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     
     /// Show an activity indicator whilst loading.
     @MainActor private func startLoading() {
-//        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "SoftLogoutLoading",
+                                                                                             type: .modal,
+                                                                                             title: ElementL10n.loading,
+                                                                                             persistent: true))
     }
     
     /// Hide the currently displayed activity indicator.
     @MainActor private func stopLoading() {
-//        loadingIndicator = nil
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId("SoftLogoutLoading")
     }
 
     /// Shows the forgot password screen.

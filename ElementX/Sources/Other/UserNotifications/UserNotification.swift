@@ -16,21 +16,15 @@
 
 import SwiftUI
 
-struct UITestsRootView: View {
-    let mockScreens: [MockScreen]
-    var selectionCallback: ((UITestScreenIdentifier) -> Void)?
-    
-    var body: some View {
-        NavigationView {
-            List(mockScreens) { coordinator in
-                Button(coordinator.id.description) {
-                    selectionCallback?(coordinator.id)
-                }
-                .accessibilityIdentifier(coordinator.id.rawValue)
-            }
-            .listStyle(.plain)
-        }
-        .navigationTitle("Screens")
-        .navigationViewStyle(.stack)
-    }
+enum UserNotificationType {
+    case toast
+    case modal
+}
+
+struct UserNotification: Equatable, Identifiable {
+    var id: String = UUID().uuidString
+    var type = UserNotificationType.toast
+    var title: String
+    var iconName: String?
+    var persistent = false
 }

@@ -20,13 +20,13 @@ import UIKit
 class UITestsAppCoordinator: CoordinatorProtocol {
     private let navigationController: NavigationController
     
-    init(navigationController: NavigationController) {
-        self.navigationController = navigationController
+    init() {
+        navigationController = NavigationController()
     }
-        
-    func toPresentable() -> AnyView {
+    
+    func start() {
         let screens = mockScreens()
-        let rootView = UITestsRootView(mockScreens: screens) { id in
+        let rootCoordinator = UITestsRootCoordinator(mockScreens: screens) { id in
             guard let screen = screens.first(where: { $0.id == id }) else {
                 fatalError()
             }
@@ -34,7 +34,11 @@ class UITestsAppCoordinator: CoordinatorProtocol {
             self.navigationController.setRootCoordinator(screen.coordinator)
         }
         
-        return AnyView(rootView)
+        navigationController.setRootCoordinator(rootCoordinator)
+    }
+        
+    func toPresentable() -> AnyView {
+        navigationController.toPresentable()
     }
     
     private func mockScreens() -> [MockScreen] {
@@ -53,9 +57,11 @@ class MockScreen: Identifiable {
                                                       navigationController: navigationController))
         case .serverSelection:
             return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                userNotificationController: MockUserNotificationController(),
                                                                 isModallyPresented: true))
         case .serverSelectionNonModal:
             return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                userNotificationController: MockUserNotificationController(),
                                                                 isModallyPresented: false))
         case .analyticsPrompt:
             return AnalyticsPromptCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
@@ -84,15 +90,18 @@ class MockScreen: Identifiable {
                                                            navigationController: navigationController))
         case .settings:
             return SettingsCoordinator(parameters: .init(navigationController: navigationController,
+                                                         userNotificationController: MockUserNotificationController(),
                                                          userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
                                                                                       mediaProvider: MockMediaProvider()),
                                                          bugReportService: MockBugReportService()))
         case .bugReport:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                          userNotificationController: MockUserNotificationController(),
                                                           screenshot: nil,
                                                           isModallyPresented: false))
         case .bugReportWithScreenshot:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                          userNotificationController: MockUserNotificationController(),
                                                           screenshot: Asset.Images.appLogo.image,
                                                           isModallyPresented: false))
         case .splash:

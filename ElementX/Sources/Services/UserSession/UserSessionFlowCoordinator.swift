@@ -170,7 +170,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private func presentSettingsScreen() {
         let settingsNavigationController = NavigationController()
         
+        let userNotificationController = UserNotificationController(rootCoordinator: settingsNavigationController)
+        
         let parameters = SettingsCoordinatorParameters(navigationController: settingsNavigationController,
+                                                       userNotificationController: userNotificationController,
                                                        userSession: userSession,
                                                        bugReportService: bugReportService)
         let settingsCoordinator = SettingsCoordinator(parameters: parameters)
@@ -186,7 +189,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         }
         
         settingsNavigationController.setRootCoordinator(settingsCoordinator)
-        navigationController.presentSheet(settingsNavigationController) { [weak self] in
+        
+        navigationController.presentSheet(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSettingsScreen)
         }
     }
@@ -216,22 +220,20 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private func presentFeedbackScreen(for image: UIImage? = nil) {
         let feedbackNavigationController = NavigationController()
         
+        let userNotificationController = UserNotificationController(rootCoordinator: feedbackNavigationController)
+        
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
+                                                        userNotificationController: userNotificationController,
                                                         screenshot: image,
                                                         isModallyPresented: true)
         let coordinator = BugReportCoordinator(parameters: parameters)
-        coordinator.completion = { [weak self] result in
-            switch result {
-            case .cancel:
-                self?.navigationController.dismissSheet()
-            default:
-                break
-            }
+        coordinator.completion = { [weak self] _ in
+            self?.navigationController.dismissSheet()
         }
 
         feedbackNavigationController.setRootCoordinator(coordinator)
         
-        navigationController.presentSheet(feedbackNavigationController) { [weak self] in
+        navigationController.presentSheet(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
     }

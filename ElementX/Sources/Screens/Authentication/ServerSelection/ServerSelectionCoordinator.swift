@@ -19,6 +19,7 @@ import SwiftUI
 struct ServerSelectionCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
+    let userNotificationController: UserNotificationControllerProtocol
     /// Whether the screen is presented modally or within a navigation stack.
     let isModallyPresented: Bool
 }
@@ -30,21 +31,17 @@ enum ServerSelectionCoordinatorAction {
 
 final class ServerSelectionCoordinator: CoordinatorProtocol {
     private let parameters: ServerSelectionCoordinatorParameters
+    private let userNotificationController: UserNotificationControllerProtocol
     private var viewModel: ServerSelectionViewModelProtocol
-    
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-//    private var loadingIndicator: UserIndicator?
 
     var callback: (@MainActor (ServerSelectionCoordinatorAction) -> Void)?
     
     init(parameters: ServerSelectionCoordinatorParameters) {
         self.parameters = parameters
-
         viewModel = ServerSelectionViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
                                              isModallyPresented: parameters.isModallyPresented)
-        
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: serverSelectionHostingController)
+        userNotificationController = parameters.userNotificationController
     }
     
     // MARK: - Public
@@ -78,12 +75,14 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
     ///   - label: The label to show on the indicator.
     ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
     private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-//        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
+        userNotificationController.submitNotification(UserNotification(type: .modal,
+                                                                       title: label,
+                                                                       persistent: true))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-//        loadingIndicator = nil
+        userNotificationController.retractAllNotifications()
     }
     
     /// Updates the login flow using the supplied homeserver address, or shows an error when this isn't possible.

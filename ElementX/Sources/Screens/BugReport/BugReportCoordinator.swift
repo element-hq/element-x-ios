@@ -23,6 +23,7 @@ enum BugReportCoordinatorResult {
 
 struct BugReportCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
+    let userNotificationController: UserNotificationControllerProtocol
     let screenshot: UIImage?
     let isModallyPresented: Bool
 }
@@ -30,11 +31,7 @@ struct BugReportCoordinatorParameters {
 final class BugReportCoordinator: CoordinatorProtocol {
     private let parameters: BugReportCoordinatorParameters
     private var viewModel: BugReportViewModelProtocol
-    
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-//    private var loadingIndicator: UserIndicator?
-//    private var statusIndicator: UserIndicator?
-    
+
     var completion: ((BugReportCoordinatorResult) -> Void)?
     
     init(parameters: BugReportCoordinatorParameters) {
@@ -43,8 +40,6 @@ final class BugReportCoordinator: CoordinatorProtocol {
         viewModel = BugReportViewModel(bugReportService: parameters.bugReportService,
                                        screenshot: parameters.screenshot,
                                        isModallyPresented: parameters.isModallyPresented)
-        
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: bugReportHostingController)
     }
     
     // MARK: - Public
@@ -83,17 +78,19 @@ final class BugReportCoordinator: CoordinatorProtocol {
     ///   - label: The label to show on the indicator.
     ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
     private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-//        loadingIndicator = indicatorPresenter.present(.loading(label: label,
-//                                                               isInteractionBlocking: isInteractionBlocking))
+        parameters.userNotificationController.submitNotification(UserNotification(id: "BugReportLoading",
+                                                                                  type: .modal,
+                                                                                  title: label,
+                                                                                  persistent: true))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-//        loadingIndicator = nil
+        parameters.userNotificationController.retractNotificationWithId("BugReportLoading")
     }
-
+    
     /// Show error indicator
     private func showError(label: String) {
-//        statusIndicator = indicatorPresenter.present(.error(label: label))
+        parameters.userNotificationController.submitNotification(UserNotification(title: label))
     }
 }

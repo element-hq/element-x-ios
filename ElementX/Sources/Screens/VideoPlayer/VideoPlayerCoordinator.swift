@@ -29,18 +29,12 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
     private let parameters: VideoPlayerCoordinatorParameters
     private var viewModel: VideoPlayerViewModelProtocol
     
-    #warning("FIXME INDICATORS")
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
-    
     var callback: ((VideoPlayerCoordinatorAction) -> Void)?
     
     init(parameters: VideoPlayerCoordinatorParameters) {
         self.parameters = parameters
         
         viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
-        
-        //indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: videoPlayerHostingController)
     }
     
     // MARK: - Public
@@ -62,12 +56,8 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
         AnyView(VideoPlayerScreen(context: viewModel.context))
     }
 
-    func stop() {
-        stopLoading()
-    }
-    
     // MARK: - Private
-
+    
     private func configureAudioSession(_ session: AVAudioSession) {
         do {
             try session.setCategory(.playback,
@@ -77,18 +67,5 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
         } catch {
             MXLog.debug("Configure audio session failed: \(error)")
         }
-    }
-    
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-//        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-//        activityIndicator = nil
     }
 }

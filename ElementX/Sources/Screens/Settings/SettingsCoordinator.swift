@@ -18,6 +18,7 @@ import SwiftUI
 
 struct SettingsCoordinatorParameters {
     let navigationController: NavigationController
+    let userNotificationController: UserNotificationControllerProtocol
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
 }
@@ -28,26 +29,16 @@ enum SettingsCoordinatorAction {
 }
 
 final class SettingsCoordinator: CoordinatorProtocol {
-    private let navigationController: NavigationController
-    private let userSession: UserSessionProtocol
-    private let bugReportService: BugReportServiceProtocol
+    private let parameters: SettingsCoordinatorParameters
     private var viewModel: SettingsViewModelProtocol
-    
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-//    private var loadingIndicator: UserIndicator?
-//    private var statusIndicator: UserIndicator?
 
     var callback: ((SettingsCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
     init(parameters: SettingsCoordinatorParameters) {
-        navigationController = parameters.navigationController
-        userSession = parameters.userSession
-        bugReportService = parameters.bugReportService
+        self.parameters = parameters
         
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: settingsHostingController)
-
         viewModel = SettingsViewModel(withUserSession: parameters.userSession)
         viewModel.callback = { [weak self] result in
             guard let self else { return }
@@ -60,7 +51,7 @@ final class SettingsCoordinator: CoordinatorProtocol {
             case .reportBug:
                 self.presentBugReportScreen()
             case .crash:
-                self.bugReportService.crash()
+                self.parameters.bugReportService.crash()
             case .logout:
                 self.callback?(.logout)
             }
@@ -79,12 +70,13 @@ final class SettingsCoordinator: CoordinatorProtocol {
         if ElementSettings.shared.enableAnalytics {
             Analytics.shared.optOut()
         } else {
-            Analytics.shared.optIn(with: userSession)
+            Analytics.shared.optIn(with: parameters.userSession)
         }
     }
 
     private func presentBugReportScreen() {
-        let params = BugReportCoordinatorParameters(bugReportService: bugReportService,
+        let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
+                                                    userNotificationController: parameters.userNotificationController,
                                                     screenshot: nil,
                                                     isModallyPresented: false)
         let coordinator = BugReportCoordinator(parameters: params)
@@ -96,27 +88,14 @@ final class SettingsCoordinator: CoordinatorProtocol {
                 break
             }
             
-            self?.navigationController.pop()
+            self?.parameters.navigationController.pop()
         }
         
-        navigationController.push(coordinator)
-    }
-
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-//        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-//        loadingIndicator = nil
+        parameters.navigationController.push(coordinator)
     }
 
     /// Show success indicator
     private func showSuccess(label: String) {
-//        statusIndicator = indicatorPresenter.present(.success(label: label))
+        parameters.userNotificationController.submitNotification(UserNotification(title: label))
     }
 }

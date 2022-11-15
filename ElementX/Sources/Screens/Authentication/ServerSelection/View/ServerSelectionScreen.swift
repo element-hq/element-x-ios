@@ -44,6 +44,7 @@ struct ServerSelectionScreen: View {
         .background(Color.element.background, ignoresSafeAreaEdges: .all)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo) { $0.alert }
+        .interactiveDismissDisabled()
     }
     
     /// The title, message and icon at the top of the screen.

@@ -29,17 +29,12 @@ final class TemplateCoordinator: CoordinatorProtocol {
     private let parameters: TemplateCoordinatorParameters
     private var viewModel: TemplateViewModelProtocol
     
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-//    private var activityIndicator: UserIndicator?
-    
     var callback: ((TemplateCoordinatorAction) -> Void)?
     
     init(parameters: TemplateCoordinatorParameters) {
         self.parameters = parameters
         
         viewModel = TemplateViewModel(promptType: parameters.promptType)
-
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: templateHostingController)
     }
     
     // MARK: - Public
@@ -56,27 +51,8 @@ final class TemplateCoordinator: CoordinatorProtocol {
             }
         }
     }
-    
-    func stop() {
-        stopLoading()
-    }
-    
+        
     func toPresentable() -> AnyView {
         AnyView(TemplateScreen(context: viewModel.context))
-    }
-    
-    // MARK: - Private
-    
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-//        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-//        activityIndicator = nil
     }
 }

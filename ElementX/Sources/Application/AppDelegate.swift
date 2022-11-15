@@ -19,29 +19,26 @@ import SwiftUI
 @main
 struct Application: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
-    private let navigationController: NavigationController
     private let applicationCoordinator: CoordinatorProtocol
-        
+    
     init() {
-        navigationController = NavigationController()
-        
         if Tests.isRunningUITests {
-            applicationCoordinator = UITestsAppCoordinator(navigationController: navigationController)
+            applicationCoordinator = UITestsAppCoordinator()
         } else {
-            applicationCoordinator = AppCoordinator(navigationController: navigationController)
+            applicationCoordinator = AppCoordinator()
         }
-        
-        navigationController.setRootCoordinator(applicationCoordinator)
     }
-
+    
     var body: some Scene {
         WindowGroup {
             if Tests.isRunningUnitTests {
                 EmptyView()
             } else {
-                navigationController
-                    .toPresentable()
+                applicationCoordinator.toPresentable()
                     .tint(.element.accent)
+                    .task {
+                        applicationCoordinator.start()
+                    }
             }
         }
     }

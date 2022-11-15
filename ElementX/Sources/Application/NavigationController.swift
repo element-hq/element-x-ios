@@ -26,7 +26,7 @@ class NavigationController: ObservableObject, CoordinatorProtocol {
             }
             
             if let internalRootCoordinator {
-                logPresentationChange("Set root", internalRootCoordinator.coordinator)
+                logPresentationChange("Set root", internalRootCoordinator)
                 internalRootCoordinator.coordinator.start()
             }
         }
@@ -35,14 +35,14 @@ class NavigationController: ObservableObject, CoordinatorProtocol {
     @Published fileprivate var internalSheetCoordinator: AnyCoordinator? {
         didSet {
             if let oldValue {
-                logPresentationChange("Dismiss", oldValue.coordinator)
+                logPresentationChange("Dismiss", oldValue)
                 oldValue.coordinator.stop()
                 dismissalCallbacks[oldValue.id]?()
                 dismissalCallbacks.removeValue(forKey: oldValue.id)
             }
             
             if let internalSheetCoordinator {
-                logPresentationChange("Present", internalSheetCoordinator.coordinator)
+                logPresentationChange("Present", internalSheetCoordinator)
                 internalSheetCoordinator.coordinator.start()
             }
         }
@@ -54,10 +54,10 @@ class NavigationController: ObservableObject, CoordinatorProtocol {
             diffs.forEach { change in
                 switch change {
                 case .insert(_, let anyCoordinator, _):
-                    logPresentationChange("Push", anyCoordinator.coordinator)
+                    logPresentationChange("Push", anyCoordinator)
                     anyCoordinator.coordinator.start()
                 case .remove(_, let anyCoordinator, _):
-                    logPresentationChange("Pop", anyCoordinator.coordinator)
+                    logPresentationChange("Pop", anyCoordinator)
                     anyCoordinator.coordinator.stop()
                     
                     dismissalCallbacks[anyCoordinator.id]?()
@@ -143,11 +143,11 @@ class NavigationController: ObservableObject, CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func logPresentationChange(_ change: String, _ coordinator: any CoordinatorProtocol) {
-        if let navigationCoordinator = coordinator as? NavigationController, let rootCoordinator = navigationCoordinator.rootCoordinator {
-            MXLog.info("\(change): \(rootCoordinator)")
+    private func logPresentationChange(_ change: String, _ anyCoordinator: AnyCoordinator) {
+        if let navigationCoordinator = anyCoordinator.coordinator as? NavigationController, let rootCoordinator = navigationCoordinator.rootCoordinator {
+            MXLog.info("\(change): NavigationController(\(anyCoordinator.id)) - \(rootCoordinator)")
         } else {
-            MXLog.info("\(change): \(coordinator)")
+            MXLog.info("\(change): \(anyCoordinator.coordinator)(\(anyCoordinator.id))")
         }
     }
 }

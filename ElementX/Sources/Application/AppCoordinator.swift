@@ -18,26 +18,22 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-//struct ServiceLocator {
-//    fileprivate static var serviceLocator: ServiceLocator?
-//    static var shared: ServiceLocator {
-//        guard let serviceLocator else {
-//            fatalError("The service locator should be setup at this point")
-//        }
-//
-//        return serviceLocator
-//    }
-//
-//    let userIndicatorPresenter: UserIndicatorTypePresenter
-//}
+struct ServiceLocator {
+    fileprivate static var serviceLocator: ServiceLocator?
+    static var shared: ServiceLocator {
+        guard let serviceLocator else {
+            fatalError("The service locator should be setup at this point")
+        }
+        
+        return serviceLocator
+    }
+    
+    let userNotificationController: UserNotificationControllerProtocol
+}
 
 class AppCoordinator: CoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
-    
-    private let splashScreenCoordinator: CoordinatorProtocol
-    
     private let navigationController: NavigationController
-    
     private let userSessionStore: UserSessionStoreProtocol
     
     private var userSession: UserSessionProtocol! {
@@ -55,20 +51,17 @@ class AppCoordinator: CoordinatorProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
-    private var loadingIndicator: UserIndicator?
-    private var statusIndicator: UserIndicator?
-
     private var cancellables = Set<AnyCancellable>()
         
-    init(navigationController: NavigationController) {
-        self.navigationController = navigationController
+    init() {
+        navigationController = NavigationController()
         stateMachine = AppCoordinatorStateMachine()
         
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
-        splashScreenCoordinator = EmptyScreenCoordinator()
+        navigationController.setRootCoordinator(EmptyScreenCoordinator())
         
-//        ServiceLocator.serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
+        ServiceLocator.serviceLocator = ServiceLocator(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
         
         guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
             fatalError("Should have a valid bundle identifier at this point")
@@ -95,7 +88,7 @@ class AppCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        splashScreenCoordinator.toPresentable()
+        ServiceLocator.shared.userNotificationController.toPresentable()
     }
         
     // MARK: - Private
@@ -265,7 +258,7 @@ class AppCoordinator: CoordinatorProtocol {
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
-        navigationController.setRootCoordinator(splashScreenCoordinator)
+        navigationController.setRootCoordinator(EmptyScreenCoordinator())
         
         if isSoftLogout {
             startAuthenticationSoftLogout()
@@ -301,15 +294,18 @@ class AppCoordinator: CoordinatorProtocol {
     // MARK: Toasts and loading indicators
     
     private func showLoadingIndicator() {
-//        loadingIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "AppCoordinatorLoading",
+                                                                                             type: .modal,
+                                                                                             title: ElementL10n.loading,
+                                                                                             persistent: true))
     }
     
     private func hideLoadingIndicator() {
-//        loadingIndicator = nil
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId("AppCoordinatorLoading")
     }
     
     private func showLoginErrorToast() {
-//        statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging in"))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: "Failed logging in"))
     }
 }
 

@@ -18,15 +18,11 @@ import SwiftUI
 
 final class SplashScreenCoordinator: CoordinatorProtocol {
     private var viewModel: SplashScreenViewModelProtocol
-    
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-//    private var loadingIndicator: UserIndicator?
-    
+        
     var callback: ((SplashScreenCoordinatorAction) -> Void)?
     
     init() {
         viewModel = SplashScreenViewModel()
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: splashScreenHostingController)
     }
     
     // MARK: - Public
@@ -42,23 +38,7 @@ final class SplashScreenCoordinator: CoordinatorProtocol {
         }
     }
     
-    func stop() {
-        stopLoading()
-    }
-    
     func toPresentable() -> AnyView {
         AnyView(SplashScreen(context: viewModel.context))
-    }
-    
-    // MARK: - Private
-    
-    /// Show an activity indicator whilst loading.
-    private func startLoading() {
-//        loadingIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-//        loadingIndicator = nil
     }
 }

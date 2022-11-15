@@ -14,17 +14,25 @@
 // limitations under the License.
 //
 
-@testable import ElementX
-import Foundation
+import SwiftUI
 
-class UserIndicatorPresenterSpy: UserIndicatorViewPresentable {
-    var intel = [String]()
+struct UITestsRootCoordinator: CoordinatorProtocol {
+    let mockScreens: [MockScreen]
+    var selectionCallback: ((UITestScreenIdentifier) -> Void)?
     
-    func present() {
-        intel.append(#function)
+    func toPresentable() -> AnyView {
+        AnyView(body)
     }
     
-    func dismiss() {
-        intel.append(#function)
+    private var body: some View {
+        List(mockScreens) { coordinator in
+            Button(coordinator.id.description) {
+                selectionCallback?(coordinator.id)
+            }
+            .accessibilityIdentifier(coordinator.id.rawValue)
+        }
+        .listStyle(.plain)
+        .navigationTitle("Screens")
+        .navigationViewStyle(.stack)
     }
 }

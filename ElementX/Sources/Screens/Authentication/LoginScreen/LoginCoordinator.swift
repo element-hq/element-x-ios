@@ -44,8 +44,6 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
     private var navigationController: NavigationController { parameters.navigationController }
-//    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-//    private var activityIndicator: UserIndicator?
 
     var callback: (@MainActor (LoginCoordinatorAction) -> Void)?
     
@@ -56,7 +54,6 @@ final class LoginCoordinator: CoordinatorProtocol {
         
         viewModel = LoginViewModel(homeserver: parameters.authenticationService.homeserver)
         
-//        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: loginHostingController)
         hostingController = UIHostingController(rootView: LoginScreen(context: viewModel.context))
         oidcUserAgent = OIDExternalUserAgentIOS(presenting: hostingController)
     }
@@ -95,7 +92,10 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Show a blocking activity indicator whilst saving.
     private func startLoading(isInteractionBlocking: Bool) {
-//        activityIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: isInteractionBlocking))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "LoginCoordinatorLoading",
+                                                                                             type: .modal,
+                                                                                             title: ElementL10n.loading,
+                                                                                             persistent: true))
         
         if !isInteractionBlocking {
             viewModel.update(isLoading: true)
@@ -104,18 +104,18 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Show a non-blocking indicator that an operation was successful.
     private func indicateSuccess() {
-//        activityIndicator = indicatorPresenter.present(.success(label: ElementL10n.dialogTitleSuccess))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.dialogTitleSuccess))
     }
     
     /// Show a non-blocking indicator that an operation failed.
     private func indicateFailure() {
-//        activityIndicator = indicatorPresenter.present(.error(label: ElementL10n.dialogTitleError))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.dialogTitleError))
     }
     
     /// Hide the currently displayed activity indicator.
     private func stopLoading() {
         viewModel.update(isLoading: false)
-//        activityIndicator = nil
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId("LoginCoordinatorLoading")
     }
     
     /// Processes an error to either update the flow or display it to the user.
@@ -199,8 +199,12 @@ final class LoginCoordinator: CoordinatorProtocol {
     private func presentServerSelectionScreen() {
         let serverSelectionNavigationController = NavigationController()
         
+        let userNotificationController = UserNotificationController(rootCoordinator: serverSelectionNavigationController)
+        
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
+                                                              userNotificationController: userNotificationController,
                                                               isModallyPresented: true)
+        
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] action in
             guard let self, let coordinator = coordinator else { return }
@@ -208,8 +212,8 @@ final class LoginCoordinator: CoordinatorProtocol {
         }
         
         serverSelectionNavigationController.setRootCoordinator(coordinator)
-
-        navigationController.presentSheet(serverSelectionNavigationController)
+        
+        navigationController.presentSheet(userNotificationController)
     }
     
     /// Handles the result from the server selection modal, dismissing it after updating the view.
