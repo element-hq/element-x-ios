@@ -33,6 +33,10 @@ Please see our [contribution guide](CONTRIBUTING.md).
 
 Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/#element-ios:matrix.org).
 
+## Build instructions
+
+Please refer to the [setting up a development environment](CONTRIBUTING.md#setting-up-a-development-environment) section from the [contribution guide](CONTRIBUTING.md).
+
 ## Support
 
 When you are experiencing an issue on ElementX iOS, please first search in [GitHub issues](https://github.com/vector-im/element-x-ios/issues)
