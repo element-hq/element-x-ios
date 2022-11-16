@@ -52,7 +52,7 @@ struct HomeScreenViewState: BindableState {
     
     var rooms: [HomeScreenRoom] = []
     
-    var roomListMode: HomeScreenRoomListMode = .rooms
+    var roomListMode: HomeScreenRoomListMode = .skeletons
     
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
@@ -94,15 +94,12 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var avatar: UIImage?
     
-    var isPlaceholder = false
-    
     static func placeholder(id: String) -> HomeScreenRoom {
         HomeScreenRoom(id: id,
                        name: "Placeholder room name",
                        hasUnreads: false,
                        timestamp: "Now",
                        lastMessage: AttributedString("Last message"),
-                       avatar: UIImage(systemName: "photo"),
-                       isPlaceholder: true)
+                       avatar: UIImage(systemName: "photo"))
     }
 }

@@ -28,22 +28,28 @@ struct HomeScreen: View {
                 sessionVerificationBanner
             }
             
-            LazyVStack {
-                ForEach(context.viewState.visibleRooms) { room in
-                    if room.isPlaceholder {
+            if context.viewState.roomListMode == .skeletons {
+                LazyVStack {
+                    ForEach(context.viewState.visibleRooms) { room in
                         HomeScreenRoomCell(room: room, context: context)
                             .redacted(reason: .placeholder)
                             .disabled(true)
-                    } else {
+                    }
+                }
+                .padding(.horizontal)
+            } else {
+                LazyVStack {
+                    ForEach(context.viewState.visibleRooms) { room in
                         HomeScreenRoomCell(room: room, context: context)
                     }
                 }
+                .padding(.horizontal)
+                .searchable(text: $context.searchQuery)
             }
-            .padding(.horizontal)
-            .searchable(text: $context.searchQuery)
         }
         .disabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
+        .animation(.elementDefault, value: context.viewState.roomListMode)
         .ignoresSafeArea(.all, edges: .bottom)
         .alert(item: $context.alertInfo) { $0.alert }
         .navigationTitle(ElementL10n.allChats)
