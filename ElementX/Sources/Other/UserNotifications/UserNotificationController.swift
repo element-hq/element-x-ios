@@ -67,7 +67,7 @@ class UserNotificationController: ObservableObject, UserNotificationControllerPr
     }
     
     func retractNotificationWithId(_ id: String) {
-        guard let displayTime = displayTimes[id], abs(displayTime.timeIntervalSinceNow) < minimumDisplayDuration else {
+        guard let displayTime = displayTimes[id], abs(displayTime.timeIntervalSinceNow) <= minimumDisplayDuration else {
             notificationQueue.removeAll { $0.id == id }
             return
         }

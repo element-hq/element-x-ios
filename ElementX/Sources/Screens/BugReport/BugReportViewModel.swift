@@ -16,10 +16,8 @@
 
 import SwiftUI
 
-@available(iOS 14, *)
-typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState,
-    BugReportViewAction>
-@available(iOS 14, *)
+typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState, BugReportViewAction>
+
 class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     let bugReportService: BugReportServiceProtocol
 
