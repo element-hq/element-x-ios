@@ -22,4 +22,6 @@ struct RoomTimelineItemProperties: Equatable {
     var isEdited = false
     /// The aggregated reactions that have been sent for this item.
     var reactions: [AggregatedReaction] = []
+    /// The delivery status for this item.
+    var deliveryStatus: MessageTimelineItemDeliveryStatus = .unknown
 }

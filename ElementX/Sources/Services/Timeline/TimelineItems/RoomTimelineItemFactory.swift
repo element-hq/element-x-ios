@@ -163,7 +163,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     senderDisplayName: displayName,
                                     senderAvatar: avatarImage,
                                     properties: RoomTimelineItemProperties(isEdited: message.isEdited,
-                                                                           reactions: aggregateReactions(message.reactions)))
+                                                                           reactions: aggregateReactions(message.reactions),
+                                                                           deliveryStatus: message.deliveryStatus))
     }
     
     private func buildImageTimelineItemFromMessage(_ message: MessageTimelineItem<ImageMessageContent>,
