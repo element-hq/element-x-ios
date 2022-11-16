@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AVKit
 import SwiftUI
 
 struct VideoPlayerCoordinatorParameters {
@@ -59,6 +60,9 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
     
     func start() {
         MXLog.debug("Did start.")
+
+        configureAudioSession(.sharedInstance())
+
         videoPlayerViewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("VideoPlayerViewModel did complete with result: \(action).")
@@ -78,6 +82,17 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
     }
     
     // MARK: - Private
+
+    private func configureAudioSession(_ session: AVAudioSession) {
+        do {
+            try session.setCategory(.playback,
+                                    mode: .default,
+                                    options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP])
+            try session.setActive(true)
+        } catch {
+            MXLog.debug("Configure audio session failed: \(error)")
+        }
+    }
     
     /// Show an activity indicator whilst loading.
     /// - Parameters:
