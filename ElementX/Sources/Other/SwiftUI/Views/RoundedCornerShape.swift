@@ -25,10 +25,6 @@ struct RoundedCornerShape: Shape {
         self.corners = corners
     }
 
-    init(radius: CGFloat, inGroupState: TimelineItemInGroupState) {
-        self.init(radius: radius, corners: inGroupState.roundedCorners)
-    }
-
     func path(in rect: CGRect) -> Path {
         let path = UIBezierPath(roundedRect: rect,
                                 byRoundingCorners: corners,
@@ -40,9 +36,5 @@ struct RoundedCornerShape: Shape {
 extension View {
     func cornerRadius(_ radius: CGFloat, corners: UIRectCorner) -> some View {
         clipShape(RoundedCornerShape(radius: radius, corners: corners))
-    }
-
-    func cornerRadius(_ radius: CGFloat, inGroupState: TimelineItemInGroupState) -> some View {
-        clipShape(RoundedCornerShape(radius: radius, inGroupState: inGroupState))
     }
 }

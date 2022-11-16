@@ -35,7 +35,7 @@ Come chat with the community in the dedicated Matrix [room](https://matrix.to/#/
 
 ## Build instructions
 
-Please refere to [Setting up a development environment](CONTRIBUTING.md#setting-up-a-development-environment) from [contribution guide](CONTRIBUTING.md).
+Please refer to the [setting up a development environment](CONTRIBUTING.md#setting-up-a-development-environment) section from the [contribution guide](CONTRIBUTING.md).
 
 ## Support
 
