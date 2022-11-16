@@ -73,23 +73,19 @@ final class BugReportCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        parameters.userNotificationController.submitNotification(UserNotification(id: "BugReportLoading",
+    static let loadingIndicatorIdentifier = "BugReportLoading"
+    
+    private func startLoading(label: String = ElementL10n.loading) {
+        parameters.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
                                                                                   type: .modal,
                                                                                   title: label,
                                                                                   persistent: true))
     }
     
-    /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        parameters.userNotificationController.retractNotificationWithId("BugReportLoading")
+        parameters.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
     
-    /// Show error indicator
     private func showError(label: String) {
         parameters.userNotificationController.submitNotification(UserNotification(title: label))
     }

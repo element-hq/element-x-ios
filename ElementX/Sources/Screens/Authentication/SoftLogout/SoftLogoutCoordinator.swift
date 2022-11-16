@@ -95,9 +95,11 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
+    static let loadingIndicatorIdentifier = "SoftLogoutLoading"
+    
     /// Show an activity indicator whilst loading.
     @MainActor private func startLoading() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "SoftLogoutLoading",
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
                                                                                              type: .modal,
                                                                                              title: ElementL10n.loading,
                                                                                              persistent: true))
@@ -105,7 +107,7 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     
     /// Hide the currently displayed activity indicator.
     @MainActor private func stopLoading() {
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId("SoftLogoutLoading")
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
 
     /// Shows the forgot password screen.

@@ -90,9 +90,10 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    /// Show a blocking activity indicator whilst saving.
+    static let loadingIndicatorIdentifier = "LoginCoordinatorLoading"
+    
     private func startLoading(isInteractionBlocking: Bool) {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "LoginCoordinatorLoading",
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
                                                                                              type: .modal,
                                                                                              title: ElementL10n.loading,
                                                                                              persistent: true))
@@ -102,20 +103,17 @@ final class LoginCoordinator: CoordinatorProtocol {
         }
     }
     
-    /// Show a non-blocking indicator that an operation was successful.
+    private func stopLoading() {
+        viewModel.update(isLoading: false)
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
+    }
+    
     private func indicateSuccess() {
         ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.dialogTitleSuccess))
     }
     
-    /// Show a non-blocking indicator that an operation failed.
     private func indicateFailure() {
         ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.dialogTitleError))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        viewModel.update(isLoading: false)
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId("LoginCoordinatorLoading")
     }
     
     /// Processes an error to either update the flow or display it to the user.

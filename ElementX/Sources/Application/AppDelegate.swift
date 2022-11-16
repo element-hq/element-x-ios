@@ -46,9 +46,6 @@ struct Application: App {
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        //  use `en` as fallback language
-        Bundle.elementFallbackLanguage = "en"
-
-        return true
+        true
     }
 }

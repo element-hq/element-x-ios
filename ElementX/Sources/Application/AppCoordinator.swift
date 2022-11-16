@@ -76,6 +76,8 @@ class AppCoordinator: CoordinatorProtocol {
         
         setupLogging()
         
+        Bundle.elementFallbackLanguage = "en"
+        
         // Benchmark.trackingEnabled = true
     }
     
@@ -293,15 +295,17 @@ class AppCoordinator: CoordinatorProtocol {
     
     // MARK: Toasts and loading indicators
     
+    static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
+    
     private func showLoadingIndicator() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "AppCoordinatorLoading",
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
                                                                                              type: .modal,
                                                                                              title: ElementL10n.loading,
                                                                                              persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId("AppCoordinatorLoading")
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func showLoginErrorToast() {

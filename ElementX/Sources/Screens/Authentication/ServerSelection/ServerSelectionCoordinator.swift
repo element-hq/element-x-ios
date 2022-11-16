@@ -70,17 +70,12 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
+    private func startLoading(label: String = ElementL10n.loading) {
         userNotificationController.submitNotification(UserNotification(type: .modal,
                                                                        title: label,
                                                                        persistent: true))
     }
     
-    /// Hide the currently displayed activity indicator.
     private func stopLoading() {
         userNotificationController.retractAllNotifications()
     }

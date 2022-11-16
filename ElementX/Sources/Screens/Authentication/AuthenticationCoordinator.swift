@@ -121,16 +121,16 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         navigationController.setRootCoordinator(coordinator)
     }
     
-    /// Show a blocking activity indicator.
+    static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
+    
     private func startLoading() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "AuthenticationCoordinatorLoading",
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
                                                                                              type: .modal,
                                                                                              title: ElementL10n.loading,
                                                                                              persistent: true))
     }
     
-    /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId("AuthenticationCoordinatorLoading")
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
 }

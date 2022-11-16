@@ -94,7 +94,6 @@ final class SettingsCoordinator: CoordinatorProtocol {
         parameters.navigationController.push(coordinator)
     }
 
-    /// Show success indicator
     private func showSuccess(label: String) {
         parameters.userNotificationController.submitNotification(UserNotification(title: label))
     }
