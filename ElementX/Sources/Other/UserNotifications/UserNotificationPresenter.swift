@@ -25,7 +25,7 @@ struct UserNotificationPresenter: View {
             rootView
             notificationViewFor(notification: userNotificationController.activeNotification)
         }
-        .animation(.default, value: userNotificationController.activeNotification)
+        .animation(.elementDefault, value: userNotificationController.activeNotification)
     }
     
     @ViewBuilder

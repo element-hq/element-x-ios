@@ -17,19 +17,30 @@
 import SwiftUI
 
 class UserNotificationController: ObservableObject, UserNotificationControllerProtocol {
-    private let operationQueue: OperationQueue
-    private var rootCoordinator: CoordinatorProtocol
+    private let rootCoordinator: CoordinatorProtocol
+    
+    private var dismisalTimer: Timer?
+    private var displayTimes = [String: Date]()
+    
+    var nonPersistentDisplayDuration = 2.5
+    var minimumDisplayDuration = 0.5
     
     @Published private(set) var activeNotification: UserNotification?
-    private var notificationQueue = [UserNotification]() {
+    private(set) var notificationQueue = [UserNotification]() {
         didSet {
             activeNotification = notificationQueue.last
+            
+            if let activeNotification, !activeNotification.persistent {
+                dismisalTimer?.invalidate()
+                dismisalTimer = Timer.scheduledTimer(withTimeInterval: nonPersistentDisplayDuration, repeats: false) { [weak self] _ in
+                    self?.retractNotificationWithId(activeNotification.id)
+                }
+            }
         }
     }
     
     init(rootCoordinator: CoordinatorProtocol) {
         self.rootCoordinator = rootCoordinator
-        operationQueue = OperationQueue()
     }
         
     func toPresentable() -> AnyView {
@@ -39,27 +50,31 @@ class UserNotificationController: ObservableObject, UserNotificationControllerPr
     }
     
     func submitNotification(_ notification: UserNotification) {
-        retractNotificationWithId(notification.id)
-        notificationQueue.append(notification)
-        
-        if notification.persistent {
-            return
+        if let index = notificationQueue.firstIndex(where: { $0.id == notification.id }) {
+            notificationQueue[index] = notification
+        } else {
+            retractNotificationWithId(notification.id)
+            notificationQueue.append(notification)
         }
         
-        operationQueue.addOperation {
-            Thread.sleep(forTimeInterval: 2.5)
-            
-            DispatchQueue.main.async {
-                self.retractNotificationWithId(notification.id)
-            }
+        displayTimes[notification.id] = .now
+    }
+    
+    func retractAllNotifications() {
+        for notification in notificationQueue {
+            retractNotificationWithId(notification.id)
         }
     }
     
     func retractNotificationWithId(_ id: String) {
-        notificationQueue.removeAll { $0.id == id }
-    }
+        guard let displayTime = displayTimes[id], abs(displayTime.timeIntervalSinceNow) < minimumDisplayDuration else {
+            notificationQueue.removeAll { $0.id == id }
+            return
+        }
     
-    func retractAllNotifications() {
-        notificationQueue.removeAll()
+        Timer.scheduledTimer(withTimeInterval: minimumDisplayDuration, repeats: false) { [weak self] _ in
+            self?.notificationQueue.removeAll { $0.id == id }
+            self?.displayTimes[id] = nil
+        }
     }
 }
