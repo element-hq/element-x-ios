@@ -17,7 +17,6 @@
 import SwiftUI
 struct TimelineDeliveryStatusView: View {
     let deliveryStatus: MessageTimelineItemDeliveryStatus
-    
     @Binding var showMe: Bool
     
     private var systemImageName: String {
