@@ -35,7 +35,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        showSplashScreen()
+        showOnboarding()
     }
     
     func stop() {
@@ -44,9 +44,8 @@ class AuthenticationCoordinator: CoordinatorProtocol {
         
     // MARK: - Private
     
-    /// Shows the splash screen as the root view in the navigation stack.
-    private func showSplashScreen() {
-        let coordinator = SplashScreenCoordinator()
+    private func showOnboarding() {
+        let coordinator = OnboardingCoordinator()
 
         coordinator.callback = { [weak self] action in
             guard let self else { return }

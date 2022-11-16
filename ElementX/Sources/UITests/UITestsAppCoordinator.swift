@@ -105,7 +105,7 @@ class MockScreen: Identifiable {
                                                           screenshot: Asset.Images.appLogo.image,
                                                           isModallyPresented: false))
         case .splash:
-            return SplashScreenCoordinator()
+            return OnboardingCoordinator()
         case .roomPlainNoAvatar:
             let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,
                                                              timelineController: MockRoomTimelineController(),

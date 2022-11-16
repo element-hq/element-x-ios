@@ -17,7 +17,7 @@
 import XCTest
 
 @MainActor
-class SplashScreenUITests: XCTestCase {
+class OnboardingUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.splash)

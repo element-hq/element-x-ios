@@ -25,7 +25,7 @@ class UserNotificationControllerTests: XCTestCase {
     private var notificationController: UserNotificationController!
     
     override func setUp() {
-        notificationController = UserNotificationController(rootCoordinator: EmptyScreenCoordinator())
+        notificationController = UserNotificationController(rootCoordinator: SplashScreenCoordinator())
     }
     
     func testNotificationQueueing() {

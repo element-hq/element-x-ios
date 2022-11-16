@@ -17,8 +17,8 @@
 import DesignKit
 import SwiftUI
 
-/// The splash screen shown at the beginning of the onboarding flow.
-struct SplashScreen: View {
+/// The screen shown at the beginning of the onboarding flow.
+struct OnboardingScreen: View {
     // MARK: - Properties
     
     // MARK: Private
@@ -36,7 +36,7 @@ struct SplashScreen: View {
     
     // MARK: Public
     
-    @ObservedObject var context: SplashScreenViewModel.Context
+    @ObservedObject var context: OnboardingViewModel.Context
     
     var body: some View {
         GeometryReader { geometry in
@@ -47,12 +47,12 @@ struct SplashScreen: View {
                 // The main content of the carousel
                 HStack(alignment: .top, spacing: 0) {
                     // Add a hidden page at the start of the carousel duplicating the content of the last page
-                    SplashScreenPageView(content: context.viewState.content[pageCount - 1])
+                    OnboardingPageView(content: context.viewState.content[pageCount - 1])
                         .frame(width: geometry.size.width)
                         .accessibilityIdentifier("hiddenPage")
                     
                     ForEach(0..<pageCount, id: \.self) { index in
-                        SplashScreenPageView(content: context.viewState.content[index])
+                        OnboardingPageView(content: context.viewState.content[index])
                             .frame(width: geometry.size.width)
                     }
                 }
@@ -60,7 +60,7 @@ struct SplashScreen: View {
                 
                 Spacer()
                 
-                SplashScreenPageIndicator(pageCount: pageCount, pageIndex: context.pageIndex)
+                OnboardingPageIndicator(pageCount: pageCount, pageIndex: context.pageIndex)
                     .frame(width: geometry.size.width)
                     .padding(.bottom)
                 
@@ -213,11 +213,11 @@ struct SplashScreen: View {
 
 // MARK: - Previews
 
-struct SplashScreen_Previews: PreviewProvider {
-    static let viewModel = SplashScreenViewModel()
+struct OnboardingScreen_Previews: PreviewProvider {
+    static let viewModel = OnboardingViewModel()
     
     static var previews: some View {
-        SplashScreen(context: viewModel.context)
+        OnboardingScreen(context: viewModel.context)
             .tint(.element.accent)
     }
 }

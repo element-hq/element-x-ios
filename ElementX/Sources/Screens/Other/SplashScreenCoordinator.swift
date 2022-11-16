@@ -14,10 +14,12 @@
 // limitations under the License.
 //
 
-import XCTest
+import SwiftUI
 
-@testable import ElementX
-
-class SplashScreenViewModelTests: XCTestCase {
-    // Nothing to test, the view model has no mutable state.
+struct SplashScreenCoordinator: CoordinatorProtocol {
+    func toPresentable() -> AnyView {
+        AnyView(
+            Image(asset: Asset.Images.appLogo)
+        )
+    }
 }

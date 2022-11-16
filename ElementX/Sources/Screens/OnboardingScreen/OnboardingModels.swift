@@ -18,12 +18,12 @@ import SwiftUI
 
 // MARK: - Coordinator
 
-enum SplashScreenCoordinatorAction {
+enum OnboardingCoordinatorAction {
     case login
 }
 
-/// The content displayed in a single splash screen page.
-struct SplashScreenPageContent {
+/// The content displayed in a single screen page.
+struct OnboardingPageContent {
     let title: AttributedString
     let message: String
     let image: ImageAsset
@@ -31,13 +31,13 @@ struct SplashScreenPageContent {
 
 // MARK: View model
 
-enum SplashScreenViewModelAction {
+enum OnboardingViewModelAction {
     case login
 }
 
 // MARK: View
 
-struct SplashScreenViewState: BindableState {
+struct OnboardingViewState: BindableState {
     /// The colours of the background gradient shown behind the 4 pages.
     private let gradientColors = [
         Color(red: 0.95, green: 0.98, blue: 0.96),
@@ -48,8 +48,8 @@ struct SplashScreenViewState: BindableState {
     ]
     
     /// An array containing all content of the carousel pages
-    let content: [SplashScreenPageContent]
-    var bindings: SplashScreenBindings
+    let content: [OnboardingPageContent]
+    var bindings: OnboardingBindings
     
     /// The background gradient for all 4 pages and the hidden page at the start of the carousel.
     var backgroundGradient: Gradient {
@@ -69,27 +69,27 @@ struct SplashScreenViewState: BindableState {
         let page4Title = locale.identifier.hasPrefix("en") ? "Cut the slack from teams." : ElementL10n.ftueAuthCarouselWorkplaceTitle
         
         content = [
-            SplashScreenPageContent(title: ElementL10n.ftueAuthCarouselSecureTitle.tinting("."),
-                                    message: ElementL10n.ftueAuthCarouselSecureBody,
-                                    image: Asset.Images.splashScreenPage1),
-            SplashScreenPageContent(title: ElementL10n.ftueAuthCarouselControlTitle.tinting("."),
-                                    message: ElementL10n.ftueAuthCarouselControlBody,
-                                    image: Asset.Images.splashScreenPage2),
-            SplashScreenPageContent(title: ElementL10n.ftueAuthCarouselEncryptedTitle.tinting("."),
-                                    message: ElementL10n.ftueAuthCarouselEncryptedBody,
-                                    image: Asset.Images.splashScreenPage3),
-            SplashScreenPageContent(title: page4Title.tinting("."),
-                                    message: ElementL10n.ftueAuthCarouselWorkplaceBody(ElementInfoPlist.cfBundleDisplayName),
-                                    image: Asset.Images.splashScreenPage4)
+            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselSecureTitle.tinting("."),
+                                  message: ElementL10n.ftueAuthCarouselSecureBody,
+                                  image: Asset.Images.onboardingScreenPage1),
+            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselControlTitle.tinting("."),
+                                  message: ElementL10n.ftueAuthCarouselControlBody,
+                                  image: Asset.Images.onboardingScreenPage2),
+            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselEncryptedTitle.tinting("."),
+                                  message: ElementL10n.ftueAuthCarouselEncryptedBody,
+                                  image: Asset.Images.onboardingScreenPage3),
+            OnboardingPageContent(title: page4Title.tinting("."),
+                                  message: ElementL10n.ftueAuthCarouselWorkplaceBody(ElementInfoPlist.cfBundleDisplayName),
+                                  image: Asset.Images.onboardingScreenPage4)
         ]
-        bindings = SplashScreenBindings()
+        bindings = OnboardingBindings()
     }
 }
 
-struct SplashScreenBindings {
+struct OnboardingBindings {
     var pageIndex = 0
 }
 
-enum SplashScreenViewAction {
+enum OnboardingViewAction {
     case login
 }

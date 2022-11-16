@@ -59,7 +59,7 @@ class AppCoordinator: CoordinatorProtocol {
         
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
-        navigationController.setRootCoordinator(EmptyScreenCoordinator())
+        navigationController.setRootCoordinator(SplashScreenCoordinator())
         
         ServiceLocator.serviceLocator = ServiceLocator(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
         
@@ -260,7 +260,7 @@ class AppCoordinator: CoordinatorProtocol {
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
-        navigationController.setRootCoordinator(EmptyScreenCoordinator())
+        navigationController.setRootCoordinator(SplashScreenCoordinator())
         
         if isSoftLogout {
             startAuthenticationSoftLogout()

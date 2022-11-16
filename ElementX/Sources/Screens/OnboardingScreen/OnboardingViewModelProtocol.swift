@@ -17,7 +17,7 @@
 import Foundation
 
 @MainActor
-protocol SplashScreenViewModelProtocol {
-    var callback: ((SplashScreenViewModelAction) -> Void)? { get set }
-    var context: SplashScreenViewModelType.Context { get }
+protocol OnboardingViewModelProtocol {
+    var callback: ((OnboardingViewModelAction) -> Void)? { get set }
+    var context: OnboardingViewModelType.Context { get }
 }

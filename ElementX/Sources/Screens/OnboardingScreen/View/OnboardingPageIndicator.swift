@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SplashScreenPageIndicator: View {
+struct OnboardingPageIndicator: View {
     // MARK: - Properties
     
     // MARK: Public

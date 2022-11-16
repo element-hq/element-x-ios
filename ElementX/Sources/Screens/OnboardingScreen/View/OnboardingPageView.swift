@@ -16,13 +16,13 @@
 
 import SwiftUI
 
-struct SplashScreenPageView: View {
+struct OnboardingPageView: View {
     // MARK: - Properties
     
     // MARK: Public
     
     /// The content that this page should display.
-    let content: SplashScreenPageContent
+    let content: OnboardingPageContent
     
     // MARK: - Views
     
@@ -54,11 +54,11 @@ struct SplashScreenPageView: View {
     }
 }
 
-struct SplashScreenPage_Previews: PreviewProvider {
-    static let content = SplashScreenViewState().content
+struct OnboardingPage_Previews: PreviewProvider {
+    static let content = OnboardingViewState().content
     static var previews: some View {
         ForEach(0..<content.count, id: \.self) { index in
-            SplashScreenPageView(content: content[index])
+            OnboardingPageView(content: content[index])
         }
     }
 }

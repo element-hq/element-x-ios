@@ -14,12 +14,32 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
-struct EmptyScreenCoordinator: CoordinatorProtocol {
-    func toPresentable() -> AnyView {
-        AnyView(
-            Image(asset: Asset.Images.appLogo)
-        )
+typealias OnboardingViewModelType = StateStoreViewModel<OnboardingViewState, OnboardingViewAction>
+
+class OnboardingViewModel: OnboardingViewModelType, OnboardingViewModelProtocol {
+    // MARK: - Properties
+
+    // MARK: Private
+
+    // MARK: Public
+
+    var callback: ((OnboardingViewModelAction) -> Void)?
+
+    // MARK: - Setup
+
+    init() {
+        super.init(initialViewState: OnboardingViewState())
+    }
+
+    // MARK: - Public
+
+    override func process(viewAction: OnboardingViewAction) async {
+        switch viewAction {
+        case .login:
+            callback?(.login)
+        }
     }
 }

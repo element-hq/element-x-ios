@@ -16,20 +16,20 @@
 
 import SwiftUI
 
-final class SplashScreenCoordinator: CoordinatorProtocol {
-    private var viewModel: SplashScreenViewModelProtocol
+final class OnboardingCoordinator: CoordinatorProtocol {
+    private var viewModel: OnboardingViewModelProtocol
         
-    var callback: ((SplashScreenCoordinatorAction) -> Void)?
+    var callback: ((OnboardingCoordinatorAction) -> Void)?
     
     init() {
-        viewModel = SplashScreenViewModel()
+        viewModel = OnboardingViewModel()
     }
     
     // MARK: - Public
     
     func start() {
         viewModel.callback = { [weak self] action in
-            MXLog.debug("SplashScreenViewModel did complete with result: \(action).")
+            MXLog.debug("OnboardingViewModel did complete with result: \(action).")
             guard let self else { return }
             switch action {
             case .login:
@@ -39,6 +39,6 @@ final class SplashScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(SplashScreen(context: viewModel.context))
+        AnyView(OnboardingScreen(context: viewModel.context))
     }
 }
