@@ -101,7 +101,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         
         if shouldAvoidBubbling {
             content()
-                .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+                .cornerRadius(12, corners: timelineItem.roundedCorners)
                 .padding(.top, topPadding)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
@@ -115,7 +115,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
             .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
             .background(Color.element.systemGray5)
-            .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+            .cornerRadius(12, corners: timelineItem.roundedCorners)
             .padding(.top, topPadding)
         }
     }
@@ -124,7 +124,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var styledContentIncoming: some View {
         if shouldAvoidBubbling {
             content()
-                .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+                .cornerRadius(12, corners: timelineItem.roundedCorners)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
@@ -136,8 +136,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
             .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
-            .background(Color.element.systemGray6) // Demo time!
-            .cornerRadius(12, inGroupState: timelineItem.inGroupState)
+            .background(Color.element.systemGray6)
+            .cornerRadius(12, corners: timelineItem.roundedCorners)
         }
     }
 
