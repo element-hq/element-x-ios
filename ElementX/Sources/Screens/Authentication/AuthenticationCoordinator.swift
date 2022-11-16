@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import UIKit
+import SwiftUI
 
 @MainActor
 protocol AuthenticationCoordinatorDelegate: AnyObject {
@@ -22,42 +22,31 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
                                    didLoginWithSession userSession: UserSessionProtocol)
 }
 
-class AuthenticationCoordinator: Coordinator, Presentable {
+class AuthenticationCoordinator: CoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
-    private let navigationRouter: NavigationRouter
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
-    
-    var childCoordinators: [Coordinator] = []
+    private let navigationController: NavigationController
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
-         navigationRouter: NavigationRouter) {
+         navigationController: NavigationController) {
         self.authenticationService = authenticationService
-        self.navigationRouter = navigationRouter
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: navigationRouter.toPresentable())
+        self.navigationController = navigationController
     }
     
     func start() {
-        showSplashScreen()
+        showOnboarding()
     }
     
-    func toPresentable() -> UIViewController {
-        navigationRouter.toPresentable()
-    }
-
     func stop() {
         stopLoading()
     }
-    
+        
     // MARK: - Private
     
-    /// Shows the splash screen as the root view in the navigation stack.
-    private func showSplashScreen() {
-        let coordinator = SplashScreenCoordinator()
-        
+    private func showOnboarding() {
+        let coordinator = OnboardingCoordinator()
+
         coordinator.callback = { [weak self] action in
             guard let self else { return }
             switch action {
@@ -66,12 +55,7 @@ class AuthenticationCoordinator: Coordinator, Presentable {
             }
         }
         
-        coordinator.start()
-        add(childCoordinator: coordinator)
-        
-        navigationRouter.setRootModule(coordinator) { [weak self] in
-            self?.remove(childCoordinator: coordinator)
-        }
+        navigationController.setRootCoordinator(coordinator)
     }
     
     private func startAuthentication() async {
@@ -89,7 +73,8 @@ class AuthenticationCoordinator: Coordinator, Presentable {
     
     private func showServerSelectionScreen() {
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              hasModalPresentation: false)
+                                                              userNotificationController: ServiceLocator.shared.userNotificationController,
+                                                              isModallyPresented: false)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] action in
@@ -103,34 +88,24 @@ class AuthenticationCoordinator: Coordinator, Presentable {
             }
         }
         
-        coordinator.start()
-        add(childCoordinator: coordinator)
-        
-        navigationRouter.push(coordinator) { [weak self] in
-            self?.remove(childCoordinator: coordinator)
-        }
+        navigationController.push(coordinator)
     }
     
     private func showLoginScreen() {
         let parameters = LoginCoordinatorParameters(authenticationService: authenticationService,
-                                                    navigationRouter: navigationRouter)
+                                                    navigationController: navigationController)
         let coordinator = LoginCoordinator(parameters: parameters)
-        
+
         coordinator.callback = { [weak self] action in
             guard let self else { return }
-            
+
             switch action {
             case .signedIn(let userSession):
                 self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
             }
         }
-        
-        coordinator.start()
-        add(childCoordinator: coordinator)
-        
-        navigationRouter.push(coordinator) { [weak self] in
-            self?.remove(childCoordinator: coordinator)
-        }
+
+        navigationController.push(coordinator)
     }
     
     private func showAnalyticsPrompt(with userSession: UserSessionProtocol) {
@@ -141,22 +116,20 @@ class AuthenticationCoordinator: Coordinator, Presentable {
             guard let self else { return }
             self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
         }
-        
-        coordinator.start()
-        add(childCoordinator: coordinator)
-        
-        navigationRouter.setRootModule(coordinator, hideNavigationBar: true, animated: true) { [weak self] in
-            self?.remove(childCoordinator: coordinator)
-        }
+                
+        navigationController.setRootCoordinator(coordinator)
     }
     
-    /// Show a blocking activity indicator.
+    static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
+    
     private func startLoading() {
-        activityIndicator = indicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
+                                                                                             type: .modal,
+                                                                                             title: ElementL10n.loading,
+                                                                                             persistent: true))
     }
     
-    /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        activityIndicator = nil
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
 }

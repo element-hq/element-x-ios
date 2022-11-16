@@ -16,90 +16,77 @@
 
 import SwiftUI
 
-struct BugReportCoordinatorParameters {
-    let bugReportService: BugReportServiceProtocol
-    let screenshot: UIImage?
+enum BugReportCoordinatorResult {
+    case cancel
+    case finish
 }
 
-final class BugReportCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
-    private let parameters: BugReportCoordinatorParameters
-    private let bugReportHostingController: UIViewController
-    private var bugReportViewModel: BugReportViewModelProtocol
-    
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var loadingIndicator: UserIndicator?
-    private var statusIndicator: UserIndicator?
-    
-    // MARK: Public
+struct BugReportCoordinatorParameters {
+    let bugReportService: BugReportServiceProtocol
+    let userNotificationController: UserNotificationControllerProtocol
+    let screenshot: UIImage?
+    let isModallyPresented: Bool
+}
 
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
-    var completion: (() -> Void)?
-    
-    // MARK: - Setup
+final class BugReportCoordinator: CoordinatorProtocol {
+    private let parameters: BugReportCoordinatorParameters
+    private var viewModel: BugReportViewModelProtocol
+
+    var completion: ((BugReportCoordinatorResult) -> Void)?
     
     init(parameters: BugReportCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = BugReportViewModel(bugReportService: parameters.bugReportService,
-                                           screenshot: parameters.screenshot)
-        let view = BugReportScreen(context: viewModel.context)
-        bugReportViewModel = viewModel
-        bugReportHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: bugReportHostingController)
+        viewModel = BugReportViewModel(bugReportService: parameters.bugReportService,
+                                       screenshot: parameters.screenshot,
+                                       isModallyPresented: parameters.isModallyPresented)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-        bugReportViewModel.callback = { [weak self] result in
+        viewModel.callback = { [weak self] result in
             guard let self else { return }
             MXLog.debug("BugReportViewModel did complete with result: \(result).")
             switch result {
+            case .cancel:
+                self.completion?(.cancel)
             case .submitStarted:
                 self.startLoading()
             case .submitFinished:
                 self.stopLoading()
-                self.completion?()
+                self.completion?(.finish)
             case .submitFailed(let error):
                 self.stopLoading()
                 self.showError(label: error.localizedDescription)
             }
         }
     }
-    
-    func toPresentable() -> UIViewController {
-        bugReportHostingController
-    }
 
     func stop() {
         stopLoading()
     }
     
+    func toPresentable() -> AnyView {
+        AnyView(BugReportScreen(context: viewModel.context))
+    }
+    
     // MARK: - Private
     
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        loadingIndicator = indicatorPresenter.present(.loading(label: label,
-                                                               isInteractionBlocking: isInteractionBlocking))
+    static let loadingIndicatorIdentifier = "BugReportLoading"
+    
+    private func startLoading(label: String = ElementL10n.loading) {
+        parameters.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
+                                                                                  type: .modal,
+                                                                                  title: label,
+                                                                                  persistent: true))
     }
     
-    /// Hide the currently displayed activity indicator.
     private func stopLoading() {
-        loadingIndicator = nil
+        parameters.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
-
-    /// Show error indicator
+    
     private func showError(label: String) {
-        statusIndicator = indicatorPresenter.present(.error(label: label))
+        parameters.userNotificationController.submitNotification(UserNotification(title: label))
     }
 }

@@ -75,7 +75,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     var isEncrypted: Bool {
-        room.isEncrypted()
+        (try? room.isEncrypted()) ?? false
     }
     
     var isTombstoned: Bool {

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import AVKit
 import SwiftUI
 
 struct VideoPlayerCoordinatorParameters {
@@ -24,42 +25,24 @@ enum VideoPlayerCoordinatorAction {
     case cancel
 }
 
-final class VideoPlayerCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class VideoPlayerCoordinator: CoordinatorProtocol {
     private let parameters: VideoPlayerCoordinatorParameters
-    private let videoPlayerHostingController: UIViewController
-    private var videoPlayerViewModel: VideoPlayerViewModelProtocol
+    private var viewModel: VideoPlayerViewModelProtocol
     
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
-    
-    // MARK: Public
-
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: ((VideoPlayerCoordinatorAction) -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: VideoPlayerCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
-        let view = VideoPlayerScreen(context: viewModel.context)
-        videoPlayerViewModel = viewModel
-        videoPlayerHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: videoPlayerHostingController)
+        viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-        videoPlayerViewModel.callback = { [weak self] action in
+        configureAudioSession(.sharedInstance())
+
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("VideoPlayerViewModel did complete with result: \(action).")
             switch action {
@@ -69,26 +52,20 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController {
-        videoPlayerHostingController
+    func toPresentable() -> AnyView {
+        AnyView(VideoPlayerScreen(context: viewModel.context))
     }
 
-    func stop() {
-        stopLoading()
-    }
-    
     // MARK: - Private
     
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        activityIndicator = nil
+    private func configureAudioSession(_ session: AVAudioSession) {
+        do {
+            try session.setCategory(.playback,
+                                    mode: .default,
+                                    options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP])
+            try session.setActive(true)
+        } catch {
+            MXLog.debug("Configure audio session failed: \(error)")
+        }
     }
 }

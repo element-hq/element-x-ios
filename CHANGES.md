@@ -1,3 +1,15 @@
+## Changes in 1.0.8 (2022-11-16)
+
+✨ Features
+
+- Timeline: Add playback support for video items. ([#238](https://github.com/vector-im/element-x-ios/issues/238))
+- Timeline: Display file messages and preview them when tapped. ([#310](https://github.com/vector-im/element-x-ios/issues/310))
+
+📄 Documentation
+
+- Updated some documentation files. ([#312](https://github.com/vector-im/element-x-ios/issues/312))
+
+
 ## Changes in 1.0.7 (2022-11-10)
 
 ✨ Features

@@ -52,7 +52,7 @@ targets:
       base:
         PRODUCT_NAME: ElementX
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
-        MARKETING_VERSION: 1.0.8
+        MARKETING_VERSION: 1.0.9
         CURRENT_PROJECT_VERSION: 1
         DEVELOPMENT_TEAM: 7J4U792NQT
         CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements 

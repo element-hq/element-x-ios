@@ -48,6 +48,16 @@ struct BugReportScreen: View {
                     .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
             }
             .navigationTitle(ElementL10n.titleActivityBugReport)
+            .toolbar {
+                if context.viewState.isModallyPresented {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button(ElementL10n.actionCancel) {
+                            context.send(viewAction: .cancel)
+                        }
+                    }
+                }
+            }
+            .interactiveDismissDisabled()
         }
     }
     
@@ -136,7 +146,7 @@ struct BugReport_Previews: PreviewProvider {
 
     @ViewBuilder
     static var body: some View {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image)
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image, isModallyPresented: false)
         BugReportScreen(context: viewModel.context)
             .previewInterfaceOrientation(.portrait)
     }

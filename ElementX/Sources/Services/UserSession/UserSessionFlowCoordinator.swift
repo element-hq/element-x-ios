@@ -14,27 +14,25 @@
 // limitations under the License.
 //
 
-import UIKit
+import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
     case signOut
 }
 
-class UserSessionFlowCoordinator: Coordinator {
+class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
     private let userSession: UserSessionProtocol
-    private let navigationRouter: NavigationRouterType
+    private let navigationController: NavigationController
     private let bugReportService: BugReportServiceProtocol
-    
-    var childCoordinators: [Coordinator] = []
     
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
-    init(userSession: UserSessionProtocol, navigationRouter: NavigationRouterType, bugReportService: BugReportServiceProtocol) {
+    init(userSession: UserSessionProtocol, navigationController: NavigationController, bugReportService: BugReportServiceProtocol) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
-        self.navigationRouter = navigationRouter
+        self.navigationController = navigationController
         self.bugReportService = bugReportService
         
         setupStateMachine()
@@ -44,9 +42,7 @@ class UserSessionFlowCoordinator: Coordinator {
     func start() {
         stateMachine.processEvent(.start)
     }
-    
-    func stop() { }
-        
+            
     // MARK: - Private
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -60,23 +56,23 @@ class UserSessionFlowCoordinator: Coordinator {
                 
             case(.homeScreen, .showRoomScreen, .roomScreen(let roomId)):
                 self.presentRoomWithIdentifier(roomId)
-            case(.roomScreen(let roomId), .dismissedRoomScreen, .homeScreen):
-                self.tearDownDismissedRoomScreen(roomId)
+            case(.roomScreen, .dismissedRoomScreen, .homeScreen):
+                break
                 
             case (.homeScreen, .showSessionVerificationScreen, .sessionVerificationScreen):
                 self.presentSessionVerification()
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .homeScreen):
-                self.tearDownDismissedSessionVerificationScreen()
+                break
                 
             case (.homeScreen, .showSettingsScreen, .settingsScreen):
                 self.presentSettingsScreen()
             case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
-                self.dismissSettingsScreen()
+                break
                 
             case (.homeScreen, .feedbackScreen, .feedbackScreen):
                 self.presentFeedbackScreen()
             case (.feedbackScreen, .dismissedFeedbackScreen, .homeScreen):
-                self.dismissFeedbackScreen()
+                break
                 
             case (_, .resignActive, .suspended):
                 self.pause()
@@ -106,14 +102,16 @@ class UserSessionFlowCoordinator: Coordinator {
     
     private func presentHomeScreen() {
         userSession.clientProxy.startSync()
-        
+
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
-                                                         attributedStringBuilder: AttributedStringBuilder())
+                                                         attributedStringBuilder: AttributedStringBuilder(),
+                                                         bugReportService: bugReportService,
+                                                         navigationController: navigationController)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
-        
+
         coordinator.callback = { [weak self] action in
             guard let self else { return }
-            
+
             switch action {
             case .presentRoomScreen(let roomIdentifier):
                 self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
@@ -127,13 +125,8 @@ class UserSessionFlowCoordinator: Coordinator {
                 self.callback?(.signOut)
             }
         }
-        
-        add(childCoordinator: coordinator)
-        navigationRouter.setRootModule(coordinator)
 
-        if bugReportService.crashedLastRun {
-            showCrashPopup()
-        }
+        navigationController.setRootCoordinator(coordinator)
     }
     
     // MARK: Rooms
@@ -158,73 +151,52 @@ class UserSessionFlowCoordinator: Coordinator {
                                                             mediaProvider: userSession.mediaProvider,
                                                             roomProxy: roomProxy)
 
-            let parameters = RoomScreenCoordinatorParameters(navigationRouter: navigationRouter,
+            let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,
                                                              timelineController: timelineController,
                                                              mediaProvider: userSession.mediaProvider,
                                                              roomName: roomProxy.displayName ?? roomProxy.name,
                                                              roomAvatarUrl: roomProxy.avatarURL)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
-
-            add(childCoordinator: coordinator)
-            coordinator.start()
-            navigationRouter.push(coordinator) { [weak self] in
+            
+            navigationController.push(coordinator) { [weak self] in
                 guard let self else { return }
                 self.stateMachine.processEvent(.dismissedRoomScreen)
             }
         }
     }
-    
-    private func tearDownDismissedRoomScreen(_ roomId: String) {
-        guard let coordinator = childCoordinators.last as? RoomScreenCoordinator else {
-            fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
-        }
         
-        remove(childCoordinator: coordinator)
-    }
-    
     // MARK: Settings
     
     private func presentSettingsScreen() {
-        let navController = ElementNavigationController()
-        let newNavigationRouter = NavigationRouter(navigationController: navController)
-
-        let parameters = SettingsCoordinatorParameters(navigationRouter: newNavigationRouter,
+        let settingsNavigationController = NavigationController()
+        
+        let userNotificationController = UserNotificationController(rootCoordinator: settingsNavigationController)
+        
+        let parameters = SettingsCoordinatorParameters(navigationController: settingsNavigationController,
+                                                       userNotificationController: userNotificationController,
                                                        userSession: userSession,
                                                        bugReportService: bugReportService)
-        let coordinator = SettingsCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self] action in
+        let settingsCoordinator = SettingsCoordinator(parameters: parameters)
+        settingsCoordinator.callback = { [weak self] action in
             guard let self else { return }
             switch action {
             case .dismiss:
-                self.dismissSettingsScreen()
+                self.navigationController.dismissSheet()
             case .logout:
-                self.dismissSettingsScreen()
+                self.navigationController.dismissSheet()
                 self.callback?(.signOut)
             }
         }
-
-        add(childCoordinator: coordinator)
-        coordinator.start()
-        navController.viewControllers = [coordinator.toPresentable()]
-        navigationRouter.present(navController, animated: true)
-    }
-
-    @objc
-    private func dismissSettingsScreen() {
-        MXLog.debug("dismissSettingsScreen")
-
-        guard let coordinator = childCoordinators.first(where: { $0 is SettingsCoordinator }) else {
-            return
-        }
-
-        navigationRouter.dismissModule()
-        remove(childCoordinator: coordinator)
         
-        stateMachine.processEvent(.dismissedSettingsScreen)
+        settingsNavigationController.setRootCoordinator(settingsCoordinator)
+        
+        navigationController.presentSheet(userNotificationController) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedSettingsScreen)
+        }
     }
     
     // MARK: Session verification
-        
+    
     private func presentSessionVerification() {
         guard let sessionVerificationController = userSession.sessionVerificationController else {
             fatalError("The sessionVerificationController should aways be valid at this point")
@@ -235,71 +207,37 @@ class UserSessionFlowCoordinator: Coordinator {
         let coordinator = SessionVerificationCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] in
-            self?.navigationRouter.dismissModule()
+            self?.navigationController.dismissSheet()
+        }
+        
+        navigationController.presentSheet(coordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
         }
-        
-        add(childCoordinator: coordinator)
-        navigationRouter.present(coordinator)
-        
-        coordinator.start()
     }
-    
-    private func tearDownDismissedSessionVerificationScreen() {
-        guard let coordinator = childCoordinators.last as? SessionVerificationCoordinator else {
-            fatalError("Invalid coordinator hierarchy: \(childCoordinators)")
-        }
-
-        remove(childCoordinator: coordinator)
-    }
-    
+        
     // MARK: Bug reporting
     
-    private func showCrashPopup() {
-        let alert = UIAlertController(title: nil,
-                                      message: ElementL10n.sendBugReportAppCrashed,
-                                      preferredStyle: .alert)
-
-        alert.addAction(UIAlertAction(title: ElementL10n.no, style: .cancel))
-        alert.addAction(UIAlertAction(title: ElementL10n.yes, style: .default) { [weak self] _ in
-            self?.stateMachine.processEvent(.feedbackScreen)
-        })
-
-        navigationRouter.present(alert, animated: true)
-    }
-
     private func presentFeedbackScreen(for image: UIImage? = nil) {
+        let feedbackNavigationController = NavigationController()
+        
+        let userNotificationController = UserNotificationController(rootCoordinator: feedbackNavigationController)
+        
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
-                                                        screenshot: image)
+                                                        userNotificationController: userNotificationController,
+                                                        screenshot: image,
+                                                        isModallyPresented: true)
         let coordinator = BugReportCoordinator(parameters: parameters)
-        coordinator.completion = { [weak self] in
+        coordinator.completion = { [weak self] _ in
+            self?.navigationController.dismissSheet()
+        }
+
+        feedbackNavigationController.setRootCoordinator(coordinator)
+        
+        navigationController.presentSheet(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
-
-        add(childCoordinator: coordinator)
-        coordinator.start()
-        let navController = ElementNavigationController(rootViewController: coordinator.toPresentable())
-        navController.navigationBar.topItem?.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .cancel,
-                                                                                 target: self,
-                                                                                 action: #selector(handleFeedbackScreenCancellation))
-        navController.isModalInPresentation = true
-        navigationRouter.present(navController, animated: true)
     }
     
-    @objc
-    private func handleFeedbackScreenCancellation() {
-        stateMachine.processEvent(.dismissedFeedbackScreen)
-    }
-    
-    private func dismissFeedbackScreen() {
-        guard let coordinator = childCoordinators.first(where: { $0 is BugReportCoordinator }) else {
-            return
-        }
-        
-        navigationRouter.dismissModule()
-        remove(childCoordinator: coordinator)
-    }
-
     // MARK: - Application State
 
     private func pause() {
