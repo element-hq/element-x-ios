@@ -16,6 +16,6 @@ jobs:
           key: danger-swift-cache-key
 
       - name: Danger
-        uses: docker://ghcr.io/danger/danger-swift-with-swiftlint:3.12.3
+        uses: docker://ghcr.io/danger/danger-swift-with-swiftlint:3.14.2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

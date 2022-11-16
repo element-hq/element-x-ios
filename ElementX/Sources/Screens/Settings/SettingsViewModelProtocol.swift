@@ -19,6 +19,5 @@ import Foundation
 @MainActor
 protocol SettingsViewModelProtocol {
     var callback: ((SettingsViewModelAction) -> Void)? { get set }
-    @available(iOS 14, *)
     var context: SettingsViewModelType.Context { get }
 }

@@ -21,7 +21,7 @@ import XCTest
 @MainActor
 class BugReportViewModelTests: XCTestCase {
     func testInitialState() {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil)
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
 
         XCTAssertEqual(context.reportText, "")
@@ -30,7 +30,7 @@ class BugReportViewModelTests: XCTestCase {
     }
 
     func testToggleSendingLogs() async throws {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil)
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
 
         context.send(viewAction: .toggleSendLogs)
@@ -39,7 +39,7 @@ class BugReportViewModelTests: XCTestCase {
     }
 
     func testClearScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: UIImage.actions)
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: UIImage.actions, isModallyPresented: false)
         let context = viewModel.context
 
         context.send(viewAction: .removeScreenshot)

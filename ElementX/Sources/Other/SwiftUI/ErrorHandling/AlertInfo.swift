@@ -31,9 +31,14 @@ struct AlertInfo<T: Hashable>: Identifiable {
     /// The alert's message (optional).
     var message: String?
     /// The alert's primary button title and action. Defaults to an Ok button with no action.
-    var primaryButton: (title: String, action: (() -> Void)?) = (ElementL10n.ok, nil)
+    var primaryButton = AlertButton(title: ElementL10n.ok, action: nil)
     /// The alert's secondary button title and action.
-    var secondaryButton: (title: String, action: (() -> Void)?)?
+    var secondaryButton: AlertButton?
+}
+
+struct AlertButton {
+    let title: String
+    let action: (() -> Void)?
 }
 
 extension AlertInfo {
@@ -79,7 +84,7 @@ extension AlertInfo {
         }
     }
     
-    private func alertButton(for buttonParameters: (title: String, action: (() -> Void)?)) -> Alert.Button {
+    private func alertButton(for buttonParameters: AlertButton) -> Alert.Button {
         guard let action = buttonParameters.action else {
             return .default(Text(buttonParameters.title))
         }

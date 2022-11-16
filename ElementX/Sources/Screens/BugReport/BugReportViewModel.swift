@@ -16,18 +16,41 @@
 
 import SwiftUI
 
-@available(iOS 14, *)
-typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState,
-    BugReportViewAction>
-@available(iOS 14, *)
-class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
-    // MARK: - Properties
+typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState, BugReportViewAction>
 
+class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     let bugReportService: BugReportServiceProtocol
 
+    var callback: ((BugReportViewModelAction) -> Void)?
+
+    init(bugReportService: BugReportServiceProtocol,
+         screenshot: UIImage?,
+         isModallyPresented: Bool) {
+        self.bugReportService = bugReportService
+        let bindings = BugReportViewStateBindings(reportText: "", sendingLogsEnabled: true)
+        super.init(initialViewState: BugReportViewState(screenshot: screenshot,
+                                                        bindings: bindings,
+                                                        isModallyPresented: isModallyPresented))
+    }
+
+    // MARK: - Public
+
+    override func process(viewAction: BugReportViewAction) async {
+        switch viewAction {
+        case .cancel:
+            callback?(.cancel)
+        case .submit:
+            await submitBugReport()
+        case .toggleSendLogs:
+            context.sendingLogsEnabled.toggle()
+        case .removeScreenshot:
+            state.screenshot = nil
+        }
+    }
+    
     // MARK: Private
 
-    func submitBugReport() async {
+    private func submitBugReport() async {
         callback?(.submitStarted)
         do {
             var files: [URL] = []
@@ -52,33 +75,6 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
         } catch {
             MXLog.error("SubmitBugReport failed: \(error)")
             callback?(.submitFailed(error: error))
-        }
-    }
-
-    // MARK: Public
-
-    var callback: ((BugReportViewModelAction) -> Void)?
-
-    // MARK: - Setup
-
-    init(bugReportService: BugReportServiceProtocol,
-         screenshot: UIImage?) {
-        self.bugReportService = bugReportService
-        let bindings = BugReportViewStateBindings(reportText: "", sendingLogsEnabled: true)
-        super.init(initialViewState: BugReportViewState(screenshot: screenshot,
-                                                        bindings: bindings))
-    }
-
-    // MARK: - Public
-
-    override func process(viewAction: BugReportViewAction) async {
-        switch viewAction {
-        case .submit:
-            await submitBugReport()
-        case .toggleSendLogs:
-            context.sendingLogsEnabled.toggle()
-        case .removeScreenshot:
-            state.screenshot = nil
         }
     }
 }

@@ -44,6 +44,7 @@ struct ServerSelectionScreen: View {
         .background(Color.element.background, ignoresSafeAreaEdges: .all)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo) { $0.alert }
+        .interactiveDismissDisabled()
     }
     
     /// The title, message and icon at the top of the screen.
@@ -91,7 +92,7 @@ struct ServerSelectionScreen: View {
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            if context.viewState.hasModalPresentation {
+            if context.viewState.isModallyPresented {
                 Button { context.send(viewAction: .dismiss) } label: {
                     Text(ElementL10n.actionCancel)
                 }

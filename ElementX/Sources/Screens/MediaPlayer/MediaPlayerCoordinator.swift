@@ -24,42 +24,23 @@ enum MediaPlayerCoordinatorAction {
     case cancel
 }
 
-final class MediaPlayerCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class MediaPlayerCoordinator: CoordinatorProtocol {
     private let parameters: MediaPlayerCoordinatorParameters
-    private let mediaPlayerHostingController: UIViewController
-    private var mediaPlayerViewModel: MediaPlayerViewModelProtocol
+    private var viewModel: MediaPlayerViewModelProtocol
     
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
-    
-    // MARK: Public
-
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: ((MediaPlayerCoordinatorAction) -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: MediaPlayerCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = MediaPlayerViewModel(mediaURL: parameters.mediaURL)
-        let view = MediaPlayerScreen(context: viewModel.context)
-        mediaPlayerViewModel = viewModel
-        mediaPlayerHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: mediaPlayerHostingController)
+        viewModel = MediaPlayerViewModel(mediaURL: parameters.mediaURL)
     }
     
     // MARK: - Public
     
     func start() {
         MXLog.debug("Did start.")
-        mediaPlayerViewModel.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("MediaPlayerViewModel did complete with result: \(action).")
             switch action {
@@ -69,26 +50,7 @@ final class MediaPlayerCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController {
-        mediaPlayerHostingController
-    }
-
-    func stop() {
-        stopLoading()
-    }
-    
-    // MARK: - Private
-    
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        activityIndicator = nil
+    func toPresentable() -> AnyView {
+        AnyView(MediaPlayerScreen(context: viewModel.context))
     }
 }
