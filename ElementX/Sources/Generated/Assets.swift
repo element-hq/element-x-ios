@@ -8,6 +8,9 @@
 #elseif os(tvOS) || os(watchOS)
   import UIKit
 #endif
+#if canImport(SwiftUI)
+  import SwiftUI
+#endif
 
 // Deprecated typealiases
 @available(*, deprecated, renamed: "ImageAsset.Image", message: "This typealias will be removed in SwiftGen 7.0")
@@ -22,7 +25,6 @@ internal enum Asset {
   internal enum Images {
     internal static let analyticsCheckmark = ImageAsset(name: "Images/AnalyticsCheckmark")
     internal static let analyticsLogo = ImageAsset(name: "Images/AnalyticsLogo")
-    internal static let qrLoginConfirm = ImageAsset(name: "Images/QR Login Confirm")
     internal static let serverSelectionIcon = ImageAsset(name: "Images/Server Selection Icon")
     internal static let splashScreenPage1 = ImageAsset(name: "Images/Splash Screen Page 1")
     internal static let splashScreenPage2 = ImageAsset(name: "Images/Splash Screen Page 2")
@@ -77,6 +79,13 @@ internal struct ImageAsset {
     return result
   }
   #endif
+
+  #if canImport(SwiftUI)
+  @available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+  internal var swiftUIImage: SwiftUI.Image {
+    SwiftUI.Image(asset: self)
+  }
+  #endif
 }
 
 internal extension ImageAsset.Image {
@@ -94,6 +103,26 @@ internal extension ImageAsset.Image {
     #endif
   }
 }
+
+#if canImport(SwiftUI)
+@available(iOS 13.0, tvOS 13.0, watchOS 6.0, macOS 10.15, *)
+internal extension SwiftUI.Image {
+  init(asset: ImageAsset) {
+    let bundle = BundleToken.bundle
+    self.init(asset.name, bundle: bundle)
+  }
+
+  init(asset: ImageAsset, label: Text) {
+    let bundle = BundleToken.bundle
+    self.init(asset.name, bundle: bundle, label: label)
+  }
+
+  init(decorative asset: ImageAsset) {
+    let bundle = BundleToken.bundle
+    self.init(decorative: asset.name, bundle: bundle)
+  }
+}
+#endif
 
 // swiftlint:disable convenience_type
 private final class BundleToken {
