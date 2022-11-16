@@ -126,10 +126,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch action {
         case .displayVideo(let videoURL):
             callback?(.displayVideo(videoURL: videoURL))
+        case .displayFile(let fileURL, let title):
+            callback?(.displayFile(fileURL: fileURL, title: title))
         case .none:
             break
         }
-
         state.showLoading = false
     }
     

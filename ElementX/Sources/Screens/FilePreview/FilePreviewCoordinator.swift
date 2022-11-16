@@ -14,25 +14,25 @@
 // limitations under the License.
 //
 
-import AVKit
 import SwiftUI
 
-struct VideoPlayerCoordinatorParameters {
-    let videoURL: URL
+struct FilePreviewCoordinatorParameters {
+    let fileURL: URL
+    let title: String?
 }
 
-enum VideoPlayerCoordinatorAction {
+enum FilePreviewCoordinatorAction {
     case cancel
 }
 
-final class VideoPlayerCoordinator: Coordinator, Presentable {
+final class FilePreviewCoordinator: Coordinator, Presentable {
     // MARK: - Properties
     
     // MARK: Private
     
-    private let parameters: VideoPlayerCoordinatorParameters
-    private let videoPlayerHostingController: UIViewController
-    private var videoPlayerViewModel: VideoPlayerViewModelProtocol
+    private let parameters: FilePreviewCoordinatorParameters
+    private let filePreviewHostingController: UIViewController
+    private var filePreviewViewModel: FilePreviewViewModelProtocol
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var activityIndicator: UserIndicator?
@@ -41,31 +41,28 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: ((VideoPlayerCoordinatorAction) -> Void)?
+    var callback: ((FilePreviewCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
-    init(parameters: VideoPlayerCoordinatorParameters) {
+    init(parameters: FilePreviewCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
-        let view = VideoPlayerScreen(context: viewModel.context)
-        videoPlayerViewModel = viewModel
-        videoPlayerHostingController = UIHostingController(rootView: view)
+        let viewModel = FilePreviewViewModel(fileURL: parameters.fileURL, title: parameters.title)
+        let view = FilePreviewScreen(context: viewModel.context)
+        filePreviewViewModel = viewModel
+        filePreviewHostingController = UIHostingController(rootView: view)
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: videoPlayerHostingController)
+        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: filePreviewHostingController)
     }
     
     // MARK: - Public
     
     func start() {
         MXLog.debug("Did start.")
-
-        configureAudioSession(.sharedInstance())
-
-        videoPlayerViewModel.callback = { [weak self] action in
+        filePreviewViewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("VideoPlayerViewModel did complete with result: \(action).")
+            MXLog.debug("FilePreviewViewModel did complete with result: \(action).")
             switch action {
             case .cancel:
                 self.callback?(.cancel)
@@ -74,7 +71,7 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        videoPlayerHostingController
+        filePreviewHostingController
     }
 
     func stop() {
@@ -82,17 +79,6 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
     }
     
     // MARK: - Private
-
-    private func configureAudioSession(_ session: AVAudioSession) {
-        do {
-            try session.setCategory(.playback,
-                                    mode: .default,
-                                    options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP])
-            try session.setActive(true)
-        } catch {
-            MXLog.debug("Configure audio session failed: \(error)")
-        }
-    }
     
     /// Show an activity indicator whilst loading.
     /// - Parameters:

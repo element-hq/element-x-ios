@@ -14,25 +14,24 @@
 // limitations under the License.
 //
 
-import AVKit
 import SwiftUI
 
-struct VideoPlayerCoordinatorParameters {
-    let videoURL: URL
+struct MediaPlayerCoordinatorParameters {
+    let mediaURL: URL
 }
 
-enum VideoPlayerCoordinatorAction {
+enum MediaPlayerCoordinatorAction {
     case cancel
 }
 
-final class VideoPlayerCoordinator: Coordinator, Presentable {
+final class MediaPlayerCoordinator: Coordinator, Presentable {
     // MARK: - Properties
     
     // MARK: Private
     
-    private let parameters: VideoPlayerCoordinatorParameters
-    private let videoPlayerHostingController: UIViewController
-    private var videoPlayerViewModel: VideoPlayerViewModelProtocol
+    private let parameters: MediaPlayerCoordinatorParameters
+    private let mediaPlayerHostingController: UIViewController
+    private var mediaPlayerViewModel: MediaPlayerViewModelProtocol
     
     private var indicatorPresenter: UserIndicatorTypePresenterProtocol
     private var activityIndicator: UserIndicator?
@@ -41,31 +40,28 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
 
     // Must be used only internally
     var childCoordinators: [Coordinator] = []
-    var callback: ((VideoPlayerCoordinatorAction) -> Void)?
+    var callback: ((MediaPlayerCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
-    init(parameters: VideoPlayerCoordinatorParameters) {
+    init(parameters: MediaPlayerCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
-        let view = VideoPlayerScreen(context: viewModel.context)
-        videoPlayerViewModel = viewModel
-        videoPlayerHostingController = UIHostingController(rootView: view)
+        let viewModel = MediaPlayerViewModel(mediaURL: parameters.mediaURL)
+        let view = MediaPlayerScreen(context: viewModel.context)
+        mediaPlayerViewModel = viewModel
+        mediaPlayerHostingController = UIHostingController(rootView: view)
         
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: videoPlayerHostingController)
+        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: mediaPlayerHostingController)
     }
     
     // MARK: - Public
     
     func start() {
         MXLog.debug("Did start.")
-
-        configureAudioSession(.sharedInstance())
-
-        videoPlayerViewModel.callback = { [weak self] action in
+        mediaPlayerViewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("VideoPlayerViewModel did complete with result: \(action).")
+            MXLog.debug("MediaPlayerViewModel did complete with result: \(action).")
             switch action {
             case .cancel:
                 self.callback?(.cancel)
@@ -74,7 +70,7 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
     }
     
     func toPresentable() -> UIViewController {
-        videoPlayerHostingController
+        mediaPlayerHostingController
     }
 
     func stop() {
@@ -82,17 +78,6 @@ final class VideoPlayerCoordinator: Coordinator, Presentable {
     }
     
     // MARK: - Private
-
-    private func configureAudioSession(_ session: AVAudioSession) {
-        do {
-            try session.setCategory(.playback,
-                                    mode: .default,
-                                    options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP])
-            try session.setActive(true)
-        } catch {
-            MXLog.debug("Configure audio session failed: \(error)")
-        }
-    }
     
     /// Show an activity indicator whilst loading.
     /// - Parameters:

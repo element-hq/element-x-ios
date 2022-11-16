@@ -116,11 +116,11 @@ class AppCoordinator: Coordinator {
         // This exposes the full Rust side tracing subscriber filter for more flexibility.
         // We can filter by level, crate and even file. See more details here:
         // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
-        setupTracing(configuration: "warn,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        setupTracing(filter: "warn,hyper=warn,sled=warn,matrix_sdk_sled=warn")
         
         loggerConfiguration.logLevel = .debug
         #else
-        setupTracing(configuration: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        setupTracing(filter: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
         loggerConfiguration.logLevel = .info
         #endif
         
