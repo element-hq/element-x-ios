@@ -37,6 +37,10 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     HStack {
                         Spacer()
                         styledContentWithReactions
+                        if timelineItem.isOutgoing {
+                            TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus)
+                                .padding(.top, 6)
+                        }
                     }
                     .padding(.trailing, 16)
                     .padding(.leading, 16)
