@@ -30,8 +30,8 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equa
     var senderAvatar: UIImage?
 
     let duration: UInt64
-    let source: MediaSource?
-    let thumbnailSource: MediaSource?
+    let source: MediaSourceProxy?
+    let thumbnailSource: MediaSourceProxy?
     var image: UIImage?
     var cachedVideoURL: URL?
     

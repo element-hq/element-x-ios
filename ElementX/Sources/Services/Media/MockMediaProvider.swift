@@ -50,11 +50,11 @@ struct MockMediaProvider: MediaProviderProtocol {
         return .success(image)
     }
 
-    func fileFromSource(_ source: MediaSource?, fileExtension: String) -> URL? {
+    func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL? {
         nil
     }
 
-    @discardableResult func loadFileFromSource(_ source: MediaSource, fileExtension: String) async -> Result<URL, MediaProviderError> {
+    @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError> {
         .failure(.failedRetrievingFile)
     }
 

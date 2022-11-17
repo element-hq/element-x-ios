@@ -240,19 +240,19 @@ class ClientProxy: ClientProxyProtocol {
                    url: String?,
                    format: PushFormat?,
                    defaultPayload: [AnyHashable: Any]?) async throws {
-        let defaultPayloadString = jsonString(from: defaultPayload)
-        try await Task.dispatch(on: .global()) {
-            try self.client.setPusher(pushkey: pushkey,
-                                      kind: kind?.rustValue,
-                                      appId: appId,
-                                      appDisplayName: appDisplayName,
-                                      deviceDisplayName: deviceDisplayName,
-                                      profileTag: profileTag,
-                                      lang: lang,
-                                      url: url,
-                                      format: format?.rustValue,
-                                      defaultPayload: defaultPayloadString)
-        }
+//        let defaultPayloadString = jsonString(from: defaultPayload)
+//        try await Task.dispatch(on: .global()) {
+//            try self.client.setPusher(pushkey: pushkey,
+//                                      kind: kind?.rustValue,
+//                                      appId: appId,
+//                                      appDisplayName: appDisplayName,
+//                                      deviceDisplayName: deviceDisplayName,
+//                                      profileTag: profileTag,
+//                                      lang: lang,
+//                                      url: url,
+//                                      format: format?.rustValue,
+//                                      defaultPayload: defaultPayloadString)
+//        }
     }
     
     // MARK: Private

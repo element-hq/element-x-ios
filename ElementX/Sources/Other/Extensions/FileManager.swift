@@ -27,13 +27,37 @@ extension FileManager {
 
     /// The base directory where all session data is stored.
     var sessionsBaseDirectory: URL {
+        let url = cacheBaseDirectory
+            .appendingPathComponent("Sessions", isDirectory: true)
+
+        try? createDirectoryIfNeeded(at: url)
+
+        return url
+    }
+
+    /// The base directory where all cache is stored.
+    var cacheBaseDirectory: URL {
         let url = appGroupContainerURL
             .appendingPathComponent("Library", isDirectory: true)
             .appendingPathComponent("Caches", isDirectory: true)
-            .appendingPathComponent("Sessions", isDirectory: true)
 
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: false, attributes: nil)
+        try? createDirectoryIfNeeded(at: url)
 
         return url
+    }
+
+    private func directoryExists(at url: URL) -> Bool {
+        var isDirectory: ObjCBool = false
+        guard fileExists(atPath: url.path(), isDirectory: &isDirectory) else {
+            return false
+        }
+        return isDirectory.boolValue
+    }
+
+    private func createDirectoryIfNeeded(at url: URL, withIntermediateDirectories: Bool = true) throws {
+        guard !directoryExists(at: url) else {
+            return
+        }
+        try createDirectory(at: url, withIntermediateDirectories: withIntermediateDirectories)
     }
 }

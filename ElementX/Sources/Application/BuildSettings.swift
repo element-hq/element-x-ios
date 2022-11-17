@@ -76,5 +76,5 @@ final class BuildSettings {
 
     // MARK: - Notifications
 
-    static let enableNotifications = true
+    static let enableNotifications = false
 }

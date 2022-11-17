@@ -36,7 +36,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: FileManager.default.appGroupContainerURL),
               let roomId = request.roomId,
               let eventId = request.eventId,
-              let credentials = keychainController.restoreTokens().first else {
+              let credentials = keychainController.restorationTokens().first else {
             // We cannot process this notification, it might be due to one of these:
             // - Device rebooted and locked
             // - Not a Matrix notification
@@ -87,7 +87,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // First process without a media proxy.
         // After this some properties of the notification should be set, like title, subtitle, sound etc.
         guard let firstContent = try await itemProxy.process(with: roomId,
-                                                             mediaProxy: nil) else {
+                                                             mediaProvider: nil) else {
             MXLog.debug("\(tag) not even first content")
 
             // Notification should be discarded
@@ -97,7 +97,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // After the first processing, update the modified content
         modifiedContent = firstContent
 
-        guard itemProxy.requiresMediaProxy else {
+        guard itemProxy.requiresMediaProvider else {
             MXLog.debug("\(tag) no media needed")
 
             // We've processed the item and no media operations needed, so no need to go further
@@ -108,7 +108,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         // There is some media to load, process it again
         if let latestContent = try await itemProxy.process(with: roomId,
-                                                           mediaProxy: try createMediaProxy(with: credentials)) {
+                                                           mediaProvider: try createMediaProvider(with: credentials)) {
             // Processing finished, hopefully with some media
             modifiedContent = latestContent
             return notify()
@@ -118,17 +118,20 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         }
     }
 
-    private func createMediaProxy(with credentials: KeychainCredentials) throws -> MediaProxyProtocol {
+    private func createMediaProvider(with credentials: KeychainCredentials) throws -> MediaProviderProtocol {
         let builder = ClientBuilder()
             .basePath(path: FileManager.default.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
 
         let client = try builder.build()
-        try client.restoreLogin(restoreToken: credentials.restoreToken)
+        try client.restoreSession(session: credentials.restorationToken.session)
 
-        MXLog.debug("\(tag) creating media proxy")
+        MXLog.debug("\(tag) creating media provider")
 
-        return MediaProxy(client: client)
+        return MediaProvider(mediaProxy: MediaProxy(client: client),
+                             imageCache: .onlyInDisk,
+                             fileCache: .default,
+                             backgroundTaskService: nil)
     }
 
     private func notify() {

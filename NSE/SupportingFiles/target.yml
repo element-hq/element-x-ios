@@ -35,6 +35,7 @@ targets:
       - package: MatrixRustSDK
       - package: SwiftyBeaver
       - package: KeychainAccess
+      - package: Kingfisher
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -73,11 +74,15 @@ targets:
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
     - path: ../../ElementX/Sources/Services/Media/MediaProxyProtocol.swift
     - path: ../../ElementX/Sources/Services/Media/MediaProxy.swift
+    - path: ../../ElementX/Sources/Services/Media/MediaProviderProtocol.swift
+    - path: ../../ElementX/Sources/Services/Media/MediaProvider.swift
     - path: ../../ElementX/Sources/Services/Media/MediaSourceProxy.swift
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
+    - path: ../../ElementX/Sources/Services/Cache/FileCache.swift
     - path: ../../ElementX/Sources/Other/Logging
     - path: ../../ElementX/Sources/Other/Extensions/Task.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/Extensions/ImageCache.swift
     - path: ../../ElementX/Sources/Other/AvatarSize.swift

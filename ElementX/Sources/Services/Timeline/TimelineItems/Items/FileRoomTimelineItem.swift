@@ -29,8 +29,8 @@ struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equat
     var senderDisplayName: String?
     var senderAvatar: UIImage?
 
-    let source: MediaSource?
-    let thumbnailSource: MediaSource?
+    let source: MediaSourceProxy?
+    let thumbnailSource: MediaSourceProxy?
     var cachedFileURL: URL?
     
     var properties = RoomTimelineItemProperties()

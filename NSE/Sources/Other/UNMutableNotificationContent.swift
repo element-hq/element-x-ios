@@ -19,71 +19,73 @@ import Intents
 import UserNotifications
 
 extension UNMutableNotificationContent {
-    func addImageAttachment(using mediaProxy: MediaProxyProtocol?,
+    func addMediaAttachment(using mediaProvider: MediaProviderProtocol?,
                             mediaSource: MediaSourceProxy) async throws -> UNMutableNotificationContent {
-        guard let mediaProxy else {
+        guard let mediaProvider else {
             return self
         }
-        
-        let data = try await mediaProxy.loadMediaContentForSource(mediaSource)
-        
-        let attachment = try UNNotificationAttachment.saveImageToDisk(fileIdentifier: ProcessInfo.processInfo.globallyUniqueString,
-                                                                      data: data,
-                                                                      options: nil)
-        attachments.append(attachment)
+
+        switch await mediaProvider.loadFileFromSource(mediaSource, fileExtension: "") {
+        case .success(let url):
+            let attachment = try UNNotificationAttachment(identifier: ProcessInfo.processInfo.globallyUniqueString,
+                                                          url: url,
+                                                          options: nil)
+            attachments.append(attachment)
+        case .failure(let error):
+            MXLog.debug("Couldn't add media attachment: \(error)")
+        }
         
         return self
     }
     
-    func addSenderIcon(using mediaProxy: MediaProxyProtocol?,
+    func addSenderIcon(using mediaProvider: MediaProviderProtocol?,
                        senderId: String,
                        senderName: String,
                        mediaSource: MediaSourceProxy?,
                        roomId: String) async throws -> UNMutableNotificationContent {
-        guard let mediaProxy, let mediaSource else {
+        guard let mediaProvider, let mediaSource else {
             return self
         }
 
-        // TODO: Add disk caching for room avatars
+        switch await mediaProvider.loadFileFromSource(mediaSource, fileExtension: "jpg") {
+        case .success(let url):
+            // Initialize only the sender for a one-to-one message intent.
+            let handle = INPersonHandle(value: senderId, type: .unknown)
+            let sender = INPerson(personHandle: handle,
+                                  nameComponents: nil,
+                                  displayName: senderName,
+                                  image: INImage(imageData: try Data(contentsOf: url)),
+                                  contactIdentifier: nil,
+                                  customIdentifier: nil)
 
-        let imageSize = AvatarSize.room(on: .notification).scaledValue
-        let imageData = try await mediaProxy.loadMediaThumbnailForSource(mediaSource,
-                                                                         width: UInt(imageSize),
-                                                                         height: UInt(imageSize))
-        
-        // Initialize only the sender for a one-to-one message intent.
-        let handle = INPersonHandle(value: senderId, type: .unknown)
-        let sender = INPerson(personHandle: handle,
-                              nameComponents: nil,
-                              displayName: senderName,
-                              image: INImage(imageData: imageData),
-                              contactIdentifier: nil,
-                              customIdentifier: nil)
-        
-        // Because this communication is incoming, you can infer that the current user is
-        // a recipient. Don't include the current user when initializing the intent.
-        let intent = INSendMessageIntent(recipients: nil,
-                                         outgoingMessageType: .outgoingMessageText,
-                                         content: nil,
-                                         speakableGroupName: nil,
-                                         conversationIdentifier: roomId,
-                                         serviceName: nil,
-                                         sender: sender,
-                                         attachments: nil)
-        
-        // Use the intent to initialize the interaction.
-        let interaction = INInteraction(intent: intent, response: nil)
-        
-        // Interaction direction is incoming because the user is
-        // receiving this message.
-        interaction.direction = .incoming
-        
-        // Donate the interaction before updating notification content.
-        try await interaction.donate()
-        // Update notification content before displaying the
-        // communication notification.
-        let updatedContent = try updating(from: intent)
-        
-        return updatedContent.mutableCopy() as! UNMutableNotificationContent
+            // Because this communication is incoming, you can infer that the current user is
+            // a recipient. Don't include the current user when initializing the intent.
+            let intent = INSendMessageIntent(recipients: nil,
+                                             outgoingMessageType: .outgoingMessageText,
+                                             content: nil,
+                                             speakableGroupName: nil,
+                                             conversationIdentifier: roomId,
+                                             serviceName: nil,
+                                             sender: sender,
+                                             attachments: nil)
+
+            // Use the intent to initialize the interaction.
+            let interaction = INInteraction(intent: intent, response: nil)
+
+            // Interaction direction is incoming because the user is
+            // receiving this message.
+            interaction.direction = .incoming
+
+            // Donate the interaction before updating notification content.
+            try await interaction.donate()
+            // Update notification content before displaying the
+            // communication notification.
+            let updatedContent = try updating(from: intent)
+
+            return updatedContent.mutableCopy() as! UNMutableNotificationContent
+        case .failure(let error):
+            MXLog.debug("Couldn't add sender icon: \(error)")
+            return self
+        }
     }
 }

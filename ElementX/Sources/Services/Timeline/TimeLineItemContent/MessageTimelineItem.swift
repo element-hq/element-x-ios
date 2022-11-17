@@ -118,15 +118,15 @@ extension MatrixRustSDK.VideoMessageContent: MessageContentProtocol { }
 
 /// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.video`.
 extension MessageTimelineItem where Content == MatrixRustSDK.VideoMessageContent {
-    var source: MediaSource {
-        MediaSource(source: content.source)
+    var source: MediaSourceProxy {
+        .init(source: content.source)
     }
 
-    var thumbnailSource: MediaSource? {
+    var thumbnailSource: MediaSourceProxy? {
         guard let src = content.info?.thumbnailSource else {
             return nil
         }
-        return MediaSource(source: src)
+        return .init(source: src)
     }
 
     var duration: UInt64 {
@@ -150,14 +150,14 @@ extension MatrixRustSDK.FileMessageContent: MessageContentProtocol { }
 
 /// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.file`.
 extension MessageTimelineItem where Content == MatrixRustSDK.FileMessageContent {
-    var source: MediaSource {
-        MediaSource(source: content.source)
+    var source: MediaSourceProxy {
+        .init(source: content.source)
     }
 
-    var thumbnailSource: MediaSource? {
+    var thumbnailSource: MediaSourceProxy? {
         guard let src = content.info?.thumbnailSource else {
             return nil
         }
-        return MediaSource(source: src)
+        return .init(source: src)
     }
 }

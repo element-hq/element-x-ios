@@ -37,25 +37,25 @@ enum PusherKind {
     case http
     case email
 
-    var rustValue: MatrixRustSDK.PusherKind {
-        switch self {
-        case .http:
-            return .http
-        case .email:
-            return .email
-        }
-    }
+//    var rustValue: MatrixRustSDK.PusherKind {
+//        switch self {
+//        case .http:
+//            return .http
+//        case .email:
+//            return .email
+//        }
+//    }
 }
 
 enum PushFormat {
     case eventIdOnly
 
-    var rustValue: MatrixRustSDK.PushFormat {
-        switch self {
-        case .eventIdOnly:
-            return .eventIdOnly
-        }
-    }
+//    var rustValue: MatrixRustSDK.PushFormat {
+//        switch self {
+//        case .eventIdOnly:
+//            return .eventIdOnly
+//        }
+//    }
 }
 
 protocol ClientProxyProtocol: MediaProxyProtocol {

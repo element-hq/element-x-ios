@@ -31,7 +31,8 @@ class KeychainController: KeychainControllerProtocol {
 
     init(service: KeychainControllerService,
          accessGroup: String) {
-        keychain = Keychain(service: service.identifier, accessGroup: accessGroup)
+        keychain = Keychain(service: service.identifier,
+                            accessGroup: accessGroup)
     }
 
     func setRestorationToken(_ restorationToken: RestorationToken, forUsername username: String) {

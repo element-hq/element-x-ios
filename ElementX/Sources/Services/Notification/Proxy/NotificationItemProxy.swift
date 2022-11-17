@@ -18,36 +18,56 @@ import Foundation
 import MatrixRustSDK
 
 struct NotificationItemProxy {
-    let notificationItem: NotificationItem
-
-    init(notificationItem: NotificationItem) {
-        self.notificationItem = notificationItem
-    }
-
-    var timelineItemProxy: TimelineItemProxy {
-        .init(item: notificationItem.item)
-    }
+//    let notificationItem: NotificationItem
+//
+//    init(notificationItem: NotificationItem) {
+//        self.notificationItem = notificationItem
+//    }
+//
+//    var timelineItemProxy: TimelineItemProxy {
+//        .init(item: notificationItem.item)
+//    }
+//
+//    var title: String {
+//        notificationItem.title
+//    }
+//
+//    var subtitle: String? {
+//        notificationItem.subtitle
+//    }
+//
+//    var isNoisy: Bool {
+//        notificationItem.isNoisy
+//    }
+//
+//    var avatarUrl: String? {
+//        notificationItem.avatarUrl
+//    }
+//
+//    var avatarMediaSource: MediaSourceProxy? {
+//        guard let avatarUrl else {
+//            return nil
+//        }
+//        return .init(urlString: avatarUrl)
+//    }
 
     var title: String {
-        notificationItem.title
+        "Title"
     }
 
     var subtitle: String? {
-        notificationItem.subtitle
+        nil
     }
 
     var isNoisy: Bool {
-        notificationItem.isNoisy
+        true
     }
 
     var avatarUrl: String? {
-        notificationItem.avatarUrl
+        nil
     }
 
     var avatarMediaSource: MediaSourceProxy? {
-        guard let avatarUrl else {
-            return nil
-        }
-        return .init(urlString: avatarUrl)
+        nil
     }
 }

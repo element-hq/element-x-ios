@@ -32,9 +32,9 @@ protocol MediaProviderProtocol {
     
     @discardableResult func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
 
-    func fileFromSource(_ source: MediaSource?, fileExtension: String) -> URL?
+    func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL?
 
-    @discardableResult func loadFileFromSource(_ source: MediaSource, fileExtension: String) async -> Result<URL, MediaProviderError>
+    @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError>
 
     func fileFromURLString(_ urlString: String?, fileExtension: String) -> URL?
 
