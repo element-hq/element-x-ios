@@ -24,8 +24,7 @@ protocol MessageContentProtocol: RoomMessageEventContentProtocol {
 }
 
 /// The delivery status for the item.
-enum MessageTimelineItemDeliveryStatus: Hashable, Identifiable {
-    var id: Self { self }
+enum MessageTimelineItemDeliveryStatus: Equatable {
     case unknown
     case sending
     case sent(secondsAgo: TimeInterval)
