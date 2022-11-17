@@ -35,8 +35,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             switch timelineItem.properties.deliveryStatus {
             case .sending, .unknown:
                 _showDeliveryStatus = State(initialValue: true)
-            case let .sent(secondsAgo: secondsAgo):
-                _showDeliveryStatus = State(initialValue: secondsAgo < 3)
+            case let .sent(elapsedTime: elapsedTime):
+                _showDeliveryStatus = State(initialValue: elapsedTime < 3)
             }
         } else {
             _showDeliveryStatus = State(initialValue: false)

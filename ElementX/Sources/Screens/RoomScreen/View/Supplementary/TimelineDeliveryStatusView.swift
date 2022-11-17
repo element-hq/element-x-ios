@@ -43,7 +43,7 @@ struct TimelineDeliveryStatusView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
             TimelineDeliveryStatusView(deliveryStatus: .sending, showMe: .constant(true))
-            TimelineDeliveryStatusView(deliveryStatus: .sent(secondsAgo: Date().timeIntervalSince1970), showMe: .constant(true))
+            TimelineDeliveryStatusView(deliveryStatus: .sent(elapsedTime: Date().timeIntervalSince1970), showMe: .constant(true))
         }
     }
 }

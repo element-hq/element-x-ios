@@ -27,7 +27,7 @@ protocol MessageContentProtocol: RoomMessageEventContentProtocol {
 enum MessageTimelineItemDeliveryStatus: Equatable {
     case unknown
     case sending
-    case sent(secondsAgo: TimeInterval)
+    case sent(elapsedTime: TimeInterval)
 }
 
 /// A timeline item that represents an `m.room.message` event.
@@ -50,7 +50,7 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
         case .transactionId:
             return .sending
         case .eventId:
-            return .sent(secondsAgo: Date().timeIntervalSince1970 - originServerTs.timeIntervalSince1970)
+            return .sent(elapsedTime: Date().timeIntervalSince1970 - originServerTs.timeIntervalSince1970)
         }
     }
 
