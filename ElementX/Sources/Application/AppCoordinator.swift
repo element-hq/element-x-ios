@@ -282,6 +282,22 @@ class AppCoordinator: AppCoordinatorProtocol {
             manager.delegate = self
             notificationManager = manager
             manager.start()
+
+            if let appDelegate = AppDelegate.shared {
+                appDelegate.callbacks
+                    .receive(on: DispatchQueue.main)
+                    .sink { [weak self] callback in
+                        switch callback {
+                        case .registeredNotifications(let deviceToken):
+                            self?.notificationManager?.register(with: deviceToken)
+                        case .failedToRegisteredNotifications(let error):
+                            self?.notificationManager?.registrationFailed(with: error)
+                        }
+                    }
+                    .store(in: &cancellables)
+            } else {
+                MXLog.debug("Couldn't register to AppDelegate callbacks")
+            }
         }
     }
     

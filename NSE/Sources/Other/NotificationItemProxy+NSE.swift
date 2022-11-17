@@ -20,7 +20,7 @@ import UserNotifications
 
 extension NotificationItemProxy {
     var requiresMediaProvider: Bool {
-        return false
+        false
 //        if avatarUrl != nil {
 //            return true
 //        }
@@ -53,7 +53,7 @@ extension NotificationItemProxy {
     /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
     func process(with roomId: String,
                  mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent? {
-        return nil
+        nil
 //        switch timelineItemProxy {
 //        case .event(let eventItem):
 //            guard eventItem.isMessage else {

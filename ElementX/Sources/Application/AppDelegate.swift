@@ -14,46 +14,30 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import Combine
+import Foundation
+import UIKit
 
-@main
-struct Application: App {
-    @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
-    fileprivate let applicationCoordinator: AppCoordinatorProtocol
-    
-    init() {
-        if Tests.isRunningUITests {
-            applicationCoordinator = UITestsAppCoordinator()
-        } else {
-            applicationCoordinator = AppCoordinator()
-        }
-    }
-    
-    var body: some Scene {
-        WindowGroup {
-            if Tests.isRunningUnitTests {
-                EmptyView()
-            } else {
-                applicationCoordinator.toPresentable()
-                    .tint(.element.accent)
-                    .task {
-                        applicationCoordinator.start()
-                    }
-            }
-        }
-    }
+enum AppDelegateCallback {
+    case registeredNotifications(deviceToken: Data)
+    case failedToRegisteredNotifications(error: Error)
 }
 
 class AppDelegate: NSObject, UIApplicationDelegate {
-    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        true
+    private(set) static var shared: AppDelegate!
+    let callbacks = PassthroughSubject<AppDelegateCallback, Never>()
+
+    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        // worst singleton ever
+        Self.shared = self
+        return true
     }
 
-//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-//        applicationCoordinator.notificationManager?.register(with: deviceToken)
-//    }
-//
-//    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-//        applicationCoordinator.notificationManager?.registrationFailed(with: error)
-//    }
+    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+        callbacks.send(.registeredNotifications(deviceToken: deviceToken))
+    }
+
+    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        callbacks.send(.failedToRegisteredNotifications(error: error))
+    }
 }
