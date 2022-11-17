@@ -55,6 +55,7 @@ extension FileCache: FileCacheProtocol {
     }
 
     func store(_ data: Data, with fileExtension: String, forKey key: String) throws -> URL {
+        try fileManager.createDirectoryIfNeeded(at: folder)
         let url = filePath(forKey: key, fileExtension: fileExtension)
         try data.write(to: url)
         return url

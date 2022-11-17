@@ -46,7 +46,7 @@ extension FileManager {
         return url
     }
 
-    private func directoryExists(at url: URL) -> Bool {
+    func directoryExists(at url: URL) -> Bool {
         var isDirectory: ObjCBool = false
         guard fileExists(atPath: url.path(), isDirectory: &isDirectory) else {
             return false
@@ -54,7 +54,7 @@ extension FileManager {
         return isDirectory.boolValue
     }
 
-    private func createDirectoryIfNeeded(at url: URL, withIntermediateDirectories: Bool = true) throws {
+    func createDirectoryIfNeeded(at url: URL, withIntermediateDirectories: Bool = true) throws {
         guard !directoryExists(at: url) else {
             return
         }
