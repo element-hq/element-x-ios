@@ -26,7 +26,7 @@ struct MockClientProxy: ClientProxyProtocol {
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol = MockRoomSummaryProvider()
+    var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
     func startSync() { }
     
