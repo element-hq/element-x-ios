@@ -166,7 +166,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     senderDisplayName: displayName,
                                     senderAvatar: avatarImage,
                                     properties: RoomTimelineItemProperties(isEdited: message.isEdited,
-                                                                           reactions: aggregateReactions(message.reactions)))
+                                                                           reactions: aggregateReactions(message.reactions),
+                                                                           deliveryStatus: message.deliveryStatus))
     }
     
     private func buildImageTimelineItemFromMessage(_ message: MessageTimelineItem<ImageMessageContent>,
@@ -196,7 +197,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      aspectRatio: aspectRatio,
                                      blurhash: message.blurhash,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
-                                                                            reactions: aggregateReactions(message.reactions)))
+                                                                            reactions: aggregateReactions(message.reactions),
+                                                                            deliveryStatus: message.deliveryStatus))
     }
 
     private func buildVideoTimelineItemFromMessage(_ message: MessageTimelineItem<VideoMessageContent>,
@@ -228,7 +230,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      aspectRatio: aspectRatio,
                                      blurhash: message.blurhash,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
-                                                                            reactions: aggregateReactions(message.reactions)))
+                                                                            reactions: aggregateReactions(message.reactions),
+                                                                            deliveryStatus: message.deliveryStatus))
     }
 
     private func buildFileTimelineItemFromMessage(_ message: MessageTimelineItem<FileMessageContent>,
@@ -248,7 +251,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              source: message.source,
                              thumbnailSource: message.thumbnailSource,
                              properties: RoomTimelineItemProperties(isEdited: message.isEdited,
-                                                                    reactions: aggregateReactions(message.reactions)))
+                                                                    reactions: aggregateReactions(message.reactions),
+                                                                    deliveryStatus: message.deliveryStatus))
     }
     
     private func buildNoticeTimelineItemFromMessage(_ message: MessageTimelineItem<NoticeMessageContent>,
@@ -270,7 +274,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                       senderDisplayName: displayName,
                                       senderAvatar: avatarImage,
                                       properties: RoomTimelineItemProperties(isEdited: message.isEdited,
-                                                                             reactions: aggregateReactions(message.reactions)))
+                                                                             reactions: aggregateReactions(message.reactions),
+                                                                             deliveryStatus: message.deliveryStatus))
     }
     
     private func buildEmoteTimelineItemFromMessage(_ message: MessageTimelineItem<EmoteMessageContent>,
@@ -292,7 +297,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      senderDisplayName: displayName,
                                      senderAvatar: avatarImage,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
-                                                                            reactions: aggregateReactions(message.reactions)))
+                                                                            reactions: aggregateReactions(message.reactions),
+                                                                            deliveryStatus: message.deliveryStatus))
     }
     
     private func aggregateReactions(_ reactions: [Reaction]) -> [AggregatedReaction] {
