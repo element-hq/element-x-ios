@@ -34,11 +34,11 @@ struct TimelineDeliveryStatusView: View {
         
         switch deliveryStatus {
         case .sending:
-            _showDeliveryStatus = State(initialValue: true)
+            showDeliveryStatus = true
         case let .sent(elapsedTime: elapsedTime):
-            _showDeliveryStatus = State(initialValue: elapsedTime < 3)
+            showDeliveryStatus = elapsedTime < 3
         case .unknown:
-            _showDeliveryStatus = State(initialValue: false)
+            showDeliveryStatus = false
         }
     }
     
