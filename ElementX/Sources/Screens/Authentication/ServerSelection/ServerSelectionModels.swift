@@ -59,6 +59,8 @@ struct ServerSelectionViewState: BindableState {
 struct ServerSelectionBindings {
     /// The homeserver address input by the user.
     var homeserverAddress: String
+    /// The sliding sync proxy address input by the user.
+    var slidingSyncProxyAddress: String
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<ServerSelectionErrorType>?
 }

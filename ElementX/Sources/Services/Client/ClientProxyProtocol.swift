@@ -46,7 +46,7 @@ protocol ClientProxyProtocol {
 
     var restorationToken: RestorationToken? { get }
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol { get }
+    var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     func startSync()
     
