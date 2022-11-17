@@ -21,39 +21,22 @@ struct AnalyticsPromptCoordinatorParameters {
     let userSession: UserSessionProtocol
 }
 
-final class AnalyticsPromptCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class AnalyticsPromptCoordinator: CoordinatorProtocol {
     private let parameters: AnalyticsPromptCoordinatorParameters
-    private let analyticsPromptHostingController: UIViewController
-    private var analyticsPromptViewModel: AnalyticsPromptViewModel
-    
-    // MARK: Public
+    private var viewModel: AnalyticsPromptViewModel
 
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: (@MainActor () -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: AnalyticsPromptCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = AnalyticsPromptViewModel(termsURL: BuildSettings.analyticsConfiguration.termsURL)
-        
-        let view = AnalyticsPrompt(context: viewModel.context)
-        analyticsPromptViewModel = viewModel
-        analyticsPromptHostingController = UIHostingController(rootView: view)
+        viewModel = AnalyticsPromptViewModel(termsURL: BuildSettings.analyticsConfiguration.termsURL)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-        
-        analyticsPromptViewModel.callback = { [weak self] result in
+        viewModel.callback = { [weak self] result in
             MXLog.debug("AnalyticsPromptViewModel did complete with result: \(result).")
             
             guard let self else { return }
@@ -69,7 +52,7 @@ final class AnalyticsPromptCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController { analyticsPromptHostingController }
-
-    func stop() { }
+    func toPresentable() -> AnyView {
+        AnyView(AnalyticsPrompt(context: viewModel.context))
+    }
 }

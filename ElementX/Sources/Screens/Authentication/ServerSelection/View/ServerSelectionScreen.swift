@@ -17,17 +17,7 @@
 import SwiftUI
 
 struct ServerSelectionScreen: View {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
-    @FocusState var isTextFieldFocused: Bool
-    
-    // MARK: Public
-    
     @ObservedObject var context: ServerSelectionViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         ScrollView {
@@ -44,6 +34,7 @@ struct ServerSelectionScreen: View {
         .background(Color.element.background, ignoresSafeAreaEdges: .all)
         .toolbar { toolbar }
         .alert(item: $context.alertInfo) { $0.alert }
+        .interactiveDismissDisabled()
     }
     
     /// The title, message and icon at the top of the screen.
@@ -68,8 +59,8 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 12) {
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
-                .focused($isTextFieldFocused)
-                .textFieldStyle(.elementInput(footerText: context.viewState.footerMessage,
+                .textFieldStyle(.elementInput(labelText: ElementL10n.hsUrl,
+                                              footerText: context.viewState.footerMessage,
                                               isError: context.viewState.isShowingFooterError))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
@@ -78,6 +69,17 @@ struct ServerSelectionScreen: View {
                 .submitLabel(.done)
                 .onSubmit(submit)
                 .accessibilityIdentifier("addressTextField")
+            
+            Divider()
+            
+            TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.slidingSyncProxyAddress)
+                .textFieldStyle(.elementInput(labelText: "Sliding sync proxy URL"))
+                .keyboardType(.URL)
+                .autocapitalization(.none)
+                .disableAutocorrection(true)
+                .submitLabel(.done)
+                .onSubmit(submit)
+                .accessibilityIdentifier("slidingSyncProxyAddressTextField")
             
             Button(action: submit) {
                 Text(context.viewState.buttonTitle)
@@ -91,7 +93,7 @@ struct ServerSelectionScreen: View {
     @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            if context.viewState.hasModalPresentation {
+            if context.viewState.isModallyPresented {
                 Button { context.send(viewAction: .dismiss) } label: {
                     Text(ElementL10n.actionCancel)
                 }

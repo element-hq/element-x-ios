@@ -68,6 +68,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       inGroupState: .single,
                                                                       isOutgoing: false,
+                                                                      isEditable: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: UIImage(systemName: "photo")))
@@ -77,6 +78,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       inGroupState: .single,
                                                                       isOutgoing: false,
+                                                                      isEditable: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: nil))
@@ -86,6 +88,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       timestamp: "Now",
                                                                       inGroupState: .single,
                                                                       isOutgoing: false,
+                                                                      isEditable: false,
                                                                       senderId: "Bob",
                                                                       source: nil,
                                                                       image: nil,

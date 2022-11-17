@@ -30,6 +30,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              timestamp: "10:10 AM",
                              inGroupState: .single,
                              isOutgoing: false,
+                             isEditable: false,
                              senderId: "",
                              senderDisplayName: "Jacob",
                              properties: RoomTimelineItemProperties(isEdited: true)),
@@ -38,6 +39,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              timestamp: "10:11 AM",
                              inGroupState: .beginning,
                              isOutgoing: false,
+                             isEditable: false,
                              senderId: "",
                              senderDisplayName: "Helena",
                              properties: RoomTimelineItemProperties(reactions: [
@@ -48,6 +50,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              timestamp: "10:11 AM",
                              inGroupState: .end,
                              isOutgoing: false,
+                             isEditable: false,
                              senderId: "",
                              senderDisplayName: "Helena",
                              properties: RoomTimelineItemProperties(reactions: [
@@ -61,6 +64,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              timestamp: "5 PM",
                              inGroupState: .single,
                              isOutgoing: false,
+                             isEditable: false,
                              senderId: "",
                              senderDisplayName: "Helena"),
         TextRoomTimelineItem(id: UUID().uuidString,
@@ -68,6 +72,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              timestamp: "5 PM",
                              inGroupState: .beginning,
                              isOutgoing: true,
+                             isEditable: true,
                              senderId: "",
                              senderDisplayName: "Bob"),
         TextRoomTimelineItem(id: UUID().uuidString,
@@ -75,6 +80,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              timestamp: "5 PM",
                              inGroupState: .end,
                              isOutgoing: true,
+                             isEditable: true,
                              senderId: "",
                              senderDisplayName: "Bob",
                              properties: RoomTimelineItemProperties(reactions: [
@@ -91,6 +97,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
                              timestamp: "5 PM",
                              inGroupState: .single,
                              isOutgoing: false,
+                             isEditable: false,
                              senderId: "",
                              senderDisplayName: "Helena")
     ]
@@ -102,10 +109,18 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func processItemAppearance(_ itemId: String) async { }
     
     func processItemDisappearance(_ itemId: String) async { }
+
+    func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction { .none }
     
     func sendMessage(_ message: String) async { }
     
     func sendReply(_ message: String, to itemId: String) async { }
+
+    func editMessage(_ newMessage: String, of itemId: String) async { }
     
     func redact(_ eventID: String) async { }
+    
+    func debugDescriptionFor(_ itemId: String) -> String {
+        "Mock debug description"
+    }
 }

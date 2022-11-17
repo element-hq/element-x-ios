@@ -56,22 +56,16 @@ class ClientProxy: ClientProxyProtocol {
     private let clientQueue: DispatchQueue
     
     private var slidingSyncObserverToken: StoppableSpawn?
-    private var slidingSync: SlidingSync!
+    private var slidingSync: SlidingSync?
     
-    var roomSummaryProviderInternal: RoomSummaryProviderProtocol!
-    var roomSummaryProvider: RoomSummaryProviderProtocol {
-        guard let roomSummaryProviderInternal else {
-            fatalError("There is an issue with ClientProxy object initialization")
-        }
-        return roomSummaryProviderInternal
-    }
+    var roomSummaryProvider: RoomSummaryProviderProtocol?
     
     deinit {
         // These need to be inlined instead of using stopSync()
         // as we can't call async methods safely from deinit
         client.setDelegate(delegate: nil)
         slidingSyncObserverToken?.cancel()
-        slidingSync.setObserver(observer: nil)
+        slidingSync?.setObserver(observer: nil)
     }
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -87,7 +81,7 @@ class ClientProxy: ClientProxyProtocol {
 
         await Task.dispatch(on: clientQueue) {
             do {
-                let slidingSyncBuilder = try client.slidingSync().homeserver(url: BuildSettings.slidingSyncProxyBaseURL.absoluteString)
+                let slidingSyncBuilder = try client.slidingSync().homeserver(url: ElementSettings.shared.slidingSyncProxyBaseURLString)
 
                 let slidingSyncView = try SlidingSyncViewBuilder()
                     .timelineLimit(limit: 10)
@@ -97,16 +91,18 @@ class ClientProxy: ClientProxyProtocol {
                     .syncMode(mode: .fullSync)
                     .build()
 
-                self.slidingSync = try slidingSyncBuilder
+                let slidingSync = try slidingSyncBuilder
                     .addView(v: slidingSyncView)
                     .withCommonExtensions()
                     .build()
-
-                self.roomSummaryProviderInternal = RoomSummaryProvider(slidingSyncController: self.slidingSync,
-                                                                       slidingSyncView: slidingSyncView,
-                                                                       roomMessageFactory: RoomMessageFactory())
+                
+                self.roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
+                                                               slidingSyncView: slidingSyncView,
+                                                               roomMessageFactory: RoomMessageFactory())
+                
+                self.slidingSync = slidingSync
             } catch {
-                fatalError("Failed configuring sliding sync")
+                MXLog.error("Failed configuring sliding sync with error: \(error)")
             }
         }
 
@@ -153,15 +149,15 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
-        slidingSyncObserverToken = slidingSync.sync()
+        slidingSync?.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+        slidingSyncObserverToken = slidingSync?.sync()
     }
     
     func stopSync() {
         client.setDelegate(delegate: nil)
         
         slidingSyncObserverToken?.cancel()
-        slidingSync.setObserver(observer: nil)
+        slidingSync?.setObserver(observer: nil)
     }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
@@ -263,7 +259,7 @@ class ClientProxy: ClientProxyProtocol {
 
     private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {
         do {
-            let slidingSyncRoom = try slidingSync.getRoom(roomId: identifier)
+            let slidingSyncRoom = try slidingSync?.getRoom(roomId: identifier)
             let fullRoom = slidingSyncRoom?.fullRoom()
 
             return (slidingSyncRoom, fullRoom)
@@ -282,7 +278,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
-        roomSummaryProvider.updateRoomsWithIdentifiers(summary.rooms)
+        roomSummaryProvider?.updateRoomsWithIdentifiers(summary.rooms)
         
         callbacks.send(.receivedSyncUpdate)
     }

@@ -1,3 +1,32 @@
+## Changes in 1.0.8 (2022-11-16)
+
+✨ Features
+
+- Timeline: Add playback support for video items. ([#238](https://github.com/vector-im/element-x-ios/issues/238))
+- Timeline: Display file messages and preview them when tapped. ([#310](https://github.com/vector-im/element-x-ios/issues/310))
+
+📄 Documentation
+
+- Updated some documentation files. ([#312](https://github.com/vector-im/element-x-ios/issues/312))
+
+
+## Changes in 1.0.7 (2022-11-10)
+
+✨ Features
+
+- Timeline: Display video messages. ([#237](https://github.com/vector-im/element-x-ios/issues/237))
+- Timeline: Implement message editing via context menu. ([#252](https://github.com/vector-im/element-x-ios/issues/252))
+- Added support for non-decryptable timeline items ([#291](https://github.com/vector-im/element-x-ios/issues/291))
+- Added a timeline item context menu option for printing and showing their debug description ([#292](https://github.com/vector-im/element-x-ios/issues/292))
+
+🐛 Bugfixes
+
+- Fix identifier regexes: Fixes permalink action on timeline. ([#303](https://github.com/vector-im/element-x-ios/pull/303))
+- Allow session restoration even while offline ([#239](https://github.com/vector-im/element-x-ios/issues/239))
+- Timeline: Reset keyboard after a message is sent. ([#269](https://github.com/vector-im/element-x-ios/issues/269))
+- Remove home screen list change animations ([#273](https://github.com/vector-im/element-x-ios/issues/273))
+
+
 ## Changes in 1.0.6 (2022-11-02)
 
 🙌 Improvements

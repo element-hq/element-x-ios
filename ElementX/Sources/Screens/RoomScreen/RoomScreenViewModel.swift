@@ -81,14 +81,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Public
+
+    var callback: ((RoomScreenViewModelAction) -> Void)?
     
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
         case .loadPreviousPage:
-            guard !state.isBackPaginating else {
-                return
-            }
-            
             switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
             default:
                 #warning("Treat errors")
@@ -97,6 +95,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):
             await timelineController.processItemDisappearance(id)
+        case .itemTapped(let id):
+            await itemTapped(with: id)
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
@@ -105,6 +105,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             #warning("Reaction implementation awaiting SDK support.")
             MXLog.warning("React with \(key) failed. Not implemented.")
         case .cancelReply:
+            state.composerMode = .default
+        case .cancelEdit:
             state.composerMode = .default
         }
     }
@@ -116,6 +118,21 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Private
+
+    private func itemTapped(with itemId: String) async {
+        state.showLoading = true
+        let action = await timelineController.processItemTap(itemId)
+
+        switch action {
+        case .displayVideo(let videoURL):
+            callback?(.displayVideo(videoURL: videoURL))
+        case .displayFile(let fileURL, let title):
+            callback?(.displayFile(fileURL: fileURL, title: title))
+        case .none:
+            break
+        }
+        state.showLoading = false
+    }
     
     private func buildTimelineViews() {
         let stateItems = timelineController.timelineItems.map { item in
@@ -139,6 +156,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch currentComposerState {
         case .reply(let itemId, _):
             await timelineController.sendReply(currentMessage, to: itemId)
+        case .edit(let originalItemId):
+            await timelineController.editMessage(currentMessage, of: originalItemId)
         default:
             await timelineController.sendMessage(currentMessage)
         }
@@ -161,21 +180,25 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    private func contextMenuActionsForItemId(_ itemId: String) -> [TimelineItemContextMenuAction] {
+    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
-              timelineItem is EventBasedTimelineItemProtocol else {
-            return []
+              let item = timelineItem as? EventBasedTimelineItemProtocol else {
+            return .init(actions: [])
         }
         
         var actions: [TimelineItemContextMenuAction] = [
             .copy, .quote, .copyPermalink, .reply
         ]
+
+        if item.isEditable {
+            actions.append(.edit)
+        }
         
-        if let item = timelineItem as? EventBasedTimelineItemProtocol, item.isOutgoing {
+        if item.isOutgoing {
             actions.append(.redact)
         }
         
-        return actions
+        return .init(actions: actions)
     }
     
     private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
@@ -187,6 +210,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch action {
         case .copy:
             UIPasteboard.general.string = item.text
+        case .edit:
+            state.bindings.composerFocused = true
+            state.bindings.composerText = item.text
+            state.composerMode = .edit(originalItemId: item.id)
         case .quote:
             state.bindings.composerFocused = true
             state.bindings.composerText = "> \(item.text)"
@@ -202,12 +229,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .reply:
             state.bindings.composerFocused = true
             state.composerMode = .reply(id: item.id, displayName: item.senderDisplayName ?? item.senderId)
+        case .viewSource:
+            let debugDescription = timelineController.debugDescriptionFor(item.id)
+            MXLog.info(debugDescription)
+            state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
         }
         
-        switch action {
-        case .reply:
-            break
-        default:
+        if action.switchToDefaultComposer {
             state.composerMode = .default
         }
     }

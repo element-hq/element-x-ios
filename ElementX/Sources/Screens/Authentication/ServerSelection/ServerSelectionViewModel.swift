@@ -28,18 +28,24 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)?
 
     // MARK: - Setup
-
-    init(homeserverAddress: String, hasModalPresentation: Bool) {
-        let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress)
+    
+    init(homeserverAddress: String, isModallyPresented: Bool) {
+        let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress,
+                                               slidingSyncProxyAddress: ElementSettings.shared.slidingSyncProxyBaseURLString)
+        
         super.init(initialViewState: ServerSelectionViewState(bindings: bindings,
-                                                              hasModalPresentation: hasModalPresentation))
+                                                              isModallyPresented: isModallyPresented))
     }
-
+    
     // MARK: - Public
 
     override func process(viewAction: ServerSelectionViewAction) async {
         switch viewAction {
         case .confirm:
+            if !state.bindings.slidingSyncProxyAddress.isEmpty {
+                ElementSettings.shared.slidingSyncProxyBaseURLString = state.bindings.slidingSyncProxyAddress
+            }
+            
             callback?(.confirm(homeserverAddress: state.bindings.homeserverAddress))
         case .dismiss:
             callback?(.dismiss)

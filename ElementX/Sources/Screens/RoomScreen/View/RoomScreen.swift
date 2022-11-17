@@ -20,27 +20,41 @@ struct RoomScreen: View {
     @ObservedObject var context: RoomScreenViewModel.Context
     
     var body: some View {
-        VStack(spacing: 0.0) {
-            TimelineView()
-                .environmentObject(context)
-            
-            MessageComposer(text: $context.composerText,
-                            focused: $context.composerFocused,
-                            sendingDisabled: context.viewState.sendButtonDisabled,
-                            type: context.viewState.composerMode) {
-                sendMessage()
-            } replyCancellationAction: {
-                context.send(viewAction: .cancelReply)
+        ZStack {
+            VStack(spacing: 0.0) {
+                TimelineView()
+                    .environmentObject(context)
+
+                MessageComposer(text: $context.composerText,
+                                focused: $context.composerFocused,
+                                sendingDisabled: context.viewState.sendButtonDisabled,
+                                type: context.viewState.composerMode) {
+                    sendMessage()
+                } replyCancellationAction: {
+                    context.send(viewAction: .cancelReply)
+                } editCancellationAction: {
+                    context.send(viewAction: .cancelEdit)
+                }
+                .padding()
             }
-            .padding()
-        }
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                RoomHeaderView(context: context)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    RoomHeaderView(context: context)
+                }
+            }
+            .alert(item: $context.alertInfo) { $0.alert }
+            .sheet(item: $context.debugInfo) { DebugScreen(info: $0) }
+
+            if context.viewState.showLoading {
+                ProgressView()
+                    .progressViewStyle(.circular)
+                    .tint(.element.primaryContent)
+                    .padding(16)
+                    .background(Color.element.quinaryContent)
+                    .cornerRadius(8)
             }
         }
-        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     private func sendMessage() {

@@ -5,8 +5,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/openid/AppAuth-iOS",
       "state" : {
-        "revision" : "33660c271c961f8ce1084cc13f2ea8195e864f7d",
-        "version" : "1.5.0"
+        "revision" : "3d36a58a2b736f7bc499453e996a704929b25080",
+        "version" : "1.6.0"
       }
     },
     {
@@ -14,8 +14,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
       "state" : {
-        "revision" : "20e0991f3975916ab0f6d58db84d8bc64f883537",
-        "version" : "4.7.0"
+        "revision" : "d37e70cb2646666dcf276d7d3d4a9760a41ff8a6",
+        "version" : "4.9.0"
       }
     },
     {
@@ -68,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "022e4eeb79f817748544b318b991d9a70036bbf8",
-        "version" : "7.2.4"
+        "revision" : "44e891bdb61426a95e31492a67c7c0dfad1f87c5",
+        "version" : "7.4.1"
       }
     },
     {
@@ -78,7 +78,7 @@
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
         "branch" : "main",
-        "revision" : "53ad46ba1ea1ee8f21139dda3c351890846a202f"
+        "revision" : "4bcc7f566b165cd2d8fde07d23bda77e1d9fbb2d"
       }
     },
     {
@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "9df6dc95119886a074dc44f461f9e3765a00fa10",
-        "version" : "1.0.15-notifications"
+        "revision" : "f4ff25f54c7e854fa1498f6dfd7bedca8c0ed260",
+        "version" : "1.0.20-alpha"
       }
     },
     {
@@ -102,10 +102,10 @@
     {
       "identity" : "sentry-cocoa",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/getsentry/sentry-cocoa.git",
+      "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "f906913c14eadb6fd31988db1ea9ff10aec9f198",
-        "version" : "7.18.1"
+        "revision" : "71fd3032635fed58ae1c1ba22bb7ffa158dbb5ee",
+        "version" : "7.30.2"
       }
     },
     {

@@ -28,7 +28,7 @@ class ServerSelectionViewModelTests: XCTestCase {
     var context: ServerSelectionViewModelType.Context!
     
     @MainActor override func setUp() {
-        viewModel = ServerSelectionViewModel(homeserverAddress: "", hasModalPresentation: true)
+        viewModel = ServerSelectionViewModel(homeserverAddress: "", isModallyPresented: true)
         context = viewModel.context
     }
 

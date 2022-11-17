@@ -14,40 +14,46 @@
 // limitations under the License.
 //
 
-import UIKit
+import SwiftUI
 
 @main
-class AppDelegate: UIResponder {
-    private lazy var appCoordinator: AppCoordinatorProtocol = Tests.isRunningUITests ? UITestsAppCoordinator() : AppCoordinator()
+struct Application: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) private var applicationDelegate
+    fileprivate let applicationCoordinator: AppCoordinatorProtocol
+    
+    init() {
+        if Tests.isRunningUITests {
+            applicationCoordinator = UITestsAppCoordinator()
+        } else {
+            applicationCoordinator = AppCoordinator()
+        }
+    }
+    
+    var body: some Scene {
+        WindowGroup {
+            if Tests.isRunningUnitTests {
+                EmptyView()
+            } else {
+                applicationCoordinator.toPresentable()
+                    .tint(.element.accent)
+                    .task {
+                        applicationCoordinator.start()
+                    }
+            }
+        }
+    }
 }
 
-// MARK: - UIApplicationDelegate
-
-extension AppDelegate: UIApplicationDelegate {
-    func application(_ application: UIApplication,
-                     willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        //  use `en` as fallback language
-        Bundle.elementFallbackLanguage = "en"
-
-        return true
+class AppDelegate: NSObject, UIApplicationDelegate {
+    func application(_ application: UIApplication, willFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
+        true
     }
 
-    func application(_ application: UIApplication,
-                     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
-        if Tests.isRunningUnitTests {
-            return true
-        }
-        
-        appCoordinator.start()
-        
-        return true
-    }
-
-    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        appCoordinator.notificationManager?.register(with: deviceToken)
-    }
-
-    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        appCoordinator.notificationManager?.registrationFailed(with: error)
-    }
+//    func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
+//        applicationCoordinator.notificationManager?.register(with: deviceToken)
+//    }
+//
+//    func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+//        applicationCoordinator.notificationManager?.registrationFailed(with: error)
+//    }
 }

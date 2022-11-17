@@ -31,14 +31,6 @@ extension String {
         
         return string
     }
-    
-    /// Whether or not the string is a Matrix user ID.
-    var isMatrixUserID: Bool {
-        let range = NSRange(location: 0, length: count)
-        
-        let detector = try? NSRegularExpression(pattern: MatrixEntityRegex.userId.rawValue, options: .caseInsensitive)
-        return detector?.numberOfMatches(in: self, range: range) ?? 0 == 1
-    }
 
     /// Calculates a numeric hash same as Element Web
     /// See original function here https://github.com/matrix-org/matrix-react-sdk/blob/321dd49db4fbe360fc2ff109ac117305c955b061/src/utils/FormattingUtils.js#L47

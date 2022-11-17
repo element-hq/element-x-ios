@@ -18,74 +18,58 @@ import SwiftUI
 import UIKit
 
 class UITestsAppCoordinator: AppCoordinatorProtocol {
-    private let window: UIWindow
-    private let mainNavigationController: ElementNavigationController
-    private let navigationRouter: NavigationRouter
-    private var hostingController: UIViewController?
-    
-    var childCoordinators: [Coordinator] = []
+    private let navigationController: NavigationController
     let notificationManager: NotificationManagerProtocol? = nil
     
     init() {
-        mainNavigationController = ElementNavigationController()
-        mainNavigationController.navigationBar.prefersLargeTitles = true
-        navigationRouter = NavigationRouter(navigationController: mainNavigationController)
-        
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = mainNavigationController
-        window.tintColor = .element.accent
-        
-        UIView.setAnimationsEnabled(false)
-        
-        let screens = mockScreens()
-        
-        let rootView = UITestsRootView(mockScreens: screens) { id in
-            guard let screen = screens.first(where: { $0.id == id }) else {
-                fatalError()
-            }
-            
-            screen.coordinator.start()
-            self.navigationRouter.setRootModule(screen.coordinator)
-        }
-        
-        let hostingController = UIHostingController(rootView: rootView)
-        self.hostingController = hostingController
-        
-        mainNavigationController.setViewControllers([hostingController], animated: false)
+        navigationController = NavigationController()
     }
     
     func start() {
-        window.makeKeyAndVisible()
+        let screens = mockScreens()
+        let rootCoordinator = UITestsRootCoordinator(mockScreens: screens) { id in
+            guard let screen = screens.first(where: { $0.id == id }) else {
+                fatalError()
+            }
+
+            self.navigationController.setRootCoordinator(screen.coordinator)
+        }
+        
+        navigationController.setRootCoordinator(rootCoordinator)
+    }
+        
+    func toPresentable() -> AnyView {
+        navigationController.toPresentable()
     }
     
     private func mockScreens() -> [MockScreen] {
-        UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationRouter: navigationRouter) }
+        UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationController: navigationController) }
     }
-
-    func stop() { }
 }
 
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestScreenIdentifier
-    let navigationRouter: NavigationRouter
-    lazy var coordinator: Coordinator & Presentable = {
+    let navigationController: NavigationController
+    lazy var coordinator: CoordinatorProtocol = {
         switch id {
         case .login:
             return LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                      navigationRouter: navigationRouter))
+                                                      navigationController: navigationController))
         case .serverSelection:
             return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                hasModalPresentation: true))
+                                                                userNotificationController: MockUserNotificationController(),
+                                                                isModallyPresented: true))
         case .serverSelectionNonModal:
             return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                                hasModalPresentation: false))
+                                                                userNotificationController: MockUserNotificationController(),
+                                                                isModallyPresented: false))
         case .analyticsPrompt:
             return AnalyticsPromptCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
                                                                                              mediaProvider: MockMediaProvider())))
         case .authenticationFlow:
             return AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                             navigationRouter: navigationRouter)
+                                             navigationController: navigationController)
         case .softLogout:
             let credentials = SoftLogoutCredentials(userId: "@mock:matrix.org",
                                                     homeserverName: "matrix.org",
@@ -101,28 +85,38 @@ class MockScreen: Identifiable {
         case .home:
             let session = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:matrix.org"),
                                           mediaProvider: MockMediaProvider())
-            return HomeScreenCoordinator(parameters: .init(userSession: session, attributedStringBuilder: AttributedStringBuilder()))
+            return HomeScreenCoordinator(parameters: .init(userSession: session,
+                                                           attributedStringBuilder: AttributedStringBuilder(),
+                                                           bugReportService: MockBugReportService(),
+                                                           navigationController: navigationController))
         case .settings:
-            return SettingsCoordinator(parameters: .init(navigationRouter: navigationRouter,
+            return SettingsCoordinator(parameters: .init(navigationController: navigationController,
+                                                         userNotificationController: MockUserNotificationController(),
                                                          userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
                                                                                       mediaProvider: MockMediaProvider()),
                                                          bugReportService: MockBugReportService()))
         case .bugReport:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
-                                                          screenshot: nil))
+                                                          userNotificationController: MockUserNotificationController(),
+                                                          screenshot: nil,
+                                                          isModallyPresented: false))
         case .bugReportWithScreenshot:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
-                                                          screenshot: Asset.Images.appLogo.image))
+                                                          userNotificationController: MockUserNotificationController(),
+                                                          screenshot: Asset.Images.appLogo.image,
+                                                          isModallyPresented: false))
         case .splash:
-            return SplashScreenCoordinator()
+            return OnboardingCoordinator()
         case .roomPlainNoAvatar:
-            let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+            let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,
+                                                             timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
                                                              roomAvatarUrl: nil)
             return RoomScreenCoordinator(parameters: parameters)
         case .roomEncryptedWithAvatar:
-            let parameters = RoomScreenCoordinatorParameters(timelineController: MockRoomTimelineController(),
+            let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,
+                                                             timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
                                                              roomAvatarUrl: "mock_url")
@@ -133,8 +127,8 @@ class MockScreen: Identifiable {
         }
     }()
     
-    init(id: UITestScreenIdentifier, navigationRouter: NavigationRouter) {
+    init(id: UITestScreenIdentifier, navigationController: NavigationController) {
         self.id = id
-        self.navigationRouter = navigationRouter
+        self.navigationController = navigationController
     }
 }

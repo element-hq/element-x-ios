@@ -25,42 +25,22 @@ enum TemplateCoordinatorAction {
     case cancel
 }
 
-final class TemplateCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class TemplateCoordinator: CoordinatorProtocol {
     private let parameters: TemplateCoordinatorParameters
-    private let templateHostingController: UIViewController
-    private var templateViewModel: TemplateViewModelProtocol
+    private var viewModel: TemplateViewModelProtocol
     
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var activityIndicator: UserIndicator?
-    
-    // MARK: Public
-
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: ((TemplateCoordinatorAction) -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: TemplateCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = TemplateViewModel(promptType: parameters.promptType)
-        let view = TemplateScreen(context: viewModel.context)
-        templateViewModel = viewModel
-        templateHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: templateHostingController)
+        viewModel = TemplateViewModel(promptType: parameters.promptType)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-        templateViewModel.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("TemplateViewModel did complete with result: \(action).")
             switch action {
@@ -71,27 +51,8 @@ final class TemplateCoordinator: Coordinator, Presentable {
             }
         }
     }
-    
-    func toPresentable() -> UIViewController {
-        templateHostingController
-    }
-
-    func stop() {
-        stopLoading()
-    }
-    
-    // MARK: - Private
-    
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        activityIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        activityIndicator = nil
+        
+    func toPresentable() -> AnyView {
+        AnyView(TemplateScreen(context: viewModel.context))
     }
 }

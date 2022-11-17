@@ -17,51 +17,71 @@
 import SwiftUI
 
 struct RoomScreenCoordinatorParameters {
+    let navigationController: NavigationController
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let roomName: String?
     let roomAvatarUrl: String?
 }
 
-final class RoomScreenCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class RoomScreenCoordinator: CoordinatorProtocol {
     private let parameters: RoomScreenCoordinatorParameters
-    private let roomScreenHostingController: UIViewController
-    private var roomScreenViewModel: RoomScreenViewModelProtocol
-    
-    // MARK: Public
 
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
-    
-    // MARK: - Setup
+    private var viewModel: RoomScreenViewModelProtocol
+    private var navigationController: NavigationController { parameters.navigationController }
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
-                                            timelineViewFactory: RoomTimelineViewFactory(),
-                                            mediaProvider: parameters.mediaProvider,
-                                            roomName: parameters.roomName,
-                                            roomAvatarUrl: parameters.roomAvatarUrl)
-        
-        let view = RoomScreen(context: viewModel.context)
-        roomScreenViewModel = viewModel
-        roomScreenHostingController = UIHostingController(rootView: view)
+        viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
+                                        timelineViewFactory: RoomTimelineViewFactory(),
+                                        mediaProvider: parameters.mediaProvider,
+                                        roomName: parameters.roomName,
+                                        roomAvatarUrl: parameters.roomAvatarUrl)
     }
     
     // MARK: - Public
-
-    func start() { }
     
-    func toPresentable() -> UIViewController {
-        roomScreenHostingController
+    func start() {
+        viewModel.callback = { [weak self] result in
+            guard let self else { return }
+            MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
+            switch result {
+            case .displayVideo(let videoURL):
+                self.displayVideo(for: videoURL)
+            case .displayFile(let fileURL, let title):
+                self.displayFile(for: fileURL, with: title)
+            }
+        }
+    }
+    
+    func stop() {
+        viewModel.stop()
+    }
+    
+    func toPresentable() -> AnyView {
+        AnyView(RoomScreen(context: viewModel.context))
     }
 
-    func stop() {
-        roomScreenViewModel.stop()
+    // MARK: - Private
+
+    private func displayVideo(for videoURL: URL) {
+        let params = VideoPlayerCoordinatorParameters(videoURL: videoURL)
+        let coordinator = VideoPlayerCoordinator(parameters: params)
+        coordinator.callback = { [weak self] _ in
+            self?.navigationController.pop()
+        }
+
+        navigationController.push(coordinator)
+    }
+
+    private func displayFile(for fileURL: URL, with title: String?) {
+        let params = FilePreviewCoordinatorParameters(fileURL: fileURL, title: title)
+        let coordinator = FilePreviewCoordinator(parameters: params)
+        coordinator.callback = { [weak self] _ in
+            self?.navigationController.pop()
+        }
+        
+        navigationController.push(coordinator)
     }
 }

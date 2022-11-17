@@ -17,7 +17,6 @@
 import Foundation
 import SwiftUI
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension Animation {
     /// Animation to be used to disable animations.
     static let noAnimation: Animation = .linear(duration: 0)
@@ -28,7 +27,6 @@ public extension Animation {
     }
 }
 
-@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 /// Returns the result of recomputing the view's body with the provided
 /// animation.
 /// - Parameters:

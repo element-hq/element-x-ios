@@ -17,31 +17,27 @@
 import Foundation
 import UIKit
 
-enum RoomScreenViewModelAction { }
-
-enum TimelineItemContextMenuAction: Identifiable, Hashable {
-    case copy
-    case quote
-    case copyPermalink
-    case redact
-    case reply
-    
-    var id: Self { self }
+enum RoomScreenViewModelAction {
+    case displayVideo(videoURL: URL)
+    case displayFile(fileURL: URL, title: String?)
 }
 
 enum RoomScreenComposerMode: Equatable {
     case `default`
     case reply(id: String, displayName: String)
+    case edit(originalItemId: String)
 }
 
 enum RoomScreenViewAction {
     case loadPreviousPage
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
+    case itemTapped(id: String)
     case linkClicked(url: URL)
     case sendMessage
     case sendReaction(key: String, eventID: String)
     case cancelReply
+    case cancelEdit
 }
 
 struct RoomScreenViewState: BindableState {
@@ -50,6 +46,7 @@ struct RoomScreenViewState: BindableState {
     var roomAvatar: UIImage?
     var items: [RoomTimelineViewProvider] = []
     var isBackPaginating = false
+    var showLoading = false
     var bindings: RoomScreenViewStateBindings
     
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
@@ -67,6 +64,8 @@ struct RoomScreenViewStateBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
+    
+    var debugInfo: DebugScreen.DebugInfo?
 }
 
 enum RoomScreenErrorType: Hashable {

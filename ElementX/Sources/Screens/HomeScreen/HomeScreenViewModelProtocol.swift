@@ -22,4 +22,6 @@ protocol HomeScreenViewModelProtocol {
     var callback: ((HomeScreenViewModelAction) -> Void)? { get set }
     
     var context: HomeScreenViewModelType.Context { get }
+    
+    func presentAlert(_ alert: AlertInfo<UUID>)
 }

@@ -21,7 +21,7 @@ import MatrixRustSDK
 enum TimelineItemProxy {
     case event(EventTimelineItemProxy)
     case virtual(MatrixRustSDK.VirtualTimelineItem)
-    case other(MatrixRustSDK.TimelineItem)
+    case unknown(MatrixRustSDK.TimelineItem)
     
     init(item: MatrixRustSDK.TimelineItem) {
         if let eventItem = item.asEvent() {
@@ -29,7 +29,7 @@ enum TimelineItemProxy {
         } else if let virtualItem = item.asVirtual() {
             self = .virtual(virtualItem)
         } else {
-            self = .other(item)
+            self = .unknown(item)
         }
     }
 
@@ -43,7 +43,7 @@ enum TimelineItemProxy {
 }
 
 /// A light wrapper around event timeline items returned from Rust.
-struct EventTimelineItemProxy {
+struct EventTimelineItemProxy: CustomDebugStringConvertible {
     let item: MatrixRustSDK.EventTimelineItem
     
     init(item: MatrixRustSDK.EventTimelineItem) {
@@ -79,6 +79,10 @@ struct EventTimelineItemProxy {
     var isOwn: Bool {
         item.isOwn()
     }
+
+    var isEditable: Bool {
+        item.isEditable()
+    }
     
     var sender: String {
         item.sender()
@@ -94,5 +98,11 @@ struct EventTimelineItemProxy {
         } else {
             return .now
         }
+    }
+    
+    // MARK: - CustomDebugStringConvertible
+    
+    var debugDescription: String {
+        item.fmtDebug()
     }
 }

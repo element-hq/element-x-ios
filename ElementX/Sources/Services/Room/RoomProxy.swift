@@ -75,7 +75,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     var isEncrypted: Bool {
-        room.isEncrypted()
+        (try? room.isEncrypted()) ?? false
     }
     
     var isTombstoned: Bool {
@@ -182,6 +182,24 @@ class RoomProxy: RoomProxyProtocol {
                     let messageContent = messageEventContentFromMarkdown(md: message)
                     try self.room.send(msg: messageContent, txnId: transactionId)
                 }
+                return .success(())
+            } catch {
+                return .failure(.failedSendingMessage)
+            }
+        }
+    }
+
+    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        defer {
+            sendMessageBgTask?.stop()
+        }
+
+        let transactionId = genTransactionId()
+
+        return await Task.dispatch(on: .global()) {
+            do {
+                try self.room.edit(newMsg: newMessage, originalEventId: originalEventId, txnId: transactionId)
                 return .success(())
             } catch {
                 return .failure(.failedSendingMessage)

@@ -71,7 +71,7 @@ protocol ClientProxyProtocol: MediaProxyProtocol {
 
     var restorationToken: RestorationToken? { get }
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol { get }
+    var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     func startSync()
     

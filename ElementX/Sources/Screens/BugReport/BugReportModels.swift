@@ -22,6 +22,7 @@ import UIKit
 // MARK: View model
 
 enum BugReportViewModelAction {
+    case cancel
     case submitStarted
     case submitFinished
     case submitFailed(error: Error)
@@ -32,6 +33,7 @@ enum BugReportViewModelAction {
 struct BugReportViewState: BindableState {
     var screenshot: UIImage?
     var bindings: BugReportViewStateBindings
+    let isModallyPresented: Bool
 }
 
 struct BugReportViewStateBindings {
@@ -40,6 +42,7 @@ struct BugReportViewStateBindings {
 }
 
 enum BugReportViewAction {
+    case cancel
     case submit
     case toggleSendLogs
     case removeScreenshot

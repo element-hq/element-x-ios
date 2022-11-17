@@ -20,12 +20,7 @@ import Foundation
 public extension AnalyticsEvent.UserProperties {
     //  Initializer for Element. Strips all Web properties.
     init(ftueUseCaseSelection: FtueUseCaseSelection?, numFavouriteRooms: Int?, numSpaces: Int?, allChatsActiveFilter: AllChatsActiveFilter?) {
-        self.init(WebMetaSpaceFavouritesEnabled: nil,
-                  WebMetaSpaceHomeAllRooms: nil,
-                  WebMetaSpaceHomeEnabled: nil,
-                  WebMetaSpaceOrphansEnabled: nil,
-                  WebMetaSpacePeopleEnabled: nil,
-                  allChatsActiveFilter: nil,
+        self.init(allChatsActiveFilter: nil,
                   ftueUseCaseSelection: ftueUseCaseSelection,
                   numFavouriteRooms: numFavouriteRooms,
                   numSpaces: numSpaces)

@@ -15,6 +15,7 @@
 "room_timeline_permalink_creation_failure" = "Failed creating the permalink";
 
 "room_timeline_replying_to" = "Replying to %@";
+"room_timeline_editing" = "Editing";
 
 "session_verification_banner_title" = "Help keep your messages secure";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify its you.";

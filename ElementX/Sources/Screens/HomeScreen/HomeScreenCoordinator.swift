@@ -20,6 +20,8 @@ import SwiftUI
 struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
+    let bugReportService: BugReportServiceProtocol
+    let navigationController: NavigationController
 }
 
 enum HomeScreenCoordinatorAction {
@@ -30,33 +32,19 @@ enum HomeScreenCoordinatorAction {
     case signOut
 }
 
-final class HomeScreenCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class HomeScreenCoordinator: CoordinatorProtocol {
     private let parameters: HomeScreenCoordinatorParameters
-    private let hostingController: UIViewController
     private var viewModel: HomeScreenViewModelProtocol
     
     private var cancellables = Set<AnyCancellable>()
     
-    // MARK: Public
-
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: ((HomeScreenCoordinatorAction) -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: HomeScreenCoordinatorParameters) {
         self.parameters = parameters
         
         viewModel = HomeScreenViewModel(userSession: parameters.userSession,
                                         attributedStringBuilder: parameters.attributedStringBuilder)
-        
-        let view = HomeScreen(context: viewModel.context)
-        hostingController = UIHostingController(rootView: view)
         
         viewModel.callback = { [weak self] action in
             guard let self else { return }
@@ -74,13 +62,21 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     
     // MARK: - Public
     
-    func start() { }
-    
-    func toPresentable() -> UIViewController {
-        hostingController
+    func start() {
+        if parameters.bugReportService.crashedLastRun {
+            viewModel.presentAlert(
+                AlertInfo(id: UUID(),
+                          title: ElementL10n.sendBugReportAppCrashed,
+                          primaryButton: .init(title: ElementL10n.no, action: nil),
+                          secondaryButton: .init(title: ElementL10n.yes) { [weak self] in
+                              self?.callback?(.presentFeedbackScreen)
+                          }))
+        }
     }
-
-    func stop() { }
+    
+    func toPresentable() -> AnyView {
+        AnyView(HomeScreen(context: viewModel.context))
+    }
     
     // MARK: - Private
     
@@ -98,11 +94,6 @@ final class HomeScreenCoordinator: Coordinator, Presentable {
     }
 
     private func presentInviteFriends() {
-        guard let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: parameters.userSession.userID).absoluteString else {
-            return
-        }
-        let shareText = ElementL10n.inviteFriendsText(ElementInfoPlist.cfBundleDisplayName, permalink)
-        let vc = UIActivityViewController(activityItems: [shareText], applicationActivities: nil)
-        hostingController.present(vc, animated: true)
+        parameters.navigationController.presentSheet(InviteFriendsCoordinator(userId: parameters.userSession.userID))
     }
 }

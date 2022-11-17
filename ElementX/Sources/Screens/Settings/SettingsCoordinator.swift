@@ -17,7 +17,8 @@
 import SwiftUI
 
 struct SettingsCoordinatorParameters {
-    let navigationRouter: NavigationRouterType
+    let navigationController: NavigationController
+    let userNotificationController: UserNotificationControllerProtocol
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
 }
@@ -27,25 +28,10 @@ enum SettingsCoordinatorAction {
     case logout
 }
 
-final class SettingsCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class SettingsCoordinator: CoordinatorProtocol {
     private let parameters: SettingsCoordinatorParameters
-    private let settingsHostingController: UIViewController
-    private var settingsViewModel: SettingsViewModelProtocol
-    
-    private var indicatorPresenter: UserIndicatorTypePresenterProtocol
-    private var loadingIndicator: UserIndicator?
-    private var statusIndicator: UserIndicator?
+    private var viewModel: SettingsViewModelProtocol
 
-    private var navigationRouter: NavigationRouterType { parameters.navigationRouter }
-    
-    // MARK: Public
-
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: ((SettingsCoordinatorAction) -> Void)?
     
     // MARK: - Setup
@@ -53,14 +39,8 @@ final class SettingsCoordinator: Coordinator, Presentable {
     init(parameters: SettingsCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = SettingsViewModel(withUserSession: parameters.userSession)
-        let view = SettingsScreen(context: viewModel.context)
-        settingsViewModel = viewModel
-        settingsHostingController = UIHostingController(rootView: view)
-        
-        indicatorPresenter = UserIndicatorTypePresenter(presentingViewController: settingsHostingController)
-
-        settingsViewModel.callback = { [weak self] result in
+        viewModel = SettingsViewModel(withUserSession: parameters.userSession)
+        viewModel.callback = { [weak self] result in
             guard let self else { return }
             MXLog.debug("SettingsViewModel did complete with result: \(result).")
             switch result {
@@ -80,15 +60,9 @@ final class SettingsCoordinator: Coordinator, Presentable {
     
     // MARK: - Public
     
-    func start() {
-        // no-op
+    func toPresentable() -> AnyView {
+        AnyView(SettingsScreen(context: viewModel.context))
     }
-    
-    func toPresentable() -> UIViewController {
-        settingsHostingController
-    }
-
-    func stop() { }
     
     // MARK: - Private
     
@@ -102,39 +76,25 @@ final class SettingsCoordinator: Coordinator, Presentable {
 
     private func presentBugReportScreen() {
         let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
-                                                    screenshot: nil)
+                                                    userNotificationController: parameters.userNotificationController,
+                                                    screenshot: nil,
+                                                    isModallyPresented: false)
         let coordinator = BugReportCoordinator(parameters: params)
-        coordinator.completion = { [weak self, weak coordinator] in
-            guard let self, let coordinator = coordinator else { return }
-            self.parameters.navigationRouter.popModule(animated: true)
-            self.remove(childCoordinator: coordinator)
-            self.showSuccess(label: ElementL10n.done)
+        coordinator.completion = { [weak self] result in
+            switch result {
+            case .finish:
+                self?.showSuccess(label: ElementL10n.done)
+            default:
+                break
+            }
+            
+            self?.parameters.navigationController.pop()
         }
-
-        add(childCoordinator: coordinator)
-        coordinator.start()
-        navigationRouter.push(coordinator, animated: true) { [weak self] in
-            guard let self else { return }
-
-            self.remove(childCoordinator: coordinator)
-        }
+        
+        parameters.navigationController.push(coordinator)
     }
 
-    /// Show an activity indicator whilst loading.
-    /// - Parameters:
-    ///   - label: The label to show on the indicator.
-    ///   - isInteractionBlocking: Whether the indicator should block any user interaction.
-    private func startLoading(label: String = ElementL10n.loading, isInteractionBlocking: Bool = true) {
-        loadingIndicator = indicatorPresenter.present(.loading(label: label, isInteractionBlocking: isInteractionBlocking))
-    }
-    
-    /// Hide the currently displayed activity indicator.
-    private func stopLoading() {
-        loadingIndicator = nil
-    }
-
-    /// Show success indicator
     private func showSuccess(label: String) {
-        statusIndicator = indicatorPresenter.present(.success(label: label))
+        parameters.userNotificationController.submitNotification(UserNotification(title: label))
     }
 }

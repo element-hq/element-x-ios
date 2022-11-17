@@ -23,6 +23,10 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .text(item)
         case let item as ImageRoomTimelineItem:
             return .image(item)
+        case let item as VideoRoomTimelineItem:
+            return .video(item)
+        case let item as FileRoomTimelineItem:
+            return .file(item)
         case let item as SeparatorRoomTimelineItem:
             return .separator(item)
         case let item as NoticeRoomTimelineItem:
@@ -31,6 +35,8 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .emote(item)
         case let item as RedactedRoomTimelineItem:
             return .redacted(item)
+        case let item as EncryptedRoomTimelineItem:
+            return .encrypted(item)
         default:
             fatalError("Unknown timeline item")
         }

@@ -1,0 +1,1 @@
+Expose sliding sync proxy configuration URL on the server selection screen

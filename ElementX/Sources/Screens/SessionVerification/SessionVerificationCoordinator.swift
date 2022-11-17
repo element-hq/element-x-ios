@@ -20,37 +20,22 @@ struct SessionVerificationCoordinatorParameters {
     let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
 }
 
-final class SessionVerificationCoordinator: Coordinator, Presentable {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
+final class SessionVerificationCoordinator: CoordinatorProtocol {
     private let parameters: SessionVerificationCoordinatorParameters
-    private let sessionVerificationHostingController: UIViewController
-    private var sessionVerificationViewModel: SessionVerificationViewModelProtocol
+    private var viewModel: SessionVerificationViewModelProtocol
     
-    // MARK: Public
-
-    // Must be used only internally
-    var childCoordinators: [Coordinator] = []
     var callback: (() -> Void)?
-    
-    // MARK: - Setup
     
     init(parameters: SessionVerificationCoordinatorParameters) {
         self.parameters = parameters
         
-        let viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
-        let view = SessionVerificationScreen(context: viewModel.context)
-        sessionVerificationViewModel = viewModel
-        sessionVerificationHostingController = UIHostingController(rootView: view)
+        viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: parameters.sessionVerificationControllerProxy)
     }
     
     // MARK: - Public
     
     func start() {
-        MXLog.debug("Did start.")
-        sessionVerificationViewModel.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             
             switch action {
@@ -60,9 +45,7 @@ final class SessionVerificationCoordinator: Coordinator, Presentable {
         }
     }
     
-    func toPresentable() -> UIViewController {
-        sessionVerificationHostingController
+    func toPresentable() -> AnyView {
+        AnyView(SessionVerificationScreen(context: viewModel.context))
     }
-
-    func stop() { }
 }

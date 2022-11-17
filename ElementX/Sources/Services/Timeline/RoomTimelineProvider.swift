@@ -84,6 +84,15 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             return .failure(.failedSendingMessage)
         }
     }
+
+    func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError> {
+        switch await roomProxy.editMessage(newMessage, originalEventId: originalItemId) {
+        case .success:
+            return .success(())
+        case .failure:
+            return .failure(.failedSendingMessage)
+        }
+    }
     
     func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError> {
         switch await roomProxy.redact(eventID) {

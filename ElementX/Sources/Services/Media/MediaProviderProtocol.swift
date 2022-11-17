@@ -19,6 +19,7 @@ import UIKit
 
 enum MediaProviderError: Error {
     case failedRetrievingImage
+    case failedRetrievingFile
     case invalidImageData
 }
 
@@ -30,6 +31,14 @@ protocol MediaProviderProtocol {
     func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage?
     
     @discardableResult func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
+
+    func fileFromSource(_ source: MediaSource?, fileExtension: String) -> URL?
+
+    @discardableResult func loadFileFromSource(_ source: MediaSource, fileExtension: String) async -> Result<URL, MediaProviderError>
+
+    func fileFromURLString(_ urlString: String?, fileExtension: String) -> URL?
+
+    @discardableResult func loadFileFromURLString(_ urlString: String, fileExtension: String) async -> Result<URL, MediaProviderError>
 }
 
 extension MediaProviderProtocol {

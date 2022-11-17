@@ -16,7 +16,7 @@
 
 import Combine
 import MatrixRustSDK
-import UIKit
+import SwiftUI
 
 struct ServiceLocator {
     fileprivate static var serviceLocator: ServiceLocator?
@@ -28,19 +28,12 @@ struct ServiceLocator {
         return serviceLocator
     }
     
-    let userIndicatorPresenter: UserIndicatorTypePresenter
+    let userNotificationController: UserNotificationControllerProtocol
 }
 
 class AppCoordinator: AppCoordinatorProtocol {
-    private let window: UIWindow
-    
     private let stateMachine: AppCoordinatorStateMachine
-    
-    private let mainNavigationController: UINavigationController
-    private let splashViewController: UIViewController
-    
-    private let navigationRouter: NavigationRouter
-    
+    private let navigationController: NavigationController
     private let userSessionStore: UserSessionStoreProtocol
     
     private var userSession: UserSessionProtocol! {
@@ -54,36 +47,23 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     private var userSessionFlowCoordinator: UserSessionFlowCoordinator?
+    private var authenticationCoordinator: AuthenticationCoordinator?
     
     private let bugReportService: BugReportServiceProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
-    private var loadingIndicator: UserIndicator?
-    private var statusIndicator: UserIndicator?
-
     private var cancellables = Set<AnyCancellable>()
-    
-    var childCoordinators: [Coordinator] = []
-
     private(set) var notificationManager: NotificationManagerProtocol?
-    
+
     init() {
+        navigationController = NavigationController()
         stateMachine = AppCoordinatorStateMachine()
         
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
-        splashViewController = SplashViewController()
-        
-        mainNavigationController = ElementNavigationController(rootViewController: splashViewController)
-        mainNavigationController.navigationBar.prefersLargeTitles = true
-        
-        window = UIWindow(frame: UIScreen.main.bounds)
-        window.rootViewController = mainNavigationController
-        window.tintColor = .element.accent
-        
-        navigationRouter = NavigationRouter(navigationController: mainNavigationController)
-        
-        ServiceLocator.serviceLocator = ServiceLocator(userIndicatorPresenter: UserIndicatorTypePresenter(presentingViewController: mainNavigationController))
+        navigationController.setRootCoordinator(SplashScreenCoordinator())
+
+        ServiceLocator.serviceLocator = ServiceLocator(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
 
         backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
 
@@ -93,11 +73,12 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         setupLogging()
         
+        Bundle.elementFallbackLanguage = "en"
+        
         // Benchmark.trackingEnabled = true
     }
     
     func start() {
-        window.makeKeyAndVisible()
         stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
 
@@ -105,6 +86,10 @@ class AppCoordinator: AppCoordinatorProtocol {
         hideLoadingIndicator()
     }
     
+    func toPresentable() -> AnyView {
+        ServiceLocator.shared.userNotificationController.toPresentable()
+    }
+        
     // MARK: - Private
     
     private func setupLogging() {
@@ -115,11 +100,11 @@ class AppCoordinator: AppCoordinatorProtocol {
         // This exposes the full Rust side tracing subscriber filter for more flexibility.
         // We can filter by level, crate and even file. See more details here:
         // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
-        setupTracing(configuration: "warn,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        setupTracing(filter: "warn,hyper=warn,sled=warn,matrix_sdk_sled=warn")
         
         loggerConfiguration.logLevel = .debug
         #else
-        setupTracing(configuration: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
+        setupTracing(filter: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
         loggerConfiguration.logLevel = .info
         #endif
         
@@ -191,12 +176,11 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private func startAuthentication() {
         let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
-        let coordinator = AuthenticationCoordinator(authenticationService: authenticationService,
-                                                    navigationRouter: navigationRouter)
-        coordinator.delegate = self
+        authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
+                                                              navigationController: navigationController)
+        authenticationCoordinator?.delegate = self
         
-        add(childCoordinator: coordinator)
-        coordinator.start()
+        authenticationCoordinator?.start()
     }
 
     private func startAuthenticationSoftLogout() {
@@ -205,12 +189,12 @@ class AppCoordinator: AppCoordinatorProtocol {
             if case .success(let name) = await userSession.clientProxy.loadUserDisplayName() {
                 displayName = name
             }
-
+            
             let credentials = SoftLogoutCredentials(userId: userSession.userID,
                                                     homeserverName: userSession.homeserver,
                                                     userDisplayName: displayName,
                                                     deviceId: userSession.deviceId)
-
+            
             let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
             _ = await authenticationService.configure(for: userSession.homeserver)
             
@@ -222,27 +206,22 @@ class AppCoordinator: AppCoordinatorProtocol {
                 switch result {
                 case .signedIn(let session):
                     self.userSession = session
-                    self.remove(childCoordinator: coordinator)
                     self.stateMachine.processEvent(.succeededSigningIn)
                 case .clearAllData:
                     //  clear user data
                     self.userSessionStore.logout(userSession: self.userSession)
                     self.userSession = nil
-                    self.remove(childCoordinator: coordinator)
                     self.startAuthentication()
                 }
             }
-
-            add(childCoordinator: coordinator)
-            coordinator.start()
-
-            navigationRouter.setRootModule(coordinator)
+            
+            navigationController.setRootCoordinator(coordinator)
         }
     }
     
     private func setupUserSession() {
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
-                                                                    navigationRouter: navigationRouter,
+                                                                    navigationController: navigationController,
                                                                     bugReportService: bugReportService)
         
         userSessionFlowCoordinator.callback = { [weak self] action in
@@ -281,12 +260,8 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
-        if let presentedCoordinator = childCoordinators.first {
-            remove(childCoordinator: presentedCoordinator)
-        }
-
-        mainNavigationController.setViewControllers([splashViewController], animated: false)
-
+        navigationController.setRootCoordinator(SplashScreenCoordinator())
+        
         if isSoftLogout {
             startAuthenticationSoftLogout()
         } else {
@@ -336,16 +311,21 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     // MARK: Toasts and loading indicators
     
+    static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
+    
     private func showLoadingIndicator() {
-        loadingIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.loading(label: ElementL10n.loading, isInteractionBlocking: true))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
+                                                                                             type: .modal,
+                                                                                             title: ElementL10n.loading,
+                                                                                             persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        loadingIndicator = nil
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func showLoginErrorToast() {
-        statusIndicator = ServiceLocator.shared.userIndicatorPresenter.present(.error(label: "Failed logging in"))
+        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: "Failed logging in"))
     }
 }
 
@@ -354,7 +334,6 @@ class AppCoordinator: AppCoordinatorProtocol {
 extension AppCoordinator: AuthenticationCoordinatorDelegate {
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        remove(childCoordinator: authenticationCoordinator)
         stateMachine.processEvent(.succeededSigningIn)
     }
 }
