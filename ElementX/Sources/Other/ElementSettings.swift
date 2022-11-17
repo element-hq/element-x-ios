@@ -25,13 +25,17 @@ final class ElementSettings: ObservableObject {
         case timelineStyle
         case enableAnalytics
         case isIdentifiedForAnalytics
+        case slidingSyncProxyBaseURLString
     }
 
     static let shared = ElementSettings()
 
     /// UserDefaults to be used on reads and writes.
     static var store: UserDefaults {
-        .standard
+        guard let userDefaults = UserDefaults(suiteName: ElementInfoPlist.appGroupIdentifier) else {
+            fatalError("Fail to load shared UserDefaults")
+        }
+        return userDefaults
     }
 
     private init() {
@@ -59,4 +63,9 @@ final class ElementSettings: ObservableObject {
 
     @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
     var timelineStyle = BuildSettings.defaultRoomTimelineStyle
+    
+    // MARK: - Client
+    
+    @AppStorage(UserDefaultsKeys.slidingSyncProxyBaseURLString.rawValue, store: store)
+    var slidingSyncProxyBaseURLString = BuildSettings.defaultSlidingSyncProxyBaseURLString
 }

@@ -21,7 +21,7 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let roomSummaryProvider: RoomSummaryProviderProtocol
+    private let roomSummaryProvider: RoomSummaryProviderProtocol?
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private var roomsForIdentifiers = [String: HomeScreenRoom]()
     
@@ -51,6 +51,25 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        Task {
+            if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
+                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, avatarSize: .user(on: .home)) {
+                    state.userAvatar = avatar
+                }
+            }
+        }
+        
+        Task {
+            if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
+                state.userDisplayName = userDisplayName
+            }
+        }
+        
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        
         Publishers.CombineLatest3(roomSummaryProvider.statePublisher,
                                   roomSummaryProvider.countPublisher,
                                   roomSummaryProvider.roomListPublisher)
@@ -77,20 +96,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        Task {
-            if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
-                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, avatarSize: .user(on: .home)) {
-                    state.userAvatar = avatar
-                }
-            }
-        }
-        
-        Task {
-            if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
-                state.userDisplayName = userDisplayName
-            }
-        }
-
         updateRooms()
     }
     
@@ -99,7 +104,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     override func process(viewAction: HomeScreenViewAction) async {
         switch viewAction {
         case .loadRoomData(let roomIdentifier):
-            loadDataForRoomIdentifier(roomIdentifier)
+            if state.roomListMode != .skeletons {
+                loadDataForRoomIdentifier(roomIdentifier)
+            }
         case .selectRoom(let roomIdentifier):
             callback?(.selectRoom(roomIdentifier: roomIdentifier))
         case .userMenu(let action):
@@ -118,6 +125,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        
         guard let roomSummary = roomSummaryProvider.roomListPublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
               let roomIndex = state.rooms.firstIndex(where: { $0.id == identifier }) else {
             return
@@ -140,6 +152,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateRooms() {
+        guard let roomSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
+        
         var rooms = [HomeScreenRoom]()
         var newRoomsForIdentifiers = [String: HomeScreenRoom]()
         

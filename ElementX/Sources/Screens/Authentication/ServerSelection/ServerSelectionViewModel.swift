@@ -30,7 +30,9 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     // MARK: - Setup
     
     init(homeserverAddress: String, isModallyPresented: Bool) {
-        let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress)
+        let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress,
+                                               slidingSyncProxyAddress: ElementSettings.shared.slidingSyncProxyBaseURLString)
+        
         super.init(initialViewState: ServerSelectionViewState(bindings: bindings,
                                                               isModallyPresented: isModallyPresented))
     }
@@ -40,6 +42,10 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     override func process(viewAction: ServerSelectionViewAction) async {
         switch viewAction {
         case .confirm:
+            if !state.bindings.slidingSyncProxyAddress.isEmpty {
+                ElementSettings.shared.slidingSyncProxyBaseURLString = state.bindings.slidingSyncProxyAddress
+            }
+            
             callback?(.confirm(homeserverAddress: state.bindings.homeserverAddress))
         case .dismiss:
             callback?(.dismiss)

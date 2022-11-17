@@ -20,8 +20,9 @@ final class BuildSettings {
     // MARK: - Servers
 
     static let defaultHomeserverAddress = "matrix.org"
-    static let slidingSyncProxyBaseURL = URL(staticString: "https://slidingsync.lab.element.dev")
-
+    
+    static let defaultSlidingSyncProxyBaseURLString = "https://slidingsync.lab.element.dev"
+    
     // MARK: - Bug report
 
     static let bugReportServiceBaseURL = URL(staticString: "https://riot.im/bugreports")
