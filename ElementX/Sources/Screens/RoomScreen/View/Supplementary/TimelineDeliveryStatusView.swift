@@ -17,7 +17,8 @@
 import SwiftUI
 struct TimelineDeliveryStatusView: View {
     let deliveryStatus: MessageTimelineItemDeliveryStatus
-    @Binding var showMe: Bool
+    
+    @State var showDeliveryStatus: Bool
     
     private var systemImageName: String {
         switch deliveryStatus {
@@ -28,22 +29,37 @@ struct TimelineDeliveryStatusView: View {
         }
     }
     
+    init(deliveryStatus: MessageTimelineItemDeliveryStatus) {
+        self.deliveryStatus = deliveryStatus
+        
+        switch deliveryStatus {
+        case .sending, .unknown:
+            _showDeliveryStatus = State(initialValue: true)
+        case let .sent(elapsedTime: elapsedTime):
+            _showDeliveryStatus = State(initialValue: elapsedTime < 3)
+        }
+    }
+    
     var body: some View {
-        Image(systemName: systemImageName)
-            .task {
-                if case .sent = deliveryStatus {
-                    try? await Task.sleep(nanoseconds: 1_000_000_000)
-                    showMe = false
+        if showDeliveryStatus {
+            Image(systemName: systemImageName)
+                .task {
+                    if case .sent = deliveryStatus {
+                        try? await Task.sleep(nanoseconds: 1_000_000_000)
+                        withAnimation {
+                            showDeliveryStatus = false
+                        }
+                    }
                 }
-            }
+        }
     }
 }
 
 struct TimelineDeliveryStatusView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            TimelineDeliveryStatusView(deliveryStatus: .sending, showMe: .constant(true))
-            TimelineDeliveryStatusView(deliveryStatus: .sent(elapsedTime: Date().timeIntervalSince1970), showMe: .constant(true))
+            TimelineDeliveryStatusView(deliveryStatus: .sending)
+            TimelineDeliveryStatusView(deliveryStatus: .sent(elapsedTime: Date().timeIntervalSince1970))
         }
     }
 }

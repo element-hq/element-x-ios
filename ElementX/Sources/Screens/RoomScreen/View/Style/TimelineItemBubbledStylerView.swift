@@ -25,24 +25,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric private var senderNameVerticalPadding = 3
-    @State var showDeliveryStatus: Bool
-    
-    init(timelineItem: EventBasedTimelineItemProtocol, @ViewBuilder content: @escaping () -> Content) {
-        self.timelineItem = timelineItem
-        self.content = content
 
-        if timelineItem.isOutgoing {
-            switch timelineItem.properties.deliveryStatus {
-            case .sending, .unknown:
-                _showDeliveryStatus = State(initialValue: true)
-            case let .sent(elapsedTime: elapsedTime):
-                _showDeliveryStatus = State(initialValue: elapsedTime < 3)
-            }
-        } else {
-            _showDeliveryStatus = State(initialValue: false)
-        }
-    }
-    
     var body: some View {
         VStack(alignment: alignment, spacing: -12) {
             if !timelineItem.isOutgoing {
@@ -54,9 +37,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     HStack {
                         Spacer()
                         styledContentWithReactions
-                        if showDeliveryStatus {
-                            TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus,
-                                                       showMe: $showDeliveryStatus.animation())
+                        if timelineItem.isOutgoing {
+                            TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus)
                                 .padding(.top, 6)
                         }
                     }
