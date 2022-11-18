@@ -92,7 +92,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.textContainer.lineFragmentPadding = 0.0
         textView.textContainerInset = .zero
         textView.keyboardType = .default
-        
+
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
                 
         return textView
