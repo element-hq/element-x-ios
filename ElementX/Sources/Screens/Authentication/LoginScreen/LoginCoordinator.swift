@@ -21,7 +21,7 @@ struct LoginCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
     /// The navigation router used to present the server selection screen.
-    let navigationController: NavigationController
+    let navigationStackCoordinator: NavigationStackCoordinator
 }
 
 enum LoginCoordinatorAction {
@@ -43,7 +43,7 @@ final class LoginCoordinator: CoordinatorProtocol {
     }
     
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
-    private var navigationController: NavigationController { parameters.navigationController }
+    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
 
     var callback: (@MainActor (LoginCoordinatorAction) -> Void)?
     
@@ -195,9 +195,9 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        let serverSelectionNavigationController = NavigationController()
+        let serverSelectionNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let userNotificationController = UserNotificationController(rootCoordinator: serverSelectionNavigationController)
+        let userNotificationController = UserNotificationController(rootCoordinator: serverSelectionNavigationStackCoordinator)
         
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
                                                               userNotificationController: userNotificationController,
@@ -209,9 +209,9 @@ final class LoginCoordinator: CoordinatorProtocol {
             self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
         }
         
-        serverSelectionNavigationController.setRootCoordinator(coordinator)
+        serverSelectionNavigationStackCoordinator.setRootCoordinator(coordinator)
         
-        navigationController.presentSheet(userNotificationController)
+        navigationStackCoordinator.setSheetCoordinator(userNotificationController)
     }
     
     /// Handles the result from the server selection modal, dismissing it after updating the view.
@@ -221,7 +221,7 @@ final class LoginCoordinator: CoordinatorProtocol {
             updateViewModel()
         }
         
-        navigationController.dismissSheet()
+        navigationStackCoordinator.setSheetCoordinator(nil)
     }
 
     /// Shows the forgot password screen.

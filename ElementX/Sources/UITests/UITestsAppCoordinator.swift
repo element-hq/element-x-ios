@@ -19,11 +19,11 @@ import UIKit
 
 class UITestsAppCoordinator: AppCoordinatorProtocol {
     private var currentRootCoordinator: CoordinatorProtocol?
-    private let navigationController: NavigationController
+    private let navigationStackCoordinator: NavigationStackCoordinator
     let notificationManager: NotificationManagerProtocol? = nil
     
     init() {
-        navigationController = NavigationController()
+        navigationStackCoordinator = NavigationStackCoordinator()
         
         ServiceLocator.shared.register(userNotificationController: MockUserNotificationController())
     }
@@ -39,32 +39,32 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
             // For example when replacing the root in the authentication flows
             self.currentRootCoordinator = screen.coordinator
             
-            self.navigationController.setRootCoordinator(screen.coordinator)
+            self.navigationStackCoordinator.setRootCoordinator(screen.coordinator)
         }
         
-        navigationController.setRootCoordinator(rootCoordinator)
+        navigationStackCoordinator.setRootCoordinator(rootCoordinator)
         
         Bundle.elementFallbackLanguage = "en"
     }
         
     func toPresentable() -> AnyView {
-        navigationController.toPresentable()
+        navigationStackCoordinator.toPresentable()
     }
     
     private func mockScreens() -> [MockScreen] {
-        UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationController: navigationController) }
+        UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationStackCoordinator: navigationStackCoordinator) }
     }
 }
 
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestScreenIdentifier
-    let navigationController: NavigationController
+    let navigationStackCoordinator: NavigationStackCoordinator
     lazy var coordinator: CoordinatorProtocol = {
         switch id {
         case .login:
             return LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                      navigationController: navigationController))
+                                                      navigationStackCoordinator: navigationStackCoordinator))
         case .serverSelection:
             return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                 userNotificationController: MockUserNotificationController(),
@@ -78,7 +78,7 @@ class MockScreen: Identifiable {
                                                                                              mediaProvider: MockMediaProvider())))
         case .authenticationFlow:
             return AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                             navigationController: navigationController)
+                                             navigationStackCoordinator: navigationStackCoordinator)
         case .softLogout:
             let credentials = SoftLogoutCredentials(userId: "@mock:matrix.org",
                                                     homeserverName: "matrix.org",
@@ -97,9 +97,9 @@ class MockScreen: Identifiable {
             return HomeScreenCoordinator(parameters: .init(userSession: session,
                                                            attributedStringBuilder: AttributedStringBuilder(),
                                                            bugReportService: MockBugReportService(),
-                                                           navigationController: navigationController))
+                                                           navigationStackCoordinator: navigationStackCoordinator))
         case .settings:
-            return SettingsCoordinator(parameters: .init(navigationController: navigationController,
+            return SettingsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                          userNotificationController: MockUserNotificationController(),
                                                          userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
                                                                                       mediaProvider: MockMediaProvider()),
@@ -117,7 +117,7 @@ class MockScreen: Identifiable {
         case .onboarding:
             return OnboardingCoordinator()
         case .roomPlainNoAvatar:
-            let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
@@ -125,7 +125,7 @@ class MockScreen: Identifiable {
                                                              emojiProvider: EmojiProvider())
             return RoomScreenCoordinator(parameters: parameters)
         case .roomEncryptedWithAvatar:
-            let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
@@ -138,8 +138,8 @@ class MockScreen: Identifiable {
         }
     }()
     
-    init(id: UITestScreenIdentifier, navigationController: NavigationController) {
+    init(id: UITestScreenIdentifier, navigationStackCoordinator: NavigationStackCoordinator) {
         self.id = id
-        self.navigationController = navigationController
+        self.navigationStackCoordinator = navigationStackCoordinator
     }
 }

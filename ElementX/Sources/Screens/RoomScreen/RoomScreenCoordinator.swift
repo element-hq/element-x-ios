@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct RoomScreenCoordinatorParameters {
-    let navigationController: NavigationController
+    let navigationStackCoordinator: NavigationStackCoordinator
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let roomName: String?
@@ -29,12 +29,12 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters?
 
     private var viewModel: RoomScreenViewModelProtocol?
-    private var navigationController: NavigationController {
+    private var navigationStackCoordinator: NavigationStackCoordinator {
         guard let parameters else {
             fatalError()
         }
         
-        return parameters.navigationController
+        return parameters.navigationStackCoordinator
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
@@ -86,19 +86,19 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
         if params.isModallyPresented {
             coordinator.callback = { [weak self] _ in
-                self?.navigationController.dismissSheet()
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
             }
 
-            let controller = NavigationController()
+            let controller = NavigationStackCoordinator()
             controller.setRootCoordinator(coordinator)
 
-            navigationController.presentSheet(controller)
+            navigationStackCoordinator.setSheetCoordinator(controller)
         } else {
             coordinator.callback = { [weak self] _ in
-                self?.navigationController.pop()
+                self?.navigationStackCoordinator.pop()
             }
 
-            navigationController.push(coordinator)
+            navigationStackCoordinator.push(coordinator)
         }
     }
 
@@ -106,10 +106,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         let params = FilePreviewCoordinatorParameters(fileURL: fileURL, title: title)
         let coordinator = FilePreviewCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
-            self?.navigationController.pop()
+            self?.navigationStackCoordinator.pop()
         }
         
-        navigationController.push(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func displayEmojiPickerScreen(for itemId: String) {
@@ -123,13 +123,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         coordinator.callback = { [weak self] action in
             switch action {
             case let .emojiSelected(emoji: emoji, itemId: itemId):
-                self?.navigationController.dismissSheet()
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                MXLog.debug("Save \(emoji) for \(itemId)")
                 Task {
                     await timelineController.sendReaction(emoji, for: itemId)
                 }
             }
         }
         
-        navigationController.presentSheet(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(coordinator)
     }
 }

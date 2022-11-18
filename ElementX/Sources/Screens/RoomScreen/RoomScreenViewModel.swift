@@ -31,6 +31,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     // MARK: - Setup
     
+    deinit {
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Constants.backPaginationIndicatorID)
+    }
+    
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
