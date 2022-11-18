@@ -16,6 +16,8 @@
 
 import SwiftUI
 
+typealias OnEnterKeyHandler = () -> Void
+
 struct MessageComposerTextField: View {
     @Binding private var text: String
     @Binding private var focused: Bool
@@ -24,16 +26,22 @@ struct MessageComposerTextField: View {
     
     private let placeholder: String
     private let maxHeight: CGFloat
+    private let onEnterKeyHandler: OnEnterKeyHandler
     
     private var showingPlaceholder: Bool {
         text.isEmpty
     }
-
-    init(placeholder: String, text: Binding<String>, focused: Binding<Bool>, maxHeight: CGFloat) {
+    
+    init(placeholder: String,
+         text: Binding<String>,
+         focused: Binding<Bool>,
+         maxHeight: CGFloat,
+         onEnterKeyHandler: @escaping OnEnterKeyHandler) {
         self.placeholder = placeholder
         _text = text
         _focused = focused
         self.maxHeight = maxHeight
+        self.onEnterKeyHandler = onEnterKeyHandler
     }
     
     private var placeholderColor: Color {
@@ -44,7 +52,8 @@ struct MessageComposerTextField: View {
         UITextViewWrapper(text: $text,
                           calculatedHeight: $dynamicHeight,
                           focused: $focused,
-                          maxHeight: maxHeight)
+                          maxHeight: maxHeight,
+                          onEnterKeyHandler: onEnterKeyHandler)
             .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
             .background(placeholderView, alignment: .topLeading)
     }
@@ -67,10 +76,12 @@ private struct UITextViewWrapper: UIViewRepresentable {
     
     let maxHeight: CGFloat
 
+    let onEnterKeyHandler: OnEnterKeyHandler
+    
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
-        let textView = UITextView()
+        let textView = TextViewWithKeyDetection()
         textView.delegate = context.coordinator
-
+        textView.keyDelegate = context.coordinator
         textView.textColor = .element.primaryContent
         textView.isEditable = true
         textView.font = UIFont.preferredFont(forTextStyle: .body)
@@ -80,7 +91,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.returnKeyType = .default
         textView.textContainer.lineFragmentPadding = 0.0
         textView.textContainerInset = .zero
-        textView.keyboardType = .twitter
+        textView.keyboardType = .default
 
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
                 
@@ -95,9 +106,9 @@ private struct UITextViewWrapper: UIViewRepresentable {
                 // text cleared, probably because the written text is sent
                 // reload keyboard type
                 if textView.isFirstResponder {
-                    textView.keyboardType = .default
-                    textView.reloadInputViews()
                     textView.keyboardType = .twitter
+                    textView.reloadInputViews()
+                    textView.keyboardType = .default
                     textView.reloadInputViews()
                 }
             }
@@ -116,7 +127,8 @@ private struct UITextViewWrapper: UIViewRepresentable {
         Coordinator(text: $text,
                     height: $calculatedHeight,
                     focused: $focused,
-                    maxHeight: maxHeight)
+                    maxHeight: maxHeight,
+                    onEnterKeyHandler: onEnterKeyHandler)
     }
     
     fileprivate static func recalculateHeight(view: UIView, result: Binding<CGFloat>, maxHeight: CGFloat) {
@@ -131,18 +143,21 @@ private struct UITextViewWrapper: UIViewRepresentable {
         }
     }
     
-    final class Coordinator: NSObject, UITextViewDelegate {
+    final class Coordinator: NSObject, UITextViewDelegate, TextViewWithKeyDetectionDelegate {
         private var text: Binding<String>
         private var calculatedHeight: Binding<CGFloat>
         private var focused: Binding<Bool>
         
         private let maxHeight: CGFloat
         
-        init(text: Binding<String>, height: Binding<CGFloat>, focused: Binding<Bool>, maxHeight: CGFloat) {
+        private let onEnterKeyHandler: OnEnterKeyHandler
+        
+        init(text: Binding<String>, height: Binding<CGFloat>, focused: Binding<Bool>, maxHeight: CGFloat, onEnterKeyHandler: @escaping OnEnterKeyHandler) {
             self.text = text
             calculatedHeight = height
             self.focused = focused
             self.maxHeight = maxHeight
+            self.onEnterKeyHandler = onEnterKeyHandler
         }
         
         func textViewDidChange(_ textView: UITextView) {
@@ -159,6 +174,36 @@ private struct UITextViewWrapper: UIViewRepresentable {
         func textViewDidEndEditing(_ textView: UITextView) {
             focused.wrappedValue = false
         }
+        
+        func enterKeyWasPressed(textView: UITextView) {
+            onEnterKeyHandler()
+        }
+        
+        func shiftEnterKeyPressed(textView: UITextView) {
+            textView.insertText("\n")
+        }
+    }
+}
+
+private protocol TextViewWithKeyDetectionDelegate: AnyObject {
+    func enterKeyWasPressed(textView: UITextView)
+    func shiftEnterKeyPressed(textView: UITextView)
+}
+
+private class TextViewWithKeyDetection: UITextView {
+    weak var keyDelegate: TextViewWithKeyDetectionDelegate?
+    
+    override var keyCommands: [UIKeyCommand]? {
+        [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
+         UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(enterKeyPressed))]
+    }
+    
+    @objc func shiftEnterKeyPressed(sender: UIKeyCommand) {
+        keyDelegate?.shiftEnterKeyPressed(textView: self)
+    }
+    
+    @objc func enterKeyPressed(sender: UIKeyCommand) {
+        keyDelegate?.enterKeyWasPressed(textView: self)
     }
 }
 
@@ -186,7 +231,7 @@ struct MessageComposerTextField_Previews: PreviewProvider {
         }
         
         var body: some View {
-            MessageComposerTextField(placeholder: "Placeholder", text: $text, focused: $focused, maxHeight: 300)
+            MessageComposerTextField(placeholder: "Placeholder", text: $text, focused: $focused, maxHeight: 300, onEnterKeyHandler: { })
         }
     }
 }
