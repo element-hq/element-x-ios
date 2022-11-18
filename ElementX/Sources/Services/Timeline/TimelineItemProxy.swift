@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Foundation
 import MatrixRustSDK
 
 /// A light wrapper around timeline items returned from Rust.
