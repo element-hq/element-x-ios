@@ -35,9 +35,8 @@ struct MessageComposer: View {
                                          text: $text,
                                          focused: $focused,
                                          maxHeight: 300,
-                                         onEnterKeyHandler: {
-                                             sendAction()
-                                         })
+                                         onEnterKeyHandler: sendAction)
+                    .padding(.vertical, 12)
                 
                 Button {
                     sendAction()
@@ -147,6 +146,22 @@ struct MessageComposer_Previews: PreviewProvider {
                             replyCancellationAction: { },
                             editCancellationAction: { })
             
+            MessageComposer(text: .constant("This is a very long message that will wrap to 2 lines on an iPhone 14."),
+                            focused: .constant(false),
+                            sendingDisabled: false,
+                            type: .default,
+                            sendAction: { },
+                            replyCancellationAction: { },
+                            editCancellationAction: { })
+            
+            MessageComposer(text: .constant("This is an even longer message that will wrap to 3 lines on an iPhone 14, just to see the difference it makes."),
+                            focused: .constant(false),
+                            sendingDisabled: false,
+                            type: .default,
+                            sendAction: { },
+                            replyCancellationAction: { },
+                            editCancellationAction: { })
+            
             MessageComposer(text: .constant("Some message"),
                             focused: .constant(false),
                             sendingDisabled: false,
@@ -165,5 +180,6 @@ struct MessageComposer_Previews: PreviewProvider {
                             editCancellationAction: { })
         }
         .tint(.element.accent)
+        .padding(.horizontal)
     }
 }
