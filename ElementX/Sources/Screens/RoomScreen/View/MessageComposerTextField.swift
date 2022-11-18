@@ -76,7 +76,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     
     let maxHeight: CGFloat
 
-    
     let onEnterKeyHandler: OnEnterKeyHandler
     
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
