@@ -34,7 +34,10 @@ struct MessageComposer: View {
                 MessageComposerTextField(placeholder: ElementL10n.roomMessagePlaceholder,
                                          text: $text,
                                          focused: $focused,
-                                         maxHeight: 300)
+                                         maxHeight: 300,
+                                         onEnterKeyHandler: {
+                    sendAction()
+                })
                 
                 Button {
                     sendAction()
