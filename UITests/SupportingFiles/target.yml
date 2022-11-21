@@ -87,5 +87,6 @@ targets:
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
     - path: ../../ElementX/Resources
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift

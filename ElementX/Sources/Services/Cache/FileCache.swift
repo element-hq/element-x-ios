@@ -66,6 +66,9 @@ extension FileCache: FileCacheProtocol {
     }
 
     func removeAll() throws {
+        guard fileManager.directoryExists(at: folder) else {
+            return
+        }
         try fileManager.removeItem(at: folder)
     }
 }
