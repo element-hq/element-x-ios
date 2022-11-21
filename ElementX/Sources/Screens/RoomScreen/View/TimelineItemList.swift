@@ -23,76 +23,58 @@ struct TimelineItemList: View {
     @State private var timelineItems: [RoomTimelineViewProvider] = []
     @State private var viewFrame: CGRect = .zero
     @State private var pinnedItem: PinnedItem?
-    @State private var visibleItemIdentifiers: Set<String> = []
-    @State private var topVisiblePublisher = CurrentValueSubject<Bool, Never>(false)
+    @Binding var visibleEdge: VerticalEdge?
     
     @EnvironmentObject var context: RoomScreenViewModel.Context
     
-    let bottomVisiblePublisher: CurrentValueSubject<Bool, Never>
     let scrollToBottomPublisher: PassthroughSubject<Void, Never>
 
     var body: some View {
-        ScrollViewReader { proxy in
-            ReversedScrollView(.vertical) {
+        ScrollViewReader { scrollView in
+            TimelineScrollView(visibleEdge: $visibleEdge) {
+                // The scroll view already contains a VStack so simply provide the content to fill it.
+                
                 ProgressView()
                     .frame(maxWidth: .infinity)
                     .opacity(context.viewState.isBackPaginating ? 1.0 : 0.0)
                     .animation(.elementDefault, value: context.viewState.isBackPaginating)
                 
-                LazyVStack(alignment: .leading, spacing: 0.0) {
-                    ForEach(isRunningPreviews ? context.viewState.items : timelineItems) { item in
-                        item
-                            .contextMenu {
-                                context.viewState.contextMenuBuilder?(item.id)
-                                    .id(item.id)
-                            }
-                            .opacity(opacityForItem(item))
-                            .padding(settings.timelineStyle.rowInsets)
-                            .onAppear {
-                                context.send(viewAction: .itemAppeared(id: item.id))
-                                visibleItemIdentifiers.insert(item.id)
-                                
-                                if timelineItems.first == item {
-                                    topVisiblePublisher.send(true)
-                                }
-                                
-                                if timelineItems.last == item {
-                                    bottomVisiblePublisher.send(true)
-                                }
-                            }
-                            .onDisappear {
-                                context.send(viewAction: .itemDisappeared(id: item.id))
-                                visibleItemIdentifiers.remove(item.id)
-                                
-                                if timelineItems.first == item {
-                                    topVisiblePublisher.send(false)
-                                }
-                                
-                                if timelineItems.last == item {
-                                    bottomVisiblePublisher.send(false)
-                                }
-                            }
-                            .environment(\.openURL, OpenURLAction { url in
-                                context.send(viewAction: .linkClicked(url: url))
-                                return .systemAction
-                            })
-                            .onTapGesture {
-                                context.send(viewAction: .itemTapped(id: item.id))
-                            }
-                    }
+                ForEach(isRunningPreviews ? context.viewState.items : timelineItems) { item in
+                    item
+                        .contextMenu {
+                            context.viewState.contextMenuBuilder?(item.id)
+                                .id(item.id)
+                        }
+                        .opacity(opacityForItem(item))
+                        .padding(settings.timelineStyle.rowInsets)
+                        .onAppear {
+                            context.send(viewAction: .itemAppeared(id: item.id))
+                        }
+                        .onDisappear {
+                            context.send(viewAction: .itemDisappeared(id: item.id))
+                        }
+                        .environment(\.openURL, OpenURLAction { url in
+                            context.send(viewAction: .linkClicked(url: url))
+                            return .systemAction
+                        })
+                        .onTapGesture {
+                            context.send(viewAction: .itemTapped(id: item.id))
+                        }
                 }
             }
+            .onChange(of: visibleEdge) { edge in
+                guard edge == .top else { return }
+                requestBackPagination()
+            }
             .onChange(of: pinnedItem) { item in
-                guard let item else {
-                    return
-                }
+                guard let item else { return }
                 
                 if item.animated {
                     withAnimation(Animation.elementDefault) {
-                        proxy.scrollTo(item.id, anchor: item.anchor)
+                        scrollView.scrollTo(item.id, anchor: item.anchor)
                     }
                 } else {
-                    proxy.scrollTo(item.id, anchor: item.anchor)
+                    scrollView.scrollTo(item.id, anchor: item.anchor)
                 }
                 
                 pinnedItem = nil
@@ -105,18 +87,16 @@ struct TimelineItemList: View {
             timelineItems = context.viewState.items
             requestBackPagination()
         }
-        // Allow SwiftUI to layout the views properly before checking if the top is visible
-        .onReceive(topVisiblePublisher.collect(.byTime(DispatchQueue.main, 0.5))) { values in
-            if values.last == true {
-                requestBackPagination()
-            }
-        }
         .onReceive(scrollToBottomPublisher) {
             scrollToBottom(animated: true)
         }
-        .onChange(of: context.viewState.items.count) { _ in
-            guard !context.viewState.items.isEmpty,
-                  context.viewState.items.count != timelineItems.count else {
+        .onChange(of: context.viewState.items) { items in
+            guard
+                !context.viewState.items.isEmpty,
+                context.viewState.items.count != timelineItems.count
+            else {
+                // Update the items, but don't worry about scrolling if the count is unchanged.
+                timelineItems = items
                 return
             }
             
@@ -132,9 +112,7 @@ struct TimelineItemList: View {
             }
             
             // Pin to the new bottom if visible
-            if let currentLastItem = timelineItems.last,
-               visibleItemIdentifiers.contains(currentLastItem.id),
-               let newLastItem = context.viewState.items.last {
+            if visibleEdge == .bottom, let newLastItem = context.viewState.items.last {
                 let pinnedItem = PinnedItem(id: newLastItem.id, anchor: .bottom, animated: false)
                 timelineItems = context.viewState.items
                 self.pinnedItem = pinnedItem
@@ -143,8 +121,7 @@ struct TimelineItemList: View {
             }
             
             // Pin to the old topmost visible
-            if let currentFirstItem = timelineItems.first,
-               visibleItemIdentifiers.contains(currentFirstItem.id) {
+            if visibleEdge == .top, let currentFirstItem = timelineItems.first {
                 let pinnedItem = PinnedItem(id: currentFirstItem.id, anchor: .top, animated: false)
                 timelineItems = context.viewState.items
                 self.pinnedItem = pinnedItem
@@ -155,18 +132,8 @@ struct TimelineItemList: View {
             // Otherwise just update the items
             timelineItems = context.viewState.items
         }
-        .onChange(of: context.viewState.items, perform: { items in
-            if timelineItems != items {
-                timelineItems = items
-            }
-        })
-        .background(GeometryReader { geo in
-            Color.clear.preference(key: ViewFramePreferenceKey.self, value: [geo.frame(in: .global)])
-        })
-        .onPreferenceChange(ViewFramePreferenceKey.self) { _ in
-            guard bottomVisiblePublisher.value == true else {
-                return
-            }
+        .onChange(of: viewFrame) { _ in
+            guard visibleEdge == .bottom else { return }
             
             // Pin the timeline to the bottom if was there on the frame change
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -234,7 +201,7 @@ struct TimelineItemList_Previews: PreviewProvider {
                                             mediaProvider: MockMediaProvider(),
                                             roomName: nil)
         
-        TimelineItemList(bottomVisiblePublisher: CurrentValueSubject(false), scrollToBottomPublisher: PassthroughSubject())
+        TimelineItemList(visibleEdge: .constant(nil), scrollToBottomPublisher: PassthroughSubject())
             .environmentObject(viewModel.context)
     }
 }
