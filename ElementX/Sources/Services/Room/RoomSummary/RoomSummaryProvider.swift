@@ -81,6 +81,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         let weakProvider = WeakRoomSummaryProviderWrapper()
         
+        rooms = slidingSyncView.currentRoomsList().map { roomListEntry in
+            buildSummaryForRoomListEntry(roomListEntry)
+        }
+        
+        roomListPublisher.send(rooms) // didSet not called from initialisers
+        
         weakProvider.stateUpdatePublisher
             .map(RoomSummaryProviderState.init)
             .subscribe(statePublisher)
