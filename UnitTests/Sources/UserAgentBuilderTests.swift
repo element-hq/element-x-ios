@@ -25,11 +25,11 @@ class UserAgentBuilderTests: XCTestCase {
     
     func testContainsClientName() {
         let userAgent = UserAgentBuilder.makeASCIIUserAgent()
-        XCTAssert(userAgent?.contains(ElementInfoPlist.cfBundleDisplayName) == true, "\(userAgent ?? "nil") does not contain client name")
+        XCTAssert(userAgent?.contains(InfoPlistReader.target.bundleDisplayName) == true, "\(userAgent ?? "nil") does not contain client name")
     }
     
     func testContainsClientVersion() {
         let userAgent = UserAgentBuilder.makeASCIIUserAgent()
-        XCTAssert(userAgent?.contains(ElementInfoPlist.cfBundleShortVersionString) == true, "\(userAgent ?? "nil") does not contain client version")
+        XCTAssert(userAgent?.contains(InfoPlistReader.target.bundleShortVersionString) == true, "\(userAgent ?? "nil") does not contain client version")
     }
 }

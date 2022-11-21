@@ -61,7 +61,7 @@ class BugReportService: BugReportServiceProtocol {
         //  also enable logging crashes, to send them with bug reports
         MXLogger.logCrashes(true)
         //  set build version for logger
-        MXLogger.buildVersion = ElementInfoPlist.cfBundleShortVersionString
+        MXLogger.buildVersion = InfoPlistReader.target.bundleShortVersionString
     }
 
     // MARK: - BugReportServiceProtocol
@@ -151,8 +151,8 @@ class BugReportService: BugReportServiceProtocol {
         return [
             MultipartFormData(key: "user_agent", type: .text(value: "iOS")),
             MultipartFormData(key: "app", type: .text(value: applicationId)),
-            MultipartFormData(key: "version", type: .text(value: ElementInfoPlist.cfBundleShortVersionString)),
-            MultipartFormData(key: "build", type: .text(value: ElementInfoPlist.cfBundleVersion)),
+            MultipartFormData(key: "version", type: .text(value: InfoPlistReader.target.bundleShortVersionString)),
+            MultipartFormData(key: "build", type: .text(value: InfoPlistReader.target.bundleVersion)),
             MultipartFormData(key: "os", type: .text(value: os)),
             MultipartFormData(key: "resolved_language", type: .text(value: Bundle.preferredLanguages[0])),
             MultipartFormData(key: "user_language", type: .text(value: Bundle.elementLanguage ?? "null")),

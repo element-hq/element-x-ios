@@ -22,8 +22,8 @@ class KeychainControllerTests: XCTestCase {
     
     override func setUp() {
         keychain = KeychainController(service: .tests,
-                                      accessGroup: Bundle.appGroupIdentifier)
-        keychain.removeAllRestoreTokens()
+                                      accessGroup: InfoPlistReader.target.appGroupIdentifier)
+        keychain.removeAllRestorationTokens()
     }
     
     func testAddRestorationToken() {

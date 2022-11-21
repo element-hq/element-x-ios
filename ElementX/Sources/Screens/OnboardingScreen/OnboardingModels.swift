@@ -79,7 +79,7 @@ struct OnboardingViewState: BindableState {
                                   message: ElementL10n.ftueAuthCarouselEncryptedBody,
                                   image: Asset.Images.onboardingScreenPage3),
             OnboardingPageContent(title: page4Title.tinting("."),
-                                  message: ElementL10n.ftueAuthCarouselWorkplaceBody(ElementInfoPlist.cfBundleDisplayName),
+                                  message: ElementL10n.ftueAuthCarouselWorkplaceBody(InfoPlistReader.target.bundleDisplayName),
                                   image: Asset.Images.onboardingScreenPage4)
         ]
         bindings = OnboardingBindings()

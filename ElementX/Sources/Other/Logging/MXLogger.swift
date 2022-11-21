@@ -150,9 +150,9 @@ class MXLogger {
         MXLogger.logCrashes(false)
         
         // Extract running app information
-        let app = ElementInfoPlist.cfBundleExecutable
-        let appId = ElementInfoPlist.cfBundleIdentifier
-        let appVersion = "\(ElementInfoPlist.cfBundleShortVersionString) (r\(ElementInfoPlist.cfBundleVersion))"
+        let app = InfoPlistReader.target.bundleExecutable
+        let appId = InfoPlistReader.target.bundleIdentifier
+        let appVersion = "\(InfoPlistReader.target.bundleShortVersionString) (r\(InfoPlistReader.target.bundleVersion))"
         
         // Build the crash log
         let model = UIDevice.current.model

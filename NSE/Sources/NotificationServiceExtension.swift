@@ -20,7 +20,7 @@ import UserNotifications
 
 class NotificationServiceExtension: UNNotificationServiceExtension {
     private lazy var keychainController = KeychainController(service: .sessions,
-                                                             accessGroup: Bundle.appGroupIdentifier)
+                                                             accessGroup: InfoPlistReader.target.appGroupIdentifier)
     var handler: ((UNNotificationContent) -> Void)?
     var modifiedContent: UNMutableNotificationContent?
 

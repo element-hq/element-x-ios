@@ -85,7 +85,7 @@ targets:
     - path: ../../ElementX/Sources/UITests/UITestScreenIdentifier.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
-    - path: ../../ElementX/Sources/Generated/InfoPlist.swift
     - path: ../../ElementX/Resources
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift

@@ -19,7 +19,7 @@ import Foundation
 extension FileManager {
     /// The URL of the primary app group container.
     @objc var appGroupContainerURL: URL {
-        guard let url = containerURL(forSecurityApplicationGroupIdentifier: Bundle.appGroupIdentifier) else {
+        guard let url = containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.target.appGroupIdentifier) else {
             fatalError("Should always be able to retrieve the container directory")
         }
         return url

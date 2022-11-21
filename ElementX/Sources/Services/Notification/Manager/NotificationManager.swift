@@ -75,7 +75,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                 try await clientProxy.setPusher(pushkey: deviceToken.base64EncodedString(),
                                                 kind: .http,
                                                 appId: BuildSettings.pusherAppId,
-                                                appDisplayName: "\(ElementInfoPlist.cfBundleDisplayName) (iOS)",
+                                                appDisplayName: "\(InfoPlistReader.target.bundleDisplayName) (iOS)",
                                                 deviceDisplayName: UIDevice.current.name,
                                                 profileTag: pusherProfileTag(),
                                                 lang: Bundle.preferredLanguages.first ?? "en",

@@ -21,9 +21,9 @@ final class BuildSettings {
 
     static var pusherAppId: String {
         #if DEBUG
-        Bundle.baseBundleIdentifier + ".ios.dev"
+        InfoPlistReader.target.baseBundleIdentifier + ".ios.dev"
         #else
-        Bundle.baseBundleIdentifier + ".ios.prod"
+        InfoPlistReader.target.baseBundleIdentifier + ".ios.prod"
         #endif
     }
 
@@ -48,14 +48,14 @@ final class BuildSettings {
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: ElementInfoPlist.cfBundleIdentifier.starts(with: "io.element.elementx"),
+    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
                                                                host: "https://posthog.element.dev",
                                                                apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                                                                termsURL: URL(staticString: "https://element.io/cookie-policy"))
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: ElementInfoPlist.cfBundleIdentifier.starts(with: "io.element.elementx"),
+    static let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
                                                                host: "https://posthog.hss.element.io",
                                                                apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                                termsURL: URL(staticString: "https://element.io/cookie-policy"))

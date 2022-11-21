@@ -34,7 +34,7 @@ final class ElementSettings: ObservableObject {
 
     /// UserDefaults to be used on reads and writes.
     static var store: UserDefaults {
-        guard let userDefaults = UserDefaults(suiteName: Bundle.appGroupIdentifier) else {
+        guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.target.appGroupIdentifier) else {
             fatalError("Fail to load shared UserDefaults")
         }
         return userDefaults

@@ -22,7 +22,7 @@ enum KeychainControllerService: String {
     case tests
 
     var identifier: String {
-        Bundle.baseBundleIdentifier + "." + rawValue
+        InfoPlistReader.target.baseBundleIdentifier + "." + rawValue
     }
 }
 

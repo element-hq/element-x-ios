@@ -56,7 +56,6 @@ targets:
         CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
         DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
         CODE_SIGN_ENTITLEMENTS: NSE/SupportingFiles/NSE.entitlements
-        SWIFT_OBJC_BRIDGING_HEADER: NSE/SupportingFiles/ElementX-NSE-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
       debug:
       release:
@@ -86,3 +85,4 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/ImageCache.swift
     - path: ../../ElementX/Sources/Other/AvatarSize.swift
+    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift

@@ -64,7 +64,7 @@ struct SettingsScreen: View {
     }
 
     private var versionText: some View {
-        Text(ElementL10n.settingsVersion + ": " + ElementInfoPlist.cfBundleShortVersionString + " (" + ElementInfoPlist.cfBundleVersion + ")")
+        Text(ElementL10n.settingsVersion + ": " + InfoPlistReader.target.bundleShortVersionString + " (" + InfoPlistReader.target.bundleVersion + ")")
     }
 
     private var backgroundColor: Color {
