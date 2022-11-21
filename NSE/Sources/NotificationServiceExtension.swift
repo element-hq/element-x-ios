@@ -33,7 +33,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
-        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: FileManager.default.appGroupContainerURL),
+        guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
               let roomId = request.roomId,
               let eventId = request.eventId,
               let credentials = keychainController.restorationTokens().first else {
@@ -73,11 +73,11 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
                      eventId: String) async throws {
         MXLog.debug("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
-        let service = NotificationServiceProxy(basePath: FileManager.default.sessionsBaseDirectory.path,
+        let service = NotificationServiceProxy(basePath: URL.sessionsBaseDirectory.path,
                                                userId: credentials.userID)
 
-        guard let itemProxy = try await service.getNotificationItem(roomId: roomId,
-                                                                    eventId: eventId) else {
+        guard let itemProxy = try await service.notificationItem(roomId: roomId,
+                                                                 eventId: eventId) else {
             MXLog.debug("\(tag) got no notification item")
 
             // Notification should be discarded
@@ -120,7 +120,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
     private func createMediaProvider(with credentials: KeychainCredentials) throws -> MediaProviderProtocol {
         let builder = ClientBuilder()
-            .basePath(path: FileManager.default.sessionsBaseDirectory.path)
+            .basePath(path: URL.sessionsBaseDirectory.path)
             .username(username: credentials.userID)
 
         let client = try builder.build()
@@ -129,7 +129,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.debug("\(tag) creating media provider")
 
         return MediaProvider(mediaProxy: MediaProxy(client: client),
-                             imageCache: .onlyInDisk,
+                             imageCache: .onlyOnDisk,
                              fileCache: .default,
                              backgroundTaskService: nil)
     }

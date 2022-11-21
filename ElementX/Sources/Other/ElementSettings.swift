@@ -77,5 +77,6 @@ final class ElementSettings: ObservableObject {
     var enableInAppNotifications = true
 
     @AppStorage(UserDefaultsKeys.pusherProfileTag.rawValue, store: store)
+    /// Tag describing which set of device specific rules a pusher executes.
     var pusherProfileTag: String?
 }

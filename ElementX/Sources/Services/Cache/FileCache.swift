@@ -36,7 +36,7 @@ class FileCache {
     static let `default` = FileCache(folderName: "Files")
 
     init(folderName: String) {
-        folder = fileManager.cacheBaseDirectory.appending(path: folderName, directoryHint: .isDirectory)
+        folder = URL.cacheBaseDirectory.appending(path: folderName, directoryHint: .isDirectory)
     }
 
     // MARK: Private

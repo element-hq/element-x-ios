@@ -20,11 +20,11 @@ schemes:
       askForAppToLaunch: true
       config: Debug
       debugEnabled: false
-      disableMainThreadChecker: true
+      disableMainThreadChecker: false
       launchAutomaticallySubstyle: 2
     test:
       config: Debug
-      disableMainThreadChecker: true
+      disableMainThreadChecker: false
 
 targets:
   NSE:
@@ -82,6 +82,7 @@ targets:
     - path: ../../ElementX/Sources/Other/Logging
     - path: ../../ElementX/Sources/Other/Extensions/Task.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
+    - path: ../../ElementX/Sources/Other/Extensions/URL.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/ImageCache.swift
     - path: ../../ElementX/Sources/Other/AvatarSize.swift

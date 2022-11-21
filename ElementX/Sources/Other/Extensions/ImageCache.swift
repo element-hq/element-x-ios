@@ -24,7 +24,7 @@ extension ImageCache {
         return result
     }
 
-    static var onlyInDisk: ImageCache {
+    static var onlyOnDisk: ImageCache {
         let result = ImageCache.default
         result.memoryStorage.config.totalCostLimit = 1
         return result

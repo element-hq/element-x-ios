@@ -23,12 +23,10 @@ protocol NotificationManagerDelegate: AnyObject {
     func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol,
                                         content: UNNotificationContent) -> Bool
     func notificationTapped(_ service: NotificationManagerProtocol,
-                            content: UNNotificationContent,
-                            completionHandler: @escaping () -> Void)
+                            content: UNNotificationContent) async
     func handleInlineReply(_ service: NotificationManagerProtocol,
                            content: UNNotificationContent,
-                           replyText: String,
-                           completionHandler: @escaping () -> Void)
+                           replyText: String) async
 }
 
 // MARK: - NotificationManagerProtocol
@@ -40,4 +38,5 @@ protocol NotificationManagerProtocol {
     func start()
     func register(with deviceToken: Data)
     func registrationFailed(with error: Error)
+    func showLocalNotification(with title: String, subtitle: String?)
 }

@@ -17,7 +17,7 @@
 import Foundation
 
 class MockNotificationServiceProxy: NotificationServiceProxyProtocol {
-    func getNotificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxy? {
+    func notificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxy? {
         nil
     }
 }

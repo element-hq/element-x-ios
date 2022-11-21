@@ -17,6 +17,7 @@
 		059173B3C77056C406906B6D /* target.yml in Resources */ = {isa = PBXBuildFile; fileRef = D4DA544B2520BFA65D6DB4BB /* target.yml */; };
 		05EC896A4B9AF4A56670C0BB /* SessionVerificationUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D4777F0142E330A75C46FE4 /* SessionVerificationUITests.swift */; };
 		066A1E9B94723EE9F3038044 /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EBB5D698CE9A25BB553A2D /* Strings.swift */; };
+		06B55882911B4BF5B14E9851 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227AC5D71A4CE43512062243 /* URL.swift */; };
 		06D3942496E9E0E655F14D21 /* NotificationManagerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A057F2FDC14866C3026A89A4 /* NotificationManagerProtocol.swift */; };
 		071A017E415AD378F2961B11 /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 227AC5D71A4CE43512062243 /* URL.swift */; };
 		07240B7159A3990C4C2E8FFC /* LoginTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D256FEE2F1AF1E51D39B622 /* LoginTests.swift */; };
@@ -2690,6 +2691,7 @@
 				BA074E9812F96FFA3200ED1D /* TimelineItemProxy.swift in Sources */,
 				6126CC51654E159804999E6A /* UNMutableNotificationContent.swift in Sources */,
 				518C93DC6516D3D018DE065F /* UNNotificationRequest.swift in Sources */,
+				06B55882911B4BF5B14E9851 /* URL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

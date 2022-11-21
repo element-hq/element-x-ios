@@ -25,7 +25,7 @@ class NotificationServiceProxy: NotificationServiceProxyProtocol {
 //        service = NotificationService(basePath: basePath, userId: userId)
     }
 
-    func getNotificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxy? {
+    func notificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxy? {
         nil
 //        try await Task.dispatch(on: .global()) {
 //            guard let item = try self.service.getNotificationItem(roomId: roomId, eventId: eventId) else {

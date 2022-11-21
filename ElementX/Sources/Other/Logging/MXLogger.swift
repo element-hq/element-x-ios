@@ -269,7 +269,7 @@ class MXLogger {
     
     /// The folder where logs are stored
     private static var logsFolderURL: URL {
-        FileManager.default.appGroupContainerURL ?? URL.documentsDirectory
+        .appGroupContainerDirectory
     }
     
     /// If `self.redirectNSLog(toFiles:numberOfFiles:)` is called with a lower numberOfFiles we need to do some cleanup.

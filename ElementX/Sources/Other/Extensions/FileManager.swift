@@ -17,35 +17,6 @@
 import Foundation
 
 extension FileManager {
-    /// The URL of the primary app group container.
-    @objc var appGroupContainerURL: URL {
-        guard let url = containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.target.appGroupIdentifier) else {
-            fatalError("Should always be able to retrieve the container directory")
-        }
-        return url
-    }
-
-    /// The base directory where all session data is stored.
-    var sessionsBaseDirectory: URL {
-        let url = cacheBaseDirectory
-            .appendingPathComponent("Sessions", isDirectory: true)
-
-        try? createDirectoryIfNeeded(at: url)
-
-        return url
-    }
-
-    /// The base directory where all cache is stored.
-    var cacheBaseDirectory: URL {
-        let url = appGroupContainerURL
-            .appendingPathComponent("Library", isDirectory: true)
-            .appendingPathComponent("Caches", isDirectory: true)
-
-        try? createDirectoryIfNeeded(at: url)
-
-        return url
-    }
-
     func directoryExists(at url: URL) -> Bool {
         var isDirectory: ObjCBool = false
         guard fileExists(atPath: url.path(), isDirectory: &isDirectory) else {

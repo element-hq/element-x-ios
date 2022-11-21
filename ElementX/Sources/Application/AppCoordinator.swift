@@ -374,7 +374,7 @@ extension AppCoordinator: NotificationManagerDelegate {
         return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomId: roomId)
     }
 
-    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent, completionHandler: @escaping () -> Void) {
+    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
         MXLog.debug("[AppCoordinator] tappedNotification")
 
         guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
@@ -382,19 +382,22 @@ extension AppCoordinator: NotificationManagerDelegate {
         }
 
         userSessionFlowCoordinator?.tryDisplayingRoomScreen(roomId: roomId)
-        completionHandler()
     }
 
-    func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String, completionHandler: @escaping () -> Void) {
+    func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
         MXLog.debug("[AppCoordinator] handle notification reply")
 
         guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
             return
         }
-        Task {
-            let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
-            _ = await roomProxy?.sendMessage(replyText)
-            completionHandler()
+        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
+        switch await roomProxy?.sendMessage(replyText) {
+        case .success:
+            break
+        default:
+            // error or no room proxy
+            service.showLocalNotification(with: "⚠️ " + ElementL10n.dialogTitleError,
+                                          subtitle: ElementL10n.a11yErrorSomeMessageNotSent)
         }
     }
 }

@@ -17,5 +17,5 @@
 import Foundation
 
 protocol NotificationServiceProxyProtocol {
-    func getNotificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxy?
+    func notificationItem(roomId: String, eventId: String) async throws -> NotificationItemProxy?
 }

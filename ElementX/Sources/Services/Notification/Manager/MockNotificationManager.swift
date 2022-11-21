@@ -32,4 +32,6 @@ class MockNotificationManager: NotificationManagerProtocol {
     func register(with deviceToken: Data) { }
 
     func registrationFailed(with error: Error) { }
+
+    func showLocalNotification(with title: String, subtitle: String?) { }
 }

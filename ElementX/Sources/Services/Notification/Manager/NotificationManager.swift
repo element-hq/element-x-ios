@@ -32,11 +32,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     weak var delegate: NotificationManagerDelegate?
 
     var isAvailable: Bool {
-        #if targetEnvironment(simulator)
         true
-        #else
-        true
-        #endif
     }
 
     func start() {
@@ -68,6 +64,25 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     func registrationFailed(with error: Error) { }
+
+    func showLocalNotification(with title: String, subtitle: String?) {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        if let subtitle {
+            content.subtitle = subtitle
+        }
+        let request = UNNotificationRequest(identifier: ProcessInfo.processInfo.globallyUniqueString,
+                                            content: content,
+                                            trigger: nil)
+        Task {
+            do {
+                try await notificationCenter.add(request)
+                MXLog.debug("[NotificationManager] show local notification succeeded")
+            } catch {
+                MXLog.debug("[NotificationManager] show local notification failed: \(error)")
+            }
+        }
+    }
 
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) {
         Task {
@@ -116,38 +131,34 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
 extension NotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                willPresent notification: UNNotification,
-                                withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+                                willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
         guard ElementSettings.shared.enableInAppNotifications else {
-            return completionHandler([])
+            return []
         }
         guard let delegate else {
-            return completionHandler([.badge, .sound, .list, .banner])
+            return [.badge, .sound, .list, .banner]
         }
 
         guard delegate.shouldDisplayInAppNotification(self, content: notification.request.content) else {
-            return completionHandler([])
+            return []
         }
 
-        completionHandler([.badge, .sound, .list, .banner])
+        return [.badge, .sound, .list, .banner]
     }
 
     func userNotificationCenter(_ center: UNUserNotificationCenter,
-                                didReceive response: UNNotificationResponse,
-                                withCompletionHandler completionHandler: @escaping () -> Void) {
+                                didReceive response: UNNotificationResponse) async {
         switch response.actionIdentifier {
         case NotificationConstants.Action.inlineReply:
             guard let response = response as? UNTextInputNotificationResponse else {
                 return
             }
-            delegate?.handleInlineReply(self,
-                                        content: response.notification.request.content,
-                                        replyText: response.userText,
-                                        completionHandler: completionHandler)
+            await delegate?.handleInlineReply(self,
+                                              content: response.notification.request.content,
+                                              replyText: response.userText)
         case UNNotificationDefaultActionIdentifier:
-            delegate?.notificationTapped(self,
-                                         content: response.notification.request.content,
-                                         completionHandler: completionHandler)
+            await delegate?.notificationTapped(self,
+                                               content: response.notification.request.content)
         default:
             break
         }
