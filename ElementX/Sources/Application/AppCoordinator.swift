@@ -127,10 +127,8 @@ class AppCoordinator: AppCoordinatorProtocol {
             case (.signedOut, .succeededSigningIn, .signedIn):
                 self.setupUserSession()
             case (.initial, .startWithExistingSession, .restoringSession):
-                self.showLoadingIndicator()
                 self.restoreUserSession()
             case (.restoringSession, .failedRestoringSession, .signedOut):
-                self.hideLoadingIndicator()
                 self.showLoginErrorToast()
             case (.restoringSession, .succeededRestoringSession, .signedIn):
                 self.hideLoadingIndicator()
