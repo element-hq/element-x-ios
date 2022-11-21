@@ -70,8 +70,8 @@ targets:
         basedOnDependencyAnalysis: false
         shell: /bin/sh
         script: |
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.16.0'
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.16.0'
+          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.16.1'
+          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.16.1'
 
     sources:
     - path: ../Sources
@@ -85,7 +85,8 @@ targets:
     - path: ../../ElementX/Sources/UITests/UITestScreenIdentifier.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
-    - path: ../../ElementX/Sources/Generated/InfoPlist.swift
     - path: ../../ElementX/Resources
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
+    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift

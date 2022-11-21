@@ -15,26 +15,18 @@
 //
 
 import Foundation
-import MatrixRustSDK
+import UserNotifications
 
-struct MediaSource: Equatable {
-    let underlyingSource: MatrixRustSDK.MediaSource
+extension UNNotificationRequest {
+    var roomId: String? {
+        content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String
+    }
 
-    var url: String {
-        underlyingSource.url()
+    var eventId: String? {
+        content.userInfo[NotificationConstants.UserInfoKey.eventIdentifier] as? String
     }
-    
-    init(source: MatrixRustSDK.MediaSource) {
-        underlyingSource = source
-    }
-    
-    init(urlString: String) {
-        underlyingSource = MatrixRustSDK.mediaSourceFromUrl(url: urlString)
-    }
-    
-    // MARK: - Equatable
-    
-    static func == (lhs: MediaSource, rhs: MediaSource) -> Bool {
-        lhs.underlyingSource.url() == rhs.underlyingSource.url()
+
+    var unreadCount: Int? {
+        content.userInfo[NotificationConstants.UserInfoKey.unreadCount] as? Int
     }
 }

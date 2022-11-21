@@ -31,3 +31,5 @@
 
 // Parameter is the application display name (e.g. "ElementX")
 "default_session_display_name" = "%@ iOS";
+
+"Notification" = "Notification";

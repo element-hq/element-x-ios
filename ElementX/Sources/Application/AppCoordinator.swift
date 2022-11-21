@@ -31,7 +31,7 @@ struct ServiceLocator {
     let userNotificationController: UserNotificationControllerProtocol
 }
 
-class AppCoordinator: CoordinatorProtocol {
+class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationController: NavigationController
     private let userSessionStore: UserSessionStoreProtocol
@@ -40,6 +40,7 @@ class AppCoordinator: CoordinatorProtocol {
         didSet {
             deobserveUserSessionChanges()
             if let userSession, !userSession.isSoftLogout {
+                configureNotificationManager()
                 observeUserSessionChanges()
             }
         }
@@ -52,7 +53,8 @@ class AppCoordinator: CoordinatorProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
     private var cancellables = Set<AnyCancellable>()
-        
+    private(set) var notificationManager: NotificationManagerProtocol?
+
     init() {
         navigationController = NavigationController()
         stateMachine = AppCoordinatorStateMachine()
@@ -60,17 +62,12 @@ class AppCoordinator: CoordinatorProtocol {
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
         navigationController.setRootCoordinator(SplashScreenCoordinator())
-        
+
         ServiceLocator.serviceLocator = ServiceLocator(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
-        
-        guard let bundleIdentifier = Bundle.main.bundleIdentifier else {
-            fatalError("Should have a valid bundle identifier at this point")
-        }
 
         backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
-        
-        userSessionStore = UserSessionStore(bundleIdentifier: bundleIdentifier,
-                                            backgroundTaskService: backgroundTaskService)
+
+        userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
         setupStateMachine()
         
@@ -97,6 +94,7 @@ class AppCoordinator: CoordinatorProtocol {
     
     private func setupLogging() {
         let loggerConfiguration = MXLogConfiguration()
+        loggerConfiguration.maxLogFilesCount = 10
         
         #if DEBUG
         // This exposes the full Rust side tracing subscriber filter for more flexibility.
@@ -252,6 +250,8 @@ class AppCoordinator: CoordinatorProtocol {
                 //  regardless of the result, clear user data
                 userSessionStore.logout(userSession: userSession)
                 userSession = nil
+                notificationManager?.delegate = nil
+                notificationManager = nil
             }
         }
         
@@ -266,6 +266,38 @@ class AppCoordinator: CoordinatorProtocol {
             startAuthenticationSoftLogout()
         } else {
             startAuthentication()
+        }
+    }
+
+    private func configureNotificationManager() {
+        guard BuildSettings.enableNotifications else {
+            return
+        }
+        guard notificationManager == nil else {
+            return
+        }
+
+        let manager = NotificationManager(clientProxy: userSession.clientProxy)
+        if manager.isAvailable {
+            manager.delegate = self
+            notificationManager = manager
+            manager.start()
+
+            if let appDelegate = AppDelegate.shared {
+                appDelegate.callbacks
+                    .receive(on: DispatchQueue.main)
+                    .sink { [weak self] callback in
+                        switch callback {
+                        case .registeredNotifications(let deviceToken):
+                            self?.notificationManager?.register(with: deviceToken)
+                        case .failedToRegisteredNotifications(let error):
+                            self?.notificationManager?.registrationFailed(with: error)
+                        }
+                    }
+                    .store(in: &cancellables)
+            } else {
+                MXLog.debug("Couldn't register to AppDelegate callbacks")
+            }
         }
     }
     
@@ -319,5 +351,53 @@ extension AppCoordinator: AuthenticationCoordinatorDelegate {
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         stateMachine.processEvent(.succeededSigningIn)
+    }
+}
+
+// MARK: - NotificationManagerDelegate
+
+extension AppCoordinator: NotificationManagerDelegate {
+    func authorizationStatusUpdated(_ service: NotificationManagerProtocol, granted: Bool) {
+        if granted {
+            UIApplication.shared.registerForRemoteNotifications()
+        }
+    }
+
+    func shouldDisplayInAppNotification(_ service: NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
+        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+            return true
+        }
+        guard let userSessionFlowCoordinator else {
+            // there is not a user session yet
+            return false
+        }
+        return !userSessionFlowCoordinator.isDisplayingRoomScreen(withRoomId: roomId)
+    }
+
+    func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
+        MXLog.debug("[AppCoordinator] tappedNotification")
+
+        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+            return
+        }
+
+        userSessionFlowCoordinator?.tryDisplayingRoomScreen(roomId: roomId)
+    }
+
+    func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
+        MXLog.debug("[AppCoordinator] handle notification reply")
+
+        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+            return
+        }
+        let roomProxy = await userSession.clientProxy.roomForIdentifier(roomId)
+        switch await roomProxy?.sendMessage(replyText) {
+        case .success:
+            break
+        default:
+            // error or no room proxy
+            service.showLocalNotification(with: "⚠️ " + ElementL10n.dialogTitleError,
+                                          subtitle: ElementL10n.a11yErrorSomeMessageNotSent)
+        }
     }
 }

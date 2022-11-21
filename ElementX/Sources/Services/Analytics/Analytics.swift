@@ -92,7 +92,7 @@ class Analytics {
         
         // Catch and log crashes
 //        MXLogger.logCrashes(true)
-//        MXLogger.setBuildVersion(ElementInfoPlist.cfBundleShortVersionString)
+//        MXLogger.setBuildVersion(Bundle.bundleShortVersionString)
     }
     
     /// Use the analytics settings from the supplied user session to configure analytics.

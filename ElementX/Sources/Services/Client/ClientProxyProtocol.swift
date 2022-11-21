@@ -33,7 +33,32 @@ enum ClientProxyError: Error {
     case failedLoadingMedia
 }
 
-protocol ClientProxyProtocol {
+enum PusherKind {
+    case http
+    case email
+
+//    var rustValue: MatrixRustSDK.PusherKind {
+//        switch self {
+//        case .http:
+//            return .http
+//        case .email:
+//            return .email
+//        }
+//    }
+}
+
+enum PushFormat {
+    case eventIdOnly
+
+//    var rustValue: MatrixRustSDK.PushFormat {
+//        switch self {
+//        case .eventIdOnly:
+//            return .eventIdOnly
+//        }
+//    }
+}
+
+protocol ClientProxyProtocol: MediaProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
     var userIdentifier: String { get }
@@ -62,13 +87,19 @@ protocol ClientProxyProtocol {
     
     func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError>
     
-    func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource
-    
-    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data
-    
-    func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data
-    
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError>
 
     func logout() async
+
+    // swiftlint:disable:next function_parameter_count
+    func setPusher(pushkey: String,
+                   kind: PusherKind?,
+                   appId: String,
+                   appDisplayName: String,
+                   deviceDisplayName: String,
+                   profileTag: String?,
+                   lang: String,
+                   url: String?,
+                   format: PushFormat?,
+                   defaultPayload: [AnyHashable: Any]?) async throws
 }

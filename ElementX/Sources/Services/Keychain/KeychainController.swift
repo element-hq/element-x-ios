@@ -17,13 +17,24 @@
 import Foundation
 import KeychainAccess
 
+enum KeychainControllerService: String {
+    case sessions
+    case tests
+
+    var identifier: String {
+        InfoPlistReader.target.baseBundleIdentifier + "." + rawValue
+    }
+}
+
 class KeychainController: KeychainControllerProtocol {
     private let keychain: Keychain
-    
-    init(identifier: String) {
-        keychain = Keychain(service: identifier)
+
+    init(service: KeychainControllerService,
+         accessGroup: String) {
+        keychain = Keychain(service: service.identifier,
+                            accessGroup: accessGroup)
     }
- 
+
     func setRestorationToken(_ restorationToken: RestorationToken, forUsername username: String) {
         do {
             let tokenData = try JSONEncoder().encode(restorationToken)
@@ -32,7 +43,7 @@ class KeychainController: KeychainControllerProtocol {
             MXLog.error("Failed storing user restore token with error: \(error)")
         }
     }
-    
+
     func restorationTokenForUsername(_ username: String) -> RestorationToken? {
         do {
             guard let tokenData = try keychain.getData(username) else {
@@ -49,24 +60,24 @@ class KeychainController: KeychainControllerProtocol {
                                             homeserverUrl: legacyRestorationToken.homeURL,
                                             isSoftLogout: legacyRestorationToken.isSoftLogout ?? false))
             }
-            
+
             return try JSONDecoder().decode(RestorationToken.self, from: tokenData)
         } catch {
             MXLog.error("Failed retrieving user restore token")
             return nil
         }
     }
-    
+
     func restorationTokens() -> [KeychainCredentials] {
         keychain.allKeys().compactMap { username in
             guard let restorationToken = restorationTokenForUsername(username) else {
                 return nil
             }
-            
+
             return KeychainCredentials(userID: username, restorationToken: restorationToken)
         }
     }
-    
+
     func removeRestorationTokenForUsername(_ username: String) {
         do {
             try keychain.remove(username)
@@ -74,7 +85,7 @@ class KeychainController: KeychainControllerProtocol {
             MXLog.error("Failed removing restore token with error: \(error)")
         }
     }
-    
+
     func removeAllRestorationTokens() {
         do {
             try keychain.removeAll()

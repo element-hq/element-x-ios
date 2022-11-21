@@ -29,7 +29,7 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equa
     var senderDisplayName: String?
     var senderAvatar: UIImage?
     
-    let source: MediaSource?
+    let source: MediaSourceProxy?
     var image: UIImage?
     
     var width: CGFloat?

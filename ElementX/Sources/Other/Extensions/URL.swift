@@ -24,4 +24,33 @@ extension URL {
         
         self = url
     }
+
+    /// The URL of the primary app group container.
+    static var appGroupContainerDirectory: URL {
+        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.target.appGroupIdentifier) else {
+            fatalError("Should always be able to retrieve the container directory")
+        }
+        return url
+    }
+
+    /// The base directory where all session data is stored.
+    static var sessionsBaseDirectory: URL {
+        let url = cacheBaseDirectory
+            .appendingPathComponent("Sessions", isDirectory: true)
+
+        try? FileManager.default.createDirectoryIfNeeded(at: url)
+
+        return url
+    }
+
+    /// The base directory where all cache is stored.
+    static var cacheBaseDirectory: URL {
+        let url = appGroupContainerDirectory
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("Caches", isDirectory: true)
+
+        try? FileManager.default.createDirectoryIfNeeded(at: url)
+
+        return url
+    }
 }

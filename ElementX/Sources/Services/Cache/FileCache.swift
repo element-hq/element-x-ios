@@ -32,32 +32,17 @@ class FileCache {
     private let fileManager = FileManager.default
     private let folder: URL
 
-    /// Default instance. Uses `FileCache` as the folder name.
-    static let `default` = FileCache(folderName: "FileCache")
+    /// Default instance. Uses `Files` as the folder name.
+    static let `default` = FileCache(folderName: "Files")
 
     init(folderName: String) {
-        folder = fileManager.temporaryDirectory.appending(path: folderName, directoryHint: .isDirectory)
+        folder = URL.cacheBaseDirectory.appending(path: folderName, directoryHint: .isDirectory)
     }
 
     // MARK: Private
 
     private func filePath(forKey key: String, fileExtension: String) -> URL {
         folder.appending(path: key, directoryHint: .notDirectory).appendingPathExtension(fileExtension)
-    }
-
-    private func folderExists() -> Bool {
-        var isDirectory: ObjCBool = false
-        guard fileManager.fileExists(atPath: folder.path(), isDirectory: &isDirectory) else {
-            return false
-        }
-        return isDirectory.boolValue
-    }
-
-    private func createFolderIfNeeded() throws {
-        guard !folderExists() else {
-            return
-        }
-        try fileManager.createDirectory(at: folder, withIntermediateDirectories: true)
     }
 }
 
@@ -70,7 +55,7 @@ extension FileCache: FileCacheProtocol {
     }
 
     func store(_ data: Data, with fileExtension: String, forKey key: String) throws -> URL {
-        try createFolderIfNeeded()
+        try fileManager.createDirectoryIfNeeded(at: folder)
         let url = filePath(forKey: key, fileExtension: fileExtension)
         try data.write(to: url)
         return url
@@ -81,7 +66,7 @@ extension FileCache: FileCacheProtocol {
     }
 
     func removeAll() throws {
-        guard folderExists() else {
+        guard fileManager.directoryExists(at: folder) else {
             return
         }
         try fileManager.removeItem(at: folder)

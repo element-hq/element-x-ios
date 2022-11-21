@@ -24,6 +24,8 @@ extension ElementL10n {
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet
   public static let loginTabletDevice = ElementL10n.tr("Untranslated", "login_tablet_device")
+  /// Notification
+  public static let notification = ElementL10n.tr("Untranslated", "Notification")
   /// Editing
   public static let roomTimelineEditing = ElementL10n.tr("Untranslated", "room_timeline_editing")
   /// Failed creating the permalink

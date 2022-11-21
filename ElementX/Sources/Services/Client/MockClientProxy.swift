@@ -53,15 +53,15 @@ struct MockClientProxy: ClientProxyProtocol {
         .failure(.failedSettingAccountData)
     }
     
-    func mediaSourceForURLString(_ urlString: String) -> MatrixRustSDK.MediaSource {
-        MatrixRustSDK.mediaSourceFromUrl(url: urlString)
+    func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
+        .init(urlString: urlString)
     }
     
-    func loadMediaContentForSource(_ source: MatrixRustSDK.MediaSource) async throws -> Data {
+    func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
         throw ClientProxyError.failedLoadingMedia
     }
     
-    func loadMediaThumbnailForSource(_ source: MatrixRustSDK.MediaSource, width: UInt, height: UInt) async throws -> Data {
+    func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
         throw ClientProxyError.failedLoadingMedia
     }
     
@@ -70,6 +70,20 @@ struct MockClientProxy: ClientProxyProtocol {
     }
 
     func logout() async {
+        // no-op
+    }
+
+    // swiftlint:disable:next function_parameter_count
+    func setPusher(pushkey: String,
+                   kind: PusherKind?,
+                   appId: String,
+                   appDisplayName: String,
+                   deviceDisplayName: String,
+                   profileTag: String?,
+                   lang: String,
+                   url: String?,
+                   format: PushFormat?,
+                   defaultPayload: [AnyHashable: Any]?) async throws {
         // no-op
     }
 }

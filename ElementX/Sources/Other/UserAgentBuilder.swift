@@ -27,8 +27,8 @@ final class UserAgentBuilder {
     }
     
     private class func makeUserAgent() -> String? {
-        let clientName = ElementInfoPlist.cfBundleDisplayName
-        let clientVersion = ElementInfoPlist.cfBundleShortVersionString
+        let clientName = InfoPlistReader.target.bundleDisplayName
+        let clientVersion = InfoPlistReader.target.bundleShortVersionString
 
         #if os(iOS)
         return String(

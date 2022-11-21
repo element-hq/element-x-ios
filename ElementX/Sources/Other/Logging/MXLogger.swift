@@ -150,9 +150,9 @@ class MXLogger {
         MXLogger.logCrashes(false)
         
         // Extract running app information
-        let app = ElementInfoPlist.cfBundleExecutable
-        let appId = ElementInfoPlist.cfBundleIdentifier
-        let appVersion = "\(ElementInfoPlist.cfBundleShortVersionString) (r\(ElementInfoPlist.cfBundleVersion))"
+        let app = InfoPlistReader.target.bundleExecutable
+        let appId = InfoPlistReader.target.bundleIdentifier
+        let appVersion = "\(InfoPlistReader.target.bundleShortVersionString) (r\(InfoPlistReader.target.bundleVersion))"
         
         // Build the crash log
         let model = UIDevice.current.model
@@ -269,7 +269,7 @@ class MXLogger {
     
     /// The folder where logs are stored
     private static var logsFolderURL: URL {
-        FileManager.default.appGroupContainerURL ?? URL.documentsDirectory
+        .appGroupContainerDirectory
     }
     
     /// If `self.redirectNSLog(toFiles:numberOfFiles:)` is called with a lower numberOfFiles we need to do some cleanup.

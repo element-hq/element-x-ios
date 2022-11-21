@@ -17,8 +17,9 @@
 import SwiftUI
 import UIKit
 
-class UITestsAppCoordinator: CoordinatorProtocol {
+class UITestsAppCoordinator: AppCoordinatorProtocol {
     private let navigationController: NavigationController
+    let notificationManager: NotificationManagerProtocol? = nil
     
     init() {
         navigationController = NavigationController()

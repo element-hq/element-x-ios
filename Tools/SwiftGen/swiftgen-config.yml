@@ -24,10 +24,3 @@ strings:
       params:
         enumName: ElementL10n
         publicAccess: true
-plist:
-  inputs: SupportingFiles/Info.plist
-  outputs:
-    templatePath: Templates/Plists/runtime-swift5-element-info.stencil
-    output: InfoPlist.swift
-    params:
-      enumName: ElementInfoPlist

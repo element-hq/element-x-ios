@@ -49,4 +49,4 @@ targets:
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/Unit
     - path: ../Resources
-    
+    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift

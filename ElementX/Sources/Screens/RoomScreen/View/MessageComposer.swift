@@ -36,8 +36,8 @@ struct MessageComposer: View {
                                          focused: $focused,
                                          maxHeight: 300,
                                          onEnterKeyHandler: {
-                    sendAction()
-                })
+                                             sendAction()
+                                         })
                 
                 Button {
                     sendAction()

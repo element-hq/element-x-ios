@@ -46,15 +46,19 @@ targets:
           UIInterfaceOrientationLandscapeRight
         ]
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
+        baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
         ITSAppUsesNonExemptEncryption: false
+        NSUserActivityTypes: [
+          INSendMessageIntent
+        ]
 
     settings:
       base:
         PRODUCT_NAME: ElementX
         PRODUCT_BUNDLE_IDENTIFIER: $(BASE_BUNDLE_IDENTIFIER)
-        MARKETING_VERSION: 1.0.9
-        CURRENT_PROJECT_VERSION: 1
-        DEVELOPMENT_TEAM: 7J4U792NQT
+        MARKETING_VERSION: $(MARKETING_VERSION)
+        CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
+        DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
         CODE_SIGN_ENTITLEMENTS: ElementX/SupportingFiles/ElementX.entitlements 
         SWIFT_OBJC_BRIDGING_HEADER: ElementX/SupportingFiles/ElementX-Bridging-Header.h
         SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
@@ -97,6 +101,7 @@ targets:
         fi
 
     dependencies:
+    - target: NSE
     - package: MatrixRustSDK
     - package: DesignKit
     - package: AnalyticsEvents

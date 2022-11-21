@@ -16,9 +16,19 @@
 
 import Foundation
 
-extension FileManager {
-    /// The URL of the primary app group container.
-    @objc var appGroupContainerURL: URL? {
-        containerURL(forSecurityApplicationGroupIdentifier: ElementInfoPlist.appGroupIdentifier)
+enum NotificationConstants {
+    enum UserInfoKey {
+        static let roomIdentifier = "room_id"
+        static let eventIdentifier = "event_id"
+        static let unreadCount = "unread_count"
+    }
+
+    enum Category {
+        static let discard = "discard"
+        static let reply = "reply"
+    }
+
+    enum Action {
+        static let inlineReply = "inline-reply"
     }
 }

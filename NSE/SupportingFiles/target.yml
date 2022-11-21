@@ -1,0 +1,89 @@
+name: NSE
+
+schemes:
+  NSE:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        NSE:
+        - running
+        - testing
+        - profiling
+        - analyzing
+        - archiving
+    profile:
+      config: Release
+    run:
+      askForAppToLaunch: true
+      config: Debug
+      debugEnabled: false
+      disableMainThreadChecker: false
+      launchAutomaticallySubstyle: 2
+    test:
+      config: Debug
+      disableMainThreadChecker: false
+
+targets:
+  NSE:
+    type: app-extension
+    platform: iOS
+
+    dependencies:
+      - package: MatrixRustSDK
+      - package: SwiftyBeaver
+      - package: KeychainAccess
+      - package: Kingfisher
+
+    info:
+      path: ../SupportingFiles/Info.plist
+      properties:
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
+        baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.usernotifications.service
+          NSExtensionPrincipalClass: $(PRODUCT_MODULE_NAME).NotificationServiceExtension
+
+    settings:
+      base:
+        PRODUCT_NAME: NSE
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.nse
+        MARKETING_VERSION: $(MARKETING_VERSION)
+        CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
+        DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
+        CODE_SIGN_ENTITLEMENTS: NSE/SupportingFiles/NSE.entitlements
+        SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
+      debug:
+      release:
+
+    sources:
+    - path: ../Sources
+    - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/Services/Timeline/TimelineItemProxy.swift
+    - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
+    - path: ../../ElementX/Sources/Services/Keychain/KeychainController.swift
+    - path: ../../ElementX/Sources/Services/UserSession/RestorationToken.swift
+    - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationServiceProxyProtocol.swift
+    - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationServiceProxy.swift
+    - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationItemProxy.swift
+    - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
+    - path: ../../ElementX/Sources/Services/Media/MediaProxyProtocol.swift
+    - path: ../../ElementX/Sources/Services/Media/MediaProxy.swift
+    - path: ../../ElementX/Sources/Services/Media/MediaProviderProtocol.swift
+    - path: ../../ElementX/Sources/Services/Media/MediaProvider.swift
+    - path: ../../ElementX/Sources/Services/Media/MediaSourceProxy.swift
+    - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
+    - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
+    - path: ../../ElementX/Sources/Services/Cache/FileCache.swift
+    - path: ../../ElementX/Sources/Other/Logging
+    - path: ../../ElementX/Sources/Other/Extensions/Task.swift
+    - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
+    - path: ../../ElementX/Sources/Other/Extensions/URL.swift
+    - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
+    - path: ../../ElementX/Sources/Other/Extensions/ImageCache.swift
+    - path: ../../ElementX/Sources/Other/AvatarSize.swift
+    - path: ../../ElementX/Sources/Other/InfoPlistReader.swift

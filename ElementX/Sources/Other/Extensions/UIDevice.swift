@@ -23,6 +23,6 @@ extension UIDevice {
     }
 
     var initialDisplayName: String {
-        ElementL10n.defaultSessionDisplayName(ElementInfoPlist.cfBundleDisplayName)
+        ElementL10n.defaultSessionDisplayName(InfoPlistReader.target.bundleDisplayName)
     }
 }
