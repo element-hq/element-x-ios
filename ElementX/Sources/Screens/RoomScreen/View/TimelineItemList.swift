@@ -82,12 +82,20 @@ struct TimelineItemList: View {
                     }
                 }
             }
-            .onChange(of: timelineItems) { _ in
-                // Run this multiple times on first appearance to fix offset issues
-                updatePinnedOffset(scrollViewProxy: proxy)
-            }
-            .onChange(of: pinnedItem) { _ in
-                updatePinnedOffset(scrollViewProxy: proxy)
+            .onChange(of: pinnedItem) { item in
+                guard let item else {
+                    return
+                }
+                
+                if item.animated {
+                    withAnimation(Animation.elementDefault) {
+                        proxy.scrollTo(item.id, anchor: item.anchor)
+                    }
+                } else {
+                    proxy.scrollTo(item.id, anchor: item.anchor)
+                }
+                
+                pinnedItem = nil
             }
         }
         .scrollDismissesKeyboard(.immediately)
@@ -140,6 +148,8 @@ struct TimelineItemList: View {
                 let pinnedItem = PinnedItem(id: currentFirstItem.id, anchor: .top, animated: false)
                 timelineItems = context.viewState.items
                 self.pinnedItem = pinnedItem
+                
+                return
             }
             
             // Otherwise just update the items
@@ -186,25 +196,6 @@ struct TimelineItemList: View {
         }
         
         return selectedItemId == item.id ? 1.0 : 0.5
-    }
-    
-    private func updatePinnedOffset(scrollViewProxy proxy: ScrollViewProxy) {
-        guard let item = pinnedItem else {
-            return
-        }
-        
-        if item.animated {
-            withAnimation(.elementDefault) {
-                proxy.scrollTo(item.id, anchor: item.anchor)
-            }
-        } else {
-            proxy.scrollTo(item.id, anchor: item.anchor)
-        }
-        
-        // Need to delay this for a bit to fix offset problems when loading the initial page
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            pinnedItem = nil
-        }
     }
     
     private var isRunningPreviews: Bool {
