@@ -61,7 +61,7 @@ class BugReportService: BugReportServiceProtocol {
         //  also enable logging crashes, to send them with bug reports
         MXLogger.logCrashes(true)
         //  set build version for logger
-        MXLogger.setBuildVersion(ElementInfoPlist.cfBundleShortVersionString)
+        MXLogger.buildVersion = ElementInfoPlist.cfBundleShortVersionString
     }
 
     // MARK: - BugReportServiceProtocol
@@ -180,12 +180,11 @@ class BugReportService: BugReportServiceProtocol {
         MXLog.debug("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
 
         var filesToCompress: [URL] = []
-        if includeLogs, let logFiles = MXLogger.logFiles() {
-            let urls = logFiles.compactMap { URL(fileURLWithPath: $0) }
-            filesToCompress.append(contentsOf: urls)
+        if includeLogs {
+            filesToCompress.append(contentsOf: MXLogger.logFiles)
         }
-        if includeCrashLog, let crashLogFile = MXLogger.crashLog() {
-            filesToCompress.append(URL(fileURLWithPath: crashLogFile))
+        if includeCrashLog, let crashLogFile = MXLogger.crashLog {
+            filesToCompress.append(crashLogFile)
         }
 
         var totalSize = 0

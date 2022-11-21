@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Foundation
 import MatrixRustSDK
 
 struct MockClientProxy: ClientProxyProtocol {

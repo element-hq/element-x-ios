@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Foundation
 import MatrixRustSDK
 
 private class RoomTimelineListener: TimelineListener {
@@ -52,7 +53,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 
             roomTimelineListener
                 .itemsUpdatePublisher
-                .collect(.byTime(DispatchQueue.global(qos: .background), 0.5))
+                .collect(.byTime(DispatchQueue.global(), 0.5))
                 .sink { self.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
         }
