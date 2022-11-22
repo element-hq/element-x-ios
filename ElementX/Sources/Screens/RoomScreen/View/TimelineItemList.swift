@@ -23,7 +23,12 @@ struct TimelineItemList: View {
     @State private var timelineItems: [RoomTimelineViewProvider] = []
     @State private var viewFrame: CGRect = .zero
     @State private var pinnedItem: PinnedItem?
+    
     @Binding var visibleEdges: [VerticalEdge]
+    /// The last known value of the visible edges. This is stored because `visibleEdges`
+    /// updates at the same time as the `viewFrame` but we need to know the previous
+    /// value when the keyboard appears to determine whether to scroll to the bottom.
+    @State private var cachedVisibleEdges: [VerticalEdge] = []
     
     @EnvironmentObject var context: RoomScreenViewModel.Context
     
@@ -63,6 +68,7 @@ struct TimelineItemList: View {
                 }
             }
             .onChange(of: visibleEdges) { edges in
+                cachedVisibleEdges = edges
                 // Paginate when the top becomes visible
                 guard edges.contains(.top) else { return }
                 requestBackPagination()
@@ -142,7 +148,9 @@ struct TimelineItemList: View {
             timelineItems = context.viewState.items
         }
         .onChange(of: viewFrame) { _ in
-            guard visibleEdges.contains(.bottom) else { return }
+            // Use the cached version as visibleEdges will already have changed
+            // (but its onChange handler is yet to be called - possible race condition?)
+            guard cachedVisibleEdges.contains(.bottom) else { return }
             
             // Pin the timeline to the bottom if was there on the frame change
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -187,14 +195,6 @@ private struct PinnedItem: Equatable {
     let id: String
     let anchor: UnitPoint
     let animated: Bool
-}
-
-private struct ViewFramePreferenceKey: PreferenceKey {
-    static var defaultValue = [CGRect]() // Doesn't work with plain CGRects
-    
-    static func reduce(value: inout [CGRect], nextValue: () -> [CGRect]) {
-        value += nextValue()
-    }
 }
 
 struct TimelineItemList_Previews: PreviewProvider {
