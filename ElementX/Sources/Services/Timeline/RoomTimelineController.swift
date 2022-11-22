@@ -378,7 +378,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func loadUserAvatarForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
-        if timelineItem.shouldShowSenderDetails == false {
+        if timelineItem.shouldShowSenderDetails == false || timelineItem.senderAvatar != nil {
             return
         }
         
@@ -408,7 +408,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func loadUserDisplayNameForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
-        if timelineItem.shouldShowSenderDetails == false {
+        if timelineItem.shouldShowSenderDetails == false || timelineItem.senderDisplayName != nil {
             return
         }
         
