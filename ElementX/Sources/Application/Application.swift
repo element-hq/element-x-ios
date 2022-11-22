@@ -35,7 +35,7 @@ struct Application: App {
                 EmptyView()
             } else {
                 applicationCoordinator.toPresentable()
-                    .tint(.element.accent)
+                    .accentColor(.element.accent)
                     .task {
                         applicationCoordinator.start()
                     }
