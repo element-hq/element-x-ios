@@ -38,7 +38,7 @@ struct ImageRoomTimelineView: View {
                         .foregroundColor(.element.systemGray6)
                         .opacity(0.3)
                     
-                    ProgressView("Loading")
+                    ProgressView(ElementL10n.loading)
                         .frame(maxWidth: .infinity)
                 }
                 .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
@@ -46,7 +46,6 @@ struct ImageRoomTimelineView: View {
         }
         .id(timelineItem.id)
         .animation(.elementDefault, value: timelineItem.image)
-        .frame(maxHeight: 1000.0)
     }
 }
 
