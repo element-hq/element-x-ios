@@ -77,7 +77,7 @@ struct TimelineItemList: View {
                 guard !isBackPaginating else { return }
                 
                 // Repeat the pagination if the top edge is still visible.
-                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
                     guard visibleEdges.contains(.top) else { return }
                     requestBackPagination()
                 }
