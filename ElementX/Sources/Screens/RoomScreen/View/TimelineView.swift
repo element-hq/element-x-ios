@@ -21,13 +21,13 @@ import SwiftUI
 import Introspect
 
 struct TimelineView: View {
-    @State private var visibleEdge: VerticalEdge? = .bottom
+    @State private var visibleEdges: [VerticalEdge] = []
     @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     @State private var scrollToBottomButtonVisible = false
     
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
-            TimelineItemList(visibleEdge: $visibleEdge, scrollToBottomPublisher: scrollToBottomPublisher)
+            TimelineItemList(visibleEdges: $visibleEdges, scrollToBottomPublisher: scrollToBottomPublisher)
             scrollToBottomButton
         }
     }
@@ -39,8 +39,8 @@ struct TimelineView: View {
                 .shadow(radius: 2.0)
                 .padding()
         }
-        .onChange(of: visibleEdge) { edge in
-            scrollToBottomButtonVisible = edge != .bottom
+        .onChange(of: visibleEdges) { edges in
+            scrollToBottomButtonVisible = !edges.contains(.bottom)
         }
         .opacity(scrollToBottomButtonVisible ? 1.0 : 0.0)
         .animation(.elementDefault, value: scrollToBottomButtonVisible)

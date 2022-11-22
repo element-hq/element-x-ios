@@ -23,7 +23,7 @@ struct TimelineItemList: View {
     @State private var timelineItems: [RoomTimelineViewProvider] = []
     @State private var viewFrame: CGRect = .zero
     @State private var pinnedItem: PinnedItem?
-    @Binding var visibleEdge: VerticalEdge?
+    @Binding var visibleEdges: [VerticalEdge]
     
     @EnvironmentObject var context: RoomScreenViewModel.Context
     
@@ -31,7 +31,7 @@ struct TimelineItemList: View {
 
     var body: some View {
         ScrollViewReader { scrollView in
-            TimelineScrollView(visibleEdge: $visibleEdge) {
+            TimelineScrollView(visibleEdges: $visibleEdges) {
                 // The scroll view already contains a VStack so simply provide the content to fill it.
                 
                 ProgressView()
@@ -62,9 +62,19 @@ struct TimelineItemList: View {
                         }
                 }
             }
-            .onChange(of: visibleEdge) { edge in
-                guard edge == .top else { return }
+            .onChange(of: visibleEdges) { edges in
+                // Paginate when the top becomes visible
+                guard edges.contains(.top) else { return }
                 requestBackPagination()
+            }
+            .onChange(of: context.viewState.isBackPaginating) { isBackPaginating in
+                guard !isBackPaginating else { return }
+                
+                // Repeat the pagination if the top edge is still visible.
+                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    guard visibleEdges.contains(.top) else { return }
+                    requestBackPagination()
+                }
             }
             .onChange(of: pinnedItem) { item in
                 guard let item else { return }
@@ -85,7 +95,6 @@ struct TimelineItemList: View {
         .timelineStyle(settings.timelineStyle)
         .onAppear {
             timelineItems = context.viewState.items
-            requestBackPagination()
         }
         .onReceive(scrollToBottomPublisher) {
             scrollToBottom(animated: true)
@@ -112,7 +121,7 @@ struct TimelineItemList: View {
             }
             
             // Pin to the new bottom if visible
-            if visibleEdge == .bottom, let newLastItem = context.viewState.items.last {
+            if visibleEdges.contains(.bottom), let newLastItem = context.viewState.items.last {
                 let pinnedItem = PinnedItem(id: newLastItem.id, anchor: .bottom, animated: false)
                 timelineItems = context.viewState.items
                 self.pinnedItem = pinnedItem
@@ -121,7 +130,7 @@ struct TimelineItemList: View {
             }
             
             // Pin to the old topmost visible
-            if visibleEdge == .top, let currentFirstItem = timelineItems.first {
+            if visibleEdges.contains(.top), let currentFirstItem = timelineItems.first {
                 let pinnedItem = PinnedItem(id: currentFirstItem.id, anchor: .top, animated: false)
                 timelineItems = context.viewState.items
                 self.pinnedItem = pinnedItem
@@ -133,7 +142,7 @@ struct TimelineItemList: View {
             timelineItems = context.viewState.items
         }
         .onChange(of: viewFrame) { _ in
-            guard visibleEdge == .bottom else { return }
+            guard visibleEdges.contains(.bottom) else { return }
             
             // Pin the timeline to the bottom if was there on the frame change
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
@@ -201,7 +210,7 @@ struct TimelineItemList_Previews: PreviewProvider {
                                             mediaProvider: MockMediaProvider(),
                                             roomName: nil)
         
-        TimelineItemList(visibleEdge: .constant(nil), scrollToBottomPublisher: PassthroughSubject())
+        TimelineItemList(visibleEdges: .constant([]), scrollToBottomPublisher: PassthroughSubject())
             .environmentObject(viewModel.context)
     }
 }

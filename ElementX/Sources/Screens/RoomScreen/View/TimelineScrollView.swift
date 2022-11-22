@@ -16,10 +16,10 @@
 
 import SwiftUI
 
-struct VisibleEdgeKey: PreferenceKey {
-    static var defaultValue: VerticalEdge?
+struct VisibleEdgesKey: PreferenceKey {
+    static var defaultValue: [VerticalEdge] = []
 
-    static func reduce(value: inout VerticalEdge?, nextValue: () -> VerticalEdge?) {
+    static func reduce(value: inout [VerticalEdge], nextValue: () -> [VerticalEdge]) {
         value = nextValue()
     }
 }
@@ -28,7 +28,7 @@ struct VisibleEdgeKey: PreferenceKey {
 /// - The content is laid out starting at the bottom.
 /// - Top and bottom edge visibility detection for triggering other behaviours.
 struct TimelineScrollView<Content: View>: View {
-    @Binding var visibleEdge: VerticalEdge?
+    @Binding var visibleEdges: [VerticalEdge]
     
     @ViewBuilder var content: () -> Content
     
@@ -46,22 +46,31 @@ struct TimelineScrollView<Content: View>: View {
                 .background {
                     GeometryReader { contentGeometry in
                         Color.clear
-                            .preference(key: VisibleEdgeKey.self,
-                                        value: visibleEdge(of: contentGeometry, in: scrollViewGeometry))
+                            .preference(key: VisibleEdgesKey.self,
+                                        value: visibleEdges(of: contentGeometry, in: scrollViewGeometry))
                     }
-                    .onPreferenceChange(VisibleEdgeKey.self) {
-                        visibleEdge = $0
+                    .onPreferenceChange(VisibleEdgesKey.self) {
+                        visibleEdges = $0
                     }
                 }
             }
         }
     }
     
-    func visibleEdge(of contentGeometry: GeometryProxy, in scrollViewGeometry: GeometryProxy) -> VerticalEdge? {
+    func visibleEdges(of contentGeometry: GeometryProxy, in scrollViewGeometry: GeometryProxy) -> [VerticalEdge] {
         let frame = contentGeometry.frame(in: .global)
         let isTopVisible = scrollViewGeometry.frame(in: .global).contains(CGPoint(x: frame.midX, y: frame.minY + edgeDetectionThreshold))
         let isBottomVisible = scrollViewGeometry.frame(in: .global).contains(CGPoint(x: frame.midX, y: frame.maxY - edgeDetectionThreshold))
         
-        return isBottomVisible ? .bottom : isTopVisible ? .top : .none
+        switch (isTopVisible, isBottomVisible) {
+        case (false, false):
+            return []
+        case (true, false):
+            return [.top]
+        case (false, true):
+            return [.bottom]
+        case (true, true):
+            return [.top, .bottom]
+        }
     }
 }
