@@ -141,8 +141,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
         rooms = diffs
-            .compactMap(buildDiff)
-            .reduce(rooms) { $0.applying($1) ?? $0 }
+            .reduce(rooms) { partialResult, diff in
+                guard let collectionDiff = buildDiff(from: diff, on: partialResult) else {
+                    return partialResult
+                }
+                
+                return partialResult.applying(collectionDiff) ?? partialResult
+            }
     }
     
     private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummary {
@@ -186,7 +191,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    private func buildDiff(from diff: SlidingSyncViewRoomsListDiff) -> CollectionDifference<RoomSummary>? {
+    private func buildDiff(from diff: SlidingSyncViewRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
         // Invalidations are a no-op for the moment
         if diff.isInvalidation {
             return nil
@@ -217,12 +222,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }
             
-            values
-                .reversed()
-                .map { buildSummaryForRoomListEntry($0) }
-                .forEach { summary in
-                    changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
-                }
+            for (index, value) in values.enumerated() {
+                changes.append(.insert(offset: index, element: buildSummaryForRoomListEntry(value), associatedWith: nil))
+            }
         }
         
         return CollectionDifference(changes)
