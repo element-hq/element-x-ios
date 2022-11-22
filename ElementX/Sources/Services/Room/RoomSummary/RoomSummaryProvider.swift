@@ -97,7 +97,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
         
         weakProvider.roomListDiffPublisher
-            .collect(.byTime(DispatchQueue.global(), 0.5))
+            .collect(.byTime(DispatchQueue.global(), 0.25))
             .sink { self.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
         
