@@ -23,6 +23,7 @@ lane :alpha do
   nse_bundle_identifier = "io.element.elementx.pr.nse"
 
   update_code_signing_settings(
+    targets: ["ElementX"],
     use_automatic_signing: false,
     bundle_identifier: app_bundle_identifier,
     profile_name: app_provisioning_profile_name,
@@ -37,6 +38,7 @@ lane :alpha do
   )
 
   update_code_signing_settings(
+    targets: ["NSE"],
     use_automatic_signing: false,
     bundle_identifier: nse_bundle_identifier,
     profile_name: nse_provisioning_profile_name,
