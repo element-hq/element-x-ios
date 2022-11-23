@@ -29,9 +29,10 @@ class VideoPlayerViewModel: VideoPlayerViewModelType, VideoPlayerViewModelProtoc
 
     // MARK: - Setup
 
-    init(videoURL: URL, autoplay: Bool = true) {
+    init(videoURL: URL, autoplay: Bool = true, isModallyPresented: Bool = true) {
         super.init(initialViewState: VideoPlayerViewState(videoURL: videoURL,
-                                                          autoplay: autoplay))
+                                                          autoplay: autoplay,
+                                                          isModallyPresented: isModallyPresented))
     }
     
     // MARK: - Public
