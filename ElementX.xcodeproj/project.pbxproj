@@ -339,6 +339,7 @@
 		BB01CC19C3D3322308D1B2CF /* ServerSelectionViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167521635A1CC27624FCEB7F /* ServerSelectionViewModel.swift */; };
 		BB6B0B91CE11E06330017000 /* SessionVerificationScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC1A01C3A745BDF1D3697D3 /* SessionVerificationScreen.swift */; };
 		BCEC41FB1F2BB663183863E4 /* LoginServerInfoSection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D379E13DD9D987470A3C70C /* LoginServerInfoSection.swift */; };
+		BD782053BE4C3D2F0BDE5699 /* ServiceLocator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57F95CADD0A5DBD76B990FCB /* ServiceLocator.swift */; };
 		BFB534E338A3D949944FB2F5 /* NotificationServiceProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0B490675B8E31423AF116BDA /* NotificationServiceProxy.swift */; };
 		C3522917C0C367C403429EEC /* CoordinatorProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = B251F5B4511D1CA0BA8361FE /* CoordinatorProtocol.swift */; };
 		C35CF4DAB1467FE1BBDC204B /* MessageTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = EEAF1C75771D9DC75877F4B4 /* MessageTimelineItem.swift */; };
@@ -658,6 +659,7 @@
 		56C1BCB9E83B09A45387FCA2 /* EncryptedRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncryptedRoomTimelineView.swift; sourceTree = "<group>"; };
 		5741CD0691019B32FE74CE9E /* UNMutableNotificationContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNMutableNotificationContent.swift; sourceTree = "<group>"; };
 		5773C86AF04AEF26515AD00C /* sl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = sl; path = sl.lproj/Localizable.strings; sourceTree = "<group>"; };
+		57F95CADD0A5DBD76B990FCB /* ServiceLocator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceLocator.swift; sourceTree = "<group>"; };
 		5B2F9D5C39A4494D19F33E38 /* SettingsViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelProtocol.swift; sourceTree = "<group>"; };
 		5D26A086A8278D39B5756D6F /* project.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = project.yml; sourceTree = "<group>"; };
 		5D2D0A6F1ABC99D29462FB84 /* AuthenticationCoordinatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorUITests.swift; sourceTree = "<group>"; };
@@ -1884,6 +1886,7 @@
 				263B3B811C2B900F12C6F695 /* BuildSettings.swift */,
 				B251F5B4511D1CA0BA8361FE /* CoordinatorProtocol.swift */,
 				495D3EC4972639C1A87DDF8E /* NavigationController.swift */,
+				57F95CADD0A5DBD76B990FCB /* ServiceLocator.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -2879,6 +2882,7 @@
 				388FD50AC66E9E684DDFA9D8 /* ServerSelectionScreen.swift in Sources */,
 				BB01CC19C3D3322308D1B2CF /* ServerSelectionViewModel.swift in Sources */,
 				19839F3526CE8C35AAF241AD /* ServerSelectionViewModelProtocol.swift in Sources */,
+				BD782053BE4C3D2F0BDE5699 /* ServiceLocator.swift in Sources */,
 				237FC70AA257B935F53316BA /* SessionVerificationControllerProxy.swift in Sources */,
 				94A65DD8A353DF112EBEF67A /* SessionVerificationControllerProxyProtocol.swift in Sources */,
 				E5895C74615CBE8462FB840F /* SessionVerificationCoordinator.swift in Sources */,
