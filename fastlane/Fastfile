@@ -15,37 +15,37 @@ lane :alpha do
   config_xcodegen_alpha()
 
   code_signing_identity = "Apple Distribution: Vector Creations Limited (7J4U792NQT)"
+  
+  app_provisioning_profile_name = "ElementX PR Ad Hoc"
+  app_bundle_identifier = "io.element.elementx.pr"
 
-  provisioning_profile_name = "ElementX PR Ad Hoc"
-  bundle_identifier = "io.element.elementx.pr" 
+  nse_provisioning_profile_name = "ElementX NSE PR Ad Hoc"
+  nse_bundle_identifier = "io.element.elementx.pr.nse"
 
   update_code_signing_settings(
     use_automatic_signing: false,
-    bundle_identifier: bundle_identifier,
-    profile_name: provisioning_profile_name,
+    bundle_identifier: app_bundle_identifier,
+    profile_name: app_provisioning_profile_name,
     code_sign_identity: code_signing_identity
   )
 
   get_provisioning_profile(
-    app_identifier: bundle_identifier,
-    provisioning_name: provisioning_profile_name,
+    app_identifier: app_bundle_identifier,
+    provisioning_name: app_provisioning_profile_name,
     ignore_profiles_with_different_name: true,
     adhoc: true 
   )
 
-  provisioning_profile_name = "ElementX NSE PR Ad Hoc"
-  bundle_identifier = "io.element.elementx.pr.nse"
-
   update_code_signing_settings(
     use_automatic_signing: false,
-    bundle_identifier: bundle_identifier,
-    profile_name: provisioning_profile_name,
+    bundle_identifier: nse_bundle_identifier,
+    profile_name: nse_provisioning_profile_name,
     code_sign_identity: code_signing_identity
   )
 
   get_provisioning_profile(
-    app_identifier: bundle_identifier,
-    provisioning_name: provisioning_profile_name,
+    app_identifier: nse_bundle_identifier,
+    provisioning_name: nse_provisioning_profile_name,
     ignore_profiles_with_different_name: true,
     adhoc: true 
   )
@@ -57,7 +57,8 @@ lane :alpha do
     output_directory: "build",
     export_options: {
       provisioningProfiles: { 
-        bundle_identifier => provisioning_profile_name,
+        app_bundle_identifier => app_provisioning_profile_name,
+        nse_bundle_identifier => nse_provisioning_profile_name
       }
     }
   )
