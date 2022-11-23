@@ -39,7 +39,12 @@ struct Application: App {
                     .task {
                         applicationCoordinator.start()
                     }
+                    .statusBarHidden(shouldHideStatusBar)
             }
         }
+    }
+    
+    private var shouldHideStatusBar: Bool {
+        Tests.isRunningUITests
     }
 }
