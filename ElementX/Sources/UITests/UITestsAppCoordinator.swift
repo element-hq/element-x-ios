@@ -18,11 +18,14 @@ import SwiftUI
 import UIKit
 
 class UITestsAppCoordinator: AppCoordinatorProtocol {
+    private var currentRootCoordinator: CoordinatorProtocol?
     private let navigationController: NavigationController
     let notificationManager: NotificationManagerProtocol? = nil
     
     init() {
         navigationController = NavigationController()
+        
+        ServiceLocator.shared.register(userNotificationController: MockUserNotificationController())
     }
     
     func start() {
@@ -31,11 +34,17 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
             guard let screen = screens.first(where: { $0.id == id }) else {
                 fatalError()
             }
-
+            
+            // Store the initial coordinator so that it stays alive if drops it
+            // For example when replacing the root in the authentication flows
+            self.currentRootCoordinator = screen.coordinator
+            
             self.navigationController.setRootCoordinator(screen.coordinator)
         }
         
         navigationController.setRootCoordinator(rootCoordinator)
+        
+        Bundle.elementFallbackLanguage = "en"
     }
         
     func toPresentable() -> AnyView {
@@ -105,7 +114,7 @@ class MockScreen: Identifiable {
                                                           userNotificationController: MockUserNotificationController(),
                                                           screenshot: Asset.Images.appLogo.image,
                                                           isModallyPresented: false))
-        case .splash:
+        case .onboarding:
             return OnboardingCoordinator()
         case .roomPlainNoAvatar:
             let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,

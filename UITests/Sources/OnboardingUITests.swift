@@ -20,18 +20,18 @@ import XCTest
 class OnboardingUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier(.splash)
+        app.goToScreenWithIdentifier(.onboarding)
         
         let getStartedButton = app.buttons["getStartedButton"]
         XCTAssertTrue(getStartedButton.exists, "The primary action button should be shown.")
         XCTAssertEqual(getStartedButton.label, ElementL10n.loginSplashSubmit)
 
-        app.assertScreenshot(.splash)
+        app.assertScreenshot(.onboarding)
     }
     
     func testSwipingBetweenPages() {
         let app = Application.launch()
-        app.goToScreenWithIdentifier(.splash)
+        app.goToScreenWithIdentifier(.onboarding)
         
         // Given the splash screen in its initial state.
         let page1TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselSecureTitle]

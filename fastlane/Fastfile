@@ -2,7 +2,7 @@ require 'yaml'
 require_relative 'changelog'
 
 before_all do
-  xcversion(version: "~> 14.0.1")
+  xcversion(version: "~> 14.1")
 end
 
 lane :alpha do
@@ -106,7 +106,7 @@ end
 lane :ui_tests do 
   run_tests(
     scheme: "UITests",
-    devices: ["iPhone 13 Pro Max (16.0)", "iPad (9th generation) (16.0)"],
+    devices: ["iPhone 14", "iPad (9th generation)"],
     ensure_devices_found: true,
     prelaunch_simulator: true,
     result_bundle: true
@@ -142,7 +142,7 @@ lane :config_nightly do
   # https://developer.apple.com/documentation/xcode/setting-the-next-build-number-for-xcode-cloud-builds
   # bump_build_number()
 
-  release_version = get_version_number()
+  release_version = get_version_number(target: "ElementX")
 
   update_app_icon(caption_text: "Nightly #{release_version}", modulate: "100,20,100")
 end
@@ -170,7 +170,7 @@ lane :release_to_github do
   # Get the Diawi link from Diawi action shared value
   diawi_link = lane_context[SharedValues::UPLOADED_FILE_LINK_TO_DIAWI]
 
-  release_version = get_version_number()
+  release_version = get_version_number(target: "ElementX")
 
   changes = export_version_changes(version: release_version)
 

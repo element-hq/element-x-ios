@@ -53,7 +53,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 
             roomTimelineListener
                 .itemsUpdatePublisher
-                .collect(.byTime(DispatchQueue.global(), 0.5))
+                .collect(.byTime(DispatchQueue.global(), 0.25))
                 .sink { self.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
         }
@@ -105,15 +105,20 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     }
     
     // MARK: - Private
-
+    
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
         itemProxies = diffs
-            .compactMap(buildDiff)
-            .reduce(itemProxies) { $0.applying($1) ?? $0 }
+            .reduce(itemProxies) { partialResult, diff in
+                guard let collectionDiff = buildDiff(from: diff, on: partialResult) else {
+                    return partialResult
+                }
+                
+                return partialResult.applying(collectionDiff) ?? partialResult
+            }
     }
      
     // swiftlint:disable:next cyclomatic_complexity
-    private func buildDiff(from diff: TimelineDiff) -> CollectionDifference<TimelineItemProxy>? {
+    private func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy]) -> CollectionDifference<TimelineItemProxy>? {
         var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
         switch diff.change() {
@@ -150,12 +155,9 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                     changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
                 }
                 
-                items
-                    .reversed()
-                    .map { TimelineItemProxy(item: $0) }
-                    .forEach { itemProxy in
-                        changes.append(.insert(offset: 0, element: itemProxy, associatedWith: nil))
-                    }
+                for (index, item) in items.enumerated() {
+                    changes.append(.insert(offset: index, element: TimelineItemProxy(item: item), associatedWith: nil))
+                }
             }
         case .clear:
             for (index, itemProxy) in itemProxies.enumerated() {

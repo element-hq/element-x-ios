@@ -94,6 +94,7 @@ class ClientProxy: ClientProxyProtocol {
                 let slidingSync = try slidingSyncBuilder
                     .addView(v: slidingSyncView)
                     .withCommonExtensions()
+                    .coldCache(name: "ElementX")
                     .build()
                 
                 self.roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
