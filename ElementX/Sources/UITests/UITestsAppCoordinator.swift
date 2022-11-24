@@ -124,6 +124,11 @@ class MockScreen: Identifiable {
         case .sessionVerification:
             let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy())
             return SessionVerificationCoordinator(parameters: parameters)
+        case .imageViewer:
+            let parameters = ImageViewerCoordinatorParameters(navigationController: navigationController,
+                                                              image: Asset.Images.appLogo.image,
+                                                              isModallyPresented: false)
+            return ImageViewerCoordinator(parameters: parameters)
         }
     }()
     

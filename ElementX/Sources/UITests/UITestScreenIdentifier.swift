@@ -33,6 +33,7 @@ enum UITestScreenIdentifier: String {
     case roomPlainNoAvatar
     case roomEncryptedWithAvatar
     case sessionVerification
+    case imageViewer
 }
 
 extension UITestScreenIdentifier: CustomStringConvertible {
