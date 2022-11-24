@@ -18,19 +18,6 @@ import Combine
 import MatrixRustSDK
 import SwiftUI
 
-struct ServiceLocator {
-    fileprivate static var serviceLocator: ServiceLocator?
-    static var shared: ServiceLocator {
-        guard let serviceLocator else {
-            fatalError("The service locator should be setup at this point")
-        }
-        
-        return serviceLocator
-    }
-    
-    let userNotificationController: UserNotificationControllerProtocol
-}
-
 class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationController: NavigationController
@@ -63,7 +50,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         navigationController.setRootCoordinator(SplashScreenCoordinator())
 
-        ServiceLocator.serviceLocator = ServiceLocator(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
+        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
 
         backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
 

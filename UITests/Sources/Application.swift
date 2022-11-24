@@ -43,7 +43,7 @@ extension XCUIApplication {
     /// - Parameter identifier: Identifier of the UI test screen
     func assertScreenshot(_ identifier: UITestScreenIdentifier) {
         let failure = verifySnapshot(matching: screenshot().image,
-                                     as: .image(precision: 0.98, perceptualPrecision: 0.98, scale: nil),
+                                     as: .image(precision: 0.99, perceptualPrecision: 0.98, scale: nil),
                                      named: identifier.rawValue,
                                      testName: testName)
 
@@ -55,7 +55,7 @@ extension XCUIApplication {
     }
 
     private var testName: String {
-        osVersion + "-" + languageCode + "-" + regionCode + "-" + deviceName
+        languageCode + "-" + regionCode + "-" + deviceName
     }
 
     private var deviceName: String {

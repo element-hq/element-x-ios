@@ -27,7 +27,7 @@ class ServerSelectionUITests: XCTestCase {
         app.goToScreenWithIdentifier(.serverSelection)
         
         // Then it should be configured for matrix.org and with a cancel button
-        let serverTextField = app.textFields.element
+        let serverTextField = app.textFields[textFieldIdentifier]
         XCTAssertEqual(serverTextField.value as? String, "matrix.org", "The server shown should be matrix.org with the https scheme hidden.")
 
         let confirmButton = app.buttons["confirmButton"]
@@ -35,9 +35,7 @@ class ServerSelectionUITests: XCTestCase {
         XCTAssertTrue(confirmButton.exists, "The confirm button should always be shown.")
         XCTAssertTrue(confirmButton.isEnabled, "The confirm button should be enabled when there is an address.")
 
-        let textFieldFooter = app.staticTexts[textFieldIdentifier]
-        XCTAssertTrue(textFieldFooter.exists)
-        XCTAssertEqual(textFieldFooter.label, ElementL10n.serverSelectionServerFooter)
+        XCTAssertTrue(app.staticTexts[ElementL10n.serverSelectionServerFooter].exists)
 
         let dismissButton = app.buttons["dismissButton"]
         XCTAssertTrue(dismissButton.exists, "The dismiss button should be shown during modal presentation.")
@@ -51,12 +49,11 @@ class ServerSelectionUITests: XCTestCase {
         app.goToScreenWithIdentifier(.serverSelection)
         
         // When clearing the server address text field.
-        app.textFields.element.tap()
-        app.textFields.element.buttons.element.tap()
+        app.textFields[textFieldIdentifier].tap()
+        app.textFields[textFieldIdentifier].buttons.element.tap()
         
         // Then the screen should not allow the user to continue.
-        let serverTextField = app.textFields.element
-        XCTAssertEqual(serverTextField.value as? String, ElementL10n.ftueAuthChooseServerEntryHint, "The text field should show placeholder text in this state.")
+        XCTAssertEqual(app.textFields[textFieldIdentifier].value as? String, ElementL10n.ftueAuthChooseServerEntryHint, "The text field should show placeholder text in this state.")
 
         let confirmButton = app.buttons["confirmButton"]
         XCTAssertTrue(confirmButton.exists, "The confirm button should always be shown.")
@@ -69,21 +66,18 @@ class ServerSelectionUITests: XCTestCase {
         app.goToScreenWithIdentifier(.serverSelection)
         
         // When typing in an invalid homeserver
-        app.textFields.element.tap()
+        app.textFields[textFieldIdentifier].tap()
         app.textFields.element.buttons.element.tap()
         app.typeText("thisisbad\n") // The tests only accept an address from LoginHomeserver.mockXYZ
         
         // Then an error should be shown and the confirmation button disabled.
-        let serverTextField = app.textFields.element
-        XCTAssertEqual(serverTextField.value as? String, "thisisbad", "The text field should show the entered server.")
+        XCTAssertEqual(app.textFields[textFieldIdentifier].value as? String, "thisisbad", "The text field should show the entered server.")
 
         let confirmButton = app.buttons["confirmButton"]
         XCTAssertTrue(confirmButton.exists, "The confirm button should always be shown.")
         XCTAssertFalse(confirmButton.isEnabled, "The confirm button should be disabled when there is an error.")
 
-        let textFieldFooter = app.staticTexts[textFieldIdentifier]
-        XCTAssertTrue(textFieldFooter.exists)
-        XCTAssertEqual(textFieldFooter.label, ElementL10n.loginErrorHomeserverNotFound)
+        XCTAssertTrue(app.staticTexts[ElementL10n.loginErrorHomeserverNotFound].exists)
     }
 
     func testNonModalPresentation() {

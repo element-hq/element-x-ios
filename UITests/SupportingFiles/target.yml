@@ -28,31 +28,18 @@ targets:
     dependencies:
     - target: ElementX
     - package: MatrixRustSDK
-      linkType: static
     - package: AnalyticsEvents
-      linkType: static
     - package: AppAuth
-      linkType: static
     - package: DeviceKit
-      linkType: static
     - package: DTCoreText
-      linkType: static
     - package: KeychainAccess
-      linkType: static
     - package: Kingfisher
-      linkType: static
     - package: PostHog
-      linkType: static
     - package: SwiftyBeaver
-      linkType: static
     - package: SwiftState
-      linkType: static
     - package: GZIP
-      linkType: static
     - package: Sentry
-      linkType: static
     - package: SnapshotTesting
-      linkType: static
 
     info:
       path: ../SupportingFiles/Info.plist
@@ -63,15 +50,6 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.ui.tests
       debug:
       release:
-
-    preBuildScripts:
-      - name: Override Simulator Status Bars
-        runOnlyWhenInstalling: false
-        basedOnDependencyAnalysis: false
-        shell: /bin/sh
-        script: |
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPhone 13 Pro Max' --version 'iOS.16.1'
-          python3 $PROJECT_DIR/Tools/Scripts/bootTestSimulator.py --name 'iPad (9th generation)' --version 'iOS.16.1'
 
     sources:
     - path: ../Sources
