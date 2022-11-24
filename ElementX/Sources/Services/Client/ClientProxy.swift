@@ -88,7 +88,8 @@ class ClientProxy: ClientProxyProtocol {
                     .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
                                                    RequiredState(key: "m.room.encryption", value: "")])
                     .name(name: "HomeScreenView")
-                    .syncMode(mode: .fullSync)
+                    .syncMode(mode: .selective)
+                    .addRange(from: 0, to: 50) // FIXME: Replace this with a dynamic solution
                     .build()
 
                 let slidingSync = try slidingSyncBuilder
