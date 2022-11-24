@@ -94,12 +94,15 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var avatar: UIImage?
     
+    var isPlaceholder = false
+    
     static func placeholder(id: String) -> HomeScreenRoom {
         HomeScreenRoom(id: id,
                        name: "Placeholder room name",
                        hasUnreads: false,
                        timestamp: "Now",
                        lastMessage: AttributedString("Last message"),
-                       avatar: UIImage(systemName: "photo"))
+                       avatar: UIImage(systemName: "photo"),
+                       isPlaceholder: true)
     }
 }

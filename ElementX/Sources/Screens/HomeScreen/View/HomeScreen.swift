@@ -40,7 +40,12 @@ struct HomeScreen: View {
             } else {
                 LazyVStack {
                     ForEach(context.viewState.visibleRooms) { room in
-                        HomeScreenRoomCell(room: room, context: context)
+                        if room.isPlaceholder {
+                            HomeScreenRoomCell(room: room, context: context)
+                                .redacted(reason: .placeholder)
+                        } else {
+                            HomeScreenRoomCell(room: room, context: context)
+                        }
                     }
                 }
                 .padding(.horizontal)
