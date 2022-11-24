@@ -31,18 +31,21 @@ private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, S
     // MARK: - SlidingSyncViewRoomListObserver
     
     func didReceiveUpdate(diff: SlidingSyncViewRoomsListDiff) {
+//        MXLog.verbose("Received room diff")
         roomListDiffPublisher.send(diff)
     }
     
     // MARK: - SlidingSyncViewStateObserver
     
     func didReceiveUpdate(newState: SlidingSyncState) {
+//        MXLog.debug("Updated state: \(newState)")
         stateUpdatePublisher.send(newState)
     }
     
     // MARK: - SlidingSyncViewRoomsCountObserver
     
     func didReceiveUpdate(count: UInt32) {
+//        MXLog.debug("Updated room count: \(count)")
         countUpdatePublisher.send(UInt(count))
     }
 }
@@ -140,6 +143,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
+//        MXLog.info("Received diffs")
+
         rooms = diffs
             .reduce(rooms) { partialResult, diff in
                 guard let collectionDiff = buildDiff(from: diff, on: partialResult) else {
@@ -148,6 +153,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 return partialResult.applying(collectionDiff) ?? partialResult
             }
+        
+//        MXLog.info("Finished applying diffs")
     }
     
     private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummary {

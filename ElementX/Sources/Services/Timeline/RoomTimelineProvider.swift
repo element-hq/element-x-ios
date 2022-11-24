@@ -63,10 +63,13 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         // Set this back to false after actually updating the items or if failed
         backPaginationPublisher.send(true)
         
+        MXLog.info("Started back pagination request")
         switch await roomProxy.paginateBackwards(count: count) {
         case .success:
+            MXLog.info("Finished back pagination request")
             return .success(())
         case .failure(let error):
+            MXLog.error("Failed back pagination request with error: \(error)")
             backPaginationPublisher.send(false)
             
             if error == .noMoreMessagesToBackPaginate {
@@ -78,28 +81,42 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     }
     
     func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError> {
+        if let inReplyToItemId {
+            MXLog.info("Sending message in reply to: \(inReplyToItemId)")
+        } else {
+            MXLog.info("Sending message")
+        }
+        
         switch await roomProxy.sendMessage(message, inReplyToEventId: inReplyToItemId) {
         case .success:
+            MXLog.info("Finished sending message")
             return .success(())
-        case .failure:
+        case .failure(let error):
+            MXLog.error("Failed sending message with error: \(error)")
             return .failure(.failedSendingMessage)
         }
     }
 
     func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError> {
+        MXLog.info("Editing message: \(originalItemId)")
         switch await roomProxy.editMessage(newMessage, originalEventId: originalItemId) {
         case .success:
+            MXLog.info("Finished editing message")
             return .success(())
-        case .failure:
+        case .failure(let error):
+            MXLog.error("Failed editing message with error: \(error)")
             return .failure(.failedSendingMessage)
         }
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError> {
+        MXLog.info("Redacting message: \(eventID)")
         switch await roomProxy.redact(eventID) {
         case .success:
+            MXLog.info("Finished redacting message")
             return .success(())
-        case .failure:
+        case .failure(let error):
+            MXLog.error("Failed redacting message with error: \(error)")
             return .failure(.failedRedactingItem)
         }
     }
@@ -107,17 +124,27 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
+        MXLog.info("Received timeline diffs")
+        
         itemProxies = diffs
             .reduce(itemProxies) { partialResult, diff in
                 guard let collectionDiff = buildDiff(from: diff, on: partialResult) else {
                     return partialResult
                 }
                 
-                return partialResult.applying(collectionDiff) ?? partialResult
+                guard let new = partialResult.applying(collectionDiff) else {
+                    fatalError("Failed miserably")
+                }
+                
+                MXLog.info("New count: \(new.count)")
+                
+                return new
             }
+        
+        MXLog.info("Finished applying diffs")
     }
      
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy]) -> CollectionDifference<TimelineItemProxy>? {
         var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
@@ -125,32 +152,38 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .push:
             if let item = diff.push() {
                 let itemProxy = TimelineItemProxy(item: item)
+                MXLog.verbose("Push")
                 changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
             }
         case .updateAt:
             if let update = diff.updateAt() {
+                MXLog.verbose("Update \(update.index), current total count: \(itemProxies.count)")
                 let itemProxy = TimelineItemProxy(item: update.item)
                 changes.append(.remove(offset: Int(update.index), element: itemProxy, associatedWith: nil))
                 changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
             }
         case .insertAt:
             if let update = diff.insertAt() {
+                MXLog.verbose("Insert at \(update.index), current total count: \(itemProxies.count)")
                 let itemProxy = TimelineItemProxy(item: update.item)
                 changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
             }
         case .move:
             if let update = diff.move() {
+                MXLog.verbose("Move from: \(update.oldIndex) to: \(update.newIndex), current total count: \(itemProxies.count)")
                 let itemProxy = itemProxies[Int(update.oldIndex)]
                 changes.append(.remove(offset: Int(update.oldIndex), element: itemProxy, associatedWith: nil))
                 changes.append(.insert(offset: Int(update.newIndex), element: itemProxy, associatedWith: nil))
             }
         case .removeAt:
             if let index = diff.removeAt() {
+                MXLog.verbose("Remove from: \(index), current total count: \(itemProxies.count)")
                 let itemProxy = itemProxies[Int(index)]
                 changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
             }
         case .replace:
             if let items = diff.replace() {
+                MXLog.verbose("Replace all items with new count: \(items.count), current total count: \(itemProxies.count)")
                 for (index, itemProxy) in itemProxies.enumerated() {
                     changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
                 }
@@ -160,10 +193,12 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 }
             }
         case .clear:
+            MXLog.verbose("Clear all items, current total count: \(itemProxies.count)")
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
         case .pop:
+            MXLog.verbose("Pop, current total count: \(itemProxies.count)")
             if let itemProxy = itemProxies.last {
                 changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
             }
