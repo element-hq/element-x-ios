@@ -31,18 +31,21 @@ private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, S
     // MARK: - SlidingSyncViewRoomListObserver
     
     func didReceiveUpdate(diff: SlidingSyncViewRoomsListDiff) {
+        MXLog.verbose("Received room diff")
         roomListDiffPublisher.send(diff)
     }
     
     // MARK: - SlidingSyncViewStateObserver
     
     func didReceiveUpdate(newState: SlidingSyncState) {
+        MXLog.verbose("Updated state: \(newState)")
         stateUpdatePublisher.send(newState)
     }
     
     // MARK: - SlidingSyncViewRoomsCountObserver
     
     func didReceiveUpdate(count: UInt32) {
+        MXLog.verbose("Updated room count: \(count)")
         countUpdatePublisher.send(UInt(count))
     }
 }
@@ -51,6 +54,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let slidingSyncController: SlidingSyncProtocol
     private let slidingSyncView: SlidingSyncViewProtocol
     private let roomMessageFactory: RoomMessageFactoryProtocol
+    private let serialDispatchQueue: DispatchQueue
     
     private var listUpdateObserverToken: StoppableSpawn?
     private var stateUpdateObserverToken: StoppableSpawn?
@@ -78,6 +82,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         self.slidingSyncView = slidingSyncView
         self.slidingSyncController = slidingSyncController
         self.roomMessageFactory = roomMessageFactory
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider")
         
         let weakProvider = WeakRoomSummaryProviderWrapper()
         
@@ -97,7 +102,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
         
         weakProvider.roomListDiffPublisher
-            .collect(.byTime(DispatchQueue.global(), 0.25))
+            .collect(.byTime(serialDispatchQueue, 0.25))
             .sink { self.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
         
@@ -140,14 +145,31 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
+        MXLog.verbose("Received diffs")
+
         rooms = diffs
-            .reduce(rooms) { partialResult, diff in
-                guard let collectionDiff = buildDiff(from: diff, on: partialResult) else {
-                    return partialResult
+            .reduce(rooms) { currentItems, diff in
+                // Invalidations are a no-op for the moment
+                if diff.isInvalidation {
+                    return currentItems
                 }
                 
-                return partialResult.applying(collectionDiff) ?? partialResult
+                guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
+                    MXLog.error("Failed building CollectionDifference from \(diff)")
+                    return currentItems
+                }
+                
+                guard let updatedItems = currentItems.applying(collectionDiff) else {
+                    MXLog.error("Failed applying diff: \(collectionDiff)")
+                    return currentItems
+                }
+                
+                MXLog.verbose("Applied diff \(collectionDiff), new count: \(updatedItems.count)")
+                
+                return updatedItems
             }
+        
+        MXLog.verbose("Finished applying diffs")
     }
     
     private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummary {
@@ -192,32 +214,33 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     private func buildDiff(from diff: SlidingSyncViewRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
-        // Invalidations are a no-op for the moment
-        if diff.isInvalidation {
-            return nil
-        }
-        
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
         case .push(value: let value):
+            MXLog.verbose("Push")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(rooms.count), element: summary, associatedWith: nil))
         case .updateAt(let index, let value):
+            MXLog.verbose("Update \(index), current total count: \(rooms.count)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .insertAt(let index, let value):
+            MXLog.verbose("Insert at \(index), current total count: \(rooms.count)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
         case .move(let oldIndex, let newIndex):
+            MXLog.verbose("Move from: \(oldIndex) to: \(newIndex), current total count: \(rooms.count)")
             let summary = rooms[Int(oldIndex)]
             changes.append(.remove(offset: Int(oldIndex), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(newIndex), element: summary, associatedWith: nil))
         case .removeAt(let index):
+            MXLog.verbose("Remove from: \(index), current total count: \(rooms.count)")
             let summary = rooms[Int(index)]
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
         case .replace(let values):
+            MXLog.verbose("Replace all items with new count: \(values.count), current total count: \(rooms.count)")
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
             }

@@ -141,8 +141,12 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func addTimelineListener(listener: TimelineListener) {
-        slidingSyncRoom.addTimelineListener(listener: listener)
+    func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
+        if let result = slidingSyncRoom.addTimelineListener(listener: listener), result == true {
+            return .success(())
+        } else {
+            return .failure(.failedAddingTimelineListener)
+        }
     }
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {

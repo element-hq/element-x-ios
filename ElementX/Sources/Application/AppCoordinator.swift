@@ -88,7 +88,6 @@ class AppCoordinator: AppCoordinatorProtocol {
         // We can filter by level, crate and even file. See more details here:
         // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
         setupTracing(filter: "warn,hyper=warn,sled=warn,matrix_sdk_sled=warn")
-        
         loggerConfiguration.logLevel = .debug
         #else
         setupTracing(filter: "info,hyper=warn,sled=warn,matrix_sdk_sled=warn")
