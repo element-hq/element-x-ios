@@ -114,6 +114,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
 
         switch timelineItem {
+        case let item as ImageRoomTimelineItem:
+            await loadThumbnailForImageTimelineItem(item)
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemId }),
+                  let item = timelineItems[index] as? ImageRoomTimelineItem else {
+                return .none
+            }
+            if let image = item.image {
+                return .displayImage(image: image)
+            }
+            return .none
         case let item as VideoRoomTimelineItem:
             await loadVideoForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemId }),
