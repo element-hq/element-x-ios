@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 import UIKit
 
 enum RoomScreenViewModelAction {
@@ -56,6 +56,8 @@ struct RoomScreenViewState: BindableState {
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
     }
+    
+    let loadPreviousPagePublisher = PassthroughSubject<Void, Never>()
 }
 
 struct RoomScreenViewStateBindings {

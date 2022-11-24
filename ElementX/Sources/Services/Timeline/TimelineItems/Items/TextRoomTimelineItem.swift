@@ -17,7 +17,7 @@
 import Foundation
 import UIKit
 
-struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
+struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
     var attributedComponents: [AttributedStringBuilderComponent]?

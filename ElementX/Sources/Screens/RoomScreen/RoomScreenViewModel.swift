@@ -60,13 +60,25 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
                 case .startedBackPaginating:
                     self.state.isBackPaginating = true
+                    ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "pagination",
+                                                                                                         type: .toast,
+                                                                                                         title: ElementL10n.roomTimelineSyncing,
+                                                                                                         persistent: true))
                 case .finishedBackPaginating:
                     self.state.isBackPaginating = false
+                    ServiceLocator.shared.userNotificationController.retractNotificationWithId("pagination")
                 }
             }
             .store(in: &cancellables)
         
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
+        
+        state.loadPreviousPagePublisher
+            .collect(.byTime(DispatchQueue.main, 0.1))
+            .sink { [weak self] _ in
+                Task { await self?.paginateBackwards() }
+            }
+            .store(in: &cancellables)
         
         buildTimelineViews()
 
@@ -87,10 +99,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
         case .loadPreviousPage:
-            switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
-            default:
-                #warning("Treat errors")
-            }
+            await paginateBackwards()
         case .itemAppeared(let id):
             await timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):
@@ -118,6 +127,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func paginateBackwards() async {
+        switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
+        default:
+            #warning("Treat errors")
+        }
+    }
 
     private func itemTapped(with itemId: String) async {
         state.showLoading = true

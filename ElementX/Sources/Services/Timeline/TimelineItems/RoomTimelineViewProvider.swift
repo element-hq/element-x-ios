@@ -17,7 +17,7 @@
 import Foundation
 import SwiftUI
 
-enum RoomTimelineViewProvider: Identifiable, Equatable {
+enum RoomTimelineViewProvider: Identifiable, Hashable {
     case text(TextRoomTimelineItem)
     case separator(SeparatorRoomTimelineItem)
     case image(ImageRoomTimelineItem)

@@ -21,26 +21,23 @@ import SwiftUI
 import Introspect
 
 struct TimelineView: View {
-    @State private var visibleEdges: [VerticalEdge] = []
+    @ObservedObject private var settings = ElementSettings.shared
+    
     @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     @State private var scrollToBottomButtonVisible = false
     
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            TimelineItemList(visibleEdges: $visibleEdges, scrollToBottomPublisher: scrollToBottomPublisher)
-            scrollToBottomButton
-        }
+        TimelineCollectionView(scrollToBottomPublisher: scrollToBottomPublisher,
+                               scrollToBottomButtonVisible: $scrollToBottomButtonVisible)
+            .timelineStyle(settings.timelineStyle)
+            .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
     }
     
-    @ViewBuilder
     private var scrollToBottomButton: some View {
         Button { scrollToBottomPublisher.send(()) } label: {
             Image(uiImage: Asset.Images.timelineScrollToBottom.image)
                 .shadow(radius: 2.0)
                 .padding()
-        }
-        .onChange(of: visibleEdges) { edges in
-            scrollToBottomButtonVisible = !edges.contains(.bottom)
         }
         .opacity(scrollToBottomButtonVisible ? 1.0 : 0.0)
         .animation(.elementDefault, value: scrollToBottomButtonVisible)

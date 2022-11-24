@@ -17,7 +17,7 @@
 import Foundation
 import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
+struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
     var attributedComponents: [AttributedStringBuilderComponent]?
