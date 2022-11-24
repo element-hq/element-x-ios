@@ -37,7 +37,10 @@ class RoomProxy: RoomProxyProtocol {
     private var backPaginationOutcome: PaginationOutcome?
     
     deinit {
-        slidingSyncRoom.removeTimeline()
+        room.removeTimeline()
+        
+        #warning("We **should** use the slidingSyncRoom but it's not working properly yet")
+//        slidingSyncRoom.removeTimeline()
     }
     
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
@@ -142,11 +145,15 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
-        if let result = slidingSyncRoom.addTimelineListener(listener: listener), result == true {
-            return .success(())
-        } else {
-            return .failure(.failedAddingTimelineListener)
-        }
+        room.addTimelineListener(listener: listener)
+        return .success(())
+        
+        #warning("We **should** use the slidingSyncRoom but it's not working properly yet")
+//        if let result = slidingSyncRoom.addTimelineListener(listener: listener), result == true {
+//            return .success(())
+//        } else {
+//            return .failure(.failedAddingTimelineListener)
+//        }
     }
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
