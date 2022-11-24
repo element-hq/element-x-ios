@@ -47,6 +47,6 @@ Tools/Scripts/element-android
 !/UITests/Sources/__Snapshots__/Application/de-DE-iPad-9th-generation.*.png
 !/UITests/Sources/__Snapshots__/Application/fr-FR-iPad-9th-generation.*.png
 !/UITests/Sources/__Snapshots__/Application/en-GB-iPad-9th-generation.*.png
-!/UITests/Sources/__Snapshots__/Application/de-DE-iPhone-13-Pro-Max.*.png
-!/UITests/Sources/__Snapshots__/Application/fr-FR-iPhone-13-Pro-Max.*.png
-!/UITests/Sources/__Snapshots__/Application/en-GB-iPhone-13-Pro-Max.*.png
+!/UITests/Sources/__Snapshots__/Application/de-DE-iPhone-14.*.png
+!/UITests/Sources/__Snapshots__/Application/fr-FR-iPhone-14.*.png
+!/UITests/Sources/__Snapshots__/Application/en-GB-iPhone-14.*.png
