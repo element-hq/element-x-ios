@@ -17,17 +17,7 @@
 import Foundation
 
 class ServiceLocator {
-    private static var serviceLocator: ServiceLocator?
-    static var shared: ServiceLocator {
-        if let serviceLocator {
-            return serviceLocator
-        }
-        
-        let serviceLocator = ServiceLocator()
-        self.serviceLocator = serviceLocator
-        
-        return serviceLocator
-    }
+    private(set) static var shared = ServiceLocator()
     
     private init() { }
     

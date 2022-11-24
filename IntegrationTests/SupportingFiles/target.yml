@@ -8,23 +8,14 @@ targets:
     dependencies:
     - target: ElementX
     - package: MatrixRustSDK
-      linkType: static
     - package: DeviceKit
-      linkType: static
     - package: DTCoreText
-      linkType: static
     - package: KeychainAccess
-      linkType: static
     - package: Kingfisher
-      linkType: static
     - package: SwiftyBeaver
-      linkType: static
     - package: SwiftState
-      linkType: static
     - package: GZIP
-      linkType: static
     - package: Sentry
-      linkType: static
 
     info:
       path: ../SupportingFiles/Info.plist
