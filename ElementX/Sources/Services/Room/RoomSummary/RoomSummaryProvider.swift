@@ -149,6 +149,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
 
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
+                // Invalidations are a no-op for the moment
+                if diff.isInvalidation {
+                    return currentItems
+                }
+                
                 guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
                     MXLog.error("Failed building CollectionDifference from \(diff)")
                     return currentItems
@@ -209,11 +214,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     private func buildDiff(from diff: SlidingSyncViewRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
-        // Invalidations are a no-op for the moment
-        if diff.isInvalidation {
-            return nil
-        }
-        
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
