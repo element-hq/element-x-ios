@@ -28,6 +28,7 @@ private class RoomTimelineListener: TimelineListener {
 
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
+    private let serialDispatchQueue: DispatchQueue
     private var cancellables = Set<AnyCancellable>()
     
     let itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
@@ -45,15 +46,21 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider")
         itemProxies = []
 
         Task {
             let roomTimelineListener = RoomTimelineListener()
-            await roomProxy.addTimelineListener(listener: roomTimelineListener)
+            switch await roomProxy.addTimelineListener(listener: roomTimelineListener) {
+            case .failure:
+                MXLog.error("Failed adding timeline listener on room with identifier: \(await roomProxy.id)")
+            default:
+                break
+            }
 
             roomTimelineListener
                 .itemsUpdatePublisher
-                .collect(.byTime(DispatchQueue.global(), 0.25))
+                .collect(.byTime(serialDispatchQueue, 0.25))
                 .sink { self.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
         }
@@ -124,24 +131,26 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
-        MXLog.info("Received timeline diffs")
+        MXLog.verbose("Received timeline diffs")
         
         itemProxies = diffs
-            .reduce(itemProxies) { partialResult, diff in
-                guard let collectionDiff = buildDiff(from: diff, on: partialResult) else {
-                    return partialResult
+            .reduce(itemProxies) { currentItems, diff in
+                guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
+                    MXLog.error("Failed building CollectionDifference from \(diff)")
+                    return currentItems
                 }
                 
-                guard let new = partialResult.applying(collectionDiff) else {
-                    fatalError("Failed miserably")
+                guard let updatedItems = currentItems.applying(collectionDiff) else {
+                    MXLog.error("Failed applying diff: \(collectionDiff)")
+                    return currentItems
                 }
                 
-                MXLog.info("New count: \(new.count)")
+                MXLog.verbose("Applied diff \(collectionDiff), new count: \(updatedItems.count)")
                 
-                return new
+                return updatedItems
             }
         
-        MXLog.info("Finished applying diffs")
+        MXLog.verbose("Finished applying diffs")
     }
      
     // swiftlint:disable:next cyclomatic_complexity function_body_length
@@ -154,8 +163,8 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 fatalError()
             }
             
-            let itemProxy = TimelineItemProxy(item: item)
             MXLog.verbose("Push")
+            let itemProxy = TimelineItemProxy(item: item)
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
         case .updateAt:
             guard let update = diff.updateAt() else {
@@ -211,9 +220,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             }
         case .pop:
             MXLog.verbose("Pop, current total count: \(itemProxies.count)")
-            if let itemProxy = itemProxies.last {
-                changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
+            guard let itemProxy = itemProxies.last else {
+                fatalError()
             }
+            
+            changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
         }
         
         return CollectionDifference(changes)
