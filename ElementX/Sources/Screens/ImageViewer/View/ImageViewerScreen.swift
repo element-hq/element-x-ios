@@ -21,12 +21,13 @@ struct ImageViewerScreen: View {
 
     private enum Constants {
         static let minScale: CGFloat = 1.0
-        static let maxScale: CGFloat = 3.0
+        static let maxScale: CGFloat = 2.0
     }
 
     @State private var scale: CGFloat = 1.0
     @State private var lastScale: CGFloat = 1.0
     @State private var displayUIControls = true
+    @State private var scrollDisabled = true
 
     // MARK: Public
     
@@ -40,11 +41,11 @@ struct ImageViewerScreen: View {
                 let imageSize = imageSize(with: proxy)
                 Image(uiImage: context.viewState.image)
                     .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .gesture(magnification)
-                    .gesture(doubleTap.exclusively(before: singleTap))
+                    .scaledToFit()
                     .frame(width: imageSize.width, height: imageSize.height, alignment: .center)
+                    .gesture(magnification.exclusively(before: doubleTap.exclusively(before: singleTap)))
             }
+            .scrollDisabled(scrollDisabled)
         }
         .background(Color.black)
         .ignoresSafeArea()
@@ -52,6 +53,15 @@ struct ImageViewerScreen: View {
         .navigationBarBackButtonHidden()
         .toolbarBackground(.hidden, for: .navigationBar)
         .toolbar { toolbar }
+        .onSwipeGesture(minimumDistance: 3.0, down: {
+            if scrollDisabled, context.viewState.isModallyPresented {
+                context.send(viewAction: .cancel)
+            }
+        }, right: {
+            if scrollDisabled, !context.viewState.isModallyPresented {
+                context.send(viewAction: .cancel)
+            }
+        })
     }
 
     var magnification: some Gesture {
@@ -60,18 +70,20 @@ struct ImageViewerScreen: View {
                 let delta = value / lastScale
                 scale *= delta
                 lastScale = value
+                scrollDisabled = true
             }
             .onEnded { _ in
-                withAnimation {
-                    scale = max(scale, Constants.minScale)
-                    scale = min(scale, Constants.maxScale)
-                }
                 lastScale = 1.0
+                let limitedScale = max(min(scale, Constants.maxScale), Constants.minScale)
+                scrollDisabled = limitedScale == Constants.minScale
+                withAnimation {
+                    scale = limitedScale
+                }
             }
     }
 
     var singleTap: some Gesture {
-        TapGesture(count: 1)
+        TapGesture()
             .onEnded { _ in
                 displayUIControls.toggle()
             }
@@ -80,11 +92,13 @@ struct ImageViewerScreen: View {
     var doubleTap: some Gesture {
         SpatialTapGesture(count: 2, coordinateSpace: .local)
             .onEnded { _ in
-                withAnimation {
+                withAnimation(.easeInOut(duration: 0.1)) {
                     if scale <= Constants.minScale {
                         scale = Constants.maxScale
+                        scrollDisabled = false
                     } else {
                         scale = Constants.minScale
+                        scrollDisabled = true
                     }
                 }
             }
