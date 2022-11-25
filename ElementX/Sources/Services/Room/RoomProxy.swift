@@ -220,6 +220,15 @@ class RoomProxy: RoomProxyProtocol {
         }
         .value
     }
+
+    func members() async -> Result<[String], RoomProxyError> {
+        do {
+            let members = try room.members()
+            return .success(members)
+        } catch {
+            return .failure(.failedRetrievingMembers)
+        }
+    }
     
     func update(avatarURL: String?, forUserId userId: String) {
         memberAvatars[userId] = avatarURL

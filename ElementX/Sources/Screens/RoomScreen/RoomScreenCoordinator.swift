@@ -84,4 +84,18 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         
         navigationController.push(coordinator)
     }
+
+    private func displayRoomDetails() {
+        guard let controller = parameters.timelineController as? RoomTimelineController else {
+            return
+        }
+        let params = RoomDetailsCoordinatorParameters(navigationController: navigationController,
+                                                      roomProxy: controller.roomProxy)
+        let coordinator = RoomDetailsCoordinator(parameters: params)
+        coordinator.callback = { [weak self] _ in
+            self?.navigationController.pop()
+        }
+
+        navigationController.push(coordinator)
+    }
 }

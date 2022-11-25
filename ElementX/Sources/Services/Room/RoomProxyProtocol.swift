@@ -26,6 +26,7 @@ enum RoomProxyError: Error {
     case failedRetrievingMemberDisplayName
     case failedSendingMessage
     case failedRedactingEvent
+    case failedRetrievingMembers
 }
 
 @MainActor
@@ -63,6 +64,8 @@ protocol RoomProxyProtocol {
     func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
+
+    func members() async -> Result<[String], RoomProxyError>
 }
 
 extension RoomProxyProtocol {
