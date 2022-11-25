@@ -76,10 +76,14 @@ struct HomeScreen: View {
                 userMenuButton
             }
         }
-        .onChange(of: scrollViewAdapter.isScrolling) { isScrolling in
-            guard !isScrolling else { return }
+        .onReceive(scrollViewAdapter.isScrolling, perform: { isScrolling in
+            guard context.viewState.bindings.searchQuery.isEmpty,
+                  !isScrolling else {
+                return
+            }
+            
             context.send(viewAction: .updatedVisibleItemIdentifiers(visibleItemIdentifiers))
-        }
+        })
     }
 
     @ViewBuilder

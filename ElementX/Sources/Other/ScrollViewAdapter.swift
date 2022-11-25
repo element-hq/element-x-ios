@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import UIKit
 
 class ScrollViewAdapter: NSObject, ObservableObject, UIScrollViewDelegate {
@@ -24,15 +25,11 @@ class ScrollViewAdapter: NSObject, ObservableObject, UIScrollViewDelegate {
         }
     }
         
-    @Published var isScrolling = false
+    var isScrolling = PassthroughSubject<Bool, Never>()
         
     private func update() {
         guard let scrollView else { return }
-        let newValue = scrollView.isDragging || scrollView.isDecelerating
-        
-        guard isScrolling != newValue else { return }
-        
-        isScrolling = newValue
+        isScrolling.send(scrollView.isDragging || scrollView.isDecelerating)
     }
     
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
@@ -48,6 +45,10 @@ class ScrollViewAdapter: NSObject, ObservableObject, UIScrollViewDelegate {
     }
         
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        update()
+    }
+    
+    func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
         update()
     }
 }
