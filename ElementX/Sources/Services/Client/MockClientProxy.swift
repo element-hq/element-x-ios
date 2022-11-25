@@ -18,7 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-struct MockClientProxy: ClientProxyProtocol {
+class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userIdentifier: String
@@ -28,6 +28,11 @@ struct MockClientProxy: ClientProxyProtocol {
     let restorationToken: RestorationToken? = nil
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    
+    internal init(userIdentifier: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
+        self.userIdentifier = userIdentifier
+        self.roomSummaryProvider = roomSummaryProvider
+    }
     
     func startSync() { }
     
