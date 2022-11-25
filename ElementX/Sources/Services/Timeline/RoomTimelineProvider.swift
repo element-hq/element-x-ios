@@ -131,7 +131,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
-        MXLog.verbose("Received timeline diffs")
+        MXLog.info("Received timeline diffs")
         
         itemProxies = diffs
             .reduce(itemProxies) { currentItems, diff in
@@ -150,7 +150,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 return updatedItems
             }
         
-        MXLog.verbose("Finished applying diffs")
+        MXLog.info("Finished applying diffs")
     }
      
     // swiftlint:disable:next cyclomatic_complexity function_body_length

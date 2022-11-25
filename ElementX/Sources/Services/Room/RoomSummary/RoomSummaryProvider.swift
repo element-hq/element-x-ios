@@ -18,47 +18,10 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-private class WeakRoomSummaryProviderWrapper: SlidingSyncViewRoomListObserver, SlidingSyncViewStateObserver, SlidingSyncViewRoomsCountObserver {
-    /// Publishes room list diffs as they come in through sliding sync
-    let roomListDiffPublisher = PassthroughSubject<SlidingSyncViewRoomsListDiff, Never>()
-    
-    /// Publishes the current state of sliding sync, such as whether its catching up or live.
-    let stateUpdatePublisher = CurrentValueSubject<SlidingSyncState, Never>(.cold)
-    
-    /// Publishes the number of available rooms
-    let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
-        
-    // MARK: - SlidingSyncViewRoomListObserver
-    
-    func didReceiveUpdate(diff: SlidingSyncViewRoomsListDiff) {
-        MXLog.verbose("Received room diff")
-        roomListDiffPublisher.send(diff)
-    }
-    
-    // MARK: - SlidingSyncViewStateObserver
-    
-    func didReceiveUpdate(newState: SlidingSyncState) {
-        MXLog.verbose("Updated state: \(newState)")
-        stateUpdatePublisher.send(newState)
-    }
-    
-    // MARK: - SlidingSyncViewRoomsCountObserver
-    
-    func didReceiveUpdate(count: UInt32) {
-        MXLog.verbose("Updated room count: \(count)")
-        countUpdatePublisher.send(UInt(count))
-    }
-}
-
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
-    private let slidingSyncController: SlidingSyncProtocol
-    private let slidingSyncView: SlidingSyncViewProtocol
+    private let slidingSyncViewProxy: SlidingSyncViewProxy
     private let roomMessageFactory: RoomMessageFactoryProtocol
     private let serialDispatchQueue: DispatchQueue
-    
-    private var listUpdateObserverToken: StoppableSpawn?
-    private var stateUpdateObserverToken: StoppableSpawn?
-    private var countUpdateObserverToken: StoppableSpawn?
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -72,47 +35,34 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    deinit {
-        listUpdateObserverToken?.cancel()
-        stateUpdateObserverToken?.cancel()
-        countUpdateObserverToken?.cancel()
-    }
-    
-    init(slidingSyncController: SlidingSyncProtocol, slidingSyncView: SlidingSyncViewProtocol, roomMessageFactory: RoomMessageFactoryProtocol) {
-        self.slidingSyncView = slidingSyncView
-        self.slidingSyncController = slidingSyncController
+    init(slidingSyncViewProxy: SlidingSyncViewProxy, roomMessageFactory: RoomMessageFactoryProtocol) {
+        self.slidingSyncViewProxy = slidingSyncViewProxy
         self.roomMessageFactory = roomMessageFactory
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider")
         
-        let weakProvider = WeakRoomSummaryProviderWrapper()
-        
-        rooms = slidingSyncView.currentRoomsList().map { roomListEntry in
+        rooms = slidingSyncViewProxy.currentRoomsList().map { roomListEntry in
             buildSummaryForRoomListEntry(roomListEntry)
         }
         
         roomListPublisher.send(rooms) // didSet not called from initialisers
         
-        weakProvider.stateUpdatePublisher
+        slidingSyncViewProxy.statePublisher
             .map(RoomSummaryProviderState.init)
             .subscribe(statePublisher)
             .store(in: &cancellables)
         
-        weakProvider.countUpdatePublisher
+        slidingSyncViewProxy.countPublisher
             .subscribe(countPublisher)
             .store(in: &cancellables)
         
-        weakProvider.roomListDiffPublisher
+        slidingSyncViewProxy.diffPublisher
             .collect(.byTime(serialDispatchQueue, 0.25))
             .sink { self.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
-        
-        listUpdateObserverToken = slidingSyncView.observeRoomList(observer: weakProvider)
-        stateUpdateObserverToken = slidingSyncView.observeState(observer: weakProvider)
-        countUpdateObserverToken = slidingSyncView.observeRoomsCount(observer: weakProvider)
     }
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) {
-        #warning("This is a valid check but Rust doesn't set it correct for selective ranged syncs")
+        #warning("This is a valid check but Rust doesn't set it correctly for selective ranged syncs")
 //        guard statePublisher.value == .live else {
 //            return
 //        }
@@ -143,18 +93,17 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         rooms = newSummaries
     }
     
+    func updateVisibleRange(_ range: ClosedRange<Int>) {
+        slidingSyncViewProxy.updateVisibleRange(range)
+    }
+    
     // MARK: - Private
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
-        MXLog.verbose("Received diffs")
-
+        MXLog.info("Received diffs")
+        
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
-                // Invalidations are a no-op for the moment
-                if diff.isInvalidation {
-                    return currentItems
-                }
-                
                 guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
                     MXLog.error("Failed building CollectionDifference from \(diff)")
                     return currentItems
@@ -165,12 +114,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     return currentItems
                 }
                 
-                MXLog.verbose("Applied diff \(collectionDiff), new count: \(updatedItems.count)")
+                MXLog.verbose("Applied diff, new count: \(updatedItems.count)")
                 
                 return updatedItems
             }
         
-        MXLog.verbose("Finished applying diffs")
+        MXLog.info("Finished applying diffs")
     }
     
     private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummary {
@@ -178,7 +127,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     private func buildRoomSummaryForIdentifier(_ identifier: String) -> RoomSummary {
-        guard let room = try? slidingSyncController.getRoom(roomId: identifier) else {
+        guard let room = try? slidingSyncViewProxy.roomForIdentifier(identifier) else {
             MXLog.error("Failed finding room with id: \(identifier)")
             return buildEmptyRoomSummary(forIdentifier: identifier)
         }

@@ -89,7 +89,7 @@ class ClientProxy: ClientProxyProtocol {
                                                    RequiredState(key: "m.room.encryption", value: "")])
                     .name(name: "HomeScreenView")
                     .syncMode(mode: .selective)
-                    .addRange(from: 0, to: 50) // FIXME: Replace this with a dynamic solution
+                    .addRange(from: 0, to: 20)
                     .build()
 
                 let slidingSync = try slidingSyncBuilder
@@ -98,8 +98,9 @@ class ClientProxy: ClientProxyProtocol {
                     .coldCache(name: "ElementX")
                     .build()
                 
-                self.roomSummaryProvider = RoomSummaryProvider(slidingSyncController: slidingSync,
-                                                               slidingSyncView: slidingSyncView,
+                let slidingSyncViewProxy = SlidingSyncViewProxy(clientProxy: self, slidingSync: slidingSync, slidingSyncView: slidingSyncView)
+                
+                self.roomSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: slidingSyncViewProxy,
                                                                roomMessageFactory: RoomMessageFactory())
                 
                 self.slidingSync = slidingSync
@@ -160,6 +161,11 @@ class ClientProxy: ClientProxyProtocol {
         
         slidingSyncObserverToken?.cancel()
         slidingSync?.setObserver(observer: nil)
+    }
+    
+    func restartSync() {
+        slidingSyncObserverToken?.cancel()
+        slidingSyncObserverToken = slidingSync?.sync()
     }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {

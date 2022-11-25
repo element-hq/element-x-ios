@@ -36,6 +36,7 @@ enum HomeScreenViewAction {
     case userMenu(action: HomeScreenViewUserMenuAction)
     case verifySession
     case skipSessionVerification
+    case updatedVisibleItemIdentifiers(Set<String>)
 }
 
 enum HomeScreenRoomListMode {
