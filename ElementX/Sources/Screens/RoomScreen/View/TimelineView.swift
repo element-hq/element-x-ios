@@ -49,12 +49,6 @@ struct TimelineView: View {
 
 struct TimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             mediaProvider: MockMediaProvider(),

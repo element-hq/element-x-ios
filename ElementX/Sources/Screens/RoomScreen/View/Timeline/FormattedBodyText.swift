@@ -69,12 +69,8 @@ extension FormattedBodyText {
 
 struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-        body.preferredColorScheme(.light)
-            .timelineStyle(.plain)
-        body.preferredColorScheme(.dark)
-            .timelineStyle(.plain)
+        body
+        body.timelineStyle(.plain)
     }
     
     @ViewBuilder

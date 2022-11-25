@@ -140,12 +140,6 @@ struct BugReportScreen: View {
 
 struct BugReport_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-
-    @ViewBuilder
-    static var body: some View {
         let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image, isModallyPresented: false)
         BugReportScreen(context: viewModel.context)
             .previewInterfaceOrientation(.portrait)

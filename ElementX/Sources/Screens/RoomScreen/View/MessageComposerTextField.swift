@@ -209,12 +209,6 @@ private class TextViewWithKeyDetection: UITextView {
 
 struct MessageComposerTextField_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         VStack {
             PreviewWrapper(text: "123")
             PreviewWrapper(text: "")
