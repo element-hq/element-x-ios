@@ -103,12 +103,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.verbose("Received diffs")
 
         rooms = diffs
-            .reduce(rooms) { currentItems, diff in
-                // Invalidations are a no-op for the moment
-                if diff.isInvalidation {
-                    return currentItems
-                }
-                
+            .reduce(rooms) { currentItems, diff in                
                 guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
                     MXLog.error("Failed building CollectionDifference from \(diff)")
                     return currentItems
