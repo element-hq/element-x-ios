@@ -119,7 +119,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                     return currentItems
                 }
                 
-                MXLog.verbose("Applied diff \(collectionDiff), new count: \(updatedItems.count)")
+                MXLog.verbose("Applied diff, new count: \(updatedItems.count)")
                 
                 return updatedItems
             }

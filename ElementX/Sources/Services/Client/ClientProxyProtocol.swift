@@ -77,6 +77,8 @@ protocol ClientProxyProtocol: AnyObject, MediaProxyProtocol {
     
     func stopSync()
     
+    func restartSync()
+    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>

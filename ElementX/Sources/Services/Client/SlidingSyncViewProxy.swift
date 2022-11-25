@@ -108,7 +108,6 @@ class SlidingSyncViewProxy {
         
         slidingSyncView.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
         
-        clientProxy?.stopSync()
-        clientProxy?.startSync()
+        clientProxy?.restartSync()
     }
 }

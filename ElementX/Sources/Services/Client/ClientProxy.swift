@@ -163,6 +163,11 @@ class ClientProxy: ClientProxyProtocol {
         slidingSync?.setObserver(observer: nil)
     }
     
+    func restartSync() {
+        slidingSyncObserverToken?.cancel()
+        slidingSyncObserverToken = slidingSync?.sync()
+    }
+    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         let (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
             self.roomTupleForIdentifier(identifier)

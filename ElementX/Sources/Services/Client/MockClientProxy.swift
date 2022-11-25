@@ -38,6 +38,8 @@ class MockClientProxy: ClientProxyProtocol {
     
     func stopSync() { }
     
+    func restartSync() { }
+    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         nil
     }
