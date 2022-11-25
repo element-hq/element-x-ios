@@ -55,7 +55,9 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
 
-        backgroundTaskService = UIKitBackgroundTaskService(withApplicationBlock: { UIApplication.shared })
+        backgroundTaskService = UIKitBackgroundTaskService {
+            UIApplication.shared
+        }
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
@@ -364,10 +366,10 @@ class AppCoordinator: AppCoordinatorProtocol {
             return
         }
 
-        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)", expirationHandler: { [weak self] in
+        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
             self?.backgroundTask = nil
             self?.stateMachine.processEvent(.suspend)
-        })
+        }
     }
 
     @objc
