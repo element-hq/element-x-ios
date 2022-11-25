@@ -17,7 +17,7 @@
 import Combine
 import UIKit
 
-class ScrollViewAdapter: NSObject, ObservableObject, UIScrollViewDelegate {
+class ScrollViewAdapter: NSObject, UIScrollViewDelegate {
     var scrollView: UIScrollView? {
         didSet {
             oldValue?.delegate = nil

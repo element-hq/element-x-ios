@@ -19,7 +19,7 @@ import SwiftUI
 struct HomeScreen: View {
     @State private var showingLogoutConfirmation = false
     @State private var visibleItemIdentifiers = Set<String>()
-    @StateObject private var scrollViewAdapter = ScrollViewAdapter()
+    @State private var scrollViewAdapter = ScrollViewAdapter()
     
     @ObservedObject var context: HomeScreenViewModel.Context
     
@@ -76,14 +76,14 @@ struct HomeScreen: View {
                 userMenuButton
             }
         }
-        .onReceive(scrollViewAdapter.isScrolling, perform: { isScrolling in
+        .onReceive(scrollViewAdapter.isScrolling) { isScrolling in
             guard context.viewState.bindings.searchQuery.isEmpty,
                   !isScrolling else {
                 return
             }
             
             context.send(viewAction: .updatedVisibleItemIdentifiers(visibleItemIdentifiers))
-        })
+        }
     }
 
     @ViewBuilder
