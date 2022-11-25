@@ -100,10 +100,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
-        MXLog.verbose("Received diffs")
-
+        MXLog.info("Received diffs")
+        
         rooms = diffs
-            .reduce(rooms) { currentItems, diff in                
+            .reduce(rooms) { currentItems, diff in
                 guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
                     MXLog.error("Failed building CollectionDifference from \(diff)")
                     return currentItems
@@ -119,7 +119,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 return updatedItems
             }
         
-        MXLog.verbose("Finished applying diffs")
+        MXLog.info("Finished applying diffs")
     }
     
     private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummary {
