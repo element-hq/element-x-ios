@@ -43,11 +43,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         }
                     }
                     .padding(.trailing, 16)
-                    .padding(.leading, 16)
+                    .padding(.leading, 56)
                 } else {
                     styledContentWithReactions
                         .padding(.leading, 24)
-                        .padding(.trailing, 24)
+                        .padding(.trailing, 56)
                 }
             }
         }
