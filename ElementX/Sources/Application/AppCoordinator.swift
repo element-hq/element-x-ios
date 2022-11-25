@@ -22,6 +22,9 @@ class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationController: NavigationController
     private let userSessionStore: UserSessionStoreProtocol
+    /// Common background task to resume long-running tasks in the background.
+    /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
+    private var backgroundTask: BackgroundTaskProtocol?
     
     private var userSession: UserSessionProtocol! {
         didSet {
@@ -61,6 +64,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         setupLogging()
         
         Bundle.elementFallbackLanguage = "en"
+
+        startObservingApplicationState()
         
         // Benchmark.trackingEnabled = true
     }
@@ -131,6 +136,10 @@ class AppCoordinator: AppCoordinatorProtocol {
             case (.remoteSigningOut(let isSoft), .completedSigningOut, .signedOut):
                 self.presentSplashScreen(isSoftLogout: isSoft)
                 self.hideLoadingIndicator()
+            case (_, .suspend, .suspended):
+                self.pause()
+            case (_, .becomeActive, _):
+                self.resume()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -326,6 +335,46 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private func showLoginErrorToast() {
         ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: "Failed logging in"))
+    }
+
+    // MARK: - Application State
+
+    private func pause() {
+        userSession?.clientProxy.stopSync()
+    }
+
+    private func resume() {
+        userSession?.clientProxy.startSync()
+    }
+
+    private func startObservingApplicationState() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+    }
+
+    @objc
+    private func applicationWillResignActive() {
+        guard backgroundTask == nil else {
+            return
+        }
+
+        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)", expirationHandler: { [weak self] in
+            self?.backgroundTask = nil
+            self?.stateMachine.processEvent(.suspend)
+        })
+    }
+
+    @objc
+    private func applicationDidBecomeActive() {
+        backgroundTask?.stop()
+        backgroundTask = nil
+        stateMachine.processEvent(.becomeActive)
     }
 }
 
