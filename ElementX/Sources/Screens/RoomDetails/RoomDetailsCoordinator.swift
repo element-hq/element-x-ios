@@ -19,6 +19,7 @@ import SwiftUI
 struct RoomDetailsCoordinatorParameters {
     let navigationController: NavigationController
     let roomProxy: RoomProxyProtocol
+    let mediaProvider: MediaProviderProtocol
 }
 
 enum RoomDetailsCoordinatorAction {
@@ -34,7 +35,8 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
     init(parameters: RoomDetailsCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomDetailsViewModel(roomProxy: parameters.roomProxy)
+        viewModel = RoomDetailsViewModel(roomProxy: parameters.roomProxy,
+                                         mediaProvider: parameters.mediaProvider)
     }
     
     // MARK: - Public

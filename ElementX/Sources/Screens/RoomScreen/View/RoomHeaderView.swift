@@ -31,6 +31,9 @@ struct RoomHeaderView: View {
                 .font(.element.headline)
                 .accessibilityIdentifier("roomNameLabel")
         }
+        .onTapGesture {
+            context.send(viewAction: .headerTapped)
+        }
     }
 
     @ViewBuilder private var roomAvatar: some View {

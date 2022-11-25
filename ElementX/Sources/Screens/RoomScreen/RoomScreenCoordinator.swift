@@ -47,6 +47,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
             switch result {
+            case .displayRoomDetails:
+                self.displayRoomDetails()
             case .displayVideo(let videoURL):
                 self.displayVideo(for: videoURL)
             case .displayFile(let fileURL, let title):
@@ -90,7 +92,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             return
         }
         let params = RoomDetailsCoordinatorParameters(navigationController: navigationController,
-                                                      roomProxy: controller.roomProxy)
+                                                      roomProxy: controller.roomProxy,
+                                                      mediaProvider: parameters.mediaProvider)
         let coordinator = RoomDetailsCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
             self?.navigationController.pop()

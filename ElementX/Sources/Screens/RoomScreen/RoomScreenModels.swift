@@ -18,6 +18,7 @@ import Foundation
 import UIKit
 
 enum RoomScreenViewModelAction {
+    case displayRoomDetails
     case displayVideo(videoURL: URL)
     case displayFile(fileURL: URL, title: String?)
 }
@@ -29,6 +30,7 @@ enum RoomScreenComposerMode: Equatable {
 }
 
 enum RoomScreenViewAction {
+    case headerTapped
     case loadPreviousPage
     case itemAppeared(id: String)
     case itemDisappeared(id: String)

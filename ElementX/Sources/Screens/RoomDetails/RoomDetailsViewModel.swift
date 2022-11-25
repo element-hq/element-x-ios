@@ -24,6 +24,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     // MARK: Private
 
     private let roomProxy: RoomProxyProtocol
+    private let mediaProvider: MediaProviderProtocol
 
     // MARK: Public
 
@@ -31,8 +32,10 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
 
     // MARK: - Setup
 
-    init(roomProxy: RoomProxyProtocol) {
+    init(roomProxy: RoomProxyProtocol,
+         mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
+        self.mediaProvider = mediaProvider
         super.init(initialViewState: RoomDetailsViewState(roomId: roomProxy.id, members: [], bindings: .init()))
 
         Task {
@@ -42,6 +45,15 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             case .failure(let error):
                 MXLog.debug("Failed to retrieve room members: \(error)")
                 state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
+            }
+        }
+
+        if let avatarURL = roomProxy.avatarURL {
+            Task {
+                if case let .success(avatar) = await mediaProvider.loadImageFromURLString(avatarURL,
+                                                                                          avatarSize: .room(on: .timeline)) {
+                    state.roomAvatar = avatar
+                }
             }
         }
     }

@@ -30,6 +30,8 @@ struct RoomDetailsScreen: View {
     var body: some View {
         ScrollView {
             LazyVStack {
+                roomAvatarImage
+
                 ForEach(context.viewState.members) { member in
                     RoomDetailsMemberCell(member: member, context: context)
                 }
@@ -41,6 +43,19 @@ struct RoomDetailsScreen: View {
         .alert(item: $context.alertInfo) { $0.alert }
         .navigationTitle(ElementL10n.allChats)
     }
+
+    @ViewBuilder private var roomAvatarImage: some View {
+        if let avatar = context.viewState.roomAvatar {
+            Image(uiImage: avatar)
+                .resizable()
+                .aspectRatio(1, contentMode: .fill)
+                .accessibilityIdentifier("roomAvatarImage")
+        } else {
+            PlaceholderAvatarImage(text: context.viewState.roomTitle,
+                                   contentId: context.viewState.roomId)
+            .accessibilityIdentifier("roomAvatarPlaceholderImage")
+        }
+    }
 }
 
 // MARK: - Previews
@@ -48,7 +63,8 @@ struct RoomDetailsScreen: View {
 struct RoomDetails_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = RoomDetailsViewModel(roomProxy: MockRoomProxy(displayName: "Room A"))
+            let viewModel = RoomDetailsViewModel(roomProxy: MockRoomProxy(displayName: "Room A"),
+                                                 mediaProvider: MockMediaProvider())
             RoomDetailsScreen(context: viewModel.context)
         }
         .tint(.element.accent)

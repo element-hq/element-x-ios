@@ -86,6 +86,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
+        case .headerTapped:
+            callback?(.displayRoomDetails)
         case .loadPreviousPage:
             switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
             default:
