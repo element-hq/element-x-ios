@@ -82,7 +82,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
-                                      alignment: .leading) { key in
+                                      alignment: alignment) { key in
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
                 .padding(.horizontal, 12)
