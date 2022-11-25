@@ -19,13 +19,17 @@ import UIKit
 
 /// /// UIKitBackgroundTaskService is a concrete implementation of BackgroundTaskServiceProtocol using a given `ApplicationProtocol`  instance.
 class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
-    private let application: ApplicationProtocol?
+    private let applicationBlock: () -> ApplicationProtocol?
     private var reusableTasks: WeakDictionary<String, UIKitBackgroundTask> = WeakDictionary()
 
+    private var application: ApplicationProtocol? {
+        applicationBlock()
+    }
+
     /// Initializer
-    /// - Parameter application: application instance to use. Defaults to `UIApplication.extensionSafeShared`.
-    init(withApplication application: ApplicationProtocol? = UIApplication.extensionSafeShared) {
-        self.application = application
+    /// - Parameter applicationBlock: block returning the application instance to use. Defaults to a block returning `UIApplication.extensionSafeShared`.
+    init(withApplicationBlock applicationBlock: @escaping () -> ApplicationProtocol? = { UIApplication.extensionSafeShared }) {
+        self.applicationBlock = applicationBlock
     }
 
     func startBackgroundTask(withName name: String,

@@ -52,7 +52,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
 
-        backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
+        backgroundTaskService = UIKitBackgroundTaskService(withApplicationBlock: { UIApplication.shared })
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
