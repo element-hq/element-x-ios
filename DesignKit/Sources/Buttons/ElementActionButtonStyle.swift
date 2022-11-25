@@ -67,7 +67,7 @@ public struct ElementActionButtonStyle: ButtonStyle {
 }
 
 public struct ElementActionButtonStyle_Previews: PreviewProvider {
-    public static var states: some View {
+    public static var previews: some View {
         VStack {
             Button("Enabled") { /* preview */ }
                 .buttonStyle(ElementActionButtonStyle())
@@ -86,12 +86,5 @@ public struct ElementActionButtonStyle_Previews: PreviewProvider {
                 .buttonStyle(ElementActionButtonStyle(color: .element.alert))
         }
         .padding()
-    }
-    
-    public static var previews: some View {
-        states
-            .preferredColorScheme(.light)
-        states
-            .preferredColorScheme(.dark)
     }
 }

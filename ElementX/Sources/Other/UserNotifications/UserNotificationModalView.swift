@@ -56,11 +56,6 @@ struct UserNotificationModalView: View {
 
 struct UserNotificationModalView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    private static var body: some View {
         VStack {
             UserNotificationModalView(notification: UserNotification(type: .modal,
                                                                      title: "Successfully logged in",

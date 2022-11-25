@@ -104,10 +104,7 @@ struct HomeScreenRoomCell: View {
 
 struct HomeScreenRoomCell_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-            .tint(.element.accent)
-        body.preferredColorScheme(.dark)
-            .tint(.element.accent)
+        body.tint(.element.accent)
     }
     
     static var body: some View {

@@ -197,13 +197,9 @@ struct HomeScreen: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        body(.loading).preferredColorScheme(.light)
+        body(.loading)
             .tint(.element.accent)
-        body(.loading).preferredColorScheme(.dark)
-            .tint(.element.accent)
-        body(.loaded).preferredColorScheme(.light)
-            .tint(.element.accent)
-        body(.loaded).preferredColorScheme(.dark)
+        body(.loaded)
             .tint(.element.accent)
     }
     

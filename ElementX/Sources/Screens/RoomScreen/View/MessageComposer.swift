@@ -131,12 +131,6 @@ private struct MessageComposerEditHeader: View {
 
 struct MessageComposer_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         VStack {
             MessageComposer(text: .constant(""),
                             focused: .constant(false),

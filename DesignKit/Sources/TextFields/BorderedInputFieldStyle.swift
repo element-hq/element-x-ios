@@ -97,7 +97,7 @@ public struct BorderedInputFieldStyle: TextFieldStyle {
 }
 
 public struct BorderedInputFieldStyle_Previews: PreviewProvider {
-    public static var states: some View {
+    public static var previews: some View {
         VStack {
             TextField("Placeholder", text: .constant(""))
                 .textFieldStyle(BorderedInputFieldStyle())
@@ -114,14 +114,5 @@ public struct BorderedInputFieldStyle_Previews: PreviewProvider {
                 .textFieldStyle(BorderedInputFieldStyle(isEditing: true, isError: true))
         }
         .padding()
-    }
-    
-    public static var previews: some View {
-        Group {
-            states
-                .preferredColorScheme(.light)
-            states
-                .preferredColorScheme(.dark)
-        }
     }
 }

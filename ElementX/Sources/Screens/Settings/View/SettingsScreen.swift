@@ -239,12 +239,6 @@ extension TimelineStyle: CustomStringConvertible {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
         let viewModel = SettingsViewModel(withUserSession: userSession)
