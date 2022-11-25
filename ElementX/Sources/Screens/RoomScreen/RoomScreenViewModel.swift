@@ -73,7 +73,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
         
-        state.loadPreviousPagePublisher
+        state.paginateBackwardsPublisher
             .collect(.byTime(DispatchQueue.main, 0.1))
             .sink { [weak self] _ in
                 Task { await self?.paginateBackwards() }

@@ -27,8 +27,8 @@ struct TimelineView: View {
     @State private var scrollToBottomButtonVisible = false
     
     var body: some View {
-        TimelineCollectionView(scrollToBottomPublisher: scrollToBottomPublisher,
-                               scrollToBottomButtonVisible: $scrollToBottomButtonVisible)
+        TimelineTableView(scrollToBottomPublisher: scrollToBottomPublisher,
+                          scrollToBottomButtonVisible: $scrollToBottomButtonVisible)
             .timelineStyle(settings.timelineStyle)
             .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
     }

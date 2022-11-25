@@ -57,7 +57,7 @@ struct RoomScreenViewState: BindableState {
         bindings.composerText.count == 0
     }
     
-    let loadPreviousPagePublisher = PassthroughSubject<Void, Never>()
+    let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
 }
 
 struct RoomScreenViewStateBindings {
