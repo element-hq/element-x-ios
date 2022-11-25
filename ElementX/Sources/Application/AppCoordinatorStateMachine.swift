@@ -35,6 +35,9 @@ class AppCoordinatorStateMachine {
 
         /// Processing a remote sign out
         case remoteSigningOut(isSoft: Bool)
+
+        /// Application has been suspended
+        case suspended
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -57,32 +60,60 @@ class AppCoordinatorStateMachine {
         case remoteSignOut(isSoft: Bool)
         /// Signing out completed
         case completedSigningOut
+
+        /// Application is about to be suspended
+        case suspend
+        /// Application goes into active state
+        case becomeActive
     }
     
     private let stateMachine: StateMachine<State, Event>
+    private var stateBeforeSuspension: State?
     
     init() {
-        stateMachine = StateMachine(state: .initial) { machine in
-            machine.addRoutes(event: .startWithAuthentication, transitions: [.initial => .signedOut])
-            machine.addRoutes(event: .succeededSigningIn, transitions: [.signedOut => .signedIn])
-            
-            machine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
-            machine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .signedIn])
-            machine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
-            
-            machine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
-            machine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
-                        
-            // Transitions with associated values need to be handled through `addRouteMapping`
-            machine.addRouteMapping { event, fromState, _ in
-                switch (event, fromState) {
-                case (.remoteSignOut(let isSoft), _):
-                    return .remoteSigningOut(isSoft: isSoft)
-                case (.completedSigningOut, .remoteSigningOut):
-                    return .signedOut
-                default:
-                    return nil
+        stateMachine = StateMachine(state: .initial)
+        configure()
+    }
+
+    private func configure() {
+        stateMachine.addRoutes(event: .startWithAuthentication, transitions: [.initial => .signedOut])
+        stateMachine.addRoutes(event: .succeededSigningIn, transitions: [.signedOut => .signedIn])
+
+        stateMachine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
+        stateMachine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .signedIn])
+        stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
+
+        stateMachine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
+        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
+
+        // Transitions with associated values need to be handled through `addRouteMapping`
+        stateMachine.addRouteMapping { event, fromState, _ in
+            switch (event, fromState) {
+            case (.remoteSignOut(let isSoft), _):
+                return .remoteSigningOut(isSoft: isSoft)
+            case (.completedSigningOut, .remoteSigningOut):
+                return .signedOut
+            case (.suspend, _):
+                self.stateBeforeSuspension = fromState
+                return .suspended
+            case (.becomeActive, _):
+                // Cannot become active if not previously suspended
+                // Happens when the app is backgrounded before the session is setup
+                guard let previousState = self.stateBeforeSuspension else {
+                    return self.stateMachine.state
                 }
+
+                return previousState
+            default:
+                return nil
+            }
+        }
+
+        addTransitionHandler { context in
+            if let event = context.event {
+                MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(event)`")
+            } else {
+                MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
         }
     }
