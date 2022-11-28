@@ -19,22 +19,11 @@ import SwiftUI
 import UIKit
 
 struct FilePreviewScreen: View {
-    // MARK: Private
-
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
-    }
-    
-    // MARK: Public
-    
     @ObservedObject var context: FilePreviewViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         PreviewController(fileURL: context.viewState.fileURL, title: context.viewState.title)
+            .ignoresSafeArea()
     }
 }
 
