@@ -38,9 +38,6 @@ struct SettingsScreen: View {
             userSection
                 .listRowBackground(rowBackgroundColor)
 
-            appearanceSection
-                .listRowBackground(rowBackgroundColor)
-
             analyticsSection
                 .listRowBackground(rowBackgroundColor)
 
@@ -87,28 +84,6 @@ struct SettingsScreen: View {
                 }
             }
             .listRowInsets(listRowInsets)
-        }
-    }
-
-    private var appearanceSection: some View {
-        Section {
-            Button(action: appearance) {
-                HStack {
-                    Image(systemName: "paintpalette")
-                        .foregroundColor(.element.systemGray)
-                        .padding(4)
-                        .background(Color.element.systemGray6)
-                        .clipShape(Circle())
-                        .frame(width: menuIconSize, height: menuIconSize)
-                    Text(ElementL10n.settingsAppearance)
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .foregroundColor(.element.tertiaryContent)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("appearanceButton")
         }
     }
 
@@ -209,10 +184,6 @@ struct SettingsScreen: View {
                 .padding(4)
         }
         .accessibilityIdentifier("closeButton")
-    }
-
-    private func appearance() {
-        #warning("Not implemented")
     }
 
     private func close() {

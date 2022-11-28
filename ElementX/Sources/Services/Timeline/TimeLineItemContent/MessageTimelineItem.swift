@@ -36,7 +36,6 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
     let content: Content
 
     var id: String {
-        #warning("Handle txid properly")
         switch item.key() {
         case .transactionId(let txnID):
             return txnID
