@@ -17,19 +17,13 @@
 import SwiftUI
 
 struct TemplateScreen: View {
-    // MARK: Private
-    
     @Environment(\.colorScheme) private var colorScheme
     
     var counterColor: Color {
         colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
     }
     
-    // MARK: Public
-    
     @ObservedObject var context: TemplateViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         ScrollView {

@@ -17,13 +17,7 @@
 import SwiftUI
 
 struct AnalyticsPromptCheckmarkItem: View {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
     private let attributedString: AttributedString
-    
-    // MARK: - Setup
     
     init(attributedString: AttributedString) {
         self.attributedString = attributedString
@@ -32,8 +26,6 @@ struct AnalyticsPromptCheckmarkItem: View {
     init(string: String) {
         attributedString = AttributedString(string)
     }
-    
-    // MARK: - Views
     
     var body: some View {
         Label { Text(attributedString) } icon: {

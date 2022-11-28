@@ -17,21 +17,13 @@
 import SwiftUI
 
 struct SoftLogoutScreen: View {
-    // MARK: - Properties
-    
-    // MARK: Private
-
     @State private var showingClearDataConfirmation = false
 
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
 
-    // MARK: Public
-    
     @ObservedObject var context: SoftLogoutViewModel.Context
     
-    // MARK: Views
-
     var body: some View {
         ScrollView {
             VStack(spacing: 0) {

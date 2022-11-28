@@ -19,22 +19,12 @@ import SwiftUI
 typealias MediaPlayerViewModelType = StateStoreViewModel<MediaPlayerViewState, MediaPlayerViewAction>
 
 class MediaPlayerViewModel: MediaPlayerViewModelType, MediaPlayerViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
-    // MARK: Public
-
     var callback: ((MediaPlayerViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(mediaURL: URL, autoplay: Bool = true) {
         super.init(initialViewState: MediaPlayerViewState(mediaURL: mediaURL,
                                                           autoplay: autoplay))
     }
-    
-    // MARK: - Public
     
     override func process(viewAction: MediaPlayerViewAction) async {
         switch viewAction {

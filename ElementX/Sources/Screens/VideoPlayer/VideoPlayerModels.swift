@@ -16,15 +16,9 @@
 
 import Foundation
 
-// MARK: - Coordinator
-
-// MARK: View model
-
 enum VideoPlayerViewModelAction {
     case cancel
 }
-
-// MARK: View
 
 struct VideoPlayerViewState: BindableState {
     var videoURL: URL

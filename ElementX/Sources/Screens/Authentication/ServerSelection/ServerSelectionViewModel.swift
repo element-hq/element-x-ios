@@ -19,16 +19,8 @@ import SwiftUI
 typealias ServerSelectionViewModelType = StateStoreViewModel<ServerSelectionViewState, ServerSelectionViewAction>
 
 class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
-    // MARK: Public
-
     var callback: (@MainActor (ServerSelectionViewModelAction) -> Void)?
 
-    // MARK: - Setup
-    
     init(homeserverAddress: String, isModallyPresented: Bool) {
         let bindings = ServerSelectionBindings(homeserverAddress: homeserverAddress,
                                                slidingSyncProxyAddress: ElementSettings.shared.slidingSyncProxyBaseURLString)
@@ -36,8 +28,6 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
         super.init(initialViewState: ServerSelectionViewState(bindings: bindings,
                                                               isModallyPresented: isModallyPresented))
     }
-    
-    // MARK: - Public
 
     override func process(viewAction: ServerSelectionViewAction) async {
         switch viewAction {

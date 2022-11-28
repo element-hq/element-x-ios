@@ -19,21 +19,11 @@ import SwiftUI
 typealias FilePreviewViewModelType = StateStoreViewModel<FilePreviewViewState, FilePreviewViewAction>
 
 class FilePreviewViewModel: FilePreviewViewModelType, FilePreviewViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
-    // MARK: Public
-
     var callback: ((FilePreviewViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(fileURL: URL, title: String? = nil) {
         super.init(initialViewState: FilePreviewViewState(fileURL: fileURL, title: title))
     }
-    
-    // MARK: - Public
     
     override func process(viewAction: FilePreviewViewAction) async {
         switch viewAction {
