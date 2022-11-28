@@ -17,16 +17,10 @@
 import SwiftUI
 
 struct LoginScreen: View {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
     /// The focus state of the username text field.
     @FocusState private var isUsernameFocused: Bool
     /// The focus state of the password text field.
     @FocusState private var isPasswordFocused: Bool
-    
-    // MARK: Public
     
     @ObservedObject var context: LoginViewModel.Context
     

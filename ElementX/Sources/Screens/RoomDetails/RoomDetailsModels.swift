@@ -60,7 +60,7 @@ struct RoomDetailsMember: Identifiable, Equatable {
 
     static func placeholder(id: String) -> RoomDetailsMember {
         RoomDetailsMember(id: id,
-                       name: "Placeholder user name",
-                       avatar: UIImage(systemName: "photo"))
+                          name: "Placeholder user name",
+                          avatar: UIImage(systemName: "photo"))
     }
 }

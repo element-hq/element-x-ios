@@ -19,10 +19,6 @@ import SwiftUI
 
 /// The screen shown at the beginning of the onboarding flow.
 struct OnboardingScreen: View {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.layoutDirection) private var layoutDirection
     
@@ -33,8 +29,6 @@ struct OnboardingScreen: View {
     @State private var pageTimer: Timer?
     /// The amount of offset to apply when a drag gesture is in progress.
     @State private var dragOffset: CGFloat = .zero
-    
-    // MARK: Public
     
     @ObservedObject var context: OnboardingViewModel.Context
     

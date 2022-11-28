@@ -115,6 +115,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.verifySession)
         case .skipSessionVerification:
             state.showSessionVerificationBanner = false
+        case .updatedVisibleItemIdentifiers(let identifiers):
+            updateVisibleRange(visibleItemIdentifiers: identifiers)
         }
     }
     
@@ -188,5 +190,21 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         state.rooms = rooms
         roomsForIdentifiers = newRoomsForIdentifiers
+    }
+    
+    private func updateVisibleRange(visibleItemIdentifiers items: Set<String>) {
+        let result = items.compactMap { itemIdentifier in
+            state.rooms.firstIndex { $0.id == itemIdentifier }
+        }.sorted()
+        
+        guard !result.isEmpty else {
+            return
+        }
+        
+        guard let lowerBound = result.first, let upperBound = result.last else {
+            return
+        }
+        
+        userSession.clientProxy.roomSummaryProvider?.updateVisibleRange(lowerBound...upperBound)
     }
 }

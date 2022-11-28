@@ -60,10 +60,8 @@ struct RoomHeaderView: View {
 
 struct RoomHeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        bodyPlain.preferredColorScheme(.light)
-        bodyPlain.preferredColorScheme(.dark)
-        bodyEncrypted.preferredColorScheme(.light)
-        bodyEncrypted.preferredColorScheme(.dark)
+        bodyPlain
+        bodyEncrypted
     }
 
     @ViewBuilder

@@ -26,6 +26,7 @@ enum RoomProxyError: Error {
     case failedRetrievingMemberDisplayName
     case failedSendingMessage
     case failedRedactingEvent
+    case failedAddingTimelineListener
     case failedRetrievingMembers
 }
 
@@ -55,7 +56,7 @@ protocol RoomProxyProtocol {
     
     func loadDisplayName() async -> Result<String, RoomProxyError>
     
-    func addTimelineListener(listener: TimelineListener)
+    func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError>
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError>
     

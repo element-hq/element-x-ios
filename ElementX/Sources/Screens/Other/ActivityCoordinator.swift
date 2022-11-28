@@ -14,23 +14,14 @@
 // limitations under the License.
 //
 
-import Foundation
+import SwiftUI
 
-// MARK: - Coordinator
-
-// MARK: View model
-
-enum MediaPlayerViewModelAction {
-    case cancel
-}
-
-// MARK: View
-
-struct MediaPlayerViewState: BindableState {
-    let mediaURL: URL
-    let autoplay: Bool
-}
-
-enum MediaPlayerViewAction {
-    case cancel
+struct ActivityCoordinator: CoordinatorProtocol {
+    let items: [Any]
+    
+    func toPresentable() -> AnyView {
+        AnyView(UIActivityViewControllerWrapper(activityItems: items)
+            .presentationDetents([.medium])
+            .ignoresSafeArea())
+    }
 }

@@ -16,16 +16,12 @@
 
 import Foundation
 
-// MARK: View model
-
 enum ServerSelectionViewModelAction {
     /// The user would like to use the homeserver at the given address.
     case confirm(homeserverAddress: String)
     /// Dismiss the view without using the entered address.
     case dismiss
 }
-
-// MARK: View
 
 struct ServerSelectionViewState: BindableState {
     /// View state that can be bound to from SwiftUI.

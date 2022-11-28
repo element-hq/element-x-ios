@@ -94,4 +94,3 @@ struct RoomDetailsMemberCell_Previews: PreviewProvider {
         }
     }
 }
-

@@ -19,13 +19,7 @@ import SwiftUI
 typealias LoginViewModelType = StateStoreViewModel<LoginViewState, LoginViewAction>
 
 class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Public
-
     var callback: (@MainActor (LoginViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(homeserver: LoginHomeserver) {
         let bindings = LoginBindings()
@@ -33,8 +27,6 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
         
         super.init(initialViewState: viewState)
     }
-    
-    // MARK: - Public
 
     override func process(viewAction: LoginViewAction) async {
         switch viewAction {

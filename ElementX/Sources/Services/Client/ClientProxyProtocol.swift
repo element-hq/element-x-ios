@@ -58,7 +58,7 @@ enum PushFormat {
 //    }
 }
 
-protocol ClientProxyProtocol: MediaProxyProtocol {
+protocol ClientProxyProtocol: AnyObject, MediaProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
     var userIdentifier: String { get }
@@ -76,6 +76,8 @@ protocol ClientProxyProtocol: MediaProxyProtocol {
     func startSync()
     
     func stopSync()
+    
+    func restartSync()
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     

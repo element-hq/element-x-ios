@@ -17,14 +17,8 @@
 import SwiftUI
 
 struct OnboardingPageView: View {
-    // MARK: - Properties
-    
-    // MARK: Public
-    
     /// The content that this page should display.
     let content: OnboardingPageContent
-    
-    // MARK: - Views
     
     var body: some View {
         VStack {

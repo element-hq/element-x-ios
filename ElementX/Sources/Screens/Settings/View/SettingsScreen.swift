@@ -17,8 +17,6 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    // MARK: Private
-
     @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
     @ObservedObject private var settings = ElementSettings.shared
@@ -27,11 +25,7 @@ struct SettingsScreen: View {
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
-    // MARK: Public
-    
     @ObservedObject var context: SettingsViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         Form {
@@ -239,12 +233,6 @@ extension TimelineStyle: CustomStringConvertible {
 
 struct Settings_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
         let viewModel = SettingsViewModel(withUserSession: userSession)

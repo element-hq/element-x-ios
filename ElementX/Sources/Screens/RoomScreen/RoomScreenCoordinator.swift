@@ -68,13 +68,25 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     // MARK: - Private
 
     private func displayVideo(for videoURL: URL) {
-        let params = VideoPlayerCoordinatorParameters(videoURL: videoURL)
+        let params = VideoPlayerCoordinatorParameters(videoURL: videoURL, isModallyPresented: false)
         let coordinator = VideoPlayerCoordinator(parameters: params)
-        coordinator.callback = { [weak self] _ in
-            self?.navigationController.pop()
-        }
 
-        navigationController.push(coordinator)
+        if params.isModallyPresented {
+            coordinator.callback = { [weak self] _ in
+                self?.navigationController.dismissSheet()
+            }
+
+            let controller = NavigationController()
+            controller.setRootCoordinator(coordinator)
+
+            navigationController.presentSheet(controller)
+        } else {
+            coordinator.callback = { [weak self] _ in
+                self?.navigationController.pop()
+            }
+
+            navigationController.push(coordinator)
+        }
     }
 
     private func displayFile(for fileURL: URL, with title: String?) {

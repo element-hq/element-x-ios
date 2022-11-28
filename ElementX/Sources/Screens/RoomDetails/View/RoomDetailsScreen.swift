@@ -53,7 +53,7 @@ struct RoomDetailsScreen: View {
         } else {
             PlaceholderAvatarImage(text: context.viewState.roomTitle,
                                    contentId: context.viewState.roomId)
-            .accessibilityIdentifier("roomAvatarPlaceholderImage")
+                .accessibilityIdentifier("roomAvatarPlaceholderImage")
         }
     }
 }

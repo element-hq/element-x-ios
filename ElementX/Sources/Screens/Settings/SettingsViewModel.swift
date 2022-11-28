@@ -19,17 +19,9 @@ import SwiftUI
 typealias SettingsViewModelType = StateStoreViewModel<SettingsViewState, SettingsViewAction>
 
 class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
     private let userSession: UserSessionProtocol
 
-    // MARK: Public
-
     var callback: ((SettingsViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
@@ -50,8 +42,6 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
             }
         }
     }
-
-    // MARK: - Public
 
     override func process(viewAction: SettingsViewAction) async {
         switch viewAction {

@@ -43,11 +43,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         }
                     }
                     .padding(.trailing, 16)
-                    .padding(.leading, 16)
+                    .padding(.leading, 56)
                 } else {
                     styledContentWithReactions
                         .padding(.leading, 24)
-                        .padding(.trailing, 24)
+                        .padding(.trailing, 56)
                 }
             }
         }
@@ -82,7 +82,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             
             if !timelineItem.properties.reactions.isEmpty {
                 TimelineReactionsView(reactions: timelineItem.properties.reactions,
-                                      alignment: .leading) { key in
+                                      alignment: alignment) { key in
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
                 .padding(.horizontal, 12)
@@ -156,12 +156,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-
-    @ViewBuilder
-    static var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]

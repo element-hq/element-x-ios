@@ -36,15 +36,10 @@ struct FileRoomTimelineView: View {
 
 struct FileRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-        body.preferredColorScheme(.light)
-            .timelineStyle(.plain)
-        body.preferredColorScheme(.dark)
-            .timelineStyle(.plain)
+        body
+        body.timelineStyle(.plain)
     }
-
-    @ViewBuilder
+    
     static var body: some View {
         VStack(spacing: 20.0) {
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,

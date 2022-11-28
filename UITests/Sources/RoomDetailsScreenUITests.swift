@@ -17,6 +17,4 @@
 import ElementX
 import XCTest
 
-class RoomDetailsScreenUITests: XCTestCase {
-    
-}
+class RoomDetailsScreenUITests: XCTestCase { }
