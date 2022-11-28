@@ -25,7 +25,7 @@ class RoomProxy: RoomProxyProtocol {
     private let room: RoomProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private let concurrentDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy", attributes: .concurrent)
+    private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.serial")
     
     private var sendMessageBgTask: BackgroundTaskProtocol?
     
@@ -104,7 +104,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         do {
-            let avatarURL = try await Task.dispatch(on: .global()) {
+            let avatarURL = try await Task.dispatch(on: serialDispatchQueue) {
                 try self.room.memberAvatarUrl(userId: userId)
             }
             update(avatarURL: avatarURL, forUserId: userId)
@@ -120,7 +120,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         do {
-            let displayName = try await Task.dispatch(on: .global()) {
+            let displayName = try await Task.dispatch(on: serialDispatchQueue) {
                 try self.room.memberDisplayName(userId: userId)
             }
             update(displayName: displayName, forUserId: userId)
@@ -134,7 +134,7 @@ class RoomProxy: RoomProxyProtocol {
         if let displayName { return .success(displayName) }
         
         do {
-            let displayName = try await Task.dispatch(on: .global()) {
+            let displayName = try await Task.dispatch(on: serialDispatchQueue) {
                 try self.room.displayName()
             }
             update(displayName: displayName)
