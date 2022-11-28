@@ -16,15 +16,9 @@
 
 import Foundation
 
-// MARK: - Coordinator
-
-// MARK: View model
-
 enum FilePreviewViewModelAction {
     case cancel
 }
-
-// MARK: View
 
 struct FilePreviewViewState: BindableState {
     let fileURL: URL

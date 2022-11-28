@@ -19,6 +19,7 @@ import SwiftUI
 
 struct VideoPlayerCoordinatorParameters {
     let videoURL: URL
+    let isModallyPresented: Bool
 }
 
 enum VideoPlayerCoordinatorAction {
@@ -34,7 +35,8 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
     init(parameters: VideoPlayerCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL)
+        viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL,
+                                         isModallyPresented: parameters.isModallyPresented)
     }
     
     // MARK: - Public
@@ -51,6 +53,10 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
             }
         }
     }
+
+    func stop() {
+        deconfigureAudioSession(.sharedInstance())
+    }
     
     func toPresentable() -> AnyView {
         AnyView(VideoPlayerScreen(context: viewModel.context))
@@ -62,10 +68,18 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
         do {
             try session.setCategory(.playback,
                                     mode: .default,
-                                    options: [.defaultToSpeaker, .allowBluetooth, .allowBluetoothA2DP])
+                                    options: [.allowBluetooth, .allowBluetoothA2DP])
             try session.setActive(true)
         } catch {
             MXLog.debug("Configure audio session failed: \(error)")
+        }
+    }
+
+    private func deconfigureAudioSession(_ session: AVAudioSession) {
+        do {
+            try session.setActive(false, options: .notifyOthersOnDeactivation)
+        } catch {
+            MXLog.debug("Deconfigure audio session failed: \(error)")
         }
     }
 }

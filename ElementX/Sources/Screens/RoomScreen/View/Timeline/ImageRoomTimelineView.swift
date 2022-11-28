@@ -51,15 +51,10 @@ struct ImageRoomTimelineView: View {
 
 struct ImageRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-        body.preferredColorScheme(.light)
-            .timelineStyle(.plain)
-        body.preferredColorScheme(.dark)
-            .timelineStyle(.plain)
+        body
+        body.timelineStyle(.plain)
     }
-     
-    @ViewBuilder
+    
     static var body: some View {
         VStack(spacing: 20.0) {
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,

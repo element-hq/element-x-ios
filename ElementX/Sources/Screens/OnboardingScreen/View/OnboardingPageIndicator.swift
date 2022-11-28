@@ -17,16 +17,10 @@
 import SwiftUI
 
 struct OnboardingPageIndicator: View {
-    // MARK: - Properties
-    
-    // MARK: Public
-    
     /// The number of pages that are shown.
     let pageCount: Int
     /// The index of the current page
     let pageIndex: Int
-    
-    // MARK: - Setup
     
     internal init(pageCount: Int, pageIndex: Int) {
         self.pageCount = pageCount

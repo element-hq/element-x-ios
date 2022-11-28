@@ -48,11 +48,6 @@ struct UserNotificationToastView: View {
 
 struct UserNotificationToastView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    private static var body: some View {
         VStack {
             UserNotificationToastView(notification: UserNotification(title: "Successfully logged in",
                                                                      iconName: "checkmark"))

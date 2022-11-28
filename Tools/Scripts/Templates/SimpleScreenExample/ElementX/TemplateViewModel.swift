@@ -19,15 +19,7 @@ import SwiftUI
 typealias TemplateViewModelType = StateStoreViewModel<TemplateViewState, TemplateViewAction>
 
 class TemplateViewModel: TemplateViewModelType, TemplateViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
-    // MARK: Public
-
     var callback: ((TemplateViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(promptType: TemplatePromptType, initialCount: Int = 0) {
         super.init(initialViewState: TemplateViewState(promptType: promptType, count: 0))

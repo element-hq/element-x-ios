@@ -32,12 +32,6 @@ struct SeparatorRoomTimelineView: View {
 
 struct SeparatorRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         let item = SeparatorRoomTimelineItem(id: UUID().uuidString, text: "This is a separator")
         SeparatorRoomTimelineView(timelineItem: item)
     }

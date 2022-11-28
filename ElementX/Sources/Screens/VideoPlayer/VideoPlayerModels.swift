@@ -16,19 +16,14 @@
 
 import Foundation
 
-// MARK: - Coordinator
-
-// MARK: View model
-
 enum VideoPlayerViewModelAction {
     case cancel
 }
 
-// MARK: View
-
 struct VideoPlayerViewState: BindableState {
-    var videoURL: URL
-    var autoplay: Bool
+    let videoURL: URL
+    let autoplay: Bool
+    let isModallyPresented: Bool
 }
 
 enum VideoPlayerViewAction {

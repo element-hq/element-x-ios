@@ -19,15 +19,7 @@ import SwiftUI
 typealias SoftLogoutViewModelType = StateStoreViewModel<SoftLogoutViewState, SoftLogoutViewAction>
 
 class SoftLogoutViewModel: SoftLogoutViewModelType, SoftLogoutViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
-    // MARK: Public
-
     var callback: (@MainActor (SoftLogoutViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(credentials: SoftLogoutCredentials,
          homeserver: LoginHomeserver,
@@ -40,8 +32,6 @@ class SoftLogoutViewModel: SoftLogoutViewModelType, SoftLogoutViewModelProtocol 
                                             bindings: bindings)
         super.init(initialViewState: viewState)
     }
-
-    // MARK: - Public
     
     override func process(viewAction: SoftLogoutViewAction) async {
         switch viewAction {

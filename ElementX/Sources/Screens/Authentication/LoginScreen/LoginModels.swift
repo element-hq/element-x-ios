@@ -16,8 +16,6 @@
 
 import Foundation
 
-// MARK: View model
-
 enum LoginViewModelAction: CustomStringConvertible {
     /// The user would like to select another server.
     case selectServer
@@ -46,8 +44,6 @@ enum LoginViewModelAction: CustomStringConvertible {
         }
     }
 }
-
-// MARK: View
 
 struct LoginViewState: BindableState {
     /// Data about the selected homeserver.

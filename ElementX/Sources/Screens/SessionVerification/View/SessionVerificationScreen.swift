@@ -19,8 +19,6 @@ import SwiftUI
 struct SessionVerificationScreen: View {
     @ObservedObject var context: SessionVerificationViewModel.Context
     
-    // MARK: Views
-    
     var body: some View {
         NavigationView {
             ScrollView {
@@ -184,12 +182,6 @@ struct SessionVerificationScreen: View {
 
 struct SessionVerification_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         Group {
             sessionVerificationScreen(state: .initial)
             sessionVerificationScreen(state: .requestingVerification)

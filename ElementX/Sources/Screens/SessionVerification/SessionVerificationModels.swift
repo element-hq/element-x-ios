@@ -16,13 +16,9 @@
 
 import Foundation
 
-// MARK: View model
-
 enum SessionVerificationViewModelAction {
     case finished
 }
-
-// MARK: View
 
 struct SessionVerificationViewState: BindableState {
     var verificationState: SessionVerificationStateMachine.State = .initial

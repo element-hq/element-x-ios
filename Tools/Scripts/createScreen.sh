@@ -26,7 +26,7 @@ echo "Copying tests"
 
 cp -R "Templates/SimpleScreenExample/Tests/UI/" $UI_TESTS_DIR/
 
-cp -R "Templates/SimpleScreenExample/Tests/Unit" $UNIT_TESTS_DIR/
+cp -R "Templates/SimpleScreenExample/Tests/Unit/" $UNIT_TESTS_DIR/
 
 SCREEN_NAME=$2
 SCREEN_VAR_NAME=`echo $SCREEN_NAME | awk '{ print tolower(substr($0, 1, 1)) substr($0, 2) }'`

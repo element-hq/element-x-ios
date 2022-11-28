@@ -37,15 +37,10 @@ struct EmoteRoomTimelineView: View {
 
 struct EmoteRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-        body.preferredColorScheme(.light)
-            .timelineStyle(.plain)
-        body.preferredColorScheme(.dark)
-            .timelineStyle(.plain)
+        body
+        body.timelineStyle(.plain)
     }
     
-    @ViewBuilder
     static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
             EmoteRoomTimelineView(timelineItem: itemWith(text: "Short loin ground round tongue hamburger, fatback salami shoulder. Beef turkey sausage kielbasa strip steak. Alcatra capicola pig tail pancetta chislic.",

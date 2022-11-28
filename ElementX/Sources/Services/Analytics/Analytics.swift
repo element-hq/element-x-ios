@@ -31,8 +31,6 @@ import PostHog
 /// into `main`, update the AnalyticsEvents Swift package in `project.yml`.
 ///
 class Analytics {
-    // MARK: - Properties
-    
     /// The singleton instance to be used within the Riot target.
     static let shared = Analytics()
     
@@ -53,8 +51,6 @@ class Analytics {
         // Only show the prompt once, and when analytics are enabled in BuildSettings.
         !ElementSettings.shared.hasSeenAnalyticsPrompt && BuildSettings.analyticsConfiguration.isEnabled
     }
-    
-    // MARK: - Public
     
     /// Opts in to analytics tracking with the supplied user session.
     /// - Parameter userSession: The user session to use to when reading/generating the analytics ID.
