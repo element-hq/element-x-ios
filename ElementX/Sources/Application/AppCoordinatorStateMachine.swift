@@ -35,9 +35,6 @@ class AppCoordinatorStateMachine {
 
         /// Processing a remote sign out
         case remoteSigningOut(isSoft: Bool)
-
-        /// Application has been suspended
-        case suspended
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -60,15 +57,9 @@ class AppCoordinatorStateMachine {
         case remoteSignOut(isSoft: Bool)
         /// Signing out completed
         case completedSigningOut
-
-        /// Application is about to be suspended
-        case suspend
-        /// Application goes into active state
-        case becomeActive
     }
     
     private let stateMachine: StateMachine<State, Event>
-    private var stateBeforeSuspension: State?
     
     init() {
         stateMachine = StateMachine(state: .initial)
@@ -93,17 +84,6 @@ class AppCoordinatorStateMachine {
                 return .remoteSigningOut(isSoft: isSoft)
             case (.completedSigningOut, .remoteSigningOut):
                 return .signedOut
-            case (.suspend, _):
-                self.stateBeforeSuspension = fromState
-                return .suspended
-            case (.becomeActive, _):
-                // Cannot become active if not previously suspended
-                // Happens when the app is backgrounded before the session is setup
-                guard let previousState = self.stateBeforeSuspension else {
-                    return self.stateMachine.state
-                }
-
-                return previousState
             default:
                 return nil
             }

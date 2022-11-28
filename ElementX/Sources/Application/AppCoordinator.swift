@@ -25,6 +25,11 @@ class AppCoordinator: AppCoordinatorProtocol {
     /// Common background task to resume long-running tasks in the background.
     /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
     private var backgroundTask: BackgroundTaskProtocol?
+    private var isSuspended = false {
+        didSet {
+            MXLog.debug("didSet to: \(isSuspended)")
+        }
+    }
     
     private var userSession: UserSessionProtocol! {
         didSet {
@@ -135,10 +140,6 @@ class AppCoordinator: AppCoordinatorProtocol {
             case (.remoteSigningOut(let isSoft), .completedSigningOut, .signedOut):
                 self.presentSplashScreen(isSoftLogout: isSoft)
                 self.hideLoadingIndicator()
-            case (_, .suspend, .suspended):
-                self.pause()
-            case (_, .becomeActive, _):
-                self.resume()
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -365,15 +366,21 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
             self?.backgroundTask = nil
-            self?.stateMachine.processEvent(.suspend)
+            self?.isSuspended = true
         }
+
+        pause()
     }
 
     @objc
     private func applicationDidBecomeActive() {
         backgroundTask?.stop()
         backgroundTask = nil
-        stateMachine.processEvent(.becomeActive)
+
+        if isSuspended {
+            isSuspended = false
+            resume()
+        }
     }
 }
 
