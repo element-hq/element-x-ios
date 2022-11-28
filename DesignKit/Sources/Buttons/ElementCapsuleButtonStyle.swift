@@ -59,7 +59,7 @@ public struct ElementCapsuleButtonStyle: ButtonStyle {
 }
 
 struct ElementCapsuleButtonStyle_Previews: PreviewProvider {
-    public static var states: some View {
+    public static var previews: some View {
         VStack {
             Button("Enabled") { /* preview */ }
                 .buttonStyle(.elementCapsuleProminent)
@@ -76,12 +76,5 @@ struct ElementCapsuleButtonStyle_Previews: PreviewProvider {
                 .disabled(true)
         }
         .padding()
-    }
-    
-    public static var previews: some View {
-        states
-            .preferredColorScheme(.light)
-        states
-            .preferredColorScheme(.dark)
     }
 }

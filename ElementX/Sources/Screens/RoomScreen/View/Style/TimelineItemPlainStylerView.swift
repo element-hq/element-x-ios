@@ -73,12 +73,6 @@ struct TimelineItemPlainStylerView<Content: View>: View {
 
 struct TimelineItemPlainStylerView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-
-    @ViewBuilder
-    static var body: some View {
         VStack(alignment: .leading) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]

@@ -27,8 +27,6 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     let statePublisher: CurrentValueSubject<RoomSummaryProviderState, Never>
     let countPublisher: CurrentValueSubject<UInt, Never>
     
-    func updateRoomsWithIdentifiers(_ identifiers: [String]) { }
-    
     convenience init() {
         self.init(state: .loading)
     }
@@ -45,6 +43,10 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
             countPublisher = .init(UInt(Self.rooms.count))
         }
     }
+    
+    func updateRoomsWithIdentifiers(_ identifiers: [String]) { }
+    
+    func updateVisibleRange(_ range: ClosedRange<Int>) { }
     
     // MARK: - Private
     

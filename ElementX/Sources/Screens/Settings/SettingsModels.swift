@@ -17,10 +17,6 @@
 import Foundation
 import UIKit
 
-// MARK: - Coordinator
-
-// MARK: View model
-
 enum SettingsViewModelAction {
     case close
     case toggleAnalytics
@@ -28,8 +24,6 @@ enum SettingsViewModelAction {
     case crash
     case logout
 }
-
-// MARK: View
 
 struct SettingsViewState: BindableState {
     var bindings: SettingsViewStateBindings

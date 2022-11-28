@@ -19,19 +19,11 @@ import SwiftUI
 typealias SessionVerificationViewModelType = StateStoreViewModel<SessionVerificationViewState, SessionVerificationViewAction>
 
 class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVerificationViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-    
     private let sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol
     
     private var stateMachine: SessionVerificationStateMachine
 
-    // MARK: Public
-
     var callback: ((SessionVerificationViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(sessionVerificationControllerProxy: SessionVerificationControllerProxyProtocol,
          initialState: SessionVerificationViewState = SessionVerificationViewState()) {
@@ -66,8 +58,6 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             }
             .store(in: &cancellables)
     }
-    
-    // MARK: - Public
     
     override func process(viewAction: SessionVerificationViewAction) async {
         switch viewAction {

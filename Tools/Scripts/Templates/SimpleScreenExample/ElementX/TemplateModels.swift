@@ -16,8 +16,6 @@
 
 import Foundation
 
-// MARK: - Coordinator
-
 enum TemplatePromptType {
     case regular
     case upgrade
@@ -45,14 +43,10 @@ extension TemplatePromptType: Identifiable, CaseIterable {
     }
 }
 
-// MARK: View model
-
 enum TemplateViewModelAction {
     case accept
     case cancel
 }
-
-// MARK: View
 
 struct TemplateViewState: BindableState {
     var promptType: TemplatePromptType

@@ -18,9 +18,10 @@ import SwiftUI
 
 struct HomeScreen: View {
     @State private var showingLogoutConfirmation = false
-    @ObservedObject var context: HomeScreenViewModel.Context
+    @State private var visibleItemIdentifiers = Set<String>()
+    @State private var scrollViewAdapter = ScrollViewAdapter()
     
-    // MARK: Views
+    @ObservedObject var context: HomeScreenViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -40,12 +41,29 @@ struct HomeScreen: View {
             } else {
                 LazyVStack {
                     ForEach(context.viewState.visibleRooms) { room in
-                        HomeScreenRoomCell(room: room, context: context)
+                        Group {
+                            if room.isPlaceholder {
+                                HomeScreenRoomCell(room: room, context: context)
+                                    .redacted(reason: .placeholder)
+                            } else {
+                                HomeScreenRoomCell(room: room, context: context)
+                            }
+                        }
+                        .onAppear {
+                            visibleItemIdentifiers.insert(room.id)
+                        }
+                        .onDisappear {
+                            visibleItemIdentifiers.remove(room.id)
+                        }
                     }
                 }
                 .padding(.horizontal)
                 .searchable(text: $context.searchQuery)
             }
+        }
+        .introspectScrollView { scrollView in
+            guard scrollView != scrollViewAdapter.scrollView else { return }
+            scrollViewAdapter.scrollView = scrollView
         }
         .disabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
@@ -57,6 +75,14 @@ struct HomeScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
             }
+        }
+        .onReceive(scrollViewAdapter.isScrolling) { isScrolling in
+            guard context.viewState.bindings.searchQuery.isEmpty,
+                  !isScrolling else {
+                return
+            }
+            
+            context.send(viewAction: .updatedVisibleItemIdentifiers(visibleItemIdentifiers))
         }
     }
 
@@ -171,13 +197,9 @@ struct HomeScreen: View {
 
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
-        body(.loading).preferredColorScheme(.light)
+        body(.loading)
             .tint(.element.accent)
-        body(.loading).preferredColorScheme(.dark)
-            .tint(.element.accent)
-        body(.loaded).preferredColorScheme(.light)
-            .tint(.element.accent)
-        body(.loaded).preferredColorScheme(.dark)
+        body(.loaded)
             .tint(.element.accent)
     }
     

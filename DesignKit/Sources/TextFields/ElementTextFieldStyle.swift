@@ -74,7 +74,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
 
 @available(iOS 15.0, *)
 struct ElementTextFieldStyle_Previews: PreviewProvider {
-    public static var states: some View {
+    public static var previews: some View {
         VStack(spacing: 12) {
             TextField("Placeholder", text: .constant(""))
                 .textFieldStyle(.elementInput(labelText: "Label", footerText: "Footer"))
@@ -87,14 +87,5 @@ struct ElementTextFieldStyle_Previews: PreviewProvider {
                 .disabled(true)
         }
         .padding()
-    }
-    
-    public static var previews: some View {
-        Group {
-            states
-                .preferredColorScheme(.light)
-            states
-                .preferredColorScheme(.dark)
-        }
     }
 }

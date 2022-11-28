@@ -29,13 +29,9 @@ struct OnboardingPageContent {
     let image: ImageAsset
 }
 
-// MARK: View model
-
 enum OnboardingViewModelAction {
     case login
 }
-
-// MARK: View
 
 struct OnboardingViewState: BindableState {
     /// The colours of the background gradient shown behind the 4 pages.

@@ -66,17 +66,6 @@ public struct ElementGhostButtonStyle: ButtonStyle {
 
 public struct ElementGhostButtonStyle_Previews: PreviewProvider {
     public static var previews: some View {
-        Group {
-            states
-        }
-        .preferredColorScheme(.light)
-        Group {
-            states
-        }
-        .preferredColorScheme(.dark)
-    }
-    
-    public static var states: some View {
         VStack {
             Button("Enabled") { /* preview */ }
                 .buttonStyle(ElementGhostButtonStyle())

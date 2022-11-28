@@ -156,12 +156,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-
-    @ViewBuilder
-    static var body: some View {
         VStack(alignment: .leading, spacing: 2) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
