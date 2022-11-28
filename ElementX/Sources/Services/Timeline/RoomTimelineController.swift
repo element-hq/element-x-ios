@@ -115,13 +115,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            await loadThumbnailForImageTimelineItem(item)
+            await loadFileForImageTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemId }),
                   let item = timelineItems[index] as? ImageRoomTimelineItem else {
                 return .none
             }
-            if let image = item.image {
-                return .displayImage(image: image)
+            if let fileURL = item.cachedFileURL {
+                return .displayFile(fileURL: fileURL, title: item.text)
             }
             return .none
         case let item as VideoRoomTimelineItem:
@@ -353,6 +353,34 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
 
             item.cachedVideoURL = fileURL
+            timelineItems[index] = item
+        case .failure:
+            break
+        }
+    }
+
+    private func loadFileForImageTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
+        if timelineItem.cachedFileURL != nil {
+            // already cached
+            return
+        }
+
+        guard let source = timelineItem.source else {
+            return
+        }
+
+        // This is not great. We could better estimate file extension from the mimetype.
+        guard let fileExtension = timelineItem.text.split(separator: ".").last else {
+            return
+        }
+        switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
+        case .success(let fileURL):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? ImageRoomTimelineItem else {
+                return
+            }
+
+            item.cachedFileURL = fileURL
             timelineItems[index] = item
         case .failure:
             break

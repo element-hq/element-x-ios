@@ -47,8 +47,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
             switch result {
-            case .displayImage(let image):
-                self.displayImage(image)
             case .displayVideo(let videoURL):
                 self.displayVideo(for: videoURL)
             case .displayFile(let fileURL, let title):
@@ -70,30 +68,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private func displayVideo(for videoURL: URL) {
         let params = VideoPlayerCoordinatorParameters(videoURL: videoURL, isModallyPresented: false)
         let coordinator = VideoPlayerCoordinator(parameters: params)
-
-        if params.isModallyPresented {
-            coordinator.callback = { [weak self] _ in
-                self?.navigationController.dismissSheet()
-            }
-
-            let controller = NavigationController()
-            controller.setRootCoordinator(coordinator)
-
-            navigationController.presentSheet(controller)
-        } else {
-            coordinator.callback = { [weak self] _ in
-                self?.navigationController.pop()
-            }
-
-            navigationController.push(coordinator)
-        }
-    }
-
-    private func displayImage(_ image: UIImage) {
-        let params = ImageViewerCoordinatorParameters(navigationController: navigationController,
-                                                      image: image,
-                                                      isModallyPresented: false)
-        let coordinator = ImageViewerCoordinator(parameters: params)
 
         if params.isModallyPresented {
             coordinator.callback = { [weak self] _ in
