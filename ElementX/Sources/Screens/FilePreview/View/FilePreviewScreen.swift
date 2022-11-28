@@ -19,16 +19,11 @@ import SwiftUI
 import UIKit
 
 struct FilePreviewScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
-    }
-    
     @ObservedObject var context: FilePreviewViewModel.Context
     
     var body: some View {
         PreviewController(fileURL: context.viewState.fileURL, title: context.viewState.title)
+            .ignoresSafeArea()
     }
 }
 

@@ -21,8 +21,9 @@ enum VideoPlayerViewModelAction {
 }
 
 struct VideoPlayerViewState: BindableState {
-    var videoURL: URL
-    var autoplay: Bool
+    let videoURL: URL
+    let autoplay: Bool
+    let isModallyPresented: Bool
 }
 
 enum VideoPlayerViewAction {

@@ -22,23 +22,31 @@ struct VideoPlayerScreen: View {
 
     var body: some View {
         VideoPlayer(player: player())
-            .ignoresSafeArea()
+            .background(Color.black.ignoresSafeArea())
             .navigationBarTitleDisplayMode(.inline)
             .navigationBarBackButtonHidden()
-            .toolbar {
-                ToolbarItem(placement: .navigationBarLeading) {
-                    Button {
-                        context.send(viewAction: .cancel)
-                    } label: {
-                        Image(systemName: "chevron.backward")
-                            .foregroundColor(.white)
-                            .fontWeight(.semibold)
-                    }
+            .toolbar { toolbar }
+            .onSwipeGesture(minimumDistance: 3.0, down: {
+                if context.viewState.isModallyPresented {
+                    context.send(viewAction: .cancel)
                 }
-            }
-            .onSwipeGesture(minimumDistance: 3.0, right: {
-                context.send(viewAction: .cancel)
+            }, right: {
+                if !context.viewState.isModallyPresented {
+                    context.send(viewAction: .cancel)
+                }
             })
+    }
+
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button { context.send(viewAction: .cancel) } label: {
+                Image(systemName: context.viewState.isModallyPresented ? "xmark" : "chevron.backward")
+                    .foregroundColor(.white)
+                    .fontWeight(.semibold)
+            }
+            .accessibilityIdentifier("dismissButton")
+        }
     }
 
     private func player() -> AVPlayer {

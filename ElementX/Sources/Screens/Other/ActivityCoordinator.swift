@@ -16,20 +16,12 @@
 
 import SwiftUI
 
-typealias MediaPlayerViewModelType = StateStoreViewModel<MediaPlayerViewState, MediaPlayerViewAction>
-
-class MediaPlayerViewModel: MediaPlayerViewModelType, MediaPlayerViewModelProtocol {
-    var callback: ((MediaPlayerViewModelAction) -> Void)?
-
-    init(mediaURL: URL, autoplay: Bool = true) {
-        super.init(initialViewState: MediaPlayerViewState(mediaURL: mediaURL,
-                                                          autoplay: autoplay))
-    }
+struct ActivityCoordinator: CoordinatorProtocol {
+    let items: [Any]
     
-    override func process(viewAction: MediaPlayerViewAction) async {
-        switch viewAction {
-        case .cancel:
-            callback?(.cancel)
-        }
+    func toPresentable() -> AnyView {
+        return AnyView(UIActivityViewControllerWrapper(activityItems: items)
+            .presentationDetents([.medium])
+            .ignoresSafeArea())
     }
 }
