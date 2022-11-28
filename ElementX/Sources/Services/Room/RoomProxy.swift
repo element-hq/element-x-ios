@@ -129,21 +129,7 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedRetrievingMemberDisplayName)
         }
     }
-    
-    func loadDisplayName() async -> Result<String, RoomProxyError> {
-        if let displayName { return .success(displayName) }
         
-        do {
-            let displayName = try await Task.dispatch(on: serialDispatchQueue) {
-                try self.room.displayName()
-            }
-            update(displayName: displayName)
-            return .success(displayName)
-        } catch {
-            return .failure(.failedRetrievingDisplayName)
-        }
-    }
-    
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
         room.addTimelineListener(listener: listener)
         return .success(())
