@@ -17,8 +17,6 @@
 import SwiftUI
 
 struct SettingsScreen: View {
-    // MARK: Private
-
     @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
     @ObservedObject private var settings = ElementSettings.shared
@@ -27,11 +25,7 @@ struct SettingsScreen: View {
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
-    // MARK: Public
-    
     @ObservedObject var context: SettingsViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         Form {

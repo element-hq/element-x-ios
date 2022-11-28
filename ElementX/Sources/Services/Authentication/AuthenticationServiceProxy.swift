@@ -19,18 +19,10 @@ import Foundation
 import MatrixRustSDK
 
 class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
     
-    // MARK: Public
-    
     private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverAddress, loginMode: .unknown)
-    
-    // MARK: - Setup
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore

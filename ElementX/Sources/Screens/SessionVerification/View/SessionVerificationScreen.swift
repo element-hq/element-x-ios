@@ -19,8 +19,6 @@ import SwiftUI
 struct SessionVerificationScreen: View {
     @ObservedObject var context: SessionVerificationViewModel.Context
     
-    // MARK: Views
-    
     var body: some View {
         NavigationView {
             ScrollView {

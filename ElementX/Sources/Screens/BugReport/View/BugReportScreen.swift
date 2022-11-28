@@ -17,19 +17,13 @@
 import SwiftUI
 
 struct BugReportScreen: View {
-    // MARK: Private
-    
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     private var horizontalPadding: CGFloat {
         horizontalSizeClass == .regular ? 50 : 16
     }
     
-    // MARK: Public
-    
     @ObservedObject var context: BugReportViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         GeometryReader { geometry in

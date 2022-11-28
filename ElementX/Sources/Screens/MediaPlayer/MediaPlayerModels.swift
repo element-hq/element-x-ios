@@ -16,15 +16,9 @@
 
 import Foundation
 
-// MARK: - Coordinator
-
-// MARK: View model
-
 enum MediaPlayerViewModelAction {
     case cancel
 }
-
-// MARK: View
 
 struct MediaPlayerViewState: BindableState {
     let mediaURL: URL
