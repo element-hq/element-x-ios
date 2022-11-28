@@ -36,7 +36,7 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL,
-                                         autoplay: UIApplication.shared.applicationState == .active)
+                                         autoplay: UIApplication.shared.applicationState == .active,
                                          isModallyPresented: parameters.isModallyPresented)
     }
     
