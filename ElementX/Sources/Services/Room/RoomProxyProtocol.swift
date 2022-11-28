@@ -18,8 +18,6 @@ import Combine
 import MatrixRustSDK
 
 enum RoomProxyError: Error {
-    case failedRetrievingDisplayName
-    case failedRetrievingAvatar
     case noMoreMessagesToBackPaginate
     case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
@@ -52,8 +50,6 @@ protocol RoomProxyProtocol {
     func displayNameForUserId(_ userId: String) -> String?
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
-    
-    func loadDisplayName() async -> Result<String, RoomProxyError>
     
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError>
     

@@ -50,11 +50,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     func displayNameForUserId(_ userId: String) -> String? {
         nil
     }
-    
-    func loadDisplayName() async -> Result<String, RoomProxyError> {
-        .failure(.failedRetrievingDisplayName)
-    }
-    
+        
     func startLiveEventListener() { }
     
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
