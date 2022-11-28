@@ -51,7 +51,6 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     }
     
     var id: String {
-        #warning("Handle txid in a better way")
         switch item.key() {
         case .transactionId(let txnID):
             return txnID
