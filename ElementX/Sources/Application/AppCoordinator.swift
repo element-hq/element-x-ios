@@ -367,9 +367,9 @@ class AppCoordinator: AppCoordinatorProtocol {
         backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
             self?.backgroundTask = nil
             self?.isSuspended = true
+            
+            self?.pause()
         }
-
-        pause()
     }
 
     @objc
