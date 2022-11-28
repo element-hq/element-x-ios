@@ -38,9 +38,6 @@ class UserSessionFlowCoordinatorStateMachine {
         
         /// Showing the settings screen
         case settingsScreen
-
-        /// Application has been suspended
-        case suspended
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -68,22 +65,15 @@ class UserSessionFlowCoordinatorStateMachine {
         case showSessionVerificationScreen
         /// Session verification has finished
         case dismissedSessionVerificationScreen
-
-        /// Application goes into inactive state
-        case resignActive
-        /// Application goes into active state
-        case becomeActive
     }
     
     private let stateMachine: StateMachine<State, Event>
-    private var stateBeforeSuspension: State?
     
     init() {
         stateMachine = StateMachine(state: .initial)
         configure()
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
     private func configure() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .homeScreen])
 
@@ -108,18 +98,6 @@ class UserSessionFlowCoordinatorStateMachine {
                 return .sessionVerificationScreen
             case (.dismissedSessionVerificationScreen, .sessionVerificationScreen):
                 return .homeScreen
-                
-            case (.resignActive, _):
-                self.stateBeforeSuspension = fromState
-                return .suspended
-            case (.becomeActive, _):
-                // Cannot become active if not previously suspended
-                // Happens when the app is backgrounded before the session is setup
-                guard let previousState = self.stateBeforeSuspension else {
-                    return self.stateMachine.state
-                }
-                
-                return previousState
                 
             default:
                 return nil

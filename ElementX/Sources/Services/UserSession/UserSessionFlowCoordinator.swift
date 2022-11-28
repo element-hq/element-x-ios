@@ -36,7 +36,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         self.bugReportService = bugReportService
         
         setupStateMachine()
-        startObservingApplicationState()
     }
     
     func start() {
@@ -84,11 +83,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             case (.feedbackScreen, .dismissedFeedbackScreen, .homeScreen):
                 break
                 
-            case (_, .resignActive, .suspended):
-                self.pause()
-            case (_, .becomeActive, _):
-                self.resume()
-                
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -97,17 +91,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         stateMachine.addErrorHandler { context in
             fatalError("Failed transition with context: \(context)")
         }
-    }
-
-    private func startObservingApplicationState() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillResignActive),
-                                               name: UIApplication.willResignActiveNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationDidBecomeActive),
-                                               name: UIApplication.didBecomeActiveNotification,
-                                               object: nil)
     }
     
     private func presentHomeScreen() {
@@ -246,25 +229,5 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         navigationController.presentSheet(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
-    }
-    
-    // MARK: - Application State
-
-    private func pause() {
-        userSession.clientProxy.stopSync()
-    }
-
-    private func resume() {
-        userSession.clientProxy.startSync()
-    }
-
-    @objc
-    private func applicationWillResignActive() {
-        stateMachine.processEvent(.resignActive)
-    }
-
-    @objc
-    private func applicationDidBecomeActive() {
-        stateMachine.processEvent(.becomeActive)
     }
 }

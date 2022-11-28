@@ -22,6 +22,14 @@ class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
     private let navigationController: NavigationController
     private let userSessionStore: UserSessionStoreProtocol
+    /// Common background task to resume long-running tasks in the background.
+    /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
+    private var backgroundTask: BackgroundTaskProtocol?
+    private var isSuspended = false {
+        didSet {
+            MXLog.debug("didSet to: \(isSuspended)")
+        }
+    }
     
     private var userSession: UserSessionProtocol! {
         didSet {
@@ -52,7 +60,9 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
 
-        backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
+        backgroundTaskService = UIKitBackgroundTaskService {
+            UIApplication.shared
+        }
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
@@ -61,6 +71,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         setupLogging()
         
         Bundle.elementFallbackLanguage = "en"
+
+        startObservingApplicationState()
         
         // Benchmark.trackingEnabled = true
     }
@@ -323,6 +335,52 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private func showLoginErrorToast() {
         ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: "Failed logging in"))
+    }
+
+    // MARK: - Application State
+
+    private func pause() {
+        userSession?.clientProxy.stopSync()
+    }
+
+    private func resume() {
+        userSession?.clientProxy.startSync()
+    }
+
+    private func startObservingApplicationState() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+    }
+
+    @objc
+    private func applicationWillResignActive() {
+        guard backgroundTask == nil else {
+            return
+        }
+
+        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
+            self?.pause()
+            
+            self?.backgroundTask = nil
+            self?.isSuspended = true
+        }
+    }
+
+    @objc
+    private func applicationDidBecomeActive() {
+        backgroundTask?.stop()
+        backgroundTask = nil
+
+        if isSuspended {
+            isSuspended = false
+            resume()
+        }
     }
 }
 
