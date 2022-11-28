@@ -20,7 +20,7 @@ struct ActivityCoordinator: CoordinatorProtocol {
     let items: [Any]
     
     func toPresentable() -> AnyView {
-        return AnyView(UIActivityViewControllerWrapper(activityItems: items)
+        AnyView(UIActivityViewControllerWrapper(activityItems: items)
             .presentationDetents([.medium])
             .ignoresSafeArea())
     }
