@@ -37,8 +37,6 @@ final class TemplateCoordinator: CoordinatorProtocol {
         viewModel = TemplateViewModel(promptType: parameters.promptType)
     }
     
-    // MARK: - Public
-    
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }

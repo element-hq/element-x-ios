@@ -17,18 +17,12 @@
 import Foundation
 import UIKit
 
-// MARK: - Coordinator
-
-// MARK: View model
-
 enum BugReportViewModelAction {
     case cancel
     case submitStarted
     case submitFinished
     case submitFailed(error: Error)
 }
-
-// MARK: View
 
 struct BugReportViewState: BindableState {
     var screenshot: UIImage?

@@ -33,12 +33,6 @@ struct RedactedRoomTimelineView: View {
 
 struct RedactedRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         VStack(alignment: .leading, spacing: 20.0) {
             RedactedRoomTimelineView(timelineItem: itemWith(text: ElementL10n.eventRedacted,
                                                             timestamp: "Later",

@@ -18,6 +18,10 @@ schemes:
       config: Release
     run:
       config: Debug
+      environmentVariables:
+        - variable: RUST_BACKTRACE
+          value: full
+          isEnabled: false
     test:
       config: Debug
       gatherCoverageData: true

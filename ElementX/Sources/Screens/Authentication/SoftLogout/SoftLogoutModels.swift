@@ -16,16 +16,12 @@
 
 import SwiftUI
 
-// MARK: Data
-
 struct SoftLogoutCredentials {
     let userId: String
     let homeserverName: String
     let userDisplayName: String
     let deviceId: String?
 }
-
-// MARK: View model
 
 enum SoftLogoutViewModelAction: CustomStringConvertible {
     /// Login with password
@@ -51,8 +47,6 @@ enum SoftLogoutViewModelAction: CustomStringConvertible {
         }
     }
 }
-
-// MARK: View
 
 struct SoftLogoutViewState: BindableState {
     /// Soft logout credentials

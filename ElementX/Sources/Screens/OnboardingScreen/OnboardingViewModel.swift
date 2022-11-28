@@ -20,21 +20,11 @@ import SwiftUI
 typealias OnboardingViewModelType = StateStoreViewModel<OnboardingViewState, OnboardingViewAction>
 
 class OnboardingViewModel: OnboardingViewModelType, OnboardingViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
-    // MARK: Public
-
     var callback: ((OnboardingViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init() {
         super.init(initialViewState: OnboardingViewState())
     }
-
-    // MARK: - Public
 
     override func process(viewAction: OnboardingViewAction) async {
         switch viewAction {

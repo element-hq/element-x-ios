@@ -18,17 +18,9 @@ import SwiftUI
 
 /// A prompt that asks the user whether they would like to enable Analytics or not.
 struct AnalyticsPrompt: View {
-    // MARK: - Properties
-    
-    // MARK: Private
-    
     private let horizontalPadding: CGFloat = 16
     
-    // MARK: Public
-    
     @ObservedObject var context: AnalyticsPromptViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         GeometryReader { geometry in

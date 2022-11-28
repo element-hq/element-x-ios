@@ -32,13 +32,7 @@ import Foundation
 @dynamicMemberLookup
 @MainActor
 class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
-    // MARK: - Properties
-
-    // MARK: Private
-
     fileprivate let viewActions: PassthroughSubject<ViewAction, Never>
-
-    // MARK: Public
 
     /// Get-able/Observable `Published` property for the `ViewState`
     @Published fileprivate(set) var viewState: ViewState
@@ -49,14 +43,10 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
         set { viewState.bindings[keyPath: keyPath] = newValue }
     }
     
-    // MARK: Setup
-
     init(initialViewState: ViewState) {
         self.viewActions = PassthroughSubject()
         self.viewState = initialViewState
     }
-
-    // MARK: Public
 
     /// Send a `ViewAction` to the `ViewModel` for processing.
     /// - Parameter viewAction: The `ViewAction` to send to the `ViewModel`.
@@ -74,10 +64,6 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
 @MainActor
 class StateStoreViewModel<State: BindableState, ViewAction> {
     typealias Context = ViewModelContext<State, ViewAction>
-
-    // MARK: - Properties
-
-    // MARK: Public
     
     /// For storing subscription references.
     ///
@@ -91,8 +77,6 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
         get { context.viewState }
         set { context.viewState = newValue }
     }
-    
-    // MARK: Setup
 
     init(initialViewState: State) {
         context = Context(initialViewState: initialViewState)

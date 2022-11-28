@@ -18,11 +18,7 @@ import AVKit
 import SwiftUI
 
 struct MediaPlayerScreen: View {
-    // MARK: Public
-    
     @ObservedObject var context: MediaPlayerViewModel.Context
-    
-    // MARK: Views
 
     var body: some View {
         VideoPlayer(player: player())
