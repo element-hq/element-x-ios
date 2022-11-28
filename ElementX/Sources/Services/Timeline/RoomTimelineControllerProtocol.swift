@@ -16,6 +16,7 @@
 
 import Combine
 import Foundation
+import UIKit
 
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems
