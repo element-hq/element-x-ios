@@ -25,10 +25,16 @@ struct RoomScreenCoordinatorParameters {
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
-    private let parameters: RoomScreenCoordinatorParameters
+    private var parameters: RoomScreenCoordinatorParameters?
 
-    private var viewModel: RoomScreenViewModelProtocol
-    private var navigationController: NavigationController { parameters.navigationController }
+    private var viewModel: RoomScreenViewModelProtocol?
+    private var navigationController: NavigationController {
+        guard let parameters else {
+            fatalError()
+        }
+        
+        return parameters.navigationController
+    }
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -43,7 +49,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] result in
+        viewModel?.callback = { [weak self] result in
             guard let self else { return }
             MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
             switch result {
@@ -56,11 +62,17 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
-        viewModel.stop()
+        viewModel?.stop()
+        viewModel = nil
+        parameters = nil
     }
     
     func toPresentable() -> AnyView {
-        AnyView(RoomScreen(context: viewModel.context))
+        guard let context = viewModel?.context else {
+            fatalError()
+        }
+        
+        return AnyView(RoomScreen(context: context))
     }
 
     // MARK: - Private

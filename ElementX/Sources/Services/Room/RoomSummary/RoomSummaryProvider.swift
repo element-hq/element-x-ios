@@ -57,7 +57,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         slidingSyncViewProxy.diffPublisher
             .collect(.byTime(serialDispatchQueue, 0.25))
-            .sink { self.updateRoomsWithDiffs($0) }
+            .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
     }
     
