@@ -158,8 +158,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             return buildEmptyRoomSummary()
         case .filled(let roomId):
             return buildRoomSummaryForIdentifier(roomId)
-        case .invalidated(let roomId):
-            return buildRoomSummaryForIdentifier(roomId)
+        case .invalidated:
+            return buildEmptyRoomSummary()
         }
     }
     
