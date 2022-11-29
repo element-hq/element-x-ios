@@ -75,7 +75,9 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section(ElementL10n.roomDetailsAboutSectionTitle) {
-            Button { } label: {
+            Button {
+                context.send(viewAction: .processTapPeople)
+            } label: {
                 HStack {
                     Image(systemName: "person")
                         .foregroundColor(.element.systemGray)

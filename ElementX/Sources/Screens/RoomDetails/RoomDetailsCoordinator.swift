@@ -29,6 +29,7 @@ enum RoomDetailsCoordinatorAction {
 final class RoomDetailsCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsCoordinatorParameters
     private var viewModel: RoomDetailsViewModelProtocol
+    private var navigationController: NavigationController { parameters.navigationController }
     
     var callback: ((RoomDetailsCoordinatorAction) -> Void)?
     
@@ -46,6 +47,8 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
             guard let self else { return }
             MXLog.debug("RoomDetailsViewModel did complete with result: \(action).")
             switch action {
+            case .peopleTapped:
+                self.showPeople()
             case .cancel:
                 self.callback?(.cancel)
             }
@@ -54,5 +57,17 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
         
     func toPresentable() -> AnyView {
         AnyView(RoomDetailsScreen(context: viewModel.context))
+    }
+
+    private func showPeople() {
+        let params = RoomMembersCoordinatorParameters(navigationController: navigationController,
+                                                      roomProxy: parameters.roomProxy,
+                                                      mediaProvider: parameters.mediaProvider)
+        let coordinator = RoomMembersCoordinator(parameters: params)
+        coordinator.callback = { [weak self] _ in
+            self?.navigationController.pop()
+        }
+
+        navigationController.push(coordinator)
     }
 }

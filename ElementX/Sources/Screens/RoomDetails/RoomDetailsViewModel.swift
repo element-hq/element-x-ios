@@ -68,8 +68,8 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     override func process(viewAction: RoomDetailsViewAction) async {
         switch viewAction {
-        case .selectMember:
-            break
+        case .processTapPeople:
+            callback?(.peopleTapped)
         case .cancel:
             callback?(.cancel)
         }

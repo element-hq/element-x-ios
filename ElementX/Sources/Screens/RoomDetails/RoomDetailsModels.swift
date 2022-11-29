@@ -22,6 +22,7 @@ import UIKit
 // MARK: View model
 
 enum RoomDetailsViewModelAction {
+    case peopleTapped
     case cancel
 }
 
@@ -50,8 +51,7 @@ enum RoomDetailsErrorType: Hashable {
 }
 
 enum RoomDetailsViewAction {
-    case loadMemberData(id: String)
-    case selectMember(id: String)
+    case processTapPeople
     case cancel
 }
 
