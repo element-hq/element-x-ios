@@ -22,6 +22,9 @@ schemes:
         - variable: RUST_BACKTRACE
           value: full
           isEnabled: false
+        - variable: HTTPS_PROXY
+          value: 192.168.0.111:9090
+          isEnabled: false
     test:
       config: Debug
       gatherCoverageData: true

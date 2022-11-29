@@ -101,6 +101,11 @@
             value = "full"
             isEnabled = "NO">
          </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "HTTPS_PROXY"
+            value = "192.168.0.111:9090"
+            isEnabled = "NO">
+         </EnvironmentVariable>
       </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
