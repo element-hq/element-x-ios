@@ -104,6 +104,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendReaction(let key, _):
             #warning("Reaction implementation awaiting SDK support.")
             MXLog.warning("React with \(key) failed. Not implemented.")
+        case .displayMoreEmojis:
+            callback?(.displayEmojiPicker)
         case .cancelReply:
             state.composerMode = .default
         case .cancelEdit:

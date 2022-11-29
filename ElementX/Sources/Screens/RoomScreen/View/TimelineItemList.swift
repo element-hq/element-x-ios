@@ -29,7 +29,8 @@ struct TimelineItemList: View {
     /// updates at the same time as the `viewFrame` but we need to know the previous
     /// value when the keyboard appears to determine whether to scroll to the bottom.
     @State private var cachedVisibleEdges: [VerticalEdge] = []
-    
+    @State private var showEmojiSelectionForItemId = ""
+
     @EnvironmentObject var context: RoomScreenViewModel.Context
     
     let scrollToBottomPublisher: PassthroughSubject<Void, Never>
@@ -45,26 +46,35 @@ struct TimelineItemList: View {
                     .animation(.elementDefault, value: context.viewState.isBackPaginating)
                 
                 ForEach(isRunningPreviews ? context.viewState.items : timelineItems) { item in
-                    item
-                        .contextMenu {
-                            context.viewState.contextMenuBuilder?(item.id)
-                                .id(item.id)
+                    VStack {
+                        if showEmojiSelectionForItemId == item.id {
+                            TimelineItemEmojiReactionsMenuView()
+                                .onTapGesture {
+                                    context.send(viewAction: .displayMoreEmojis)
+                                }
                         }
-                        .opacity(opacityForItem(item))
-                        .padding(settings.timelineStyle.rowInsets)
-                        .onAppear {
-                            context.send(viewAction: .itemAppeared(id: item.id))
-                        }
-                        .onDisappear {
-                            context.send(viewAction: .itemDisappeared(id: item.id))
-                        }
-                        .environment(\.openURL, OpenURLAction { url in
-                            context.send(viewAction: .linkClicked(url: url))
-                            return .systemAction
-                        })
-                        .onTapGesture {
-                            context.send(viewAction: .itemTapped(id: item.id))
-                        }
+                        item
+                            .contextMenu {
+                                context.viewState.contextMenuBuilder?(item.id)
+                                    .id(item.id)
+                            }
+                            .opacity(opacityForItem(item))
+                            .padding(settings.timelineStyle.rowInsets)
+                            .onAppear {
+                                context.send(viewAction: .itemAppeared(id: item.id))
+                            }
+                            .onDisappear {
+                                context.send(viewAction: .itemDisappeared(id: item.id))
+                            }
+                            .environment(\.openURL, OpenURLAction { url in
+                                context.send(viewAction: .linkClicked(url: url))
+                                return .systemAction
+                            })
+                            .onTapGesture {
+                                // context.send(viewAction: .itemTapped(id: item.id))
+                                showEmojiSelectionForItemId = item.id
+                            }
+                    }
                 }
             }
             .onChange(of: visibleEdges) { edges in

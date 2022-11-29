@@ -57,6 +57,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayVideo(for: videoURL)
             case .displayFile(let fileURL, let title):
                 self.displayFile(for: fileURL, with: title)
+            case .displayEmojiPicker:
+                self.displayEmojiPickerScreen()
             }
         }
     }
@@ -107,5 +109,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         }
         
         navigationController.push(coordinator)
+    }
+    
+    private func displayEmojiPickerScreen() {
+        let params = EmojiPickerScreenCoordinatorParameters()
+        let coordinator = EmojiPickerScreenCoordinator(parameters: params)
+        navigationController.presentSheet(coordinator)
     }
 }

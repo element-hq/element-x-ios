@@ -20,6 +20,7 @@ import UIKit
 enum RoomScreenViewModelAction {
     case displayVideo(videoURL: URL)
     case displayFile(fileURL: URL, title: String?)
+    case displayEmojiPicker
 }
 
 enum RoomScreenComposerMode: Equatable {
@@ -30,6 +31,7 @@ enum RoomScreenComposerMode: Equatable {
 
 enum RoomScreenViewAction {
     case loadPreviousPage
+    case displayMoreEmojis
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
     case itemTapped(id: String)
