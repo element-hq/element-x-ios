@@ -29,7 +29,10 @@ enum RoomDetailsViewModelAction {
 
 struct RoomDetailsViewState: BindableState {
     let roomId: String
+    let isEncrypted: Bool
+    let isDirect: Bool
     var roomTitle = ""
+    var roomTopic: String?
     var roomAvatar: UIImage?
     var members: [RoomDetailsMember]
 
@@ -47,20 +50,21 @@ enum RoomDetailsErrorType: Hashable {
 }
 
 enum RoomDetailsViewAction {
+    case loadMemberData(id: String)
     case selectMember(id: String)
     case cancel
 }
 
 struct RoomDetailsMember: Identifiable, Equatable {
     let id: String
-
     let name: String?
-
+    let avatarUrl: String?
+    // cached
     var avatar: UIImage?
 
-    static func placeholder(id: String) -> RoomDetailsMember {
-        RoomDetailsMember(id: id,
-                          name: "Placeholder user name",
-                          avatar: UIImage(systemName: "photo"))
+    init(withProxy proxy: RoomMemberProxy) {
+        id = proxy.userId
+        name = proxy.displayName
+        avatarUrl = proxy.avatarUrl
     }
 }

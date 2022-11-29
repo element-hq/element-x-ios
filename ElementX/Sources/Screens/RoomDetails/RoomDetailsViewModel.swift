@@ -36,12 +36,18 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
          mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
-        super.init(initialViewState: RoomDetailsViewState(roomId: roomProxy.id, members: [], bindings: .init()))
+        super.init(initialViewState: .init(roomId: roomProxy.id,
+                                           isEncrypted: roomProxy.isEncrypted,
+                                           isDirect: roomProxy.isDirect,
+                                           roomTitle: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",
+                                           roomTopic: roomProxy.topic,
+                                           members: [],
+                                           bindings: .init()))
 
         Task {
             switch await roomProxy.members() {
             case .success(let members):
-                state.members = members.map { RoomDetailsMember(id: $0, name: roomProxy.displayNameForUserId($0)) }
+                state.members = members.map { RoomDetailsMember(withProxy: $0) }
             case .failure(let error):
                 MXLog.debug("Failed to retrieve room members: \(error)")
                 state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
@@ -51,7 +57,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         if let avatarURL = roomProxy.avatarURL {
             Task {
                 if case let .success(avatar) = await mediaProvider.loadImageFromURLString(avatarURL,
-                                                                                          avatarSize: .room(on: .timeline)) {
+                                                                                          avatarSize: .room(on: .details)) {
                     state.roomAvatar = avatar
                 }
             }

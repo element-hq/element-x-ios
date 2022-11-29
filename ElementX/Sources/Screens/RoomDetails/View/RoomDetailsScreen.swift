@@ -20,6 +20,9 @@ struct RoomDetailsScreen: View {
     // MARK: Private
     
     @Environment(\.colorScheme) private var colorScheme
+    @ScaledMetric private var avatarSize = AvatarSize.room(on: .details).value
+    @ScaledMetric private var menuIconSize = 30.0
+    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
     // MARK: Public
     
@@ -28,31 +31,114 @@ struct RoomDetailsScreen: View {
     // MARK: Views
     
     var body: some View {
-        ScrollView {
-            LazyVStack {
-                roomAvatarImage
+        Form {
+            headerSection
 
-                ForEach(context.viewState.members) { member in
-                    RoomDetailsMemberCell(member: member, context: context)
-                }
+            if let topic = context.viewState.roomTopic {
+                topicSection(with: topic)
             }
-            .padding(.horizontal)
-//            .searchable(text: $context.searchQuery)
+
+            if !context.viewState.isDirect {
+                aboutSection
+            }
+
+            if context.viewState.isEncrypted {
+                securitySection
+            }
         }
         .ignoresSafeArea(.all, edges: .bottom)
         .alert(item: $context.alertInfo) { $0.alert }
-        .navigationTitle(ElementL10n.allChats)
+        .navigationTitle(ElementL10n.roomDetailsTitle)
+    }
+
+    private var headerSection: some View {
+        VStack(spacing: 16.0) {
+            roomAvatarImage
+            Text(context.viewState.roomTitle)
+                .foregroundColor(.element.primaryContent)
+                .font(.element.headline)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .listRowBackground(Color.clear)
+        .padding(.top, 18)
+        .padding(.bottom, 42)
+    }
+
+    private func topicSection(with topic: String) -> some View {
+        Section(ElementL10n.roomSettingsTopic) {
+            Text(topic)
+                .foregroundColor(.element.secondaryContent)
+                .font(.element.footnote)
+        }
+    }
+
+    private var aboutSection: some View {
+        Section(ElementL10n.roomDetailsAboutSectionTitle) {
+            Button { } label: {
+                HStack {
+                    Image(systemName: "person")
+                        .foregroundColor(.element.systemGray)
+                        .padding(4)
+                        .background(Color.element.systemGray6)
+                        .clipShape(Circle())
+                        .frame(width: menuIconSize, height: menuIconSize)
+                    Text(ElementL10n.bottomActionPeople)
+                        .foregroundColor(.element.primaryContent)
+                        .font(.body)
+                    Spacer()
+                    Text(String(context.viewState.members.count))
+                        .foregroundColor(.element.secondaryContent)
+                        .font(.element.body)
+                    Image(systemName: "chevron.forward")
+                        .foregroundColor(.element.secondaryContent)
+                }
+            }
+            .listRowInsets(listRowInsets)
+            .foregroundColor(.element.primaryContent)
+            .accessibilityIdentifier("peopleButton")
+        }
+    }
+
+    private var securitySection: some View {
+        Section(ElementL10n.roomProfileSectionSecurity) {
+            HStack(alignment: .top) {
+                Image(systemName: "lock.shield")
+                    .foregroundColor(.element.systemGray)
+                    .padding(4)
+                    .background(Color.element.systemGray6)
+                    .clipShape(Circle())
+                    .frame(width: menuIconSize, height: menuIconSize)
+                VStack {
+                    HStack {
+                        Text(ElementL10n.encryptionEnabled)
+                            .foregroundColor(.element.primaryContent)
+                            .font(.element.body)
+                        Spacer()
+                        Image(systemName: "checkmark")
+                            .foregroundColor(.element.secondaryContent)
+                    }
+                    Text(ElementL10n.encryptionEnabledTileDescription)
+                        .foregroundColor(.element.secondaryContent)
+                        .font(.element.footnote)
+                }
+            }
+        }
     }
 
     @ViewBuilder private var roomAvatarImage: some View {
         if let avatar = context.viewState.roomAvatar {
             Image(uiImage: avatar)
                 .resizable()
-                .aspectRatio(1, contentMode: .fill)
+                .scaledToFill()
+                .frame(width: avatarSize, height: avatarSize)
+                .clipShape(Circle())
                 .accessibilityIdentifier("roomAvatarImage")
         } else {
             PlaceholderAvatarImage(text: context.viewState.roomTitle,
                                    contentId: context.viewState.roomId)
+                .clipShape(Circle())
+                .frame(width: avatarSize, height: avatarSize)
                 .accessibilityIdentifier("roomAvatarPlaceholderImage")
         }
     }
