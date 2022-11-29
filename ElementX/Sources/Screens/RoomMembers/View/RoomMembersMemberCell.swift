@@ -16,17 +16,17 @@
 
 import SwiftUI
 
-struct RoomDetailsMemberCell: View {
+struct RoomMembersMemberCell: View {
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .roomDetails).value
 
     let member: RoomDetailsMember
-    let context: RoomDetailsViewModel.Context
+    let context: RoomMembersViewModel.Context
 
     var body: some View {
         Button {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
-            HStack(spacing: 16.0) {
+            HStack {
                 if let avatar = member.avatar {
                     Image(uiImage: avatar)
                         .resizable()
@@ -41,20 +41,17 @@ struct RoomDetailsMemberCell: View {
                         .accessibilityHidden(true)
                 }
 
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 2.0) {
-                        Text(member.name ?? "")
-                            .font(.element.callout.bold())
-                            .foregroundColor(.element.primaryContent)
-                            .lineLimit(1)
-                    }
-                }
+                Text(member.name ?? "")
+                    .font(.element.callout.bold())
+                    .foregroundColor(.element.primaryContent)
+                    .lineLimit(1)
+
+                Spacer()
             }
-            .frame(minHeight: 64.0)
             .accessibilityElement(children: .combine)
-//            .task {
-//                context.send(viewAction: .loadMemberData(id: member.id))
-//            }
+            .task {
+                context.send(viewAction: .loadMemberData(id: member.id))
+            }
         }
     }
 }
