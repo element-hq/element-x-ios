@@ -59,6 +59,7 @@ struct HomeScreen: View {
                 }
                 .padding(.horizontal)
                 .searchable(text: $context.searchQuery)
+                .disableAutocorrection(true)
             }
         }
         .introspectScrollView { scrollView in
