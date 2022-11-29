@@ -66,7 +66,7 @@ protocol RoomProxyProtocol {
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
 
-    func members() async -> Result<[String], RoomProxyError>
+    func members() async -> Result<[RoomMemberProxy], RoomProxyError>
 }
 
 extension RoomProxyProtocol {

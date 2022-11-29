@@ -77,7 +77,7 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.failedRedactingEvent)
     }
 
-    func members() async -> Result<[String], RoomProxyError> {
+    func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
         .failure(.failedRetrievingMembers)
     }
 }

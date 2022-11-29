@@ -232,10 +232,10 @@ class RoomProxy: RoomProxyProtocol {
         .value
     }
 
-    func members() async -> Result<[String], RoomProxyError> {
+    func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
         do {
             let members = try room.members()
-            return .success(members)
+            return .success(members.map { RoomMemberProxy(with: $0) })
         } catch {
             return .failure(.failedRetrievingMembers)
         }
