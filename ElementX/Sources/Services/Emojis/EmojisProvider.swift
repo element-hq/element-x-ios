@@ -19,7 +19,7 @@ import Foundation
 @MainActor
 class EmojisProvider {
     private let loader: EmojisLoaderProtocol
-    private var emojiCategories = [EmojiCategory]()
+    private static var emojiCategories = [EmojiCategory]()
     
     init(loader: EmojisLoaderProtocol = EmojiMartJSONLoader()) {
         self.loader = loader
@@ -30,10 +30,10 @@ class EmojisProvider {
     }
     
     func load() async -> [EmojiCategory] {
-        guard emojiCategories.isEmpty else {
-            return emojiCategories
+        guard Self.emojiCategories.isEmpty else {
+            return Self.emojiCategories
         }
-        emojiCategories = await loader.load()
-        return emojiCategories
+        Self.emojiCategories = await loader.load()
+        return Self.emojiCategories
     }
 }

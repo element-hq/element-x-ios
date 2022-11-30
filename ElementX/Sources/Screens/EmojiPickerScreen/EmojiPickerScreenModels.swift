@@ -18,6 +18,8 @@ import Foundation
 
 enum EmojiPickerScreenViewModelAction { }
 
-struct EmojiPickerScreenViewState: BindableState { }
+struct EmojiPickerScreenViewState: BindableState {
+    var categories: [EmojiCategory]
+}
 
 enum EmojiPickerScreenViewAction { }

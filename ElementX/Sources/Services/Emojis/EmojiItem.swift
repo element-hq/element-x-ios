@@ -16,8 +16,10 @@
 
 import Foundation
 
-struct EmojiItem: Equatable {
-    // MARK: - Properties
+struct EmojiItem: Equatable, Identifiable {
+    var id: String {
+        value
+    }
     
     /// The commonly-agreed short name for the emoji, as supported in GitHub and others via the :short_name: syntax (e.g. "grinning" for 😀).
     let shortName: String
@@ -36,8 +38,6 @@ struct EmojiItem: Equatable {
     
     /// For emoji with multiple skin tone variations, a list of alternative emoji items.
     let variations: [EmojiItem]
-    
-    // MARK: - Setup
     
     init(shortName: String,
          value: String,

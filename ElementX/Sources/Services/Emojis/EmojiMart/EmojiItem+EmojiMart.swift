@@ -49,7 +49,7 @@ extension EmojiItem: Decodable {
         
         for unicodeStringComponent in unicodeStringComponents {
             if let unicodeCodePoint = Int(unicodeStringComponent, radix: 16),
-                let emojiUnicodeScalar = UnicodeScalar(unicodeCodePoint) {
+               let emojiUnicodeScalar = UnicodeScalar(unicodeCodePoint) {
                 emoji.append(String(emojiUnicodeScalar))
             } else {
                 throw DecodingError.dataCorruptedError(forKey: .codepoint, in: container, debugDescription: "Cannot initialize emoji")

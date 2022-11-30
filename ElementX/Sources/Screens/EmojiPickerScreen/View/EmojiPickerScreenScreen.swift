@@ -22,7 +22,18 @@ struct EmojiPickerScreenScreen: View {
     @ObservedObject var context: EmojiPickerScreenViewModel.Context
     
     var body: some View {
-        Text("Content")
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 5) {
+                ForEach(context.viewState.categories) { category in
+                    Section(header: Text(category.name).font(.title)) {
+                        ForEach(category.emojis) { emoji in
+                            Text(emoji.value)
+                        }
+                    }
+                }
+            }
+            .padding(16)
+        }
     }
 }
 
@@ -30,13 +41,6 @@ struct EmojiPickerScreenScreen: View {
 
 struct EmojiPickerScreen_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            let regularViewModel = EmojiPickerScreenViewModel()
-            EmojiPickerScreenScreen(context: regularViewModel.context)
-            
-            let upgradeViewModel = EmojiPickerScreenViewModel()
-            EmojiPickerScreenScreen(context: upgradeViewModel.context)
-        }
-        .tint(.element.accent)
+        EmojiPickerScreenScreen(context: EmojiPickerScreenViewModel().context)
     }
 }

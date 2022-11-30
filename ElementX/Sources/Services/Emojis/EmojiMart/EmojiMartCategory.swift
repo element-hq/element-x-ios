@@ -17,7 +17,6 @@
 import Foundation
 
 struct EmojiMartCategory {
-    
     /// Emoji category identifier (e.g. "people")
     let identifier: String
     
@@ -28,9 +27,7 @@ struct EmojiMartCategory {
     let emojiShortNames: [String]
 }
 
-// MARK: - Decodable
 extension EmojiMartCategory: Decodable {
-    
     /// JSON keys associated to EmojiJSONCategory properties.
     enum CodingKeys: String, CodingKey {
         case identifier = "id"
