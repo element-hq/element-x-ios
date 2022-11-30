@@ -24,15 +24,16 @@ struct RoomHeaderView: View {
     @ObservedObject var context: RoomScreenViewModel.Context
 
     var body: some View {
-        HStack(spacing: 8) {
-            roomAvatar
-                .accessibilityHidden(true)
-            Text(context.viewState.roomTitle)
-                .font(.element.headline)
-                .accessibilityIdentifier("roomNameLabel")
-        }
-        .onTapGesture {
+        Button {
             context.send(viewAction: .headerTapped)
+        } label: {
+            HStack(spacing: 8) {
+                roomAvatar
+                    .accessibilityHidden(true)
+                Text(context.viewState.roomTitle)
+                    .font(.element.headline)
+                    .accessibilityIdentifier("roomNameLabel")
+            }
         }
     }
 

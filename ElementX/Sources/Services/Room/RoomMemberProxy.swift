@@ -52,3 +52,34 @@ struct RoomMemberProxy {
         member.normalizedPowerLevel
     }
 }
+
+extension RoomMemberProxy: Identifiable {
+    var id: String {
+        userId
+    }
+}
+
+// Mocks
+extension RoomMemberProxy {
+    static let mockA = RoomMemberProxy(with: .init(userId: "mockA@m.org",
+                                                   displayName: "A Member",
+                                                   avatarUrl: nil,
+                                                   membership: .join,
+                                                   isNameAmbiguous: false,
+                                                   powerLevel: 50,
+                                                   normalizedPowerLevel: 50))
+    static let mockB = RoomMemberProxy(with: .init(userId: "mockB@m.org",
+                                                   displayName: "B Member",
+                                                   avatarUrl: nil,
+                                                   membership: .join,
+                                                   isNameAmbiguous: false,
+                                                   powerLevel: 50,
+                                                   normalizedPowerLevel: 50))
+    static let mockC = RoomMemberProxy(with: .init(userId: "mockC@m.org",
+                                                   displayName: "C Member",
+                                                   avatarUrl: nil,
+                                                   membership: .join,
+                                                   isNameAmbiguous: false,
+                                                   powerLevel: 50,
+                                                   normalizedPowerLevel: 50))
+}

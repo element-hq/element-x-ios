@@ -56,7 +56,7 @@ struct RoomMembersMemberCell: View {
     }
 }
 
-struct RoomDetailsMemberCell_Previews: PreviewProvider {
+struct RoomMembersMemberCell_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
             .tint(.element.accent)
@@ -65,28 +65,19 @@ struct RoomDetailsMemberCell_Previews: PreviewProvider {
     }
 
     static var body: some View {
-        let summaryProvider = MockRoomSummaryProvider(state: .loaded)
-
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe", roomSummaryProvider: summaryProvider),
-                                          mediaProvider: MockMediaProvider())
-
-        let viewModel = HomeScreenViewModel(userSession: userSession,
-                                            attributedStringBuilder: AttributedStringBuilder())
-
-        let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary in
-            guard let summary = summary.asFilled else {
-                return nil
-            }
-
-            return HomeScreenRoom(id: summary.id,
-                                  name: summary.name,
-                                  hasUnreads: summary.unreadNotificationCount > 0,
-                                  timestamp: Date.now.formatted(date: .omitted, time: .shortened))
-        }
+        let members: [RoomMemberProxy] = [
+            .mockA,
+            .mockB,
+            .mockC
+        ]
+        let roomProxy = MockRoomProxy(displayName: "Room A",
+                                      members: members)
+        let viewModel = RoomMembersViewModel(roomProxy: roomProxy,
+                                             mediaProvider: MockMediaProvider())
 
         return VStack {
-            ForEach(rooms) { room in
-                HomeScreenRoomCell(room: room, context: viewModel.context)
+            ForEach(members) { member in
+                RoomMembersMemberCell(member: .init(withProxy: member), context: viewModel.context)
             }
         }
     }

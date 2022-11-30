@@ -151,7 +151,17 @@ struct RoomDetailsScreen: View {
 struct RoomDetails_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = RoomDetailsViewModel(roomProxy: MockRoomProxy(displayName: "Room A"),
+            let members: [RoomMemberProxy] = [
+                .mockA,
+                .mockB,
+                .mockC
+            ]
+            let roomProxy = MockRoomProxy(displayName: "Room A",
+                                          topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                                          isDirect: false,
+                                          isEncrypted: true,
+                                          members: members)
+            let viewModel = RoomDetailsViewModel(roomProxy: roomProxy,
                                                  mediaProvider: MockMediaProvider())
             RoomDetailsScreen(context: viewModel.context)
         }

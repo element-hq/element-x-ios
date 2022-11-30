@@ -56,7 +56,7 @@ class RoomMembersViewModel: RoomMembersViewModelType, RoomMembersViewModelProtoc
     }
 
     private func loadAvatar(forMember memberId: String) async {
-        guard var member = state.members.first(where: { $0.id == memberId }) else {
+        guard let member = state.members.first(where: { $0.id == memberId }) else {
             return
         }
         if member.avatar != nil {
@@ -70,7 +70,9 @@ class RoomMembersViewModel: RoomMembersViewModelType, RoomMembersViewModelProtoc
 
         switch await mediaProvider.loadImageFromURLString(avatarUrl, avatarSize: .user(on: .roomDetails)) {
         case .success(let image):
-            member.avatar = image
+            if let index = state.members.firstIndex(where: { $0.id == memberId }) {
+                state.members[index].avatar = image
+            }
         case .failure(let error):
             MXLog.debug("Failed to retrieve room member avatar: \(error)")
         }

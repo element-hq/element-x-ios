@@ -24,7 +24,7 @@ struct RoomMembersScreen: View {
     var body: some View {
         Form {
             Section {
-                ForEach(context.viewState.visibleMembers, id: \.id) { member in
+                ForEach(context.viewState.visibleMembers) { member in
                     RoomMembersMemberCell(member: member, context: context)
                         .id(member.id)
                 }
@@ -46,7 +46,14 @@ struct RoomMembersScreen: View {
 struct RoomMembers_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = RoomMembersViewModel(roomProxy: MockRoomProxy(displayName: "Room A"),
+            let members: [RoomMemberProxy] = [
+                .mockA,
+                .mockB,
+                .mockC
+            ]
+            let roomProxy = MockRoomProxy(displayName: "Room A",
+                                          members: members)
+            let viewModel = RoomMembersViewModel(roomProxy: roomProxy,
                                                  mediaProvider: MockMediaProvider())
             RoomMembersScreen(context: viewModel.context)
         }

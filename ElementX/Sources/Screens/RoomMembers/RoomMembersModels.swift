@@ -32,7 +32,7 @@ struct RoomMembersViewState: BindableState {
 
         return members.lazy.filter { member in
             member.id.localizedCaseInsensitiveContains(bindings.searchQuery) ||
-            member.name?.localizedCaseInsensitiveContains(bindings.searchQuery) ?? false
+                member.name?.localizedCaseInsensitiveContains(bindings.searchQuery) ?? false
         }
     }
 }
