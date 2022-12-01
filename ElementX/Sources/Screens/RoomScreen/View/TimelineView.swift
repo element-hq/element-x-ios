@@ -22,25 +22,22 @@ import Introspect
 
 struct TimelineView: View {
     @ObservedObject private var settings = ElementSettings.shared
-    
-    @State private var scrollToBottomPublisher = PassthroughSubject<Void, Never>()
-    @State private var scrollToBottomButtonVisible = false
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     
     var body: some View {
-        TimelineTableView(scrollToBottomPublisher: scrollToBottomPublisher,
-                          scrollToBottomButtonVisible: $scrollToBottomButtonVisible)
+        TimelineTableView()
             .timelineStyle(settings.timelineStyle)
             .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
     }
     
     private var scrollToBottomButton: some View {
-        Button { scrollToBottomPublisher.send(()) } label: {
+        Button { context.viewState.scrollToBottomPublisher.send(()) } label: {
             Image(uiImage: Asset.Images.timelineScrollToBottom.image)
                 .shadow(radius: 2.0)
                 .padding()
         }
-        .opacity(scrollToBottomButtonVisible ? 1.0 : 0.0)
-        .animation(.elementDefault, value: scrollToBottomButtonVisible)
+        .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
+        .animation(.elementDefault, value: context.scrollToBottomButtonVisible)
     }
 }
 

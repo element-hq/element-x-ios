@@ -18,6 +18,8 @@ import Combine
 import SwiftUI
 
 class TimelineItemCell: UITableViewCell {
+    static let reuseIdentifier = "TimelineCell"
+    
     var item: RoomTimelineViewProvider?
     
     override func prepareForReuse() {
@@ -26,25 +28,16 @@ class TimelineItemCell: UITableViewCell {
 }
 
 struct TimelineTableView: UIViewRepresentable {
-    enum Constants {
-        static let cellIdentifier = "TimelineCell"
-    }
-    
     @EnvironmentObject private var viewModelContext: RoomScreenViewModel.Context
     @Environment(\.timelineStyle) private var timelineStyle
     
-    #warning("Should this come via the context like loadPreviousPage???")
-    let scrollToBottomPublisher: PassthroughSubject<Void, Never>
-    @Binding var scrollToBottomButtonVisible: Bool
-    
     func makeUIView(context: Context) -> UITableView {
         let tableView = UITableView(frame: .zero, style: .plain)
-        tableView.register(TimelineItemCell.self, forCellReuseIdentifier: Constants.cellIdentifier)
+        tableView.register(TimelineItemCell.self, forCellReuseIdentifier: TimelineItemCell.reuseIdentifier)
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
         context.coordinator.tableView = tableView
-        context.coordinator.paginateBackwardsPublisher = viewModelContext.viewState.paginateBackwardsPublisher
         context.coordinator.paginateBackwardsPublisher.send(())
         return tableView
     }
@@ -59,20 +52,24 @@ struct TimelineTableView: UIViewRepresentable {
         if context.coordinator.timelineStyle != timelineStyle {
             context.coordinator.timelineStyle = timelineStyle
         }
+        if case let .reply(selectedItemID, _) = viewModelContext.viewState.composerMode {
+            if context.coordinator.selectedItemID != selectedItemID {
+                context.coordinator.selectedItemID = selectedItemID
+            }
+        } else if context.coordinator.selectedItemID != nil {
+            context.coordinator.selectedItemID = nil
+        }
     }
     
     func makeCoordinator() -> Coordinator {
         Coordinator(viewModelContext: viewModelContext,
-                    scrollToBottomPublisher: scrollToBottomPublisher,
-                    scrollToBottomButtonVisible: $scrollToBottomButtonVisible)
+                    scrollToBottomButtonVisible: $viewModelContext.scrollToBottomButtonVisible)
     }
     
     // MARK: - Coordinator
     
     @MainActor
     class Coordinator: NSObject {
-        let viewModelContext: RoomScreenViewModel.Context
-        
         var tableView: UITableView? {
             didSet {
                 registerFrameObserver()
@@ -92,13 +89,26 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
+        var selectedItemID: String? {
+            didSet {
+                // Reload the visible items in order to update their opacity.
+                // Applying a snapshot won't work in this instance as the items don't change.
+                guard let tableView, let visibleIndexPaths = tableView.indexPathsForVisibleRows, let dataSource else { return }
+                var snapshot = dataSource.snapshot()
+                snapshot.reloadItems(visibleIndexPaths.compactMap { dataSource.itemIdentifier(for: $0) })
+                dataSource.apply(snapshot)
+            }
+        }
+        
         var isBackPaginating = false {
             didSet {
                 paginateBackwardsIfNeeded()
             }
         }
         
-        var paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
+        private let contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
+        private let viewActionPublisher: PassthroughSubject<RoomScreenViewAction, Never>
+        let paginateBackwardsPublisher: PassthroughSubject<Void, Never>
         @Binding var scrollToBottomButtonVisible: Bool
         
         private var dataSource: UITableViewDiffableDataSource<TimelineSection, RoomTimelineViewProvider>?
@@ -108,13 +118,15 @@ struct TimelineTableView: UIViewRepresentable {
         private var frameObserverToken: NSKeyValueObservation?
         
         init(viewModelContext: RoomScreenViewModel.Context,
-             scrollToBottomPublisher: PassthroughSubject<Void, Never>,
              scrollToBottomButtonVisible: Binding<Bool>) {
-            self.viewModelContext = viewModelContext
+            contextMenuBuilder = viewModelContext.viewState.contextMenuBuilder
+            viewActionPublisher = viewModelContext.viewState.viewActionPublisher
+            paginateBackwardsPublisher = viewModelContext.viewState.paginateBackwardsPublisher
             _scrollToBottomButtonVisible = scrollToBottomButtonVisible
+            
             super.init()
             
-            scrollToBottomPublisher
+            viewModelContext.viewState.scrollToBottomPublisher
                 .sink { [weak self] _ in
                     self?.scrollToBottom(animated: true)
                 }
@@ -130,11 +142,12 @@ struct TimelineTableView: UIViewRepresentable {
                 .store(in: &cancellables)
         }
         
+        /// Configures a diffable data source for the timeline's table view.
         private func configureDataSource() {
             guard let tableView else { return }
             
             dataSource = .init(tableView: tableView) { tableView, indexPath, timelineItem in
-                let cell = tableView.dequeueReusableCell(withIdentifier: Constants.cellIdentifier, for: indexPath)
+                let cell = tableView.dequeueReusableCell(withIdentifier: TimelineItemCell.reuseIdentifier, for: indexPath)
                 guard let cell = cell as? TimelineItemCell else { return cell }
                 
                 cell.item = timelineItem
@@ -143,21 +156,21 @@ struct TimelineTableView: UIViewRepresentable {
                     timelineItem
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contextMenu {
-                            self.viewModelContext.viewState.contextMenuBuilder?(timelineItem.id)
+                            self.contextMenuBuilder?(timelineItem.id)
                         }
                         .opacity(self.opacityForItem(timelineItem))
                         .onAppear {
-                            self.viewModelContext.send(viewAction: .itemAppeared(id: timelineItem.id))
+                            self.viewActionPublisher.send(.itemAppeared(id: timelineItem.id))
                         }
                         .onDisappear {
-                            self.viewModelContext.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                            self.viewActionPublisher.send(.itemDisappeared(id: timelineItem.id))
                         }
                         .environment(\.openURL, OpenURLAction { url in
-                            self.viewModelContext.send(viewAction: .linkClicked(url: url))
+                            self.viewActionPublisher.send(.linkClicked(url: url))
                             return .systemAction
                         })
                         .onTapGesture {
-                            self.viewModelContext.send(viewAction: .itemTapped(id: timelineItem.id))
+                            self.viewActionPublisher.send(.itemTapped(id: timelineItem.id))
                         }
                 }
                 .margins(.all, self.timelineStyle.rowInsets)
@@ -176,7 +189,7 @@ struct TimelineTableView: UIViewRepresentable {
             frameObserverToken?.invalidate()
             
             frameObserverToken = tableView?.observe(\.frame, options: .new) { [weak self] _, _ in
-                guard let self else { return }
+                guard let self, self.selectedItemID == nil else { return }
                 let previousLayout = self.layout()
                 
                 if previousLayout.isBottomVisible {
@@ -185,6 +198,9 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
+        /// Updates the table view with the latest items from the `timelineItems` array. After
+        /// updating the data, the table will be scrolled to the bottom if it was visible otherwise
+        /// the scroll position will be updated to maintain the position of the last visible item.
         private func applySnapshot() {
             guard let dataSource else { return }
             
@@ -195,17 +211,19 @@ struct TimelineTableView: UIViewRepresentable {
             snapshot.appendItems(timelineItems)
             dataSource.apply(snapshot, animatingDifferences: false)
             
-            updateHeader()
+            updateTopPadding()
             
             guard snapshot.numberOfItems != previousLayout.numberOfItems else { return }
             
             if previousLayout.isBottomVisible {
                 scrollToBottom(animated: false)
             } else if let pinnedItem = previousLayout.pinnedItem {
-                pinItem(pinnedItem, using: snapshot)
+                restoreScrollPosition(using: pinnedItem, and: snapshot)
             }
         }
         
+        /// Returns a description of the current layout in order to update the
+        /// scroll position after adding/updating items to the timeline.
         private func layout() -> LayoutDescriptor {
             guard let tableView, let dataSource else { return LayoutDescriptor() }
             
@@ -227,7 +245,9 @@ struct TimelineTableView: UIViewRepresentable {
             return layout
         }
         
-        private func updateHeader() {
+        /// Updates the additional padding added to the top of the table (via a header)
+        /// in order to fill the timeline from the bottom of the view upwards.
+        private func updateTopPadding() {
             guard let tableView else { return }
             
             let contentHeight = tableView.contentSize.height - (tableView.tableHeaderView?.frame.height ?? 0)
@@ -235,16 +255,18 @@ struct TimelineTableView: UIViewRepresentable {
             
             if height > 0 {
                 let frame = CGRect(origin: .zero, size: CGSize(width: tableView.contentSize.width, height: height))
-                tableView.tableHeaderView = UIView(frame: frame)
+                tableView.tableHeaderView = UIView(frame: frame) // Updating an existing view's height doesn't move the cells.
             } else {
                 tableView.tableHeaderView = nil
             }
         }
         
+        /// Whether or not the bottom of the scroll view is visible (with some small tolerance added).
         private func isAtBottom(of scrollView: UIScrollView) -> Bool {
             scrollView.contentOffset.y < (scrollView.contentSize.height - scrollView.visibleSize.height - 15)
         }
         
+        /// Scrolls to the bottom of the timeline.
         private func scrollToBottom(animated: Bool) {
             guard let lastItem = timelineItems.last,
                   let lastIndexPath = dataSource?.indexPath(for: lastItem)
@@ -253,7 +275,8 @@ struct TimelineTableView: UIViewRepresentable {
             tableView?.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
         }
         
-        private func pinItem(_ pinnedItem: PinnedItem, using snapshot: NSDiffableDataSourceSnapshot<TimelineSection, RoomTimelineViewProvider>) {
+        /// Restores the position of the timeline using the supplied item and snapshot.
+        private func restoreScrollPosition(using pinnedItem: PinnedItem, and snapshot: NSDiffableDataSourceSnapshot<TimelineSection, RoomTimelineViewProvider>) {
             guard let tableView,
                   let item = snapshot.itemIdentifiers.first(where: { $0.id == pinnedItem.id }),
                   let indexPath = dataSource?.indexPath(for: item)
@@ -270,7 +293,8 @@ struct TimelineTableView: UIViewRepresentable {
                 tableView.contentOffset.y += deltaY
             }
         }
-            
+        
+        /// Checks whether or a backwards pagination is needed and requests one if so.
         private func paginateBackwardsIfNeeded() {
             guard let tableView,
                   !isBackPaginating,
@@ -281,15 +305,11 @@ struct TimelineTableView: UIViewRepresentable {
             paginateBackwardsPublisher.send(())
         }
         
+        /// 
         private func opacityForItem(_ item: RoomTimelineViewProvider) -> Double {
-            guard case let .reply(selectedItemId, _) = viewModelContext.viewState.composerMode else {
-                return 1.0
-            }
-            
-            return selectedItemId == item.id ? 1.0 : 0.5
+            guard let selectedItemID else { return 1.0 }
+            return item.id == selectedItemID ? 1.0 : 0.5
         }
-        
-        // TODO: Handle frame changes.
     }
 }
 

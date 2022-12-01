@@ -80,6 +80,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        state.viewActionPublisher
+            .sink { [weak self] action in
+                self?.context.send(viewAction: action)
+            }
+            .store(in: &cancellables)
+        
         buildTimelineViews()
 
         if let roomAvatarUrl {

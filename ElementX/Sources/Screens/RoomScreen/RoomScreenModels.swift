@@ -57,12 +57,16 @@ struct RoomScreenViewState: BindableState {
         bindings.composerText.count == 0
     }
     
+    let viewActionPublisher = PassthroughSubject<RoomScreenViewAction, Never>()
     let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
+    let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
 }
 
 struct RoomScreenViewStateBindings {
     var composerText: String
     var composerFocused: Bool
+    
+    var scrollToBottomButtonVisible = false
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
