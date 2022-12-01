@@ -38,38 +38,28 @@ struct TimelineTableView: UIViewRepresentable {
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
         context.coordinator.tableView = tableView
-        context.coordinator.paginateBackwardsPublisher.send(())
+        viewModelContext.viewState.paginateBackwardsPublisher.send(())
         return tableView
     }
     
     func updateUIView(_ uiView: UITableView, context: Context) {
-        if context.coordinator.timelineItems != viewModelContext.viewState.items {
-            context.coordinator.timelineItems = viewModelContext.viewState.items
-        }
-        if context.coordinator.isBackPaginating != viewModelContext.viewState.isBackPaginating {
-            context.coordinator.isBackPaginating = viewModelContext.viewState.isBackPaginating
-        }
+        context.coordinator.update()
+        
         if context.coordinator.timelineStyle != timelineStyle {
             context.coordinator.timelineStyle = timelineStyle
-        }
-        if case let .reply(selectedItemID, _) = viewModelContext.viewState.composerMode {
-            if context.coordinator.selectedItemID != selectedItemID {
-                context.coordinator.selectedItemID = selectedItemID
-            }
-        } else if context.coordinator.selectedItemID != nil {
-            context.coordinator.selectedItemID = nil
         }
     }
     
     func makeCoordinator() -> Coordinator {
-        Coordinator(viewModelContext: viewModelContext,
-                    scrollToBottomButtonVisible: $viewModelContext.scrollToBottomButtonVisible)
+        Coordinator(viewModelContext: viewModelContext)
     }
     
     // MARK: - Coordinator
     
     @MainActor
     class Coordinator: NSObject {
+        let viewModelContext: RoomScreenViewModel.Context
+        
         var tableView: UITableView? {
             didSet {
                 registerFrameObserver()
@@ -89,7 +79,7 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
-        var selectedItemID: String? {
+        var composerMode: RoomScreenComposerMode = .default {
             didSet {
                 // Reload the visible items in order to update their opacity.
                 // Applying a snapshot won't work in this instance as the items don't change.
@@ -106,24 +96,14 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
-        private let contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
-        private let viewActionPublisher: PassthroughSubject<RoomScreenViewAction, Never>
-        let paginateBackwardsPublisher: PassthroughSubject<Void, Never>
-        @Binding var scrollToBottomButtonVisible: Bool
-        
         private var dataSource: UITableViewDiffableDataSource<TimelineSection, RoomTimelineViewProvider>?
         private var cancellables: Set<AnyCancellable> = []
         private let adapter = ScrollViewAdapter()
         private var hasPendingUpdates = false
         private var frameObserverToken: NSKeyValueObservation?
         
-        init(viewModelContext: RoomScreenViewModel.Context,
-             scrollToBottomButtonVisible: Binding<Bool>) {
-            contextMenuBuilder = viewModelContext.viewState.contextMenuBuilder
-            viewActionPublisher = viewModelContext.viewState.viewActionPublisher
-            paginateBackwardsPublisher = viewModelContext.viewState.paginateBackwardsPublisher
-            _scrollToBottomButtonVisible = scrollToBottomButtonVisible
-            
+        init(viewModelContext: RoomScreenViewModel.Context) {
+            self.viewModelContext = viewModelContext
             super.init()
             
             viewModelContext.viewState.scrollToBottomPublisher
@@ -156,21 +136,21 @@ struct TimelineTableView: UIViewRepresentable {
                     timelineItem
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .contextMenu {
-                            self.contextMenuBuilder?(timelineItem.id)
+                            self.viewModelContext.viewState.contextMenuBuilder?(timelineItem.id)
                         }
-                        .opacity(self.opacityForItem(timelineItem))
+                        .opacity(self.viewModelContext.viewState.opacity(for: timelineItem))
                         .onAppear {
-                            self.viewActionPublisher.send(.itemAppeared(id: timelineItem.id))
+                            self.viewModelContext.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
                         .onDisappear {
-                            self.viewActionPublisher.send(.itemDisappeared(id: timelineItem.id))
+                            self.viewModelContext.send(viewAction: .itemDisappeared(id: timelineItem.id))
                         }
                         .environment(\.openURL, OpenURLAction { url in
-                            self.viewActionPublisher.send(.linkClicked(url: url))
+                            self.viewModelContext.send(viewAction: .linkClicked(url: url))
                             return .systemAction
                         })
                         .onTapGesture {
-                            self.viewActionPublisher.send(.itemTapped(id: timelineItem.id))
+                            self.viewModelContext.send(viewAction: .itemTapped(id: timelineItem.id))
                         }
                 }
                 .margins(.all, self.timelineStyle.rowInsets)
@@ -189,12 +169,25 @@ struct TimelineTableView: UIViewRepresentable {
             frameObserverToken?.invalidate()
             
             frameObserverToken = tableView?.observe(\.frame, options: .new) { [weak self] _, _ in
-                guard let self, self.selectedItemID == nil else { return }
+                guard let self, self.composerMode == .default else { return }
                 let previousLayout = self.layout()
                 
                 if previousLayout.isBottomVisible {
                     self.scrollToBottom(animated: false)
                 }
+            }
+        }
+        
+        /// Updates the table view's internal state from the view model's context.
+        func update() {
+            if timelineItems != viewModelContext.viewState.items {
+                timelineItems = viewModelContext.viewState.items
+            }
+            if isBackPaginating != viewModelContext.viewState.isBackPaginating {
+                isBackPaginating = viewModelContext.viewState.isBackPaginating
+            }
+            if composerMode != viewModelContext.viewState.composerMode {
+                composerMode = viewModelContext.viewState.composerMode
             }
         }
         
@@ -302,13 +295,7 @@ struct TimelineTableView: UIViewRepresentable {
                   tableView.contentOffset.y < tableView.visibleSize.height * 2.0
             else { return }
             
-            paginateBackwardsPublisher.send(())
-        }
-        
-        /// 
-        private func opacityForItem(_ item: RoomTimelineViewProvider) -> Double {
-            guard let selectedItemID else { return 1.0 }
-            return item.id == selectedItemID ? 1.0 : 0.5
+            viewModelContext.viewState.paginateBackwardsPublisher.send(())
         }
     }
 }
@@ -319,10 +306,10 @@ extension TimelineTableView.Coordinator: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         let isAtBottom = isAtBottom(of: scrollView)
         
-        if !scrollToBottomButtonVisible, isAtBottom {
-            DispatchQueue.main.async { self.scrollToBottomButtonVisible = true }
-        } else if scrollToBottomButtonVisible, !isAtBottom {
-            DispatchQueue.main.async { self.scrollToBottomButtonVisible = false }
+        if !viewModelContext.scrollToBottomButtonVisible, isAtBottom {
+            DispatchQueue.main.async { self.viewModelContext.scrollToBottomButtonVisible = true }
+        } else if viewModelContext.scrollToBottomButtonVisible, !isAtBottom {
+            DispatchQueue.main.async { self.viewModelContext.scrollToBottomButtonVisible = false }
         }
         
         paginateBackwardsIfNeeded()

@@ -60,6 +60,12 @@ struct RoomScreenViewState: BindableState {
     let viewActionPublisher = PassthroughSubject<RoomScreenViewAction, Never>()
     let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
     let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
+    
+    /// Returns the opacity that the supplied timeline item's cell should be.
+    func opacity(for item: RoomTimelineViewProvider) -> CGFloat {
+        guard case let .reply(selectedItemID, _) = composerMode else { return 1.0 }
+        return selectedItemID == item.id ? 1.0 : 0.5
+    }
 }
 
 struct RoomScreenViewStateBindings {
