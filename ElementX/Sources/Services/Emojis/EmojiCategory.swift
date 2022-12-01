@@ -16,19 +16,7 @@
 
 import Foundation
 struct EmojiCategory: Equatable, Identifiable {
-    var id: String {
-        identifier
-    }
-    
-    /// Emoji category identifier (e.g. "people")
-    let identifier: String
-    
-    /// Emoji list associated to category
+    let id: String
     let emojis: [EmojiItem]
-    
-    /// Emoji category localized name
-    var name: String {
-        let categoryNameLocalizationKey = "emoji_picker_\(identifier)_category"
-        return ElementL10n.tr("Localizable", categoryNameLocalizationKey)
-    }
+
 }

@@ -16,20 +16,21 @@
 
 import Foundation
 
-struct EmojiMartStore: Decodable {
-    let categories: [EmojiMartCategory]
-    let emojis: [EmojiMartEmoji]
+struct EmojiItemSkin: Equatable {
+    let value: String
     
-    enum CodingKeys: CodingKey {
-        case categories
-        case emojis
-    }
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        categories = try container.decode([EmojiMartCategory].self, forKey: .categories)
+    init?(from emojiMartEmojiSkin: EmojiMartEmojiSkin) {
+        let unicodeStringComponents = emojiMartEmojiSkin.unified.components(separatedBy: "-")
         
-        let emojisDictionary = try container.decode([String: EmojiMartEmoji].self, forKey: .emojis)
-        emojis = emojisDictionary.map(\.value)
+        var emoji = ""
+        
+        for unicodeStringComponent in unicodeStringComponents {
+            guard let unicodeCodePoint = Int(unicodeStringComponent, radix: 16),
+                  let emojiUnicodeScalar = UnicodeScalar(unicodeCodePoint) else {
+                return nil
+            }
+            emoji.append(String(emojiUnicodeScalar))
+        }
+        value = emoji
     }
 }

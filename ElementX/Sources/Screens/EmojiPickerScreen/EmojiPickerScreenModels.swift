@@ -19,7 +19,22 @@ import Foundation
 enum EmojiPickerScreenViewModelAction { }
 
 struct EmojiPickerScreenViewState: BindableState {
-    var categories: [EmojiCategory]
+    var categories: [EmojiPickerEmojiCategoryViewData]
 }
 
 enum EmojiPickerScreenViewAction { }
+
+struct EmojiPickerEmojiCategoryViewData: Identifiable {
+    let id: String
+    let emojis: [EmojiPickerEmojiViewData]
+    
+    var name: String {
+        let categoryNameLocalizationKey = "emoji_picker_\(id)_category"
+        return ElementL10n.tr("Localizable", categoryNameLocalizationKey)
+    }
+}
+
+struct EmojiPickerEmojiViewData: Identifiable {
+    var id: String
+    let value: String
+}

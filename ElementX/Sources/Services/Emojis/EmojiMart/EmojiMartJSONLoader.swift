@@ -21,7 +21,7 @@ private enum EmojiMartJSONLoaderError: Error {
 }
 
 class EmojiMartJSONLoader: EmojisLoaderProtocol {
-    /// Emoji data coming from https://github.com/missive/emoji-mart/blob/master/data/apple.json
+    /// Emoji data coming from https://github.com/missive/emoji-mart/blob/main/packages/emoji-mart-data/sets/14/apple.json
     private let jsonFilename = "apple_emojis_data"
     
     func load() async -> [EmojiCategory] {
@@ -46,14 +46,15 @@ class EmojiMartJSONLoader: EmojisLoaderProtocol {
         try JSONDecoder().decode(EmojiMartStore.self, from: data)
     }
     
-    private func emojiCategories(from emojiJSONStore: EmojiMartStore) -> [EmojiCategory] {
-        let allEmojiItems = emojiJSONStore.emojis
-        
-        return emojiJSONStore.categories.map { jsonCategory -> EmojiCategory in
-            let emojiItems = jsonCategory.emojiShortNames.compactMap { shortName -> EmojiItem? in
-                allEmojiItems.first(where: { $0.shortName == shortName })
+    private func emojiCategories(from emojiMartStore: EmojiMartStore) -> [EmojiCategory] {
+        emojiMartStore.categories.map { emojiMartCategory -> EmojiCategory in
+            let emojiItems = emojiMartCategory.emojis.compactMap { emoji -> EmojiItem? in
+                guard let emojiMartEmoji = emojiMartStore.emojis.first(where: { $0.id == emoji }) else {
+                    return nil
+                }
+                return EmojiItem(from: emojiMartEmoji)
             }
-            return EmojiCategory(identifier: jsonCategory.identifier, emojis: emojiItems)
+            return EmojiCategory(id: emojiMartCategory.id, emojis: emojiItems)
         }
     }
 }

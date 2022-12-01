@@ -27,20 +27,32 @@ final class EmojisProviderTests: XCTestCase {
         sut = EmojisProvider(loader: emojisLoaderMock)
     }
     
-    func test_whenEmojisLoaded_categoriesAreLoadedFromLoader() async {
-        emojisLoaderMock.categories = [EmojiCategory(identifier: "test", emojis: [EmojiItem(shortName: "test", value: "🙂", name: "test")])]
+    func test_whenEmojisLoaded_categoriesAreLoadedFromLoader() async throws {
+        let item = EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])
+        let category = EmojiCategory(id: "test", emojis: [item])
+        emojisLoaderMock.categories = [category]
         let categories = await sut.load()
         XCTAssertEqual(emojisLoaderMock.categories, categories)
     }
     
-    func test_whenEmojisLoadedSecondTime_cachedValuesAreUsed() async {
-        let categoriesForFirstLoad = [EmojiCategory(identifier: "test", emojis: [EmojiItem(shortName: "test", value: "🙂", name: "test")])]
-        let categoriesForSecondLoad = [EmojiCategory(identifier: "test2", emojis: [EmojiItem(shortName: "tes2", value: "🙃", name: "test2")])]
+    func test_whenEmojisLoadedSecondTime_cachedValuesAreUsed() async throws {
+        let categoriesForFirstLoad = [EmojiCategory(id: "test",
+                                                    emojis: [EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])])]
+        let categoriesForSecondLoad = [EmojiCategory(id: "test2",
+                                                     emojis: [EmojiItem(id: "test2", name: "test2", keywords: ["3", "4"], skins: [try meltingFaceEmoji()])])]
         emojisLoaderMock.categories = categoriesForFirstLoad
         _ = await sut.load()
         emojisLoaderMock.categories = categoriesForSecondLoad
         let categories = await sut.load()
         XCTAssertEqual(categories, categoriesForFirstLoad)
+    }
+    
+    private func slightlySmilingFaceEmoji() throws -> EmojiItemSkin {
+        try XCTUnwrap(EmojiItemSkin(from: EmojiMartEmojiSkin(unified: "1f642", native: "🙂")))
+    }
+    
+    private func meltingFaceEmoji() throws -> EmojiItemSkin {
+        try XCTUnwrap(EmojiItemSkin(from: EmojiMartEmojiSkin(unified: "1fae0", native: "🫠")))
     }
 }
 

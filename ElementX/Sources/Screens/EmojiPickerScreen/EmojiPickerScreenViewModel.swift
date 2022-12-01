@@ -30,9 +30,24 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     }
     
     private func loadEmojis() {
-        Task(priority: .userInitiated) {
+        Task(priority: .userInitiated) { [weak self] in
             let categories = await emojisProvider.load()
-            state.categories = categories
+            self?.state.categories = convert(emojiCategories: categories)
+        }
+    }
+    
+    private func convert(emojiCategories: [EmojiCategory]) -> [EmojiPickerEmojiCategoryViewData] {
+        emojiCategories.compactMap { emojiCategory in
+            
+            let emojisViewData: [EmojiPickerEmojiViewData] = emojiCategory.emojis.compactMap { emojiItem in
+                
+                guard let firstSkin = emojiItem.skins.first else {
+                    return nil
+                }
+                return EmojiPickerEmojiViewData(id: emojiItem.id, value: firstSkin.value)
+            }
+            
+            return EmojiPickerEmojiCategoryViewData(id: emojiCategory.id, emojis: emojisViewData)
         }
     }
 }
