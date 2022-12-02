@@ -17,8 +17,10 @@
 import Combine
 import SwiftUI
 
+/// A table view cell that displays a timeline item in a room. The cell is intended
+/// to be configured to display a SwiftUI view and not use any UIKit.
 class TimelineItemCell: UITableViewCell {
-    static let reuseIdentifier = "TimelineCell"
+    static let reuseIdentifier = "TimelineItemCell"
     
     var item: RoomTimelineViewProvider?
     
@@ -27,6 +29,7 @@ class TimelineItemCell: UITableViewCell {
     }
 }
 
+/// A table view wrapper that displays the timeline of a room.
 struct TimelineTableView: UIViewRepresentable {
     @EnvironmentObject private var viewModelContext: RoomScreenViewModel.Context
     @Environment(\.timelineStyle) private var timelineStyle
@@ -38,7 +41,7 @@ struct TimelineTableView: UIViewRepresentable {
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
         context.coordinator.tableView = tableView
-        viewModelContext.viewState.paginateBackwardsPublisher.send(())
+        viewModelContext.send(viewAction: .paginateBackwards)
         return tableView
     }
     
@@ -70,7 +73,9 @@ struct TimelineTableView: UIViewRepresentable {
         var timelineStyle: TimelineStyle = .bubbles
         var timelineItems: [RoomTimelineViewProvider] = [] {
             didSet {
-                guard !adapter.isScrolling.value else {
+                guard !scrollAdapter.isScrolling.value else {
+                    // Delay updating until scrolling has stopped as programatic
+                    // changes to the scroll position kills any inertia.
                     hasPendingUpdates = true
                     return
                 }
@@ -79,27 +84,33 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
+        /// The mode of the message composer. This is used to render selected
+        /// items in the timeline when replying, editing etc.
         var composerMode: RoomScreenComposerMode = .default {
             didSet {
                 // Reload the visible items in order to update their opacity.
                 // Applying a snapshot won't work in this instance as the items don't change.
-                guard let tableView, let visibleIndexPaths = tableView.indexPathsForVisibleRows, let dataSource else { return }
-                var snapshot = dataSource.snapshot()
-                snapshot.reloadItems(visibleIndexPaths.compactMap { dataSource.itemIdentifier(for: $0) })
-                dataSource.apply(snapshot)
+                reloadVisibleItems()
             }
         }
         
+        /// Whether or not the timeline is waiting for more messages to be added to the top.
         var isBackPaginating = false {
             didSet {
+                // Paginate again if the threshold hasn't been satisfied.
                 paginateBackwardsIfNeeded()
             }
         }
         
+        /// The table's diffable data source.
         private var dataSource: UITableViewDiffableDataSource<TimelineSection, RoomTimelineViewProvider>?
         private var cancellables: Set<AnyCancellable> = []
-        private let adapter = ScrollViewAdapter()
+        
+        /// The scroll view adapter used to detect whether scrolling is in progress.
+        private let scrollAdapter = ScrollViewAdapter()
+        /// Whether or not the ``timelineItems`` value should be applied when scrolling stops.
         private var hasPendingUpdates = false
+        /// The observation token used to handle frame changes.
         private var frameObserverToken: NSKeyValueObservation?
         
         init(viewModelContext: RoomScreenViewModel.Context) {
@@ -112,9 +123,10 @@ struct TimelineTableView: UIViewRepresentable {
                 }
                 .store(in: &cancellables)
             
-            adapter.isScrolling
+            scrollAdapter.isScrolling
                 .sink { [weak self] isScrolling in
                     guard !isScrolling, let self, self.hasPendingUpdates else { return }
+                    // When scrolling has stopped, apply any pending updates.
                     self.applySnapshot()
                     self.hasPendingUpdates = false
                     self.paginateBackwardsIfNeeded()
@@ -135,10 +147,10 @@ struct TimelineTableView: UIViewRepresentable {
                 cell.contentConfiguration = UIHostingConfiguration {
                     timelineItem
                         .frame(maxWidth: .infinity, alignment: .leading)
+                        .opacity(self.viewModelContext.viewState.opacity(for: timelineItem))
                         .contextMenu {
                             self.viewModelContext.viewState.contextMenuBuilder?(timelineItem.id)
                         }
-                        .opacity(self.viewModelContext.viewState.opacity(for: timelineItem))
                         .onAppear {
                             self.viewModelContext.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
@@ -170,8 +182,10 @@ struct TimelineTableView: UIViewRepresentable {
             
             frameObserverToken = tableView?.observe(\.frame, options: .new) { [weak self] _, _ in
                 guard let self, self.composerMode == .default else { return }
-                let previousLayout = self.layout()
                 
+                // The table view is yet to update its layout so layout() returns a
+                // description of the timeline before the frame change occurs.
+                let previousLayout = self.layout()
                 if previousLayout.isBottomVisible {
                     self.scrollToBottom(animated: false)
                 }
@@ -191,7 +205,7 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
-        /// Updates the table view with the latest items from the `timelineItems` array. After
+        /// Updates the table view with the latest items from the ``timelineItems`` array. After
         /// updating the data, the table will be scrolled to the bottom if it was visible otherwise
         /// the scroll position will be updated to maintain the position of the last visible item.
         private func applySnapshot() {
@@ -215,6 +229,18 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
+        /// Reloads all of the visible timeline items.
+        ///
+        /// This only needs to be called when some state internal to this table view changes that
+        /// will affect the appearance of those items. Any updates to the items themselves should
+        /// use ``applySnapshot()`` which handles everything in the diffable data source.
+        private func reloadVisibleItems() {
+            guard let tableView, let visibleIndexPaths = tableView.indexPathsForVisibleRows, let dataSource else { return }
+            var snapshot = dataSource.snapshot()
+            snapshot.reloadItems(visibleIndexPaths.compactMap { dataSource.itemIdentifier(for: $0) })
+            dataSource.apply(snapshot)
+        }
+        
         /// Returns a description of the current layout in order to update the
         /// scroll position after adding/updating items to the timeline.
         private func layout() -> LayoutDescriptor {
@@ -228,12 +254,13 @@ struct TimelineTableView: UIViewRepresentable {
                 return layout
             }
             
-            if let pinnedIndexPath = tableView.indexPathsForVisibleRows?.last,
-               let pinnedItem = dataSource.itemIdentifier(for: pinnedIndexPath) {
-                let pinnedCellFrame = tableView.cellFrame(for: pinnedItem)
-                layout.pinnedItem = PinnedItem(id: pinnedItem.id, position: .bottom, frame: pinnedCellFrame)
-                layout.isBottomVisible = pinnedItem == snapshot.itemIdentifiers.last
-            }
+            guard let bottomItemIndexPath = tableView.indexPathsForVisibleRows?.last,
+                  let bottomItem = dataSource.itemIdentifier(for: bottomItemIndexPath)
+            else { return layout }
+            
+            let bottomCellFrame = tableView.cellFrame(for: bottomItem)
+            layout.pinnedItem = PinnedItem(id: bottomItem.id, position: .bottom, frame: bottomCellFrame)
+            layout.isBottomVisible = bottomItem == snapshot.itemIdentifiers.last
             
             return layout
         }
@@ -295,7 +322,7 @@ struct TimelineTableView: UIViewRepresentable {
                   tableView.contentOffset.y < tableView.visibleSize.height * 2.0
             else { return }
             
-            viewModelContext.viewState.paginateBackwardsPublisher.send(())
+            viewModelContext.send(viewAction: .paginateBackwards)
         }
     }
 }
@@ -317,38 +344,43 @@ extension TimelineTableView.Coordinator: UITableViewDelegate {
 
     // MARK: - ScrollViewAdapter
     
+    // Required delegate methods are forwarded to the adapter so others can be implemented.
+    
     func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
-        adapter.scrollViewWillBeginDragging(scrollView)
+        scrollAdapter.scrollViewWillBeginDragging(scrollView)
     }
     
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        adapter.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
+        scrollAdapter.scrollViewDidEndDragging(scrollView, willDecelerate: decelerate)
     }
     
     func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        adapter.scrollViewDidEndScrollingAnimation(scrollView)
+        scrollAdapter.scrollViewDidEndScrollingAnimation(scrollView)
     }
         
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        adapter.scrollViewDidEndDecelerating(scrollView)
+        scrollAdapter.scrollViewDidEndDecelerating(scrollView)
     }
     
     func scrollViewDidScrollToTop(_ scrollView: UIScrollView) {
-        adapter.scrollViewDidScrollToTop(scrollView)
+        scrollAdapter.scrollViewDidScrollToTop(scrollView)
     }
 }
 
 // MARK: - Layout Types
 
 extension TimelineTableView.Coordinator {
+    /// The sections of the table view used in the diffable data source.
     enum TimelineSection { case main }
     
+    /// A description of the timeline's layout.
     struct LayoutDescriptor {
         var numberOfItems = 0
         var pinnedItem: PinnedItem?
         var isBottomVisible = false
     }
     
+    /// An item that should have its position pinned after updates.
     struct PinnedItem {
         let id: String
         let position: UITableView.ScrollPosition
@@ -359,6 +391,7 @@ extension TimelineTableView.Coordinator {
 // MARK: - Cell Layout
 
 private extension UITableView {
+    /// Returns the frame of the cell for a particular timeline item.
     func cellFrame(for item: RoomTimelineViewProvider) -> CGRect? {
         guard let timelineCell = visibleCells.last(where: { ($0 as? TimelineItemCell)?.item == item }) else {
             return nil
@@ -372,12 +405,6 @@ private extension UITableView {
 
 struct TimelineTableView_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-        body.preferredColorScheme(.dark)
-    }
-    
-    @ViewBuilder
-    static var body: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             mediaProvider: MockMediaProvider(),

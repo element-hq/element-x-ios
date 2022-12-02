@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
@@ -26,6 +27,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
+    
+    /// A publisher used to throttle back pagination requests.
+    private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
 
     // MARK: - Setup
     
@@ -73,16 +77,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
         
-        state.paginateBackwardsPublisher
+        paginateBackwardsPublisher
             .collect(.byTime(DispatchQueue.main, 0.1))
             .sink { [weak self] _ in
                 Task { await self?.paginateBackwards() }
-            }
-            .store(in: &cancellables)
-        
-        state.viewActionPublisher
-            .sink { [weak self] action in
-                self?.context.send(viewAction: action)
             }
             .store(in: &cancellables)
         
@@ -104,8 +102,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
-        case .loadPreviousPage:
-            await paginateBackwards()
+        case .paginateBackwards:
+            paginateBackwardsPublisher.send(())
         case .itemAppeared(let id):
             await timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):

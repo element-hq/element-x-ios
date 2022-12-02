@@ -29,7 +29,7 @@ enum RoomScreenComposerMode: Equatable {
 }
 
 enum RoomScreenViewAction {
-    case loadPreviousPage
+    case paginateBackwards
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
     case itemTapped(id: String)
@@ -57,8 +57,6 @@ struct RoomScreenViewState: BindableState {
         bindings.composerText.count == 0
     }
     
-    let viewActionPublisher = PassthroughSubject<RoomScreenViewAction, Never>()
-    let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
     let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
     
     /// Returns the opacity that the supplied timeline item's cell should be.
