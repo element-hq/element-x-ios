@@ -20,19 +20,30 @@ struct EmojiPickerScreenScreen: View {
     @Environment(\.colorScheme) private var colorScheme
     
     @ObservedObject var context: EmojiPickerScreenViewModel.Context
+    @State var searchString = ""
     
     var body: some View {
-        ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 50))], spacing: 5) {
-                ForEach(context.viewState.categories) { category in
-                    Section(header: Text(category.name).font(.title)) {
-                        ForEach(category.emojis) { emoji in
-                            Text(emoji.value)
-                        }
+        VStack {
+            EmojiPickerSearchFieldView(searchString: $searchString)
+                .padding(.horizontal, 10)
+                .padding(.top, 10)
+            ScrollView {
+                LazyVGrid(columns: [GridItem(.adaptive(minimum: 45))], spacing: 3) {
+                    ForEach(context.viewState.categories) { category in
+                        Section(header: EmojiPickerHeaderView(title: category.name)
+                            .padding(.horizontal, 13)
+                            .padding(.top, 10)) {
+                                ForEach(category.emojis) { emoji in
+                                    Text(emoji.value)
+                                        .frame(width: 45, height: 45)
+                                }
+                            }
                     }
                 }
             }
-            .padding(16)
+        }
+        .onChange(of: searchString) { _ in
+            context.send(viewAction: .search(searchString: searchString))
         }
     }
 }

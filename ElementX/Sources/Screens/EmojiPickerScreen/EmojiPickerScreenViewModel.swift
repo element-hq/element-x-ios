@@ -50,4 +50,12 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
             return EmojiPickerEmojiCategoryViewData(id: emojiCategory.id, emojis: emojisViewData)
         }
     }
+    
+    override func process(viewAction: EmojiPickerScreenViewAction) async {
+        switch viewAction {
+        case let .search(searchString: searchString):
+            let categories = await emojisProvider.search(searchString: searchString)
+            state.categories = convert(emojiCategories: categories)
+        }
+    }
 }

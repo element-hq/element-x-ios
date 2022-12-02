@@ -167,6 +167,8 @@
 		5D04B17929378AB300FD5B00 /* apple_emojis_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D04B17829378AB300FD5B00 /* apple_emojis_data.json */; };
 		5D04B17B29378D3600FD5B00 /* EmojiMartEmoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B17A29378D3600FD5B00 /* EmojiMartEmoji.swift */; };
 		5D04B17D2937ADE300FD5B00 /* EmojiItemSkin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B17C2937ADE300FD5B00 /* EmojiItemSkin.swift */; };
+		5D04B17F293A333600FD5B00 /* EmojiPickerSearchFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B17E293A333600FD5B00 /* EmojiPickerSearchFieldView.swift */; };
+		5D04B181293A337400FD5B00 /* EmojiPickerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B180293A337400FD5B00 /* EmojiPickerHeaderView.swift */; };
 		5D2AF8C0DF872E7985F8FE54 /* TimelineDeliveryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AC06FC11B6638F7BF1670E /* TimelineDeliveryStatusView.swift */; };
 		5D430CDE11EAC3E8E6B80A66 /* RoomTimelineViewFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FEE631F3A4AFDC6652DD9DA /* RoomTimelineViewFactory.swift */; };
 		5D70FAE4D2BF4553AFFFFE41 /* NotificationItemProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 25F7FE40EF7490A7E09D7BE6 /* NotificationItemProxy.swift */; };
@@ -692,6 +694,8 @@
 		5D04B17829378AB300FD5B00 /* apple_emojis_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = apple_emojis_data.json; sourceTree = "<group>"; };
 		5D04B17A29378D3600FD5B00 /* EmojiMartEmoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMartEmoji.swift; sourceTree = "<group>"; };
 		5D04B17C2937ADE300FD5B00 /* EmojiItemSkin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiItemSkin.swift; sourceTree = "<group>"; };
+		5D04B17E293A333600FD5B00 /* EmojiPickerSearchFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerSearchFieldView.swift; sourceTree = "<group>"; };
+		5D04B180293A337400FD5B00 /* EmojiPickerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerHeaderView.swift; sourceTree = "<group>"; };
 		5D26A086A8278D39B5756D6F /* project.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = project.yml; sourceTree = "<group>"; };
 		5D2D0A6F1ABC99D29462FB84 /* AuthenticationCoordinatorUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationCoordinatorUITests.swift; sourceTree = "<group>"; };
 		5F12E996BFBEB43815189ABF /* uk */ = {isa = PBXFileReference; lastKnownFileType = text.plist.stringsdict; name = uk; path = uk.lproj/Localizable.stringsdict; sourceTree = "<group>"; };
@@ -1232,6 +1236,8 @@
 			isa = PBXGroup;
 			children = (
 				0E016C12585FC5A6EA6941B5 /* EmojiPickerScreenScreen.swift */,
+				5D04B17E293A333600FD5B00 /* EmojiPickerSearchFieldView.swift */,
+				5D04B180293A337400FD5B00 /* EmojiPickerHeaderView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -2836,6 +2842,7 @@
 				1CF18DE71D5D23C61BD88852 /* DebugScreen.swift in Sources */,
 				EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */,
 				FE4593FC2A02AAF92E089565 /* ElementAnimations.swift in Sources */,
+				5D04B181293A337400FD5B00 /* EmojiPickerHeaderView.swift in Sources */,
 				9738F894DB1BD383BE05767A /* ElementSettings.swift in Sources */,
 				D8CFF02C2730EE5BC4F17ABF /* ElementToggleStyle.swift in Sources */,
 				7C1A7B594B2F8143F0DD0005 /* ElementXAttributeScope.swift in Sources */,
@@ -2934,6 +2941,7 @@
 				14132418A748C988B85B025E /* OnboardingPageIndicator.swift in Sources */,
 				F257F964493A9CD02A6F720C /* OnboardingPageView.swift in Sources */,
 				7F64FA937B95924B3A44EC12 /* OnboardingScreen.swift in Sources */,
+				5D04B17F293A333600FD5B00 /* EmojiPickerSearchFieldView.swift in Sources */,
 				CE7148E80F09B7305E026AC6 /* OnboardingViewModel.swift in Sources */,
 				992477AB8E3F3C36D627D32E /* OnboardingViewModelProtocol.swift in Sources */,
 				CD6A72B65D3B6076F4045C30 /* PHGPostHogConfiguration.swift in Sources */,

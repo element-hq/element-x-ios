@@ -22,7 +22,9 @@ struct EmojiPickerScreenViewState: BindableState {
     var categories: [EmojiPickerEmojiCategoryViewData]
 }
 
-enum EmojiPickerScreenViewAction { }
+enum EmojiPickerScreenViewAction {
+    case search(searchString: String)
+}
 
 struct EmojiPickerEmojiCategoryViewData: Identifiable {
     let id: String

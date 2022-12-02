@@ -18,5 +18,4 @@ import Foundation
 struct EmojiCategory: Equatable, Identifiable {
     let id: String
     let emojis: [EmojiItem]
-
 }

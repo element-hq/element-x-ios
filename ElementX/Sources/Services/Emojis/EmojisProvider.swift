@@ -25,8 +25,18 @@ class EmojisProvider {
         self.loader = loader
     }
     
-    func search(searchText: String?) async -> [EmojiCategory] {
-        []
+    func search(searchString: String) async -> [EmojiCategory] {
+        guard !searchString.isEmpty else {
+            return Self.emojiCategories
+        }
+     
+        return Self.emojiCategories.compactMap { category in
+            let emojis = category.emojis.filter { emoji in
+                let searchArray = [emoji.id, emoji.name] + emoji.keywords
+                return searchArray.description.containsIgnoringCase(string: searchString)
+            }
+            return emojis.isEmpty ? nil : EmojiCategory(id: category.id, emojis: emojis)
+        }
     }
     
     func load() async -> [EmojiCategory] {

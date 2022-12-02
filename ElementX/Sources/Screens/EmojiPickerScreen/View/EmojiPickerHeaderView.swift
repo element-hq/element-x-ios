@@ -14,22 +14,23 @@
 // limitations under the License.
 //
 
-import Foundation
+import SwiftUI
 
-struct EmojiItem: Equatable, Identifiable {
-    var id: String
-    let name: String
-    let keywords: [String]
-    let skins: [EmojiItemSkin]
+struct EmojiPickerHeaderView: View {
+    let title: String
+    
+    var body: some View {
+        HStack {
+            Text(title)
+                .frame(maxWidth: .infinity, alignment: .leading)
+        }
+    }
 }
 
-extension EmojiItem {
-    init?(from emojiMart: EmojiMartEmoji) {
-        id = emojiMart.id
-        name = emojiMart.name
-        keywords = emojiMart.keywords
-        skins = emojiMart.skins.compactMap { emojiMartEmojiSkin in
-            EmojiItemSkin(from: emojiMartEmojiSkin)
+struct EmojiPickerHeaderView_Previews: PreviewProvider {
+    static var previews: some View {
+        Group {
+            EmojiPickerHeaderView(title: "")
         }
     }
 }
