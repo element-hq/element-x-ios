@@ -47,6 +47,38 @@ final class EmojisProviderTests: XCTestCase {
         XCTAssertEqual(categories, categoriesForFirstLoad)
     }
     
+    func test_whenEmojisSearched_correctNumberOfCategoriesReturned() async throws {
+        let searchString = "smile"
+        var categories = [EmojiCategory]()
+        categories.append(EmojiCategory(id: "test",
+                                        emojis: [EmojiItem(id: "\(searchString)_123",
+                                                           name: "emoji0",
+                                                           keywords: ["key1", "key1"],
+                                                           skins: [try slightlySmilingFaceEmoji()]),
+                                                 EmojiItem(id: "emoji_1",
+                                                           name: searchString,
+                                                           keywords: ["key1", "key1"],
+                                                           skins: [try slightlySmilingFaceEmoji()]),
+                                                 EmojiItem(id: "emoji_2",
+                                                           name: "emoji2",
+                                                           keywords: ["key1", "\(searchString)_123"],
+                                                           skins: [try slightlySmilingFaceEmoji()]),
+                                                 EmojiItem(id: "emoji_3",
+                                                           name: "emoji_3",
+                                                           keywords: ["key1", "key1"],
+                                                           skins: [try slightlySmilingFaceEmoji()])]))
+        categories.append(EmojiCategory(id: "test",
+                                        emojis: [EmojiItem(id: "\(searchString)_123",
+                                                           name: "emoji0",
+                                                           keywords: ["key1", "key1"],
+                                                           skins: [try slightlySmilingFaceEmoji()])]))
+        emojisLoaderMock.categories = categories
+        _ = await sut.load()
+        let result = await sut.search(searchString: searchString)
+        XCTAssertEqual(result.count, 2)
+        XCTAssertEqual(result.first?.emojis.count, 3)
+    }
+    
     private func slightlySmilingFaceEmoji() throws -> EmojiItemSkin {
         try XCTUnwrap(EmojiItemSkin(from: EmojiMartEmojiSkin(unified: "1f642", native: "🙂")))
     }

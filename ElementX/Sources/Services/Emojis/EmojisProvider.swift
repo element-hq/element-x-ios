@@ -17,9 +17,14 @@
 import Foundation
 
 @MainActor
-class EmojisProvider {
+protocol EmojisProviderProtocol {
+    func search(searchString: String) async -> [EmojiCategory]
+    func load() async -> [EmojiCategory]
+}
+
+class EmojisProvider: EmojisProviderProtocol {
     private let loader: EmojisLoaderProtocol
-    private static var emojiCategories = [EmojiCategory]()
+    private var emojiCategories = [EmojiCategory]()
     
     init(loader: EmojisLoaderProtocol = EmojiMartJSONLoader()) {
         self.loader = loader
@@ -27,10 +32,10 @@ class EmojisProvider {
     
     func search(searchString: String) async -> [EmojiCategory] {
         guard !searchString.isEmpty else {
-            return Self.emojiCategories
+            return emojiCategories
         }
      
-        return Self.emojiCategories.compactMap { category in
+        return emojiCategories.compactMap { category in
             let emojis = category.emojis.filter { emoji in
                 let searchArray = [emoji.id, emoji.name] + emoji.keywords
                 return searchArray.description.containsIgnoringCase(string: searchString)
@@ -40,10 +45,10 @@ class EmojisProvider {
     }
     
     func load() async -> [EmojiCategory] {
-        guard Self.emojiCategories.isEmpty else {
-            return Self.emojiCategories
+        guard emojiCategories.isEmpty else {
+            return emojiCategories
         }
-        Self.emojiCategories = await loader.load()
-        return Self.emojiCategories
+        emojiCategories = await loader.load()
+        return emojiCategories
     }
 }

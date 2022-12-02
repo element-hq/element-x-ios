@@ -22,6 +22,7 @@ struct RoomScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     let roomName: String?
     let roomAvatarUrl: String?
+    let emojisProvide: EmojisProviderProtocol
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -112,7 +113,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayEmojiPickerScreen() {
-        let params = EmojiPickerScreenCoordinatorParameters()
+        guard let emojisProvider = parameters?.emojisProvide else {
+            fatalError()
+        }
+        let params = EmojiPickerScreenCoordinatorParameters(emojisProvider: emojisProvider)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         navigationController.presentSheet(coordinator)
     }

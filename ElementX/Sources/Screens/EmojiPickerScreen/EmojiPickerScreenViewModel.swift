@@ -21,10 +21,11 @@ typealias EmojiPickerScreenViewModelType = StateStoreViewModel<EmojiPickerScreen
 class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScreenViewModelProtocol {
     var callback: ((EmojiPickerScreenViewModelAction) -> Void)?
     
-    private let emojisProvider = EmojisProvider()
+    private let emojisProvider: EmojisProviderProtocol
     
-    init() {
+    init(emojisProvider: EmojisProviderProtocol) {
         let initialViewState = EmojiPickerScreenViewState(categories: [])
+        self.emojisProvider = emojisProvider
         super.init(initialViewState: initialViewState)
         loadEmojis()
     }

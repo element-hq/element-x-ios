@@ -26,6 +26,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationController: NavigationController
     private let bugReportService: BugReportServiceProtocol
+    private let emojisProvider: EmojisProviderProtocol = EmojisProvider()
     
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
@@ -148,7 +149,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                              timelineController: timelineController,
                                                              mediaProvider: userSession.mediaProvider,
                                                              roomName: roomProxy.displayName ?? roomProxy.name,
-                                                             roomAvatarUrl: roomProxy.avatarURL)
+                                                             roomAvatarUrl: roomProxy.avatarURL,
+                                                             emojisProvide: emojisProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationController.push(coordinator) { [weak self] in
