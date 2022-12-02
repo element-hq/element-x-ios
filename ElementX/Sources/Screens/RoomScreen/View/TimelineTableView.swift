@@ -181,7 +181,14 @@ struct TimelineTableView: UIViewRepresentable {
             frameObserverToken?.invalidate()
             
             frameObserverToken = tableView?.observe(\.frame, options: .new) { [weak self] _, _ in
-                guard let self, self.composerMode == .default else { return }
+                self?.handleFrameChange()
+            }
+        }
+        
+        /// Updates the table's layout if necessary after the frame changed.
+        private nonisolated func handleFrameChange() {
+            Task { @MainActor in
+                guard self.composerMode == .default else { return }
                 
                 // The table view is yet to update its layout so layout() returns a
                 // description of the timeline before the frame change occurs.
