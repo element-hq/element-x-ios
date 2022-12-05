@@ -57,8 +57,8 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
         case let .search(searchString: searchString):
             let categories = await emojisProvider.getCategories(searchString: searchString)
             state.categories = convert(emojiCategories: categories)
-        case .emojiSelected:
-            break
+        case let .emojiSelected(emoji: emoji):
+            callback?(.selectEmoji(emojiId: emoji.id))
         }
     }
 }

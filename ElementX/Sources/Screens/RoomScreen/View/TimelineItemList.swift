@@ -48,10 +48,9 @@ struct TimelineItemList: View {
                 ForEach(isRunningPreviews ? context.viewState.items : timelineItems) { item in
                     VStack {
                         if showEmojiSelectionForItemId == item.id {
-                            TimelineItemEmojiReactionsMenuView()
-                                .onTapGesture {
-                                    context.send(viewAction: .displayMoreEmojis)
-                                }
+                            TimelineItemEmojiReactionsMenuView(onMoreEmojisSelected: {
+                                context.send(viewAction: .displayMoreEmojis(itemId: item.id))
+                            })
                         }
                         item
                             .contextMenu {
@@ -70,10 +69,11 @@ struct TimelineItemList: View {
                                 context.send(viewAction: .linkClicked(url: url))
                                 return .systemAction
                             })
-                            .onTapGesture {
-                                // context.send(viewAction: .itemTapped(id: item.id))
-                                showEmojiSelectionForItemId = item.id
-                            }
+                    }.onTapGesture(count: 2) {
+                        showEmojiSelectionForItemId = item.id
+                    }
+                    .onTapGesture {
+                        context.send(viewAction: .itemTapped(id: item.id))
                     }
                 }
             }

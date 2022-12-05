@@ -18,9 +18,12 @@ import SwiftUI
 
 struct EmojiPickerScreenCoordinatorParameters {
     let emojisProvider: EmojisProviderProtocol
+    let itemId: String
 }
 
-enum EmojiPickerScreenCoordinatorAction { }
+enum EmojiPickerScreenCoordinatorAction {
+    case selectEmoji(emojiId: String, itemId: String)
+}
 
 final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     private let parameters: EmojiPickerScreenCoordinatorParameters
@@ -38,6 +41,10 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
             MXLog.debug("EmojiPickerScreenViewModel did complete with result: \(action).")
+            switch action {
+            case let .selectEmoji(emojiId: emojiId):
+                self.callback?(.selectEmoji(emojiId: emojiId, itemId: self.parameters.itemId))
+            }
         }
     }
     

@@ -58,8 +58,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayVideo(for: videoURL)
             case .displayFile(let fileURL, let title):
                 self.displayFile(for: fileURL, with: title)
-            case .displayEmojiPicker:
-                self.displayEmojiPickerScreen()
+            case .displayEmojiPicker(let itemId):
+                self.displayEmojiPickerScreen(for: itemId)
             }
         }
     }
@@ -112,12 +112,21 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         navigationController.push(coordinator)
     }
     
-    private func displayEmojiPickerScreen() {
+    private func displayEmojiPickerScreen(for itemId: String) {
         guard let emojisProvider = parameters?.emojisProvide else {
             fatalError()
         }
-        let params = EmojiPickerScreenCoordinatorParameters(emojisProvider: emojisProvider)
+        let params = EmojiPickerScreenCoordinatorParameters(emojisProvider: emojisProvider,
+                                                            itemId: itemId)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
+        coordinator.callback = { [weak self] action in
+            switch action {
+            case let .selectEmoji(emojiId: emojiId, itemId: itemId):
+                self?.navigationController.dismissSheet()
+                MXLog.debug("Save \(emojiId) for \(itemId)")
+            }
+        }
+
         navigationController.presentSheet(coordinator)
     }
 }

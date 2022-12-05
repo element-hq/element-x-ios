@@ -18,21 +18,34 @@ import SwiftUI
 
 struct TimelineItemEmojiReactionsMenuView: View {
     private let emojis = ["👍🏼", "👎🏼", "😄", "🙏🏼", "😇"]
-
+    
+    var onMoreEmojisSelected: (() -> Void)?
+    
     var body: some View {
-        HStack(spacing: 10) {
-            ForEach(emojis, id: \.self) { emoji in
-                Text(emoji)
+        HStack {
+            HStack(spacing: 10) {
+                ForEach(emojis, id: \.self) { emoji in
+                    Text(emoji)
+                }
+            }
+            .padding(10)
+            .background(.gray)
+            .cornerRadius(15)
+            HStack(spacing: 10) {
+                Text("➕")
+            }
+            .padding(10)
+            .background(.gray)
+            .cornerRadius(15)
+            .onTapGesture {
+                onMoreEmojisSelected?()
             }
         }
-        .padding(10)
-        .background(.gray)
-        .cornerRadius(15)
     }
 }
 
 struct TimelineItemEmojiReactionsMenu_Previews: PreviewProvider {
     static var previews: some View {
-        TimelineItemEmojiReactionsMenuView()
+        TimelineItemEmojiReactionsMenuView(onMoreEmojisSelected: nil)
     }
 }
