@@ -138,31 +138,33 @@ struct TimelineTableView: UIViewRepresentable {
         private func configureDataSource() {
             guard let tableView else { return }
             
-            dataSource = .init(tableView: tableView) { tableView, indexPath, timelineItem in
+            dataSource = .init(tableView: tableView) { [weak self] tableView, indexPath, timelineItem in
                 let cell = tableView.dequeueReusableCell(withIdentifier: TimelineItemCell.reuseIdentifier, for: indexPath)
-                guard let cell = cell as? TimelineItemCell else { return cell }
+                guard let self, let cell = cell as? TimelineItemCell else { return cell }
+                
+                // A local reference to avoid capturing self in the cell configuration.
+                let viewModelContext = self.viewModelContext
                 
                 cell.item = timelineItem
-                #warning("Do we need a weak self here???")
                 cell.contentConfiguration = UIHostingConfiguration {
                     timelineItem
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity(self.viewModelContext.viewState.opacity(for: timelineItem))
+                        .opacity(viewModelContext.viewState.opacity(for: timelineItem))
                         .contextMenu {
-                            self.viewModelContext.viewState.contextMenuBuilder?(timelineItem.id)
+                            viewModelContext.viewState.contextMenuBuilder?(timelineItem.id)
                         }
                         .onAppear {
-                            self.viewModelContext.send(viewAction: .itemAppeared(id: timelineItem.id))
+                            viewModelContext.send(viewAction: .itemAppeared(id: timelineItem.id))
                         }
                         .onDisappear {
-                            self.viewModelContext.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                            viewModelContext.send(viewAction: .itemDisappeared(id: timelineItem.id))
                         }
                         .environment(\.openURL, OpenURLAction { url in
-                            self.viewModelContext.send(viewAction: .linkClicked(url: url))
+                            viewModelContext.send(viewAction: .linkClicked(url: url))
                             return .systemAction
                         })
                         .onTapGesture {
-                            self.viewModelContext.send(viewAction: .itemTapped(id: timelineItem.id))
+                            viewModelContext.send(viewAction: .itemTapped(id: timelineItem.id))
                         }
                 }
                 .margins(.all, self.timelineStyle.rowInsets)
