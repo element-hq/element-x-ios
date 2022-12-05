@@ -62,9 +62,3 @@ extension String {
         return mutableString.trimmingCharacters(in: .whitespaces)
     }
 }
-
-extension String {
-    func containsIgnoringCase(string: String) -> Bool{
-        range(of: string, options: .caseInsensitive) != nil
-    }
-}

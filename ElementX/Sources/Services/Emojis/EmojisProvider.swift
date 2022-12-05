@@ -51,7 +51,7 @@ class EmojisProvider: EmojisProviderProtocol {
         emojiCategories.compactMap { category in
             let emojis = category.emojis.filter { emoji in
                 let searchArray = [emoji.id, emoji.name] + emoji.keywords
-                return searchArray.description.containsIgnoringCase(string: searchString)
+                return searchArray.description.range(of: searchString, options: .caseInsensitive) != nil
             }
             return emojis.isEmpty ? nil : EmojiCategory(id: category.id, emojis: emojis)
         }
