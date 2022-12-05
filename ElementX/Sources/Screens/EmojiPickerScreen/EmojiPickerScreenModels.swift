@@ -24,6 +24,7 @@ struct EmojiPickerScreenViewState: BindableState {
 
 enum EmojiPickerScreenViewAction {
     case search(searchString: String)
+    case emojiSelected(emoji: EmojiPickerEmojiViewData)
 }
 
 struct EmojiPickerEmojiCategoryViewData: Identifiable {

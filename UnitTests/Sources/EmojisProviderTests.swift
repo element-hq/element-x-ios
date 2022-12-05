@@ -31,7 +31,7 @@ final class EmojisProviderTests: XCTestCase {
         let item = EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])
         let category = EmojiCategory(id: "test", emojis: [item])
         emojisLoaderMock.categories = [category]
-        let categories = await sut.load()
+        let categories = await sut.getCategories()
         XCTAssertEqual(emojisLoaderMock.categories, categories)
     }
     
@@ -41,9 +41,9 @@ final class EmojisProviderTests: XCTestCase {
         let categoriesForSecondLoad = [EmojiCategory(id: "test2",
                                                      emojis: [EmojiItem(id: "test2", name: "test2", keywords: ["3", "4"], skins: [try meltingFaceEmoji()])])]
         emojisLoaderMock.categories = categoriesForFirstLoad
-        _ = await sut.load()
+        _ = await sut.getCategories()
         emojisLoaderMock.categories = categoriesForSecondLoad
-        let categories = await sut.load()
+        let categories = await sut.getCategories()
         XCTAssertEqual(categories, categoriesForFirstLoad)
     }
     
@@ -73,8 +73,8 @@ final class EmojisProviderTests: XCTestCase {
                                                            keywords: ["key1", "key1"],
                                                            skins: [try slightlySmilingFaceEmoji()])]))
         emojisLoaderMock.categories = categories
-        _ = await sut.load()
-        let result = await sut.search(searchString: searchString)
+        _ = await sut.getCategories()
+        let result = await sut.getCategories(searchString: searchString)
         XCTAssertEqual(result.count, 2)
         XCTAssertEqual(result.first?.emojis.count, 3)
     }

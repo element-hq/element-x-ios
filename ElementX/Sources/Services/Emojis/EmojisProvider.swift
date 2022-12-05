@@ -18,24 +18,37 @@ import Foundation
 
 @MainActor
 protocol EmojisProviderProtocol {
-    func search(searchString: String) async -> [EmojiCategory]
-    func load() async -> [EmojiCategory]
+    func getCategories(searchString: String?) async -> [EmojiCategory]
+}
+
+private enum EmojisProviderState {
+    case notLoaded
+    case inProgress(Task<[EmojiCategory], Never>)
+    case loaded([EmojiCategory])
 }
 
 class EmojisProvider: EmojisProviderProtocol {
     private let loader: EmojisLoaderProtocol
-    private var emojiCategories = [EmojiCategory]()
+    private var state: EmojisProviderState = .notLoaded
     
     init(loader: EmojisLoaderProtocol = EmojiMartJSONLoader()) {
         self.loader = loader
+        Task {
+            await loadIfNeeded()
+        }
     }
     
-    func search(searchString: String) async -> [EmojiCategory] {
-        guard !searchString.isEmpty else {
+    func getCategories(searchString: String? = nil) async -> [EmojiCategory] {
+        let emojiCategories = await loadIfNeeded()
+        if let searchString = searchString {
+            return search(searchString: searchString, emojiCategories: emojiCategories)
+        } else {
             return emojiCategories
         }
-     
-        return emojiCategories.compactMap { category in
+    }
+    
+    private func search(searchString: String, emojiCategories: [EmojiCategory]) -> [EmojiCategory] {
+        emojiCategories.compactMap { category in
             let emojis = category.emojis.filter { emoji in
                 let searchArray = [emoji.id, emoji.name] + emoji.keywords
                 return searchArray.description.containsIgnoringCase(string: searchString)
@@ -44,11 +57,20 @@ class EmojisProvider: EmojisProviderProtocol {
         }
     }
     
-    func load() async -> [EmojiCategory] {
-        guard emojiCategories.isEmpty else {
-            return emojiCategories
+    private func loadIfNeeded() async -> [EmojiCategory] {
+        switch state {
+        case .notLoaded:
+            let task = Task {
+                await loader.load()
+            }
+            state = .inProgress(task)
+            let categories = await task.value
+            state = .loaded(categories)
+            return categories
+        case .loaded(let categories):
+            return categories
+        case .inProgress(let task):
+            return await task.value
         }
-        emojiCategories = await loader.load()
-        return emojiCategories
     }
 }

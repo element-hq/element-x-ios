@@ -32,7 +32,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     
     private func loadEmojis() {
         Task(priority: .userInitiated) { [weak self] in
-            let categories = await emojisProvider.load()
+            let categories = await emojisProvider.getCategories(searchString: nil)
             self?.state.categories = convert(emojiCategories: categories)
         }
     }
@@ -55,8 +55,10 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     override func process(viewAction: EmojiPickerScreenViewAction) async {
         switch viewAction {
         case let .search(searchString: searchString):
-            let categories = await emojisProvider.search(searchString: searchString)
+            let categories = await emojisProvider.getCategories(searchString: searchString)
             state.categories = convert(emojiCategories: categories)
+        case .emojiSelected:
+            break
         }
     }
 }
