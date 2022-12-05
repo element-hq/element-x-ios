@@ -22,14 +22,12 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationPageSize: UInt = 20
+        static let backPaginationIndicatorID = "RoomBackPagination"
     }
 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
-    
-    /// A publisher used to throttle back pagination requests.
-    private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
 
     // MARK: - Setup
     
@@ -64,25 +62,18 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
                 case .startedBackPaginating:
                     self.state.isBackPaginating = true
-                    ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: "pagination",
+                    ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Constants.backPaginationIndicatorID,
                                                                                                          type: .toast,
                                                                                                          title: ElementL10n.roomTimelineSyncing,
                                                                                                          persistent: true))
                 case .finishedBackPaginating:
                     self.state.isBackPaginating = false
-                    ServiceLocator.shared.userNotificationController.retractNotificationWithId("pagination")
+                    ServiceLocator.shared.userNotificationController.retractNotificationWithId(Constants.backPaginationIndicatorID)
                 }
             }
             .store(in: &cancellables)
         
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
-        
-        paginateBackwardsPublisher
-            .collect(.byTime(DispatchQueue.main, 0.1))
-            .sink { [weak self] _ in
-                Task { await self?.paginateBackwards() }
-            }
-            .store(in: &cancellables)
         
         buildTimelineViews()
 
@@ -103,7 +94,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
         case .paginateBackwards:
-            paginateBackwardsPublisher.send(())
+            await paginateBackwards()
         case .itemAppeared(let id):
             await timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):

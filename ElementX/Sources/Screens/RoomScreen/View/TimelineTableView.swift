@@ -98,7 +98,7 @@ struct TimelineTableView: UIViewRepresentable {
         var isBackPaginating = false {
             didSet {
                 // Paginate again if the threshold hasn't been satisfied.
-                paginateBackwardsIfNeeded()
+                paginateBackwardsPublisher.send(())
             }
         }
         
@@ -108,6 +108,11 @@ struct TimelineTableView: UIViewRepresentable {
         
         /// The scroll view adapter used to detect whether scrolling is in progress.
         private let scrollAdapter = ScrollViewAdapter()
+        /// A publisher used to throttle back pagination requests.
+        ///
+        /// Our view actions get wrapped in a `Task` so it is possible that a second call in
+        /// quick succession can execute before ``isBackPaginating`` becomes `true`.
+        private let paginateBackwardsPublisher = PassthroughSubject<Void, Never>()
         /// Whether or not the ``timelineItems`` value should be applied when scrolling stops.
         private var hasPendingUpdates = false
         /// The observation token used to handle frame changes.
@@ -129,7 +134,14 @@ struct TimelineTableView: UIViewRepresentable {
                     // When scrolling has stopped, apply any pending updates.
                     self.applySnapshot()
                     self.hasPendingUpdates = false
-                    self.paginateBackwardsIfNeeded()
+                    self.paginateBackwardsPublisher.send(())
+                }
+                .store(in: &cancellables)
+            
+            paginateBackwardsPublisher
+                .collect(.byTime(DispatchQueue.main, 0.1))
+                .sink { [weak self] _ in
+                    self?.paginateBackwardsIfNeeded()
                 }
                 .store(in: &cancellables)
         }
@@ -324,6 +336,8 @@ struct TimelineTableView: UIViewRepresentable {
         }
         
         /// Checks whether or a backwards pagination is needed and requests one if so.
+        ///
+        /// Prefer not to call this directly, instead using ``paginateBackwardsPublisher`` to throttle requests.
         private func paginateBackwardsIfNeeded() {
             guard let tableView,
                   !isBackPaginating,
@@ -348,7 +362,7 @@ extension TimelineTableView.Coordinator: UITableViewDelegate {
             DispatchQueue.main.async { self.viewModelContext.scrollToBottomButtonVisible = false }
         }
         
-        paginateBackwardsIfNeeded()
+        paginateBackwardsPublisher.send(())
     }
 
     // MARK: - ScrollViewAdapter
