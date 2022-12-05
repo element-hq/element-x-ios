@@ -14,7 +14,7 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 import UIKit
 
 enum RoomScreenViewModelAction {
@@ -29,7 +29,7 @@ enum RoomScreenComposerMode: Equatable {
 }
 
 enum RoomScreenViewAction {
-    case loadPreviousPage
+    case paginateBackwards
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
     case itemTapped(id: String)
@@ -56,11 +56,21 @@ struct RoomScreenViewState: BindableState {
     var sendButtonDisabled: Bool {
         bindings.composerText.count == 0
     }
+    
+    let scrollToBottomPublisher = PassthroughSubject<Void, Never>()
+    
+    /// Returns the opacity that the supplied timeline item's cell should be.
+    func opacity(for item: RoomTimelineViewProvider) -> CGFloat {
+        guard case let .reply(selectedItemID, _) = composerMode else { return 1.0 }
+        return selectedItemID == item.id ? 1.0 : 0.5
+    }
 }
 
 struct RoomScreenViewStateBindings {
     var composerText: String
     var composerFocused: Bool
+    
+    var scrollToBottomButtonVisible = false
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?

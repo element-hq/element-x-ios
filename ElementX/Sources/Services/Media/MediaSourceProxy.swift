@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct MediaSourceProxy: Equatable {
+struct MediaSourceProxy: Hashable {
     let underlyingSource: MediaSource
     
     init(source: MediaSource) {
@@ -32,9 +32,16 @@ struct MediaSourceProxy: Equatable {
         underlyingSource.url()
     }
     
-    // MARK: - Equatable
+}
+
+// MARK: - Hashable
+
+extension MediaSource: Hashable {
+    public static func == (lhs: MediaSource, rhs: MediaSource) -> Bool {
+        lhs.url() == rhs.url()
+    }
     
-    static func == (lhs: MediaSourceProxy, rhs: MediaSourceProxy) -> Bool {
-        lhs.url == rhs.url
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(url())
     }
 }
