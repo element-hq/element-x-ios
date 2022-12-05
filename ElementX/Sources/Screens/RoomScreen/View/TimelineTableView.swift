@@ -117,6 +117,8 @@ struct TimelineTableView: UIViewRepresentable {
         private var hasPendingUpdates = false
         /// The observation token used to handle frame changes.
         private var frameObserverToken: NSKeyValueObservation?
+        /// Yucky hack to fix some layouts where the scroll view doesn't make it to the bottom on keyboard appearance.
+        var keyboardWillShowLayout: LayoutDescriptor?
         
         init(viewModelContext: RoomScreenViewModel.Context) {
             self.viewModelContext = viewModelContext
@@ -142,6 +144,20 @@ struct TimelineTableView: UIViewRepresentable {
                 .collect(.byTime(DispatchQueue.main, 0.1))
                 .sink { [weak self] _ in
                     self?.paginateBackwardsIfNeeded()
+                }
+                .store(in: &cancellables)
+            
+            NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
+                .sink { [weak self] _ in
+                    guard let self else { return }
+                    self.keyboardWillShowLayout = self.layout()
+                }
+                .store(in: &cancellables)
+            
+            NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)
+                .sink { [weak self] _ in
+                    guard let self, let layout = self.keyboardWillShowLayout, layout.isBottomVisible else { return }
+                    self.scrollToBottom(animated: false) // Force the bottom to be visible as some timelines misbehave.
                 }
                 .store(in: &cancellables)
         }
