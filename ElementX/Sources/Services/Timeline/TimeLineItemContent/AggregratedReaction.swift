@@ -17,7 +17,7 @@
 import Foundation
 
 /// Represents all reactions of the same type for a single event.
-struct AggregatedReaction: Equatable, Hashable {
+struct AggregatedReaction: Hashable {
     /// The reaction that was sent.
     let key: String
     /// The number of times this reactions was sent.

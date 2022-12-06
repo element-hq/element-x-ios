@@ -17,7 +17,7 @@
 import Foundation
 import UIKit
 
-enum TimelineItemInGroupState {
+enum TimelineItemInGroupState: Hashable {
     case single
     case beginning
     case middle

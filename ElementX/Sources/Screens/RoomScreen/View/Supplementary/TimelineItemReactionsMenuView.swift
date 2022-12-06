@@ -16,10 +16,10 @@
 
 import SwiftUI
 
-struct TimelineItemEmojiReactionsMenuView: View {
+struct TimelineItemReactionsMenuView: View {
     private let emojis = ["👍🏼", "👎🏼", "😄", "🙏🏼", "😇"]
     
-    var onMoreEmojisSelected: (() -> Void)?
+    var onDisplayEmojiPicker: (() -> Void)?
     
     var body: some View {
         HStack {
@@ -38,14 +38,14 @@ struct TimelineItemEmojiReactionsMenuView: View {
             .background(.gray)
             .cornerRadius(15)
             .onTapGesture {
-                onMoreEmojisSelected?()
+                onDisplayEmojiPicker?()
             }
         }
     }
 }
 
-struct TimelineItemEmojiReactionsMenu_Previews: PreviewProvider {
+struct TimelineItemReactionsMenuView_Previews: PreviewProvider {
     static var previews: some View {
-        TimelineItemEmojiReactionsMenuView(onMoreEmojisSelected: nil)
+        TimelineItemReactionsMenuView(onDisplayEmojiPicker: nil)
     }
 }

@@ -38,6 +38,8 @@ extension ElementL10n {
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
   /// Plain Timeline
   public static let roomTimelineStylePlainLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_plain_long_description")
+  /// Syncing
+  public static let roomTimelineSyncing = ElementL10n.tr("Untranslated", "room_timeline_syncing")
   /// Would you like to submit a bug report?
   public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
   /// You took a screenshot

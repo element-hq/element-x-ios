@@ -17,7 +17,7 @@
 import Foundation
 import UIKit
 
-struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
+struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
     let timestamp: String
