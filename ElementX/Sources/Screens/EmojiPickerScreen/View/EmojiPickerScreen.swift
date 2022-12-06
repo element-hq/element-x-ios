@@ -24,7 +24,7 @@ struct EmojiPickerScreen: View {
         VStack {
             EmojiPickerSearchFieldView(searchString: $searchString)
                 .padding(.horizontal, 10)
-                .padding(.top, 10)
+                .padding(.top, 20)
             ScrollView {
                 LazyVGrid(columns: [GridItem(.adaptive(minimum: 45))], spacing: 3) {
                     ForEach(context.viewState.categories) { category in
