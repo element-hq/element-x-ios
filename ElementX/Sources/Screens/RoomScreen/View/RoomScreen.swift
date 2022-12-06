@@ -19,6 +19,7 @@ import SwiftUI
 struct RoomScreen: View {
     @ObservedObject private var settings = ElementSettings.shared
     @ObservedObject var context: RoomScreenViewModel.Context
+    @State private var showReactionsMenuForItemId = ""
     
     var body: some View {
         timeline

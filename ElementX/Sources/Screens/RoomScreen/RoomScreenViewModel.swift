@@ -91,6 +91,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     var callback: ((RoomScreenViewModelAction) -> Void)?
     
+    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
         case .paginateBackwards:
@@ -108,6 +109,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendReaction(let key, _):
             #warning("Reaction implementation awaiting SDK support.")
             MXLog.warning("React with \(key) failed. Not implemented.")
+        case .displayEmojiPicker(let itemId):
+            callback?(.displayEmojiPicker(itemId: itemId))
+        case .displayReactionsMenuForItemId(let itemId):
+            state.displayReactionsMenuForItemId = itemId
         case .cancelReply:
             state.composerMode = .default
         case .cancelEdit:

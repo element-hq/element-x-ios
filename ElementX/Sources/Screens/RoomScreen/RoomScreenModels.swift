@@ -20,6 +20,7 @@ import UIKit
 enum RoomScreenViewModelAction {
     case displayVideo(videoURL: URL)
     case displayFile(fileURL: URL, title: String?)
+    case displayEmojiPicker(itemId: String)
 }
 
 enum RoomScreenComposerMode: Equatable {
@@ -29,6 +30,7 @@ enum RoomScreenComposerMode: Equatable {
 }
 
 enum RoomScreenViewAction {
+    case displayEmojiPicker(itemId: String)
     case paginateBackwards
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
@@ -38,6 +40,7 @@ enum RoomScreenViewAction {
     case sendReaction(key: String, eventID: String)
     case cancelReply
     case cancelEdit
+    case displayReactionsMenuForItemId(itemId: String)
 }
 
 struct RoomScreenViewState: BindableState {
@@ -48,6 +51,7 @@ struct RoomScreenViewState: BindableState {
     var isBackPaginating = false
     var showLoading = false
     var bindings: RoomScreenViewStateBindings
+    var displayReactionsMenuForItemId = ""
     
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
     

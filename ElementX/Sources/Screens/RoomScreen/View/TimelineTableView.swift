@@ -102,6 +102,12 @@ struct TimelineTableView: UIViewRepresentable {
             }
         }
         
+        var displayReactionsMenuForItemId = "" {
+            didSet {
+                tableView?.reloadData()
+            }
+        }
+        
         /// The table's diffable data source.
         private var dataSource: UITableViewDiffableDataSource<TimelineSection, RoomTimelineViewProvider>?
         private var cancellables: Set<AnyCancellable> = []
@@ -175,25 +181,35 @@ struct TimelineTableView: UIViewRepresentable {
                 
                 cell.item = timelineItem
                 cell.contentConfiguration = UIHostingConfiguration {
-                    timelineItem
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity(viewModelContext.viewState.opacity(for: timelineItem))
-                        .contextMenu {
-                            viewModelContext.viewState.contextMenuBuilder?(timelineItem.id)
+                    VStack {
+                        if viewModelContext.viewState.displayReactionsMenuForItemId == timelineItem.id {
+                            TimelineItemReactionsMenuView {
+                                viewModelContext.send(viewAction: .displayEmojiPicker(itemId: timelineItem.id))
+                            }
                         }
-                        .onAppear {
-                            viewModelContext.send(viewAction: .itemAppeared(id: timelineItem.id))
-                        }
-                        .onDisappear {
-                            viewModelContext.send(viewAction: .itemDisappeared(id: timelineItem.id))
-                        }
-                        .environment(\.openURL, OpenURLAction { url in
-                            viewModelContext.send(viewAction: .linkClicked(url: url))
-                            return .systemAction
-                        })
-                        .onTapGesture {
-                            viewModelContext.send(viewAction: .itemTapped(id: timelineItem.id))
-                        }
+                        timelineItem
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .opacity(viewModelContext.viewState.opacity(for: timelineItem))
+                            .contextMenu {
+                                viewModelContext.viewState.contextMenuBuilder?(timelineItem.id)
+                            }
+                            .onAppear {
+                                viewModelContext.send(viewAction: .itemAppeared(id: timelineItem.id))
+                            }
+                            .onDisappear {
+                                viewModelContext.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                            }
+                            .environment(\.openURL, OpenURLAction { url in
+                                viewModelContext.send(viewAction: .linkClicked(url: url))
+                                return .systemAction
+                            })
+                            .onTapGesture(count: 2) {
+                                viewModelContext.send(viewAction: .displayReactionsMenuForItemId(itemId: timelineItem.id))
+                            }
+                            .onTapGesture {
+                                viewModelContext.send(viewAction: .itemTapped(id: timelineItem.id))
+                            }
+                    }
                 }
                 .margins(.all, self.timelineStyle.rowInsets)
                 .minSize(height: 1)
@@ -239,6 +255,9 @@ struct TimelineTableView: UIViewRepresentable {
             }
             if composerMode != viewModelContext.viewState.composerMode {
                 composerMode = viewModelContext.viewState.composerMode
+            }
+            if displayReactionsMenuForItemId != viewModelContext.viewState.displayReactionsMenuForItemId {
+                displayReactionsMenuForItemId = viewModelContext.viewState.displayReactionsMenuForItemId
             }
         }
         

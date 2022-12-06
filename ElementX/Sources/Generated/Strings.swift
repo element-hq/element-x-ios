@@ -1239,6 +1239,22 @@ public enum ElementL10n {
   public static var editPollTitle: String { return ElementL10n.tr("Localizable", "edit_poll_title") }
   /// (edited)
   public static var editedSuffix: String { return ElementL10n.tr("Localizable", "edited_suffix") }
+  /// Activities
+  public static var emojiPickerActivityCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_activity_category") }
+  /// Flags
+  public static var emojiPickerFlagsCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_flags_category") }
+  /// Food & Drink
+  public static var emojiPickerFoodsCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_foods_category") }
+  /// Animals & Nature
+  public static var emojiPickerNatureCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_nature_category") }
+  /// Objects
+  public static var emojiPickerObjectsCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_objects_category") }
+  /// Smileys & People
+  public static var emojiPickerPeopleCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_people_category") }
+  /// Travel & Places
+  public static var emojiPickerPlacesCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_places_category") }
+  /// Symbols
+  public static var emojiPickerSymbolsCategory: String { return ElementL10n.tr("Localizable", "emoji_picker_symbols_category") }
   /// Your contact book is empty
   public static var emptyContactBook: String { return ElementL10n.tr("Localizable", "empty_contact_book") }
   /// Encrypted message
