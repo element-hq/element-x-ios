@@ -55,6 +55,6 @@ struct EmojiPickerScreenScreen: View {
 
 struct EmojiPickerScreen_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiPickerScreenScreen(context: EmojiPickerScreenViewModel(emojisProvider: EmojisProvider()).context)
+        EmojiPickerScreenScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
     }
 }

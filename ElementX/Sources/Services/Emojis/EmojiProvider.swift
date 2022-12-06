@@ -17,19 +17,19 @@
 import Foundation
 
 @MainActor
-protocol EmojisProviderProtocol {
+protocol EmojiProviderProtocol {
     func getCategories(searchString: String?) async -> [EmojiCategory]
 }
 
-private enum EmojisProviderState {
+private enum EmojiProviderState {
     case notLoaded
     case inProgress(Task<[EmojiCategory], Never>)
     case loaded([EmojiCategory])
 }
 
-class EmojisProvider: EmojisProviderProtocol {
+class EmojiProvider: EmojiProviderProtocol {
     private let loader: EmojisLoaderProtocol
-    private var state: EmojisProviderState = .notLoaded
+    private var state: EmojiProviderState = .notLoaded
     
     init(loader: EmojisLoaderProtocol = EmojiMartJSONLoader()) {
         self.loader = loader

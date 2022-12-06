@@ -21,18 +21,18 @@ typealias EmojiPickerScreenViewModelType = StateStoreViewModel<EmojiPickerScreen
 class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScreenViewModelProtocol {
     var callback: ((EmojiPickerScreenViewModelAction) -> Void)?
     
-    private let emojisProvider: EmojisProviderProtocol
+    private let emojiProvider: EmojiProviderProtocol
     
-    init(emojisProvider: EmojisProviderProtocol) {
+    init(emojiProvider: EmojiProviderProtocol) {
         let initialViewState = EmojiPickerScreenViewState(categories: [])
-        self.emojisProvider = emojisProvider
+        self.emojiProvider = emojiProvider
         super.init(initialViewState: initialViewState)
         loadEmojis()
     }
     
     private func loadEmojis() {
         Task(priority: .userInitiated) { [weak self] in
-            let categories = await emojisProvider.getCategories(searchString: nil)
+            let categories = await emojiProvider.getCategories(searchString: nil)
             self?.state.categories = convert(emojiCategories: categories)
         }
     }
@@ -55,7 +55,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     override func process(viewAction: EmojiPickerScreenViewAction) async {
         switch viewAction {
         case let .search(searchString: searchString):
-            let categories = await emojisProvider.getCategories(searchString: searchString)
+            let categories = await emojiProvider.getCategories(searchString: searchString)
             state.categories = convert(emojiCategories: categories)
         case let .emojiSelected(emoji: emoji):
             callback?(.selectEmoji(emojiId: emoji.id))

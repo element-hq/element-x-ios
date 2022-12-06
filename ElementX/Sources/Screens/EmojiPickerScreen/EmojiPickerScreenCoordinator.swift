@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct EmojiPickerScreenCoordinatorParameters {
-    let emojisProvider: EmojisProviderProtocol
+    let emojiProvider: EmojiProviderProtocol
     let itemId: String
 }
 
@@ -34,7 +34,7 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     init(parameters: EmojiPickerScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = EmojiPickerScreenViewModel(emojisProvider: parameters.emojisProvider)
+        viewModel = EmojiPickerScreenViewModel(emojiProvider: parameters.emojiProvider)
     }
     
     func start() {

@@ -50,6 +50,7 @@ struct TimelineItemList: View {
                         if showEmojiSelectionForItemId == item.id {
                             TimelineItemEmojiReactionsMenuView(onMoreEmojisSelected: {
                                 context.send(viewAction: .displayMoreEmojis(itemId: item.id))
+                                showEmojiSelectionForItemId = ""
                             })
                         }
                         item

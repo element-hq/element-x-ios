@@ -18,13 +18,13 @@ import XCTest
 
 @testable import ElementX
 
-final class EmojisProviderTests: XCTestCase {
-    var sut: EmojisProvider!
+final class EmojiProviderTests: XCTestCase {
+    var sut: EmojiProvider!
     private var emojisLoaderMock: EmojisLoaderMock!
     
     @MainActor override func setUp() {
         emojisLoaderMock = EmojisLoaderMock()
-        sut = EmojisProvider(loader: emojisLoaderMock)
+        sut = EmojiProvider(loader: emojisLoaderMock)
     }
     
     func test_whenEmojisLoaded_categoriesAreLoadedFromLoader() async throws {
