@@ -54,6 +54,7 @@ targets:
         ]
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
+        keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
         ITSAppUsesNonExemptEncryption: false
         NSUserActivityTypes: [
           INSendMessageIntent
