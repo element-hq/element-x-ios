@@ -16,6 +16,6 @@
 
 import Foundation
 
-protocol EmojisLoaderProtocol {
+protocol EmojiLoaderProtocol {
     func load() async -> [EmojiCategory]
 }

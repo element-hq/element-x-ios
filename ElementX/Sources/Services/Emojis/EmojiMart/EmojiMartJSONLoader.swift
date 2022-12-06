@@ -20,7 +20,7 @@ private enum EmojiMartJSONLoaderError: Error {
     case fileNotFound
 }
 
-class EmojiMartJSONLoader: EmojisLoaderProtocol {
+class EmojiMartJSONLoader: EmojiLoaderProtocol {
     /// Emoji data coming from https://github.com/missive/emoji-mart/blob/main/packages/emoji-mart-data/sets/14/apple.json
     private let jsonFilename = "apple_emojis_data"
     

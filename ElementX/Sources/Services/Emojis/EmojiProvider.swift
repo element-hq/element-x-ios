@@ -28,10 +28,10 @@ private enum EmojiProviderState {
 }
 
 class EmojiProvider: EmojiProviderProtocol {
-    private let loader: EmojisLoaderProtocol
+    private let loader: EmojiLoaderProtocol
     private var state: EmojiProviderState = .notLoaded
     
-    init(loader: EmojisLoaderProtocol = EmojiMartJSONLoader()) {
+    init(loader: EmojiLoaderProtocol = EmojiMartJSONLoader()) {
         self.loader = loader
         Task {
             await loadIfNeeded()
