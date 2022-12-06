@@ -18,11 +18,22 @@ import SwiftUI
 
 struct EmojiPickerSearchFieldView: View {
     @Binding var searchString: String
+    @FocusState private var isSearchFocused: Bool
     
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
             TextField(ElementL10n.search, text: $searchString)
+                .focused($isSearchFocused)
+            if isSearchFocused {
+                Spacer()
+                Button {
+                    searchString = ""
+                    isSearchFocused = false
+                } label: {
+                    Text(ElementL10n.actionCancel)
+                }
+            }
         }
     }
 }
