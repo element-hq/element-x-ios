@@ -30,7 +30,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     init(backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(service: .sessions,
-                                                accessGroup: InfoPlistReader.target.appGroupIdentifier)
+                                                accessGroup: InfoPlistReader.target.keychainAccessGroupIdentifier)
         self.backgroundTaskService = backgroundTaskService
         baseDirectory = .sessionsBaseDirectory
         MXLog.debug("Setup base directory at: \(baseDirectory)")
