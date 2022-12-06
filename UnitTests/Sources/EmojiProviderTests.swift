@@ -35,6 +35,14 @@ final class EmojiProviderTests: XCTestCase {
         XCTAssertEqual(emojiLoaderMock.categories, categories)
     }
     
+    func test_whenEmojisLoadedAndSearchStringEmpty_allCategoriesReturned() async throws {
+        let item = EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])
+        let category = EmojiCategory(id: "test", emojis: [item])
+        emojiLoaderMock.categories = [category]
+        let categories = await sut.getCategories(searchString: "")
+        XCTAssertEqual(emojiLoaderMock.categories, categories)
+    }
+    
     func test_whenEmojisLoadedSecondTime_cachedValuesAreUsed() async throws {
         let categoriesForFirstLoad = [EmojiCategory(id: "test",
                                                     emojis: [EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])])]

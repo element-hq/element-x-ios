@@ -22,7 +22,7 @@ struct EmojiPickerSearchFieldView: View {
     var body: some View {
         HStack {
             Image(systemName: "magnifyingglass")
-            TextField("Search", text: $searchString)
+            TextField(ElementL10n.search, text: $searchString)
         }
     }
 }
