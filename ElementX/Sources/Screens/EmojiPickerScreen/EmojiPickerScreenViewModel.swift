@@ -30,6 +30,20 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
         loadEmojis()
     }
     
+    // MARK: - Public
+    
+    override func process(viewAction: EmojiPickerScreenViewAction) async {
+        switch viewAction {
+        case let .search(searchString: searchString):
+            let categories = await emojiProvider.getCategories(searchString: searchString)
+            state.categories = convert(emojiCategories: categories)
+        case let .emojiSelected(emoji: emoji):
+            callback?(.selectEmoji(emojiId: emoji.id))
+        }
+    }
+    
+    // MARK: - Private
+
     private func loadEmojis() {
         Task(priority: .userInitiated) { [weak self] in
             let categories = await emojiProvider.getCategories(searchString: nil)
@@ -49,16 +63,6 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
             }
             
             return EmojiPickerEmojiCategoryViewData(id: emojiCategory.id, emojis: emojisViewData)
-        }
-    }
-    
-    override func process(viewAction: EmojiPickerScreenViewAction) async {
-        switch viewAction {
-        case let .search(searchString: searchString):
-            let categories = await emojiProvider.getCategories(searchString: searchString)
-            state.categories = convert(emojiCategories: categories)
-        case let .emojiSelected(emoji: emoji):
-            callback?(.selectEmoji(emojiId: emoji.id))
         }
     }
 }
