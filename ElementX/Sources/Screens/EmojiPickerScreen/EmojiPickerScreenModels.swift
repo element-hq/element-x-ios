@@ -34,8 +34,27 @@ struct EmojiPickerEmojiCategoryViewData: Identifiable {
     let emojis: [EmojiPickerEmojiViewData]
     
     var name: String {
-        let categoryNameLocalizationKey = "emoji_picker_\(id)_category"
-        return ElementL10n.tr("Localizable", categoryNameLocalizationKey)
+        switch id {
+        case "people":
+            return ElementL10n.emojiPickerPeopleCategory
+        case "nature":
+            return ElementL10n.emojiPickerNatureCategory
+        case "foods":
+            return ElementL10n.emojiPickerFoodsCategory
+        case "activity":
+            return ElementL10n.emojiPickerActivityCategory
+        case "places":
+            return ElementL10n.emojiPickerPlacesCategory
+        case "objects":
+            return ElementL10n.emojiPickerObjectsCategory
+        case "symbols":
+            return ElementL10n.emojiPickerSymbolsCategory
+        case "flags":
+            return ElementL10n.emojiPickerFlagsCategory
+        default:
+            MXLog.failure("Missing translation for emoji category with id \(id)")
+            return ""
+        }
     }
 }
 
