@@ -16,9 +16,7 @@
 
 import SwiftUI
 
-struct EmojiPickerScreenScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
+struct EmojiPickerScreen: View {
     @ObservedObject var context: EmojiPickerScreenViewModel.Context
     @State var searchString = ""
     
@@ -55,6 +53,6 @@ struct EmojiPickerScreenScreen: View {
 
 struct EmojiPickerScreen_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiPickerScreenScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
+        EmojiPickerScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
     }
 }
