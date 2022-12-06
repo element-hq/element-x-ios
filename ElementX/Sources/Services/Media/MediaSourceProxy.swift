@@ -31,7 +31,6 @@ struct MediaSourceProxy: Hashable {
     var url: String {
         underlyingSource.url()
     }
-    
 }
 
 // MARK: - Hashable
