@@ -20,6 +20,7 @@ struct InfoPlistReader {
     private enum Keys {
         static let appGroupIdentifier = "appGroupIdentifier"
         static let baseBundleIdentifier = "baseBundleIdentifier"
+        static let keychainAccessGroupIdentifier = "keychainAccessGroupIdentifier"
         static let bundleShortVersion = "CFBundleShortVersionString"
         static let bundleDisplayName = "CFBundleDisplayName"
     }
@@ -43,6 +44,11 @@ struct InfoPlistReader {
     /// Base bundle identifier set in Info.plist of the target
     var baseBundleIdentifier: String {
         infoPlistStringValue(forKey: Keys.baseBundleIdentifier)
+    }
+    
+    /// Keychain access group identifier set in Info.plist of the target
+    var keychainAccessGroupIdentifier: String {
+        infoPlistStringValue(forKey: Keys.keychainAccessGroupIdentifier)
     }
 
     /// Bundle executable of the target
