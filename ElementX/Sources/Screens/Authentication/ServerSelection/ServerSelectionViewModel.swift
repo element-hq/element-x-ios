@@ -32,7 +32,8 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
     override func process(viewAction: ServerSelectionViewAction) async {
         switch viewAction {
         case .confirm:
-            if !state.bindings.slidingSyncProxyAddress.isEmpty {
+            if !state.bindings.slidingSyncProxyAddress.isEmpty,
+               state.bindings.slidingSyncProxyAddress != ElementSettings.shared.slidingSyncProxyBaseURLString {
                 ElementSettings.shared.slidingSyncProxyBaseURLString = state.bindings.slidingSyncProxyAddress
             }
             
