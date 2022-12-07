@@ -22,7 +22,7 @@ struct EmojiPickerScreenCoordinatorParameters {
 }
 
 enum EmojiPickerScreenCoordinatorAction {
-    case selectEmoji(emojiId: String, itemId: String)
+    case emojiSelected(emoji: String, itemId: String)
 }
 
 final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
@@ -42,8 +42,8 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             MXLog.debug("EmojiPickerScreenViewModel did complete with result: \(action).")
             switch action {
-            case let .selectEmoji(emojiId: emojiId):
-                self.callback?(.selectEmoji(emojiId: emojiId, itemId: self.parameters.itemId))
+            case let .emojiSelected(emoji: emoji):
+                self.callback?(.emojiSelected(emoji: emoji, itemId: self.parameters.itemId))
             }
         }
     }

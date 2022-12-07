@@ -183,9 +183,11 @@ struct TimelineTableView: UIViewRepresentable {
                 cell.contentConfiguration = UIHostingConfiguration {
                     VStack {
                         if viewModelContext.viewState.displayReactionsMenuForItemId == timelineItem.id {
-                            TimelineItemReactionsMenuView {
+                            TimelineItemReactionsMenuView(onEmojiSelected: { emoji in
+                                viewModelContext.send(viewAction: .emojiTapped(emoji: emoji, itemId: timelineItem.id))
+                            }, onDisplayEmojiPicker: {
                                 viewModelContext.send(viewAction: .displayEmojiPicker(itemId: timelineItem.id))
-                            }
+                            })
                         }
                         timelineItem
                             .frame(maxWidth: .infinity, alignment: .leading)

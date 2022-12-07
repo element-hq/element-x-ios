@@ -113,7 +113,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayEmojiPickerScreen(for itemId: String) {
-        guard let emojiProvider = parameters?.emojiProvide else {
+        guard let emojiProvider = parameters?.emojiProvide,
+              let timelineController = parameters?.timelineController else {
             fatalError()
         }
         let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
@@ -121,12 +122,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
             switch action {
-            case let .selectEmoji(emojiId: emojiId, itemId: itemId):
+            case let .emojiSelected(emoji: emoji, itemId: itemId):
                 self?.navigationController.dismissSheet()
-                MXLog.debug("Save \(emojiId) for \(itemId)")
+                Task {
+                    await timelineController.sendReaction(emoji, for: itemId)
+                }
             }
         }
-
+        
         navigationController.presentSheet(coordinator)
     }
 }

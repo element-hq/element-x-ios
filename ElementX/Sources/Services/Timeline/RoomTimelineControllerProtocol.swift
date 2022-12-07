@@ -55,6 +55,8 @@ protocol RoomTimelineControllerProtocol {
     func sendReply(_ message: String, to itemId: String) async
 
     func editMessage(_ newMessage: String, of itemId: String) async
+    
+    func sendReaction(_ reaction: String, for itemId: String) async
 
     func redact(_ eventID: String) async
     

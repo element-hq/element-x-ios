@@ -36,7 +36,7 @@ struct EmojiPickerScreen: View {
                                     Text(emoji.value)
                                         .frame(width: 45, height: 45)
                                         .onTapGesture {
-                                            context.send(viewAction: .emojiSelected(emoji: emoji))
+                                            context.send(viewAction: .emojiTapped(emoji: emoji))
                                         }
                                 }
                             }

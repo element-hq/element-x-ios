@@ -162,6 +162,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             break
         }
     }
+    
+    func sendReaction(_ reaction: String, for itemId: String) async {
+        switch await timelineProvider.sendReaction(reaction, for: itemId) {
+        default:
+            break
+        }
+    }
 
     func editMessage(_ newMessage: String, of itemId: String) async {
         switch await timelineProvider.editMessage(newMessage, originalItemId: itemId) {

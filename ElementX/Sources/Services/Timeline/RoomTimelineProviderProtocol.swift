@@ -21,6 +21,7 @@ enum RoomTimelineProviderError: Error {
     case noMoreMessagesToBackPaginate
     case failedPaginatingBackwards
     case failedSendingMessage
+    case failedSendingReaction
     case failedRedactingItem
     case generic
 }
@@ -34,6 +35,8 @@ protocol RoomTimelineProviderProtocol {
     
     func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError>
 
+    func sendReaction(_ reaction: String, for itemId: String) async -> Result<Void, RoomTimelineProviderError>
+    
     func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError>
