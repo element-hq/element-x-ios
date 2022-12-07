@@ -22,7 +22,7 @@ struct RoomScreenCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     let roomName: String?
     let roomAvatarUrl: String?
-    let emojiProvide: EmojiProviderProtocol
+    let emojiProvider: EmojiProviderProtocol
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -113,7 +113,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayEmojiPickerScreen(for itemId: String) {
-        guard let emojiProvider = parameters?.emojiProvide,
+        guard let emojiProvider = parameters?.emojiProvider,
               let timelineController = parameters?.timelineController else {
             fatalError()
         }

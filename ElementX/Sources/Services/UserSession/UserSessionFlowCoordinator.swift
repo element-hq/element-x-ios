@@ -150,7 +150,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                              mediaProvider: userSession.mediaProvider,
                                                              roomName: roomProxy.displayName ?? roomProxy.name,
                                                              roomAvatarUrl: roomProxy.avatarURL,
-                                                             emojiProvide: emojiProvider)
+                                                             emojiProvider: emojiProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             navigationController.push(coordinator) { [weak self] in

@@ -26,10 +26,11 @@ struct TimelineItemReactionsMenuView: View {
         HStack {
             HStack(spacing: 10) {
                 ForEach(emojis, id: \.self) { emoji in
-                    Text(emoji)
-                        .onTapGesture {
-                            onEmojiSelected?(emoji)
-                        }
+                    Button {
+                        onEmojiSelected?(emoji)
+                    } label: {
+                        Text(emoji)
+                    }
                 }
             }
             .padding(10)

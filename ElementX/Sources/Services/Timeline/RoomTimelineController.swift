@@ -108,6 +108,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func processItemDisappearance(_ itemId: String) { }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction {
         guard let timelineItem = timelineItems.first(where: { $0.id == itemId }) else {
             return .none
