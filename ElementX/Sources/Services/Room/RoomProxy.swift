@@ -185,6 +185,12 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
+    
+    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            .success(())
+        }
+    }
 
     func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
         sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)

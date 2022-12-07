@@ -108,6 +108,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func processItemDisappearance(_ itemId: String) { }
 
+    // swiftlint:disable:next cyclomatic_complexity
     func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction {
         guard let timelineItem = timelineItems.first(where: { $0.id == itemId }) else {
             return .none
@@ -158,6 +159,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func sendReply(_ message: String, to itemId: String) async {
         switch await timelineProvider.sendMessage(message, inReplyToItemId: itemId) {
+        default:
+            break
+        }
+    }
+    
+    func sendReaction(_ reaction: String, for itemId: String) async {
+        switch await timelineProvider.sendReaction(reaction, for: itemId) {
         default:
             break
         }

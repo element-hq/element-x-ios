@@ -117,6 +117,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.composerMode = .default
         case .cancelEdit:
             state.composerMode = .default
+        case .emojiTapped(let emoji, let itemId):
+            await timelineController.sendReaction(emoji, for: itemId)
+            state.displayReactionsMenuForItemId = ""
         }
     }
 

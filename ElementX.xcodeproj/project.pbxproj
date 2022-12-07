@@ -163,7 +163,6 @@
 		5C8AFBF168A41E20835F3B86 /* LoginScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DB34B0C74CD242FED9DD069 /* LoginScreenUITests.swift */; };
 		5D04B17929378AB300FD5B00 /* apple_emojis_data.json in Resources */ = {isa = PBXBuildFile; fileRef = 5D04B17829378AB300FD5B00 /* apple_emojis_data.json */; };
 		5D04B17B29378D3600FD5B00 /* EmojiMartEmoji.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B17A29378D3600FD5B00 /* EmojiMartEmoji.swift */; };
-		5D04B17D2937ADE300FD5B00 /* EmojiItemSkin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B17C2937ADE300FD5B00 /* EmojiItemSkin.swift */; };
 		5D04B17F293A333600FD5B00 /* EmojiPickerSearchFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B17E293A333600FD5B00 /* EmojiPickerSearchFieldView.swift */; };
 		5D04B181293A337400FD5B00 /* EmojiPickerHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5D04B180293A337400FD5B00 /* EmojiPickerHeaderView.swift */; };
 		5D2AF8C0DF872E7985F8FE54 /* TimelineDeliveryStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5AC06FC11B6638F7BF1670E /* TimelineDeliveryStatusView.swift */; };
@@ -689,7 +688,6 @@
 		5B2F9D5C39A4494D19F33E38 /* SettingsViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewModelProtocol.swift; sourceTree = "<group>"; };
 		5D04B17829378AB300FD5B00 /* apple_emojis_data.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = apple_emojis_data.json; sourceTree = "<group>"; };
 		5D04B17A29378D3600FD5B00 /* EmojiMartEmoji.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMartEmoji.swift; sourceTree = "<group>"; };
-		5D04B17C2937ADE300FD5B00 /* EmojiItemSkin.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiItemSkin.swift; sourceTree = "<group>"; };
 		5D04B17E293A333600FD5B00 /* EmojiPickerSearchFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerSearchFieldView.swift; sourceTree = "<group>"; };
 		5D04B180293A337400FD5B00 /* EmojiPickerHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerHeaderView.swift; sourceTree = "<group>"; };
 		5D26A086A8278D39B5756D6F /* project.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = project.yml; sourceTree = "<group>"; };
@@ -1274,7 +1272,6 @@
 				5DE2282D293F2CF6001790FD /* EmojiLoaderProtocol.swift */,
 				5DE2282B293F29FC001790FD /* EmojiProvider.swift */,
 				5BACB442D02C878293C04837 /* EmojiMart */,
-				5D04B17C2937ADE300FD5B00 /* EmojiItemSkin.swift */,
 			);
 			path = Emojis;
 			sourceTree = "<group>";
@@ -3001,7 +2998,6 @@
 				A7D48E44D485B143AADDB77D /* Strings+Untranslated.swift in Sources */,
 				066A1E9B94723EE9F3038044 /* Strings.swift in Sources */,
 				44AE0752E001D1D10605CD88 /* Swipe.swift in Sources */,
-				5D04B17D2937ADE300FD5B00 /* EmojiItemSkin.swift in Sources */,
 				E290C78E7F09F47FD2662986 /* Task.swift in Sources */,
 				43FD77998F33C32718C51450 /* TemplateCoordinator.swift in Sources */,
 				63C9AF0FB8278AF1C0388A0C /* TemplateModels.swift in Sources */,

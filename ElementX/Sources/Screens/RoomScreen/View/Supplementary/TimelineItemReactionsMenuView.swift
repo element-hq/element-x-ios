@@ -19,13 +19,18 @@ import SwiftUI
 struct TimelineItemReactionsMenuView: View {
     private let emojis = ["👍🏼", "👎🏼", "😄", "🙏🏼", "😇"]
     
+    var onEmojiSelected: ((String) -> Void)?
     var onDisplayEmojiPicker: (() -> Void)?
     
     var body: some View {
         HStack {
             HStack(spacing: 10) {
                 ForEach(emojis, id: \.self) { emoji in
-                    Text(emoji)
+                    Button {
+                        onEmojiSelected?(emoji)
+                    } label: {
+                        Text(emoji)
+                    }
                 }
             }
             .padding(10)

@@ -103,6 +103,17 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             return .failure(.failedSendingMessage)
         }
     }
+    
+    func sendReaction(_ reaction: String, for itemId: String) async -> Result<Void, RoomTimelineProviderError> {
+        switch await roomProxy.sendReaction(reaction, for: itemId) {
+        case .success:
+            MXLog.info("Finished sending reaction")
+            return .success(())
+        case .failure(let error):
+            MXLog.error("Failed sending reaction with error: \(error)")
+            return .failure(.failedSendingReaction)
+        }
+    }
 
     func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError> {
         MXLog.info("Editing message: \(originalItemId)")
