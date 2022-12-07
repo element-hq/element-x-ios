@@ -59,7 +59,7 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
                 guard let firstSkin = emojiItem.skins.first else {
                     return nil
                 }
-                return EmojiPickerEmojiViewData(id: emojiItem.id, value: firstSkin.value)
+                return EmojiPickerEmojiViewData(id: emojiItem.id, value: firstSkin)
             }
             
             return EmojiPickerEmojiCategoryViewData(id: emojiCategory.id, emojis: emojisViewData)

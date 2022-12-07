@@ -28,7 +28,7 @@ final class EmojiProviderTests: XCTestCase {
     }
     
     func test_whenEmojisLoaded_categoriesAreLoadedFromLoader() async throws {
-        let item = EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])
+        let item = EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: ["🙂"])
         let category = EmojiCategory(id: "test", emojis: [item])
         emojiLoaderMock.categories = [category]
         let categories = await sut.getCategories()
@@ -36,7 +36,7 @@ final class EmojiProviderTests: XCTestCase {
     }
     
     func test_whenEmojisLoadedAndSearchStringEmpty_allCategoriesReturned() async throws {
-        let item = EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])
+        let item = EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: ["🙂"])
         let category = EmojiCategory(id: "test", emojis: [item])
         emojiLoaderMock.categories = [category]
         let categories = await sut.getCategories(searchString: "")
@@ -45,9 +45,9 @@ final class EmojiProviderTests: XCTestCase {
     
     func test_whenEmojisLoadedSecondTime_cachedValuesAreUsed() async throws {
         let categoriesForFirstLoad = [EmojiCategory(id: "test",
-                                                    emojis: [EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: [try slightlySmilingFaceEmoji()])])]
+                                                    emojis: [EmojiItem(id: "test", name: "test", keywords: ["1", "2"], skins: ["🙂"])])]
         let categoriesForSecondLoad = [EmojiCategory(id: "test2",
-                                                     emojis: [EmojiItem(id: "test2", name: "test2", keywords: ["3", "4"], skins: [try meltingFaceEmoji()])])]
+                                                     emojis: [EmojiItem(id: "test2", name: "test2", keywords: ["3", "4"], skins: ["🫠"])])]
         emojiLoaderMock.categories = categoriesForFirstLoad
         _ = await sut.getCategories()
         emojiLoaderMock.categories = categoriesForSecondLoad
@@ -62,37 +62,29 @@ final class EmojiProviderTests: XCTestCase {
                                         emojis: [EmojiItem(id: "\(searchString)_123",
                                                            name: "emoji0",
                                                            keywords: ["key1", "key1"],
-                                                           skins: [try slightlySmilingFaceEmoji()]),
+                                                           skins: ["🙂"]),
                                                  EmojiItem(id: "emoji_1",
                                                            name: searchString,
                                                            keywords: ["key1", "key1"],
-                                                           skins: [try slightlySmilingFaceEmoji()]),
+                                                           skins: ["🙂"]),
                                                  EmojiItem(id: "emoji_2",
                                                            name: "emoji2",
                                                            keywords: ["key1", "\(searchString)_123"],
-                                                           skins: [try slightlySmilingFaceEmoji()]),
+                                                           skins: ["🙂"]),
                                                  EmojiItem(id: "emoji_3",
                                                            name: "emoji_3",
                                                            keywords: ["key1", "key1"],
-                                                           skins: [try slightlySmilingFaceEmoji()])]))
+                                                           skins: ["🙂"])]))
         categories.append(EmojiCategory(id: "test",
                                         emojis: [EmojiItem(id: "\(searchString)_123",
                                                            name: "emoji0",
                                                            keywords: ["key1", "key1"],
-                                                           skins: [try slightlySmilingFaceEmoji()])]))
+                                                           skins: ["🙂"])]))
         emojiLoaderMock.categories = categories
         _ = await sut.getCategories()
         let result = await sut.getCategories(searchString: searchString)
         XCTAssertEqual(result.count, 2)
         XCTAssertEqual(result.first?.emojis.count, 3)
-    }
-    
-    private func slightlySmilingFaceEmoji() throws -> EmojiItemSkin {
-        try XCTUnwrap(EmojiItemSkin(from: EmojiMartEmojiSkin(unified: "1f642", native: "🙂")))
-    }
-    
-    private func meltingFaceEmoji() throws -> EmojiItemSkin {
-        try XCTUnwrap(EmojiItemSkin(from: EmojiMartEmojiSkin(unified: "1fae0", native: "🫠")))
     }
 }
 

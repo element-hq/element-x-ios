@@ -20,7 +20,7 @@ struct EmojiItem: Equatable, Identifiable {
     var id: String
     let name: String
     let keywords: [String]
-    let skins: [EmojiItemSkin]
+    let skins: [String]
 }
 
 extension EmojiItem {
@@ -28,8 +28,8 @@ extension EmojiItem {
         id = emojiMart.id
         name = emojiMart.name
         keywords = emojiMart.keywords
-        skins = emojiMart.skins.compactMap { emojiMartEmojiSkin in
-            EmojiItemSkin(from: emojiMartEmojiSkin)
+        skins = emojiMart.skins.map { emojiMartEmojiSkin in
+            emojiMartEmojiSkin.native
         }
     }
 }
