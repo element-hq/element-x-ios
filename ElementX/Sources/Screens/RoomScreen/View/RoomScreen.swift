@@ -32,7 +32,7 @@ struct RoomScreen: View {
     }
     
     var timeline: some View {
-        TimelineTableView()
+        TimelineView()
             .id(context.viewState.roomId)
             .environmentObject(context)
             .timelineStyle(settings.timelineStyle)
