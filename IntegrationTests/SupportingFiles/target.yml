@@ -1,5 +1,29 @@
 name: IntegrationTests
 
+schemes:
+  IntegrationTests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        IntegrationTests: all
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: false
+    test:
+      config: Debug
+      disableMainThreadChecker: false
+      captureScreenshotsAutomatically: false
+      gatherCoverageData: true
+      coverageTargets:
+        - ElementX
+      targets:
+      - IntegrationTests
+
 targets:
   IntegrationTests:
     type: bundle.ui-testing
@@ -26,10 +50,6 @@ targets:
         PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.integration.tests
       debug:
       release:
-
-    scheme:
-      testTargets:
-        - IntegrationTests
 
       environmentVariables:
         INTEGRATION_TESTS_HOST: ${INTEGRATION_TESTS_HOST}
