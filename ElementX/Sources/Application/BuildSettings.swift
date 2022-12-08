@@ -30,7 +30,7 @@ final class BuildSettings {
     // MARK: - Servers
 
     static let defaultHomeserverAddress = "matrix.org"
-    static let defaultSlidingSyncProxyBaseURLString = "https://slidingsync.lab.matrix.org"
+    static let defaultSlidingSyncProxyBaseURLString = "https://slidingsync.lab.element.dev"
     static let pushGatewayBaseURL = URL(staticString: "https://matrix.org/_matrix/push/v1/notify")
 
     // MARK: - Bug report
