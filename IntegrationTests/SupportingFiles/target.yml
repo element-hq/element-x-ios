@@ -21,7 +21,6 @@ schemes:
     test:
       config: Debug
       disableMainThreadChecker: false
-      captureScreenshotsAutomatically: false
       gatherCoverageData: true
       coverageTargets:
         - ElementX
