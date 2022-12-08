@@ -127,6 +127,13 @@ lane :integration_tests do
     devices: ["iPhone 13 Pro"],
     ensure_devices_found: true,
   )
+
+  slather(
+    cobertura_xml: true,
+    output_directory: "./fastlane/test_output",
+    proj: "ElementX.xcodeproj",
+    scheme: "IntegrationTests",
+  )
 end
 
 lane :config_nightly do
