@@ -33,6 +33,7 @@ schemes:
       targets:
         - UnitTests
         - UITests
+        - IntegrationTests
 
 targets:
   ElementX:
