@@ -24,23 +24,21 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
     private let userSession: UserSessionProtocol
-    private let navigationRootCoordinator: NavigationRootCoordinator
+    private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let bugReportService: BugReportServiceProtocol
     private let emojiProvider: EmojiProviderProtocol = EmojiProvider()
     
-    private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
     
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
-    init(userSession: UserSessionProtocol, navigationRootCoordinator: NavigationRootCoordinator, bugReportService: BugReportServiceProtocol) {
+    init(userSession: UserSessionProtocol, navigationSplitCoordinator: NavigationSplitCoordinator, bugReportService: BugReportServiceProtocol) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
-        self.navigationRootCoordinator = navigationRootCoordinator
+        self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
         
-        navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         
@@ -136,8 +134,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         }
         
         sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
     // MARK: Rooms

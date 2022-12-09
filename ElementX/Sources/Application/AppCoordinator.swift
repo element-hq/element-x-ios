@@ -216,8 +216,9 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     private func setupUserSession() {
+        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
-                                                                    navigationRootCoordinator: navigationRootCoordinator,
+                                                                    navigationSplitCoordinator: navigationSplitCoordinator,
                                                                     bugReportService: bugReportService)
         
         userSessionFlowCoordinator.callback = { [weak self] action in
@@ -230,6 +231,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionFlowCoordinator.start()
         
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
+        
+        navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
     private func tearDownUserSession(isSoftLogout: Bool = false) {
