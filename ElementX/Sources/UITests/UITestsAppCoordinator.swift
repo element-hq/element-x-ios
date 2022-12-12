@@ -18,54 +18,57 @@ import SwiftUI
 import UIKit
 
 class UITestsAppCoordinator: AppCoordinatorProtocol {
-    private var currentRootCoordinator: CoordinatorProtocol?
-    private let navigationStackCoordinator: NavigationStackCoordinator
-    let notificationManager: NotificationManagerProtocol? = nil
+    private let navigationRootCoordinator: NavigationRootCoordinator
+    private var mockScreens: [MockScreen] = []
+    var notificationManager: NotificationManagerProtocol?
     
     init() {
         UIView.setAnimationsEnabled(false)
-        navigationStackCoordinator = NavigationStackCoordinator()
+        navigationRootCoordinator = NavigationRootCoordinator()
+        mockScreens = UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationRootCoordinator: navigationRootCoordinator) }
         
         ServiceLocator.shared.register(userNotificationController: MockUserNotificationController())
     }
     
     func start() {
-        let screens = mockScreens()
-        let rootCoordinator = UITestsRootCoordinator(mockScreens: screens) { id in
-            guard let screen = screens.first(where: { $0.id == id }) else {
+        let rootCoordinator = UITestsRootCoordinator(mockScreens: mockScreens) { id in
+            guard let screen = self.mockScreens.first(where: { $0.id == id }) else {
                 fatalError()
             }
             
-            // Store the initial coordinator so that it stays alive if drops it
-            // For example when replacing the root in the authentication flows
-            self.currentRootCoordinator = screen.coordinator
-            
-            self.navigationStackCoordinator.setRootCoordinator(screen.coordinator)
+            self.navigationRootCoordinator.setRootCoordinator(screen.coordinator)
         }
         
-        navigationStackCoordinator.setRootCoordinator(rootCoordinator)
+        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
         
         Bundle.elementFallbackLanguage = "en"
     }
-        
-    func toPresentable() -> AnyView {
-        navigationStackCoordinator.toPresentable()
-    }
     
-    private func mockScreens() -> [MockScreen] {
-        UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationStackCoordinator: navigationStackCoordinator) }
+    func toPresentable() -> AnyView {
+        navigationRootCoordinator.toPresentable()
     }
 }
 
 @MainActor
 class MockScreen: Identifiable {
     let id: UITestScreenIdentifier
-    let navigationStackCoordinator: NavigationStackCoordinator
+    
+    private let navigationRootCoordinator: NavigationRootCoordinator
+    private var retainedState = [Any]()
+    
+    init(id: UITestScreenIdentifier, navigationRootCoordinator: NavigationRootCoordinator) {
+        self.id = id
+        self.navigationRootCoordinator = navigationRootCoordinator
+    }
+    
     lazy var coordinator: CoordinatorProtocol = {
         switch id {
         case .login:
-            return LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
-                                                      navigationStackCoordinator: navigationStackCoordinator))
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = LoginCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
+                                                                 navigationStackCoordinator: navigationStackCoordinator))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .serverSelection:
             return ServerSelectionCoordinator(parameters: .init(authenticationService: MockAuthenticationServiceProxy(),
                                                                 userNotificationController: MockUserNotificationController(),
@@ -78,8 +81,12 @@ class MockScreen: Identifiable {
             return AnalyticsPromptCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
                                                                                              mediaProvider: MockMediaProvider())))
         case .authenticationFlow:
-            return AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
-                                             navigationStackCoordinator: navigationStackCoordinator)
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),
+                                                        navigationStackCoordinator: navigationStackCoordinator)
+            retainedState.append(coordinator)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .softLogout:
             let credentials = SoftLogoutCredentials(userId: "@mock:matrix.org",
                                                     homeserverName: "matrix.org",
@@ -93,18 +100,24 @@ class MockScreen: Identifiable {
         case .simpleUpgrade:
             return TemplateCoordinator(parameters: .init(promptType: .upgrade))
         case .home:
+            let navigationStackCoordinator = NavigationStackCoordinator()
             let session = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:matrix.org"),
                                           mediaProvider: MockMediaProvider())
-            return HomeScreenCoordinator(parameters: .init(userSession: session,
-                                                           attributedStringBuilder: AttributedStringBuilder(),
-                                                           bugReportService: MockBugReportService(),
-                                                           navigationStackCoordinator: navigationStackCoordinator))
+            let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
+                                                                      attributedStringBuilder: AttributedStringBuilder(),
+                                                                      bugReportService: MockBugReportService(),
+                                                                      navigationStackCoordinator: navigationStackCoordinator))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .settings:
-            return SettingsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
-                                                         userNotificationController: MockUserNotificationController(),
-                                                         userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
-                                                                                      mediaProvider: MockMediaProvider()),
-                                                         bugReportService: MockBugReportService()))
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = SettingsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                    userNotificationController: MockUserNotificationController(),
+                                                                    userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
+                                                                                                 mediaProvider: MockMediaProvider()),
+                                                                    bugReportService: MockBugReportService()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .bugReport:
             return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
                                                           userNotificationController: MockUserNotificationController(),
@@ -118,22 +131,29 @@ class MockScreen: Identifiable {
         case .onboarding:
             return OnboardingCoordinator()
         case .roomPlainNoAvatar:
+            let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
                                                              roomAvatarUrl: nil,
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomEncryptedWithAvatar:
+            let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomSmallTimeline:
+            let navigationStackCoordinator = NavigationStackCoordinator()
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
@@ -142,8 +162,12 @@ class MockScreen: Identifiable {
                                                              roomName: "New room",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomSmallTimelineIncomingAndSmallPagination:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.singleMessageChunk]
@@ -155,8 +179,13 @@ class MockScreen: Identifiable {
                                                              roomName: "Small timeline",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomSmallTimelineLargePagination:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
@@ -166,15 +195,28 @@ class MockScreen: Identifiable {
                                                              roomName: "Small timeline, paginating",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .sessionVerification:
             let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy())
             return SessionVerificationCoordinator(parameters: parameters)
+        case .userSessionFlow:
+            let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
+            
+            let clientProxy = MockClientProxy(userIdentifier: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded))
+            
+            let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
+                                                         navigationSplitCoordinator: navigationSplitCoordinator,
+                                                         bugReportService: MockBugReportService(),
+                                                         roomTimelineControllerFactory: RoomTimelineControllerFactory())
+            
+            coordinator.start()
+            
+            retainedState.append(coordinator)
+            
+            return navigationSplitCoordinator
         }
     }()
-    
-    init(id: UITestScreenIdentifier, navigationStackCoordinator: NavigationStackCoordinator) {
-        self.id = id
-        self.navigationStackCoordinator = navigationStackCoordinator
-    }
 }
