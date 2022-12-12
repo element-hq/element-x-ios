@@ -20,7 +20,7 @@ import SwiftUI
 
 class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
-    private let navigationController: NavigationController
+    private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
     /// Common background task to resume long-running tasks in the background.
     /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
@@ -51,14 +51,14 @@ class AppCoordinator: AppCoordinatorProtocol {
     private(set) var notificationManager: NotificationManagerProtocol?
 
     init() {
-        navigationController = NavigationController()
+        navigationRootCoordinator = NavigationRootCoordinator()
         stateMachine = AppCoordinatorStateMachine()
         
         bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
 
-        navigationController.setRootCoordinator(SplashScreenCoordinator())
+        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
 
-        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
+        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
 
         backgroundTaskService = UIKitBackgroundTaskService {
             UIApplication.shared
@@ -168,12 +168,15 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     private func startAuthentication() {
+        let authenticationNavigationStackCoordinator = NavigationStackCoordinator()
         let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
         authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
-                                                              navigationController: navigationController)
+                                                              navigationStackCoordinator: authenticationNavigationStackCoordinator)
         authenticationCoordinator?.delegate = self
         
         authenticationCoordinator?.start()
+        
+        navigationRootCoordinator.setRootCoordinator(authenticationNavigationStackCoordinator)
     }
 
     private func startAuthenticationSoftLogout() {
@@ -208,13 +211,14 @@ class AppCoordinator: AppCoordinatorProtocol {
                 }
             }
             
-            navigationController.setRootCoordinator(coordinator)
+            navigationRootCoordinator.setRootCoordinator(coordinator)
         }
     }
     
     private func setupUserSession() {
+        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
-                                                                    navigationController: navigationController,
+                                                                    navigationSplitCoordinator: navigationSplitCoordinator,
                                                                     bugReportService: bugReportService)
         
         userSessionFlowCoordinator.callback = { [weak self] action in
@@ -227,6 +231,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionFlowCoordinator.start()
         
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
+        
+        navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
     private func tearDownUserSession(isSoftLogout: Bool = false) {
@@ -253,7 +259,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
-        navigationController.setRootCoordinator(SplashScreenCoordinator())
+        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
         if isSoftLogout {
             startAuthenticationSoftLogout()

@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct SettingsCoordinatorParameters {
-    let navigationController: NavigationController
+    let navigationStackCoordinator: NavigationStackCoordinator
     let userNotificationController: UserNotificationControllerProtocol
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
@@ -88,10 +88,10 @@ final class SettingsCoordinator: CoordinatorProtocol {
                 break
             }
             
-            self?.parameters.navigationController.pop()
+            self?.parameters.navigationStackCoordinator.pop()
         }
         
-        parameters.navigationController.push(coordinator)
+        parameters.navigationStackCoordinator.push(coordinator)
     }
 
     private func showSuccess(label: String) {

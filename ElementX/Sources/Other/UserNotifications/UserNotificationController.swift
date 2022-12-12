@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-class UserNotificationController: ObservableObject, UserNotificationControllerProtocol {
+class UserNotificationController: ObservableObject, UserNotificationControllerProtocol, CustomStringConvertible {
     private let rootCoordinator: CoordinatorProtocol
     
     private var dismisalTimer: Timer?
@@ -76,5 +76,11 @@ class UserNotificationController: ObservableObject, UserNotificationControllerPr
             self?.notificationQueue.removeAll { $0.id == id }
             self?.displayTimes[id] = nil
         }
+    }
+    
+    // MARK: - CustomStringConvertible
+    
+    var description: String {
+        "UserNotificationController(\(String(describing: rootCoordinator)))"
     }
 }

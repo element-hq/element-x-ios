@@ -24,14 +24,14 @@ protocol AuthenticationCoordinatorDelegate: AnyObject {
 
 class AuthenticationCoordinator: CoordinatorProtocol {
     private let authenticationService: AuthenticationServiceProxyProtocol
-    private let navigationController: NavigationController
+    private let navigationStackCoordinator: NavigationStackCoordinator
     
     weak var delegate: AuthenticationCoordinatorDelegate?
     
     init(authenticationService: AuthenticationServiceProxyProtocol,
-         navigationController: NavigationController) {
+         navigationStackCoordinator: NavigationStackCoordinator) {
         self.authenticationService = authenticationService
-        self.navigationController = navigationController
+        self.navigationStackCoordinator = navigationStackCoordinator
     }
     
     func start() {
@@ -55,7 +55,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             }
         }
         
-        navigationController.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
     private func startAuthentication() async {
@@ -88,12 +88,12 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             }
         }
         
-        navigationController.push(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func showLoginScreen() {
         let parameters = LoginCoordinatorParameters(authenticationService: authenticationService,
-                                                    navigationController: navigationController)
+                                                    navigationStackCoordinator: navigationStackCoordinator)
         let coordinator = LoginCoordinator(parameters: parameters)
 
         coordinator.callback = { [weak self] action in
@@ -105,7 +105,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             }
         }
 
-        navigationController.push(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func showAnalyticsPrompt(with userSession: UserSessionProtocol) {
@@ -117,7 +117,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
             self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
         }
                 
-        navigationController.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
     static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
