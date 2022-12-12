@@ -219,7 +219,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
                                                                     navigationSplitCoordinator: navigationSplitCoordinator,
-                                                                    bugReportService: bugReportService)
+                                                                    bugReportService: bugReportService,
+                                                                    roomTimelineControllerFactory: RoomTimelineControllerFactory())
         
         userSessionFlowCoordinator.callback = { [weak self] action in
             switch action {

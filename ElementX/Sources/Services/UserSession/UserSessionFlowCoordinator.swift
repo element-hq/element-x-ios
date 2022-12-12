@@ -26,6 +26,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let bugReportService: BugReportServiceProtocol
+    private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
     private let emojiProvider: EmojiProviderProtocol = EmojiProvider()
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
@@ -33,11 +34,15 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
-    init(userSession: UserSessionProtocol, navigationSplitCoordinator: NavigationSplitCoordinator, bugReportService: BugReportServiceProtocol) {
+    init(userSession: UserSessionProtocol,
+         navigationSplitCoordinator: NavigationSplitCoordinator,
+         bugReportService: BugReportServiceProtocol,
+         roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
         self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
+        self.roomTimelineControllerFactory = roomTimelineControllerFactory
         
         sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
         detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
@@ -150,13 +155,11 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                               mediaProvider: userSession.mediaProvider,
                                                               roomProxy: roomProxy,
                                                               attributedStringBuilder: AttributedStringBuilder())
-
-            let timelineController = RoomTimelineController(userId: userId,
-                                                            roomId: roomIdentifier,
-                                                            timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
-                                                            timelineItemFactory: timelineItemFactory,
-                                                            mediaProvider: userSession.mediaProvider,
-                                                            roomProxy: roomProxy)
+            
+            let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
+                                                                                               roomProxy: roomProxy,
+                                                                                               timelineItemFactory: timelineItemFactory,
+                                                                                               mediaProvider: userSession.mediaProvider)
 
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: detailNavigationStackCoordinator,
                                                              timelineController: timelineController,
