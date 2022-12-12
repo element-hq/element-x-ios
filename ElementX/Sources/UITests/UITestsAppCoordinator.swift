@@ -23,6 +23,7 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     let notificationManager: NotificationManagerProtocol? = nil
     
     init() {
+        UIView.setAnimationsEnabled(false)
         navigationStackCoordinator = NavigationStackCoordinator()
         
         ServiceLocator.shared.register(userNotificationController: MockUserNotificationController())
@@ -129,6 +130,40 @@ class MockScreen: Identifiable {
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
                                                              roomName: "Some room name",
+                                                             roomAvatarUrl: "mock_url",
+                                                             emojiProvider: EmojiProvider())
+            return RoomScreenCoordinator(parameters: parameters)
+        case .roomSmallTimeline:
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             roomName: "New room",
+                                                             roomAvatarUrl: "mock_url",
+                                                             emojiProvider: EmojiProvider())
+            return RoomScreenCoordinator(parameters: parameters)
+        case .roomSmallTimelineIncomingAndSmallPagination:
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
+            timelineController.backPaginationResponses = [RoomTimelineItemFixtures.singleMessageChunk]
+            timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
+            timelineController.simulateIncomingItems()
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             roomName: "Small timeline",
+                                                             roomAvatarUrl: "mock_url",
+                                                             emojiProvider: EmojiProvider())
+            return RoomScreenCoordinator(parameters: parameters)
+        case .roomSmallTimelineLargePagination:
+            let timelineController = MockRoomTimelineController()
+            timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
+            timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             roomName: "Small timeline, paginating",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             return RoomScreenCoordinator(parameters: parameters)

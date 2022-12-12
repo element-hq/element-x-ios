@@ -18,92 +18,54 @@ import Combine
 import Foundation
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
+    /// An array of timeline item arrays that will be inserted in order for each back pagination request.
+    var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
+    /// The time delay added to each back pagination request.
+    var backPaginationDelay: Duration = .milliseconds(500)
+    
+    /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
+    var incomingItems: [RoomTimelineItemProtocol] = []
+    /// The time delay between each incoming item.
+    var incomingDelay: Duration = .milliseconds(750)
+    
     let roomId = "MockRoomIdentifier"
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
-    var timelineItems: [RoomTimelineItemProtocol] = [
-        SeparatorRoomTimelineItem(id: UUID().uuidString,
-                                  text: "Yesterday"),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "That looks so good!",
-                             timestamp: "10:10 AM",
-                             inGroupState: .single,
-                             isOutgoing: false,
-                             isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Jacob",
-                             properties: RoomTimelineItemProperties(isEdited: true)),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗",
-                             timestamp: "10:11 AM",
-                             inGroupState: .beginning,
-                             isOutgoing: false,
-                             isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena",
-                             properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
-                             ])),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/",
-                             timestamp: "10:11 AM",
-                             inGroupState: .end,
-                             isOutgoing: false,
-                             isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena",
-                             properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
-                                 AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
-                             ])),
-        SeparatorRoomTimelineItem(id: UUID().uuidString,
-                                  text: "Today"),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!",
-                             timestamp: "5 PM",
-                             inGroupState: .single,
-                             isOutgoing: false,
-                             isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena"),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "And John's speech was amazing!",
-                             timestamp: "5 PM",
-                             inGroupState: .beginning,
-                             isOutgoing: true,
-                             isEditable: true,
-                             senderId: "",
-                             senderDisplayName: "Bob"),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "New home office set up!",
-                             timestamp: "5 PM",
-                             inGroupState: .end,
-                             isOutgoing: true,
-                             isEditable: true,
-                             senderId: "",
-                             senderDisplayName: "Bob",
-                             properties: RoomTimelineItemProperties(reactions: [
-                                 AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
-                                 AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
-                             ])),
-        TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "",
-                             attributedComponents: [
-                                 AttributedStringBuilderComponent(attributedString: "Hol' up", isBlockquote: false),
-                                 AttributedStringBuilderComponent(attributedString: "New home office set up!", isBlockquote: true),
-                                 AttributedStringBuilderComponent(attributedString: "That's amazing! Congrats 🥳", isBlockquote: false)
-                             ],
-                             timestamp: "5 PM",
-                             inGroupState: .single,
-                             isOutgoing: false,
-                             isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena")
-    ]
+    var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
+    
+    func simulateIncomingItems() {
+        guard !incomingItems.isEmpty else { return }
+        
+        let incomingItem = incomingItems.removeFirst()
+        
+        Task {
+            try await Task.sleep(for: incomingDelay)
+            timelineItems.append(incomingItem)
+            callbacks.send(.updatedTimelineItems)
+            
+            if !self.incomingItems.isEmpty {
+                simulateIncomingItems()
+            }
+        }
+    }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        .failure(.generic)
+        callbacks.send(.startedBackPaginating)
+        
+        guard !backPaginationResponses.isEmpty else {
+            callbacks.send(.finishedBackPaginating)
+            return .failure(.generic)
+        }
+        
+        let newItems = backPaginationResponses.removeFirst()
+        
+        try? await Task.sleep(for: backPaginationDelay)
+        timelineItems.insert(contentsOf: newItems, at: 0)
+        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.finishedBackPaginating)
+        
+        return .success(())
     }
     
     func processItemAppearance(_ itemId: String) async { }
