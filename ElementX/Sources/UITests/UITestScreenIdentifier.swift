@@ -32,6 +32,9 @@ enum UITestScreenIdentifier: String {
     case onboarding
     case roomPlainNoAvatar
     case roomEncryptedWithAvatar
+    case roomSmallTimeline
+    case roomSmallTimelineIncomingAndSmallPagination
+    case roomSmallTimelineLargePagination
     case sessionVerification
 }
 

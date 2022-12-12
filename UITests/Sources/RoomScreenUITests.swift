@@ -38,4 +38,28 @@ class RoomScreenUITests: XCTestCase {
 
         app.assertScreenshot(.roomEncryptedWithAvatar)
     }
+    
+    func testSmallTimelineLayout() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomSmallTimeline)
+        
+        // The messages should be bottom aligned.
+        app.assertScreenshot(.roomSmallTimeline)
+    }
+    
+    func testSmallTimelineWithIncomingAndPagination() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
+        
+        // Wait for both the incoming message and the pagination chunk.
+        XCTAssert(app.staticTexts["Bob"].waitForExistence(timeout: 2))
+        XCTAssert(app.staticTexts["Helena"].waitForExistence(timeout: 2))
+
+        // The messages should still be bottom aligned after the new items are added.
+        app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
+    }
+    
+    func testSmallTimelineWithLargePagination() {
+        // To be implemented
+    }
 }

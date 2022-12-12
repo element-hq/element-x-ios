@@ -33,7 +33,7 @@ extension XCUIApplication {
         let lastLabel = staticTexts["lastItem"]
         
         while !button.isHittable, !lastLabel.isHittable {
-            tables.firstMatch.swipeUp()
+            swipeUp()
         }
         
         button.tap()
