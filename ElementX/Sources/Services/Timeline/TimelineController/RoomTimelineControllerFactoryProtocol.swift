@@ -21,5 +21,5 @@ protocol RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(userId: String,
                                      roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineController
+                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
 }

@@ -16,15 +16,13 @@
 
 import Foundation
 
-struct RoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
+struct MockRoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
     func buildRoomTimelineController(userId: String,
                                      roomProxy: RoomProxyProtocol,
                                      timelineItemFactory: RoomTimelineItemFactoryProtocol,
-                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineController {
-        RoomTimelineController(userId: userId,
-                               roomProxy: roomProxy,
-                               timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
-                               timelineItemFactory: timelineItemFactory,
-                               mediaProvider: mediaProvider)
+                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
+        let timelineController = MockRoomTimelineController()
+        timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+        return timelineController
     }
 }

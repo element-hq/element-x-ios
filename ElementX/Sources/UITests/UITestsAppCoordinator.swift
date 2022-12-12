@@ -210,7 +210,7 @@ class MockScreen: Identifiable {
             let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
                                                          bugReportService: MockBugReportService(),
-                                                         roomTimelineControllerFactory: RoomTimelineControllerFactory())
+                                                         roomTimelineControllerFactory: MockRoomTimelineControllerFactory())
             
             coordinator.start()
             
