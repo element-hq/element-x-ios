@@ -202,7 +202,7 @@ class MockScreen: Identifiable {
         case .sessionVerification:
             let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy())
             return SessionVerificationCoordinator(parameters: parameters)
-        case .userSessionFlow:
+        case .userSessionScreen:
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
             
             let clientProxy = MockClientProxy(userIdentifier: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded))

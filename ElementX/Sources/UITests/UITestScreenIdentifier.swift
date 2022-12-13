@@ -36,7 +36,7 @@ enum UITestScreenIdentifier: String {
     case roomSmallTimelineIncomingAndSmallPagination
     case roomSmallTimelineLargePagination
     case sessionVerification
-    case userSessionFlow
+    case userSessionScreen
 }
 
 extension UITestScreenIdentifier: CustomStringConvertible {
