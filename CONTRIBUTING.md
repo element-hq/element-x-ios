@@ -18,7 +18,17 @@ The Xcode project itself is generated through [xcodegen](https://github.com/yona
 
 Dependencies will be automatically fetched through the Swift Package Manager, including a release version of the MatrixRustSDK. If you encounter issues while resolving the package graph please attempt a cache reset through `File -> Packages -> Reset Package Caches`.
 
-For instructions on how to setup the RustSDK in development mode please refer to the [matrix-rust-components-swift](https://github.com/matrix-org/matrix-rust-components-swift) repository.
+To setup the RustSDK in local development mode run the following command
+
+```
+swift run Tools build-sdk
+```
+
+This will clone a copy of the SDK if needed, build it for all supported architectures and configure ElementX to use the built framework. To learn about additional options run
+
+```
+swift run Tools build-sdk --help
+```
 
 ### Tools
 
@@ -109,7 +119,7 @@ $ towncrier build --draft --version 1.2.3
 For Swift coding style we use [SwiftLint](https://github.com/realm/SwiftLint) to check some conventions at compile time (rules are located in the `.swiftlint.yml` file). 
 Otherwise please have a look to [Apple Swift conventions](https://swift.org/documentation/api-design-guidelines.html#conventions). We are also using some of the conventions of [raywenderlich.com Swift style guide](https://github.com/raywenderlich/swift-style-guide).
 
-We enforce the coding style by running checks on the CI for every PR through [Danger](Dangerfile.swift), [SwiftLint](.swiftlint.yml) and [SonarCloud](https://sonarcloud.io/project/overview?id=vector-im_element-x-ios)
+We enforce the coding style by running checks on the CI for every PR through [Danger](Dangerfile.swift), [SwiftLint](.swiftlint.yml), [SwiftFormat](.swiftformat) and [SonarCloud](https://sonarcloud.io/project/overview?id=vector-im_element-x-ios)
 
 We also gather coverage reports on every PR through [Codecov](https://app.codecov.io/gh/vector-im/element-x-ios) and will eventually start enforcing minimums.
 
