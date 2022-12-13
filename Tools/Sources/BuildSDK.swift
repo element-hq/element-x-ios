@@ -16,10 +16,10 @@ struct BuildSDK: ParsableCommand {
     private var sdkDirectoryURL: URL { parentDirectoryURL.appending(path: "matrix-rust-sdk") }
     
     enum Error: LocalizedError {
-        case failedReadingRustTargets
+        case scriptFailed
+        case rustupOutputFailure
         case missingRustTargets([String])
-        case sdkURLContainsFile
-        case failedParsingProjectYAML
+        case failureParsingProjectYAML
         
         var errorDescription: String? {
             switch self {
@@ -49,7 +49,7 @@ struct BuildSDK: ParsableCommand {
     /// but only when the ``target`` option hasn't been supplied.
     func checkRustupTargets() throws {
         guard target == nil else { return }
-        guard let output = try zsh("rustup show", workingDirectoryURL: projectDirectoryURL) else { throw Error.failedReadingRustTargets }
+        guard let output = try zsh("rustup show", workingDirectoryURL: projectDirectoryURL) else { throw Error.rustupOutputFailure }
         
         var requiredTargets = [
             "aarch64-apple-darwin": false,
@@ -99,7 +99,7 @@ struct BuildSDK: ParsableCommand {
     func updateProjectYAML() throws {
         let yamlURL = projectDirectoryURL.appending(path: "project.yml")
         let yamlString = try String(contentsOf: yamlURL)
-        guard var projectConfig = try Yams.compose(yaml: yamlString) else { throw Error.failedParsingProjectYAML }
+        guard var projectConfig = try Yams.compose(yaml: yamlString) else { throw Error.failureParsingProjectYAML }
         
         projectConfig["packages"]?.mapping?["MatrixRustSDK"]? = ["path": "../matrix-rust-sdk"]
         
@@ -120,6 +120,8 @@ struct BuildSDK: ParsableCommand {
         
         try process.run()
         process.waitUntilExit()
+        
+        guard process.terminationReason == .exit, process.terminationStatus == 0 else { throw Error.scriptFailed }
         
         guard let outputData = try outputPipe.fileHandleForReading.readToEnd() else { return nil }
         return String(data: outputData, encoding: .utf8)
