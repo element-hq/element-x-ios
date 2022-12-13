@@ -11,7 +11,7 @@ let package = Package(
     ],
     products: [
         .library(name: "DesignKit", targets: ["DesignKit"]),
-        .executable(name: "Tools", targets: ["Tools"])
+        .executable(name: "tools", targets: ["Tools"])
     ],
     dependencies: [
         .package(url: "https://github.com/vector-im/element-design-tokens.git", exact: "0.0.3"),

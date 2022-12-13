@@ -21,13 +21,13 @@ Dependencies will be automatically fetched through the Swift Package Manager, in
 To setup the RustSDK in local development mode run the following command
 
 ```
-swift run Tools build-sdk
+swift run tools build-sdk
 ```
 
 This will clone a copy of the SDK if needed, build it for all supported architectures and configure ElementX to use the built framework. To learn about additional options run
 
 ```
-swift run Tools build-sdk --help
+swift run tools build-sdk --help
 ```
 
 ### Tools
