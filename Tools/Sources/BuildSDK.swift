@@ -58,13 +58,13 @@ struct BuildSDK: ParsableCommand {
             "x86_64-apple-darwin": false,
             "x86_64-apple-ios": false
         ]
-        output.enumerateLines { line, stop in
+        output.enumerateLines { line, _ in
             if requiredTargets.keys.contains(line) {
                 requiredTargets[line] = true
             }
         }
         
-        let missingTargets = requiredTargets.compactMap { $0.value == false ? $0.key : nil }
+        let missingTargets = requiredTargets.compactMap { !$0.value ? $0.key : nil }
         guard missingTargets.isEmpty else { throw Error.missingRustTargets(missingTargets) }
     }
     
