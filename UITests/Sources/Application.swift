@@ -47,6 +47,7 @@ extension XCUIApplication {
             snapshotName += "-\(step)"
         }
 
+        let failure = verifySnapshot(matching: XCUIScreen.main.screenshot().image,
                                      as: .image(precision: 0.99, perceptualPrecision: 0.98, scale: nil),
                                      named: snapshotName,
                                      testName: testName)
