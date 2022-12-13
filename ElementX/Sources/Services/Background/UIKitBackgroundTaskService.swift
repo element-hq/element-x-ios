@@ -20,7 +20,7 @@ import UIKit
 /// /// UIKitBackgroundTaskService is a concrete implementation of BackgroundTaskServiceProtocol using a given `ApplicationProtocol`  instance.
 class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
     private let applicationBlock: () -> ApplicationProtocol?
-    private var reusableTasks: WeakDictionary<String, UIKitBackgroundTask> = WeakDictionary()
+    private var reusableTasks = NSMapTable<NSString, UIKitBackgroundTask>(keyOptions: .strongMemory, valueOptions: .weakMemory)
 
     private var application: ApplicationProtocol? {
         applicationBlock()
@@ -50,7 +50,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         var result: BackgroundTaskProtocol?
 
         if isReusable {
-            if let oldTask = reusableTasks[name], oldTask.isRunning {
+            if let oldTask = reusableTasks.object(forKey: name as NSString), oldTask.isRunning {
                 oldTask.reuse()
                 result = oldTask
             } else {
@@ -59,11 +59,11 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
                                                      application: application,
                                                      expirationHandler: { [weak self] task in
                                                          guard let self else { return }
-                                                         self.reusableTasks[task.name] = nil
+                                                         self.reusableTasks.removeObject(forKey: task.name as NSString)
                                                          expirationHandler?()
                                                      }) {
                     created = true
-                    reusableTasks[name] = newTask
+                    reusableTasks.setObject(newTask, forKey: name as NSString)
                     result = newTask
                 }
             }
