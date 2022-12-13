@@ -122,15 +122,21 @@ class MockScreen: Identifiable {
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .bugReport:
-            return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
-                                                          userNotificationController: MockUserNotificationController(),
-                                                          screenshot: nil,
-                                                          isModallyPresented: false))
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                                     userNotificationController: MockUserNotificationController(),
+                                                                     screenshot: nil,
+                                                                     isModallyPresented: true))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .bugReportWithScreenshot:
-            return BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
-                                                          userNotificationController: MockUserNotificationController(),
-                                                          screenshot: Asset.Images.appLogo.image,
-                                                          isModallyPresented: false))
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                                     userNotificationController: MockUserNotificationController(),
+                                                                     screenshot: Asset.Images.appLogo.image,
+                                                                     isModallyPresented: false))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .onboarding:
             return OnboardingCoordinator()
         case .roomPlainNoAvatar:
