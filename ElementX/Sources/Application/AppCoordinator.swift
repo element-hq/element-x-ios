@@ -59,6 +59,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
 
         ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
+        ServiceLocator.shared.register(applicationSettings: ApplicationSettings())
 
         backgroundTaskService = UIKitBackgroundTaskService {
             UIApplication.shared
@@ -67,9 +68,9 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
         // Reset everything if the app has been deleted since the previous run
-        if !ElementSettings.shared.wasAppPreviouslyRan {
+        if !ServiceLocator.shared.applicationSettings.wasAppPreviouslyRan {
             userSessionStore.reset()
-            ElementSettings.shared.wasAppPreviouslyRan = true
+            ServiceLocator.shared.applicationSettings.wasAppPreviouslyRan = true
         }
         
         setupStateMachine()

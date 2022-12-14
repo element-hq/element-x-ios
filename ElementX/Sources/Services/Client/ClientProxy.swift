@@ -81,7 +81,7 @@ class ClientProxy: ClientProxyProtocol {
 
         await Task.dispatch(on: clientQueue) {
             do {
-                let slidingSyncBuilder = try client.slidingSync().homeserver(url: ElementSettings.shared.slidingSyncProxyBaseURLString)
+                let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.applicationSettings.slidingSyncProxyBaseURLString)
 
                 let slidingSyncView = try SlidingSyncViewBuilder()
                     .timelineLimit(limit: 10)

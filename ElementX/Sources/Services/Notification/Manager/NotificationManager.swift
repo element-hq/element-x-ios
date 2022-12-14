@@ -113,7 +113,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     private func pusherProfileTag() -> String {
-        if let currentTag = ElementSettings.shared.pusherProfileTag {
+        if let currentTag = ServiceLocator.shared.applicationSettings.pusherProfileTag {
             return currentTag
         }
         let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -122,7 +122,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
             return String(chars[chars.index(chars.startIndex, offsetBy: offset)])
         }.joined()
 
-        ElementSettings.shared.pusherProfileTag = newTag
+        ServiceLocator.shared.applicationSettings.pusherProfileTag = newTag
         return newTag
     }
 }
@@ -132,7 +132,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 extension NotificationManager: UNUserNotificationCenterDelegate {
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async -> UNNotificationPresentationOptions {
-        guard ElementSettings.shared.enableInAppNotifications else {
+        guard ServiceLocator.shared.applicationSettings.enableInAppNotifications else {
             return []
         }
         guard let delegate else {

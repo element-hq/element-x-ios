@@ -18,10 +18,10 @@ import Foundation
 import SwiftUI
 
 /// Store Element specific app settings.
-final class ElementSettings: ObservableObject {
+final class ApplicationSettings: ObservableObject {
     // MARK: - Constants
 
-    public enum UserDefaultsKeys: String {
+    private enum UserDefaultsKeys: String {
         case wasAppPreviouslyRan
         case timelineStyle
         case enableAnalytics
@@ -31,8 +31,6 @@ final class ElementSettings: ObservableObject {
         case pusherProfileTag
     }
 
-    static let shared = ElementSettings()
-
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults {
         guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.target.appGroupIdentifier) else {
@@ -40,9 +38,12 @@ final class ElementSettings: ObservableObject {
         }
         return userDefaults
     }
-
-    private init() {
-        // no-op
+    
+    static func reset() {
+        let dictionary = Self.store.dictionaryRepresentation()
+        dictionary.keys.forEach { key in
+            Self.store.removeObject(forKey: key)
+        }
     }
     
     // MARK: - Application
@@ -84,7 +85,7 @@ final class ElementSettings: ObservableObject {
     @AppStorage(UserDefaultsKeys.enableInAppNotifications.rawValue, store: store)
     var enableInAppNotifications = true
 
-    @AppStorage(UserDefaultsKeys.pusherProfileTag.rawValue, store: store)
     /// Tag describing which set of device specific rules a pusher executes.
+    @AppStorage(UserDefaultsKeys.pusherProfileTag.rawValue, store: store)
     var pusherProfileTag: String?
 }
