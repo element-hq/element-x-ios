@@ -19,8 +19,6 @@ import SwiftUI
 
 /// Store Element specific app settings.
 final class ApplicationSettings: ObservableObject {
-    // MARK: - Constants
-
     private enum UserDefaultsKeys: String {
         case wasAppPreviouslyRan
         case timelineStyle
@@ -53,7 +51,48 @@ final class ApplicationSettings: ObservableObject {
     @AppStorage(UserDefaultsKeys.wasAppPreviouslyRan.rawValue, store: store)
     var wasAppPreviouslyRan = false
     
+    let defaultHomeserverAddress = "matrix.org"
+    
+    // MARK: - Notifications
+    
+    var pusherAppId: String {
+        #if DEBUG
+        InfoPlistReader.target.baseBundleIdentifier + ".ios.dev"
+        #else
+        InfoPlistReader.target.baseBundleIdentifier + ".ios.prod"
+        #endif
+    }
+    
+    let pushGatewayBaseURL = URL(staticString: "https://matrix.org/_matrix/push/v1/notify")
+    
+    let enableNotifications = false
+    
+    // MARK: - Bug report
+
+    let bugReportServiceBaseURL = URL(staticString: "https://riot.im/bugreports")
+    let bugReportSentryURL = URL(staticString: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44")
+    // Use the name allocated by the bug report server
+    let bugReportApplicationId = "riot-ios"
+    let bugReportUISIId = "element-auto-uisi"
+    let bugReportGHLabels = ["Element-X"]
+    
     // MARK: - Analytics
+    
+    #if DEBUG
+    /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
+    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
+                                                        host: "https://posthog.element.dev",
+                                                        apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
+                                                        termsURL: URL(staticString: "https://element.io/cookie-policy"))
+    #else
+    /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
+    /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
+                                                        host: "https://posthog.hss.element.io",
+                                                        apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
+                                                        termsURL: URL(staticString: "https://element.io/cookie-policy"))
+    #endif
     
     /// Whether the user has already been shown the PostHog analytics prompt.
     var hasSeenAnalyticsPrompt: Bool {
@@ -69,16 +108,16 @@ final class ApplicationSettings: ObservableObject {
     /// enabled, but requires the next account to be identified separately.
     @AppStorage(UserDefaultsKeys.isIdentifiedForAnalytics.rawValue, store: store)
     var isIdentifiedForAnalytics = false
-
+    
     // MARK: - Room Screen
-
+    
     @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
-    var timelineStyle = BuildSettings.defaultRoomTimelineStyle
+    var timelineStyle = TimelineStyle.bubbles
 
     // MARK: - Client
 
     @AppStorage(UserDefaultsKeys.slidingSyncProxyBaseURLString.rawValue, store: store)
-    var slidingSyncProxyBaseURLString = BuildSettings.defaultSlidingSyncProxyBaseURLString
+    var slidingSyncProxyBaseURLString = "https://slidingsync.lab.element.dev"
 
     // MARK: - Notifications
 
@@ -88,4 +127,8 @@ final class ApplicationSettings: ObservableObject {
     /// Tag describing which set of device specific rules a pusher executes.
     @AppStorage(UserDefaultsKeys.pusherProfileTag.rawValue, store: store)
     var pusherProfileTag: String?
+        
+    // MARK: - Other
+    
+    var permalinkBaseURL = URL(staticString: "https://matrix.to")
 }

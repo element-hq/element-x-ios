@@ -49,7 +49,7 @@ class Analytics {
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool {
         // Only show the prompt once, and when analytics are enabled in BuildSettings.
-        !ServiceLocator.shared.applicationSettings.hasSeenAnalyticsPrompt && BuildSettings.analyticsConfiguration.isEnabled
+        !ServiceLocator.shared.applicationSettings.hasSeenAnalyticsPrompt && ServiceLocator.shared.applicationSettings.analyticsConfiguration.isEnabled
     }
     
     /// Opts in to analytics tracking with the supplied user session.

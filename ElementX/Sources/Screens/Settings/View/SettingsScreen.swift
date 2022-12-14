@@ -110,30 +110,26 @@ struct SettingsScreen: View {
             .listRowSeparator(.hidden)
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier("reportBugButton")
-
-            if BuildSettings.settingsCrashButtonVisible {
-                Button("Crash app",
-                       role: .destructive) { context.send(viewAction: .crash)
-                }
-                .listRowInsets(listRowInsets)
-                .accessibilityIdentifier("crashButton")
+            
+            Button("Crash app",
+                   role: .destructive) { context.send(viewAction: .crash)
             }
+                   .listRowInsets(listRowInsets)
+                   .accessibilityIdentifier("crashButton")
         }
     }
 
     @ViewBuilder
     private var userInterfaceSection: some View {
-        if BuildSettings.settingsShowTimelineStyle {
-            Section {
-                Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
-                    ForEach(TimelineStyle.allCases, id: \.self) { style in
-                        Text(style.description)
-                            .tag(style)
-                    }
+        Section {
+            Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
+                ForEach(TimelineStyle.allCases, id: \.self) { style in
+                    Text(style.description)
+                        .tag(style)
                 }
-                .listRowInsets(listRowInsets)
-                .accessibilityIdentifier("timelineStylePicker")
             }
+            .listRowInsets(listRowInsets)
+            .accessibilityIdentifier("timelineStylePicker")
         }
     }
     

@@ -52,14 +52,15 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     init() {
         navigationRootCoordinator = NavigationRootCoordinator()
+        
+        Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator)
+        Self.setupLogging()
+        
         stateMachine = AppCoordinatorStateMachine()
         
-        bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
+        bugReportService = BugReportService(withBaseURL: ServiceLocator.shared.applicationSettings.bugReportServiceBaseURL, sentryURL: ServiceLocator.shared.applicationSettings.bugReportSentryURL)
 
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
-
-        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
-        ServiceLocator.shared.register(applicationSettings: ApplicationSettings())
 
         backgroundTaskService = UIKitBackgroundTaskService {
             UIApplication.shared
@@ -74,8 +75,6 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
         
         setupStateMachine()
-        
-        setupLogging()
         
         Bundle.elementFallbackLanguage = "en"
 
@@ -98,7 +97,12 @@ class AppCoordinator: AppCoordinatorProtocol {
         
     // MARK: - Private
     
-    private func setupLogging() {
+    private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
+        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
+        ServiceLocator.shared.register(applicationSettings: ApplicationSettings())
+    }
+    
+    private static func setupLogging() {
         let loggerConfiguration = MXLogConfiguration()
         loggerConfiguration.maxLogFilesCount = 10
         
@@ -277,7 +281,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        guard BuildSettings.enableNotifications else {
+        guard ServiceLocator.shared.applicationSettings.enableNotifications else {
             return
         }
         guard notificationManager == nil else {

@@ -57,7 +57,7 @@ targets:
         - "**/__Snapshots__/**"
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
-    - path: ../../ElementX/Sources/Application/BuildSettings.swift
+    - path: ../../ElementX/Sources/Application/ApplicationSettings.swift
     - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
     - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConfiguration.swift
     - path: ../../ElementX/Sources/UITests/UITestScreenIdentifier.swift

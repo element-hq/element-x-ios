@@ -30,7 +30,7 @@ final class AnalyticsPromptCoordinator: CoordinatorProtocol {
     init(parameters: AnalyticsPromptCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = AnalyticsPromptViewModel(termsURL: BuildSettings.analyticsConfiguration.termsURL)
+        viewModel = AnalyticsPromptViewModel(termsURL: ServiceLocator.shared.applicationSettings.analyticsConfiguration.termsURL)
     }
     
     // MARK: - Public

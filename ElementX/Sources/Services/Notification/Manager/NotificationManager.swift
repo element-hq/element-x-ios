@@ -89,12 +89,12 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
             do {
                 try await clientProxy.setPusher(pushkey: deviceToken.base64EncodedString(),
                                                 kind: .http,
-                                                appId: BuildSettings.pusherAppId,
+                                                appId: ServiceLocator.shared.applicationSettings.pusherAppId,
                                                 appDisplayName: "\(InfoPlistReader.target.bundleDisplayName) (iOS)",
                                                 deviceDisplayName: UIDevice.current.name,
                                                 profileTag: pusherProfileTag(),
                                                 lang: Bundle.preferredLanguages.first ?? "en",
-                                                url: BuildSettings.pushGatewayBaseURL.absoluteString,
+                                                url: ServiceLocator.shared.applicationSettings.pushGatewayBaseURL.absoluteString,
                                                 format: .eventIdOnly,
                                                 defaultPayload: [
                                                     "aps": [
