@@ -66,6 +66,12 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
+        // Reset everything if the app has been deleted since the previous run
+        if !ElementSettings.shared.wasAppPreviouslyRan {
+            userSessionStore.reset()
+            ElementSettings.shared.wasAppPreviouslyRan = true
+        }
+        
         setupStateMachine()
         
         setupLogging()

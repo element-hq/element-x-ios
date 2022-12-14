@@ -22,6 +22,7 @@ final class ElementSettings: ObservableObject {
     // MARK: - Constants
 
     public enum UserDefaultsKeys: String {
+        case wasAppPreviouslyRan
         case timelineStyle
         case enableAnalytics
         case isIdentifiedForAnalytics
@@ -33,7 +34,7 @@ final class ElementSettings: ObservableObject {
     static let shared = ElementSettings()
 
     /// UserDefaults to be used on reads and writes.
-    static var store: UserDefaults {
+    private static var store: UserDefaults {
         guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.target.appGroupIdentifier) else {
             fatalError("Fail to load shared UserDefaults")
         }
@@ -43,6 +44,13 @@ final class ElementSettings: ObservableObject {
     private init() {
         // no-op
     }
+    
+    // MARK: - Application
+    
+    /// Simple flag to check if app has been deleted between runs.
+    /// Used to clear data stored in the shared container and keychain
+    @AppStorage(UserDefaultsKeys.wasAppPreviouslyRan.rawValue, store: store)
+    var wasAppPreviouslyRan = false
     
     // MARK: - Analytics
     

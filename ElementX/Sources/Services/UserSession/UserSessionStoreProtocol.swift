@@ -25,6 +25,9 @@ enum UserSessionStoreError: Error {
 }
 
 protocol UserSessionStoreProtocol {
+    /// Deletes all data stored in the shared container and keychain
+    func reset()
+    
     /// Whether or not there are sessions in the store.
     var hasSessions: Bool { get }
     
