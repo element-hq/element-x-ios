@@ -52,6 +52,11 @@ class LoginTests: XCTestCase {
         
         homeserverTextField.clearAndTypeText(app.homeserver)
         
+        let slidingSyncTextField = app.textFields["slidingSyncProxyAddressTextField"]
+        XCTAssertTrue(slidingSyncTextField.waitForExistence(timeout: 5.0))
+        
+        slidingSyncTextField.clearAndTypeText(app.homeserver)
+        
         let confirmButton = app.buttons["confirmButton"]
         XCTAssertTrue(confirmButton.exists)
         confirmButton.tap()
