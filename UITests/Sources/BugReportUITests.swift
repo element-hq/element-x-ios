@@ -46,13 +46,11 @@ class BugReportUITests: XCTestCase {
         app.goToScreenWithIdentifier(.bugReport)
 
         //  type 4 chars
-        app.textViews["reportTextView"].tap()
-        app.textViews["reportTextView"].typeText("Test")
+        app.textViews["reportTextView"].clearAndTypeText("Text")
         XCTAssertFalse(app.buttons["sendButton"].isEnabled)
 
         //  type one more char and see the button enabled
-        app.textViews["reportTextView"].tap()
-        app.textViews["reportTextView"].typeText("-")
+        app.textViews["reportTextView"].clearAndTypeText("Longer text")
         XCTAssert(app.buttons["sendButton"].isEnabled)
     }
 
