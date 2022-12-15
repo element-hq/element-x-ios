@@ -13,7 +13,7 @@ ignore:
   - "ElementX/Sources/Vendor"
   - "ElementX/Sources/UITests"
   - "Tools"
-  - "**/Mock*.rb"
+  - "**/Mock*.swift" 
 
 flag_management:
   default_rules:
