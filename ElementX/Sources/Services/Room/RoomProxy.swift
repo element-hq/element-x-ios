@@ -27,6 +27,8 @@ class RoomProxy: RoomProxyProtocol {
     
     private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.serial")
     
+    private var timelineListenerToken: StoppableSpawn?
+    
     private var sendMessageBgTask: BackgroundTaskProtocol?
     
     private var memberAvatars = [String: String]()
@@ -37,10 +39,7 @@ class RoomProxy: RoomProxyProtocol {
     private var backPaginationOutcome: PaginationOutcome?
     
     deinit {
-        room.removeTimeline()
-        
-        #warning("We **should** use the slidingSyncRoom but it's not working properly yet")
-//        slidingSyncRoom.removeTimeline()
+        timelineListenerToken?.cancel()
     }
     
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
@@ -131,15 +130,12 @@ class RoomProxy: RoomProxyProtocol {
     }
         
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
-        room.addTimelineListener(listener: listener)
-        return .success(())
-        
-        #warning("We **should** use the slidingSyncRoom but it's not working properly yet")
-//        if let result = slidingSyncRoom.addTimelineListener(listener: listener), result == true {
-//            return .success(())
-//        } else {
-//            return .failure(.failedAddingTimelineListener)
-//        }
+        if let token = slidingSyncRoom.addTimelineListener(listener: listener) {
+            timelineListenerToken = token
+            return .success(())
+        } else {
+            return .failure(.failedAddingTimelineListener)
+        }
     }
     
     func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
