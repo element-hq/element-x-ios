@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct RoomScreen: View {
-    @ObservedObject private var settings = ServiceLocator.shared.applicationSettings
+    @ObservedObject private var settings = ServiceLocator.shared.settings
     @ObservedObject var context: RoomScreenViewModel.Context
     @State private var showReactionsMenuForItemId = ""
     

@@ -68,7 +68,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
             let result = try await bugReportService.submitBugReport(text: context.reportText,
                                                                     includeLogs: context.sendingLogsEnabled,
                                                                     includeCrashLog: true,
-                                                                    githubLabels: ServiceLocator.shared.applicationSettings.bugReportGHLabels,
+                                                                    githubLabels: ServiceLocator.shared.settings.bugReportGHLabels,
                                                                     files: files)
             MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")
             callback?(.submitFinished)

@@ -19,7 +19,7 @@ import SwiftUI
 struct SettingsScreen: View {
     @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
-    @ObservedObject private var settings = ServiceLocator.shared.applicationSettings
+    @ObservedObject private var settings = ServiceLocator.shared.settings
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     @ScaledMetric private var menuIconSize = 30.0

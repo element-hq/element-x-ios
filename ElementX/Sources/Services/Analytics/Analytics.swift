@@ -49,14 +49,14 @@ class Analytics {
     /// Whether to show the user the analytics opt in prompt.
     var shouldShowAnalyticsPrompt: Bool {
         // Only show the prompt once, and when analytics are enabled in BuildSettings.
-        !ServiceLocator.shared.applicationSettings.hasSeenAnalyticsPrompt && ServiceLocator.shared.applicationSettings.analyticsConfiguration.isEnabled
+        !ServiceLocator.shared.settings.hasSeenAnalyticsPrompt && ServiceLocator.shared.settings.analyticsConfiguration.isEnabled
     }
     
     /// Opts in to analytics tracking with the supplied user session.
     /// - Parameter userSession: The user session to use to when reading/generating the analytics ID.
     ///  The session will be ignored if not running.
     func optIn(with userSession: UserSessionProtocol) {
-        ServiceLocator.shared.applicationSettings.enableAnalytics = true
+        ServiceLocator.shared.settings.enableAnalytics = true
         startIfEnabled()
         
         Task { await useAnalyticsSettings(from: userSession) }
@@ -64,7 +64,7 @@ class Analytics {
     
     /// Stops analytics tracking and calls `reset` to clear any IDs and event queues.
     func optOut() {
-        ServiceLocator.shared.applicationSettings.enableAnalytics = false
+        ServiceLocator.shared.settings.enableAnalytics = false
         
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
@@ -76,7 +76,7 @@ class Analytics {
     
     /// Starts the analytics client if the user has opted in, otherwise does nothing.
     func startIfEnabled() {
-        guard ServiceLocator.shared.applicationSettings.enableAnalytics, !isRunning else { return }
+        guard ServiceLocator.shared.settings.enableAnalytics, !isRunning else { return }
         
         client.start()
 //        monitoringClient.start()
@@ -96,8 +96,8 @@ class Analytics {
     /// - Parameter userSession: The user session to read analytics settings from.
     func useAnalyticsSettings(from userSession: UserSessionProtocol) async {
         guard
-            ServiceLocator.shared.applicationSettings.enableAnalytics,
-            !ServiceLocator.shared.applicationSettings.isIdentifiedForAnalytics
+            ServiceLocator.shared.settings.enableAnalytics,
+            !ServiceLocator.shared.settings.isIdentifiedForAnalytics
         else { return }
         
         let service = AnalyticsService(userSession: userSession)
@@ -122,7 +122,7 @@ class Analytics {
 //        monitoringClient.reset()
         
         MXLog.debug("Reset.")
-        ServiceLocator.shared.applicationSettings.isIdentifiedForAnalytics = false
+        ServiceLocator.shared.settings.isIdentifiedForAnalytics = false
         
         // Stop collecting crash logs
 //        MXLogger.logCrashes(false)
@@ -147,7 +147,7 @@ class Analytics {
         
         client.identify(id: id)
         MXLog.debug("Identified.")
-        ServiceLocator.shared.applicationSettings.isIdentifiedForAnalytics = true
+        ServiceLocator.shared.settings.isIdentifiedForAnalytics = true
     }
     
     /// Capture an event in the `client`.

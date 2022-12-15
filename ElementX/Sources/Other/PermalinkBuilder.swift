@@ -37,7 +37,7 @@ enum PermalinkBuilder {
             throw PermalinkBuilderError.invalidUserIdentifier
         }
         
-        let urlString = "\(ServiceLocator.shared.applicationSettings.permalinkBaseURL)/#/\(userIdentifier)"
+        let urlString = "\(ServiceLocator.shared.settings.permalinkBaseURL)/#/\(userIdentifier)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL
@@ -75,7 +75,7 @@ enum PermalinkBuilder {
             throw PermalinkBuilderError.failedAddingPercentEncoding
         }
         
-        let urlString = "\(ServiceLocator.shared.applicationSettings.permalinkBaseURL)/#/\(roomId)/\(eventId)"
+        let urlString = "\(ServiceLocator.shared.settings.permalinkBaseURL)/#/\(roomId)/\(eventId)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL
@@ -91,7 +91,7 @@ enum PermalinkBuilder {
             throw PermalinkBuilderError.failedAddingPercentEncoding
         }
         
-        let urlString = "\(ServiceLocator.shared.applicationSettings.permalinkBaseURL)/#/\(identifier)"
+        let urlString = "\(ServiceLocator.shared.settings.permalinkBaseURL)/#/\(identifier)"
         
         guard let url = URL(string: urlString) else {
             throw PermalinkBuilderError.failedConstructingURL

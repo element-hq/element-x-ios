@@ -114,7 +114,7 @@ struct AnalyticsPrompt: View {
 // MARK: - Previews
 
 struct AnalyticsPrompt_Previews: PreviewProvider {
-    static let viewModel = AnalyticsPromptViewModel(termsURL: ServiceLocator.shared.applicationSettings.analyticsConfiguration.termsURL)
+    static let viewModel = AnalyticsPromptViewModel(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
     static var previews: some View {
         AnalyticsPrompt(context: viewModel.context)
             .tint(.element.accent)

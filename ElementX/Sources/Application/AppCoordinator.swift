@@ -58,7 +58,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         stateMachine = AppCoordinatorStateMachine()
         
-        bugReportService = BugReportService(withBaseURL: ServiceLocator.shared.applicationSettings.bugReportServiceBaseURL, sentryURL: ServiceLocator.shared.applicationSettings.bugReportSentryURL)
+        bugReportService = BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL, sentryURL: ServiceLocator.shared.settings.bugReportSentryURL)
 
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
 
@@ -69,10 +69,10 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
         // Reset everything if the app has been deleted since the previous run
-        if !ServiceLocator.shared.applicationSettings.wasAppPreviouslyRan {
+        if !ServiceLocator.shared.settings.wasAppPreviouslyRan {
             ApplicationSettings.reset()
             userSessionStore.reset()
-            ServiceLocator.shared.applicationSettings.wasAppPreviouslyRan = true
+            ServiceLocator.shared.settings.wasAppPreviouslyRan = true
         }
         
         setupStateMachine()
@@ -282,7 +282,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        guard ServiceLocator.shared.applicationSettings.enableNotifications else {
+        guard ServiceLocator.shared.settings.enableNotifications else {
             return
         }
         guard notificationManager == nil else {

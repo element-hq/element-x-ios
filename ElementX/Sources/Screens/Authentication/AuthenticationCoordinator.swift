@@ -61,7 +61,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     private func startAuthentication() async {
         startLoading()
         
-        switch await authenticationService.configure(for: ServiceLocator.shared.applicationSettings.defaultHomeserverAddress) {
+        switch await authenticationService.configure(for: ServiceLocator.shared.settings.defaultHomeserverAddress) {
         case .success:
             stopLoading()
             showLoginScreen()

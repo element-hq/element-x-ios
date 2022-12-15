@@ -67,7 +67,7 @@ final class SettingsCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func toggleAnalytics() {
-        if ServiceLocator.shared.applicationSettings.enableAnalytics {
+        if ServiceLocator.shared.settings.enableAnalytics {
             Analytics.shared.optOut()
         } else {
             Analytics.shared.optIn(with: parameters.userSession)

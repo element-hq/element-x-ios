@@ -33,7 +33,7 @@ struct SettingsViewState: BindableState {
 }
 
 struct SettingsViewStateBindings {
-    var enableAnalytics = ServiceLocator.shared.applicationSettings.enableAnalytics
+    var enableAnalytics = ServiceLocator.shared.settings.enableAnalytics
 }
 
 enum SettingsViewAction {
