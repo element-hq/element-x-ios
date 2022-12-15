@@ -78,11 +78,7 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
     }
 
     var originServerTs: Date {
-        if let timestamp = item.originServerTs() {
-            return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-        } else {
-            return .now
-        }
+        Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
     }
 }
 
