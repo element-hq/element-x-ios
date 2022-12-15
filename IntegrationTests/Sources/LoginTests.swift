@@ -17,7 +17,7 @@
 import XCTest
 
 class LoginTests: XCTestCase {
-    let expectedDuration = 30.0
+    let expectedDuration = 32.0
     
     func testLoginFlow() throws {
         let parser = TestMeasurementParser()
@@ -52,6 +52,11 @@ class LoginTests: XCTestCase {
         
         homeserverTextField.clearAndTypeText(app.homeserver)
         
+        let slidingSyncTextField = app.textFields["slidingSyncProxyAddressTextField"]
+        XCTAssertTrue(slidingSyncTextField.waitForExistence(timeout: 5.0))
+        
+        slidingSyncTextField.clearAndTypeText(app.homeserver)
+        
         let confirmButton = app.buttons["confirmButton"]
         XCTAssertTrue(confirmButton.exists)
         confirmButton.tap()
@@ -59,14 +64,12 @@ class LoginTests: XCTestCase {
         let usernameTextField = app.textFields["usernameTextField"]
         XCTAssertTrue(usernameTextField.exists)
         
-        usernameTextField.tap()
-        usernameTextField.typeText(app.username)
+        usernameTextField.clearAndTypeText(app.username)
         
         let passwordTextField = app.secureTextFields["passwordTextField"]
         XCTAssertTrue(passwordTextField.exists)
         
-        passwordTextField.tap()
-        passwordTextField.typeText(app.password)
+        passwordTextField.clearAndTypeText(app.password)
         
         let nextButton = app.buttons["nextButton"]
         XCTAssertTrue(nextButton.exists)

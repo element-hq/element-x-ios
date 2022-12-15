@@ -29,10 +29,9 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         app.buttons["getStartedButton"].tap()
         
         // Login Screen: Enter valid credentials
-        app.textFields["usernameTextField"].tap()
-        app.typeText("alice\n")
-        app.secureTextFields["passwordTextField"].tap()
-        app.typeText("12345678")
+        
+        app.textFields["usernameTextField"].clearAndTypeText("alice\n")
+        app.secureTextFields["passwordTextField"].clearAndTypeText("12345678")
 
         app.assertScreenshot(.authenticationFlow)
         
@@ -52,10 +51,8 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         app.buttons["getStartedButton"].tap()
         
         // Login Screen: Enter invalid credentials
-        app.textFields["usernameTextField"].tap()
-        app.typeText("alice")
-        app.secureTextFields["passwordTextField"].tap()
-        app.typeText("87654321")
+        app.textFields["usernameTextField"].clearAndTypeText("alice")
+        app.secureTextFields["passwordTextField"].clearAndTypeText("87654321")
 
         // Login Screen: Tap next
         let nextButton = app.buttons["nextButton"]
@@ -80,9 +77,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         app.buttons["editServerButton"].tap()
         
         // Server Selection: Clear the default and enter OIDC server.
-        app.textFields["addressTextField"].tap()
-        app.textFields["addressTextField"].buttons.element.tap()
-        app.typeText("company.com")
+        app.textFields["addressTextField"].clearAndTypeText("company.com")
         
         // Dismiss server screen.
         app.buttons["confirmButton"].tap()

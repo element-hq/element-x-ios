@@ -57,3 +57,4 @@ targets:
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/Other/Extensions/XCUIElement.swift

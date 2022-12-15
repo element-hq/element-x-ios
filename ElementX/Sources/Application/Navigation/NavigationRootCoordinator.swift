@@ -57,9 +57,9 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
     
     var description: String {
         if let rootCoordinator = rootModule?.coordinator {
-            return "SingleScreenCoordinator(\(rootCoordinator)"
+            return "NavigationRootCoordinator(\(rootCoordinator)"
         } else {
-            return "SingleScreenCoordinator(Empty)"
+            return "NavigationRootCoordinator(Empty)"
         }
     }
     

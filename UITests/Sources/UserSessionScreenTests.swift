@@ -14,24 +14,25 @@
 // limitations under the License.
 //
 
+import ElementX
 import XCTest
 
-class ApplicationTests: XCTestCase {
-    func testLaunchPerformance() throws {
-        let parser = TestMeasurementParser()
+@MainActor
+class UserSessionScreenTests: XCTestCase {
+    func testUserSessionFlows() async throws {
+        let roomName = "First room"
         
-        parser.capture(testCase: self) {
-            self.measure(metrics: [XCTApplicationLaunchMetric()]) {
-                Application.launch()
-            }
-        }
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.userSessionScreen)
+
+        app.assertScreenshot(.userSessionScreen, step: 1)
         
-        guard let actualDuration = parser.valueForMetric(.appLaunch) else {
-            XCTFail("Couldn't retrieve app launch duration")
-            return
-        }
+        app.buttons["roomName:\(roomName)"].tap()
         
-        let expectedDuration = 5.0
-        XCTAssertLessThanOrEqual(actualDuration, expectedDuration)
+        XCTAssert(app.staticTexts[roomName].exists)
+        
+        try await Task.sleep(for: .seconds(1))
+    
+        app.assertScreenshot(.userSessionScreen, step: 2)
     }
 }

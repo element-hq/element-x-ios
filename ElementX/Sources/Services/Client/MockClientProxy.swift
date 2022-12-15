@@ -41,7 +41,12 @@ class MockClientProxy: ClientProxyProtocol {
     func restartSync() { }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
-        nil
+        guard let room = roomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }),
+              let displayName = room.asFilled?.name else {
+            return nil
+        }
+        
+        return MockRoomProxy(displayName: displayName)
     }
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {

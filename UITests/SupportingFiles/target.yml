@@ -68,3 +68,4 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift
+    - path: ../../ElementX/Sources/Other/Extensions/XCUIElement.swift

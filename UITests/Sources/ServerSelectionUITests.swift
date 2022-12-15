@@ -66,9 +66,7 @@ class ServerSelectionUITests: XCTestCase {
         app.goToScreenWithIdentifier(.serverSelection)
         
         // When typing in an invalid homeserver
-        app.textFields[textFieldIdentifier].tap()
-        app.textFields.element.buttons.element.tap()
-        app.typeText("thisisbad\n") // The tests only accept an address from LoginHomeserver.mockXYZ
+        app.textFields[textFieldIdentifier].clearAndTypeText("thisisbad\n") // The tests only accept an address from LoginHomeserver.mockXYZ
         
         // Then an error should be shown and the confirmation button disabled.
         XCTAssertEqual(app.textFields[textFieldIdentifier].value as? String, "thisisbad", "The text field should show the entered server.")

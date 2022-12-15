@@ -14,20 +14,12 @@
 // limitations under the License.
 //
 
-import XCTest
+import Foundation
 
-extension XCUIElement {
-    func clearAndTypeText(_ text: String) {
-        guard let stringValue = value as? String else {
-            XCTFail("Tried to clear and type text into a non string value")
-            return
-        }
-
-        tap()
-
-        let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: stringValue.count)
-
-        typeText(deleteString)
-        typeText(text)
-    }
+@MainActor
+protocol RoomTimelineControllerFactoryProtocol {
+    func buildRoomTimelineController(userId: String,
+                                     roomProxy: RoomProxyProtocol,
+                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol
 }

@@ -14,24 +14,15 @@
 // limitations under the License.
 //
 
-import XCTest
+import Foundation
 
-class ApplicationTests: XCTestCase {
-    func testLaunchPerformance() throws {
-        let parser = TestMeasurementParser()
-        
-        parser.capture(testCase: self) {
-            self.measure(metrics: [XCTApplicationLaunchMetric()]) {
-                Application.launch()
-            }
-        }
-        
-        guard let actualDuration = parser.valueForMetric(.appLaunch) else {
-            XCTFail("Couldn't retrieve app launch duration")
-            return
-        }
-        
-        let expectedDuration = 5.0
-        XCTAssertLessThanOrEqual(actualDuration, expectedDuration)
+struct MockRoomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol {
+    func buildRoomTimelineController(userId: String,
+                                     roomProxy: RoomProxyProtocol,
+                                     timelineItemFactory: RoomTimelineItemFactoryProtocol,
+                                     mediaProvider: MediaProviderProtocol) -> RoomTimelineControllerProtocol {
+        let timelineController = MockRoomTimelineController()
+        timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+        return timelineController
     }
 }

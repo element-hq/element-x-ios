@@ -41,10 +41,15 @@ extension XCUIApplication {
 
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
     /// - Parameter identifier: Identifier of the UI test screen
-    func assertScreenshot(_ identifier: UITestScreenIdentifier) {
-        let failure = verifySnapshot(matching: screenshot().image,
+    func assertScreenshot(_ identifier: UITestScreenIdentifier, step: Int? = nil) {
+        var snapshotName = identifier.rawValue
+        if let step {
+            snapshotName += "-\(step)"
+        }
+
+        let failure = verifySnapshot(matching: XCUIScreen.main.screenshot().image,
                                      as: .image(precision: 0.99, perceptualPrecision: 0.98, scale: nil),
-                                     named: identifier.rawValue,
+                                     named: snapshotName,
                                      testName: testName)
 
         if let failure,

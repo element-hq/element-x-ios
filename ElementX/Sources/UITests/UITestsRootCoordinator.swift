@@ -31,8 +31,7 @@ struct UITestsRootCoordinator: CoordinatorProtocol {
             }
             .accessibilityIdentifier(coordinator.id.rawValue)
         }
+        .padding(.top, 50) // Add some top padding so the iPad split screen button isn't tapped by mistake
         .listStyle(.plain)
-        .navigationTitle("Screens")
-        .navigationViewStyle(.stack)
     }
 }

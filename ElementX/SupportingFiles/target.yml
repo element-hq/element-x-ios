@@ -128,7 +128,7 @@ targets:
     sources:
     - path: ../Sources
       excludes:
-        - Screens/Templates
+        - Other/Extensions/XCUIElement.swift
     - path: ../Resources
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/ElementX
