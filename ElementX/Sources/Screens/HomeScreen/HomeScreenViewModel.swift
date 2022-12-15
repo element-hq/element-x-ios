@@ -181,20 +181,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
             switch summary {
             case .empty(let id):
-                guard let otherSummary = allRoomsSummaryProvider?.roomListPublisher.value[index] else {
+                guard case let .filled(summary) = allRoomsSummaryProvider?.roomListPublisher.value[index] else {
                     rooms.append(HomeScreenRoom.placeholder(id: id))
                     continue
                 }
                 
-                switch otherSummary {
-                case .empty(let id):
-                    rooms.append(HomeScreenRoom.placeholder(id: id))
-                case .filled(let summary):
-                    let room = buildRoomForSummary(summary)
-                    
-                    rooms.append(room)
-                    newRoomsForIdentifiers[summary.id] = room
-                }
+                let room = buildRoomForSummary(summary)
+                rooms.append(room)
+                newRoomsForIdentifiers[summary.id] = room
             case .filled(let summary):
                 let room = buildRoomForSummary(summary)
                 rooms.append(room)
