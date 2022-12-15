@@ -70,6 +70,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         // Reset everything if the app has been deleted since the previous run
         if !ServiceLocator.shared.applicationSettings.wasAppPreviouslyRan {
+            ApplicationSettings.reset()
             userSessionStore.reset()
             ServiceLocator.shared.applicationSettings.wasAppPreviouslyRan = true
         }
