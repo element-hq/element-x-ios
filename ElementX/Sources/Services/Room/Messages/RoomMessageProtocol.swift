@@ -20,5 +20,5 @@ protocol RoomMessageProtocol {
     var id: String { get }
     var body: String { get }
     var sender: String { get }
-    var originServerTs: Date { get }
+    var timestamp: Date { get }
 }

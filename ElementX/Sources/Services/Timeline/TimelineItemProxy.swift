@@ -91,7 +91,7 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         item.reactions()
     }
     
-    var originServerTs: Date {
+    var timestamp: Date {
         Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
     }
     

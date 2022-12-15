@@ -49,7 +49,7 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
         case .transactionId:
             return .sending
         case .eventId:
-            return .sent(elapsedTime: Date().timeIntervalSince1970 - originServerTs.timeIntervalSince1970)
+            return .sent(elapsedTime: Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970)
         }
     }
 
@@ -77,7 +77,7 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
         item.sender()
     }
 
-    var originServerTs: Date {
+    var timestamp: Date {
         Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
     }
 }

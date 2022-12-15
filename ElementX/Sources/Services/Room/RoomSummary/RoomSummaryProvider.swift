@@ -142,7 +142,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             //     attributedLastMessage = lastMessageSender + ": " + AttributedString(lastMessage.body)
             // }
             attributedLastMessage = AttributedString(lastMessage.body)
-            lastMessageTimestamp = lastMessage.originServerTs
+            lastMessageTimestamp = lastMessage.timestamp
         }
         
         return .filled(details: RoomSummaryDetails(id: room.roomId(),
