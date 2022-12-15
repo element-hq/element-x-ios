@@ -21,7 +21,8 @@ typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, Hom
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
-    private let roomSummaryProvider: RoomSummaryProviderProtocol?
+    private let visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
+    private let allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     private var roomsForIdentifiers = [String: HomeScreenRoom]()
     
@@ -32,8 +33,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
-        roomSummaryProvider = userSession.clientProxy.roomSummaryProvider
         self.attributedStringBuilder = attributedStringBuilder
+        
+        visibleRoomsSummaryProvider = userSession.clientProxy.visibleRoomsSummaryProvider
+        allRoomsSummaryProvider = userSession.clientProxy.allRoomsSummaryProvider
         
         super.init(initialViewState: HomeScreenViewState(userID: userSession.userID))
         
@@ -65,14 +68,15 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
         }
         
-        guard let roomSummaryProvider else {
+        guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
         
-        Publishers.CombineLatest3(roomSummaryProvider.statePublisher,
-                                  roomSummaryProvider.countPublisher,
-                                  roomSummaryProvider.roomListPublisher)
+        // Combine all 3 publishers to correctly compute the screen state
+        Publishers.CombineLatest3(visibleRoomsSummaryProvider.statePublisher,
+                                  visibleRoomsSummaryProvider.countPublisher,
+                                  visibleRoomsSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state, totalCount, rooms in
                 if state != .live {
@@ -89,7 +93,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        roomSummaryProvider.roomListPublisher
+        // Listen to changes from both roomSummaryProviders and update state accordingly
+        
+        visibleRoomsSummaryProvider.roomListPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.updateRooms()
+            }
+            .store(in: &cancellables)
+        
+        allRoomsSummaryProvider.roomListPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.updateRooms()
@@ -127,12 +140,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {
-        guard let roomSummaryProvider else {
+        guard let visibleRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
         
-        guard let roomSummary = roomSummaryProvider.roomListPublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
+        guard let roomSummary = visibleRoomsSummaryProvider.roomListPublisher.value.first(where: { $0.asFilled?.id == identifier })?.asFilled,
               let roomIndex = state.rooms.firstIndex(where: { $0.id == identifier }) else {
             return
         }
@@ -153,8 +166,11 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
+    /// This method will update all view state rooms by merging the data from both summary providers
+    /// If a room is empty in the visible room summary provider it will try to get it from the allRooms one
+    /// This ensures that we show as many room details as possible without loading up timelines
     private func updateRooms() {
-        guard let roomSummaryProvider else {
+        guard let visibleRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
@@ -162,27 +178,25 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         var rooms = [HomeScreenRoom]()
         var newRoomsForIdentifiers = [String: HomeScreenRoom]()
         
-        for summary in roomSummaryProvider.roomListPublisher.value {
+        for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
             switch summary {
             case .empty(let id):
-                rooms.append(HomeScreenRoom.placeholder(id: id))
-            case .filled(let summary):
-                let oldRoom = roomsForIdentifiers[summary.id]
-                
-                let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
-                
-                var timestamp: String?
-                if let lastMessageTimestamp = summary.lastMessageTimestamp {
-                    timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+                guard let otherSummary = allRoomsSummaryProvider?.roomListPublisher.value[index] else {
+                    rooms.append(HomeScreenRoom.placeholder(id: id))
+                    continue
                 }
                 
-                let room = HomeScreenRoom(id: summary.id,
-                                          name: summary.name,
-                                          hasUnreads: summary.unreadNotificationCount > 0,
-                                          timestamp: timestamp ?? oldRoom?.timestamp,
-                                          lastMessage: summary.lastMessage ?? oldRoom?.lastMessage,
-                                          avatar: avatarImage ?? oldRoom?.avatar)
-                
+                switch otherSummary {
+                case .empty(let id):
+                    rooms.append(HomeScreenRoom.placeholder(id: id))
+                case .filled(let summary):
+                    let room = buildRoomForSummary(summary)
+                    
+                    rooms.append(room)
+                    newRoomsForIdentifiers[summary.id] = room
+                }
+            case .filled(let summary):
+                let room = buildRoomForSummary(summary)
                 rooms.append(room)
                 newRoomsForIdentifiers[summary.id] = room
             }
@@ -190,6 +204,24 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         state.rooms = rooms
         roomsForIdentifiers = newRoomsForIdentifiers
+    }
+    
+    private func buildRoomForSummary(_ summary: RoomSummaryDetails) -> HomeScreenRoom {
+        let oldRoom = roomsForIdentifiers[summary.id]
+        
+        let avatarImage = userSession.mediaProvider.imageFromURLString(summary.avatarURLString, avatarSize: .room(on: .home))
+        
+        var timestamp: String?
+        if let lastMessageTimestamp = summary.lastMessageTimestamp {
+            timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+        }
+        
+        return HomeScreenRoom(id: summary.id,
+                              name: summary.name,
+                              hasUnreads: summary.unreadNotificationCount > 0,
+                              timestamp: timestamp ?? oldRoom?.timestamp,
+                              lastMessage: summary.lastMessage ?? oldRoom?.lastMessage,
+                              avatar: avatarImage ?? oldRoom?.avatar)
     }
     
     private func updateVisibleRange(visibleItemIdentifiers items: Set<String>) {
@@ -205,6 +237,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        userSession.clientProxy.roomSummaryProvider?.updateVisibleRange(lowerBound...upperBound)
+        visibleRoomsSummaryProvider?.updateVisibleRange(lowerBound...upperBound)
     }
 }
