@@ -96,6 +96,7 @@
 		2CA8AD07773A38BA4662098B /* MediaProxyProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = FC3D31C2DA6910AA0079678A /* MediaProxyProtocol.swift */; };
 		2CB6787E25B11711518E9588 /* OnboardingCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = E6281B199D8A8F0892490C2E /* OnboardingCoordinator.swift */; };
 		2D794361CFE790C8FB3C9C0F /* message.caf in Resources */ = {isa = PBXBuildFile; fileRef = ED482057AE39D5C6D9C5F3D8 /* message.caf */; };
+		2DDF993D92491841433A2752 /* NotificationManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 010AFCAFF9938E65CFC7784F /* NotificationManagerTests.swift */; };
 		2E43A3D221BE9587BC19C3F1 /* MatrixEntityRegexTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31F59030205A6F65B057E1A /* MatrixEntityRegexTests.swift */; };
 		2F1CF90A3460C153154427F0 /* RoomScreenUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 086B997409328F091EBA43CE /* RoomScreenUITests.swift */; };
 		2F30EFEB7BD39242D1AD96F3 /* LoginViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1E1FB768A24FDD2A5CA16E3C /* LoginViewModelProtocol.swift */; };
@@ -502,6 +503,7 @@
 /* Begin PBXFileReference section */
 		00245D40CD90FD71D6A05239 /* EmojiPickerScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiPickerScreen.swift; sourceTree = "<group>"; };
 		00A941F289F6AB876BA3361A /* OnboardingViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModelTests.swift; sourceTree = "<group>"; };
+		010AFCAFF9938E65CFC7784F /* NotificationManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationManagerTests.swift; sourceTree = "<group>"; };
 		01C4C7DB37597D7D8379511A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		02A07FF019724B6ACEA73076 /* szl */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = szl; path = szl.lproj/Localizable.strings; sourceTree = "<group>"; };
 		033DB41C51865A2E83174E87 /* target.yml */ = {isa = PBXFileReference; lastKnownFileType = text.yaml; path = target.yml; sourceTree = "<group>"; };
@@ -1653,6 +1655,7 @@
 				F875D71347DC81EAE7687446 /* NavigationRootCoordinatorTests.swift */,
 				A63A32A0627A03F00A2900FE /* NavigationSplitCoordinator.swift */,
 				9C698E30698EC59302A8EEBD /* NavigationStackCoordinatorTests.swift */,
+				010AFCAFF9938E65CFC7784F /* NotificationManagerTests.swift */,
 				00A941F289F6AB876BA3361A /* OnboardingViewModelTests.swift */,
 				6FB31A32C93D94930B253FBF /* PermalinkBuilderTests.swift */,
 				93CF7B19FFCF8EFBE0A8696A /* RoomScreenViewModelTests.swift */,
@@ -2214,6 +2217,7 @@
 				4009BE2E791C16AC6EE39A7E /* BugReport */,
 				F5A65D1D3B83593598DC278D /* EmojiPickerScreen */,
 				B442FCF47E0A6F28D7D50A4D /* FilePreview */,
+				FC26FB522EDED4965C5325F0 /* Folder */,
 				B53CA9BECD3F97805E1432D0 /* HomeScreen */,
 				3F38EAC92E2281990E65DAF2 /* OnboardingScreen */,
 				A448A3A8F764174C60CD0CA1 /* Other */,
@@ -2281,6 +2285,13 @@
 				323160803A296713F839540B /* View */,
 			);
 			path = EmojiPickerScreen;
+			sourceTree = "<group>";
+		};
+		FC26FB522EDED4965C5325F0 /* Folder */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Folder;
 			sourceTree = "<group>";
 		};
 		FCDF06BDB123505F0334B4F9 /* Timeline */ = {
@@ -2767,6 +2778,7 @@
 				981853650217B6C8ECDD998C /* NavigationRootCoordinatorTests.swift in Sources */,
 				FCB9B475F908765531335859 /* NavigationSplitCoordinator.swift in Sources */,
 				4BB282209EA82015D0DF8F89 /* NavigationStackCoordinatorTests.swift in Sources */,
+				2DDF993D92491841433A2752 /* NotificationManagerTests.swift in Sources */,
 				F9F6D2883BBEBB9A3789A137 /* OnboardingViewModelTests.swift in Sources */,
 				27E9263DA75E266690A37EB1 /* PermalinkBuilderTests.swift in Sources */,
 				46562110EE202E580A5FFD9C /* RoomScreenViewModelTests.swift in Sources */,

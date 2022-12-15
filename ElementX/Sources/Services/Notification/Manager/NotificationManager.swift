@@ -59,8 +59,10 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         }
     }
 
-    func register(with deviceToken: Data) {
-        setPusher(with: deviceToken, clientProxy: clientProxy)
+    func register(with deviceToken: Data, completion: ((Bool) -> Void)? = nil) {
+        setPusher(with: deviceToken,
+                  clientProxy: clientProxy,
+                  completion: completion)
     }
 
     func registrationFailed(with error: Error) { }
@@ -84,7 +86,9 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         }
     }
 
-    private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) {
+    private func setPusher(with deviceToken: Data,
+                           clientProxy: ClientProxyProtocol,
+                           completion: ((Bool) -> Void)?) {
         Task {
             do {
                 try await clientProxy.setPusher(pushkey: deviceToken.base64EncodedString(),
@@ -106,8 +110,10 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                     ]
                                                 ])
                 MXLog.debug("[NotificationManager] set pusher succeeded")
+                completion?(true)
             } catch {
                 MXLog.debug("[NotificationManager] set pusher failed: \(error)")
+                completion?(false)
             }
         }
     }
