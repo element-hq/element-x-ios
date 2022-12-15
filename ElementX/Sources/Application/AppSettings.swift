@@ -20,7 +20,7 @@ import SwiftUI
 /// Store Element specific app settings.
 final class AppSettings: ObservableObject {
     private enum UserDefaultsKeys: String {
-        case wasAppPreviouslyRan
+        case hasAppLaunchedOnce
         case timelineStyle
         case enableAnalytics
         case isIdentifiedForAnalytics
@@ -28,28 +28,32 @@ final class AppSettings: ObservableObject {
         case enableInAppNotifications
         case pusherProfileTag
     }
+    
+    private static var suiteName: String = InfoPlistReader.target.appGroupIdentifier
 
     /// UserDefaults to be used on reads and writes.
-    private static var store: UserDefaults {
-        guard let userDefaults = UserDefaults(suiteName: InfoPlistReader.target.appGroupIdentifier) else {
-            fatalError("Fail to load shared UserDefaults")
-        }
-        return userDefaults
-    }
+    private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
     
     static func reset() {
-        let dictionary = Self.store.dictionaryRepresentation()
-        dictionary.keys.forEach { key in
-            Self.store.removeObject(forKey: key)
+        store.removePersistentDomain(forName: suiteName)
+    }
+    
+    static func configureWithSuiteName(_ name: String) {
+        suiteName = name
+        
+        guard let userDefaults = UserDefaults(suiteName: name) else {
+            fatalError("Fail to load shared UserDefaults")
         }
+        
+        store = userDefaults
     }
     
     // MARK: - Application
     
     /// Simple flag to check if app has been deleted between runs.
     /// Used to clear data stored in the shared container and keychain
-    @AppStorage(UserDefaultsKeys.wasAppPreviouslyRan.rawValue, store: store)
-    var wasAppPreviouslyRan = false
+    @AppStorage(UserDefaultsKeys.hasAppLaunchedOnce.rawValue, store: store)
+    var hasAppLaunchedOnce = false
     
     let defaultHomeserverAddress = "matrix.org"
     
@@ -130,5 +134,5 @@ final class AppSettings: ObservableObject {
         
     // MARK: - Other
     
-    var permalinkBaseURL = URL(staticString: "https://matrix.to")
+    let permalinkBaseURL = URL(staticString: "https://matrix.to")
 }

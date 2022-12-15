@@ -110,12 +110,6 @@ struct SettingsScreen: View {
             .listRowSeparator(.hidden)
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier("reportBugButton")
-            
-            Button("Crash app",
-                   role: .destructive) { context.send(viewAction: .crash)
-            }
-            .listRowInsets(listRowInsets)
-            .accessibilityIdentifier("crashButton")
         }
     }
 

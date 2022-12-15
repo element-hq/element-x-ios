@@ -50,8 +50,6 @@ final class SettingsCoordinator: CoordinatorProtocol {
                 self.toggleAnalytics()
             case .reportBug:
                 self.presentBugReportScreen()
-            case .crash:
-                self.parameters.bugReportService.crash()
             case .logout:
                 self.callback?(.logout)
             }

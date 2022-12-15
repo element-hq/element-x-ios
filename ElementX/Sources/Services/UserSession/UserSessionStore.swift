@@ -38,12 +38,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     /// Deletes all data stored in the shared container and keychain
     func reset() {
-        do {
-            try FileManager.default.removeItem(at: baseDirectory)
-        } catch {
-            MXLog.failure("Failed resetting user session store: \(error)")
-        }
-        
+        try? FileManager.default.removeItem(at: baseDirectory)
         keychainController.removeAllRestorationTokens()
     }
     

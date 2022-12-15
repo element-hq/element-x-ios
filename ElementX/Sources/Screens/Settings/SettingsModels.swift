@@ -21,7 +21,6 @@ enum SettingsViewModelAction {
     case close
     case toggleAnalytics
     case reportBug
-    case crash
     case logout
 }
 
@@ -40,6 +39,5 @@ enum SettingsViewAction {
     case close
     case toggleAnalytics
     case reportBug
-    case crash
     case logout
 }

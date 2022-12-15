@@ -22,6 +22,7 @@ class AnalyticsTests: XCTestCase {
     private var applicationSettings: AppSettings!
     
     override func setUp() {
+        AppSettings.configureWithSuiteName("io.element.elementx.unitests")
         AppSettings.reset()
         applicationSettings = AppSettings()
     }

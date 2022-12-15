@@ -18,12 +18,20 @@
 import XCTest
 
 class PermalinkBuilderTests: XCTestCase {
+    private var appSettings: AppSettings!
+    
+    override func setUp() {
+        AppSettings.configureWithSuiteName("io.element.elementx.unitests")
+        AppSettings.reset()
+        appSettings = AppSettings()
+    }
+    
     func testUserIdentifierPermalink() {
         let userId = "@abcdefghijklmnopqrstuvwxyz1234567890._-=/:matrix.org"
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(userIdentifier: userId)
-            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/\(userId)"))
+            XCTAssertEqual(permalink, URL(string: "\(appSettings.permalinkBaseURL)/#/\(userId)"))
         } catch {
             XCTFail("User identifier must be valid: \(error)")
         }
@@ -43,7 +51,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(roomIdentifier: roomId)
-            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org"))
+            XCTAssertEqual(permalink, URL(string: "\(appSettings.permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org"))
         } catch {
             XCTFail("Room identifier must be valid: \(error)")
         }
@@ -63,7 +71,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(roomAlias: roomAlias)
-            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/%23abcdefghijklmnopqrstuvwxyz-_.1234567890%3Amatrix.org"))
+            XCTAssertEqual(permalink, URL(string: "\(appSettings.permalinkBaseURL)/#/%23abcdefghijklmnopqrstuvwxyz-_.1234567890%3Amatrix.org"))
         } catch {
             XCTFail("Room alias must be valid: \(error)")
         }
@@ -84,7 +92,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventId, roomIdentifier: roomId)
-            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org/%24abcdefghijklmnopqrstuvwxyz1234567890"))
+            XCTAssertEqual(permalink, URL(string: "\(appSettings.permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org/%24abcdefghijklmnopqrstuvwxyz1234567890"))
         } catch {
             XCTFail("Room and event identifiers must be valid: \(error)")
         }

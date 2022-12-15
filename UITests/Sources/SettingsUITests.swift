@@ -26,7 +26,6 @@ class SettingsUITests: XCTestCase {
         let reportBugButton = app.buttons["reportBugButton"]
         XCTAssert(reportBugButton.exists)
         XCTAssertEqual(reportBugButton.label, ElementL10n.sendBugReport)
-        XCTAssertTrue(app.buttons["crashButton"].exists)
 
         XCTAssertTrue(app.buttons["timelineStylePicker"].exists)
         XCTAssertTrue(app.staticTexts[ElementL10n.settingsTimelineStyle].exists)
