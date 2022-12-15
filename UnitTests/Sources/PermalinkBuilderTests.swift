@@ -23,7 +23,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(userIdentifier: userId)
-            XCTAssertEqual(permalink, URL(string: "\(ApplicationSettings().permalinkBaseURL)/#/\(userId)"))
+            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/\(userId)"))
         } catch {
             XCTFail("User identifier must be valid: \(error)")
         }
@@ -43,7 +43,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(roomIdentifier: roomId)
-            XCTAssertEqual(permalink, URL(string: "\(ApplicationSettings().permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org"))
+            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org"))
         } catch {
             XCTFail("Room identifier must be valid: \(error)")
         }
@@ -63,7 +63,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(roomAlias: roomAlias)
-            XCTAssertEqual(permalink, URL(string: "\(ApplicationSettings().permalinkBaseURL)/#/%23abcdefghijklmnopqrstuvwxyz-_.1234567890%3Amatrix.org"))
+            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/%23abcdefghijklmnopqrstuvwxyz-_.1234567890%3Amatrix.org"))
         } catch {
             XCTFail("Room alias must be valid: \(error)")
         }
@@ -84,7 +84,7 @@ class PermalinkBuilderTests: XCTestCase {
         
         do {
             let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: eventId, roomIdentifier: roomId)
-            XCTAssertEqual(permalink, URL(string: "\(ApplicationSettings().permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org/%24abcdefghijklmnopqrstuvwxyz1234567890"))
+            XCTAssertEqual(permalink, URL(string: "\(AppSettings().permalinkBaseURL)/#/!abcdefghijklmnopqrstuvwxyz1234567890%3Amatrix.org/%24abcdefghijklmnopqrstuvwxyz1234567890"))
         } catch {
             XCTFail("Room and event identifiers must be valid: \(error)")
         }

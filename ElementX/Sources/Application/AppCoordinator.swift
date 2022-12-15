@@ -70,7 +70,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         // Reset everything if the app has been deleted since the previous run
         if !ServiceLocator.shared.settings.wasAppPreviouslyRan {
-            ApplicationSettings.reset()
+            AppSettings.reset()
             userSessionStore.reset()
             ServiceLocator.shared.settings.wasAppPreviouslyRan = true
         }
@@ -100,7 +100,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
         ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
-        ServiceLocator.shared.register(applicationSettings: ApplicationSettings())
+        ServiceLocator.shared.register(appSettings: AppSettings())
     }
     
     private static func setupLogging() {

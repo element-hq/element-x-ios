@@ -18,7 +18,7 @@ import Foundation
 import SwiftUI
 
 /// Store Element specific app settings.
-final class ApplicationSettings: ObservableObject {
+final class AppSettings: ObservableObject {
     private enum UserDefaultsKeys: String {
         case wasAppPreviouslyRan
         case timelineStyle

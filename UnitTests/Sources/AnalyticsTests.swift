@@ -19,11 +19,11 @@ import AnalyticsEvents
 import XCTest
 
 class AnalyticsTests: XCTestCase {
-    private var applicationSettings: ApplicationSettings!
+    private var applicationSettings: AppSettings!
     
     override func setUp() {
-        ApplicationSettings.reset()
-        applicationSettings = ApplicationSettings()
+        AppSettings.reset()
+        applicationSettings = AppSettings()
     }
     
     func testAnalyticsPromptNewUser() {
