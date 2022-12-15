@@ -16,6 +16,7 @@
 
 import Combine
 import Foundation
+import Network
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
@@ -33,6 +34,13 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
+    
+    private let client = MessageClient()
+    private let waitForSignal: Bool
+    
+    init(waitForSignal: Bool = false) {
+        self.waitForSignal = waitForSignal
+    }
     
     func simulateIncomingItems() {
         guard !incomingItems.isEmpty else { return }
@@ -60,12 +68,24 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
         let newItems = backPaginationResponses.removeFirst()
         
-        try? await Task.sleep(for: backPaginationDelay)
-        timelineItems.insert(contentsOf: newItems, at: 0)
-        callbacks.send(.updatedTimelineItems)
-        callbacks.send(.finishedBackPaginating)
-        
-        return .success(())
+        do {
+            if waitForSignal {
+                try await client.connect()
+                try await client.nextMessage()
+            } else {
+                try await Task.sleep(for: backPaginationDelay)
+            }
+            
+            timelineItems.insert(contentsOf: newItems, at: 0)
+            callbacks.send(.updatedTimelineItems)
+            callbacks.send(.finishedBackPaginating)
+            
+            try await client.send(message: "Done")
+            
+            return .success(())
+        } catch {
+            return .failure(.generic)
+        }
     }
     
     func processItemAppearance(_ itemId: String) async { }

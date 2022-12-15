@@ -59,7 +59,20 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
     }
     
-    func testSmallTimelineWithLargePagination() {
-        // To be implemented
+    func testSmallTimelineWithLargePagination() async throws {
+        let server = try MessageServer()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
+        
+        try await server.connect()
+        try await server.send(message: "Paginate")
+        try await server.nextMessage()
+        
+        // Pagination finished, wait for the timeline to update
+        try await Task.sleep(for: .milliseconds(500))
+
+        // The bottom of the timeline should remain visible with more items added above.
+        app.assertScreenshot(.roomSmallTimelineLargePagination)
     }
 }
