@@ -114,8 +114,8 @@ struct SettingsScreen: View {
             Button("Crash app",
                    role: .destructive) { context.send(viewAction: .crash)
             }
-                   .listRowInsets(listRowInsets)
-                   .accessibilityIdentifier("crashButton")
+            .listRowInsets(listRowInsets)
+            .accessibilityIdentifier("crashButton")
         }
     }
 
