@@ -19,11 +19,12 @@ import UIKit
 import UserNotifications
 
 class NotificationManager: NSObject, NotificationManagerProtocol {
-    private let notificationCenter = UNUserNotificationCenter.current()
+    private var notificationCenter: UserNotificationCenterProtocol
     private let clientProxy: ClientProxyProtocol
 
-    init(clientProxy: ClientProxyProtocol) {
+    init(clientProxy: ClientProxyProtocol, notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.clientProxy = clientProxy
+        self.notificationCenter = notificationCenter
         super.init()
     }
 
@@ -45,16 +46,17 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                    options: [])
         notificationCenter.setNotificationCategories([replyCategory])
         notificationCenter.delegate = self
-        Task {
-            do {
-                let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
-                MXLog.debug("[NotificationManager] permission granted: \(granted)")
-
-                await MainActor.run {
-                    delegate?.authorizationStatusUpdated(self, granted: granted)
-                }
-            } catch {
+        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
+            guard let self else {
+                return
+            }
+            if let error {
                 MXLog.debug("[NotificationManager] request authorization failed: \(error)")
+            } else {
+                MXLog.debug("[NotificationManager] permission granted: \(granted)")
+                DispatchQueue.main.async {
+                    self.delegate?.authorizationStatusUpdated(self, granted: granted)
+                }
             }
         }
     }
@@ -76,12 +78,11 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         let request = UNNotificationRequest(identifier: ProcessInfo.processInfo.globallyUniqueString,
                                             content: content,
                                             trigger: nil)
-        Task {
-            do {
-                try await notificationCenter.add(request)
-                MXLog.debug("[NotificationManager] show local notification succeeded")
-            } catch {
+        notificationCenter.add(request) { error in
+            if let error {
                 MXLog.debug("[NotificationManager] show local notification failed: \(error)")
+            } else {
+                MXLog.debug("[NotificationManager] show local notification succeeded")
             }
         }
     }
@@ -170,3 +171,5 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
         }
     }
 }
+
+extension UNUserNotificationCenter: UserNotificationCenterProtocol { }

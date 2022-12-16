@@ -22,11 +22,14 @@ import Combine
 final class NotificationManagerTests: XCTestCase {
     var sut: NotificationManager!
     private let clientProxySpy = ClientProxySpy()
-
+    private let notificationCenter = UserNotificationCenterSpy()
+    private var authorizationStatusWasGranted = false
+    private var shouldDisplayInAppNotificationReturnValue = false
+    
     override func setUp() {
-        sut = NotificationManager(clientProxy: clientProxySpy)
+        sut = NotificationManager(clientProxy: clientProxySpy, notificationCenter: notificationCenter)
     }
-
+    
     func test_whenRegistered_pusherIsCalled() throws {
         let expectation = expectation(description: "Callback happened")
         sut.register(with: Data(), completion: { _ in
@@ -110,6 +113,99 @@ final class NotificationManagerTests: XCTestCase {
         })
         waitForExpectations(timeout: 0.5)
         XCTAssertEqual(ElementSettings.shared.pusherProfileTag, "12345")
+    }
+    
+    func test_whenShowLocalNotification_notificationRequestGetsAdded() throws {
+        sut.showLocalNotification(with: "Title", subtitle: "Subtitle")
+        let request = try XCTUnwrap(notificationCenter.addRequest)
+        XCTAssertEqual(request.content.title, "Title")
+        XCTAssertEqual(request.content.subtitle, "Subtitle")
+    }
+    
+    func test_whenStart_notificationCategoriesAreSet() throws {
+        sut.start()
+        let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
+                                                        title: ElementL10n.actionQuickReply,
+                                                        options: [])
+        let replyCategory = UNNotificationCategory(identifier: NotificationConstants.Category.reply,
+                                                   actions: [replyAction],
+                                                   intentIdentifiers: [],
+                                                   options: [])
+        XCTAssertEqual(notificationCenter.notificationCategoriesValue, [replyCategory])
+    }
+    
+    func test_whenStart_delegateIsSet() throws {
+        sut.start()
+        let delegate = try XCTUnwrap(notificationCenter.delegate)
+        XCTAssertTrue(delegate.isEqual(sut))
+    }
+    
+    func test_whenStart_requestAuthorizationCalledWithCorrectParams() throws {
+        sut.start()
+        XCTAssertEqual(notificationCenter.requestAuthorizationOptions, [.alert, .sound, .badge])
+    }
+    
+    func test_whenStartAndAuthorizationGranted_delegateCalled() throws {
+        authorizationStatusWasGranted = false
+        notificationCenter.requestAuthorizationGrantedReturnValue = true
+        sut.delegate = self
+        sut.start()
+        let expectation = expectation(description: "Wait for main thread")
+        DispatchQueue.main.async {
+            expectation.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+        XCTAssertTrue(authorizationStatusWasGranted)
+    }
+    
+    func test_whenWillPresentNotificationsDelegateNotSet_CorrectPresentationOptionsReturned() async throws {
+        sut.start()
+        let archiver = MockCoder(requiringSecureCoding: false)
+        let notification = try XCTUnwrap(UNNotification(coder: archiver))
+        let options = await sut.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
+        XCTAssertEqual(options, [.badge, .sound, .list, .banner])
+    }
+}
+
+extension NotificationManagerTests: NotificationManagerDelegate {
+    func authorizationStatusUpdated(_ service: ElementX.NotificationManagerProtocol, granted: Bool) {
+        authorizationStatusWasGranted = granted
+    }
+    
+    func shouldDisplayInAppNotification(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) -> Bool {
+        shouldDisplayInAppNotificationReturnValue
+    }
+    
+    func notificationTapped(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) async { }
+    
+    func handleInlineReply(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async { }
+}
+
+// MARK: - Helpers
+
+class MockCoder: NSKeyedArchiver {
+    override func decodeObject(forKey key: String) -> Any { "" }
+}
+
+class UserNotificationCenterSpy: UserNotificationCenterProtocol {
+    weak var delegate: UNUserNotificationCenterDelegate?
+    
+    var addRequest: UNNotificationRequest?
+    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?) {
+        addRequest = request
+        completionHandler?(nil)
+    }
+    
+    var requestAuthorizationOptions: UNAuthorizationOptions?
+    var requestAuthorizationGrantedReturnValue = false
+    func requestAuthorization(options: UNAuthorizationOptions, completionHandler: @escaping (Bool, Error?) -> Void) {
+        requestAuthorizationOptions = options
+        completionHandler(requestAuthorizationGrantedReturnValue, nil)
+    }
+    
+    var notificationCategoriesValue: Set<UNNotificationCategory>?
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
+        notificationCategoriesValue = categories
     }
 }
 
