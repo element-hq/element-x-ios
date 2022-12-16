@@ -35,7 +35,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
     
-    private let client = MessageClient()
+    private let signal = UITestSignalClient()
     private let waitForSignal: Bool
     
     init(waitForSignal: Bool = false) {
@@ -70,8 +70,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         
         do {
             if waitForSignal {
-                try await client.connect()
-                try await client.nextMessage()
+                try await signal.connect()
+                try await signal.receive()
             } else {
                 try await Task.sleep(for: backPaginationDelay)
             }
@@ -80,7 +80,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             callbacks.send(.updatedTimelineItems)
             callbacks.send(.finishedBackPaginating)
             
-            try await client.send(message: "Done")
+            try await signal.send(.done)
             
             return .success(())
         } catch {

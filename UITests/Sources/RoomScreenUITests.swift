@@ -60,19 +60,59 @@ class RoomScreenUITests: XCTestCase {
     }
     
     func testSmallTimelineWithLargePagination() async throws {
-        let server = try MessageServer()
+        let signal = try UITestSignalServer()
         
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
         
-        try await server.connect()
-        try await server.send(message: "Paginate")
-        try await server.nextMessage()
+        try await signal.connect()
+        try await signal.send(.paginate)
+        try await signal.receive()
         
         // Pagination finished, wait for the timeline to update
         try await Task.sleep(for: .milliseconds(500))
 
         // The bottom of the timeline should remain visible with more items added above.
         app.assertScreenshot(.roomSmallTimelineLargePagination)
+    }
+    
+    func testBackPaginationInMiddle() async throws {
+        let server = try UITestSignalServer()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomMiddlePagination)
+        
+        try await server.connect()
+        
+        app.tables.element.swipeDown()
+//        while !app.staticTexts["Syncing"].exists {
+//        }
+        
+        // The messages should be bottom aligned.
+        app.assertScreenshot(.roomMiddlePagination, step: 0)
+        
+        try await server.send(.paginate)
+        try await server.receive()
+        
+//        while app.staticTexts["Syncing"].exists {
+//            continue
+//        }
+        
+        // The messages should be bottom aligned.
+        app.assertScreenshot(.roomMiddlePagination, step: 1)
+    }
+    
+    func testBackPaginationAtTop() async throws {
+        let server = try UITestSignalServer()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomTopPagination)
+        
+        try await server.connect()
+        try await server.send(.paginate)
+        try await server.receive()
+
+        // The messages should be bottom aligned.
+        app.assertScreenshot(.roomTopPagination)
     }
 }

@@ -17,47 +17,24 @@
 import Foundation
 import Network
 
-enum NetworkError: Error {
+enum UITestSignal: String {
+    case ready
+    case paginate
+    case done
+}
+
+enum UITestSignalError: Error {
     case unknown
     case notConnected
     case awaitingAnotherMessage
     case nwError(NWError)
 }
 
-class MessageClient: MessagingProtocol {
-    let connection: NWConnection
-    var nextMessageContinuation: CheckedContinuation<String, Error>?
-    
-    init() {
-        connection = NWConnection(host: "127.0.0.1", port: 1234, using: .udp)
-    }
-    
-    func connect() async throws {
-        guard connection.state == .setup else { return }
-        
-        return try await withCheckedThrowingContinuation { continuation in
-            connection.start(queue: .main)
-            connection.stateUpdateHandler = { state in
-                switch state {
-                case .ready:
-                    self.receiveNextMessage()
-                    continuation.resume()
-                    Task { try await self.send(message: "Ready") }
-                case .failed(let error):
-                    continuation.resume(with: .failure(error))
-                default:
-                    break
-                }
-            }
-        }
-    }
-}
-
-class MessageServer: MessagingProtocol {
+class UITestSignalServer: UITestSignalProtocol {
     let listener: NWListener
     
     var connection: NWConnection
-    var nextMessageContinuation: CheckedContinuation<String, Error>?
+    var nextMessageContinuation: CheckedContinuation<UITestSignal, Error>?
     
     init() throws {
         connection = NWConnection(host: "127.0.0.1", port: 0, using: .udp)
@@ -89,23 +66,52 @@ class MessageServer: MessagingProtocol {
     }
 }
 
-protocol MessagingProtocol: AnyObject {
-    var connection: NWConnection { get }
-    var nextMessageContinuation: CheckedContinuation<String, Error>? { get set }
+class UITestSignalClient: UITestSignalProtocol {
+    let connection: NWConnection
+    var nextMessageContinuation: CheckedContinuation<UITestSignal, Error>?
+    
+    init() {
+        connection = NWConnection(host: "127.0.0.1", port: 1234, using: .udp)
+    }
+    
+    func connect() async throws {
+        guard connection.state == .setup else { return }
+        
+        return try await withCheckedThrowingContinuation { continuation in
+            connection.start(queue: .main)
+            connection.stateUpdateHandler = { state in
+                switch state {
+                case .ready:
+                    self.receiveNextMessage()
+                    continuation.resume()
+                    Task { try await self.send(.ready) }
+                case .failed(let error):
+                    continuation.resume(with: .failure(error))
+                default:
+                    break
+                }
+            }
+        }
+    }
 }
 
-extension MessagingProtocol {
+protocol UITestSignalProtocol: AnyObject {
+    var connection: NWConnection { get }
+    var nextMessageContinuation: CheckedContinuation<UITestSignal, Error>? { get set }
+}
+
+extension UITestSignalProtocol {
     /// Sends a message to the connected client/server.
-    func send(message: String) async throws {
-        guard connection.state == .ready else { throw NetworkError.notConnected }
-        let data = message.data(using: .utf8)
+    func send(_ signal: UITestSignal) async throws {
+        guard connection.state == .ready else { throw UITestSignalError.notConnected }
+        let data = signal.rawValue.data(using: .utf8)
         connection.send(content: data, completion: .idempotent)
     }
     
     /// Returns the next message received by the client/server.
-    func nextMessage() async throws -> String {
-        guard connection.state == .ready else { throw NetworkError.notConnected }
-        guard nextMessageContinuation == nil else { throw NetworkError.awaitingAnotherMessage }
+    func receive() async throws -> UITestSignal {
+        guard connection.state == .ready else { throw UITestSignalError.notConnected }
+        guard nextMessageContinuation == nil else { throw UITestSignalError.awaitingAnotherMessage }
         
         return try await withCheckedThrowingContinuation { continuation in
             self.nextMessageContinuation = continuation
@@ -120,13 +126,16 @@ extension MessagingProtocol {
             
             defer { self.nextMessageContinuation = nil }
             
-            guard let completeContent, let message = String(data: completeContent, encoding: .utf8) else {
-                let error: NetworkError = error.map { .nwError($0) } ?? .unknown
+            guard let completeContent,
+                  let message = String(data: completeContent, encoding: .utf8),
+                  let signal = UITestSignal(rawValue: message)
+            else {
+                let error: UITestSignalError = error.map { .nwError($0) } ?? .unknown
                 self.nextMessageContinuation?.resume(with: .failure(error))
                 return
             }
             
-            self.nextMessageContinuation?.resume(returning: message)
+            self.nextMessageContinuation?.resume(returning: signal)
             
             self.receiveNextMessage()
         }

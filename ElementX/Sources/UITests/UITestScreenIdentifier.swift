@@ -35,6 +35,8 @@ enum UITestScreenIdentifier: String {
     case roomSmallTimeline
     case roomSmallTimelineIncomingAndSmallPagination
     case roomSmallTimelineLargePagination
+    case roomMiddlePagination
+    case roomTopPagination
     case sessionVerification
     case userSessionScreen
     case roomDetailsScreen

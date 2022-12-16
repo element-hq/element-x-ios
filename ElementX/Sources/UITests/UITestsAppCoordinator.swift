@@ -207,6 +207,35 @@ class MockScreen: Identifiable {
             
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomMiddlePagination:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let timelineController = MockRoomTimelineController(waitForSignal: true)
+            timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+            timelineController.backPaginationDelay = .seconds(5)
+            timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk,
+                                                          RoomTimelineItemFixtures.largeChunk,
+                                                          RoomTimelineItemFixtures.largeChunk]
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             roomName: "Large timeline",
+                                                             roomAvatarUrl: "mock_url",
+                                                             emojiProvider: EmojiProvider())
+            return RoomScreenCoordinator(parameters: parameters)
+        case .roomTopPagination:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let timelineController = MockRoomTimelineController(waitForSignal: true)
+            timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+            timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             roomName: "Large timeline",
+                                                             roomAvatarUrl: "mock_url",
+                                                             emojiProvider: EmojiProvider())
+            return RoomScreenCoordinator(parameters: parameters)
         case .sessionVerification:
             let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy())
             return SessionVerificationCoordinator(parameters: parameters)
