@@ -1,1 +1,0 @@
-Fix a bug where the access token wasn't stored on macOS (Designed for iPad).
