@@ -105,7 +105,7 @@ class ClientProxy: ClientProxyProtocol {
 
                 let slidingSync = try slidingSyncBuilder
                     .addView(v: visibleRoomsView)
-                    .addView(v: allRoomsView)
+                    // .addView(v: allRoomsView) // FIXME: Intentionally disabled as it doesn't work properly
                     .withCommonExtensions()
                     .coldCache(name: "ElementX")
                     .build()

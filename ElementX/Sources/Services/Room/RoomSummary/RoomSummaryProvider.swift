@@ -62,9 +62,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) {
-        guard statePublisher.value == .live else {
-            return
-        }
+        #warning("This is a valid check but Rust doesn't set it correctly for selective ranged syncs")
+        // guard statePublisher.value == .live else {
+        //     return
+        // }
 
         var changes = [CollectionDifference<RoomSummary>.Change]()
         for identifier in identifiers {
@@ -160,8 +161,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             return buildEmptyRoomSummary()
         case .filled(let roomId):
             return buildRoomSummaryForIdentifier(roomId)
-        case .invalidated(let roomId):
-            return buildRoomSummaryForIdentifier(roomId)
+        case .invalidated:
+            return buildEmptyRoomSummary()
         }
     }
     
