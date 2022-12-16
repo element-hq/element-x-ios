@@ -61,6 +61,7 @@ targets:
     - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
     - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConfiguration.swift
     - path: ../../ElementX/Sources/UITests/UITestScreenIdentifier.swift
+    - path: ../../ElementX/Sources/UITests/UITestSignalling.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
     - path: ../../ElementX/Resources

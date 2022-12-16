@@ -460,6 +460,7 @@
 		F6E860FF7B18B81DF43B30B8 /* EncryptedRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B3FA7C8D4EF2B1873C180ED7 /* EncryptedRoomTimelineItem.swift */; };
 		F6F49E37272AD7397CD29A01 /* HomeScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505208F28007C0FEC14E1FF0 /* HomeScreenViewModelTests.swift */; };
 		F7567DD6635434E8C563BF85 /* AnalyticsClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B97591B2D3D4D67553506D /* AnalyticsClientProtocol.swift */; };
+		F98333D53D85B0E029FDCA12 /* UITestSignalling.swift in Sources */ = {isa = PBXBuildFile; fileRef = D619626288AAB513B7620BB6 /* UITestSignalling.swift */; };
 		F9981191DC408AED537C1749 /* MediaProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12C9E0B61A77C7F0EE7918C /* MediaProxy.swift */; };
 		F99FB21EFC6D99D247FE7CBE /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = DE8DC9B3FBA402117DC4C49F /* Kingfisher */; };
 		F9F6D2883BBEBB9A3789A137 /* OnboardingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A941F289F6AB876BA3361A /* OnboardingViewModelTests.swift */; };
@@ -3225,6 +3226,7 @@
 				C4180F418235DAD9DD173951 /* TemplateScreenUITests.swift in Sources */,
 				0ED951768EC443A8728DE1D7 /* TimelineStyle.swift in Sources */,
 				9A47B7EFE3793760EEF68FFE /* UITestScreenIdentifier.swift in Sources */,
+				F98333D53D85B0E029FDCA12 /* UITestSignalling.swift in Sources */,
 				35C57543D245E82CBFE15DF0 /* URL.swift in Sources */,
 				B22D857D1E8FCA6DD74A58E3 /* UserSessionScreenTests.swift in Sources */,
 				588411C8FD72B2A2DFE5F7DE /* XCUIElement.swift in Sources */,
