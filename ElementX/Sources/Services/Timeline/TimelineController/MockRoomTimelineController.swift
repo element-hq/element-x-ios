@@ -16,18 +16,12 @@
 
 import Combine
 import Foundation
-import Network
 
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
     var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
-    /// The time delay added to each back pagination request.
-    var backPaginationDelay: Duration = .milliseconds(500)
-    
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
     var incomingItems: [RoomTimelineItemProtocol] = []
-    /// The time delay between each incoming item.
-    var incomingDelay: Duration = .milliseconds(750)
     
     let roomId = "MockRoomIdentifier"
     
@@ -36,56 +30,16 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
     
     private let signal = UITestSignalClient()
-    private let waitForSignal: Bool
+    private var signalTask: Task<Void, Error>?
     
-    init(waitForSignal: Bool = false) {
-        self.waitForSignal = waitForSignal
-    }
-    
-    func simulateIncomingItems() {
-        guard !incomingItems.isEmpty else { return }
-        
-        let incomingItem = incomingItems.removeFirst()
-        
-        Task {
-            try await Task.sleep(for: incomingDelay)
-            timelineItems.append(incomingItem)
-            callbacks.send(.updatedTimelineItems)
-            
-            if !self.incomingItems.isEmpty {
-                simulateIncomingItems()
-            }
+    init(listenForSignals: Bool = false) {
+        if listenForSignals {
+            Task { try await enableServerSimulation() }
         }
     }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        callbacks.send(.startedBackPaginating)
-        
-        guard !backPaginationResponses.isEmpty else {
-            callbacks.send(.finishedBackPaginating)
-            return .failure(.generic)
-        }
-        
-        let newItems = backPaginationResponses.removeFirst()
-        
-        do {
-            if waitForSignal {
-                try await signal.connect()
-                try await signal.receive()
-            } else {
-                try await Task.sleep(for: backPaginationDelay)
-            }
-            
-            timelineItems.insert(contentsOf: newItems, at: 0)
-            callbacks.send(.updatedTimelineItems)
-            callbacks.send(.finishedBackPaginating)
-            
-            try await signal.send(.done)
-            
-            return .success(())
-        } catch {
-            return .failure(.generic)
-        }
+        .failure(.generic)
     }
     
     func processItemAppearance(_ itemId: String) async { }
@@ -109,4 +63,47 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func retryDecryption(forSessionId sessionId: String) async { }
+    
+    // MARK: - UI Test signalling
+    
+    /// Allows the simulation of server responses by listening for signals from UI tests.
+    private func enableServerSimulation() async throws {
+        try await signal.connect()
+        signalTask = Task {
+            switch try await signal.receive() {
+            case .paginate:
+                try await self.simulateBackPagination()
+            case .incomingMessage:
+                try await self.simulateIncomingItem()
+            default:
+                break
+            }
+            
+            // Keep listening TODO: Try an async stream here?
+            try await self.enableServerSimulation()
+        }
+    }
+    
+    /// Appends the next incoming item to the `timelineItems` array.
+    private func simulateIncomingItem() async throws {
+        guard !incomingItems.isEmpty else { return }
+        
+        let incomingItem = incomingItems.removeFirst()
+        timelineItems.append(incomingItem)
+        callbacks.send(.updatedTimelineItems)
+        
+        try? await signal.send(.success)
+    }
+    
+    /// Prepends the next chunk of items to the `timelineItems` array.
+    private func simulateBackPagination() async throws {
+        guard !backPaginationResponses.isEmpty else { return }
+        
+        let newItems = backPaginationResponses.removeFirst()
+        timelineItems.insert(contentsOf: newItems, at: 0)
+        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.finishedBackPaginating)
+        
+        try? await signal.send(.success)
+    }
 }

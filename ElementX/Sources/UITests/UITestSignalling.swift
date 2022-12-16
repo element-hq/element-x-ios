@@ -18,62 +18,94 @@ import Foundation
 import Network
 
 enum UITestSignal: String {
-    case ready
+    /// An internal signal used to bring up the connection.
+    case connect
+    /// Ask the app to back paginate.
     case paginate
-    case done
+    /// Ask the app to simulate an incoming message.
+    case incomingMessage
+    /// The operation has completed successfully.
+    case success
 }
 
 enum UITestSignalError: Error {
+    /// An unknown error occurred.
     case unknown
+    /// The connection was cancelled.
+    case cancelled
+    /// The connection hasn't been established.
     case notConnected
-    case awaitingAnotherMessage
+    /// Attempted to receive multiple signals at once.
+    case awaitingAnotherSignal
+    /// A network error occurred.
     case nwError(NWError)
+    /// An unexpected signal was received. This error isn't used internally.
+    case unexpected
 }
 
+/// A UDP server that can be used for signalling between the UI tests jig and the app.
+/// The server should be instantiated on the UI tests side.
 class UITestSignalServer: UITestSignalProtocol {
     let listener: NWListener
     
     var connection: NWConnection
     var nextMessageContinuation: CheckedContinuation<UITestSignal, Error>?
     
+    /// Creates a new signalling server.
     init() throws {
         connection = NWConnection(host: "127.0.0.1", port: 0, using: .udp)
         listener = try NWListener(using: .udp, on: 1234)
     }
     
+    /// Listens for a client and attempts to negotiate a connection when one is discovered.
     func connect() async throws {
         guard listener.state == .setup else { return }
         
-        return try await withCheckedThrowingContinuation { continuation in
+        return try await withCheckedThrowingContinuation { [weak self] continuation in
             listener.newConnectionHandler = { connection in
-                // TODO: Handle multiple connections
                 connection.start(queue: .main)
                 connection.stateUpdateHandler = { state in
                     switch state {
                     case .ready:
-                        self.receiveNextMessage()
+                        self?.listener.cancel()
+                        self?.receiveNextMessage()
                         continuation.resume()
                     case .failed(let error):
+                        self?.listener.cancel()
                         continuation.resume(with: .failure(error))
                     default:
                         break
                     }
                 }
-                self.connection = connection
+                self?.connection = connection
             }
             listener.start(queue: .main)
         }
     }
+    
+    /// Stops the connection (or the listener if a connection hasn't been established).
+    func disconnect() {
+        listener.cancel()
+        connection.cancel()
+        if let nextMessageContinuation {
+            nextMessageContinuation.resume(throwing: UITestSignalError.cancelled)
+            self.nextMessageContinuation = nil
+        }
+    }
 }
 
+/// A UDP client that can be used for signalling between the app and the UI tests jig.
+/// The client should be instantiated on the app side.
 class UITestSignalClient: UITestSignalProtocol {
     let connection: NWConnection
     var nextMessageContinuation: CheckedContinuation<UITestSignal, Error>?
     
+    /// Creates a new signalling client.
     init() {
         connection = NWConnection(host: "127.0.0.1", port: 1234, using: .udp)
     }
     
+    /// Attempts to connect to a server.
     func connect() async throws {
         guard connection.state == .setup else { return }
         
@@ -84,7 +116,7 @@ class UITestSignalClient: UITestSignalProtocol {
                 case .ready:
                     self.receiveNextMessage()
                     continuation.resume()
-                    Task { try await self.send(.ready) }
+                    Task { try await self.send(.connect) }
                 case .failed(let error):
                     continuation.resume(with: .failure(error))
                 default:
@@ -93,8 +125,18 @@ class UITestSignalClient: UITestSignalProtocol {
             }
         }
     }
+    
+    /// Stops the connection.
+    func disconnect() {
+        connection.cancel()
+        if let nextMessageContinuation {
+            nextMessageContinuation.resume(throwing: UITestSignalError.cancelled)
+            self.nextMessageContinuation = nil
+        }
+    }
 }
 
+/// A shared implementation for sending/receiving signals between a client and a server.
 protocol UITestSignalProtocol: AnyObject {
     var connection: NWConnection { get }
     var nextMessageContinuation: CheckedContinuation<UITestSignal, Error>? { get set }
@@ -111,20 +153,18 @@ extension UITestSignalProtocol {
     /// Returns the next message received by the client/server.
     func receive() async throws -> UITestSignal {
         guard connection.state == .ready else { throw UITestSignalError.notConnected }
-        guard nextMessageContinuation == nil else { throw UITestSignalError.awaitingAnotherMessage }
+        guard nextMessageContinuation == nil else { throw UITestSignalError.awaitingAnotherSignal }
         
         return try await withCheckedThrowingContinuation { continuation in
             self.nextMessageContinuation = continuation
         }
     }
     
-    ///
+    /// Processes the next message received by the client/server
     fileprivate func receiveNextMessage() {
         connection.receiveMessage { [weak self] completeContent, _, isComplete, error in
             guard let self else { return }
             guard isComplete else { fatalError("Partial messages not supported") }
-            
-            defer { self.nextMessageContinuation = nil }
             
             guard let completeContent,
                   let message = String(data: completeContent, encoding: .utf8),
@@ -132,10 +172,14 @@ extension UITestSignalProtocol {
             else {
                 let error: UITestSignalError = error.map { .nwError($0) } ?? .unknown
                 self.nextMessageContinuation?.resume(with: .failure(error))
+                self.nextMessageContinuation = nil
                 return
             }
             
-            self.nextMessageContinuation?.resume(returning: signal)
+            if signal != .connect {
+                self.nextMessageContinuation?.resume(returning: signal)
+                self.nextMessageContinuation = nil
+            }
             
             self.receiveNextMessage()
         }

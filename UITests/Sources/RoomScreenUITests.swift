@@ -47,16 +47,20 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomSmallTimeline)
     }
     
-    func testSmallTimelineWithIncomingAndPagination() {
+    func testSmallTimelineWithIncomingAndPagination() async throws {
+        let signal = try UITestSignalServer()
+        
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
         
-        // Wait for both the incoming message and the pagination chunk.
-        XCTAssert(app.staticTexts["Bob"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["Helena"].waitForExistence(timeout: 2))
+        // When a back pagination occurs and an incoming message arrives.
+        try await signal.connect()
+        try await performOperation(.incomingMessage, using: signal)
+        try await performOperation(.paginate, using: signal)
 
-        // The messages should still be bottom aligned after the new items are added.
+        // Then the 4 visible messages should stay aligned to the bottom.
         app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
+        signal.disconnect()
     }
     
     func testSmallTimelineWithLargePagination() async throws {
@@ -66,53 +70,100 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
         
         try await signal.connect()
-        try await signal.send(.paginate)
-        try await signal.receive()
-        
-        // Pagination finished, wait for the timeline to update
-        try await Task.sleep(for: .milliseconds(500))
+        try await performOperation(.paginate, using: signal)
 
         // The bottom of the timeline should remain visible with more items added above.
         app.assertScreenshot(.roomSmallTimelineLargePagination)
+        signal.disconnect()
     }
     
-    func testBackPaginationInMiddle() async throws {
-        let server = try UITestSignalServer()
+    func testTimelineLayoutInMiddle() async throws {
+        let signal = try UITestSignalServer()
         
         let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomMiddlePagination)
+        app.goToScreenWithIdentifier(.roomLayoutMiddle)
         
-        try await server.connect()
+        try await signal.connect()
         
+        // Given a timeline that is neither at the top nor the bottom.
         app.tables.element.swipeDown()
-//        while !app.staticTexts["Syncing"].exists {
-//        }
+        try await Task.sleep(for: .milliseconds(500)) // Allow the table to settle
+        app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
         
-        // The messages should be bottom aligned.
-        app.assertScreenshot(.roomMiddlePagination, step: 0)
+        // When a back pagination occurs.
+        try await performOperation(.paginate, using: signal)
         
-        try await server.send(.paginate)
-        try await server.receive()
+        // Then the UI should remain unchanged.
+        app.assertScreenshot(.roomLayoutMiddle, step: 0)
         
-//        while app.staticTexts["Syncing"].exists {
-//            continue
-//        }
+        // When an incoming message arrives
+        try await performOperation(.incomingMessage, using: signal)
         
-        // The messages should be bottom aligned.
-        app.assertScreenshot(.roomMiddlePagination, step: 1)
+        // Then the UI should still remain unchanged.
+        app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        
+        // When the keyboard appears for the message composer.
+        try await tapMessageComposer(in: app)
+        
+        // Then the timeline scroll offset should remain unchanged.
+        app.assertScreenshot(.roomLayoutMiddle, step: 1)
+        signal.disconnect()
     }
     
-    func testBackPaginationAtTop() async throws {
-        let server = try UITestSignalServer()
+    func testTimelineLayoutAtTop() async throws {
+        let signal = try UITestSignalServer()
         
         let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomTopPagination)
+        app.goToScreenWithIdentifier(.roomLayoutTop)
         
-        try await server.connect()
-        try await server.send(.paginate)
-        try await server.receive()
+        try await signal.connect()
+        
+        // Given a timeline that is scrolled to the top.
+        while !app.staticTexts["Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs."].isHittable {
+            app.tables.element.swipeDown()
+        }
+        app.assertScreenshot(.roomLayoutTop) // Assert initial state for comparison.
+        
+        // When a back pagination occurs.
+        try await performOperation(.paginate, using: signal)
 
-        // The messages should be bottom aligned.
-        app.assertScreenshot(.roomTopPagination)
+        // Then the UI should remain unchanged (just with newer items above).
+        app.assertScreenshot(.roomLayoutTop)
+        signal.disconnect()
+    }
+    
+    func testTimelineLayoutAtBottom() async throws {
+        let signal = try UITestSignalServer()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomLayoutBottom)
+        
+        try await signal.connect()
+        
+        // When an incoming message arrives.
+        try await performOperation(.incomingMessage, using: signal)
+        
+        // Then the timeline should scroll down to reveal the message.
+        app.assertScreenshot(.roomLayoutBottom, step: 0)
+        
+        // When the keyboard appears for the message composer.
+        try await tapMessageComposer(in: app)
+        
+        // Then the timeline should still show the last message.
+        app.assertScreenshot(.roomLayoutBottom, step: 1)
+        signal.disconnect()
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func performOperation(_ operation: UITestSignal, using signal: UITestSignalServer) async throws {
+        try await signal.send(operation)
+        guard try await signal.receive() == .success else { throw UITestSignalError.unexpected }
+        try await Task.sleep(for: .milliseconds(500)) // Allow the timeline to update
+    }
+    
+    private func tapMessageComposer(in app: XCUIApplication) async throws {
+        app.textViews.element.tap()
+        try await Task.sleep(for: .milliseconds(500)) // Allow the animations to complete
     }
 }
