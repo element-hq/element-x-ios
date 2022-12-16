@@ -63,9 +63,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) {
         #warning("This is a valid check but Rust doesn't set it correctly for selective ranged syncs")
-//        guard statePublisher.value == .live else {
-//            return
-//        }
+        // guard statePublisher.value == .live else {
+        //     return
+        // }
 
         var changes = [CollectionDifference<RoomSummary>.Change]()
         for identifier in identifiers {
@@ -136,11 +136,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         var lastMessageTimestamp: Date?
         if let latestRoomMessage = room.latestRoomMessage() {
             let lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItemProxy(item: latestRoomMessage))
-            if let lastMessageSender = try? AttributedString(markdown: "**\(lastMessage.sender)**") {
-                // Don't include the message body in the markdown otherwise it makes tappable links.
-                attributedLastMessage = lastMessageSender + ": " + AttributedString(lastMessage.body)
-            }
-            lastMessageTimestamp = lastMessage.originServerTs
+            
+            #warning("Intentionally remove the sender mxid from the room list for now")
+            // if let lastMessageSender = try? AttributedString(markdown: "**\(lastMessage.sender)**") {
+            //     // Don't include the message body in the markdown otherwise it makes tappable links.
+            //     attributedLastMessage = lastMessageSender + ": " + AttributedString(lastMessage.body)
+            // }
+            attributedLastMessage = AttributedString(lastMessage.body)
+            lastMessageTimestamp = lastMessage.timestamp
         }
         
         return .filled(details: RoomSummaryDetails(id: room.roomId(),
