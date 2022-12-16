@@ -36,6 +36,12 @@ class UserSessionStore: UserSessionStoreProtocol {
         MXLog.debug("Setup base directory at: \(baseDirectory)")
     }
     
+    /// Deletes all data stored in the shared container and keychain
+    func reset() {
+        try? FileManager.default.removeItem(at: baseDirectory)
+        keychainController.removeAllRestorationTokens()
+    }
+    
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {
         let availableCredentials = keychainController.restorationTokens()
         

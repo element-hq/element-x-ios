@@ -50,8 +50,6 @@ final class SettingsCoordinator: CoordinatorProtocol {
                 self.toggleAnalytics()
             case .reportBug:
                 self.presentBugReportScreen()
-            case .crash:
-                self.parameters.bugReportService.crash()
             case .logout:
                 self.callback?(.logout)
             }
@@ -67,7 +65,7 @@ final class SettingsCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func toggleAnalytics() {
-        if ElementSettings.shared.enableAnalytics {
+        if ServiceLocator.shared.settings.enableAnalytics {
             Analytics.shared.optOut()
         } else {
             Analytics.shared.optIn(with: parameters.userSession)

@@ -28,6 +28,10 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
         mockScreens = UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationRootCoordinator: navigationRootCoordinator) }
         
         ServiceLocator.shared.register(userNotificationController: MockUserNotificationController())
+        
+        AppSettings.configureWithSuiteName("io.element.elementx.uitests")
+        AppSettings.reset()
+        ServiceLocator.shared.register(appSettings: AppSettings())
     }
     
     func start() {

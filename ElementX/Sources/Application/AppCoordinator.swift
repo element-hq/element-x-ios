@@ -52,13 +52,15 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     init() {
         navigationRootCoordinator = NavigationRootCoordinator()
+        
+        Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator)
+        Self.setupLogging()
+        
         stateMachine = AppCoordinatorStateMachine()
         
-        bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
+        bugReportService = BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL, sentryURL: ServiceLocator.shared.settings.bugReportSentryURL)
 
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
-
-        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
 
         backgroundTaskService = UIKitBackgroundTaskService {
             UIApplication.shared
@@ -66,9 +68,14 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
-        setupStateMachine()
+        // Reset everything if the app has been deleted since the previous run
+        if !ServiceLocator.shared.settings.hasAppLaunchedOnce {
+            AppSettings.reset()
+            userSessionStore.reset()
+            ServiceLocator.shared.settings.hasAppLaunchedOnce = true
+        }
         
-        setupLogging()
+        setupStateMachine()
         
         Bundle.elementFallbackLanguage = "en"
 
@@ -91,7 +98,12 @@ class AppCoordinator: AppCoordinatorProtocol {
         
     // MARK: - Private
     
-    private func setupLogging() {
+    private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
+        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
+        ServiceLocator.shared.register(appSettings: AppSettings())
+    }
+    
+    private static func setupLogging() {
         let loggerConfiguration = MXLogConfiguration()
         loggerConfiguration.maxLogFilesCount = 10
         
@@ -270,7 +282,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        guard BuildSettings.enableNotifications else {
+        guard ServiceLocator.shared.settings.enableNotifications else {
             return
         }
         guard notificationManager == nil else {

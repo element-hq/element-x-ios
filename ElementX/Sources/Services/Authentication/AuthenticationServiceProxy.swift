@@ -22,7 +22,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
     
-    private(set) var homeserver = LoginHomeserver(address: BuildSettings.defaultHomeserverAddress, loginMode: .unknown)
+    private(set) var homeserver = LoginHomeserver(address: ServiceLocator.shared.settings.defaultHomeserverAddress, loginMode: .unknown)
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore
