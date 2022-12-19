@@ -120,7 +120,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     func stop() {
-        cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
         state.contextMenuBuilder = nil
     }
