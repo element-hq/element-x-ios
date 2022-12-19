@@ -34,8 +34,7 @@ struct RoomMembersScreen: View {
                     .font(.element.footnote)
             }
         }
-        .searchable(text: $context.searchQuery)
-        .ignoresSafeArea(.all, edges: .bottom)
+        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .alert(item: $context.alertInfo) { $0.alert }
         .navigationTitle(ElementL10n.listMembers)
     }

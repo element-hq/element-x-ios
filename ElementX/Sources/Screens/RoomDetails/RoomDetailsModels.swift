@@ -36,6 +36,10 @@ struct RoomDetailsViewState: BindableState {
     var roomTopic: String?
     var roomAvatar: UIImage?
     var members: [RoomDetailsMember]
+    
+    var isLoadingMembers: Bool {
+        members.isEmpty
+    }
 
     var bindings: RoomDetailsViewStateBindings
 }
@@ -52,7 +56,6 @@ enum RoomDetailsErrorType: Hashable {
 
 enum RoomDetailsViewAction {
     case processTapPeople
-    case cancel
 }
 
 struct RoomDetailsMember: Identifiable, Equatable {

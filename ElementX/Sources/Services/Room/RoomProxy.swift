@@ -223,13 +223,15 @@ class RoomProxy: RoomProxyProtocol {
         }
         .value
     }
-
+    
     func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
-        do {
-            let members = try room.members()
-            return .success(members.map { RoomMemberProxy(with: $0) })
-        } catch {
-            return .failure(.failedRetrievingMembers)
+        await Task.dispatch(on: .global()) {
+            do {
+                let members = try self.room.members()
+                return .success(members.map { RoomMemberProxy(with: $0) })
+            } catch {
+                return .failure(.failedRetrievingMembers)
+            }
         }
     }
     

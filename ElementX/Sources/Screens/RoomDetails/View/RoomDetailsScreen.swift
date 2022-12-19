@@ -46,7 +46,6 @@ struct RoomDetailsScreen: View {
                 securitySection
             }
         }
-        .ignoresSafeArea(.all, edges: .bottom)
         .alert(item: $context.alertInfo) { $0.alert }
         .navigationTitle(ElementL10n.roomDetailsTitle)
     }
@@ -89,16 +88,22 @@ struct RoomDetailsScreen: View {
                         .foregroundColor(.element.primaryContent)
                         .font(.body)
                     Spacer()
-                    Text(String(context.viewState.members.count))
-                        .foregroundColor(.element.secondaryContent)
-                        .font(.element.body)
-                    Image(systemName: "chevron.forward")
-                        .foregroundColor(.element.secondaryContent)
+                    
+                    if context.viewState.isLoadingMembers {
+                        ProgressView()
+                    } else {
+                        Text(String(context.viewState.members.count))
+                            .foregroundColor(.element.secondaryContent)
+                            .font(.element.body)
+                        Image(systemName: "chevron.forward")
+                            .foregroundColor(.element.secondaryContent)
+                    }
                 }
             }
             .listRowInsets(listRowInsets)
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier("peopleButton")
+            .disabled(context.viewState.isLoadingMembers)
         }
     }
 
@@ -157,7 +162,7 @@ struct RoomDetails_Previews: PreviewProvider {
                 .mockC
             ]
             let roomProxy = MockRoomProxy(displayName: "Room A",
-                                          topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+                                          topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                           isDirect: false,
                                           isEncrypted: true,
                                           members: members)

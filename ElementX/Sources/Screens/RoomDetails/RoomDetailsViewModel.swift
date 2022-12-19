@@ -70,8 +70,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         switch viewAction {
         case .processTapPeople:
             callback?(.peopleTapped)
-        case .cancel:
-            callback?(.cancel)
         }
     }
 }

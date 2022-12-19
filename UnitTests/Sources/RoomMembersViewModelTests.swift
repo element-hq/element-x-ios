@@ -19,24 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class RoomMembersScreenViewModelTests: XCTestCase {
-    var viewModel: RoomMembersViewModelProtocol!
-    var context: RoomMembersViewModelType.Context!
-    
-    @MainActor override func setUpWithError() throws {
-        viewModel = RoomMembersViewModel(roomProxy: MockRoomProxy(displayName: "Room A"),
-                                         mediaProvider: MockMediaProvider())
-        context = viewModel.context
-    }
-
-    func testCancel() async throws {
-        var correctResult = false
-        viewModel.callback = { result in
-            correctResult = result == .cancel
-        }
-
-        context.send(viewAction: .cancel)
-        await Task.yield()
-        XCTAssert(correctResult)
-    }
-}
+class RoomMembersScreenViewModelTests: XCTestCase { }

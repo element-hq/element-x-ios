@@ -50,8 +50,6 @@ class RoomMembersViewModel: RoomMembersViewModelType, RoomMembersViewModelProtoc
             MXLog.debug("Member selected: \(id)")
         case .loadMemberData(let id):
             await loadAvatar(forMember: id)
-        case .cancel:
-            callback?(.cancel)
         }
     }
 

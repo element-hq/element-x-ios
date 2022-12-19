@@ -47,5 +47,4 @@ struct RoomMembersViewStateBindings {
 enum RoomMembersViewAction {
     case selectMember(id: String)
     case loadMemberData(id: String)
-    case cancel
 }

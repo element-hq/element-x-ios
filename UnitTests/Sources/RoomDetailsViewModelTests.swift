@@ -19,26 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class RoomDetailsScreenViewModelTests: XCTestCase {
-    var viewModel: RoomDetailsViewModelProtocol!
-    var context: RoomDetailsViewModelType.Context!
-    
-    @MainActor override func setUpWithError() throws {
-        viewModel = RoomDetailsViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-        context = viewModel.context
-    }
-
-    @MainActor func testCancel() async throws {
-        var correctResult = false
-        viewModel.callback = { result in
-            switch result {
-            case .cancel:
-                correctResult = true
-            }
-        }
-
-        context.send(viewAction: .cancel)
-        await Task.yield()
-        XCTAssert(correctResult)
-    }
-}
+class RoomDetailsScreenViewModelTests: XCTestCase { }

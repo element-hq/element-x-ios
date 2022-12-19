@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct RoomMembersCoordinatorParameters {
-    let navigationController: NavigationController
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }

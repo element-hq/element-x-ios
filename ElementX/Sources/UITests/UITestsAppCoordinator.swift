@@ -146,10 +146,9 @@ class MockScreen: Identifiable {
         case .roomPlainNoAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Some room name", avatarURL: nil),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "Some room name",
-                                                             roomAvatarUrl: nil,
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -157,10 +156,9 @@ class MockScreen: Identifiable {
         case .roomEncryptedWithAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Some room name", avatarURL: "mock_url"),
                                                              timelineController: MockRoomTimelineController(),
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "Some room name",
-                                                             roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -170,10 +168,9 @@ class MockScreen: Identifiable {
             let timelineController = MockRoomTimelineController()
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "New room", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "New room",
-                                                             roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -187,10 +184,9 @@ class MockScreen: Identifiable {
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
             timelineController.simulateIncomingItems()
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Small timeline", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "Small timeline",
-                                                             roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
@@ -203,10 +199,9 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Small timeline, paginating", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "Small timeline, paginating",
-                                                             roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             

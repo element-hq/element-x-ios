@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct RoomDetailsCoordinatorParameters {
-    let navigationController: NavigationController
+    let navigationStackCoordinator: NavigationStackCoordinator
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }
@@ -29,7 +29,7 @@ enum RoomDetailsCoordinatorAction {
 final class RoomDetailsCoordinator: CoordinatorProtocol {
     private let parameters: RoomDetailsCoordinatorParameters
     private var viewModel: RoomDetailsViewModelProtocol
-    private var navigationController: NavigationController { parameters.navigationController }
+    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
     
     var callback: ((RoomDetailsCoordinatorAction) -> Void)?
     
@@ -60,14 +60,13 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
     }
 
     private func showPeople() {
-        let params = RoomMembersCoordinatorParameters(navigationController: navigationController,
-                                                      roomProxy: parameters.roomProxy,
+        let params = RoomMembersCoordinatorParameters(roomProxy: parameters.roomProxy,
                                                       mediaProvider: parameters.mediaProvider)
         let coordinator = RoomMembersCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
-            self?.navigationController.pop()
+            self?.navigationStackCoordinator.pop()
         }
 
-        navigationController.push(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
 }
