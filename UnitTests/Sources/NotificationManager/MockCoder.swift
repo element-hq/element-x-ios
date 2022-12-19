@@ -17,6 +17,6 @@
 import Foundation
 
 final class MockCoder: NSKeyedArchiver {
-   override func decodeObject(forKey _: String) -> Any { "" }
-   override func decodeInt64(forKey key: String) -> Int64 { 0 }
+    override func decodeObject(forKey _: String) -> Any { "" }
+    override func decodeInt64(forKey key: String) -> Int64 { 0 }
 }

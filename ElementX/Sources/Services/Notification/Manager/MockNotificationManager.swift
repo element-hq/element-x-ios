@@ -29,7 +29,7 @@ class MockNotificationManager: NotificationManagerProtocol {
         delegate?.authorizationStatusUpdated(self, granted: false)
     }
 
-    func register(with deviceToken: Data, completion: ((Bool)->Void)? = nil) { }
+    func register(with deviceToken: Data, completion: ((Bool) -> Void)? = nil) { }
 
     func registrationFailed(with error: Error) { }
 
