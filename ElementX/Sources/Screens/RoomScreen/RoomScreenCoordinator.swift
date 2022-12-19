@@ -18,10 +18,9 @@ import SwiftUI
 
 struct RoomScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
+    let roomProxy: RoomProxyProtocol
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
-    let roomName: String?
-    let roomAvatarUrl: String?
     let emojiProvider: EmojiProviderProtocol
 }
 
@@ -43,8 +42,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
                                         timelineViewFactory: RoomTimelineViewFactory(),
                                         mediaProvider: parameters.mediaProvider,
-                                        roomName: parameters.roomName,
-                                        roomAvatarUrl: parameters.roomAvatarUrl)
+                                        roomName: parameters.roomProxy.displayName ?? parameters.roomProxy.name,
+                                        roomAvatarUrl: parameters.roomProxy.avatarURL)
     }
     
     // MARK: - Public
@@ -54,6 +53,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
             switch result {
+            case .displayRoomDetails:
+                self.displayRoomDetails()
             case .displayVideo(let videoURL):
                 self.displayVideo(for: videoURL)
             case .displayFile(let fileURL, let title):
@@ -121,5 +122,22 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         }
         
         navigationStackCoordinator.setSheetCoordinator(coordinator)
+    }
+    
+    private func displayRoomDetails() {
+        guard let roomProxy = parameters?.roomProxy,
+              let mediaProvider = parameters?.mediaProvider else {
+            return
+        }
+        
+        let params = RoomDetailsCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                      roomProxy: roomProxy,
+                                                      mediaProvider: mediaProvider)
+        let coordinator = RoomDetailsCoordinator(parameters: params)
+        coordinator.callback = { [weak self] _ in
+            self?.navigationStackCoordinator.pop()
+        }
+
+        navigationStackCoordinator.push(coordinator)
     }
 }

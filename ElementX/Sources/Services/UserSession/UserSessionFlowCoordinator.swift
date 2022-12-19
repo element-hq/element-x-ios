@@ -162,10 +162,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                                                                mediaProvider: userSession.mediaProvider)
 
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: detailNavigationStackCoordinator,
+                                                             roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaProvider: userSession.mediaProvider,
-                                                             roomName: roomProxy.displayName ?? roomProxy.name,
-                                                             roomAvatarUrl: roomProxy.avatarURL,
                                                              emojiProvider: emojiProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             

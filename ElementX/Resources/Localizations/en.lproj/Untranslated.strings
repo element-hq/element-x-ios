@@ -34,3 +34,7 @@
 "default_session_display_name" = "%@ iOS";
 
 "Notification" = "Notification";
+
+// Room Details
+"room_details_title" = "Info";
+"room_details_about_section_title" = "About";

@@ -22,16 +22,14 @@ struct MockRoomProxy: RoomProxyProtocol {
     let id = UUID().uuidString
     let name: String? = nil
     let displayName: String?
-    
-    let topic: String? = nil
-    
-    let avatarURL: String? = nil
-    
-    let isDirect = Bool.random()
-    let isSpace = Bool.random()
-    let isPublic = Bool.random()
-    let isEncrypted = Bool.random()
-    let isTombstoned = Bool.random()
+    var topic: String?
+    var avatarURL: String?
+    var isDirect = Bool.random()
+    var isSpace = Bool.random()
+    var isPublic = Bool.random()
+    var isEncrypted = Bool.random()
+    var isTombstoned = Bool.random()
+    var members: [RoomMemberProxy]?
     
     let timelineProvider: RoomTimelineProviderProtocol = MockRoomTimelineProvider()
     
@@ -75,5 +73,12 @@ struct MockRoomProxy: RoomProxyProtocol {
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         .failure(.failedRedactingEvent)
+    }
+
+    func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
+        if let members {
+            return .success(members)
+        }
+        return .failure(.failedRetrievingMembers)
     }
 }

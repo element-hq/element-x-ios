@@ -23,7 +23,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
-    private let roomProxy: RoomProxyProtocol
+    let roomProxy: RoomProxyProtocol
     
     private var cancellables = Set<AnyCancellable>()
     private var timelineItemsUpdateTask: Task<Void, Never>? {
