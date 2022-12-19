@@ -66,6 +66,7 @@ class TimelineTableViewController: UIViewController {
         didSet {
             // Paginate again if the threshold hasn't been satisfied.
             paginateBackwardsPublisher.send(())
+            applySnapshot()
         }
     }
     
@@ -197,37 +198,41 @@ class TimelineTableViewController: UIViewController {
             
             cell.item = timelineItem
             cell.contentConfiguration = UIHostingConfiguration {
-                VStack {
-                    if displayReactionsMenuForItemId == timelineItem.id {
-                        TimelineItemReactionsMenuView { emoji in
-                            coordinator.send(viewAction: .emojiTapped(emoji: emoji, itemId: timelineItem.id))
-                        } onDisplayEmojiPicker: {
-                            coordinator.send(viewAction: .displayEmojiPicker(itemId: timelineItem.id))
-                        }
-                    }
-                    
+                if case .backPaginationIndicator = timelineItem {
                     timelineItem
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .opacity(opacity)
-                        .contextMenu {
-                            contextMenuBuilder?(timelineItem.id)
+                } else {
+                    VStack {
+                        if displayReactionsMenuForItemId == timelineItem.id {
+                            TimelineItemReactionsMenuView { emoji in
+                                coordinator.send(viewAction: .emojiTapped(emoji: emoji, itemId: timelineItem.id))
+                            } onDisplayEmojiPicker: {
+                                coordinator.send(viewAction: .displayEmojiPicker(itemId: timelineItem.id))
+                            }
                         }
-                        .onAppear {
-                            coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
-                        }
-                        .onDisappear {
-                            coordinator.send(viewAction: .itemDisappeared(id: timelineItem.id))
-                        }
-                        .environment(\.openURL, OpenURLAction { url in
-                            coordinator.send(viewAction: .linkClicked(url: url))
-                            return .systemAction
-                        })
-                        .onTapGesture(count: 2) {
-                            coordinator.send(viewAction: .displayReactionsMenuForItemId(itemId: timelineItem.id))
-                        }
-                        .onTapGesture {
-                            coordinator.send(viewAction: .itemTapped(id: timelineItem.id))
-                        }
+                        
+                        timelineItem
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .opacity(opacity)
+                            .contextMenu {
+                                contextMenuBuilder?(timelineItem.id)
+                            }
+                            .onAppear {
+                                coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
+                            }
+                            .onDisappear {
+                                coordinator.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                            }
+                            .environment(\.openURL, OpenURLAction { url in
+                                coordinator.send(viewAction: .linkClicked(url: url))
+                                return .systemAction
+                            })
+                            .onTapGesture(count: 2) {
+                                coordinator.send(viewAction: .displayReactionsMenuForItemId(itemId: timelineItem.id))
+                            }
+                            .onTapGesture {
+                                coordinator.send(viewAction: .itemTapped(id: timelineItem.id))
+                            }
+                    }
                 }
             }
             .margins(.all, self.timelineStyle.rowInsets)
@@ -248,6 +253,8 @@ class TimelineTableViewController: UIViewController {
         let previousLayout = layout()
         
         var snapshot = NSDiffableDataSourceSnapshot<TimelineSection, RoomTimelineViewProvider>()
+        snapshot.appendSections([.loadingIndicator])
+        snapshot.appendItems([.backPaginationIndicator(isBackPaginating)])
         snapshot.appendSections([.main])
         snapshot.appendItems(timelineItems)
         dataSource.apply(snapshot, animatingDifferences: false)
@@ -409,7 +416,10 @@ extension TimelineTableViewController: UITableViewDelegate {
 
 extension TimelineTableViewController {
     /// The sections of the table view used in the diffable data source.
-    enum TimelineSection { case main }
+    enum TimelineSection {
+        case loadingIndicator
+        case main
+    }
     
     /// A description of the timeline's layout.
     struct LayoutDescriptor {

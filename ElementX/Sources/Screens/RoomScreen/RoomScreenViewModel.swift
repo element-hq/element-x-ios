@@ -22,7 +22,6 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationPageSize: UInt = 20
-        static let backPaginationIndicatorID = "RoomBackPagination"
     }
 
     private let timelineController: RoomTimelineControllerProtocol
@@ -30,11 +29,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let mediaProvider: MediaProviderProtocol
 
     // MARK: - Setup
-    
-    deinit {
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Constants.backPaginationIndicatorID)
-    }
-    
+        
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -66,13 +61,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
                 case .startedBackPaginating:
                     self.state.isBackPaginating = true
-                    ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Constants.backPaginationIndicatorID,
-                                                                                                         type: .toast,
-                                                                                                         title: ElementL10n.roomTimelineSyncing,
-                                                                                                         persistent: true))
                 case .finishedBackPaginating:
                     self.state.isBackPaginating = false
-                    ServiceLocator.shared.userNotificationController.retractNotificationWithId(Constants.backPaginationIndicatorID)
                 }
             }
             .store(in: &cancellables)
