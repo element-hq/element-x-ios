@@ -18,5 +18,10 @@ import ElementX
 import XCTest
 
 class RoomMembersScreenUITests: XCTestCase {
-    #warning("Implement this")
+    func testInitialStateComponents() {
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomMembersScreen)
+        
+        app.assertScreenshot(.roomMembersScreen)
+    }
 }

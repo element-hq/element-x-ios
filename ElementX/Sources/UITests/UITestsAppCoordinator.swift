@@ -225,6 +225,22 @@ class MockScreen: Identifiable {
             retainedState.append(coordinator)
             
             return navigationSplitCoordinator
+        case .roomDetailsScreen:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                       roomProxy: MockRoomProxy(displayName: "Room",
+                                                                                                isEncrypted: true,
+                                                                                                members: [.mockAlice, .mockBob, .mockCharlie]),
+                                                                       mediaProvider: MockMediaProvider()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomMembersScreen:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = RoomMembersCoordinator(parameters: .init(roomProxy: MockRoomProxy(displayName: "Room",
+                                                                                                members: [.mockAlice, .mockBob, .mockCharlie]),
+                                                                       mediaProvider: MockMediaProvider()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }

@@ -46,9 +46,9 @@ struct RoomMembers_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             let members: [RoomMemberProxy] = [
-                .mockA,
-                .mockB,
-                .mockC
+                .mockAlice,
+                .mockBob,
+                .mockCharlie
             ]
             let roomProxy = MockRoomProxy(displayName: "Room A",
                                           members: members)

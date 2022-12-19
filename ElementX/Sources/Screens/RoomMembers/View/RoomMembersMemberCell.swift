@@ -66,9 +66,9 @@ struct RoomMembersMemberCell_Previews: PreviewProvider {
 
     static var body: some View {
         let members: [RoomMemberProxy] = [
-            .mockA,
-            .mockB,
-            .mockC
+            .mockAlice,
+            .mockBob,
+            .mockCharlie
         ]
         let roomProxy = MockRoomProxy(displayName: "Room A",
                                       members: members)

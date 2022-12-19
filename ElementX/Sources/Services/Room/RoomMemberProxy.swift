@@ -61,25 +61,33 @@ extension RoomMemberProxy: Identifiable {
 
 // Mocks
 extension RoomMemberProxy {
-    static let mockA = RoomMemberProxy(with: .init(userId: "mockA@m.org",
-                                                   displayName: "A Member",
-                                                   avatarUrl: nil,
-                                                   membership: .join,
-                                                   isNameAmbiguous: false,
-                                                   powerLevel: 50,
-                                                   normalizedPowerLevel: 50))
-    static let mockB = RoomMemberProxy(with: .init(userId: "mockB@m.org",
-                                                   displayName: "B Member",
-                                                   avatarUrl: nil,
-                                                   membership: .join,
-                                                   isNameAmbiguous: false,
-                                                   powerLevel: 50,
-                                                   normalizedPowerLevel: 50))
-    static let mockC = RoomMemberProxy(with: .init(userId: "mockC@m.org",
-                                                   displayName: "C Member",
-                                                   avatarUrl: nil,
-                                                   membership: .join,
-                                                   isNameAmbiguous: false,
-                                                   powerLevel: 50,
-                                                   normalizedPowerLevel: 50))
+    static var mockAlice: RoomMemberProxy {
+        RoomMemberProxy(with: .init(userId: "alice@matrix.org",
+                                    displayName: "Alice",
+                                    avatarUrl: nil,
+                                    membership: .join,
+                                    isNameAmbiguous: false,
+                                    powerLevel: 50,
+                                    normalizedPowerLevel: 50))
+    }
+    
+    static var mockBob: RoomMemberProxy {
+        RoomMemberProxy(with: .init(userId: "bob@matrix.org",
+                                    displayName: "Bob",
+                                    avatarUrl: nil,
+                                    membership: .join,
+                                    isNameAmbiguous: false,
+                                    powerLevel: 50,
+                                    normalizedPowerLevel: 50))
+    }
+    
+    static var mockCharlie: RoomMemberProxy {
+        RoomMemberProxy(with: .init(userId: "charlie@matrix.org",
+                                    displayName: "Charlie",
+                                    avatarUrl: nil,
+                                    membership: .join,
+                                    isNameAmbiguous: false,
+                                    powerLevel: 50,
+                                    normalizedPowerLevel: 50))
+    }
 }

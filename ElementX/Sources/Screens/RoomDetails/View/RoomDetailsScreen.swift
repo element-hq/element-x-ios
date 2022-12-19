@@ -38,9 +38,7 @@ struct RoomDetailsScreen: View {
                 topicSection(with: topic)
             }
 
-            if !context.viewState.isDirect {
-                aboutSection
-            }
+            aboutSection
 
             if context.viewState.isEncrypted {
                 securitySection
@@ -106,29 +104,27 @@ struct RoomDetailsScreen: View {
             .disabled(context.viewState.isLoadingMembers)
         }
     }
-
+    
     private var securitySection: some View {
         Section(ElementL10n.roomProfileSectionSecurity) {
-            HStack(alignment: .top) {
+            HStack(alignment: .center) {
                 Image(systemName: "lock.shield")
                     .foregroundColor(.element.systemGray)
                     .padding(4)
                     .background(Color.element.systemGray6)
                     .clipShape(Circle())
                     .frame(width: menuIconSize, height: menuIconSize)
-                VStack {
-                    HStack {
-                        Text(ElementL10n.encryptionEnabled)
-                            .foregroundColor(.element.primaryContent)
-                            .font(.element.body)
-                        Spacer()
-                        Image(systemName: "checkmark")
-                            .foregroundColor(.element.secondaryContent)
-                    }
+                VStack(alignment: .leading) {
+                    Text(ElementL10n.encryptionEnabled)
+                        .foregroundColor(.element.primaryContent)
+                        .font(.element.body)
                     Text(ElementL10n.encryptionEnabledTileDescription)
                         .foregroundColor(.element.secondaryContent)
                         .font(.element.footnote)
                 }
+                Spacer()
+                Image(systemName: "checkmark")
+                    .foregroundColor(.element.secondaryContent)
             }
         }
     }
@@ -157,9 +153,9 @@ struct RoomDetails_Previews: PreviewProvider {
     static var previews: some View {
         Group {
             let members: [RoomMemberProxy] = [
-                .mockA,
-                .mockB,
-                .mockC
+                .mockAlice,
+                .mockBob,
+                .mockCharlie
             ]
             let roomProxy = MockRoomProxy(displayName: "Room A",
                                           topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
