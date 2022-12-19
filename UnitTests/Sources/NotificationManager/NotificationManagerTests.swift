@@ -25,6 +25,8 @@ final class NotificationManagerTests: XCTestCase {
     private let notificationCenter = UserNotificationCenterSpy()
     private var authorizationStatusWasGranted = false
     private var shouldDisplayInAppNotificationReturnValue = false
+    private var handleInlineReplyDelegateCalled = false
+    private var notificationTappedDelegateCalled = false
     
     override func setUp() {
         sut = NotificationManager(clientProxy: clientProxySpy, notificationCenter: notificationCenter)
@@ -165,6 +167,42 @@ final class NotificationManagerTests: XCTestCase {
         let options = await sut.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [.badge, .sound, .list, .banner])
     }
+    
+    func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudNotBeDisplayed_CorrectPresentationOptionsReturned() async throws {
+        shouldDisplayInAppNotificationReturnValue = false
+        sut.delegate = self
+        sut.start()
+        let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
+        let options = await sut.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
+        XCTAssertEqual(options, [])
+    }
+    
+    func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudBeDisplayed_CorrectPresentationOptionsReturned() async throws {
+        shouldDisplayInAppNotificationReturnValue = true
+        sut.delegate = self
+        sut.start()
+        let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
+        let options = await sut.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
+        XCTAssertEqual(options, [.badge, .sound, .list, .banner])
+    }
+    
+    func test_whenNotificationCenterReceivedResponseInLineReply_delegateIsCalled() async throws {
+        handleInlineReplyDelegateCalled = false
+        sut.delegate = self
+        sut.start()
+        let response = try UNTextInputNotificationResponse.with(userInfo: [AnyHashable: Any](), actionIdentifier: NotificationConstants.Action.inlineReply)
+        await sut.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
+        XCTAssertTrue(handleInlineReplyDelegateCalled)
+    }
+    
+    func test_whenNotificationCenterReceivedResponseWithActionIdentifier_delegateIsCalled() async throws {
+        notificationTappedDelegateCalled = false
+        sut.delegate = self
+        sut.start()
+        let response = try UNTextInputNotificationResponse.with(userInfo: [AnyHashable: Any](), actionIdentifier: UNNotificationDefaultActionIdentifier)
+        await sut.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
+        XCTAssertTrue(notificationTappedDelegateCalled)
+    }
 }
 
 extension NotificationManagerTests: NotificationManagerDelegate {
@@ -176,128 +214,11 @@ extension NotificationManagerTests: NotificationManagerDelegate {
         shouldDisplayInAppNotificationReturnValue
     }
     
-    func notificationTapped(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) async { }
-    
-    func handleInlineReply(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async { }
-}
-
-// MARK: - Helpers
-
-class MockCoder: NSKeyedArchiver {
-    override func decodeObject(forKey key: String) -> Any { "" }
-}
-
-class UserNotificationCenterSpy: UserNotificationCenterProtocol {
-    weak var delegate: UNUserNotificationCenterDelegate?
-    
-    var addRequest: UNNotificationRequest?
-    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?) {
-        addRequest = request
-        completionHandler?(nil)
+    func notificationTapped(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent) async {
+        notificationTappedDelegateCalled = true
     }
     
-    var requestAuthorizationOptions: UNAuthorizationOptions?
-    var requestAuthorizationGrantedReturnValue = false
-    func requestAuthorization(options: UNAuthorizationOptions, completionHandler: @escaping (Bool, Error?) -> Void) {
-        requestAuthorizationOptions = options
-        completionHandler(requestAuthorizationGrantedReturnValue, nil)
-    }
-    
-    var notificationCategoriesValue: Set<UNNotificationCategory>?
-    func setNotificationCategories(_ categories: Set<UNNotificationCategory>) {
-        notificationCategoriesValue = categories
-    }
-}
-
-private class ClientProxySpy: ClientProxyProtocol {
-    let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
-    
-    var userIdentifier = ""
-    
-    var isSoftLogout = false
-    
-    var deviceId: String? = ""
-    
-    var homeserver = ""
-    
-    var restorationToken: ElementX.RestorationToken?
-    
-    var roomSummaryProvider: ElementX.RoomSummaryProviderProtocol?
-    
-    internal init() { }
-    
-    func startSync() { }
-    
-    func stopSync() { }
-    
-    func restartSync() { }
-    
-    func roomForIdentifier(_ identifier: String) async -> ElementX.RoomProxyProtocol? {
-        nil
-    }
-    
-    func loadUserDisplayName() async -> Result<String, ElementX.ClientProxyError> {
-        .failure(.failedLoadingMedia)
-    }
-    
-    func loadUserAvatarURLString() async -> Result<String, ElementX.ClientProxyError> {
-        .failure(.failedLoadingMedia)
-    }
-    
-    func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
-        .failure(.failedLoadingMedia)
-    }
-    
-    func setAccountData<Content>(content: Content, type: String) async -> Result<Void, ClientProxyError> where Content: Encodable {
-        .failure(.failedLoadingMedia)
-    }
-    
-    func sessionVerificationControllerProxy() async -> Result<ElementX.SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        .failure(.failedLoadingMedia)
-    }
-    
-    func logout() async { }
-    
-    var setPusherCalled = false
-    var setPusherErrorToThrow: Error?
-    var setPusherPushkey: String?
-    var setPusherKind: PusherKind?
-    var setPusherAppId: String?
-    var setPusherAppDisplayName: String?
-    var setPusherDeviceDisplayName: String?
-    var setPusherProfileTag: String?
-    var setPusherLang: String?
-    var setPusherUrl: String?
-    var setPusherFormat: PushFormat?
-    var setPusherDefaultPayload: [AnyHashable: Any]?
-    
-    // swiftlint:disable:next function_parameter_count
-    func setPusher(pushkey: String, kind: PusherKind?, appId: String, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String, url: String?, format: PushFormat?, defaultPayload: [AnyHashable: Any]?) async throws {
-        if let setPusherErrorToThrow {
-            throw setPusherErrorToThrow
-        }
-        setPusherCalled = true
-        setPusherPushkey = pushkey
-        setPusherKind = kind
-        setPusherAppId = appId
-        setPusherAppDisplayName = appDisplayName
-        setPusherDeviceDisplayName = deviceDisplayName
-        setPusherProfileTag = profileTag
-        setPusherLang = lang
-        setPusherUrl = url
-        setPusherFormat = format
-        setPusherDefaultPayload = defaultPayload
-    }
-    
-    func mediaSourceForURLString(_ urlString: String) -> ElementX.MediaSourceProxy {
-        MediaSourceProxy(urlString: "")
-    }
-    
-    func loadMediaContentForSource(_ source: ElementX.MediaSourceProxy) async throws -> Data {
-        Data()
-    }
-    
-    func loadMediaThumbnailForSource(_ source: ElementX.MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
-        Data()
+    func handleInlineReply(_ service: ElementX.NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
+        handleInlineReplyDelegateCalled = true
     }
 }
