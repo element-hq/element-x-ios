@@ -1,0 +1,1 @@
+Display an indicator if the network is currently unreachable

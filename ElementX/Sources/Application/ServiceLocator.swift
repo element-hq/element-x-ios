@@ -32,4 +32,10 @@ class ServiceLocator {
     func register(appSettings: AppSettings) {
         settings = appSettings
     }
+    
+    private(set) var networkMonitor: NetworkMonitor!
+    
+    func register(networkMonitor: NetworkMonitor) {
+        self.networkMonitor = networkMonitor
+    }
 }
