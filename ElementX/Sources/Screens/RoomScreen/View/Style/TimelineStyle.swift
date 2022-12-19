@@ -35,7 +35,7 @@ enum TimelineStyle: String, CaseIterable {
 // MARK: - Environment
 
 private struct TimelineStyleKey: EnvironmentKey {
-    static let defaultValue = BuildSettings.defaultRoomTimelineStyle
+    static let defaultValue = TimelineStyle.bubbles
 }
 
 extension EnvironmentValues {

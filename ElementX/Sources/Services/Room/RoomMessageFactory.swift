@@ -21,7 +21,7 @@ struct SomeRoomMessage: RoomMessageProtocol {
     let id: String
     let body: String
     let sender: String
-    let originServerTs: Date
+    let timestamp: Date
 }
 
 struct RoomMessageFactory: RoomMessageFactoryProtocol {
@@ -29,6 +29,6 @@ struct RoomMessageFactory: RoomMessageFactoryProtocol {
         SomeRoomMessage(id: eventItemProxy.id,
                         body: eventItemProxy.body ?? "",
                         sender: eventItemProxy.sender,
-                        originServerTs: eventItemProxy.originServerTs)
+                        timestamp: eventItemProxy.timestamp)
     }
 }

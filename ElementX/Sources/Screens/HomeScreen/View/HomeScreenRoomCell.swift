@@ -83,6 +83,7 @@ struct HomeScreenRoomCell: View {
                 context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
             }
         }
+        .accessibilityIdentifier("roomName:\(room.name)")
     }
     
     var lastMessageFont: Font {

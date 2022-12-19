@@ -55,7 +55,7 @@ struct AnalyticsPromptStrings {
         
         // Replace the placeholder with a link.
         var link = AttributedString(ElementL10n.analyticsOptInContentLink)
-        link.link = BuildSettings.analyticsConfiguration.termsURL
+        link.link = ServiceLocator.shared.settings.analyticsConfiguration.termsURL
         optInContent.replaceSubrange(range, with: link)
         
         self.optInContent = optInContent

@@ -1,5 +1,32 @@
 name: IntegrationTests
 
+schemes:
+  IntegrationTests:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        IntegrationTests: all
+    profile:
+      config: Release
+    run:
+      config: Debug
+      disableMainThreadChecker: false
+      environmentVariables:
+        INTEGRATION_TESTS_HOST: ${INTEGRATION_TESTS_HOST}
+        INTEGRATION_TESTS_USERNAME: ${INTEGRATION_TESTS_USERNAME}
+        INTEGRATION_TESTS_PASSWORD: ${INTEGRATION_TESTS_PASSWORD}
+    test:
+      config: Debug
+      disableMainThreadChecker: false
+      gatherCoverageData: true
+      coverageTargets:
+        - ElementX
+      targets:
+      - IntegrationTests
+
 targets:
   IntegrationTests:
     type: bundle.ui-testing
@@ -27,15 +54,7 @@ targets:
       debug:
       release:
 
-    scheme:
-      testTargets:
-        - IntegrationTests
-
-      environmentVariables:
-        INTEGRATION_TESTS_HOST: ${INTEGRATION_TESTS_HOST}
-        INTEGRATION_TESTS_USERNAME: ${INTEGRATION_TESTS_USERNAME}
-        INTEGRATION_TESTS_PASSWORD: ${INTEGRATION_TESTS_PASSWORD}
-
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/Other/Extensions/XCUIElement.swift

@@ -21,7 +21,7 @@ struct HomeScreenCoordinatorParameters {
     let userSession: UserSessionProtocol
     let attributedStringBuilder: AttributedStringBuilderProtocol
     let bugReportService: BugReportServiceProtocol
-    let navigationController: NavigationController
+    let navigationStackCoordinator: NavigationStackCoordinator
 }
 
 enum HomeScreenCoordinatorAction {
@@ -94,6 +94,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     }
 
     private func presentInviteFriends() {
-        parameters.navigationController.presentSheet(InviteFriendsCoordinator(userId: parameters.userSession.userID))
+        parameters.navigationStackCoordinator.setSheetCoordinator(InviteFriendsCoordinator(userId: parameters.userSession.userID))
     }
 }

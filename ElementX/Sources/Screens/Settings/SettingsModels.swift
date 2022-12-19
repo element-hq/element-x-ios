@@ -21,7 +21,6 @@ enum SettingsViewModelAction {
     case close
     case toggleAnalytics
     case reportBug
-    case crash
     case logout
 }
 
@@ -33,13 +32,12 @@ struct SettingsViewState: BindableState {
 }
 
 struct SettingsViewStateBindings {
-    var enableAnalytics = ElementSettings.shared.enableAnalytics
+    var enableAnalytics = ServiceLocator.shared.settings.enableAnalytics
 }
 
 enum SettingsViewAction {
     case close
     case toggleAnalytics
     case reportBug
-    case crash
     case logout
 }

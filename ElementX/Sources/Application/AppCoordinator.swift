@@ -20,8 +20,16 @@ import SwiftUI
 
 class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
-    private let navigationController: NavigationController
+    private let navigationRootCoordinator: NavigationRootCoordinator
     private let userSessionStore: UserSessionStoreProtocol
+    /// Common background task to resume long-running tasks in the background.
+    /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
+    private var backgroundTask: BackgroundTaskProtocol?
+    private var isSuspended = false {
+        didSet {
+            MXLog.debug("didSet to: \(isSuspended)")
+        }
+    }
     
     private var userSession: UserSessionProtocol! {
         didSet {
@@ -43,24 +51,35 @@ class AppCoordinator: AppCoordinatorProtocol {
     private(set) var notificationManager: NotificationManagerProtocol?
 
     init() {
-        navigationController = NavigationController()
+        navigationRootCoordinator = NavigationRootCoordinator()
+        
+        Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator)
+        Self.setupLogging()
+        
         stateMachine = AppCoordinatorStateMachine()
         
-        bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
+        bugReportService = BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL, sentryURL: ServiceLocator.shared.settings.bugReportSentryURL)
 
-        navigationController.setRootCoordinator(SplashScreenCoordinator())
+        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
 
-        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationController))
-
-        backgroundTaskService = UIKitBackgroundTaskService(withApplication: UIApplication.shared)
+        backgroundTaskService = UIKitBackgroundTaskService {
+            UIApplication.shared
+        }
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
+        // Reset everything if the app has been deleted since the previous run
+        if !ServiceLocator.shared.settings.hasAppLaunchedOnce {
+            AppSettings.reset()
+            userSessionStore.reset()
+            ServiceLocator.shared.settings.hasAppLaunchedOnce = true
+        }
+        
         setupStateMachine()
         
-        setupLogging()
-        
         Bundle.elementFallbackLanguage = "en"
+
+        startObservingApplicationState()
         
         // Benchmark.trackingEnabled = true
     }
@@ -79,7 +98,12 @@ class AppCoordinator: AppCoordinatorProtocol {
         
     // MARK: - Private
     
-    private func setupLogging() {
+    private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
+        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
+        ServiceLocator.shared.register(appSettings: AppSettings())
+    }
+    
+    private static func setupLogging() {
         let loggerConfiguration = MXLogConfiguration()
         loggerConfiguration.maxLogFilesCount = 10
         
@@ -156,12 +180,15 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     private func startAuthentication() {
+        let authenticationNavigationStackCoordinator = NavigationStackCoordinator()
         let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
         authenticationCoordinator = AuthenticationCoordinator(authenticationService: authenticationService,
-                                                              navigationController: navigationController)
+                                                              navigationStackCoordinator: authenticationNavigationStackCoordinator)
         authenticationCoordinator?.delegate = self
         
         authenticationCoordinator?.start()
+        
+        navigationRootCoordinator.setRootCoordinator(authenticationNavigationStackCoordinator)
     }
 
     private func startAuthenticationSoftLogout() {
@@ -196,14 +223,16 @@ class AppCoordinator: AppCoordinatorProtocol {
                 }
             }
             
-            navigationController.setRootCoordinator(coordinator)
+            navigationRootCoordinator.setRootCoordinator(coordinator)
         }
     }
     
     private func setupUserSession() {
+        let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
         let userSessionFlowCoordinator = UserSessionFlowCoordinator(userSession: userSession,
-                                                                    navigationController: navigationController,
-                                                                    bugReportService: bugReportService)
+                                                                    navigationSplitCoordinator: navigationSplitCoordinator,
+                                                                    bugReportService: bugReportService,
+                                                                    roomTimelineControllerFactory: RoomTimelineControllerFactory())
         
         userSessionFlowCoordinator.callback = { [weak self] action in
             switch action {
@@ -215,6 +244,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionFlowCoordinator.start()
         
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
+        
+        navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
     private func tearDownUserSession(isSoftLogout: Bool = false) {
@@ -241,7 +272,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
-        navigationController.setRootCoordinator(SplashScreenCoordinator())
+        navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
         if isSoftLogout {
             startAuthenticationSoftLogout()
@@ -251,7 +282,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        guard BuildSettings.enableNotifications else {
+        guard ServiceLocator.shared.settings.enableNotifications else {
             return
         }
         guard notificationManager == nil else {
@@ -323,6 +354,52 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private func showLoginErrorToast() {
         ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: "Failed logging in"))
+    }
+
+    // MARK: - Application State
+
+    private func pause() {
+        userSession?.clientProxy.stopSync()
+    }
+
+    private func resume() {
+        userSession?.clientProxy.startSync()
+    }
+
+    private func startObservingApplicationState() {
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationWillResignActive),
+                                               name: UIApplication.willResignActiveNotification,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(applicationDidBecomeActive),
+                                               name: UIApplication.didBecomeActiveNotification,
+                                               object: nil)
+    }
+
+    @objc
+    private func applicationWillResignActive() {
+        guard backgroundTask == nil else {
+            return
+        }
+
+        backgroundTask = backgroundTaskService.startBackgroundTask(withName: "SuspendApp: \(UUID().uuidString)") { [weak self] in
+            self?.pause()
+            
+            self?.backgroundTask = nil
+            self?.isSuspended = true
+        }
+    }
+
+    @objc
+    private func applicationDidBecomeActive() {
+        backgroundTask?.stop()
+        backgroundTask = nil
+
+        if isSuspended {
+            isSuspended = false
+            resume()
+        }
     }
 }
 

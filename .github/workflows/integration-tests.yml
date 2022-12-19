@@ -42,3 +42,8 @@ jobs:
           INTEGRATION_TESTS_USERNAME: ${{ secrets.INTEGRATION_TESTS_USERNAME }}
           INTEGRATION_TESTS_PASSWORD: ${{ secrets.INTEGRATION_TESTS_PASSWORD }}
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          flags: integrationtests
+

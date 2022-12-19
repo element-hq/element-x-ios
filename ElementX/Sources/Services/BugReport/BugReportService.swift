@@ -28,7 +28,7 @@ class BugReportService: BugReportServiceProtocol {
     
     init(withBaseURL baseURL: URL,
          sentryURL: URL,
-         applicationId: String = BuildSettings.bugReportApplicationId,
+         applicationId: String = ServiceLocator.shared.settings.bugReportApplicationId,
          session: URLSession = .shared) {
         self.baseURL = baseURL
         self.sentryURL = sentryURL

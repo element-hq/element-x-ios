@@ -48,11 +48,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     func displayNameForUserId(_ userId: String) -> String? {
         nil
     }
-    
-    func loadDisplayName() async -> Result<String, RoomProxyError> {
-        .failure(.failedRetrievingDisplayName)
-    }
-    
+        
     func startLiveEventListener() { }
     
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
@@ -64,6 +60,10 @@ struct MockRoomProxy: RoomProxyProtocol {
     }
         
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
+        .failure(.failedSendingMessage)
+    }
+    
+    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
 

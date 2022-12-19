@@ -61,7 +61,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             roomTimelineListener
                 .itemsUpdatePublisher
                 .collect(.byTime(serialDispatchQueue, 0.25))
-                .sink { self.updateItemsWithDiffs($0) }
+                .sink { [weak self] in self?.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
         }
     }
@@ -101,6 +101,17 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .failure(let error):
             MXLog.error("Failed sending message with error: \(error)")
             return .failure(.failedSendingMessage)
+        }
+    }
+    
+    func sendReaction(_ reaction: String, for itemId: String) async -> Result<Void, RoomTimelineProviderError> {
+        switch await roomProxy.sendReaction(reaction, for: itemId) {
+        case .success:
+            MXLog.info("Finished sending reaction")
+            return .success(())
+        case .failure(let error):
+            MXLog.error("Failed sending reaction with error: \(error)")
+            return .failure(.failedSendingReaction)
         }
     }
 

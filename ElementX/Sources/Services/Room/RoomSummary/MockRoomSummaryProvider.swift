@@ -55,7 +55,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
                                             isDirect: true,
                                             avatarURLString: nil,
                                             lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
-                                            lastMessageTimestamp: .now,
+                                            lastMessageTimestamp: .distantPast,
                                             unreadNotificationCount: 4)),
         .filled(details: RoomSummaryDetails(id: "2",
                                             name: "Second room",
@@ -69,7 +69,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
                                             isDirect: true,
                                             avatarURLString: nil,
                                             lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
-                                            lastMessageTimestamp: .now,
+                                            lastMessageTimestamp: .distantPast,
                                             unreadNotificationCount: 0)),
         .empty(id: "3")
     ]

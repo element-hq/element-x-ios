@@ -51,7 +51,6 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     }
     
     var id: String {
-        #warning("Handle txid in a better way")
         switch item.key() {
         case .transactionId(let txnID):
             return txnID
@@ -92,12 +91,8 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         item.reactions()
     }
     
-    var originServerTs: Date {
-        if let timestamp = item.originServerTs() {
-            return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-        } else {
-            return .now
-        }
+    var timestamp: Date {
+        Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
     }
     
     // MARK: - CustomDebugStringConvertible

@@ -24,23 +24,16 @@ class UserSessionFlowCoordinatorStateMachine {
         case initial
         
         /// Showing the home screen
-        case homeScreen
-        
-        /// Showing a particular room's timeline
-        /// - Parameter roomId: that room's identifier
-        case roomScreen(roomId: String)
+        case roomList(selectedRoomId: String?)
+                
+        /// Showing the session verification flows
+        case sessionVerificationScreen(selectedRoomId: String?)
         
         /// Showing the session verification flows
-        case sessionVerificationScreen
-        
-        /// Showing the session verification flows
-        case feedbackScreen
+        case feedbackScreen(selectedRoomId: String?)
         
         /// Showing the settings screen
-        case settingsScreen
-
-        /// Application has been suspended
-        case suspended
+        case settingsScreen(selectedRoomId: String?)
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -50,9 +43,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         /// Request presentation for a particular room
         /// - Parameter roomId:the room identifier
-        case showRoomScreen(roomId: String)
+        case selectRoom(roomId: String)
         /// The room screen has been dismissed
-        case dismissedRoomScreen
+        case deselectRoom
         
         /// Request presentation of the settings screen
         case showSettingsScreen
@@ -68,58 +61,43 @@ class UserSessionFlowCoordinatorStateMachine {
         case showSessionVerificationScreen
         /// Session verification has finished
         case dismissedSessionVerificationScreen
-
-        /// Application goes into inactive state
-        case resignActive
-        /// Application goes into active state
-        case becomeActive
     }
     
     private let stateMachine: StateMachine<State, Event>
-    private var stateBeforeSuspension: State?
+    
+    var state: UserSessionFlowCoordinatorStateMachine.State {
+        stateMachine.state
+    }
     
     init() {
         stateMachine = StateMachine(state: .initial)
         configure()
     }
 
-    // swiftlint:disable:next cyclomatic_complexity
     private func configure() {
-        stateMachine.addRoutes(event: .start, transitions: [.initial => .homeScreen])
+        stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomId: nil)])
 
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (event, fromState) {
-            case (.showRoomScreen(let roomId), .homeScreen):
-                return .roomScreen(roomId: roomId)
-            case (.dismissedRoomScreen, .roomScreen):
-                return .homeScreen
+            case (.selectRoom(let roomId), .roomList):
+                return .roomList(selectedRoomId: roomId)
+            case (.deselectRoom, .roomList):
+                return .roomList(selectedRoomId: nil)
 
-            case (.showSettingsScreen, .homeScreen):
-                return .settingsScreen
-            case (.dismissedSettingsScreen, .settingsScreen):
-                return .homeScreen
+            case (.showSettingsScreen, .roomList(let selectedRoomId)):
+                return .settingsScreen(selectedRoomId: selectedRoomId)
+            case (.dismissedSettingsScreen, .settingsScreen(let selectedRoomId)):
+                return .roomList(selectedRoomId: selectedRoomId)
                 
-            case (.feedbackScreen, .homeScreen):
-                return .feedbackScreen
-            case (.dismissedFeedbackScreen, .feedbackScreen):
-                return .homeScreen
+            case (.feedbackScreen, .roomList(let selectedRoomId)):
+                return .feedbackScreen(selectedRoomId: selectedRoomId)
+            case (.dismissedFeedbackScreen, .feedbackScreen(let selectedRoomId)):
+                return .roomList(selectedRoomId: selectedRoomId)
                 
-            case (.showSessionVerificationScreen, .homeScreen):
-                return .sessionVerificationScreen
-            case (.dismissedSessionVerificationScreen, .sessionVerificationScreen):
-                return .homeScreen
-                
-            case (.resignActive, _):
-                self.stateBeforeSuspension = fromState
-                return .suspended
-            case (.becomeActive, _):
-                // Cannot become active if not previously suspended
-                // Happens when the app is backgrounded before the session is setup
-                guard let previousState = self.stateBeforeSuspension else {
-                    return self.stateMachine.state
-                }
-                
-                return previousState
+            case (.showSessionVerificationScreen, .roomList(let selectedRoomId)):
+                return .sessionVerificationScreen(selectedRoomId: selectedRoomId)
+            case (.dismissedSessionVerificationScreen, .sessionVerificationScreen(let selectedRoomId)):
+                return .roomList(selectedRoomId: selectedRoomId)
                 
             default:
                 return nil
@@ -154,8 +132,8 @@ class UserSessionFlowCoordinatorStateMachine {
     /// Flag indicating the machine is displaying room screen with given room identifier
     func isDisplayingRoomScreen(withRoomId roomId: String) -> Bool {
         switch stateMachine.state {
-        case .roomScreen(let displayedRoomId):
-            return roomId == displayedRoomId
+        case .roomList(let selectedRoomId):
+            return roomId == selectedRoomId
         default:
             return false
         }

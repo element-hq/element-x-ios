@@ -17,7 +17,7 @@
 import Foundation
 
 /// Properties of a matrix event that are common between all timeline items.
-struct RoomTimelineItemProperties: Equatable {
+struct RoomTimelineItemProperties: Hashable {
     /// Whether the item has been edited.
     var isEdited = false
     /// The aggregated reactions that have been sent for this item.

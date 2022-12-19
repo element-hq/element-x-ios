@@ -25,7 +25,7 @@ class RoomProxy: RoomProxyProtocol {
     private let room: RoomProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     
-    private let concurrentDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy", attributes: .concurrent)
+    private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.serial")
     
     private var sendMessageBgTask: BackgroundTaskProtocol?
     
@@ -104,7 +104,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         do {
-            let avatarURL = try await Task.dispatch(on: .global()) {
+            let avatarURL = try await Task.dispatch(on: serialDispatchQueue) {
                 try self.room.memberAvatarUrl(userId: userId)
             }
             update(avatarURL: avatarURL, forUserId: userId)
@@ -120,7 +120,7 @@ class RoomProxy: RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         do {
-            let displayName = try await Task.dispatch(on: .global()) {
+            let displayName = try await Task.dispatch(on: serialDispatchQueue) {
                 try self.room.memberDisplayName(userId: userId)
             }
             update(displayName: displayName, forUserId: userId)
@@ -129,21 +129,7 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.failedRetrievingMemberDisplayName)
         }
     }
-    
-    func loadDisplayName() async -> Result<String, RoomProxyError> {
-        if let displayName { return .success(displayName) }
         
-        do {
-            let displayName = try await Task.dispatch(on: .global()) {
-                try self.room.displayName()
-            }
-            update(displayName: displayName)
-            return .success(displayName)
-        } catch {
-            return .failure(.failedRetrievingDisplayName)
-        }
-    }
-    
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
         room.addTimelineListener(listener: listener)
         return .success(())
@@ -197,6 +183,12 @@ class RoomProxy: RoomProxyProtocol {
             } catch {
                 return .failure(.failedSendingMessage)
             }
+        }
+    }
+    
+    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            .success(())
         }
     }
 

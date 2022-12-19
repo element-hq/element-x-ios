@@ -23,7 +23,7 @@ struct TracingConfiguration {
     static var release = TracingConfiguration(common: .info)
     static var debug = TracingConfiguration()
     static var full = TracingConfiguration(common: .info,
-                                           crates: [
+                                           targets: [
                                                .hyper: .warn,
                                                .sled: .warn,
                                                .matrix_sdk_sled: .warn,
@@ -45,14 +45,14 @@ struct TracingConfiguration {
     enum LogLevel: String { case warn, trace, info }
     
     var common = LogLevel.warn
-    var crates: [Target: LogLevel] = [
+    var targets: [Target: LogLevel] = [
         .hyper: .warn,
         .sled: .warn,
         .matrix_sdk_sled: .warn
     ]
     
     var filter: String {
-        "\(common),\(crates.map { "\($0.key)=\($0.value)" }.joined(separator: ","))"
+        "\(common),\(targets.map { "\($0.key.rawValue)=\($0.value.rawValue)" }.joined(separator: ","))"
     }
 }
 

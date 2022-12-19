@@ -22,6 +22,9 @@ schemes:
         - variable: RUST_BACKTRACE
           value: full
           isEnabled: false
+        - variable: HTTPS_PROXY
+          value: 192.168.0.111:9090
+          isEnabled: false
     test:
       config: Debug
       gatherCoverageData: true
@@ -29,7 +32,8 @@ schemes:
         - ElementX
       targets:
         - UnitTests
-        - UITests
+      environmentVariables:
+        IS_RUNNING_UNIT_TESTS: "1"
 
 targets:
   ElementX:
@@ -51,6 +55,7 @@ targets:
         ]
         appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
         baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
+        keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
         ITSAppUsesNonExemptEncryption: false
         NSUserActivityTypes: [
           INSendMessageIntent
@@ -123,7 +128,7 @@ targets:
     sources:
     - path: ../Sources
       excludes:
-        - Screens/Templates
+        - Other/Extensions/XCUIElement.swift
     - path: ../Resources
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/ElementX

@@ -16,8 +16,8 @@
 
 import UIKit
 
-struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Equatable {
-    enum EncryptionType: Equatable {
+struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+    enum EncryptionType: Hashable {
         case megolmV1AesSha2(sessionId: String)
         case olmV1Curve25519AesSha2(senderKey: String)
         case unknown

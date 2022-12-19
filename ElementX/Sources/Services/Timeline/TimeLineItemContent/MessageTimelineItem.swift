@@ -24,7 +24,7 @@ protocol MessageContentProtocol: RoomMessageEventContentProtocol {
 }
 
 /// The delivery status for the item.
-enum MessageTimelineItemDeliveryStatus: Equatable {
+enum MessageTimelineItemDeliveryStatus: Hashable {
     case unknown
     case sending
     case sent(elapsedTime: TimeInterval)
@@ -36,7 +36,6 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
     let content: Content
 
     var id: String {
-        #warning("Handle txid properly")
         switch item.key() {
         case .transactionId(let txnID):
             return txnID
@@ -50,7 +49,7 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
         case .transactionId:
             return .sending
         case .eventId:
-            return .sent(elapsedTime: Date().timeIntervalSince1970 - originServerTs.timeIntervalSince1970)
+            return .sent(elapsedTime: Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970)
         }
     }
 
@@ -78,12 +77,8 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
         item.sender()
     }
 
-    var originServerTs: Date {
-        if let timestamp = item.originServerTs() {
-            return Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-        } else {
-            return .now
-        }
+    var timestamp: Date {
+        Date(timeIntervalSince1970: TimeInterval(item.timestamp() / 1000))
     }
 }
 

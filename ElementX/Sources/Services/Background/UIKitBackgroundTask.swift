@@ -53,6 +53,7 @@ class UIKitBackgroundTask: BackgroundTaskProtocol {
         // attempt to start
         identifier = application.beginBackgroundTask(withName: name) { [weak self] in
             guard let self else { return }
+            self.stop()
             self.expirationHandler?(self)
         }
 

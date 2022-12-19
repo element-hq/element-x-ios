@@ -86,8 +86,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "2645cfb64f3255f299a63af280b5172a6dd6602c",
-        "version" : "0.0.9-demo"
+        "revision" : "65d6f8a51367d5c411c1fec39402907f588fcd67",
+        "version" : "1.0.22-alpha"
       }
     },
     {
@@ -106,6 +106,15 @@
       "state" : {
         "revision" : "71fd3032635fed58ae1c1ba22bb7ffa158dbb5ee",
         "version" : "7.30.2"
+      }
+    },
+    {
+      "identity" : "swift-argument-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/apple/swift-argument-parser",
+      "state" : {
+        "revision" : "fddd1c00396eed152c45a46bea9f47b98e59301d",
+        "version" : "1.2.0"
       }
     },
     {
@@ -142,6 +151,15 @@
       "state" : {
         "revision" : "12b5acf96d98f91d50de447369bd18df74600f1a",
         "version" : "1.9.6"
+      }
+    },
+    {
+      "identity" : "yams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpsim/Yams",
+      "state" : {
+        "revision" : "01835dc202670b5bb90d07f3eae41867e9ed29f6",
+        "version" : "5.0.1"
       }
     }
   ],

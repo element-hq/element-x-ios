@@ -24,19 +24,32 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
     
     private let userSession: UserSessionProtocol
-    private let navigationController: NavigationController
+    private let navigationSplitCoordinator: NavigationSplitCoordinator
     private let bugReportService: BugReportServiceProtocol
+    private let roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol
+    private let emojiProvider: EmojiProviderProtocol = EmojiProvider()
+    
+    private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
+    private let detailNavigationStackCoordinator: NavigationStackCoordinator
     
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
-    init(userSession: UserSessionProtocol, navigationController: NavigationController, bugReportService: BugReportServiceProtocol) {
+    init(userSession: UserSessionProtocol,
+         navigationSplitCoordinator: NavigationSplitCoordinator,
+         bugReportService: BugReportServiceProtocol,
+         roomTimelineControllerFactory: RoomTimelineControllerFactoryProtocol) {
         stateMachine = UserSessionFlowCoordinatorStateMachine()
         self.userSession = userSession
-        self.navigationController = navigationController
+        self.navigationSplitCoordinator = navigationSplitCoordinator
         self.bugReportService = bugReportService
+        self.roomTimelineControllerFactory = roomTimelineControllerFactory
+        
+        sidebarNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
+        detailNavigationStackCoordinator = NavigationStackCoordinator(navigationSplitCoordinator: navigationSplitCoordinator)
+        
+        navigationSplitCoordinator.setSidebarCoordinator(sidebarNavigationStackCoordinator)
         
         setupStateMachine()
-        startObservingApplicationState()
     }
     
     func start() {
@@ -50,7 +63,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     }
 
     func tryDisplayingRoomScreen(roomId: String) {
-        stateMachine.processEvent(.showRoomScreen(roomId: roomId))
+        stateMachine.processEvent(.selectRoom(roomId: roomId))
     }
 
     // MARK: - Private
@@ -61,33 +74,33 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch (context.fromState, context.event, context.toState) {
-            case (.initial, .start, .homeScreen):
+            case (.initial, .start, .roomList):
                 self.presentHomeScreen()
                 
-            case(.homeScreen, .showRoomScreen, .roomScreen(let roomId)):
-                self.presentRoomWithIdentifier(roomId)
-            case(.roomScreen, .dismissedRoomScreen, .homeScreen):
-                break
+            case(.roomList(let currentRoomId), .selectRoom, .roomList(let selectedRoomId)):
+                guard let selectedRoomId,
+                      selectedRoomId != currentRoomId else {
+                    return
+                }
                 
-            case (.homeScreen, .showSessionVerificationScreen, .sessionVerificationScreen):
+                self.presentRoomWithIdentifier(selectedRoomId)
+            case(.roomList, .deselectRoom, .roomList):
+                break
+
+            case (.roomList, .showSessionVerificationScreen, .sessionVerificationScreen):
                 self.presentSessionVerification()
-            case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .homeScreen):
+            case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
                 break
-                
-            case (.homeScreen, .showSettingsScreen, .settingsScreen):
+
+            case (.roomList, .showSettingsScreen, .settingsScreen):
                 self.presentSettingsScreen()
-            case (.settingsScreen, .dismissedSettingsScreen, .homeScreen):
+            case (.settingsScreen, .dismissedSettingsScreen, .roomList):
                 break
                 
-            case (.homeScreen, .feedbackScreen, .feedbackScreen):
+            case (.roomList, .feedbackScreen, .feedbackScreen):
                 self.presentFeedbackScreen()
-            case (.feedbackScreen, .dismissedFeedbackScreen, .homeScreen):
+            case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
-                
-            case (_, .resignActive, .suspended):
-                self.pause()
-            case (_, .becomeActive, _):
-                self.resume()
                 
             default:
                 fatalError("Unknown transition: \(context)")
@@ -98,17 +111,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             fatalError("Failed transition with context: \(context)")
         }
     }
-
-    private func startObservingApplicationState() {
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationWillResignActive),
-                                               name: UIApplication.willResignActiveNotification,
-                                               object: nil)
-        NotificationCenter.default.addObserver(self,
-                                               selector: #selector(applicationDidBecomeActive),
-                                               name: UIApplication.didBecomeActiveNotification,
-                                               object: nil)
-    }
     
     private func presentHomeScreen() {
         userSession.clientProxy.startSync()
@@ -116,7 +118,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let parameters = HomeScreenCoordinatorParameters(userSession: userSession,
                                                          attributedStringBuilder: AttributedStringBuilder(),
                                                          bugReportService: bugReportService,
-                                                         navigationController: navigationController)
+                                                         navigationStackCoordinator: detailNavigationStackCoordinator)
         let coordinator = HomeScreenCoordinator(parameters: parameters)
 
         coordinator.callback = { [weak self] action in
@@ -124,7 +126,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
 
             switch action {
             case .presentRoomScreen(let roomIdentifier):
-                self.stateMachine.processEvent(.showRoomScreen(roomId: roomIdentifier))
+                self.stateMachine.processEvent(.selectRoom(roomId: roomIdentifier))
             case .presentSettingsScreen:
                 self.stateMachine.processEvent(.showSettingsScreen)
             case .presentFeedbackScreen:
@@ -135,8 +137,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.callback?(.signOut)
             }
         }
-
-        navigationController.setRootCoordinator(coordinator)
+        
+        sidebarNavigationStackCoordinator.setRootCoordinator(coordinator)
     }
     
     // MARK: Rooms
@@ -153,24 +155,31 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                               mediaProvider: userSession.mediaProvider,
                                                               roomProxy: roomProxy,
                                                               attributedStringBuilder: AttributedStringBuilder())
+            
+            let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
+                                                                                               roomProxy: roomProxy,
+                                                                                               timelineItemFactory: timelineItemFactory,
+                                                                                               mediaProvider: userSession.mediaProvider)
 
-            let timelineController = RoomTimelineController(userId: userId,
-                                                            roomId: roomIdentifier,
-                                                            timelineProvider: RoomTimelineProvider(roomProxy: roomProxy),
-                                                            timelineItemFactory: timelineItemFactory,
-                                                            mediaProvider: userSession.mediaProvider,
-                                                            roomProxy: roomProxy)
-
-            let parameters = RoomScreenCoordinatorParameters(navigationController: navigationController,
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: detailNavigationStackCoordinator,
                                                              timelineController: timelineController,
                                                              mediaProvider: userSession.mediaProvider,
                                                              roomName: roomProxy.displayName ?? roomProxy.name,
-                                                             roomAvatarUrl: roomProxy.avatarURL)
+                                                             roomAvatarUrl: roomProxy.avatarURL,
+                                                             emojiProvider: emojiProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
-            navigationController.push(coordinator) { [weak self] in
+            detailNavigationStackCoordinator.setRootCoordinator(coordinator)
+            navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator) { [weak self, roomIdentifier] in
                 guard let self else { return }
-                self.stateMachine.processEvent(.dismissedRoomScreen)
+                
+                // Move the state machine to no room selected if the room currently being dimissed
+                // is the same as the one selected in the state machine.
+                // This generally happens when popping the room screen while in a compact layout
+                if case let .roomList(selectedRoomId) = self.stateMachine.state, selectedRoomId == roomIdentifier {
+                    self.stateMachine.processEvent(.deselectRoom)
+                    self.detailNavigationStackCoordinator.setRootCoordinator(nil)
+                }
             }
         }
     }
@@ -178,11 +187,11 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     // MARK: Settings
     
     private func presentSettingsScreen() {
-        let settingsNavigationController = NavigationController()
+        let settingsNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let userNotificationController = UserNotificationController(rootCoordinator: settingsNavigationController)
+        let userNotificationController = UserNotificationController(rootCoordinator: settingsNavigationStackCoordinator)
         
-        let parameters = SettingsCoordinatorParameters(navigationController: settingsNavigationController,
+        let parameters = SettingsCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
                                                        userNotificationController: userNotificationController,
                                                        userSession: userSession,
                                                        bugReportService: bugReportService)
@@ -191,16 +200,16 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             guard let self else { return }
             switch action {
             case .dismiss:
-                self.navigationController.dismissSheet()
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
             case .logout:
-                self.navigationController.dismissSheet()
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
                 self.callback?(.signOut)
             }
         }
         
-        settingsNavigationController.setRootCoordinator(settingsCoordinator)
+        settingsNavigationStackCoordinator.setRootCoordinator(settingsCoordinator)
         
-        navigationController.presentSheet(userNotificationController) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSettingsScreen)
         }
     }
@@ -217,10 +226,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let coordinator = SessionVerificationCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] in
-            self?.navigationController.dismissSheet()
+            self?.navigationSplitCoordinator.setSheetCoordinator(nil)
         }
         
-        navigationController.presentSheet(coordinator) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
         }
     }
@@ -228,9 +237,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     // MARK: Bug reporting
     
     private func presentFeedbackScreen(for image: UIImage? = nil) {
-        let feedbackNavigationController = NavigationController()
+        let feedbackNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let userNotificationController = UserNotificationController(rootCoordinator: feedbackNavigationController)
+        let userNotificationController = UserNotificationController(rootCoordinator: feedbackNavigationStackCoordinator)
         
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
                                                         userNotificationController: userNotificationController,
@@ -238,33 +247,13 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                         isModallyPresented: true)
         let coordinator = BugReportCoordinator(parameters: parameters)
         coordinator.completion = { [weak self] _ in
-            self?.navigationController.dismissSheet()
+            self?.navigationSplitCoordinator.setSheetCoordinator(nil)
         }
 
-        feedbackNavigationController.setRootCoordinator(coordinator)
+        feedbackNavigationStackCoordinator.setRootCoordinator(coordinator)
         
-        navigationController.presentSheet(userNotificationController) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
-    }
-    
-    // MARK: - Application State
-
-    private func pause() {
-        userSession.clientProxy.stopSync()
-    }
-
-    private func resume() {
-        userSession.clientProxy.startSync()
-    }
-
-    @objc
-    private func applicationWillResignActive() {
-        stateMachine.processEvent(.resignActive)
-    }
-
-    @objc
-    private func applicationDidBecomeActive() {
-        stateMachine.processEvent(.becomeActive)
     }
 }

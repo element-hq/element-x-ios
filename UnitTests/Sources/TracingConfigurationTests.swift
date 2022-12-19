@@ -41,10 +41,10 @@ class TracingConfigurationTests: XCTestCase {
         XCTAssertTrue(filterComponents.contains("hyper=warn"))
         XCTAssertTrue(filterComponents.contains("sled=warn"))
         XCTAssertTrue(filterComponents.contains("matrix_sdk_sled=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_http_client=trace"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_ffi_uniffi_api=warn"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk::http_client=trace"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk_ffi::uniffi_api=warn"))
         XCTAssertTrue(filterComponents.contains("matrix_sdk_ffi=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_sliding_sync=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_base_sliding_sync=warn"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk::sliding_sync=warn"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk_base::sliding_sync=warn"))
     }
 }

@@ -19,7 +19,7 @@ import SwiftUI
 struct SettingsScreen: View {
     @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
-    @ObservedObject private var settings = ElementSettings.shared
+    @ObservedObject private var settings = ServiceLocator.shared.settings
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     @ScaledMetric private var menuIconSize = 30.0
@@ -30,9 +30,6 @@ struct SettingsScreen: View {
     var body: some View {
         Form {
             userSection
-                .listRowBackground(rowBackgroundColor)
-
-            appearanceSection
                 .listRowBackground(rowBackgroundColor)
 
             analyticsSection
@@ -84,28 +81,6 @@ struct SettingsScreen: View {
         }
     }
 
-    private var appearanceSection: some View {
-        Section {
-            Button(action: appearance) {
-                HStack {
-                    Image(systemName: "paintpalette")
-                        .foregroundColor(.element.systemGray)
-                        .padding(4)
-                        .background(Color.element.systemGray6)
-                        .clipShape(Circle())
-                        .frame(width: menuIconSize, height: menuIconSize)
-                    Text(ElementL10n.settingsAppearance)
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .foregroundColor(.element.tertiaryContent)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("appearanceButton")
-        }
-    }
-
     @ViewBuilder
     private var userAvatar: some View {
         if let avatar = context.viewState.userAvatar {
@@ -135,30 +110,20 @@ struct SettingsScreen: View {
             .listRowSeparator(.hidden)
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier("reportBugButton")
-
-            if BuildSettings.settingsCrashButtonVisible {
-                Button("Crash app",
-                       role: .destructive) { context.send(viewAction: .crash)
-                }
-                .listRowInsets(listRowInsets)
-                .accessibilityIdentifier("crashButton")
-            }
         }
     }
 
     @ViewBuilder
     private var userInterfaceSection: some View {
-        if BuildSettings.settingsShowTimelineStyle {
-            Section {
-                Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
-                    ForEach(TimelineStyle.allCases, id: \.self) { style in
-                        Text(style.description)
-                            .tag(style)
-                    }
+        Section {
+            Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
+                ForEach(TimelineStyle.allCases, id: \.self) { style in
+                    Text(style.description)
+                        .tag(style)
                 }
-                .listRowInsets(listRowInsets)
-                .accessibilityIdentifier("timelineStylePicker")
             }
+            .listRowInsets(listRowInsets)
+            .accessibilityIdentifier("timelineStylePicker")
         }
     }
     
@@ -203,10 +168,6 @@ struct SettingsScreen: View {
                 .padding(4)
         }
         .accessibilityIdentifier("closeButton")
-    }
-
-    private func appearance() {
-        #warning("Not implemented")
     }
 
     private func close() {

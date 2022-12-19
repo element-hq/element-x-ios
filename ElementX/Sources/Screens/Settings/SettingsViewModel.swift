@@ -51,8 +51,6 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
             callback?(.toggleAnalytics)
         case .reportBug:
             callback?(.reportBug)
-        case .crash:
-            callback?(.crash)
         case .logout:
             callback?(.logout)
         }

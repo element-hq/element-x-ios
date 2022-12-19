@@ -36,6 +36,7 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL,
+                                         autoplay: UIApplication.shared.applicationState == .active,
                                          isModallyPresented: parameters.isModallyPresented)
     }
     
@@ -67,8 +68,7 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
     private func configureAudioSession(_ session: AVAudioSession) {
         do {
             try session.setCategory(.playback,
-                                    mode: .default,
-                                    options: [.allowBluetooth, .allowBluetoothA2DP])
+                                    mode: .default)
             try session.setActive(true)
         } catch {
             MXLog.debug("Configure audio session failed: \(error)")

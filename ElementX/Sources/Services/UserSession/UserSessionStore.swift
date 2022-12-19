@@ -30,10 +30,16 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     init(backgroundTaskService: BackgroundTaskServiceProtocol) {
         keychainController = KeychainController(service: .sessions,
-                                                accessGroup: InfoPlistReader.target.appGroupIdentifier)
+                                                accessGroup: InfoPlistReader.target.keychainAccessGroupIdentifier)
         self.backgroundTaskService = backgroundTaskService
         baseDirectory = .sessionsBaseDirectory
         MXLog.debug("Setup base directory at: \(baseDirectory)")
+    }
+    
+    /// Deletes all data stored in the shared container and keychain
+    func reset() {
+        try? FileManager.default.removeItem(at: baseDirectory)
+        keychainController.removeAllRestorationTokens()
     }
     
     func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {

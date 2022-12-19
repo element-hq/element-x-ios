@@ -16,6 +16,7 @@
 
 "room_timeline_replying_to" = "Replying to %@";
 "room_timeline_editing" = "Editing";
+"room_timeline_syncing" = "Syncing";
 
 "session_verification_banner_title" = "Help keep your messages secure";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify its you.";

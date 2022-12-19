@@ -9,7 +9,11 @@ coverage:
     patch: false
 
 ignore:
-  - "ElementX/Source/Generated"  # ignore the folder and all its contents
+  - "ElementX/Sources/Generated"
+  - "ElementX/Sources/Vendor"
+  - "ElementX/Sources/UITests"
+  - "Tools"
+  - "**/Mock*.swift" 
 
 flag_management:
   default_rules:

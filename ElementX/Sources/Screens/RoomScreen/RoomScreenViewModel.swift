@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, RoomScreenViewAction>
@@ -21,6 +22,7 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
         static let backPaginationPageSize: UInt = 20
+        static let backPaginationIndicatorID = "RoomBackPagination"
     }
 
     private let timelineController: RoomTimelineControllerProtocol
@@ -28,6 +30,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let mediaProvider: MediaProviderProtocol
 
     // MARK: - Setup
+    
+    deinit {
+        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Constants.backPaginationIndicatorID)
+    }
     
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
@@ -60,8 +66,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
                 case .startedBackPaginating:
                     self.state.isBackPaginating = true
+                    ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Constants.backPaginationIndicatorID,
+                                                                                                         type: .toast,
+                                                                                                         title: ElementL10n.roomTimelineSyncing,
+                                                                                                         persistent: true))
                 case .finishedBackPaginating:
                     self.state.isBackPaginating = false
+                    ServiceLocator.shared.userNotificationController.retractNotificationWithId(Constants.backPaginationIndicatorID)
                 }
             }
             .store(in: &cancellables)
@@ -84,15 +95,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     var callback: ((RoomScreenViewModelAction) -> Void)?
     
+    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
         case .headerTapped:
             callback?(.displayRoomDetails)
-        case .loadPreviousPage:
-            switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
-            default:
-                #warning("Treat errors")
-            }
+        case .paginateBackwards:
+            await paginateBackwards()
         case .itemAppeared(let id):
             await timelineController.processItemAppearance(id)
         case .itemDisappeared(let id):
@@ -106,10 +115,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendReaction(let key, _):
             #warning("Reaction implementation awaiting SDK support.")
             MXLog.warning("React with \(key) failed. Not implemented.")
+        case .displayEmojiPicker(let itemId):
+            callback?(.displayEmojiPicker(itemId: itemId))
+        case .displayReactionsMenuForItemId(let itemId):
+            state.displayReactionsMenuForItemId = itemId
         case .cancelReply:
             state.composerMode = .default
         case .cancelEdit:
             state.composerMode = .default
+        case .emojiTapped(let emoji, let itemId):
+            await timelineController.sendReaction(emoji, for: itemId)
+            state.displayReactionsMenuForItemId = ""
         }
     }
 
@@ -120,6 +136,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    private func paginateBackwards() async {
+        switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
+        default:
+            #warning("Treat errors")
+        }
+    }
 
     private func itemTapped(with itemId: String) async {
         state.showLoading = true

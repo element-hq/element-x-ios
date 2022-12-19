@@ -57,7 +57,7 @@ targets:
         - "**/__Snapshots__/**"
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
-    - path: ../../ElementX/Sources/Application/BuildSettings.swift
+    - path: ../../ElementX/Sources/Application/AppSettings.swift
     - path: ../../ElementX/Sources/Screens/RoomScreen/View/Style/TimelineStyle.swift
     - path: ../../ElementX/Sources/Services/Analytics/AnalyticsConfiguration.swift
     - path: ../../ElementX/Sources/UITests/UITestScreenIdentifier.swift
@@ -68,3 +68,4 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
     - path: ../../ElementX/Sources/Other/Extensions/URL.swift
+    - path: ../../ElementX/Sources/Other/Extensions/XCUIElement.swift

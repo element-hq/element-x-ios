@@ -40,11 +40,9 @@ class LoginScreenUITests: XCTestCase {
         app.assertScreenshot(.login)
         
         // When typing in a username and password.
-        app.textFields.element.tap()
-        app.typeText("@test:matrix.org")
+        app.textFields.element.clearAndTypeText("@test:matrix.org")
         
-        app.secureTextFields.element.tap()
-        app.typeText("12345678")
+        app.secureTextFields.element.clearAndTypeText("12345678")
         
         // Then the form should be ready to submit.
         validateNextButtonIsEnabled(for: "matrix.org with credentials entered")
@@ -56,8 +54,7 @@ class LoginScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.login)
         
         // When entering a username on a homeserver that only supports OIDC.
-        app.textFields.element.tap()
-        app.typeText("@test:company.com\n")
+        app.textFields.element.clearAndTypeText("@test:company.com\n")
         
         // Then the screen should be configured for OIDC.
         let state = "an OIDC only server"
@@ -72,8 +69,7 @@ class LoginScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.login)
         
         // When entering a username on a homeserver with an unsupported flow.
-        app.textFields.element.tap()
-        app.typeText("@test:server.net\n")
+        app.textFields.element.clearAndTypeText("@test:server.net\n")
         
         // Then the screen should not allow login to continue.
         let state = "an unsupported server"
