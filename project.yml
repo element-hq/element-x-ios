@@ -41,7 +41,7 @@ packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
     exactVersion: 1.0.22-alpha
-    # path: ../matrix-rust-components-swift
+    # path: ../matrix-rust-sdk
   DesignKit:
     path: ./
   AnalyticsEvents:
