@@ -23,7 +23,8 @@ struct FilePreviewScreen: View {
     
     var body: some View {
         PreviewController(fileURL: context.viewState.fileURL, title: context.viewState.title)
-            .ignoresSafeArea()
+            .ignoresSafeArea(.all, edges: [.horizontal, .bottom])
+            .navigationTitle(ElementL10n.attachmentTypeFile)
     }
 }
 
