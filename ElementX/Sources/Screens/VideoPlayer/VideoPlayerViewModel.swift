@@ -21,10 +21,9 @@ typealias VideoPlayerViewModelType = StateStoreViewModel<VideoPlayerViewState, V
 class VideoPlayerViewModel: VideoPlayerViewModelType, VideoPlayerViewModelProtocol {
     var callback: ((VideoPlayerViewModelAction) -> Void)?
 
-    init(videoURL: URL, autoplay: Bool = true, isModallyPresented: Bool = true) {
+    init(videoURL: URL, autoplay: Bool = true) {
         super.init(initialViewState: VideoPlayerViewState(videoURL: videoURL,
-                                                          autoplay: autoplay,
-                                                          isModallyPresented: isModallyPresented))
+                                                          autoplay: autoplay))
     }
     
     override func process(viewAction: VideoPlayerViewAction) async {

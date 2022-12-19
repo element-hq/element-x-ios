@@ -19,7 +19,6 @@ import SwiftUI
 
 struct VideoPlayerCoordinatorParameters {
     let videoURL: URL
-    let isModallyPresented: Bool
 }
 
 enum VideoPlayerCoordinatorAction {
@@ -36,8 +35,7 @@ final class VideoPlayerCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = VideoPlayerViewModel(videoURL: parameters.videoURL,
-                                         autoplay: UIApplication.shared.applicationState == .active,
-                                         isModallyPresented: parameters.isModallyPresented)
+                                         autoplay: UIApplication.shared.applicationState == .active)
     }
     
     // MARK: - Public
