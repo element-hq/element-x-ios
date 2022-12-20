@@ -43,17 +43,18 @@ struct TimelineDeliveryStatusView: View {
     }
     
     var body: some View {
-        if showDeliveryStatus {
-            Image(systemName: systemImageName)
-                .task {
-                    if case .sent = deliveryStatus {
-                        try? await Task.sleep(nanoseconds: 1_000_000_000)
-                        withAnimation {
-                            showDeliveryStatus = false
-                        }
+        Image(systemName: systemImageName)
+            .resizable()
+            .frame(width: 12.0, height: 12.0)
+            .opacity(showDeliveryStatus ? 1.0 : 0.0)
+            .task {
+                if case .sent = deliveryStatus {
+                    try? await Task.sleep(nanoseconds: 1_000_000_000)
+                    withAnimation {
+                        showDeliveryStatus = false
                     }
                 }
-        }
+            }
     }
 }
 

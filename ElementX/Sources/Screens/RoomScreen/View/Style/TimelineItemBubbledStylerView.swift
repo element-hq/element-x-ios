@@ -27,28 +27,25 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     @ScaledMetric private var senderNameVerticalPadding = 3
 
     var body: some View {
-        VStack(alignment: alignment, spacing: -12) {
-            if !timelineItem.isOutgoing {
-                header
-                    .zIndex(1)
-            }
-            VStack(alignment: alignment) {
-                if timelineItem.isOutgoing {
-                    HStack {
-                        Spacer()
-                        styledContentWithReactions
-                        if timelineItem.isOutgoing {
-                            TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus)
-                                .padding(.top, 6)
-                        }
-                    }
-                    .padding(.trailing, 16)
-                    .padding(.leading, 56)
-                } else {
-                    styledContentWithReactions
-                        .padding(.leading, 24)
-                        .padding(.trailing, 56)
+        ZStack(alignment: .trailingFirstTextBaseline) {
+            VStack(alignment: alignment, spacing: -12) {
+                if !timelineItem.isOutgoing {
+                    header
+                        .zIndex(1)
                 }
+                
+                HStack {
+                    if timelineItem.isOutgoing {
+                        Spacer()
+                    }
+                    
+                    styledContentWithReactions
+                }
+                .padding(.horizontal, 16.0)
+            }
+            
+            if timelineItem.isOutgoing {
+                TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus)
             }
         }
     }

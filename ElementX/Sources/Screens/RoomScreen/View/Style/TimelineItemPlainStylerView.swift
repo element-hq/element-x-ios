@@ -28,7 +28,15 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             header
             
             VStack(alignment: .leading, spacing: 4) {
-                content()
+                HStack(alignment: .firstTextBaseline) {
+                    content()
+                    
+                    Spacer()
+                    
+                    if timelineItem.isOutgoing {
+                        TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus)
+                    }
+                }
                 supplementaryViews
             }
         }
