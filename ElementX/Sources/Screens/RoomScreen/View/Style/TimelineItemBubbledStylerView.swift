@@ -82,7 +82,6 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                                       alignment: alignment) { key in
                     context.send(viewAction: .sendReaction(key: key, eventID: timelineItem.id))
                 }
-                .padding(.horizontal, 12)
             }
         }
     }
