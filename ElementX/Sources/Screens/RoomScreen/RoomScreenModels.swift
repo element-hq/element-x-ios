@@ -43,7 +43,6 @@ enum RoomScreenViewAction {
     case sendReaction(key: String, eventID: String)
     case cancelReply
     case cancelEdit
-    case displayReactionsMenuForItemId(itemId: String)
 }
 
 struct RoomScreenViewState: BindableState {
@@ -54,7 +53,6 @@ struct RoomScreenViewState: BindableState {
     var isBackPaginating = false
     var showLoading = false
     var bindings: RoomScreenViewStateBindings
-    var displayReactionsMenuForItemId = ""
     
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
     

@@ -39,6 +39,8 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
             state.categories = convert(emojiCategories: categories)
         case let .emojiTapped(emoji: emoji):
             callback?(.emojiSelected(emoji: emoji.value))
+        case .dismiss:
+            callback?(.dismiss)
         }
     }
     

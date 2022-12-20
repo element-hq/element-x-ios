@@ -107,15 +107,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             MXLog.warning("React with \(key) failed. Not implemented.")
         case .displayEmojiPicker(let itemId):
             callback?(.displayEmojiPicker(itemId: itemId))
-        case .displayReactionsMenuForItemId(let itemId):
-            state.displayReactionsMenuForItemId = itemId
         case .cancelReply:
             state.composerMode = .default
         case .cancelEdit:
             state.composerMode = .default
         case .emojiTapped(let emoji, let itemId):
             await timelineController.sendReaction(emoji, for: itemId)
-            state.displayReactionsMenuForItemId = ""
         }
     }
 
@@ -128,8 +125,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func paginateBackwards() async {
         switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
+        case .failure:
+            displayError(.alert(ElementL10n.roomTimelineBackpaginationFailure))
         default:
-            #warning("Treat errors")
+            break
         }
     }
 
@@ -201,7 +200,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         var actions: [TimelineItemContextMenuAction] = [
-            .copy, .quote, .copyPermalink, .reply
+            .react, .copy, .quote, .copyPermalink, .reply
         ]
 
         if item.isEditable {
@@ -215,6 +214,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         return .init(actions: actions)
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
@@ -222,6 +222,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         switch action {
+        case .react:
+            callback?(.displayEmojiPicker(itemId: item.id))
         case .copy:
             UIPasteboard.general.string = item.text
         case .edit:

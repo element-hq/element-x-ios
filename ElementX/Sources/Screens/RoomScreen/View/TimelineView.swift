@@ -65,9 +65,6 @@ struct TimelineView: UIViewControllerRepresentable {
             if tableViewController.composerMode != context.viewState.composerMode {
                 tableViewController.composerMode = context.viewState.composerMode
             }
-            if tableViewController.displayReactionsMenuForItemId != context.viewState.displayReactionsMenuForItemId {
-                tableViewController.displayReactionsMenuForItemId = context.viewState.displayReactionsMenuForItemId
-            }
             
             // Doesn't have an equatable conformance :(
             tableViewController.contextMenuBuilder = context.viewState.contextMenuBuilder

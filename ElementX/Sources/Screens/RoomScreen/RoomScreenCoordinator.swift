@@ -107,6 +107,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
               let timelineController = parameters?.timelineController else {
             fatalError()
         }
+        
+        let emojiPickerNavigationStackCoordinator = NavigationStackCoordinator()
+        
         let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
                                                             itemId: itemId)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
@@ -118,10 +121,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 Task {
                     await timelineController.sendReaction(emoji, for: itemId)
                 }
+            case .dismiss:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
             }
         }
         
-        navigationStackCoordinator.setSheetCoordinator(coordinator)
+        emojiPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationStackCoordinator.setSheetCoordinator(emojiPickerNavigationStackCoordinator)
     }
     
     private func displayRoomDetails() {
