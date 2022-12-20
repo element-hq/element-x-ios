@@ -39,6 +39,7 @@ struct EmojiPickerScreen: View {
             }
         }
         .navigationTitle(ElementL10n.reactions)
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .searchable(text: $searchString)
         .onChange(of: searchString) { _ in

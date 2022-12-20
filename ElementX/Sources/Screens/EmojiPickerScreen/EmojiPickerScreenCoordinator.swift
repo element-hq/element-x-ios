@@ -52,7 +52,6 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        AnyView(EmojiPickerScreen(context: viewModel.context)
-            .presentationDetents([.medium, .large]))
+        AnyView(EmojiPickerScreen(context: viewModel.context))
     }
 }

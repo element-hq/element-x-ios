@@ -127,6 +127,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         }
         
         emojiPickerNavigationStackCoordinator.setRootCoordinator(coordinator)
+        emojiPickerNavigationStackCoordinator.presentationDetents = [.medium, .large]
         
         navigationStackCoordinator.setSheetCoordinator(emojiPickerNavigationStackCoordinator)
     }
