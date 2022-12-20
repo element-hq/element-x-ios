@@ -218,7 +218,10 @@ class MockScreen: Identifiable {
                                                              roomName: "Large timeline",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomLayoutMiddle:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
@@ -232,7 +235,10 @@ class MockScreen: Identifiable {
                                                              roomName: "Large timeline",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .roomLayoutBottom:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
@@ -245,7 +251,10 @@ class MockScreen: Identifiable {
                                                              roomName: "Large timeline",
                                                              roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
-            return RoomScreenCoordinator(parameters: parameters)
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .sessionVerification:
             let parameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy())
             return SessionVerificationCoordinator(parameters: parameters)
