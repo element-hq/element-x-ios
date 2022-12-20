@@ -17,7 +17,7 @@
 import XCTest
 
 class LoginTests: XCTestCase {
-    let expectedDuration = 32.0
+    let expectedDuration = 40.0
     
     func testLoginFlow() throws {
         let parser = TestMeasurementParser()
