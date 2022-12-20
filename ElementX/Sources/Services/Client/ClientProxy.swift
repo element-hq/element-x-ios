@@ -58,7 +58,9 @@ class ClientProxy: ClientProxyProtocol {
     private var slidingSyncObserverToken: StoppableSpawn?
     private var slidingSync: SlidingSync?
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol?
+    var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
+    
+    var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     
     deinit {
         // These need to be inlined instead of using stopSync()
@@ -81,27 +83,42 @@ class ClientProxy: ClientProxyProtocol {
 
         await Task.dispatch(on: clientQueue) {
             do {
-                let slidingSyncBuilder = try client.slidingSync().homeserver(url: ElementSettings.shared.slidingSyncProxyBaseURLString)
+                let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.settings.slidingSyncProxyBaseURLString)
 
-                let slidingSyncView = try SlidingSyncViewBuilder()
+                let visibleRoomsView = try SlidingSyncViewBuilder()
                     .timelineLimit(limit: 10)
                     .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
                                                    RequiredState(key: "m.room.encryption", value: "")])
-                    .name(name: "HomeScreenView")
+                    .name(name: "CurrentlyVisibleRooms")
                     .syncMode(mode: .selective)
                     .addRange(from: 0, to: 20)
                     .build()
+                
+                let allRoomsView = try SlidingSyncViewBuilder()
+                    .noTimelineLimit()
+                    .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
+                                                   RequiredState(key: "m.room.encryption", value: "")])
+                    .name(name: "AllRooms")
+                    .syncMode(mode: .growingFullSync)
+                    .batchSize(batchSize: 20)
+                    .build()
 
                 let slidingSync = try slidingSyncBuilder
-                    .addView(v: slidingSyncView)
+                    .addView(v: visibleRoomsView)
+                    // .addView(v: allRoomsView) // FIXME: Intentionally disabled as it doesn't work properly
                     .withCommonExtensions()
                     .coldCache(name: "ElementX")
                     .build()
                 
-                let slidingSyncViewProxy = SlidingSyncViewProxy(clientProxy: self, slidingSync: slidingSync, slidingSyncView: slidingSyncView)
+                let visibleRoomsViewProxy = SlidingSyncViewProxy(clientProxy: self, slidingSync: slidingSync, slidingSyncView: visibleRoomsView)
                 
-                self.roomSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: slidingSyncViewProxy,
-                                                               roomMessageFactory: RoomMessageFactory())
+                let allRoomsViewProxy = SlidingSyncViewProxy(clientProxy: self, slidingSync: slidingSync, slidingSyncView: allRoomsView)
+                
+                self.visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
+                                                                       roomMessageFactory: RoomMessageFactory())
+                
+                self.allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
+                                                                   roomMessageFactory: RoomMessageFactory())
                 
                 self.slidingSync = slidingSync
             } catch {
@@ -286,7 +303,8 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
-        roomSummaryProvider?.updateRoomsWithIdentifiers(summary.rooms)
+        visibleRoomsSummaryProvider?.updateRoomsWithIdentifiers(summary.rooms)
+        allRoomsSummaryProvider?.updateRoomsWithIdentifiers(summary.rooms)
         
         callbacks.send(.receivedSyncUpdate)
     }

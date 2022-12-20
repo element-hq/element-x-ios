@@ -26,7 +26,7 @@ settings:
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   BASE_BUNDLE_IDENTIFIER: io.element.elementx
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.0.9
+  MARKETING_VERSION: 1.0.10
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
 
@@ -40,8 +40,8 @@ include:
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 0.0.9-demo
-    # path: ../matrix-rust-components-swift
+    exactVersion: 1.0.22-alpha
+    # path: ../matrix-rust-sdk
   DesignKit:
     path: ./
   AnalyticsEvents:

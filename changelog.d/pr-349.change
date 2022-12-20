@@ -1,1 +1,0 @@
-Re-write the timeline view to be backed by a UITableView to fix scroll glitches.

@@ -1,1 +1,0 @@
-Implement a split screen layout for when running on iPad and MacOS

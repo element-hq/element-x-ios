@@ -19,10 +19,16 @@ import AnalyticsEvents
 import XCTest
 
 class AnalyticsTests: XCTestCase {
+    private var applicationSettings: AppSettings!
+    
+    override func setUp() {
+        AppSettings.configureWithSuiteName("io.element.elementx.unitests")
+        AppSettings.reset()
+        applicationSettings = AppSettings()
+    }
+    
     func testAnalyticsPromptNewUser() {
         // Given a fresh install of the app (without PostHog analytics having been set).
-        ElementSettings.store.removeObject(forKey: ElementSettings.UserDefaultsKeys.enableAnalytics.rawValue)
-        
         // When the user is prompted for analytics.
         let showPrompt = Analytics.shared.shouldShowAnalyticsPrompt
         
@@ -32,7 +38,7 @@ class AnalyticsTests: XCTestCase {
     
     func testAnalyticsPromptUserDeclinedPostHog() {
         // Given an existing install of the app where the user previously declined PostHog
-        ElementSettings.shared.enableAnalytics = false
+        applicationSettings.enableAnalytics = false
         
         // When the user is prompted for analytics
         let showPrompt = Analytics.shared.shouldShowAnalyticsPrompt
@@ -43,7 +49,7 @@ class AnalyticsTests: XCTestCase {
     
     func testAnalyticsPromptUserAcceptedPostHog() {
         // Given an existing install of the app where the user previously accepted PostHog
-        ElementSettings.shared.enableAnalytics = true
+        applicationSettings.enableAnalytics = true
         
         // When the user is prompted for analytics
         let showPrompt = Analytics.shared.shouldShowAnalyticsPrompt

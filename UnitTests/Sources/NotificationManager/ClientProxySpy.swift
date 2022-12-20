@@ -19,6 +19,10 @@ import Combine
 import Foundation
 
 class ClientProxySpy: ClientProxyProtocol {
+    var visibleRoomsSummaryProvider: ElementX.RoomSummaryProviderProtocol?
+    
+    var allRoomsSummaryProvider: ElementX.RoomSummaryProviderProtocol?
+    
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     var userIdentifier = ""

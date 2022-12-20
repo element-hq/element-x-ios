@@ -56,15 +56,4 @@ class SettingsViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssert(correctResult)
     }
-
-    func testCrash() async throws {
-        var correctResult = false
-        viewModel.callback = { result in
-            correctResult = result == .crash
-        }
-
-        context.send(viewAction: .crash)
-        await Task.yield()
-        XCTAssert(correctResult)
-    }
 }

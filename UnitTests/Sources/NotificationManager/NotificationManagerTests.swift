@@ -27,7 +27,8 @@ final class NotificationManagerTests: XCTestCase {
     private var shouldDisplayInAppNotificationReturnValue = false
     private var handleInlineReplyDelegateCalled = false
     private var notificationTappedDelegateCalled = false
-    
+    private let settings = ServiceLocator.shared.settings
+
     override func setUp() {
         sut = NotificationManager(clientProxy: clientProxySpy, notificationCenter: notificationCenter)
     }
@@ -75,14 +76,14 @@ final class NotificationManagerTests: XCTestCase {
         })
         waitForExpectations(timeout: 0.5)
         XCTAssertEqual(clientProxySpy.setPusherPushkey, pushkeyData.base64EncodedString())
-        XCTAssertEqual(clientProxySpy.setPusherAppId, BuildSettings.pusherAppId)
+        XCTAssertEqual(clientProxySpy.setPusherAppId, settings?.pusherAppId)
         XCTAssertEqual(clientProxySpy.setPusherKind, .http)
-        XCTAssertEqual(clientProxySpy.setPusherAppId, BuildSettings.pusherAppId)
+        XCTAssertEqual(clientProxySpy.setPusherAppId, settings?.pusherAppId)
         XCTAssertEqual(clientProxySpy.setPusherAppDisplayName, "\(InfoPlistReader.target.bundleDisplayName) (iOS)")
         XCTAssertEqual(clientProxySpy.setPusherDeviceDisplayName, UIDevice.current.name)
         XCTAssertNotNil(clientProxySpy.setPusherProfileTag)
         XCTAssertEqual(clientProxySpy.setPusherLang, Bundle.preferredLanguages.first)
-        XCTAssertEqual(clientProxySpy.setPusherUrl, BuildSettings.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(clientProxySpy.setPusherUrl, settings?.pushGatewayBaseURL.absoluteString)
         XCTAssertEqual(clientProxySpy.setPusherFormat, .eventIdOnly)
         let defaultPayload: [AnyHashable: Any] = [
             "aps": [
@@ -99,22 +100,22 @@ final class NotificationManagerTests: XCTestCase {
     
     func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() throws {
         let expectation = expectation(description: "Callback happened")
-        ElementSettings.shared.pusherProfileTag = nil
+        settings?.pusherProfileTag = nil
         sut.register(with: Data(), completion: { _ in
             expectation.fulfill()
         })
         waitForExpectations(timeout: 0.5)
-        XCTAssertNotNil(ElementSettings.shared.pusherProfileTag)
+        XCTAssertNotNil(settings?.pusherProfileTag)
     }
     
     func test_whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() throws {
         let expectation = expectation(description: "Callback happened")
-        ElementSettings.shared.pusherProfileTag = "12345"
+        settings?.pusherProfileTag = "12345"
         sut.register(with: Data(), completion: { _ in
             expectation.fulfill()
         })
         waitForExpectations(timeout: 0.5)
-        XCTAssertEqual(ElementSettings.shared.pusherProfileTag, "12345")
+        XCTAssertEqual(settings?.pusherProfileTag, "12345")
     }
     
     func test_whenShowLocalNotification_notificationRequestGetsAdded() throws {

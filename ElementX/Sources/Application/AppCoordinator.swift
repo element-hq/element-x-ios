@@ -47,18 +47,21 @@ class AppCoordinator: AppCoordinatorProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
 
+    private var userSessionCancellables = Set<AnyCancellable>()
     private var cancellables = Set<AnyCancellable>()
     private(set) var notificationManager: NotificationManagerProtocol?
 
     init() {
         navigationRootCoordinator = NavigationRootCoordinator()
+        
+        Self.setupServiceLocator(navigationRootCoordinator: navigationRootCoordinator)
+        Self.setupLogging()
+        
         stateMachine = AppCoordinatorStateMachine()
         
-        bugReportService = BugReportService(withBaseURL: BuildSettings.bugReportServiceBaseURL, sentryURL: BuildSettings.bugReportSentryURL)
+        bugReportService = BugReportService(withBaseURL: ServiceLocator.shared.settings.bugReportServiceBaseURL, sentryURL: ServiceLocator.shared.settings.bugReportSentryURL)
 
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
-
-        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
 
         backgroundTaskService = UIKitBackgroundTaskService {
             UIApplication.shared
@@ -66,15 +69,19 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
-        setupStateMachine()
+        // Reset everything if the app has been deleted since the previous run
+        if !ServiceLocator.shared.settings.hasAppLaunchedOnce {
+            AppSettings.reset()
+            userSessionStore.reset()
+            ServiceLocator.shared.settings.hasAppLaunchedOnce = true
+        }
         
-        setupLogging()
+        setupStateMachine()
         
         Bundle.elementFallbackLanguage = "en"
 
-        startObservingApplicationState()
-        
-        // Benchmark.trackingEnabled = true
+        observeApplicationState()
+        observeNetworkState()
     }
     
     func start() {
@@ -91,7 +98,13 @@ class AppCoordinator: AppCoordinatorProtocol {
         
     // MARK: - Private
     
-    private func setupLogging() {
+    private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
+        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
+        ServiceLocator.shared.register(appSettings: AppSettings())
+        ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
+    }
+    
+    private static func setupLogging() {
         let loggerConfiguration = MXLogConfiguration()
         loggerConfiguration.maxLogFilesCount = 10
         
@@ -270,7 +283,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        guard BuildSettings.enableNotifications else {
+        guard ServiceLocator.shared.settings.enableNotifications else {
             return
         }
         guard notificationManager == nil else {
@@ -317,12 +330,11 @@ class AppCoordinator: AppCoordinatorProtocol {
                     break
                 }
             }
-            .store(in: &cancellables)
+            .store(in: &userSessionCancellables)
     }
 
     private func deobserveUserSessionChanges() {
-        cancellables.forEach { $0.cancel() }
-        cancellables.removeAll()
+        userSessionCancellables.removeAll()
     }
     
     // MARK: Toasts and loading indicators
@@ -354,7 +366,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSession?.clientProxy.startSync()
     }
 
-    private func startObservingApplicationState() {
+    private func observeApplicationState() {
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(applicationWillResignActive),
                                                name: UIApplication.willResignActiveNotification,
@@ -388,6 +400,19 @@ class AppCoordinator: AppCoordinatorProtocol {
             isSuspended = false
             resume()
         }
+    }
+    
+    private func observeNetworkState() {
+        let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
+        ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
+            if reachable {
+                ServiceLocator.shared.userNotificationController.retractNotificationWithId(reachabilityNotificationIdentifier)
+            } else {
+                ServiceLocator.shared.userNotificationController.submitNotification(.init(id: reachabilityNotificationIdentifier,
+                                                                                          title: ElementL10n.a11yPresenceOffline,
+                                                                                          persistent: true))
+            }
+        }.store(in: &cancellables)
     }
 }
 

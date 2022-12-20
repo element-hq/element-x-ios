@@ -71,7 +71,9 @@ protocol ClientProxyProtocol: AnyObject, MediaProxyProtocol {
 
     var restorationToken: RestorationToken? { get }
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
+    var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? { get }
+    
+    var allRoomsSummaryProvider: RoomSummaryProviderProtocol? { get }
     
     func startSync()
     

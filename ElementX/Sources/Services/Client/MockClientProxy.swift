@@ -27,11 +27,13 @@ class MockClientProxy: ClientProxyProtocol {
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
     
-    var roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    
+    var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
     internal init(userIdentifier: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userIdentifier = userIdentifier
-        self.roomSummaryProvider = roomSummaryProvider
+        visibleRoomsSummaryProvider = roomSummaryProvider
     }
     
     func startSync() { }
@@ -41,7 +43,7 @@ class MockClientProxy: ClientProxyProtocol {
     func restartSync() { }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
-        guard let room = roomSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }),
+        guard let room = visibleRoomsSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }),
               let displayName = room.asFilled?.name else {
             return nil
         }

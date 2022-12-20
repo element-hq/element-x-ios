@@ -26,4 +26,16 @@ class ServiceLocator {
     func register(userNotificationController: UserNotificationControllerProtocol) {
         self.userNotificationController = userNotificationController
     }
+    
+    private(set) var settings: AppSettings!
+    
+    func register(appSettings: AppSettings) {
+        settings = appSettings
+    }
+    
+    private(set) var networkMonitor: NetworkMonitor!
+    
+    func register(networkMonitor: NetworkMonitor) {
+        self.networkMonitor = networkMonitor
+    }
 }
