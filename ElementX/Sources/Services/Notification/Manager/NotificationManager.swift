@@ -19,7 +19,7 @@ import UIKit
 import UserNotifications
 
 class NotificationManager: NSObject, NotificationManagerProtocol {
-    private var notificationCenter: UserNotificationCenterProtocol
+    private let notificationCenter: UserNotificationCenterProtocol
     private let clientProxy: ClientProxyProtocol
 
     init(clientProxy: ClientProxyProtocol, notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
