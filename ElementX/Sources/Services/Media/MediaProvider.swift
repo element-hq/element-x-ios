@@ -20,12 +20,12 @@ import UIKit
 struct MediaProvider: MediaProviderProtocol {
     private let mediaProxy: MediaProxyProtocol
     private let imageCache: Kingfisher.ImageCache
-    private let fileCache: FileCache
+    private let fileCache: FileCacheProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol?
     
     init(mediaProxy: MediaProxyProtocol,
          imageCache: Kingfisher.ImageCache,
-         fileCache: FileCache,
+         fileCache: FileCacheProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol?) {
         self.mediaProxy = mediaProxy
         self.imageCache = imageCache
