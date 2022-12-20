@@ -19,7 +19,10 @@ import SwiftUI
 struct SplashScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(
-            Image(asset: Asset.Images.appLogo)
+            ZStack {
+                Image(asset: Asset.Images.appLogo)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         )
     }
 }
