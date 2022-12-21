@@ -34,7 +34,7 @@ class NetworkMonitor {
     init() {
         queue = DispatchQueue(label: "io.element.elementx.networkmonitor")
         pathMonitor = NWPathMonitor()
-        reachabilityPublisher = CurrentValueSubject<Bool, Never>(pathMonitor.currentPath.status == .satisfied)
+        reachabilityPublisher = CurrentValueSubject<Bool, Never>(true)
         
         pathMonitor.pathUpdateHandler = { [weak self] path in
             DispatchQueue.main.async {

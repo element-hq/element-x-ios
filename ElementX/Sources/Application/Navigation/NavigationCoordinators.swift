@@ -377,6 +377,8 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
     }
     
+    var presentationDetents: Set<PresentationDetent> = []
+    
     // The currently presented sheet coordinator
     // Sheets will be presented through the NavigationSplitCoordinator if provided
     var sheetCoordinator: (any CoordinatorProtocol)? {
@@ -489,7 +491,8 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     // MARK: - CoordinatorProtocol
     
     func toPresentable() -> AnyView {
-        AnyView(NavigationStackCoordinatorView(navigationStackCoordinator: self))
+        AnyView(NavigationStackCoordinatorView(navigationStackCoordinator: self)
+            .presentationDetents(presentationDetents))
     }
     
     // MARK: - CustomStringConvertible

@@ -22,6 +22,7 @@ struct TimelineItemContextMenuActions {
 }
 
 enum TimelineItemContextMenuAction: Identifiable, Hashable {
+    case react
     case copy
     case edit
     case quote
@@ -59,6 +60,10 @@ public struct TimelineItemContextMenu: View {
     private func viewsForActions(_ actions: [TimelineItemContextMenuAction]) -> some View {
         ForEach(actions, id: \.self) { item in
             switch item {
+            case .react:
+                Button { callback(item) } label: {
+                    Label(ElementL10n.reactions, systemImage: "face.smiling")
+                }
             case .copy:
                 Button { callback(item) } label: {
                     Label(ElementL10n.actionCopy, systemImage: "doc.on.doc")

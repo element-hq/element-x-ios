@@ -69,13 +69,7 @@ class TimelineTableViewController: UIViewController {
             applySnapshot()
         }
     }
-    
-    var displayReactionsMenuForItemId = "" {
-        didSet {
-            tableView.reloadData()
-        }
-    }
-    
+        
     var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
@@ -193,7 +187,6 @@ class TimelineTableViewController: UIViewController {
             // A local reference to avoid capturing self in the cell configuration.
             let coordinator = self.coordinator
             let opacity = self.opacity(for: timelineItem)
-            let displayReactionsMenuForItemId = self.displayReactionsMenuForItemId
             let contextMenuBuilder = self.contextMenuBuilder
             
             cell.item = timelineItem
@@ -201,38 +194,28 @@ class TimelineTableViewController: UIViewController {
                 if case .backPaginationIndicator = timelineItem {
                     timelineItem
                 } else {
-                    VStack {
-                        if displayReactionsMenuForItemId == timelineItem.id {
-                            TimelineItemReactionsMenuView { emoji in
-                                coordinator.send(viewAction: .emojiTapped(emoji: emoji, itemId: timelineItem.id))
-                            } onDisplayEmojiPicker: {
-                                coordinator.send(viewAction: .displayEmojiPicker(itemId: timelineItem.id))
-                            }
+                    timelineItem
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .opacity(opacity)
+                        .contextMenu {
+                            contextMenuBuilder?(timelineItem.id)
                         }
-                        
-                        timelineItem
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .opacity(opacity)
-                            .contextMenu {
-                                contextMenuBuilder?(timelineItem.id)
-                            }
-                            .onAppear {
-                                coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
-                            }
-                            .onDisappear {
-                                coordinator.send(viewAction: .itemDisappeared(id: timelineItem.id))
-                            }
-                            .environment(\.openURL, OpenURLAction { url in
-                                coordinator.send(viewAction: .linkClicked(url: url))
-                                return .systemAction
-                            })
-                            .onTapGesture(count: 2) {
-                                coordinator.send(viewAction: .displayReactionsMenuForItemId(itemId: timelineItem.id))
-                            }
-                            .onTapGesture {
-                                coordinator.send(viewAction: .itemTapped(id: timelineItem.id))
-                            }
-                    }
+                        .onAppear {
+                            coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
+                        }
+                        .onDisappear {
+                            coordinator.send(viewAction: .itemDisappeared(id: timelineItem.id))
+                        }
+                        .environment(\.openURL, OpenURLAction { url in
+                            coordinator.send(viewAction: .linkClicked(url: url))
+                            return .systemAction
+                        })
+                        .onTapGesture(count: 2) {
+                            coordinator.send(viewAction: .displayEmojiPicker(itemId: timelineItem.id))
+                        }
+                        .onTapGesture {
+                            coordinator.send(viewAction: .itemTapped(id: timelineItem.id))
+                        }
                 }
             }
             .margins(.all, self.timelineStyle.rowInsets)
@@ -375,15 +358,9 @@ class TimelineTableViewController: UIViewController {
 
 extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let isAtBottom = isAtBottom()
-        
         // Dispatches fix runtime warnings about making changes during a view update.
-        if !scrollToBottomButtonVisible, isAtBottom {
-            DispatchQueue.main.async { self.scrollToBottomButtonVisible = true }
-        } else if scrollToBottomButtonVisible, !isAtBottom {
-            DispatchQueue.main.async { self.scrollToBottomButtonVisible = false }
-        }
-        
+        DispatchQueue.main.async { self.scrollToBottomButtonVisible = self.isAtBottom() }
+
         paginateBackwardsPublisher.send(())
     }
 

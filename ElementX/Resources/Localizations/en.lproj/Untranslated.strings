@@ -13,6 +13,7 @@
 "room_timeline_style_bubbled_long_description" = "Bubbled Timeline";
 
 "room_timeline_permalink_creation_failure" = "Failed creating the permalink";
+"room_timeline_backpagination_failure" = "Failed loading messages";
 
 "room_timeline_replying_to" = "Replying to %@";
 "room_timeline_editing" = "Editing";

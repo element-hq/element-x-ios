@@ -27,7 +27,7 @@ class RoomProxy: RoomProxyProtocol {
     
     private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.serial")
     
-    private var sendMessageBgTask: BackgroundTaskProtocol?
+    private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
     private var memberAvatars = [String: String]()
     private var memberDisplayNames = [String: String]()
@@ -151,10 +151,7 @@ class RoomProxy: RoomProxyProtocol {
         
         do {
             let outcome: PaginationOutcome = try await Task.dispatch(on: .global()) {
-                Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
-                let outcome = try self.room.paginateBackwards(limit: UInt16(count))
-                Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
-                return outcome
+                try self.room.paginateBackwards(limit: UInt16(count))
             }
             update(backPaginationOutcome: outcome)
             return .success(())
@@ -164,9 +161,9 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
-        sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
         defer {
-            sendMessageBgTask?.stop()
+            sendMessageBackgroundTask?.stop()
         }
         
         let transactionId = genTransactionId()
@@ -187,15 +184,25 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            .success(())
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: .global()) {
+            do {
+                try self.room.sendReaction(eventId: eventId, key: reaction)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingReaction)
+            }
         }
     }
 
     func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBgTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
         defer {
-            sendMessageBgTask?.stop()
+            sendMessageBackgroundTask?.stop()
         }
 
         let transactionId = genTransactionId()
@@ -205,7 +212,7 @@ class RoomProxy: RoomProxyProtocol {
                 try self.room.edit(newMsg: newMessage, originalEventId: originalEventId, txnId: transactionId)
                 return .success(())
             } catch {
-                return .failure(.failedSendingMessage)
+                return .failure(.failedEditingMessage)
             }
         }
     }
