@@ -40,6 +40,8 @@ protocol RoomTimelineProviderProtocol {
     func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError>
+    
+    func retryDecryption(forSessionId sessionId: String) async
 }
 
 extension RoomTimelineProviderProtocol {

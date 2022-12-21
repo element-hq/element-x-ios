@@ -18,7 +18,7 @@ import SwiftUI
 
 struct TimelineItemContextMenuActions {
     let actions: [TimelineItemContextMenuAction]
-    let debugActions: [TimelineItemContextMenuAction] = [.viewSource]
+    let debugActions: [TimelineItemContextMenuAction]
 }
 
 enum TimelineItemContextMenuAction: Identifiable, Hashable {
@@ -30,6 +30,7 @@ enum TimelineItemContextMenuAction: Identifiable, Hashable {
     case redact
     case reply
     case viewSource
+    case retryDecryption(sessionId: String)
     
     var id: Self { self }
 
@@ -91,6 +92,10 @@ public struct TimelineItemContextMenu: View {
             case .viewSource:
                 Button { callback(item) } label: {
                     Label(ElementL10n.viewSource, systemImage: "doc.text.below.ecg")
+                }
+            case .retryDecryption:
+                Button { callback(item) } label: {
+                    Label(ElementL10n.roomTimelineContextMenuRetryDecryption, systemImage: "arrow.down.message")
                 }
             }
         }

@@ -81,4 +81,6 @@ struct MockRoomProxy: RoomProxyProtocol {
         }
         return .failure(.failedRetrievingMembers)
     }
+    
+    func retryDecryption(forSessionId sessionId: String) async { }
 }

@@ -85,8 +85,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     } else {
                         self?.state.roomListMode = .rooms
                     }
-                } else if totalCount == 0 {
-                    #warning("Empty state but it never happens because SS never goes into live for empty accounts")
+                } else if totalCount == 0 { // Empty state
+                    self?.state.roomListMode = .skeletons
                 } else {
                     self?.state.roomListMode = .rooms
                 }

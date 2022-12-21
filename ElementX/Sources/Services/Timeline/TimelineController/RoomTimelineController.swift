@@ -204,6 +204,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         return description
     }
+    
+    func retryDecryption(forSessionId sessionId: String) async {
+        await timelineProvider.retryDecryption(forSessionId: sessionId)
+    }
 
     // MARK: - Private
     

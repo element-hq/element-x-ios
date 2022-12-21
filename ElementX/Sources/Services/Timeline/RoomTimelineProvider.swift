@@ -139,6 +139,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
     }
     
+    func retryDecryption(forSessionId sessionId: String) async {
+        await roomProxy.retryDecryption(forSessionId: sessionId)
+    }
+    
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
