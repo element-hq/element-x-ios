@@ -151,7 +151,7 @@ class RoomProxy: RoomProxyProtocol {
         
         do {
             let outcome: PaginationOutcome = try await Task.dispatch(on: .global()) {
-                return try self.room.paginateBackwards(limit: UInt16(count))
+                try self.room.paginateBackwards(limit: UInt16(count))
             }
             update(backPaginationOutcome: outcome)
             return .success(())
