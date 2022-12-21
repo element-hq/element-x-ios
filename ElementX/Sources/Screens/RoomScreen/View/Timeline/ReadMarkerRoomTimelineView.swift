@@ -17,22 +17,23 @@
 import Foundation
 import SwiftUI
 
-struct SeparatorRoomTimelineView: View {
-    let timelineItem: SeparatorRoomTimelineItem
+struct ReadMarkerRoomTimelineView: View {
+    let timelineItem: ReadMarkerRoomTimelineItem
     
     var body: some View {
-        Text(timelineItem.text)
-            .font(.element.footnote)
-            .foregroundColor(.element.secondaryContent)
-            .id(timelineItem.id)
-            .padding(.vertical, 24)
-            .frame(maxWidth: .infinity)
+        VStack {
+            Spacer(minLength: 4.0)
+            Divider()
+                .id(timelineItem.id)
+                .frame(maxWidth: .infinity)
+                .overlay(Color.element.accent)
+        }
     }
 }
 
-struct SeparatorRoomTimelineView_Previews: PreviewProvider {
+struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = SeparatorRoomTimelineItem(id: UUID().uuidString, text: "This is a separator")
-        SeparatorRoomTimelineView(timelineItem: item)
+        let item = ReadMarkerRoomTimelineItem(id: UUID().uuidString)
+        ReadMarkerRoomTimelineView(timelineItem: item)
     }
 }
