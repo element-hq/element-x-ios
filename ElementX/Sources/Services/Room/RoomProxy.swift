@@ -151,10 +151,7 @@ class RoomProxy: RoomProxyProtocol {
         
         do {
             let outcome: PaginationOutcome = try await Task.dispatch(on: .global()) {
-                Benchmark.startTrackingForIdentifier("BackPagination \(id)", message: "Backpaginating \(count) message(s) in room \(id)")
-                let outcome = try self.room.paginateBackwards(limit: UInt16(count))
-                Benchmark.endTrackingForIdentifier("BackPagination \(id)", message: "Finished backpaginating \(count) message(s) in room \(id)")
-                return outcome
+                return try self.room.paginateBackwards(limit: UInt16(count))
             }
             update(backPaginationOutcome: outcome)
             return .success(())

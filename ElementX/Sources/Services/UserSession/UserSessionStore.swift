@@ -100,8 +100,6 @@ class UserSessionStore: UserSessionStoreProtocol {
     // MARK: - Private
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
-        Benchmark.startTrackingForIdentifier("Login", message: "Started restoring previous login")
-        
         let builder = ClientBuilder()
             .basePath(path: baseDirectory.path)
             .username(username: credentials.userID)
