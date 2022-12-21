@@ -27,6 +27,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     case notice(NoticeRoomTimelineItem)
     case redacted(RedactedRoomTimelineItem)
     case encrypted(EncryptedRoomTimelineItem)
+    case readMarker(ReadMarkerRoomTimelineItem)
     case backPaginationIndicator(Bool)
     
     var id: String {
@@ -48,6 +49,8 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
         case .redacted(let item):
             return item.id
         case .encrypted(let item):
+            return item.id
+        case .readMarker(let item):
             return item.id
         case .backPaginationIndicator:
             return "BackpaginationLoadingIndicator"
@@ -76,6 +79,8 @@ extension RoomTimelineViewProvider: View {
             RedactedRoomTimelineView(timelineItem: item)
         case .encrypted(let item):
             EncryptedRoomTimelineView(timelineItem: item)
+        case .readMarker(let item):
+            ReadMarkerRoomTimelineView(timelineItem: item)
         case .backPaginationIndicator(let isBackPaginating):
             ProgressView()
                 .frame(maxWidth: .infinity)

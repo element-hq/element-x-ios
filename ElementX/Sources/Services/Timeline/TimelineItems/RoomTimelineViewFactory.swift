@@ -17,6 +17,7 @@
 import Foundation
 
 struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
+    // swiftlint:disable:next cyclomatic_complexity
     func buildTimelineViewFor(timelineItem: RoomTimelineItemProtocol) -> RoomTimelineViewProvider {
         switch timelineItem {
         case let item as TextRoomTimelineItem:
@@ -37,6 +38,8 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .redacted(item)
         case let item as EncryptedRoomTimelineItem:
             return .encrypted(item)
+        case let item as ReadMarkerRoomTimelineItem:
+            return .readMarker(item)
         default:
             fatalError("Unknown timeline item")
         }
