@@ -19,11 +19,12 @@ import UIKit
 import UserNotifications
 
 class NotificationManager: NSObject, NotificationManagerProtocol {
-    private let notificationCenter = UNUserNotificationCenter.current()
+    private let notificationCenter: UserNotificationCenterProtocol
     private let clientProxy: ClientProxyProtocol
 
-    init(clientProxy: ClientProxyProtocol) {
+    init(clientProxy: ClientProxyProtocol, notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.clientProxy = clientProxy
+        self.notificationCenter = notificationCenter
         super.init()
     }
 
@@ -45,22 +46,25 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                    options: [])
         notificationCenter.setNotificationCategories([replyCategory])
         notificationCenter.delegate = self
-        Task {
-            do {
-                let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
-                MXLog.debug("[NotificationManager] permission granted: \(granted)")
-
-                await MainActor.run {
-                    delegate?.authorizationStatusUpdated(self, granted: granted)
-                }
-            } catch {
+        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
+            guard let self else {
+                return
+            }
+            if let error {
                 MXLog.debug("[NotificationManager] request authorization failed: \(error)")
+            } else {
+                MXLog.debug("[NotificationManager] permission granted: \(granted)")
+                DispatchQueue.main.async {
+                    self.delegate?.authorizationStatusUpdated(self, granted: granted)
+                }
             }
         }
     }
 
-    func register(with deviceToken: Data) {
-        setPusher(with: deviceToken, clientProxy: clientProxy)
+    func register(with deviceToken: Data, completion: ((Bool) -> Void)? = nil) {
+        setPusher(with: deviceToken,
+                  clientProxy: clientProxy,
+                  completion: completion)
     }
 
     func registrationFailed(with error: Error) { }
@@ -74,17 +78,18 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         let request = UNNotificationRequest(identifier: ProcessInfo.processInfo.globallyUniqueString,
                                             content: content,
                                             trigger: nil)
-        Task {
-            do {
-                try await notificationCenter.add(request)
-                MXLog.debug("[NotificationManager] show local notification succeeded")
-            } catch {
+        notificationCenter.add(request) { error in
+            if let error {
                 MXLog.debug("[NotificationManager] show local notification failed: \(error)")
+            } else {
+                MXLog.debug("[NotificationManager] show local notification succeeded")
             }
         }
     }
 
-    private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) {
+    private func setPusher(with deviceToken: Data,
+                           clientProxy: ClientProxyProtocol,
+                           completion: ((Bool) -> Void)?) {
         Task {
             do {
                 try await clientProxy.setPusher(pushkey: deviceToken.base64EncodedString(),
@@ -106,8 +111,10 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                     ]
                                                 ])
                 MXLog.debug("[NotificationManager] set pusher succeeded")
+                completion?(true)
             } catch {
                 MXLog.debug("[NotificationManager] set pusher failed: \(error)")
+                completion?(false)
             }
         }
     }
@@ -164,3 +171,5 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
         }
     }
 }
+
+extension UNUserNotificationCenter: UserNotificationCenterProtocol { }

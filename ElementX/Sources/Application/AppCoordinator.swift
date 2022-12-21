@@ -302,7 +302,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                     .sink { [weak self] callback in
                         switch callback {
                         case .registeredNotifications(let deviceToken):
-                            self?.notificationManager?.register(with: deviceToken)
+                            self?.notificationManager?.register(with: deviceToken, completion: nil)
                         case .failedToRegisteredNotifications(let error):
                             self?.notificationManager?.registrationFailed(with: error)
                         }

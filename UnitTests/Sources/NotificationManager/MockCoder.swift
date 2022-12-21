@@ -16,22 +16,7 @@
 
 import Foundation
 
-class MockNotificationManager: NotificationManagerProtocol {
-    // MARK: NotificationManagerProtocol
-
-    var isAvailable: Bool {
-        false
-    }
-
-    weak var delegate: NotificationManagerDelegate?
-
-    func start() {
-        delegate?.authorizationStatusUpdated(self, granted: false)
-    }
-
-    func register(with deviceToken: Data, completion: ((Bool) -> Void)? = nil) { }
-
-    func registrationFailed(with error: Error) { }
-
-    func showLocalNotification(with title: String, subtitle: String?) { }
+final class MockCoder: NSKeyedArchiver {
+    override func decodeObject(forKey _: String) -> Any { "" }
+    override func decodeInt64(forKey key: String) -> Int64 { 0 }
 }

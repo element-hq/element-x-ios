@@ -15,23 +15,11 @@
 //
 
 import Foundation
+import UserNotifications
 
-class MockNotificationManager: NotificationManagerProtocol {
-    // MARK: NotificationManagerProtocol
-
-    var isAvailable: Bool {
-        false
-    }
-
-    weak var delegate: NotificationManagerDelegate?
-
-    func start() {
-        delegate?.authorizationStatusUpdated(self, granted: false)
-    }
-
-    func register(with deviceToken: Data, completion: ((Bool) -> Void)? = nil) { }
-
-    func registrationFailed(with error: Error) { }
-
-    func showLocalNotification(with title: String, subtitle: String?) { }
+protocol UserNotificationCenterProtocol: AnyObject {
+    var delegate: UNUserNotificationCenterDelegate? { get set }
+    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?)
+    func requestAuthorization(options: UNAuthorizationOptions, completionHandler: @escaping (Bool, Error?) -> Void)
+    func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
 }
