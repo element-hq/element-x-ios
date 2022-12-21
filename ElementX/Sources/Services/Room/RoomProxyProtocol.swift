@@ -23,6 +23,8 @@ enum RoomProxyError: Error {
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
     case failedSendingMessage
+    case failedSendingReaction
+    case failedEditingMessage
     case failedRedactingEvent
     case failedAddingTimelineListener
     case failedRetrievingMembers

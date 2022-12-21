@@ -3,6 +3,9 @@ require_relative 'changelog'
 
 before_all do
   xcversion(version: "~> 14.1")
+
+  ENV["FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT"] = "180"
+  ENV["FASTLANE_XCODE_LIST_TIMEOUT"] = "180"
 end
 
 lane :alpha do

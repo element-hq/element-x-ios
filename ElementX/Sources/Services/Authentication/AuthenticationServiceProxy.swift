@@ -95,8 +95,6 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     func login(username: String, password: String, initialDeviceName: String?, deviceId: String?) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
         do {
-            Benchmark.startTrackingForIdentifier("Login", message: "Started new login")
-        
             let client = try await Task.dispatch(on: .global()) {
                 try self.authenticationService.login(username: username,
                                                      password: password,
@@ -104,11 +102,8 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
                                                      deviceId: deviceId)
             }
             
-            Benchmark.endTrackingForIdentifier("Login", message: "Finished login")
             return await userSession(for: client)
         } catch {
-            Benchmark.endTrackingForIdentifier("Login", message: "Login failed")
-            
             MXLog.error("Failed logging in with error: \(error)")
             guard let error = error as? AuthenticationError else { return .failure(.failedLoggingIn) }
             

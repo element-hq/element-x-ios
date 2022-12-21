@@ -30,6 +30,8 @@ extension ElementL10n {
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
   /// Info
   public static let roomDetailsTitle = ElementL10n.tr("Untranslated", "room_details_title")
+  /// Failed loading messages
+  public static let roomTimelineBackpaginationFailure = ElementL10n.tr("Untranslated", "room_timeline_backpagination_failure")
   /// Editing
   public static let roomTimelineEditing = ElementL10n.tr("Untranslated", "room_timeline_editing")
   /// Failed creating the permalink

@@ -18,6 +18,7 @@ import Foundation
 
 enum EmojiPickerScreenViewModelAction {
     case emojiSelected(emoji: String)
+    case dismiss
 }
 
 struct EmojiPickerScreenViewState: BindableState {
@@ -27,6 +28,7 @@ struct EmojiPickerScreenViewState: BindableState {
 enum EmojiPickerScreenViewAction {
     case search(searchString: String)
     case emojiTapped(emoji: EmojiPickerEmojiViewData)
+    case dismiss
 }
 
 struct EmojiPickerEmojiCategoryViewData: Identifiable {

@@ -23,6 +23,7 @@ struct EmojiPickerScreenCoordinatorParameters {
 
 enum EmojiPickerScreenCoordinatorAction {
     case emojiSelected(emoji: String, itemId: String)
+    case dismiss
 }
 
 final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
@@ -44,12 +45,13 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
             switch action {
             case let .emojiSelected(emoji: emoji):
                 self.callback?(.emojiSelected(emoji: emoji, itemId: self.parameters.itemId))
+            case .dismiss:
+                self.callback?(.dismiss)
             }
         }
     }
     
     func toPresentable() -> AnyView {
-        AnyView(EmojiPickerScreen(context: viewModel.context)
-            .presentationDetents([.medium, .large]))
+        AnyView(EmojiPickerScreen(context: viewModel.context))
     }
 }

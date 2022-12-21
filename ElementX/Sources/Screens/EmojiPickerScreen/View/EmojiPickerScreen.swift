@@ -21,31 +21,39 @@ struct EmojiPickerScreen: View {
     @State var searchString = ""
     
     var body: some View {
-        VStack {
-            Text(ElementL10n.reactions)
-                .padding(.top, 20)
-            EmojiPickerSearchFieldView(searchString: $searchString)
-                .padding(.horizontal, 10)
-            ScrollView {
-                LazyVGrid(columns: [GridItem(.adaptive(minimum: 45))], spacing: 3) {
-                    ForEach(context.viewState.categories) { category in
-                        Section(header: EmojiPickerHeaderView(title: category.name)
-                            .padding(.horizontal, 13)
-                            .padding(.top, 10)) {
-                                ForEach(category.emojis) { emoji in
-                                    Text(emoji.value)
-                                        .frame(width: 45, height: 45)
-                                        .onTapGesture {
-                                            context.send(viewAction: .emojiTapped(emoji: emoji))
-                                        }
-                                }
+        ScrollView {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: 45))], spacing: 3) {
+                ForEach(context.viewState.categories) { category in
+                    Section(header: EmojiPickerHeaderView(title: category.name)
+                        .padding(.horizontal, 13)
+                        .padding(.top, 10)) {
+                            ForEach(category.emojis) { emoji in
+                                Text(emoji.value)
+                                    .frame(width: 45, height: 45)
+                                    .onTapGesture {
+                                        context.send(viewAction: .emojiTapped(emoji: emoji))
+                                    }
                             }
-                    }
+                        }
                 }
             }
         }
+        .navigationTitle(ElementL10n.reactions)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+        .searchable(text: $searchString)
         .onChange(of: searchString) { _ in
             context.send(viewAction: .search(searchString: searchString))
+        }
+    }
+    
+    @ToolbarContentBuilder
+    var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button { context.send(viewAction: .dismiss) } label: {
+                Text(ElementL10n.actionCancel)
+            }
+            .accessibilityIdentifier("dismissButton")
         }
     }
 }
@@ -54,6 +62,8 @@ struct EmojiPickerScreen: View {
 
 struct EmojiPickerScreen_Previews: PreviewProvider {
     static var previews: some View {
-        EmojiPickerScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
+        NavigationStack {
+            EmojiPickerScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
+        }
     }
 }
