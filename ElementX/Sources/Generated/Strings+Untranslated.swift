@@ -32,6 +32,8 @@ extension ElementL10n {
   public static let roomDetailsTitle = ElementL10n.tr("Untranslated", "room_details_title")
   /// Failed loading messages
   public static let roomTimelineBackpaginationFailure = ElementL10n.tr("Untranslated", "room_timeline_backpagination_failure")
+  /// Retry decryption
+  public static let roomTimelineContextMenuRetryDecryption = ElementL10n.tr("Untranslated", "room_timeline_context_menu_retry_decryption")
   /// Editing
   public static let roomTimelineEditing = ElementL10n.tr("Untranslated", "room_timeline_editing")
   /// Failed creating the permalink

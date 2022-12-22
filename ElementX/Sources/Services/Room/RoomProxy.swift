@@ -147,8 +147,6 @@ class RoomProxy: RoomProxyProtocol {
             return .failure(.noMoreMessagesToBackPaginate)
         }
         
-        let id = id // Copy the ID due to @Sendable requirement.
-        
         do {
             let outcome: PaginationOutcome = try await Task.dispatch(on: .global()) {
                 try self.room.paginateBackwards(limit: UInt16(count))
@@ -242,19 +240,27 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func update(avatarURL: String?, forUserId userId: String) {
+    func retryDecryption(forSessionId sessionId: String) async {
+        await Task.dispatch(on: .global()) { [weak self] in
+            self?.room.retryDecryption(sessionIds: [sessionId])
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func update(avatarURL: String?, forUserId userId: String) {
         memberAvatars[userId] = avatarURL
     }
     
-    func update(displayName: String?, forUserId userId: String) {
+    private func update(displayName: String?, forUserId userId: String) {
         memberDisplayNames[userId] = displayName
     }
     
-    func update(displayName: String) {
+    private func update(displayName: String) {
         self.displayName = displayName
     }
     
-    func update(backPaginationOutcome: PaginationOutcome) {
+    private func update(backPaginationOutcome: PaginationOutcome) {
         self.backPaginationOutcome = backPaginationOutcome
     }
 }

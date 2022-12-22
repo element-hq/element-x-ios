@@ -212,11 +212,11 @@ lane :prepare_next_release do
   api_token = ENV["GITHUB_TOKEN"]
   UI.user_error!("Invalid GitHub API token.") unless !api_token.to_s.empty?
 
-  target_file_path = "../ElementX/SupportingFiles/target.yml"
+  target_file_path = "../project.yml"
   xcode_project_file_path = "../ElementX.xcodeproj"
 
   data = YAML.load_file target_file_path
-  current_version = data["targets"]["ElementX"]["settings"]["base"]["MARKETING_VERSION"]
+  current_version = data["settings"]["MARKETING_VERSION"]
   new_version = current_version.next
   
   # Bump the patch version. The empty string after -i is so that sed doesn't 

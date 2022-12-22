@@ -42,4 +42,6 @@ struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
     func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError> {
         .failure(.failedRedactingItem)
     }
+    
+    func retryDecryption(forSessionId sessionId: String) async { }
 }

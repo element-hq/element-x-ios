@@ -193,7 +193,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
-            return .init(actions: [])
+            return .init(actions: [], debugActions: [])
         }
         
         var actions: [TimelineItemContextMenuAction] = [
@@ -208,7 +208,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.redact)
         }
         
-        return .init(actions: actions)
+        var debugActions: [TimelineItemContextMenuAction] = [.viewSource]
+        
+        if let item = timelineItem as? EncryptedRoomTimelineItem,
+           case let .megolmV1AesSha2(sessionId) = item.encryptionType {
+            debugActions.append(.retryDecryption(sessionId: sessionId))
+        }
+        
+        return .init(actions: actions, debugActions: debugActions)
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -238,7 +245,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 displayError(.alert(ElementL10n.roomTimelinePermalinkCreationFailure))
             }
         case .redact:
-            redact(itemId)
+            Task {
+                await timelineController.redact(itemId)
+            }
         case .reply:
             state.bindings.composerFocused = true
             state.composerMode = .reply(id: item.id, displayName: item.senderDisplayName ?? item.senderId)
@@ -246,16 +255,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             let debugDescription = timelineController.debugDescriptionFor(item.id)
             MXLog.info(debugDescription)
             state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
+        case .retryDecryption(let sessionId):
+            Task {
+                await timelineController.retryDecryption(forSessionId: sessionId)
+            }
         }
         
         if action.switchToDefaultComposer {
             state.composerMode = .default
-        }
-    }
-    
-    private func redact(_ eventID: String) {
-        Task {
-            await timelineController.redact(eventID)
         }
     }
 }

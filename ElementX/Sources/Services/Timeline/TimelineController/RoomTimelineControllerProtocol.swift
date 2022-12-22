@@ -61,4 +61,6 @@ protocol RoomTimelineControllerProtocol {
     func redact(_ eventID: String) async
     
     func debugDescriptionFor(_ itemId: String) -> String
+    
+    func retryDecryption(forSessionId sessionId: String) async
 }
