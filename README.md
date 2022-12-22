@@ -1,7 +1,7 @@
 [![Element iOS Matrix room #element-ios:matrix.org](https://img.shields.io/matrix/element-ios:matrix.org.svg?label=%23element-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-ios:matrix.org)
 ![GitHub](https://img.shields.io/github/license/vector-im/element-x-ios)
 
-![Build Status](https://img.shields.io/github/workflow/status/vector-im/element-x-ios/Tests?style=flat-square)
+![Build Status](https://img.shields.io/github/actions/workflow/status/vector-im/element-x-ios/unit_tests.yml?style=flat-square)
 ![GitHub release (latest by date)](https://img.shields.io/github/v/release/vector-im/element-x-ios)
 
 [![codecov](https://codecov.io/gh/vector-im/element-x-ios/branch/develop/graph/badge.svg?token=AVIJB2MJU2)](https://codecov.io/gh/vector-im/element-x-ios)
