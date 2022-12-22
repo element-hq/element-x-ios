@@ -64,6 +64,8 @@ struct RoomScreenViewState: BindableState {
     var canBackPaginate = true
     var isBackPaginating = false
     var showLoading = false
+    var timelineStyle: TimelineStyle
+    
     var bindings: RoomScreenViewStateBindings
     
     var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemContextMenuActions?)?

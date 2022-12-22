@@ -19,7 +19,6 @@ import SwiftUI
 struct SettingsScreen: View {
     @State private var showingLogoutConfirmation = false
     @Environment(\.colorScheme) private var colorScheme
-    @ObservedObject private var settings = ServiceLocator.shared.settings
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     @ScaledMetric private var menuIconSize = 30.0
@@ -104,13 +103,16 @@ struct SettingsScreen: View {
         Section {
             SettingsPickerRow(title: ElementL10n.settingsTimelineStyle,
                               image: Image(systemName: "rectangle.grid.1x2"),
-                              selection: $settings.timelineStyle) {
+                              selection: $context.timelineStyle) {
                 ForEach(TimelineStyle.allCases, id: \.self) { style in
-                    Text(style.description)
+                    Text(style.name)
                         .tag(style)
                 }
             }
             .accessibilityIdentifier("timelineStylePicker")
+            .onChange(of: context.timelineStyle) { _ in
+                context.send(viewAction: .changedTimelineStyle)
+            }
             
             SettingsDefaultRow(title: ElementL10n.sendBugReport,
                                image: Image(systemName: "questionmark.circle")) {
@@ -166,8 +168,8 @@ struct SettingsScreen: View {
     }
 }
 
-extension TimelineStyle: CustomStringConvertible {
-    var description: String {
+private extension TimelineStyle {
+    var name: String {
         switch self {
         case .plain:
             return ElementL10n.roomTimelineStylePlainLongDescription

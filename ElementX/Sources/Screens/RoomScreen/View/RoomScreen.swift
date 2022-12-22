@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct RoomScreen: View {
-    @ObservedObject private var settings = ServiceLocator.shared.settings
     @ObservedObject var context: RoomScreenViewModel.Context
     @State private var showReactionsMenuForItemId = ""
     
@@ -45,7 +44,7 @@ struct RoomScreen: View {
         TimelineView()
             .id(context.viewState.roomId)
             .environmentObject(context)
-            .timelineStyle(settings.timelineStyle)
+            .timelineStyle(context.viewState.timelineStyle)
             .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
     }
     

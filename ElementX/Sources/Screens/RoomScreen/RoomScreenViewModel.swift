@@ -40,6 +40,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatarURL: roomAvatarUrl,
+                                                         timelineStyle: ServiceLocator.shared.settings.timelineStyle,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
         
@@ -77,6 +78,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             return self.contextMenuActionsForItemId(itemId)
         }
+        
+        ServiceLocator.shared.settings.$timelineStyle.sink { [weak self] timelineStyle in
+            self?.state.timelineStyle = timelineStyle
+        }
+        .store(in: &cancellables)
         
         buildTimelineViews()
     }
