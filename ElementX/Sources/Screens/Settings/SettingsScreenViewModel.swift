@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias SettingsScreenViewModelType = StateStoreViewModel<SettingsScreenViewState, SettingsScreenViewAction>
@@ -25,12 +26,14 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
 
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        let bindings = SettingsScreenViewStateBindings()
+        let bindings = SettingsScreenViewStateBindings(timelineStyle: ServiceLocator.shared.settings.timelineStyle)
         super.init(initialViewState: .init(bindings: bindings,
                                            deviceID: userSession.deviceId,
                                            userID: userSession.userID,
                                            showSessionVerificationSection: !(userSession.sessionVerificationController?.isVerified ?? false)),
                    imageProvider: userSession.mediaProvider)
+        
+        listenToSettingsChange(publisher: ServiceLocator.shared.settings.$timelineStyle, keyPath: \.timelineStyle)
         
         Task {
             if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL() {
@@ -71,6 +74,20 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.logout)
         case .sessionVerification:
             callback?(.sessionVerification)
+        case .changedTimelineStyle:
+            ServiceLocator.shared.settings.timelineStyle = state.bindings.timelineStyle
         }
+    }
+    
+    private func listenToSettingsChange<Value>(publisher: AnyPublisher<Value, Never>,
+                                               keyPath: WritableKeyPath<SettingsScreenViewStateBindings, Value>) where Value: Equatable {
+        publisher.sink { [weak self] newValue in
+            guard newValue != self?.state.bindings[keyPath: keyPath] else {
+                return
+            }
+            
+            self?.state.bindings[keyPath: keyPath] = newValue
+        }
+        .store(in: &cancellables)
     }
 }

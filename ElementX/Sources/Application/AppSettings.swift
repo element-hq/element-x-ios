@@ -52,7 +52,7 @@ final class AppSettings: ObservableObject {
     /// The last known version of the app that was launched on this device, which is
     /// used to detect when migrations should be run. When `nil` the app may have been
     /// deleted between runs so should clear data in the shared container and keychain.
-    @AppStorage(UserDefaultsKeys.lastVersionLaunched.rawValue, store: store)
+    @UserSetting(key: UserDefaultsKeys.lastVersionLaunched.rawValue, defaultValue: nil, storage: store)
     var lastVersionLaunched: String?
     
     /// The default homeserver address used. This is intentionally a string without a scheme
@@ -114,27 +114,27 @@ final class AppSettings: ObservableObject {
     }
     
     /// `true` when the user has opted in to send analytics.
-    @AppStorage(UserDefaultsKeys.enableAnalytics.rawValue, store: store)
-    var enableAnalytics = false
+    @UserSetting(key: UserDefaultsKeys.enableAnalytics.rawValue, defaultValue: false, storage: store)
+    var enableAnalytics
     
     /// Indicates if the device has already called identify for this session to PostHog.
     /// This is separate to `enableAnalytics` as logging out leaves analytics
     /// enabled, but requires the next account to be identified separately.
-    @AppStorage(UserDefaultsKeys.isIdentifiedForAnalytics.rawValue, store: store)
-    var isIdentifiedForAnalytics = false
+    @UserSetting(key: UserDefaultsKeys.isIdentifiedForAnalytics.rawValue, defaultValue: false, storage: store)
+    var isIdentifiedForAnalytics
     
     // MARK: - Room Screen
     
-    @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
-    var timelineStyle = TimelineStyle.bubbles
+    @UserSettingRawRepresentable(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: TimelineStyle.bubbles, storage: store)
+    var timelineStyle
 
     // MARK: - Notifications
 
-    @AppStorage(UserDefaultsKeys.enableInAppNotifications.rawValue, store: store)
-    var enableInAppNotifications = true
+    @UserSetting(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: true, storage: store)
+    var enableInAppNotifications
 
     /// Tag describing which set of device specific rules a pusher executes.
-    @AppStorage(UserDefaultsKeys.pusherProfileTag.rawValue, store: store)
+    @UserSetting(key: UserDefaultsKeys.pusherProfileTag.rawValue, defaultValue: nil, storage: store)
     var pusherProfileTag: String?
         
     // MARK: - Other
