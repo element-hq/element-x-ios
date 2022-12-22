@@ -1,3 +1,24 @@
+## Changes in 1.0.10 (2022-12-22)
+
+✨ Features
+
+- Added timeline day separators and read markers ([#383](https://github.com/vector-im/element-x-ios/pull/383))
+- Add retry decryption encrypted timeline item debug menu option ([#384](https://github.com/vector-im/element-x-ios/pull/384))
+- Display an indicator if the network is currently unreachable ([#258](https://github.com/vector-im/element-x-ios/issues/258))
+
+🐛 Bugfixes
+
+- * moved the message delivery status outside of the main content and added it to the plain timeline as well
+  * fixed glithcy scroll to bottom timeline button
+  * simplified the emoji picker, double tapping a timeline item directly opens it now and added a context menu option. Linked it to rust side reaction sending
+  * fixed cold cache seemingly not working (invalid rooms treated as empty)
+  * made splash screen full screen
+  * fixed connectivity indicator starting off as offline
+  * added presentation detents on the NavigationStackCoordinator as they're not inherited from the child
+  * fixed timeline item link tint colors
+  * removed some unnecessary classes ([#381](https://github.com/vector-im/element-x-ios/pull/381))
+
+
 ## Changes in 1.0.9 (2022-12-16)
 
 ✨ Features

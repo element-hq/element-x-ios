@@ -1,9 +1,0 @@
-* moved the message delivery status outside of the main content and added it to the plain timeline as well
-* fixed glithcy scroll to bottom timeline button
-* simplified the emoji picker, double tapping a timeline item directly opens it now and added a context menu option. Linked it to rust side reaction sending
-* fixed cold cache seemingly not working (invalid rooms treated as empty)
-* made splash screen full screen
-* fixed connectivity indicator starting off as offline
-* added presentation detents on the NavigationStackCoordinator as they're not inherited from the child
-* fixed timeline item link tint colors
-* removed some unnecessary classes
