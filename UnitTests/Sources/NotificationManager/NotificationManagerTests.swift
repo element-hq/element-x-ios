@@ -21,7 +21,7 @@ import Combine
 
 final class NotificationManagerTests: XCTestCase {
     var sut: NotificationManager!
-    private let clientProxySpy = ClientProxySpy()
+    private let clientProxyMock = ClientProxyMock()
     private let notificationCenter = UserNotificationCenterSpy()
     private var authorizationStatusWasGranted = false
     private var shouldDisplayInAppNotificationReturnValue = false
@@ -30,12 +30,12 @@ final class NotificationManagerTests: XCTestCase {
     private let settings = ServiceLocator.shared.settings
 
     override func setUp() {
-        sut = NotificationManager(clientProxy: clientProxySpy, notificationCenter: notificationCenter)
+        sut = NotificationManager(clientProxy: clientProxyMock, notificationCenter: notificationCenter)
     }
     
     func test_whenRegistered_pusherIsCalled() async {
         _ = await sut.register(with: Data())
-        XCTAssertTrue(clientProxySpy.setPusherCalled)
+        XCTAssertTrue(clientProxyMock.setPusherCalled)
     }
     
     func test_whenRegisteredSuccess_completionSuccessIsCalled() async throws {
@@ -47,7 +47,7 @@ final class NotificationManagerTests: XCTestCase {
         enum TestError: Error {
             case someError
         }
-        clientProxySpy.setPusherErrorToThrow = TestError.someError
+        clientProxyMock.setPusherErrorToThrow = TestError.someError
         let success = await sut.register(with: Data())
         XCTAssertFalse(success)
     }
@@ -56,16 +56,16 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenRegistered_pusherIsCalledWithCorrectValues() async throws {
         let pushkeyData = Data("1234".utf8)
         _ = await sut.register(with: pushkeyData)
-        XCTAssertEqual(clientProxySpy.setPusherPushkey, pushkeyData.base64EncodedString())
-        XCTAssertEqual(clientProxySpy.setPusherAppId, settings?.pusherAppId)
-        XCTAssertEqual(clientProxySpy.setPusherKind, .http)
-        XCTAssertEqual(clientProxySpy.setPusherAppId, settings?.pusherAppId)
-        XCTAssertEqual(clientProxySpy.setPusherAppDisplayName, "\(InfoPlistReader.target.bundleDisplayName) (iOS)")
-        XCTAssertEqual(clientProxySpy.setPusherDeviceDisplayName, UIDevice.current.name)
-        XCTAssertNotNil(clientProxySpy.setPusherProfileTag)
-        XCTAssertEqual(clientProxySpy.setPusherLang, Bundle.preferredLanguages.first)
-        XCTAssertEqual(clientProxySpy.setPusherUrl, settings?.pushGatewayBaseURL.absoluteString)
-        XCTAssertEqual(clientProxySpy.setPusherFormat, .eventIdOnly)
+        XCTAssertEqual(clientProxyMock.setPusherPushkey, pushkeyData.base64EncodedString())
+        XCTAssertEqual(clientProxyMock.setPusherAppId, settings?.pusherAppId)
+        XCTAssertEqual(clientProxyMock.setPusherKind, .http)
+        XCTAssertEqual(clientProxyMock.setPusherAppId, settings?.pusherAppId)
+        XCTAssertEqual(clientProxyMock.setPusherAppDisplayName, "\(InfoPlistReader.target.bundleDisplayName) (iOS)")
+        XCTAssertEqual(clientProxyMock.setPusherDeviceDisplayName, UIDevice.current.name)
+        XCTAssertNotNil(clientProxyMock.setPusherProfileTag)
+        XCTAssertEqual(clientProxyMock.setPusherLang, Bundle.preferredLanguages.first)
+        XCTAssertEqual(clientProxyMock.setPusherUrl, settings?.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(clientProxyMock.setPusherFormat, .eventIdOnly)
         let defaultPayload: [AnyHashable: Any] = [
             "aps": [
                 "mutable-content": 1,
@@ -75,7 +75,7 @@ final class NotificationManagerTests: XCTestCase {
                 ]
             ]
         ]
-        let actualPayload = NSDictionary(dictionary: clientProxySpy.setPusherDefaultPayload ?? [:])
+        let actualPayload = NSDictionary(dictionary: clientProxyMock.setPusherDefaultPayload ?? [:])
         XCTAssertTrue(actualPayload.isEqual(to: defaultPayload))
     }
     

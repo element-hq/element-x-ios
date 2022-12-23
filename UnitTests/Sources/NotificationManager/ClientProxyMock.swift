@@ -18,7 +18,9 @@ import Combine
 @testable import ElementX
 import Foundation
 
-class ClientProxySpy: ClientProxyProtocol {
+class ClientProxyMock: ClientProxyProtocol {
+    var sessionVerificationControllerProxyResult: Result<ElementX.SessionVerificationControllerProxyProtocol, ClientProxyError>?
+    
     var visibleRoomsSummaryProvider: ElementX.RoomSummaryProviderProtocol?
     
     var allRoomsSummaryProvider: ElementX.RoomSummaryProviderProtocol?
@@ -64,9 +66,13 @@ class ClientProxySpy: ClientProxyProtocol {
     func setAccountData<Content>(content: Content, type: String) async -> Result<Void, ClientProxyError> where Content: Encodable {
         .failure(.failedLoadingMedia)
     }
-    
+
     func sessionVerificationControllerProxy() async -> Result<ElementX.SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        .failure(.failedLoadingMedia)
+        if let sessionVerificationControllerProxyResult {
+            return sessionVerificationControllerProxyResult
+        } else {
+            return .failure(.failedLoadingMedia)
+        }
     }
     
     func logout() async { }
