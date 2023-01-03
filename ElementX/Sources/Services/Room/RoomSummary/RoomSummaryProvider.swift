@@ -99,7 +99,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
-        MXLog.info("Received diffs")
+        MXLog.info("Received \(diffs.count) diffs")
         
         rooms = diffs
             .reduce(rooms) { currentItems, diff in

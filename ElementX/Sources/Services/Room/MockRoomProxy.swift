@@ -55,7 +55,7 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.failedAddingTimelineListener)
     }
     
-    func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
+    func paginateBackwards(count: UInt) async -> Result<UInt, RoomProxyError> {
         .failure(.failedPaginatingBackwards)
     }
         
