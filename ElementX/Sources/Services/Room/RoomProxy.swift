@@ -142,7 +142,7 @@ class RoomProxy: RoomProxyProtocol {
 //        }
     }
     
-    func paginateBackwards(count: UInt) async -> Result<Void, RoomProxyError> {
+    func paginateBackwards(count: UInt) async -> Result<UInt, RoomProxyError> {
         guard backPaginationOutcome?.moreMessages != false else {
             return .failure(.noMoreMessagesToBackPaginate)
         }
@@ -152,7 +152,7 @@ class RoomProxy: RoomProxyProtocol {
                 try self.room.paginateBackwards(limit: UInt16(count))
             }
             update(backPaginationOutcome: outcome)
-            return .success(())
+            return .success(UInt(outcome.numUpdates))
         } catch {
             return .failure(.failedPaginatingBackwards)
         }
