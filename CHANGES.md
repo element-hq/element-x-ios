@@ -1,3 +1,11 @@
+## Changes in 1.0.11 (2023-01-04)
+
+🐛 Bugfixes
+
+- Avoid the "Failed to load messages" popup when all messages have been loaded. ([#399](https://github.com/vector-im/element-x-ios/pull/399))
+- Fix stuck timeline pagination because of too many membership events ([#394](https://github.com/vector-im/element-x-ios/issues/394))
+
+
 ## Changes in 1.0.10 (2022-12-22)
 
 ✨ Features
