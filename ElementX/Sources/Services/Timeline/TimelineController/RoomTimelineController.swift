@@ -82,7 +82,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         switch await timelineProvider.paginateBackwards(count) {
         case .success:
             return .success(())
-        case .failure:
+        case .failure(let error):
+            if error == .noMoreMessagesToBackPaginate {
+                return .success(())
+            }
             return .failure(.generic)
         }
     }
