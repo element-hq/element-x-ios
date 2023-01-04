@@ -51,18 +51,20 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
 
         Task {
             let roomTimelineListener = RoomTimelineListener()
+            
+            roomTimelineListener
+                .itemsUpdatePublisher
+                .receive(on: DispatchQueue.main)
+//                .collect(.byTime(serialDispatchQueue, 0.25))
+                .sink { [weak self] in self?.updateItemsWithDiffs([$0]) }
+                .store(in: &cancellables)
+            
             switch await roomProxy.addTimelineListener(listener: roomTimelineListener) {
             case .failure:
                 MXLog.error("Failed adding timeline listener on room with identifier: \(await roomProxy.id)")
             default:
                 break
             }
-
-            roomTimelineListener
-                .itemsUpdatePublisher
-                .collect(.byTime(serialDispatchQueue, 0.25))
-                .sink { [weak self] in self?.updateItemsWithDiffs($0) }
-                .store(in: &cancellables)
         }
     }
     
