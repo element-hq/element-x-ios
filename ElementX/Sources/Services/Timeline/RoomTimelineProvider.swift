@@ -72,10 +72,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         
         MXLog.info("Started back pagination request")
         switch await roomProxy.paginateBackwards(count: count) {
-        case .success(let numUpdates):
-            MXLog.info("Finished back pagination request. Got \(numUpdates) updates")
+        case .success(let numberOfUpdates):
+            MXLog.info("Finished back pagination request. Got \(numberOfUpdates) updates")
             
-            if numUpdates == 0 {
+            if numberOfUpdates == 0 {
                 backPaginationPublisher.send(false)
             }
             return .success(())
