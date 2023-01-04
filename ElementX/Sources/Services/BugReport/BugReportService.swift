@@ -74,7 +74,6 @@ class BugReportService: BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    // swiftlint: disable function_body_length
     func submitBugReport(text: String,
                          includeLogs: Bool,
                          includeCrashLog: Bool,
