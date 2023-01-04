@@ -1,3 +1,8 @@
+## Changes in 1.0.12 (2023-01-04)
+
+No significant changes.
+
+
 ## Changes in 1.0.11 (2023-01-04)
 
 🐛 Bugfixes
