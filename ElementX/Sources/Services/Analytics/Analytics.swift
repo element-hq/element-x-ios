@@ -37,7 +37,7 @@ class Analytics {
     /// The analytics client to send events with.
     private var client: AnalyticsClientProtocol = PostHogAnalyticsClient()
     
-    /// The monitoring client to track crashes, issues and performance
+//    /// The monitoring client to track crashes, issues and performance
 //    private var monitoringClient = SentryMonitoringClient()
     
     /// The service used to interact with account data settings.
