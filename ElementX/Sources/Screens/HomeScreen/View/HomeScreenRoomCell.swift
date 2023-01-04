@@ -48,16 +48,18 @@ struct HomeScreenRoomCell: View {
                             .foregroundColor(.element.primaryContent)
                             .lineLimit(1)
                         
-                        if let lastMessage = room.lastMessage {
+                        if let lastMessage = room.lastMessage, !String(lastMessage.characters).isEmpty {
                             Text(lastMessage)
                                 .font(lastMessageFont)
                                 .foregroundColor(lastMessageForegroundColor)
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
                                 .padding(.top, 2)
-                                .animation(nil, value: UUID()) // Text animations look ugly
+                                .id(lastMessage)
+                                .transition(.opacity.animation(.elementDefault))
                         }
                     }
+                    .animation(.elementDefault, value: room)
                     
                     Spacer()
                   
@@ -66,6 +68,8 @@ struct HomeScreenRoomCell: View {
                             Text(timestamp)
                                 .font(.element.caption1)
                                 .foregroundColor(.element.secondaryContent)
+                                .id(timestamp)
+                                .transition(.opacity.animation(.elementDefault))
                         }
                         
                         if room.hasUnreads {
@@ -73,8 +77,10 @@ struct HomeScreenRoomCell: View {
                                 .frame(width: 12, height: 12)
                                 .foregroundColor(.element.primaryContent)
                                 .clipShape(Circle())
+                                .transition(.opacity.animation(.elementDefault))
                         }
                     }
+                    .animation(.elementDefault, value: room)
                 }
             }
             .frame(minHeight: 64.0)
