@@ -86,7 +86,7 @@ class ClientProxy: ClientProxyProtocol {
                 let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.settings.slidingSyncProxyBaseURLString)
 
                 let visibleRoomsView = try SlidingSyncViewBuilder()
-                    .timelineLimit(limit: 10)
+                    .timelineLimit(limit: 30)
                     .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
                                                    RequiredState(key: "m.room.encryption", value: "")])
                     .name(name: "CurrentlyVisibleRooms")
