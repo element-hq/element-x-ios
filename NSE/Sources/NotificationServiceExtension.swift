@@ -130,7 +130,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         return MediaProvider(mediaProxy: MediaProxy(client: client),
                              imageCache: .onlyOnDisk,
-                             fileCache: .default,
+                             fileCache: FileCache.default,
                              backgroundTaskService: nil)
     }
 
