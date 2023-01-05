@@ -21,16 +21,15 @@ class UserNotificationCenterSpy: UserNotificationCenterProtocol {
     weak var delegate: UNUserNotificationCenterDelegate?
     
     var addRequest: UNNotificationRequest?
-    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?) {
+    func add(_ request: UNNotificationRequest) async throws {
         addRequest = request
-        completionHandler?(nil)
     }
     
     var requestAuthorizationOptions: UNAuthorizationOptions?
     var requestAuthorizationGrantedReturnValue = false
-    func requestAuthorization(options: UNAuthorizationOptions, completionHandler: @escaping (Bool, Error?) -> Void) {
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool {
         requestAuthorizationOptions = options
-        completionHandler(requestAuthorizationGrantedReturnValue, nil)
+        return requestAuthorizationGrantedReturnValue
     }
     
     var notificationCategoriesValue: Set<UNNotificationCategory>?
