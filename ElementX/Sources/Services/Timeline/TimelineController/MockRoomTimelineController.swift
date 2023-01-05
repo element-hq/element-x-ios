@@ -30,12 +30,11 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
     
     private var client: UITestsSignalling.Client?
-    private var signalTask: Task<Void, Error>?
     
     init(listenForSignals: Bool = false) {
         if listenForSignals {
             client = .init()
-            Task { try await listenForSignal() }
+            Task { try await startListening() }
         }
     }
     
@@ -68,22 +67,30 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     // MARK: - UI Test signalling
     
     /// Allows the simulation of server responses by listening for signals from UI tests.
-    private func listenForSignal() async throws {
-        guard let client else { throw UITestsSignalError.disabled }
+    private func startListening() async throws {
+        try await client?.connect()
         
-        try await client.connect()
-        signalTask = Task {
-            switch try await client.receive() {
-            case .paginate:
-                try await self.simulateBackPagination()
-            case .incomingMessage:
-                try await self.simulateIncomingItem()
-            default:
-                break
+        Task {
+            while let client {
+                do {
+                    try await handleSignal(client.receive())
+                } catch {
+                    client.disconnect()
+                    self.client = nil
+                }
             }
-            
-            // Keep listening TODO: Try an async stream here?
-            try await self.listenForSignal()
+        }
+    }
+    
+    /// Handles a UI test signal as necessary.
+    private func handleSignal(_ signal: UITestsSignal) async throws {
+        switch signal {
+        case .paginate:
+            try await simulateBackPagination()
+        case .incomingMessage:
+            try await simulateIncomingItem()
+        default:
+            break
         }
     }
     
