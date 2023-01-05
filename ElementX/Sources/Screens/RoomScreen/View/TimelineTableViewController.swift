@@ -358,8 +358,13 @@ class TimelineTableViewController: UIViewController {
 
 extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Dispatches fix runtime warnings about making changes during a view update.
-        DispatchQueue.main.async { self.scrollToBottomButtonVisible = self.isAtBottom() }
+        let isAtBottom = isAtBottom()
+        
+        // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
+        if scrollToBottomButtonVisible != isAtBottom {
+            // Dispatch to fix runtime warning about making changes during a view update.
+            DispatchQueue.main.async { self.scrollToBottomButtonVisible = isAtBottom }
+        }
 
         paginateBackwardsPublisher.send(())
     }
