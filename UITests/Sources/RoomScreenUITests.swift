@@ -126,13 +126,14 @@ class RoomScreenUITests: XCTestCase {
         while !app.staticTexts["Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs."].isHittable {
             app.tables.element.swipeDown()
         }
-        app.assertScreenshot(.roomLayoutTop) // Assert initial state for comparison.
+        let cropped = UIEdgeInsets(top: 150, left: 0, bottom: 0, right: 0) // Ignore the navigation bar and pagination indicator as these change.
+        app.assertScreenshot(.roomLayoutTop, insets: cropped) // Assert initial state for comparison.
         
         // When a back pagination occurs.
         try await performOperation(.paginate, using: server)
 
-        // Then the UI should remain unchanged (just with newer items above).
-        app.assertScreenshot(.roomLayoutTop)
+        // Then the bottom of the timeline should remain unchanged (with new items having been added above).
+        app.assertScreenshot(.roomLayoutTop, insets: cropped)
     }
     
     func testTimelineLayoutAtBottom() async throws {
