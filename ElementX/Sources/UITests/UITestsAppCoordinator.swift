@@ -213,10 +213,9 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Large timeline", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "Large timeline",
-                                                             roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
 
@@ -230,10 +229,9 @@ class MockScreen: Identifiable {
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Large timeline", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "Large timeline",
-                                                             roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
@@ -246,10 +244,9 @@ class MockScreen: Identifiable {
             timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Large timeline", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
-                                                             roomName: "Large timeline",
-                                                             roomAvatarUrl: "mock_url",
                                                              emojiProvider: EmojiProvider())
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
