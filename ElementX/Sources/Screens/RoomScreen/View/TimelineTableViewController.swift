@@ -363,7 +363,7 @@ extension TimelineTableViewController: UITableViewDelegate {
         // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
         if scrollToBottomButtonVisible != isAtBottom {
             // Dispatch to fix runtime warning about making changes during a view update.
-            DispatchQueue.main.async { self.scrollToBottomButtonVisible = self.isAtBottom() }
+            DispatchQueue.main.async { self.scrollToBottomButtonVisible = isAtBottom }
         }
 
         paginateBackwardsPublisher.send(())
