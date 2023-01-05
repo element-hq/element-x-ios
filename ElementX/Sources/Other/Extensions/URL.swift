@@ -35,12 +35,17 @@ extension URL {
 
     /// The base directory where all session data is stored.
     static var sessionsBaseDirectory: URL {
-        let url = cacheBaseDirectory
-            .appendingPathComponent("Sessions", isDirectory: true)
+        let cacheSessionsURL = cacheBaseDirectory.appendingPathComponent("Sessions", isDirectory: true)
+        let applicationSupportSessionsURL = applicationSupportBaseDirectory.appendingPathComponent("Sessions", isDirectory: true)
+        
+        #warning("Migration from caches to application support. Remove this in a couple of releases.")
+        if FileManager.default.directoryExists(at: cacheSessionsURL) {
+            try? FileManager.default.moveItem(at: cacheSessionsURL, to: applicationSupportSessionsURL)
+        }
 
-        try? FileManager.default.createDirectoryIfNeeded(at: url)
+        try? FileManager.default.createDirectoryIfNeeded(at: applicationSupportSessionsURL)
 
-        return url
+        return applicationSupportSessionsURL
     }
 
     /// The base directory where all cache is stored.
@@ -50,6 +55,25 @@ extension URL {
             .appendingPathComponent("Caches", isDirectory: true)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
+
+        return url
+    }
+    
+    /// The base directory where all application support data is stored.
+    static var applicationSupportBaseDirectory: URL {
+        var url = appGroupContainerDirectory
+            .appendingPathComponent("Library", isDirectory: true)
+            .appendingPathComponent("Application Support", isDirectory: true)
+
+        try? FileManager.default.createDirectoryIfNeeded(at: url)
+        
+        do {
+            var resourceValues = URLResourceValues()
+            resourceValues.isExcludedFromBackup = true
+            try url.setResourceValues(resourceValues)
+        } catch {
+            MXLog.error("Failed excluding Application Support from backups")
+        }
 
         return url
     }
