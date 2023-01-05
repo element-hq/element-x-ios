@@ -42,6 +42,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                     styledContentWithReactions
                 }
                 .padding(.horizontal, 16.0)
+                .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
             }
             
             if timelineItem.isOutgoing {
