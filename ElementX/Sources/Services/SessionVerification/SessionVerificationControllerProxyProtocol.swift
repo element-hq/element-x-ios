@@ -19,12 +19,15 @@ import Foundation
 
 enum SessionVerificationControllerProxyError: Error {
     case failedRequestingVerification
+    case failedStartingSasVerification
     case failedApprovingVerification
     case failedDecliningVerification
     case failedCancellingVerification
 }
 
 enum SessionVerificationControllerProxyCallback {
+    case acceptedVerificationRequest
+    case startedSasVerification
     case receivedVerificationData([SessionVerificationEmoji])
     case finished
     case cancelled
@@ -42,6 +45,8 @@ protocol SessionVerificationControllerProxyProtocol {
     var isVerified: Bool { get }
         
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError>
+    
+    func startSasVerification() async -> Result<Void, SessionVerificationControllerProxyError>
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError>
     

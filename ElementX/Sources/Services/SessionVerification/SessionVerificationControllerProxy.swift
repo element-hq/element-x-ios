@@ -31,6 +31,14 @@ private class WeakSessionVerificationControllerProxy: SessionVerificationControl
         proxy?.didReceiveData(data)
     }
     
+    func didAcceptVerificationRequest() {
+        proxy?.didAcceptVerificationRequest()
+    }
+    
+    func didStartSasVerification() {
+        proxy?.didStartSasVerification()
+    }
+    
     func didFail() {
         proxy?.didFail()
     }
@@ -73,6 +81,17 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
         }
     }
     
+    func startSasVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                try self.sessionVerificationController.startSasVerification()
+                return .success(())
+            } catch {
+                return .failure(.failedStartingSasVerification)
+            }
+        }
+    }
+    
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         await Task.dispatch(on: .global()) {
             do {
@@ -107,6 +126,14 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     // MARK: - Private
+    
+    fileprivate func didAcceptVerificationRequest() {
+        callbacks.send(.acceptedVerificationRequest)
+    }
+    
+    fileprivate func didStartSasVerification() {
+        callbacks.send(.startedSasVerification)
+    }
     
     fileprivate func didReceiveData(_ data: [MatrixRustSDK.SessionVerificationEmoji]) {
         callbacks.send(.receivedVerificationData(data.map { emoji in

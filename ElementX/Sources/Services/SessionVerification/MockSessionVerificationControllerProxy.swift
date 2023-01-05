@@ -26,7 +26,21 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         Task.detached {
             try await Task.sleep(nanoseconds: 2_000_000_000)
-            callbacks.send(.receivedVerificationData(Self.emojis))
+            callbacks.send(.acceptedVerificationRequest)
+        }
+        
+        return .success(())
+    }
+    
+    func startSasVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
+        Task.detached {
+            try await Task.sleep(nanoseconds: 2_000_000_000)
+            callbacks.send(.startedSasVerification)
+            
+            Task.detached {
+                try await Task.sleep(nanoseconds: 2_000_000_000)
+                callbacks.send(.receivedVerificationData(Self.emojis))
+            }
         }
         
         return .success(())

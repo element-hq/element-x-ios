@@ -22,21 +22,18 @@ enum SessionVerificationViewModelAction {
 
 struct SessionVerificationViewState: BindableState {
     var verificationState: SessionVerificationStateMachine.State = .initial
-    
-    var title: String? {
-        switch verificationState {
-        case .showingChallenge:
-            return ElementL10n.sessionVerificationScreenEmojisTitle
-        default:
-            return nil
-        }
-    }
-    
+        
     var message: String {
         switch verificationState {
         case .initial:
             return ElementL10n.verificationOpenOtherToVerify
         case .requestingVerification:
+            return ElementL10n.verificationRequestWaiting
+        case .verificationRequestAccepted:
+            return ElementL10n.verificationEmojiNotice
+        case .startingSasVerification:
+            return ElementL10n.verificationRequestWaiting
+        case .sasVerificationStarted:
             return ElementL10n.verificationRequestWaiting
         case .acceptingChallenge:
             return ElementL10n.verificationRequestWaiting
@@ -45,7 +42,7 @@ struct SessionVerificationViewState: BindableState {
         case .cancelling:
             return ElementL10n.verificationRequestWaiting
         case .showingChallenge:
-            return ElementL10n.sessionVerificationScreenEmojisMessage
+            return ElementL10n.verificationCodeNotice
         case .verified:
             return ElementL10n.verificationConclusionOkSelfNotice
         case .cancelled:
@@ -55,7 +52,8 @@ struct SessionVerificationViewState: BindableState {
 }
 
 enum SessionVerificationViewAction {
-    case start
+    case requestVerification
+    case startSasVerification
     case restart
     case accept
     case decline

@@ -41,8 +41,12 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
                 guard let self else { return }
                 
                 switch callback {
+                case .acceptedVerificationRequest:
+                    self.stateMachine.processEvent(.didAcceptVerificationRequest)
+                case .startedSasVerification:
+                    self.stateMachine.processEvent(.didStartSasVerification)
                 case .receivedVerificationData(let emojis):
-                    guard self.stateMachine.state == .requestingVerification else {
+                    guard self.stateMachine.state == .sasVerificationStarted else {
                         MXLog.warning("Callbacks: Ignoring receivedVerificationData due to invalid state.")
                         return
                     }
@@ -61,8 +65,10 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
     
     override func process(viewAction: SessionVerificationViewAction) async {
         switch viewAction {
-        case .start:
+        case .requestVerification:
             stateMachine.processEvent(.requestVerification)
+        case .startSasVerification:
+            stateMachine.processEvent(.startSasVerification)
         case .restart:
             stateMachine.processEvent(.restart)
         case .close:
@@ -92,6 +98,8 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .requestVerification, .requestingVerification):
                 self.requestVerification()
+            case (.verificationRequestAccepted, .startSasVerification, .startingSasVerification):
+                self.startSasVerification()
             case (.showingChallenge, .acceptChallenge, .acceptingChallenge):
                 self.acceptChallenge()
             case (.showingChallenge, .declineChallenge, .decliningChallenge):
@@ -125,6 +133,18 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             switch await sessionVerificationControllerProxy.cancelVerification() {
             case .success:
                 stateMachine.processEvent(.didCancel)
+            case .failure:
+                stateMachine.processEvent(.didFail)
+            }
+        }
+    }
+    
+    private func startSasVerification() {
+        Task {
+            switch await sessionVerificationControllerProxy.startSasVerification() {
+            case .success:
+                // Need to wait for the callback from the remote
+                break
             case .failure:
                 stateMachine.processEvent(.didFail)
             }

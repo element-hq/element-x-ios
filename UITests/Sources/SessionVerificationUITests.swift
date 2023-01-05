@@ -22,15 +22,21 @@ class SessionVerificationUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.buttons["startButton"].exists)
+        XCTAssert(app.buttons["requestVerificationButton"].exists)
         XCTAssert(app.buttons["closeButton"].exists)
         XCTAssert(app.staticTexts["titleLabel"].exists)
 
         app.assertScreenshot(.sessionVerification)
         
-        app.buttons["startButton"].tap()
+        app.buttons["requestVerificationButton"].tap()
         
         XCTAssert(app.activityIndicators["requestingVerificationProgressView"].exists)
+        
+        XCTAssert(app.buttons["sasVerificationStartButton"].waitForExistence(timeout: 5.0))
+        app.buttons["sasVerificationStartButton"].tap()
+        
+        XCTAssert(app.activityIndicators["startingSasVerification"].waitForExistence(timeout: 5.0))
+        XCTAssert(app.activityIndicators["startedSasVerification"].waitForExistence(timeout: 5.0))
         
         XCTAssert(app.buttons["challengeAcceptButton"].waitForExistence(timeout: 5.0))
         XCTAssert(app.buttons["challengeDeclineButton"].waitForExistence(timeout: 5.0))
@@ -50,13 +56,19 @@ class SessionVerificationUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.buttons["startButton"].exists)
+        XCTAssert(app.buttons["requestVerificationButton"].exists)
         XCTAssert(app.buttons["closeButton"].exists)
         XCTAssert(app.staticTexts["titleLabel"].exists)
         
-        app.buttons["startButton"].tap()
+        app.buttons["requestVerificationButton"].tap()
         
         XCTAssert(app.activityIndicators["requestingVerificationProgressView"].exists)
+        
+        XCTAssert(app.buttons["sasVerificationStartButton"].waitForExistence(timeout: 5.0))
+        app.buttons["sasVerificationStartButton"].tap()
+        
+        XCTAssert(app.activityIndicators["startingSasVerification"].waitForExistence(timeout: 5.0))
+        XCTAssert(app.activityIndicators["startedSasVerification"].waitForExistence(timeout: 5.0))
         
         XCTAssert(app.buttons["challengeAcceptButton"].waitForExistence(timeout: 5.0))
         XCTAssert(app.buttons["challengeDeclineButton"].waitForExistence(timeout: 5.0))
@@ -74,13 +86,19 @@ class SessionVerificationUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.sessionVerification)
         
-        XCTAssert(app.buttons["startButton"].exists)
+        XCTAssert(app.buttons["requestVerificationButton"].exists)
         XCTAssert(app.buttons["closeButton"].exists)
         XCTAssert(app.staticTexts["titleLabel"].exists)
         
-        app.buttons["startButton"].tap()
+        app.buttons["requestVerificationButton"].tap()
         
         XCTAssert(app.activityIndicators["requestingVerificationProgressView"].waitForExistence(timeout: 1))
+        
+        XCTAssert(app.buttons["sasVerificationStartButton"].waitForExistence(timeout: 5.0))
+        app.buttons["sasVerificationStartButton"].tap()
+        
+        XCTAssert(app.activityIndicators["startingSasVerification"].waitForExistence(timeout: 5.0))
+        XCTAssert(app.activityIndicators["startedSasVerification"].waitForExistence(timeout: 5.0))
         
         app.buttons["closeButton"].tap()
         
