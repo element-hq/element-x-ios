@@ -51,8 +51,7 @@ struct FormattedBodyText: View {
                 }
             }
         }
-        // Should be .element.accent but that's currently black
-        .tint(.blue)
+        .tint(.element.links)
     }
 
     private var blockquoteAttributes: AttributeContainer {
