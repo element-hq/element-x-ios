@@ -58,10 +58,6 @@ extension ElementL10n {
   public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")
   /// Help keep your messages secure
   public static let sessionVerificationBannerTitle = ElementL10n.tr("Untranslated", "session_verification_banner_title")
-  /// Open Element on one of your other sessions to compare.
-  public static let sessionVerificationScreenEmojisMessage = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_message")
-  /// Lets check if these
-  public static let sessionVerificationScreenEmojisTitle = ElementL10n.tr("Untranslated", "session_verification_screen_emojis_title")
   /// Appearance
   public static let settingsAppearance = ElementL10n.tr("Untranslated", "settings_appearance")
   /// Timeline Style

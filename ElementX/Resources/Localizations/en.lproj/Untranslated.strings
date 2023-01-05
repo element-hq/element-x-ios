@@ -23,8 +23,6 @@
 
 "session_verification_banner_title" = "Help keep your messages secure";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify its you.";
-"session_verification_screen_emojis_title" = "Lets check if these";
-"session_verification_screen_emojis_message" = "Open Element on one of your other sessions to compare.";
 
 "server_selection_server_footer" = "You can only connect to a server that has already been set up";
 

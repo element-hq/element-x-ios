@@ -24,6 +24,12 @@ class SessionVerificationStateMachine {
         case initial
         /// Waiting for verification acceptance
         case requestingVerification
+        /// Verification request accepted. Waiting for start
+        case verificationRequestAccepted
+        /// Waiting for SaS verification start
+        case startingSasVerification
+        /// A SaS verification flow has been started
+        case sasVerificationStarted
         /// Verification accepted and emojis received
         case showingChallenge(emojis: [SessionVerificationEmoji])
         /// Emojis match locally
@@ -42,6 +48,12 @@ class SessionVerificationStateMachine {
     enum Event: EventType {
         /// Request verification
         case requestVerification
+        /// The current verification request has been accepted
+        case didAcceptVerificationRequest
+        /// Start a SaS verification flow
+        case startSasVerification
+        /// Started a SaS verification flow
+        case didStartSasVerification
         /// Has received emojis
         case didReceiveChallenge(emojis: [SessionVerificationEmoji])
         /// Emojis match
@@ -69,15 +81,19 @@ class SessionVerificationStateMachine {
     init() {
         stateMachine = StateMachine(state: .initial) { machine in
             machine.addRoutes(event: .requestVerification, transitions: [.initial => .requestingVerification])
+            machine.addRoutes(event: .didAcceptVerificationRequest, transitions: [.requestingVerification => .verificationRequestAccepted])
+            machine.addRoutes(event: .startSasVerification, transitions: [.verificationRequestAccepted => .startingSasVerification])
             machine.addRoutes(event: .didFail, transitions: [.requestingVerification => .initial])
             machine.addRoutes(event: .restart, transitions: [.cancelled => .initial])
             
             // Transitions with associated values need to be handled through `addRouteMapping`
             machine.addRouteMapping { event, fromState, _ in
                 switch (event, fromState) {
-                case (.didReceiveChallenge(let emojis), .requestingVerification):
+                case (.didStartSasVerification, _):
+                    return .sasVerificationStarted
+                    
+                case (.didReceiveChallenge(let emojis), .sasVerificationStarted):
                     return .showingChallenge(emojis: emojis)
-                
                 case (.acceptChallenge, .showingChallenge(let emojis)):
                     return .acceptingChallenge(emojis: emojis)
                 case (.didFail, .acceptingChallenge(let emojis)):
@@ -98,6 +114,14 @@ class SessionVerificationStateMachine {
                     
                 default:
                     return nil
+                }
+            }
+            
+            addTransitionHandler { context in
+                if let event = context.event {
+                    MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(event)`")
+                } else {
+                    MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
                 }
             }
         }
