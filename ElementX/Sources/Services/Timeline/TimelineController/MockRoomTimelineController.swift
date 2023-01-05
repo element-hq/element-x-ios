@@ -29,12 +29,13 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
     
-    private let signal = UITestSignalClient()
+    private var client: UITestsSignalling.Client?
     private var signalTask: Task<Void, Error>?
     
     init(listenForSignals: Bool = false) {
         if listenForSignals {
-            Task { try await enableServerSimulation() }
+            client = .init()
+            Task { try await listenForSignal() }
         }
     }
     
@@ -67,10 +68,12 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     // MARK: - UI Test signalling
     
     /// Allows the simulation of server responses by listening for signals from UI tests.
-    private func enableServerSimulation() async throws {
-        try await signal.connect()
+    private func listenForSignal() async throws {
+        guard let client else { throw UITestsSignalError.disabled }
+        
+        try await client.connect()
         signalTask = Task {
-            switch try await signal.receive() {
+            switch try await client.receive() {
             case .paginate:
                 try await self.simulateBackPagination()
             case .incomingMessage:
@@ -80,7 +83,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
             }
             
             // Keep listening TODO: Try an async stream here?
-            try await self.enableServerSimulation()
+            try await self.listenForSignal()
         }
     }
     
@@ -92,7 +95,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         timelineItems.append(incomingItem)
         callbacks.send(.updatedTimelineItems)
         
-        try? await signal.send(.success)
+        try? await client?.send(.success)
     }
     
     /// Prepends the next chunk of items to the `timelineItems` array.
@@ -104,6 +107,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.finishedBackPaginating)
         
-        try? await signal.send(.success)
+        try? await client?.send(.success)
     }
 }
