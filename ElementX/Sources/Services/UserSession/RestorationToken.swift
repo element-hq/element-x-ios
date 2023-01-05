@@ -46,31 +46,3 @@ extension MatrixRustSDK.Session: Codable {
         case accessToken, refreshToken, userId, deviceId, homeserverUrl, isSoftLogout
     }
 }
-
-#warning("Remove this in a couple of releases - sceriu 03.11.2022")
-struct LegacyRestorationToken: Decodable {
-    let isGuest: Bool?
-    let isSoftLogout: Bool?
-    let homeURL: String
-    let session: Session
-    
-    enum CodingKeys: String, CodingKey {
-        case isGuest = "is_guest"
-        case isSoftLogout = "is_soft_logout"
-        case homeURL = "homeurl"
-        case session
-    }
-    
-    struct Session: Decodable {
-        let accessToken: String
-        let userId: String
-        let deviceId: String
-    
-        // swiftlint:disable:next nesting
-        enum CodingKeys: String, CodingKey {
-            case accessToken = "access_token"
-            case userId = "user_id"
-            case deviceId = "device_id"
-        }
-    }
-}
