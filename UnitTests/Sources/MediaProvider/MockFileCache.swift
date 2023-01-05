@@ -16,11 +16,11 @@
 @testable import ElementX
 import Foundation
 
-enum FileCacheMockError: Error {
+enum MockFileCacheError: Error {
     case someError
 }
 
-class FileCacheMock: FileCacheProtocol {
+class MockFileCache: FileCacheProtocol {
     var fileKey: String?
     var fileExtension: String?
     var fileURLToReturn: URL?
@@ -42,7 +42,7 @@ class FileCacheMock: FileCacheProtocol {
         if let storeURLToReturn {
             return storeURLToReturn
         } else {
-            throw FileCacheMockError.someError
+            throw MockFileCacheError.someError
         }
     }
     

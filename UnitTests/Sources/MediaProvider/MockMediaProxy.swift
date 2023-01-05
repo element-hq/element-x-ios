@@ -16,31 +16,31 @@
 @testable import ElementX
 import Foundation
 
-enum MediaProxyMockError: Error {
+enum MockMediaProxyError: Error {
     case someError
 }
 
-class MediaProxyMock: MediaProxyProtocol {
-    var loadMediaThumbnailForSourceData: Data?
-    var loadMediaContentForSourceData: Data?
+class MockMediaProxy: MediaProxyProtocol {
+    var mediaContentData: Data?
+    var mediaThumbnailData: Data?
     
     func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
         MediaSourceProxy(urlString: "test")
     }
     
     func loadMediaContentForSource(_ source: ElementX.MediaSourceProxy) async throws -> Data {
-        if let loadMediaContentForSourceData {
-            return loadMediaContentForSourceData
+        if let mediaContentData {
+            return mediaContentData
         } else {
-            throw MediaProxyMockError.someError
+            throw MockMediaProxyError.someError
         }
     }
     
     func loadMediaThumbnailForSource(_ source: ElementX.MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
-        if let loadMediaThumbnailForSourceData {
-            return loadMediaThumbnailForSourceData
+        if let mediaThumbnailData {
+            return mediaThumbnailData
         } else {
-            throw MediaProxyMockError.someError
+            throw MockMediaProxyError.someError
         }
     }
 }

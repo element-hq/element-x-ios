@@ -16,7 +16,7 @@
 @testable import ElementX
 import Foundation
 
-class BackgroundTaskServiceMock: BackgroundTaskServiceProtocol {
+class MockBackgroundTaskService: BackgroundTaskServiceProtocol {
     func startBackgroundTask(withName name: String, isReusable: Bool, expirationHandler: (() -> Void)?) -> ElementX.BackgroundTaskProtocol? {
         nil
     }

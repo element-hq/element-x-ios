@@ -17,7 +17,7 @@
 import Kingfisher
 import UIKit
 
-class ImageCacheMock: ImageCache {
+class MockImageCache: ImageCache {
     var retrievedImagesInMemory = [String: UIImage]()
     var retrievedImages = [String: UIImage]()
     var storedImages = [String: UIImage]()
@@ -35,8 +35,14 @@ class ImageCacheMock: ImageCache {
         }
     }
     
-    // swiftlint:disable:next line_length
-    override func store(_ image: KFCrossPlatformImage, original: Data? = nil, forKey key: String, processorIdentifier identifier: String = "", cacheSerializer serializer: CacheSerializer = DefaultCacheSerializer.default, toDisk: Bool = true, callbackQueue: CallbackQueue = .untouch, completionHandler: ((CacheStoreResult) -> Void)? = nil) {
+    override func store(_ image: KFCrossPlatformImage,
+                        original: Data? = nil,
+                        forKey key: String,
+                        processorIdentifier identifier: String = "",
+                        cacheSerializer serializer: CacheSerializer = DefaultCacheSerializer.default,
+                        toDisk: Bool = true,
+                        callbackQueue: CallbackQueue = .untouch,
+                        completionHandler: ((CacheStoreResult) -> Void)? = nil) {
         storedImages[key] = image
     }
 }
