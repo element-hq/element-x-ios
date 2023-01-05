@@ -64,7 +64,7 @@ enum RoomTimelineItemFixtures {
                              senderId: "",
                              senderDisplayName: "Helena"),
         TextRoomTimelineItem(id: UUID().uuidString,
-                             text: "And John's speech was amazing!And John's speech was amazing!And John's speech was amazing!",
+                             text: "And John's speech was amazing!",
                              timestamp: "5 PM",
                              inGroupState: .beginning,
                              isOutgoing: true,

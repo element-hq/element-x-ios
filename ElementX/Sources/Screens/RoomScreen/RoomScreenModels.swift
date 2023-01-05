@@ -79,4 +79,6 @@ struct RoomScreenViewStateBindings {
 enum RoomScreenErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
+    /// A specific error message shown in a toast.
+    case toast(String)
 }
