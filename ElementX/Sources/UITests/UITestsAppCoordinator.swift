@@ -178,11 +178,10 @@ class MockScreen: Identifiable {
         case .roomSmallTimelineIncomingAndSmallPagination:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockRoomTimelineController(listenForSignals: true)
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.singleMessageChunk]
             timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
-            timelineController.simulateIncomingItems()
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                              roomProxy: MockRoomProxy(displayName: "Small timeline", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
@@ -195,11 +194,57 @@ class MockScreen: Identifiable {
         case .roomSmallTimelineLargePagination:
             let navigationStackCoordinator = NavigationStackCoordinator()
             
-            let timelineController = MockRoomTimelineController()
+            let timelineController = MockRoomTimelineController(listenForSignals: true)
             timelineController.timelineItems = RoomTimelineItemFixtures.smallChunk
             timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                              roomProxy: MockRoomProxy(displayName: "Small timeline, paginating", avatarURL: "mock_url"),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             emojiProvider: EmojiProvider())
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomLayoutTop:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+            timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Large timeline", avatarURL: "mock_url"),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             emojiProvider: EmojiProvider())
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomLayoutMiddle:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+            timelineController.backPaginationResponses = [RoomTimelineItemFixtures.largeChunk]
+            timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Large timeline", avatarURL: "mock_url"),
+                                                             timelineController: timelineController,
+                                                             mediaProvider: MockMediaProvider(),
+                                                             emojiProvider: EmojiProvider())
+            let coordinator = RoomScreenCoordinator(parameters: parameters)
+            
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomLayoutBottom:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            
+            let timelineController = MockRoomTimelineController(listenForSignals: true)
+            timelineController.timelineItems = RoomTimelineItemFixtures.largeChunk
+            timelineController.incomingItems = [RoomTimelineItemFixtures.incomingMessage]
+            let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                             roomProxy: MockRoomProxy(displayName: "Large timeline", avatarURL: "mock_url"),
                                                              timelineController: timelineController,
                                                              mediaProvider: MockMediaProvider(),
                                                              emojiProvider: EmojiProvider())

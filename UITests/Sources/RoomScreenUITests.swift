@@ -47,19 +47,127 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomSmallTimeline)
     }
     
-    func testSmallTimelineWithIncomingAndPagination() {
+    func testSmallTimelineWithIncomingAndPagination() async throws {
+        let server = try UITestsSignalling.Server()
+        
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
         
-        // Wait for both the incoming message and the pagination chunk.
-        XCTAssert(app.staticTexts["Bob"].waitForExistence(timeout: 2))
-        XCTAssert(app.staticTexts["Helena"].waitForExistence(timeout: 2))
+        try await server.connect()
+        defer { server.disconnect() }
+        
+        // When a back pagination occurs and an incoming message arrives.
+        try await performOperation(.incomingMessage, using: server)
+        try await performOperation(.paginate, using: server)
 
-        // The messages should still be bottom aligned after the new items are added.
+        // Then the 4 visible messages should stay aligned to the bottom.
         app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
     }
     
-    func testSmallTimelineWithLargePagination() {
-        // To be implemented
+    func testSmallTimelineWithLargePagination() async throws {
+        let server = try UITestsSignalling.Server()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
+        
+        try await server.connect()
+        defer { server.disconnect() }
+        
+        // When a large back pagination occurs.
+        try await performOperation(.paginate, using: server)
+
+        // The bottom of the timeline should remain visible with more items added above.
+        app.assertScreenshot(.roomSmallTimelineLargePagination)
+    }
+    
+    func testTimelineLayoutInMiddle() async throws {
+        let server = try UITestsSignalling.Server()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomLayoutMiddle)
+        
+        try await server.connect()
+        defer { server.disconnect() }
+        
+        // Given a timeline that is neither at the top nor the bottom.
+        app.tables.element.swipeDown()
+        try await Task.sleep(for: .milliseconds(500)) // Allow the table to settle
+        app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
+        
+        // When a back pagination occurs.
+        try await performOperation(.paginate, using: server)
+        
+        // Then the UI should remain unchanged.
+        app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        
+        // When an incoming message arrives
+        try await performOperation(.incomingMessage, using: server)
+        
+        // Then the UI should still remain unchanged.
+        app.assertScreenshot(.roomLayoutMiddle, step: 0)
+        
+        // When the keyboard appears for the message composer.
+        try await tapMessageComposer(in: app)
+        
+        // Then the timeline scroll offset should remain unchanged.
+        app.assertScreenshot(.roomLayoutMiddle, step: 1)
+    }
+    
+    func testTimelineLayoutAtTop() async throws {
+        let server = try UITestsSignalling.Server()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomLayoutTop)
+        
+        try await server.connect()
+        defer { server.disconnect() }
+        
+        // Given a timeline that is scrolled to the top.
+        while !app.staticTexts["Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs."].isHittable {
+            app.tables.element.swipeDown()
+        }
+        let cropped = UIEdgeInsets(top: 150, left: 0, bottom: 0, right: 0) // Ignore the navigation bar and pagination indicator as these change.
+        app.assertScreenshot(.roomLayoutTop, insets: cropped) // Assert initial state for comparison.
+        
+        // When a back pagination occurs.
+        try await performOperation(.paginate, using: server)
+
+        // Then the bottom of the timeline should remain unchanged (with new items having been added above).
+        app.assertScreenshot(.roomLayoutTop, insets: cropped)
+    }
+    
+    func testTimelineLayoutAtBottom() async throws {
+        let server = try UITestsSignalling.Server()
+        
+        let app = Application.launch()
+        app.goToScreenWithIdentifier(.roomLayoutBottom)
+        
+        try await server.connect()
+        defer { server.disconnect() }
+        
+        // When an incoming message arrives.
+        try await performOperation(.incomingMessage, using: server)
+        
+        // Then the timeline should scroll down to reveal the message.
+        app.assertScreenshot(.roomLayoutBottom, step: 0)
+        
+        // When the keyboard appears for the message composer.
+        try await tapMessageComposer(in: app)
+        
+        // Then the timeline should still show the last message.
+        app.assertScreenshot(.roomLayoutBottom, step: 1)
+    }
+    
+    // MARK: - Helper Methods
+    
+    private func performOperation(_ operation: UITestsSignal, using server: UITestsSignalling.Server) async throws {
+        try await server.send(operation)
+        guard try await server.receive() == .success else { throw UITestsSignalError.unexpected }
+        try await Task.sleep(for: .milliseconds(500)) // Allow the timeline to update
+    }
+    
+    private func tapMessageComposer(in app: XCUIApplication) async throws {
+        app.textViews.element.tap()
+        try await Task.sleep(for: .milliseconds(500)) // Allow the animations to complete
     }
 }

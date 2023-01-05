@@ -41,13 +41,21 @@ extension XCUIApplication {
 
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
     /// - Parameter identifier: Identifier of the UI test screen
-    func assertScreenshot(_ identifier: UITestScreenIdentifier, step: Int? = nil) {
+    /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier.
+    /// - Parameter insets: Optional insets with which to crop the image by.
+    func assertScreenshot(_ identifier: UITestScreenIdentifier, step: Int? = nil, insets: UIEdgeInsets? = nil) {
         var snapshotName = identifier.rawValue
         if let step {
             snapshotName += "-\(step)"
         }
+        
+        var snapshot = XCUIScreen.main.screenshot().image
+        
+        if let insets {
+            snapshot = snapshot.inset(by: insets)
+        }
 
-        let failure = verifySnapshot(matching: XCUIScreen.main.screenshot().image,
+        let failure = verifySnapshot(matching: snapshot,
                                      as: .image(precision: 0.99, perceptualPrecision: 0.98, scale: nil),
                                      named: snapshotName,
                                      testName: testName)
@@ -77,5 +85,17 @@ extension XCUIApplication {
 
     private var osVersion: String {
         UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "-")
+    }
+}
+
+private extension UIImage {
+    /// Adjusts the image by cropping it with the given edge insets.
+    func inset(by insets: UIEdgeInsets) -> UIImage {
+        let insetRect = CGRect(origin: .zero, size: size).inset(by: insets)
+        let renderer = UIGraphicsImageRenderer(size: insetRect.size)
+        
+        return renderer.image { _ in
+            draw(at: CGPoint(x: -insets.left, y: -insets.top))
+        }
     }
 }

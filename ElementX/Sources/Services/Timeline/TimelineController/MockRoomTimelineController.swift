@@ -20,13 +20,8 @@ import Foundation
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
     var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
-    /// The time delay added to each back pagination request.
-    var backPaginationDelay: Duration = .milliseconds(500)
-    
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
     var incomingItems: [RoomTimelineItemProtocol] = []
-    /// The time delay between each incoming item.
-    var incomingDelay: Duration = .milliseconds(750)
     
     let roomId = "MockRoomIdentifier"
     
@@ -34,38 +29,17 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
     
-    func simulateIncomingItems() {
-        guard !incomingItems.isEmpty else { return }
-        
-        let incomingItem = incomingItems.removeFirst()
-        
-        Task {
-            try await Task.sleep(for: incomingDelay)
-            timelineItems.append(incomingItem)
-            callbacks.send(.updatedTimelineItems)
-            
-            if !self.incomingItems.isEmpty {
-                simulateIncomingItems()
-            }
+    private var client: UITestsSignalling.Client?
+    
+    init(listenForSignals: Bool = false) {
+        if listenForSignals {
+            client = .init()
+            Task { try await startListening() }
         }
     }
     
     func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        callbacks.send(.startedBackPaginating)
-        
-        guard !backPaginationResponses.isEmpty else {
-            callbacks.send(.finishedBackPaginating)
-            return .failure(.generic)
-        }
-        
-        let newItems = backPaginationResponses.removeFirst()
-        
-        try? await Task.sleep(for: backPaginationDelay)
-        timelineItems.insert(contentsOf: newItems, at: 0)
-        callbacks.send(.updatedTimelineItems)
-        callbacks.send(.finishedBackPaginating)
-        
-        return .success(())
+        .failure(.generic)
     }
     
     func processItemAppearance(_ itemId: String) async { }
@@ -89,4 +63,57 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func retryDecryption(forSessionId sessionId: String) async { }
+    
+    // MARK: - UI Test signalling
+    
+    /// Allows the simulation of server responses by listening for signals from UI tests.
+    private func startListening() async throws {
+        try await client?.connect()
+        
+        Task {
+            while let client {
+                do {
+                    try await handleSignal(client.receive())
+                } catch {
+                    client.disconnect()
+                    self.client = nil
+                }
+            }
+        }
+    }
+    
+    /// Handles a UI test signal as necessary.
+    private func handleSignal(_ signal: UITestsSignal) async throws {
+        switch signal {
+        case .paginate:
+            try await simulateBackPagination()
+        case .incomingMessage:
+            try await simulateIncomingItem()
+        default:
+            break
+        }
+    }
+    
+    /// Appends the next incoming item to the `timelineItems` array.
+    private func simulateIncomingItem() async throws {
+        guard !incomingItems.isEmpty else { return }
+        
+        let incomingItem = incomingItems.removeFirst()
+        timelineItems.append(incomingItem)
+        callbacks.send(.updatedTimelineItems)
+        
+        try? await client?.send(.success)
+    }
+    
+    /// Prepends the next chunk of items to the `timelineItems` array.
+    private func simulateBackPagination() async throws {
+        guard !backPaginationResponses.isEmpty else { return }
+        
+        let newItems = backPaginationResponses.removeFirst()
+        timelineItems.insert(contentsOf: newItems, at: 0)
+        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.finishedBackPaginating)
+        
+        try? await client?.send(.success)
+    }
 }
