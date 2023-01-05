@@ -35,7 +35,7 @@ class SessionVerificationViewModelTests: XCTestCase {
     func testRequestVerification() async {
         XCTAssertEqual(context.viewState.verificationState, .initial)
         
-        context.send(viewAction: .start)
+        context.send(viewAction: .requestVerification)
         
         await Task.yield()
         
@@ -45,7 +45,7 @@ class SessionVerificationViewModelTests: XCTestCase {
     func testVerificationCancellation() async throws {
         XCTAssertEqual(context.viewState.verificationState, .initial)
         
-        context.send(viewAction: .start)
+        context.send(viewAction: .requestVerification)
         
         context.send(viewAction: .close)
         
@@ -125,14 +125,20 @@ class SessionVerificationViewModelTests: XCTestCase {
     // MARK: - Private
     
     private func setupChallengeReceived() {
-        let expectation = XCTestExpectation(description: "Wait for challenge")
+        let requestAcceptanceExpectation = XCTestExpectation(description: "Wait for request acceptance")
+        let sasVerificationStartExpectation = XCTestExpectation(description: "Wait for SaS verification start")
+        let verificationDataReceivalExpectation = XCTestExpectation(description: "Wait for Emoji data")
         
         let cancellable = sessionVerificationController.callbacks
             .debounce(for: .seconds(2.0), scheduler: DispatchQueue.main)
             .sink { callback in
                 switch callback {
+                case .acceptedVerificationRequest:
+                    requestAcceptanceExpectation.fulfill()
+                case .startedSasVerification:
+                    sasVerificationStartExpectation.fulfill()
                 case .receivedVerificationData:
-                    expectation.fulfill()
+                    verificationDataReceivalExpectation.fulfill()
                 default:
                     break
                 }
@@ -142,10 +148,15 @@ class SessionVerificationViewModelTests: XCTestCase {
             cancellable.cancel()
         }
         
-        context.send(viewAction: .start)
+        context.send(viewAction: .requestVerification)
+        wait(for: [requestAcceptanceExpectation], timeout: 10.0)
+        XCTAssertEqual(context.viewState.verificationState, .verificationRequestAccepted)
         
-        wait(for: [expectation], timeout: 10.0)
+        context.send(viewAction: .startSasVerification)
+        wait(for: [sasVerificationStartExpectation], timeout: 10.0)
+        XCTAssertEqual(context.viewState.verificationState, .sasVerificationStarted)
         
+        wait(for: [verificationDataReceivalExpectation], timeout: 10.0)
         XCTAssertEqual(context.viewState.verificationState, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
     }
 }

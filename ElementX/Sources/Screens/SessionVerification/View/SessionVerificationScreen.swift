@@ -23,13 +23,6 @@ struct SessionVerificationScreen: View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 32.0) {
-                    if let title = context.viewState.title {
-                        Text(title)
-                            .font(.element.headlineBold)
-                            .foregroundColor(.element.systemPrimaryLabel)
-                            .multilineTextAlignment(.center)
-                    }
-                    
                     Text(context.viewState.message)
                         .font(.body)
                         .multilineTextAlignment(.center)
@@ -66,6 +59,15 @@ struct SessionVerificationScreen: View {
         case .requestingVerification:
             ProgressView()
                 .accessibilityIdentifier("requestingVerificationProgressView")
+            
+        case .verificationRequestAccepted:
+            StateIcon(systemName: "lock.shield")
+        case .startingSasVerification:
+            ProgressView()
+                .accessibilityIdentifier("startingSasVerification")
+        case .sasVerificationStarted:
+            ProgressView()
+                .accessibilityIdentifier("startedSasVerification")
         case .cancelling:
             ProgressView()
                 .accessibilityIdentifier("cancellingVerificationProgressView")
@@ -98,10 +100,10 @@ struct SessionVerificationScreen: View {
         switch context.viewState.verificationState {
         case .initial:
             Button(ElementL10n.startVerification) {
-                context.send(viewAction: .start)
+                context.send(viewAction: .requestVerification)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("startButton")
+            .accessibilityIdentifier("requestVerificationButton")
         
         case .cancelled:
             Button(ElementL10n.globalRetry) {
@@ -109,16 +111,23 @@ struct SessionVerificationScreen: View {
             }
             .buttonStyle(.elementAction(.xLarge))
             .accessibilityIdentifier("restartButton")
+            
+        case .verificationRequestAccepted:
+            Button(ElementL10n.startVerification) {
+                context.send(viewAction: .startSasVerification)
+            }
+            .buttonStyle(.elementAction(.xLarge))
+            .accessibilityIdentifier("sasVerificationStartButton")
         
         case .showingChallenge:
             VStack(spacing: 30) {
                 Button { context.send(viewAction: .accept) } label: {
-                    Label(ElementL10n.actionMatch, systemImage: "checkmark")
+                    Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
                 }
                 .buttonStyle(.elementAction(.xLarge))
                 .accessibilityLabel("challengeAcceptButton")
                 
-                Button(ElementL10n.no) {
+                Button(ElementL10n.verificationSasDoNotMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)

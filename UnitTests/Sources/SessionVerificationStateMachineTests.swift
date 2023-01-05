@@ -33,6 +33,12 @@ class SessionVerificationStateMachineTests: XCTestCase {
         stateMachine.processEvent(.requestVerification)
         XCTAssertEqual(stateMachine.state, .requestingVerification)
         
+        stateMachine.processEvent(.didAcceptVerificationRequest)
+        XCTAssertEqual(stateMachine.state, .verificationRequestAccepted)
+        
+        stateMachine.processEvent(.didStartSasVerification)
+        XCTAssertEqual(stateMachine.state, .sasVerificationStarted)
+        
         stateMachine.processEvent(.didReceiveChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
         XCTAssertEqual(stateMachine.state, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
         
@@ -48,6 +54,12 @@ class SessionVerificationStateMachineTests: XCTestCase {
         
         stateMachine.processEvent(.requestVerification)
         XCTAssertEqual(stateMachine.state, .requestingVerification)
+        
+        stateMachine.processEvent(.didAcceptVerificationRequest)
+        XCTAssertEqual(stateMachine.state, .verificationRequestAccepted)
+        
+        stateMachine.processEvent(.didStartSasVerification)
+        XCTAssertEqual(stateMachine.state, .sasVerificationStarted)
         
         stateMachine.processEvent(.didReceiveChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
         XCTAssertEqual(stateMachine.state, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
@@ -83,6 +95,12 @@ class SessionVerificationStateMachineTests: XCTestCase {
         
         stateMachine.processEvent(.requestVerification)
         XCTAssertEqual(stateMachine.state, .requestingVerification)
+        
+        stateMachine.processEvent(.didAcceptVerificationRequest)
+        XCTAssertEqual(stateMachine.state, .verificationRequestAccepted)
+        
+        stateMachine.processEvent(.didStartSasVerification)
+        XCTAssertEqual(stateMachine.state, .sasVerificationStarted)
         
         stateMachine.processEvent(.didReceiveChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
         XCTAssertEqual(stateMachine.state, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
