@@ -46,30 +46,26 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                    options: [])
         notificationCenter.setNotificationCategories([replyCategory])
         notificationCenter.delegate = self
-        notificationCenter.requestAuthorization(options: [.alert, .sound, .badge]) { [weak self] granted, error in
-            guard let self else {
-                return
-            }
-            if let error {
-                MXLog.debug("[NotificationManager] request authorization failed: \(error)")
-            } else {
+        Task {
+            do {
+                let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
                 MXLog.debug("[NotificationManager] permission granted: \(granted)")
-                DispatchQueue.main.async {
+                await MainActor.run {
                     self.delegate?.authorizationStatusUpdated(self, granted: granted)
                 }
+            } catch {
+                MXLog.debug("[NotificationManager] request authorization failed: \(error)")
             }
         }
     }
 
-    func register(with deviceToken: Data, completion: ((Bool) -> Void)? = nil) {
-        setPusher(with: deviceToken,
-                  clientProxy: clientProxy,
-                  completion: completion)
+    func register(with deviceToken: Data) async -> Bool {
+        await setPusher(with: deviceToken, clientProxy: clientProxy)
     }
 
     func registrationFailed(with error: Error) { }
 
-    func showLocalNotification(with title: String, subtitle: String?) {
+    func showLocalNotification(with title: String, subtitle: String?) async {
         let content = UNMutableNotificationContent()
         content.title = title
         if let subtitle {
@@ -78,44 +74,39 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         let request = UNNotificationRequest(identifier: ProcessInfo.processInfo.globallyUniqueString,
                                             content: content,
                                             trigger: nil)
-        notificationCenter.add(request) { error in
-            if let error {
-                MXLog.debug("[NotificationManager] show local notification failed: \(error)")
-            } else {
-                MXLog.debug("[NotificationManager] show local notification succeeded")
-            }
+        do {
+            try await notificationCenter.add(request)
+            MXLog.debug("[NotificationManager] show local notification succeeded")
+        } catch {
+            MXLog.debug("[NotificationManager] show local notification failed: \(error)")
         }
     }
-
-    private func setPusher(with deviceToken: Data,
-                           clientProxy: ClientProxyProtocol,
-                           completion: ((Bool) -> Void)?) {
-        Task {
-            do {
-                try await clientProxy.setPusher(pushkey: deviceToken.base64EncodedString(),
-                                                kind: .http,
-                                                appId: ServiceLocator.shared.settings.pusherAppId,
-                                                appDisplayName: "\(InfoPlistReader.target.bundleDisplayName) (iOS)",
-                                                deviceDisplayName: UIDevice.current.name,
-                                                profileTag: pusherProfileTag(),
-                                                lang: Bundle.preferredLanguages.first ?? "en",
-                                                url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
-                                                format: .eventIdOnly,
-                                                defaultPayload: [
-                                                    "aps": [
-                                                        "mutable-content": 1,
-                                                        "alert": [
-                                                            "loc-key": "Notification",
-                                                            "loc-args": []
-                                                        ]
+    
+    private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
+        do {
+            try await clientProxy.setPusher(pushkey: deviceToken.base64EncodedString(),
+                                            kind: .http,
+                                            appId: ServiceLocator.shared.settings.pusherAppId,
+                                            appDisplayName: "\(InfoPlistReader.target.bundleDisplayName) (iOS)",
+                                            deviceDisplayName: UIDevice.current.name,
+                                            profileTag: pusherProfileTag(),
+                                            lang: Bundle.preferredLanguages.first ?? "en",
+                                            url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
+                                            format: .eventIdOnly,
+                                            defaultPayload: [
+                                                "aps": [
+                                                    "mutable-content": 1,
+                                                    "alert": [
+                                                        "loc-key": "Notification",
+                                                        "loc-args": []
                                                     ]
-                                                ])
-                MXLog.debug("[NotificationManager] set pusher succeeded")
-                completion?(true)
-            } catch {
-                MXLog.debug("[NotificationManager] set pusher failed: \(error)")
-                completion?(false)
-            }
+                                                ]
+                                            ])
+            MXLog.debug("[NotificationManager] set pusher succeeded")
+            return true
+        } catch {
+            MXLog.debug("[NotificationManager] set pusher failed: \(error)")
+            return false
         }
     }
 

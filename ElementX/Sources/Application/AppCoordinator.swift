@@ -302,7 +302,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                     .sink { [weak self] callback in
                         switch callback {
                         case .registeredNotifications(let deviceToken):
-                            self?.notificationManager?.register(with: deviceToken, completion: nil)
+                            Task { await self?.notificationManager?.register(with: deviceToken) }
                         case .failedToRegisteredNotifications(let error):
                             self?.notificationManager?.registrationFailed(with: error)
                         }
@@ -467,8 +467,8 @@ extension AppCoordinator: NotificationManagerDelegate {
             break
         default:
             // error or no room proxy
-            service.showLocalNotification(with: "⚠️ " + ElementL10n.dialogTitleError,
-                                          subtitle: ElementL10n.a11yErrorSomeMessageNotSent)
+            await service.showLocalNotification(with: "⚠️ " + ElementL10n.dialogTitleError,
+                                                subtitle: ElementL10n.a11yErrorSomeMessageNotSent)
         }
     }
 }

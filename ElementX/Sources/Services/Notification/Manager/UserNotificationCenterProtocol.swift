@@ -19,7 +19,7 @@ import UserNotifications
 
 protocol UserNotificationCenterProtocol: AnyObject {
     var delegate: UNUserNotificationCenterDelegate? { get set }
-    func add(_ request: UNNotificationRequest, withCompletionHandler completionHandler: ((Error?) -> Void)?)
-    func requestAuthorization(options: UNAuthorizationOptions, completionHandler: @escaping (Bool, Error?) -> Void)
+    func add(_ request: UNNotificationRequest) async throws
+    func requestAuthorization(options: UNAuthorizationOptions) async throws -> Bool
     func setNotificationCategories(_ categories: Set<UNNotificationCategory>)
 }

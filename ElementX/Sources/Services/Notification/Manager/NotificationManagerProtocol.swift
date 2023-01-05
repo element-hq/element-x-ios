@@ -36,7 +36,7 @@ protocol NotificationManagerProtocol {
     var delegate: NotificationManagerDelegate? { get set }
 
     func start()
-    func register(with deviceToken: Data, completion: ((Bool) -> Void)?)
+    func register(with deviceToken: Data) async -> Bool
     func registrationFailed(with error: Error)
-    func showLocalNotification(with title: String, subtitle: String?)
+    func showLocalNotification(with title: String, subtitle: String?) async
 }

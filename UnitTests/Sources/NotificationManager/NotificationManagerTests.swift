@@ -33,48 +33,29 @@ final class NotificationManagerTests: XCTestCase {
         sut = NotificationManager(clientProxy: clientProxySpy, notificationCenter: notificationCenter)
     }
     
-    func test_whenRegistered_pusherIsCalled() throws {
-        let expectation = expectation(description: "Callback happened")
-        sut.register(with: Data(), completion: { _ in
-            expectation.fulfill()
-        })
-        waitForExpectations(timeout: 0.5)
+    func test_whenRegistered_pusherIsCalled() async {
+        _ = await sut.register(with: Data())
         XCTAssertTrue(clientProxySpy.setPusherCalled)
     }
     
-    func test_whenRegisteredSuccess_completionSuccessIsCalled() throws {
-        let expectation = expectation(description: "Callback happened")
-        var success = false
-        sut.register(with: Data(), completion: { s in
-            success = s
-            expectation.fulfill()
-        })
-        waitForExpectations(timeout: 0.5)
+    func test_whenRegisteredSuccess_completionSuccessIsCalled() async throws {
+        let success = await sut.register(with: Data())
         XCTAssertTrue(success)
     }
     
-    func test_whenRegisteredAndPusherThrowsError_completionFalseIsCalled() throws {
-        let expectation = expectation(description: "Callback happened")
-        var success = true
+    func test_whenRegisteredAndPusherThrowsError_completionFalseIsCalled() async throws {
         enum TestError: Error {
             case someError
         }
         clientProxySpy.setPusherErrorToThrow = TestError.someError
-        sut.register(with: Data(), completion: { s in
-            success = s
-            expectation.fulfill()
-        })
-        waitForExpectations(timeout: 0.5)
+        let success = await sut.register(with: Data())
         XCTAssertFalse(success)
     }
     
-    func test_whenRegistered_pusherIsCalledWithCorrectValues() throws {
-        let expectation = expectation(description: "Callback happened")
+    @MainActor
+    func test_whenRegistered_pusherIsCalledWithCorrectValues() async throws {
         let pushkeyData = Data("1234".utf8)
-        sut.register(with: pushkeyData, completion: { _ in
-            expectation.fulfill()
-        })
-        waitForExpectations(timeout: 0.5)
+        _ = await sut.register(with: pushkeyData)
         XCTAssertEqual(clientProxySpy.setPusherPushkey, pushkeyData.base64EncodedString())
         XCTAssertEqual(clientProxySpy.setPusherAppId, settings?.pusherAppId)
         XCTAssertEqual(clientProxySpy.setPusherKind, .http)
@@ -98,28 +79,20 @@ final class NotificationManagerTests: XCTestCase {
         XCTAssertTrue(actualPayload.isEqual(to: defaultPayload))
     }
     
-    func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() throws {
-        let expectation = expectation(description: "Callback happened")
+    func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async throws {
         settings?.pusherProfileTag = nil
-        sut.register(with: Data(), completion: { _ in
-            expectation.fulfill()
-        })
-        waitForExpectations(timeout: 0.5)
+        _ = await sut.register(with: Data())
         XCTAssertNotNil(settings?.pusherProfileTag)
     }
     
-    func test_whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() throws {
-        let expectation = expectation(description: "Callback happened")
+    func test_whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() async throws {
         settings?.pusherProfileTag = "12345"
-        sut.register(with: Data(), completion: { _ in
-            expectation.fulfill()
-        })
-        waitForExpectations(timeout: 0.5)
+        _ = await sut.register(with: Data())
         XCTAssertEqual(settings?.pusherProfileTag, "12345")
     }
     
-    func test_whenShowLocalNotification_notificationRequestGetsAdded() throws {
-        sut.showLocalNotification(with: "Title", subtitle: "Subtitle")
+    func test_whenShowLocalNotification_notificationRequestGetsAdded() async throws {
+        await sut.showLocalNotification(with: "Title", subtitle: "Subtitle")
         let request = try XCTUnwrap(notificationCenter.addRequest)
         XCTAssertEqual(request.content.title, "Title")
         XCTAssertEqual(request.content.subtitle, "Subtitle")
@@ -143,21 +116,18 @@ final class NotificationManagerTests: XCTestCase {
         XCTAssertTrue(delegate.isEqual(sut))
     }
     
-    func test_whenStart_requestAuthorizationCalledWithCorrectParams() throws {
+    func test_whenStart_requestAuthorizationCalledWithCorrectParams() async throws {
         sut.start()
+        await Task.yield()
         XCTAssertEqual(notificationCenter.requestAuthorizationOptions, [.alert, .sound, .badge])
     }
     
-    func test_whenStartAndAuthorizationGranted_delegateCalled() throws {
+    func test_whenStartAndAuthorizationGranted_delegateCalled() async throws {
         authorizationStatusWasGranted = false
         notificationCenter.requestAuthorizationGrantedReturnValue = true
         sut.delegate = self
         sut.start()
-        let expectation = expectation(description: "Wait for main thread")
-        DispatchQueue.main.async {
-            expectation.fulfill()
-        }
-        waitForExpectations(timeout: 1, handler: nil)
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(authorizationStatusWasGranted)
     }
     
