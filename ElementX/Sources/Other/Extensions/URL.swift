@@ -64,6 +64,7 @@ extension URL {
         var url = appGroupContainerDirectory
             .appendingPathComponent("Library", isDirectory: true)
             .appendingPathComponent("Application Support", isDirectory: true)
+            .appendingPathComponent(InfoPlistReader.target.baseBundleIdentifier, isDirectory: true)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         
