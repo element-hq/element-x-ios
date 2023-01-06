@@ -20,8 +20,8 @@ import Combine
 @testable import ElementX
 
 final class NotificationManagerTests: XCTestCase {
-    var sut: NotificationManager!
-    private let clientProxyMock = ClientProxyMock()
+    var notificationManager: NotificationManager!
+    private let clientProxy = MockClientProxy(userIdentifier: "@test:user.net")
     private let notificationCenter = UserNotificationCenterSpy()
     private var authorizationStatusWasGranted = false
     private var shouldDisplayInAppNotificationReturnValue = false
@@ -30,16 +30,16 @@ final class NotificationManagerTests: XCTestCase {
     private let settings = ServiceLocator.shared.settings
 
     override func setUp() {
-        sut = NotificationManager(clientProxy: clientProxyMock, notificationCenter: notificationCenter)
+        notificationManager = NotificationManager(clientProxy: clientProxy, notificationCenter: notificationCenter)
     }
     
     func test_whenRegistered_pusherIsCalled() async {
-        _ = await sut.register(with: Data())
-        XCTAssertTrue(clientProxyMock.setPusherCalled)
+        _ = await notificationManager.register(with: Data())
+        XCTAssertTrue(clientProxy.setPusherCalled)
     }
     
     func test_whenRegisteredSuccess_completionSuccessIsCalled() async throws {
-        let success = await sut.register(with: Data())
+        let success = await notificationManager.register(with: Data())
         XCTAssertTrue(success)
     }
     
@@ -47,25 +47,25 @@ final class NotificationManagerTests: XCTestCase {
         enum TestError: Error {
             case someError
         }
-        clientProxyMock.setPusherErrorToThrow = TestError.someError
-        let success = await sut.register(with: Data())
+        clientProxy.setPusherErrorToThrow = TestError.someError
+        let success = await notificationManager.register(with: Data())
         XCTAssertFalse(success)
     }
     
     @MainActor
     func test_whenRegistered_pusherIsCalledWithCorrectValues() async throws {
         let pushkeyData = Data("1234".utf8)
-        _ = await sut.register(with: pushkeyData)
-        XCTAssertEqual(clientProxyMock.setPusherPushkey, pushkeyData.base64EncodedString())
-        XCTAssertEqual(clientProxyMock.setPusherAppId, settings?.pusherAppId)
-        XCTAssertEqual(clientProxyMock.setPusherKind, .http)
-        XCTAssertEqual(clientProxyMock.setPusherAppId, settings?.pusherAppId)
-        XCTAssertEqual(clientProxyMock.setPusherAppDisplayName, "\(InfoPlistReader.target.bundleDisplayName) (iOS)")
-        XCTAssertEqual(clientProxyMock.setPusherDeviceDisplayName, UIDevice.current.name)
-        XCTAssertNotNil(clientProxyMock.setPusherProfileTag)
-        XCTAssertEqual(clientProxyMock.setPusherLang, Bundle.preferredLanguages.first)
-        XCTAssertEqual(clientProxyMock.setPusherUrl, settings?.pushGatewayBaseURL.absoluteString)
-        XCTAssertEqual(clientProxyMock.setPusherFormat, .eventIdOnly)
+        _ = await notificationManager.register(with: pushkeyData)
+        XCTAssertEqual(clientProxy.setPusherPushkey, pushkeyData.base64EncodedString())
+        XCTAssertEqual(clientProxy.setPusherAppId, settings?.pusherAppId)
+        XCTAssertEqual(clientProxy.setPusherKind, .http)
+        XCTAssertEqual(clientProxy.setPusherAppId, settings?.pusherAppId)
+        XCTAssertEqual(clientProxy.setPusherAppDisplayName, "\(InfoPlistReader.target.bundleDisplayName) (iOS)")
+        XCTAssertEqual(clientProxy.setPusherDeviceDisplayName, UIDevice.current.name)
+        XCTAssertNotNil(clientProxy.setPusherProfileTag)
+        XCTAssertEqual(clientProxy.setPusherLang, Bundle.preferredLanguages.first)
+        XCTAssertEqual(clientProxy.setPusherUrl, settings?.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(clientProxy.setPusherFormat, .eventIdOnly)
         let defaultPayload: [AnyHashable: Any] = [
             "aps": [
                 "mutable-content": 1,
@@ -75,31 +75,31 @@ final class NotificationManagerTests: XCTestCase {
                 ]
             ]
         ]
-        let actualPayload = NSDictionary(dictionary: clientProxyMock.setPusherDefaultPayload ?? [:])
+        let actualPayload = NSDictionary(dictionary: clientProxy.setPusherDefaultPayload ?? [:])
         XCTAssertTrue(actualPayload.isEqual(to: defaultPayload))
     }
     
     func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async throws {
         settings?.pusherProfileTag = nil
-        _ = await sut.register(with: Data())
+        _ = await notificationManager.register(with: Data())
         XCTAssertNotNil(settings?.pusherProfileTag)
     }
     
     func test_whenRegisteredAndPusherTagIsSetInSettings_tagNotGenerated() async throws {
         settings?.pusherProfileTag = "12345"
-        _ = await sut.register(with: Data())
+        _ = await notificationManager.register(with: Data())
         XCTAssertEqual(settings?.pusherProfileTag, "12345")
     }
     
     func test_whenShowLocalNotification_notificationRequestGetsAdded() async throws {
-        await sut.showLocalNotification(with: "Title", subtitle: "Subtitle")
+        await notificationManager.showLocalNotification(with: "Title", subtitle: "Subtitle")
         let request = try XCTUnwrap(notificationCenter.addRequest)
         XCTAssertEqual(request.content.title, "Title")
         XCTAssertEqual(request.content.subtitle, "Subtitle")
     }
     
     func test_whenStart_notificationCategoriesAreSet() throws {
-        sut.start()
+        notificationManager.start()
         let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
                                                         title: ElementL10n.actionQuickReply,
                                                         options: [])
@@ -111,13 +111,13 @@ final class NotificationManagerTests: XCTestCase {
     }
     
     func test_whenStart_delegateIsSet() throws {
-        sut.start()
+        notificationManager.start()
         let delegate = try XCTUnwrap(notificationCenter.delegate)
-        XCTAssertTrue(delegate.isEqual(sut))
+        XCTAssertTrue(delegate.isEqual(notificationManager))
     }
     
     func test_whenStart_requestAuthorizationCalledWithCorrectParams() async throws {
-        sut.start()
+        notificationManager.start()
         await Task.yield()
         XCTAssertEqual(notificationCenter.requestAuthorizationOptions, [.alert, .sound, .badge])
     }
@@ -125,53 +125,53 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenStartAndAuthorizationGranted_delegateCalled() async throws {
         authorizationStatusWasGranted = false
         notificationCenter.requestAuthorizationGrantedReturnValue = true
-        sut.delegate = self
-        sut.start()
+        notificationManager.delegate = self
+        notificationManager.start()
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(authorizationStatusWasGranted)
     }
     
     func test_whenWillPresentNotificationsDelegateNotSet_CorrectPresentationOptionsReturned() async throws {
-        sut.start()
+        notificationManager.start()
         let archiver = MockCoder(requiringSecureCoding: false)
         let notification = try XCTUnwrap(UNNotification(coder: archiver))
-        let options = await sut.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
+        let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [.badge, .sound, .list, .banner])
     }
     
     func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudNotBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = false
-        sut.delegate = self
-        sut.start()
+        notificationManager.delegate = self
+        notificationManager.start()
         let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
-        let options = await sut.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
+        let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [])
     }
     
     func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = true
-        sut.delegate = self
-        sut.start()
+        notificationManager.delegate = self
+        notificationManager.start()
         let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
-        let options = await sut.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
+        let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [.badge, .sound, .list, .banner])
     }
     
     func test_whenNotificationCenterReceivedResponseInLineReply_delegateIsCalled() async throws {
         handleInlineReplyDelegateCalled = false
-        sut.delegate = self
-        sut.start()
+        notificationManager.delegate = self
+        notificationManager.start()
         let response = try UNTextInputNotificationResponse.with(userInfo: [AnyHashable: Any](), actionIdentifier: NotificationConstants.Action.inlineReply)
-        await sut.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
+        await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(handleInlineReplyDelegateCalled)
     }
     
     func test_whenNotificationCenterReceivedResponseWithActionIdentifier_delegateIsCalled() async throws {
         notificationTappedDelegateCalled = false
-        sut.delegate = self
-        sut.start()
+        notificationManager.delegate = self
+        notificationManager.start()
         let response = try UNTextInputNotificationResponse.with(userInfo: [AnyHashable: Any](), actionIdentifier: UNNotificationDefaultActionIdentifier)
-        await sut.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
+        await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(notificationTappedDelegateCalled)
     }
 }

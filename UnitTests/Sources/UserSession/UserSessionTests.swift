@@ -18,37 +18,42 @@ import Combine
 import XCTest
 
 final class UserSessionTests: XCTestCase {
-    var sut: UserSession!
-    let clientProxyMock = ClientProxyMock()
-    private var cancellables: Set<AnyCancellable>!
+    var userSession: UserSession!
+    let clientProxy = MockClientProxy(userIdentifier: "@test:user.net")
+    
+    private var cancellables: Set<AnyCancellable> = []
+    
     override func setUpWithError() throws {
         cancellables = []
-        sut = UserSession(clientProxy: clientProxyMock, mediaProvider: MockMediaProvider())
+        userSession = UserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
     }
 
-    func test_whenUserSessionReceivesSyncUpdateAndSessionControllerRetrievedAndSessionNotVierified_sessionVerificationNeededEventReceived() throws {
+    func test_whenUserSessionReceivesSyncUpdateAndSessionControllerRetrievedAndSessionNotVerified_sessionVerificationNeededEventReceived() throws {
         let expectation = expectation(description: "SessionVerificationNeeded expectation")
-        sut.callbacks.sink { callback in
+        userSession.callbacks.sink { callback in
             switch callback {
             case .sessionVerificationNeeded:
                 expectation.fulfill()
             default:
                 break
             }
-        }.store(in: &cancellables)
+        }
+        .store(in: &cancellables)
         
-        let controller = SessionVerificationControllerProxyMock(callbacks: PassthroughSubject<ElementX.SessionVerificationControllerProxyCallback, Never>(),
-                                                                isVerified: false)
-        clientProxyMock.sessionVerificationControllerProxyResult = .success(controller)
-        clientProxyMock.callbacks.send(.receivedSyncUpdate)
+        let controller = MockSessionVerificationControllerProxy(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
+                                                                isVerified: false,
+                                                                requestDelay: .zero)
+        clientProxy.sessionVerificationControllerProxyResult = .success(controller)
+        clientProxy.callbacks.send(.receivedSyncUpdate)
         waitForExpectations(timeout: 1.0)
     }
     
     func test_whenUserSessionReceivesSyncUpdateAndSessionIsVerified_didVerifySessionEventReceived() throws {
         let expectation = expectation(description: "DidVerifySessionEvent expectation")
-        let controller = SessionVerificationControllerProxyMock(callbacks: PassthroughSubject<ElementX.SessionVerificationControllerProxyCallback, Never>(),
-                                                                isVerified: false)
-        clientProxyMock.sessionVerificationControllerProxyResult = .success(controller)
+        let controller = MockSessionVerificationControllerProxy(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
+                                                                isVerified: false,
+                                                                requestDelay: .zero)
+        clientProxy.sessionVerificationControllerProxyResult = .success(controller)
         
         controller.callbacks.sink { value in
             switch value {
@@ -57,24 +62,27 @@ final class UserSessionTests: XCTestCase {
             default:
                 break
             }
-        }.store(in: &cancellables)
+        }
+        .store(in: &cancellables)
         
-        clientProxyMock.callbacks.send(.receivedSyncUpdate)
+        clientProxy.callbacks.send(.receivedSyncUpdate)
         controller.callbacks.send(.finished)
         waitForExpectations(timeout: 1.0)
     }
     
     func test_whenUserSessionReceivesUpdatedRestoreToken_updateRestoreTokenNeededEventReceived() throws {
         let expectation = expectation(description: "UpdatedRestoreToken expectation")
-        sut.callbacks.sink { callback in
+        userSession.callbacks.sink { callback in
             switch callback {
             case .updateRestoreTokenNeeded:
                 expectation.fulfill()
             default:
                 break
             }
-        }.store(in: &cancellables)
-        clientProxyMock.callbacks.send(.updatedRestoreToken)
+        }
+        .store(in: &cancellables)
+        
+        clientProxy.callbacks.send(.updatedRestoreToken)
         waitForExpectations(timeout: 1.0)
     }
 }
