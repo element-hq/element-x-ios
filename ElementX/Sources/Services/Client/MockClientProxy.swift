@@ -79,14 +79,31 @@ class MockClientProxy: ClientProxyProtocol {
         throw ClientProxyError.failedLoadingMedia
     }
     
+    var sessionVerificationControllerProxyResult: Result<SessionVerificationControllerProxyProtocol, ClientProxyError>?
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
-        .failure(.failedRetrievingSessionVerificationController)
+        if let sessionVerificationControllerProxyResult {
+            return sessionVerificationControllerProxyResult
+        } else {
+            return .failure(.failedRetrievingSessionVerificationController)
+        }
     }
-
+    
     func logout() async {
         // no-op
     }
-
+    
+    var setPusherCalled = false
+    var setPusherErrorToThrow: Error?
+    var setPusherPushkey: String?
+    var setPusherKind: PusherKind?
+    var setPusherAppId: String?
+    var setPusherAppDisplayName: String?
+    var setPusherDeviceDisplayName: String?
+    var setPusherProfileTag: String?
+    var setPusherLang: String?
+    var setPusherUrl: String?
+    var setPusherFormat: PushFormat?
+    var setPusherDefaultPayload: [AnyHashable: Any]?
     // swiftlint:disable:next function_parameter_count
     func setPusher(pushkey: String,
                    kind: PusherKind?,
@@ -98,6 +115,17 @@ class MockClientProxy: ClientProxyProtocol {
                    url: String?,
                    format: PushFormat?,
                    defaultPayload: [AnyHashable: Any]?) async throws {
-        // no-op
+        if let setPusherErrorToThrow { throw setPusherErrorToThrow }
+        setPusherCalled = true
+        setPusherPushkey = pushkey
+        setPusherKind = kind
+        setPusherAppId = appId
+        setPusherAppDisplayName = appDisplayName
+        setPusherDeviceDisplayName = deviceDisplayName
+        setPusherProfileTag = profileTag
+        setPusherLang = lang
+        setPusherUrl = url
+        setPusherFormat = format
+        setPusherDefaultPayload = defaultPayload
     }
 }

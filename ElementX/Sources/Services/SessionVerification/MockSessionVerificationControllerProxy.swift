@@ -22,10 +22,11 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     var callbacks = PassthroughSubject<SessionVerificationControllerProxyCallback, Never>()
     
     var isVerified = false
+    var requestDelay: Duration = .seconds(2)
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         Task.detached {
-            try await Task.sleep(nanoseconds: 2_000_000_000)
+            try await Task.sleep(for: requestDelay)
             callbacks.send(.receivedVerificationData(Self.emojis))
         }
         
@@ -34,7 +35,7 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         Task.detached {
-            try await Task.sleep(nanoseconds: 2_000_000_000)
+            try await Task.sleep(for: requestDelay)
             callbacks.send(.finished)
         }
         
@@ -43,7 +44,7 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         Task.detached {
-            try await Task.sleep(nanoseconds: 2_000_000_000)
+            try await Task.sleep(for: requestDelay)
             callbacks.send(.cancelled)
         }
         
@@ -52,7 +53,7 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         Task.detached {
-            try await Task.sleep(nanoseconds: 2_000_000_000)
+            try await Task.sleep(for: requestDelay)
             callbacks.send(.cancelled)
         }
         
