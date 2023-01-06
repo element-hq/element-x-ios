@@ -40,6 +40,12 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .encrypted(item)
         case let item as ReadMarkerRoomTimelineItem:
             return .readMarker(item)
+        case let item as PaginationIndicatorRoomTimelineItem:
+            return .paginationIndicator(item)
+        case let item as StickerRoomTimelineItem:
+            return .sticker(item)
+        case let item as UnsupportedRoomTimelineItem:
+            return .unsupported(item)
         default:
             fatalError("Unknown timeline item")
         }

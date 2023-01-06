@@ -17,7 +17,7 @@
 import Foundation
 import UIKit
 
-enum TimelineItemInGroupState: Hashable {
+enum TimelineItemGroupState: Hashable {
     case single
     case beginning
     case middle
@@ -37,7 +37,7 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
     var text: String { get }
     var timestamp: String { get }
     var shouldShowSenderDetails: Bool { get }
-    var inGroupState: TimelineItemInGroupState { get }
+    var groupState: TimelineItemGroupState { get }
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }
     
@@ -50,11 +50,11 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
 
 extension EventBasedTimelineItemProtocol {
     var shouldShowSenderDetails: Bool {
-        inGroupState.shouldShowSenderDetails
+        groupState.shouldShowSenderDetails
     }
     
     var roundedCorners: UIRectCorner {
-        switch inGroupState {
+        switch groupState {
         case .single:
             return .allCorners
         case .beginning:

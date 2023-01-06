@@ -42,6 +42,13 @@ enum TimelineItemProxy {
     }
 }
 
+/// The delivery status for the item.
+enum TimelineItemDeliveryStatus: Hashable {
+    case unknown
+    case sending
+    case sent(elapsedTime: TimeInterval)
+}
+
 /// A light wrapper around event timeline items returned from Rust.
 struct EventTimelineItemProxy: CustomDebugStringConvertible {
     let item: MatrixRustSDK.EventTimelineItem
@@ -59,6 +66,15 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         }
     }
     
+    var deliveryStatus: TimelineItemDeliveryStatus {
+        switch item.key() {
+        case .transactionId:
+            return .sending
+        case .eventId:
+            return .sent(elapsedTime: Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970)
+        }
+    }
+    
     var body: String? {
         content.asMessage()?.body()
     }
@@ -69,10 +85,6 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     
     var content: TimelineItemContent {
         item.content()
-    }
-
-    var isRedacted: Bool {
-        content.isRedactedMessage()
     }
 
     var isOwn: Bool {

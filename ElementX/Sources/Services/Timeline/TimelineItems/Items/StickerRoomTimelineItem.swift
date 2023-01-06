@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
 import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
@@ -29,6 +27,14 @@ struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let senderId: String
     var senderDisplayName: String?
     var senderAvatar: UIImage?
+    
+    let urlString: String?
+    var image: UIImage?
+    
+    var width: CGFloat?
+    var height: CGFloat?
+    var aspectRatio: CGFloat?
+    var blurhash: String?
     
     var properties = RoomTimelineItemProperties()
 }

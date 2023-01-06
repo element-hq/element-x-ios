@@ -19,12 +19,11 @@ import Foundation
 enum RoomTimelineItemFixtures {
     /// The default timeline items used in Xcode previews etc.
     static var `default`: [RoomTimelineItemProtocol] = [
-        SeparatorRoomTimelineItem(id: UUID().uuidString,
-                                  text: "Yesterday"),
+        SeparatorRoomTimelineItem(text: "Yesterday"),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "That looks so good!",
                              timestamp: "10:10 AM",
-                             inGroupState: .single,
+                             groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
                              senderId: "",
@@ -33,7 +32,7 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗",
                              timestamp: "10:11 AM",
-                             inGroupState: .beginning,
+                             groupState: .beginning,
                              isOutgoing: false,
                              isEditable: false,
                              senderId: "",
@@ -44,7 +43,7 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/",
                              timestamp: "10:11 AM",
-                             inGroupState: .end,
+                             groupState: .end,
                              isOutgoing: false,
                              isEditable: false,
                              senderId: "",
@@ -53,12 +52,11 @@ enum RoomTimelineItemFixtures {
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
                              ])),
-        SeparatorRoomTimelineItem(id: UUID().uuidString,
-                                  text: "Today"),
+        SeparatorRoomTimelineItem(text: "Today"),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!",
                              timestamp: "5 PM",
-                             inGroupState: .single,
+                             groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
                              senderId: "",
@@ -66,7 +64,7 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "And John's speech was amazing!And John's speech was amazing!And John's speech was amazing!",
                              timestamp: "5 PM",
-                             inGroupState: .beginning,
+                             groupState: .beginning,
                              isOutgoing: true,
                              isEditable: true,
                              senderId: "",
@@ -74,7 +72,7 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "New home office set up!",
                              timestamp: "5 PM",
-                             inGroupState: .end,
+                             groupState: .end,
                              isOutgoing: true,
                              isEditable: true,
                              senderId: "",
@@ -91,7 +89,7 @@ enum RoomTimelineItemFixtures {
                                  AttributedStringBuilderComponent(attributedString: "That's amazing! Congrats 🥳", isBlockquote: false)
                              ],
                              timestamp: "5 PM",
-                             inGroupState: .single,
+                             groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
                              senderId: "",
@@ -101,24 +99,24 @@ enum RoomTimelineItemFixtures {
     /// A small chunk of events, containing 2 text items.
     static var smallChunk: [RoomTimelineItemProtocol] {
         [TextRoomTimelineItem(text: "Hey there 👋",
-                              inGroupState: .beginning,
+                              groupState: .beginning,
                               senderDisplayName: "Alice"),
          TextRoomTimelineItem(text: "How are you?",
-                              inGroupState: .end,
+                              groupState: .end,
                               senderDisplayName: "Alice")]
     }
     
     /// A chunk of events that contains a single text item.
     static var singleMessageChunk: [RoomTimelineItemProtocol] {
         [TextRoomTimelineItem(text: "Tap tap tap 🎙️. Is this thing on?",
-                              inGroupState: .single,
+                              groupState: .single,
                               senderDisplayName: "Helena")]
     }
     
     /// A single text item.
     static var incomingMessage: RoomTimelineItemProtocol {
         TextRoomTimelineItem(text: "Hello, World!",
-                             inGroupState: .single,
+                             groupState: .single,
                              senderDisplayName: "Bob")
     }
     
@@ -209,11 +207,11 @@ enum RoomTimelineItemFixtures {
 }
 
 private extension TextRoomTimelineItem {
-    init(text: String, inGroupState: TimelineItemInGroupState = .single, senderDisplayName: String) {
+    init(text: String, groupState: TimelineItemGroupState = .single, senderDisplayName: String) {
         self.init(id: UUID().uuidString,
                   text: text,
                   timestamp: "10:47 am",
-                  inGroupState: inGroupState,
+                  groupState: groupState,
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,
                   senderId: "",

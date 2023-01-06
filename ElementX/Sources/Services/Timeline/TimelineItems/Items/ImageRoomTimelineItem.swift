@@ -21,7 +21,7 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let id: String
     let text: String
     let timestamp: String
-    let inGroupState: TimelineItemInGroupState
+    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     

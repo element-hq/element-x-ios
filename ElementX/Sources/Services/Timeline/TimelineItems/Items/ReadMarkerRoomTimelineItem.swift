@@ -17,5 +17,5 @@
 import Foundation
 
 struct ReadMarkerRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+    let id: String = UUID().uuidString
 }

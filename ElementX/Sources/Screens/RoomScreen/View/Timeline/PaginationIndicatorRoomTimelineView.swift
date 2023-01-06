@@ -14,21 +14,20 @@
 // limitations under the License.
 //
 
-import Foundation
-import UIKit
+import SwiftUI
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
-    let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
-    let timestamp: String
-    let groupState: TimelineItemGroupState
-    let isOutgoing: Bool
-    let isEditable: Bool
+struct PaginationIndicatorRoomTimelineView: View {
+    let timelineItem: PaginationIndicatorRoomTimelineItem
     
-    let senderId: String
-    var senderDisplayName: String?
-    var senderAvatar: UIImage?
-    
-    var properties = RoomTimelineItemProperties()
+    var body: some View {
+        ProgressView()
+            .frame(maxWidth: .infinity)
+    }
+}
+
+struct PaginationIndicatorRoomTimelineView_Previews: PreviewProvider {
+    static var previews: some View {
+        let item = PaginationIndicatorRoomTimelineItem()
+        PaginationIndicatorRoomTimelineView(timelineItem: item)
+    }
 }

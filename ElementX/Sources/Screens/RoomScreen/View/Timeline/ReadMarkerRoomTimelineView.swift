@@ -33,7 +33,7 @@ struct ReadMarkerRoomTimelineView: View {
 
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = ReadMarkerRoomTimelineItem(id: UUID().uuidString)
+        let item = ReadMarkerRoomTimelineItem()
         ReadMarkerRoomTimelineView(timelineItem: item)
     }
 }

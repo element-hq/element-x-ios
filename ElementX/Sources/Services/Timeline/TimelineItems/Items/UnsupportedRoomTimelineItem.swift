@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,13 +14,15 @@
 // limitations under the License.
 //
 
-import Foundation
 import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
+    
+    let eventType: String
+    let error: String
+    
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
