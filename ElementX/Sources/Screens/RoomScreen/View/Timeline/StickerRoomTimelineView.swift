@@ -46,6 +46,7 @@ struct StickerRoomTimelineView: View {
         }
         .id(timelineItem.id)
         .animation(.elementDefault, value: timelineItem.image)
+        .accessibilityLabel(timelineItem.text)
     }
 }
 
