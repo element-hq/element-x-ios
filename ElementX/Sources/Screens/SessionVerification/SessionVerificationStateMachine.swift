@@ -79,50 +79,54 @@ class SessionVerificationStateMachine {
     }
 
     init() {
-        stateMachine = StateMachine(state: .initial) { machine in
-            machine.addRoutes(event: .requestVerification, transitions: [.initial => .requestingVerification])
-            machine.addRoutes(event: .didAcceptVerificationRequest, transitions: [.requestingVerification => .verificationRequestAccepted])
-            machine.addRoutes(event: .startSasVerification, transitions: [.verificationRequestAccepted => .startingSasVerification])
-            machine.addRoutes(event: .didFail, transitions: [.requestingVerification => .initial])
-            machine.addRoutes(event: .restart, transitions: [.cancelled => .initial])
-            
-            // Transitions with associated values need to be handled through `addRouteMapping`
-            machine.addRouteMapping { event, fromState, _ in
-                switch (event, fromState) {
-                case (.didStartSasVerification, _):
-                    return .sasVerificationStarted
-                    
-                case (.didReceiveChallenge(let emojis), .sasVerificationStarted):
-                    return .showingChallenge(emojis: emojis)
-                case (.acceptChallenge, .showingChallenge(let emojis)):
-                    return .acceptingChallenge(emojis: emojis)
-                case (.didFail, .acceptingChallenge(let emojis)):
-                    return .showingChallenge(emojis: emojis)
+        stateMachine = StateMachine(state: .initial)
+        configure()
+    }
+    
+    // swiftlint:disable:next cyclomatic_complexity
+    private func configure() {
+        stateMachine.addRoutes(event: .requestVerification, transitions: [.initial => .requestingVerification])
+        stateMachine.addRoutes(event: .didAcceptVerificationRequest, transitions: [.requestingVerification => .verificationRequestAccepted])
+        stateMachine.addRoutes(event: .startSasVerification, transitions: [.verificationRequestAccepted => .startingSasVerification])
+        stateMachine.addRoutes(event: .didFail, transitions: [.requestingVerification => .initial])
+        stateMachine.addRoutes(event: .restart, transitions: [.cancelled => .initial])
+        
+        // Transitions with associated values need to be handled through `addRouteMapping`
+        stateMachine.addRouteMapping { event, fromState, _ in
+            switch (event, fromState) {
+            case (.didStartSasVerification, _):
+                return .sasVerificationStarted
                 
-                case (.didAcceptChallenge, .acceptingChallenge):
-                    return .verified
+            case (.didReceiveChallenge(let emojis), .sasVerificationStarted):
+                return .showingChallenge(emojis: emojis)
+            case (.acceptChallenge, .showingChallenge(let emojis)):
+                return .acceptingChallenge(emojis: emojis)
+            case (.didFail, .acceptingChallenge(let emojis)):
+                return .showingChallenge(emojis: emojis)
                 
-                case (.declineChallenge, .showingChallenge(let emojis)):
-                    return .decliningChallenge(emojis: emojis)
-                case (.didFail, .decliningChallenge(let emojis)):
-                    return .showingChallenge(emojis: emojis)
+            case (.didAcceptChallenge, .acceptingChallenge):
+                return .verified
                 
-                case (.cancel, _):
-                    return .cancelling
-                case (.didCancel, _):
-                    return .cancelled
-                    
-                default:
-                    return nil
-                }
+            case (.declineChallenge, .showingChallenge(let emojis)):
+                return .decliningChallenge(emojis: emojis)
+            case (.didFail, .decliningChallenge(let emojis)):
+                return .showingChallenge(emojis: emojis)
+                
+            case (.cancel, _):
+                return .cancelling
+            case (.didCancel, _):
+                return .cancelled
+                
+            default:
+                return nil
             }
-            
-            addTransitionHandler { context in
-                if let event = context.event {
-                    MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(event)`")
-                } else {
-                    MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
-                }
+        }
+        
+        addTransitionHandler { context in
+            if let event = context.event {
+                MXLog.info("Transitioning from `\(context.fromState)` to `\(context.toState)` with event `\(event)`")
+            } else {
+                MXLog.info("Transitioning from \(context.fromState)` to `\(context.toState)`")
             }
         }
     }
