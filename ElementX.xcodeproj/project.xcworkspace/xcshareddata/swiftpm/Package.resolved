@@ -127,6 +127,15 @@
       }
     },
     {
+      "identity" : "swiftformat",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/nicklockwood/SwiftFormat",
+      "state" : {
+        "revision" : "34cd9dd87b78048ce0d623a9153f9bf260ad6590",
+        "version" : "0.50.7"
+      }
+    },
+    {
       "identity" : "swiftstate",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/ReactKit/SwiftState",

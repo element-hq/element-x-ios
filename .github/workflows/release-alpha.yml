@@ -34,11 +34,11 @@ jobs:
 
       - name: Brew bundle
         run:
-          brew bundle
+          brew update && brew bundle
 
       - name: SwiftFormat
         run:
-          swiftformat --lint .
+          swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint .
 
       - name: Bundle install
         run: |

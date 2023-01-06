@@ -26,11 +26,11 @@ jobs:
 
       - name: Brew bundle
         run:
-          brew update && brew bundle && brew upgrade swiftformat
+          brew update && brew bundle
       
       - name: SwiftFormat
         run:
-          swiftformat --lint .
+          swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint .
 
       - uses: actions/cache@v3
         with:

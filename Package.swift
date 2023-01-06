@@ -18,7 +18,9 @@ let package = Package(
         .package(url: "https://github.com/siteline/SwiftUI-Introspect.git", from: "0.1.4"),
         /* Command line tools dependencies */
         .package(url: "https://github.com/apple/swift-argument-parser", from: "1.2.0"),
-        .package(url: "https://github.com/jpsim/Yams", from: "5.0.1")
+        .package(url: "https://github.com/jpsim/Yams", from: "5.0.1"),
+        /* Package plug-ins */
+        .package(url: "https://github.com/nicklockwood/SwiftFormat", from: "0.50.4")
     ],
     targets: [
         .target(name: "DesignKit",

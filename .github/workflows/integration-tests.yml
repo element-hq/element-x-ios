@@ -21,7 +21,7 @@ jobs:
 
       - name: Brew bundle
         run:
-          brew update && brew bundle && brew upgrade swiftformat
+          brew update && brew bundle
 
       - uses: actions/cache@v3
         with:
