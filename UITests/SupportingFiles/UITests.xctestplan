@@ -9,14 +9,6 @@
       }
     },
     {
-      "id" : "9657189C-CDB9-4D85-86EB-8A611144C11E",
-      "name" : "French",
-      "options" : {
-        "language" : "fr",
-        "region" : "FR"
-      }
-    },
-    {
       "id" : "04E7AF54-391D-42D4-8193-7AD50C685639",
       "name" : "German",
       "options" : {
