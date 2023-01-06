@@ -50,17 +50,6 @@ class KeychainController: KeychainControllerProtocol {
                 return nil
             }
 
-            // Handle the previous restoration token format as we don't want users to have to log in again
-            // It will automatically be updated to the new version after login
-            if let legacyRestorationToken = try? JSONDecoder().decode(LegacyRestorationToken.self, from: tokenData) {
-                return .init(session: .init(accessToken: legacyRestorationToken.session.accessToken,
-                                            refreshToken: nil,
-                                            userId: legacyRestorationToken.session.userId,
-                                            deviceId: legacyRestorationToken.session.deviceId,
-                                            homeserverUrl: legacyRestorationToken.homeURL,
-                                            isSoftLogout: legacyRestorationToken.isSoftLogout ?? false))
-            }
-
             return try JSONDecoder().decode(RestorationToken.self, from: tokenData)
         } catch {
             MXLog.error("Failed retrieving user restore token")
