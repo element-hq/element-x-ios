@@ -48,9 +48,13 @@ enum UITestsSignalError: Error {
 enum UITestsSignalling {
     /// A network listener that can be used in the UI tests runner to create a two-way `Connection` with the app.
     class Listener {
+        /// The underlying network listener.
         private let listener: NWListener
         
+        /// The established connection. This is stored in case the connection is established
+        /// before `connection()` is awaited and so the continuation is still `nil`.
         private var establishedConnection: Connection?
+        /// The continuation to call when a connection is established.
         private var connectionContinuation: CheckedContinuation<Connection, Error>?
         
         /// Creates a new signalling `Listener` and starts listening.
@@ -77,7 +81,7 @@ enum UITestsSignalling {
         }
         
         /// Returns the negotiated `Connection` as and when it has been established.
-        func connect() async throws -> Connection {
+        func connection() async throws -> Connection {
             guard listener.state == .setup else { throw UITestsSignalError.unknown }
             if let establishedConnection {
                 return establishedConnection
@@ -104,7 +108,9 @@ enum UITestsSignalling {
     /// - Await the `connection()` on the `Listener` when you need to send the signal.
     /// - The two `Connection` objects can now be used for two-way signalling.
     class Connection {
+        /// The underlying network connection.
         private let connection: NWConnection
+        /// A continuation to call each time a signal is received.
         private var nextMessageContinuation: CheckedContinuation<UITestsSignal, Error>?
         
         /// Creates a new signalling `Connection`.

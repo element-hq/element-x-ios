@@ -53,7 +53,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
         
-        let connection = try await listener.connect()
+        let connection = try await listener.connection()
         defer { connection.disconnect() }
         
         // When a back pagination occurs and an incoming message arrives.
@@ -70,7 +70,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
         
-        let connection = try await listener.connect()
+        let connection = try await listener.connection()
         defer { connection.disconnect() }
         
         // When a large back pagination occurs.
@@ -86,7 +86,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomLayoutMiddle)
         
-        let connection = try await listener.connect()
+        let connection = try await listener.connection()
         defer { connection.disconnect() }
         
         // Given a timeline that is neither at the top nor the bottom.
@@ -119,7 +119,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomLayoutTop)
         
-        let connection = try await listener.connect()
+        let connection = try await listener.connection()
         defer { connection.disconnect() }
         
         // Given a timeline that is scrolled to the top.
@@ -142,7 +142,7 @@ class RoomScreenUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomLayoutBottom)
         
-        let connection = try await listener.connect()
+        let connection = try await listener.connection()
         defer { connection.disconnect() }
         
         // When an incoming message arrives.
