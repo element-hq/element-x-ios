@@ -2833,7 +2833,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "xcrun --sdk macosx swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint --lenient \"$PROJECT_DIR\"\n";
+			shellScript = "xcrun --sdk macosx swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint --lenient --target Tools \"$PROJECT_DIR\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 

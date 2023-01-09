@@ -102,7 +102,7 @@ targets:
       basedOnDependencyAnalysis: false
       shell: /bin/sh
       script: |
-        xcrun --sdk macosx swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint --lenient "$PROJECT_DIR"
+        xcrun --sdk macosx swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint --lenient --target Tools "$PROJECT_DIR"
 
     dependencies:
     - target: NSE

@@ -30,7 +30,7 @@ jobs:
       
       - name: SwiftFormat
         run:
-          swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint .
+          swift package -c release plugin --allow-writing-to-package-directory swiftformat --lint --target Tools .
 
       - uses: actions/cache@v3
         with:
