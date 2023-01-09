@@ -192,6 +192,7 @@ class TimelineTableViewController: UIViewController {
             cell.item = timelineItem
             cell.contentConfiguration = UIHostingConfiguration {
                 timelineItem
+                    .id(timelineItem.id)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .opacity(opacity)
                     .contextMenu {

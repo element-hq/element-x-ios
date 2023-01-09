@@ -27,7 +27,6 @@ struct RedactedRoomTimelineView: View {
                 FormattedBodyText(text: timelineItem.text)
             }
         }
-        .id(timelineItem.id)
     }
 }
 

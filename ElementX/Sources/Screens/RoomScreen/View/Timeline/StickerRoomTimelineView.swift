@@ -44,7 +44,6 @@ struct StickerRoomTimelineView: View {
                 .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
             }
         }
-        .id(timelineItem.id)
         .animation(.elementDefault, value: timelineItem.image)
         .accessibilityLabel(timelineItem.text)
     }

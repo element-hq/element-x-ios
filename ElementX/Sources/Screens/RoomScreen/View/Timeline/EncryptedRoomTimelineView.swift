@@ -26,20 +26,19 @@ struct EncryptedRoomTimelineView: View {
             Button {
                 showEncryptionInfo = !showEncryptionInfo
             } label: {
-                HStack(alignment: .top) {
-                    Image(systemName: "lock.shield")
-                        .foregroundColor(.red)
-                        .padding(.top, 1.0)
+                Label {
                     if showEncryptionInfo {
                         FormattedBodyText(text: encryptionDetails)
                     } else {
                         FormattedBodyText(text: timelineItem.text)
                     }
+                } icon: {
+                    Image(systemName: "lock.shield")
+                        .foregroundColor(.red)
                 }
                 .animation(nil, value: showEncryptionInfo)
             }
         }
-        .id(timelineItem.id)
     }
     
     private var encryptionDetails: String {

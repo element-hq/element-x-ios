@@ -30,7 +30,6 @@ struct FileRoomTimelineView: View {
             .padding(.vertical, 12)
             .padding(.horizontal, 6)
         }
-        .id(timelineItem.id)
     }
 }
 

@@ -21,18 +21,22 @@ struct UnsupportedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            VStack(alignment: .leading) {
-                Text("\(timelineItem.text): \(timelineItem.eventType)")
-                    .fixedSize(horizontal: false, vertical: true)
-                    .foregroundColor(.element.alert)
-                
-                Text(timelineItem.error)
-                    .fixedSize(horizontal: false, vertical: true)
-                    .foregroundColor(.element.alert)
-                    .font(.element.callout)
+            Label {
+                VStack(alignment: .leading) {
+                    Text("\(timelineItem.text): \(timelineItem.eventType)")
+                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(.element.primaryContent)
+                    
+                    Text(timelineItem.error)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .font(.element.footnote)
+                        .foregroundColor(.element.primaryContent)
+                }
+            } icon: {
+                Image(systemName: "exclamationmark.bubble")
+                    .foregroundColor(.red)
             }
         }
-        .id(timelineItem.id)
     }
 }
 

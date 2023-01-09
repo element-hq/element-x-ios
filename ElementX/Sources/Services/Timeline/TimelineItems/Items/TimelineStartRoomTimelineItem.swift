@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,24 +15,8 @@
 //
 
 import Foundation
-import SwiftUI
 
-struct ReadMarkerRoomTimelineView: View {
-    let timelineItem: ReadMarkerRoomTimelineItem
-    
-    var body: some View {
-        VStack {
-            Spacer(minLength: 4.0)
-            Divider()
-                .frame(maxWidth: .infinity)
-                .overlay(Color.element.accent)
-        }
-    }
-}
-
-struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
-    static var previews: some View {
-        let item = ReadMarkerRoomTimelineItem()
-        ReadMarkerRoomTimelineView(timelineItem: item)
-    }
+struct TimelineStartRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
+    let id: String = UUID().uuidString
+    let name: String?
 }

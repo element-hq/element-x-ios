@@ -50,7 +50,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
         callbacks.send(.startedBackPaginating)
         
         guard !backPaginationResponses.isEmpty else {

@@ -78,8 +78,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        switch await timelineProvider.paginateBackwards(count) {
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
+        switch await timelineProvider.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
         case .success:
             return .success(())
         case .failure(let error):
@@ -262,6 +262,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     }
                 case .loadingIndicator:
                     newTimelineItems.append(PaginationIndicatorRoomTimelineItem())
+                case .timelineStart:
+                    newTimelineItems.append(TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name))
                 }
             default:
                 break

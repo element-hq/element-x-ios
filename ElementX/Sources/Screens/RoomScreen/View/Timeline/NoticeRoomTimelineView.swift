@@ -31,7 +31,6 @@ struct NoticeRoomTimelineView: View {
                 }
             }
         }
-        .id(timelineItem.id)
     }
 }
 

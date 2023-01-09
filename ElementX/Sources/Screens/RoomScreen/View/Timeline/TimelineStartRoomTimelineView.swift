@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,21 +16,29 @@
 
 import SwiftUI
 
-struct SeparatorRoomTimelineView: View {
-    let timelineItem: SeparatorRoomTimelineItem
+struct TimelineStartRoomTimelineView: View {
+    let timelineItem: TimelineStartRoomTimelineItem
     
     var body: some View {
-        Text(timelineItem.text)
+        Text(title)
             .font(.element.footnote)
             .foregroundColor(.element.secondaryContent)
             .padding(.vertical, 24)
             .frame(maxWidth: .infinity)
     }
+    
+    var title: String {
+        var text = ElementL10n.thisIsTheBeginningOfRoomNoName
+        if let name = timelineItem.name {
+            text = ElementL10n.thisIsTheBeginningOfRoom(name)
+        }
+        return text
+    }
 }
 
-struct SeparatorRoomTimelineView_Previews: PreviewProvider {
+struct TimelineStartRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = SeparatorRoomTimelineItem(text: "This is a separator")
-        SeparatorRoomTimelineView(timelineItem: item)
+        let item = TimelineStartRoomTimelineItem(name: "Alice and Bob")
+        TimelineStartRoomTimelineView(timelineItem: item)
     }
 }

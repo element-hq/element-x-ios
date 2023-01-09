@@ -31,7 +31,6 @@ struct EmoteRoomTimelineView: View {
                 }
             }
         }
-        .id(timelineItem.id)
     }
 }
 
