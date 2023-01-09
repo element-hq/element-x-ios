@@ -63,6 +63,7 @@ enum UITestsSignalling {
                     switch state {
                     case .ready:
                         connection.receiveNextMessage()
+                        self?.establishedConnection = connection
                         self?.connectionContinuation?.resume(returning: connection)
                     case .failed(let error):
                         self?.connectionContinuation?.resume(with: .failure(error))
@@ -70,8 +71,7 @@ enum UITestsSignalling {
                         break
                     }
                 }
-                self?.listener.cancel()
-                self?.establishedConnection = connection
+                self?.listener.cancel() // Stop listening for connections when one is discovered.
             }
             listener.start(queue: .main)
         }
