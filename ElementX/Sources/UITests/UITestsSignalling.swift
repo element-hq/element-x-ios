@@ -14,8 +14,8 @@
 // limitations under the License.
 //
 
-import Foundation
 import Network
+import SwiftUI
 
 enum UITestsSignal: String {
     /// An internal signal used to bring up the connection.
@@ -46,6 +46,16 @@ enum UITestsSignalError: Error {
 }
 
 enum UITestsSignalling {
+    /// The Bonjour service name used for the connection. The device name
+    /// is included to allow UI tests to run on multiple devices simultaneously.
+    private static let serviceName = "UITestsSignalling \(UIDevice.current.name)"
+    /// The Bonjour service type used for the connection.
+    private static let serviceType = "_signalling._udp."
+    /// The Bonjour domain used for the connection.
+    private static let domain = "local."
+    /// The DispatchQueue used for networking.
+    private static let queue: DispatchQueue = .main
+    
     /// A network listener that can be used in the UI tests runner to create a two-way `Connection` with the app.
     class Listener {
         /// The underlying network listener.
@@ -59,10 +69,11 @@ enum UITestsSignalling {
         
         /// Creates a new signalling `Listener` and starts listening.
         init() throws {
-            listener = try NWListener(using: .udp, on: 1234)
+            let service = NWListener.Service(name: UITestsSignalling.serviceName, type: UITestsSignalling.serviceType, domain: UITestsSignalling.domain)
+            listener = try NWListener(service: service, using: .udp)
             listener.newConnectionHandler = { [weak self] nwConnection in
                 let connection = Connection(nwConnection: nwConnection)
-                nwConnection.start(queue: .main)
+                nwConnection.start(queue: UITestsSignalling.queue)
                 nwConnection.stateUpdateHandler = { state in
                     switch state {
                     case .ready:
@@ -77,7 +88,7 @@ enum UITestsSignalling {
                 }
                 self?.listener.cancel() // Stop listening for connections when one is discovered.
             }
-            listener.start(queue: .main)
+            listener.start(queue: UITestsSignalling.queue)
         }
         
         /// Returns the negotiated `Connection` as and when it has been established.
@@ -115,7 +126,11 @@ enum UITestsSignalling {
         
         /// Creates a new signalling `Connection`.
         init() {
-            connection = NWConnection(host: "127.0.0.1", port: 1234, using: .udp)
+            let endpoint = NWEndpoint.service(name: UITestsSignalling.serviceName,
+                                              type: UITestsSignalling.serviceType,
+                                              domain: UITestsSignalling.domain,
+                                              interface: nil)
+            connection = NWConnection(to: endpoint, using: .udp)
         }
         
         /// Creates a new signalling `Connection` from an established `NWConnection`.
@@ -128,7 +143,7 @@ enum UITestsSignalling {
             guard connection.state == .setup else { return }
             
             return try await withCheckedThrowingContinuation { continuation in
-                connection.start(queue: .main)
+                connection.start(queue: UITestsSignalling.queue)
                 connection.stateUpdateHandler = { state in
                     switch state {
                     case .ready:

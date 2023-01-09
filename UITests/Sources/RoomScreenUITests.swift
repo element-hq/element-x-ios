@@ -54,6 +54,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
         
         let connection = try await listener.connection()
+        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // When a back pagination occurs and an incoming message arrives.
@@ -71,6 +72,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
         
         let connection = try await listener.connection()
+        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // When a large back pagination occurs.
@@ -87,6 +89,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomLayoutMiddle)
         
         let connection = try await listener.connection()
+        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // Given a timeline that is neither at the top nor the bottom.
@@ -120,6 +123,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomLayoutTop)
         
         let connection = try await listener.connection()
+        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // Given a timeline that is scrolled to the top.
@@ -143,6 +147,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomLayoutBottom)
         
         let connection = try await listener.connection()
+        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // When an incoming message arrives.
@@ -160,9 +165,9 @@ class RoomScreenUITests: XCTestCase {
     
     // MARK: - Helper Methods
     
-    private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Connection) async throws {
-        try await client.send(operation)
-        guard try await client.receive() == .success else { throw UITestsSignalError.unexpected }
+    private func performOperation(_ operation: UITestsSignal, using connection: UITestsSignalling.Connection) async throws {
+        try await connection.send(operation)
+        guard try await connection.receive() == .success else { throw UITestsSignalError.unexpected }
         try await Task.sleep(for: .milliseconds(500)) // Allow the timeline to update
     }
     
