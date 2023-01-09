@@ -91,12 +91,7 @@ targets:
       basedOnDependencyAnalysis: false
       shell: /bin/sh
       script: |
-        export PATH="$PATH:/opt/homebrew/bin"
-        if which swiftlint >/dev/null; then
-            swiftlint
-        else
-            echo "warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint"
-        fi
+        xcrun --sdk macosx swift package -c release plugin swiftlint
     - name: 🧹 SwiftFormat
       runOnlyWhenInstalling: false
       basedOnDependencyAnalysis: false
