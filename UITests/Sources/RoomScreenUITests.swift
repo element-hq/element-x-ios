@@ -48,46 +48,46 @@ class RoomScreenUITests: XCTestCase {
     }
     
     func testSmallTimelineWithIncomingAndPagination() async throws {
-        let server = try UITestsSignalling.Server()
+        let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
         
-        let client = try await server.connect()
-        defer { client.disconnect() }
+        let connection = try await listener.connect()
+        defer { connection.disconnect() }
         
         // When a back pagination occurs and an incoming message arrives.
-        try await performOperation(.incomingMessage, using: client)
-        try await performOperation(.paginate, using: client)
+        try await performOperation(.incomingMessage, using: connection)
+        try await performOperation(.paginate, using: connection)
 
         // Then the 4 visible messages should stay aligned to the bottom.
         app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
     }
     
     func testSmallTimelineWithLargePagination() async throws {
-        let server = try UITestsSignalling.Server()
+        let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
         
-        let client = try await server.connect()
-        defer { client.disconnect() }
+        let connection = try await listener.connect()
+        defer { connection.disconnect() }
         
         // When a large back pagination occurs.
-        try await performOperation(.paginate, using: client)
+        try await performOperation(.paginate, using: connection)
 
         // The bottom of the timeline should remain visible with more items added above.
         app.assertScreenshot(.roomSmallTimelineLargePagination)
     }
     
     func testTimelineLayoutInMiddle() async throws {
-        let server = try UITestsSignalling.Server()
+        let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomLayoutMiddle)
         
-        let client = try await server.connect()
-        defer { client.disconnect() }
+        let connection = try await listener.connect()
+        defer { connection.disconnect() }
         
         // Given a timeline that is neither at the top nor the bottom.
         app.tables.element.swipeDown()
@@ -95,13 +95,13 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomLayoutMiddle, step: 0) // Assert initial state for comparison.
         
         // When a back pagination occurs.
-        try await performOperation(.paginate, using: client)
+        try await performOperation(.paginate, using: connection)
         
         // Then the UI should remain unchanged.
         app.assertScreenshot(.roomLayoutMiddle, step: 0)
         
         // When an incoming message arrives
-        try await performOperation(.incomingMessage, using: client)
+        try await performOperation(.incomingMessage, using: connection)
         
         // Then the UI should still remain unchanged.
         app.assertScreenshot(.roomLayoutMiddle, step: 0)
@@ -114,13 +114,13 @@ class RoomScreenUITests: XCTestCase {
     }
     
     func testTimelineLayoutAtTop() async throws {
-        let server = try UITestsSignalling.Server()
+        let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomLayoutTop)
         
-        let client = try await server.connect()
-        defer { client.disconnect() }
+        let connection = try await listener.connect()
+        defer { connection.disconnect() }
         
         // Given a timeline that is scrolled to the top.
         while !app.staticTexts["Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs."].isHittable {
@@ -130,23 +130,23 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomLayoutTop, insets: cropped) // Assert initial state for comparison.
         
         // When a back pagination occurs.
-        try await performOperation(.paginate, using: client)
+        try await performOperation(.paginate, using: connection)
 
         // Then the bottom of the timeline should remain unchanged (with new items having been added above).
         app.assertScreenshot(.roomLayoutTop, insets: cropped)
     }
     
     func testTimelineLayoutAtBottom() async throws {
-        let server = try UITestsSignalling.Server()
+        let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomLayoutBottom)
         
-        let client = try await server.connect()
-        defer { client.disconnect() }
+        let connection = try await listener.connect()
+        defer { connection.disconnect() }
         
         // When an incoming message arrives.
-        try await performOperation(.incomingMessage, using: client)
+        try await performOperation(.incomingMessage, using: connection)
         
         // Then the timeline should scroll down to reveal the message.
         app.assertScreenshot(.roomLayoutBottom, step: 0)
@@ -160,7 +160,7 @@ class RoomScreenUITests: XCTestCase {
     
     // MARK: - Helper Methods
     
-    private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Client) async throws {
+    private func performOperation(_ operation: UITestsSignal, using client: UITestsSignalling.Connection) async throws {
         try await client.send(operation)
         guard try await client.receive() == .success else { throw UITestsSignalError.unexpected }
         try await Task.sleep(for: .milliseconds(500)) // Allow the timeline to update

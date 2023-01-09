@@ -46,31 +46,24 @@ enum UITestsSignalError: Error {
 }
 
 enum UITestsSignalling {
-    /// A UDP server that can be used for signalling between the UI tests jig and the app.
-    /// The server should be instantiated on the UI tests side.
-    class Server {
+    /// A network listener that can be used in the UI tests runner to create a two-way `Connection` with the app.
+    class Listener {
         private let listener: NWListener
         
-        var client: Client?
-        var connectionContinuation: CheckedContinuation<Client, Error>?
+        private var establishedConnection: Connection?
+        private var connectionContinuation: CheckedContinuation<Connection, Error>?
         
-        /// Creates a new signalling server.
+        /// Creates a new signalling `Listener` and starts listening.
         init() throws {
             listener = try NWListener(using: .udp, on: 1234)
-            start()
-        }
-        
-        func start() {
-            guard listener.state == .setup else { return }
-            
-            listener.newConnectionHandler = { [weak self] connection in
-                let client = Client(connection: connection)
-                connection.start(queue: .main)
-                connection.stateUpdateHandler = { state in
+            listener.newConnectionHandler = { [weak self] nwConnection in
+                let connection = Connection(nwConnection: nwConnection)
+                nwConnection.start(queue: .main)
+                nwConnection.stateUpdateHandler = { state in
                     switch state {
                     case .ready:
-                        client.receiveNextMessage()
-                        self?.connectionContinuation?.resume(returning: client)
+                        connection.receiveNextMessage()
+                        self?.connectionContinuation?.resume(returning: connection)
                     case .failed(let error):
                         self?.connectionContinuation?.resume(with: .failure(error))
                     default:
@@ -78,24 +71,24 @@ enum UITestsSignalling {
                     }
                 }
                 self?.listener.cancel()
-                self?.client = client
+                self?.establishedConnection = connection
             }
             listener.start(queue: .main)
         }
         
-        /// Listens for a client and attempts to negotiate a connection when one is discovered.
-        func connect() async throws -> Client {
+        /// Returns the negotiated `Connection` as and when it has been established.
+        func connect() async throws -> Connection {
             guard listener.state == .setup else { throw UITestsSignalError.unknown }
-            if let client {
-                return client
+            if let establishedConnection {
+                return establishedConnection
             }
             return try await withCheckedThrowingContinuation { [weak self] continuation in
                 self?.connectionContinuation = continuation
             }
         }
         
-        /// Stops the the listener if when a connection hasn't been established.
-        func disconnect() {
+        /// Stops the listening when a connection hasn't been established.
+        func cancel() {
             listener.cancel()
             if let connectionContinuation {
                 connectionContinuation.resume(throwing: UITestsSignalError.cancelled)
@@ -104,22 +97,27 @@ enum UITestsSignalling {
         }
     }
 
-    /// A UDP client that can be used for signalling between the app and the UI tests jig.
-    /// The client should be instantiated on the app side.
-    class Client {
-        let connection: NWConnection
-        var nextMessageContinuation: CheckedContinuation<UITestsSignal, Error>?
+    /// A two-way UDP connection that can be used for signalling between the app and the UI tests runner.
+    /// The connection should be created as follows:
+    /// - Create a `Listener` in the UI tests before launching the app. This will automatically start listening for a connection.
+    /// - With in the App, create a `Connection` and call `connect()` to establish a connection.
+    /// - Await the `connection()` on the `Listener` when you need to send the signal.
+    /// - The two `Connection` objects can now be used for two-way signalling.
+    class Connection {
+        private let connection: NWConnection
+        private var nextMessageContinuation: CheckedContinuation<UITestsSignal, Error>?
         
-        /// Creates a new signalling client.
+        /// Creates a new signalling `Connection`.
         init() {
             connection = NWConnection(host: "127.0.0.1", port: 1234, using: .udp)
         }
         
-        init(connection: NWConnection) {
-            self.connection = connection
+        /// Creates a new signalling `Connection` from an established `NWConnection`.
+        fileprivate init(nwConnection: NWConnection) {
+            connection = nwConnection
         }
         
-        /// Attempts to connect to a server.
+        /// Attempts to establish a connection with a `Listener`.
         func connect() async throws {
             guard connection.state == .setup else { return }
             
@@ -149,14 +147,14 @@ enum UITestsSignalling {
             }
         }
         
-        /// Sends a message to the connected client/server.
+        /// Sends a message to the other side of the connection.
         func send(_ signal: UITestsSignal) async throws {
             guard connection.state == .ready else { throw UITestsSignalError.notConnected }
             let data = signal.rawValue.data(using: .utf8)
             connection.send(content: data, completion: .idempotent)
         }
         
-        /// Returns the next message received by the client/server.
+        /// Returns the next message received from the other side of the connection.
         func receive() async throws -> UITestsSignal {
             guard connection.state == .ready else { throw UITestsSignalError.notConnected }
             guard nextMessageContinuation == nil else { throw UITestsSignalError.awaitingAnotherSignal }
@@ -166,7 +164,7 @@ enum UITestsSignalling {
             }
         }
         
-        /// Processes the next message received by the client/server
+        /// Processes the next message received by the connection.
         fileprivate func receiveNextMessage() {
             connection.receiveMessage { [weak self] completeContent, _, isComplete, error in
                 guard let self else { return }
