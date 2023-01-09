@@ -24,7 +24,6 @@ struct ReadMarkerRoomTimelineView: View {
         VStack {
             Spacer(minLength: 4.0)
             Divider()
-                .id(timelineItem.id)
                 .frame(maxWidth: .infinity)
                 .overlay(Color.element.accent)
         }
@@ -33,7 +32,7 @@ struct ReadMarkerRoomTimelineView: View {
 
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
     static var previews: some View {
-        let item = ReadMarkerRoomTimelineItem(id: UUID().uuidString)
+        let item = ReadMarkerRoomTimelineItem()
         ReadMarkerRoomTimelineView(timelineItem: item)
     }
 }

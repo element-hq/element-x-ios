@@ -48,7 +48,7 @@ protocol RoomTimelineControllerProtocol {
 
     func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError>
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError>
     
     func sendMessage(_ message: String) async
     

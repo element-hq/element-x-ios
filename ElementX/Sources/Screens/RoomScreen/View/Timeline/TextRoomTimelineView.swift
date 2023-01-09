@@ -28,7 +28,6 @@ struct TextRoomTimelineView: View {
                 FormattedBodyText(text: timelineItem.text)
             }
         }
-        .id(timelineItem.id)
     }
 }
 
@@ -66,7 +65,7 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: text,
                              timestamp: timestamp,
-                             inGroupState: .single,
+                             groupState: .single,
                              isOutgoing: isOutgoing,
                              isEditable: isOutgoing,
                              senderId: senderId)

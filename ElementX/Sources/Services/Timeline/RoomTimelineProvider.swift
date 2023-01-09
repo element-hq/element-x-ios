@@ -68,18 +68,14 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         }
     }
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError> {
         // Set this back to false after actually updating the items or if failed
         backPaginationPublisher.send(true)
         
         MXLog.info("Started back pagination request")
-        switch await roomProxy.paginateBackwards(count: count) {
-        case .success(let numberOfUpdates):
-            MXLog.info("Finished back pagination request. Got \(numberOfUpdates) updates")
-            
-            if numberOfUpdates == 0 {
-                backPaginationPublisher.send(false)
-            }
+        switch await roomProxy.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
+        case .success:
+            MXLog.info("Finished back pagination request")
             return .success(())
         case .failure(let error):
             MXLog.error("Failed back pagination request with error: \(error)")
@@ -152,7 +148,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     // MARK: - Private
     
     private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
-        MXLog.info("Received timeline diffs")
+        MXLog.verbose("Received timeline diffs")
         
         itemProxies = diffs
             .reduce(itemProxies) { currentItems, diff in
@@ -171,7 +167,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 return updatedItems
             }
         
-        MXLog.info("Finished applying diffs")
+        MXLog.verbose("Finished applying diffs")
     }
      
     // swiftlint:disable:next cyclomatic_complexity function_body_length

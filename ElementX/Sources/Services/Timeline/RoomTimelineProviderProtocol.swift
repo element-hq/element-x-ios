@@ -31,7 +31,7 @@ protocol RoomTimelineProviderProtocol {
     
     var backPaginationPublisher: CurrentValueSubject<Bool, Never> { get }
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError>
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError>
     
     func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError>
 

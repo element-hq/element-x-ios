@@ -20,6 +20,9 @@ import Foundation
 class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline item arrays that will be inserted in order for each back pagination request.
     var backPaginationResponses: [[RoomTimelineItemProtocol]] = []
+    /// The time delay added to each back pagination request.
+    var backPaginationDelay: Duration = .milliseconds(500)
+
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
     var incomingItems: [RoomTimelineItemProtocol] = []
     
@@ -38,8 +41,22 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        .failure(.generic)
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
+        callbacks.send(.startedBackPaginating)
+        
+        guard !backPaginationResponses.isEmpty else {
+            callbacks.send(.finishedBackPaginating)
+            return .failure(.generic)
+        }
+        
+        let newItems = backPaginationResponses.removeFirst()
+        
+        try? await Task.sleep(for: backPaginationDelay)
+        timelineItems.insert(contentsOf: newItems, at: 0)
+        callbacks.send(.updatedTimelineItems)
+        callbacks.send(.finishedBackPaginating)
+        
+        return .success(())
     }
     
     func processItemAppearance(_ itemId: String) async { }

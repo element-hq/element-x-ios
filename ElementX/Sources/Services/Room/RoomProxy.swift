@@ -34,8 +34,6 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var displayName: String?
     
-    private var backPaginationOutcome: PaginationOutcome?
-    
     private var timelineObservationToken: StoppableSpawn?
     
     deinit {
@@ -138,17 +136,13 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func paginateBackwards(count: UInt) async -> Result<UInt, RoomProxyError> {
-        guard backPaginationOutcome?.moreMessages != false else {
-            return .failure(.noMoreMessagesToBackPaginate)
-        }
-        
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         do {
-            let outcome: PaginationOutcome = try await Task.dispatch(on: .global()) {
-                try self.room.paginateBackwards(limit: UInt16(count))
+            try await Task.dispatch(on: .global()) {
+                try self.room.paginateBackwards(opts: .untilNumItems(eventLimit: UInt16(requestSize), items: UInt16(untilNumberOfItems)))
             }
-            update(backPaginationOutcome: outcome)
-            return .success(UInt(outcome.numUpdates))
+            
+            return .success(())
         } catch {
             return .failure(.failedPaginatingBackwards)
         }
@@ -254,9 +248,5 @@ class RoomProxy: RoomProxyProtocol {
     
     private func update(displayName: String) {
         self.displayName = displayName
-    }
-    
-    private func update(backPaginationOutcome: PaginationOutcome) {
-        self.backPaginationOutcome = backPaginationOutcome
     }
 }

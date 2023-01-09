@@ -78,8 +78,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
     }
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        switch await timelineProvider.paginateBackwards(count) {
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
+        switch await timelineProvider.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
         case .success:
             return .success(())
         case .failure(let error):
@@ -105,6 +105,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             await loadThumbnailForImageTimelineItem(item)
         case let item as VideoRoomTimelineItem:
             await loadThumbnailForVideoTimelineItem(item)
+        case let item as StickerRoomTimelineItem:
+            await loadThumbnailForStickerTimelineItem(item)
         default:
             break
         }
@@ -225,6 +227,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
 
@@ -236,27 +239,31 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let previousItemProxy = timelineProvider.itemsPublisher.value[safe: index - 1]
             let nextItemProxy = timelineProvider.itemsPublisher.value[safe: index + 1]
 
-            let inGroupState = inGroupState(for: itemProxy, previousItemProxy: previousItemProxy, nextItemProxy: nextItemProxy)
+            let groupState = computeGroupState(for: itemProxy, previousItemProxy: previousItemProxy, nextItemProxy: nextItemProxy)
             
             switch itemProxy {
             case .event(let eventItem):
                 newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
-                                                                                 inGroupState: inGroupState))
+                                                                                 groupState: groupState))
             case .virtual(let virtualItem):
                 switch virtualItem {
                 case .dayDivider(let year, let month, let day):
                     // These components will be replaced by a timestamp in upcoming releases
                     let dateComponents = DateComponents(calendar: .current, year: Int(year), month: Int(month), day: Int(day))
                     if let dateString = dateComponents.date?.formatted(date: .complete, time: .omitted) {
-                        newTimelineItems.append(SeparatorRoomTimelineItem(id: UUID().uuidString, text: dateString))
+                        newTimelineItems.append(SeparatorRoomTimelineItem(text: dateString))
                     } else {
                         MXLog.error("Failed formatting separator date")
                     }
                 case .readMarker:
                     // Don't show the read marker if it's the last item in the timeline
                     if index != timelineProvider.itemsPublisher.value.indices.last {
-                        newTimelineItems.append(ReadMarkerRoomTimelineItem(id: UUID().uuidString))
+                        newTimelineItems.append(ReadMarkerRoomTimelineItem())
                     }
+                case .loadingIndicator:
+                    newTimelineItems.append(PaginationIndicatorRoomTimelineItem())
+                case .timelineStart:
+                    newTimelineItems.append(TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name))
                 }
             default:
                 break
@@ -271,10 +278,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         callbacks.send(.updatedTimelineItems)
     }
-
-    private func inGroupState(for itemProxy: TimelineItemProxy,
-                              previousItemProxy: TimelineItemProxy?,
-                              nextItemProxy: TimelineItemProxy?) -> TimelineItemInGroupState {
+    
+    private func computeGroupState(for itemProxy: TimelineItemProxy,
+                                   previousItemProxy: TimelineItemProxy?,
+                                   nextItemProxy: TimelineItemProxy?) -> TimelineItemGroupState {
         guard let previousItem = previousItemProxy else {
             //  no previous item, check next item
             guard let nextItem = nextItemProxy else {
@@ -357,6 +364,30 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
 
+            item.image = image
+            timelineItems[index] = item
+            callbacks.send(.updatedTimelineItem(timelineItem.id))
+        case .failure:
+            break
+        }
+    }
+    
+    private func loadThumbnailForStickerTimelineItem(_ timelineItem: StickerRoomTimelineItem) async {
+        if timelineItem.image != nil {
+            return
+        }
+        
+        guard let urlString = timelineItem.urlString else {
+            return
+        }
+        
+        switch await mediaProvider.loadImageFromURLString(urlString) {
+        case .success(let image):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? StickerRoomTimelineItem else {
+                return
+            }
+            
             item.image = image
             timelineItems[index] = item
             callbacks.send(.updatedTimelineItem(timelineItem.id))

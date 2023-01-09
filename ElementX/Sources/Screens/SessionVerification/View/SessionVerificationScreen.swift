@@ -125,13 +125,13 @@ struct SessionVerificationScreen: View {
                     Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
                 }
                 .buttonStyle(.elementAction(.xLarge))
-                .accessibilityLabel("challengeAcceptButton")
+                .accessibilityIdentifier("challengeAcceptButton")
                 
                 Button(ElementL10n.verificationSasDoNotMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
-                .accessibilityLabel("challengeDeclineButton")
+                .accessibilityIdentifier("challengeDeclineButton")
             }
         
         case .verified:
