@@ -21,6 +21,7 @@ typealias RoomScreenViewModelType = StateStoreViewModel<RoomScreenViewState, Roo
 
 class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol {
     private enum Constants {
+        static let backPaginationEventLimit: UInt = 20
         static let backPaginationPageSize: UInt = 50
         static let toastErrorID = "RoomScreenToastError"
     }
@@ -122,7 +123,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // MARK: - Private
     
     private func paginateBackwards() async {
-        switch await timelineController.paginateBackwards(Constants.backPaginationPageSize) {
+        switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
         case .failure:
             displayError(.toast(ElementL10n.roomTimelineBackpaginationFailure))
         default:

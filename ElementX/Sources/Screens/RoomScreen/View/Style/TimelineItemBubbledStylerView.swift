@@ -98,7 +98,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @ViewBuilder
     var styledContentOutgoing: some View {
-        let topPadding: CGFloat? = timelineItem.inGroupState == .single || timelineItem.inGroupState == .beginning ? 8 : 0
+        let topPadding: CGFloat? = timelineItem.groupState == .single || timelineItem.groupState == .beginning ? 8 : 0
         
         if shouldAvoidBubbling {
             content()

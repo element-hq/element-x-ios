@@ -16,7 +16,7 @@
 
 import SwiftUI
 struct TimelineDeliveryStatusView: View {
-    let deliveryStatus: MessageTimelineItemDeliveryStatus
+    let deliveryStatus: TimelineItemDeliveryStatus
     
     @State var showDeliveryStatus: Bool
     
@@ -29,7 +29,7 @@ struct TimelineDeliveryStatusView: View {
         }
     }
     
-    init(deliveryStatus: MessageTimelineItemDeliveryStatus) {
+    init(deliveryStatus: TimelineItemDeliveryStatus) {
         self.deliveryStatus = deliveryStatus
         
         switch deliveryStatus {

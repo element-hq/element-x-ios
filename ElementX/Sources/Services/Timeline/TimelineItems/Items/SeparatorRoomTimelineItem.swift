@@ -17,6 +17,6 @@
 import Foundation
 
 struct SeparatorRoomTimelineItem: DecorationTimelineItemProtocol, Identifiable, Hashable {
-    let id: String
+    let id: String = UUID().uuidString
     let text: String
 }

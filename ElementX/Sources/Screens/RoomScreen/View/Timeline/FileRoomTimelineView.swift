@@ -30,7 +30,6 @@ struct FileRoomTimelineView: View {
             .padding(.vertical, 12)
             .padding(.horizontal, 6)
         }
-        .id(timelineItem.id)
     }
 }
 
@@ -45,7 +44,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
                                                                     text: "document.pdf",
                                                                     timestamp: "Now",
-                                                                    inGroupState: .single,
+                                                                    groupState: .single,
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     senderId: "Bob",
@@ -55,7 +54,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
                                                                     text: "document.docx",
                                                                     timestamp: "Now",
-                                                                    inGroupState: .single,
+                                                                    groupState: .single,
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     senderId: "Bob",
@@ -65,7 +64,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
                                                                     text: "document.txt",
                                                                     timestamp: "Now",
-                                                                    inGroupState: .single,
+                                                                    groupState: .single,
                                                                     isOutgoing: false,
                                                                     isEditable: false,
                                                                     senderId: "Bob",

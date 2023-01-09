@@ -40,7 +40,6 @@ struct VideoRoomTimelineView: View {
                 .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
             }
         }
-        .id(timelineItem.id)
         .animation(.elementDefault, value: timelineItem.image)
     }
 
@@ -70,7 +69,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Some video",
                                                                       timestamp: "Now",
-                                                                      inGroupState: .single,
+                                                                      groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       senderId: "Bob",
@@ -82,7 +81,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Some other video",
                                                                       timestamp: "Now",
-                                                                      inGroupState: .single,
+                                                                      groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       senderId: "Bob",
@@ -94,7 +93,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Blurhashed video",
                                                                       timestamp: "Now",
-                                                                      inGroupState: .single,
+                                                                      groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       senderId: "Bob",

@@ -23,7 +23,7 @@ struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
     
     private var itemProxies = [TimelineItemProxy]()
     
-    func paginateBackwards(_ count: UInt) async -> Result<Void, RoomTimelineProviderError> {
+    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError> {
         .failure(.failedPaginatingBackwards)
     }
     

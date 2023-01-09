@@ -28,7 +28,10 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     case redacted(RedactedRoomTimelineItem)
     case encrypted(EncryptedRoomTimelineItem)
     case readMarker(ReadMarkerRoomTimelineItem)
-    case backPaginationIndicator(Bool)
+    case paginationIndicator(PaginationIndicatorRoomTimelineItem)
+    case sticker(StickerRoomTimelineItem)
+    case unsupported(UnsupportedRoomTimelineItem)
+    case timelineStart(TimelineStartRoomTimelineItem)
     
     var id: String {
         switch self {
@@ -52,8 +55,14 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
             return item.id
         case .readMarker(let item):
             return item.id
-        case .backPaginationIndicator:
-            return "BackpaginationLoadingIndicator"
+        case .paginationIndicator(let item):
+            return item.id
+        case .sticker(let item):
+            return item.id
+        case .unsupported(let item):
+            return item.id
+        case .timelineStart(let item):
+            return item.id
         }
     }
 }
@@ -81,10 +90,14 @@ extension RoomTimelineViewProvider: View {
             EncryptedRoomTimelineView(timelineItem: item)
         case .readMarker(let item):
             ReadMarkerRoomTimelineView(timelineItem: item)
-        case .backPaginationIndicator(let isBackPaginating):
-            ProgressView()
-                .frame(maxWidth: .infinity)
-                .opacity(isBackPaginating ? 1.0 : 0.0)
+        case .paginationIndicator(let item):
+            PaginationIndicatorRoomTimelineView(timelineItem: item)
+        case .sticker(let item):
+            StickerRoomTimelineView(timelineItem: item)
+        case .unsupported(let item):
+            UnsupportedRoomTimelineView(timelineItem: item)
+        case .timelineStart(let item):
+            TimelineStartRoomTimelineView(timelineItem: item)
         }
     }
 }

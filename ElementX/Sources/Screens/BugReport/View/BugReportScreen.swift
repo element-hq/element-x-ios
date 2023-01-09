@@ -88,7 +88,8 @@ struct BugReportScreen: View {
                 Toggle(ElementL10n.sendBugReportIncludeLogs, isOn: $context.sendingLogsEnabled)
                     .toggleStyle(ElementToggleStyle())
                     .accessibilityIdentifier("sendLogsToggle")
-                Text(ElementL10n.sendBugReportIncludeLogs).accessibilityIdentifier("sendLogsText")
+                Text(ElementL10n.sendBugReportIncludeLogs)
+                    .accessibilityIdentifier("sendLogsText")
             }
             .onTapGesture {
                 context.send(viewAction: .toggleSendLogs)

@@ -44,7 +44,6 @@ struct ImageRoomTimelineView: View {
                 .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
             }
         }
-        .id(timelineItem.id)
         .animation(.elementDefault, value: timelineItem.image)
     }
 }
@@ -60,7 +59,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Some image",
                                                                       timestamp: "Now",
-                                                                      inGroupState: .single,
+                                                                      groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       senderId: "Bob",
@@ -70,7 +69,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Some other image",
                                                                       timestamp: "Now",
-                                                                      inGroupState: .single,
+                                                                      groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       senderId: "Bob",
@@ -80,7 +79,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Blurhashed image",
                                                                       timestamp: "Now",
-                                                                      inGroupState: .single,
+                                                                      groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       senderId: "Bob",

@@ -23,13 +23,6 @@ protocol MessageContentProtocol: RoomMessageEventContentProtocol {
     var body: String { get }
 }
 
-/// The delivery status for the item.
-enum MessageTimelineItemDeliveryStatus: Hashable {
-    case unknown
-    case sending
-    case sent(elapsedTime: TimeInterval)
-}
-
 /// A timeline item that represents an `m.room.message` event.
 struct MessageTimelineItem<Content: MessageContentProtocol> {
     let item: MatrixRustSDK.EventTimelineItem
@@ -43,15 +36,6 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
             return eventID
         }
     }
-    
-    var deliveryStatus: MessageTimelineItemDeliveryStatus {
-        switch item.key() {
-        case .transactionId:
-            return .sending
-        case .eventId:
-            return .sent(elapsedTime: Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970)
-        }
-    }
 
     var body: String {
         content.body
@@ -61,18 +45,10 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
         item.content().asMessage()?.isEdited() == true
     }
 
-    var isEditable: Bool {
-        item.isEditable()
-    }
-    
     var inReplyTo: String? {
         item.content().asMessage()?.inReplyTo()
     }
     
-    var reactions: [Reaction] {
-        item.reactions()
-    }
-
     var sender: String {
         item.sender()
     }
