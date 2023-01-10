@@ -57,7 +57,7 @@ struct HomeScreenRoomCell: View {
                                 .lineLimit(2)
                                 .multilineTextAlignment(.leading)
                                 .padding(.top, 2)
-                                .id(UUID())
+                                .id(lastMessage)
                                 .transition(.opacity.animation(.elementDefault))
                         }
                     }
@@ -70,7 +70,7 @@ struct HomeScreenRoomCell: View {
                             Text(timestamp)
                                 .font(.element.caption1)
                                 .foregroundColor(.element.secondaryContent)
-                                .id(UUID())
+                                .id(timestamp)
                                 .transition(.opacity.animation(.elementDefault))
                         }
                         

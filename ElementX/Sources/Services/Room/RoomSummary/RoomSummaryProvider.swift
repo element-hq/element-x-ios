@@ -142,23 +142,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             lastMessageTimestamp = lastMessage.timestamp
         }
         
-        if invalidated {
-            return .invalidated(details: RoomSummaryDetails(id: room.roomId(),
-                                                            name: room.name() ?? room.roomId(),
-                                                            isDirect: room.isDm() ?? false,
-                                                            avatarURLString: room.fullRoom()?.avatarUrl(),
-                                                            lastMessage: attributedLastMessage,
-                                                            lastMessageTimestamp: lastMessageTimestamp,
-                                                            unreadNotificationCount: UInt(room.unreadNotifications().notificationCount())))
-        } else {
-            return .filled(details: RoomSummaryDetails(id: room.roomId(),
-                                                       name: room.name() ?? room.roomId(),
-                                                       isDirect: room.isDm() ?? false,
-                                                       avatarURLString: room.fullRoom()?.avatarUrl(),
-                                                       lastMessage: attributedLastMessage,
-                                                       lastMessageTimestamp: lastMessageTimestamp,
-                                                       unreadNotificationCount: UInt(room.unreadNotifications().notificationCount())))
-        }
+        let details = RoomSummaryDetails(id: room.roomId(),
+                                         name: room.name() ?? room.roomId(),
+                                         isDirect: room.isDm() ?? false,
+                                         avatarURLString: room.fullRoom()?.avatarUrl(),
+                                         lastMessage: attributedLastMessage,
+                                         lastMessageTimestamp: lastMessageTimestamp,
+                                         unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
+        
+        return invalidated ? .invalidated(details: details) : .filled(details: details)
     }
     
     private func buildSummaryForRoomListEntry(_ entry: RoomListEntry) -> RoomSummary {

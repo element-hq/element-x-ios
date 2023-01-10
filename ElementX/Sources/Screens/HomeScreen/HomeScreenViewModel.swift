@@ -180,14 +180,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .empty:
                     rooms.append(HomeScreenRoom.placeholder())
                 case .filled(let details), .invalidated(let details):
-                    let room = buildRoomForSummaryWithDetails(details, invalidated: true)
+                    let room = buildRoom(with: details, invalidated: true)
                     rooms.append(room)
                 }
             case .filled(let details):
-                let room = buildRoomForSummaryWithDetails(details, invalidated: false)
+                let room = buildRoom(with: details, invalidated: false)
                 rooms.append(room)
             case .invalidated(let details):
-                let room = buildRoomForSummaryWithDetails(details, invalidated: true)
+                let room = buildRoom(with: details, invalidated: true)
                 rooms.append(room)
             }
         }
@@ -195,7 +195,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         state.rooms = rooms
     }
     
-    private func buildRoomForSummaryWithDetails(_ details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
+    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
         let avatarImage = userSession.mediaProvider.imageFromURLString(details.avatarURLString, avatarSize: .room(on: .home))
         
         var timestamp: String?

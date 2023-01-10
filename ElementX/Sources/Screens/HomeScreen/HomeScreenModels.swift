@@ -83,8 +83,11 @@ struct HomeScreenViewStateBindings {
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
+    /// The list item identifier can be a real room identifier, a custom one for invalidated entries
+    /// or a completely unique one for empty items and skeletons
     let id: String
     
+    /// The real room identifier this item points to
     let roomId: String?
     
     let name: String
