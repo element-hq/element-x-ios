@@ -32,11 +32,11 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
     
-    private var client: UITestsSignalling.Client?
+    private var connection: UITestsSignalling.Connection?
     
     init(listenForSignals: Bool = false) {
         if listenForSignals {
-            client = .init()
+            connection = .init()
             Task { try await startListening() }
         }
     }
@@ -85,15 +85,15 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     /// Allows the simulation of server responses by listening for signals from UI tests.
     private func startListening() async throws {
-        try await client?.connect()
+        try await connection?.connect()
         
         Task {
-            while let client {
+            while let connection {
                 do {
-                    try await handleSignal(client.receive())
+                    try await handleSignal(connection.receive())
                 } catch {
-                    client.disconnect()
-                    self.client = nil
+                    connection.disconnect()
+                    self.connection = nil
                 }
             }
         }
@@ -119,7 +119,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         timelineItems.append(incomingItem)
         callbacks.send(.updatedTimelineItems)
         
-        try? await client?.send(.success)
+        try? await connection?.send(.success)
     }
     
     /// Prepends the next chunk of items to the `timelineItems` array.
@@ -131,6 +131,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.finishedBackPaginating)
         
-        try? await client?.send(.success)
+        try? await connection?.send(.success)
     }
 }
