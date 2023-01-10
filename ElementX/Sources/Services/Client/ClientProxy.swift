@@ -72,6 +72,7 @@ class ClientProxy: ClientProxyProtocol {
     
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
+    // swiftlint:disable:next function_body_length
     init(client: ClientProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) async {
         self.client = client
@@ -80,15 +81,29 @@ class ClientProxy: ClientProxyProtocol {
                             attributes: .concurrent)
         mediaProxy = MediaProxy(client: client,
                                 clientQueue: clientQueue)
-
+        
         await Task.dispatch(on: clientQueue) {
             do {
                 let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.settings.slidingSyncProxyBaseURLString)
-
+                
+                let requiredState = [RequiredState(key: "m.room.avatar", value: ""),
+                                     RequiredState(key: "m.room.encryption", value: "")]
+                
+                let filters = SlidingSyncRequestListFilters(isDm: nil,
+                                                            spaces: [],
+                                                            isEncrypted: nil,
+                                                            isInvite: false,
+                                                            isTombstoned: false,
+                                                            roomTypes: [],
+                                                            notRoomTypes: ["m.space"],
+                                                            roomNameLike: nil,
+                                                            tags: [],
+                                                            notTags: [])
+                
                 let visibleRoomsView = try SlidingSyncViewBuilder()
-                    .timelineLimit(limit: 30)
-                    .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
-                                                   RequiredState(key: "m.room.encryption", value: "")])
+                    .timelineLimit(limit: 20)
+                    .requiredState(requiredState: requiredState)
+                    .filters(filters: filters)
                     .name(name: "CurrentlyVisibleRooms")
                     .syncMode(mode: .selective)
                     .addRange(from: 0, to: 20)
@@ -96,16 +111,17 @@ class ClientProxy: ClientProxyProtocol {
                 
                 let allRoomsView = try SlidingSyncViewBuilder()
                     .noTimelineLimit()
-                    .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
-                                                   RequiredState(key: "m.room.encryption", value: "")])
+                    .requiredState(requiredState: requiredState)
+                    .filters(filters: filters)
                     .name(name: "AllRooms")
                     .syncMode(mode: .growingFullSync)
-                    .batchSize(batchSize: 20)
+                    .batchSize(batchSize: 100)
+                    .roomLimit(limit: 500)
                     .build()
 
                 let slidingSync = try slidingSyncBuilder
                     .addView(v: visibleRoomsView)
-                    // .addView(v: allRoomsView) // FIXME: Intentionally disabled as it doesn't work properly
+                    .addView(v: allRoomsView)
                     .withCommonExtensions()
                     .coldCache(name: "ElementX")
                     .build()

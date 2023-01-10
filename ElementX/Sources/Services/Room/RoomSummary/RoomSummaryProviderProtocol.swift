@@ -16,6 +16,7 @@
 
 import Combine
 import Foundation
+import MatrixRustSDK
 
 enum RoomSummaryProviderState {
     case cold
@@ -24,25 +25,18 @@ enum RoomSummaryProviderState {
     case live
 }
 
-enum RoomSummary: Identifiable {
-    case empty(id: String)
+enum RoomSummary {
+    case empty
     case filled(details: RoomSummaryDetails)
+    case invalidated(details: RoomSummaryDetails)
     
-    var id: String {
+    var id: String? {
         switch self {
-        case .empty(let id):
-            return id
-        case .filled(let summary):
-            return summary.id
-        }
-    }
-    
-    var asFilled: RoomSummaryDetails? {
-        guard case let .filled(details) = self else {
+        case .empty:
             return nil
+        case .invalidated(let details), .filled(let details):
+            return details.id
         }
-        
-        return details
     }
 }
 

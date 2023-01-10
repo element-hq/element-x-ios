@@ -71,6 +71,6 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
                                             lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
                                             lastMessageTimestamp: .distantPast,
                                             unreadNotificationCount: 0)),
-        .empty(id: "3")
+        .empty
     ]
 }

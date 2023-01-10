@@ -24,7 +24,9 @@ struct HomeScreenRoomCell: View {
     
     var body: some View {
         Button {
-            context.send(viewAction: .selectRoom(roomIdentifier: room.id))
+            if let roomId = room.roomId {
+                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
+            }
         } label: {
             HStack(spacing: 16.0) {
                 if let avatar = room.avatar {
@@ -35,7 +37,7 @@ struct HomeScreenRoomCell: View {
                         .clipShape(Circle())
                         .accessibilityHidden(true)
                 } else {
-                    PlaceholderAvatarImage(text: room.name, contentId: room.id)
+                    PlaceholderAvatarImage(text: room.name, contentId: room.roomId)
                         .clipShape(Circle())
                         .frame(width: avatarSize, height: avatarSize)
                         .accessibilityHidden(true)
@@ -86,7 +88,9 @@ struct HomeScreenRoomCell: View {
             .frame(minHeight: 64.0)
             .accessibilityElement(children: .combine)
             .task {
-                context.send(viewAction: .loadRoomData(roomIdentifier: room.id))
+                if let roomId = room.roomId {
+                    context.send(viewAction: .loadRoomData(roomIdentifier: roomId))
+                }
             }
         }
         .accessibilityIdentifier("roomName:\(room.name)")
@@ -113,27 +117,29 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
     static var previews: some View {
         body.tint(.element.accent)
     }
-    
+
     static var body: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded)
-        
+
         let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe", roomSummaryProvider: summaryProvider),
                                           mediaProvider: MockMediaProvider())
-        
+
         let viewModel = HomeScreenViewModel(userSession: userSession,
                                             attributedStringBuilder: AttributedStringBuilder())
         
-        let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary in
-            guard let summary = summary.asFilled else {
+        let rooms: [HomeScreenRoom] = summaryProvider.roomListPublisher.value.compactMap { summary -> HomeScreenRoom? in
+            switch summary {
+            case .empty:
                 return nil
+            case .filled(let details), .invalidated(let details):
+                return HomeScreenRoom(id: UUID().uuidString,
+                                      roomId: details.id,
+                                      name: details.name,
+                                      hasUnreads: details.unreadNotificationCount > 0,
+                                      timestamp: Date.now.formatted(date: .omitted, time: .shortened))
             }
-            
-            return HomeScreenRoom(id: summary.id,
-                                  name: summary.name,
-                                  hasUnreads: summary.unreadNotificationCount > 0,
-                                  timestamp: Date.now.formatted(date: .omitted, time: .shortened))
         }
-                
+
         return VStack {
             ForEach(rooms) { room in
                 HomeScreenRoomCell(room: room, context: viewModel.context)

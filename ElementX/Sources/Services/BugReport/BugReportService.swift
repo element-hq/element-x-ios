@@ -141,7 +141,7 @@ class BugReportService: BugReportServiceProtocol {
         }
         
         return result
-    } // swiftlint: enable function_body_length
+    }
 
     // MARK: - Private
 

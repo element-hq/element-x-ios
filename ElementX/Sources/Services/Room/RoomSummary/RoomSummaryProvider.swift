@@ -56,7 +56,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
         
         slidingSyncViewProxy.diffPublisher
-            .collect(.byTime(serialDispatchQueue, 0.25))
+            .collect(.byTime(serialDispatchQueue, 0.1))
             .sink { [weak self] in self?.updateRoomsWithDiffs($0) }
             .store(in: &cancellables)
     }
@@ -65,15 +65,16 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         guard statePublisher.value == .live else {
             return
         }
-
+        
         var changes = [CollectionDifference<RoomSummary>.Change]()
         for identifier in identifiers {
-            guard let index = rooms.firstIndex(where: { $0.id == identifier }) else {
+            guard let index = rooms.firstIndex(where: { $0.id == identifier }),
+                  let roomListEntry = slidingSyncViewProxy.currentRoomsList().first(where: { $0.id == identifier }) else {
                 continue
             }
-
+            
             let oldRoom = rooms[index]
-            let newRoom = buildRoomSummaryForIdentifier(identifier)
+            let newRoom = buildRoomSummaryForIdentifier(identifier, invalidated: roomListEntry.isInvalidated)
 
             changes.append(.remove(offset: index, element: oldRoom, associatedWith: nil))
             changes.append(.insert(offset: index, element: newRoom, associatedWith: nil))
@@ -120,15 +121,11 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         MXLog.info("Finished applying diffs")
     }
-    
-    private func buildEmptyRoomSummary(forIdentifier identifier: String = UUID().uuidString) -> RoomSummary {
-        .empty(id: identifier)
-    }
-    
-    private func buildRoomSummaryForIdentifier(_ identifier: String) -> RoomSummary {
+        
+    private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
         guard let room = try? slidingSyncViewProxy.roomForIdentifier(identifier) else {
             MXLog.error("Failed finding room with id: \(identifier)")
-            return buildEmptyRoomSummary(forIdentifier: identifier)
+            return .empty
         }
         
         var attributedLastMessage: AttributedString?
@@ -145,23 +142,25 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             lastMessageTimestamp = lastMessage.timestamp
         }
         
-        return .filled(details: RoomSummaryDetails(id: room.roomId(),
-                                                   name: room.name() ?? room.roomId(),
-                                                   isDirect: room.isDm() ?? false,
-                                                   avatarURLString: room.fullRoom()?.avatarUrl(),
-                                                   lastMessage: attributedLastMessage,
-                                                   lastMessageTimestamp: lastMessageTimestamp,
-                                                   unreadNotificationCount: UInt(room.unreadNotifications().notificationCount())))
+        let details = RoomSummaryDetails(id: room.roomId(),
+                                         name: room.name() ?? room.roomId(),
+                                         isDirect: room.isDm() ?? false,
+                                         avatarURLString: room.fullRoom()?.avatarUrl(),
+                                         lastMessage: attributedLastMessage,
+                                         lastMessageTimestamp: lastMessageTimestamp,
+                                         unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
+        
+        return invalidated ? .invalidated(details: details) : .filled(details: details)
     }
     
     private func buildSummaryForRoomListEntry(_ entry: RoomListEntry) -> RoomSummary {
         switch entry {
         case .empty:
-            return buildEmptyRoomSummary()
+            return .empty
         case .filled(let roomId):
-            return buildRoomSummaryForIdentifier(roomId)
+            return buildRoomSummaryForIdentifier(roomId, invalidated: false)
         case .invalidated(let roomId):
-            return buildRoomSummaryForIdentifier(roomId)
+            return buildRoomSummaryForIdentifier(roomId, invalidated: true)
         }
     }
     
@@ -233,6 +232,26 @@ extension RoomSummaryProviderState {
             self = .catchingUp
         case .live:
             self = .live
+        }
+    }
+}
+
+extension MatrixRustSDK.RoomListEntry {
+    var id: String? {
+        switch self {
+        case .empty:
+            return nil
+        case .invalidated(let roomId), .filled(let roomId):
+            return roomId
+        }
+    }
+    
+    var isInvalidated: Bool {
+        switch self {
+        case .invalidated:
+            return true
+        default:
+            return false
         }
     }
 }
