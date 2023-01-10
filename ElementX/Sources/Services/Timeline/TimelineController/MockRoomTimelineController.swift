@@ -42,20 +42,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        callbacks.send(.startedBackPaginating)
-        
-        guard !backPaginationResponses.isEmpty else {
-            callbacks.send(.finishedBackPaginating)
-            return .failure(.generic)
-        }
-        
-        let newItems = backPaginationResponses.removeFirst()
-        
-        try? await Task.sleep(for: backPaginationDelay)
-        timelineItems.insert(contentsOf: newItems, at: 0)
-        callbacks.send(.updatedTimelineItems)
-        callbacks.send(.finishedBackPaginating)
-        
+        callbacks.send(.canBackPaginate(false))
         return .success(())
     }
     
@@ -125,11 +112,12 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// Prepends the next chunk of items to the `timelineItems` array.
     private func simulateBackPagination() async throws {
         guard !backPaginationResponses.isEmpty else { return }
+        callbacks.send(.isBackPaginating(true))
         
         let newItems = backPaginationResponses.removeFirst()
         timelineItems.insert(contentsOf: newItems, at: 0)
         callbacks.send(.updatedTimelineItems)
-        callbacks.send(.finishedBackPaginating)
+        callbacks.send(.isBackPaginating(false))
         
         try? await connection?.send(.success)
     }

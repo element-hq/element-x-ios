@@ -61,10 +61,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     }
                     
                     self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
-                case .startedBackPaginating:
-                    self.state.isBackPaginating = true
-                case .finishedBackPaginating:
-                    self.state.isBackPaginating = false
+                case .canBackPaginate(let canBackPaginate):
+                    if self.state.canBackPaginate != canBackPaginate {
+                        self.state.canBackPaginate = canBackPaginate
+                    }
+                case .isBackPaginating(let isBackPaginating):
+                    if self.state.isBackPaginating != isBackPaginating {
+                        self.state.isBackPaginating = isBackPaginating
+                    }
                 }
             }
             .store(in: &cancellables)

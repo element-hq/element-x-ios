@@ -61,18 +61,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             .store(in: &cancellables)
         
-        self.timelineProvider
-            .backPaginationPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] value in
-                if value {
-                    self?.callbacks.send(.startedBackPaginating)
-                } else {
-                    self?.callbacks.send(.finishedBackPaginating)
-                }
-            }
-            .store(in: &cancellables)
-        
         updateTimelineItems()
         
         NotificationCenter.default.addObserver(self, selector: #selector(contentSizeCategoryDidChange), name: UIContentSizeCategory.didChangeNotification, object: nil)
@@ -230,6 +218,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     // swiftlint:disable:next cyclomatic_complexity
     private func asyncUpdateTimelineItems() async {
         var newTimelineItems = [RoomTimelineItemProtocol]()
+        var canBackPaginate = true
+        var isBackPaginating = false
 
         for (index, itemProxy) in timelineProvider.itemsPublisher.value.enumerated() {
             if Task.isCancelled {
@@ -262,8 +252,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     }
                 case .loadingIndicator:
                     newTimelineItems.append(PaginationIndicatorRoomTimelineItem())
+                    isBackPaginating = true
                 case .timelineStart:
                     newTimelineItems.append(TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name))
+                    canBackPaginate = false
                 }
             default:
                 break
@@ -277,6 +269,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems)
+        callbacks.send(.canBackPaginate(canBackPaginate))
+        callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
     private func computeGroupState(for itemProxy: TimelineItemProxy,

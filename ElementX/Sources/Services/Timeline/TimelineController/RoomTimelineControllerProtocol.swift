@@ -21,8 +21,8 @@ import UIKit
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems
     case updatedTimelineItem(_ itemId: String)
-    case startedBackPaginating
-    case finishedBackPaginating
+    case canBackPaginate(Bool)
+    case isBackPaginating(Bool)
 }
 
 enum RoomTimelineControllerAction {
