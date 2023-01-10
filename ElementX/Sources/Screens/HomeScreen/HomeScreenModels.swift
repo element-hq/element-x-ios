@@ -70,8 +70,8 @@ struct HomeScreenViewState: BindableState {
     var bindings = HomeScreenViewStateBindings()
     
     var placeholderRooms: [HomeScreenRoom] {
-        (1...10).map { index in
-            HomeScreenRoom.placeholder(id: "\(index)")
+        (1...10).map { _ in
+            HomeScreenRoom.placeholder()
         }
     }
 }
@@ -85,6 +85,8 @@ struct HomeScreenViewStateBindings {
 struct HomeScreenRoom: Identifiable, Equatable {
     let id: String
     
+    let roomId: String?
+    
     let name: String
     
     let hasUnreads: Bool
@@ -93,12 +95,15 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var lastMessage: AttributedString?
     
+    var avatarURLString: String?
+    
     var avatar: UIImage?
     
     var isPlaceholder = false
     
-    static func placeholder(id: String) -> HomeScreenRoom {
-        HomeScreenRoom(id: id,
+    static func placeholder() -> HomeScreenRoom {
+        HomeScreenRoom(id: UUID().uuidString,
+                       roomId: nil,
                        name: "Placeholder room name",
                        hasUnreads: false,
                        timestamp: "Now",
