@@ -86,7 +86,7 @@ class ClientProxy: ClientProxyProtocol {
                 let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.settings.slidingSyncProxyBaseURLString)
 
                 let visibleRoomsView = try SlidingSyncViewBuilder()
-                    .timelineLimit(limit: 30)
+                    .timelineLimit(limit: 20)
                     .requiredState(requiredState: [RequiredState(key: "m.room.avatar", value: ""),
                                                    RequiredState(key: "m.room.encryption", value: "")])
                     .name(name: "CurrentlyVisibleRooms")
@@ -100,12 +100,13 @@ class ClientProxy: ClientProxyProtocol {
                                                    RequiredState(key: "m.room.encryption", value: "")])
                     .name(name: "AllRooms")
                     .syncMode(mode: .growingFullSync)
-                    .batchSize(batchSize: 20)
+                    .batchSize(batchSize: 100)
+                    .roomLimit(limit: 500)
                     .build()
 
                 let slidingSync = try slidingSyncBuilder
                     .addView(v: visibleRoomsView)
-                    // .addView(v: allRoomsView) // FIXME: Intentionally disabled as it doesn't work properly
+                    .addView(v: allRoomsView)
                     .withCommonExtensions()
                     .coldCache(name: "ElementX")
                     .build()
