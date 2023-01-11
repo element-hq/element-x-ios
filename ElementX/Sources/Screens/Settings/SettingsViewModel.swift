@@ -26,7 +26,7 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         let bindings = SettingsViewStateBindings()
-        super.init(initialViewState: .init(bindings: bindings, userID: userSession.userID))
+        super.init(initialViewState: .init(bindings: bindings, deviceID: userSession.deviceId, userID: userSession.userID))
 
         Task {
             if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {

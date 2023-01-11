@@ -155,8 +155,14 @@ struct SettingsScreen: View {
                 Text(ElementL10n.actionSignOutConfirmationSimple)
             }
         } footer: {
-            versionText
-                .frame(maxWidth: .infinity)
+            VStack {
+                versionText
+                    .frame(maxWidth: .infinity)
+                
+                if let deviceId = context.viewState.deviceID {
+                    Text(deviceId)
+                }
+            }
         }
     }
 
