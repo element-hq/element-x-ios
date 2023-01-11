@@ -17,6 +17,7 @@
 import Combine
 import Foundation
 import UIKit
+import UniformTypeIdentifiers
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let userId: String
@@ -399,9 +400,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         guard let source = timelineItem.source else {
             return
         }
-
-        // This is not great. We could better estimate file extension from the mimetype.
-        let fileExtension = String(timelineItem.text.split(separator: ".").last ?? "mp4")
+        
+        let fileExtension = movieFileExtension(for: timelineItem.text)
         switch await mediaProvider.loadFileFromSource(source, fileExtension: fileExtension) {
         case .success(let fileURL):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
@@ -414,6 +414,26 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case .failure:
             break
         }
+    }
+    
+    /// Temporary method that generates a file extension for a video file name
+    /// using `UTType.movie` and falls back to .mp4 if anything goes wrong.
+    ///
+    /// Ideally Rust should be able to handle this for us, otherwise we should be
+    /// attempting to detect the file type from the data itself.
+    private func movieFileExtension(for text: String) -> String {
+        let fallbackExtension = "mp4"
+        
+        // This is not great. We could better estimate file extension from the mimetype.
+        guard let fileExtensionComponent = text.split(separator: ".").last else { return fallbackExtension }
+        let fileExtension = String(fileExtensionComponent)
+        
+        // We can't trust that the extension provided is an extension that AVFoundation will accept.
+        guard let fileType = UTType(filenameExtension: fileExtension),
+              fileType.isSubtype(of: .movie)
+        else { return fallbackExtension }
+        
+        return fileExtension
     }
 
     private func loadFileForImageTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
