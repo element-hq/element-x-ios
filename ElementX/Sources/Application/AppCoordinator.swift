@@ -260,6 +260,11 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         deobserveUserSessionChanges()
         
+        guard !isSoftLogout else {
+            stateMachine.processEvent(.completedSigningOut)
+            return
+        }
+        
         Task {
             showLoadingIndicator()
             
