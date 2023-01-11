@@ -125,7 +125,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             guard let self else { return }
 
             switch action {
-            case .presentRoomScreen(let roomIdentifier):
+            case .presentRoom(let roomIdentifier):
                 self.stateMachine.processEvent(.selectRoom(roomId: roomIdentifier))
             case .presentSettingsScreen:
                 self.stateMachine.processEvent(.showSettingsScreen)

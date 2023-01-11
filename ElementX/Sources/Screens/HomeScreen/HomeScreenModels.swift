@@ -18,9 +18,12 @@ import Foundation
 import UIKit
 
 enum HomeScreenViewModelAction {
-    case selectRoom(roomIdentifier: String)
-    case userMenu(action: HomeScreenViewUserMenuAction)
-    case verifySession
+    case presentRoom(roomIdentifier: String)
+    case presentSessionVerificationScreen
+    case presentSettingsScreen
+    case presentInviteFriendsScreen
+    case presentFeedbackScreen
+    case signOut
 }
 
 enum HomeScreenViewUserMenuAction {
