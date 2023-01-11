@@ -168,7 +168,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenFileFromSourceWithSource_correctValuesAreReturned() throws {
-        let expectedURL = try XCTUnwrap(URL(string: "some_url"))
+        let expectedURL = URL(filePath: "/some/file/path")
         fileCache.fileURLToReturn = expectedURL
         let url = mediaProvider.fileFromSource(MediaSourceProxy(urlString: "test/test1"), fileExtension: "png")
         XCTAssertEqual(fileCache.fileKey, "test1")
@@ -177,7 +177,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenLoadFileFromSourceAndFileFromSourceExists_urlIsReturned() async throws {
-        let expectedURL = try XCTUnwrap(URL(string: "some_url"))
+        let expectedURL = URL(filePath: "/some/file/path")
         let expectedResult: Result<URL, MediaProviderError> = .success(expectedURL)
         fileCache.fileURLToReturn = expectedURL
         let result = await mediaProvider.loadFileFromSource(MediaSourceProxy(urlString: "test/test1"), fileExtension: "png")
@@ -185,7 +185,7 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenLoadFileFromSourceAndNoFileFromSourceExists_mediaLoadedFromSource() async throws {
-        let expectedURL = try XCTUnwrap(URL(string: "some_url"))
+        let expectedURL = URL(filePath: "/some/file/path")
         let expectedResult: Result<URL, MediaProviderError> = .success(expectedURL)
         mediaProxy.mediaContentData = try loadTestImage().pngData()
         fileCache.storeURLToReturn = expectedURL
@@ -217,14 +217,14 @@ final class MediaProviderTests: XCTestCase {
     }
     
     func test_whenFileFromURLString_correctURLIsReturned() throws {
-        let expectedURL = try XCTUnwrap(URL(string: "some_url"))
+        let expectedURL = URL(filePath: "/some/file/path")
         fileCache.fileURLToReturn = expectedURL
         let url = mediaProvider.fileFromURLString("test/test1", fileExtension: "png")
         XCTAssertEqual(url?.absoluteString, expectedURL.absoluteString)
     }
     
     func test_whenLoadFileFromURLString_correctURLIsReturned() async throws {
-        let expectedURL = try XCTUnwrap(URL(string: "some_url"))
+        let expectedURL = URL(filePath: "/some/file/path")
         let expectedResult: Result<URL, MediaProviderError> = .success(expectedURL)
         fileCache.fileURLToReturn = expectedURL
         let result = await mediaProvider.loadFileFromURLString("test/test1", fileExtension: "png")
