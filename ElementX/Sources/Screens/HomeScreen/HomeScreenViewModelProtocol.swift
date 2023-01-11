@@ -23,5 +23,5 @@ protocol HomeScreenViewModelProtocol {
     
     var context: HomeScreenViewModelType.Context { get }
     
-    func presentAlert(_ alert: AlertInfo<UUID>)
+    func presentCrashedLastRunAlert()
 }

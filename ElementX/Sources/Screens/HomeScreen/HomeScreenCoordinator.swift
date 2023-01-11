@@ -25,7 +25,7 @@ struct HomeScreenCoordinatorParameters {
 }
 
 enum HomeScreenCoordinatorAction {
-    case presentRoomScreen(roomIdentifier: String)
+    case presentRoom(roomIdentifier: String)
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentSessionVerificationScreen
@@ -50,12 +50,18 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .selectRoom(let roomIdentifier):
-                self.callback?(.presentRoomScreen(roomIdentifier: roomIdentifier))
-            case .userMenu(let action):
-                self.processUserMenuAction(action)
-            case .verifySession:
+            case .presentRoom(let roomIdentifier):
+                self.callback?(.presentRoom(roomIdentifier: roomIdentifier))
+            case .presentFeedbackScreen:
+                self.callback?(.presentFeedbackScreen)
+            case .presentSettingsScreen:
+                self.callback?(.presentSettingsScreen)
+            case .presentInviteFriendsScreen:
+                self.presentInviteFriends()
+            case .presentSessionVerificationScreen:
                 self.callback?(.presentSessionVerificationScreen)
+            case .signOut:
+                self.callback?(.signOut)
             }
         }
     }
@@ -63,15 +69,11 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
+        #if !DEBUG
         if parameters.bugReportService.crashedLastRun {
-            viewModel.presentAlert(
-                AlertInfo(id: UUID(),
-                          title: ElementL10n.sendBugReportAppCrashed,
-                          primaryButton: .init(title: ElementL10n.no, action: nil),
-                          secondaryButton: .init(title: ElementL10n.yes) { [weak self] in
-                              self?.callback?(.presentFeedbackScreen)
-                          }))
+            viewModel.presentCrashedLastRunAlert()
         }
+        #endif
     }
     
     func toPresentable() -> AnyView {
@@ -79,19 +81,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     }
     
     // MARK: - Private
-    
-    private func processUserMenuAction(_ action: HomeScreenViewUserMenuAction) {
-        switch action {
-        case .settings:
-            callback?(.presentSettingsScreen)
-        case .inviteFriends:
-            presentInviteFriends()
-        case .feedback:
-            callback?(.presentFeedbackScreen)
-        case .signOut:
-            callback?(.signOut)
-        }
-    }
 
     private func presentInviteFriends() {
         parameters.navigationStackCoordinator.setSheetCoordinator(InviteFriendsCoordinator(userId: parameters.userSession.userID))

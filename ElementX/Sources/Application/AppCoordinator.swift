@@ -85,6 +85,11 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     func start() {
+        guard stateMachine.state == .initial else {
+            MXLog.error("Received a start request when already started")
+            return
+        }
+        
         stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
 
@@ -255,21 +260,27 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         deobserveUserSessionChanges()
         
-        if !isSoftLogout {
-            Task {
-                //  first log out from the server
-                _ = await userSession.clientProxy.logout()
-                
-                //  regardless of the result, clear user data
-                userSessionStore.logout(userSession: userSession)
-                userSession = nil
-                notificationManager?.delegate = nil
-                notificationManager = nil
-            }
+        guard !isSoftLogout else {
+            stateMachine.processEvent(.completedSigningOut)
+            return
         }
         
-        //  complete logging out
-        stateMachine.processEvent(.completedSigningOut)
+        Task {
+            showLoadingIndicator()
+            
+            //  first log out from the server
+            _ = await userSession.clientProxy.logout()
+            
+            //  regardless of the result, clear user data
+            userSessionStore.logout(userSession: userSession)
+            userSession = nil
+            notificationManager?.delegate = nil
+            notificationManager = nil
+            
+            stateMachine.processEvent(.completedSigningOut)
+            
+            hideLoadingIndicator()
+        }
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {

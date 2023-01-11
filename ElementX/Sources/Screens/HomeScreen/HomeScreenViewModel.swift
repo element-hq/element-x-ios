@@ -112,6 +112,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Public
     
+    // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: HomeScreenViewAction) async {
         switch viewAction {
         case .loadRoomData(let roomIdentifier):
@@ -119,11 +120,20 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 loadDataForRoomIdentifier(roomIdentifier)
             }
         case .selectRoom(let roomIdentifier):
-            callback?(.selectRoom(roomIdentifier: roomIdentifier))
+            callback?(.presentRoom(roomIdentifier: roomIdentifier))
         case .userMenu(let action):
-            callback?(.userMenu(action: action))
+            switch action {
+            case .feedback:
+                callback?(.presentFeedbackScreen)
+            case .settings:
+                callback?(.presentSettingsScreen)
+            case .inviteFriends:
+                callback?(.presentInviteFriendsScreen)
+            case .signOut:
+                callback?(.signOut)
+            }
         case .verifySession:
-            callback?(.verifySession)
+            callback?(.presentSessionVerificationScreen)
         case .skipSessionVerification:
             state.showSessionVerificationBanner = false
         case .updatedVisibleItemIdentifiers(let identifiers):
@@ -131,8 +141,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
     }
     
-    func presentAlert(_ alertInfo: AlertInfo<UUID>) {
-        state.bindings.alertInfo = alertInfo
+    func presentCrashedLastRunAlert() {
+        state.bindings.alertInfo = AlertInfo(id: UUID(),
+                                             title: ElementL10n.sendBugReportAppCrashed,
+                                             primaryButton: .init(title: ElementL10n.no, action: nil),
+                                             secondaryButton: .init(title: ElementL10n.yes) { [weak self] in
+                                                 self?.callback?(.presentFeedbackScreen)
+                                             })
     }
     
     // MARK: - Private

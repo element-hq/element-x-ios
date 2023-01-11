@@ -35,7 +35,7 @@ class HomeScreenViewModelTests: XCTestCase {
         var selectedRoomId = ""
         viewModel.callback = { result in
             switch result {
-            case .selectRoom(let roomId):
+            case .presentRoom(let roomId):
                 correctResult = true
                 selectedRoomId = roomId
             default:
@@ -53,8 +53,8 @@ class HomeScreenViewModelTests: XCTestCase {
         var correctResult = false
         viewModel.callback = { result in
             switch result {
-            case .userMenu(let action):
-                correctResult = action == .settings
+            case .presentSettingsScreen:
+                correctResult = true
             default:
                 break
             }

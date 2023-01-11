@@ -25,3 +25,9 @@ struct RoomSummaryDetails {
     let lastMessageTimestamp: Date?
     let unreadNotificationCount: UInt
 }
+
+extension RoomSummaryDetails: CustomStringConvertible {
+    var description: String {
+        "id: \"\(id)\", isDirect: \"\(isDirect)\", unreadNotificationCount: \"\(unreadNotificationCount)\""
+    }
+}
