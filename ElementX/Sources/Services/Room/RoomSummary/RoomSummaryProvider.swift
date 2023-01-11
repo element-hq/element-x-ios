@@ -62,7 +62,28 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) {
+        serialDispatchQueue.async { [weak self] in
+            guard let self else { return }
+            self.updateRoomsForIdentifiers(identifiers)
+        }
+    }
+    
+    func updateVisibleRange(_ range: ClosedRange<Int>) {
+        slidingSyncViewProxy.updateVisibleRange(range)
+    }
+    
+    // MARK: - Private
+    
+    /// Invoked from `updateRoomsWithIdentifiers` on the same dispatch queue as `updateRoomsWithDiffs`
+    private func updateRoomsForIdentifiers(_ identifiers: [String]) {
+        guard !identifiers.isEmpty else {
+            return
+        }
+        
+        MXLog.verbose("Updating \(identifiers.count) rooms")
+        
         guard statePublisher.value == .live else {
+            MXLog.verbose("Sliding sync not live yet, ignoring.")
             return
         }
         
@@ -91,16 +112,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
 
         rooms = newSummaries
+        
+        MXLog.verbose("Finished updating \(identifiers.count) rooms")
     }
-    
-    func updateVisibleRange(_ range: ClosedRange<Int>) {
-        slidingSyncViewProxy.updateVisibleRange(range)
-    }
-    
-    // MARK: - Private
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
-        MXLog.info("Received \(diffs.count) diffs")
+        MXLog.verbose("Received \(diffs.count) diffs")
         
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
@@ -119,7 +136,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 return updatedItems
             }
         
-        MXLog.info("Finished applying diffs")
+        MXLog.verbose("Finished applying \(diffs.count) diffs")
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
