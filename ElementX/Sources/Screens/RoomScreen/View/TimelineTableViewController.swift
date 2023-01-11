@@ -61,6 +61,9 @@ class TimelineTableViewController: UIViewController {
         }
     }
     
+    /// Whether or not the timeline has more messages to back paginate.
+    var canBackPaginate = true
+    
     /// Whether or not the timeline is waiting for more messages to be added to the top.
     var isBackPaginating = false {
         didSet {
@@ -334,7 +337,8 @@ class TimelineTableViewController: UIViewController {
     ///
     /// Prefer not to call this directly, instead using ``paginateBackwardsPublisher`` to throttle requests.
     private func paginateBackwardsIfNeeded() {
-        guard !isBackPaginating,
+        guard canBackPaginate,
+              !isBackPaginating,
               !hasPendingUpdates,
               tableView.contentOffset.y < tableView.visibleSize.height * 2.0
         else { return }

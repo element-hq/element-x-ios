@@ -32,15 +32,10 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     let itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
-    let backPaginationPublisher = CurrentValueSubject<Bool, Never>(false)
     
     private var itemProxies: [TimelineItemProxy] {
         didSet {
             itemsPublisher.send(itemProxies)
-            
-            if backPaginationPublisher.value == true {
-                backPaginationPublisher.send(false)
-            }
         }
     }
     
@@ -69,9 +64,6 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError> {
-        // Set this back to false after actually updating the items or if failed
-        backPaginationPublisher.send(true)
-        
         MXLog.info("Started back pagination request")
         switch await roomProxy.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
         case .success:
@@ -79,7 +71,6 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             return .success(())
         case .failure(let error):
             MXLog.error("Failed back pagination request with error: \(error)")
-            backPaginationPublisher.send(false)
             
             if error == .noMoreMessagesToBackPaginate {
                 return .failure(.noMoreMessagesToBackPaginate)

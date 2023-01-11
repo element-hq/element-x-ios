@@ -58,7 +58,7 @@ targets:
     - path: ../SupportingFiles
     - path: ../../Tools/Scripts/Templates/SimpleScreenExample/Tests/UI
     - path: ../../ElementX/Sources/UITests/UITestScreenIdentifier.swift
-    - path: ../../ElementX/Sources/UITests/UITestSignalling.swift
+    - path: ../../ElementX/Sources/UITests/UITestsSignalling.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
     - path: ../../ElementX/Resources

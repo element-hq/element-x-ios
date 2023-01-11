@@ -49,6 +49,7 @@ struct RoomScreenViewState: BindableState {
     var roomTitle = ""
     var roomAvatar: UIImage?
     var items: [RoomTimelineViewProvider] = []
+    var canBackPaginate = true
     var isBackPaginating = false
     var showLoading = false
     var bindings: RoomScreenViewStateBindings

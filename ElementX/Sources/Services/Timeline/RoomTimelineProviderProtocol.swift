@@ -29,8 +29,6 @@ enum RoomTimelineProviderError: Error {
 protocol RoomTimelineProviderProtocol {
     var itemsPublisher: CurrentValueSubject<[TimelineItemProxy], Never> { get }
     
-    var backPaginationPublisher: CurrentValueSubject<Bool, Never> { get }
-    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError>
     
     func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError>

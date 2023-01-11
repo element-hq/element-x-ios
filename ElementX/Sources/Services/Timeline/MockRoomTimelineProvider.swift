@@ -19,8 +19,6 @@ import Combine
 struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
     var itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
     
-    var backPaginationPublisher = CurrentValueSubject<Bool, Never>(false)
-    
     private var itemProxies = [TimelineItemProxy]()
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError> {
