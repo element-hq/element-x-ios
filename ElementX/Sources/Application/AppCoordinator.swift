@@ -85,6 +85,11 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     func start() {
+        guard stateMachine.state == .initial else {
+            MXLog.error("Received a start request when already started")
+            return
+        }
+        
         stateMachine.processEvent(userSessionStore.hasSessions ? .startWithExistingSession : .startWithAuthentication)
     }
 

@@ -61,6 +61,10 @@ class AppCoordinatorStateMachine {
     
     private let stateMachine: StateMachine<State, Event>
     
+    var state: AppCoordinatorStateMachine.State {
+        stateMachine.state
+    }
+    
     init() {
         stateMachine = StateMachine(state: .initial)
         configure()
