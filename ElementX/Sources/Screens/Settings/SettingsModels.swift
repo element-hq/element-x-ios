@@ -26,6 +26,7 @@ enum SettingsViewModelAction {
 
 struct SettingsViewState: BindableState {
     var bindings: SettingsViewStateBindings
+    var deviceID: String?
     var userID: String
     var userAvatar: UIImage?
     var userDisplayName: String?
