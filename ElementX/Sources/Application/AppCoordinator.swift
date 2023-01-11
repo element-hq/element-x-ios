@@ -260,21 +260,22 @@ class AppCoordinator: AppCoordinatorProtocol {
         
         deobserveUserSessionChanges()
         
-        if !isSoftLogout {
-            Task {
-                //  first log out from the server
-                _ = await userSession.clientProxy.logout()
-                
-                //  regardless of the result, clear user data
-                userSessionStore.logout(userSession: userSession)
-                userSession = nil
-                notificationManager?.delegate = nil
-                notificationManager = nil
-            }
+        Task {
+            showLoadingIndicator()
+            
+            //  first log out from the server
+            _ = await userSession.clientProxy.logout()
+            
+            //  regardless of the result, clear user data
+            userSessionStore.logout(userSession: userSession)
+            userSession = nil
+            notificationManager?.delegate = nil
+            notificationManager = nil
+            
+            stateMachine.processEvent(.completedSigningOut)
+            
+            hideLoadingIndicator()
         }
-        
-        //  complete logging out
-        stateMachine.processEvent(.completedSigningOut)
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
