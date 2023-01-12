@@ -76,9 +76,8 @@ final class AppSettings: ObservableObject {
     let bugReportServiceBaseURL = URL(staticString: "https://riot.im/bugreports")
     let bugReportSentryURL = URL(staticString: "https://f39ac49e97714316965b777d9f3d6cd8@sentry.tools.element.io/44")
     // Use the name allocated by the bug report server
-    let bugReportApplicationId = "riot-ios"
+    let bugReportApplicationId = "element-x-ios"
     let bugReportUISIId = "element-auto-uisi"
-    let bugReportGHLabels = ["Element-X"]
     
     // MARK: - Analytics
     
