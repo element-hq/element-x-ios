@@ -185,7 +185,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
             switch summary {
-            case .empty:
+            case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     rooms.append(HomeScreenRoom.placeholder())
                     continue
@@ -200,9 +200,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 }
             case .filled(let details):
                 let room = buildRoom(with: details, invalidated: false)
-                rooms.append(room)
-            case .invalidated(let details):
-                let room = buildRoom(with: details, invalidated: true)
                 rooms.append(room)
             }
         }
