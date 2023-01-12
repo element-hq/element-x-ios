@@ -90,6 +90,28 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         sheetModule?.coordinator
     }
     
+    @Published fileprivate var fullScreenCoverModule: NavigationModule? {
+        didSet {
+            if let oldValue {
+                logPresentationChange("Remove fullscreen cover", oldValue)
+                oldValue.coordinator.stop()
+                oldValue.dismissalCallback?()
+            }
+            
+            if let fullScreenCoverModule {
+                logPresentationChange("Set fullscreen cover", fullScreenCoverModule)
+                fullScreenCoverModule.coordinator.start()
+            }
+            
+            updateCompactLayoutComponents()
+        }
+    }
+    
+    /// The currently displayed fullscreen cover coordinator
+    var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
+        fullScreenCoverModule?.coordinator
+    }
+    
     @Published fileprivate var compactLayoutRootModule: NavigationModule?
     
     var compactLayoutRootCoordinator: (any CoordinatorProtocol)? {
@@ -147,6 +169,19 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         }
         
         sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+    }
+    
+    /// Present a fullscreen cover on top of the split view
+    /// - Parameters:
+    ///   - coordinator: the coordinator to display
+    ///   - dismissalCallback: called when the fullscreen cover has been dismissed, programatically or otherwise
+    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+        guard let coordinator else {
+            fullScreenCoverModule = nil
+            return
+        }
+        
+        fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
     }
         
     // MARK: - CoordinatorProtocol
@@ -301,6 +336,11 @@ private struct NavigationSplitCoordinatorView: View {
         // through the NavigationSplitCoordinator as well.
         .sheet(item: $navigationSplitCoordinator.sheetModule) { module in
             module.coordinator.toPresentable()
+                .tint(.element.accent)
+        }
+        .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
+            module.coordinator.toPresentable()
+                .tint(.element.accent)
         }
     }
     
@@ -387,6 +427,31 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
         
         return sheetModule?.coordinator
+    }
+    
+    @Published fileprivate var fullScreenCoverModule: NavigationModule? {
+        didSet {
+            if let oldValue {
+                logPresentationChange("Remove fullscreen cover", oldValue)
+                oldValue.coordinator.stop()
+                oldValue.dismissalCallback?()
+            }
+            
+            if let fullScreenCoverModule {
+                logPresentationChange("Set fullscreen cover", fullScreenCoverModule)
+                fullScreenCoverModule.coordinator.start()
+            }
+        }
+    }
+    
+    // The currently presented fullscreen cover coordinator
+    // Fullscreen covers will be presented through the NavigationSplitCoordinator if provided
+    var fullScreenCoverCoordinator: (any CoordinatorProtocol)? {
+        if let navigationSplitCoordinator {
+            return navigationSplitCoordinator.fullScreenCoverCoordinator
+        }
+        
+        return fullScreenCoverModule?.coordinator
     }
     
     @Published fileprivate var stackModules = [NavigationModule]() {
@@ -488,6 +553,25 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
     }
     
+    /// Present a fullscreen cover on top of the stack. If this NavigationStackCoordinator is embedded within a NavigationSplitCoordinator
+    /// then the presentation will be proxied to the split
+    /// - Parameters:
+    ///   - coordinator: the coordinator to display
+    ///   - dismissalCallback: called when the fullscreen cover has been dismissed, programatically or otherwise
+    func setFullScreenCoverCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
+        if let navigationSplitCoordinator {
+            navigationSplitCoordinator.setFullScreenCoverCoordinator(coordinator, dismissalCallback: dismissalCallback)
+            return
+        }
+        
+        guard let coordinator else {
+            fullScreenCoverModule = nil
+            return
+        }
+        
+        fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
+    }
+    
     // MARK: - CoordinatorProtocol
     
     func toPresentable() -> AnyView {
@@ -524,6 +608,11 @@ private struct NavigationStackCoordinatorView: View {
         }
         .sheet(item: $navigationStackCoordinator.sheetModule) { module in
             module.coordinator.toPresentable()
+                .tint(.element.accent)
+        }
+        .fullScreenCover(item: $navigationStackCoordinator.fullScreenCoverModule) { module in
+            module.coordinator.toPresentable()
+                .tint(.element.accent)
         }
     }
 }

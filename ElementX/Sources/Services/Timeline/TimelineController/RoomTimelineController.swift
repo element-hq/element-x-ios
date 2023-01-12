@@ -127,7 +127,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .none
             }
             if let videoURL = item.cachedVideoURL {
-                return .displayVideo(videoURL: videoURL)
+                return .displayVideo(videoURL: videoURL, title: item.text)
             }
             return .none
         case let item as FileRoomTimelineItem:

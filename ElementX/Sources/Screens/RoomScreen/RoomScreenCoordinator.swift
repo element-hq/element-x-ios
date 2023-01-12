@@ -55,9 +55,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             switch result {
             case .displayRoomDetails:
                 self.displayRoomDetails()
-            case .displayVideo(let videoURL):
-                self.displayVideo(for: videoURL)
-            case .displayFile(let fileURL, let title):
+            case .displayVideo(let fileURL, let title), .displayFile(let fileURL, let title):
                 self.displayFile(for: fileURL, with: title)
             case .displayEmojiPicker(let itemId):
                 self.displayEmojiPickerScreen(for: itemId)
@@ -81,25 +79,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
     // MARK: - Private
 
-    private func displayVideo(for videoURL: URL) {
-        let params = VideoPlayerCoordinatorParameters(videoURL: videoURL)
-        let coordinator = VideoPlayerCoordinator(parameters: params)
-        
-        coordinator.callback = { [weak self] _ in
-            self?.navigationStackCoordinator.pop()
-        }
-        
-        navigationStackCoordinator.push(coordinator)
-    }
-
     private func displayFile(for fileURL: URL, with title: String?) {
         let params = FilePreviewCoordinatorParameters(fileURL: fileURL, title: title)
         let coordinator = FilePreviewCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
-            self?.navigationStackCoordinator.pop()
+            self?.navigationStackCoordinator.setFullScreenCoverCoordinator(nil)
         }
         
-        navigationStackCoordinator.push(coordinator)
+        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator)
     }
     
     private func displayEmojiPickerScreen(for itemId: String) {
