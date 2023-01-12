@@ -46,7 +46,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
     
     func updateRoomsWithIdentifiers(_ identifiers: [String]) { }
     
-    func updateVisibleRange(_ range: ClosedRange<Int>) { }
+    func updateVisibleRange(_ range: Range<Int>) { }
     
     // MARK: - Private
     

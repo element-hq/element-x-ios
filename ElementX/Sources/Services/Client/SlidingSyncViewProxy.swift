@@ -102,7 +102,7 @@ class SlidingSyncViewProxy {
         try slidingSync.getRoom(roomId: identifier)
     }
     
-    func updateVisibleRange(_ range: ClosedRange<Int>) {
+    func updateVisibleRange(_ range: Range<Int>) {
         MXLog.info("Setting sliding sync view range to \(range)")
         
         slidingSyncView.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))

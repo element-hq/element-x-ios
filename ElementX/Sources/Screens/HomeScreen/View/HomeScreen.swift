@@ -17,11 +17,16 @@
 import SwiftUI
 
 struct HomeScreen: View {
-    @State private var showingLogoutConfirmation = false
-    @State private var visibleItemIdentifiers = Set<String>()
-    @State private var scrollViewAdapter = ScrollViewAdapter()
-    
     @ObservedObject var context: HomeScreenViewModel.Context
+    
+    @State private var showingLogoutConfirmation = false
+    @State private var visibleItemIdentifiers = Set<String>() {
+        didSet {
+            if visibleItemIdentifiers != oldValue {
+                updateVisibleRange()
+            }
+        }
+    }
     
     var body: some View {
         ScrollView {
@@ -62,10 +67,6 @@ struct HomeScreen: View {
                 .disableAutocorrection(true)
             }
         }
-        .introspectScrollView { scrollView in
-            guard scrollView != scrollViewAdapter.scrollView else { return }
-            scrollViewAdapter.scrollView = scrollView
-        }
         .disabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
@@ -75,14 +76,6 @@ struct HomeScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
             }
-        }
-        .onReceive(scrollViewAdapter.isScrolling) { isScrolling in
-            guard context.viewState.bindings.searchQuery.isEmpty,
-                  !isScrolling else {
-                return
-            }
-            
-            context.send(viewAction: .updatedVisibleItemIdentifiers(visibleItemIdentifiers))
         }
     }
 
@@ -190,6 +183,22 @@ struct HomeScreen: View {
 
     private func signOut() {
         context.send(viewAction: .userMenu(action: .signOut))
+    }
+    
+    private func updateVisibleRange() {
+        let result = visibleItemIdentifiers.compactMap { itemIdentifier in
+            context.viewState.rooms.firstIndex { $0.id == itemIdentifier }
+        }.sorted()
+        
+        guard !result.isEmpty else {
+            return
+        }
+        
+        guard let firstIndex = result.first, let lastIndex = result.last else {
+            return
+        }
+        
+        context.send(viewAction: .updatedVisibleItemRange(firstIndex..<lastIndex))
     }
 }
 
