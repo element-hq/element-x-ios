@@ -55,10 +55,10 @@ class ClientProxy: ClientProxyProtocol {
     private var slidingSyncObserverToken: StoppableSpawn?
     private var slidingSync: SlidingSync?
     
-    var visibleRoomsSlidingSyncView: SlidingSyncViewProtocol?
+    var visibleRoomsSlidingSyncView: SlidingSyncView?
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
     
-    var allRoomsSlidingSyncView: SlidingSyncViewProtocol?
+    var allRoomsSlidingSyncView: SlidingSyncView?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     
     private var cancellables = Set<AnyCancellable>()
@@ -121,7 +121,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func startSync() {
-        guard !client.isSoftLogout() else {
+        guard !client.isSoftLogout(), slidingSyncObserverToken == nil else {
             return
         }
         
@@ -132,13 +132,9 @@ class ClientProxy: ClientProxyProtocol {
     func stopSync() {
         client.setDelegate(delegate: nil)
         
-        slidingSyncObserverToken?.cancel()
         slidingSync?.setObserver(observer: nil)
-    }
-    
-    func restartSync() {
         slidingSyncObserverToken?.cancel()
-        slidingSyncObserverToken = slidingSync?.sync()
+        slidingSyncObserverToken = nil
     }
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
@@ -237,6 +233,12 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
+    
+    private func restartSync() {
+        slidingSyncObserverToken?.cancel()
+        slidingSync?.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+        slidingSyncObserverToken = slidingSync?.sync()
+    }
     
     private func configureSlidingSync() {
         do {
@@ -337,8 +339,9 @@ class ClientProxy: ClientProxyProtocol {
         registerSlidingSyncView(allRoomsSlidingSyncView)
     }
     
-    private func registerSlidingSyncView(_ view: SlidingSyncViewProtocol) {
-        
+    private func registerSlidingSyncView(_ view: SlidingSyncView) {
+        _ = slidingSync?.addView(view: view)
+        restartSync()
     }
 
     private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {
