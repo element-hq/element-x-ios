@@ -62,6 +62,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
             configuration
                 .textFieldStyle(BorderedInputFieldStyle(isEditing: isFocused, isError: isError, returnKey: nil))
                 .focused($isFocused)
+                .onTapGesture { isFocused = true } // Set focus with taps in the space between the border and text field.
             
             if let footerText {
                 Text(footerText)

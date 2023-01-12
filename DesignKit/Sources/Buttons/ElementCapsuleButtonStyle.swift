@@ -40,6 +40,7 @@ public struct ElementCapsuleButtonStyle: ButtonStyle {
             .multilineTextAlignment(.center)
             .background(background)
             .opacity(configuration.isPressed ? 0.6 : 1)
+            .contentShape(Capsule())
     }
     
     @ViewBuilder
