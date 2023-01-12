@@ -51,7 +51,6 @@ private class SlidingSyncViewObserver: SlidingSyncViewRoomListObserver, SlidingS
 }
 
 class SlidingSyncViewProxy {
-    private weak var clientProxy: ClientProxyProtocol?
     private let slidingSync: SlidingSyncProtocol
     private let slidingSyncView: SlidingSyncViewProtocol
     
@@ -64,6 +63,7 @@ class SlidingSyncViewProxy {
     let diffPublisher = PassthroughSubject<SlidingSyncViewRoomsListDiff, Never>()
     let statePublisher = PassthroughSubject<SlidingSyncState, Never>()
     let countPublisher = PassthroughSubject<UInt, Never>()
+    let visibleRangeUpdatePublisher = PassthroughSubject<Void, Never>()
     
     deinit {
         listUpdateObserverToken?.cancel()
@@ -71,8 +71,7 @@ class SlidingSyncViewProxy {
         countUpdateObserverToken?.cancel()
     }
     
-    init(clientProxy: ClientProxyProtocol, slidingSync: SlidingSyncProtocol, slidingSyncView: SlidingSyncViewProtocol) {
-        self.clientProxy = clientProxy
+    init(slidingSync: SlidingSyncProtocol, slidingSyncView: SlidingSyncViewProtocol) {
         self.slidingSync = slidingSync
         self.slidingSyncView = slidingSyncView
         
@@ -108,6 +107,6 @@ class SlidingSyncViewProxy {
         
         slidingSyncView.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
         
-        clientProxy?.restartSync()
+        visibleRangeUpdatePublisher.send(())
     }
 }
