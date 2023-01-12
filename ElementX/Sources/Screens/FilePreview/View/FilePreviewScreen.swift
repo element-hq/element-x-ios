@@ -22,19 +22,27 @@ struct FilePreviewScreen: View {
     @ObservedObject var context: FilePreviewViewModel.Context
     
     var body: some View {
-        PreviewController(fileURL: context.viewState.fileURL, title: context.viewState.title)
-            .ignoresSafeArea(.all, edges: [.horizontal, .bottom])
-            .navigationTitle(ElementL10n.attachmentTypeFile)
+        PreviewView(context: context,
+                    fileURL: context.viewState.fileURL,
+                    title: context.viewState.title)
+            .ignoresSafeArea()
     }
 }
 
-private struct PreviewController: UIViewControllerRepresentable {
+private struct PreviewView: UIViewControllerRepresentable {
+    let context: FilePreviewViewModel.Context
     let fileURL: URL
     let title: String?
 
     func makeUIViewController(context: Context) -> UINavigationController {
         let controller = QLPreviewController()
         controller.dataSource = context.coordinator
+        
+        let doneButton = UIBarButtonItem(title: "Done",
+                                         style: .done,
+                                         target: context.coordinator,
+                                         action: #selector(Coordinator.done))
+        controller.navigationItem.rightBarButtonItem = doneButton
 
         return UINavigationController(rootViewController: controller)
     }
@@ -42,23 +50,30 @@ private struct PreviewController: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UINavigationController, context: Context) { }
 
     func makeCoordinator() -> Coordinator {
-        Coordinator(parent: self)
+        Coordinator(view: self)
     }
+    
+    class Coordinator: NSObject, QLPreviewControllerDataSource {
+        let view: PreviewView
 
-    class Coordinator: QLPreviewControllerDataSource {
-        let parent: PreviewController
-
-        init(parent: PreviewController) {
-            self.parent = parent
+        init(view: PreviewView) {
+            self.view = view
         }
 
+        @objc func done() {
+            Task { await view.context.send(viewAction: .cancel) }
+        }
+        
+        // MARK: - QLPreviewControllerDataSource
+        
         func numberOfPreviewItems(in controller: QLPreviewController) -> Int {
             1
         }
 
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
-            PreviewItem(previewItemURL: parent.fileURL, previewItemTitle: parent.title)
+            PreviewItem(previewItemURL: view.fileURL, previewItemTitle: view.title)
         }
+        
     }
 }
 
