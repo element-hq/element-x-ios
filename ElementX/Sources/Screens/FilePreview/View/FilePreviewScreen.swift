@@ -73,7 +73,6 @@ private struct PreviewView: UIViewControllerRepresentable {
         func previewController(_ controller: QLPreviewController, previewItemAt index: Int) -> QLPreviewItem {
             PreviewItem(previewItemURL: view.fileURL, previewItemTitle: view.title)
         }
-        
     }
 }
 
