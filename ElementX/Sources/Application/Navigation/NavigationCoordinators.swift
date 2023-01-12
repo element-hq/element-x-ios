@@ -93,13 +93,13 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     @Published fileprivate var fullScreenCoverModule: NavigationModule? {
         didSet {
             if let oldValue {
-                logPresentationChange("Remove sheet", oldValue)
+                logPresentationChange("Remove fullscreen cover", oldValue)
                 oldValue.coordinator.stop()
                 oldValue.dismissalCallback?()
             }
             
             if let fullScreenCoverModule {
-                logPresentationChange("Set sheet", fullScreenCoverModule)
+                logPresentationChange("Set fullscreen cover", fullScreenCoverModule)
                 fullScreenCoverModule.coordinator.start()
             }
             
