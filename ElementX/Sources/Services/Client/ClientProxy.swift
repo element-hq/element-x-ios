@@ -233,7 +233,7 @@ class ClientProxy: ClientProxyProtocol {
     
     private func restartSync() {
         stopSync()
-        slidingSyncObserverToken = slidingSync?.sync()
+        startSync()
     }
     
     private func configureSlidingSync() {
