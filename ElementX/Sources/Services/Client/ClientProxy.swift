@@ -126,14 +126,10 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        slidingSync?.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
         slidingSyncObserverToken = slidingSync?.sync()
     }
     
     func stopSync() {
-        client.setDelegate(delegate: nil)
-        
-        slidingSync?.setObserver(observer: nil)
         slidingSyncObserverToken?.cancel()
         slidingSyncObserverToken = nil
     }
@@ -236,8 +232,7 @@ class ClientProxy: ClientProxyProtocol {
     // MARK: Private
     
     private func restartSync() {
-        slidingSyncObserverToken?.cancel()
-        slidingSync?.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+        stopSync()
         slidingSyncObserverToken = slidingSync?.sync()
     }
     
@@ -253,6 +248,9 @@ class ClientProxy: ClientProxyProtocol {
                 .withCommonExtensions()
                 .coldCache(name: "ElementX")
                 .build()
+            
+            slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+            
             self.slidingSync = slidingSync
             
             configureSlidingSyncViews(slidingSync: slidingSync)
