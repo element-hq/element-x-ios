@@ -62,6 +62,7 @@ class ClientProxy: ClientProxyProtocol {
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     
     private var cancellables = Set<AnyCancellable>()
+    private var visibleRoomsViewProxyStateObservationToken: AnyCancellable?
     
     deinit {
         // These need to be inlined instead of using stopSync()
@@ -241,6 +242,10 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func configureSlidingSync() {
+        guard slidingSync == nil else {
+            fatalError("This shouldn't be called more than once")
+        }
+        
         do {
             let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.settings.slidingSyncProxyBaseURLString)
             
@@ -266,6 +271,11 @@ class ClientProxy: ClientProxyProtocol {
     
     // swiftlint:disable:next function_body_length
     private func configureSlidingSyncViews(slidingSync: SlidingSyncProtocol) {
+        guard visibleRoomsSlidingSyncView == nil,
+              allRoomsSlidingSyncView == nil else {
+            fatalError("This shouldn't be called more than once")
+        }
+        
         let requiredState = [RequiredState(key: "m.room.avatar", value: ""),
                              RequiredState(key: "m.room.encryption", value: "")]
         
@@ -315,12 +325,10 @@ class ClientProxy: ClientProxyProtocol {
             }
             .store(in: &cancellables)
             
-            visibleRoomsViewProxy.statePublisher.sink { [weak self] state in
-                if state == .live {
-                    self?.registerAllRoomSlidingSyncView()
-                }
+            visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.diffPublisher.sink { [weak self] _ in
+                self?.registerAllRoomSlidingSyncView()
+                self?.visibleRoomsViewProxyStateObservationToken = nil
             }
-            .store(in: &cancellables)
             
             visibleRoomsSlidingSyncView = visibleRoomsView
             allRoomsSlidingSyncView = allRoomsView
