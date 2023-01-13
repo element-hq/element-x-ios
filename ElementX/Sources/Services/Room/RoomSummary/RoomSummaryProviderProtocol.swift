@@ -55,5 +55,5 @@ protocol RoomSummaryProviderProtocol {
     /// - Parameter identifiers: the identifiers for the rooms that have changed
     func updateRoomsWithIdentifiers(_ identifiers: [String])
     
-    func updateVisibleRange(_ range: ClosedRange<Int>)
+    func updateVisibleRange(_ range: Range<Int>)
 }

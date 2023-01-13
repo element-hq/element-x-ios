@@ -40,8 +40,6 @@ class MockClientProxy: ClientProxyProtocol {
     
     func stopSync() { }
     
-    func restartSync() { }
-    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         guard let room = visibleRoomsSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
             return nil

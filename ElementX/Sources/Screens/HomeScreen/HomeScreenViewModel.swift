@@ -20,10 +20,16 @@ import SwiftUI
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
+    enum Constants {
+        static let slidingWindowBoundsPadding = 5
+    }
+    
     private let userSession: UserSessionProtocol
     private let visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
     private let allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     private let attributedStringBuilder: AttributedStringBuilderProtocol
+    
+    private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
@@ -50,6 +56,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 default:
                     break
                 }
+            }
+            .store(in: &cancellables)
+        
+        visibleItemRangePublisher
+            .debounce(for: 0.1, scheduler: RunLoop.main)
+            .removeDuplicates()
+            .sink { range in
+                self.updateVisibleRange(range)
             }
             .store(in: &cancellables)
         
@@ -136,8 +150,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.presentSessionVerificationScreen)
         case .skipSessionVerification:
             state.showSessionVerificationBanner = false
-        case .updatedVisibleItemIdentifiers(let identifiers):
-            updateVisibleRange(visibleItemIdentifiers: identifiers)
+        case .updatedVisibleItemRange(let range):
+            visibleItemRangePublisher.send(range)
         }
     }
     
@@ -185,7 +199,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
             switch summary {
-            case .empty:
+            case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     rooms.append(HomeScreenRoom.placeholder())
                     continue
@@ -200,9 +214,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 }
             case .filled(let details):
                 let room = buildRoom(with: details, invalidated: false)
-                rooms.append(room)
-            case .invalidated(let details):
-                let room = buildRoom(with: details, invalidated: true)
                 rooms.append(room)
             }
         }
@@ -229,19 +240,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               avatar: avatarImage)
     }
     
-    private func updateVisibleRange(visibleItemIdentifiers items: Set<String>) {
-        let result = items.compactMap { itemIdentifier in
-            state.rooms.firstIndex { $0.id == itemIdentifier }
-        }.sorted()
+    private func updateVisibleRange(_ range: Range<Int>) {
+        guard !range.isEmpty else { return }
         
-        guard !result.isEmpty else {
+        guard let visibleRoomsSummaryProvider else {
+            MXLog.error("Visible rooms summary provider unavailable")
             return
         }
         
-        guard let lowerBound = result.first, let upperBound = result.last else {
-            return
-        }
+        let lowerBound = max(0, range.lowerBound - Constants.slidingWindowBoundsPadding)
+        let upperBound = min(Int(visibleRoomsSummaryProvider.countPublisher.value), range.upperBound + Constants.slidingWindowBoundsPadding)
         
-        visibleRoomsSummaryProvider?.updateVisibleRange(lowerBound...upperBound)
+        visibleRoomsSummaryProvider.updateVisibleRange(lowerBound..<upperBound)
     }
 }

@@ -68,7 +68,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func updateVisibleRange(_ range: ClosedRange<Int>) {
+    func updateVisibleRange(_ range: Range<Int>) {
         slidingSyncViewProxy.updateVisibleRange(range)
     }
     
@@ -181,6 +181,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
+    // swiftlint:disable:next cyclomatic_complexity
     private func buildDiff(from diff: SlidingSyncViewRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
@@ -216,6 +217,18 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             for (index, value) in values.enumerated() {
                 changes.append(.insert(offset: index, element: buildSummaryForRoomListEntry(value), associatedWith: nil))
             }
+        case .clear:
+            MXLog.verbose("Clear all items, current total count: \(rooms.count)")
+            for (index, value) in rooms.enumerated() {
+                changes.append(.remove(offset: index, element: value, associatedWith: nil))
+            }
+        case .pop:
+            MXLog.verbose("Pop, current total count: \(rooms.count)")
+            guard let value = rooms.last else {
+                fatalError()
+            }
+            
+            changes.append(.remove(offset: rooms.count - 1, element: value, associatedWith: nil))
         }
         
         return CollectionDifference(changes)
