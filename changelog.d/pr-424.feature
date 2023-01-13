@@ -1,1 +1,0 @@
-Add support for new timeline items: loading indicators, stickers, invalid events and begining of history

@@ -1,1 +1,0 @@
-Add support for manually starting SaS verification flows and accepting remotely started ones
