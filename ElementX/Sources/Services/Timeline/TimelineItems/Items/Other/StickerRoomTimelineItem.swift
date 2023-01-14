@@ -26,6 +26,8 @@ struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Ha
     
     let senderId: String
     var senderDisplayName: String?
+    
+    var senderAvatarURLString: String?
     var senderAvatar: UIImage?
     
     let urlString: String?

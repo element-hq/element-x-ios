@@ -43,6 +43,8 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
     
     var senderId: String { get }
     var senderDisplayName: String? { get set }
+    
+    var senderAvatarURLString: String? { get }
     var senderAvatar: UIImage? { get set }
     
     var properties: RoomTimelineItemProperties { get }

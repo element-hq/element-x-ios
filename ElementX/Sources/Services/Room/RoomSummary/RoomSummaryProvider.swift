@@ -20,7 +20,6 @@ import MatrixRustSDK
 
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let slidingSyncViewProxy: SlidingSyncViewProxy
-    private let roomMessageFactory: RoomMessageFactoryProtocol
     private let serialDispatchQueue: DispatchQueue
     
     private var cancellables = Set<AnyCancellable>()
@@ -35,9 +34,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    init(slidingSyncViewProxy: SlidingSyncViewProxy, roomMessageFactory: RoomMessageFactoryProtocol) {
+    init(slidingSyncViewProxy: SlidingSyncViewProxy) {
         self.slidingSyncViewProxy = slidingSyncViewProxy
-        self.roomMessageFactory = roomMessageFactory
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider")
         
         rooms = slidingSyncViewProxy.currentRoomsList().map { roomListEntry in
@@ -147,16 +145,21 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         var attributedLastMessage: AttributedString?
         var lastMessageTimestamp: Date?
-        if let latestRoomMessage = room.latestRoomMessage() {
-            let lastMessage = roomMessageFactory.buildRoomMessageFrom(EventTimelineItemProxy(item: latestRoomMessage))
-            
-            #warning("Intentionally remove the sender mxid from the room list for now")
-            // if let lastMessageSender = try? AttributedString(markdown: "**\(lastMessage.sender)**") {
-            //     // Don't include the message body in the markdown otherwise it makes tappable links.
-            //     attributedLastMessage = lastMessageSender + ": " + AttributedString(lastMessage.body)
-            // }
-            attributedLastMessage = AttributedString(lastMessage.body)
-            lastMessageTimestamp = lastMessage.timestamp
+        
+        DispatchQueue.global(qos: .default).sync {
+            if let latestRoomMessage = room.latestRoomMessage() {
+                let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
+                
+                lastMessageTimestamp = lastMessage.timestamp
+                
+                if let senderDisplayName = lastMessage.senderDisplayName,
+                   let attributedSenderDisplayName = try? AttributedString(markdown: "**\(senderDisplayName)**") {
+                    // Don't include the message body in the markdown otherwise it makes tappable links.
+                    attributedLastMessage = attributedSenderDisplayName + ": " + AttributedString(lastMessage.body ?? "")
+                } else if let body = lastMessage.body {
+                    attributedLastMessage = AttributedString(body)
+                }
+            }
         }
         
         let details = RoomSummaryDetails(id: room.roomId(),

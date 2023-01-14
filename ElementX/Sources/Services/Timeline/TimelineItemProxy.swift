@@ -98,6 +98,14 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     var sender: String {
         item.sender()
     }
+    
+    var senderDisplayName: String? {
+        item.senderProfile().displayName
+    }
+    
+    var senderAvatarURLString: String? {
+        item.senderProfile().avatarUrl
+    }
 
     var reactions: [Reaction] {
         item.reactions()

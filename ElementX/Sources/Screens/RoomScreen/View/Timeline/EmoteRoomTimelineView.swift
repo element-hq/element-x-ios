@@ -22,13 +22,10 @@ struct EmoteRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            HStack(alignment: .top) {
-                Image(systemName: "face.dashed").padding(.top, 1.0)
-                if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(attributedComponents: attributedComponents)
-                } else {
-                    FormattedBodyText(text: timelineItem.text)
-                }
+            if let attributedComponents = timelineItem.attributedComponents {
+                FormattedBodyText(attributedComponents: attributedComponents)
+            } else {
+                FormattedBodyText(text: timelineItem.text)
             }
         }
     }
