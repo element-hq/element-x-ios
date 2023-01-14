@@ -42,7 +42,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         keychainController.removeAllRestorationTokens()
     }
     
-    func restoreUserSession() async -> Result<UserSession, UserSessionStoreError> {
+    func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError> {
         let availableCredentials = keychainController.restorationTokens()
         
         guard let credentials = availableCredentials.first else {
@@ -51,11 +51,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         
         switch await restorePreviousLogin(credentials) {
         case .success(let clientProxy):
-            return .success(UserSession(clientProxy: clientProxy,
-                                        mediaProvider: MediaProvider(mediaProxy: clientProxy,
-                                                                     imageCache: .onlyInMemory,
-                                                                     fileCache: FileCache.default,
-                                                                     backgroundTaskService: backgroundTaskService)))
+            return .success(buildUserSessionWithClient(clientProxy))
         case .failure(let error):
             MXLog.error("Failed restoring login with error: \(error)")
             
@@ -67,14 +63,10 @@ class UserSessionStore: UserSessionStoreProtocol {
         }
     }
     
-    func userSession(for client: Client) async -> Result<UserSession, UserSessionStoreError> {
+    func userSession(for client: Client) async -> Result<UserSessionProtocol, UserSessionStoreError> {
         switch await setupProxyForClient(client) {
         case .success(let clientProxy):
-            return .success(UserSession(clientProxy: clientProxy,
-                                        mediaProvider: MediaProvider(mediaProxy: clientProxy,
-                                                                     imageCache: .onlyInMemory,
-                                                                     fileCache: FileCache.default,
-                                                                     backgroundTaskService: backgroundTaskService)))
+            return .success(buildUserSessionWithClient(clientProxy))
         case .failure(let error):
             MXLog.error("Failed creating user session with error: \(error)")
             return .failure(error)
@@ -98,6 +90,17 @@ class UserSessionStore: UserSessionStoreProtocol {
     }
     
     // MARK: - Private
+    
+    private func buildUserSessionWithClient(_ clientProxy: ClientProxyProtocol) -> UserSessionProtocol {
+        let imageCache = ImageCache.onlyInMemory
+        imageCache.memoryStorage.config.keepWhenEnteringBackground = true
+        
+        return UserSession(clientProxy: clientProxy,
+                           mediaProvider: MediaProvider(mediaProxy: clientProxy,
+                                                        imageCache: imageCache,
+                                                        fileCache: FileCache.default,
+                                                        backgroundTaskService: backgroundTaskService))
+    }
     
     private func restorePreviousLogin(_ credentials: KeychainCredentials) async -> Result<ClientProxyProtocol, UserSessionStoreError> {
         let builder = ClientBuilder()
