@@ -75,9 +75,20 @@ struct RoomScreen: View {
         }
     }
     
+    @ToolbarContentBuilder
     var toolbar: some ToolbarContent {
-        ToolbarItem(placement: .navigationBarLeading) {
+        // .principal + .primaryAction works better than .navigation leading + trailing
+        // as the latter disables interaction in the action button for rooms with long names
+        ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
+        }
+        
+        ToolbarItem(placement: .primaryAction) {
+            Button {
+                context.send(viewAction: .displayRoomDetails)
+            } label: {
+                Image(systemName: "ellipsis.circle")
+            }
         }
     }
     
