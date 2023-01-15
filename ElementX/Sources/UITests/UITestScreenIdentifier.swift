@@ -41,7 +41,7 @@ enum UITestScreenIdentifier: String {
     case sessionVerification
     case userSessionScreen
     case roomDetailsScreen
-    case roomMembersScreen
+    case roomMemberDetailsScreen
 }
 
 extension UITestScreenIdentifier: CustomStringConvertible {

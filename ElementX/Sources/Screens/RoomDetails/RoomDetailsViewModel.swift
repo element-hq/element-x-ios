@@ -22,9 +22,9 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     private let roomProxy: RoomProxyProtocol
     private let mediaProvider: MediaProviderProtocol
     
-    private var roomMembers: [RoomMemberProxy] = [] {
+    private var members: [RoomMemberProxy] = [] {
         didSet {
-            state.members = roomMembers.map { RoomDetailsMember(withProxy: $0) }
+            state.members = members.map { RoomDetailsMember(withProxy: $0) }
         }
     }
 
@@ -45,7 +45,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         Task {
             switch await roomProxy.members() {
             case .success(let members):
-                roomMembers = members
+                self.members = members
             case .failure(let error):
                 MXLog.debug("Failed to retrieve room members: \(error)")
                 state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
@@ -67,7 +67,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     override func process(viewAction: RoomDetailsViewAction) async {
         switch viewAction {
         case .processTapPeople:
-            callback?(.requestMemberDetailsPresentation(roomMembers))
+            callback?(.requestMemberDetailsPresentation(members))
         }
     }
 }
