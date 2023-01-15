@@ -70,10 +70,8 @@ struct RoomMembersMemberCell_Previews: PreviewProvider {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = MockRoomProxy(displayName: "Room A",
-                                      members: members)
-        let viewModel = RoomMembersViewModel(roomProxy: roomProxy,
-                                             mediaProvider: MockMediaProvider())
+        let viewModel = RoomMembersViewModel(mediaProvider: MockMediaProvider(),
+                                             members: members)
 
         return VStack {
             ForEach(members) { member in

@@ -19,27 +19,15 @@ import SwiftUI
 typealias RoomMembersViewModelType = StateStoreViewModel<RoomMembersViewState, RoomMembersViewAction>
 
 class RoomMembersViewModel: RoomMembersViewModelType, RoomMembersViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
     private let mediaProvider: MediaProviderProtocol
-
+    
     var callback: ((RoomMembersViewModelAction) -> Void)?
 
-    init(roomProxy: RoomProxyProtocol,
-         mediaProvider: MediaProviderProtocol) {
-        self.roomProxy = roomProxy
+    init(mediaProvider: MediaProviderProtocol,
+         members: [RoomMemberProxy]) {
         self.mediaProvider = mediaProvider
-        super.init(initialViewState: .init(members: [],
+        super.init(initialViewState: .init(members: members.map { RoomDetailsMember(withProxy: $0) },
                                            bindings: .init()))
-
-        Task {
-            switch await roomProxy.members() {
-            case .success(let members):
-                state.members = members.map { RoomDetailsMember(withProxy: $0) }
-            case .failure(let error):
-                MXLog.debug("Failed to retrieve room members: \(error)")
-                state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
-            }
-        }
     }
     
     // MARK: - Public

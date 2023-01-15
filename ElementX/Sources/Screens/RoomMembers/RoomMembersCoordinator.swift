@@ -17,8 +17,8 @@
 import SwiftUI
 
 struct RoomMembersCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
+    let members: [RoomMemberProxy]
 }
 
 enum RoomMembersCoordinatorAction {
@@ -26,16 +26,13 @@ enum RoomMembersCoordinatorAction {
 }
 
 final class RoomMembersCoordinator: CoordinatorProtocol {
-    private let parameters: RoomMembersCoordinatorParameters
     private var viewModel: RoomMembersViewModelProtocol
     
     var callback: ((RoomMembersCoordinatorAction) -> Void)?
     
     init(parameters: RoomMembersCoordinatorParameters) {
-        self.parameters = parameters
-        
-        viewModel = RoomMembersViewModel(roomProxy: parameters.roomProxy,
-                                         mediaProvider: parameters.mediaProvider)
+        viewModel = RoomMembersViewModel(mediaProvider: parameters.mediaProvider,
+                                         members: parameters.members)
     }
     
     func start() {

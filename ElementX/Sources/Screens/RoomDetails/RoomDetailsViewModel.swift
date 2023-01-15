@@ -19,18 +19,16 @@ import SwiftUI
 typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, RoomDetailsViewAction>
 
 class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtocol {
-    // MARK: - Properties
-
-    // MARK: Private
-
     private let roomProxy: RoomProxyProtocol
     private let mediaProvider: MediaProviderProtocol
-
-    // MARK: Public
+    
+    private var roomMembers: [RoomMemberProxy] = [] {
+        didSet {
+            state.members = roomMembers.map { RoomDetailsMember(withProxy: $0) }
+        }
+    }
 
     var callback: ((RoomDetailsViewModelAction) -> Void)?
-
-    // MARK: - Setup
 
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
@@ -47,7 +45,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         Task {
             switch await roomProxy.members() {
             case .success(let members):
-                state.members = members.map { RoomDetailsMember(withProxy: $0) }
+                roomMembers = members
             case .failure(let error):
                 MXLog.debug("Failed to retrieve room members: \(error)")
                 state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
@@ -69,7 +67,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     override func process(viewAction: RoomDetailsViewAction) async {
         switch viewAction {
         case .processTapPeople:
-            callback?(.peopleTapped)
+            callback?(.requestMemberDetailsPresentation(roomMembers))
         }
     }
 }

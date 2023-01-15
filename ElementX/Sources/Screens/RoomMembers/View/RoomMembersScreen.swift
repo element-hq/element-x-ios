@@ -22,16 +22,19 @@ struct RoomMembersScreen: View {
     @ObservedObject var context: RoomMembersViewModel.Context
     
     var body: some View {
-        Form {
-            Section {
-                ForEach(context.viewState.visibleMembers) { member in
-                    RoomMembersMemberCell(member: member, context: context)
-                        .id(member.id)
+        ScrollView {
+            LazyVStack(alignment: .leading) {
+                Section {
+                    ForEach(context.viewState.visibleMembers) { member in
+                        RoomMembersMemberCell(member: member, context: context)
+                            .id(member.id)
+                    }
+                } footer: {
+                    Text(ElementL10n.roomTitleMembers(context.viewState.members.count))
+                        .foregroundColor(.element.secondaryContent)
+                        .font(.element.footnote)
                 }
-            } footer: {
-                Text(ElementL10n.roomTitleMembers(context.viewState.members.count))
-                    .foregroundColor(.element.secondaryContent)
-                    .font(.element.footnote)
+                .padding(.horizontal)
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
@@ -50,10 +53,8 @@ struct RoomMembers_Previews: PreviewProvider {
                 .mockBob,
                 .mockCharlie
             ]
-            let roomProxy = MockRoomProxy(displayName: "Room A",
-                                          members: members)
-            let viewModel = RoomMembersViewModel(roomProxy: roomProxy,
-                                                 mediaProvider: MockMediaProvider())
+            let viewModel = RoomMembersViewModel(mediaProvider: MockMediaProvider(),
+                                                 members: members)
             RoomMembersScreen(context: viewModel.context)
         }
         .tint(.element.accent)

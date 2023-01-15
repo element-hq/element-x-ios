@@ -45,10 +45,9 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("RoomDetailsViewModel did complete with result: \(action).")
             switch action {
-            case .peopleTapped:
-                self.showPeople()
+            case .requestMemberDetailsPresentation(let members):
+                self.presentRoomMemberDetails(members)
             case .cancel:
                 self.callback?(.cancel)
             }
@@ -59,9 +58,9 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
         AnyView(RoomDetailsScreen(context: viewModel.context))
     }
 
-    private func showPeople() {
-        let params = RoomMembersCoordinatorParameters(roomProxy: parameters.roomProxy,
-                                                      mediaProvider: parameters.mediaProvider)
+    private func presentRoomMemberDetails(_ members: [RoomMemberProxy]) {
+        let params = RoomMembersCoordinatorParameters(mediaProvider: parameters.mediaProvider,
+                                                      members: members)
         let coordinator = RoomMembersCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
             self?.navigationStackCoordinator.pop()
