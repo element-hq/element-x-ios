@@ -50,7 +50,8 @@ struct TracingConfiguration {
         .hyper: .warn,
         .sled: .warn,
         .matrix_sdk_sled: .warn,
-        .matrix_sdk_crypto: .debug
+        .matrix_sdk_crypto: .debug,
+        .matrix_sdk_http_client: .debug
     ]
     
     var filter: String {
