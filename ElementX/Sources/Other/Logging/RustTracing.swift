@@ -31,7 +31,8 @@ struct TracingConfiguration {
                                                .matrix_sdk_ffi_uniffi_api: .warn,
                                                .matrix_sdk_ffi: .warn,
                                                .matrix_sdk_sliding_sync: .warn,
-                                               .matrix_sdk_base_sliding_sync: .warn
+                                               .matrix_sdk_base_sliding_sync: .warn,
+                                               .matrix_sdk_crypto: .trace
                                            ])
     
     enum Target: String {
@@ -40,15 +41,19 @@ struct TracingConfiguration {
         case matrix_sdk_ffi_uniffi_api = "matrix_sdk_ffi::uniffi_api"
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
+        case matrix_sdk_crypto
+        case matrix_sdk_crypto_sync = "matrix_sdk_crypto::machine[receive_sync_changes]"
     }
     
-    enum LogLevel: String { case warn, trace, info }
+    enum LogLevel: String { case error, warn, info, debug, trace }
     
     var common = LogLevel.warn
     var targets: [Target: LogLevel] = [
         .hyper: .warn,
         .sled: .warn,
-        .matrix_sdk_sled: .warn
+        .matrix_sdk_sled: .warn,
+        .matrix_sdk_crypto: .debug,
+        .matrix_sdk_crypto_sync: .trace
     ]
     
     var filter: String {
