@@ -31,7 +31,7 @@ struct TracingConfiguration {
                                                .matrix_sdk_ffi_uniffi_api: .warn,
                                                .matrix_sdk_ffi: .warn,
                                                .matrix_sdk_sliding_sync: .warn,
-                                               .matrix_sdk_base_sliding_sync: .warn
+                                               .matrix_sdk_base_sliding_sync: .warn,
                                                .matrix_sdk_crypto: .trace,
                                            ])
     
@@ -51,7 +51,7 @@ struct TracingConfiguration {
     var targets: [Target: LogLevel] = [
         .hyper: .warn,
         .sled: .warn,
-        .matrix_sdk_sled: .warn
+        .matrix_sdk_sled: .warn,
         .matrix_sdk_crypto: .debug,
         .matrix_sdk_crypto_sync: .trace,
     ]
