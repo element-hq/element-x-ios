@@ -53,7 +53,8 @@ struct TracingConfiguration {
         .sled: .warn,
         .matrix_sdk_sled: .warn,
         .matrix_sdk_crypto: .debug,
-        .matrix_sdk_crypto_sync: .trace
+        .matrix_sdk_crypto_sync: .trace,
+        .matrix_sdk_http_client: .debug
     ]
     
     var filter: String {
