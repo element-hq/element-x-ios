@@ -14,10 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
 import UIKit
 
-struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
     var attributedComponents: [AttributedStringBuilderComponent]?
@@ -31,4 +30,12 @@ struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Has
     var senderAvatar: UIImage?
     
     var properties = RoomTimelineItemProperties()
+}
+
+// MARK: - Redact content from logs
+
+extension TextRoomTimelineItem: CustomStringConvertible {
+    var description: String {
+        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
+    }
 }
