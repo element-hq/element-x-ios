@@ -60,7 +60,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
                 state.members[index].avatar = image
             }
         case .failure(let error):
-            MXLog.debug("Failed to retrieve room member avatar: \(error)")
+            MXLog.error("Failed to retrieve room member avatar: \(error)")
         }
     }
 }

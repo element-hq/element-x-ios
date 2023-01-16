@@ -71,7 +71,7 @@ class Analytics {
         client.stop()
 //        monitoringClient.stop()
         
-        MXLog.debug("Stopped.")
+        MXLog.info("Stopped.")
     }
     
     /// Starts the analytics client if the user has opted in, otherwise does nothing.
@@ -84,7 +84,7 @@ class Analytics {
         // Sanity check in case something went wrong.
         guard client.isRunning else { return }
         
-        MXLog.debug("Started.")
+        MXLog.info("Started.")
         
         // Catch and log crashes
 //        MXLogger.logCrashes(true)
@@ -121,7 +121,7 @@ class Analytics {
         client.reset()
 //        monitoringClient.reset()
         
-        MXLog.debug("Reset.")
+        MXLog.info("Reset.")
         ServiceLocator.shared.settings.isIdentifiedForAnalytics = false
         
         // Stop collecting crash logs
@@ -146,7 +146,7 @@ class Analytics {
         }
         
         client.identify(id: id)
-        MXLog.debug("Identified.")
+        MXLog.info("Identified.")
         ServiceLocator.shared.settings.isIdentifiedForAnalytics = true
     }
     

@@ -32,7 +32,7 @@ extension UNMutableNotificationContent {
                                                           options: nil)
             attachments.append(attachment)
         case .failure(let error):
-            MXLog.debug("Couldn't add media attachment: \(error)")
+            MXLog.error("Couldn't add media attachment: \(error)")
         }
         
         return self
@@ -84,7 +84,7 @@ extension UNMutableNotificationContent {
 
             return updatedContent.mutableCopy() as! UNMutableNotificationContent
         case .failure(let error):
-            MXLog.debug("Couldn't add sender icon: \(error)")
+            MXLog.error("Couldn't add sender icon: \(error)")
             return self
         }
     }

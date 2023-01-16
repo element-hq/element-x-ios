@@ -53,7 +53,7 @@ class BugReportService: BugReportServiceProtocol {
             }
 
             options.onCrashedLastRun = { [weak self] event in
-                MXLog.debug("Sentry detected application was crashed: \(event)")
+                MXLog.error("Sentry detected application was crashed: \(event)")
                 self?.lastCrashEventId = event.eventId.sentryIdString
             }
         }
@@ -79,8 +79,6 @@ class BugReportService: BugReportServiceProtocol {
                          includeCrashLog: Bool,
                          githubLabels: [String],
                          files: [URL]) async throws -> SubmitBugReportResponse {
-        MXLog.debug("submitBugReport")
-
         var params = [
             MultipartFormData(key: "text", type: .text(value: text))
         ]
@@ -140,6 +138,8 @@ class BugReportService: BugReportServiceProtocol {
             lastCrashEventId = nil
         }
         
+        MXLog.info("Feedback submitted.")
+        
         return result
     }
 
@@ -176,7 +176,7 @@ class BugReportService: BugReportServiceProtocol {
 
     private func zipFiles(includeLogs: Bool,
                           includeCrashLog: Bool) async throws -> [URL] {
-        MXLog.debug("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
+        MXLog.info("zipFiles: includeLogs: \(includeLogs), includeCrashLog: \(includeCrashLog)")
 
         var filesToCompress: [URL] = []
         if includeLogs {
@@ -213,7 +213,7 @@ class BugReportService: BugReportServiceProtocol {
             zippedFiles.append(zippedFileURL)
         }
 
-        MXLog.debug("zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
+        MXLog.info("zipFiles: totalSize: \(totalSize), totalZippedSize: \(totalZippedSize)")
 
         return zippedFiles
     }

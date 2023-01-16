@@ -242,8 +242,6 @@ class TimelineTableViewController: UIViewController {
         
         updateTopPadding()
         
-        guard snapshot.numberOfItems != previousLayout.numberOfItems else { return }
-        
         if previousLayout.isBottomVisible {
             scrollToBottom(animated: false)
         } else if let pinnedItem = previousLayout.pinnedItem {
@@ -357,15 +355,19 @@ class TimelineTableViewController: UIViewController {
 
 extension TimelineTableViewController: UITableViewDelegate {
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let isAtBottom = isAtBottom()
-        
-        // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
-        if scrollToBottomButtonVisible != isAtBottom {
-            // Dispatch to fix runtime warning about making changes during a view update.
-            DispatchQueue.main.async { self.scrollToBottomButtonVisible = isAtBottom }
-        }
-
         paginateBackwardsPublisher.send(())
+        
+        // Dispatch to fix runtime warning about making changes during a view update.
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            
+            let isAtBottom = self.isAtBottom()
+            
+            // Only update the binding on changes to avoid needlessly recomputing the hierarchy when scrolling.
+            if self.scrollToBottomButtonVisible != isAtBottom {
+                self.scrollToBottomButtonVisible = isAtBottom
+            }
+        }
     }
 
     // MARK: ScrollViewAdapter Methods

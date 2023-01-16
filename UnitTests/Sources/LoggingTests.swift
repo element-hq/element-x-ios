@@ -38,7 +38,7 @@ class LoggingTests: XCTestCase {
         let configuration = MXLogConfiguration()
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
-        MXLog.debug(log)
+        MXLog.info(log)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
@@ -58,7 +58,7 @@ class LoggingTests: XCTestCase {
             let configuration = MXLogConfiguration()
             configuration.redirectLogsToFiles = true
             MXLog.configure(configuration) // This call is only made at app launch.
-            MXLog.debug("Launch \(index + 1)")
+            MXLog.info("Launch \(index + 1)")
         }
         
         // Then 5 log files should be created each with the correct contents.
@@ -80,7 +80,7 @@ class LoggingTests: XCTestCase {
             configuration.maxLogFilesCount = UInt(logFileCount)
             configuration.redirectLogsToFiles = true
             MXLog.configure(configuration) // This call is only made at app launch.
-            MXLog.debug("Launch \(index + 1)")
+            MXLog.info("Launch \(index + 1)")
         }
         
         // Then only 5 log files should be stored on disk, with the contents of launches 6 to 10.
@@ -102,12 +102,12 @@ class LoggingTests: XCTestCase {
             configuration.logFilesSizeLimit = UInt(logFileSizeLimit)
             configuration.redirectLogsToFiles = true
             MXLog.configure(configuration) // This call is only made at app launch.
-            MXLog.debug("Launch \(index + 1)")
+            MXLog.info("Launch \(index + 1)")
             
             // Add ~5KB of logs
             for _ in 0..<5 {
                 let string = [String](repeating: "a", count: 1024).joined()
-                MXLog.debug(string)
+                MXLog.info(string)
             }
         }
         
@@ -145,7 +145,7 @@ class LoggingTests: XCTestCase {
         configuration.logLevel = .error
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
-        MXLog.debug(log)
+        MXLog.info(log)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
@@ -164,7 +164,7 @@ class LoggingTests: XCTestCase {
         configuration.subLogName = subLogName
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
-        MXLog.debug(UUID().uuidString)
+        MXLog.info(UUID().uuidString)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return

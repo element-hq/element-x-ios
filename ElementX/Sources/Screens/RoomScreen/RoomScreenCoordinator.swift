@@ -49,10 +49,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel?.callback = { [weak self] result in
+        viewModel?.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("RoomScreenViewModel did complete with result: \(result).")
-            switch result {
+            
+            switch action {
             case .displayRoomDetails:
                 self.displayRoomDetails()
             case .displayVideo(let fileURL, let title), .displayFile(let fileURL, let title):
@@ -103,8 +103,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         coordinator.callback = { [weak self] action in
             switch action {
             case let .emojiSelected(emoji: emoji, itemId: itemId):
+                MXLog.debug("Selected \(emoji) for \(itemId)")
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
-                MXLog.debug("Save \(emoji) for \(itemId)")
                 Task {
                     await timelineController.sendReaction(emoji, for: itemId)
                 }

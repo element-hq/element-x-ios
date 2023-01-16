@@ -37,15 +37,15 @@ final class AnalyticsPromptCoordinator: CoordinatorProtocol {
     
     func start() {
         viewModel.callback = { [weak self] result in
-            MXLog.debug("AnalyticsPromptViewModel did complete with result: \(result).")
-            
             guard let self else { return }
             
             switch result {
             case .enable:
+                MXLog.info("Enable Analytics")
                 Analytics.shared.optIn(with: self.parameters.userSession)
                 self.callback?()
             case .disable:
+                MXLog.info("Disable Analytics")
                 Analytics.shared.optOut()
                 self.callback?()
             }

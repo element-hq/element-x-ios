@@ -18,25 +18,25 @@ import Foundation
 import SwiftyBeaver
 
 /// Various MXLog configuration options. Used in conjunction with `MXLog.configure()`
-@objc public class MXLogConfiguration: NSObject {
+public class MXLogConfiguration: NSObject {
     /// the desired log level. `.verbose` by default.
-    @objc public var logLevel = MXLogLevel.verbose
+    public var logLevel = MXLogLevel.verbose
     
     /// whether logs should be written directly to files. `false` by default.
-    @objc public var redirectLogsToFiles = false
+    public var redirectLogsToFiles = false
     
     /// the maximum total space to use for log files in bytes. `100MB` by default.
-    @objc public var logFilesSizeLimit: UInt = 100 * 1024 * 1024 // 100MB
+    public var logFilesSizeLimit: UInt = 100 * 1024 * 1024 // 100MB
     
     /// the maximum number of log files to use before rolling. `50` by default.
-    @objc public var maxLogFilesCount: UInt = 50
+    public var maxLogFilesCount: UInt = 50
     
     /// the subname for log files. Files will be named as 'console-[subLogName].log'. `nil` by default
-    @objc public var subLogName: String?
+    public var subLogName: String?
 }
 
 /// MXLog logging levels. Use .none to disable logging entirely.
-@objc public enum MXLogLevel: UInt {
+public enum MXLogLevel: UInt {
     case none
     case verbose
     case debug
@@ -56,13 +56,13 @@ private var logger: SwiftyBeaver.Type = {
  Its purpose is to provide a common entry for customizing logging and should be used throughout the code.
  Please see `MXLog.h` for Objective-C options.
  */
-@objc public class MXLog: NSObject {
+public class MXLog: NSObject {
     /// Method used to customize MXLog's behavior.
     /// Called automatically when first accessing the logger with the default values.
     /// Please see `MXLogConfiguration` for all available options.
     /// - Parameters:
     ///     - configuration: the `MXLogConfiguration` instance to use
-    @objc public static func configure(_ configuration: MXLogConfiguration) {
+    public static func configure(_ configuration: MXLogConfiguration) {
         configureLogger(logger, withConfiguration: configuration)
     }
     
@@ -74,22 +74,12 @@ private var logger: SwiftyBeaver.Type = {
         logger.verbose(message(), file, function, line: line, context: context)
     }
     
-    @available(swift, obsoleted: 5.4)
-    @objc public static func logVerbose(_ message: String, file: String, function: String, line: Int) {
-        logger.verbose(message, file, function, line: line)
-    }
-    
     public static func debug(_ message: @autoclosure () -> Any,
                              file: String = #file,
                              function: String = #function,
                              line: Int = #line,
                              context: Any? = nil) {
         logger.debug(message(), file, function, line: line, context: context)
-    }
-    
-    @available(swift, obsoleted: 5.4)
-    @objc public static func logDebug(_ message: String, file: String, function: String, line: Int) {
-        logger.debug(message, file, function, line: line)
     }
     
     public static func info(_ message: @autoclosure () -> Any,
@@ -100,11 +90,6 @@ private var logger: SwiftyBeaver.Type = {
         logger.info(message(), file, function, line: line, context: context)
     }
     
-    @available(swift, obsoleted: 5.4)
-    @objc public static func logInfo(_ message: String, file: String, function: String, line: Int) {
-        logger.info(message, file, function, line: line)
-    }
-    
     public static func warning(_ message: @autoclosure () -> Any,
                                file: String = #file,
                                function: String = #function,
@@ -113,31 +98,17 @@ private var logger: SwiftyBeaver.Type = {
         logger.warning(message(), file, function, line: line, context: context)
     }
     
-    @available(swift, obsoleted: 5.4)
-    @objc public static func logWarning(_ message: String, file: String, function: String, line: Int) {
-        logger.warning(message, file, function, line: line)
-    }
-    
     /// Log error with additional details
     ///
     /// - Parameters:
     ///     - message: Description of the error without any variables (this is to improve error aggregations by type)
     ///     - context: Additional context-dependent details about the issue
-    public static func error(_ message: String,
+    public static func error(_ message: @autoclosure () -> Any,
                              file: String = #file,
                              function: String = #function,
                              line: Int = #line,
                              context: Any? = nil) {
-        logger.error(message, file, function, line: line, context: context)
-    }
-    
-    @available(swift, obsoleted: 5.4)
-    @objc public static func logError(_ message: String,
-                                      file: String,
-                                      function: String,
-                                      line: Int,
-                                      context: Any? = nil) {
-        logger.error(message, file, function, line: line, context: context)
+        logger.error(message(), file, function, line: line, context: context)
     }
     
     /// Log failure with additional details
@@ -153,18 +124,6 @@ private var logger: SwiftyBeaver.Type = {
                                function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
-        logger.error(message, file, function, line: line, context: context)
-        #if DEBUG
-        assertionFailure("\(message)")
-        #endif
-    }
-    
-    @available(swift, obsoleted: 5.4)
-    @objc public static func logFailure(_ message: String,
-                                        file: String,
-                                        function: String,
-                                        line: Int,
-                                        context: Any? = nil) {
         logger.error(message, file, function, line: line, context: context)
         #if DEBUG
         assertionFailure("\(message)")

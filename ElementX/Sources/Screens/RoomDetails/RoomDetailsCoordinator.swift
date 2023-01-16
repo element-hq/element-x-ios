@@ -45,6 +45,7 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
+            
             switch action {
             case .requestMemberDetailsPresentation(let members):
                 self.presentRoomMemberDetails(members)

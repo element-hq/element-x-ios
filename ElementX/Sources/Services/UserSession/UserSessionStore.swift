@@ -33,7 +33,7 @@ class UserSessionStore: UserSessionStoreProtocol {
                                                 accessGroup: InfoPlistReader.target.keychainAccessGroupIdentifier)
         self.backgroundTaskService = backgroundTaskService
         baseDirectory = .sessionsBaseDirectory
-        MXLog.debug("Setup base directory at: \(baseDirectory)")
+        MXLog.info("Setup base directory at: \(baseDirectory)")
     }
     
     /// Deletes all data stored in the shared container and keychain

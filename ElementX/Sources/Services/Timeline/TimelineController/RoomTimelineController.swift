@@ -146,6 +146,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func sendMessage(_ message: String) async {
+        MXLog.info("Send message in \(roomId)")
         switch await timelineProvider.sendMessage(message) {
         default:
             break
@@ -153,6 +154,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func sendReply(_ message: String, to itemId: String) async {
+        MXLog.info("Send reply in \(roomId)")
         switch await timelineProvider.sendMessage(message, inReplyToItemId: itemId) {
         default:
             break
@@ -160,6 +162,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func sendReaction(_ reaction: String, for itemId: String) async {
+        MXLog.info("Send reaction in \(roomId)")
         switch await timelineProvider.sendReaction(reaction, for: itemId) {
         default:
             break
@@ -167,6 +170,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
 
     func editMessage(_ newMessage: String, of itemId: String) async {
+        MXLog.info("Edit message in \(roomId)")
         switch await timelineProvider.editMessage(newMessage, originalItemId: itemId) {
         default:
             break
@@ -174,6 +178,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func redact(_ eventID: String) async {
+        MXLog.info("Send redaction in \(roomId)")
         switch await timelineProvider.redact(eventID) {
         default:
             break

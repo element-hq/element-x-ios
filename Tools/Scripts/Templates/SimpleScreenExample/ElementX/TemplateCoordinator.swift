@@ -23,6 +23,8 @@ struct TemplateCoordinatorParameters {
 enum TemplateCoordinatorAction {
     case accept
     case cancel
+    
+    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
 final class TemplateCoordinator: CoordinatorProtocol {
@@ -40,9 +42,9 @@ final class TemplateCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("TemplateViewModel did complete with result: \(action).")
             switch action {
             case .accept:
+                MXLog.info("User accepted the prompt.")
                 self.callback?(.accept)
             case .cancel:
                 self.callback?(.cancel)

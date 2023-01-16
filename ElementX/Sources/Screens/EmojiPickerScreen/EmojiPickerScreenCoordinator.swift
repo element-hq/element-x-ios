@@ -41,7 +41,7 @@ final class EmojiPickerScreenCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("EmojiPickerScreenViewModel did complete with result: \(action).")
+            
             switch action {
             case let .emojiSelected(emoji: emoji):
                 self.callback?(.emojiSelected(emoji: emoji, itemId: self.parameters.itemId))

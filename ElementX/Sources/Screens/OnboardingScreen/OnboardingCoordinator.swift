@@ -29,8 +29,8 @@ final class OnboardingCoordinator: CoordinatorProtocol {
     
     func start() {
         viewModel.callback = { [weak self] action in
-            MXLog.debug("OnboardingViewModel did complete with result: \(action).")
             guard let self else { return }
+            
             switch action {
             case .login:
                 self.callback?(.login)
