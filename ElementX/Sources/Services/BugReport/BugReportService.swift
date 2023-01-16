@@ -79,9 +79,7 @@ class BugReportService: BugReportServiceProtocol {
                          includeCrashLog: Bool,
                          githubLabels: [String],
                          files: [URL]) async throws -> SubmitBugReportResponse {
-        var params = [
-            MultipartFormData(key: "text", type: .text(value: text))
-        ]
+        var params = [MultipartFormData(key: "text", type: .text(value: text))]
         params.append(contentsOf: defaultParams)
         for label in githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))

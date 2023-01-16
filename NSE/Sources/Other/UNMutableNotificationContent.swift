@@ -81,7 +81,8 @@ extension UNMutableNotificationContent {
             // Update notification content before displaying the
             // communication notification.
             let updatedContent = try updating(from: intent)
-
+            
+            // swiftlint:disable:next force_cast
             return updatedContent.mutableCopy() as! UNMutableNotificationContent
         case .failure(let error):
             MXLog.error("Couldn't add sender icon: \(error)")

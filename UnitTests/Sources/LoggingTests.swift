@@ -275,6 +275,7 @@ class LoggingTests: XCTestCase {
         XCTAssertTrue(content.contains(fileMessage.id))
         XCTAssertFalse(content.contains(fileMessage.text))
     }
+
     // swiftlint:enable function_body_length
     
     func testRustMessageContentIsRedacted() throws {
