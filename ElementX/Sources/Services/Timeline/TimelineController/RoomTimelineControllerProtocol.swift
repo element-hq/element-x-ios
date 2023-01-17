@@ -52,9 +52,7 @@ protocol RoomTimelineControllerProtocol {
     
     func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError>
     
-    func sendMessage(_ message: String) async
-    
-    func sendReply(_ message: String, to itemId: String) async
+    func sendMessage(_ message: String, inReplyTo itemId: String?) async
 
     func editMessage(_ newMessage: String, of itemId: String) async
     
@@ -65,4 +63,10 @@ protocol RoomTimelineControllerProtocol {
     func debugDescriptionFor(_ itemId: String) -> String
     
     func retryDecryption(forSessionId sessionId: String) async
+}
+
+extension RoomTimelineControllerProtocol {
+    func sendMessage(_ message: String) async {
+        await sendMessage(message, inReplyTo: nil)
+    }
 }

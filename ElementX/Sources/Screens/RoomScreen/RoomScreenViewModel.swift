@@ -116,6 +116,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.composerMode = .default
         case .cancelEdit:
             state.composerMode = .default
+            state.bindings.composerText = ""
         case .markRoomAsRead:
             await markRoomAsRead()
         }
@@ -177,7 +178,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch currentComposerState {
         case .reply(let itemId, _):
-            await timelineController.sendReply(currentMessage, to: itemId)
+            await timelineController.sendMessage(currentMessage, inReplyTo: itemId)
         case .edit(let originalItemId):
             await timelineController.editMessage(currentMessage, of: originalItemId)
         default:

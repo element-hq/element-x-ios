@@ -68,13 +68,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError> {
-        switch await timelineProvider.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
+        MXLog.info("Started back pagination request")
+        switch await roomProxy.paginateBackwards(requestSize: requestSize, untilNumberOfItems: untilNumberOfItems) {
         case .success:
+            MXLog.info("Finished back pagination request")
+            return .success(())
+        case .failure(.noMoreMessagesToBackPaginate):
+            MXLog.warning("Back pagination requested when all messages have been loaded.")
             return .success(())
         case .failure(let error):
-            if error == .noMoreMessagesToBackPaginate {
-                return .success(())
-            }
+            MXLog.error("Failed back pagination request with error: \(error)")
             return .failure(.generic)
         }
     }
@@ -158,47 +161,52 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendMessage(_ message: String) async {
-        MXLog.info("Send message in \(roomId)")
-        switch await timelineProvider.sendMessage(message) {
-        default:
-            break
+    func sendMessage(_ message: String, inReplyTo itemId: String?) async {
+        if itemId == nil {
+            MXLog.info("Send message in \(roomId)")
+        } else {
+            MXLog.info("Send reply in \(roomId)")
         }
-    }
-    
-    func sendReply(_ message: String, to itemId: String) async {
-        MXLog.info("Send reply in \(roomId)")
-        switch await timelineProvider.sendMessage(message, inReplyToItemId: itemId) {
-        default:
-            break
+        
+        switch await roomProxy.sendMessage(message, inReplyToEventId: itemId) {
+        case .success:
+            MXLog.info("Finished sending message")
+        case .failure(let error):
+            MXLog.error("Failed sending message with error: \(error)")
         }
     }
     
     func sendReaction(_ reaction: String, for itemId: String) async {
         MXLog.info("Send reaction in \(roomId)")
-        switch await timelineProvider.sendReaction(reaction, for: itemId) {
-        default:
-            break
+        switch await roomProxy.sendReaction(reaction, for: itemId) {
+        case .success:
+            MXLog.info("Finished sending reaction")
+        case .failure(let error):
+            MXLog.error("Failed sending reaction with error: \(error)")
         }
     }
-
+    
     func editMessage(_ newMessage: String, of itemId: String) async {
         MXLog.info("Edit message in \(roomId)")
-        switch await timelineProvider.editMessage(newMessage, originalItemId: itemId) {
-        default:
-            break
+        switch await roomProxy.editMessage(newMessage, originalEventId: itemId) {
+        case .success:
+            MXLog.info("Finished editing message")
+        case .failure(let error):
+            MXLog.error("Failed editing message with error: \(error)")
         }
     }
     
     func redact(_ eventID: String) async {
         MXLog.info("Send redaction in \(roomId)")
-        switch await timelineProvider.redact(eventID) {
-        default:
-            break
+        switch await roomProxy.redact(eventID) {
+        case .success:
+            MXLog.info("Finished redacting message")
+        case .failure(let error):
+            MXLog.error("Failed redacting message with error: \(error)")
         }
     }
     
-    // Handle this paralel to the timeline items so we're not forced
+    // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
     func debugDescriptionFor(_ itemId: String) -> String {
         var description = "Unknown item"
@@ -218,7 +226,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     func retryDecryption(forSessionId sessionId: String) async {
-        await timelineProvider.retryDecryption(forSessionId: sessionId)
+        await roomProxy.retryDecryption(forSessionId: sessionId)
     }
 
     // MARK: - Private

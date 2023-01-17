@@ -54,9 +54,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
 
     func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction { .none }
     
-    func sendMessage(_ message: String) async { }
-    
-    func sendReply(_ message: String, to itemId: String) async { }
+    func sendMessage(_ message: String, inReplyTo itemId: String?) async { }
     
     func sendReaction(_ reaction: String, for itemId: String) async { }
 
