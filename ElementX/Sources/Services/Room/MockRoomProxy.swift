@@ -29,6 +29,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     var isPublic = Bool.random()
     var isEncrypted = Bool.random()
     var isTombstoned = Bool.random()
+    var hasUnreadNotifications = Bool.random()
     var members: [RoomMemberProxy]?
     
     let timelineProvider: RoomTimelineProviderProtocol = MockRoomTimelineProvider()
@@ -57,6 +58,10 @@ struct MockRoomProxy: RoomProxyProtocol {
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         .failure(.failedPaginatingBackwards)
+    }
+    
+    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
+        .failure(.failedSendingReadReceipt)
     }
         
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {

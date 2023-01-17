@@ -64,6 +64,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
+        viewModel?.context.send(viewAction: .markRoomAsRead)
         viewModel?.stop()
         viewModel = nil
         parameters = nil

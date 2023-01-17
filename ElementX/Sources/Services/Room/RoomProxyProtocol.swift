@@ -23,6 +23,7 @@ enum RoomProxyError: Error {
     case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
+    case failedSendingReadReceipt
     case failedSendingMessage
     case failedSendingReaction
     case failedEditingMessage
@@ -39,6 +40,7 @@ protocol RoomProxyProtocol {
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
     var isTombstoned: Bool { get }
+    var hasUnreadNotifications: Bool { get }
     
     var name: String? { get }
     var displayName: String? { get }
@@ -58,6 +60,8 @@ protocol RoomProxyProtocol {
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError>
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
+    
+    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>
     
     func sendMessage(_ message: String, inReplyToEventId: String?) async -> Result<Void, RoomProxyError>
     

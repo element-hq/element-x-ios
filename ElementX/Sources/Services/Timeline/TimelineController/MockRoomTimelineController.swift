@@ -46,6 +46,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         return .success(())
     }
     
+    func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError> { .success(()) }
+    
     func processItemAppearance(_ itemId: String) async { }
     
     func processItemDisappearance(_ itemId: String) async { }

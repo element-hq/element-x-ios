@@ -42,6 +42,8 @@ enum RoomScreenViewAction {
     case sendReaction(key: String, eventID: String)
     case cancelReply
     case cancelEdit
+    /// Mark the entire room as read - this is heavy handed as a starting point for now.
+    case markRoomAsRead
 }
 
 struct RoomScreenViewState: BindableState {

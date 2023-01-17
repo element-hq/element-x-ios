@@ -116,6 +116,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.composerMode = .default
         case .cancelEdit:
             state.composerMode = .default
+        case .markRoomAsRead:
+            await markRoomAsRead()
         }
     }
 
@@ -133,6 +135,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             break
         }
+    }
+    
+    private func markRoomAsRead() async {
+        _ = await timelineController.markRoomAsRead()
     }
 
     private func itemTapped(with itemId: String) async {

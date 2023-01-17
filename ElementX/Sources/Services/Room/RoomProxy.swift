@@ -82,6 +82,10 @@ class RoomProxy: RoomProxyProtocol {
         room.isTombstoned()
     }
     
+    var hasUnreadNotifications: Bool {
+        slidingSyncRoom.hasUnreadNotifications()
+    }
+    
     var avatarURL: URL? {
         room.avatarUrl().flatMap(URL.init(string:))
     }
@@ -156,6 +160,22 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        return await Task.dispatch(on: serialDispatchQueue) {
+            do {
+                try self.room.sendReadReceipt(eventId: eventID)
+                return .success(())
+            } catch {
+                return .failure(.failedSendingReadReceipt)
+            }
+        }
+    }
+    
     func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
         defer {
@@ -164,7 +184,7 @@ class RoomProxy: RoomProxyProtocol {
         
         let transactionId = genTransactionId()
         
-        return await Task.dispatch(on: .global()) {
+        return await Task.dispatch(on: serialDispatchQueue) {
             do {
                 if let inReplyToEventId {
                     try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
@@ -216,15 +236,14 @@ class RoomProxy: RoomProxyProtocol {
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         let transactionID = genTransactionId()
         
-        return await Task {
+        return await Task.dispatch(on: .global()) {
             do {
-                try room.redact(eventId: eventID, reason: nil, txnId: transactionID)
+                try self.room.redact(eventId: eventID, reason: nil, txnId: transactionID)
                 return .success(())
             } catch {
                 return .failure(.failedRedactingEvent)
             }
         }
-        .value
     }
     
     func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
