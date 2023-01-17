@@ -83,11 +83,11 @@ struct RoomScreen: View {
             RoomHeaderView(context: context)
         }
         
-        ToolbarItem(placement: .primaryAction) {
+        ToolbarItem(id: "RoomDetailsAction", placement: .secondaryAction, showsByDefault: false) {
             Button {
                 context.send(viewAction: .displayRoomDetails)
             } label: {
-                Image(systemName: "ellipsis.circle")
+                Label("Room Details", systemImage: "info.circle")
             }
         }
     }
