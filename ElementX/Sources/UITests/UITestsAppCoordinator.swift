@@ -279,11 +279,10 @@ class MockScreen: Identifiable {
                                                                        mediaProvider: MockMediaProvider()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .roomMembersScreen:
+        case .roomMemberDetailsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = RoomMembersCoordinator(parameters: .init(roomProxy: MockRoomProxy(displayName: "Room",
-                                                                                                members: [.mockAlice, .mockBob, .mockCharlie]),
-                                                                       mediaProvider: MockMediaProvider()))
+            let coordinator = RoomMemberDetailsCoordinator(parameters: .init(mediaProvider: MockMediaProvider(),
+                                                                             members: [.mockAlice, .mockBob, .mockCharlie]))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         }

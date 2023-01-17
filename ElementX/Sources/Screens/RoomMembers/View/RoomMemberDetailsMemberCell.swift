@@ -16,11 +16,11 @@
 
 import SwiftUI
 
-struct RoomMembersMemberCell: View {
+struct RoomMemberDetailsMemberCell: View {
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .roomDetails).value
 
     let member: RoomDetailsMember
-    let context: RoomMembersViewModel.Context
+    let context: RoomMemberDetailsViewModel.Context
 
     var body: some View {
         Button {
@@ -56,7 +56,7 @@ struct RoomMembersMemberCell: View {
     }
 }
 
-struct RoomMembersMemberCell_Previews: PreviewProvider {
+struct RoomMemberDetailsMemberCell_Previews: PreviewProvider {
     static var previews: some View {
         body.preferredColorScheme(.light)
             .tint(.element.accent)
@@ -70,14 +70,12 @@ struct RoomMembersMemberCell_Previews: PreviewProvider {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = MockRoomProxy(displayName: "Room A",
-                                      members: members)
-        let viewModel = RoomMembersViewModel(roomProxy: roomProxy,
-                                             mediaProvider: MockMediaProvider())
-
+        let viewModel = RoomMemberDetailsViewModel(mediaProvider: MockMediaProvider(),
+                                                   members: members)
+        
         return VStack {
             ForEach(members) { member in
-                RoomMembersMemberCell(member: .init(withProxy: member), context: viewModel.context)
+                RoomMemberDetailsMemberCell(member: .init(withProxy: member), context: viewModel.context)
             }
         }
     }

@@ -22,7 +22,7 @@ import UIKit
 // MARK: View model
 
 enum RoomDetailsViewModelAction {
-    case peopleTapped
+    case requestMemberDetailsPresentation([RoomMemberProxy])
     case cancel
 }
 

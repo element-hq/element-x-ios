@@ -16,32 +16,29 @@
 
 import SwiftUI
 
-struct RoomMembersCoordinatorParameters {
-    let roomProxy: RoomProxyProtocol
+struct RoomMemberDetailsCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
+    let members: [RoomMemberProxy]
 }
 
-enum RoomMembersCoordinatorAction {
+enum RoomMemberDetailsCoordinatorAction {
     case cancel
 }
 
-final class RoomMembersCoordinator: CoordinatorProtocol {
-    private let parameters: RoomMembersCoordinatorParameters
-    private var viewModel: RoomMembersViewModelProtocol
+final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
+    private var viewModel: RoomMemberDetailsViewModelProtocol
     
-    var callback: ((RoomMembersCoordinatorAction) -> Void)?
+    var callback: ((RoomMemberDetailsCoordinatorAction) -> Void)?
     
-    init(parameters: RoomMembersCoordinatorParameters) {
-        self.parameters = parameters
-        
-        viewModel = RoomMembersViewModel(roomProxy: parameters.roomProxy,
-                                         mediaProvider: parameters.mediaProvider)
+    init(parameters: RoomMemberDetailsCoordinatorParameters) {
+        viewModel = RoomMemberDetailsViewModel(mediaProvider: parameters.mediaProvider,
+                                               members: parameters.members)
     }
     
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("RoomMembersViewModel did complete with result: \(action).")
+            MXLog.debug("RoomMemberDetailsViewModel did complete with result: \(action).")
             switch action {
             case .cancel:
                 self.callback?(.cancel)
@@ -50,6 +47,6 @@ final class RoomMembersCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(RoomMembersScreen(context: viewModel.context))
+        AnyView(RoomMemberDetailsScreen(context: viewModel.context))
     }
 }

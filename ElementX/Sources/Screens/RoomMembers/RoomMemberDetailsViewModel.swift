@@ -16,35 +16,23 @@
 
 import SwiftUI
 
-typealias RoomMembersViewModelType = StateStoreViewModel<RoomMembersViewState, RoomMembersViewAction>
+typealias RoomMemberDetailsViewModelType = StateStoreViewModel<RoomMemberDetailsViewState, RoomMemberDetailsViewAction>
 
-class RoomMembersViewModel: RoomMembersViewModelType, RoomMembersViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
+class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDetailsViewModelProtocol {
     private let mediaProvider: MediaProviderProtocol
+    
+    var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
 
-    var callback: ((RoomMembersViewModelAction) -> Void)?
-
-    init(roomProxy: RoomProxyProtocol,
-         mediaProvider: MediaProviderProtocol) {
-        self.roomProxy = roomProxy
+    init(mediaProvider: MediaProviderProtocol,
+         members: [RoomMemberProxy]) {
         self.mediaProvider = mediaProvider
-        super.init(initialViewState: .init(members: [],
+        super.init(initialViewState: .init(members: members.map { RoomDetailsMember(withProxy: $0) },
                                            bindings: .init()))
-
-        Task {
-            switch await roomProxy.members() {
-            case .success(let members):
-                state.members = members.map { RoomDetailsMember(withProxy: $0) }
-            case .failure(let error):
-                MXLog.debug("Failed to retrieve room members: \(error)")
-                state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
-            }
-        }
     }
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMembersViewAction) async {
+    override func process(viewAction: RoomMemberDetailsViewAction) async {
         switch viewAction {
         case .selectMember(let id):
             MXLog.debug("Member selected: \(id)")

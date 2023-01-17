@@ -16,14 +16,14 @@
 
 import Foundation
 
-enum RoomMembersViewModelAction {
+enum RoomMemberDetailsViewModelAction {
     case cancel
 }
 
-struct RoomMembersViewState: BindableState {
+struct RoomMemberDetailsViewState: BindableState {
     var members: [RoomDetailsMember]
 
-    var bindings: RoomMembersViewStateBindings
+    var bindings: RoomMemberDetailsViewStateBindings
 
     var visibleMembers: [RoomDetailsMember] {
         if bindings.searchQuery.isEmpty {
@@ -37,14 +37,14 @@ struct RoomMembersViewState: BindableState {
     }
 }
 
-struct RoomMembersViewStateBindings {
+struct RoomMemberDetailsViewStateBindings {
     var searchQuery = ""
 
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomDetailsErrorType>?
 }
 
-enum RoomMembersViewAction {
+enum RoomMemberDetailsViewAction {
     case selectMember(id: String)
     case loadMemberData(id: String)
 }
