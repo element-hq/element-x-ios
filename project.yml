@@ -43,7 +43,7 @@ packages:
     exactVersion: 1.0.30-alpha
     # path: ../matrix-rust-sdk
   DesignKit:
-    path: ./
+    path: DesignKit
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     branch: main
