@@ -22,7 +22,7 @@ struct MockSessionVerificationControllerProxy: SessionVerificationControllerProx
     var callbacks = PassthroughSubject<SessionVerificationControllerProxyCallback, Never>()
     
     var isVerified = false
-    var requestDelay: Duration = .seconds(2)
+    var requestDelay: Duration = .seconds(1)
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         Task.detached {
