@@ -173,7 +173,7 @@ enum UITestsSignalling {
             if let nextMessageContinuation {
                 nextMessageContinuation.resume(throwing: UITestsSignalError.cancelled)
                 self.nextMessageContinuation = nil
-                self.nextMessageTimeoutTask = nil
+                nextMessageTimeoutTask = nil
             }
         }
         
@@ -198,7 +198,7 @@ enum UITestsSignalling {
                     try? await Task.sleep(for: .seconds(30))
                     
                     guard !Task.isCancelled,
-                            let nextMessageContinuation = self.nextMessageContinuation
+                          let nextMessageContinuation = self.nextMessageContinuation
                     else { return }
                     
                     nextMessageContinuation.resume(throwing: UITestsSignalError.timeout)
