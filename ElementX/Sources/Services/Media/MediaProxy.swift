@@ -29,8 +29,8 @@ class MediaProxy: MediaProxyProtocol {
         self.clientQueue = clientQueue
     }
 
-    func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
-        .init(urlString: urlString)
+    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
+        .init(url: url)
     }
 
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {

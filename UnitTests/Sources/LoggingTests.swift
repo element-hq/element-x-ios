@@ -181,7 +181,7 @@ class LoggingTests: XCTestCase {
         let roomSummary = RoomSummaryDetails(id: "myroomid",
                                              name: roomName,
                                              isDirect: true,
-                                             avatarURLString: nil,
+                                             avatarURL: nil,
                                              lastMessage: AttributedString(lastMessage),
                                              lastMessageTimestamp: .now,
                                              unreadNotificationCount: 0)

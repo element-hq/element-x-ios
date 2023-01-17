@@ -27,7 +27,7 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let senderId: String
     var senderDisplayName: String?
     
-    var senderAvatarURLString: String?
+    var senderAvatarURL: URL?
     var senderAvatar: UIImage?
     
     let source: MediaSourceProxy?

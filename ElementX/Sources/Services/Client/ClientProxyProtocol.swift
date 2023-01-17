@@ -83,7 +83,7 @@ protocol ClientProxyProtocol: AnyObject, MediaProxyProtocol {
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
         
-    func loadUserAvatarURLString() async -> Result<String, ClientProxyError>
+    func loadUserAvatarURL() async -> Result<URL?, ClientProxyError>
     
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     
@@ -101,7 +101,7 @@ protocol ClientProxyProtocol: AnyObject, MediaProxyProtocol {
                    deviceDisplayName: String,
                    profileTag: String?,
                    lang: String,
-                   url: String?,
+                   url: URL?,
                    format: PushFormat?,
                    defaultPayload: [AnyHashable: Any]?) async throws
 }

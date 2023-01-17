@@ -101,7 +101,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var lastMessage: AttributedString?
     
-    var avatarURLString: String?
+    var avatarURL: URL?
     
     var avatar: UIImage?
     

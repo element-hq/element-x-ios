@@ -26,11 +26,11 @@ struct MockMediaProvider: MediaProviderProtocol {
         .failure(.failedRetrievingImage)
     }
     
-    func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage? {
-        guard urlString != nil else {
+    func imageFromURL(_ url: URL?, avatarSize: AvatarSize?) -> UIImage? {
+        guard url != nil else {
             return nil
         }
-
+        
         if let avatarSize {
             switch avatarSize {
             case .room:
@@ -41,8 +41,8 @@ struct MockMediaProvider: MediaProviderProtocol {
         }
         return UIImage(systemName: "photo")
     }
-        
-    func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
+    
+    func loadImageFromURL(_ url: URL, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
         guard let image = UIImage(systemName: "photo") else {
             fatalError()
         }
@@ -58,11 +58,11 @@ struct MockMediaProvider: MediaProviderProtocol {
         .failure(.failedRetrievingFile)
     }
 
-    func fileFromURLString(_ urlString: String?, fileExtension: String) -> URL? {
+    func fileFromURL(_ url: URL?, fileExtension: String) -> URL? {
         nil
     }
 
-    @discardableResult func loadFileFromURLString(_ urlString: String, fileExtension: String) async -> Result<URL, MediaProviderError> {
+    @discardableResult func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError> {
         .failure(.failedRetrievingFile)
     }
 }

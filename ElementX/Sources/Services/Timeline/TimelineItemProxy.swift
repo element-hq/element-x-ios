@@ -103,8 +103,12 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         item.senderProfile().displayName
     }
     
-    var senderAvatarURLString: String? {
-        item.senderProfile().avatarUrl
+    var senderAvatarURL: URL? {
+        guard let urlString = item.senderProfile().avatarUrl else {
+            return nil
+        }
+        
+        return URL(string: urlString)
     }
 
     var reactions: [Reaction] {

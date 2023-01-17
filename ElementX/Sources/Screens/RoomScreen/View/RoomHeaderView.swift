@@ -71,7 +71,7 @@ struct RoomHeaderView_Previews: PreviewProvider {
                                             timelineViewFactory: RoomTimelineViewFactory(),
                                             mediaProvider: MockMediaProvider(),
                                             roomName: "Some Room name",
-                                            roomAvatarUrl: "mock_url")
+                                            roomAvatarUrl: URL.picturesDirectory)
 
         RoomHeaderView(context: viewModel.context)
             .previewLayout(.sizeThatFits)

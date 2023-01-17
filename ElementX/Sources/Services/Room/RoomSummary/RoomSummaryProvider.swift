@@ -162,10 +162,15 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
         }
         
+        var avatarURL: URL?
+        if let avatarURLString = room.fullRoom()?.avatarUrl() {
+            avatarURL = URL(string: avatarURLString)
+        }
+        
         let details = RoomSummaryDetails(id: room.roomId(),
                                          name: room.name() ?? room.roomId(),
                                          isDirect: room.isDm() ?? false,
-                                         avatarURLString: room.fullRoom()?.avatarUrl(),
+                                         avatarURL: avatarURL,
                                          lastMessage: attributedLastMessage,
                                          lastMessageTimestamp: lastMessageTimestamp,
                                          unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))

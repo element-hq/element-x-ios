@@ -64,7 +64,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           senderId: "Bob",
-                                                                          urlString: nil,
+                                                                          imageURL: nil,
                                                                           image: UIImage(systemName: "photo")))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
@@ -74,7 +74,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           senderId: "Bob",
-                                                                          urlString: nil,
+                                                                          imageURL: nil,
                                                                           image: nil))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
@@ -84,7 +84,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           senderId: "Bob",
-                                                                          urlString: nil,
+                                                                          imageURL: nil,
                                                                           image: nil,
                                                                           aspectRatio: 0.7,
                                                                           blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))

@@ -36,7 +36,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          roomName: String?,
-         roomAvatarUrl: String? = nil) {
+         roomAvatarUrl: URL? = nil) {
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
         self.mediaProvider = mediaProvider
@@ -76,11 +76,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
         
         buildTimelineViews()
-
+        
         if let roomAvatarUrl {
             Task {
-                if case let .success(avatar) = await mediaProvider.loadImageFromURLString(roomAvatarUrl,
-                                                                                          avatarSize: .room(on: .timeline)) {
+                if case let .success(avatar) = await mediaProvider.loadImageFromURL(roomAvatarUrl,
+                                                                                    avatarSize: .room(on: .timeline)) {
                     state.roomAvatar = avatar
                 }
             }

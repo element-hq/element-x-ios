@@ -15,6 +15,7 @@
 //
 
 import Combine
+import Foundation
 import MatrixRustSDK
 
 enum RoomProxyError: Error {
@@ -44,11 +45,11 @@ protocol RoomProxyProtocol {
     
     var topic: String? { get }
     
-    var avatarURL: String? { get }
+    var avatarURL: URL? { get }
     
-    func avatarURLStringForUserId(_ userId: String) -> String?
+    func avatarURLForUserId(_ userId: String) -> URL?
     
-    func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
+    func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func displayNameForUserId(_ userId: String) -> String?
     

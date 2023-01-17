@@ -54,8 +54,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
 
         if let avatarURL = roomProxy.avatarURL {
             Task {
-                if case let .success(avatar) = await mediaProvider.loadImageFromURLString(avatarURL,
-                                                                                          avatarSize: .room(on: .details)) {
+                if case let .success(avatar) = await mediaProvider.loadImageFromURL(avatarURL, avatarSize: .room(on: .details)) {
                     state.roomAvatar = avatar
                 }
             }

@@ -35,7 +35,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     // swiftlint:disable:next cyclomatic_complexity
     func buildTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
                               groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        let avatarImage = mediaProvider.imageFromURLString(eventItemProxy.senderAvatarURLString, avatarSize: .user(on: .timeline))
+        var avatarImage: UIImage?
+        if let senderAvatarURL = eventItemProxy.senderAvatarURL {
+            avatarImage = mediaProvider.imageFromURL(senderAvatarURL, avatarSize: .user(on: .timeline))
+        }
+        
         let isOutgoing = eventItemProxy.isOwn
         
         switch eventItemProxy.content.kind() {
@@ -96,7 +100,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isEditable: eventItemProxy.isEditable,
                                     senderId: eventItemProxy.sender,
                                     senderDisplayName: eventItemProxy.senderDisplayName,
-                                    senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                    senderAvatarURL: eventItemProxy.senderAvatarURL,
                                     senderAvatar: avatarImage,
                                     properties: RoomTimelineItemProperties())
     }
@@ -105,7 +109,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildStickerTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                           _ body: String,
                                           _ imageInfo: ImageInfo,
-                                          _ urlString: String,
+                                          _ imageURLString: String,
                                           _ isOutgoing: Bool,
                                           _ groupState: TimelineItemGroupState,
                                           _ avatarImage: UIImage?) -> RoomTimelineItemProtocol {
@@ -114,6 +118,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         let height = imageInfo.height.map(CGFloat.init)
         if let width, let height {
             aspectRatio = width / height
+        }
+        
+        var image: UIImage?
+        if let url = URL(string: imageURLString) {
+            image = mediaProvider.imageFromURL(url)
         }
 
         return StickerRoomTimelineItem(id: eventItemProxy.id,
@@ -124,10 +133,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                        isEditable: eventItemProxy.isEditable,
                                        senderId: eventItemProxy.sender,
                                        senderDisplayName: eventItemProxy.senderDisplayName,
-                                       senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                       senderAvatarURL: eventItemProxy.senderAvatarURL,
                                        senderAvatar: avatarImage,
-                                       urlString: urlString,
-                                       image: mediaProvider.imageFromURLString(urlString),
+                                       imageURL: URL(string: imageURLString),
+                                       image: image,
                                        width: width,
                                        height: height,
                                        aspectRatio: aspectRatio,
@@ -160,7 +169,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                          isEditable: eventItemProxy.isEditable,
                                          senderId: eventItemProxy.sender,
                                          senderDisplayName: eventItemProxy.senderDisplayName,
-                                         senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                         senderAvatarURL: eventItemProxy.senderAvatarURL,
                                          senderAvatar: avatarImage,
                                          properties: RoomTimelineItemProperties())
     }
@@ -177,7 +186,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                  isEditable: eventItemProxy.isEditable,
                                  senderId: eventItemProxy.sender,
                                  senderDisplayName: eventItemProxy.senderDisplayName,
-                                 senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                 senderAvatarURL: eventItemProxy.senderAvatarURL,
                                  senderAvatar: avatarImage,
                                  properties: RoomTimelineItemProperties())
     }
@@ -198,7 +207,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isEditable: eventItemProxy.isEditable,
                                     senderId: eventItemProxy.sender,
                                     senderDisplayName: eventItemProxy.senderDisplayName,
-                                    senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                    senderAvatarURL: eventItemProxy.senderAvatarURL,
                                     senderAvatar: avatarImage,
                                     properties: RoomTimelineItemProperties(isEdited: eventItemProxy.content.asMessage()?.isEdited() ?? false,
                                                                            reactions: aggregateReactions(eventItemProxy.reactions)))
@@ -221,7 +230,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                     isEditable: eventItemProxy.isEditable,
                                     senderId: message.sender,
                                     senderDisplayName: eventItemProxy.senderDisplayName,
-                                    senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                    senderAvatarURL: eventItemProxy.senderAvatarURL,
                                     senderAvatar: avatarImage,
                                     properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                            reactions: aggregateReactions(eventItemProxy.reactions),
@@ -247,7 +256,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      isEditable: eventItemProxy.isEditable,
                                      senderId: message.sender,
                                      senderDisplayName: eventItemProxy.senderDisplayName,
-                                     senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                     senderAvatarURL: eventItemProxy.senderAvatarURL,
                                      senderAvatar: avatarImage,
                                      source: message.source,
                                      image: mediaProvider.imageFromSource(message.source),
@@ -279,7 +288,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      isEditable: eventItemProxy.isEditable,
                                      senderId: message.sender,
                                      senderDisplayName: eventItemProxy.senderDisplayName,
-                                     senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                     senderAvatarURL: eventItemProxy.senderAvatarURL,
                                      senderAvatar: avatarImage,
                                      duration: message.duration,
                                      source: message.source,
@@ -307,7 +316,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              isEditable: eventItemProxy.isEditable,
                              senderId: message.sender,
                              senderDisplayName: eventItemProxy.senderDisplayName,
-                             senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                             senderAvatarURL: eventItemProxy.senderAvatarURL,
                              senderAvatar: avatarImage,
                              source: message.source,
                              thumbnailSource: message.thumbnailSource,
@@ -333,7 +342,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                       isEditable: eventItemProxy.isEditable,
                                       senderId: message.sender,
                                       senderDisplayName: eventItemProxy.senderDisplayName,
-                                      senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                      senderAvatarURL: eventItemProxy.senderAvatarURL,
                                       senderAvatar: avatarImage,
                                       properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                              reactions: aggregateReactions(eventItemProxy.reactions),
@@ -365,7 +374,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      isEditable: eventItemProxy.isEditable,
                                      senderId: message.sender,
                                      senderDisplayName: eventItemProxy.senderDisplayName,
-                                     senderAvatarURLString: eventItemProxy.senderAvatarURLString,
+                                     senderAvatarURL: eventItemProxy.senderAvatarURL,
                                      senderAvatar: avatarImage,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),

@@ -94,7 +94,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case let item as VideoRoomTimelineItem:
             await loadThumbnailForVideoTimelineItem(item)
         case let item as StickerRoomTimelineItem:
-            await loadThumbnailForStickerTimelineItem(item)
+            await loadImageForStickerTimelineItem(item)
         default:
             break
         }
@@ -371,16 +371,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    private func loadThumbnailForStickerTimelineItem(_ timelineItem: StickerRoomTimelineItem) async {
+    private func loadImageForStickerTimelineItem(_ timelineItem: StickerRoomTimelineItem) async {
         if timelineItem.image != nil {
             return
         }
         
-        guard let urlString = timelineItem.urlString else {
+        guard let url = timelineItem.imageURL else {
             return
         }
         
-        switch await mediaProvider.loadImageFromURLString(urlString) {
+        switch await mediaProvider.loadImageFromURL(url) {
         case .success(let image):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                   var item = timelineItems[index] as? StickerRoomTimelineItem else {
@@ -498,12 +498,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private func loadUserAvatarForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
         guard timelineItem.shouldShowSenderDetails,
-              let avatarURLString = timelineItem.senderAvatarURLString,
+              let avatarURL = timelineItem.senderAvatarURL,
               timelineItem.senderAvatar == nil else {
             return
         }
-                
-        switch await mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .user(on: .timeline)) {
+        
+        switch await mediaProvider.loadImageFromURL(avatarURL, avatarSize: .user(on: .timeline)) {
         case .success(let avatar):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                   var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {

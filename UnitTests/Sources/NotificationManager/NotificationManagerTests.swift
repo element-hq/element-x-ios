@@ -64,7 +64,7 @@ final class NotificationManagerTests: XCTestCase {
         XCTAssertEqual(clientProxy.setPusherDeviceDisplayName, UIDevice.current.name)
         XCTAssertNotNil(clientProxy.setPusherProfileTag)
         XCTAssertEqual(clientProxy.setPusherLang, Bundle.preferredLanguages.first)
-        XCTAssertEqual(clientProxy.setPusherUrl, settings?.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(clientProxy.setPusherUrl, settings?.pushGatewayBaseURL)
         XCTAssertEqual(clientProxy.setPusherFormat, .eventIdOnly)
         let defaultPayload: [AnyHashable: Any] = [
             "aps": [

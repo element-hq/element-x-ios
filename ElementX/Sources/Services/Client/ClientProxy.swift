@@ -158,12 +158,18 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-        
-    func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
+    
+    func loadUserAvatarURL() async -> Result<URL?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                let avatarURL = try self.client.avatarUrl()
-                return .success(avatarURL)
+                let urlString = try self.client.avatarUrl()
+                
+                guard let url = URL(string: urlString) else {
+                    MXLog.error("Invalid avatar URL string: \(String(describing: urlString))")
+                    return .failure(.failedRetrievingAvatarURL)
+                }
+                 
+                return .success(url)
             } catch {
                 return .failure(.failedRetrievingAvatarURL)
             }
@@ -211,7 +217,7 @@ class ClientProxy: ClientProxyProtocol {
                    deviceDisplayName: String,
                    profileTag: String?,
                    lang: String,
-                   url: String?,
+                   url: URL?,
                    format: PushFormat?,
                    defaultPayload: [AnyHashable: Any]?) async throws {
 //        let defaultPayloadString = jsonString(from: defaultPayload)
@@ -312,11 +318,9 @@ class ClientProxy: ClientProxyProtocol {
             
             let allRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: allRoomsView)
             
-            visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
-                                                              roomMessageFactory: RoomMessageFactory())
+            visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy)
             
-            allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
-                                                          roomMessageFactory: RoomMessageFactory())
+            allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy)
             
             visibleRoomsViewProxy.visibleRangeUpdatePublisher.sink { [weak self] in
                 self?.restartSync()
@@ -390,8 +394,8 @@ class ClientProxy: ClientProxyProtocol {
 }
 
 extension ClientProxy: MediaProxyProtocol {
-    func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
-        mediaProxy.mediaSourceForURLString(urlString)
+    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
+        mediaProxy.mediaSourceForURL(url)
     }
 
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {

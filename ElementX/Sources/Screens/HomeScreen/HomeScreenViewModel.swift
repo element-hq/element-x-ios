@@ -68,8 +68,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task {
-            if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
-                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, avatarSize: .user(on: .home)) {
+            if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL(),
+               let url = url {
+                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURL(url, avatarSize: .user(on: .home)) {
                     state.userAvatar = avatar
                 }
             }
@@ -169,12 +170,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private func loadDataForRoomIdentifier(_ identifier: String) {
         guard let room = state.rooms.first(where: { $0.roomId == identifier }),
               room.avatar == nil,
-              let avatarURLString = room.avatarURLString else {
+              let avatarURL = room.avatarURL else {
             return
         }
         
         Task {
-            if case let .success(image) = await userSession.mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .room(on: .home)) {
+            if case let .success(image) = await userSession.mediaProvider.loadImageFromURL(avatarURL, avatarSize: .room(on: .home)) {
                 guard let roomIndex = state.rooms.firstIndex(where: { $0.roomId == identifier }) else {
                     return
                 }
@@ -222,7 +223,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
-        let avatarImage = userSession.mediaProvider.imageFromURLString(details.avatarURLString, avatarSize: .room(on: .home))
+        var avatarImage: UIImage?
+        if let avatarURL = details.avatarURL {
+            avatarImage = userSession.mediaProvider.imageFromURL(avatarURL, avatarSize: .room(on: .home))
+        }
         
         var timestamp: String?
         if let lastMessageTimestamp = details.lastMessageTimestamp {
@@ -236,7 +240,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               hasUnreads: details.unreadNotificationCount > 0,
                               timestamp: timestamp,
                               lastMessage: details.lastMessage,
-                              avatarURLString: details.avatarURLString,
+                              avatarURL: details.avatarURL,
                               avatar: avatarImage)
     }
     

@@ -27,22 +27,23 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
         self.userSession = userSession
         let bindings = SettingsViewStateBindings()
         super.init(initialViewState: .init(bindings: bindings, deviceID: userSession.deviceId, userID: userSession.userID))
-
+        
         Task {
-            if case let .success(userAvatarURLString) = await userSession.clientProxy.loadUserAvatarURLString() {
-                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURLString(userAvatarURLString, avatarSize: .user(on: .settings)) {
+            if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL(),
+               let userAvatarURL = userAvatarURL {
+                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURL(userAvatarURL, avatarSize: .user(on: .settings)) {
                     state.userAvatar = avatar
                 }
             }
         }
-
+        
         Task {
             if case let .success(userDisplayName) = await self.userSession.clientProxy.loadUserDisplayName() {
                 state.userDisplayName = userDisplayName
             }
         }
     }
-
+    
     override func process(viewAction: SettingsViewAction) async {
         switch viewAction {
         case .close:

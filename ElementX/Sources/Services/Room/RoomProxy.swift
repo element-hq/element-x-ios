@@ -29,7 +29,7 @@ class RoomProxy: RoomProxyProtocol {
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
-    private var memberAvatars = [String: String]()
+    private var memberAvatars = [String: URL]()
     private var memberDisplayNames = [String: String]()
     
     private(set) var displayName: String?
@@ -82,8 +82,12 @@ class RoomProxy: RoomProxyProtocol {
         room.isTombstoned()
     }
     
-    var avatarURL: String? {
-        room.avatarUrl()
+    var avatarURL: URL? {
+        guard let urlString = room.avatarUrl() else {
+            return nil
+        }
+        
+        return URL(string: urlString)
     }
 
     var encryptionBadgeImage: UIImage? {
@@ -95,16 +99,24 @@ class RoomProxy: RoomProxyProtocol {
         return Asset.Images.encryptionTrusted.image
     }
     
-    func avatarURLStringForUserId(_ userId: String) -> String? {
+    func avatarURLForUserId(_ userId: String) -> URL? {
         memberAvatars[userId]
     }
     
-    func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
+    func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         do {
-            let avatarURL = try await Task.dispatch(on: serialDispatchQueue) {
+            guard let urlString = try await Task.dispatch(on: serialDispatchQueue, {
                 try self.room.memberAvatarUrl(userId: userId)
+            }) else {
+                return .success(nil)
             }
-            update(avatarURL: avatarURL, forUserId: userId)
+            
+            guard let avatarURL = URL(string: urlString) else {
+                MXLog.error("Invalid avatar URL string: \(String(describing: urlString))")
+                return .failure(.failedRetrievingMemberAvatarURL)
+            }
+            
+            update(url: avatarURL, forUserId: userId)
             return .success(avatarURL)
         } catch {
             return .failure(.failedRetrievingMemberAvatarURL)
@@ -238,8 +250,8 @@ class RoomProxy: RoomProxyProtocol {
     
     // MARK: - Private
     
-    private func update(avatarURL: String?, forUserId userId: String) {
-        memberAvatars[userId] = avatarURL
+    private func update(url: URL?, forUserId userId: String) {
+        memberAvatars[userId] = url
     }
     
     private func update(displayName: String?, forUserId userId: String) {

@@ -91,7 +91,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                             deviceDisplayName: UIDevice.current.name,
                                             profileTag: pusherProfileTag(),
                                             lang: Bundle.preferredLanguages.first ?? "en",
-                                            url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
+                                            url: ServiceLocator.shared.settings.pushGatewayBaseURL,
                                             format: .eventIdOnly,
                                             defaultPayload: [
                                                 "aps": [

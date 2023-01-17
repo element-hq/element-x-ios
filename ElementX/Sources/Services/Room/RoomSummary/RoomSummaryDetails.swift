@@ -20,7 +20,7 @@ struct RoomSummaryDetails {
     let id: String
     let name: String
     let isDirect: Bool
-    let avatarURLString: String?
+    let avatarURL: URL?
     let lastMessage: AttributedString?
     let lastMessageTimestamp: Date?
     let unreadNotificationCount: UInt
