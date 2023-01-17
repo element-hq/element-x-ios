@@ -14,8 +14,7 @@ xcuserdata/
 /Packages
 xcuserdata/
 DerivedData/
-.swiftpm/config/registries.json
-.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+.swiftpm
 .netrc
 
 # fastlane
