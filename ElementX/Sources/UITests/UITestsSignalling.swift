@@ -39,6 +39,8 @@ enum UITestsSignalError: Error {
     case notConnected
     /// Attempted to receive multiple signals at once.
     case awaitingAnotherSignal
+    /// Receiving the next signal timed out.
+    case timeout
     /// A network error occurred.
     case nwError(NWError)
     /// An unexpected signal was received. This error isn't used internally.
@@ -123,6 +125,12 @@ enum UITestsSignalling {
         private let connection: NWConnection
         /// A continuation to call each time a signal is received.
         private var nextMessageContinuation: CheckedContinuation<UITestsSignal, Error>?
+        /// A task to handle the timeout when receiving a signal.
+        private var nextMessageTimeoutTask: Task<Void, Never>? {
+            didSet {
+                oldValue?.cancel()
+            }
+        }
         
         /// Creates a new signalling `Connection`.
         init() {
@@ -165,6 +173,7 @@ enum UITestsSignalling {
             if let nextMessageContinuation {
                 nextMessageContinuation.resume(throwing: UITestsSignalError.cancelled)
                 self.nextMessageContinuation = nil
+                self.nextMessageTimeoutTask = nil
             }
         }
         
@@ -182,6 +191,20 @@ enum UITestsSignalling {
             
             return try await withCheckedThrowingContinuation { continuation in
                 self.nextMessageContinuation = continuation
+                
+                // Add a 30 second timeout to stop tests from hanging
+                self.nextMessageTimeoutTask = Task { [weak self] in
+                    guard let self else { return }
+                    try? await Task.sleep(for: .seconds(30))
+                    
+                    guard !Task.isCancelled,
+                            let nextMessageContinuation = self.nextMessageContinuation
+                    else { return }
+                    
+                    nextMessageContinuation.resume(throwing: UITestsSignalError.timeout)
+                    self.nextMessageContinuation = nil
+                    self.nextMessageTimeoutTask = nil
+                }
             }
         }
         
@@ -198,12 +221,14 @@ enum UITestsSignalling {
                     let error: UITestsSignalError = error.map { .nwError($0) } ?? .unknown
                     self.nextMessageContinuation?.resume(with: .failure(error))
                     self.nextMessageContinuation = nil
+                    self.nextMessageTimeoutTask = nil
                     return
                 }
                 
                 if signal != .connect {
                     self.nextMessageContinuation?.resume(returning: signal)
                     self.nextMessageContinuation = nil
+                    self.nextMessageTimeoutTask = nil
                 }
                 
                 self.receiveNextMessage()
