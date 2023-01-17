@@ -46,6 +46,8 @@ extension TemplatePromptType: Identifiable, CaseIterable {
 enum TemplateViewModelAction {
     case accept
     case cancel
+    
+    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
 struct TemplateViewState: BindableState {
@@ -58,4 +60,6 @@ enum TemplateViewAction {
     case decrementCount
     case accept
     case cancel
+    
+    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }

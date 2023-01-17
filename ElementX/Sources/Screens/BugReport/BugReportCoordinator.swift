@@ -47,7 +47,7 @@ final class BugReportCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] result in
             guard let self else { return }
-            MXLog.debug("BugReportViewModel did complete with result: \(result).")
+            MXLog.info("BugReportViewModel did complete with result: \(result).")
             switch result {
             case .cancel:
                 self.completion?(.cancel)

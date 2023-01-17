@@ -31,21 +31,21 @@ private class SlidingSyncViewObserver: SlidingSyncViewRoomListObserver, SlidingS
     // MARK: - SlidingSyncViewRoomListObserver
     
     func didReceiveUpdate(diff: SlidingSyncViewRoomsListDiff) {
-        MXLog.verbose("Received room diff")
+        MXLog.info("Received room diff")
         roomListDiffPublisher.send(diff)
     }
     
     // MARK: - SlidingSyncViewStateObserver
     
     func didReceiveUpdate(newState: SlidingSyncState) {
-        MXLog.verbose("Updated state: \(newState)")
+        MXLog.info("Updated state: \(newState)")
         stateUpdatePublisher.send(newState)
     }
     
     // MARK: - SlidingSyncViewRoomsCountObserver
     
     func didReceiveUpdate(count: UInt32) {
-        MXLog.verbose("Updated room count: \(count)")
+        MXLog.info("Updated room count: \(count)")
         countUpdatePublisher.send(UInt(count))
     }
 }

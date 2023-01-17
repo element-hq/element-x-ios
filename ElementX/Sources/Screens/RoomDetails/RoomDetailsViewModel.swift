@@ -47,7 +47,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             case .success(let members):
                 self.members = members
             case .failure(let error):
-                MXLog.debug("Failed to retrieve room members: \(error)")
+                MXLog.error("Failed retrieving room members: \(error)")
                 state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
             }
         }

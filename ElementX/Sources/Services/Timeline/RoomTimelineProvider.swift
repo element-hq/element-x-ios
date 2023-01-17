@@ -53,7 +53,8 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             
             switch await roomProxy.addTimelineListener(listener: roomTimelineListener) {
             case .failure:
-                MXLog.error("Failed adding timeline listener on room with identifier: \(await roomProxy.id)")
+                let roomID = await roomProxy.id
+                MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
             default:
                 break
             }

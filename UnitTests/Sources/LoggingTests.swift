@@ -15,6 +15,7 @@
 //
 
 @testable import ElementX
+@testable import MatrixRustSDK
 import XCTest
 
 class LoggingTests: XCTestCase {
@@ -38,7 +39,7 @@ class LoggingTests: XCTestCase {
         let configuration = MXLogConfiguration()
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
-        MXLog.debug(log)
+        MXLog.info(log)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
@@ -58,7 +59,7 @@ class LoggingTests: XCTestCase {
             let configuration = MXLogConfiguration()
             configuration.redirectLogsToFiles = true
             MXLog.configure(configuration) // This call is only made at app launch.
-            MXLog.debug("Launch \(index + 1)")
+            MXLog.info("Launch \(index + 1)")
         }
         
         // Then 5 log files should be created each with the correct contents.
@@ -80,7 +81,7 @@ class LoggingTests: XCTestCase {
             configuration.maxLogFilesCount = UInt(logFileCount)
             configuration.redirectLogsToFiles = true
             MXLog.configure(configuration) // This call is only made at app launch.
-            MXLog.debug("Launch \(index + 1)")
+            MXLog.info("Launch \(index + 1)")
         }
         
         // Then only 5 log files should be stored on disk, with the contents of launches 6 to 10.
@@ -102,12 +103,12 @@ class LoggingTests: XCTestCase {
             configuration.logFilesSizeLimit = UInt(logFileSizeLimit)
             configuration.redirectLogsToFiles = true
             MXLog.configure(configuration) // This call is only made at app launch.
-            MXLog.debug("Launch \(index + 1)")
+            MXLog.info("Launch \(index + 1)")
             
             // Add ~5KB of logs
             for _ in 0..<5 {
                 let string = [String](repeating: "a", count: 1024).joined()
-                MXLog.debug(string)
+                MXLog.info(string)
             }
         }
         
@@ -145,7 +146,7 @@ class LoggingTests: XCTestCase {
         configuration.logLevel = .error
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
-        MXLog.debug(log)
+        MXLog.info(log)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
@@ -164,12 +165,172 @@ class LoggingTests: XCTestCase {
         configuration.subLogName = subLogName
         configuration.redirectLogsToFiles = true
         MXLog.configure(configuration)
-        MXLog.debug(UUID().uuidString)
+        MXLog.info(UUID().uuidString)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
 
         XCTAssertTrue(logFile.lastPathComponent.contains(subLogName))
+    }
+    
+    func testRoomSummaryContentIsRedacted() throws {
+        // Given a room summary that contains sensitive information
+        let roomName = "Private Conversation"
+        let lastMessage = "Secret information"
+        let roomSummary = RoomSummaryDetails(id: "myroomid",
+                                             name: roomName,
+                                             isDirect: true,
+                                             avatarURLString: nil,
+                                             lastMessage: AttributedString(lastMessage),
+                                             lastMessageTimestamp: .now,
+                                             unreadNotificationCount: 0)
+        
+        // When logging that value
+        XCTAssert(MXLogger.logFiles.isEmpty)
+        let configuration = MXLogConfiguration()
+        configuration.logLevel = .info
+        configuration.redirectLogsToFiles = true
+        MXLog.configure(configuration)
+        MXLog.info(roomSummary)
+        
+        // Then the log file should not include the sensitive information
+        guard let logFile = MXLogger.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+
+        let content = try String(contentsOf: logFile)
+        XCTAssertTrue(content.contains(roomSummary.id))
+        XCTAssertFalse(content.contains(roomName))
+        XCTAssertFalse(content.contains(lastMessage))
+    }
+    
+    // swiftlint:disable function_body_length
+    func testTimelineContentIsRedacted() throws {
+        // Given timeline items that contain text
+        let textAttributedString = "TextAttributed"
+        let textMessage = TextRoomTimelineItem(id: "mytextmessage", text: "TextString",
+                                               attributedComponents: [.init(attributedString: AttributedString(textAttributedString),
+                                                                            isBlockquote: false)],
+                                               timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, senderId: "sender")
+        let noticeAttributedString = "NoticeAttributed"
+        let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage", text: "NoticeString",
+                                                   attributedComponents: [.init(attributedString: AttributedString(noticeAttributedString),
+                                                                                isBlockquote: false)],
+                                                   timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, senderId: "sender")
+        let emoteAttributedString = "EmoteAttributed"
+        let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage", text: "EmoteString",
+                                                 attributedComponents: [.init(attributedString: AttributedString(emoteAttributedString),
+                                                                              isBlockquote: false)],
+                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, senderId: "sender")
+        let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", text: "ImageString",
+                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
+                                                 senderId: "sender", source: nil)
+        let videoMessage = VideoRoomTimelineItem(id: "myvideomessage", text: "VideoString",
+                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
+                                                 senderId: "sender", duration: 0, source: nil, thumbnailSource: nil)
+        let fileMessage = FileRoomTimelineItem(id: "myfilemessage", text: "FileString",
+                                               timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
+                                               senderId: "sender", source: nil, thumbnailSource: nil)
+        
+        // When logging that value
+        XCTAssert(MXLogger.logFiles.isEmpty)
+        let configuration = MXLogConfiguration()
+        configuration.logLevel = .info
+        configuration.redirectLogsToFiles = true
+        MXLog.configure(configuration)
+        MXLog.info(textMessage)
+        MXLog.info(noticeMessage)
+        MXLog.info(emoteMessage)
+        MXLog.info(imageMessage)
+        MXLog.info(videoMessage)
+        MXLog.info(fileMessage)
+        
+        // Then the log file should not include the text content
+        guard let logFile = MXLogger.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+
+        let content = try String(contentsOf: logFile)
+        XCTAssertTrue(content.contains(textMessage.id))
+        XCTAssertFalse(content.contains(textMessage.text))
+        XCTAssertFalse(content.contains(textAttributedString))
+        
+        XCTAssertTrue(content.contains(noticeMessage.id))
+        XCTAssertFalse(content.contains(noticeMessage.text))
+        XCTAssertFalse(content.contains(noticeAttributedString))
+        
+        XCTAssertTrue(content.contains(emoteMessage.id))
+        XCTAssertFalse(content.contains(emoteMessage.text))
+        XCTAssertFalse(content.contains(emoteAttributedString))
+        
+        XCTAssertTrue(content.contains(imageMessage.id))
+        XCTAssertFalse(content.contains(imageMessage.text))
+        
+        XCTAssertTrue(content.contains(videoMessage.id))
+        XCTAssertFalse(content.contains(videoMessage.text))
+        
+        XCTAssertTrue(content.contains(fileMessage.id))
+        XCTAssertFalse(content.contains(fileMessage.text))
+    }
+
+    // swiftlint:enable function_body_length
+    
+    func testRustMessageContentIsRedacted() throws {
+        // Given message content that contain text
+        let textString = "TextString"
+        let textMessage = TextMessageContent(body: "",
+                                             formatted: FormattedBody(format: .html, body: "<b>\(textString)</b>"))
+        let noticeString = "NoticeString"
+        let noticeMessage = NoticeMessageContent(body: noticeString,
+                                                 formatted: FormattedBody(format: .html, body: "<b>\(noticeString)</b>"))
+        let emoteString = "EmoteString"
+        let emoteMessage = EmoteMessageContent(body: emoteString,
+                                               formatted: FormattedBody(format: .html, body: "<b>\(emoteString)</b>"))
+        
+        let pointer = Unmanaged.passRetained(NSURL(fileURLWithPath: "/tmp/file")).toOpaque()
+        let imageMessage = ImageMessageContent(body: "ImageString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let videoMessage = VideoMessageContent(body: "VideoString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        let fileMessage = FileMessageContent(body: "FileString", source: MediaSource(unsafeFromRawPointer: pointer), info: nil)
+        
+        // When logging that value
+        XCTAssert(MXLogger.logFiles.isEmpty)
+        let configuration = MXLogConfiguration()
+        configuration.logLevel = .info
+        configuration.redirectLogsToFiles = true
+        MXLog.configure(configuration)
+        MXLog.info(textMessage)
+        MXLog.info(noticeMessage)
+        MXLog.info(emoteMessage)
+        MXLog.info(imageMessage)
+        MXLog.info(videoMessage)
+        MXLog.info(fileMessage)
+        
+        // Then the log file should not include the text content
+        guard let logFile = MXLogger.logFiles.first else {
+            XCTFail(Constants.genericFailure)
+            return
+        }
+
+        let content = try String(contentsOf: logFile)
+        XCTAssertTrue(content.contains(String(describing: TextMessageContent.self)))
+        XCTAssertFalse(content.contains(textString))
+        
+        XCTAssertTrue(content.contains(String(describing: NoticeMessageContent.self)))
+        XCTAssertFalse(content.contains(noticeString))
+        
+        XCTAssertTrue(content.contains(String(describing: EmoteMessageContent.self)))
+        XCTAssertFalse(content.contains(emoteString))
+        
+        XCTAssertTrue(content.contains(String(describing: ImageMessageContent.self)))
+        XCTAssertFalse(content.contains(imageMessage.body))
+        
+        XCTAssertTrue(content.contains(String(describing: VideoMessageContent.self)))
+        XCTAssertFalse(content.contains(videoMessage.body))
+        
+        XCTAssertTrue(content.contains(String(describing: FileMessageContent.self)))
+        XCTAssertFalse(content.contains(fileMessage.body))
     }
 }

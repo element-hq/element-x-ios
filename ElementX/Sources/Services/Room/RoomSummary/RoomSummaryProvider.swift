@@ -83,7 +83,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         MXLog.verbose("Updating \(identifiers.count) rooms")
         
         guard statePublisher.value == .live else {
-            MXLog.verbose("Sliding sync not live yet, ignoring.")
+            MXLog.warning("Sliding sync not live yet, ignoring update.")
             return
         }
         

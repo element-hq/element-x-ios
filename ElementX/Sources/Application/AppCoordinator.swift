@@ -27,7 +27,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     private var backgroundTask: BackgroundTaskProtocol?
     private var isSuspended = false {
         didSet {
-            MXLog.debug("didSet to: \(isSuspended)")
+            MXLog.info("didSet to: \(isSuspended)")
         }
     }
     
@@ -320,7 +320,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                     }
                     .store(in: &cancellables)
             } else {
-                MXLog.debug("Couldn't register to AppDelegate callbacks")
+                MXLog.error("Couldn't register to AppDelegate callbacks")
             }
         }
     }
@@ -457,7 +457,7 @@ extension AppCoordinator: NotificationManagerDelegate {
     }
 
     func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
-        MXLog.debug("[AppCoordinator] tappedNotification")
+        MXLog.info("[AppCoordinator] tappedNotification")
 
         guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
             return
@@ -467,7 +467,7 @@ extension AppCoordinator: NotificationManagerDelegate {
     }
 
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
-        MXLog.debug("[AppCoordinator] handle notification reply")
+        MXLog.info("[AppCoordinator] handle notification reply")
 
         guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
             return

@@ -36,13 +36,11 @@ struct TracingConfiguration {
                                            ])
     
     enum Target: String {
-        case hyper, sled, matrix_sdk_sled, matrix_sdk_ffi
+        case hyper, sled, matrix_sdk_sled, matrix_sdk_ffi, matrix_sdk_crypto
         case matrix_sdk_http_client = "matrix_sdk::http_client"
         case matrix_sdk_ffi_uniffi_api = "matrix_sdk_ffi::uniffi_api"
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
-        case matrix_sdk_crypto
-        case matrix_sdk_crypto_sync = "matrix_sdk_crypto::machine[receive_sync_changes]"
     }
     
     enum LogLevel: String { case error, warn, info, debug, trace }
@@ -52,8 +50,7 @@ struct TracingConfiguration {
         .hyper: .warn,
         .sled: .warn,
         .matrix_sdk_sled: .warn,
-        .matrix_sdk_crypto: .debug,
-        .matrix_sdk_crypto_sync: .trace
+        .matrix_sdk_crypto: .debug
     ]
     
     var filter: String {

@@ -102,6 +102,6 @@ class NSELogger {
     }
 
     static func logMemory(with tag: String) {
-        MXLog.debug("\(tag) Memory: footprint: \(formattedMemoryFootprint) - available: \(formattedMemoryAvailable)")
+        MXLog.info("\(tag) Memory: footprint: \(formattedMemoryFootprint) - available: \(formattedMemoryAvailable)")
     }
 }

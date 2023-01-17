@@ -70,7 +70,7 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] result in
             guard let self else { return }
-            MXLog.debug("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(result).")
+            MXLog.info("[SoftLogoutCoordinator] SoftLogoutViewModel did complete with result: \(result).")
 
             switch result {
             case .login(let password):
@@ -112,8 +112,6 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
 
     /// Shows the forgot password screen.
     @MainActor private func showForgotPasswordScreen() {
-        MXLog.debug("[SoftLogoutCoordinator] showForgotPasswordScreen")
-
         viewModel.displayError(.alert("Not implemented."))
     }
 

@@ -42,7 +42,7 @@ final class FilePreviewCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("FilePreviewViewModel did complete with result: \(action).")
+            
             switch action {
             case .cancel:
                 self.callback?(.cancel)

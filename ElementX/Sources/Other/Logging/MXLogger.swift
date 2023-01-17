@@ -54,10 +54,10 @@ class MXLogger {
             let nsLogURL = logURL(for: "console\(subLogName).log")
             freopen((nsLogURL as NSURL).fileSystemRepresentation, "w+", stderr)
 
-            MXLog.debug("redirectNSLogToFiles: true")
+            MXLog.info("redirectNSLogToFiles: true")
             if !tempLog.isEmpty {
                 // We can now log into files
-                MXLog.debug(tempLog)
+                MXLog.info(tempLog)
             }
             
             removeExtraFiles(from: numberOfFiles)
@@ -138,7 +138,7 @@ class MXLogger {
             }
         }
         
-        MXLog.debug("logFiles: \(logFiles)")
+        MXLog.info("logFiles: \(logFiles)")
         
         return logFiles
     }
@@ -282,7 +282,7 @@ class MXLogger {
             
             if fileManager.fileExists(atPath: logFile.path()) {
                 try? fileManager.removeItem(at: logFile)
-                MXLog.debug("removeExtraFilesFromCount: \(count). removeItemAt: \(logFile)\n")
+                MXLog.info("removeExtraFilesFromCount: \(count). removeItemAt: \(logFile)\n")
             } else {
                 break
             }
@@ -318,10 +318,10 @@ class MXLogger {
         let sizeLimitString = sizeLimit.formatted(.byteCount(style: .binary))
         
         if let indexExceedingSizeLimit {
-            MXLog.debug("removeFilesAfterSizeLimit: Remove files from index \(indexExceedingSizeLimit) because logs are too large (\(logSizeString) for a limit of \(sizeLimitString)\n")
+            MXLog.info("removeFilesAfterSizeLimit: Remove files from index \(indexExceedingSizeLimit) because logs are too large (\(logSizeString) for a limit of \(sizeLimitString)\n")
             removeExtraFiles(from: UInt(indexExceedingSizeLimit))
         } else {
-            MXLog.debug("removeFilesAfterSizeLimit: No need: \(logSizeString) for a limit of \(sizeLimitString)\n")
+            MXLog.info("removeFilesAfterSizeLimit: No need: \(logSizeString) for a limit of \(sizeLimitString)\n")
         }
     }
 }

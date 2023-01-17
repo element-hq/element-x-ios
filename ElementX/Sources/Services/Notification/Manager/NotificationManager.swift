@@ -49,12 +49,12 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         Task {
             do {
                 let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
-                MXLog.debug("[NotificationManager] permission granted: \(granted)")
+                MXLog.info("[NotificationManager] permission granted: \(granted)")
                 await MainActor.run {
                     self.delegate?.authorizationStatusUpdated(self, granted: granted)
                 }
             } catch {
-                MXLog.debug("[NotificationManager] request authorization failed: \(error)")
+                MXLog.error("[NotificationManager] request authorization failed: \(error)")
             }
         }
     }
@@ -76,9 +76,9 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                             trigger: nil)
         do {
             try await notificationCenter.add(request)
-            MXLog.debug("[NotificationManager] show local notification succeeded")
+            MXLog.info("[NotificationManager] show local notification succeeded")
         } catch {
-            MXLog.debug("[NotificationManager] show local notification failed: \(error)")
+            MXLog.error("[NotificationManager] show local notification failed: \(error)")
         }
     }
     
@@ -102,10 +102,10 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                     ]
                                                 ]
                                             ])
-            MXLog.debug("[NotificationManager] set pusher succeeded")
+            MXLog.info("[NotificationManager] set pusher succeeded")
             return true
         } catch {
-            MXLog.debug("[NotificationManager] set pusher failed: \(error)")
+            MXLog.error("[NotificationManager] set pusher failed: \(error)")
             return false
         }
     }

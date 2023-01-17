@@ -40,10 +40,10 @@ final class SettingsCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = SettingsViewModel(withUserSession: parameters.userSession)
-        viewModel.callback = { [weak self] result in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("SettingsViewModel did complete with result: \(result).")
-            switch result {
+            
+            switch action {
             case .close:
                 self.callback?(.dismiss)
             case .toggleAnalytics:

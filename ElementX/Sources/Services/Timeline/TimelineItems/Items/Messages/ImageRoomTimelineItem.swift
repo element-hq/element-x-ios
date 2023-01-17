@@ -14,13 +14,11 @@
 // limitations under the License.
 //
 
-import Foundation
 import UIKit
 
-struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
@@ -30,5 +28,22 @@ struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     var senderDisplayName: String?
     var senderAvatar: UIImage?
     
+    let source: MediaSourceProxy?
+    var image: UIImage?
+    var cachedFileURL: URL?
+    
+    var width: CGFloat?
+    var height: CGFloat?
+    var aspectRatio: CGFloat?
+    var blurhash: String?
+    
     var properties = RoomTimelineItemProperties()
+}
+
+// MARK: - Redact content from logs
+
+extension ImageRoomTimelineItem: CustomStringConvertible {
+    var description: String {
+        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
+    }
 }

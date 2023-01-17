@@ -49,7 +49,6 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("ServerSelectionViewModel did callback with action: \(action).")
             
             switch action {
             case .confirm(let homeserverAddress):
@@ -87,9 +86,11 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
         Task {
             switch await authenticationService.configure(for: homeserverAddress) {
             case .success:
+                MXLog.info("Selected homeserver: \(homeserverAddress)")
                 callback?(.updated)
                 stopLoading()
             case .failure(let error):
+                MXLog.info("Invalid homeserver: \(homeserverAddress)")
                 stopLoading()
                 handleError(error)
             }

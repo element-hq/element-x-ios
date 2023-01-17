@@ -63,7 +63,6 @@ final class LoginCoordinator: CoordinatorProtocol {
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
-            MXLog.debug("LoginViewModel did callback with result: \(action).")
             
             switch action {
             case .selectServer:
@@ -118,6 +117,8 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Processes an error to either update the flow or display it to the user.
     private func handleError(_ error: AuthenticationServiceError) {
+        MXLog.info("Error occurred: \(error)")
+        
         switch error {
         case .invalidCredentials:
             viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
@@ -150,6 +151,7 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Requests the authentication coordinator to log in using the specified credentials.
     private func login(username: String, password: String) {
+        MXLog.info("Starting login with password.")
         startLoading(isInteractionBlocking: true)
         
         Task {

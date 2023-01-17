@@ -19,7 +19,8 @@ import Foundation
 import MatrixRustSDK
 
 /// A protocol that contains the base `m.room.message` event content properties.
-protocol MessageContentProtocol: RoomMessageEventContentProtocol {
+/// The `CustomStringConvertible` conformance is to redact specific properties from the logs.
+protocol MessageContentProtocol: RoomMessageEventContentProtocol, CustomStringConvertible {
     var body: String { get }
 }
 

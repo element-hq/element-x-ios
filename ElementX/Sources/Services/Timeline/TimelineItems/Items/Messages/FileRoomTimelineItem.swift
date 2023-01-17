@@ -14,7 +14,6 @@
 // limitations under the License.
 //
 
-import Foundation
 import UIKit
 
 struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
@@ -34,4 +33,12 @@ struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hasha
     var cachedFileURL: URL?
     
     var properties = RoomTimelineItemProperties()
+}
+
+// MARK: - Redact content from logs
+
+extension FileRoomTimelineItem: CustomStringConvertible {
+    var description: String {
+        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
+    }
 }

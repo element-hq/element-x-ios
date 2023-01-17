@@ -51,8 +51,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         NSELogger.logMemory(with: tag)
 
-        MXLog.debug("\(tag) #########################################")
-        MXLog.debug("\(tag) Payload came: \(request.content.userInfo)")
+        MXLog.info("\(tag) #########################################")
+        MXLog.info("\(tag) Payload came: \(request.content.userInfo)")
 
         Task {
             try await run(with: credentials,
@@ -64,21 +64,21 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
         // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
-        MXLog.debug("\(tag) serviceExtensionTimeWillExpire")
+        MXLog.warning("\(tag) serviceExtensionTimeWillExpire")
         notify()
     }
 
     private func run(with credentials: KeychainCredentials,
                      roomId: String,
                      eventId: String) async throws {
-        MXLog.debug("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
+        MXLog.info("\(tag) run with roomId: \(roomId), eventId: \(eventId)")
 
         let service = NotificationServiceProxy(basePath: URL.sessionsBaseDirectory.path,
                                                userId: credentials.userID)
 
         guard let itemProxy = try await service.notificationItem(roomId: roomId,
                                                                  eventId: eventId) else {
-            MXLog.debug("\(tag) got no notification item")
+            MXLog.error("\(tag) got no notification item")
 
             // Notification should be discarded
             return discard()
@@ -88,7 +88,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         // After this some properties of the notification should be set, like title, subtitle, sound etc.
         guard let firstContent = try await itemProxy.process(with: roomId,
                                                              mediaProvider: nil) else {
-            MXLog.debug("\(tag) not even first content")
+            MXLog.error("\(tag) not even first content")
 
             // Notification should be discarded
             return discard()
@@ -98,13 +98,13 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         modifiedContent = firstContent
 
         guard itemProxy.requiresMediaProvider else {
-            MXLog.debug("\(tag) no media needed")
+            MXLog.info("\(tag) no media needed")
 
             // We've processed the item and no media operations needed, so no need to go further
             return notify()
         }
 
-        MXLog.debug("\(tag) process with media")
+        MXLog.info("\(tag) process with media")
 
         // There is some media to load, process it again
         if let latestContent = try await itemProxy.process(with: roomId,
@@ -126,7 +126,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         let client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
 
-        MXLog.debug("\(tag) creating media provider")
+        MXLog.info("\(tag) creating media provider")
 
         return MediaProvider(mediaProxy: MediaProxy(client: client),
                              imageCache: .onlyOnDisk,
@@ -135,10 +135,10 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
 
     private func notify() {
-        MXLog.debug("\(tag) notify")
+        MXLog.info("\(tag) notify")
 
         guard let modifiedContent else {
-            MXLog.debug("\(tag) notify: no modified content")
+            MXLog.info("\(tag) notify: no modified content")
             return
         }
         handler?(modifiedContent)
@@ -147,7 +147,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     }
 
     private func discard() {
-        MXLog.debug("\(tag) discard")
+        MXLog.info("\(tag) discard")
 
         handler?(UNMutableNotificationContent())
         handler = nil
@@ -160,6 +160,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
     deinit {
         NSELogger.logMemory(with: tag)
-        MXLog.debug("\(tag) deinit")
+        MXLog.info("\(tag) deinit")
     }
 }
