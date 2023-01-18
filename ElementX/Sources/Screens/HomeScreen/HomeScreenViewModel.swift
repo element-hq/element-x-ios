@@ -35,7 +35,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder

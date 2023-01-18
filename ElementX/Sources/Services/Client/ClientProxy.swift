@@ -336,23 +336,19 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    private lazy var slidingSyncRequiredState: [RequiredState] = {
-        [RequiredState(key: "m.room.avatar", value: ""),
-         RequiredState(key: "m.room.encryption", value: "")]
-    }()
+    private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
+                                                 RequiredState(key: "m.room.encryption", value: "")]
     
-    private lazy var slidingSyncFilters: SlidingSyncRequestListFilters = {
-        SlidingSyncRequestListFilters(isDm: nil,
-                                      spaces: [],
-                                      isEncrypted: nil,
-                                      isInvite: false,
-                                      isTombstoned: false,
-                                      roomTypes: [],
-                                      notRoomTypes: ["m.space"],
-                                      roomNameLike: nil,
-                                      tags: [],
-                                      notTags: [])
-    }()
+    private lazy var slidingSyncFilters = SlidingSyncRequestListFilters(isDm: nil,
+                                                                        spaces: [],
+                                                                        isEncrypted: nil,
+                                                                        isInvite: false,
+                                                                        isTombstoned: false,
+                                                                        roomTypes: [],
+                                                                        notRoomTypes: ["m.space"],
+                                                                        roomNameLike: nil,
+                                                                        tags: [],
+                                                                        notTags: [])
     
     private func registerAllRoomSlidingSyncView() {
         guard let allRoomsSlidingSyncView else {
