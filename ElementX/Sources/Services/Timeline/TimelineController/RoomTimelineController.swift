@@ -86,6 +86,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         if let item = timelineItem as? EventBasedTimelineItemProtocol {
             await loadUserAvatarForTimelineItem(item)
+            await loadUserDisplayNameForTimelineItem(item)
         }
                 
         switch timelineItem {
@@ -511,6 +512,28 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
             
             item.senderAvatar = avatar
+            timelineItems[index] = item
+            callbacks.send(.updatedTimelineItem(timelineItem.id))
+        case .failure:
+            break
+        }
+    }
+    
+    #warning("This is here because sender profiles aren't working properly. Remove it entirely later")
+    private func loadUserDisplayNameForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
+        if timelineItem.shouldShowSenderDetails == false || timelineItem.senderDisplayName != nil {
+            return
+        }
+        
+        switch await roomProxy.loadDisplayNameForUserId(timelineItem.senderId) {
+        case .success(let displayName):
+            guard let displayName,
+                  let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
+                return
+            }
+            
+            item.senderDisplayName = displayName
             timelineItems[index] = item
             callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:
