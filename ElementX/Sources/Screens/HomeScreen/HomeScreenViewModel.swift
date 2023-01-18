@@ -205,7 +205,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     if case let .invalidated(details) = summary {
-                        rooms.append(buildRoom(with: details, invalidated: false))
+                        rooms.append(buildRoom(with: details))
                     } else {
                         rooms.append(HomeScreenRoom.placeholder())
                     }
@@ -216,18 +216,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .empty:
                     rooms.append(HomeScreenRoom.placeholder())
                 case .filled(let details), .invalidated(let details):
-                    let room = buildRoom(with: details, invalidated: true)
-                    rooms.append(room)
+                    rooms.append(buildRoom(with: details))
                 }
             case .filled(let details):
-                rooms.append(buildRoom(with: details, invalidated: false))
+                rooms.append(buildRoom(with: details))
             }
         }
         
         state.rooms = rooms
     }
     
-    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
+    private func buildRoom(with details: RoomSummaryDetails) -> HomeScreenRoom {
         let avatarImage = details.avatarURL.flatMap { userSession.mediaProvider.imageFromURL($0, avatarSize: .room(on: .home)) }
         
         var timestamp: String?
@@ -235,8 +234,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
         }
         
-        let identifier = invalidated ? "invalidated-" + details.id : details.id
-        return HomeScreenRoom(id: identifier,
+        return HomeScreenRoom(id: details.id,
                               roomId: details.id,
                               name: details.name,
                               hasUnreads: details.unreadNotificationCount > 0,
