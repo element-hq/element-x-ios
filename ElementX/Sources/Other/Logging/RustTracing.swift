@@ -42,7 +42,6 @@ struct TracingConfiguration {
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
         case matrix_sdk_crypto
-        case matrix_sdk_crypto_sync = "matrix_sdk_crypto::machine[receive_sync_changes]"
     }
     
     enum LogLevel: String { case error, warn, info, debug, trace }
@@ -53,7 +52,6 @@ struct TracingConfiguration {
         .sled: .warn,
         .matrix_sdk_sled: .warn,
         .matrix_sdk_crypto: .debug,
-        .matrix_sdk_crypto_sync: .trace,
         .matrix_sdk_http_client: .debug
     ]
     
