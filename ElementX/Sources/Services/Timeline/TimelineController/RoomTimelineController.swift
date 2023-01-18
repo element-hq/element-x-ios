@@ -95,7 +95,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case let item as VideoRoomTimelineItem:
             await loadThumbnailForVideoTimelineItem(item)
         case let item as StickerRoomTimelineItem:
-            await loadThumbnailForStickerTimelineItem(item)
+            await loadImageForStickerTimelineItem(item)
         default:
             break
         }
@@ -372,16 +372,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    private func loadThumbnailForStickerTimelineItem(_ timelineItem: StickerRoomTimelineItem) async {
+    private func loadImageForStickerTimelineItem(_ timelineItem: StickerRoomTimelineItem) async {
         if timelineItem.image != nil {
             return
         }
         
-        guard let urlString = timelineItem.urlString else {
+        guard let url = timelineItem.imageURL else {
             return
         }
         
-        switch await mediaProvider.loadImageFromURLString(urlString) {
+        switch await mediaProvider.loadImageFromURL(url) {
         case .success(let image):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
                   var item = timelineItems[index] as? StickerRoomTimelineItem else {
@@ -498,41 +498,34 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     }
     
     private func loadUserAvatarForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
-        if timelineItem.shouldShowSenderDetails == false || timelineItem.senderAvatar != nil {
+        guard timelineItem.shouldShowSenderDetails,
+              let avatarURL = timelineItem.sender.avatarURL,
+              timelineItem.sender.avatar == nil else {
             return
         }
         
-        switch await roomProxy.loadAvatarURLForUserId(timelineItem.senderId) {
-        case .success(let avatarURLString):
-            guard let avatarURLString else {
+        switch await mediaProvider.loadImageFromURL(avatarURL, avatarSize: .user(on: .timeline)) {
+        case .success(let avatar):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
                 return
             }
             
-            switch await mediaProvider.loadImageFromURLString(avatarURLString, avatarSize: .user(on: .timeline)) {
-            case .success(let avatar):
-                guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                      var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
-                    return
-                }
-                
-                item.senderAvatar = avatar
-                timelineItems[index] = item
-                callbacks.send(.updatedTimelineItem(timelineItem.id))
-            case .failure:
-                break
-            }
-            
+            item.sender.avatar = avatar
+            timelineItems[index] = item
+            callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:
             break
         }
     }
     
+    #warning("This is here because sender profiles aren't working properly. Remove it entirely later")
     private func loadUserDisplayNameForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
-        if timelineItem.shouldShowSenderDetails == false || timelineItem.senderDisplayName != nil {
+        if timelineItem.shouldShowSenderDetails == false || timelineItem.sender.displayName != nil {
             return
         }
         
-        switch await roomProxy.loadDisplayNameForUserId(timelineItem.senderId) {
+        switch await roomProxy.loadDisplayNameForUserId(timelineItem.sender.id) {
         case .success(let displayName):
             guard let displayName,
                   let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
@@ -540,7 +533,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
             
-            item.senderDisplayName = displayName
+            item.sender.displayName = displayName
             timelineItems[index] = item
             callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:

@@ -57,7 +57,7 @@ class MockClientProxy: ClientProxyProtocol {
         .success("User display name")
     }
     
-    func loadUserAvatarURLString() async -> Result<String, ClientProxyError> {
+    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
         .failure(.failedRetrievingAvatarURL)
     }
     
@@ -69,8 +69,8 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedSettingAccountData)
     }
     
-    func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
-        .init(urlString: urlString)
+    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
+        .init(url: url)
     }
     
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
@@ -103,7 +103,7 @@ class MockClientProxy: ClientProxyProtocol {
     var setPusherDeviceDisplayName: String?
     var setPusherProfileTag: String?
     var setPusherLang: String?
-    var setPusherUrl: String?
+    var setPusherUrl: URL?
     var setPusherFormat: PushFormat?
     var setPusherDefaultPayload: [AnyHashable: Any]?
     // swiftlint:disable:next function_parameter_count
@@ -114,7 +114,7 @@ class MockClientProxy: ClientProxyProtocol {
                    deviceDisplayName: String,
                    profileTag: String?,
                    lang: String,
-                   url: String?,
+                   url: URL?,
                    format: PushFormat?,
                    defaultPayload: [AnyHashable: Any]?) async throws {
         if let setPusherErrorToThrow { throw setPusherErrorToThrow }

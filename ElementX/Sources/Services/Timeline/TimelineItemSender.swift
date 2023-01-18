@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,11 +14,14 @@
 // limitations under the License.
 //
 
-import Foundation
+import UIKit
 
-protocol RoomMessageProtocol {
-    var id: String { get }
-    var body: String { get }
-    var sender: String { get }
-    var timestamp: Date { get }
+#warning("This could be replaced by RoomMemberProxy if Rust includes a RoomMember.")
+struct TimelineItemSender: Identifiable, Hashable {
+    let id: String
+    
+    // Lazy loaded properties, displayName and avatarURL will be come lets.
+    var displayName: String?
+    var avatarURL: URL?
+    var avatar: UIImage?
 }

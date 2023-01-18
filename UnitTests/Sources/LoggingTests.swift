@@ -181,7 +181,7 @@ class LoggingTests: XCTestCase {
         let roomSummary = RoomSummaryDetails(id: "myroomid",
                                              name: roomName,
                                              isDirect: true,
-                                             avatarURLString: nil,
+                                             avatarURL: nil,
                                              lastMessage: AttributedString(lastMessage),
                                              lastMessageTimestamp: .now,
                                              unreadNotificationCount: 0)
@@ -213,26 +213,26 @@ class LoggingTests: XCTestCase {
         let textMessage = TextRoomTimelineItem(id: "mytextmessage", text: "TextString",
                                                attributedComponents: [.init(attributedString: AttributedString(textAttributedString),
                                                                             isBlockquote: false)],
-                                               timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, senderId: "sender")
+                                               timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let noticeAttributedString = "NoticeAttributed"
         let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage", text: "NoticeString",
                                                    attributedComponents: [.init(attributedString: AttributedString(noticeAttributedString),
                                                                                 isBlockquote: false)],
-                                                   timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, senderId: "sender")
+                                                   timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let emoteAttributedString = "EmoteAttributed"
         let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage", text: "EmoteString",
                                                  attributedComponents: [.init(attributedString: AttributedString(emoteAttributedString),
                                                                               isBlockquote: false)],
-                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, senderId: "sender")
+                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", text: "ImageString",
                                                  timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
-                                                 senderId: "sender", source: nil)
+                                                 sender: .init(id: "sender"), source: nil)
         let videoMessage = VideoRoomTimelineItem(id: "myvideomessage", text: "VideoString",
                                                  timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
-                                                 senderId: "sender", duration: 0, source: nil, thumbnailSource: nil)
+                                                 sender: .init(id: "sender"), duration: 0, source: nil, thumbnailSource: nil)
         let fileMessage = FileRoomTimelineItem(id: "myfilemessage", text: "FileString",
                                                timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
-                                               senderId: "sender", source: nil, thumbnailSource: nil)
+                                               sender: .init(id: "sender"), source: nil, thumbnailSource: nil)
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)

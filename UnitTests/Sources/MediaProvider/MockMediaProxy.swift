@@ -24,8 +24,8 @@ class MockMediaProxy: MediaProxyProtocol {
     var mediaContentData: Data?
     var mediaThumbnailData: Data?
     
-    func mediaSourceForURLString(_ urlString: String) -> MediaSourceProxy {
-        MediaSourceProxy(urlString: "test")
+    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
+        MediaSourceProxy(url: URL.picturesDirectory)
     }
     
     func loadMediaContentForSource(_ source: ElementX.MediaSourceProxy) async throws -> Data {

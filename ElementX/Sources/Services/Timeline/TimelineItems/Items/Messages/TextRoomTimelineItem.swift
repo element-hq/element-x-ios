@@ -25,9 +25,7 @@ struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hasha
     let isOutgoing: Bool
     let isEditable: Bool
     
-    let senderId: String
-    var senderDisplayName: String?
-    var senderAvatar: UIImage?
+    var sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
 }

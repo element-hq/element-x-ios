@@ -40,7 +40,7 @@ struct NotificationItemProxy {
 //        notificationItem.isNoisy
 //    }
 //
-//    var avatarUrl: String? {
+//    var avatarURL: URL? {
 //        notificationItem.avatarUrl
 //    }
 //
@@ -63,7 +63,7 @@ struct NotificationItemProxy {
         true
     }
 
-    var avatarUrl: String? {
+    var avatarURL: URL? {
         nil
     }
 

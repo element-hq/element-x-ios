@@ -35,10 +35,10 @@ protocol UserSessionStoreProtocol {
     var baseDirectory: URL { get }
     
     /// Restores an existing user session.
-    func restoreUserSession() async -> Result<UserSession, UserSessionStoreError>
+    func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError>
     
     /// Creates a user session for a new client from the SDK.
-    func userSession(for client: Client) async -> Result<UserSession, UserSessionStoreError>
+    func userSession(for client: Client) async -> Result<UserSessionProtocol, UserSessionStoreError>
 
     /// Refresh the restore token of the client for a given session.
     func refreshRestorationToken(for userSession: UserSessionProtocol) -> Result<Void, UserSessionStoreError>

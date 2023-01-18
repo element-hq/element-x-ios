@@ -28,17 +28,17 @@ protocol MediaProviderProtocol {
     
     @discardableResult func loadImageFromSource(_ source: MediaSourceProxy, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
     
-    func imageFromURLString(_ urlString: String?, avatarSize: AvatarSize?) -> UIImage?
+    func imageFromURL(_ url: URL?, avatarSize: AvatarSize?) -> UIImage?
     
-    @discardableResult func loadImageFromURLString(_ urlString: String, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromURL(_ url: URL, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
 
     func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL?
 
     @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError>
 
-    func fileFromURLString(_ urlString: String?, fileExtension: String) -> URL?
+    func fileFromURL(_ url: URL?, fileExtension: String) -> URL?
 
-    @discardableResult func loadFileFromURLString(_ urlString: String, fileExtension: String) async -> Result<URL, MediaProviderError>
+    @discardableResult func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError>
 }
 
 extension MediaProviderProtocol {
@@ -50,11 +50,11 @@ extension MediaProviderProtocol {
         await loadImageFromSource(source, avatarSize: nil)
     }
     
-    func imageFromURLString(_ urlString: String?) -> UIImage? {
-        imageFromURLString(urlString, avatarSize: nil)
+    func imageFromURL(_ url: URL?) -> UIImage? {
+        imageFromURL(url, avatarSize: nil)
     }
     
-    @discardableResult func loadImageFromURLString(_ urlString: String) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromURLString(urlString, avatarSize: nil)
+    @discardableResult func loadImageFromURL(_ url: URL) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromURL(url, avatarSize: nil)
     }
 }

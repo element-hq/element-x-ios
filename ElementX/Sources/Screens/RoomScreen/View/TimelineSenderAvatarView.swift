@@ -24,14 +24,14 @@ struct TimelineSenderAvatarView: View {
 
     var body: some View {
         ZStack(alignment: .center) {
-            if let avatar = timelineItem.senderAvatar {
+            if let avatar = timelineItem.sender.avatar {
                 Image(uiImage: avatar)
                     .resizable()
                     .scaledToFill()
                     .overlay(Circle().stroke(Color.element.accent))
             } else {
-                PlaceholderAvatarImage(text: timelineItem.senderDisplayName ?? timelineItem.senderId,
-                                       contentId: timelineItem.senderId)
+                PlaceholderAvatarImage(text: timelineItem.sender.displayName ?? timelineItem.sender.id,
+                                       contentId: timelineItem.sender.id)
             }
         }
         .clipShape(Circle())
@@ -41,6 +41,6 @@ struct TimelineSenderAvatarView: View {
                 .stroke(Color.element.background, lineWidth: 3)
         )
 
-        .animation(.elementDefault, value: timelineItem.senderAvatar)
+        .animation(.elementDefault, value: timelineItem.sender.avatar)
     }
 }

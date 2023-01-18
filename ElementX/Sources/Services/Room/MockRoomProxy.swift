@@ -23,7 +23,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     let name: String? = nil
     let displayName: String?
     var topic: String?
-    var avatarURL: String?
+    var avatarURL: URL?
     var isDirect = Bool.random()
     var isSpace = Bool.random()
     var isPublic = Bool.random()
@@ -37,11 +37,11 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.failedRetrievingMemberDisplayName)
     }
     
-    func avatarURLStringForUserId(_ userId: String) -> String? {
+    func avatarURLForUserId(_ userId: String) -> URL? {
         nil
     }
     
-    func loadAvatarURLForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
+    func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         .failure(.failedRetrievingMemberAvatarURL)
     }
     

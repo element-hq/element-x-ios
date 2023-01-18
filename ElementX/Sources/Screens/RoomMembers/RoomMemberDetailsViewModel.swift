@@ -46,15 +46,14 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
             return
         }
         if member.avatar != nil {
-            // already loaded
+            // Avatar already loaded.
             return
         }
-        guard let avatarUrl = member.avatarUrl else {
-            // user has no avatar
+        guard let avatarURL = member.avatarURL else {
             return
         }
 
-        switch await mediaProvider.loadImageFromURLString(avatarUrl, avatarSize: .user(on: .roomDetails)) {
+        switch await mediaProvider.loadImageFromURL(avatarURL, avatarSize: .user(on: .roomDetails)) {
         case .success(let image):
             if let index = state.members.firstIndex(where: { $0.id == memberId }) {
                 state.members[index].avatar = image

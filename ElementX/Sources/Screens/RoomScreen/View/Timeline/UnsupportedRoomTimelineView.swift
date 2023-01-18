@@ -69,6 +69,6 @@ struct UnsupportedRoomTimelineView_Previews: PreviewProvider {
                                     groupState: .single,
                                     isOutgoing: isOutgoing,
                                     isEditable: false,
-                                    senderId: senderId)
+                                    sender: .init(id: senderId))
     }
 }

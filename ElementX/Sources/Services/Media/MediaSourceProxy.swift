@@ -24,12 +24,13 @@ struct MediaSourceProxy: Hashable {
         underlyingSource = source
     }
     
-    init(urlString: String) {
-        underlyingSource = mediaSourceFromUrl(url: urlString)
+    init(url: URL) {
+        underlyingSource = mediaSourceFromUrl(url: url.absoluteString)
     }
 
-    var url: String {
-        underlyingSource.url()
+    var url: URL! {
+        // Expecting these to always be valid URLs
+        URL(string: underlyingSource.url())
     }
 }
 

@@ -26,7 +26,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore
-        authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path)
+        authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path, passphrase: nil)
     }
     
     // MARK: - Public
