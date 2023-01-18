@@ -250,7 +250,19 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.settings.slidingSyncProxyBaseURLString)
             
+            // Build the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
+            // We will still register the allRoomsSlidingSyncView later, and than will have no cache
+            let visibleRoomsView = try SlidingSyncViewBuilder()
+                .timelineLimit(limit: 20)
+                .requiredState(requiredState: slidingSyncRequiredState)
+                .filters(filters: slidingSyncFilters)
+                .name(name: "CurrentlyVisibleRooms")
+                .syncMode(mode: .selective)
+                .addRange(from: 0, to: 20)
+                .build()
+            
             let slidingSync = try slidingSyncBuilder
+                .addView(v: visibleRoomsView)
                 .withCommonExtensions()
                 .coldCache(name: "ElementX")
                 .build()
@@ -259,86 +271,77 @@ class ClientProxy: ClientProxyProtocol {
             
             self.slidingSync = slidingSync
             
-            configureSlidingSyncViews(slidingSync: slidingSync)
-            
-            guard let visibleRoomsSlidingSyncView else {
-                MXLog.error("Visible rooms sliding sync view unavailable")
-                return
-            }
-            
-            registerSlidingSyncView(visibleRoomsSlidingSyncView)
-            
+            buildAndConfigureVisibleRoomsSlidingSyncView(slidingSync: slidingSync, visibleRoomsView: visibleRoomsView)
+            buildAndConfigureAllRoomsSlidingSyncView(slidingSync: slidingSync)
         } catch {
             MXLog.error("Failed building sliding sync with error: \(error)")
         }
     }
     
-    // swiftlint:disable:next function_body_length
-    private func configureSlidingSyncViews(slidingSync: SlidingSyncProtocol) {
-        guard visibleRoomsSlidingSyncView == nil,
-              allRoomsSlidingSyncView == nil else {
+    private func buildAndConfigureVisibleRoomsSlidingSyncView(slidingSync: SlidingSyncProtocol, visibleRoomsView: SlidingSyncView) {
+        let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: visibleRoomsView)
+        
+        visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy)
+        
+        visibleRoomsSlidingSyncView = visibleRoomsView
+        
+        // Changes to the visibleRoomsSlidingSyncView range need to restart the connection to be applied
+        visibleRoomsViewProxy.visibleRangeUpdatePublisher.sink { [weak self] in
+            self?.restartSync()
+        }
+        .store(in: &cancellables)
+        
+        // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
+        visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.diffPublisher.sink { [weak self] _ in
+            self?.registerAllRoomSlidingSyncView()
+            self?.visibleRoomsViewProxyStateObservationToken = nil
+        }
+    }
+    
+    private func buildAndConfigureAllRoomsSlidingSyncView(slidingSync: SlidingSyncProtocol) {
+        guard allRoomsSlidingSyncView == nil else {
             fatalError("This shouldn't be called more than once")
         }
         
-        let requiredState = [RequiredState(key: "m.room.avatar", value: ""),
-                             RequiredState(key: "m.room.encryption", value: "")]
-        
-        let filters = SlidingSyncRequestListFilters(isDm: nil,
-                                                    spaces: [],
-                                                    isEncrypted: nil,
-                                                    isInvite: false,
-                                                    isTombstoned: false,
-                                                    roomTypes: [],
-                                                    notRoomTypes: ["m.space"],
-                                                    roomNameLike: nil,
-                                                    tags: [],
-                                                    notTags: [])
-        
         do {
-            let visibleRoomsView = try SlidingSyncViewBuilder()
-                .timelineLimit(limit: 20)
-                .requiredState(requiredState: requiredState)
-                .filters(filters: filters)
-                .name(name: "CurrentlyVisibleRooms")
-                .syncMode(mode: .selective)
-                .addRange(from: 0, to: 20)
-                .build()
-            
             let allRoomsView = try SlidingSyncViewBuilder()
                 .noTimelineLimit()
-                .requiredState(requiredState: requiredState)
-                .filters(filters: filters)
+                .requiredState(requiredState: slidingSyncRequiredState)
+                .filters(filters: slidingSyncFilters)
                 .name(name: "AllRooms")
                 .syncMode(mode: .growingFullSync)
                 .batchSize(batchSize: 100)
                 .roomLimit(limit: 500)
                 .build()
             
-            let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: visibleRoomsView)
-            
             let allRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: allRoomsView)
-            
-            visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy)
             
             allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy)
             
-            visibleRoomsViewProxy.visibleRangeUpdatePublisher.sink { [weak self] in
-                self?.restartSync()
-            }
-            .store(in: &cancellables)
-            
-            visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.diffPublisher.sink { [weak self] _ in
-                self?.registerAllRoomSlidingSyncView()
-                self?.visibleRoomsViewProxyStateObservationToken = nil
-            }
-            
-            visibleRoomsSlidingSyncView = visibleRoomsView
             allRoomsSlidingSyncView = allRoomsView
             
         } catch {
-            MXLog.error("Failed building sliding sync views with error: \(error)")
+            MXLog.error("Failed building the all rooms sliding sync view with error: \(error)")
         }
     }
+    
+    private lazy var slidingSyncRequiredState: [RequiredState] = {
+        [RequiredState(key: "m.room.avatar", value: ""),
+         RequiredState(key: "m.room.encryption", value: "")]
+    }()
+    
+    private lazy var slidingSyncFilters: SlidingSyncRequestListFilters = {
+        SlidingSyncRequestListFilters(isDm: nil,
+                                      spaces: [],
+                                      isEncrypted: nil,
+                                      isInvite: false,
+                                      isTombstoned: false,
+                                      roomTypes: [],
+                                      notRoomTypes: ["m.space"],
+                                      roomNameLike: nil,
+                                      tags: [],
+                                      notTags: [])
+    }()
     
     private func registerAllRoomSlidingSyncView() {
         guard let allRoomsSlidingSyncView else {
@@ -346,14 +349,10 @@ class ClientProxy: ClientProxyProtocol {
             return
         }
         
-        registerSlidingSyncView(allRoomsSlidingSyncView)
-    }
-    
-    private func registerSlidingSyncView(_ view: SlidingSyncView) {
-        _ = slidingSync?.addView(view: view)
+        _ = slidingSync?.addView(view: allRoomsSlidingSyncView)
         restartSync()
     }
-
+    
     private func roomTupleForIdentifier(_ identifier: String) -> (SlidingSyncRoom?, Room?) {
         do {
             let slidingSyncRoom = try slidingSync?.getRoom(roomId: identifier)

@@ -197,11 +197,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         var rooms = [HomeScreenRoom]()
         
+        // Try merging together results from both the visibleRoomsSummaryProvider and the allRoomsSummaryProvider
+        // Empty or invalidated items in the visibleRoomsSummaryProvider might have more details in the allRoomsSummaryProvider
+        // If items are unavailable in the allRoomsSummaryProvider (hasn't be added to SS yet / cold cache) then use what's available
         for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
             switch summary {
             case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
-                    rooms.append(HomeScreenRoom.placeholder())
+                    if case let .invalidated(details) = summary {
+                        rooms.append(buildRoom(with: details, invalidated: false))
+                    } else {
+                        rooms.append(HomeScreenRoom.placeholder())
+                    }
                     continue
                 }
 
@@ -213,8 +220,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     rooms.append(room)
                 }
             case .filled(let details):
-                let room = buildRoom(with: details, invalidated: false)
-                rooms.append(room)
+                rooms.append(buildRoom(with: details, invalidated: false))
             }
         }
         
