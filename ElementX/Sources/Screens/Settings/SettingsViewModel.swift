@@ -29,8 +29,7 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
         super.init(initialViewState: .init(bindings: bindings, deviceID: userSession.deviceId, userID: userSession.userID))
         
         Task {
-            if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL(),
-               let userAvatarURL = userAvatarURL {
+            if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL() {
                 if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURL(userAvatarURL, avatarSize: .user(on: .settings)) {
                     state.userAvatar = avatar
                 }

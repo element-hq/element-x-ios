@@ -33,11 +33,7 @@ struct RoomMemberProxy {
     }
 
     var avatarURL: URL? {
-        guard let urlString = member.avatarUrl else {
-            return nil
-        }
-        
-        return URL(string: urlString)
+        member.avatarUrl.flatMap { URL(string: $0) }
     }
 
     var membership: MembershipState {

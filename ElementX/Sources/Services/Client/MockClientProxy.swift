@@ -57,7 +57,7 @@ class MockClientProxy: ClientProxyProtocol {
         .success("User display name")
     }
     
-    func loadUserAvatarURL() async -> Result<URL?, ClientProxyError> {
+    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
         .failure(.failedRetrievingAvatarURL)
     }
     

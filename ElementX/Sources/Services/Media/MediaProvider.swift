@@ -146,7 +146,8 @@ struct MediaProvider: MediaProviderProtocol {
     }
 
     private func fileCacheKeyForURL(_ url: URL) -> String {
-        guard let component = url.absoluteString.split(separator: "/").last else {
+        let component = url.lastPathComponent
+        guard !component.isEmpty else {
             return url.absoluteString
         }
         return String(component)

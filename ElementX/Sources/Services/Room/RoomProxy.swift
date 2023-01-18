@@ -83,11 +83,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     var avatarURL: URL? {
-        guard let urlString = room.avatarUrl() else {
-            return nil
-        }
-        
-        return URL(string: urlString)
+        room.avatarUrl().flatMap { URL(string: $0) }
     }
 
     var encryptionBadgeImage: UIImage? {

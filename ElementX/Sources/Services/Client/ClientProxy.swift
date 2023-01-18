@@ -159,7 +159,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func loadUserAvatarURL() async -> Result<URL?, ClientProxyError> {
+    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
                 let urlString = try self.client.avatarUrl()

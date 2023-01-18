@@ -68,8 +68,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         Task {
-            if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL(),
-               let url = url {
+            if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
                 if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURL(url, avatarSize: .user(on: .home)) {
                     state.userAvatar = avatar
                 }
@@ -223,10 +222,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
-        var avatarImage: UIImage?
-        if let avatarURL = details.avatarURL {
-            avatarImage = userSession.mediaProvider.imageFromURL(avatarURL, avatarSize: .room(on: .home))
-        }
+        let avatarImage = details.avatarURL.flatMap { userSession.mediaProvider.imageFromURL($0, avatarSize: .room(on: .home)) }
         
         var timestamp: String?
         if let lastMessageTimestamp = details.lastMessageTimestamp {

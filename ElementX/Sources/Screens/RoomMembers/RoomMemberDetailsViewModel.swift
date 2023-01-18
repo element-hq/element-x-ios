@@ -46,6 +46,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
             return
         }
         if member.avatar != nil {
+            // Avatar already loaded.
             return
         }
         guard let avatarURL = member.avatarURL else {

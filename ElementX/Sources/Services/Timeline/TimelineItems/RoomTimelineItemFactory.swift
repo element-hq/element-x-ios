@@ -35,11 +35,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     // swiftlint:disable:next cyclomatic_complexity
     func buildTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
                               groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        var avatarImage: UIImage?
-        if let senderAvatarURL = eventItemProxy.senderAvatarURL {
-            avatarImage = mediaProvider.imageFromURL(senderAvatarURL, avatarSize: .user(on: .timeline))
-        }
-        
+        let avatarImage = eventItemProxy.senderAvatarURL.flatMap { mediaProvider.imageFromURL($0, avatarSize: .user(on: .timeline)) }
         let isOutgoing = eventItemProxy.isOwn
         
         switch eventItemProxy.content.kind() {
