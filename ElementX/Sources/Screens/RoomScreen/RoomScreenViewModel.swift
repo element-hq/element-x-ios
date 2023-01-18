@@ -94,7 +94,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: RoomScreenViewAction) async {
         switch viewAction {
-        case .headerTapped:
+        case .displayRoomDetails:
             callback?(.displayRoomDetails)
         case .paginateBackwards:
             await paginateBackwards()

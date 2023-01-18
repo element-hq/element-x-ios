@@ -31,7 +31,7 @@ enum RoomScreenComposerMode: Equatable {
 }
 
 enum RoomScreenViewAction {
-    case headerTapped
+    case displayRoomDetails
     case displayEmojiPicker(itemId: String)
     case paginateBackwards
     case itemAppeared(id: String)

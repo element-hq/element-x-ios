@@ -24,16 +24,16 @@ struct RoomHeaderView: View {
     @ObservedObject var context: RoomScreenViewModel.Context
 
     var body: some View {
-        Button {
-            context.send(viewAction: .headerTapped)
-        } label: {
-            HStack(spacing: 8) {
-                roomAvatar
-                    .accessibilityHidden(true)
-                Text(context.viewState.roomTitle)
-                    .font(.element.headline)
-                    .accessibilityIdentifier("roomNameLabel")
-            }
+        HStack(spacing: 8) {
+            roomAvatar
+                .accessibilityHidden(true)
+            Text(context.viewState.roomTitle)
+                .font(.element.headline)
+                .accessibilityIdentifier("roomNameLabel")
+        }
+        // Using a button stops is from getting truncated in the navigation bar
+        .onTapGesture {
+            context.send(viewAction: .displayRoomDetails)
         }
     }
 
