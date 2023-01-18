@@ -41,7 +41,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         self.timelineViewFactory = timelineViewFactory
         self.mediaProvider = mediaProvider
         
-        super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomId,
+        super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatar: nil,
                                                          bindings: .init(composerText: "", composerFocused: false)))
@@ -109,13 +109,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .sendMessage:
             await sendCurrentMessage()
         case .sendReaction(let emoji, let itemId):
-            await timelineController.sendReaction(emoji, for: itemId)
+            await timelineController.sendReaction(emoji, to: itemId)
         case .displayEmojiPicker(let itemId):
             callback?(.displayEmojiPicker(itemId: itemId))
         case .cancelReply:
             state.composerMode = .default
         case .cancelEdit:
             state.composerMode = .default
+            state.bindings.composerText = ""
+        case .markRoomAsRead:
+            await markRoomAsRead()
         }
     }
 
@@ -133,6 +136,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         default:
             break
         }
+    }
+    
+    private func markRoomAsRead() async {
+        _ = await timelineController.markRoomAsRead()
     }
 
     private func itemTapped(with itemId: String) async {
@@ -171,9 +178,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
         switch currentComposerState {
         case .reply(let itemId, _):
-            await timelineController.sendReply(currentMessage, to: itemId)
+            await timelineController.sendMessage(currentMessage, inReplyTo: itemId)
         case .edit(let originalItemId):
-            await timelineController.editMessage(currentMessage, of: originalItemId)
+            await timelineController.editMessage(currentMessage, original: originalItemId)
         default:
             await timelineController.sendMessage(currentMessage)
         }
@@ -250,7 +257,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = "> \(item.text)"
         case .copyPermalink:
             do {
-                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomId)
+                let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomID)
                 UIPasteboard.general.url = permalink
             } catch {
                 displayError(.alert(ElementL10n.roomTimelinePermalinkCreationFailure))
@@ -263,12 +270,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerFocused = true
             state.composerMode = .reply(id: item.id, displayName: item.sender.displayName ?? item.sender.id)
         case .viewSource:
-            let debugDescription = timelineController.debugDescriptionFor(item.id)
+            let debugDescription = timelineController.debugDescription(for: item.id)
             MXLog.info(debugDescription)
             state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
         case .retryDecryption(let sessionId):
             Task {
-                await timelineController.retryDecryption(forSessionId: sessionId)
+                await timelineController.retryDecryption(for: sessionId)
             }
         }
         

@@ -64,6 +64,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
+        viewModel?.context.send(viewAction: .markRoomAsRead)
         viewModel?.stop()
         viewModel = nil
         parameters = nil
@@ -106,7 +107,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 MXLog.debug("Selected \(emoji) for \(itemId)")
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    await timelineController.sendReaction(emoji, for: itemId)
+                    await timelineController.sendReaction(emoji, to: itemId)
                 }
             case .dismiss:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)

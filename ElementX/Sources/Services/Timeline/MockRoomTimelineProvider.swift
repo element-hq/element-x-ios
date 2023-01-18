@@ -20,26 +20,4 @@ struct MockRoomTimelineProvider: RoomTimelineProviderProtocol {
     var itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
     
     private var itemProxies = [TimelineItemProxy]()
-    
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError> {
-        .failure(.failedPaginatingBackwards)
-    }
-    
-    func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError> {
-        .failure(.failedSendingMessage)
-    }
-
-    func sendReaction(_ reaction: String, for itemId: String) async -> Result<Void, RoomTimelineProviderError> {
-        .failure(.failedSendingReaction)
-    }
-    
-    func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError> {
-        .failure(.failedSendingMessage)
-    }
-    
-    func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError> {
-        .failure(.failedRedactingItem)
-    }
-    
-    func retryDecryption(forSessionId sessionId: String) async { }
 }

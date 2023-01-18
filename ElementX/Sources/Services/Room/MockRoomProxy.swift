@@ -29,6 +29,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     var isPublic = Bool.random()
     var isEncrypted = Bool.random()
     var isTombstoned = Bool.random()
+    var hasUnreadNotifications = Bool.random()
     var members: [RoomMemberProxy]?
     
     let timelineProvider: RoomTimelineProviderProtocol = MockRoomTimelineProvider()
@@ -58,16 +59,20 @@ struct MockRoomProxy: RoomProxyProtocol {
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         .failure(.failedPaginatingBackwards)
     }
+    
+    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
+        .failure(.failedSendingReadReceipt)
+    }
         
-    func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
+    func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
     
-    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError> {
+    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
 
-    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
     
@@ -82,5 +87,5 @@ struct MockRoomProxy: RoomProxyProtocol {
         return .failure(.failedRetrievingMembers)
     }
     
-    func retryDecryption(forSessionId sessionId: String) async { }
+    func retryDecryption(for sessionID: String) async { }
 }

@@ -17,33 +17,6 @@
 import Combine
 import Foundation
 
-enum RoomTimelineProviderError: Error {
-    case noMoreMessagesToBackPaginate
-    case failedPaginatingBackwards
-    case failedSendingMessage
-    case failedSendingReaction
-    case failedRedactingItem
-    case generic
-}
-
 protocol RoomTimelineProviderProtocol {
     var itemsPublisher: CurrentValueSubject<[TimelineItemProxy], Never> { get }
-    
-    func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineProviderError>
-    
-    func sendMessage(_ message: String, inReplyToItemId: String?) async -> Result<Void, RoomTimelineProviderError>
-
-    func sendReaction(_ reaction: String, for itemId: String) async -> Result<Void, RoomTimelineProviderError>
-    
-    func editMessage(_ newMessage: String, originalItemId: String) async -> Result<Void, RoomTimelineProviderError>
-    
-    func redact(_ eventID: String) async -> Result<Void, RoomTimelineProviderError>
-    
-    func retryDecryption(forSessionId sessionId: String) async
-}
-
-extension RoomTimelineProviderProtocol {
-    func sendMessage(_ message: String) async -> Result<Void, RoomTimelineProviderError> {
-        await sendMessage(message, inReplyToItemId: nil)
-    }
 }

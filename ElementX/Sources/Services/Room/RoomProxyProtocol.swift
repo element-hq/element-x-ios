@@ -23,6 +23,7 @@ enum RoomProxyError: Error {
     case failedPaginatingBackwards
     case failedRetrievingMemberAvatarURL
     case failedRetrievingMemberDisplayName
+    case failedSendingReadReceipt
     case failedSendingMessage
     case failedSendingReaction
     case failedEditingMessage
@@ -39,6 +40,7 @@ protocol RoomProxyProtocol {
     var isSpace: Bool { get }
     var isEncrypted: Bool { get }
     var isTombstoned: Bool { get }
+    var hasUnreadNotifications: Bool { get }
     
     var name: String? { get }
     var displayName: String? { get }
@@ -59,21 +61,23 @@ protocol RoomProxyProtocol {
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
     
-    func sendMessage(_ message: String, inReplyToEventId: String?) async -> Result<Void, RoomProxyError>
+    func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>
     
-    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError>
+    func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
+    
+    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
 
-    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError>
+    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
 
     func members() async -> Result<[RoomMemberProxy], RoomProxyError>
     
-    func retryDecryption(forSessionId sessionId: String) async
+    func retryDecryption(for sessionID: String) async
 }
 
 extension RoomProxyProtocol {
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
-        await sendMessage(message, inReplyToEventId: nil)
+        await sendMessage(message, inReplyTo: nil)
     }
 }
