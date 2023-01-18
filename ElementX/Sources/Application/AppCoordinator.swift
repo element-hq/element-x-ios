@@ -143,6 +143,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                 self.restoreUserSession()
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 self.showLoginErrorToast()
+                self.presentSplashScreen(isSoftLogout: false)
             case (.restoringSession, .succeededRestoringSession, .signedIn):
                 self.hideLoadingIndicator()
                 self.setupUserSession()
