@@ -37,32 +37,32 @@ enum RoomTimelineControllerError: Error {
 
 @MainActor
 protocol RoomTimelineControllerProtocol {
-    var roomId: String { get }
+    var roomID: String { get }
     
     var timelineItems: [RoomTimelineItemProtocol] { get }
     var callbacks: PassthroughSubject<RoomTimelineControllerCallback, Never> { get }
     
-    func processItemAppearance(_ itemId: String) async
+    func processItemAppearance(_ itemID: String) async
     
-    func processItemDisappearance(_ itemId: String) async
+    func processItemDisappearance(_ itemID: String) async
 
-    func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction
+    func processItemTap(_ itemID: String) async -> RoomTimelineControllerAction
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomTimelineControllerError>
     
     func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError>
     
-    func sendMessage(_ message: String, inReplyTo itemId: String?) async
+    func sendMessage(_ message: String, inReplyTo itemID: String?) async
 
-    func editMessage(_ newMessage: String, of itemId: String) async
+    func editMessage(_ newMessage: String, original itemID: String) async
     
-    func sendReaction(_ reaction: String, for itemId: String) async
+    func sendReaction(_ reaction: String, to itemID: String) async
 
-    func redact(_ eventID: String) async
+    func redact(_ itemID: String) async
     
-    func debugDescriptionFor(_ itemId: String) -> String
+    func debugDescription(for itemID: String) -> String
     
-    func retryDecryption(forSessionId sessionId: String) async
+    func retryDecryption(for sessionID: String) async
 }
 
 extension RoomTimelineControllerProtocol {

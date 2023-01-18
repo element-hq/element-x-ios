@@ -26,7 +26,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     /// An array of timeline items that will be appended in order when ``simulateIncomingItems()`` is called.
     var incomingItems: [RoomTimelineItemProtocol] = []
     
-    let roomId = "MockRoomIdentifier"
+    let roomID = "MockRoomIdentifier"
     
     let callbacks = PassthroughSubject<RoomTimelineControllerCallback, Never>()
     
@@ -48,25 +48,25 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     func markRoomAsRead() async -> Result<Void, RoomTimelineControllerError> { .success(()) }
     
-    func processItemAppearance(_ itemId: String) async { }
+    func processItemAppearance(_ itemID: String) async { }
     
-    func processItemDisappearance(_ itemId: String) async { }
+    func processItemDisappearance(_ itemID: String) async { }
 
-    func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction { .none }
+    func processItemTap(_ itemID: String) async -> RoomTimelineControllerAction { .none }
     
-    func sendMessage(_ message: String, inReplyTo itemId: String?) async { }
+    func sendMessage(_ message: String, inReplyTo itemID: String?) async { }
     
-    func sendReaction(_ reaction: String, for itemId: String) async { }
+    func sendReaction(_ reaction: String, to itemID: String) async { }
 
-    func editMessage(_ newMessage: String, of itemId: String) async { }
+    func editMessage(_ newMessage: String, original itemID: String) async { }
     
-    func redact(_ eventID: String) async { }
+    func redact(_ itemID: String) async { }
     
-    func debugDescriptionFor(_ itemId: String) -> String {
+    func debugDescription(for itemID: String) -> String {
         "Mock debug description"
     }
     
-    func retryDecryption(forSessionId sessionId: String) async { }
+    func retryDecryption(for sessionID: String) async { }
     
     // MARK: - UI Test signalling
     

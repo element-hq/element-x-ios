@@ -24,6 +24,7 @@ class RoomProxy: RoomProxyProtocol {
     private let slidingSyncRoom: SlidingSyncRoomProtocol
     private let room: RoomProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
+    private let backgroundTaskName = "SendRoomEvent"
     
     private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.serial")
     
@@ -161,7 +162,7 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -176,8 +177,8 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+    func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
@@ -186,8 +187,8 @@ class RoomProxy: RoomProxyProtocol {
         
         return await Task.dispatch(on: serialDispatchQueue) {
             do {
-                if let inReplyToEventId {
-                    try self.room.sendReply(msg: message, inReplyToEventId: inReplyToEventId, txnId: transactionId)
+                if let eventID {
+                    try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
                 } else {
                     let messageContent = messageEventContentFromMarkdown(md: message)
                     try self.room.send(msg: messageContent, txnId: transactionId)
@@ -199,15 +200,15 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
 
-        return await Task.dispatch(on: .global()) {
+        return await Task.dispatch(on: serialDispatchQueue) {
             do {
-                try self.room.sendReaction(eventId: eventId, key: reaction)
+                try self.room.sendReaction(eventId: eventID, key: reaction)
                 return .success(())
             } catch {
                 return .failure(.failedSendingReaction)
@@ -215,17 +216,17 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
-        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: "SendMessage", isReusable: true)
+    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
         }
 
         let transactionId = genTransactionId()
 
-        return await Task.dispatch(on: .global()) {
+        return await Task.dispatch(on: serialDispatchQueue) {
             do {
-                try self.room.edit(newMsg: newMessage, originalEventId: originalEventId, txnId: transactionId)
+                try self.room.edit(newMsg: newMessage, originalEventId: eventID, txnId: transactionId)
                 return .success(())
             } catch {
                 return .failure(.failedEditingMessage)
@@ -234,9 +235,14 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
         let transactionID = genTransactionId()
         
-        return await Task.dispatch(on: .global()) {
+        return await Task.dispatch(on: serialDispatchQueue) {
             do {
                 try self.room.redact(eventId: eventID, reason: nil, txnId: transactionID)
                 return .success(())
@@ -257,9 +263,9 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func retryDecryption(forSessionId sessionId: String) async {
+    func retryDecryption(for sessionID: String) async {
         await Task.dispatch(on: .global()) { [weak self] in
-            self?.room.retryDecryption(sessionIds: [sessionId])
+            self?.room.retryDecryption(sessionIds: [sessionID])
         }
     }
     

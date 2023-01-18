@@ -37,7 +37,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private(set) var timelineItems = [RoomTimelineItemProtocol]()
     
-    var roomId: String {
+    var roomID: String {
         roomProxy.id
     }
     
@@ -95,8 +95,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemAppearance(_ itemId: String) async {
-        guard let timelineItem = timelineItems.first(where: { $0.id == itemId }) else {
+    func processItemAppearance(_ itemID: String) async {
+        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
             return
         }
         
@@ -117,18 +117,18 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemDisappearance(_ itemId: String) { }
+    func processItemDisappearance(_ itemID: String) { }
 
     // swiftlint:disable:next cyclomatic_complexity
-    func processItemTap(_ itemId: String) async -> RoomTimelineControllerAction {
-        guard let timelineItem = timelineItems.first(where: { $0.id == itemId }) else {
+    func processItemTap(_ itemID: String) async -> RoomTimelineControllerAction {
+        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
             return .none
         }
 
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
             await loadFileForImageTimelineItem(item)
-            guard let index = timelineItems.firstIndex(where: { $0.id == itemId }),
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
                   let item = timelineItems[index] as? ImageRoomTimelineItem else {
                 return .none
             }
@@ -138,7 +138,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return .none
         case let item as VideoRoomTimelineItem:
             await loadVideoForTimelineItem(item)
-            guard let index = timelineItems.firstIndex(where: { $0.id == itemId }),
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
                   let item = timelineItems[index] as? VideoRoomTimelineItem else {
                 return .none
             }
@@ -148,7 +148,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return .none
         case let item as FileRoomTimelineItem:
             await loadFileForTimelineItem(item)
-            guard let index = timelineItems.firstIndex(where: { $0.id == itemId }),
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
                   let item = timelineItems[index] as? FileRoomTimelineItem else {
                 return .none
             }
@@ -161,14 +161,14 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendMessage(_ message: String, inReplyTo itemId: String?) async {
-        if itemId == nil {
-            MXLog.info("Send message in \(roomId)")
+    func sendMessage(_ message: String, inReplyTo itemID: String?) async {
+        if itemID == nil {
+            MXLog.info("Send message in \(roomID)")
         } else {
-            MXLog.info("Send reply in \(roomId)")
+            MXLog.info("Send reply in \(roomID)")
         }
         
-        switch await roomProxy.sendMessage(message, inReplyToEventId: itemId) {
+        switch await roomProxy.sendMessage(message, inReplyTo: itemID) {
         case .success:
             MXLog.info("Finished sending message")
         case .failure(let error):
@@ -176,9 +176,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func sendReaction(_ reaction: String, for itemId: String) async {
-        MXLog.info("Send reaction in \(roomId)")
-        switch await roomProxy.sendReaction(reaction, for: itemId) {
+    func sendReaction(_ reaction: String, to itemID: String) async {
+        MXLog.info("Send reaction in \(roomID)")
+        switch await roomProxy.sendReaction(reaction, to: itemID) {
         case .success:
             MXLog.info("Finished sending reaction")
         case .failure(let error):
@@ -186,9 +186,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func editMessage(_ newMessage: String, of itemId: String) async {
-        MXLog.info("Edit message in \(roomId)")
-        switch await roomProxy.editMessage(newMessage, originalEventId: itemId) {
+    func editMessage(_ newMessage: String, original itemID: String) async {
+        MXLog.info("Edit message in \(roomID)")
+        switch await roomProxy.editMessage(newMessage, original: itemID) {
         case .success:
             MXLog.info("Finished editing message")
         case .failure(let error):
@@ -196,9 +196,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func redact(_ eventID: String) async {
-        MXLog.info("Send redaction in \(roomId)")
-        switch await roomProxy.redact(eventID) {
+    func redact(_ itemID: String) async {
+        MXLog.info("Send redaction in \(roomID)")
+        switch await roomProxy.redact(itemID) {
         case .success:
             MXLog.info("Finished redacting message")
         case .failure(let error):
@@ -208,12 +208,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
-    func debugDescriptionFor(_ itemId: String) -> String {
+    func debugDescription(for itemID: String) -> String {
         var description = "Unknown item"
         timelineProvider.itemsPublisher.value.forEach { timelineItemProxy in
             switch timelineItemProxy {
             case .event(let item):
-                if item.id == itemId {
+                if item.id == itemID {
                     description = item.debugDescription
                     return
                 }
@@ -225,8 +225,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         return description
     }
     
-    func retryDecryption(forSessionId sessionId: String) async {
-        await roomProxy.retryDecryption(forSessionId: sessionId)
+    func retryDecryption(for sessionID: String) async {
+        await roomProxy.retryDecryption(for: sessionID)
     }
 
     // MARK: - Private

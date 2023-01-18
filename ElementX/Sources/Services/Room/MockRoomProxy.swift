@@ -64,15 +64,15 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.failedSendingReadReceipt)
     }
         
-    func sendMessage(_ message: String, inReplyToEventId: String? = nil) async -> Result<Void, RoomProxyError> {
+    func sendMessage(_ message: String, inReplyTo eventID: String? = nil) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
     
-    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError> {
+    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
 
-    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError> {
+    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMessage)
     }
     
@@ -87,5 +87,5 @@ struct MockRoomProxy: RoomProxyProtocol {
         return .failure(.failedRetrievingMembers)
     }
     
-    func retryDecryption(forSessionId sessionId: String) async { }
+    func retryDecryption(for sessionID: String) async { }
 }

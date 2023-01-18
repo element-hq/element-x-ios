@@ -63,21 +63,21 @@ protocol RoomProxyProtocol {
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>
     
-    func sendMessage(_ message: String, inReplyToEventId: String?) async -> Result<Void, RoomProxyError>
+    func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
     
-    func sendReaction(_ reaction: String, for eventId: String) async -> Result<Void, RoomProxyError>
+    func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
 
-    func editMessage(_ newMessage: String, originalEventId: String) async -> Result<Void, RoomProxyError>
+    func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
 
     func members() async -> Result<[RoomMemberProxy], RoomProxyError>
     
-    func retryDecryption(forSessionId sessionId: String) async
+    func retryDecryption(for sessionID: String) async
 }
 
 extension RoomProxyProtocol {
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
-        await sendMessage(message, inReplyToEventId: nil)
+        await sendMessage(message, inReplyTo: nil)
     }
 }
