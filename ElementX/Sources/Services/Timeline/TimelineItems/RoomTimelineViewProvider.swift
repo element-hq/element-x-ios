@@ -32,6 +32,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     case sticker(StickerRoomTimelineItem)
     case unsupported(UnsupportedRoomTimelineItem)
     case timelineStart(TimelineStartRoomTimelineItem)
+    case state(StateRoomTimelineItem)
     
     var id: String {
         switch self {
@@ -62,6 +63,8 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
         case .unsupported(let item):
             return item.id
         case .timelineStart(let item):
+            return item.id
+        case .state(let item):
             return item.id
         }
     }
@@ -98,6 +101,8 @@ extension RoomTimelineViewProvider: View {
             UnsupportedRoomTimelineView(timelineItem: item)
         case .timelineStart(let item):
             TimelineStartRoomTimelineView(timelineItem: item)
+        case .state(let item):
+            StateRoomTimelineView(timelineItem: item)
         }
     }
 }

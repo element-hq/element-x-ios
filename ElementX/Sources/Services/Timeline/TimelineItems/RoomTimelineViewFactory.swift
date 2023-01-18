@@ -48,6 +48,8 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .unsupported(item)
         case let item as TimelineStartRoomTimelineItem:
             return .timelineStart(item)
+        case let item as StateRoomTimelineItem:
+            return .state(item)
         default:
             fatalError("Unknown timeline item")
         }

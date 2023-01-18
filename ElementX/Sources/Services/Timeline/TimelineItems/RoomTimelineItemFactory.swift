@@ -79,10 +79,10 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .none:
                 return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
             }
-        case .state:
-            return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
-        case .roomMembership:
-            return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
+        case .state(let stateKey, let content):
+            return RoomStateTimelineItemFactory.buildStateTimelineItemFor(eventItemProxy: eventItemProxy, isOutgoing: isOutgoing, avatarImage: avatarImage, stateKey: stateKey, content: content)
+        case .roomMembership(let change):
+            return RoomStateTimelineItemFactory.buildStateMembershipChangeTimelineItemFor(eventItemProxy: eventItemProxy, isOutgoing: isOutgoing, avatarImage: avatarImage, change: change)
         }
     }
     
