@@ -391,6 +391,8 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     @objc
     private func applicationWillResignActive() {
+        MXLog.info("Application will resign active")
+        
         guard backgroundTask == nil else {
             return
         }
@@ -405,6 +407,8 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     @objc
     private func applicationDidBecomeActive() {
+        MXLog.info("Application did become active")
+        
         backgroundTask?.stop()
         backgroundTask = nil
 
@@ -417,6 +421,8 @@ class AppCoordinator: AppCoordinatorProtocol {
     private func observeNetworkState() {
         let reachabilityNotificationIdentifier = "io.element.elementx.reachability.notification"
         ServiceLocator.shared.networkMonitor.reachabilityPublisher.sink { reachable in
+            MXLog.info("Reachability changed to \(reachable)")
+            
             if reachable {
                 ServiceLocator.shared.userNotificationController.retractNotificationWithId(reachabilityNotificationIdentifier)
             } else {

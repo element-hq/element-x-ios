@@ -31,16 +31,23 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     func didReceiveSyncUpdate() { }
 
     func didReceiveAuthError(isSoftLogout: Bool) {
+        MXLog.error("Received authentication error, softlogout=\(isSoftLogout)")
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
     func didUpdateRestoreToken() {
+        MXLog.info("Did update restoration token")
         clientProxy?.didUpdateRestoreToken()
     }
     
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
+        if summary.views.isEmpty, summary.rooms.isEmpty {
+            return
+        }
+        
+        MXLog.info("Received sliding sync update")
         clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
     }
 }
@@ -122,6 +129,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func startSync() {
+        MXLog.info("Starting sync")
         guard !client.isSoftLogout(), slidingSyncObserverToken == nil else {
             return
         }
@@ -130,6 +138,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     func stopSync() {
+        MXLog.info("Stopping sync")
         slidingSyncObserverToken?.cancel()
         slidingSyncObserverToken = nil
     }
@@ -238,6 +247,7 @@ class ClientProxy: ClientProxyProtocol {
     // MARK: Private
     
     private func restartSync() {
+        MXLog.info("Restarting sync")
         stopSync()
         startSync()
     }
@@ -293,6 +303,7 @@ class ClientProxy: ClientProxyProtocol {
         
         // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
         visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.diffPublisher.sink { [weak self] _ in
+            MXLog.info("Visible rooms view received first update, registering all rooms view")
             self?.registerAllRoomSlidingSyncView()
             self?.visibleRoomsViewProxyStateObservationToken = nil
         }

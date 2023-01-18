@@ -92,16 +92,27 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                   visibleRoomsSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state, totalCount, rooms in
+                guard let self = self else { return }
+                
                 let isLoadingData = state != .live && (totalCount == 0 || rooms.count != totalCount)
                 let hasNoRooms = state == .live && totalCount == 0
                 
+                var newState = self.state.roomListMode
                 if isLoadingData {
-                    self?.state.roomListMode = .skeletons
+                    newState = .skeletons
                 } else if hasNoRooms {
-                    self?.state.roomListMode = .skeletons
+                    newState = .skeletons
                 } else {
-                    self?.state.roomListMode = .rooms
+                    newState = .rooms
                 }
+                
+                guard newState != self.state.roomListMode else {
+                    return
+                }
+                
+                self.state.roomListMode = newState
+                
+                MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
             }
             .store(in: &cancellables)
         
