@@ -154,7 +154,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 
                 lastMessageTimestamp = lastMessage.timestamp
                 
-                if let senderDisplayName = lastMessage.senderDisplayName,
+                if let senderDisplayName = lastMessage.sender.displayName,
                    let attributedSenderDisplayName = try? AttributedString(markdown: "**\(senderDisplayName)**") {
                     // Don't include the message body in the markdown otherwise it makes tappable links.
                     attributedLastMessage = attributedSenderDisplayName + ": " + AttributedString(lastMessage.body ?? "")
@@ -164,7 +164,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
         }
         
-        let avatarURL = room.fullRoom()?.avatarUrl().flatMap { URL(string: $0) }
+        let avatarURL = room.fullRoom()?.avatarUrl().flatMap(URL.init(string:))
         
         let details = RoomSummaryDetails(id: room.roomId(),
                                          name: room.name() ?? room.roomId(),

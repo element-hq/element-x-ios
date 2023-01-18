@@ -63,7 +63,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           groupState: .single,
                                                                           isOutgoing: false,
                                                                           isEditable: false,
-                                                                          senderId: "Bob",
+                                                                          sender: .init(id: "Bob"),
                                                                           imageURL: nil,
                                                                           image: UIImage(systemName: "photo")))
             
@@ -73,7 +73,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           groupState: .single,
                                                                           isOutgoing: false,
                                                                           isEditable: false,
-                                                                          senderId: "Bob",
+                                                                          sender: .init(id: "Bob"),
                                                                           imageURL: nil,
                                                                           image: nil))
             
@@ -83,7 +83,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           groupState: .single,
                                                                           isOutgoing: false,
                                                                           isEditable: false,
-                                                                          senderId: "Bob",
+                                                                          sender: .init(id: "Bob"),
                                                                           imageURL: nil,
                                                                           image: nil,
                                                                           aspectRatio: 0.7,

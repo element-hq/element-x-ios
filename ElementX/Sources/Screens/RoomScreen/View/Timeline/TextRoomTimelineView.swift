@@ -68,6 +68,6 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
                              groupState: .single,
                              isOutgoing: isOutgoing,
                              isEditable: isOutgoing,
-                             senderId: senderId)
+                             sender: .init(id: senderId))
     }
 }

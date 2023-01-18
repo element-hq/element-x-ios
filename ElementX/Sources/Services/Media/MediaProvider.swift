@@ -57,7 +57,8 @@ struct MediaProvider: MediaProviderProtocol {
         if let image = imageFromSource(source, avatarSize: avatarSize) {
             return .success(image)
         }
-
+        
+        #warning("Media loading should check for existing in flight operations and de-dupe requests.")
         let loadImageBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
         defer {
             loadImageBgTask?.stop()

@@ -16,12 +16,12 @@
 
 import UIKit
 
-#warning("Find a better home for this - share with member details???")
-struct SenderProfile: Identifiable, Hashable {
+#warning("This could be replaced by RoomMemberProxy if Rust includes a RoomMember.")
+struct TimelineItemSender: Identifiable, Hashable {
     let id: String
-    let displayName: String?
-    let avatarURL: URL?
     
-    // Will be updated after the image is loaded.
+    // Lazy loaded properties, displayName and avatarURL will be come lets.
+    var displayName: String?
+    var avatarURL: URL?
     var avatar: UIImage?
 }

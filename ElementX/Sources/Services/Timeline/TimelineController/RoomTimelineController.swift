@@ -499,8 +499,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     private func loadUserAvatarForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
         guard timelineItem.shouldShowSenderDetails,
-              let avatarURL = timelineItem.senderAvatarURL,
-              timelineItem.senderAvatar == nil else {
+              let avatarURL = timelineItem.sender.avatarURL,
+              timelineItem.sender.avatar == nil else {
             return
         }
         
@@ -511,7 +511,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
             
-            item.senderAvatar = avatar
+            item.sender.avatar = avatar
             timelineItems[index] = item
             callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:
@@ -521,11 +521,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     #warning("This is here because sender profiles aren't working properly. Remove it entirely later")
     private func loadUserDisplayNameForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
-        if timelineItem.shouldShowSenderDetails == false || timelineItem.senderDisplayName != nil {
+        if timelineItem.shouldShowSenderDetails == false || timelineItem.sender.displayName != nil {
             return
         }
         
-        switch await roomProxy.loadDisplayNameForUserId(timelineItem.senderId) {
+        switch await roomProxy.loadDisplayNameForUserId(timelineItem.sender.id) {
         case .success(let displayName):
             guard let displayName,
                   let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
@@ -533,7 +533,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return
             }
             
-            item.senderDisplayName = displayName
+            item.sender.displayName = displayName
             timelineItems[index] = item
             callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:

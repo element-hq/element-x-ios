@@ -26,8 +26,7 @@ enum RoomTimelineItemFixtures {
                              groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Jacob",
+                             sender: .init(id: "", displayName: "Jacob"),
                              properties: RoomTimelineItemProperties(isEdited: true)),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗",
@@ -35,8 +34,7 @@ enum RoomTimelineItemFixtures {
                              groupState: .beginning,
                              isOutgoing: false,
                              isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena",
+                             sender: .init(id: "", displayName: "Helena"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙌", count: 1, isHighlighted: true)
                              ])),
@@ -46,8 +44,7 @@ enum RoomTimelineItemFixtures {
                              groupState: .end,
                              isOutgoing: false,
                              isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena",
+                             sender: .init(id: "", displayName: "Helena"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "🙌", count: 2, isHighlighted: true)
@@ -59,24 +56,21 @@ enum RoomTimelineItemFixtures {
                              groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena"),
+                             sender: .init(id: "", displayName: "Helena")),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "And John's speech was amazing!",
                              timestamp: "5 PM",
                              groupState: .beginning,
                              isOutgoing: true,
                              isEditable: true,
-                             senderId: "",
-                             senderDisplayName: "Bob"),
+                             sender: .init(id: "", displayName: "Bob")),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "New home office set up!",
                              timestamp: "5 PM",
                              groupState: .end,
                              isOutgoing: true,
                              isEditable: true,
-                             senderId: "",
-                             senderDisplayName: "Bob",
+                             sender: .init(id: "", displayName: "Bob"),
                              properties: RoomTimelineItemProperties(reactions: [
                                  AggregatedReaction(key: "🙏", count: 1, isHighlighted: false),
                                  AggregatedReaction(key: "😁", count: 3, isHighlighted: false)
@@ -92,8 +86,7 @@ enum RoomTimelineItemFixtures {
                              groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
-                             senderId: "",
-                             senderDisplayName: "Helena")
+                             sender: .init(id: "", displayName: "Helena"))
     ]
     
     /// A small chunk of events, containing 2 text items.
@@ -214,7 +207,6 @@ private extension TextRoomTimelineItem {
                   groupState: groupState,
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,
-                  senderId: "",
-                  senderDisplayName: senderDisplayName)
+                  sender: .init(id: "", displayName: senderDisplayName))
     }
 }

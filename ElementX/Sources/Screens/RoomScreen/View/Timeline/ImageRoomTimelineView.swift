@@ -62,7 +62,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
-                                                                      senderId: "Bob",
+                                                                      sender: .init(id: "Bob"),
                                                                       source: nil,
                                                                       image: UIImage(systemName: "photo")))
 
@@ -72,7 +72,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
-                                                                      senderId: "Bob",
+                                                                      sender: .init(id: "Bob"),
                                                                       source: nil,
                                                                       image: nil))
             
@@ -82,7 +82,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       groupState: .single,
                                                                       isOutgoing: false,
                                                                       isEditable: false,
-                                                                      senderId: "Bob",
+                                                                      sender: .init(id: "Bob"),
                                                                       source: nil,
                                                                       image: nil,
                                                                       aspectRatio: 0.7,

@@ -95,20 +95,11 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         item.isEditable()
     }
     
-    var sender: String {
-        item.sender()
-    }
-    
-    var senderDisplayName: String? {
-        item.senderProfile().displayName
-    }
-    
-    var senderAvatarURL: URL? {
-        guard let urlString = item.senderProfile().avatarUrl else {
-            return nil
-        }
-        
-        return URL(string: urlString)
+    var sender: TimelineItemSender {
+        let profile = item.senderProfile()
+        return .init(id: item.sender(),
+                     displayName: profile.displayName,
+                     avatarURL: profile.avatarUrl.flatMap(URL.init(string:)))
     }
 
     var reactions: [Reaction] {

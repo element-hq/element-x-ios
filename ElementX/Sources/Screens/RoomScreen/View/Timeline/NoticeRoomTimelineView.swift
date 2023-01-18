@@ -59,6 +59,6 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
                                groupState: .single,
                                isOutgoing: false,
                                isEditable: false,
-                               senderId: senderId)
+                               sender: .init(id: senderId))
     }
 }

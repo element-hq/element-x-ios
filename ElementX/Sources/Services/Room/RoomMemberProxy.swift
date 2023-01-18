@@ -33,7 +33,7 @@ struct RoomMemberProxy {
     }
 
     var avatarURL: URL? {
-        member.avatarUrl.flatMap { URL(string: $0) }
+        member.avatarUrl.flatMap(URL.init(string:))
     }
 
     var membership: MembershipState {

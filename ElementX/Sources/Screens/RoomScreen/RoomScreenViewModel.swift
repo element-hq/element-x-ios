@@ -261,7 +261,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .reply:
             state.bindings.composerFocused = true
-            state.composerMode = .reply(id: item.id, displayName: item.senderDisplayName ?? item.senderId)
+            state.composerMode = .reply(id: item.id, displayName: item.sender.displayName ?? item.sender.id)
         case .viewSource:
             let debugDescription = timelineController.debugDescriptionFor(item.id)
             MXLog.info(debugDescription)

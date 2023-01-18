@@ -24,11 +24,7 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let isOutgoing: Bool
     let isEditable: Bool
     
-    let senderId: String
-    var senderDisplayName: String?
-    
-    var senderAvatarURL: URL?
-    var senderAvatar: UIImage?
+    var sender: TimelineItemSender
 
     let duration: UInt64
     let source: MediaSourceProxy?

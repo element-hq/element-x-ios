@@ -47,7 +47,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     groupState: .single,
                                                                     isOutgoing: false,
                                                                     isEditable: false,
-                                                                    senderId: "Bob",
+                                                                    sender: .init(id: "Bob"),
                                                                     source: nil,
                                                                     thumbnailSource: nil))
 
@@ -57,7 +57,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     groupState: .single,
                                                                     isOutgoing: false,
                                                                     isEditable: false,
-                                                                    senderId: "Bob",
+                                                                    sender: .init(id: "Bob"),
                                                                     source: nil,
                                                                     thumbnailSource: nil))
             
@@ -67,7 +67,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     groupState: .single,
                                                                     isOutgoing: false,
                                                                     isEditable: false,
-                                                                    senderId: "Bob",
+                                                                    sender: .init(id: "Bob"),
                                                                     source: nil,
                                                                     thumbnailSource: nil))
         }

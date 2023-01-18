@@ -60,7 +60,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 HStack(alignment: .top, spacing: 4) {
                     TimelineSenderAvatarView(timelineItem: timelineItem)
                         .accessibilityHidden(true)
-                    Text(timelineItem.senderDisplayName ?? timelineItem.senderId)
+                    Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         .font(.element.footnoteBold)
                         .foregroundColor(.element.primaryContent)
                         .lineLimit(1)
