@@ -60,7 +60,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         visibleItemRangePublisher
-            .debounce(for: 0.1, scheduler: RunLoop.main)
+            .debounce(for: 0.1, scheduler: DispatchQueue.main)
             .removeDuplicates()
             .sink { range in
                 self.updateVisibleRange(range)
@@ -245,7 +245,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {
-        guard !range.isEmpty else { return }
+        guard visibleRoomsSummaryProvider?.statePublisher.value == .live,
+              !range.isEmpty else { return }
         
         guard let visibleRoomsSummaryProvider else {
             MXLog.error("Visible rooms summary provider unavailable")
