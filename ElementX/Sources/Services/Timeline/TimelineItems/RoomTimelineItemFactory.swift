@@ -20,6 +20,7 @@ import UIKit
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
+    private let roomStateTimelineItemFactory: RoomStateTimelineItemFactory
     
     /// The Matrix ID of the current user.
     private let userID: String
@@ -30,6 +31,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         self.userID = userID
         self.mediaProvider = mediaProvider
         self.attributedStringBuilder = attributedStringBuilder
+        #warning("Add dependency injection")
+        self.roomStateTimelineItemFactory = RoomStateTimelineItemFactory(userID: userID)
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -80,9 +83,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
             }
         case .state(let stateKey, let content):
-            return RoomStateTimelineItemFactory.buildStateTimelineItemFor(eventItemProxy: eventItemProxy, isOutgoing: isOutgoing, avatarImage: avatarImage, stateKey: stateKey, content: content)
-        case .roomMembership(let change):
-            return RoomStateTimelineItemFactory.buildStateMembershipChangeTimelineItemFor(eventItemProxy: eventItemProxy, isOutgoing: isOutgoing, avatarImage: avatarImage, change: change)
+            return roomStateTimelineItemFactory.buildStateTimelineItemFor(eventItemProxy: eventItemProxy, content: content, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
+        case .roomMembership(userId: let userID, change: let change):
+            return roomStateTimelineItemFactory.buildStateMembershipChangeTimelineItemFor(eventItemProxy: eventItemProxy, member: userID, change: change, sender: sender, isOutgoing: isOutgoing)
         }
     }
     

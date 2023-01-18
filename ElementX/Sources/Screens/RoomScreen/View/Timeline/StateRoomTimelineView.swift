@@ -31,7 +31,7 @@ struct StateRoomTimelineView_Previews: PreviewProvider {
     }
     
     static var body: some View {
-        let item = StateRoomTimelineItem(id: UUID().uuidString, text: "Alice joined", timestamp: "Now", groupState: .beginning, isOutgoing: false, isEditable: false, senderId: "")
+        let item = StateRoomTimelineItem(id: UUID().uuidString, text: "Alice joined", timestamp: "Now", groupState: .beginning, isOutgoing: false, isEditable: false, sender: .init(id: ""))
         return StateRoomTimelineView(timelineItem: item)
     }
 }
