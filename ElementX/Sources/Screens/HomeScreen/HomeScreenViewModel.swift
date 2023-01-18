@@ -35,7 +35,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Setup
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
@@ -60,7 +60,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         visibleItemRangePublisher
-            .debounce(for: 0.1, scheduler: RunLoop.main)
+            .debounce(for: 0.1, scheduler: DispatchQueue.main)
             .removeDuplicates()
             .sink { range in
                 self.updateVisibleRange(range)
@@ -92,16 +92,27 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                   visibleRoomsSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state, totalCount, rooms in
+                guard let self = self else { return }
+                
                 let isLoadingData = state != .live && (totalCount == 0 || rooms.count != totalCount)
                 let hasNoRooms = state == .live && totalCount == 0
                 
+                var newState = self.state.roomListMode
                 if isLoadingData {
-                    self?.state.roomListMode = .skeletons
+                    newState = .skeletons
                 } else if hasNoRooms {
-                    self?.state.roomListMode = .skeletons
+                    newState = .skeletons
                 } else {
-                    self?.state.roomListMode = .rooms
+                    newState = .rooms
                 }
+                
+                guard newState != self.state.roomListMode else {
+                    return
+                }
+                
+                self.state.roomListMode = newState
+                
+                MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
             }
             .store(in: &cancellables)
         
@@ -197,11 +208,18 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         var rooms = [HomeScreenRoom]()
         
+        // Try merging together results from both the visibleRoomsSummaryProvider and the allRoomsSummaryProvider
+        // Empty or invalidated items in the visibleRoomsSummaryProvider might have more details in the allRoomsSummaryProvider
+        // If items are unavailable in the allRoomsSummaryProvider (hasn't be added to SS yet / cold cache) then use what's available
         for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
             switch summary {
             case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
-                    rooms.append(HomeScreenRoom.placeholder())
+                    if case let .invalidated(details) = summary {
+                        rooms.append(buildRoom(with: details))
+                    } else {
+                        rooms.append(HomeScreenRoom.placeholder())
+                    }
                     continue
                 }
 
@@ -209,19 +227,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .empty:
                     rooms.append(HomeScreenRoom.placeholder())
                 case .filled(let details), .invalidated(let details):
-                    let room = buildRoom(with: details, invalidated: true)
-                    rooms.append(room)
+                    rooms.append(buildRoom(with: details))
                 }
             case .filled(let details):
-                let room = buildRoom(with: details, invalidated: false)
-                rooms.append(room)
+                rooms.append(buildRoom(with: details))
             }
         }
         
         state.rooms = rooms
     }
     
-    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
+    private func buildRoom(with details: RoomSummaryDetails) -> HomeScreenRoom {
         let avatarImage = details.avatarURL.flatMap { userSession.mediaProvider.imageFromURL($0, avatarSize: .room(on: .home)) }
         
         var timestamp: String?
@@ -229,8 +245,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
         }
         
-        let identifier = invalidated ? "invalidated-" + details.id : details.id
-        return HomeScreenRoom(id: identifier,
+        return HomeScreenRoom(id: details.id,
                               roomId: details.id,
                               name: details.name,
                               hasUnreads: details.unreadNotificationCount > 0,
@@ -241,7 +256,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {
-        guard !range.isEmpty else { return }
+        guard visibleRoomsSummaryProvider?.statePublisher.value == .live,
+              !range.isEmpty else { return }
         
         guard let visibleRoomsSummaryProvider else {
             MXLog.error("Visible rooms summary provider unavailable")

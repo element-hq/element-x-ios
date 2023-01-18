@@ -42,9 +42,18 @@ enum HomeScreenViewAction {
     case updatedVisibleItemRange(Range<Int>)
 }
 
-enum HomeScreenRoomListMode {
+enum HomeScreenRoomListMode: CustomStringConvertible {
     case skeletons
     case rooms
+    
+    var description: String {
+        switch self {
+        case .rooms:
+            return "Showing rooms"
+        case .skeletons:
+            return "Showing placeholders"
+        }
+    }
 }
 
 struct HomeScreenViewState: BindableState {
