@@ -74,7 +74,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         let waitForAcceptance = XCTestExpectation(description: "Wait for acceptance")
         
         let cancellable = sessionVerificationController.callbacks
-            .debounce(for: .seconds(2.0), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(0.1), scheduler: DispatchQueue.main) // Allow the view model to process the callback first.
             .sink { callback in
                 switch callback {
                 case .finished:
@@ -101,7 +101,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         let expectation = XCTestExpectation(description: "Wait for cancellation")
         
         let cancellable = sessionVerificationController.callbacks
-            .debounce(for: .seconds(2.0), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(0.1), scheduler: DispatchQueue.main) // Allow the view model to process the callback first.
             .sink { callback in
                 switch callback {
                 case .cancelled:
@@ -130,7 +130,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         let verificationDataReceivalExpectation = XCTestExpectation(description: "Wait for Emoji data")
         
         let cancellable = sessionVerificationController.callbacks
-            .debounce(for: .seconds(2.0), scheduler: DispatchQueue.main)
+            .delay(for: .seconds(0.1), scheduler: DispatchQueue.main) // Allow the view model to process the callback first.
             .sink { callback in
                 switch callback {
                 case .acceptedVerificationRequest:
