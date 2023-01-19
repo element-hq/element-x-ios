@@ -149,11 +149,12 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 MXLog.error("Invalid room identifier: \(roomIdentifier)")
                 return
             }
-            let userId = userSession.clientProxy.userIdentifier
+            let userId = userSession.clientProxy.userID
 
             let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
                                                               mediaProvider: userSession.mediaProvider,
-                                                              attributedStringBuilder: AttributedStringBuilder())
+                                                              attributedStringBuilder: AttributedStringBuilder(),
+                                                              roomStateTimelineItemFactory: RoomStateTimelineItemFactory(userID: userId))
             
             let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
                                                                                                roomProxy: roomProxy,

@@ -19,5 +19,5 @@ import Foundation
 @MainActor
 protocol RoomTimelineItemFactoryProtocol {
     func buildTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
-                              groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol
+                              groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol?
 }

@@ -61,7 +61,7 @@ enum PushFormat {
 protocol ClientProxyProtocol: AnyObject, MediaProxyProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
-    var userIdentifier: String { get }
+    var userID: String { get }
 
     var isSoftLogout: Bool { get }
 

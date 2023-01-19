@@ -35,9 +35,8 @@
 "noticeRoomKnockDenied" = "%1$@ rejected %2$@'s request to join";
 "noticeRoomKnockDeniedByYou" = "You rejected %1$@'s request to join";
 "noticeRoomKnockDeniedYou" = "%1$@ rejected your request to join";
-"noticeRoomUnknownChange" = "%1$@ made an unknown change in the room";
 "noticeRoomUnknownMembershipChange" = "%1$@ made an unknown change to their membership";
-"noticeRoomMembershipError" = "Membership error for %1$@";
+
 
 "session_verification_banner_title" = "Help keep your messages secure";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify its you.";

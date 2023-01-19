@@ -21,6 +21,12 @@ struct StateRoomTimelineView: View {
     
     var body: some View {
         Text(timelineItem.text)
+            .font(.element.caption1Bold)
+            .multilineTextAlignment(.center)
+            .foregroundColor(.element.secondaryContent)
+            .frame(maxWidth: .infinity, alignment: .center)
+            .padding(.horizontal, 16)
+            .padding(.vertical, 4)
     }
 }
 

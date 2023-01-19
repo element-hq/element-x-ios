@@ -62,14 +62,6 @@ extension ElementL10n {
   }
   /// You cancelled your request to join
   public static let noticeRoomKnockRetractedByYou = ElementL10n.tr("Untranslated", "noticeRoomKnockRetractedByYou")
-  /// Membership error for %1$@
-  public static func noticeRoomMembershipError(_ p1: Any) -> String {
-    return ElementL10n.tr("Untranslated", "noticeRoomMembershipError", String(describing: p1))
-  }
-  /// %1$@ made an unknown change in the room
-  public static func noticeRoomUnknownChange(_ p1: Any) -> String {
-    return ElementL10n.tr("Untranslated", "noticeRoomUnknownChange", String(describing: p1))
-  }
   /// %1$@ made an unknown change to their membership
   public static func noticeRoomUnknownMembershipChange(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "noticeRoomUnknownMembershipChange", String(describing: p1))

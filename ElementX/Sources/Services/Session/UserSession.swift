@@ -23,7 +23,7 @@ class UserSession: UserSessionProtocol {
     private var authErrorCancellable: AnyCancellable?
     private var restoreTokenUpdateCancellable: AnyCancellable?
     
-    var userID: String { clientProxy.userIdentifier }
+    var userID: String { clientProxy.userID }
     var isSoftLogout: Bool { clientProxy.isSoftLogout }
     var deviceId: String? { clientProxy.deviceId }
     var homeserver: String { clientProxy.homeserver }
