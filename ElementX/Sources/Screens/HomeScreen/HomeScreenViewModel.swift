@@ -208,6 +208,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
+        MXLog.info("Updating rooms")
+        
         var rooms = [HomeScreenRoom]()
         
         // Try merging together results from both the visibleRoomsSummaryProvider and the allRoomsSummaryProvider
@@ -237,6 +239,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         state.rooms = rooms
+        
+        MXLog.info("Finished updating rooms")
     }
     
     private func buildRoom(with details: RoomSummaryDetails) -> HomeScreenRoom {

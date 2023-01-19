@@ -80,7 +80,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             return
         }
         
-        MXLog.verbose("Updating \(identifiers.count) rooms")
+        MXLog.info("Updating \(identifiers.count) rooms")
         
         guard statePublisher.value == .live else {
             MXLog.warning("Sliding sync not live yet, ignoring update.")
@@ -107,7 +107,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
 
         guard let newSummaries = rooms.applying(diff) else {
-            MXLog.error("Failed applying diff: \(diff)")
+            MXLog.info("Failed applying diff: \(diff)")
             return
         }
 
@@ -117,7 +117,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
-        MXLog.verbose("Received \(diffs.count) diffs")
+        MXLog.info("Received \(diffs.count) diffs")
         
         rooms = diffs
             .reduce(rooms) { currentItems, diff in
@@ -136,7 +136,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                 return updatedItems
             }
         
-        MXLog.verbose("Finished applying \(diffs.count) diffs")
+        MXLog.info("Finished applying \(diffs.count) diffs")
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {
