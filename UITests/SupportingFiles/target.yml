@@ -40,6 +40,7 @@ targets:
     - package: GZIP
     - package: Sentry
     - package: SnapshotTesting
+    - package: Collections
 
     info:
       path: ../SupportingFiles/Info.plist

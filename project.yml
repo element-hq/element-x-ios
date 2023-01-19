@@ -83,3 +83,6 @@ packages:
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     majorVersion: 1.10.0
+  Collections:
+    url: https://github.com/apple/swift-collections
+    majorVersion: 1.0.4

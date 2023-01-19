@@ -36,6 +36,7 @@ targets:
       - package: SwiftyBeaver
       - package: KeychainAccess
       - package: Kingfisher
+      - package: Collections
 
     info:
       path: ../SupportingFiles/Info.plist

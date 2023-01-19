@@ -43,6 +43,7 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
+    - package: Collections
 
     info:
       path: ../SupportingFiles/Info.plist
