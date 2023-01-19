@@ -98,11 +98,6 @@ struct RoomStateStringBuilder {
             }
         case (false, true, false):
             return ElementL10n.noticeAvatarUrlChanged(displayName ?? member)
-        case (true, true, false):
-            return profileChangedString(displayName: displayName, previousDisplayName: previousDisplayName,
-                                        avatarURLString: nil, previousAvatarURLString: nil,
-                                        member: member, memberIsYou: memberIsYou,
-                                        sender: sender, senderIsYou: senderIsYou) + "\n" + ElementL10n.noticeAvatarChangedToo
         case (true, false, true):
             if let displayName, let previousDisplayName {
                 return ElementL10n.noticeDisplayNameChangedFromByYou(displayName, previousDisplayName)
@@ -116,7 +111,8 @@ struct RoomStateStringBuilder {
             }
         case (false, true, true):
             return ElementL10n.noticeAvatarUrlChangedByYou
-        case (true, true, true):
+        case (true, true, _):
+            // When both have changed, get the string for the display name and tack on that the avatar changed too.
             return profileChangedString(displayName: displayName, previousDisplayName: previousDisplayName,
                                         avatarURLString: nil, previousAvatarURLString: nil,
                                         member: member, memberIsYou: memberIsYou,
