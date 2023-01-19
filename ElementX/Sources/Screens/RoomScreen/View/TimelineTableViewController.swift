@@ -69,7 +69,6 @@ class TimelineTableViewController: UIViewController {
         didSet {
             // Paginate again if the threshold hasn't been satisfied.
             paginateBackwardsPublisher.send(())
-            applySnapshot()
         }
     }
         
