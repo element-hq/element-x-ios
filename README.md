@@ -23,7 +23,7 @@ We're doing this as a way to share code between platforms and while we've seen p
 
 ## Roadmap
 
-Our current roadmap is available [here](https://github.com/orgs/vector-im/projects/43/views/3) but as the projects are in their initial stages this is subject to change.
+Our current roadmap is available [here](https://github.com/orgs/vector-im/projects/43/views/23) but as the projects are in their initial stages this is subject to change.
 
 We are aiming to have a fast and fully functional personal messaging application by the end of the year.
 
