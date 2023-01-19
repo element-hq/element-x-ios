@@ -105,11 +105,11 @@ struct HomeScreenRoom: Identifiable, Equatable {
     /// The real room identifier this item points to
     let roomId: String?
     
-    let name: String
+    var name = ""
     
-    let hasUnreads: Bool
+    var hasUnreads = false
     
-    let timestamp: String?
+    var timestamp: String?
     
     var lastMessage: AttributedString?
     
