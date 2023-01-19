@@ -47,8 +47,8 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             
             roomTimelineListener
                 .itemsUpdatePublisher
-                .receive(on: DispatchQueue.main)
-                .sink { [weak self] in self?.updateItemsWithDiff($0) }
+                .collect(.byTime(DispatchQueue.global(), 0.025))
+                .sink { [weak self] in self?.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
             
             switch await roomProxy.addTimelineListener(listener: roomTimelineListener) {
@@ -63,22 +63,25 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     // MARK: - Private
     
-    private func updateItemsWithDiff(_ diff: TimelineDiff) {
+    private func updateItemsWithDiffs(_ diffs: [TimelineDiff]) {
         MXLog.verbose("Received timeline diff")
         
-        guard let collectionDiff = buildDiff(from: diff, on: itemProxies) else {
-            MXLog.error("Failed building CollectionDifference from \(diff)")
-            return
-        }
-        
-        guard let updatedItems = itemProxies.applying(collectionDiff) else {
-            MXLog.error("Failed applying diff: \(collectionDiff)")
-            return
-        }
-        
-        MXLog.verbose("Applied diff \(collectionDiff), new count: \(updatedItems.count)")
-        
-        itemProxies = updatedItems
+        itemProxies = diffs
+            .reduce(itemProxies) { currentItems, diff in
+                guard let collectionDiff = buildDiff(from: diff, on: currentItems) else {
+                    MXLog.error("Failed building CollectionDifference from \(diff)")
+                    return currentItems
+                }
+                
+                guard let updatedItems = currentItems.applying(collectionDiff) else {
+                    MXLog.error("Failed applying diff: \(collectionDiff)")
+                    return currentItems
+                }
+                
+                MXLog.verbose("Applied diff \(collectionDiff), new count: \(updatedItems.count)")
+                
+                return updatedItems
+            }
         
         MXLog.verbose("Finished applying diff")
     }

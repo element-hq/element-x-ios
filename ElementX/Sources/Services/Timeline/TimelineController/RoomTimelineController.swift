@@ -54,7 +54,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         self.timelineProvider
             .itemsPublisher
-            .receive(on: DispatchQueue.main)
+            .receive(on: DispatchQueue.global())
             .sink { [weak self] _ in
                 guard let self else { return }
                 
@@ -236,14 +236,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         updateTimelineItems()
     }
     
-    private func updateTimelineItems() {
-        timelineItemsUpdateTask = Task {
-            await asyncUpdateTimelineItems()
-        }
-    }
-    
     // swiftlint:disable:next cyclomatic_complexity
-    private func asyncUpdateTimelineItems() async {
+    private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
         var isBackPaginating = false
