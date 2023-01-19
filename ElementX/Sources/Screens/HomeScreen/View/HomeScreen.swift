@@ -213,7 +213,7 @@ struct HomeScreen_Previews: PreviewProvider {
     }
     
     static func body(_ state: MockRoomSummaryProviderState) -> some View {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe",
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe",
                                                                        roomSummaryProvider: MockRoomSummaryProvider(state: state)),
                                           mediaProvider: MockMediaProvider())
         

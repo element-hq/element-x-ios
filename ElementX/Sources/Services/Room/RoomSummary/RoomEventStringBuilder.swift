@@ -16,15 +16,15 @@
 
 import Foundation
 
-struct EventTimelineItemSummaryFactory {
-    private let roomStateTimelineItemFactory: RoomStateTimelineItemFactory
+struct RoomEventStringBuilder {
+    private let roomStateStringBuilder: RoomStateStringBuilder
     
     /// The Matrix ID of the current user.
     private let userID: String
     
-    init(userID: String, roomStateTimelineItemFactory: RoomStateTimelineItemFactory) {
+    init(userID: String, roomStateStringBuilder: RoomStateStringBuilder) {
         self.userID = userID
-        self.roomStateTimelineItemFactory = roomStateTimelineItemFactory
+        self.roomStateStringBuilder = roomStateStringBuilder
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -61,13 +61,13 @@ struct EventTimelineItemSummaryFactory {
                 message = messageContent.body()
             }
             return prefix(message, with: sender)
-        case .state(let stateKey, let content):
-            return roomStateTimelineItemFactory
-                .textForOtherState(content, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
+        case .state(let stateKey, let state):
+            return roomStateStringBuilder
+                .buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
         case .roomMembership(userId: let userID, change: let change):
-            return roomStateTimelineItemFactory
-                .textForMembershipChange(change, member: userID, sender: sender, isOutgoing: isOutgoing)
+            return roomStateStringBuilder
+                .buildString(for: change, member: userID, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
         }
     }

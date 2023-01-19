@@ -17,11 +17,11 @@
 import MatrixRustSDK
 import UIKit
 
-struct RoomStateTimelineItemFactory {
+struct RoomStateStringBuilder {
     let userID: String
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    func textForMembershipChange(_ change: MembershipChange, member: String, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
+    func buildString(for change: MembershipChange, member: String, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
         let senderName = sender.displayName ?? sender.id
         let senderIsYou = isOutgoing
         let memberIsYou = member == userID
@@ -93,7 +93,8 @@ struct RoomStateTimelineItemFactory {
             } else if let previousDisplayName {
                 return ElementL10n.noticeDisplayNameRemoved(member, previousDisplayName)
             } else {
-                return ElementL10n.noticeMemberNoChanges(member); #warning("Filter these")
+                MXLog.error("The display name changed from nil to nil, shouldn't be possible.")
+                return ElementL10n.noticeMemberNoChanges(member)
             }
         case (false, true, false):
             return ElementL10n.noticeAvatarUrlChanged(displayName ?? member)
@@ -110,7 +111,8 @@ struct RoomStateTimelineItemFactory {
             } else if let previousDisplayName {
                 return ElementL10n.noticeDisplayNameRemovedByYou(previousDisplayName)
             } else {
-                return ElementL10n.noticeMemberNoChangesByYou;  #warning("Filter these")
+                MXLog.error("The display name changed from nil to nil, shouldn't be possible.")
+                return ElementL10n.noticeMemberNoChangesByYou
             }
         case (false, true, true):
             return ElementL10n.noticeAvatarUrlChangedByYou
@@ -120,15 +122,16 @@ struct RoomStateTimelineItemFactory {
                                         member: member, memberIsYou: memberIsYou,
                                         sender: sender, senderIsYou: senderIsYou) + "\n" + ElementL10n.noticeAvatarChangedToo
         case (false, false, _):
-            return ElementL10n.noticeMemberNoChangesByYou;  #warning("Filter these")
+            MXLog.error("Nothing changed, shouldn't be possible.")
+            return ElementL10n.noticeMemberNoChangesByYou
         }
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    func textForOtherState(_ content: OtherState, stateKey: String?, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
+    func buildString(for state: OtherState, stateKey: String?, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
         let senderName = sender.displayName ?? sender.id
         
-        switch content {
+        switch state {
         case .roomAvatar(let url):
             switch (url, isOutgoing) {
             case (.some, false):
@@ -195,7 +198,7 @@ struct RoomStateTimelineItemFactory {
             break
         }
         
-        MXLog.verbose("Filtering timeline item for state: \(content)")
+        MXLog.verbose("Filtering timeline item for state: \(state)")
         return nil
     }
 }

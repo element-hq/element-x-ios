@@ -21,7 +21,7 @@ import MatrixRustSDK
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let slidingSyncViewProxy: SlidingSyncViewProxy
     private let serialDispatchQueue: DispatchQueue
-    private let eventSummaryFactory: EventTimelineItemSummaryFactory
+    private let eventStringBuilder: RoomEventStringBuilder
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -35,10 +35,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    init(slidingSyncViewProxy: SlidingSyncViewProxy, eventSummaryFactory: EventTimelineItemSummaryFactory) {
+    init(slidingSyncViewProxy: SlidingSyncViewProxy, eventStringBuilder: RoomEventStringBuilder) {
         self.slidingSyncViewProxy = slidingSyncViewProxy
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider")
-        self.eventSummaryFactory = eventSummaryFactory
+        self.eventStringBuilder = eventStringBuilder
         
         rooms = slidingSyncViewProxy.currentRoomsList().map { roomListEntry in
             buildSummaryForRoomListEntry(roomListEntry)
@@ -154,7 +154,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             if let latestRoomMessage = room.latestRoomMessage() {
                 let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
                 lastMessageTimestamp = lastMessage.timestamp
-                attributedLastMessage = eventSummaryFactory.buildAttributedString(for: lastMessage)
+                attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
             }
         }
         

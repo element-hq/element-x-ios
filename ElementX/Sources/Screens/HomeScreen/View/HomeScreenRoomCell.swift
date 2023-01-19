@@ -121,7 +121,7 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
     static var body: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded)
 
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "John Doe", roomSummaryProvider: summaryProvider),
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProvider),
                                           mediaProvider: MockMediaProvider())
 
         let viewModel = HomeScreenViewModel(userSession: userSession,

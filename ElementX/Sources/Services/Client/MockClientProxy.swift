@@ -31,8 +31,8 @@ class MockClientProxy: ClientProxyProtocol {
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
-    internal init(userIdentifier: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
-        self.userID = userIdentifier
+    internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
+        self.userID = userID
         visibleRoomsSummaryProvider = roomSummaryProvider
     }
     

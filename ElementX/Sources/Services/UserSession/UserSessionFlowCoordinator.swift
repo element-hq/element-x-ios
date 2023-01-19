@@ -154,7 +154,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             let timelineItemFactory = RoomTimelineItemFactory(userID: userId,
                                                               mediaProvider: userSession.mediaProvider,
                                                               attributedStringBuilder: AttributedStringBuilder(),
-                                                              roomStateTimelineItemFactory: RoomStateTimelineItemFactory(userID: userId))
+                                                              roomStateStringBuilder: RoomStateStringBuilder(userID: userId))
             
             let timelineController = roomTimelineControllerFactory.buildRoomTimelineController(userId: userId,
                                                                                                roomProxy: roomProxy,

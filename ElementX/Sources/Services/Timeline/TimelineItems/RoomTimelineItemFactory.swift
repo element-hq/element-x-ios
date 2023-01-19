@@ -20,7 +20,7 @@ import UIKit
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
-    private let roomStateTimelineItemFactory: RoomStateTimelineItemFactory
+    private let roomStateStringBuilder: RoomStateStringBuilder
     
     /// The Matrix ID of the current user.
     private let userID: String
@@ -28,11 +28,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     init(userID: String,
          mediaProvider: MediaProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         roomStateTimelineItemFactory: RoomStateTimelineItemFactory) {
+         roomStateStringBuilder: RoomStateStringBuilder) {
         self.userID = userID
         self.mediaProvider = mediaProvider
         self.attributedStringBuilder = attributedStringBuilder
-        self.roomStateTimelineItemFactory = roomStateTimelineItemFactory
+        self.roomStateStringBuilder = roomStateStringBuilder
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -83,9 +83,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                 return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
             }
         case .state(let stateKey, let content):
-            return buildStateTimelineItemFor(eventItemProxy: eventItemProxy, content: content, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
+            return buildStateTimelineItemFor(eventItemProxy: eventItemProxy, state: content, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, change: let change):
-            return buildStateMembershipChangeTimelineItemFor(eventItemProxy: eventItemProxy, member: userID, change: change, sender: sender, isOutgoing: isOutgoing)
+            return buildStateMembershipChangeTimelineItemFor(eventItemProxy: eventItemProxy, member: userID, membershipChange: change, sender: sender, isOutgoing: isOutgoing)
         }
     }
     
@@ -366,20 +366,20 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     // MARK: - State Events
     
     private func buildStateTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
-                                           content: OtherState,
+                                           state: OtherState,
                                            stateKey: String,
                                            sender: TimelineItemSender,
                                            isOutgoing: Bool) -> RoomTimelineItemProtocol? {
-        guard let text = roomStateTimelineItemFactory.textForOtherState(content, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing) else { return nil }
+        guard let text = roomStateStringBuilder.buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing) else { return nil }
         return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, sender: sender, isOutgoing: isOutgoing)
     }
     
     private func buildStateMembershipChangeTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
                                                            member: String,
-                                                           change: MembershipChange,
+                                                           membershipChange: MembershipChange,
                                                            sender: TimelineItemSender,
                                                            isOutgoing: Bool) -> RoomTimelineItemProtocol? {
-        guard let text = roomStateTimelineItemFactory.textForMembershipChange(change, member: member, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
+        guard let text = roomStateStringBuilder.buildString(for: membershipChange, member: member, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
         return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, sender: sender, isOutgoing: isOutgoing)
     }
     
