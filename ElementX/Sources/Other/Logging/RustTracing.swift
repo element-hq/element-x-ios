@@ -53,7 +53,7 @@ struct TracingConfiguration {
     
     var overrides = [Target: LogLevel]()
     
-    fileprivate var filter: String {
+    var filter: String {
         var newTargets = targets
         for (target, logLevel) in overrides {
             newTargets.updateValue(logLevel, forKey: target)
