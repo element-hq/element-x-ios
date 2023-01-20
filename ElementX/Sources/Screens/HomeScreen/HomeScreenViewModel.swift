@@ -45,7 +45,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         visibleRoomsSummaryProvider = userSession.clientProxy.visibleRoomsSummaryProvider
         allRoomsSummaryProvider = userSession.clientProxy.allRoomsSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID))
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
+                   imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
             .receive(on: DispatchQueue.main)
@@ -142,10 +143,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // swiftlint:disable:next cyclomatic_complexity
     override func process(viewAction: HomeScreenViewAction) async {
         switch viewAction {
-        case .loadRoomData(let roomIdentifier):
-            if state.roomListMode != .skeletons {
-                loadDataForRoomIdentifier(roomIdentifier)
-            }
         case .selectRoom(let roomIdentifier):
             callback?(.presentRoom(roomIdentifier: roomIdentifier))
         case .userMenu(let action):
@@ -178,27 +175,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     // MARK: - Private
-    
-    private func loadDataForRoomIdentifier(_ identifier: String) {
-        guard let room = roomsForIdentifiers[identifier],
-              room.avatar == nil,
-              let avatarURL = room.avatarURL else {
-            return
-        }
         
-        Task {
-            if case let .success(image) = await userSession.mediaProvider.loadImageFromURL(avatarURL, avatarSize: .room(on: .home)) {
-                guard let roomIndex = state.rooms.firstIndex(where: { $0.roomId == identifier }) else {
-                    return
-                }
-                
-                var room = state.rooms[roomIndex]
-                room.avatar = image
-                state.rooms[roomIndex] = room
-            }
-        }
-    }
-    
     /// This method will update all view state rooms by merging the data from both summary providers
     /// If a room is empty in the visible room summary provider it will try to get it from the allRooms one
     /// This ensures that we show as many room details as possible without loading up timelines
@@ -255,10 +232,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         room.name = details.name
         room.hasUnreads = details.unreadNotificationCount > 0
         room.lastMessage = details.lastMessage
-        
-        if let avatarURL = details.avatarURL {
-            room.avatar = userSession.mediaProvider.imageFromURL(avatarURL, avatarSize: .room(on: .home))
-        }
         
         if let lastMessageTimestamp = details.lastMessageTimestamp {
             room.timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)

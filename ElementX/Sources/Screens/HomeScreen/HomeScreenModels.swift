@@ -34,7 +34,6 @@ enum HomeScreenViewUserMenuAction {
 }
 
 enum HomeScreenViewAction {
-    case loadRoomData(roomIdentifier: String)
     case selectRoom(roomIdentifier: String)
     case userMenu(action: HomeScreenViewUserMenuAction)
     case verifySession
@@ -96,7 +95,6 @@ struct HomeScreenViewStateBindings {
 
 struct HomeScreenRoom: Identifiable, Equatable {
     private static let placeholderLastMessage = AttributedString("Last message")
-    private static let placeholderAvatar = UIImage(systemName: "photo")
     
     /// The list item identifier can be a real room identifier, a custom one for invalidated entries
     /// or a completely unique one for empty items and skeletons
@@ -115,8 +113,6 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var avatarURL: URL?
     
-    var avatar: UIImage?
-    
     var isPlaceholder = false
     
     static func placeholder() -> HomeScreenRoom {
@@ -126,7 +122,6 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        hasUnreads: false,
                        timestamp: "Now",
                        lastMessage: Self.placeholderLastMessage,
-                       avatar: Self.placeholderAvatar,
                        isPlaceholder: true)
     }
 }

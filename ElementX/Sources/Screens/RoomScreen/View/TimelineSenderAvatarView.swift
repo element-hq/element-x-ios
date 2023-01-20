@@ -42,5 +42,8 @@ struct TimelineSenderAvatarView: View {
         )
 
         .animation(.elementDefault, value: timelineItem.sender.avatar)
+        .task {
+            
+        }
     }
 }

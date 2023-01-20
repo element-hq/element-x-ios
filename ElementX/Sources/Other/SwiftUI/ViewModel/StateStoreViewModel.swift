@@ -36,6 +36,10 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
 
     /// Get-able/Observable `Published` property for the `ViewState`
     @Published fileprivate(set) var viewState: ViewState
+    
+    /// An optional image loading service so that views can manage themselves
+    /// Intentionally keeps non-generic so that it doesn't grow uncontrollably
+    let imageProvider: ImageProviderProtocol?
 
     /// Set-able/Bindable access to the bindable state.
     subscript<T>(dynamicMember keyPath: WritableKeyPath<ViewState.BindStateType, T>) -> T {
@@ -43,9 +47,10 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
         set { viewState.bindings[keyPath: keyPath] = newValue }
     }
     
-    init(initialViewState: ViewState) {
+    init(initialViewState: ViewState, imageProvider: ImageProviderProtocol?) {
         self.viewActions = PassthroughSubject()
         self.viewState = initialViewState
+        self.imageProvider = imageProvider
     }
 
     /// Send a `ViewAction` to the `ViewModel` for processing.
@@ -78,8 +83,8 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
         set { context.viewState = newValue }
     }
 
-    init(initialViewState: State) {
-        context = Context(initialViewState: initialViewState)
+    init(initialViewState: State, imageProvider: ImageProviderProtocol? = nil) {
+        context = Context(initialViewState: initialViewState, imageProvider: imageProvider)
         context.viewActions
             .sink { [weak self] action in
                 guard let self else { return }
