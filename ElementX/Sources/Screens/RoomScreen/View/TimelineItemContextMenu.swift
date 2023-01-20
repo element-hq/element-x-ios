@@ -17,8 +17,11 @@
 import SwiftUI
 
 struct TimelineItemContextMenuActions {
+    static var empty: TimelineItemContextMenuActions { .init(actions: [], debugActions: []) }
+    
     let actions: [TimelineItemContextMenuAction]
     let debugActions: [TimelineItemContextMenuAction]
+    var isEmpty: Bool { actions.isEmpty && debugActions.isEmpty }
 }
 
 enum TimelineItemContextMenuAction: Identifiable, Hashable {
@@ -48,13 +51,17 @@ public struct TimelineItemContextMenu: View {
     let contextMenuActions: TimelineItemContextMenuActions
     let callback: (TimelineItemContextMenuAction) -> Void
     
-    @ViewBuilder
     public var body: some View {
-        viewsForActions(contextMenuActions.actions)
-        Menu {
-            viewsForActions(contextMenuActions.debugActions)
-        } label: {
-            Label("Developer", systemImage: "hammer")
+        if contextMenuActions.isEmpty {
+            // When there are no actions make sure then menu isn't shown.
+            EmptyView()
+        } else {
+            viewsForActions(contextMenuActions.actions)
+            Menu {
+                viewsForActions(contextMenuActions.debugActions)
+            } label: {
+                Label("Developer", systemImage: "hammer")
+            }
         }
     }
     

@@ -37,6 +37,12 @@ enum TimelineItemProxy {
         guard case let .event(selfEventItemProxy) = self, case let .event(previousEventItemProxy) = previousItemProxy else {
             return false
         }
+        
+        // State events aren't rendered as messages so shouldn't be grouped.
+        if selfEventItemProxy.isState || previousEventItemProxy.isState {
+            return false
+        }
+        
         //  can be improved by adding a date threshold
         return previousEventItemProxy.reactions.isEmpty && selfEventItemProxy.sender == previousEventItemProxy.sender
     }
@@ -83,6 +89,10 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         content.asMessage() != nil
     }
     
+    var isState: Bool {
+        content.kind().isState
+    }
+    
     var content: TimelineItemContent {
         item.content()
     }
@@ -114,5 +124,16 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     
     var debugDescription: String {
         item.fmtDebug()
+    }
+}
+
+extension TimelineItemContentKind {
+    var isState: Bool {
+        switch self {
+        case .state, .roomMembership:
+            return true
+        default:
+            return false
+        }
     }
 }
