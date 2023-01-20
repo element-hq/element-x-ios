@@ -107,7 +107,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
 
         guard let newSummaries = rooms.applying(diff) else {
-            MXLog.info("Failed applying diff: \(diff)")
+            MXLog.error("Failed applying diff: \(diff)")
             return
         }
 

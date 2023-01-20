@@ -21,10 +21,11 @@ import UniformTypeIdentifiers
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let userId: String
+    private let roomProxy: RoomProxyProtocol
     private let timelineProvider: RoomTimelineProviderProtocol
     private let timelineItemFactory: RoomTimelineItemFactoryProtocol
     private let mediaProvider: MediaProviderProtocol
-    let roomProxy: RoomProxyProtocol
+    private let serialDispatchQueue: DispatchQueue
     
     private var cancellables = Set<AnyCancellable>()
     private var timelineItemsUpdateTask: Task<Void, Never>? {
@@ -51,10 +52,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
         self.roomProxy = roomProxy
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider")
         
         self.timelineProvider
             .itemsPublisher
-            .receive(on: DispatchQueue.global())
+            .receive(on: serialDispatchQueue)
             .sink { [weak self] _ in
                 guard let self else { return }
                 

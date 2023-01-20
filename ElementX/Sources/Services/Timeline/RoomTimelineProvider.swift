@@ -29,6 +29,7 @@ private class RoomTimelineListener: TimelineListener {
 class RoomTimelineProvider: RoomTimelineProviderProtocol {
     private let roomProxy: RoomProxyProtocol
     private var cancellables = Set<AnyCancellable>()
+    private let serialDispatchQueue: DispatchQueue
     
     let itemsPublisher = CurrentValueSubject<[TimelineItemProxy], Never>([])
     
@@ -40,6 +41,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider")
         itemProxies = []
 
         Task {
@@ -47,7 +49,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             
             roomTimelineListener
                 .itemsUpdatePublisher
-                .collect(.byTime(DispatchQueue.global(), 0.025))
+                .collect(.byTime(serialDispatchQueue, 0.025))
                 .sink { [weak self] in self?.updateItemsWithDiffs($0) }
                 .store(in: &cancellables)
             
