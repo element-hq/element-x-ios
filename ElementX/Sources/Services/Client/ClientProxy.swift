@@ -292,8 +292,7 @@ class ClientProxy: ClientProxyProtocol {
         let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: visibleRoomsView)
         
         visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
-                                                          eventStringBuilder: RoomEventStringBuilder(userID: userID,
-                                                                                                     roomStateStringBuilder: RoomStateStringBuilder(userID: userID)))
+                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
         
         visibleRoomsSlidingSyncView = visibleRoomsView
         
@@ -330,8 +329,7 @@ class ClientProxy: ClientProxyProtocol {
             let allRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: allRoomsView)
             
             allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
-                                                          eventStringBuilder: RoomEventStringBuilder(userID: userID,
-                                                                                                     roomStateStringBuilder: RoomStateStringBuilder(userID: userID)))
+                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
             
             allRoomsSlidingSyncView = allRoomsView
             

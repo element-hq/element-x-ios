@@ -60,7 +60,7 @@
 		187E18F21EF4DA244E436E58 /* BugReportViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28959C7DB36C7688A01D4045 /* BugReportViewModelProtocol.swift */; };
 		18E674DB2977DBD60055EA9F /* StateRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E674DA2977DBD60055EA9F /* StateRoomTimelineItem.swift */; };
 		18E674DD2977DC2B0055EA9F /* StateRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E674DC2977DC2B0055EA9F /* StateRoomTimelineView.swift */; };
-		18E674DF2977DD9B0055EA9F /* RoomStateStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E674DE2977DD9B0055EA9F /* RoomStateStringBuilder.swift */; };
+		18E674DF2977DD9B0055EA9F /* RoomStateEventStringBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18E674DE2977DD9B0055EA9F /* RoomStateEventStringBuilder.swift */; };
 		191161FE9E0DA89704301F37 /* Untranslated.strings in Resources */ = {isa = PBXBuildFile; fileRef = D2F7194F440375338F8E2487 /* Untranslated.strings */; };
 		1950A80CD198BED283DFC2CE /* ClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */; };
 		19839F3526CE8C35AAF241AD /* ServerSelectionViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0F52BF30D12BA3BD3D3DBB8F /* ServerSelectionViewModelProtocol.swift */; };
@@ -586,7 +586,7 @@
 		184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DecorationTimelineItemProtocol.swift; sourceTree = "<group>"; };
 		18E674DA2977DBD60055EA9F /* StateRoomTimelineItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateRoomTimelineItem.swift; sourceTree = "<group>"; };
 		18E674DC2977DC2B0055EA9F /* StateRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StateRoomTimelineView.swift; sourceTree = "<group>"; };
-		18E674DE2977DD9B0055EA9F /* RoomStateStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStateStringBuilder.swift; sourceTree = "<group>"; };
+		18E674DE2977DD9B0055EA9F /* RoomStateEventStringBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomStateEventStringBuilder.swift; sourceTree = "<group>"; };
 		18F2958E6D247AE2516BEEE8 /* ClientProxy.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientProxy.swift; sourceTree = "<group>"; };
 		18FE0CDF1FFA92EA7EE17B0B /* RoomTimelineControllerFactoryProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomTimelineControllerFactoryProtocol.swift; sourceTree = "<group>"; };
 		1941C8817E6B6971BA4415F5 /* VideoRoomTimelineView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoRoomTimelineView.swift; sourceTree = "<group>"; };
@@ -1992,7 +1992,7 @@
 				EEE384418EB1FEDFA62C9CD0 /* RoomTimelineViewFactoryProtocol.swift */,
 				ACB6C5E4950B6C9842F35A38 /* RoomTimelineViewProvider.swift */,
 				75D1D02F7F3AC1122FCFB4F3 /* Items */,
-				18E674DE2977DD9B0055EA9F /* RoomStateStringBuilder.swift */,
+				18E674DE2977DD9B0055EA9F /* RoomStateEventStringBuilder.swift */,
 			);
 			path = TimelineItems;
 			sourceTree = "<group>";
@@ -2977,7 +2977,7 @@
 				64FF5CB4E35971255872E1BB /* AuthenticationServiceProxyProtocol.swift in Sources */,
 				D876EC0FED3B6D46C806912A /* AvatarSize.swift in Sources */,
 				E0A4DCA633D174EB43AD599F /* BackgroundTaskProtocol.swift in Sources */,
-				18E674DF2977DD9B0055EA9F /* RoomStateStringBuilder.swift in Sources */,
+				18E674DF2977DD9B0055EA9F /* RoomStateEventStringBuilder.swift in Sources */,
 				6D046D653DA28ADF1E6E59A4 /* BackgroundTaskServiceProtocol.swift in Sources */,
 				38546A6010A2CF240EC9AF73 /* BindableState.swift in Sources */,
 				B6DF6B6FA8734B70F9BF261E /* BlurHashDecode.swift in Sources */,

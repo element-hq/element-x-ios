@@ -17,7 +17,7 @@
 import MatrixRustSDK
 import UIKit
 
-struct RoomStateStringBuilder {
+struct RoomStateEventStringBuilder {
     let userID: String
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length

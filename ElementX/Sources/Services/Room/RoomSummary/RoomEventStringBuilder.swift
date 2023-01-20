@@ -17,14 +17,10 @@
 import Foundation
 
 struct RoomEventStringBuilder {
-    private let roomStateStringBuilder: RoomStateStringBuilder
+    private let stateEventStringBuilder: RoomStateEventStringBuilder
     
-    /// The Matrix ID of the current user.
-    private let userID: String
-    
-    init(userID: String, roomStateStringBuilder: RoomStateStringBuilder) {
-        self.userID = userID
-        self.roomStateStringBuilder = roomStateStringBuilder
+    init(stateEventStringBuilder: RoomStateEventStringBuilder) {
+        self.stateEventStringBuilder = stateEventStringBuilder
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -62,11 +58,11 @@ struct RoomEventStringBuilder {
             }
             return prefix(message, with: sender)
         case .state(let stateKey, let state):
-            return roomStateStringBuilder
+            return stateEventStringBuilder
                 .buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
         case .roomMembership(userId: let userID, change: let change):
-            return roomStateStringBuilder
+            return stateEventStringBuilder
                 .buildString(for: change, member: userID, sender: sender, isOutgoing: isOutgoing)
                 .map(AttributedString.init)
         }

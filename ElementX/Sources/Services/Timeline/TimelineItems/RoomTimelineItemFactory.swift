@@ -20,7 +20,7 @@ import UIKit
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
-    private let roomStateStringBuilder: RoomStateStringBuilder
+    private let stateEventStringBuilder: RoomStateEventStringBuilder
     
     /// The Matrix ID of the current user.
     private let userID: String
@@ -28,11 +28,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     init(userID: String,
          mediaProvider: MediaProviderProtocol,
          attributedStringBuilder: AttributedStringBuilderProtocol,
-         roomStateStringBuilder: RoomStateStringBuilder) {
+         stateEventStringBuilder: RoomStateEventStringBuilder) {
         self.userID = userID
         self.mediaProvider = mediaProvider
         self.attributedStringBuilder = attributedStringBuilder
-        self.roomStateStringBuilder = roomStateStringBuilder
+        self.stateEventStringBuilder = stateEventStringBuilder
     }
     
     // swiftlint:disable:next cyclomatic_complexity
@@ -370,7 +370,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                            stateKey: String,
                                            sender: TimelineItemSender,
                                            isOutgoing: Bool) -> RoomTimelineItemProtocol? {
-        guard let text = roomStateStringBuilder.buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing) else { return nil }
+        guard let text = stateEventStringBuilder.buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing) else { return nil }
         return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, sender: sender, isOutgoing: isOutgoing)
     }
     
@@ -379,7 +379,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                            membershipChange: MembershipChange,
                                                            sender: TimelineItemSender,
                                                            isOutgoing: Bool) -> RoomTimelineItemProtocol? {
-        guard let text = roomStateStringBuilder.buildString(for: membershipChange, member: member, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
+        guard let text = stateEventStringBuilder.buildString(for: membershipChange, member: member, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
         return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, sender: sender, isOutgoing: isOutgoing)
     }
     
