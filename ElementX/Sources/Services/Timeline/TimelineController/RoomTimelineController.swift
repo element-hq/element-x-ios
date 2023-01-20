@@ -259,9 +259,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             let groupState = computeGroupState(for: itemProxy, previousItemProxy: previousItemProxy, nextItemProxy: nextItemProxy)
             
             switch itemProxy {
-            case .event(let eventItem):
-                newTimelineItems.append(timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItem,
-                                                                                 groupState: groupState))
+            case .event(let eventItemProxy):
+                if let timelineItem = timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy, groupState: groupState) {
+                    newTimelineItems.append(timelineItem)
+                }
             case .virtual(let virtualItem):
                 switch virtualItem {
                 case .dayDivider(let year, let month, let day):

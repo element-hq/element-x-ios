@@ -52,7 +52,7 @@ class MockAuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             return .failure(.invalidCredentials)
         }
         
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: username),
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: username),
                                           mediaProvider: MockMediaProvider())
         return .success(userSession)
     }

@@ -24,6 +24,20 @@
 
 "room_timeline_item_unsupported" = "Unsupported event";
 
+"noticeRoomInviteAccepted" = "%1$@ accepted the invite";
+"noticeRoomInviteAcceptedByYou" = "You accepted the invite";
+"noticeRoomKnock" = "%1$@ requested to join";
+"noticeRoomKnockByYou" = "You requested to join";
+"noticeRoomKnockAccepted" = "%1$@ allowed %2$@ to join";
+"noticeRoomKnockAcceptedByYou" = "%1$@ allowed you to join";
+"noticeRoomKnockRetracted" = "%1$@ is no longer interested in joining";
+"noticeRoomKnockRetractedByYou" = "You cancelled your request to join";
+"noticeRoomKnockDenied" = "%1$@ rejected %2$@'s request to join";
+"noticeRoomKnockDeniedByYou" = "You rejected %1$@'s request to join";
+"noticeRoomKnockDeniedYou" = "%1$@ rejected your request to join";
+"noticeRoomUnknownMembershipChange" = "%1$@ made an unknown change to their membership";
+
+
 "session_verification_banner_title" = "Help keep your messages secure";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify its you.";
 

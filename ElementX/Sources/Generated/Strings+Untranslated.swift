@@ -24,6 +24,48 @@ extension ElementL10n {
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet
   public static let loginTabletDevice = ElementL10n.tr("Untranslated", "login_tablet_device")
+  /// %1$@ accepted the invite
+  public static func noticeRoomInviteAccepted(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomInviteAccepted", String(describing: p1))
+  }
+  /// You accepted the invite
+  public static let noticeRoomInviteAcceptedByYou = ElementL10n.tr("Untranslated", "noticeRoomInviteAcceptedByYou")
+  /// %1$@ requested to join
+  public static func noticeRoomKnock(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomKnock", String(describing: p1))
+  }
+  /// %1$@ allowed %2$@ to join
+  public static func noticeRoomKnockAccepted(_ p1: Any, _ p2: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomKnockAccepted", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ allowed you to join
+  public static func noticeRoomKnockAcceptedByYou(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomKnockAcceptedByYou", String(describing: p1))
+  }
+  /// You requested to join
+  public static let noticeRoomKnockByYou = ElementL10n.tr("Untranslated", "noticeRoomKnockByYou")
+  /// %1$@ rejected %2$@'s request to join
+  public static func noticeRoomKnockDenied(_ p1: Any, _ p2: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomKnockDenied", String(describing: p1), String(describing: p2))
+  }
+  /// You rejected %1$@'s request to join
+  public static func noticeRoomKnockDeniedByYou(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomKnockDeniedByYou", String(describing: p1))
+  }
+  /// %1$@ rejected your request to join
+  public static func noticeRoomKnockDeniedYou(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomKnockDeniedYou", String(describing: p1))
+  }
+  /// %1$@ is no longer interested in joining
+  public static func noticeRoomKnockRetracted(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomKnockRetracted", String(describing: p1))
+  }
+  /// You cancelled your request to join
+  public static let noticeRoomKnockRetractedByYou = ElementL10n.tr("Untranslated", "noticeRoomKnockRetractedByYou")
+  /// %1$@ made an unknown change to their membership
+  public static func noticeRoomUnknownMembershipChange(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "noticeRoomUnknownMembershipChange", String(describing: p1))
+  }
   /// Notification
   public static let notification = ElementL10n.tr("Untranslated", "Notification")
   /// About

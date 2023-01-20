@@ -20,21 +20,24 @@ import UIKit
 struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private let mediaProvider: MediaProviderProtocol
     private let attributedStringBuilder: AttributedStringBuilderProtocol
+    private let roomStateStringBuilder: RoomStateStringBuilder
     
     /// The Matrix ID of the current user.
     private let userID: String
     
     init(userID: String,
          mediaProvider: MediaProviderProtocol,
-         attributedStringBuilder: AttributedStringBuilderProtocol) {
+         attributedStringBuilder: AttributedStringBuilderProtocol,
+         roomStateStringBuilder: RoomStateStringBuilder) {
         self.userID = userID
         self.mediaProvider = mediaProvider
         self.attributedStringBuilder = attributedStringBuilder
+        self.roomStateStringBuilder = roomStateStringBuilder
     }
     
     // swiftlint:disable:next cyclomatic_complexity
     func buildTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
-                              groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
+                              groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol? {
         var sender = eventItemProxy.sender
         if let senderAvatarURL = eventItemProxy.sender.avatarURL,
            let image = mediaProvider.imageFromURL(senderAvatarURL, avatarSize: .user(on: .timeline)) {
@@ -79,14 +82,14 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .none:
                 return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
             }
-        case .state:
-            return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
-        case .roomMembership:
-            return buildFallbackTimelineItem(eventItemProxy, sender, isOutgoing, groupState)
+        case .state(let stateKey, let content):
+            return buildStateTimelineItemFor(eventItemProxy: eventItemProxy, state: content, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing)
+        case .roomMembership(userId: let userID, change: let change):
+            return buildStateMembershipChangeTimelineItemFor(eventItemProxy: eventItemProxy, member: userID, membershipChange: change, sender: sender, isOutgoing: isOutgoing)
         }
     }
     
-    // MARK: - Private
+    // MARK: - Message Events
     
     // swiftlint:disable:next function_parameter_count
     private func buildUnsupportedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
@@ -358,5 +361,35 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             let isHighlighted = false // reaction.details.contains(where: { $0.sender.id == userID })
             return AggregatedReaction(key: reaction.key, count: Int(reaction.count), isHighlighted: isHighlighted)
         }
+    }
+    
+    // MARK: - State Events
+    
+    private func buildStateTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
+                                           state: OtherState,
+                                           stateKey: String,
+                                           sender: TimelineItemSender,
+                                           isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        guard let text = roomStateStringBuilder.buildString(for: state, stateKey: stateKey, sender: sender, isOutgoing: isOutgoing) else { return nil }
+        return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, sender: sender, isOutgoing: isOutgoing)
+    }
+    
+    private func buildStateMembershipChangeTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
+                                                           member: String,
+                                                           membershipChange: MembershipChange,
+                                                           sender: TimelineItemSender,
+                                                           isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        guard let text = roomStateStringBuilder.buildString(for: membershipChange, member: member, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
+        return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, sender: sender, isOutgoing: isOutgoing)
+    }
+    
+    private func buildStateTimelineItem(eventItemProxy: EventTimelineItemProxy, text: String, sender: TimelineItemSender, isOutgoing: Bool) -> RoomTimelineItemProtocol {
+        StateRoomTimelineItem(id: eventItemProxy.id,
+                              text: text,
+                              timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
+                              groupState: .single,
+                              isOutgoing: isOutgoing,
+                              isEditable: false,
+                              sender: sender)
     }
 }

@@ -21,7 +21,7 @@ import MatrixRustSDK
 class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
-    let userIdentifier: String
+    let userID: String
     let isSoftLogout = false
     let deviceId: String? = nil
     let homeserver = ""
@@ -31,8 +31,8 @@ class MockClientProxy: ClientProxyProtocol {
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
-    internal init(userIdentifier: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
-        self.userIdentifier = userIdentifier
+    internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
+        self.userID = userID
         visibleRoomsSummaryProvider = roomSummaryProvider
     }
     

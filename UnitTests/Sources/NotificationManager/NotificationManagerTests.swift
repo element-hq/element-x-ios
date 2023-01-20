@@ -21,7 +21,7 @@ import Combine
 
 final class NotificationManagerTests: XCTestCase {
     var notificationManager: NotificationManager!
-    private let clientProxy = MockClientProxy(userIdentifier: "@test:user.net")
+    private let clientProxy = MockClientProxy(userID: "@test:user.net")
     private let notificationCenter = UserNotificationCenterSpy()
     private var authorizationStatusWasGranted = false
     private var shouldDisplayInAppNotificationReturnValue = false

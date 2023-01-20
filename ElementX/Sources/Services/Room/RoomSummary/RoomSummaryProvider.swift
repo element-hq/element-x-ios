@@ -21,6 +21,7 @@ import MatrixRustSDK
 class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private let slidingSyncViewProxy: SlidingSyncViewProxy
     private let serialDispatchQueue: DispatchQueue
+    private let eventStringBuilder: RoomEventStringBuilder
     
     private var cancellables = Set<AnyCancellable>()
     
@@ -34,9 +35,10 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    init(slidingSyncViewProxy: SlidingSyncViewProxy) {
+    init(slidingSyncViewProxy: SlidingSyncViewProxy, eventStringBuilder: RoomEventStringBuilder) {
         self.slidingSyncViewProxy = slidingSyncViewProxy
         serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider")
+        self.eventStringBuilder = eventStringBuilder
         
         rooms = slidingSyncViewProxy.currentRoomsList().map { roomListEntry in
             buildSummaryForRoomListEntry(roomListEntry)
@@ -151,16 +153,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         DispatchQueue.global(qos: .default).sync {
             if let latestRoomMessage = room.latestRoomMessage() {
                 let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
-                
                 lastMessageTimestamp = lastMessage.timestamp
-                
-                if let senderDisplayName = lastMessage.sender.displayName,
-                   let attributedSenderDisplayName = try? AttributedString(markdown: "**\(senderDisplayName)**") {
-                    // Don't include the message body in the markdown otherwise it makes tappable links.
-                    attributedLastMessage = attributedSenderDisplayName + ": " + AttributedString(lastMessage.body ?? "")
-                } else if let body = lastMessage.body {
-                    attributedLastMessage = AttributedString(body)
-                }
+                attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
             }
         }
         

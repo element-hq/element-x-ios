@@ -85,7 +85,7 @@ class MockScreen: Identifiable {
                                                                 userNotificationController: MockUserNotificationController(),
                                                                 isModallyPresented: false))
         case .analyticsPrompt:
-            return AnalyticsPromptCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
+            return AnalyticsPromptCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
                                                                                              mediaProvider: MockMediaProvider())))
         case .authenticationFlow:
             let navigationStackCoordinator = NavigationStackCoordinator()
@@ -108,7 +108,7 @@ class MockScreen: Identifiable {
             return TemplateCoordinator(parameters: .init(promptType: .upgrade))
         case .home:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let session = MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:matrix.org"),
+            let session = MockUserSession(clientProxy: MockClientProxy(userID: "@mock:matrix.org"),
                                           mediaProvider: MockMediaProvider())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
                                                                       attributedStringBuilder: AttributedStringBuilder(),
@@ -120,7 +120,7 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = SettingsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                     userNotificationController: MockUserNotificationController(),
-                                                                    userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
+                                                                    userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
                                                                                                  mediaProvider: MockMediaProvider()),
                                                                     bugReportService: MockBugReportService()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -260,7 +260,7 @@ class MockScreen: Identifiable {
         case .userSessionScreen:
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
             
-            let clientProxy = MockClientProxy(userIdentifier: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded))
+            let clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded))
             
             let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,

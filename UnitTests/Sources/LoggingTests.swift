@@ -206,7 +206,7 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(lastMessage))
     }
     
-    // swiftlint:disable function_body_length
+    // swiftlint:disable:next function_body_length
     func testTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
@@ -275,8 +275,6 @@ class LoggingTests: XCTestCase {
         XCTAssertTrue(content.contains(fileMessage.id))
         XCTAssertFalse(content.contains(fileMessage.text))
     }
-
-    // swiftlint:enable function_body_length
     
     func testRustMessageContentIsRedacted() throws {
         // Given message content that contain text

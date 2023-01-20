@@ -19,7 +19,7 @@ import XCTest
 
 final class UserSessionTests: XCTestCase {
     var userSession: UserSession!
-    let clientProxy = MockClientProxy(userIdentifier: "@test:user.net")
+    let clientProxy = MockClientProxy(userID: "@test:user.net")
     
     private var cancellables: Set<AnyCancellable> = []
     

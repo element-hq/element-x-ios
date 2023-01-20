@@ -23,7 +23,7 @@ class HomeScreenViewModelTests: XCTestCase {
     var context: HomeScreenViewModelType.Context!
     
     @MainActor override func setUpWithError() throws {
-        viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userIdentifier: "@mock:client.com"),
+        viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
                                                                      mediaProvider: MockMediaProvider()),
                                         attributedStringBuilder: AttributedStringBuilder())
         context = viewModel.context

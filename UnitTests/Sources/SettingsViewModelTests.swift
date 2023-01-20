@@ -24,7 +24,7 @@ class SettingsViewModelTests: XCTestCase {
     var context: SettingsViewModelType.Context!
     
     @MainActor override func setUpWithError() throws {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userIdentifier: ""),
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: ""),
                                           mediaProvider: MockMediaProvider())
         viewModel = SettingsViewModel(withUserSession: userSession)
         context = viewModel.context

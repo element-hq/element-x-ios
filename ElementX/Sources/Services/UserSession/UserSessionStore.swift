@@ -78,13 +78,13 @@ class UserSessionStore: UserSessionStoreProtocol {
             return .failure(.failedRefreshingRestoreToken)
         }
 
-        keychainController.setRestorationToken(restorationToken, forUsername: userSession.clientProxy.userIdentifier)
+        keychainController.setRestorationToken(restorationToken, forUsername: userSession.clientProxy.userID)
 
         return .success(())
     }
     
     func logout(userSession: UserSessionProtocol) {
-        let userID = userSession.clientProxy.userIdentifier
+        let userID = userSession.clientProxy.userID
         keychainController.removeRestorationTokenForUsername(userID)
         deleteSessionDirectory(for: userID)
     }
