@@ -1,3 +1,24 @@
+## Changes in 1.0.14 (2023-01-20)
+
+✨ Features
+
+- Show state events in the timeline and (at least temporarily) on the home screen. ([#473](https://github.com/vector-im/element-x-ios/pull/473))
+
+🙌 Improvements
+
+- Logging: Redact Room/Message content and use MXLog.info in more places. ([#457](https://github.com/vector-im/element-x-ios/pull/457))
+- Rooms: Mark rooms as read when opening/closing. ([#414](https://github.com/vector-im/element-x-ios/issues/414))
+
+🐛 Bugfixes
+
+- Prevent long room names from breaking the room navigation bar layout ([#388](https://github.com/vector-im/element-x-ios/issues/388))
+- Fix room member details screen performance ([#421](https://github.com/vector-im/element-x-ios/issues/421))
+
+🧱 Build
+
+- DesignKit: Move into a sub-package as long term this package will live outside of this repo. ([#459](https://github.com/vector-im/element-x-ios/pull/459))
+
+
 ## Changes in 1.0.13 (2023-01-13)
 
 ✨ Features
