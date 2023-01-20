@@ -14,48 +14,60 @@
 // limitations under the License.
 //
 
+import Collections
 import MatrixRustSDK
 
 // This exposes the full Rust side tracing subscriber filter for more flexibility.
 // We can filter by level, crate and even file. See more details here:
 // https://docs.rs/tracing-subscriber/0.2.7/tracing_subscriber/filter/struct.EnvFilter.html#examples
 struct TracingConfiguration {
-    static var release = TracingConfiguration(common: .info)
-    static var debug = TracingConfiguration()
-    static var full = TracingConfiguration(common: .info,
-                                           targets: [
-                                               .hyper: .warn,
-                                               .sled: .warn,
-                                               .matrix_sdk_sled: .warn,
-                                               .matrix_sdk_http_client: .trace,
-                                               .matrix_sdk_ffi_uniffi_api: .warn,
-                                               .matrix_sdk_ffi: .warn,
-                                               .matrix_sdk_sliding_sync: .warn,
-                                               .matrix_sdk_base_sliding_sync: .warn,
-                                               .matrix_sdk_crypto: .trace
-                                           ])
+    static var release = TracingConfiguration(overrides: [.common: .info])
+    static var debug = TracingConfiguration(overrides: [.common: .info])
+    static func custom(overrides: [Target: LogLevel]) -> TracingConfiguration {
+        TracingConfiguration(overrides: overrides)
+    }
+    
+    enum LogLevel: String { case error, warn, info, debug, trace }
     
     enum Target: String {
+        case common = ""
+        
         case hyper, sled, matrix_sdk_sled, matrix_sdk_ffi, matrix_sdk_crypto
+        
         case matrix_sdk_http_client = "matrix_sdk::http_client"
         case matrix_sdk_ffi_uniffi_api = "matrix_sdk_ffi::uniffi_api"
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
     }
     
-    enum LogLevel: String { case error, warn, info, debug, trace }
-    
-    var common = LogLevel.warn
-    var targets: [Target: LogLevel] = [
+    let targets: OrderedDictionary<Target, LogLevel> = [
+        .common: .warn,
         .hyper: .warn,
         .sled: .warn,
         .matrix_sdk_sled: .warn,
         .matrix_sdk_crypto: .debug,
-        .matrix_sdk_http_client: .debug
+        .matrix_sdk_http_client: .debug,
+        .matrix_sdk_sliding_sync: .trace,
+        .matrix_sdk_base_sliding_sync: .trace
     ]
     
+    var overrides = [Target: LogLevel]()
+    
     var filter: String {
-        "\(common),\(targets.map { "\($0.key.rawValue)=\($0.value.rawValue)" }.joined(separator: ","))"
+        var newTargets = targets
+        for (target, logLevel) in overrides {
+            newTargets.updateValue(logLevel, forKey: target)
+        }
+        
+        let components = newTargets.map { (target: Target, logLevel: LogLevel) in
+            guard !target.rawValue.isEmpty else {
+                return logLevel.rawValue
+            }
+            
+            return "\(target.rawValue)=\(logLevel.rawValue)"
+        }
+        
+        return components.joined(separator: ",")
     }
 }
 

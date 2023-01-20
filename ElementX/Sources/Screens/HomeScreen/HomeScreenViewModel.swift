@@ -31,6 +31,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
     
+    private var roomsForIdentifiers = [String: HomeScreenRoom]()
+    
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
     // MARK: - Setup
@@ -178,7 +180,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     // MARK: - Private
     
     private func loadDataForRoomIdentifier(_ identifier: String) {
-        guard let room = state.rooms.first(where: { $0.roomId == identifier }),
+        guard let room = roomsForIdentifiers[identifier],
               room.avatar == nil,
               let avatarURL = room.avatarURL else {
             return
@@ -205,6 +207,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             MXLog.error("Room summary provider unavailable")
             return
         }
+        
+        MXLog.info("Updating rooms")
         
         var rooms = [HomeScreenRoom]()
         
@@ -235,24 +239,34 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         }
         
         state.rooms = rooms
+        
+        MXLog.info("Finished updating rooms")
     }
     
     private func buildRoom(with details: RoomSummaryDetails) -> HomeScreenRoom {
-        let avatarImage = details.avatarURL.flatMap { userSession.mediaProvider.imageFromURL($0, avatarSize: .room(on: .home)) }
+        var room: HomeScreenRoom! = roomsForIdentifiers[details.id]
         
-        var timestamp: String?
-        if let lastMessageTimestamp = details.lastMessageTimestamp {
-            timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+        if room == nil {
+            room = HomeScreenRoom(id: details.id,
+                                  roomId: details.id,
+                                  avatarURL: details.avatarURL)
         }
         
-        return HomeScreenRoom(id: details.id,
-                              roomId: details.id,
-                              name: details.name,
-                              hasUnreads: details.unreadNotificationCount > 0,
-                              timestamp: timestamp,
-                              lastMessage: details.lastMessage,
-                              avatarURL: details.avatarURL,
-                              avatar: avatarImage)
+        room.name = details.name
+        room.hasUnreads = details.unreadNotificationCount > 0
+        room.lastMessage = details.lastMessage
+        
+        if let avatarURL = details.avatarURL {
+            room.avatar = userSession.mediaProvider.imageFromURL(avatarURL, avatarSize: .room(on: .home))
+        }
+        
+        if let lastMessageTimestamp = details.lastMessageTimestamp {
+            room.timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+        }
+        
+        roomsForIdentifiers[details.id] = room
+        
+        return room
     }
     
     private func updateVisibleRange(_ range: Range<Int>) {

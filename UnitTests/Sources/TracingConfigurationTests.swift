@@ -19,32 +19,18 @@ import XCTest
 @testable import ElementX
 
 class TracingConfigurationTests: XCTestCase {
-    func testReleaseConfiguration() {
-        let filterComponents = TracingConfiguration.release.filter.components(separatedBy: ",")
-        XCTAssertTrue(filterComponents.contains("info"))
-        XCTAssertTrue(filterComponents.contains("hyper=warn"))
-        XCTAssertTrue(filterComponents.contains("sled=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_sled=warn"))
-    }
-    
-    func testDebugConfiguration() {
-        let filterComponents = TracingConfiguration.debug.filter.components(separatedBy: ",")
-        XCTAssertTrue(filterComponents.contains("warn"))
-        XCTAssertTrue(filterComponents.contains("hyper=warn"))
-        XCTAssertTrue(filterComponents.contains("sled=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_sled=warn"))
-    }
-    
-    func testFullConfiguration() {
-        let filterComponents = TracingConfiguration.full.filter.components(separatedBy: ",")
-        XCTAssertTrue(filterComponents.contains("info"))
-        XCTAssertTrue(filterComponents.contains("hyper=warn"))
-        XCTAssertTrue(filterComponents.contains("sled=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_sled=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk::http_client=trace"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_ffi::uniffi_api=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_ffi=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk::sliding_sync=warn"))
-        XCTAssertTrue(filterComponents.contains("matrix_sdk_base::sliding_sync=warn"))
+    func testConfiguration() {
+        let configuration = TracingConfiguration(overrides: [.common: .trace,
+                                                             .matrix_sdk_base_sliding_sync: .error,
+                                                             .matrix_sdk_http_client: .warn,
+                                                             .matrix_sdk_crypto: .info,
+                                                             .hyper: .debug])
+        
+        let filterComponents = configuration.filter.components(separatedBy: ",")
+        XCTAssertEqual(filterComponents.first, "trace")
+        XCTAssertTrue(filterComponents.contains("matrix_sdk_base::sliding_sync=error"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk::http_client=warn"))
+        XCTAssertTrue(filterComponents.contains("matrix_sdk_crypto=info"))
+        XCTAssertTrue(filterComponents.contains("hyper=debug"))
     }
 }

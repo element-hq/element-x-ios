@@ -95,6 +95,9 @@ struct HomeScreenViewStateBindings {
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
+    private static let placeholderLastMessage = AttributedString("Last message")
+    private static let placeholderAvatar = UIImage(systemName: "photo")
+    
     /// The list item identifier can be a real room identifier, a custom one for invalidated entries
     /// or a completely unique one for empty items and skeletons
     let id: String
@@ -102,11 +105,11 @@ struct HomeScreenRoom: Identifiable, Equatable {
     /// The real room identifier this item points to
     let roomId: String?
     
-    let name: String
+    var name = ""
     
-    let hasUnreads: Bool
+    var hasUnreads = false
     
-    let timestamp: String?
+    var timestamp: String?
     
     var lastMessage: AttributedString?
     
@@ -122,8 +125,8 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        name: "Placeholder room name",
                        hasUnreads: false,
                        timestamp: "Now",
-                       lastMessage: AttributedString("Last message"),
-                       avatar: UIImage(systemName: "photo"),
+                       lastMessage: Self.placeholderLastMessage,
+                       avatar: Self.placeholderAvatar,
                        isPlaceholder: true)
     }
 }

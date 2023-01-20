@@ -124,6 +124,7 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
+    - package: Collections
 
     sources:
     - path: ../Sources
