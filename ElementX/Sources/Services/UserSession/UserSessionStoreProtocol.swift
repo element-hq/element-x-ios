@@ -37,8 +37,8 @@ protocol UserSessionStoreProtocol {
     /// Restores an existing user session.
     func restoreUserSession() async -> Result<UserSessionProtocol, UserSessionStoreError>
     
-    /// Creates a user session for a new client from the SDK.
-    func userSession(for client: Client) async -> Result<UserSessionProtocol, UserSessionStoreError>
+    /// Creates a user session for a new client from the SDK along with its database key.
+    func userSession(for client: Client, databaseKey: Data) async -> Result<UserSessionProtocol, UserSessionStoreError>
 
     /// Refresh the restore token of the client for a given session.
     @discardableResult

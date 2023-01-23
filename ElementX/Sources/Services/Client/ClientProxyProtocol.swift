@@ -71,9 +71,11 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
 
+    var session: Session? { get }
+
     var avatarURLPublisher: AnyPublisher<URL?, Never> { get }
 
-    var restorationToken: RestorationToken? { get }
+    var pusherNotificationClientIdentifier: String? { get }
     
     var roomSummaryProvider: RoomSummaryProviderProtocol? { get }
     

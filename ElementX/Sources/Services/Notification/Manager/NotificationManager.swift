@@ -100,7 +100,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
             let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
                                                           alert: APSAlert(locKey: "Notification",
                                                                           locArgs: [])),
-                                             pusherNotificationClientIdentifier: clientProxy.restorationToken?.pusherNotificationClientIdentifier)
+                                             pusherNotificationClientIdentifier: clientProxy.pusherNotificationClientIdentifier)
 
             let configuration = try await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
                                                                                  appId: ServiceLocator.shared.settings.pusherAppId),

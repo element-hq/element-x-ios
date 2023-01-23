@@ -21,12 +21,15 @@ import MatrixRustSDK
 class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     private let authenticationService: AuthenticationService
     private let userSessionStore: UserSessionStoreProtocol
+    private let databaseKey: Data
     
     private let homeserverSubject: CurrentValueSubject<LoginHomeserver, Never> = .init(LoginHomeserver(address: ServiceLocator.shared.settings.defaultHomeserverAddress,
                                                                                                        loginMode: .unknown))
     var homeserver: CurrentValuePublisher<LoginHomeserver, Never> { homeserverSubject.asCurrentValuePublisher() }
     
     init(userSessionStore: UserSessionStoreProtocol) {
+        let databaseKey = EncryptionKeyProvider.generateKey() // TODO: Dependency injection?
+        self.databaseKey = databaseKey
         self.userSessionStore = userSessionStore
         
         // guard let settings = ServiceLocator.shared.settings else { fatalError("The settings must be set.") }
@@ -38,7 +41,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         //                                           staticRegistrations: settings.oidcStaticRegistrations.mapKeys { $0.absoluteString })
         
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
-                                                      passphrase: nil,
+                                                      passphrase: String(databaseKey.base64EncodedString()), // FIXME: Hack until we can pass key data
                                                       // oidcConfiguration: oidcConfiguration,
                                                       customSlidingSyncProxy: ServiceLocator.shared.settings.slidingSyncProxyURL?.absoluteString)
     }
@@ -130,7 +133,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     // MARK: - Private
     
     private func userSession(for client: Client) async -> Result<UserSessionProtocol, AuthenticationServiceError> {
-        switch await userSessionStore.userSession(for: client) {
+        switch await userSessionStore.userSession(for: client, databaseKey: databaseKey) {
         case .success(let clientProxy):
             return .success(clientProxy)
         case .failure:
