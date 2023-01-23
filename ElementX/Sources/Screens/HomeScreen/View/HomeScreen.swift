@@ -67,6 +67,7 @@ struct HomeScreen: View {
                 .disableAutocorrection(true)
             }
         }
+        .scrollDismissesKeyboard(.immediately)
         .disabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
