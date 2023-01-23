@@ -28,7 +28,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
-    private let mediaProvider: MediaProviderProtocol
 
     // MARK: - Setup
         
@@ -39,12 +38,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
          roomAvatarUrl: URL? = nil) {
         self.timelineController = timelineController
         self.timelineViewFactory = timelineViewFactory
-        self.mediaProvider = mediaProvider
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomName ?? "Unknown room 💥",
-                                                         roomAvatar: nil,
-                                                         bindings: .init(composerText: "", composerFocused: false)))
+                                                         roomAvatarURL: roomAvatarUrl,
+                                                         bindings: .init(composerText: "", composerFocused: false)),
+                   imageProvider: mediaProvider)
         
         timelineController.callbacks
             .receive(on: DispatchQueue.main)
@@ -76,15 +75,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         state.contextMenuBuilder = buildContexMenuForItemId(_:)
         
         buildTimelineViews()
-        
-        if let roomAvatarUrl {
-            Task {
-                if case let .success(avatar) = await mediaProvider.loadImageFromURL(roomAvatarUrl,
-                                                                                    avatarSize: .room(on: .timeline)) {
-                    state.roomAvatar = avatar
-                }
-            }
-        }
     }
     
     // MARK: - Public

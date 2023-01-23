@@ -49,7 +49,7 @@ enum RoomScreenViewAction {
 struct RoomScreenViewState: BindableState {
     var roomId: String
     var roomTitle = ""
-    var roomAvatar: UIImage?
+    var roomAvatarURL: URL?
     var items: [RoomTimelineViewProvider] = []
     var canBackPaginate = true
     var isBackPaginating = false
