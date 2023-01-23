@@ -62,8 +62,6 @@ struct RoomDetailsMember: Identifiable, Equatable {
     let id: String
     let name: String?
     let avatarURL: URL?
-    // cached
-    var avatar: UIImage?
 
     init(withProxy proxy: RoomMemberProxy) {
         id = proxy.userId

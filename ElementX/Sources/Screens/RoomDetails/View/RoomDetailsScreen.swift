@@ -46,7 +46,7 @@ struct RoomDetailsScreen: View {
         .task {
             guard avatarImage == nil, let avatarURL = context.viewState.avatarURL else { return }
             
-            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .home)) {
+            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .details)) {
                 avatarImage = image
             }
         }

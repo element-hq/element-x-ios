@@ -39,7 +39,7 @@ struct RoomHeaderView: View {
         .task {
             guard avatarImage == nil, let avatarURL = context.viewState.roomAvatarURL else { return }
             
-            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .home)) {
+            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .timeline)) {
                 avatarImage = image
             }
         }
