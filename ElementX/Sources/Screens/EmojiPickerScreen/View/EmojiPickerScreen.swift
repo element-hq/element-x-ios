@@ -19,24 +19,27 @@ import SwiftUI
 struct EmojiPickerScreen: View {
     @ObservedObject var context: EmojiPickerScreenViewModel.Context
     @State var searchString = ""
+    @ScaledMetric(relativeTo: .title) var minimumWidth: Double = 50
     
     var body: some View {
         ScrollView {
-            LazyVGrid(columns: [GridItem(.adaptive(minimum: 45))], spacing: 3) {
+            LazyVGrid(columns: [GridItem(.adaptive(minimum: minimumWidth))], spacing: 16) {
                 ForEach(context.viewState.categories) { category in
                     Section(header: EmojiPickerHeaderView(title: category.name)
                         .padding(.horizontal, 13)
                         .padding(.top, 10)) {
                             ForEach(category.emojis) { emoji in
-                                Text(emoji.value)
-                                    .frame(width: 45, height: 45)
-                                    .onTapGesture {
-                                        context.send(viewAction: .emojiTapped(emoji: emoji))
-                                    }
+                                Button {
+                                    context.send(viewAction: .emojiTapped(emoji: emoji))
+                                } label: {
+                                    Text(emoji.value)
+                                        .font(.element.title1)
+                                }
                             }
                         }
                 }
             }
+            .padding(.horizontal, 6)
         }
         .navigationTitle(ElementL10n.reactions)
         .navigationBarTitleDisplayMode(.inline)
@@ -65,5 +68,6 @@ struct EmojiPickerScreen_Previews: PreviewProvider {
         NavigationStack {
             EmojiPickerScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
         }
+        .tint(.element.accent)
     }
 }
