@@ -23,5 +23,4 @@ struct TimelineItemSender: Identifiable, Hashable {
     // Lazy loaded properties, displayName and avatarURL will be come lets.
     var displayName: String?
     var avatarURL: URL?
-    var avatar: UIImage?
 }

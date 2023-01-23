@@ -18,34 +18,30 @@ import Foundation
 import SwiftUI
 
 struct StickerRoomTimelineView: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     let timelineItem: StickerRoomTimelineItem
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let image = timelineItem.image {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
-            } else if let blurhash = timelineItem.blurhash,
-                      // Build a small blurhash image so that it's fast
-                      let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
-            } else {
-                ZStack {
-                    Rectangle()
-                        .foregroundColor(.element.systemGray6)
-                        .opacity(0.3)
-                    
-                    ProgressView(ElementL10n.loading)
-                        .frame(maxWidth: .infinity)
-                }
-                .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+            LoadableImage(imageProvider: context.imageProvider,
+                          mediaSource: MediaSourceProxy(url: timelineItem.imageURL),
+                          blurhash: timelineItem.blurhash) {
+                placeholderView
             }
+            .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
-        .animation(.elementDefault, value: timelineItem.image)
         .accessibilityLabel(timelineItem.text)
+    }
+    
+    private var placeholderView: some View {
+        ZStack {
+            Rectangle()
+                .foregroundColor(.element.systemGray6)
+                .opacity(0.3)
+            
+            ProgressView(ElementL10n.loading)
+                .frame(maxWidth: .infinity)
+        }
     }
 }
 
@@ -64,8 +60,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           sender: .init(id: "Bob"),
-                                                                          imageURL: nil,
-                                                                          image: UIImage(systemName: "photo")))
+                                                                          imageURL: URL.picturesDirectory))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
                                                                           text: "Some other image",
@@ -74,8 +69,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           sender: .init(id: "Bob"),
-                                                                          imageURL: nil,
-                                                                          image: nil))
+                                                                          imageURL: URL.picturesDirectory))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
                                                                           text: "Blurhashed image",
@@ -84,8 +78,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           isOutgoing: false,
                                                                           isEditable: false,
                                                                           sender: .init(id: "Bob"),
-                                                                          imageURL: nil,
-                                                                          image: nil,
+                                                                          imageURL: URL.picturesDirectory,
                                                                           aspectRatio: 0.7,
                                                                           blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }

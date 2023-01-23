@@ -429,6 +429,7 @@
 		D85D4FA590305180B4A41795 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB3073CCD77D906B330BC1D6 /* Tests.swift */; };
 		D876EC0FED3B6D46C806912A /* AvatarSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = E24B88AD3D1599E8CB1376E0 /* AvatarSize.swift */; };
 		D8CFF02C2730EE5BC4F17ABF /* ElementToggleStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */; };
+		D9F80CE61BF8FF627FDB0543 /* LoadableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C352359663A0E52BA20761EE /* LoadableImage.swift */; };
 		DBAA69CC2CE4D44BC8E20105 /* SettingsScreenModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 548E7D356609ACD33AE7643E /* SettingsScreenModels.swift */; };
 		DC68E866D6E664B0D2B06E74 /* MockImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = AC1DA29A5A041CC0BACA7CB0 /* MockImageCache.swift */; };
 		DD9B70DE54B24E0694A35D8A /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
@@ -948,6 +949,7 @@
 		C070FD43DC6BF4E50217965A /* LocalizationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalizationTests.swift; sourceTree = "<group>"; };
 		C1198B925F4A88DA74083662 /* OnboardingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewModel.swift; sourceTree = "<group>"; };
 		C2886615BEBAE33A0AA4D5F8 /* RoomScreenModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomScreenModels.swift; sourceTree = "<group>"; };
+		C352359663A0E52BA20761EE /* LoadableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadableImage.swift; sourceTree = "<group>"; };
 		C38AE3617D7619EF30CDD229 /* EmojiMartStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmojiMartStore.swift; sourceTree = "<group>"; };
 		C3F652E88106B855A2A55ADE /* FilePreviewViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilePreviewViewModelProtocol.swift; sourceTree = "<group>"; };
 		C483956FA3D665E3842E319A /* SettingsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsScreen.swift; sourceTree = "<group>"; };
@@ -1309,6 +1311,7 @@
 			isa = PBXGroup;
 			children = (
 				0960A7F5C1B0B6679BDF26F9 /* ElementToggleStyle.swift */,
+				C352359663A0E52BA20761EE /* LoadableImage.swift */,
 				839E2C35DF3F9C7B54C3CE49 /* RoundedCornerShape.swift */,
 			);
 			path = Views;
@@ -3077,6 +3080,7 @@
 				1FE593ECEC40A43789105D80 /* KeychainController.swift in Sources */,
 				CB99B0FA38A4AC596F38CC13 /* KeychainControllerProtocol.swift in Sources */,
 				15D867E638BFD0E5E71DB1EF /* List.swift in Sources */,
+				D9F80CE61BF8FF627FDB0543 /* LoadableImage.swift in Sources */,
 				83E5054739949181CA981193 /* LoginCoordinator.swift in Sources */,
 				872A6457DF573AF8CEAE927A /* LoginHomeserver.swift in Sources */,
 				CEB8FB1269DE20536608B957 /* LoginMode.swift in Sources */,

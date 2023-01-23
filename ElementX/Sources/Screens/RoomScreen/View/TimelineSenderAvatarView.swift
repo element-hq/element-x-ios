@@ -18,13 +18,23 @@ import Foundation
 import SwiftUI
 
 struct TimelineSenderAvatarView: View {
-    let timelineItem: EventBasedTimelineItemProtocol
+    private let timelineItem: EventBasedTimelineItemProtocol
+    private let imageProvider: ImageProviderProtocol?
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .timeline).value
-
+    @State private var avatarImage: UIImage?
+    
+    init(timelineItem: EventBasedTimelineItemProtocol,
+         imageProvider: ImageProviderProtocol?) {
+        self.timelineItem = timelineItem
+        self.imageProvider = imageProvider
+        
+        _avatarImage = State(initialValue: imageProvider?.imageFromURL(timelineItem.sender.avatarURL, avatarSize: .room(on: .timeline)))
+    }
+    
     var body: some View {
         ZStack(alignment: .center) {
-            if let avatar = timelineItem.sender.avatar {
+            if let avatar = avatarImage {
                 Image(uiImage: avatar)
                     .resizable()
                     .scaledToFill()
@@ -40,7 +50,13 @@ struct TimelineSenderAvatarView: View {
             Circle()
                 .stroke(Color.element.background, lineWidth: 3)
         )
-
-        .animation(.elementDefault, value: timelineItem.sender.avatar)
+        .animation(.elementDefault, value: avatarImage)
+        .task {
+            guard avatarImage == nil, let avatarURL = timelineItem.sender.avatarURL else { return }
+            
+            if case let .success(image) = await imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .timeline)) {
+                avatarImage = image
+            }
+        }
     }
 }

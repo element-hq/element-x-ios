@@ -18,21 +18,14 @@ import Foundation
 import SwiftUI
 
 struct ImageRoomTimelineView: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     let timelineItem: ImageRoomTimelineItem
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let image = timelineItem.image {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
-            } else if let blurhash = timelineItem.blurhash,
-                      // Build a small blurhash image so that it's fast
-                      let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
-            } else {
+            LoadableImage(imageProvider: context.imageProvider,
+                          mediaSource: timelineItem.source,
+                          blurhash: timelineItem.blurhash) {
                 ZStack {
                     Rectangle()
                         .foregroundColor(.element.systemGray6)
@@ -41,10 +34,9 @@ struct ImageRoomTimelineView: View {
                     ProgressView(ElementL10n.loading)
                         .frame(maxWidth: .infinity)
                 }
-                .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
             }
+            .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
-        .animation(.elementDefault, value: timelineItem.image)
     }
 }
 
@@ -63,8 +55,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      source: nil,
-                                                                      image: UIImage(systemName: "photo")))
+                                                                      source: nil))
 
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Some other image",
@@ -73,8 +64,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isOutgoing: false,
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
-                                                                      source: nil,
-                                                                      image: nil))
+                                                                      source: nil))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Blurhashed image",
@@ -84,7 +74,6 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       isEditable: false,
                                                                       sender: .init(id: "Bob"),
                                                                       source: nil,
-                                                                      image: nil,
                                                                       aspectRatio: 0.7,
                                                                       blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }

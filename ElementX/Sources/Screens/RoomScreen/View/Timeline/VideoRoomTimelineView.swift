@@ -18,17 +18,23 @@ import Foundation
 import SwiftUI
 
 struct VideoRoomTimelineView: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     let timelineItem: VideoRoomTimelineItem
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let image = timelineItem.image {
-                thumbnail(with: image)
-            } else if let blurhash = timelineItem.blurhash,
-                      // Build a small blurhash image so that it's fast
-                      let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                thumbnail(with: image)
-            } else {
+            LoadableImage(imageProvider: context.imageProvider,
+                          mediaSource: timelineItem.thumbnailSource,
+                          blurhash: timelineItem.blurhash) { imageView in
+                ZStack {
+                    imageView
+                    Image(systemName: "play.circle.fill")
+                        .resizable()
+                        .frame(width: 50, height: 50)
+                        .background(.ultraThinMaterial, in: Circle())
+                        .foregroundColor(.white)
+                }
+            } placeholder: {
                 ZStack {
                     Rectangle()
                         .foregroundColor(.element.systemGray6)
@@ -37,23 +43,8 @@ struct VideoRoomTimelineView: View {
                     ProgressView(ElementL10n.loading)
                         .frame(maxWidth: .infinity)
                 }
-                .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
             }
-        }
-        .animation(.elementDefault, value: timelineItem.image)
-    }
-
-    @ViewBuilder
-    private func thumbnail(with image: UIImage) -> some View {
-        ZStack {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
-            Image(systemName: "play.circle.fill")
-                .resizable()
-                .frame(width: 50, height: 50)
-                .background(.ultraThinMaterial, in: Circle())
-                .foregroundColor(.white)
+            .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
     }
 }
@@ -75,8 +66,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       sender: .init(id: "Bob"),
                                                                       duration: 21,
                                                                       source: nil,
-                                                                      thumbnailSource: nil,
-                                                                      image: UIImage(systemName: "photo")))
+                                                                      thumbnailSource: nil))
 
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Some other video",
@@ -87,8 +77,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       sender: .init(id: "Bob"),
                                                                       duration: 22,
                                                                       source: nil,
-                                                                      thumbnailSource: nil,
-                                                                      image: nil))
+                                                                      thumbnailSource: nil))
             
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
                                                                       text: "Blurhashed video",
@@ -100,7 +89,6 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       duration: 23,
                                                                       source: nil,
                                                                       thumbnailSource: nil,
-                                                                      image: nil,
                                                                       aspectRatio: 0.7,
                                                                       blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
         }

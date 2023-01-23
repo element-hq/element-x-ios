@@ -32,21 +32,3 @@ protocol MediaProviderProtocol: ImageProviderProtocol {
 
     @discardableResult func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError>
 }
-
-extension MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSourceProxy?) -> UIImage? {
-        imageFromSource(source, avatarSize: nil)
-    }
-    
-    @discardableResult func loadImageFromSource(_ source: MediaSourceProxy) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(source, avatarSize: nil)
-    }
-    
-    func imageFromURL(_ url: URL?) -> UIImage? {
-        imageFromURL(url, avatarSize: nil)
-    }
-    
-    @discardableResult func loadImageFromURL(_ url: URL) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromURL(url, avatarSize: nil)
-    }
-}
