@@ -22,6 +22,8 @@ struct EmojiPickerHeaderView: View {
     var body: some View {
         HStack {
             Text(title)
+                .font(.element.subheadline.bold())
+                .foregroundColor(.element.primaryContent)
                 .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
