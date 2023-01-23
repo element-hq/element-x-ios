@@ -87,7 +87,7 @@ struct RoomStateEventStringBuilder {
         switch (displayNameChanged, avatarChanged, memberIsYou) {
         case (true, false, false):
             if let displayName, let previousDisplayName {
-                return ElementL10n.noticeDisplayNameChangedFrom(member, displayName, previousDisplayName)
+                return ElementL10n.noticeDisplayNameChangedFrom(member, previousDisplayName, displayName)
             } else if let displayName {
                 return ElementL10n.noticeDisplayNameSet(member, displayName)
             } else if let previousDisplayName {
@@ -100,7 +100,7 @@ struct RoomStateEventStringBuilder {
             return ElementL10n.noticeAvatarUrlChanged(displayName ?? member)
         case (true, false, true):
             if let displayName, let previousDisplayName {
-                return ElementL10n.noticeDisplayNameChangedFromByYou(displayName, previousDisplayName)
+                return ElementL10n.noticeDisplayNameChangedFromByYou(previousDisplayName, displayName)
             } else if let displayName {
                 return ElementL10n.noticeDisplayNameSetByYou(displayName)
             } else if let previousDisplayName {
