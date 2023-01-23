@@ -39,7 +39,7 @@ enum TimelineItemProxy {
         }
         
         // State events aren't rendered as messages so shouldn't be grouped.
-        if selfEventItemProxy.isState || previousEventItemProxy.isState {
+        if selfEventItemProxy.isRoomState || previousEventItemProxy.isRoomState {
             return false
         }
         
@@ -89,8 +89,8 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
         content.asMessage() != nil
     }
     
-    var isState: Bool {
-        content.kind().isState
+    var isRoomState: Bool {
+        content.kind().isRoomState
     }
     
     var content: TimelineItemContent {
@@ -128,7 +128,7 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
 }
 
 extension TimelineItemContentKind {
-    var isState: Bool {
+    var isRoomState: Bool {
         switch self {
         case .state, .roomMembership:
             return true
