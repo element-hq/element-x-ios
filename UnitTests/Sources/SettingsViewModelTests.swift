@@ -19,14 +19,14 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class SettingsViewModelTests: XCTestCase {
-    var viewModel: SettingsViewModelProtocol!
-    var context: SettingsViewModelType.Context!
+class SettingsScreenViewModelTests: XCTestCase {
+    var viewModel: SettingsScreenViewModelProtocol!
+    var context: SettingsScreenViewModelType.Context!
     
     @MainActor override func setUpWithError() throws {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: ""),
                                           mediaProvider: MockMediaProvider())
-        viewModel = SettingsViewModel(withUserSession: userSession)
+        viewModel = SettingsScreenViewModel(withUserSession: userSession)
         context = viewModel.context
     }
 

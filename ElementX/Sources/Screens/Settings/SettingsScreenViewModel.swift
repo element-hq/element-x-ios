@@ -16,16 +16,16 @@
 
 import SwiftUI
 
-typealias SettingsViewModelType = StateStoreViewModel<SettingsViewState, SettingsViewAction>
+typealias SettingsScreenViewModelType = StateStoreViewModel<SettingsScreenViewState, SettingsScreenViewAction>
 
-class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
+class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewModelProtocol {
     private let userSession: UserSessionProtocol
 
-    var callback: ((SettingsViewModelAction) -> Void)?
+    var callback: ((SettingsScreenViewModelAction) -> Void)?
 
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        let bindings = SettingsViewStateBindings()
+        let bindings = SettingsScreenViewStateBindings()
         super.init(initialViewState: .init(bindings: bindings, deviceID: userSession.deviceId, userID: userSession.userID))
         
         Task {
@@ -43,7 +43,7 @@ class SettingsViewModel: SettingsViewModelType, SettingsViewModelProtocol {
         }
     }
     
-    override func process(viewAction: SettingsViewAction) async {
+    override func process(viewAction: SettingsScreenViewAction) async {
         switch viewAction {
         case .close:
             callback?(.close)

@@ -15,9 +15,30 @@
 //
 
 import Foundation
+import UIKit
 
-@MainActor
-protocol SettingsViewModelProtocol {
-    var callback: ((SettingsViewModelAction) -> Void)? { get set }
-    var context: SettingsViewModelType.Context { get }
+enum SettingsScreenViewModelAction {
+    case close
+    case toggleAnalytics
+    case reportBug
+    case logout
+}
+
+struct SettingsScreenViewState: BindableState {
+    var bindings: SettingsScreenViewStateBindings
+    var deviceID: String?
+    var userID: String
+    var userAvatar: UIImage?
+    var userDisplayName: String?
+}
+
+struct SettingsScreenViewStateBindings {
+    var enableAnalytics = ServiceLocator.shared.settings.enableAnalytics
+}
+
+enum SettingsScreenViewAction {
+    case close
+    case toggleAnalytics
+    case reportBug
+    case logout
 }

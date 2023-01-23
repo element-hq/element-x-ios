@@ -118,11 +118,11 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .settings:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = SettingsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
-                                                                    userNotificationController: MockUserNotificationController(),
-                                                                    userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
-                                                                                                 mediaProvider: MockMediaProvider()),
-                                                                    bugReportService: MockBugReportService()))
+            let coordinator = SettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                          userNotificationController: MockUserNotificationController(),
+                                                                          userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
+                                                                                                       mediaProvider: MockMediaProvider()),
+                                                                          bugReportService: MockBugReportService()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .bugReport:

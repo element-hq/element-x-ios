@@ -16,30 +16,30 @@
 
 import SwiftUI
 
-struct SettingsCoordinatorParameters {
+struct SettingsScreenCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
     let userNotificationController: UserNotificationControllerProtocol
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
 }
 
-enum SettingsCoordinatorAction {
+enum SettingsScreenCoordinatorAction {
     case dismiss
     case logout
 }
 
-final class SettingsCoordinator: CoordinatorProtocol {
-    private let parameters: SettingsCoordinatorParameters
-    private var viewModel: SettingsViewModelProtocol
+final class SettingsScreenCoordinator: CoordinatorProtocol {
+    private let parameters: SettingsScreenCoordinatorParameters
+    private var viewModel: SettingsScreenViewModelProtocol
 
-    var callback: ((SettingsCoordinatorAction) -> Void)?
+    var callback: ((SettingsScreenCoordinatorAction) -> Void)?
     
     // MARK: - Setup
     
-    init(parameters: SettingsCoordinatorParameters) {
+    init(parameters: SettingsScreenCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = SettingsViewModel(withUserSession: parameters.userSession)
+        viewModel = SettingsScreenViewModel(withUserSession: parameters.userSession)
         viewModel.callback = { [weak self] action in
             guard let self else { return }
             

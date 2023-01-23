@@ -25,7 +25,7 @@ struct SettingsScreen: View {
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
-    @ObservedObject var context: SettingsViewModel.Context
+    @ObservedObject var context: SettingsScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -198,11 +198,11 @@ extension TimelineStyle: CustomStringConvertible {
 
 // MARK: - Previews
 
-struct Settings_Previews: PreviewProvider {
+struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let viewModel = SettingsViewModel(withUserSession: userSession)
+        let viewModel = SettingsScreenViewModel(withUserSession: userSession)
         
         NavigationView {
             SettingsScreen(context: viewModel.context)
