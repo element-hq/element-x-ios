@@ -17,24 +17,21 @@
 import SwiftUI
 
 struct RoomDetailsScreen: View {
-    // MARK: Private
-    
     @Environment(\.colorScheme) private var colorScheme
+    
     @ScaledMetric private var avatarSize = AvatarSize.room(on: .details).value
+    @State private var avatarImage: UIImage?
+    
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
-    // MARK: Public
-    
     @ObservedObject var context: RoomDetailsViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         Form {
             headerSection
 
-            if let topic = context.viewState.roomTopic {
+            if let topic = context.viewState.topic {
                 topicSection(with: topic)
             }
 
@@ -46,12 +43,21 @@ struct RoomDetailsScreen: View {
         }
         .alert(item: $context.alertInfo) { $0.alert }
         .navigationTitle(ElementL10n.roomDetailsTitle)
+        .task {
+            guard avatarImage == nil, let avatarURL = context.viewState.avatarURL else { return }
+            
+            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .home)) {
+                avatarImage = image
+            }
+        }
     }
+    
+    // MARK: - Private
 
     private var headerSection: some View {
         VStack(spacing: 16.0) {
-            roomAvatarImage
-            Text(context.viewState.roomTitle)
+            avatarImageView
+            Text(context.viewState.title)
                 .foregroundColor(.element.primaryContent)
                 .font(.element.headline)
                 .multilineTextAlignment(.center)
@@ -129,8 +135,8 @@ struct RoomDetailsScreen: View {
         }
     }
 
-    @ViewBuilder private var roomAvatarImage: some View {
-        if let avatar = context.viewState.roomAvatar {
+    @ViewBuilder private var avatarImageView: some View {
+        if let avatar = avatarImage {
             Image(uiImage: avatar)
                 .resizable()
                 .scaledToFill()
@@ -138,7 +144,7 @@ struct RoomDetailsScreen: View {
                 .clipShape(Circle())
                 .accessibilityIdentifier("roomAvatarImage")
         } else {
-            PlaceholderAvatarImage(text: context.viewState.roomTitle,
+            PlaceholderAvatarImage(text: context.viewState.title,
                                    contentId: context.viewState.roomId)
                 .clipShape(Circle())
                 .frame(width: avatarSize, height: avatarSize)

@@ -19,29 +19,25 @@ import SwiftUI
 typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, RoomDetailsViewAction>
 
 class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtocol {
-    private let roomProxy: RoomProxyProtocol
-    private let mediaProvider: MediaProviderProtocol
-    
     private var members: [RoomMemberProxy] = [] {
         didSet {
             state.members = members.map { RoomDetailsMember(withProxy: $0) }
         }
     }
-
+    
     var callback: ((RoomDetailsViewModelAction) -> Void)?
-
-    init(roomProxy: RoomProxyProtocol,
-         mediaProvider: MediaProviderProtocol) {
-        self.roomProxy = roomProxy
-        self.mediaProvider = mediaProvider
+    
+    init(roomProxy: RoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
-                                           roomTitle: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",
-                                           roomTopic: roomProxy.topic,
+                                           title: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",
+                                           topic: roomProxy.topic,
+                                           avatarURL: roomProxy.avatarURL,
                                            members: [],
-                                           bindings: .init()))
-
+                                           bindings: .init()),
+                   imageProvider: mediaProvider)
+        
         Task {
             switch await roomProxy.members() {
             case .success(let members):
@@ -49,14 +45,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             case .failure(let error):
                 MXLog.error("Failed retrieving room members: \(error)")
                 state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
-            }
-        }
-
-        if let avatarURL = roomProxy.avatarURL {
-            Task {
-                if case let .success(avatar) = await mediaProvider.loadImageFromURL(avatarURL, avatarSize: .room(on: .details)) {
-                    state.roomAvatar = avatar
-                }
             }
         }
     }

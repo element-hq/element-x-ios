@@ -32,9 +32,9 @@ struct RoomDetailsViewState: BindableState {
     let roomId: String
     let isEncrypted: Bool
     let isDirect: Bool
-    var roomTitle = ""
-    var roomTopic: String?
-    var roomAvatar: UIImage?
+    var title = ""
+    var topic: String?
+    var avatarURL: URL?
     var members: [RoomDetailsMember]
     
     var isLoadingMembers: Bool {
