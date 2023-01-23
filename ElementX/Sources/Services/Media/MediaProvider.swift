@@ -18,16 +18,16 @@ import Kingfisher
 import UIKit
 
 struct MediaProvider: MediaProviderProtocol {
-    private let mediaProxy: MediaProxyProtocol
+    private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
     private let fileCache: FileCacheProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol?
     
-    init(mediaProxy: MediaProxyProtocol,
+    init(mediaLoader: MediaLoaderProtocol,
          imageCache: Kingfisher.ImageCache,
          fileCache: FileCacheProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol?) {
-        self.mediaProxy = mediaProxy
+        self.mediaLoader = mediaLoader
         self.imageCache = imageCache
         self.fileCache = fileCache
         self.backgroundTaskService = backgroundTaskService
@@ -75,9 +75,9 @@ struct MediaProvider: MediaProviderProtocol {
         do {
             let imageData: Data
             if let avatarSize {
-                imageData = try await mediaProxy.loadMediaThumbnailForSource(source, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
+                imageData = try await mediaLoader.loadMediaThumbnailForSource(source, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
             } else {
-                imageData = try await mediaProxy.loadMediaContentForSource(source)
+                imageData = try await mediaLoader.loadMediaContentForSource(source)
             }
 
             guard let image = UIImage(data: imageData) else {
@@ -129,7 +129,7 @@ struct MediaProvider: MediaProviderProtocol {
         let cacheKey = fileCacheKeyForURL(source.url)
         
         do {
-            let data = try await mediaProxy.loadMediaContentForSource(source)
+            let data = try await mediaLoader.loadMediaContentForSource(source)
             
             let url = try fileCache.store(data, with: fileExtension, forKey: cacheKey)
             return .success(url)

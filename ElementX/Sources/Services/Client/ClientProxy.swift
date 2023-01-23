@@ -56,7 +56,7 @@ class ClientProxy: ClientProxyProtocol {
     private let client: ClientProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private var sessionVerificationControllerProxy: SessionVerificationControllerProxy?
-    private let mediaProxy: MediaProxyProtocol
+    private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
     
     private var slidingSyncObserverToken: StoppableSpawn?
@@ -86,7 +86,7 @@ class ClientProxy: ClientProxyProtocol {
         self.backgroundTaskService = backgroundTaskService
         clientQueue = .init(label: "ClientProxyQueue", attributes: .concurrent)
         
-        mediaProxy = MediaProxy(client: client, clientQueue: clientQueue)
+        mediaLoader = MediaLoader(client: client, clientQueue: clientQueue)
         
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         
@@ -401,16 +401,16 @@ class ClientProxy: ClientProxyProtocol {
     }
 }
 
-extension ClientProxy: MediaProxyProtocol {
+extension ClientProxy: MediaLoaderProtocol {
     func mediaSourceForURL(_ url: URL) async -> MediaSourceProxy {
-        await mediaProxy.mediaSourceForURL(url)
+        await mediaLoader.mediaSourceForURL(url)
     }
 
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
-        try await mediaProxy.loadMediaContentForSource(source)
+        try await mediaLoader.loadMediaContentForSource(source)
     }
 
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
-        try await mediaProxy.loadMediaThumbnailForSource(source, width: width, height: height)
+        try await mediaLoader.loadMediaThumbnailForSource(source, width: width, height: height)
     }
 }

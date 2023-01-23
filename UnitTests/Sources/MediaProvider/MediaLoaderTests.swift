@@ -18,43 +18,43 @@
 import MatrixRustSDK
 import XCTest
 
-final class MediaProxyTests: XCTestCase {
+final class MediaLoaderTests: XCTestCase {
     func testMediaRequestCoalescing() async {
-        let mediaLoader = MockMediaLoader()
-        let mediaProxy = MediaProxy(client: mediaLoader)
+        let mediaLoadingClient = MockMediaLoadingClient()
+        let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
         let mediaSource = MediaSourceProxy(url: URL.documentsDirectory)
         
         do {
             for _ in 1...10 {
-                _ = try await mediaProxy.loadMediaContentForSource(mediaSource)
+                _ = try await mediaLoader.loadMediaContentForSource(mediaSource)
             }
             
-            XCTAssertEqual(mediaLoader.numberOfInvocations, 10)
+            XCTAssertEqual(mediaLoadingClient.numberOfInvocations, 10)
         } catch {
             fatalError()
         }
     }
     
     func testMediaThumbnailRequestCoalescing() async {
-        let mediaLoader = MockMediaLoader()
-        let mediaProxy = MediaProxy(client: mediaLoader)
+        let mediaLoadingClient = MockMediaLoadingClient()
+        let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
         let mediaSource = MediaSourceProxy(url: URL.documentsDirectory)
         
         do {
             for _ in 1...10 {
-                _ = try await mediaProxy.loadMediaThumbnailForSource(mediaSource, width: 100, height: 100)
+                _ = try await mediaLoader.loadMediaThumbnailForSource(mediaSource, width: 100, height: 100)
             }
             
-            XCTAssertEqual(mediaLoader.numberOfInvocations, 10)
+            XCTAssertEqual(mediaLoadingClient.numberOfInvocations, 10)
         } catch {
             fatalError()
         }
     }
 }
 
-class MockMediaLoader: ClientProtocol {
+private class MockMediaLoadingClient: ClientProtocol {
     private(set) var numberOfInvocations = 0
     
     func getMediaContent(source: MatrixRustSDK.MediaSource) throws -> [UInt8] {

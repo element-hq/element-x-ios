@@ -23,7 +23,7 @@ private final class MediaRequest: @unchecked Sendable {
     var continuations: [CheckedContinuation<Data, Error>] = []
 }
 
-actor MediaProxy: MediaProxyProtocol {
+actor MediaLoader: MediaLoaderProtocol {
     private let client: ClientProtocol
     private let clientQueue: DispatchQueue
     private var ongoingRequests = [MediaSourceProxy: MediaRequest]()

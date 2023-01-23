@@ -16,11 +16,11 @@
 @testable import ElementX
 import Foundation
 
-enum MockMediaProxyError: Error {
+enum MockMediaLoaderError: Error {
     case someError
 }
 
-class MockMediaProxy: MediaProxyProtocol {
+class MockMediaLoader: MediaLoaderProtocol {
     var mediaContentData: Data?
     var mediaThumbnailData: Data?
     
@@ -32,7 +32,7 @@ class MockMediaProxy: MediaProxyProtocol {
         if let mediaContentData {
             return mediaContentData
         } else {
-            throw MockMediaProxyError.someError
+            throw MockMediaLoaderError.someError
         }
     }
     
@@ -40,7 +40,7 @@ class MockMediaProxy: MediaProxyProtocol {
         if let mediaThumbnailData {
             return mediaThumbnailData
         } else {
-            throw MockMediaProxyError.someError
+            throw MockMediaLoaderError.someError
         }
     }
 }

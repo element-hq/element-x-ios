@@ -125,15 +125,15 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         let client = try builder.build()
         try client.restoreSession(session: credentials.restorationToken.session)
-
+        
         MXLog.info("\(tag) creating media provider")
-
-        return MediaProvider(mediaProxy: MediaProxy(client: client),
+        
+        return MediaProvider(mediaLoader: MediaLoader(client: client),
                              imageCache: .onlyOnDisk,
                              fileCache: FileCache.default,
                              backgroundTaskService: nil)
     }
-
+    
     private func notify() {
         MXLog.info("\(tag) notify")
 

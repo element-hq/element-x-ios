@@ -16,7 +16,7 @@
 
 import Foundation
 
-protocol MediaProxyProtocol {
+protocol MediaLoaderProtocol {
     func mediaSourceForURL(_ url: URL) async -> MediaSourceProxy
 
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data
