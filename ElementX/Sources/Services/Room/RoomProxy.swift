@@ -141,7 +141,7 @@ class RoomProxy: RoomProxyProtocol {
     }
         
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
-        if let token = slidingSyncRoom.addTimelineListener(listener: listener) {
+        if let token = slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: nil) {
             timelineObservationToken = token
             return .success(())
         } else {

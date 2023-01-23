@@ -1,0 +1,1 @@
+Prevent room timelines from becoming stale if the room drops out of the sliding sync window
