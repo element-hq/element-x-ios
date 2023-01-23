@@ -22,7 +22,6 @@ import Introspect
 
 struct RoomHeaderView: View {
     @ObservedObject var context: RoomScreenViewModel.Context
-    @State var avatarImage: UIImage?
 
     var body: some View {
         HStack(spacing: 8) {
@@ -36,13 +35,6 @@ struct RoomHeaderView: View {
         .onTapGesture {
             context.send(viewAction: .displayRoomDetails)
         }
-        .task {
-            guard avatarImage == nil, let avatarURL = context.viewState.roomAvatarURL else { return }
-            
-            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .timeline)) {
-                avatarImage = image
-            }
-        }
     }
 
     @ViewBuilder private var roomAvatar: some View {
@@ -54,12 +46,13 @@ struct RoomHeaderView: View {
     }
     
     @ViewBuilder private var avatarImageView: some View {
-        if let avatar = avatarImage {
-            Image(uiImage: avatar)
-                .resizable()
+        LoadableImage(imageProvider: context.imageProvider,
+                      url: context.viewState.roomAvatarURL,
+                      avatarSize: .room(on: .timeline)) { image in
+            image
                 .scaledToFill()
                 .accessibilityIdentifier("roomAvatarImage")
-        } else {
+        } placeholder: {
             PlaceholderAvatarImage(text: context.viewState.roomTitle,
                                    contentId: context.viewState.roomId)
                 .accessibilityIdentifier("roomAvatarPlaceholderImage")

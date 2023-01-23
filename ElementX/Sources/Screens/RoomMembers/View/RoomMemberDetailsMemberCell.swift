@@ -18,7 +18,6 @@ import SwiftUI
 
 struct RoomMemberDetailsMemberCell: View {
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .roomDetails).value
-    @State private var avatarImage: UIImage?
 
     let member: RoomDetailsMember
     let context: RoomMemberDetailsViewModel.Context
@@ -28,14 +27,15 @@ struct RoomMemberDetailsMemberCell: View {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
             HStack {
-                if let avatar = avatarImage {
-                    Image(uiImage: avatar)
-                        .resizable()
+                LoadableImage(imageProvider: context.imageProvider,
+                              url: member.avatarURL,
+                              avatarSize: .user(on: .roomDetails)) { image in
+                    image
                         .scaledToFill()
                         .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
                         .accessibilityHidden(true)
-                } else {
+                } placeholder: {
                     PlaceholderAvatarImage(text: member.name ?? "", contentId: member.id)
                         .clipShape(Circle())
                         .frame(width: avatarSize, height: avatarSize)
@@ -50,13 +50,6 @@ struct RoomMemberDetailsMemberCell: View {
                 Spacer()
             }
             .accessibilityElement(children: .combine)
-            .task {
-                guard avatarImage == nil, let avatarURL = member.avatarURL else { return }
-                
-                if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .user(on: .roomDetails)) {
-                    avatarImage = image
-                }
-            }
         }
     }
 }

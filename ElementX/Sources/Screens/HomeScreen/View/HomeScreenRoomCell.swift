@@ -18,7 +18,6 @@ import SwiftUI
 
 struct HomeScreenRoomCell: View {
     @ScaledMetric private var avatarSize = AvatarSize.room(on: .home).value
-    @State private var avatarImage: UIImage?
     
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
@@ -30,14 +29,15 @@ struct HomeScreenRoomCell: View {
             }
         } label: {
             HStack(spacing: 16.0) {
-                if let avatarImage {
-                    Image(uiImage: avatarImage)
-                        .resizable()
+                LoadableImage(imageProvider: context.imageProvider,
+                              url: room.avatarURL,
+                              avatarSize: .room(on: .home)) { image in
+                    image
                         .scaledToFill()
                         .frame(width: avatarSize, height: avatarSize)
                         .clipShape(Circle())
                         .accessibilityHidden(true)
-                } else {
+                } placeholder: {
                     PlaceholderAvatarImage(text: room.name, contentId: room.roomId)
                         .clipShape(Circle())
                         .frame(width: avatarSize, height: avatarSize)
@@ -90,13 +90,6 @@ struct HomeScreenRoomCell: View {
             .accessibilityElement(children: .combine)
         }
         .accessibilityIdentifier("roomName:\(room.name)")
-        .task {
-            guard avatarImage == nil, let avatarURL = room.avatarURL else { return }
-            
-            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .home)) {
-                avatarImage = image
-            }
-        }
     }
     
     var lastMessageFont: Font {

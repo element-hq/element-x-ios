@@ -46,7 +46,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     private var header: some View {
         if timelineItem.shouldShowSenderDetails {
             HStack {
-                TimelineSenderAvatarView(timelineItem: timelineItem, imageProvider: context.imageProvider)
+                TimelineSenderAvatarView(timelineItem: timelineItem)
                 Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                     .font(.body)
                     .foregroundColor(.element.primaryContent)

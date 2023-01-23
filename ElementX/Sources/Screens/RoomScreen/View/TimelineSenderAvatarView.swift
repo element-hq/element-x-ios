@@ -18,28 +18,20 @@ import Foundation
 import SwiftUI
 
 struct TimelineSenderAvatarView: View {
-    private let timelineItem: EventBasedTimelineItemProtocol
-    private let imageProvider: ImageProviderProtocol?
-
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .timeline).value
-    @State private var avatarImage: UIImage?
     
-    init(timelineItem: EventBasedTimelineItemProtocol,
-         imageProvider: ImageProviderProtocol?) {
-        self.timelineItem = timelineItem
-        self.imageProvider = imageProvider
+    let timelineItem: EventBasedTimelineItemProtocol
         
-        _avatarImage = State(initialValue: imageProvider?.imageFromURL(timelineItem.sender.avatarURL, avatarSize: .room(on: .timeline)))
-    }
-    
     var body: some View {
         ZStack(alignment: .center) {
-            if let avatar = avatarImage {
-                Image(uiImage: avatar)
-                    .resizable()
+            LoadableImage(imageProvider: context.imageProvider,
+                          url: timelineItem.sender.avatarURL,
+                          avatarSize: .room(on: .timeline)) { image in
+                image
                     .scaledToFill()
                     .overlay(Circle().stroke(Color.element.accent))
-            } else {
+            } placeholder: {
                 PlaceholderAvatarImage(text: timelineItem.sender.displayName ?? timelineItem.sender.id,
                                        contentId: timelineItem.sender.id)
             }
@@ -50,13 +42,5 @@ struct TimelineSenderAvatarView: View {
             Circle()
                 .stroke(Color.element.background, lineWidth: 3)
         )
-        .animation(.elementDefault, value: avatarImage)
-        .task {
-            guard avatarImage == nil, let avatarURL = timelineItem.sender.avatarURL else { return }
-            
-            if case let .success(image) = await imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .timeline)) {
-                avatarImage = image
-            }
-        }
     }
 }

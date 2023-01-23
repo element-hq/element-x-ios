@@ -20,8 +20,6 @@ struct RoomDetailsScreen: View {
     @Environment(\.colorScheme) private var colorScheme
     
     @ScaledMetric private var avatarSize = AvatarSize.room(on: .details).value
-    @State private var avatarImage: UIImage?
-    
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
@@ -43,13 +41,6 @@ struct RoomDetailsScreen: View {
         }
         .alert(item: $context.alertInfo) { $0.alert }
         .navigationTitle(ElementL10n.roomDetailsTitle)
-        .task {
-            guard avatarImage == nil, let avatarURL = context.viewState.avatarURL else { return }
-            
-            if case let .success(image) = await context.imageProvider?.loadImageFromURL(avatarURL, avatarSize: .room(on: .details)) {
-                avatarImage = image
-            }
-        }
     }
     
     // MARK: - Private
@@ -136,14 +127,15 @@ struct RoomDetailsScreen: View {
     }
 
     @ViewBuilder private var avatarImageView: some View {
-        if let avatar = avatarImage {
-            Image(uiImage: avatar)
-                .resizable()
+        LoadableImage(imageProvider: context.imageProvider,
+                      url: context.viewState.avatarURL,
+                      avatarSize: .room(on: .details)) { image in
+            image
                 .scaledToFill()
                 .frame(width: avatarSize, height: avatarSize)
                 .clipShape(Circle())
                 .accessibilityIdentifier("roomAvatarImage")
-        } else {
+        } placeholder: {
             PlaceholderAvatarImage(text: context.viewState.title,
                                    contentId: context.viewState.roomId)
                 .clipShape(Circle())

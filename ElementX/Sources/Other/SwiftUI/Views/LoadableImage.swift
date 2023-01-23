@@ -16,13 +16,13 @@
 
 import SwiftUI
 
-struct LoadableImage<ContainerView: View, PlaceholderView: View>: View {
+struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private let imageProvider: ImageProviderProtocol?
     private let mediaSource: MediaSourceProxy?
     private let blurhash: String?
     private let avatarSize: AvatarSize?
     
-    private var container: (Image) -> ContainerView
+    private var transformer: (Image) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
     @State private var image: UIImage?
@@ -33,36 +33,55 @@ struct LoadableImage<ContainerView: View, PlaceholderView: View>: View {
     /// - Parameters:
     ///   - mediaSource: the source of the image
     ///   - blurhash: an optional blurhash
-    ///   - container: entry point for configuring the resulting image view
+    ///   - transformer: entry point for configuring the resulting image view
     ///   - placeholder: a view to show while the image or blurhash are not available
     init(imageProvider: ImageProviderProtocol?,
          mediaSource: MediaSourceProxy?,
-         blurhash: String?,
+         blurhash: String? = nil,
          avatarSize: AvatarSize? = nil,
-         container: @escaping (Image) -> ContainerView = { $0 },
+         transformer: @escaping (Image) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.imageProvider = imageProvider
         self.mediaSource = mediaSource
         self.blurhash = blurhash
         self.avatarSize = avatarSize
         
-        self.container = container
+        self.transformer = transformer
         self.placeholder = placeholder
         
         _image = State(initialValue: imageProvider?.imageFromSource(mediaSource, avatarSize: avatarSize))
     }
     
+    init(imageProvider: ImageProviderProtocol?,
+         url: URL?,
+         blurhash: String? = nil,
+         avatarSize: AvatarSize? = nil,
+         transformer: @escaping (Image) -> TransformerView = { $0 },
+         placeholder: @escaping () -> PlaceholderView) {
+        var mediaSource: MediaSourceProxy?
+        if let url {
+            mediaSource = MediaSourceProxy(url: url)
+        }
+        
+        self.init(imageProvider: imageProvider,
+                  mediaSource: mediaSource,
+                  blurhash: blurhash,
+                  avatarSize: avatarSize,
+                  transformer: transformer,
+                  placeholder: placeholder)
+    }
+    
     var body: some View {
         ZStack {
             if let image = image {
-                container(
+                transformer(
                     Image(uiImage: image)
                         .resizable()
                 )
             } else if let blurhash = blurhash,
                       // Build a small blurhash image so that it's fast
                       let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
-                container(
+                transformer(
                     Image(uiImage: image)
                         .resizable()
                 )

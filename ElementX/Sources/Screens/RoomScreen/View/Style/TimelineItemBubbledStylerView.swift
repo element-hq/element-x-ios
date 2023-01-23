@@ -58,7 +58,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 Spacer()
                     .frame(height: 8)
                 HStack(alignment: .top, spacing: 4) {
-                    TimelineSenderAvatarView(timelineItem: timelineItem, imageProvider: context.imageProvider)
+                    TimelineSenderAvatarView(timelineItem: timelineItem)
                         .accessibilityHidden(true)
                     Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
                         .font(.element.footnoteBold)
