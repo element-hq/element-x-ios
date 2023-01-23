@@ -402,8 +402,8 @@ class ClientProxy: ClientProxyProtocol {
 }
 
 extension ClientProxy: MediaProxyProtocol {
-    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
-        mediaProxy.mediaSourceForURL(url)
+    func mediaSourceForURL(_ url: URL) async -> MediaSourceProxy {
+        await mediaProxy.mediaSourceForURL(url)
     }
 
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {

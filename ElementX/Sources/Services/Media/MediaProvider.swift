@@ -33,6 +33,8 @@ struct MediaProvider: MediaProviderProtocol {
         self.backgroundTaskService = backgroundTaskService
     }
     
+    // MARK: Images
+    
     func imageFromSource(_ source: MediaSourceProxy?, avatarSize: AvatarSize?) -> UIImage? {
         guard let url = source?.url else {
             return nil
@@ -58,7 +60,6 @@ struct MediaProvider: MediaProviderProtocol {
             return .success(image)
         }
         
-        #warning("Media loading should check for existing in flight operations and de-dupe requests.")
         let loadImageBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
         defer {
             loadImageBgTask?.stop()
@@ -92,6 +93,8 @@ struct MediaProvider: MediaProviderProtocol {
             return .failure(.failedRetrievingImage)
         }
     }
+    
+    // MARK: Files
 
     func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL? {
         guard let source else {
@@ -99,6 +102,18 @@ struct MediaProvider: MediaProviderProtocol {
         }
         let cacheKey = fileCacheKeyForURL(source.url)
         return fileCache.file(forKey: cacheKey, fileExtension: fileExtension)
+    }
+    
+    func fileFromURL(_ url: URL?, fileExtension: String) -> URL? {
+        guard let url else {
+            return nil
+        }
+        
+        return fileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
+    }
+    
+    func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError> {
+        await loadFileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
     }
 
     @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError> {
@@ -122,18 +137,6 @@ struct MediaProvider: MediaProviderProtocol {
             MXLog.error("Failed retrieving file with error: \(error)")
             return .failure(.failedRetrievingImage)
         }
-    }
-    
-    func fileFromURL(_ url: URL?, fileExtension: String) -> URL? {
-        guard let url else {
-            return nil
-        }
-        
-        return fileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
-    }
-    
-    func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError> {
-        await loadFileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
     }
     
     // MARK: - Private

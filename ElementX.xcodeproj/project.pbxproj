@@ -216,6 +216,7 @@
 		6CA81428F0970785CDCC5E86 /* UserNotificationToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F31A4E5941ACBA4BB9FEF94C /* UserNotificationToastView.swift */; };
 		6D046D653DA28ADF1E6E59A4 /* BackgroundTaskServiceProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = AAE73D571D4F9C36DD45255A /* BackgroundTaskServiceProtocol.swift */; };
 		6E6E0AAF6C44C0B117EBBE5A /* SlidingSyncViewProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 41F3B445BD6EF1C751806B22 /* SlidingSyncViewProxy.swift */; };
+		6EC7A40A537CFB3D526A111C /* Strings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 47EBB5D698CE9A25BB553A2D /* Strings.swift */; };
 		6F2AB43A1EFAD8A97AF41A15 /* DeviceKit in Frameworks */ = {isa = PBXBuildFile; productRef = A7CA6F33C553805035C3B114 /* DeviceKit */; };
 		6FC10A00D268FCD48B631E37 /* ViewFrameReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFF7BF82A950B91BC5469E91 /* ViewFrameReader.swift */; };
 		6FF51EB400DBA0668FC38B97 /* TimelineStartRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9ED8E731E21055F728E5FED /* TimelineStartRoomTimelineView.swift */; };
@@ -345,6 +346,7 @@
 		AA050DF4AEE54A641BA7CA22 /* RoomSummaryProviderProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 10CC626F97AD70FF0420C115 /* RoomSummaryProviderProtocol.swift */; };
 		AAF0BBED840DF4A53EE85E77 /* MatrixRustSDK in Frameworks */ = {isa = PBXBuildFile; productRef = C2C69B8BA5A9702E7A8BC08F /* MatrixRustSDK */; };
 		AB34401E4E1CAD5D2EC3072B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 9760103CF316DF68698BCFE6 /* LaunchScreen.storyboard */; };
+		ABDC81BD1C3C8B62665F2C72 /* MockMediaProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6920A4869821BF72FFC58842 /* MockMediaProvider.swift */; };
 		ABF3FAB234AD3565B214309B /* TimelineSenderAvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0BC588051E6572A1AF51D738 /* TimelineSenderAvatarView.swift */; };
 		AC5CC8250CEAE57B73900C57 /* UserNotificationModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD80F22830C2360F3F39DDCE /* UserNotificationModalView.swift */; };
 		AC69B6DF15FC451AB2945036 /* UserSessionStoreProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEBA759D1347CFFB3D84ED1F /* UserSessionStoreProtocol.swift */; };
@@ -455,6 +457,7 @@
 		EBE13FAB4E29738AC41BD3E5 /* InfoPlistReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6A580295A56B55A856CC4084 /* InfoPlistReader.swift */; };
 		EC280623A42904341363EAAF /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 886A0A498FA01E8EDD451D05 /* Sentry */; };
 		EC4C31963E755EEC77BD778C /* AnalyticsSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4B362E695A7103C11F64B185 /* AnalyticsSettings.swift */; };
+		ECA636DAF071C611FDC2BB57 /* Strings+Untranslated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A18F6CE4D694D21E4EA9B25 /* Strings+Untranslated.swift */; };
 		EE4F5601356228FF72FC56B6 /* MockClientProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F40F48279322E504153AB0D /* MockClientProxy.swift */; };
 		EE6933C935080B4E0348A58B /* EmojiMartCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E5C3AACCAA82392D08924496 /* EmojiMartCategory.swift */; };
 		EE8491AD81F47DF3C192497B /* DecorationTimelineItemProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 184CF8C196BE143AE226628D /* DecorationTimelineItemProtocol.swift */; };
@@ -465,6 +468,7 @@
 		F06CE9132855E81EBB6DDC32 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 800631D7250B7F93195035F1 /* KeychainAccess */; };
 		F07D88421A9BC4D03D4A5055 /* VideoRoomTimelineItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F348B5F2C12F9D4F4B4D3884 /* VideoRoomTimelineItem.swift */; };
 		F0F82C3C848C865C3098AA52 /* Sentry in Frameworks */ = {isa = PBXBuildFile; productRef = 67E7A6F388D3BF85767609D9 /* Sentry */; };
+		F253AAB4C8F06208173C9C4A /* Assets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71D52BAA5BADB06E5E8C295D /* Assets.swift */; };
 		F257F964493A9CD02A6F720C /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1DF2717AB91060260E5F4781 /* OnboardingPageView.swift */; };
 		F32B271F60531BE92C6E62A1 /* StickerRoomTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 612EF972F2A1800682D32C5E /* StickerRoomTimelineView.swift */; };
 		F425C3F85BFF28C9AC593F52 /* MockNotificationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96561CC53F7C1E24D4C292E4 /* MockNotificationManager.swift */; };
@@ -473,6 +477,7 @@
 		F656F92A63D3DC1978D79427 /* AnalyticsEvents in Frameworks */ = {isa = PBXBuildFile; productRef = 2A3F7BCCB18C15B30CCA39A9 /* AnalyticsEvents */; };
 		F6F49E37272AD7397CD29A01 /* HomeScreenViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 505208F28007C0FEC14E1FF0 /* HomeScreenViewModelTests.swift */; };
 		F7567DD6635434E8C563BF85 /* AnalyticsClientProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = E3B97591B2D3D4D67553506D /* AnalyticsClientProtocol.swift */; };
+		F9305EC5B3D76B3D51E5284E /* MediaProxyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49D86E64CF92B6D652120EFF /* MediaProxyTests.swift */; };
 		F9981191DC408AED537C1749 /* MediaProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12C9E0B61A77C7F0EE7918C /* MediaProxy.swift */; };
 		F99FB21EFC6D99D247FE7CBE /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = DE8DC9B3FBA402117DC4C49F /* Kingfisher */; };
 		F9F6D2883BBEBB9A3789A137 /* OnboardingViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 00A941F289F6AB876BA3361A /* OnboardingViewModelTests.swift */; };
@@ -697,6 +702,7 @@
 		4959CECEC984B3995616F427 /* DataProtectionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProtectionManager.swift; sourceTree = "<group>"; };
 		4990FDBDA96B88E214F92F48 /* SettingsModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsModels.swift; sourceTree = "<group>"; };
 		49D2C8E66E83EA578A7F318A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		49D86E64CF92B6D652120EFF /* MediaProxyTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MediaProxyTests.swift; sourceTree = "<group>"; };
 		49E751D7EDB6043238111D90 /* UNNotificationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNNotificationRequest.swift; sourceTree = "<group>"; };
 		4A57A4AFA6A068668AFBD070 /* UIActivityViewControllerWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIActivityViewControllerWrapper.swift; sourceTree = "<group>"; };
 		4B362E695A7103C11F64B185 /* AnalyticsSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsSettings.swift; sourceTree = "<group>"; };
@@ -1729,6 +1735,7 @@
 			isa = PBXGroup;
 			children = (
 				62A81CCC2516D9CF9322DF01 /* MediaProviderTests.swift */,
+				49D86E64CF92B6D652120EFF /* MediaProxyTests.swift */,
 				3948D16F021DFDB2CD26EAA8 /* MockBackgroundTaskService.swift */,
 				AEC96B3DC55090BBF8876CC2 /* MockFileCache.swift */,
 				AC1DA29A5A041CC0BACA7CB0 /* MockImageCache.swift */,
@@ -2869,6 +2876,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F253AAB4C8F06208173C9C4A /* Assets.swift in Sources */,
 				968A5B890004526AB58A217C /* AvatarSize.swift in Sources */,
 				EF7924005216B8189898F370 /* BackgroundTaskProtocol.swift in Sources */,
 				1B4B3E847BF944DB2C1C217F /* BackgroundTaskServiceProtocol.swift in Sources */,
@@ -2888,6 +2896,7 @@
 				F9981191DC408AED537C1749 /* MediaProxy.swift in Sources */,
 				2CA8AD07773A38BA4662098B /* MediaProxyProtocol.swift in Sources */,
 				5E25568E1CDAD983517E58B5 /* MediaSourceProxy.swift in Sources */,
+				ABDC81BD1C3C8B62665F2C72 /* MockMediaProvider.swift in Sources */,
 				5455147CAC63F71E48F7D699 /* NSELogger.swift in Sources */,
 				5C02841B2A86327B2C377682 /* NotificationConstants.swift in Sources */,
 				214CDBF0C783155242FFE4A0 /* NotificationItemProxy+NSE.swift in Sources */,
@@ -2897,6 +2906,8 @@
 				7E3B1F8D72573ED2FCB2D94B /* NotificationServiceProxyProtocol.swift in Sources */,
 				414F50CFCFEEE2611127DCFB /* RestorationToken.swift in Sources */,
 				7354D094A4C59B555F407FA1 /* RustTracing.swift in Sources */,
+				ECA636DAF071C611FDC2BB57 /* Strings+Untranslated.swift in Sources */,
+				6EC7A40A537CFB3D526A111C /* Strings.swift in Sources */,
 				719E7AAD1F8E68F68F30FECD /* Task.swift in Sources */,
 				BA074E9812F96FFA3200ED1D /* TimelineItemProxy.swift in Sources */,
 				B8C316C6CA24512DFE9A27FD /* TimelineItemSender.swift in Sources */,
@@ -2928,6 +2939,7 @@
 				1E59B77A0B2CE83DCC1B203C /* LoginViewModelTests.swift in Sources */,
 				2E43A3D221BE9587BC19C3F1 /* MatrixEntityRegexTests.swift in Sources */,
 				167D00CAA13FAFB822298021 /* MediaProviderTests.swift in Sources */,
+				F9305EC5B3D76B3D51E5284E /* MediaProxyTests.swift in Sources */,
 				4E8F17EBA24FBBA6ABB62ECB /* MockBackgroundTaskService.swift in Sources */,
 				1146E9EDCF8344F7D6E0D553 /* MockCoder.swift in Sources */,
 				CF6319CC05F964B4D05BF614 /* MockFileCache.swift in Sources */,
