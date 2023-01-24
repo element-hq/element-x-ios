@@ -17,8 +17,6 @@
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
-    @ScaledMetric private var avatarSize = AvatarSize.room(on: .home).value
-    
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     
@@ -29,20 +27,12 @@ struct HomeScreenRoomCell: View {
             }
         } label: {
             HStack(spacing: 16.0) {
-                LoadableImage(imageProvider: context.imageProvider,
-                              url: room.avatarURL,
-                              avatarSize: .room(on: .home)) { image in
-                    image
-                        .scaledToFill()
-                        .frame(width: avatarSize, height: avatarSize)
-                        .clipShape(Circle())
-                        .accessibilityHidden(true)
-                } placeholder: {
-                    PlaceholderAvatarImage(text: room.name, contentId: room.roomId)
-                        .clipShape(Circle())
-                        .frame(width: avatarSize, height: avatarSize)
-                        .accessibilityHidden(true)
-                }
+                LoadableAvatarImage(imageProvider: context.imageProvider,
+                                    url: room.avatarURL,
+                                    avatarSize: .room(on: .home),
+                                    text: room.name,
+                                    contentID: room.roomId)
+                    .accessibilityHidden(true)
                 
                 HStack(alignment: .top) {
                     VStack(alignment: .leading, spacing: 2.0) {

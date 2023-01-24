@@ -24,23 +24,13 @@ struct TimelineSenderAvatarView: View {
     let timelineItem: EventBasedTimelineItemProtocol
         
     var body: some View {
-        ZStack(alignment: .center) {
-            LoadableImage(imageProvider: context.imageProvider,
-                          url: timelineItem.sender.avatarURL,
-                          avatarSize: .room(on: .timeline)) { image in
-                image
-                    .scaledToFill()
-                    .overlay(Circle().stroke(Color.element.accent))
-            } placeholder: {
-                PlaceholderAvatarImage(text: timelineItem.sender.displayName ?? timelineItem.sender.id,
-                                       contentId: timelineItem.sender.id)
-            }
-        }
-        .clipShape(Circle())
-        .frame(width: avatarSize, height: avatarSize)
-        .overlay(
-            Circle()
-                .stroke(Color.element.background, lineWidth: 3)
-        )
+        LoadableAvatarImage(imageProvider: context.imageProvider,
+                            url: timelineItem.sender.avatarURL,
+                            avatarSize: .user(on: .timeline),
+                            text: timelineItem.sender.displayName ?? timelineItem.sender.id,
+                            contentID: timelineItem.sender.id)
+            .overlay(
+                Circle().stroke(Color.element.background, lineWidth: 3)
+            )
     }
 }

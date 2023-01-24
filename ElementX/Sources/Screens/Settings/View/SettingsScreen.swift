@@ -69,7 +69,12 @@ struct SettingsScreen: View {
     private var userSection: some View {
         Section {
             HStack(spacing: 13) {
-                userAvatar
+                LoadableAvatarImage(imageProvider: context.imageProvider,
+                                    url: context.viewState.userAvatarURL,
+                                    avatarSize: .user(on: .settings),
+                                    text: context.viewState.userDisplayName ?? context.viewState.userID,
+                                    contentID: context.viewState.userID)
+                
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
                         .font(.title3)
@@ -78,21 +83,6 @@ struct SettingsScreen: View {
                 }
             }
             .listRowInsets(listRowInsets)
-        }
-    }
-
-    @ViewBuilder
-    private var userAvatar: some View {
-        LoadableImage(imageProvider: context.imageProvider,
-                      url: context.viewState.userAvatarURL) { image in
-            image
-                .scaledToFill()
-                .frame(width: avatarSize, height: avatarSize)
-                .clipShape(Circle())
-        } placeholder: {
-            PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID, contentId: context.viewState.userID)
-                .clipShape(Circle())
-                .frame(width: avatarSize, height: avatarSize)
         }
     }
     

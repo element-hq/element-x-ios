@@ -39,24 +39,14 @@ struct RoomHeaderView: View {
 
     @ViewBuilder private var roomAvatar: some View {
         ZStack(alignment: .bottomTrailing) {
-            avatarImageView
-                .clipShape(Circle())
+            LoadableAvatarImage(imageProvider: context.imageProvider,
+                                url: context.viewState.roomAvatarURL,
+                                avatarSize: .room(on: .timeline),
+                                text: context.viewState.roomTitle,
+                                contentID: context.viewState.roomId)
+                .accessibilityIdentifier("roomAvatarImage")
         }
         .frame(width: AvatarSize.room(on: .timeline).value, height: AvatarSize.room(on: .timeline).value)
-    }
-    
-    @ViewBuilder private var avatarImageView: some View {
-        LoadableImage(imageProvider: context.imageProvider,
-                      url: context.viewState.roomAvatarURL,
-                      avatarSize: .room(on: .timeline)) { image in
-            image
-                .scaledToFill()
-                .accessibilityIdentifier("roomAvatarImage")
-        } placeholder: {
-            PlaceholderAvatarImage(text: context.viewState.roomTitle,
-                                   contentId: context.viewState.roomId)
-                .accessibilityIdentifier("roomAvatarPlaceholderImage")
-        }
     }
 }
 

@@ -27,20 +27,12 @@ struct RoomMemberDetailsMemberCell: View {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
             HStack {
-                LoadableImage(imageProvider: context.imageProvider,
-                              url: member.avatarURL,
-                              avatarSize: .user(on: .roomDetails)) { image in
-                    image
-                        .scaledToFill()
-                        .frame(width: avatarSize, height: avatarSize)
-                        .clipShape(Circle())
-                        .accessibilityHidden(true)
-                } placeholder: {
-                    PlaceholderAvatarImage(text: member.name ?? "", contentId: member.id)
-                        .clipShape(Circle())
-                        .frame(width: avatarSize, height: avatarSize)
-                        .accessibilityHidden(true)
-                }
+                LoadableAvatarImage(imageProvider: context.imageProvider,
+                                    url: member.avatarURL,
+                                    avatarSize: .user(on: .roomDetails),
+                                    text: member.name ?? "",
+                                    contentID: member.id)
+                    .accessibilityHidden(true)
 
                 Text(member.name ?? "")
                     .font(.element.callout.bold())

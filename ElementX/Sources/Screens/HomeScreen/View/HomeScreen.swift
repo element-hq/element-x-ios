@@ -103,7 +103,12 @@ struct HomeScreen: View {
                 }
             }
         } label: {
-            userAvatarImageView
+            LoadableAvatarImage(imageProvider: context.imageProvider,
+                                url: context.viewState.userAvatarURL,
+                                avatarSize: .user(on: .home),
+                                text: context.viewState.userDisplayName ?? context.viewState.userID,
+                                contentID: context.viewState.userID)
+                .accessibilityIdentifier("userAvatarImage")
         }
         .alert(ElementL10n.actionSignOut,
                isPresented: $showingLogoutConfirmation) {
@@ -114,27 +119,6 @@ struct HomeScreen: View {
             Text(ElementL10n.actionSignOutConfirmationSimple)
         }
         .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
-    }
-
-    @ViewBuilder
-    private var userAvatarImageView: some View {
-        userAvatarImage
-            .frame(width: AvatarSize.user(on: .home).value, height: AvatarSize.user(on: .home).value, alignment: .center)
-            .clipShape(Circle())
-            .accessibilityIdentifier("userAvatarImage")
-    }
-
-    @ViewBuilder
-    private var userAvatarImage: some View {
-        LoadableImage(imageProvider: context.imageProvider,
-                      url: context.viewState.userAvatarURL,
-                      avatarSize: .user(on: .home)) { image in
-            image
-                .scaledToFill()
-        } placeholder: {
-            PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID,
-                                   contentId: context.viewState.userID)
-        }
     }
     
     private var sessionVerificationBanner: some View {

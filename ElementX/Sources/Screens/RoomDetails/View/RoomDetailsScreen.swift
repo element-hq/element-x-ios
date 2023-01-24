@@ -17,9 +17,6 @@
 import SwiftUI
 
 struct RoomDetailsScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    @ScaledMetric private var avatarSize = AvatarSize.room(on: .details).value
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
@@ -47,7 +44,13 @@ struct RoomDetailsScreen: View {
 
     private var headerSection: some View {
         VStack(spacing: 16.0) {
-            avatarImageView
+            LoadableAvatarImage(imageProvider: context.imageProvider,
+                                url: context.viewState.avatarURL,
+                                avatarSize: .room(on: .details),
+                                text: context.viewState.title,
+                                contentID: context.viewState.roomId)
+                .accessibilityIdentifier("roomAvatarImage")
+            
             Text(context.viewState.title)
                 .foregroundColor(.element.primaryContent)
                 .font(.element.headline)
@@ -123,24 +126,6 @@ struct RoomDetailsScreen: View {
                 Image(systemName: "checkmark")
                     .foregroundColor(.element.secondaryContent)
             }
-        }
-    }
-
-    @ViewBuilder private var avatarImageView: some View {
-        LoadableImage(imageProvider: context.imageProvider,
-                      url: context.viewState.avatarURL,
-                      avatarSize: .room(on: .details)) { image in
-            image
-                .scaledToFill()
-                .frame(width: avatarSize, height: avatarSize)
-                .clipShape(Circle())
-                .accessibilityIdentifier("roomAvatarImage")
-        } placeholder: {
-            PlaceholderAvatarImage(text: context.viewState.title,
-                                   contentId: context.viewState.roomId)
-                .clipShape(Circle())
-                .frame(width: avatarSize, height: avatarSize)
-                .accessibilityIdentifier("roomAvatarPlaceholderImage")
         }
     }
 }
