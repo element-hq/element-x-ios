@@ -29,60 +29,11 @@ struct HomeScreenRoomCell: View {
             }
         } label: {
             HStack(spacing: 16.0) {
-                if let avatar = room.avatar {
-                    Image(uiImage: avatar)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: avatarSize, height: avatarSize)
-                        .clipShape(Circle())
-                        .accessibilityHidden(true)
-                } else {
-                    PlaceholderAvatarImage(text: room.name, contentId: room.roomId)
-                        .clipShape(Circle())
-                        .frame(width: avatarSize, height: avatarSize)
-                        .accessibilityHidden(true)
-                }
+                avatar
                 
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 2.0) {
-                        Text(room.name)
-                            .font(.element.callout.bold())
-                            .foregroundColor(.element.primaryContent)
-                            .lineLimit(1)
-                        
-                        if let lastMessage = room.lastMessage, !String(lastMessage.characters).isEmpty {
-                            Text(lastMessage)
-                                .font(lastMessageFont)
-                                .foregroundColor(lastMessageForegroundColor)
-                                .lineLimit(2)
-                                .multilineTextAlignment(.leading)
-                                .padding(.top, 2)
-                                .id(lastMessage)
-                                .transition(.opacity.animation(.elementDefault))
-                        }
-                    }
-                    .animation(.elementDefault, value: room)
-                    
-                    Spacer()
-                  
-                    VStack(alignment: .trailing, spacing: 3.0) {
-                        if let timestamp = room.timestamp {
-                            Text(timestamp)
-                                .font(.element.caption1)
-                                .foregroundColor(.element.secondaryContent)
-                                .id(timestamp)
-                                .transition(.opacity.animation(.elementDefault))
-                        }
-                        
-                        if room.hasUnreads {
-                            Rectangle()
-                                .frame(width: 12, height: 12)
-                                .foregroundColor(.element.primaryContent)
-                                .clipShape(Circle())
-                                .transition(.opacity.animation(.elementDefault))
-                        }
-                    }
-                    .animation(.elementDefault, value: room)
+                VStack(alignment: .leading, spacing: 2) {
+                    header
+                    footer
                 }
             }
             .frame(minHeight: 64.0)
@@ -93,23 +44,99 @@ struct HomeScreenRoomCell: View {
                 }
             }
         }
+        .buttonStyle(HomeScreenRoomCellButtonStyle())
         .accessibilityIdentifier("roomName:\(room.name)")
     }
     
-    var lastMessageFont: Font {
-        if room.hasUnreads {
-            return .element.subheadline.bold()
+    @ViewBuilder
+    var avatar: some View {
+        if let avatar = room.avatar {
+            Image(uiImage: avatar)
+                .resizable()
+                .scaledToFill()
+                .frame(width: avatarSize, height: avatarSize)
+                .clipShape(Circle())
+                .accessibilityHidden(true)
         } else {
-            return .element.subheadline
+            PlaceholderAvatarImage(text: room.name, contentId: room.roomId)
+                .clipShape(Circle())
+                .frame(width: avatarSize, height: avatarSize)
+                .accessibilityHidden(true)
         }
     }
     
-    var lastMessageForegroundColor: Color {
-        if room.hasUnreads {
-            return .element.primaryContent
-        } else {
-            return .element.secondaryContent
+    @ViewBuilder
+    var header: some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(room.name)
+                .font(.element.callout.bold())
+                .foregroundColor(.element.primaryContent)
+                .lineLimit(1)
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            if let timestamp = room.timestamp {
+                Text(timestamp)
+                    .font(.element.caption1)
+                    .foregroundColor(.element.secondaryContent)
+                    .id(timestamp)
+                    .transition(.opacity.animation(.elementDefault))
+            }
         }
+        .animation(.elementDefault, value: room)
+    }
+    
+    @ViewBuilder
+    var footer: some View {
+        HStack(alignment: .firstTextBaseline) {
+            ZStack(alignment: .topLeading) {
+                // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
+                Text(" \n ").lastMessageFormatting().hidden()
+                
+                if let lastMessage = room.lastMessage, !String(lastMessage.characters).isEmpty {
+                    Text(lastMessage)
+                        .lastMessageFormatting()
+                        .id(lastMessage)
+                        .transition(.opacity.animation(.elementDefault))
+                }
+            }
+            
+            Spacer()
+            
+            if room.hasUnreads {
+                Rectangle()
+                    .frame(width: 12, height: 12)
+                    .foregroundColor(.element.primaryContent)
+                    .clipShape(Circle())
+                    .transition(.opacity.animation(.elementDefault))
+            }
+        }
+        .animation(.elementDefault, value: room)
+    }
+}
+
+struct HomeScreenRoomCellButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .roomCellBackground(configuration.isPressed ? .element.system : .clear)
+            .contentShape(Rectangle())
+    }
+}
+
+private extension View {
+    func lastMessageFormatting() -> some View {
+        font(.element.subheadline)
+            .foregroundColor(.element.secondaryContent)
+            .lineLimit(2)
+            .multilineTextAlignment(.leading)
+            .padding(.top, 2)
+    }
+    
+    // To be used to indicate the selected room too
+    func roomCellBackground(_ background: Color) -> some View {
+        padding(.horizontal, 8)
+            .padding(.vertical, 6)
+            .background { background.clipShape(RoundedRectangle(cornerRadius: 12)) }
+            .padding(.horizontal, 8)
     }
 }
 
@@ -136,11 +163,12 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
                                       roomId: details.id,
                                       name: details.name,
                                       hasUnreads: details.unreadNotificationCount > 0,
-                                      timestamp: Date.now.formatted(date: .omitted, time: .shortened))
+                                      timestamp: Date.now.formattedMinimal(),
+                                      lastMessage: details.lastMessage)
             }
         }
 
-        return VStack {
+        return VStack(spacing: 0) {
             ForEach(rooms) { room in
                 HomeScreenRoomCell(room: room, context: viewModel.context)
             }

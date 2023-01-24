@@ -35,16 +35,15 @@ struct HomeScreen: View {
             }
             
             if context.viewState.roomListMode == .skeletons {
-                LazyVStack {
+                LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleRooms) { room in
                         HomeScreenRoomCell(room: room, context: context)
                             .redacted(reason: .placeholder)
                             .disabled(true)
                     }
                 }
-                .padding(.horizontal)
             } else {
-                LazyVStack {
+                LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleRooms) { room in
                         Group {
                             if room.isPlaceholder {
@@ -62,7 +61,6 @@ struct HomeScreen: View {
                         }
                     }
                 }
-                .padding(.horizontal)
                 .searchable(text: $context.searchQuery)
                 .disableAutocorrection(true)
             }
