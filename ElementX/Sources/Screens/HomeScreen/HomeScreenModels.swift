@@ -58,7 +58,7 @@ enum HomeScreenRoomListMode: CustomStringConvertible {
 struct HomeScreenViewState: BindableState {
     var userID: String
     var userDisplayName: String?
-    var userAvatar: UIImage?
+    var userAvatarURL: URL?
     
     var showSessionVerificationBanner = false
     

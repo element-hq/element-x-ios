@@ -70,6 +70,14 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     }
     
     var body: some View {
+        let _ = Task {
+            guard image == nil, let mediaSource else { return }
+            
+            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, avatarSize: avatarSize) {
+                self.cachedImage = image
+            }
+        }
+        
         ZStack {
             if let image = image {
                 transformer(
@@ -88,13 +96,6 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
             }
         }
         .animation(.elementDefault, value: image)
-        .task {
-            guard image == nil, let mediaSource else { return }
-            
-            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, avatarSize: avatarSize) {
-                self.cachedImage = image
-            }
-        }
     }
     
     var image: UIImage? {

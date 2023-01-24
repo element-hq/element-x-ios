@@ -83,13 +83,13 @@ struct SettingsScreen: View {
 
     @ViewBuilder
     private var userAvatar: some View {
-        if let avatar = context.viewState.userAvatar {
-            Image(uiImage: avatar)
-                .resizable()
+        LoadableImage(imageProvider: context.imageProvider,
+                      url: context.viewState.userAvatarURL) { image in
+            image
                 .scaledToFill()
                 .frame(width: avatarSize, height: avatarSize)
                 .clipShape(Circle())
-        } else {
+        } placeholder: {
             PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID, contentId: context.viewState.userID)
                 .clipShape(Circle())
                 .frame(width: avatarSize, height: avatarSize)

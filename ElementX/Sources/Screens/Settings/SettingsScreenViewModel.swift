@@ -26,13 +26,12 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         let bindings = SettingsScreenViewStateBindings()
-        super.init(initialViewState: .init(bindings: bindings, deviceID: userSession.deviceId, userID: userSession.userID))
+        super.init(initialViewState: .init(bindings: bindings, deviceID: userSession.deviceId, userID: userSession.userID),
+                   imageProvider: userSession.mediaProvider)
         
         Task {
             if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL() {
-                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURL(userAvatarURL, avatarSize: .user(on: .settings)) {
-                    state.userAvatar = avatar
-                }
+                state.userAvatarURL = userAvatarURL
             }
         }
         

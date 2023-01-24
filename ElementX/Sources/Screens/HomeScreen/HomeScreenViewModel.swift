@@ -72,9 +72,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         Task {
             if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
-                if case let .success(avatar) = await userSession.mediaProvider.loadImageFromURL(url, avatarSize: .user(on: .home)) {
-                    state.userAvatar = avatar
-                }
+                state.userAvatarURL = url
             }
         }
         

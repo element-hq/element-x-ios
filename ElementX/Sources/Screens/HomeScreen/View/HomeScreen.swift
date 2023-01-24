@@ -104,8 +104,6 @@ struct HomeScreen: View {
             }
         } label: {
             userAvatarImageView
-                .animation(.elementDefault, value: context.viewState.userAvatar)
-                .transition(.opacity)
         }
         .alert(ElementL10n.actionSignOut,
                isPresented: $showingLogoutConfirmation) {
@@ -128,11 +126,12 @@ struct HomeScreen: View {
 
     @ViewBuilder
     private var userAvatarImage: some View {
-        if let avatar = context.viewState.userAvatar {
-            Image(uiImage: avatar)
-                .resizable()
+        LoadableImage(imageProvider: context.imageProvider,
+                      url: context.viewState.userAvatarURL,
+                      avatarSize: .user(on: .home)) { image in
+            image
                 .scaledToFill()
-        } else {
+        } placeholder: {
             PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID,
                                    contentId: context.viewState.userID)
         }

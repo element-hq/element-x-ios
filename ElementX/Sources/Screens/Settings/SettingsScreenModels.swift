@@ -28,7 +28,7 @@ struct SettingsScreenViewState: BindableState {
     var bindings: SettingsScreenViewStateBindings
     var deviceID: String?
     var userID: String
-    var userAvatar: UIImage?
+    var userAvatarURL: URL?
     var userDisplayName: String?
 }
 
