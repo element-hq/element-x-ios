@@ -117,7 +117,8 @@ struct HomeScreenRoomCell: View {
 struct HomeScreenRoomCellButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .roomCellBackground(configuration.isPressed ? .element.system : .element.background)
+            .roomCellBackground(configuration.isPressed ? .element.system : .clear)
+            .contentShape(Rectangle())
     }
 }
 
