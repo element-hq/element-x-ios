@@ -41,7 +41,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         }
 
         if avoidStartingNewTasks(for: application) {
-            MXLog.info("Do not start background task: \(name), as not enough time exists")
+            MXLog.error("Do not start background task: \(name), as not enough time exists")
             //  call expiration handler immediately
             expirationHandler?()
             return nil
@@ -82,7 +82,7 @@ class UIKitBackgroundTaskService: BackgroundTaskServiceProtocol {
         let appState = application.applicationState
         let remainingTime = readableBackgroundTimeRemaining(application.backgroundTimeRemaining)
 
-        MXLog.info("Background task \(name) \(created ? "started" : "reused") with app state: \(appState) and estimated background time remaining: \(remainingTime)")
+        MXLog.verbose("Background task \(name) \(created ? "started" : "reused") with app state: \(appState) and estimated background time remaining: \(remainingTime)")
 
         return result
     }

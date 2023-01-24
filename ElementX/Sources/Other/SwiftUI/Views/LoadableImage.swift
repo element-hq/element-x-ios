@@ -25,7 +25,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     private var transformer: (Image) -> TransformerView
     private let placeholder: () -> PlaceholderView
     
-    @State var cachedImage: UIImage?
+    @State private var cachedImage: UIImage?
     
     /// A SwiftUI view that automatically fetches images
     /// It will try fetching the image from in-memory cache and if that's not available
@@ -98,7 +98,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
         .animation(.elementDefault, value: image)
     }
     
-    var image: UIImage? {
+    private var image: UIImage? {
         cachedImage ?? imageProvider?.imageFromSource(mediaSource, avatarSize: avatarSize)
     }
 }
