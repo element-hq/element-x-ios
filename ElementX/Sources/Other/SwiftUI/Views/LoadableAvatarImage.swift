@@ -41,12 +41,10 @@ struct LoadableAvatarImage: View {
                       avatarSize: avatarSize) { image in
             image
                 .scaledToFill()
-                .frame(width: frameSize, height: frameSize)
-                .clipShape(Circle())
         } placeholder: {
             PlaceholderAvatarImage(text: text, contentId: contentID)
-                .frame(width: frameSize, height: frameSize)
-                .clipShape(Circle())
         }
+        .frame(width: frameSize, height: frameSize)
+        .clipShape(Circle())
     }
 }

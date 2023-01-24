@@ -17,17 +17,22 @@
 import SwiftUI
 
 struct PlaceholderAvatarImage: View {
+    @Environment(\.redactionReasons) var redactionReasons
+
     private let textForImage: String
     private let contentId: String?
     
     var body: some View {
         ZStack {
             bgColor
-            Text(textForImage)
-                .padding(4)
-                .foregroundColor(.white)
-                .font(.system(size: 200).weight(.semibold))
-                .minimumScaleFactor(0.001)
+            
+            if redactionReasons.isEmpty {
+                Text(textForImage)
+                    .padding(4)
+                    .foregroundColor(.white)
+                    .font(.system(size: 200).weight(.semibold))
+                    .minimumScaleFactor(0.001)
+            }
         }
         .aspectRatio(1, contentMode: .fill)
     }
@@ -38,6 +43,10 @@ struct PlaceholderAvatarImage: View {
     }
 
     private var bgColor: Color {
+        guard redactionReasons.isEmpty else {
+            return .element.systemGray4
+        }
+        
         guard let contentId else {
             return .element.accent
         }
