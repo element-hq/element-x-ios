@@ -26,7 +26,8 @@ struct PlaceholderAvatarImage: View {
         ZStack {
             bgColor
             
-            if redactionReasons.isEmpty {
+            // This text's frame doesn't look right when redacted
+            if redactionReasons != .placeholder {
                 Text(textForImage)
                     .padding(4)
                     .foregroundColor(.white)
@@ -43,7 +44,7 @@ struct PlaceholderAvatarImage: View {
     }
 
     private var bgColor: Color {
-        guard redactionReasons.isEmpty else {
+        if redactionReasons == .placeholder {
             return .element.systemGray4
         }
         
