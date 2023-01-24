@@ -29,6 +29,8 @@ struct MockRoomProxy: RoomProxyProtocol {
     var isPublic = Bool.random()
     var isEncrypted = Bool.random()
     var isTombstoned = Bool.random()
+    var canonicalAlias: String?
+    var alternativeAliases: [String] = []
     var hasUnreadNotifications = Bool.random()
     var members: [RoomMemberProxy]?
     

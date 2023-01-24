@@ -83,6 +83,14 @@ class RoomProxy: RoomProxyProtocol {
         room.isTombstoned()
     }
     
+    var canonicalAlias: String? {
+        room.canonicalAlias()
+    }
+    
+    var alternativeAliases: [String] {
+        room.alternativeAliases()
+    }
+    
     var hasUnreadNotifications: Bool {
         slidingSyncRoom.hasUnreadNotifications()
     }
