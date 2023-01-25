@@ -29,15 +29,10 @@ struct LoginScreen: View {
             VStack(spacing: 0) {
                 header
                     .padding(.top, UIConstants.topPaddingToNavigationBar)
-                    .padding(.bottom, 36)
+                    .padding(.bottom, 32)
                 
                 serverInfo
-                    .padding(.leading, 12)
-                
-                Rectangle()
-                    .fill(Color.element.quinaryContent)
-                    .frame(height: 1)
-                    .padding(.vertical, 21)
+                    .padding(.bottom, 32)
                 
                 switch context.viewState.loginMode {
                 case .password:
@@ -59,7 +54,7 @@ struct LoginScreen: View {
     /// The header containing a Welcome Back title.
     var header: some View {
         Text(ElementL10n.ftueAuthWelcomeBackTitle)
-            .font(.element.title2Bold)
+            .font(.element.title1Bold)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
     }
@@ -73,7 +68,13 @@ struct LoginScreen: View {
     
     /// The form with text fields for username and password, along with a submit button.
     var loginForm: some View {
-        VStack(spacing: 14) {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(ElementL10n.ftueAuthSignInEnterDetails)
+                .font(.element.subheadline)
+                .foregroundColor(.element.primaryContent)
+                .padding(.horizontal, 16)
+                .padding(.bottom, 8)
+            
             TextField(ElementL10n.loginSigninUsernameHint, text: $context.username)
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput())
@@ -84,8 +85,7 @@ struct LoginScreen: View {
                 .onChange(of: isUsernameFocused, perform: usernameFocusChanged)
                 .onSubmit { isPasswordFocused = true }
                 .accessibilityIdentifier("usernameTextField")
-            
-            Spacer().frame(height: 20)
+                .padding(.bottom, 20)
             
             SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
                 .focused($isPasswordFocused)
@@ -95,15 +95,18 @@ struct LoginScreen: View {
                 .onSubmit(submit)
                 .accessibilityIdentifier("passwordTextField")
             
-            Button { context.send(viewAction: .forgotPassword) } label: {
-                Text(ElementL10n.ftueAuthForgotPassword)
-                    .font(.element.body)
-            }
-            .frame(maxWidth: .infinity, alignment: .trailing)
-            .padding(.bottom, 8)
+            // uncomment this piece of code once forgot password will be available
+//            Button { context.send(viewAction: .forgotPassword) } label: {
+//                Text(ElementL10n.ftueAuthForgotPassword)
+//                    .font(.element.body)
+//            }
+//            .frame(maxWidth: .infinity, alignment: .trailing)
+//            .padding(.bottom, 8)
             
+            Spacer().frame(height: 32)
+
             Button(action: submit) {
-                Text(ElementL10n.loginSignupSubmit)
+                Text(ElementL10n.loginContinue)
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(!context.viewState.canSubmit)

@@ -25,6 +25,10 @@ internal enum Asset {
   internal enum Images {
     internal static let analyticsCheckmark = ImageAsset(name: "Images/AnalyticsCheckmark")
     internal static let analyticsLogo = ImageAsset(name: "Images/AnalyticsLogo")
+    internal static let onboardingAppLogo = ImageAsset(name: "Images/Onboarding App Logo")
+    internal static let onboardingBackgroundPart1 = ImageAsset(name: "Images/Onboarding Background Part 1")
+    internal static let onboardingBackgroundPart2 = ImageAsset(name: "Images/Onboarding Background Part 2")
+    internal static let onboardingBackgroundPart3 = ImageAsset(name: "Images/Onboarding Background Part 3")
     internal static let onboardingScreenPage1 = ImageAsset(name: "Images/Onboarding Screen Page 1")
     internal static let onboardingScreenPage2 = ImageAsset(name: "Images/Onboarding Screen Page 2")
     internal static let onboardingScreenPage3 = ImageAsset(name: "Images/Onboarding Screen Page 3")

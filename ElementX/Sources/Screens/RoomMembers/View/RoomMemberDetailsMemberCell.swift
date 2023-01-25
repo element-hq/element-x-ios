@@ -42,7 +42,7 @@ struct RoomMemberDetailsMemberCell: View {
                 }
 
                 Text(member.name ?? "")
-                    .font(.element.callout.bold())
+                    .font(.element.calloutBold)
                     .foregroundColor(.element.primaryContent)
                     .lineLimit(1)
 

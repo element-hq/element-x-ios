@@ -16,10 +16,26 @@ extension ElementL10n {
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
   /// Match
   public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
+  /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
+  public static let bugReportScreenDescription = ElementL10n.tr("Untranslated", "bug_report_screen_description")
+  /// Send logs to help
+  public static let bugReportScreenIncludeLogs = ElementL10n.tr("Untranslated", "bug_report_screen_include_logs")
+  /// To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.
+  public static let bugReportScreenLogsDescription = ElementL10n.tr("Untranslated", "bug_report_screen_logs_description")
+  /// Report a bug
+  public static let bugReportScreenTitle = ElementL10n.tr("Untranslated", "bug_report_screen_title")
   /// %@ iOS
   public static func defaultSessionDisplayName(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "default_session_display_name", String(describing: p1))
   }
+  /// Welcome to the %@ Alpha. Supercharged, for speed and simplicity.
+  public static func ftueAuthCarouselWelcomeBody(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "ftue_auth_carousel_welcome_body", String(describing: p1))
+  }
+  /// Be in your Element
+  public static let ftueAuthCarouselWelcomeTitle = ElementL10n.tr("Untranslated", "ftue_auth_carousel_welcome_title")
+  /// Enter your details
+  public static let ftueAuthSignInEnterDetails = ElementL10n.tr("Untranslated", "ftue_auth_sign_in_enter_details")
   /// Mobile
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet
@@ -96,7 +112,7 @@ extension ElementL10n {
   public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
   /// You took a screenshot
   public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
-  /// You can only connect to a server that has already been set up
+  /// You can only connect to an existing server
   public static let serverSelectionServerFooter = ElementL10n.tr("Untranslated", "server_selection_server_footer")
   /// Looks like you’re using a new device. Verify its you.
   public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")

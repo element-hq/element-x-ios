@@ -30,6 +30,7 @@ enum RoomDetailsViewModelAction {
 
 struct RoomDetailsViewState: BindableState {
     let roomId: String
+    let canonicalAlias: String?
     let isEncrypted: Bool
     let isDirect: Bool
     var roomTitle = ""

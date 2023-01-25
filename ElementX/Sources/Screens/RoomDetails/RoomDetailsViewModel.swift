@@ -35,6 +35,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         self.roomProxy = roomProxy
         self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(roomId: roomProxy.id,
+                                           canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
                                            roomTitle: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",

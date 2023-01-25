@@ -60,23 +60,10 @@ struct OnboardingViewState: BindableState {
     }
     
     init() {
-        // The pun doesn't translate, so we only use it for English.
-        let locale = Locale.current
-        let page4Title = locale.identifier.hasPrefix("en") ? "Cut the slack from teams." : ElementL10n.ftueAuthCarouselWorkplaceTitle
-        
         content = [
-            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselSecureTitle.tinting("."),
-                                  message: ElementL10n.ftueAuthCarouselSecureBody,
-                                  image: Asset.Images.onboardingScreenPage1),
-            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselControlTitle.tinting("."),
-                                  message: ElementL10n.ftueAuthCarouselControlBody,
-                                  image: Asset.Images.onboardingScreenPage2),
-            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselEncryptedTitle.tinting("."),
-                                  message: ElementL10n.ftueAuthCarouselEncryptedBody,
-                                  image: Asset.Images.onboardingScreenPage3),
-            OnboardingPageContent(title: page4Title.tinting("."),
-                                  message: ElementL10n.ftueAuthCarouselWorkplaceBody(InfoPlistReader.target.bundleDisplayName),
-                                  image: Asset.Images.onboardingScreenPage4)
+            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselWelcomeTitle.tinting(".", color: .element.accent),
+                                  message: ElementL10n.ftueAuthCarouselWelcomeBody(InfoPlistReader.target.bundleDisplayName),
+                                  image: Asset.Images.onboardingAppLogo)
         ]
         bindings = OnboardingBindings()
     }

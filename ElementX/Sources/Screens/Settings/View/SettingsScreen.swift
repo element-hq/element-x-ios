@@ -31,15 +31,18 @@ struct SettingsScreen: View {
         Form {
             userSection
                 .listRowBackground(rowBackgroundColor)
-
-            analyticsSection
+            
+            simplifiedSection
                 .listRowBackground(rowBackgroundColor)
 
-            userInterfaceSection
-                .listRowBackground(rowBackgroundColor)
+//            analyticsSection
+//                .listRowBackground(rowBackgroundColor)
 
-            logoutSection
-                .listRowBackground(rowBackgroundColor)
+//            userInterfaceSection
+//                .listRowBackground(rowBackgroundColor)
+
+//            logoutSection
+//                .listRowBackground(rowBackgroundColor)
         }
         .introspectTableView { tableView in
             tableView.backgroundColor = .clear
@@ -59,7 +62,7 @@ struct SettingsScreen: View {
     }
 
     private var backgroundColor: Color {
-        .element.systemGray6
+        .element.system
     }
 
     private var rowBackgroundColor: Color {
@@ -73,8 +76,10 @@ struct SettingsScreen: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
                         .font(.title3)
+                        .foregroundColor(.element.primaryContent)
                     Text(context.viewState.userID)
                         .font(.subheadline)
+                        .foregroundColor(.element.primaryContent)
                 }
             }
             .listRowInsets(listRowInsets)
@@ -93,6 +98,55 @@ struct SettingsScreen: View {
             PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID, contentId: context.viewState.userID)
                 .clipShape(Circle())
                 .frame(width: avatarSize, height: avatarSize)
+        }
+    }
+    
+    private func row(title: String, image: Image, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack(spacing: 16) {
+                image
+                    .foregroundColor(.element.systemGray)
+                    .padding(4)
+                    .background(Color.element.systemGray6)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(width: menuIconSize, height: menuIconSize)
+                
+                Text(title)
+                    .font(.element.body)
+                    .foregroundColor(.element.primaryContent)
+                
+                Spacer()
+                
+                Image(systemName: "chevron.forward")
+                    .foregroundColor(.element.tertiaryContent)
+            }
+        }
+        .listRowInsets(listRowInsets)
+        .listRowSeparator(.hidden)
+        .foregroundColor(.element.primaryContent)
+    }
+    
+    private var simplifiedSection: some View {
+        Section {
+            row(title: ElementL10n.sendBugReport,
+                image: Image(systemName: "questionmark.circle")) {
+                    context.send(viewAction: .reportBug)
+                }
+                .accessibilityIdentifier("reportBugButton")
+            
+            row(title: ElementL10n.actionSignOut,
+                image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
+                    showingLogoutConfirmation = true
+                }
+                .accessibilityIdentifier("logoutButton")
+                .alert(ElementL10n.actionSignOut,
+                       isPresented: $showingLogoutConfirmation) {
+                    Button(ElementL10n.actionSignOut,
+                           role: .destructive,
+                           action: logout)
+                } message: {
+                    Text(ElementL10n.actionSignOutConfirmationSimple)
+                }
         }
     }
     
@@ -167,13 +221,8 @@ struct SettingsScreen: View {
     }
 
     private var closeButton: some View {
-        Button(action: close) {
-            Image(systemName: "xmark")
-                .font(.title3.bold())
-                .foregroundColor(.element.secondaryContent)
-                .padding(4)
-        }
-        .accessibilityIdentifier("closeButton")
+        Button(ElementL10n.actionCancel, action: close)
+            .accessibilityIdentifier("closeButton")
     }
 
     private func close() {

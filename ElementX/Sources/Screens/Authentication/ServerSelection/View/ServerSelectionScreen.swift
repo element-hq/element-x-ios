@@ -40,7 +40,7 @@ struct ServerSelectionScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(spacing: 8) {
-            AuthenticationIconImage(image: Asset.Images.serverSelectionIcon)
+            AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon))
                 .padding(.bottom, 8)
             
             Text(ElementL10n.ftueAuthChooseServerTitle)
@@ -51,13 +51,14 @@ struct ServerSelectionScreen: View {
             Text(ElementL10n.ftueAuthChooseServerSubtitle)
                 .font(.element.body)
                 .multilineTextAlignment(.center)
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.element.tertiaryContent)
         }
+        .padding(.horizontal, 16)
     }
     
     /// The text field and confirm button where the user enters a server URL.
     var serverForm: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 24) {
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
                 .textFieldStyle(.elementInput(labelText: ElementL10n.hsUrl,
                                               footerText: context.viewState.footerMessage,
@@ -70,8 +71,6 @@ struct ServerSelectionScreen: View {
                 .onSubmit(submit)
                 .accessibilityIdentifier("addressTextField")
             
-            Divider()
-            
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.slidingSyncProxyAddress)
                 .textFieldStyle(.elementInput(labelText: "Sliding sync proxy URL"))
                 .keyboardType(.URL)
@@ -80,6 +79,7 @@ struct ServerSelectionScreen: View {
                 .submitLabel(.done)
                 .onSubmit(submit)
                 .accessibilityIdentifier("slidingSyncProxyAddressTextField")
+                .padding(.bottom, 8)
             
             Button(action: submit) {
                 Text(context.viewState.buttonTitle)

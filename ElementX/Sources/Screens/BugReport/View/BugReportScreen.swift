@@ -26,93 +26,86 @@ struct BugReportScreen: View {
     @ObservedObject var context: BugReportViewModel.Context
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack {
-                ScrollView {
-                    mainContent
-                        .padding(.top, 50)
-                        .padding(.horizontal, horizontalPadding)
-                }
-                .introspectScrollView { scrollView in
-                    scrollView.keyboardDismissMode = .onDrag
-                }
-                
-                buttons
-                    .padding(.horizontal, horizontalPadding)
-                    .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
-            }
-            .navigationTitle(ElementL10n.titleActivityBugReport)
-            .toolbar {
-                if context.viewState.isModallyPresented {
-                    ToolbarItem(placement: .cancellationAction) {
-                        Button(ElementL10n.actionCancel) {
-                            context.send(viewAction: .cancel)
-                        }
-                    }
-                }
-            }
-            .interactiveDismissDisabled()
+        ScrollView {
+            mainContent
+                .padding(.top, 50)
+                .padding(.horizontal, horizontalPadding)
         }
+        .introspectScrollView { scrollView in
+            scrollView.keyboardDismissMode = .onDrag
+        }
+        .background(Color.element.system)
+        .navigationTitle(ElementL10n.bugReportScreenTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+        .interactiveDismissDisabled()
     }
-    
+
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(ElementL10n.sendBugReportDescription)
-                .accessibilityIdentifier("reportBugDescription")
-            ZStack(alignment: .topLeading) {
-                RoundedRectangle(cornerRadius: 8, style: .continuous)
-                    .fill(Color.element.system)
-
-                if context.reportText.isEmpty {
-                    Text(ElementL10n.sendBugReportPlaceholder)
-                        .foregroundColor(Color.element.secondaryContent)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 12)
-                }
-                TextEditor(text: $context.reportText)
-                    .padding(4)
-                    .background(Color.clear)
-                    .cornerRadius(8)
-                    .accessibilityIdentifier("reportTextView")
-                    .introspectTextView { textView in
-                        textView.backgroundColor = .clear
-                    }
-            }
-            .frame(maxWidth: .infinity)
-            .frame(height: 300)
-            .font(.body)
-            Text(ElementL10n.sendBugReportLogsDescription)
-                .accessibilityIdentifier("sendLogsDescription")
-            HStack(spacing: 12) {
-                Toggle(ElementL10n.sendBugReportIncludeLogs, isOn: $context.sendingLogsEnabled)
-                    .toggleStyle(ElementToggleStyle())
-                    .accessibilityIdentifier("sendLogsToggle")
-                Text(ElementL10n.sendBugReportIncludeLogs)
-                    .accessibilityIdentifier("sendLogsText")
-            }
-            .onTapGesture {
-                context.send(viewAction: .toggleSendLogs)
-            }
+        VStack(alignment: .leading, spacing: 24) {
+            desrtiptionTextEditor
+            sendLogsToggle
             screenshot
         }
     }
     
-    /// The action buttons shown at the bottom of the view.
-    var buttons: some View {
-        VStack {
-            Button { context.send(viewAction: .submit) } label: {
-                Text(ElementL10n.actionSend)
+    @ViewBuilder
+    private var desrtiptionTextEditor: some View {
+        ZStack(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color.element.background)
+
+            TextEditor(text: $context.reportText)
+                .tint(.element.brand)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .background(Color.clear)
+                .cornerRadius(14)
+                .accessibilityIdentifier("reportTextView")
+                .introspectTextView { textView in
+                    textView.backgroundColor = .clear
+                }
+
+            if context.reportText.isEmpty {
+                Text(ElementL10n.bugReportScreenDescription)
+                    .font(.element.body)
+                    .foregroundColor(Color.element.secondaryContent)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .allowsHitTesting(false)
             }
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 16)
-            .disabled(context.reportText.count < 5)
-            .accessibilityIdentifier("sendButton")
+            
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.element.quaternaryContent)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 300)
+        .font(.body)
+    }
+    
+    @ViewBuilder
+    private var sendLogsToggle: some View {
+        VStack(spacing: 8) {
+            Toggle(ElementL10n.bugReportScreenIncludeLogs, isOn: $context.sendingLogsEnabled)
+                .tint(Color.element.brand)
+                .accessibilityIdentifier("sendLogsToggle")
+                .padding(.horizontal, 16)
+                .padding(.vertical, 11)
+                .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.background))
+                .onTapGesture {
+                    context.send(viewAction: .toggleSendLogs)
+                }
+            
+            Text(ElementL10n.bugReportScreenLogsDescription)
+                .font(.element.caption1)
+                .foregroundColor(Color.element.secondaryContent)
+                .padding(.horizontal, -8)
         }
     }
-
+    
     @ViewBuilder
-    var screenshot: some View {
+    private var screenshot: some View {
         if let screenshot = context.viewState.screenshot {
             ZStack(alignment: .topTrailing) {
                 Image(uiImage: screenshot)
@@ -126,7 +119,27 @@ struct BugReportScreen: View {
                 .offset(x: 10, y: -10)
                 .accessibilityIdentifier("removeScreenshotButton")
             }
-            .padding(.vertical, 10)
+            .padding(.vertical, 16)
+            .padding(.horizontal, 16)
+        }
+    }
+    
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        if context.viewState.isModallyPresented {
+            ToolbarItem(placement: .cancellationAction) {
+                Button(ElementL10n.actionCancel) {
+                    context.send(viewAction: .cancel)
+                }
+            }
+        }
+        
+        ToolbarItem(placement: .confirmationAction) {
+            Button(ElementL10n.actionSend) {
+                context.send(viewAction: .submit)
+            }
+            .disabled(context.reportText.count < 5)
+            .accessibilityIdentifier("sendButton")
         }
     }
 }

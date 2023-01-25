@@ -29,17 +29,18 @@ struct RoomMemberDetailsScreen: View {
                         RoomMemberDetailsMemberCell(member: member, context: context)
                             .id(member.id)
                     }
-                } footer: {
+                } header: {
                     Text(ElementL10n.roomTitleMembers(context.viewState.members.count))
                         .foregroundColor(.element.secondaryContent)
-                        .font(.element.footnote)
+                        .font(.element.body)
+                        .padding(.vertical, 12)
                 }
                 .padding(.horizontal)
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .alert(item: $context.alertInfo) { $0.alert }
-        .navigationTitle(ElementL10n.listMembers)
+        .navigationTitle(ElementL10n.bottomActionPeople)
     }
 }
 

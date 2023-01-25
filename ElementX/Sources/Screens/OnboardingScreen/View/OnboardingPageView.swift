@@ -20,27 +20,38 @@ struct OnboardingPageView: View {
     /// The content that this page should display.
     let content: OnboardingPageContent
     
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+    
     var body: some View {
         VStack {
-            Image(content.image.name)
-                .resizable()
-                .scaledToFit()
-                .frame(maxWidth: 310) // This value is problematic. 300 results in dropped frames
-                // on iPhone 12/13 Mini. 305 the same on iPhone 12/13. As of
-                // iOS 15, 310 seems fine on all supported screen widths 🤞.
-                .padding(20)
-                .accessibilityHidden(true)
+            if verticalSizeClass == .regular {
+                Spacer()
+                
+                Image(content.image.name)
+                    .resizable()
+                    .scaledToFit()
+                    .padding(60)
+                    .accessibilityHidden(true)
+            }
+            
+            Spacer()
             
             VStack(spacing: 8) {
+                Spacer()
+                
                 Text(content.title)
-                    .font(.element.title2Bold)
+                    .font(.element.title1Bold)
                     .foregroundColor(.element.primaryContent)
+                    .multilineTextAlignment(.center)
                 Text(content.message)
                     .font(.element.body)
                     .foregroundColor(.element.secondaryContent)
                     .multilineTextAlignment(.center)
             }
+            .padding()
             .fixedSize(horizontal: false, vertical: true)
+            
+            Spacer()
         }
         .padding(.bottom)
         .padding(.horizontal, 16)

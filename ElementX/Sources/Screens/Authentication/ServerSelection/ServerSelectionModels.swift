@@ -38,7 +38,7 @@ struct ServerSelectionViewState: BindableState {
     
     /// The title shown on the confirm button.
     var buttonTitle: String {
-        isModallyPresented ? ElementL10n.actionConfirm : ElementL10n.actionNext
+        isModallyPresented ? ElementL10n.continue : ElementL10n.actionNext
     }
     
     /// The text field is showing an error.

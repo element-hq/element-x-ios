@@ -42,16 +42,16 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     /// The color of the text field's border.
     private var borderColor: Color {
         guard !isError else { return .element.alert }
-        return isFocused ? .element.accent : .element.quinaryContent
+        return isFocused ? .element.tertiaryContent : .element.quinaryContent
     }
     
     /// The width of the text field's border.
     private var borderWidth: CGFloat {
-        isFocused || isError ? 2.0 : 1.5
+        isFocused || isError ? 1.0 : 0
     }
     
     private var accentColor: Color {
-        isError ? .element.alert : .element.accent
+        isError ? .element.alert : .element.brand
     }
     
     /// The color of the text inside the text field.
@@ -68,7 +68,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
         if !isEnabled, colorScheme == .dark {
             return .element.quinaryContent
         }
-        return .element.background
+        return .element.system
     }
     
     /// The color of the placeholder text inside the text field.
@@ -78,8 +78,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     
     /// The color of the label above the text field.
     private var labelColor: Color {
-        guard colorScheme == .light else { return .element.tertiaryContent }
-        return isEnabled ? .element.primaryContent : .element.quaternaryContent
+        isEnabled ? .element.primaryContent : .element.quaternaryContent
     }
     
     /// The color of the footer label below the text field.
@@ -99,13 +98,14 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     }
     
     public func _body(configuration: TextField<_Label>) -> some View {
-        let rectangle = RoundedRectangle(cornerRadius: 8.0)
+        let rectangle = RoundedRectangle(cornerRadius: 14.0)
         
         return VStack(alignment: .leading, spacing: 8) {
             if let labelText {
                 Text(labelText)
-                    .font(.element.subheadline)
+                    .font(.element.footnote)
                     .foregroundColor(labelColor)
+                    .padding(.horizontal, 16)
             }
             
             configuration
@@ -113,8 +113,9 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                 .font(.element.callout)
                 .foregroundColor(textColor)
                 .accentColor(accentColor)
-                .padding(.vertical, 12.0)
-                .padding(.horizontal, 8.0)
+                .padding(.vertical, 11.0)
+                .padding(.leading, 16.0)
+                .padding(.trailing, 11.0)
                 .background {
                     ZStack {
                         backgroundColor
@@ -132,8 +133,9 @@ public struct ElementTextFieldStyle: TextFieldStyle {
             
             if let footerText {
                 Text(footerText)
-                    .font(.element.footnote)
+                    .font(.element.caption1)
                     .foregroundColor(footerColor)
+                    .padding(.horizontal, 16)
             }
         }
     }
