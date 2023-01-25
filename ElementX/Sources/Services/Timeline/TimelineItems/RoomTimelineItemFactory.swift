@@ -48,7 +48,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         case .sticker(let body, let imageInfo, let urlString):
             guard let url = URL(string: urlString) else {
                 MXLog.error("Invalid sticker url string: \(urlString)")
-                return nil
+                return buildUnsupportedTimelineItem(eventItemProxy, "m.sticker", "Invalid Sticker URL", isOutgoing, groupState)
             }
             
             return buildStickerTimelineItem(eventItemProxy, body, imageInfo, url, isOutgoing, groupState)

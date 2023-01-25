@@ -37,8 +37,6 @@ struct MockMediaProvider: MediaProviderProtocol {
                 || size == AvatarSize.room(on: .home).scaledSize
                 || size == AvatarSize.room(on: .timeline).scaledSize {
                 return Asset.Images.appLogo.image
-            } else {
-                return UIImage(systemName: "photo")
             }
         }
         return UIImage(systemName: "photo")
