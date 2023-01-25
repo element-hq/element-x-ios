@@ -231,7 +231,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         room.lastMessage = details.lastMessage
         
         if let lastMessageTimestamp = details.lastMessageTimestamp {
-            room.timestamp = lastMessageTimestamp.formatted(date: .omitted, time: .shortened)
+            room.timestamp = lastMessageTimestamp.formattedMinimal()
         }
         
         roomsForIdentifiers[details.id] = room

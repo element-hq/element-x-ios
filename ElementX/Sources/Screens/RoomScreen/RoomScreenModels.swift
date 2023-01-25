@@ -32,11 +32,11 @@ enum RoomScreenComposerMode: Equatable {
 
 enum RoomScreenViewAction {
     case displayRoomDetails
-    case displayEmojiPicker(itemId: String)
     case paginateBackwards
     case itemAppeared(id: String)
     case itemDisappeared(id: String)
     case itemTapped(id: String)
+    case itemDoubleTapped(id: String)
     case linkClicked(url: URL)
     case sendMessage
     case sendReaction(key: String, eventID: String)

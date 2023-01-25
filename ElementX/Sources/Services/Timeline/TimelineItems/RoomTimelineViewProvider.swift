@@ -68,6 +68,18 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
             return item.id
         }
     }
+    
+    /// Whether or not it is possible to send a reaction to this timeline item.
+    var isReactable: Bool {
+        switch self {
+        case .text, .image, .video, .file, .emote, .notice, .sticker:
+            return true
+        case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
+            return false
+        case .timelineStart, .separator, .readMarker, .paginationIndicator: // Virtual items are never reactable
+            return false
+        }
+    }
 }
 
 extension RoomTimelineViewProvider: View {

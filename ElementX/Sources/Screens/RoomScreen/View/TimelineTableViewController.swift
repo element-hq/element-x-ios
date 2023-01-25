@@ -211,7 +211,7 @@ class TimelineTableViewController: UIViewController {
                         return .systemAction
                     })
                     .onTapGesture(count: 2) {
-                        coordinator.send(viewAction: .displayEmojiPicker(itemId: timelineItem.id))
+                        coordinator.send(viewAction: .itemDoubleTapped(id: timelineItem.id))
                     }
                     .onTapGesture {
                         coordinator.send(viewAction: .itemTapped(id: timelineItem.id))

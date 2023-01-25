@@ -72,7 +72,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        state.contextMenuBuilder = buildContexMenuForItemId(_:)
+        state.contextMenuBuilder = buildContextMenuForItemId(_:)
         
         buildTimelineViews()
     }
@@ -94,14 +94,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await timelineController.processItemDisappearance(id)
         case .itemTapped(let id):
             await itemTapped(with: id)
+        case .itemDoubleTapped(let id):
+            itemDoubleTapped(with: id)
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
             await sendCurrentMessage()
         case .sendReaction(let emoji, let itemId):
             await timelineController.sendReaction(emoji, to: itemId)
-        case .displayEmojiPicker(let itemId):
-            callback?(.displayEmojiPicker(itemId: itemId))
         case .cancelReply:
             state.composerMode = .default
         case .cancelEdit:
@@ -145,6 +145,11 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             break
         }
         state.showLoading = false
+    }
+    
+    private func itemDoubleTapped(with itemId: String) {
+        guard let item = state.items.first(where: { $0.id == itemId }), item.isReactable else { return }
+        callback?(.displayEmojiPicker(itemId: itemId))
     }
     
     private func buildTimelineViews() {
@@ -192,7 +197,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: ContextMenus
     
-    private func buildContexMenuForItemId(_ itemId: String) -> TimelineItemContextMenu {
+    private func buildContextMenuForItemId(_ itemId: String) -> TimelineItemContextMenu {
         TimelineItemContextMenu(contextMenuActions: contextMenuActionsForItemId(itemId)) { [weak self] action in
             self?.processContentMenuAction(action, itemId: itemId)
         }
@@ -201,7 +206,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
-            return .init(actions: [], debugActions: [])
+            // Don't show a context menu for non-event based items.
+            return .empty
+        }
+        
+        if timelineItem is StateRoomTimelineItem {
+            // Don't show a context menu for state events.
+            return .empty
         }
         
         var actions: [TimelineItemContextMenuAction] = [

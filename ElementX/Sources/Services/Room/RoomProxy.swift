@@ -83,6 +83,14 @@ class RoomProxy: RoomProxyProtocol {
         room.isTombstoned()
     }
     
+    var canonicalAlias: String? {
+        room.canonicalAlias()
+    }
+    
+    var alternativeAliases: [String] {
+        room.alternativeAliases()
+    }
+    
     var hasUnreadNotifications: Bool {
         slidingSyncRoom.hasUnreadNotifications()
     }
@@ -141,7 +149,7 @@ class RoomProxy: RoomProxyProtocol {
     }
         
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
-        if let token = slidingSyncRoom.addTimelineListener(listener: listener) {
+        if let token = slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: nil) {
             timelineObservationToken = token
             return .success(())
         } else {

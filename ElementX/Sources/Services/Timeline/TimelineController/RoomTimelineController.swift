@@ -249,14 +249,11 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 }
             case .virtual(let virtualItem):
                 switch virtualItem {
-                case .dayDivider(let year, let month, let day):
+                case .dayDivider(let timestamp):
                     // These components will be replaced by a timestamp in upcoming releases
-                    let dateComponents = DateComponents(calendar: .current, year: Int(year), month: Int(month), day: Int(day))
-                    if let dateString = dateComponents.date?.formatted(date: .complete, time: .omitted) {
-                        newTimelineItems.append(SeparatorRoomTimelineItem(text: dateString))
-                    } else {
-                        MXLog.error("Failed formatting separator date")
-                    }
+                    let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+                    let dateString = date.formatted(date: .complete, time: .omitted)
+                    newTimelineItems.append(SeparatorRoomTimelineItem(text: dateString))
                 case .readMarker:
                     // Don't show the read marker if it's the last item in the timeline
                     if index != timelineProvider.itemsPublisher.value.indices.last {
