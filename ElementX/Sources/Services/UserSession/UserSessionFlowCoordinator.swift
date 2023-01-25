@@ -190,12 +190,12 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         let userNotificationController = UserNotificationController(rootCoordinator: settingsNavigationStackCoordinator)
         
-        let parameters = SettingsCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
-                                                       userNotificationController: userNotificationController,
-                                                       userSession: userSession,
-                                                       bugReportService: bugReportService)
-        let settingsCoordinator = SettingsCoordinator(parameters: parameters)
-        settingsCoordinator.callback = { [weak self] action in
+        let parameters = SettingsScreenCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
+                                                             userNotificationController: userNotificationController,
+                                                             userSession: userSession,
+                                                             bugReportService: bugReportService)
+        let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
+        settingsScreenCoordinator.callback = { [weak self] action in
             guard let self else { return }
             switch action {
             case .dismiss:
@@ -206,7 +206,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             }
         }
         
-        settingsNavigationStackCoordinator.setRootCoordinator(settingsCoordinator)
+        settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator)
         
         navigationSplitCoordinator.setSheetCoordinator(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSettingsScreen)

@@ -66,6 +66,7 @@ targets:
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/Generated
     - path: ../../ElementX/Sources/Services/Timeline/TimelineItemProxy.swift
     - path: ../../ElementX/Sources/Services/Timeline/TimelineItemSender.swift
     - path: ../../ElementX/Sources/Services/Keychain/KeychainControllerProtocol.swift
@@ -75,11 +76,7 @@ targets:
     - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationServiceProxy.swift
     - path: ../../ElementX/Sources/Services/Notification/Proxy/NotificationItemProxy.swift
     - path: ../../ElementX/Sources/Services/Notification/NotificationConstants.swift
-    - path: ../../ElementX/Sources/Services/Media/MediaProxyProtocol.swift
-    - path: ../../ElementX/Sources/Services/Media/MediaProxy.swift
-    - path: ../../ElementX/Sources/Services/Media/MediaProviderProtocol.swift
-    - path: ../../ElementX/Sources/Services/Media/MediaProvider.swift
-    - path: ../../ElementX/Sources/Services/Media/MediaSourceProxy.swift
+    - path: ../../ElementX/Sources/Services/Media
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
     - path: ../../ElementX/Sources/Services/Cache/FileCache.swift

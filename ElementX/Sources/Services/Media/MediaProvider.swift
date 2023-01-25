@@ -18,53 +18,54 @@ import Kingfisher
 import UIKit
 
 struct MediaProvider: MediaProviderProtocol {
-    private let mediaProxy: MediaProxyProtocol
+    private let mediaLoader: MediaLoaderProtocol
     private let imageCache: Kingfisher.ImageCache
     private let fileCache: FileCacheProtocol
     private let backgroundTaskService: BackgroundTaskServiceProtocol?
     
-    init(mediaProxy: MediaProxyProtocol,
+    init(mediaLoader: MediaLoaderProtocol,
          imageCache: Kingfisher.ImageCache,
          fileCache: FileCacheProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol?) {
-        self.mediaProxy = mediaProxy
+        self.mediaLoader = mediaLoader
         self.imageCache = imageCache
         self.fileCache = fileCache
         self.backgroundTaskService = backgroundTaskService
     }
     
-    func imageFromSource(_ source: MediaSourceProxy?, avatarSize: AvatarSize?) -> UIImage? {
+    // MARK: Images
+    
+    func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage? {
         guard let url = source?.url else {
             return nil
         }
-        let cacheKey = cacheKeyForURL(url, avatarSize: avatarSize)
+        let cacheKey = cacheKeyForURL(url, size: size)
         return imageCache.retrieveImageInMemoryCache(forKey: cacheKey, options: nil)
     }
     
-    func imageFromURL(_ url: URL?, avatarSize: AvatarSize?) -> UIImage? {
+    func imageFromURL(_ url: URL?, size: CGSize?) -> UIImage? {
         guard let url else {
             return nil
         }
         
-        return imageFromSource(.init(url: url), avatarSize: avatarSize)
+        return imageFromSource(.init(url: url), size: size)
     }
     
-    func loadImageFromURL(_ url: URL, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(.init(url: url), avatarSize: avatarSize)
+    func loadImageFromURL(_ url: URL, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
+        await loadImageFromSource(.init(url: url), size: size)
     }
     
-    func loadImageFromSource(_ source: MediaSourceProxy, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
-        if let image = imageFromSource(source, avatarSize: avatarSize) {
+    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
+        if let image = imageFromSource(source, size: size) {
             return .success(image)
         }
         
-        #warning("Media loading should check for existing in flight operations and de-dupe requests.")
         let loadImageBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadImage: \(source.url.hashValue)")
         defer {
             loadImageBgTask?.stop()
         }
         
-        let cacheKey = cacheKeyForURL(source.url, avatarSize: avatarSize)
+        let cacheKey = cacheKeyForURL(source.url, size: size)
 
         if case let .success(cacheResult) = await imageCache.retrieveImage(forKey: cacheKey),
            let image = cacheResult.image {
@@ -73,10 +74,10 @@ struct MediaProvider: MediaProviderProtocol {
 
         do {
             let imageData: Data
-            if let avatarSize {
-                imageData = try await mediaProxy.loadMediaThumbnailForSource(source, width: UInt(avatarSize.scaledValue), height: UInt(avatarSize.scaledValue))
+            if let size {
+                imageData = try await mediaLoader.loadMediaThumbnailForSource(source, width: UInt(size.width), height: UInt(size.height))
             } else {
-                imageData = try await mediaProxy.loadMediaContentForSource(source)
+                imageData = try await mediaLoader.loadMediaContentForSource(source)
             }
 
             guard let image = UIImage(data: imageData) else {
@@ -92,6 +93,8 @@ struct MediaProvider: MediaProviderProtocol {
             return .failure(.failedRetrievingImage)
         }
     }
+    
+    // MARK: Files
 
     func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL? {
         guard let source else {
@@ -99,6 +102,18 @@ struct MediaProvider: MediaProviderProtocol {
         }
         let cacheKey = fileCacheKeyForURL(source.url)
         return fileCache.file(forKey: cacheKey, fileExtension: fileExtension)
+    }
+    
+    func fileFromURL(_ url: URL?, fileExtension: String) -> URL? {
+        guard let url else {
+            return nil
+        }
+        
+        return fileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
+    }
+    
+    func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError> {
+        await loadFileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
     }
 
     @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError> {
@@ -114,7 +129,7 @@ struct MediaProvider: MediaProviderProtocol {
         let cacheKey = fileCacheKeyForURL(source.url)
         
         do {
-            let data = try await mediaProxy.loadMediaContentForSource(source)
+            let data = try await mediaLoader.loadMediaContentForSource(source)
             
             let url = try fileCache.store(data, with: fileExtension, forKey: cacheKey)
             return .success(url)
@@ -124,23 +139,11 @@ struct MediaProvider: MediaProviderProtocol {
         }
     }
     
-    func fileFromURL(_ url: URL?, fileExtension: String) -> URL? {
-        guard let url else {
-            return nil
-        }
-        
-        return fileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
-    }
-    
-    func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError> {
-        await loadFileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
-    }
-    
     // MARK: - Private
     
-    private func cacheKeyForURL(_ url: URL, avatarSize: AvatarSize?) -> String {
-        if let avatarSize {
-            return "\(url.absoluteString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
+    private func cacheKeyForURL(_ url: URL, size: CGSize?) -> String {
+        if let size {
+            return "\(url.absoluteString){\(size.width),\(size.height)}"
         } else {
             return url.absoluteString
         }

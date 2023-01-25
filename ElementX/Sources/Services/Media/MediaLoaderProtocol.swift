@@ -16,8 +16,10 @@
 
 import Foundation
 
-@MainActor
-protocol SettingsViewModelProtocol {
-    var callback: ((SettingsViewModelAction) -> Void)? { get set }
-    var context: SettingsViewModelType.Context { get }
+protocol MediaLoaderProtocol {
+    func mediaSourceForURL(_ url: URL) async -> MediaSourceProxy
+
+    func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data
+
+    func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data
 }

@@ -18,29 +18,19 @@ import Foundation
 import SwiftUI
 
 struct TimelineSenderAvatarView: View {
-    let timelineItem: EventBasedTimelineItemProtocol
-
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .timeline).value
-
+    
+    let timelineItem: EventBasedTimelineItemProtocol
+        
     var body: some View {
-        ZStack(alignment: .center) {
-            if let avatar = timelineItem.sender.avatar {
-                Image(uiImage: avatar)
-                    .resizable()
-                    .scaledToFill()
-                    .overlay(Circle().stroke(Color.element.accent))
-            } else {
-                PlaceholderAvatarImage(text: timelineItem.sender.displayName ?? timelineItem.sender.id,
-                                       contentId: timelineItem.sender.id)
-            }
-        }
-        .clipShape(Circle())
-        .frame(width: avatarSize, height: avatarSize)
-        .overlay(
-            Circle()
-                .stroke(Color.element.background, lineWidth: 3)
-        )
-
-        .animation(.elementDefault, value: timelineItem.sender.avatar)
+        LoadableAvatarImage(url: timelineItem.sender.avatarURL,
+                            name: timelineItem.sender.displayName,
+                            contentID: timelineItem.sender.id,
+                            avatarSize: .user(on: .timeline),
+                            imageProvider: context.imageProvider)
+            .overlay(
+                Circle().stroke(Color.element.background, lineWidth: 3)
+            )
     }
 }

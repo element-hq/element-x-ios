@@ -24,7 +24,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomPlainNoAvatar)
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
-        XCTAssert(app.staticTexts["roomAvatarPlaceholderImage"].exists)
+        XCTAssert(app.staticTexts["roomAvatarImage"].exists)
 
         app.assertScreenshot(.roomPlainNoAvatar)
     }

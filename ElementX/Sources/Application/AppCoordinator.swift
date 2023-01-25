@@ -25,11 +25,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     /// Common background task to resume long-running tasks in the background.
     /// When this task expiring, we'll try to suspend the state machine by `suspend` event.
     private var backgroundTask: BackgroundTaskProtocol?
-    private var isSuspended = false {
-        didSet {
-            MXLog.info("didSet to: \(isSuspended)")
-        }
-    }
+    private var isSuspended = false
     
     private var userSession: UserSessionProtocol! {
         didSet {

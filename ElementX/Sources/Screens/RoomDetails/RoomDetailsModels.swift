@@ -32,9 +32,9 @@ struct RoomDetailsViewState: BindableState {
     let roomId: String
     let isEncrypted: Bool
     let isDirect: Bool
-    var roomTitle = ""
-    var roomTopic: String?
-    var roomAvatar: UIImage?
+    var title = ""
+    var topic: String?
+    var avatarURL: URL?
     var members: [RoomDetailsMember]
     
     var isLoadingMembers: Bool {
@@ -62,8 +62,6 @@ struct RoomDetailsMember: Identifiable, Equatable {
     let id: String
     let name: String?
     let avatarURL: URL?
-    // cached
-    var avatar: UIImage?
 
     init(withProxy proxy: RoomMemberProxy) {
         id = proxy.userId
