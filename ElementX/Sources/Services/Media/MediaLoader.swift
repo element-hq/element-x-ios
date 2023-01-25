@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private final class MediaRequest: @unchecked Sendable {
+private final class MediaRequest {
     var continuations: [CheckedContinuation<Data, Error>] = []
 }
 

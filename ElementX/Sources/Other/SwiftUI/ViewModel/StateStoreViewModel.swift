@@ -38,7 +38,7 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
     @Published fileprivate(set) var viewState: ViewState
     
     /// An optional image loading service so that views can manage themselves
-    /// Intentionally keeps non-generic so that it doesn't grow uncontrollably
+    /// Intentionally non-generic so that it doesn't grow uncontrollably
     let imageProvider: ImageProviderProtocol?
 
     /// Set-able/Bindable access to the bindable state.

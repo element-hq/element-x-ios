@@ -23,28 +23,34 @@ struct VideoRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            LoadableImage(imageProvider: context.imageProvider,
-                          mediaSource: timelineItem.thumbnailSource,
-                          blurhash: timelineItem.blurhash) { imageView in
-                ZStack {
-                    imageView
-                    Image(systemName: "play.circle.fill")
-                        .resizable()
-                        .frame(width: 50, height: 50)
-                        .background(.ultraThinMaterial, in: Circle())
-                        .foregroundColor(.white)
-                }
+            LoadableImage(mediaSource: timelineItem.thumbnailSource,
+                          blurhash: timelineItem.blurhash,
+                          imageProvider: context.imageProvider) { imageView in
+                imageView
+                    .overlay { playIcon }
             } placeholder: {
-                ZStack {
-                    Rectangle()
-                        .foregroundColor(.element.systemGray6)
-                        .opacity(0.3)
-                    
-                    ProgressView(ElementL10n.loading)
-                        .frame(maxWidth: .infinity)
-                }
+                placeholder
             }
             .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+        }
+    }
+    
+    var playIcon: some View {
+        Image(systemName: "play.circle.fill")
+            .resizable()
+            .frame(width: 50, height: 50)
+            .background(.ultraThinMaterial, in: Circle())
+            .foregroundColor(.white)
+    }
+    
+    var placeholder: some View {
+        ZStack {
+            Rectangle()
+                .foregroundColor(.element.systemGray6)
+                .opacity(0.3)
+            
+            ProgressView(ElementL10n.loading)
+                .frame(maxWidth: .infinity)
         }
     }
 }

@@ -44,11 +44,11 @@ struct RoomDetailsScreen: View {
 
     private var headerSection: some View {
         VStack(spacing: 16.0) {
-            LoadableAvatarImage(imageProvider: context.imageProvider,
-                                url: context.viewState.avatarURL,
+            LoadableAvatarImage(url: context.viewState.avatarURL,
+                                name: context.viewState.title,
+                                contentID: context.viewState.roomId,
                                 avatarSize: .room(on: .details),
-                                text: context.viewState.title,
-                                contentID: context.viewState.roomId)
+                                imageProvider: context.imageProvider)
                 .accessibilityIdentifier("roomAvatarImage")
             
             Text(context.viewState.title)

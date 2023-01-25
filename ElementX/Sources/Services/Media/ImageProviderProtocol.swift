@@ -17,29 +17,29 @@
 import UIKit
 
 protocol ImageProviderProtocol {
-    func imageFromSource(_ source: MediaSourceProxy?, avatarSize: AvatarSize?) -> UIImage?
+    func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage?
     
-    @discardableResult func loadImageFromSource(_ source: MediaSourceProxy, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError>
     
-    func imageFromURL(_ url: URL?, avatarSize: AvatarSize?) -> UIImage?
+    func imageFromURL(_ url: URL?, size: CGSize?) -> UIImage?
     
-    @discardableResult func loadImageFromURL(_ url: URL, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
+    @discardableResult func loadImageFromURL(_ url: URL, size: CGSize?) async -> Result<UIImage, MediaProviderError>
 }
 
 extension ImageProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?) -> UIImage? {
-        imageFromSource(source, avatarSize: nil)
+        imageFromSource(source, size: nil)
     }
     
     @discardableResult func loadImageFromSource(_ source: MediaSourceProxy) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(source, avatarSize: nil)
+        await loadImageFromSource(source, size: nil)
     }
     
     func imageFromURL(_ url: URL?) -> UIImage? {
-        imageFromURL(url, avatarSize: nil)
+        imageFromURL(url, size: nil)
     }
     
     @discardableResult func loadImageFromURL(_ url: URL) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromURL(url, avatarSize: nil)
+        await loadImageFromURL(url, size: nil)
     }
 }

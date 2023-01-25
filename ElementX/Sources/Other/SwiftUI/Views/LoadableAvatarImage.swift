@@ -17,32 +17,32 @@
 import SwiftUI
 
 struct LoadableAvatarImage: View {
-    private let imageProvider: ImageProviderProtocol?
     private let url: URL?
-    private let avatarSize: AvatarSize?
-    private let text: String
+    private let name: String?
     private let contentID: String?
+    private let avatarSize: AvatarSize?
+    private let imageProvider: ImageProviderProtocol?
     
     @ScaledMetric private var frameSize: CGFloat
     
-    init(imageProvider: ImageProviderProtocol?, url: URL?, avatarSize: AvatarSize, text: String, contentID: String?) {
-        self.imageProvider = imageProvider
+    init(url: URL?, name: String?, contentID: String?, avatarSize: AvatarSize, imageProvider: ImageProviderProtocol?) {
         self.url = url
-        self.avatarSize = avatarSize
-        self.text = text
+        self.name = name
         self.contentID = contentID
+        self.avatarSize = avatarSize
+        self.imageProvider = imageProvider
         
         _frameSize = ScaledMetric(wrappedValue: avatarSize.value)
     }
     
     var body: some View {
-        LoadableImage(imageProvider: imageProvider,
-                      url: url,
-                      avatarSize: avatarSize) { image in
+        LoadableImage(url: url,
+                      size: avatarSize?.scaledSize,
+                      imageProvider: imageProvider) { image in
             image
                 .scaledToFill()
         } placeholder: {
-            PlaceholderAvatarImage(text: text, contentId: contentID)
+            PlaceholderAvatarImage(name: name, contentID: contentID)
         }
         .frame(width: frameSize, height: frameSize)
         .clipShape(Circle())

@@ -69,11 +69,11 @@ struct SettingsScreen: View {
     private var userSection: some View {
         Section {
             HStack(spacing: 13) {
-                LoadableAvatarImage(imageProvider: context.imageProvider,
-                                    url: context.viewState.userAvatarURL,
+                LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                    name: context.viewState.userDisplayName,
+                                    contentID: context.viewState.userID,
                                     avatarSize: .user(on: .settings),
-                                    text: context.viewState.userDisplayName ?? context.viewState.userID,
-                                    contentID: context.viewState.userID)
+                                    imageProvider: context.imageProvider)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")

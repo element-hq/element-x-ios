@@ -23,19 +23,23 @@ struct ImageRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            LoadableImage(imageProvider: context.imageProvider,
-                          mediaSource: timelineItem.source,
-                          blurhash: timelineItem.blurhash) {
-                ZStack {
-                    Rectangle()
-                        .foregroundColor(.element.systemGray6)
-                        .opacity(0.3)
-                    
-                    ProgressView(ElementL10n.loading)
-                        .frame(maxWidth: .infinity)
-                }
+            LoadableImage(mediaSource: timelineItem.source,
+                          blurhash: timelineItem.blurhash,
+                          imageProvider: context.imageProvider) {
+                placeholder
             }
             .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
+        }
+    }
+    
+    var placeholder: some View {
+        ZStack {
+            Rectangle()
+                .foregroundColor(.element.systemGray6)
+                .opacity(0.3)
+            
+            ProgressView(ElementL10n.loading)
+                .frame(maxWidth: .infinity)
         }
     }
 }

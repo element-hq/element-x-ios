@@ -103,11 +103,11 @@ struct HomeScreen: View {
                 }
             }
         } label: {
-            LoadableAvatarImage(imageProvider: context.imageProvider,
-                                url: context.viewState.userAvatarURL,
+            LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                name: context.viewState.userDisplayName,
+                                contentID: context.viewState.userID,
                                 avatarSize: .user(on: .home),
-                                text: context.viewState.userDisplayName ?? context.viewState.userID,
-                                contentID: context.viewState.userID)
+                                imageProvider: context.imageProvider)
                 .accessibilityIdentifier("userAvatarImage")
         }
         .alert(ElementL10n.actionSignOut,

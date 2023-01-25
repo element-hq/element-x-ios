@@ -18,31 +18,33 @@ import Foundation
 import UIKit
 
 struct MockMediaProvider: MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSourceProxy?, avatarSize: AvatarSize?) -> UIImage? {
+    func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage? {
         nil
     }
     
-    func loadImageFromSource(_ source: MediaSourceProxy, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
+    func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
         .failure(.failedRetrievingImage)
     }
     
-    func imageFromURL(_ url: URL?, avatarSize: AvatarSize?) -> UIImage? {
+    func imageFromURL(_ url: URL?, size: CGSize?) -> UIImage? {
         guard url != nil else {
             return nil
         }
         
-        if let avatarSize {
-            switch avatarSize {
-            case .room:
+        #warning("Fix me. this is stupid!")
+        if let size {
+            if size == AvatarSize.room(on: .details).scaledSize
+                || size == AvatarSize.room(on: .home).scaledSize
+                || size == AvatarSize.room(on: .timeline).scaledSize {
                 return Asset.Images.appLogo.image
-            default:
+            } else {
                 return UIImage(systemName: "photo")
             }
         }
         return UIImage(systemName: "photo")
     }
     
-    func loadImageFromURL(_ url: URL, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError> {
+    func loadImageFromURL(_ url: URL, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
         guard let image = UIImage(systemName: "photo") else {
             fatalError()
         }

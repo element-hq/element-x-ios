@@ -23,17 +23,17 @@ struct StickerRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            LoadableImage(imageProvider: context.imageProvider,
-                          mediaSource: MediaSourceProxy(url: timelineItem.imageURL),
-                          blurhash: timelineItem.blurhash) {
-                placeholderView
+            LoadableImage(url: timelineItem.imageURL,
+                          blurhash: timelineItem.blurhash,
+                          imageProvider: context.imageProvider) {
+                placeholder
             }
             .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
         .accessibilityLabel(timelineItem.text)
     }
     
-    private var placeholderView: some View {
+    private var placeholder: some View {
         ZStack {
             Rectangle()
                 .foregroundColor(.element.systemGray6)

@@ -24,11 +24,11 @@ struct TimelineSenderAvatarView: View {
     let timelineItem: EventBasedTimelineItemProtocol
         
     var body: some View {
-        LoadableAvatarImage(imageProvider: context.imageProvider,
-                            url: timelineItem.sender.avatarURL,
+        LoadableAvatarImage(url: timelineItem.sender.avatarURL,
+                            name: timelineItem.sender.displayName,
+                            contentID: timelineItem.sender.id,
                             avatarSize: .user(on: .timeline),
-                            text: timelineItem.sender.displayName ?? timelineItem.sender.id,
-                            contentID: timelineItem.sender.id)
+                            imageProvider: context.imageProvider)
             .overlay(
                 Circle().stroke(Color.element.background, lineWidth: 3)
             )

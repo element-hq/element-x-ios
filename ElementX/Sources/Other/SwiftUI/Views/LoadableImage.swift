@@ -17,10 +17,10 @@
 import SwiftUI
 
 struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
-    private let imageProvider: ImageProviderProtocol?
     private let mediaSource: MediaSourceProxy?
     private let blurhash: String?
-    private let avatarSize: AvatarSize?
+    private let size: CGSize?
+    private let imageProvider: ImageProviderProtocol?
     
     private var transformer: (Image) -> TransformerView
     private let placeholder: () -> PlaceholderView
@@ -35,56 +35,54 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     ///   - blurhash: an optional blurhash
     ///   - transformer: entry point for configuring the resulting image view
     ///   - placeholder: a view to show while the image or blurhash are not available
-    init(imageProvider: ImageProviderProtocol?,
-         mediaSource: MediaSourceProxy?,
+    init(mediaSource: MediaSourceProxy?,
          blurhash: String? = nil,
-         avatarSize: AvatarSize? = nil,
+         size: CGSize? = nil,
+         imageProvider: ImageProviderProtocol?,
          transformer: @escaping (Image) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
         self.imageProvider = imageProvider
         self.mediaSource = mediaSource
         self.blurhash = blurhash
-        self.avatarSize = avatarSize
+        self.size = size
         
         self.transformer = transformer
         self.placeholder = placeholder
     }
     
-    init(imageProvider: ImageProviderProtocol?,
-         url: URL?,
+    init(url: URL?,
          blurhash: String? = nil,
-         avatarSize: AvatarSize? = nil,
+         size: CGSize? = nil,
+         imageProvider: ImageProviderProtocol?,
          transformer: @escaping (Image) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
-        var mediaSource: MediaSourceProxy?
-        if let url {
-            mediaSource = MediaSourceProxy(url: url)
-        }
+        let mediaSource = url.map(MediaSourceProxy.init)
         
-        self.init(imageProvider: imageProvider,
-                  mediaSource: mediaSource,
+        self.init(mediaSource: mediaSource,
                   blurhash: blurhash,
-                  avatarSize: avatarSize,
+                  size: size,
+                  imageProvider: imageProvider,
                   transformer: transformer,
                   placeholder: placeholder)
     }
     
     var body: some View {
         let _ = Task {
+            // Future improvement: Does guarding against a nil image prevent the image being updated when the URL changes?
             guard image == nil, let mediaSource else { return }
             
-            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, avatarSize: avatarSize) {
+            if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, size: size) {
                 self.cachedImage = image
             }
         }
         
         ZStack {
-            if let image = image {
+            if let image {
                 transformer(
                     Image(uiImage: image)
                         .resizable()
                 )
-            } else if let blurhash = blurhash,
+            } else if let blurhash,
                       // Build a small blurhash image so that it's fast
                       let image = UIImage(blurHash: blurhash, size: .init(width: 10.0, height: 10.0)) {
                 transformer(
@@ -99,6 +97,6 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
     }
     
     private var image: UIImage? {
-        cachedImage ?? imageProvider?.imageFromSource(mediaSource, avatarSize: avatarSize)
+        cachedImage ?? imageProvider?.imageFromSource(mediaSource, size: size)
     }
 }

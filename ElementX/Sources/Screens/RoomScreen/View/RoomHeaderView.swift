@@ -38,15 +38,12 @@ struct RoomHeaderView: View {
     }
 
     @ViewBuilder private var roomAvatar: some View {
-        ZStack(alignment: .bottomTrailing) {
-            LoadableAvatarImage(imageProvider: context.imageProvider,
-                                url: context.viewState.roomAvatarURL,
-                                avatarSize: .room(on: .timeline),
-                                text: context.viewState.roomTitle,
-                                contentID: context.viewState.roomId)
-                .accessibilityIdentifier("roomAvatarImage")
-        }
-        .frame(width: AvatarSize.room(on: .timeline).value, height: AvatarSize.room(on: .timeline).value)
+        LoadableAvatarImage(url: context.viewState.roomAvatarURL,
+                            name: context.viewState.roomTitle,
+                            contentID: context.viewState.roomId,
+                            avatarSize: .room(on: .timeline),
+                            imageProvider: context.imageProvider)
+            .accessibilityIdentifier("roomAvatarImage")
     }
 }
 

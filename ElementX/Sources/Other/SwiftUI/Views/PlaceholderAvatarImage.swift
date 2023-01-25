@@ -20,7 +20,7 @@ struct PlaceholderAvatarImage: View {
     @Environment(\.redactionReasons) var redactionReasons
 
     private let textForImage: String
-    private let contentId: String?
+    private let contentID: String?
     
     var body: some View {
         ZStack {
@@ -38,28 +38,39 @@ struct PlaceholderAvatarImage: View {
         .aspectRatio(1, contentMode: .fill)
     }
 
-    init(text: String, contentId: String? = nil) {
-        textForImage = text.first?.uppercased() ?? ""
-        self.contentId = contentId
+    init(name: String?, contentID: String?) {
+        let baseName = name ?? contentID?.trimmingCharacters(in: .punctuationCharacters)
+        textForImage = baseName?.first?.uppercased() ?? ""
+        self.contentID = contentID
     }
 
     private var bgColor: Color {
         if redactionReasons == .placeholder {
             return .element.systemGray4
         }
-        
-        guard let contentId else {
+
+        guard let contentID else {
             return .element.accent
         }
 
-        return .element.avatarBackground(for: contentId)
+        return .element.avatarBackground(for: contentID)
     }
 }
 
 struct PlaceholderAvatarImage_Previews: PreviewProvider {
     static var previews: some View {
-        PlaceholderAvatarImage(text: "X", contentId: "@userid:matrix.org")
-            .clipShape(Circle())
-            .frame(width: 150, height: 100)
+        VStack(spacing: 75) {
+            PlaceholderAvatarImage(name: "Xavier", contentID: "@userid1:matrix.org")
+                .clipShape(Circle())
+                .frame(width: 150, height: 100)
+            
+            PlaceholderAvatarImage(name: "@*~AmazingName~*@", contentID: "@userid2:matrix.org")
+                .clipShape(Circle())
+                .frame(width: 150, height: 100)
+            
+            PlaceholderAvatarImage(name: nil, contentID: "@userid3:matrix.org")
+                .clipShape(Circle())
+                .frame(width: 150, height: 100)
+        }
     }
 }

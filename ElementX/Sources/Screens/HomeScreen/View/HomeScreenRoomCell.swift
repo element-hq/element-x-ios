@@ -27,11 +27,11 @@ struct HomeScreenRoomCell: View {
             }
         } label: {
             HStack(spacing: 16.0) {
-                LoadableAvatarImage(imageProvider: context.imageProvider,
-                                    url: room.avatarURL,
+                LoadableAvatarImage(url: room.avatarURL,
+                                    name: room.name,
+                                    contentID: room.roomId,
                                     avatarSize: .room(on: .home),
-                                    text: room.name,
-                                    contentID: room.roomId)
+                                    imageProvider: context.imageProvider)
                     .accessibilityHidden(true)
                 
                 HStack(alignment: .top) {

@@ -27,11 +27,11 @@ struct RoomMemberDetailsMemberCell: View {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
             HStack {
-                LoadableAvatarImage(imageProvider: context.imageProvider,
-                                    url: member.avatarURL,
+                LoadableAvatarImage(url: member.avatarURL,
+                                    name: member.name ?? "",
+                                    contentID: member.id,
                                     avatarSize: .user(on: .roomDetails),
-                                    text: member.name ?? "",
-                                    contentID: member.id)
+                                    imageProvider: context.imageProvider)
                     .accessibilityHidden(true)
 
                 Text(member.name ?? "")
