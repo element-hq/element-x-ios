@@ -20,7 +20,7 @@ struct LoadableAvatarImage: View {
     private let url: URL?
     private let name: String?
     private let contentID: String?
-    private let avatarSize: AvatarSize?
+    private let avatarSize: AvatarSize
     private let imageProvider: ImageProviderProtocol?
     
     @ScaledMetric private var frameSize: CGFloat
@@ -37,7 +37,7 @@ struct LoadableAvatarImage: View {
     
     var body: some View {
         LoadableImage(url: url,
-                      size: avatarSize?.scaledSize,
+                      size: avatarSize.scaledSize,
                       imageProvider: imageProvider) { image in
             image
                 .scaledToFill()

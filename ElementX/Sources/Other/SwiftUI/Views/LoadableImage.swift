@@ -41,10 +41,10 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          imageProvider: ImageProviderProtocol?,
          transformer: @escaping (Image) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
-        self.imageProvider = imageProvider
         self.mediaSource = mediaSource
         self.blurhash = blurhash
         self.size = size
+        self.imageProvider = imageProvider
         
         self.transformer = transformer
         self.placeholder = placeholder
