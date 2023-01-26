@@ -311,7 +311,6 @@ class ClientProxy: ClientProxyProtocol {
                 .name(name: "AllRooms")
                 .syncMode(mode: .growingFullSync)
                 .batchSize(batchSize: 100)
-                .roomLimit(limit: 500)
                 .sendUpdatesForItems(enable: true)
                 .build()
             
