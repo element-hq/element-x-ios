@@ -1,3 +1,19 @@
+## Changes in 1.0.15 (2023-01-26)
+
+🙌 Improvements
+
+- Add support for aliases to RoomProxy and bump the SDK version. ([#486](https://github.com/vector-im/element-x-ios/pull/486))
+
+🐛 Bugfixes
+
+- Show the date instead of the time in the room list when the last message is from yesterday or before. ([#484](https://github.com/vector-im/element-x-ios/pull/484))
+- Prevent room timelines from becoming stale if the room drops out of the sliding sync window ([#448](https://github.com/vector-im/element-x-ios/issues/448))
+
+🚧 In development 🚧
+
+- Design update for first public TestFlight ([#430](https://github.com/vector-im/element-x-ios/issues/430))
+
+
 ## Changes in 1.0.14 (2023-01-20)
 
 ✨ Features
