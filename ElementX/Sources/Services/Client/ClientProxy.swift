@@ -252,7 +252,7 @@ class ClientProxy: ClientProxyProtocol {
             // Build the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache
             let visibleRoomsView = try SlidingSyncViewBuilder()
-                .timelineLimit(limit: 20)
+                .timelineLimit(limit: 1)
                 .requiredState(requiredState: slidingSyncRequiredState)
                 .filters(filters: slidingSyncFilters)
                 .name(name: "CurrentlyVisibleRooms")
