@@ -24,6 +24,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             state.members = members.map { RoomDetailsMember(withProxy: $0) }
         }
     }
+    
     private let userNotificationController: UserNotificationControllerProtocol?
 
     var callback: ((RoomDetailsViewModelAction) -> Void)?
