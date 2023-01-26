@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
+private class WeakClientProxyWrapper: ClientDelegate {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
@@ -38,17 +38,6 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     func didUpdateRestoreToken() {
         MXLog.info("Did update restoration token")
         clientProxy?.didUpdateRestoreToken()
-    }
-    
-    // MARK: - SlidingSyncDelegate
-    
-    func didReceiveSyncUpdate(summary: UpdateSummary) {
-        if summary.views.isEmpty, summary.rooms.isEmpty {
-            return
-        }
-        
-        MXLog.info("Received sliding sync update")
-        clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
     }
 }
 
@@ -263,12 +252,13 @@ class ClientProxy: ClientProxyProtocol {
             // Build the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache
             let visibleRoomsView = try SlidingSyncViewBuilder()
-                .timelineLimit(limit: 20)
+                .timelineLimit(limit: 1)
                 .requiredState(requiredState: slidingSyncRequiredState)
                 .filters(filters: slidingSyncFilters)
                 .name(name: "CurrentlyVisibleRooms")
                 .syncMode(mode: .selective)
                 .addRange(from: 0, to: 20)
+                .sendUpdatesForItems(enable: true)
                 .build()
             
             let slidingSync = try slidingSyncBuilder
@@ -276,8 +266,6 @@ class ClientProxy: ClientProxyProtocol {
                 .withCommonExtensions()
                 .coldCache(name: "ElementX")
                 .build()
-            
-            slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
             
             self.slidingSync = slidingSync
             
@@ -323,7 +311,7 @@ class ClientProxy: ClientProxyProtocol {
                 .name(name: "AllRooms")
                 .syncMode(mode: .growingFullSync)
                 .batchSize(batchSize: 100)
-                .roomLimit(limit: 500)
+                .sendUpdatesForItems(enable: true)
                 .build()
             
             let allRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: allRoomsView)
@@ -382,13 +370,6 @@ class ClientProxy: ClientProxyProtocol {
         callbacks.send(.updatedRestoreToken)
     }
     
-    fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
-        visibleRoomsSummaryProvider?.updateRoomsWithIdentifiers(summary.rooms)
-        allRoomsSummaryProvider?.updateRoomsWithIdentifiers(summary.rooms)
-        
-        callbacks.send(.receivedSyncUpdate)
-    }
-
     /// Convenience method to get the json string of an Encodable
     private func jsonString(from dictionary: [AnyHashable: Any]?) -> String? {
         guard let dictionary,

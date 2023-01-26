@@ -183,7 +183,7 @@ class LoggingTests: XCTestCase {
                                              isDirect: true,
                                              avatarURL: nil,
                                              lastMessage: AttributedString(lastMessage),
-                                             lastMessageTimestamp: .now,
+                                             lastMessageFormattedTimestamp: "Now",
                                              unreadNotificationCount: 0)
         
         // When logging that value

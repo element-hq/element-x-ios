@@ -44,8 +44,6 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func updateRoomsWithIdentifiers(_ identifiers: [String]) { }
-    
     func updateVisibleRange(_ range: Range<Int>) { }
     
     // MARK: - Private
@@ -55,21 +53,21 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
                                             isDirect: true,
                                             avatarURL: nil,
                                             lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
-                                            lastMessageTimestamp: .distantPast,
+                                            lastMessageFormattedTimestamp: "Now",
                                             unreadNotificationCount: 4)),
         .filled(details: RoomSummaryDetails(id: "2",
                                             name: "Second room",
                                             isDirect: true,
                                             avatarURL: URL.picturesDirectory,
                                             lastMessage: nil,
-                                            lastMessageTimestamp: nil,
+                                            lastMessageFormattedTimestamp: nil,
                                             unreadNotificationCount: 1)),
         .filled(details: RoomSummaryDetails(id: "3",
                                             name: "Third room",
                                             isDirect: true,
                                             avatarURL: nil,
                                             lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
-                                            lastMessageTimestamp: .distantPast,
+                                            lastMessageFormattedTimestamp: "Later",
                                             unreadNotificationCount: 0)),
         .empty
     ]

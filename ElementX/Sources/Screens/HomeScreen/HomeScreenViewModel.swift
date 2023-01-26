@@ -229,10 +229,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         room.name = details.name
         room.hasUnreads = details.unreadNotificationCount > 0
         room.lastMessage = details.lastMessage
-        
-        if let lastMessageTimestamp = details.lastMessageTimestamp {
-            room.timestamp = lastMessageTimestamp.formattedMinimal()
-        }
+        room.timestamp = details.lastMessageFormattedTimestamp
         
         roomsForIdentifiers[details.id] = room
         

@@ -37,7 +37,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     init(slidingSyncViewProxy: SlidingSyncViewProxy, eventStringBuilder: RoomEventStringBuilder) {
         self.slidingSyncViewProxy = slidingSyncViewProxy
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider")
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
         
         rooms = slidingSyncViewProxy.currentRoomsList().map { roomListEntry in
@@ -61,61 +61,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
     }
     
-    func updateRoomsWithIdentifiers(_ identifiers: [String]) {
-        serialDispatchQueue.async { [weak self] in
-            guard let self else { return }
-            self.updateRoomsForIdentifiers(identifiers)
-        }
-    }
-    
     func updateVisibleRange(_ range: Range<Int>) {
         slidingSyncViewProxy.updateVisibleRange(range)
     }
     
     // MARK: - Private
-    
-    /// Invoked from `updateRoomsWithIdentifiers` on the same dispatch queue as `updateRoomsWithDiffs`
-    private func updateRoomsForIdentifiers(_ identifiers: [String]) {
-        guard !identifiers.isEmpty else {
-            return
-        }
         
-        MXLog.info("Updating \(identifiers.count) rooms")
-        
-        guard statePublisher.value == .live else {
-            MXLog.warning("Sliding sync not live yet, ignoring update.")
-            return
-        }
-        
-        var changes = [CollectionDifference<RoomSummary>.Change]()
-        for identifier in identifiers {
-            guard let index = rooms.firstIndex(where: { $0.id == identifier }),
-                  let roomListEntry = slidingSyncViewProxy.currentRoomsList().first(where: { $0.id == identifier }) else {
-                continue
-            }
-            
-            let oldRoom = rooms[index]
-            let newRoom = buildRoomSummaryForIdentifier(identifier, invalidated: roomListEntry.isInvalidated)
-
-            changes.append(.remove(offset: index, element: oldRoom, associatedWith: nil))
-            changes.append(.insert(offset: index, element: newRoom, associatedWith: nil))
-        }
-
-        guard let diff = CollectionDifference(changes) else {
-            MXLog.error("Failed creating diff from changes: \(changes)")
-            return
-        }
-
-        guard let newSummaries = rooms.applying(diff) else {
-            MXLog.error("Failed applying diff: \(diff)")
-            return
-        }
-
-        rooms = newSummaries
-        
-        MXLog.verbose("Finished updating \(identifiers.count) rooms")
-    }
-    
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
         MXLog.info("Received \(diffs.count) diffs")
         
@@ -146,14 +97,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         var attributedLastMessage: AttributedString?
-        var lastMessageTimestamp: Date?
+        var lastMessageFormattedTimestamp: String?
         
         // Dispatch onto another queue otherwise the rust method latestRoomMessage crashes.
         // This will be fixed when we get async uniffi support.
         DispatchQueue.global(qos: .default).sync {
             if let latestRoomMessage = room.latestRoomMessage() {
                 let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
-                lastMessageTimestamp = lastMessage.timestamp
+                lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
                 attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
             }
         }
@@ -165,7 +116,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          isDirect: room.isDm() ?? false,
                                          avatarURL: avatarURL,
                                          lastMessage: attributedLastMessage,
-                                         lastMessageTimestamp: lastMessageTimestamp,
+                                         lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
                                          unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
         
         return invalidated ? .invalidated(details: details) : .filled(details: details)

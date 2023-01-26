@@ -49,11 +49,6 @@ protocol RoomSummaryProviderProtocol {
     
     /// Publishes the total number of rooms
     var countPublisher: CurrentValueSubject<UInt, Never> { get }
-    
-    /// Invoked by the sliding sync controller whenever certain rooms have updated
-    /// without necessarily changing their position in the list
-    /// - Parameter identifiers: the identifiers for the rooms that have changed
-    func updateRoomsWithIdentifiers(_ identifiers: [String])
-    
+        
     func updateVisibleRange(_ range: Range<Int>)
 }
