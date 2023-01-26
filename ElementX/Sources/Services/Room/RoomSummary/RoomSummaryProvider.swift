@@ -97,14 +97,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
         
         var attributedLastMessage: AttributedString?
-        var lastMessageTimestamp: Date?
+        var lastMessageFormattedTimestamp: String?
         
         // Dispatch onto another queue otherwise the rust method latestRoomMessage crashes.
         // This will be fixed when we get async uniffi support.
         DispatchQueue.global(qos: .default).sync {
             if let latestRoomMessage = room.latestRoomMessage() {
                 let lastMessage = EventTimelineItemProxy(item: latestRoomMessage)
-                lastMessageTimestamp = lastMessage.timestamp
+                lastMessageFormattedTimestamp = lastMessage.timestamp.formattedMinimal()
                 attributedLastMessage = eventStringBuilder.buildAttributedString(for: lastMessage)
             }
         }
@@ -116,7 +116,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          isDirect: room.isDm() ?? false,
                                          avatarURL: avatarURL,
                                          lastMessage: attributedLastMessage,
-                                         lastMessageTimestamp: lastMessageTimestamp,
+                                         lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
                                          unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
         
         return invalidated ? .invalidated(details: details) : .filled(details: details)
