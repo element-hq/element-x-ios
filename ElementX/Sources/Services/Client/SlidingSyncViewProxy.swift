@@ -31,7 +31,7 @@ private class SlidingSyncViewObserver: SlidingSyncViewRoomListObserver, SlidingS
     // MARK: - SlidingSyncViewRoomListObserver
     
     func didReceiveUpdate(diff: SlidingSyncViewRoomsListDiff) {
-        MXLog.info("Received room diff")
+        MXLog.verbose("Received room diff")
         roomListDiffPublisher.send(diff)
     }
     
