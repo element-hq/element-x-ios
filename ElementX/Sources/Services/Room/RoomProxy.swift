@@ -26,7 +26,7 @@ class RoomProxy: RoomProxyProtocol {
     private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let backgroundTaskName = "SendRoomEvent"
     
-    private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.serial")
+    private let serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomproxy.serial", qos: .utility)
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     

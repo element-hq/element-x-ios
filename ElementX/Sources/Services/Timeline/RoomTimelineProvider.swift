@@ -41,7 +41,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
     
     init(roomProxy: RoomProxyProtocol) {
         self.roomProxy = roomProxy
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider")
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         itemProxies = []
 
         Task {

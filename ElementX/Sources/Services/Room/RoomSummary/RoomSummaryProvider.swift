@@ -37,7 +37,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     init(slidingSyncViewProxy: SlidingSyncViewProxy, eventStringBuilder: RoomEventStringBuilder) {
         self.slidingSyncViewProxy = slidingSyncViewProxy
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider")
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomsummaryprovider", qos: .utility)
         self.eventStringBuilder = eventStringBuilder
         
         rooms = slidingSyncViewProxy.currentRoomsList().map { roomListEntry in
