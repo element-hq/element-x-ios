@@ -56,7 +56,7 @@ enum UserAvatarSizeOnScreen {
         case .settings:
             return 60
         case .roomDetails:
-            return 32
+            return 44
         }
     }
 }
@@ -73,7 +73,7 @@ enum RoomAvatarSizeOnScreen {
         case .home:
             return 44
         case .details:
-            return 100
+            return 70
         }
     }
 }

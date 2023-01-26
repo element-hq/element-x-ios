@@ -27,8 +27,10 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     var callback: ((RoomDetailsViewModelAction) -> Void)?
     
-    init(roomProxy: RoomProxyProtocol, mediaProvider: MediaProviderProtocol) {
+    init(roomProxy: RoomProxyProtocol,
+         mediaProvider: MediaProviderProtocol) {
         super.init(initialViewState: .init(roomId: roomProxy.id,
+                                           canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,
                                            title: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",
@@ -37,7 +39,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
                                            members: [],
                                            bindings: .init()),
                    imageProvider: mediaProvider)
-        
+
         Task {
             switch await roomProxy.members() {
             case .success(let members):
@@ -55,6 +57,21 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         switch viewAction {
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
+        case .copyRoomLink:
+            copyRoomLink()
+        case .inviteToRoom:
+            inviteToRoom()
         }
+    }
+    
+    // MARK: - Private
+    
+    private func copyRoomLink() {
+        // TODO: to be implemented
+//        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.linkCopiedToClipboard))
+    }
+    
+    private func inviteToRoom() {
+        // TODO: to be implemented
     }
 }

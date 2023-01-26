@@ -56,13 +56,14 @@ public struct ElementActionButtonStyle: ButtonStyle {
             .frame(maxWidth: maxWidth)
             .foregroundColor(fontColor)
             .font(.element.bodyBold)
-            .background(color.opacity(backgroundOpacity(when: configuration.isPressed)))
-            .cornerRadius(cornerRadius)
+            .background(Capsule()
+                .fill(color)
+                .opacity(backgroundOpacity(when: configuration.isPressed)))
     }
     
     private func backgroundOpacity(when isPressed: Bool) -> CGFloat {
-        guard isEnabled else { return 0.3 }
-        return isPressed ? 0.6 : 1.0
+        guard isEnabled else { return colorScheme == .dark ? 0.2 : 0.1 }
+        return isPressed ? 0.3 : 1.0
     }
 }
 

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "OnboardingSplashScreenPage2.pdf",
+      "filename" : "OnboardingBackgroundPart1.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "OnboardingSplashScreenPage2-Dark.pdf",
+      "filename" : "OnboardingBackgroundPart1-Dark.pdf",
       "idiom" : "universal"
     }
   ],

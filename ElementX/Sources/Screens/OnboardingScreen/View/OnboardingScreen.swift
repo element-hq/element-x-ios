@@ -21,7 +21,8 @@ import SwiftUI
 struct OnboardingScreen: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(\.layoutDirection) private var layoutDirection
-    
+    @Environment(\.verticalSizeClass) private var verticalSizeClass
+
     private var isLeftToRight: Bool { layoutDirection == .leftToRight }
     private var pageCount: Int { context.viewState.content.count }
     
@@ -33,64 +34,68 @@ struct OnboardingScreen: View {
     @ObservedObject var context: OnboardingViewModel.Context
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack(alignment: .leading) {
-                Spacer()
-                    .frame(height: UIConstants.spacerHeight(in: geometry))
-                
-                // The main content of the carousel
-                HStack(alignment: .top, spacing: 0) {
-                    // Add a hidden page at the start of the carousel duplicating the content of the last page
-                    OnboardingPageView(content: context.viewState.content[pageCount - 1])
-                        .frame(width: geometry.size.width)
-                        .accessibilityIdentifier("hiddenPage")
-                    
-                    ForEach(0..<pageCount, id: \.self) { index in
-                        OnboardingPageView(content: context.viewState.content[index])
+        ZStack {
+            OnboardingBackgroundView()
+            GeometryReader { geometry in
+                ZStack {
+                    VStack(alignment: .leading) {
+                        Spacer()
+                            .frame(height: UIConstants.spacerHeight(in: geometry))
+                        
+                        // The main content of the carousel
+                        HStack(alignment: .top, spacing: 0) {
+                            // Add a hidden page at the start of the carousel duplicating the content of the last page
+                            OnboardingPageView(content: context.viewState.content[pageCount - 1])
+                                .frame(width: geometry.size.width)
+                                .accessibilityIdentifier("hiddenPage")
+                            
+                            ForEach(0..<pageCount, id: \.self) { index in
+                                OnboardingPageView(content: context.viewState.content[index])
+                                    .frame(width: geometry.size.width)
+                            }
+                        }
+                        .offset(x: pageOffset(in: geometry))
+                        
+                        Spacer()
+                        
+                        if pageCount > 1 {
+                            OnboardingPageIndicator(pageCount: pageCount, pageIndex: context.pageIndex)
+                                .frame(width: geometry.size.width)
+                                .padding(.bottom)
+                        }
+                        
+                        buttons
                             .frame(width: geometry.size.width)
+                            .padding(.bottom, UIConstants.actionButtonBottomPadding)
+                            .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
+                        
+                        Spacer()
+                            .frame(height: UIConstants.spacerHeight(in: geometry))
                     }
+                    .frame(maxHeight: .infinity)
+                    .gesture(
+                        DragGesture()
+                            .onChanged(handleDragGestureChange)
+                            .onEnded { handleDragGestureEnded($0, viewSize: geometry.size) }
+                    )
                 }
-                .offset(x: pageOffset(in: geometry))
-                
-                Spacer()
-                
-                OnboardingPageIndicator(pageCount: pageCount, pageIndex: context.pageIndex)
-                    .frame(width: geometry.size.width)
-                    .padding(.bottom)
-                
-                Spacer()
-                
-                buttons
-                    .frame(width: geometry.size.width)
-                    .padding(.bottom, UIConstants.actionButtonBottomPadding)
-                    .padding(.bottom, geometry.safeAreaInsets.bottom > 0 ? 0 : 16)
-                
-                Spacer()
-                    .frame(height: UIConstants.spacerHeight(in: geometry))
             }
-            .frame(maxHeight: .infinity)
-            .background(background.ignoresSafeArea().offset(x: pageOffset(in: geometry)))
-            .gesture(
-                DragGesture()
-                    .onChanged(handleDragGestureChange)
-                    .onEnded { handleDragGestureEnded($0, viewSize: geometry.size) }
-            )
+            .navigationBarHidden(true)
+            .onAppear(perform: startTimer)
+            .onDisappear(perform: stopTimer)
         }
-        .navigationBarHidden(true)
-        .onAppear(perform: startTimer)
-        .onDisappear(perform: stopTimer)
     }
     
     /// The main action buttons.
     var buttons: some View {
         VStack(spacing: 12) {
             Button { context.send(viewAction: .login) } label: {
-                Text(ElementL10n.loginSplashSubmit)
+                Text(ElementL10n.loginContinue)
             }
             .buttonStyle(.elementAction(.xLarge))
             .accessibilityIdentifier("getStartedButton")
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
     }
     
@@ -111,7 +116,7 @@ struct OnboardingScreen: View {
     
     /// Starts the animation timer for an automatic carousel effect.
     private func startTimer() {
-        guard pageTimer == nil else { return }
+        guard pageTimer == nil, pageCount > 1 else { return }
         
         pageTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { _ in
             if context.pageIndex == pageCount - 1 {

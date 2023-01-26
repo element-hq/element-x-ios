@@ -29,25 +29,36 @@ struct LoginServerInfoSection: View {
     // MARK: - Views
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
+        VStack(alignment: .leading, spacing: 8) {
             Text(ElementL10n.ftueAuthSignInChooseServerHeader)
                 .font(.element.subheadline)
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(.element.primaryContent)
+                .padding(.horizontal, 16)
             
-            HStack {
-                Text(address)
-                    .font(.element.body)
-                    .foregroundColor(.element.primaryContent)
-                
-                Spacer()
-                
-                Button(action: editAction) {
-                    Text(ElementL10n.edit)
-                        .padding(.vertical, 2)
+            Button(action: editAction) {
+                HStack {
+                    Text(address)
+                        .font(.element.subheadlineBold)
+                        .foregroundColor(.element.primaryContent)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical)
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .foregroundColor(.element.tertiaryContent)
+                        .padding(.trailing, 16)
                 }
-                .buttonStyle(.elementGhost())
-                .accessibilityIdentifier("editServerButton")
+                .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.system))
             }
+            .accessibilityIdentifier("editServerButton")
         }
+    }
+}
+
+struct LoginServerInfoSection_Previews: PreviewProvider {
+    static var previews: some View {
+        LoginServerInfoSection(address: "matrix.org", editAction: { })
+            .padding()
     }
 }

@@ -30,6 +30,7 @@ enum RoomDetailsViewModelAction {
 
 struct RoomDetailsViewState: BindableState {
     let roomId: String
+    let canonicalAlias: String?
     let isEncrypted: Bool
     let isDirect: Bool
     var title = ""
@@ -56,6 +57,8 @@ enum RoomDetailsErrorType: Hashable {
 
 enum RoomDetailsViewAction {
     case processTapPeople
+    case copyRoomLink
+    case inviteToRoom
 }
 
 struct RoomDetailsMember: Identifiable, Equatable {

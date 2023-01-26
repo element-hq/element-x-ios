@@ -197,13 +197,11 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        let serverSelectionNavigationStackCoordinator = NavigationStackCoordinator()
-        
-        let userNotificationController = UserNotificationController(rootCoordinator: serverSelectionNavigationStackCoordinator)
+        let userNotificationController = UserNotificationController(rootCoordinator: navigationStackCoordinator)
         
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
                                                               userNotificationController: userNotificationController,
-                                                              isModallyPresented: true)
+                                                              isModallyPresented: false)
         
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] action in
@@ -211,9 +209,7 @@ final class LoginCoordinator: CoordinatorProtocol {
             self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
         }
         
-        serverSelectionNavigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationStackCoordinator.setSheetCoordinator(userNotificationController)
+        navigationStackCoordinator.push(coordinator)
     }
     
     /// Handles the result from the server selection modal, dismissing it after updating the view.
@@ -223,7 +219,7 @@ final class LoginCoordinator: CoordinatorProtocol {
             updateViewModel()
         }
         
-        navigationStackCoordinator.setSheetCoordinator(nil)
+        navigationStackCoordinator.pop()
     }
 
     /// Shows the forgot password screen.

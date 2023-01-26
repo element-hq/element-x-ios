@@ -38,6 +38,5 @@ struct BugReportViewStateBindings {
 enum BugReportViewAction {
     case cancel
     case submit
-    case toggleSendLogs
     case removeScreenshot
 }

@@ -1,7 +1,7 @@
 {
   "images" : [
     {
-      "filename" : "OnboardingSplashScreenPage4.pdf",
+      "filename" : "OnboardingSplashAppLogo.pdf",
       "idiom" : "universal"
     },
     {
@@ -11,7 +11,7 @@
           "value" : "dark"
         }
       ],
-      "filename" : "OnboardingSplashScreenPage4-Dark.pdf",
+      "filename" : "OnboardingSplashAppLogo-Dark.pdf",
       "idiom" : "universal"
     }
   ],

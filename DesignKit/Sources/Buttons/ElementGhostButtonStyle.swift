@@ -22,7 +22,7 @@ public extension ButtonStyle where Self == ElementGhostButtonStyle {
     /// - Parameter size: The control size to use. Defaults to `regular`.
     /// - Parameter color: The color of the label and border. Defaults to the accent color.
     static func elementGhost(_ size: ElementControlSize = .regular,
-                             color: Color = .element.accent) -> ElementGhostButtonStyle {
+                             color: Color = .element.primaryContent) -> ElementGhostButtonStyle {
         ElementGhostButtonStyle(size: size, color: color)
     }
 }
@@ -36,7 +36,7 @@ public struct ElementGhostButtonStyle: ButtonStyle {
     private var verticalPadding: CGFloat { size == .xLarge ? 12 : 4 }
     private var maxWidth: CGFloat? { size == .xLarge ? .infinity : nil }
     
-    public init(size: ElementControlSize = .regular, color: Color = .element.accent) {
+    public init(size: ElementControlSize = .regular, color: Color = .element.primaryContent) {
         self.size = size
         self.color = color
     }
@@ -47,19 +47,19 @@ public struct ElementGhostButtonStyle: ButtonStyle {
             .padding(.vertical, verticalPadding)
             .frame(maxWidth: maxWidth)
             .foregroundColor(color)
-            .font(.element.body)
+            .font(.element.footnoteBold)
             .background(border)
             .opacity(opacity(when: configuration.isPressed))
     }
     
     private var border: some View {
-        RoundedRectangle(cornerRadius: 8)
+        Capsule()
             .strokeBorder()
             .foregroundColor(color)
     }
     
     private func opacity(when isPressed: Bool) -> CGFloat {
-        guard isEnabled else { return 0.6 }
+        guard isEnabled else { return 0.5 }
         return isPressed ? 0.6 : 1.0
     }
 }

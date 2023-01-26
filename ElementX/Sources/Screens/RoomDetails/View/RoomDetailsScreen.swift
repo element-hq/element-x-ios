@@ -37,96 +37,121 @@ struct RoomDetailsScreen: View {
             }
         }
         .alert(item: $context.alertInfo) { $0.alert }
-        .navigationTitle(ElementL10n.roomDetailsTitle)
     }
     
     // MARK: - Private
 
     private var headerSection: some View {
-        VStack(spacing: 16.0) {
+        VStack(spacing: 8.0) {
             LoadableAvatarImage(url: context.viewState.avatarURL,
                                 name: context.viewState.title,
                                 contentID: context.viewState.roomId,
                                 avatarSize: .room(on: .details),
                                 imageProvider: context.imageProvider)
                 .accessibilityIdentifier("roomAvatarImage")
-            
+
             Text(context.viewState.title)
                 .foregroundColor(.element.primaryContent)
-                .font(.element.headline)
+                .font(.element.title1Bold)
                 .multilineTextAlignment(.center)
+            
+            if let canonicalAlias = context.viewState.canonicalAlias {
+                Text(canonicalAlias)
+                    .foregroundColor(.element.secondaryContent)
+                    .font(.element.body)
+                    .multilineTextAlignment(.center)
+            }
+
+            // TODO: uncomment this code to display copy link and invite buttons
+//            HStack(spacing: 32) {
+//                SettingsActionButton(title: ElementL10n.roomDetailsCopyLink, image: Image(systemName: "link")) {
+//                    context.send(viewAction: .copyRoomLink)
+//                }
+//                SettingsActionButton(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized, image: Image(systemName: "square.and.arrow.up")) {
+//                    context.send(viewAction: .inviteToRoom)
+//                }
+//            }
+//            .padding(.top, 32)
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
-        .padding(.top, 18)
-        .padding(.bottom, 42)
     }
-
+    
     private func topicSection(with topic: String) -> some View {
-        Section(ElementL10n.roomSettingsTopic) {
-            Text(topic)
-                .foregroundColor(.element.secondaryContent)
-                .font(.element.footnote)
-        }
+        Section(header: Text(ElementL10n.roomSettingsTopic)
+            .formSectionHeader()) {
+                Text(topic)
+                    .foregroundColor(.element.secondaryContent)
+                    .font(.element.footnote)
+            }
     }
 
     private var aboutSection: some View {
-        Section(ElementL10n.roomDetailsAboutSectionTitle) {
-            Button {
-                context.send(viewAction: .processTapPeople)
-            } label: {
-                HStack {
-                    Image(systemName: "person")
-                        .foregroundColor(.element.systemGray)
-                        .padding(4)
-                        .background(Color.element.systemGray6)
-                        .clipShape(Circle())
-                        .frame(width: menuIconSize, height: menuIconSize)
-                    Text(ElementL10n.bottomActionPeople)
-                        .foregroundColor(.element.primaryContent)
-                        .font(.body)
-                    Spacer()
+        Section(header: Text(ElementL10n.roomDetailsAboutSectionTitle)
+            .formSectionHeader()) {
+                Button {
+                    context.send(viewAction: .processTapPeople)
+                } label: {
+                    HStack {
+                        Image(systemName: "person")
+                            .foregroundColor(.element.secondaryContent)
+                            .padding(4)
+                            .background(Color.element.system)
+                            .clipShape(RoundedCornerShape(radius: 8, corners: .allCorners))
+                            .frame(width: menuIconSize, height: menuIconSize)
                     
-                    if context.viewState.isLoadingMembers {
-                        ProgressView()
-                    } else {
-                        Text(String(context.viewState.members.count))
-                            .foregroundColor(.element.secondaryContent)
-                            .font(.element.body)
-                        Image(systemName: "chevron.forward")
-                            .foregroundColor(.element.secondaryContent)
+                        Text(ElementL10n.bottomActionPeople)
+                            .foregroundColor(.element.primaryContent)
+                            .font(.body)
+                    
+                        Spacer()
+                    
+                        if context.viewState.isLoadingMembers {
+                            ProgressView()
+                        } else {
+                            Text(String(context.viewState.members.count))
+                                .foregroundColor(.element.secondaryContent)
+                                .font(.element.body)
+                            Image(systemName: "chevron.forward")
+                                .foregroundColor(.element.quaternaryContent)
+                        }
                     }
                 }
+                .listRowInsets(listRowInsets)
+                .foregroundColor(.element.primaryContent)
+                .accessibilityIdentifier("peopleButton")
+                .disabled(context.viewState.isLoadingMembers)
             }
-            .listRowInsets(listRowInsets)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("peopleButton")
-            .disabled(context.viewState.isLoadingMembers)
-        }
     }
     
     private var securitySection: some View {
-        Section(ElementL10n.roomProfileSectionSecurity) {
-            HStack(alignment: .center) {
-                Image(systemName: "lock.shield")
-                    .foregroundColor(.element.systemGray)
-                    .padding(4)
-                    .background(Color.element.systemGray6)
-                    .clipShape(Circle())
-                    .frame(width: menuIconSize, height: menuIconSize)
-                VStack(alignment: .leading) {
-                    Text(ElementL10n.encryptionEnabled)
-                        .foregroundColor(.element.primaryContent)
-                        .font(.element.body)
-                    Text(ElementL10n.encryptionEnabledTileDescription)
+        Section(header: Text(ElementL10n.roomProfileSectionSecurity)
+            .formSectionHeader()) {
+                HStack(alignment: .top) {
+                    Image(systemName: "lock.shield")
                         .foregroundColor(.element.secondaryContent)
-                        .font(.element.footnote)
+                        .padding(4)
+                        .background(Color.element.system)
+                        .clipShape(RoundedCornerShape(radius: 8, corners: .allCorners))
+                        .frame(width: menuIconSize, height: menuIconSize)
+                
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ElementL10n.encryptionEnabled)
+                            .foregroundColor(.element.primaryContent)
+                            .font(.element.body)
+                    
+                        Text(ElementL10n.encryptionEnabledTileDescription)
+                            .foregroundColor(.element.secondaryContent)
+                            .font(.element.footnote)
+                    }
+                
+                    Spacer()
+                
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.element.quaternaryContent)
                 }
-                Spacer()
-                Image(systemName: "checkmark")
-                    .foregroundColor(.element.secondaryContent)
+                .padding(.horizontal, -3)
             }
-        }
     }
 }
 
@@ -144,6 +169,7 @@ struct RoomDetails_Previews: PreviewProvider {
                                           topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
                                           isDirect: false,
                                           isEncrypted: true,
+                                          canonicalAlias: "#alias:domain.com",
                                           members: members)
             let viewModel = RoomDetailsViewModel(roomProxy: roomProxy,
                                                  mediaProvider: MockMediaProvider())

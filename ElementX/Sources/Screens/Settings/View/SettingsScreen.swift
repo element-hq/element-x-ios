@@ -31,15 +31,18 @@ struct SettingsScreen: View {
         Form {
             userSection
                 .listRowBackground(rowBackgroundColor)
-
-            analyticsSection
+            
+            simplifiedSection
                 .listRowBackground(rowBackgroundColor)
 
-            userInterfaceSection
-                .listRowBackground(rowBackgroundColor)
+//            analyticsSection
+//                .listRowBackground(rowBackgroundColor)
 
-            logoutSection
-                .listRowBackground(rowBackgroundColor)
+//            userInterfaceSection
+//                .listRowBackground(rowBackgroundColor)
+
+//            logoutSection
+//                .listRowBackground(rowBackgroundColor)
         }
         .introspectTableView { tableView in
             tableView.backgroundColor = .clear
@@ -59,7 +62,7 @@ struct SettingsScreen: View {
     }
 
     private var backgroundColor: Color {
-        .element.systemGray6
+        .element.system
     }
 
     private var rowBackgroundColor: Color {
@@ -78,11 +81,37 @@ struct SettingsScreen: View {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
                         .font(.title3)
+                        .foregroundColor(.element.primaryContent)
                     Text(context.viewState.userID)
                         .font(.subheadline)
+                        .foregroundColor(.element.primaryContent)
                 }
             }
             .listRowInsets(listRowInsets)
+        }
+    }
+    
+    private var simplifiedSection: some View {
+        Section {
+            SettingsDefaultRow(title: ElementL10n.sendBugReport,
+                               image: Image(systemName: "questionmark.circle")) {
+                context.send(viewAction: .reportBug)
+            }
+            .accessibilityIdentifier("reportBugButton")
+            
+            SettingsDefaultRow(title: ElementL10n.actionSignOut,
+                               image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
+                showingLogoutConfirmation = true
+            }
+            .accessibilityIdentifier("logoutButton")
+            .alert(ElementL10n.actionSignOut,
+                   isPresented: $showingLogoutConfirmation) {
+                Button(ElementL10n.actionSignOut,
+                       role: .destructive,
+                       action: logout)
+            } message: {
+                Text(ElementL10n.actionSignOutConfirmationSimple)
+            }
         }
     }
     
@@ -157,13 +186,8 @@ struct SettingsScreen: View {
     }
 
     private var closeButton: some View {
-        Button(action: close) {
-            Image(systemName: "xmark")
-                .font(.title3.bold())
-                .foregroundColor(.element.secondaryContent)
-                .padding(4)
-        }
-        .accessibilityIdentifier("closeButton")
+        Button(ElementL10n.actionCancel, action: close)
+            .accessibilityIdentifier("closeButton")
     }
 
     private func close() {

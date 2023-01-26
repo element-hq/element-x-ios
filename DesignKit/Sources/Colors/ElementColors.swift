@@ -38,6 +38,8 @@ public struct ElementColors {
     public var quinaryContent: Color { compound.quinaryContent }
     public var system: Color { compound.system }
     public var background: Color { compound.background }
+    // Should be the accent color
+    public var brand: Color { compound.accent }
     
     public var contentAndAvatars: [Color] { compound.contentAndAvatars }
     

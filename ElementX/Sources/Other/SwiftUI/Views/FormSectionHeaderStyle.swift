@@ -16,26 +16,18 @@
 
 import SwiftUI
 
-/// An image that is styled for use as the screen icon in the onboarding flow.
-struct AuthenticationIconImage: View {
-    let image: Image
-    
-    var body: some View {
-        image
-            .resizable()
-            .renderingMode(.template)
+/// Style for section header
+struct FormSectionHeaderStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
             .foregroundColor(.element.secondaryContent)
-            .accessibilityHidden(true)
-            .padding(20)
-            .frame(width: 72, height: 72)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.quinaryContent))
+            .font(.element.footnoteBold)
     }
 }
 
-// MARK: - Previews
-
-struct AuthenticationIconImage_Previews: PreviewProvider {
-    static var previews: some View {
-        AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon))
+extension View {
+    /// Applies the `FormSectionHeaderStyle` modifier to the view
+    func formSectionHeader() -> some View {
+        modifier(FormSectionHeaderStyle())
     }
 }
