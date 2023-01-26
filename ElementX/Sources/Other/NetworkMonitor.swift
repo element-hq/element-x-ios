@@ -32,7 +32,7 @@ class NetworkMonitor {
     }
     
     init() {
-        queue = DispatchQueue(label: "io.element.elementx.networkmonitor")
+        queue = DispatchQueue(label: "io.element.elementx.networkmonitor", qos: .background)
         pathMonitor = NWPathMonitor()
         reachabilityPublisher = CurrentValueSubject<Bool, Never>(true)
         

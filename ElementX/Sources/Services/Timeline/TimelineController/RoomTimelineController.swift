@@ -52,7 +52,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         self.timelineItemFactory = timelineItemFactory
         self.mediaProvider = mediaProvider
         self.roomProxy = roomProxy
-        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider")
+        serialDispatchQueue = DispatchQueue(label: "io.element.elementx.roomtimelineprovider", qos: .utility)
         
         self.timelineProvider
             .itemsPublisher
