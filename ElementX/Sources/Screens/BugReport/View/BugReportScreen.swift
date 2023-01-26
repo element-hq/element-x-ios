@@ -31,9 +31,7 @@ struct BugReportScreen: View {
                 .padding(.top, 50)
                 .padding(.horizontal, horizontalPadding)
         }
-        .introspectScrollView { scrollView in
-            scrollView.keyboardDismissMode = .onDrag
-        }
+        .scrollDismissesKeyboard(.immediately)
         .background(Color.element.system)
         .navigationTitle(ElementL10n.bugReportScreenTitle)
         .navigationBarTitleDisplayMode(.inline)
@@ -44,14 +42,14 @@ struct BugReportScreen: View {
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
         VStack(alignment: .leading, spacing: 24) {
-            desrtiptionTextEditor
+            descriptionTextEditor
             sendLogsToggle
             screenshot
         }
     }
     
     @ViewBuilder
-    private var desrtiptionTextEditor: some View {
+    private var descriptionTextEditor: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
                 .fill(Color.element.background)
@@ -94,7 +92,7 @@ struct BugReportScreen: View {
                 .padding(.vertical, 11)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.background))
                 .onTapGesture {
-                    context.send(viewAction: .toggleSendLogs)
+                    context.sendingLogsEnabled.toggle()
                 }
             
             Text(ElementL10n.bugReportScreenLogsDescription)

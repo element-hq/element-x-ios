@@ -56,6 +56,7 @@
 // Room Details
 "room_details_title" = "Info";
 "room_details_about_section_title" = "About";
+"room_details_copy_link" = "Copy Link";
 
 // Onboarding
 "ftue_auth_carousel_welcome_title" = "Be in your Element";

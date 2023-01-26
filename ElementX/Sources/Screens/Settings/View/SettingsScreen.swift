@@ -101,52 +101,27 @@ struct SettingsScreen: View {
         }
     }
     
-    private func row(title: String, image: Image, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack(spacing: 16) {
-                image
-                    .foregroundColor(.element.systemGray)
-                    .padding(4)
-                    .background(Color.element.systemGray6)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .frame(width: menuIconSize, height: menuIconSize)
-                
-                Text(title)
-                    .font(.element.body)
-                    .foregroundColor(.element.primaryContent)
-                
-                Spacer()
-                
-                Image(systemName: "chevron.forward")
-                    .foregroundColor(.element.tertiaryContent)
-            }
-        }
-        .listRowInsets(listRowInsets)
-        .listRowSeparator(.hidden)
-        .foregroundColor(.element.primaryContent)
-    }
-    
     private var simplifiedSection: some View {
         Section {
-            row(title: ElementL10n.sendBugReport,
-                image: Image(systemName: "questionmark.circle")) {
-                    context.send(viewAction: .reportBug)
-                }
-                .accessibilityIdentifier("reportBugButton")
+            SettingsDefaultRow(title: ElementL10n.sendBugReport,
+                               image: Image(systemName: "questionmark.circle")) {
+                context.send(viewAction: .reportBug)
+            }
+            .accessibilityIdentifier("reportBugButton")
             
-            row(title: ElementL10n.actionSignOut,
-                image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
-                    showingLogoutConfirmation = true
-                }
-                .accessibilityIdentifier("logoutButton")
-                .alert(ElementL10n.actionSignOut,
-                       isPresented: $showingLogoutConfirmation) {
-                    Button(ElementL10n.actionSignOut,
-                           role: .destructive,
-                           action: logout)
-                } message: {
-                    Text(ElementL10n.actionSignOutConfirmationSimple)
-                }
+            SettingsDefaultRow(title: ElementL10n.actionSignOut,
+                               image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
+                showingLogoutConfirmation = true
+            }
+            .accessibilityIdentifier("logoutButton")
+            .alert(ElementL10n.actionSignOut,
+                   isPresented: $showingLogoutConfirmation) {
+                Button(ElementL10n.actionSignOut,
+                       role: .destructive,
+                       action: logout)
+            } message: {
+                Text(ElementL10n.actionSignOutConfirmationSimple)
+            }
         }
     }
     

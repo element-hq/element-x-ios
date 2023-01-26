@@ -20,6 +20,7 @@ typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, R
 
 class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
+    private let userNotificationController: UserNotificationControllerProtocol?
     private let mediaProvider: MediaProviderProtocol
     
     private var members: [RoomMemberProxy] = [] {
@@ -31,8 +32,10 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     var callback: ((RoomDetailsViewModelAction) -> Void)?
 
     init(roomProxy: RoomProxyProtocol,
+         userNotificationController: UserNotificationControllerProtocol?,
          mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
+        self.userNotificationController = userNotificationController
         self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
@@ -68,6 +71,20 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         switch viewAction {
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
+        case .copyRoomLink:
+            copyRoomLink()
+        case .inviteToRoom:
+            inviteToRoom()
         }
+    }
+    
+    // MARK: - Private
+    
+    private func copyRoomLink() {
+        // TODO: to be implemented
+    }
+    
+    private func inviteToRoom() {
+        // TODO: to be implemented
     }
 }

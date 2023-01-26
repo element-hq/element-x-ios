@@ -113,9 +113,8 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                 .font(.element.callout)
                 .foregroundColor(textColor)
                 .accentColor(accentColor)
-                .padding(.vertical, 11.0)
                 .padding(.leading, 16.0)
-                .padding(.trailing, 11.0)
+                .padding([.vertical, .trailing], 11.0)
                 .background {
                     ZStack {
                         backgroundColor

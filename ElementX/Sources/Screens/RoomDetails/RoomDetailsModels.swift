@@ -57,6 +57,8 @@ enum RoomDetailsErrorType: Hashable {
 
 enum RoomDetailsViewAction {
     case processTapPeople
+    case copyRoomLink
+    case inviteToRoom
 }
 
 struct RoomDetailsMember: Identifiable, Equatable {

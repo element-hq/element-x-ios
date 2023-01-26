@@ -86,6 +86,8 @@ extension ElementL10n {
   public static let notification = ElementL10n.tr("Untranslated", "Notification")
   /// About
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
+  /// Copy Link
+  public static let roomDetailsCopyLink = ElementL10n.tr("Untranslated", "room_details_copy_link")
   /// Info
   public static let roomDetailsTitle = ElementL10n.tr("Untranslated", "room_details_title")
   /// Failed loading messages

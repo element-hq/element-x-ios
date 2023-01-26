@@ -16,16 +16,10 @@
 
 import SwiftUI
 
-/// Text with right style for section header
-struct FormSectionHeader: View {
-    // MARK: Public
-    
-    let title: String
-    
-    // MARK: Views
-    
-    var body: some View {
-        Text(title)
+/// Style for section header
+struct FormSectionHeaderStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
             .foregroundColor(.element.secondaryContent)
             .font(.element.footnoteBold)
     }

@@ -46,7 +46,7 @@ public struct ElementGhostButtonStyle: ButtonStyle {
             .padding(.horizontal, 12)
             .padding(.vertical, verticalPadding)
             .frame(maxWidth: maxWidth)
-            .foregroundColor(.element.primaryContent)
+            .foregroundColor(color)
             .font(.element.footnoteBold)
             .background(border)
             .opacity(opacity(when: configuration.isPressed))

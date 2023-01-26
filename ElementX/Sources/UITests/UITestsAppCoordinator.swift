@@ -274,11 +274,13 @@ class MockScreen: Identifiable {
             return navigationSplitCoordinator
         case .roomDetailsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
+            let userNotificationController = UserNotificationController(rootCoordinator: navigationStackCoordinator)
             let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                        roomProxy: MockRoomProxy(displayName: "Room",
                                                                                                 isEncrypted: true,
                                                                                                 members: [.mockAlice, .mockBob, .mockCharlie]),
-                                                                       mediaProvider: MockMediaProvider()))
+                                                                       mediaProvider: MockMediaProvider(),
+                                                                       userNotificationController: userNotificationController))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsScreen:

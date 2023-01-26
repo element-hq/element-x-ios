@@ -62,104 +62,97 @@ struct RoomDetailsScreen: View {
                     .font(.element.body)
                     .multilineTextAlignment(.center)
             }
-            
-            HStack(spacing: 32) {
-                actionButton(title: "Copy Link", image: Image(systemName: "link")) { }
-                actionButton(title: "Invite", image: Image(systemName: "square.and.arrow.up")) { }
-            }
-            .padding(.top, 32)
+
+            // TODO: uncomment this code to display copy link and invite buttons
+//            HStack(spacing: 32) {
+//                SettingsActionButton(title: ElementL10n.roomDetailsCopyLink, image: Image(systemName: "link")) {
+//                    context.send(viewAction: .copyRoomLink)
+//                }
+//                SettingsActionButton(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized, image: Image(systemName: "square.and.arrow.up")) {
+//                    context.send(viewAction: .inviteToRoom)
+//                }
+//            }
+//            .padding(.top, 32)
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
     }
     
-    private func actionButton(title: String, image: Image, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            VStack {
-                image
-                    .renderingMode(.template)
-                    .foregroundColor(.element.primaryContent)
-                    .frame(width: 54, height: 54)
-                    .background(RoundedRectangle(cornerRadius: 16).fill(Color.element.background))
-                Text(title)
-                    .foregroundColor(.element.secondaryContent)
-                    .font(.element.subheadline)
-            }
-        }
-    }
-
     private func topicSection(with topic: String) -> some View {
-        Section(header: FormSectionHeader(title: ElementL10n.roomSettingsTopic)) {
-            Text(topic)
-                .foregroundColor(.element.secondaryContent)
-                .font(.element.footnote)
-        }
+        Section(header: Text(ElementL10n.roomSettingsTopic)
+            .modifier(FormSectionHeaderStyle())) {
+                Text(topic)
+                    .foregroundColor(.element.secondaryContent)
+                    .font(.element.footnote)
+            }
     }
 
     private var aboutSection: some View {
-        Section(header: FormSectionHeader(title: ElementL10n.roomDetailsAboutSectionTitle)) {
-            Button {
-                context.send(viewAction: .processTapPeople)
-            } label: {
-                HStack {
-                    Image(systemName: "person")
+        Section(header: Text(ElementL10n.roomDetailsAboutSectionTitle)
+            .modifier(FormSectionHeaderStyle())) {
+                Button {
+                    context.send(viewAction: .processTapPeople)
+                } label: {
+                    HStack {
+                        Image(systemName: "person")
+                            .foregroundColor(.element.secondaryContent)
+                            .padding(4)
+                            .background(Color.element.system)
+                            .clipShape(RoundedCornerShape(radius: 8, corners: .allCorners))
+                            .frame(width: menuIconSize, height: menuIconSize)
+                    
+                        Text(ElementL10n.bottomActionPeople)
+                            .foregroundColor(.element.primaryContent)
+                            .font(.body)
+                    
+                        Spacer()
+                    
+                        if context.viewState.isLoadingMembers {
+                            ProgressView()
+                        } else {
+                            Text(String(context.viewState.members.count))
+                                .foregroundColor(.element.secondaryContent)
+                                .font(.element.body)
+                            Image(systemName: "chevron.forward")
+                                .foregroundColor(.element.quaternaryContent)
+                        }
+                    }
+                }
+                .listRowInsets(listRowInsets)
+                .foregroundColor(.element.primaryContent)
+                .accessibilityIdentifier("peopleButton")
+                .disabled(context.viewState.isLoadingMembers)
+            }
+    }
+    
+    private var securitySection: some View {
+        Section(header: Text(ElementL10n.roomProfileSectionSecurity)
+            .modifier(FormSectionHeaderStyle())) {
+                HStack(alignment: .top) {
+                    Image(systemName: "lock.shield")
                         .foregroundColor(.element.secondaryContent)
                         .padding(4)
                         .background(Color.element.system)
                         .clipShape(RoundedCornerShape(radius: 8, corners: .allCorners))
                         .frame(width: menuIconSize, height: menuIconSize)
-                    
-                    Text(ElementL10n.bottomActionPeople)
-                        .foregroundColor(.element.primaryContent)
-                        .font(.body)
-                    
-                    Spacer()
-                    
-                    if context.viewState.isLoadingMembers {
-                        ProgressView()
-                    } else {
-                        Text(String(context.viewState.members.count))
-                            .foregroundColor(.element.secondaryContent)
+                
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ElementL10n.encryptionEnabled)
+                            .foregroundColor(.element.primaryContent)
                             .font(.element.body)
-                        Image(systemName: "chevron.forward")
-                            .foregroundColor(.element.quaternaryContent)
-                    }
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("peopleButton")
-            .disabled(context.viewState.isLoadingMembers)
-        }
-    }
-    
-    private var securitySection: some View {
-        Section(header: FormSectionHeader(title: ElementL10n.roomProfileSectionSecurity)) {
-            HStack(alignment: .top) {
-                Image(systemName: "lock.shield")
-                    .foregroundColor(.element.secondaryContent)
-                    .padding(4)
-                    .background(Color.element.system)
-                    .clipShape(RoundedCornerShape(radius: 8, corners: .allCorners))
-                    .frame(width: menuIconSize, height: menuIconSize)
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(ElementL10n.encryptionEnabled)
-                        .foregroundColor(.element.primaryContent)
-                        .font(.element.body)
                     
-                    Text(ElementL10n.encryptionEnabledTileDescription)
-                        .foregroundColor(.element.secondaryContent)
-                        .font(.element.footnote)
+                        Text(ElementL10n.encryptionEnabledTileDescription)
+                            .foregroundColor(.element.secondaryContent)
+                            .font(.element.footnote)
+                    }
+                
+                    Spacer()
+                
+                    Image(systemName: "checkmark")
+                        .foregroundColor(.element.quaternaryContent)
                 }
-                
-                Spacer()
-                
-                Image(systemName: "checkmark")
-                    .foregroundColor(.element.quaternaryContent)
+                .padding(.horizontal, -3)
             }
-            .padding(.horizontal, -3)
-        }
     }
 
     @ViewBuilder private var roomAvatarImage: some View {
@@ -197,6 +190,7 @@ struct RoomDetails_Previews: PreviewProvider {
                                           canonicalAlias: "#alias:domain.com",
                                           members: members)
             let viewModel = RoomDetailsViewModel(roomProxy: roomProxy,
+                                                 userNotificationController: nil,
                                                  mediaProvider: MockMediaProvider())
             RoomDetailsScreen(context: viewModel.context)
         }

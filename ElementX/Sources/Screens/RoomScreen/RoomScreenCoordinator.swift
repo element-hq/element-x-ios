@@ -128,7 +128,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         
         let params = RoomDetailsCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
                                                       roomProxy: roomProxy,
-                                                      mediaProvider: mediaProvider)
+                                                      mediaProvider: mediaProvider,
+                                                      userNotificationController: UserNotificationController(rootCoordinator: navigationStackCoordinator))
         let coordinator = RoomDetailsCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
             self?.navigationStackCoordinator.pop()
