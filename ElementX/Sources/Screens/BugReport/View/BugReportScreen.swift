@@ -91,9 +91,6 @@ struct BugReportScreen: View {
                 .padding(.horizontal, 16)
                 .padding(.vertical, 11)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.background))
-                .onTapGesture {
-                    context.sendingLogsEnabled.toggle()
-                }
             
             Text(ElementL10n.bugReportScreenLogsDescription)
                 .font(.element.caption1)
