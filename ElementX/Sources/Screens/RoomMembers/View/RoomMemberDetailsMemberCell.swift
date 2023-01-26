@@ -27,19 +27,12 @@ struct RoomMemberDetailsMemberCell: View {
             context.send(viewAction: .selectMember(id: member.id))
         } label: {
             HStack {
-                if let avatar = member.avatar {
-                    Image(uiImage: avatar)
-                        .resizable()
-                        .scaledToFill()
-                        .frame(width: avatarSize, height: avatarSize)
-                        .clipShape(Circle())
-                        .accessibilityHidden(true)
-                } else {
-                    PlaceholderAvatarImage(text: member.name ?? "", contentId: member.id)
-                        .clipShape(Circle())
-                        .frame(width: avatarSize, height: avatarSize)
-                        .accessibilityHidden(true)
-                }
+                LoadableAvatarImage(url: member.avatarURL,
+                                    name: member.name ?? "",
+                                    contentID: member.id,
+                                    avatarSize: .user(on: .roomDetails),
+                                    imageProvider: context.imageProvider)
+                    .accessibilityHidden(true)
 
                 Text(member.name ?? "")
                     .font(.element.calloutBold)
@@ -49,9 +42,6 @@ struct RoomMemberDetailsMemberCell: View {
                 Spacer()
             }
             .accessibilityElement(children: .combine)
-            .task {
-                context.send(viewAction: .loadMemberData(id: member.id))
-            }
         }
     }
 }

@@ -29,7 +29,6 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let duration: UInt64
     let source: MediaSourceProxy?
     let thumbnailSource: MediaSourceProxy?
-    var image: UIImage?
     var cachedVideoURL: URL?
     
     var width: CGFloat?

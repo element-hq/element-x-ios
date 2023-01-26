@@ -96,7 +96,7 @@ class UserSessionStore: UserSessionStoreProtocol {
         imageCache.memoryStorage.config.keepWhenEnteringBackground = true
         
         return UserSession(clientProxy: clientProxy,
-                           mediaProvider: MediaProvider(mediaProxy: clientProxy,
+                           mediaProvider: MediaProvider(mediaLoader: clientProxy,
                                                         imageCache: imageCache,
                                                         fileCache: FileCache.default,
                                                         backgroundTaskService: backgroundTaskService))

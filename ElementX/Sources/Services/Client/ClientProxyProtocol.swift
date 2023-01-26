@@ -58,7 +58,7 @@ enum PushFormat {
 //    }
 }
 
-protocol ClientProxyProtocol: AnyObject, MediaProxyProtocol {
+protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
     var userID: String { get }

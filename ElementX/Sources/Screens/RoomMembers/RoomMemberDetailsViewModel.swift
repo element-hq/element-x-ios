@@ -27,7 +27,8 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
          members: [RoomMemberProxy]) {
         self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(members: members.map { RoomDetailsMember(withProxy: $0) },
-                                           bindings: .init()))
+                                           bindings: .init()),
+                   imageProvider: mediaProvider)
     }
     
     // MARK: - Public
@@ -36,30 +37,6 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         switch viewAction {
         case .selectMember(let id):
             MXLog.debug("Member selected: \(id)")
-        case .loadMemberData(let id):
-            await loadAvatar(forMember: id)
-        }
-    }
-
-    private func loadAvatar(forMember memberId: String) async {
-        guard let member = state.members.first(where: { $0.id == memberId }) else {
-            return
-        }
-        if member.avatar != nil {
-            // Avatar already loaded.
-            return
-        }
-        guard let avatarURL = member.avatarURL else {
-            return
-        }
-
-        switch await mediaProvider.loadImageFromURL(avatarURL, avatarSize: .user(on: .roomDetails)) {
-        case .success(let image):
-            if let index = state.members.firstIndex(where: { $0.id == memberId }) {
-                state.members[index].avatar = image
-            }
-        case .failure(let error):
-            MXLog.error("Failed to retrieve room member avatar: \(error)")
         }
     }
 }

@@ -17,24 +17,16 @@
 import SwiftUI
 
 struct RoomDetailsScreen: View {
-    // MARK: Private
-    
-    @Environment(\.colorScheme) private var colorScheme
-    @ScaledMetric private var avatarSize = AvatarSize.room(on: .details).value
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
-    // MARK: Public
-    
     @ObservedObject var context: RoomDetailsViewModel.Context
-    
-    // MARK: Views
     
     var body: some View {
         Form {
             headerSection
 
-            if let topic = context.viewState.roomTopic {
+            if let topic = context.viewState.topic {
                 topicSection(with: topic)
             }
 
@@ -46,12 +38,19 @@ struct RoomDetailsScreen: View {
         }
         .alert(item: $context.alertInfo) { $0.alert }
     }
+    
+    // MARK: - Private
 
     private var headerSection: some View {
         VStack(spacing: 8.0) {
-            roomAvatarImage
-            
-            Text(context.viewState.roomTitle)
+            LoadableAvatarImage(url: context.viewState.avatarURL,
+                                name: context.viewState.title,
+                                contentID: context.viewState.roomId,
+                                avatarSize: .room(on: .details),
+                                imageProvider: context.imageProvider)
+                .accessibilityIdentifier("roomAvatarImage")
+
+            Text(context.viewState.title)
                 .foregroundColor(.element.primaryContent)
                 .font(.element.title1Bold)
                 .multilineTextAlignment(.center)
@@ -153,23 +152,6 @@ struct RoomDetailsScreen: View {
                 }
                 .padding(.horizontal, -3)
             }
-    }
-
-    @ViewBuilder private var roomAvatarImage: some View {
-        if let avatar = context.viewState.roomAvatar {
-            Image(uiImage: avatar)
-                .resizable()
-                .scaledToFill()
-                .frame(width: avatarSize, height: avatarSize)
-                .clipShape(Circle())
-                .accessibilityIdentifier("roomAvatarImage")
-        } else {
-            PlaceholderAvatarImage(text: context.viewState.roomTitle,
-                                   contentId: context.viewState.roomId)
-                .clipShape(Circle())
-                .frame(width: avatarSize, height: avatarSize)
-                .accessibilityIdentifier("roomAvatarPlaceholderImage")
-        }
     }
 }
 

@@ -16,10 +16,8 @@
 
 import Foundation
 
-protocol MediaProxyProtocol {
-    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy
-
-    func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data
-
-    func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data
+@MainActor
+protocol SettingsScreenViewModelProtocol {
+    var callback: ((SettingsScreenViewModelAction) -> Void)? { get set }
+    var context: SettingsScreenViewModelType.Context { get }
 }

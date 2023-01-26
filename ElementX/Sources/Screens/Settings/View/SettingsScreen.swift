@@ -25,7 +25,7 @@ struct SettingsScreen: View {
     @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
-    @ObservedObject var context: SettingsViewModel.Context
+    @ObservedObject var context: SettingsScreenViewModel.Context
     
     var body: some View {
         Form {
@@ -72,7 +72,12 @@ struct SettingsScreen: View {
     private var userSection: some View {
         Section {
             HStack(spacing: 13) {
-                userAvatar
+                LoadableAvatarImage(url: context.viewState.userAvatarURL,
+                                    name: context.viewState.userDisplayName,
+                                    contentID: context.viewState.userID,
+                                    avatarSize: .user(on: .settings),
+                                    imageProvider: context.imageProvider)
+                
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
                         .font(.title3)
@@ -83,21 +88,6 @@ struct SettingsScreen: View {
                 }
             }
             .listRowInsets(listRowInsets)
-        }
-    }
-
-    @ViewBuilder
-    private var userAvatar: some View {
-        if let avatar = context.viewState.userAvatar {
-            Image(uiImage: avatar)
-                .resizable()
-                .scaledToFill()
-                .frame(width: avatarSize, height: avatarSize)
-                .clipShape(Circle())
-        } else {
-            PlaceholderAvatarImage(text: context.viewState.userDisplayName ?? context.viewState.userID, contentId: context.viewState.userID)
-                .clipShape(Circle())
-                .frame(width: avatarSize, height: avatarSize)
         }
     }
     
@@ -222,11 +212,11 @@ extension TimelineStyle: CustomStringConvertible {
 
 // MARK: - Previews
 
-struct Settings_Previews: PreviewProvider {
+struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let viewModel = SettingsViewModel(withUserSession: userSession)
+        let viewModel = SettingsScreenViewModel(withUserSession: userSession)
         
         NavigationView {
             SettingsScreen(context: viewModel.context)

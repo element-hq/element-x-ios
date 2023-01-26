@@ -17,8 +17,6 @@
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
-    @ScaledMetric private var avatarSize = AvatarSize.room(on: .home).value
-    
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     
@@ -38,11 +36,6 @@ struct HomeScreenRoomCell: View {
             }
             .frame(minHeight: 64.0)
             .accessibilityElement(children: .combine)
-            .task {
-                if let roomId = room.roomId {
-                    context.send(viewAction: .loadRoomData(roomIdentifier: roomId))
-                }
-            }
         }
         .buttonStyle(HomeScreenRoomCellButtonStyle())
         .accessibilityIdentifier("roomName:\(room.name)")
@@ -50,19 +43,12 @@ struct HomeScreenRoomCell: View {
     
     @ViewBuilder
     var avatar: some View {
-        if let avatar = room.avatar {
-            Image(uiImage: avatar)
-                .resizable()
-                .scaledToFill()
-                .frame(width: avatarSize, height: avatarSize)
-                .clipShape(Circle())
-                .accessibilityHidden(true)
-        } else {
-            PlaceholderAvatarImage(text: room.name, contentId: room.roomId)
-                .clipShape(Circle())
-                .frame(width: avatarSize, height: avatarSize)
-                .accessibilityHidden(true)
-        }
+        LoadableAvatarImage(url: room.avatarURL,
+                            name: room.name,
+                            contentID: room.roomId,
+                            avatarSize: .room(on: .home),
+                            imageProvider: context.imageProvider)
+            .accessibilityHidden(true)
     }
     
     @ViewBuilder

@@ -23,15 +23,7 @@ enum MediaProviderError: Error {
     case invalidImageData
 }
 
-protocol MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSourceProxy?, avatarSize: AvatarSize?) -> UIImage?
-    
-    @discardableResult func loadImageFromSource(_ source: MediaSourceProxy, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
-    
-    func imageFromURL(_ url: URL?, avatarSize: AvatarSize?) -> UIImage?
-    
-    @discardableResult func loadImageFromURL(_ url: URL, avatarSize: AvatarSize?) async -> Result<UIImage, MediaProviderError>
-
+protocol MediaProviderProtocol: ImageProviderProtocol {
     func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL?
 
     @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError>
@@ -39,22 +31,4 @@ protocol MediaProviderProtocol {
     func fileFromURL(_ url: URL?, fileExtension: String) -> URL?
 
     @discardableResult func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError>
-}
-
-extension MediaProviderProtocol {
-    func imageFromSource(_ source: MediaSourceProxy?) -> UIImage? {
-        imageFromSource(source, avatarSize: nil)
-    }
-    
-    @discardableResult func loadImageFromSource(_ source: MediaSourceProxy) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(source, avatarSize: nil)
-    }
-    
-    func imageFromURL(_ url: URL?) -> UIImage? {
-        imageFromURL(url, avatarSize: nil)
-    }
-    
-    @discardableResult func loadImageFromURL(_ url: URL) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromURL(url, avatarSize: nil)
-    }
 }
