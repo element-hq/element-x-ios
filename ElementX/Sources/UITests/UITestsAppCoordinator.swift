@@ -279,8 +279,7 @@ class MockScreen: Identifiable {
                                                                        roomProxy: MockRoomProxy(displayName: "Room",
                                                                                                 isEncrypted: true,
                                                                                                 members: [.mockAlice, .mockBob, .mockCharlie]),
-                                                                       mediaProvider: MockMediaProvider(),
-                                                                       userNotificationController: userNotificationController))
+                                                                       mediaProvider: MockMediaProvider()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomMemberDetailsScreen:

@@ -79,7 +79,7 @@ struct RoomDetailsScreen: View {
     
     private func topicSection(with topic: String) -> some View {
         Section(header: Text(ElementL10n.roomSettingsTopic)
-            .modifier(FormSectionHeaderStyle())) {
+            .formSectionHeader()) {
                 Text(topic)
                     .foregroundColor(.element.secondaryContent)
                     .font(.element.footnote)
@@ -88,7 +88,7 @@ struct RoomDetailsScreen: View {
 
     private var aboutSection: some View {
         Section(header: Text(ElementL10n.roomDetailsAboutSectionTitle)
-            .modifier(FormSectionHeaderStyle())) {
+            .formSectionHeader()) {
                 Button {
                     context.send(viewAction: .processTapPeople)
                 } label: {
@@ -126,7 +126,7 @@ struct RoomDetailsScreen: View {
     
     private var securitySection: some View {
         Section(header: Text(ElementL10n.roomProfileSectionSecurity)
-            .modifier(FormSectionHeaderStyle())) {
+            .formSectionHeader()) {
                 HStack(alignment: .top) {
                     Image(systemName: "lock.shield")
                         .foregroundColor(.element.secondaryContent)
@@ -172,7 +172,6 @@ struct RoomDetails_Previews: PreviewProvider {
                                           canonicalAlias: "#alias:domain.com",
                                           members: members)
             let viewModel = RoomDetailsViewModel(roomProxy: roomProxy,
-                                                 userNotificationController: nil,
                                                  mediaProvider: MockMediaProvider())
             RoomDetailsScreen(context: viewModel.context)
         }

@@ -25,14 +25,10 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         }
     }
     
-    private let userNotificationController: UserNotificationControllerProtocol?
-
     var callback: ((RoomDetailsViewModelAction) -> Void)?
     
     init(roomProxy: RoomProxyProtocol,
-         userNotificationController: UserNotificationControllerProtocol?,
          mediaProvider: MediaProviderProtocol) {
-        self.userNotificationController = userNotificationController
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
@@ -72,6 +68,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     private func copyRoomLink() {
         // TODO: to be implemented
+//        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.linkCopiedToClipboard))
     }
     
     private func inviteToRoom() {

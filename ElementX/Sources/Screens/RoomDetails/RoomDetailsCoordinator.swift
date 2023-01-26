@@ -20,7 +20,6 @@ struct RoomDetailsCoordinatorParameters {
     let navigationStackCoordinator: NavigationStackCoordinator
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
-    let userNotificationController: UserNotificationControllerProtocol
 }
 
 enum RoomDetailsCoordinatorAction {
@@ -38,7 +37,6 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = RoomDetailsViewModel(roomProxy: parameters.roomProxy,
-                                         userNotificationController: parameters.userNotificationController,
                                          mediaProvider: parameters.mediaProvider)
     }
     

@@ -24,3 +24,10 @@ struct FormSectionHeaderStyle: ViewModifier {
             .font(.element.footnoteBold)
     }
 }
+
+extension View {
+    /// Applies the `FormSectionHeaderStyle` modifier to the view
+    func formSectionHeader() -> some View {
+        modifier(FormSectionHeaderStyle())
+    }
+}
