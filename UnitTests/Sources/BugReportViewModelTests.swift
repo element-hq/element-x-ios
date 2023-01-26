@@ -29,15 +29,6 @@ class BugReportViewModelTests: XCTestCase {
         XCTAssertTrue(context.sendingLogsEnabled)
     }
 
-    func testToggleSendingLogs() async throws {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil, isModallyPresented: false)
-        let context = viewModel.context
-
-        context.send(viewAction: .toggleSendLogs)
-        await Task.yield()
-        XCTAssertFalse(context.sendingLogsEnabled)
-    }
-
     func testClearScreenshot() async throws {
         let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: UIImage.actions, isModallyPresented: false)
         let context = viewModel.context

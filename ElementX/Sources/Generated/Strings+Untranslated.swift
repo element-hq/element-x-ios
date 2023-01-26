@@ -28,7 +28,7 @@ extension ElementL10n {
   public static func defaultSessionDisplayName(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "default_session_display_name", String(describing: p1))
   }
-  /// Welcome to the %@ Alpha. Supercharged, for speed and simplicity.
+  /// Welcome to the %@ Beta. Supercharged, for speed and simplicity.
   public static func ftueAuthCarouselWelcomeBody(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "ftue_auth_carousel_welcome_body", String(describing: p1))
   }

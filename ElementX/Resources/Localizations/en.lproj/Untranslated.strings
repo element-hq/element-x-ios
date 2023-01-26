@@ -60,7 +60,7 @@
 
 // Onboarding
 "ftue_auth_carousel_welcome_title" = "Be in your Element";
-"ftue_auth_carousel_welcome_body" = "Welcome to the %@ Alpha. Supercharged, for speed and simplicity.";
+"ftue_auth_carousel_welcome_body" = "Welcome to the %@ Beta. Supercharged, for speed and simplicity.";
 
 // Sign in
 "ftue_auth_sign_in_enter_details" = "Enter your details";
