@@ -31,12 +31,12 @@ struct FormattedBodyText: View {
                             Rectangle()
                                 .foregroundColor(Color.red)
                                 .frame(width: 4.0)
-                            Text(component.attributedString)
+                            richText(from: component.attributedString)
                                 .foregroundColor(.element.primaryContent)
                         }
                         .fixedSize(horizontal: false, vertical: true)
                     } else {
-                        Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                        richText(from: component.attributedString.mergingAttributes(blockquoteAttributes))
                             .fixedSize(horizontal: false, vertical: true)
                             .foregroundColor(.element.primaryContent)
                             .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
@@ -45,7 +45,7 @@ struct FormattedBodyText: View {
                             .cornerRadius(13)
                     }
                 } else {
-                    Text(component.attributedString)
+                    richText(from: component.attributedString)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.element.primaryContent)
                 }
@@ -58,6 +58,43 @@ struct FormattedBodyText: View {
         var container = AttributeContainer()
         container.font = .element.caption1
         return container
+    }
+    
+    @MainActor
+    private func richText(from attributedString: AttributedString) -> Text {
+        var richText = Text("")
+        attributedString.runs.forEach { run in
+            guard let userId = run.userId else {
+                richText = richText + Text(AttributedString(attributedString[run.range]))
+                return
+            }
+            
+            // TODO: replace the userId by the user displayname when available
+            let pillView = pill(forUser: userId)
+            let pillImage = ImageRenderer(content: pillView)
+            pillImage.scale = 3
+            
+            guard let image = pillImage.uiImage else {
+                richText = richText + Text(AttributedString(attributedString[run.range]))
+                return
+            }
+            
+            richText = richText + Text(Image(uiImage: image))
+        }
+        return richText
+    }
+    
+    private func pill(forUser user: String) -> some View {
+        // TODO: We could replace this Text by Label with the avatar as image
+        Text(user)
+            .foregroundColor(Color.element.background)
+            .font(.element.caption1)
+            .fixedSize(horizontal: false, vertical: true)
+            .multilineTextAlignment(.center)
+            .padding(.horizontal, 12)
+            .padding(.vertical, 2)
+        // TODO: adapt the color accordingly to the userId of the current sesson
+            .background(Capsule().fill(Color.element.alert))
     }
 }
 
@@ -89,6 +126,11 @@ struct FormattedBodyText_Previews: PreviewProvider {
             <blockquote>Third blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
             """,
             """
+            <a href=\"https://matrix.to/#/@userId:matrix.org\">User</a>: some text
+            <blockquote><a href=\"https://matrix.to/#/@userId:matrix.org\">User</a>: some text</blockquote>
+            @userId:matrix.org: some text
+            """,
+            """
             <code>Hello world</code>
             <p>Text</p>
             <code><b>Hello</b> <i>world</i></code>
@@ -109,6 +151,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
                 }
             }
             FormattedBodyText(text: "Some plain text that's not an attributed component.")
+            FormattedBodyText(text: "@userId:matrix.org plain text that's not an attributed component.")
         }
     }
 }

@@ -73,6 +73,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
+        detectUserIdLinks(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
@@ -99,6 +100,18 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     }
     
     // MARK: - Private
+    
+    private func detectUserIdLinks(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if value != nil {
+                attributedString.removeAttribute(.foregroundColor, range: range)
+                attributedString.removeAttribute(.underlineStyle, range: range)
+                if let link = value as? String, MatrixEntityRegex.isMatrixUserIdentifier(link) || MatrixEntityRegex.isMatrixUserAnchorLink(link) {
+                    attributedString.addAttributes([.MXUserId: link], range: range)
+                }
+            }
+        }
+    }
     
     private func replaceMarkedBlockquotes(_ attributedString: NSMutableAttributedString) {
         // According to blockquotes in the string, DTCoreText can apply 2 policies:
@@ -237,4 +250,5 @@ extension UIColor {
 extension NSAttributedString.Key {
     static let DTTextBlocks: NSAttributedString.Key = .init(rawValue: DTTextBlocksAttribute)
     static let MXBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MXUserId: NSAttributedString.Key = .init(rawValue: UserIdAttribute.name)
 }

@@ -16,6 +16,11 @@
 
 import Foundation
 
+enum UserIdAttribute: AttributedStringKey {
+    typealias Value = String
+    public static var name = "MXUserIdAttribute"
+}
+
 enum BlockquoteAttribute: AttributedStringKey {
     typealias Value = Bool
     public static var name = "MXBlockquoteAttribute"
@@ -24,7 +29,8 @@ enum BlockquoteAttribute: AttributedStringKey {
 extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
-        
+        let userId: UserIdAttribute
+
         let swiftUI: SwiftUIAttributes
         let uiKit: UIKitAttributes
     }

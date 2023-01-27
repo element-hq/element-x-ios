@@ -56,6 +56,11 @@ enum MatrixEntityRegex: String {
         return match.range.length == homeserver.count
     }
     
+    static func isMatrixUserAnchorLink(_ identifier: String) -> Bool {
+        // TODO: need to detect anchors to user ID like <a href=\"https://matrix.to/#/@userId:matrix.org\">User</a>
+        return false
+    }
+    
     static func isMatrixUserIdentifier(_ identifier: String) -> Bool {
         guard let match = userIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
             return false
