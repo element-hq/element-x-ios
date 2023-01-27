@@ -22,10 +22,20 @@ struct FilePreviewScreen: View {
     @ObservedObject var context: FilePreviewViewModel.Context
     
     var body: some View {
-        PreviewView(context: context,
-                    fileURL: context.viewState.fileURL,
-                    title: context.viewState.title)
-            .ignoresSafeArea()
+        ZStack(alignment: .leading) {
+            PreviewView(context: context,
+                        fileURL: context.viewState.fileURL,
+                        title: context.viewState.title)
+                .ignoresSafeArea()
+            
+            // Drop a random view on top to make QLPreviewController stop
+            // swallowing all gestures and allow swiping backwards
+            Rectangle()
+                .frame(maxWidth: 20.0)
+                .foregroundColor(.red)
+                .opacity(0.005)
+                .ignoresSafeArea()
+        }
     }
 }
 
@@ -37,12 +47,6 @@ private struct PreviewView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UINavigationController {
         let controller = QLPreviewController()
         controller.dataSource = context.coordinator
-        
-        let doneButton = UIBarButtonItem(title: "Done",
-                                         style: .done,
-                                         target: context.coordinator,
-                                         action: #selector(Coordinator.done))
-        controller.navigationItem.rightBarButtonItem = doneButton
 
         return UINavigationController(rootViewController: controller)
     }
