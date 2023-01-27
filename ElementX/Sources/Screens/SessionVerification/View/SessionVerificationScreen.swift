@@ -22,23 +22,18 @@ struct SessionVerificationScreen: View {
     var body: some View {
         NavigationView {
             ScrollView {
-                VStack(spacing: 32.0) {
-                    Text(context.viewState.message)
-                        .font(.body)
-                        .multilineTextAlignment(.center)
-                        .foregroundColor(.element.systemPrimaryLabel)
-                        .accessibilityIdentifier("titleLabel")
-                    
+                VStack(spacing: 32) {
+                    screenHeader
+                    Spacer()
                     mainContent
                 }
-                .padding()
-                .padding(.top, 64)
+                .padding(.horizontal, 16)
+                .padding(.top, 24)
                 .frame(maxWidth: .infinity)
                 .navigationBarTitleDisplayMode(.inline)
-                .navigationTitle(ElementL10n.verificationProfileVerify)
                 .toolbar { toolbarContent }
             }
-            .background(Color.element.systemSecondaryBackground)
+            .background(Color.element.background)
             .safeAreaInset(edge: .bottom) { actionButtons.padding() }
         }
         .navigationViewStyle(.stack)
@@ -46,52 +41,82 @@ struct SessionVerificationScreen: View {
     
     // MARK: - Private
     
+    private var headerImageName: String {
+        switch context.viewState.verificationState {
+        case .initial:
+            return "macbook.and.iphone"
+        case .cancelled:
+            return "exclamationmark.shield"
+        case .requestingVerification:
+            return "hourglass"
+        case .verificationRequestAccepted:
+            return "face.smiling"
+        case .startingSasVerification:
+            return "hourglass"
+        case .sasVerificationStarted:
+            return "hourglass"
+        case .cancelling:
+            return "hourglass"
+        case .acceptingChallenge:
+            return "hourglass"
+        case .decliningChallenge:
+            return "hourglass"
+        case .showingChallenge:
+            return "face.smiling"
+        case .verified:
+            return "checkmark.shield"
+        }
+    }
+    
+    @ViewBuilder
+    private var screenHeader: some View {
+        VStack(spacing: 0) {
+            AuthenticationIconImage(image: Image(systemName: headerImageName))
+                .padding(.bottom, 16)
+            
+            Text(context.viewState.title ?? "")
+                .font(.title2.bold())
+                .multilineTextAlignment(.center)
+                .foregroundColor(.element.primaryContent)
+                .accessibilityIdentifier("titleLabel")
+                .padding(.bottom, 8)
+
+            Text(context.viewState.message)
+                .font(.subheadline)
+                .multilineTextAlignment(.center)
+                .foregroundColor(.element.tertiaryContent)
+                .accessibilityIdentifier("detailLabel")
+        }
+    }
+    
     @ViewBuilder
     private var mainContent: some View {
         switch context.viewState.verificationState {
-        case .initial:
-            StateIcon(systemName: "lock.shield")
-            
-        case .cancelled:
-            StateIcon(systemName: "xmark.shield")
-                .accessibilityIdentifier("sessionVerificationFailedIcon")
-            
+        case .showingChallenge(let emojis):
+            emojisPanel(with: emojis)
+        case .acceptingChallenge(let emojis):
+            emojisPanel(with: emojis)
         case .requestingVerification:
             ProgressView()
-                .accessibilityIdentifier("requestingVerificationProgressView")
-            
-        case .verificationRequestAccepted:
-            StateIcon(systemName: "lock.shield")
-        case .startingSasVerification:
-            ProgressView()
-                .accessibilityIdentifier("startingSasVerification")
-        case .sasVerificationStarted:
-            ProgressView()
-                .accessibilityIdentifier("startedSasVerification")
-        case .cancelling:
-            ProgressView()
-                .accessibilityIdentifier("cancellingVerificationProgressView")
-        case .acceptingChallenge:
-            ProgressView()
-                .accessibilityIdentifier("acceptingChallengeProgressView")
-        case .decliningChallenge:
-            ProgressView()
-                .accessibilityIdentifier("decliningChallengeProgressView")
-            
-        case .showingChallenge(let emojis):
-            HStack(spacing: 16) {
-                ForEach(emojis.prefix(4), id: \.self) { emoji in
-                    EmojiView(emoji: emoji)
-                }
+                .tint(.element.secondaryContent)
+                .scaleEffect(2)
+        default:
+            // In All other cases, we just want an empty view
+            EmptyView()
+        }
+    }
+    
+    @ViewBuilder
+    private func emojisPanel(with emojis: [SessionVerificationEmoji]) -> some View {
+        HStack(spacing: 16) {
+            ForEach(emojis.prefix(4), id: \.self) { emoji in
+                EmojiView(emoji: emoji)
             }
-            HStack(spacing: 16) {
-                ForEach(emojis.suffix(from: 4), id: \.self) { emoji in
-                    EmojiView(emoji: emoji)
-                }
+        }
+        HStack(spacing: 16) {
+            ForEach(emojis.suffix(from: 4), id: \.self) { emoji in
+                EmojiView(emoji: emoji)
             }
-        case .verified:
-            StateIcon(systemName: "checkmark.shield")
-                .accessibilityIdentifier("sessionVerificationSucceededIcon")
         }
     }
     
@@ -113,7 +138,7 @@ struct SessionVerificationScreen: View {
             .accessibilityIdentifier("restartButton")
             
         case .verificationRequestAccepted:
-            Button(ElementL10n.startVerification) {
+            Button(ElementL10n.sessionVerificationStart) {
                 context.send(viewAction: .startSasVerification)
             }
             .buttonStyle(.elementAction(.xLarge))
@@ -133,14 +158,28 @@ struct SessionVerificationScreen: View {
                 .font(.element.bodyBold)
                 .accessibilityIdentifier("challengeDeclineButton")
             }
-        
-        case .verified:
-            Button(ElementL10n.finish) {
-                context.send(viewAction: .close)
+            
+        case .acceptingChallenge:
+            VStack(spacing: 30) {
+                Button { context.send(viewAction: .accept) } label: {
+                    HStack(spacing: 16) {
+                        ProgressView()
+                            .tint(.element.background)
+                        Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
+                    }
+                }
+                .buttonStyle(.elementAction(.xLarge))
+                .accessibilityIdentifier("challengeAcceptButton")
+                .disabled(true)
+
+                Button(ElementL10n.verificationSasDoNotMatch) {
+                    context.send(viewAction: .decline)
+                }
+                .font(.element.bodyBold)
+                .accessibilityIdentifier("challengeDeclineButton")
+                .disabled(true)
             }
-            .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("finishButton")
-        
+
         default:
             EmptyView()
         }
@@ -149,11 +188,10 @@ struct SessionVerificationScreen: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button { context.send(viewAction: .close) } label: {
-                Image(systemName: "xmark")
+            Button(ElementL10n.actionCancel) {
+                context.send(viewAction: .close)
             }
-            .font(.element.bodyBold)
-            .foregroundColor(.element.systemSecondaryLabel)
+            .foregroundColor(.element.accent)
             .accessibilityIdentifier("closeButton")
         }
     }
@@ -166,8 +204,8 @@ struct SessionVerificationScreen: View {
                 Text(emoji.symbol)
                     .font(.element.largeTitleBold)
                 Text(emoji.description)
-                    .font(.element.caption2)
-                    .foregroundColor(.element.systemSecondaryLabel)
+                    .font(.element.subheadline)
+                    .foregroundColor(.element.secondaryContent)
             }
             .padding(8.0)
         }

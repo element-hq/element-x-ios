@@ -106,6 +106,10 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
                 self.declineChallenge()
             case (_, .cancel, .cancelling):
                 self.cancelVerification()
+            case (_, _, .verified):
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                    self.callback?(.finished)
+                }
             default:
                 break
             }

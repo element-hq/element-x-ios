@@ -25,6 +25,7 @@ struct SettingsScreenCoordinatorParameters {
 
 enum SettingsScreenCoordinatorAction {
     case dismiss
+    case sessionVerification
     case logout
 }
 
@@ -50,6 +51,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 self.toggleAnalytics()
             case .reportBug:
                 self.presentBugReportScreen()
+            case .sessionVerification:
+                self.callback?(.sessionVerification)
             case .logout:
                 self.callback?(.logout)
             }
@@ -90,6 +93,10 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         }
         
         parameters.navigationStackCoordinator.push(coordinator)
+    }
+    
+    private func verifySession() {
+        // TODO: to be implemented
     }
 
     private func showSuccess(label: String) {

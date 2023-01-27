@@ -32,15 +32,23 @@ struct SettingsScreen: View {
             userSection
                 .listRowBackground(rowBackgroundColor)
             
+            if context.viewState.showSessionVerificationSection {
+                sessionVerificationSection
+                    .listRowBackground(rowBackgroundColor)
+            }
+            
             simplifiedSection
+                .listRowBackground(rowBackgroundColor)
+            
+            signOutSection
                 .listRowBackground(rowBackgroundColor)
 
 //            analyticsSection
 //                .listRowBackground(rowBackgroundColor)
-
+//
 //            userInterfaceSection
 //                .listRowBackground(rowBackgroundColor)
-
+//
 //            logoutSection
 //                .listRowBackground(rowBackgroundColor)
         }
@@ -80,10 +88,10 @@ struct SettingsScreen: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
-                        .font(.title3)
+                        .font(.element.title3)
                         .foregroundColor(.element.primaryContent)
                     Text(context.viewState.userID)
-                        .font(.subheadline)
+                        .font(.element.subheadline)
                         .foregroundColor(.element.primaryContent)
                 }
             }
@@ -91,14 +99,38 @@ struct SettingsScreen: View {
         }
     }
     
+    private var sessionVerificationSection: some View {
+        Section {
+            SettingsDefaultRow(title: ElementL10n.settingsSessionVerification,
+                               image: Image(systemName: "checkmark.shield")) {
+                context.send(viewAction: .sessionVerification)
+            }
+            .accessibilityIdentifier("sessionVerificationButton")
+        }
+    }
+    
     private var simplifiedSection: some View {
         Section {
+            SettingsPickerRow(title: ElementL10n.settingsTimelineStyle,
+                              image: Image(systemName: "rectangle.grid.1x2"),
+                              selection: $settings.timelineStyle) {
+                ForEach(TimelineStyle.allCases, id: \.self) { style in
+                    Text(style.description)
+                        .tag(style)
+                }
+            }
+            .accessibilityIdentifier("timelineStylePicker")
+            
             SettingsDefaultRow(title: ElementL10n.sendBugReport,
                                image: Image(systemName: "questionmark.circle")) {
                 context.send(viewAction: .reportBug)
             }
             .accessibilityIdentifier("reportBugButton")
-            
+        }
+    }
+    
+    private var signOutSection: some View {
+        Section {
             SettingsDefaultRow(title: ElementL10n.actionSignOut,
                                image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
                 showingLogoutConfirmation = true
@@ -112,6 +144,20 @@ struct SettingsScreen: View {
             } message: {
                 Text(ElementL10n.actionSignOutConfirmationSimple)
             }
+        } footer: {
+            VStack {
+                versionText
+                    .font(.element.caption1)
+                    .foregroundColor(.element.tertiaryContent)
+                    .frame(maxWidth: .infinity)
+                
+                if let deviceId = context.viewState.deviceID {
+                    Text(deviceId)
+                        .font(.element.caption1)
+                        .foregroundColor(.element.tertiaryContent)
+                }
+            }
+            .padding(.top, 24)
         }
     }
     

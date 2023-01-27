@@ -21,24 +21,31 @@ struct HomeScreenRoomCell: View {
     let context: HomeScreenViewModel.Context
     
     var body: some View {
-        Button {
-            if let roomId = room.roomId {
-                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
-            }
-        } label: {
-            HStack(spacing: 16.0) {
-                avatar
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    header
-                    footer
+        ZStack(alignment: .bottom) {
+            Button {
+                if let roomId = room.roomId {
+                    context.send(viewAction: .selectRoom(roomIdentifier: roomId))
                 }
+            } label: {
+                HStack(spacing: 16.0) {
+                    avatar
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        header
+                        footer
+                    }
+                }
+                .frame(minHeight: 84.0)
+                .accessibilityElement(children: .combine)
             }
-            .frame(minHeight: 64.0)
-            .accessibilityElement(children: .combine)
+            .buttonStyle(HomeScreenRoomCellButtonStyle())
+            .accessibilityIdentifier("roomName:\(room.name)")
+            
+            Divider()
+                .frame(height: 0.5)
+                .background(Color.element.quinaryContent)
+                .padding(.leading, 84)
         }
-        .buttonStyle(HomeScreenRoomCellButtonStyle())
-        .accessibilityIdentifier("roomName:\(room.name)")
     }
     
     @ViewBuilder
@@ -53,17 +60,17 @@ struct HomeScreenRoomCell: View {
     
     @ViewBuilder
     var header: some View {
-        HStack(alignment: .firstTextBaseline) {
+        HStack(alignment: .top, spacing: 16) {
             Text(room.name)
-                .font(.element.callout.bold())
+                .font(.element.headline)
                 .foregroundColor(.element.primaryContent)
                 .lineLimit(1)
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             if let timestamp = room.timestamp {
                 Text(timestamp)
-                    .font(.element.caption1)
-                    .foregroundColor(.element.secondaryContent)
+                    .font(.element.footnote)
+                    .foregroundColor(room.hasUnreads ? .element.brand : .element.tertiaryContent)
                     .id(timestamp)
                     .transition(.opacity.animation(.elementDefault))
             }
@@ -91,9 +98,15 @@ struct HomeScreenRoomCell: View {
             if room.hasUnreads {
                 Rectangle()
                     .frame(width: 12, height: 12)
-                    .foregroundColor(.element.primaryContent)
+                    .foregroundColor(.element.brand)
                     .clipShape(Circle())
                     .transition(.opacity.animation(.elementDefault))
+                    .padding(.leading, 12)
+            } else {
+                // Force extra padding between last message text and the right border of the screen if there is no unread dot
+                Rectangle()
+                    .fill(Color.clear)
+                    .frame(width: 12, height: 12)
             }
         }
         .animation(.elementDefault, value: room)
@@ -111,18 +124,16 @@ struct HomeScreenRoomCellButtonStyle: ButtonStyle {
 private extension View {
     func lastMessageFormatting() -> some View {
         font(.element.subheadline)
-            .foregroundColor(.element.secondaryContent)
+            .foregroundColor(.element.tertiaryContent)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
-            .padding(.top, 2)
     }
     
     // To be used to indicate the selected room too
     func roomCellBackground(_ background: Color) -> some View {
         padding(.horizontal, 8)
-            .padding(.vertical, 6)
-            .background { background.clipShape(RoundedRectangle(cornerRadius: 12)) }
             .padding(.horizontal, 8)
+            .background { background }
     }
 }
 

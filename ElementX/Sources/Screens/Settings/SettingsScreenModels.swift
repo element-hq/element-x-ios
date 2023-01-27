@@ -21,6 +21,7 @@ enum SettingsScreenViewModelAction {
     case close
     case toggleAnalytics
     case reportBug
+    case sessionVerification
     case logout
 }
 
@@ -30,6 +31,7 @@ struct SettingsScreenViewState: BindableState {
     var userID: String
     var userAvatarURL: URL?
     var userDisplayName: String?
+    var showSessionVerificationSection: Bool
 }
 
 struct SettingsScreenViewStateBindings {
@@ -40,5 +42,6 @@ enum SettingsScreenViewAction {
     case close
     case toggleAnalytics
     case reportBug
+    case sessionVerification
     case logout
 }
