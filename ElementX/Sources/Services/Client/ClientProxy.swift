@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 import UIKit
 
-private class WeakClientProxyWrapper: ClientDelegate {
+private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     private weak var clientProxy: ClientProxy?
     
     init(clientProxy: ClientProxy) {
@@ -38,6 +38,13 @@ private class WeakClientProxyWrapper: ClientDelegate {
     func didUpdateRestoreToken() {
         MXLog.info("Did update restoration token")
         clientProxy?.didUpdateRestoreToken()
+    }
+    
+    // MARK: - SlidingSyncDelegate
+    
+    func didReceiveSyncUpdate(summary: UpdateSummary) {
+        MXLog.info("Received sliding sync update")
+        clientProxy?.didReceiveSlidingSyncUpdate(summary: summary)
     }
 }
 
@@ -267,6 +274,8 @@ class ClientProxy: ClientProxyProtocol {
                 .coldCache(name: "ElementX")
                 .build()
             
+            slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
+            
             self.slidingSync = slidingSync
             
             buildAndConfigureVisibleRoomsSlidingSyncView(slidingSync: slidingSync, visibleRoomsView: visibleRoomsView)
@@ -368,6 +377,10 @@ class ClientProxy: ClientProxyProtocol {
 
     fileprivate func didUpdateRestoreToken() {
         callbacks.send(.updatedRestoreToken)
+    }
+    
+    fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
+        callbacks.send(.receivedSyncUpdate)
     }
     
     /// Convenience method to get the json string of an Encodable
