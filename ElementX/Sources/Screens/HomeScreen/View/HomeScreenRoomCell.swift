@@ -21,26 +21,25 @@ struct HomeScreenRoomCell: View {
     let context: HomeScreenViewModel.Context
     
     var body: some View {
-        ZStack(alignment: .bottom) {
-            Button {
-                if let roomId = room.roomId {
-                    context.send(viewAction: .selectRoom(roomIdentifier: roomId))
-                }
-            } label: {
-                HStack(spacing: 16.0) {
-                    avatar
-                    
-                    VStack(alignment: .leading, spacing: 2) {
-                        header
-                        footer
-                    }
-                }
-                .frame(minHeight: 84.0)
-                .accessibilityElement(children: .combine)
+        Button {
+            if let roomId = room.roomId {
+                context.send(viewAction: .selectRoom(roomIdentifier: roomId))
             }
-            .buttonStyle(HomeScreenRoomCellButtonStyle())
-            .accessibilityIdentifier("roomName:\(room.name)")
-            
+        } label: {
+            HStack(spacing: 16.0) {
+                avatar
+                
+                VStack(alignment: .leading, spacing: 2) {
+                    header
+                    footer
+                }
+            }
+            .frame(minHeight: 84.0)
+            .accessibilityElement(children: .combine)
+        }
+        .buttonStyle(HomeScreenRoomCellButtonStyle())
+        .accessibilityIdentifier("roomName:\(room.name)")
+        .overlay(alignment: .bottom) {
             Divider()
                 .frame(height: 0.5)
                 .background(Color.element.quinaryContent)
