@@ -20,7 +20,7 @@ import SwiftUI
 /// Store Element specific app settings.
 final class AppSettings: ObservableObject {
     private enum UserDefaultsKeys: String {
-        case hasAppLaunchedOnce
+        case lastVersionLaunched
         case timelineStyle
         case enableAnalytics
         case isIdentifiedForAnalytics
@@ -50,10 +50,11 @@ final class AppSettings: ObservableObject {
     
     // MARK: - Application
     
-    /// Simple flag to check if app has been deleted between runs.
-    /// Used to clear data stored in the shared container and keychain
-    @AppStorage(UserDefaultsKeys.hasAppLaunchedOnce.rawValue, store: store)
-    var hasAppLaunchedOnce = false
+    /// The last known version of the app that was launched on this device, which is
+    /// used to detect when migrations should be run. When `nil` the app may have been
+    /// deleted between runs so should clear data in the shared container and keychain.
+    @AppStorage(UserDefaultsKeys.lastVersionLaunched.rawValue, store: store)
+    var lastVersionLaunched: String?
     
     /// The default homeserver address used. This is intentionally a string without a scheme
     /// so that it can be passed to Rust as a ServerName for well-known discovery.

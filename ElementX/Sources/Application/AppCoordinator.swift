@@ -17,6 +17,7 @@
 import Combine
 import MatrixRustSDK
 import SwiftUI
+import Version
 
 class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
@@ -66,12 +67,15 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
-        // Reset everything if the app has been deleted since the previous run
-        if !ServiceLocator.shared.settings.hasAppLaunchedOnce {
+        let currentVersion = Bundle.main.version
+        if let previousVersion = ServiceLocator.shared.settings.lastVersionLaunched.flatMap(Version.init) {
+            migrateIfNecessary(from: previousVersion, to: currentVersion)
+        } else {
+            // The app has been deleted since the previous run. Reset everything.
             AppSettings.reset()
             userSessionStore.reset()
-            ServiceLocator.shared.settings.hasAppLaunchedOnce = true
         }
+        ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
         
         setupStateMachine()
         
@@ -124,6 +128,18 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
       
         MXLog.configure(loggerConfiguration)
+    }
+    
+    /// Perform any required migrations for the app to function correctly.
+    private func migrateIfNecessary(from oldVersion: Version, to newVersion: Version) {
+        guard oldVersion != newVersion else { return }
+        
+        if oldVersion < Version(1, 0, 17) {
+            // Version 1.0.17 hardcoded a new sliding sync proxy for matrix.org
+            // Force a sign out for the user to log in with the new proxy.
+            MXLog.warning("Clearing user data for hardcoded proxy.")
+            userSessionStore.reset()
+        }
     }
     
     // swiftlint:disable:next cyclomatic_complexity

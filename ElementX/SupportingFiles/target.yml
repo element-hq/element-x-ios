@@ -115,6 +115,7 @@ targets:
     - package: DesignKit
     - package: AnalyticsEvents
     - package: AppAuth
+    - package: Collections
     - package: DeviceKit
     - package: DTCoreText
     - package: KeychainAccess
@@ -124,7 +125,7 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
-    - package: Collections
+    - package: Version
 
     sources:
     - path: ../Sources
