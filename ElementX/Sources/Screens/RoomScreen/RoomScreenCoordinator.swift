@@ -25,15 +25,11 @@ struct RoomScreenCoordinatorParameters {
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
-    private var parameters: RoomScreenCoordinatorParameters?
+    private var parameters: RoomScreenCoordinatorParameters
 
-    private var viewModel: RoomScreenViewModelProtocol?
+    private var viewModel: RoomScreenViewModelProtocol
     private var navigationStackCoordinator: NavigationStackCoordinator {
-        guard let parameters else {
-            fatalError()
-        }
-        
-        return parameters.navigationStackCoordinator
+        parameters.navigationStackCoordinator
     }
     
     init(parameters: RoomScreenCoordinatorParameters) {
@@ -49,7 +45,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel?.callback = { [weak self] action in
+        viewModel.callback = { [weak self] action in
             guard let self else { return }
             
             switch action {
@@ -64,18 +60,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
-        viewModel?.context.send(viewAction: .markRoomAsRead)
-        viewModel?.stop()
-        viewModel = nil
-        parameters = nil
+        viewModel.context.send(viewAction: .markRoomAsRead)
     }
     
     func toPresentable() -> AnyView {
-        guard let context = viewModel?.context else {
-            fatalError()
-        }
-        
-        return AnyView(RoomScreen(context: context))
+        AnyView(RoomScreen(context: viewModel.context))
     }
 
     // MARK: - Private
@@ -91,14 +80,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayEmojiPickerScreen(for itemId: String) {
-        guard let emojiProvider = parameters?.emojiProvider,
-              let timelineController = parameters?.timelineController else {
-            fatalError()
-        }
-        
         let emojiPickerNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: emojiProvider,
+        let params = EmojiPickerScreenCoordinatorParameters(emojiProvider: parameters.emojiProvider,
                                                             itemId: itemId)
         let coordinator = EmojiPickerScreenCoordinator(parameters: params)
         coordinator.callback = { [weak self] action in
@@ -107,7 +91,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 MXLog.debug("Selected \(emoji) for \(itemId)")
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
                 Task {
-                    await timelineController.sendReaction(emoji, to: itemId)
+                    await self?.parameters.timelineController.sendReaction(emoji, to: itemId)
                 }
             case .dismiss:
                 self?.navigationStackCoordinator.setSheetCoordinator(nil)
@@ -121,14 +105,9 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayRoomDetails() {
-        guard let roomProxy = parameters?.roomProxy,
-              let mediaProvider = parameters?.mediaProvider else {
-            return
-        }
-        
         let params = RoomDetailsCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
-                                                      roomProxy: roomProxy,
-                                                      mediaProvider: mediaProvider)
+                                                      roomProxy: parameters.roomProxy,
+                                                      mediaProvider: parameters.mediaProvider)
         let coordinator = RoomDetailsCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
             self?.navigationStackCoordinator.pop()

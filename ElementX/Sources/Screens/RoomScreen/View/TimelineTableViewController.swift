@@ -72,7 +72,7 @@ class TimelineTableViewController: UIViewController {
         }
     }
         
-    var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
+    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemContextMenuActions?)?
     
     @Binding private var scrollToBottomButtonVisible: Bool
     
@@ -189,7 +189,7 @@ class TimelineTableViewController: UIViewController {
             // A local reference to avoid capturing self in the cell configuration.
             let coordinator = self.coordinator
             let opacity = self.opacity(for: timelineItem)
-            let contextMenuBuilder = self.contextMenuBuilder
+            let contextMenuActionProvider = self.contextMenuActionProvider
             
             cell.item = timelineItem
             cell.contentConfiguration = UIHostingConfiguration {
@@ -198,7 +198,11 @@ class TimelineTableViewController: UIViewController {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .opacity(opacity)
                     .contextMenu {
-                        contextMenuBuilder?(timelineItem.id)
+                        contextMenuActionProvider?(timelineItem.id).map { actions in
+                            TimelineItemContextMenu(contextMenuActions: actions) { action in
+                                coordinator.send(viewAction: .handleContextMenuAction(itemID: timelineItem.id, action: action))
+                            }
+                        }
                     }
                     .onAppear {
                         coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))

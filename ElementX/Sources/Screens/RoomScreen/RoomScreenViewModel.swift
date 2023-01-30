@@ -28,9 +28,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
-
-    // MARK: - Setup
-        
+    
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -72,7 +70,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        state.contextMenuBuilder = buildContextMenuForItemId(_:)
+        state.contextMenuActionProvider = { [weak self] itemId -> TimelineItemContextMenuActions? in
+            guard let self = self else {
+                return nil
+            }
+            
+            return self.contextMenuActionsForItemId(itemId)
+        }
         
         buildTimelineViews()
     }
@@ -109,12 +113,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = ""
         case .markRoomAsRead:
             await markRoomAsRead()
+        case .handleContextMenuAction(let itemID, let action):
+            processContentMenuAction(action, itemID: itemID)
         }
-    }
-
-    func stop() {
-        cancellables.removeAll()
-        state.contextMenuBuilder = nil
     }
     
     // MARK: - Private
@@ -197,22 +198,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     // MARK: ContextMenus
     
-    private func buildContextMenuForItemId(_ itemId: String) -> TimelineItemContextMenu {
-        TimelineItemContextMenu(contextMenuActions: contextMenuActionsForItemId(itemId)) { [weak self] action in
-            self?.processContentMenuAction(action, itemId: itemId)
-        }
-    }
-    
-    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions {
+    private func contextMenuActionsForItemId(_ itemId: String) -> TimelineItemContextMenuActions? {
         guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             // Don't show a context menu for non-event based items.
-            return .empty
+            return nil
         }
         
         if timelineItem is StateRoomTimelineItem {
             // Don't show a context menu for state events.
-            return .empty
+            return nil
         }
         
         var actions: [TimelineItemContextMenuAction] = [
@@ -238,8 +233,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     // swiftlint:disable:next cyclomatic_complexity
-    private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemId: String) {
-        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemId }),
+    private func processContentMenuAction(_ action: TimelineItemContextMenuAction, itemID: String) {
+        guard let timelineItem = timelineController.timelineItems.first(where: { $0.id == itemID }),
               let item = timelineItem as? EventBasedTimelineItemProtocol else {
             return
         }
@@ -265,7 +260,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             }
         case .redact:
             Task {
-                await timelineController.redact(itemId)
+                await timelineController.redact(itemID)
             }
         case .reply:
             state.bindings.composerFocused = true
