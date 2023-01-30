@@ -42,15 +42,6 @@ struct SettingsScreen: View {
             
             signOutSection
                 .listRowBackground(rowBackgroundColor)
-
-//            analyticsSection
-//                .listRowBackground(rowBackgroundColor)
-//
-//            userInterfaceSection
-//                .listRowBackground(rowBackgroundColor)
-//
-//            logoutSection
-//                .listRowBackground(rowBackgroundColor)
         }
         .introspectTableView { tableView in
             tableView.backgroundColor = .clear
@@ -158,76 +149,6 @@ struct SettingsScreen: View {
                 }
             }
             .padding(.top, 24)
-        }
-    }
-    
-    private var analyticsSection: some View {
-        Section {
-            Button { context.send(viewAction: .reportBug) } label: {
-                HStack {
-                    Text(ElementL10n.sendBugReport)
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .foregroundColor(.element.tertiaryContent)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .listRowSeparator(.hidden)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("reportBugButton")
-        }
-    }
-
-    @ViewBuilder
-    private var userInterfaceSection: some View {
-        Section {
-            Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
-                ForEach(TimelineStyle.allCases, id: \.self) { style in
-                    Text(style.description)
-                        .tag(style)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .accessibilityIdentifier("timelineStylePicker")
-        }
-    }
-    
-    private var logoutSection: some View {
-        Section {
-            Button { showingLogoutConfirmation = true } label: {
-                HStack {
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                        .foregroundColor(.element.systemGray)
-                        .padding(4)
-                        .background(Color.element.systemGray6)
-                        .clipShape(Circle())
-                        .frame(width: menuIconSize, height: menuIconSize)
-                    Text(ElementL10n.actionSignOut)
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .foregroundColor(.element.tertiaryContent)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("logoutButton")
-            .alert(ElementL10n.actionSignOut,
-                   isPresented: $showingLogoutConfirmation) {
-                Button(ElementL10n.actionSignOut,
-                       role: .destructive,
-                       action: logout)
-            } message: {
-                Text(ElementL10n.actionSignOutConfirmationSimple)
-            }
-        } footer: {
-            VStack {
-                versionText
-                    .frame(maxWidth: .infinity)
-                
-                if let deviceId = context.viewState.deviceID {
-                    Text(deviceId)
-                }
-            }
         }
     }
 

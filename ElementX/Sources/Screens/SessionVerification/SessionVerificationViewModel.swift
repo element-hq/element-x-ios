@@ -107,7 +107,9 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             case (_, .cancel, .cancelling):
                 self.cancelVerification()
             case (_, _, .verified):
-                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                // Dismiss the success screen automatically.
+                Task {
+                    try await Task.sleep(for: .seconds(2))
                     self.callback?(.finished)
                 }
             default:
