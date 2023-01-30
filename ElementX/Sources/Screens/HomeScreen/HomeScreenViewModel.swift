@@ -65,8 +65,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         visibleItemRangePublisher
             .debounce(for: 0.1, scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .sink { range in
-                self.updateVisibleRange(range)
+            .sink { [weak self] range in
+                self?.updateVisibleRange(range)
             }
             .store(in: &cancellables)
         

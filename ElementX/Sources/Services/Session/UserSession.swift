@@ -66,10 +66,10 @@ class UserSession: UserSessionProtocol {
                 
                 self.sessionVerificationController = sessionVerificationController
                 
-                sessionVerificationController.callbacks.sink { callback in
+                sessionVerificationController.callbacks.sink { [weak self] callback in
                     switch callback {
                     case .finished:
-                        self.callbacks.send(.didVerifySession)
+                        self?.callbacks.send(.didVerifySession)
                     default:
                         break
                     }
