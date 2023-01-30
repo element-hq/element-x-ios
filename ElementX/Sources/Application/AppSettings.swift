@@ -55,7 +55,13 @@ final class AppSettings: ObservableObject {
     @AppStorage(UserDefaultsKeys.hasAppLaunchedOnce.rawValue, store: store)
     var hasAppLaunchedOnce = false
     
+    /// The default homeserver address used. This is intentionally a string without a scheme
+    /// so that it can be passed to Rust as a ServerName for well-known discovery.
     let defaultHomeserverAddress = "matrix.org"
+    
+    /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
+    /// that don't yet have an officially trusted proxy configured in their well-known.
+    let slidingSyncProxyURL = URL(staticString: "https://slidingsync.lab.matrix.org")
     
     // MARK: - Notifications
     
@@ -116,11 +122,6 @@ final class AppSettings: ObservableObject {
     
     @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
     var timelineStyle = TimelineStyle.bubbles
-
-    // MARK: - Client
-
-    @AppStorage(UserDefaultsKeys.slidingSyncProxyBaseURLString.rawValue, store: store)
-    var slidingSyncProxyBaseURLString = "https://slidingsync.lab.element.dev"
 
     // MARK: - Notifications
 
