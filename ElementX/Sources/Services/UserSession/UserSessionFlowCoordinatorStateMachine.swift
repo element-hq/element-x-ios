@@ -28,9 +28,6 @@ class UserSessionFlowCoordinatorStateMachine {
                 
         /// Showing the session verification flows
         case sessionVerificationScreen(selectedRoomId: String?)
-        
-        /// Showing the session verification flows
-        case sessionVerificationScreenFromSettings(selectedRoomId: String?)
 
         /// Showing the session verification flows
         case feedbackScreen(selectedRoomId: String?)
@@ -64,11 +61,6 @@ class UserSessionFlowCoordinatorStateMachine {
         case showSessionVerificationScreen
         /// Session verification has finished
         case dismissedSessionVerificationScreen
-        
-        /// Request the start of the session verification flow from the settings screen
-        case showSessionVerificationScreenFromSettings
-        /// Session verification requested from the settings screen has finished
-        case dismissedSessionVerificationScreenFromSettings
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -107,11 +99,6 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.dismissedSessionVerificationScreen, .sessionVerificationScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
                 
-            case (.showSessionVerificationScreenFromSettings, .settingsScreen(let selectedRoomId)):
-                return .sessionVerificationScreenFromSettings(selectedRoomId: selectedRoomId)
-            case (.dismissedSessionVerificationScreenFromSettings, .sessionVerificationScreenFromSettings(let selectedRoomId)):
-                return .settingsScreen(selectedRoomId: selectedRoomId)
-
             default:
                 return nil
             }

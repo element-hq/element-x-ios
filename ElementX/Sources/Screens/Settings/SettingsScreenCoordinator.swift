@@ -25,7 +25,6 @@ struct SettingsScreenCoordinatorParameters {
 
 enum SettingsScreenCoordinatorAction {
     case dismiss
-    case sessionVerification
     case logout
 }
 
@@ -52,7 +51,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             case .reportBug:
                 self.presentBugReportScreen()
             case .sessionVerification:
-                self.callback?(.sessionVerification)
+                self.verifySession()
             case .logout:
                 self.callback?(.logout)
             }
@@ -96,7 +95,20 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
     
     private func verifySession() {
-        // TODO: to be implemented
+        guard let sessionVerificationController = parameters.userSession.sessionVerificationController else {
+            fatalError("The sessionVerificationController should aways be valid at this point")
+        }
+        
+        let verificationParameters = SessionVerificationCoordinatorParameters(sessionVerificationControllerProxy: sessionVerificationController)
+        let coordinator = SessionVerificationCoordinator(parameters: verificationParameters)
+        
+        coordinator.callback = { [weak self] in
+            self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+        }
+        
+        parameters.navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+            self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+        }
     }
 
     private func showSuccess(label: String) {

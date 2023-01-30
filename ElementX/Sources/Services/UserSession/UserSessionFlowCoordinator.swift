@@ -31,8 +31,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
-    
-    private weak var settingsNavigationStackCoordinator: NavigationStackCoordinator?
 
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
@@ -94,11 +92,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
                 break
                 
-            case (.settingsScreen, .showSessionVerificationScreenFromSettings, .sessionVerificationScreenFromSettings):
-                self.presentSessionVerification()
-            case (.sessionVerificationScreenFromSettings, .dismissedSessionVerificationScreenFromSettings, .settingsScreen):
-                break
-
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 self.presentSettingsScreen()
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):
@@ -207,19 +200,13 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             switch action {
             case .dismiss:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.settingsNavigationStackCoordinator = nil
             case .logout:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.settingsNavigationStackCoordinator = nil
                 self.callback?(.signOut)
-            case .sessionVerification:
-                self.stateMachine.processEvent(.showSessionVerificationScreenFromSettings)
             }
         }
         
         settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator)
-        
-        self.settingsNavigationStackCoordinator = settingsNavigationStackCoordinator
         
         navigationSplitCoordinator.setSheetCoordinator(userNotificationController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSettingsScreen)
@@ -238,21 +225,11 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let coordinator = SessionVerificationCoordinator(parameters: parameters)
         
         coordinator.callback = { [weak self] in
-            if let settingsNavigationStackCoordinator = self?.settingsNavigationStackCoordinator {
-                settingsNavigationStackCoordinator.setSheetCoordinator(nil)
-            } else {
-                self?.navigationSplitCoordinator.setSheetCoordinator(nil)
-            }
+            self?.navigationSplitCoordinator.setSheetCoordinator(nil)
         }
         
-        if let settingsNavigationStackCoordinator = settingsNavigationStackCoordinator {
-            settingsNavigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-                self?.stateMachine.processEvent(.dismissedSessionVerificationScreenFromSettings)
-            }
-        } else {
-            navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-                self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
-            }
+        navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
         }
     }
         
