@@ -28,13 +28,14 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sidebar", oldValue)
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let sidebarModule {
                 logPresentationChange("Set sidebar", sidebarModule)
-                sidebarModule.coordinator.start()
+                sidebarModule.coordinator?.start()
             }
             
             updateCompactLayoutComponents()
@@ -50,13 +51,14 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove detail", oldValue)
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let detailModule {
                 logPresentationChange("Set detail", detailModule)
-                detailModule.coordinator.start()
+                detailModule.coordinator?.start()
             }
             
             updateCompactLayoutComponents()
@@ -72,13 +74,14 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sheet", oldValue)
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let sheetModule {
                 logPresentationChange("Set sheet", sheetModule)
-                sheetModule.coordinator.start()
+                sheetModule.coordinator?.start()
             }
             
             updateCompactLayoutComponents()
@@ -94,13 +97,14 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove fullscreen cover", oldValue)
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let fullScreenCoverModule {
                 logPresentationChange("Set fullscreen cover", fullScreenCoverModule)
-                fullScreenCoverModule.coordinator.start()
+                fullScreenCoverModule.coordinator?.start()
             }
             
             updateCompactLayoutComponents()
@@ -123,7 +127,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     @Published internal var compactLayoutStackModules: [NavigationModule] = []
     
     var compactLayoutStackCoordinators: [any CoordinatorProtocol] {
-        compactLayoutStackModules.map(\.coordinator)
+        compactLayoutStackModules.compactMap(\.coordinator)
     }
     
     /// Default NavigationSplitCoordinator initialiser
@@ -190,6 +194,10 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         AnyView(NavigationSplitCoordinatorView(navigationSplitCoordinator: self))
     }
     
+    func stop() {
+        releaseAllCoordinatorReferences()
+    }
+    
     // MARK: - CustomStringConvertible
 
     var description: String {
@@ -207,8 +215,27 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     
     // MARK: - Private
     
+    /// The NavigationStack has a tendency to hold on to path items for longer than needed. We work around that by manually nilling the coordinator
+    /// when a NavigationModule is dismissed. As the NavigationModule is just a wrapper multiple instances of it continuing living is of no consequence
+    /// https://stackoverflow.com/questions/73885353/found-a-strange-behaviour-of-state-when-combined-to-the-new-navigation-stack/
+    ///
+    /// For added complexity, the NavigationSplitCoordinator has an internal compact layout NavigationStack for which we need to manually nil things again
+    private func releaseAllCoordinatorReferences() {
+        sidebarModule?.coordinator = nil
+        detailModule?.coordinator = nil
+        sheetModule?.coordinator = nil
+        fullScreenCoverModule?.coordinator = nil
+        
+        compactLayoutRootModule?.coordinator = nil
+        compactLayoutStackModules.forEach { module in
+            module.coordinator = nil
+        }
+    }
+    
     private func logPresentationChange(_ change: String, _ module: NavigationModule) {
-        MXLog.info("\(self) \(change): \(module.coordinator)")
+        if let coordinator = module.coordinator {
+            MXLog.info("\(self) \(change): \(coordinator)")
+        }
     }
     
     /// We need to update the compact layout whenever anything changes within the split coordinator or
@@ -335,11 +362,11 @@ private struct NavigationSplitCoordinatorView: View {
         // Embedded NavigationStackCoordinators will present their sheets
         // through the NavigationSplitCoordinator as well.
         .sheet(item: $navigationSplitCoordinator.sheetModule) { module in
-            module.coordinator.toPresentable()
+            module.coordinator?.toPresentable()
                 .tint(.element.accent)
         }
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
-            module.coordinator.toPresentable()
+            module.coordinator?.toPresentable()
                 .tint(.element.accent)
         }
     }
@@ -347,9 +374,9 @@ private struct NavigationSplitCoordinatorView: View {
     /// The NavigationStack that will be used in compact layouts
     var navigationStack: some View {
         NavigationStack(path: $navigationSplitCoordinator.compactLayoutStackModules) {
-            navigationSplitCoordinator.compactLayoutRootModule?.coordinator.toPresentable()
+            navigationSplitCoordinator.compactLayoutRootModule?.coordinator?.toPresentable()
                 .navigationDestination(for: NavigationModule.self) { module in
-                    module.coordinator.toPresentable()
+                    module.coordinator?.toPresentable()
                 }
         }
     }
@@ -358,20 +385,20 @@ private struct NavigationSplitCoordinatorView: View {
     var navigationSplitView: some View {
         NavigationSplitView(columnVisibility: $columnVisibility) {
             if let sidebarModule = navigationSplitCoordinator.sidebarModule {
-                sidebarModule.coordinator.toPresentable()
+                sidebarModule.coordinator?.toPresentable()
             } else {
-                navigationSplitCoordinator.placeholderModule.coordinator.toPresentable()
+                navigationSplitCoordinator.placeholderModule.coordinator?.toPresentable()
             }
         } detail: {
             if let detailModule = navigationSplitCoordinator.detailModule {
-                detailModule.coordinator.toPresentable()
+                detailModule.coordinator?.toPresentable()
             } else {
-                navigationSplitCoordinator.placeholderModule.coordinator.toPresentable()
+                navigationSplitCoordinator.placeholderModule.coordinator?.toPresentable()
             }
         }
         .navigationSplitViewStyle(.balanced)
         .navigationDestination(for: NavigationModule.self) { module in
-            module.coordinator.toPresentable()
+            module.coordinator?.toPresentable()
         }
     }
 }
@@ -386,13 +413,14 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove root", oldValue)
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let rootModule {
                 logPresentationChange("Set root", rootModule)
-                rootModule.coordinator.start()
+                rootModule.coordinator?.start()
             }
         }
     }
@@ -406,13 +434,14 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sheet", oldValue)
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let sheetModule {
                 logPresentationChange("Set sheet", sheetModule)
-                sheetModule.coordinator.start()
+                sheetModule.coordinator?.start()
             }
         }
     }
@@ -433,13 +462,14 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove fullscreen cover", oldValue)
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let fullScreenCoverModule {
                 logPresentationChange("Set fullscreen cover", fullScreenCoverModule)
-                fullScreenCoverModule.coordinator.start()
+                fullScreenCoverModule.coordinator?.start()
             }
         }
     }
@@ -461,11 +491,12 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
                 switch change {
                 case .insert(_, let module, _):
                     logPresentationChange("Push", module)
-                    module.coordinator.start()
+                    module.coordinator?.start()
                 case .remove(_, let module, _):
                     logPresentationChange("Pop", module)
-                    module.coordinator.stop()
+                    module.coordinator?.stop()
                     module.dismissalCallback?()
+                    module.coordinator = nil
                 }
             }
         }
@@ -473,7 +504,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     
     // The current navigation stack. Excludes the rootCoordinator
     var stackCoordinators: [any CoordinatorProtocol] {
-        stackModules.map(\.coordinator)
+        stackModules.compactMap(\.coordinator)
     }
     
     /// If this NavigationStackCoordinator will be embedded into a NavigationSplitCoordinator pass it here
@@ -592,7 +623,9 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     // MARK: - Private
     
     private func logPresentationChange(_ change: String, _ module: NavigationModule) {
-        MXLog.info("\(self) \(change): \(module.coordinator)")
+        if let coordinator = module.coordinator {
+            MXLog.info("\(self) \(change): \(coordinator)")
+        }
     }
 }
 
@@ -601,17 +634,17 @@ private struct NavigationStackCoordinatorView: View {
     
     var body: some View {
         NavigationStack(path: $navigationStackCoordinator.stackModules) {
-            navigationStackCoordinator.rootModule?.coordinator.toPresentable()
+            navigationStackCoordinator.rootModule?.coordinator?.toPresentable()
                 .navigationDestination(for: NavigationModule.self) { module in
-                    module.coordinator.toPresentable()
+                    module.coordinator?.toPresentable()
                 }
         }
         .sheet(item: $navigationStackCoordinator.sheetModule) { module in
-            module.coordinator.toPresentable()
+            module.coordinator?.toPresentable()
                 .tint(.element.accent)
         }
         .fullScreenCover(item: $navigationStackCoordinator.fullScreenCoverModule) { module in
-            module.coordinator.toPresentable()
+            module.coordinator?.toPresentable()
                 .tint(.element.accent)
         }
     }

@@ -20,13 +20,14 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
     @Published fileprivate var rootModule: NavigationModule? {
         didSet {
             if let oldValue {
-                oldValue.coordinator.stop()
+                oldValue.coordinator?.stop()
                 oldValue.dismissalCallback?()
+                oldValue.coordinator = nil
             }
             
             if let rootModule {
                 logPresentationChange("Set root", rootModule)
-                rootModule.coordinator.start()
+                rootModule.coordinator?.start()
             }
         }
     }
@@ -66,7 +67,9 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
     // MARK: - Private
     
     private func logPresentationChange(_ change: String, _ module: NavigationModule) {
-        MXLog.info("\(self) \(change): \(module.coordinator)")
+        if let coordinator = module.coordinator {
+            MXLog.info("\(self) \(change): \(coordinator)")
+        }
     }
 }
 
@@ -75,7 +78,7 @@ private struct NavigationRootCoordinatorView: View {
     
     var body: some View {
         ZStack {
-            rootCoordinator.rootModule?.coordinator.toPresentable()
+            rootCoordinator.rootModule?.coordinator?.toPresentable()
         }
         .animation(.elementDefault, value: rootCoordinator.rootModule)
     }
