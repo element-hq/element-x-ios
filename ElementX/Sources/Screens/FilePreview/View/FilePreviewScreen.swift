@@ -26,7 +26,7 @@ struct FilePreviewScreen: View {
             PreviewView(context: context,
                         fileURL: context.viewState.fileURL,
                         title: context.viewState.title)
-                .ignoresSafeArea()
+                .ignoresSafeArea(edges: .bottom)
             
             // Drop a random view on top to make QLPreviewController stop
             // swallowing all gestures and allow swiping backwards
