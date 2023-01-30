@@ -28,9 +28,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sidebar", oldValue)
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let sidebarModule {
@@ -51,9 +49,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove detail", oldValue)
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let detailModule {
@@ -74,9 +70,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sheet", oldValue)
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let sheetModule {
@@ -97,9 +91,7 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove fullscreen cover", oldValue)
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let fullScreenCoverModule {
@@ -413,9 +405,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove root", oldValue)
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let rootModule {
@@ -434,9 +424,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove sheet", oldValue)
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let sheetModule {
@@ -462,9 +450,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         didSet {
             if let oldValue {
                 logPresentationChange("Remove fullscreen cover", oldValue)
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let fullScreenCoverModule {
@@ -494,9 +480,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
                     module.coordinator?.start()
                 case .remove(_, let module, _):
                     logPresentationChange("Pop", module)
-                    module.coordinator?.stop()
-                    module.dismissalCallback?()
-                    module.coordinator = nil
+                    module.dismiss()
                 }
             }
         }

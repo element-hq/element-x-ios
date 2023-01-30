@@ -20,9 +20,7 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
     @Published fileprivate var rootModule: NavigationModule? {
         didSet {
             if let oldValue {
-                oldValue.coordinator?.stop()
-                oldValue.dismissalCallback?()
-                oldValue.coordinator = nil
+                oldValue.dismiss()
             }
             
             if let rootModule {

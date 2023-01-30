@@ -18,6 +18,7 @@ import Foundation
 
 /// A CoordinatorProtocol wrapper and type erasing component that allows
 /// dynamically presenting arbitrary screens
+@MainActor
 class NavigationModule: Identifiable, Hashable {
     let id = UUID()
     
@@ -33,11 +34,17 @@ class NavigationModule: Identifiable, Hashable {
         self.dismissalCallback = dismissalCallback
     }
     
-    static func == (lhs: NavigationModule, rhs: NavigationModule) -> Bool {
+    func dismiss() {
+        coordinator?.stop()
+        dismissalCallback?()
+        coordinator = nil
+    }
+    
+    nonisolated static func == (lhs: NavigationModule, rhs: NavigationModule) -> Bool {
         lhs.id == rhs.id
     }
     
-    func hash(into hasher: inout Hasher) {
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }
