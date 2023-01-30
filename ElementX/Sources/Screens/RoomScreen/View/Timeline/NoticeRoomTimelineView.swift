@@ -22,7 +22,7 @@ struct NoticeRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            HStack(alignment: .top) {
+            HStack(alignment: .firstTextBaseline) {
                 Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
                 if let attributedComponents = timelineItem.attributedComponents {
                     FormattedBodyText(attributedComponents: attributedComponents)
@@ -35,9 +35,11 @@ struct NoticeRoomTimelineView: View {
 }
 
 struct NoticeRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
-        body
-        body.timelineStyle(.plain)
+        body.environmentObject(viewModel.context)
+        body.timelineStyle(.plain).environmentObject(viewModel.context)
     }
     
     static var body: some View {

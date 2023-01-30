@@ -34,9 +34,11 @@ struct FileRoomTimelineView: View {
 }
 
 struct FileRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
-        body
-        body.timelineStyle(.plain)
+        body.environmentObject(viewModel.context)
+        body.timelineStyle(.plain).environmentObject(viewModel.context)
     }
     
     static var body: some View {

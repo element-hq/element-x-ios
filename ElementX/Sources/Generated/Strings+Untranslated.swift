@@ -40,6 +40,8 @@ extension ElementL10n {
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet
   public static let loginTabletDevice = ElementL10n.tr("Untranslated", "login_tablet_device")
+  /// New message
+  public static let newMessage = ElementL10n.tr("Untranslated", "new_message")
   /// %1$@ accepted the invite
   public static func noticeRoomInviteAccepted(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "noticeRoomInviteAccepted", String(describing: p1))
@@ -110,6 +112,8 @@ extension ElementL10n {
   public static let roomTimelineStylePlainLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_plain_long_description")
   /// Syncing
   public static let roomTimelineSyncing = ElementL10n.tr("Untranslated", "room_timeline_syncing")
+  /// Unable to decrypt
+  public static let roomTimelineUnableToDecrypt = ElementL10n.tr("Untranslated", "room_timeline_unable_to_decrypt")
   /// Would you like to submit a bug report?
   public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
   /// You took a screenshot

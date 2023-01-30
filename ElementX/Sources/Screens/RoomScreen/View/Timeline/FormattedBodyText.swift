@@ -38,14 +38,16 @@ struct FormattedBodyText: View {
                     } else {
                         Text(component.attributedString.mergingAttributes(blockquoteAttributes))
                             .fixedSize(horizontal: false, vertical: true)
-                            .foregroundColor(.element.primaryContent)
-                            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
+                            .foregroundColor(.element.tertiaryContent)
+                            .lineLimit(3) // FIXME: Quotes vs replies
+                            .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
                             .clipped()
-                            .background(Color.element.systemGray4)
-                            .cornerRadius(13)
+                            .background(Color.element.background)
+                            .cornerRadius(8)
                     }
                 } else {
                     Text(component.attributedString)
+                        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0) // FIXME: Configurable
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.element.primaryContent)
                 }
@@ -56,7 +58,7 @@ struct FormattedBodyText: View {
 
     private var blockquoteAttributes: AttributeContainer {
         var container = AttributeContainer()
-        container.font = .element.caption1
+        container.font = .element.subheadline
         return container
     }
 }
@@ -70,7 +72,12 @@ extension FormattedBodyText {
 struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
         body
-        body.timelineStyle(.plain)
+            .padding(8)
+            .background(Color.element.systemGray6)
+            .cornerRadius(12)
+        
+        body
+            .timelineStyle(.plain)
     }
     
     @ViewBuilder
@@ -80,8 +87,7 @@ struct FormattedBodyText_Previews: PreviewProvider {
             Text before blockquote
             <blockquote>
             <b>bold</b> <i>italic</i>
-            </blockquote>
-            Text after blockquote
+            </blockquote>Text after blockquote
             """,
             """
             <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>

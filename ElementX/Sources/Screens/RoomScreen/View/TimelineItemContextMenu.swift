@@ -79,7 +79,7 @@ public struct TimelineItemContextMenu: View {
                 }
             case .edit:
                 Button { callback(item) } label: {
-                    Label(ElementL10n.edit, systemImage: "pencil")
+                    Label(ElementL10n.edit, systemImage: "pencil.line")
                 }
             case .quote:
                 Button { callback(item) } label: {
@@ -91,7 +91,7 @@ public struct TimelineItemContextMenu: View {
                 }
             case .reply:
                 Button { callback(item) } label: {
-                    Label(ElementL10n.reply, systemImage: "arrow.uturn.left")
+                    Label(ElementL10n.reply, systemImage: "arrowshape.turn.up.left")
                 }
             case .redact:
                 Button(role: .destructive) { callback(item) } label: {

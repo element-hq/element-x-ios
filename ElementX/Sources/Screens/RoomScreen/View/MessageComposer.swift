@@ -27,38 +27,48 @@ struct MessageComposer: View {
     let editCancellationAction: () -> Void
     
     var body: some View {
-        let rect = RoundedRectangle(cornerRadius: borderRadius)
-        VStack(alignment: .leading, spacing: 4.0) {
+        let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
+        VStack(alignment: .leading, spacing: 0) {
             header
-            HStack(alignment: .center) {
+            HStack(alignment: .bottom) {
                 MessageComposerTextField(placeholder: ElementL10n.roomMessagePlaceholder,
                                          text: $text,
                                          focused: $focused,
                                          maxHeight: 300,
                                          onEnterKeyHandler: sendAction)
+                    .tint(.element.brand)
                     .padding(.vertical, 12)
                 
                 Button {
                     sendAction()
                 } label: {
-                    Image(systemName: "paperplane")
-                        .font(.element.title3)
-                        .foregroundColor(sendingDisabled ? .element.tempActionBackground : .element.tempActionForeground)
-                        .padding(8.0)
-                        .background(
+                    submitButtonImage
+                        .symbolVariant(.fill)
+                        .font(.element.body)
+                        .foregroundColor(sendingDisabled ? .element.quaternaryContent : .element.background)
+                        .padding(5)
+                        .background {
                             Circle()
-                                .foregroundColor(sendingDisabled ? .clear : .element.tempActionBackground)
-                        )
+                                .foregroundColor(sendingDisabled ? .clear : .element.brand)
+                        }
                 }
                 .disabled(sendingDisabled)
                 .animation(.elementDefault, value: sendingDisabled)
                 .keyboardShortcut(.return, modifiers: [.command])
-                .padding(4.0)
+                .padding(8)
             }
         }
         .padding(.leading, 12.0)
-        .background(.thinMaterial)
-        .clipShape(rect)
+        .background {
+            ZStack {
+                roundedRectangle
+                    .fill(Color.element.system)
+                roundedRectangle
+                    .stroke(Color.element.quinaryContent, lineWidth: 1)
+                    .opacity(focused ? 1 : 0)
+            }
+        }
+        .clipShape(roundedRectangle)
         .animation(.elementDefault, value: type)
     }
 
@@ -71,6 +81,17 @@ struct MessageComposer: View {
             MessageComposerEditHeader(action: editCancellationAction)
         case .default:
             EmptyView()
+        }
+    }
+    
+    private var submitButtonImage: some View {
+        // ZStack with opacity so the button size is consistent.
+        ZStack {
+            Image(systemName: "checkmark")
+                .opacity(type.isEdit ? 1 : 0)
+                .fontWeight(.medium)
+            Image(systemName: "paperplane")
+                .opacity(type.isEdit ? 0 : 1)
         }
     }
     
@@ -90,18 +111,18 @@ private struct MessageComposerReplyHeader: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Label(ElementL10n.roomTimelineReplyingTo(displayName), systemImage: "arrow.uturn.left")
-                .font(.element.caption2)
+            Label(ElementL10n.roomTimelineReplyingTo(displayName), systemImage: "arrowshape.turn.up.left")
+                .font(.element.caption1)
                 .foregroundColor(.element.secondaryContent)
                 .lineLimit(1)
             Spacer()
             Button {
                 action()
             } label: {
-                Image(systemName: "x.circle")
-                    .font(.element.callout)
+                Image(systemName: "xmark")
+                    .font(.element.caption2.weight(.medium))
                     .foregroundColor(.element.secondaryContent)
-                    .padding(4.0)
+                    .padding(12.0)
             }
         }
     }
@@ -112,18 +133,18 @@ private struct MessageComposerEditHeader: View {
 
     var body: some View {
         HStack(alignment: .center) {
-            Label(ElementL10n.roomTimelineEditing, systemImage: "pencil")
-                .font(.element.caption2)
+            Label(ElementL10n.roomTimelineEditing, systemImage: "pencil.line")
+                .font(.element.caption1)
                 .foregroundColor(.element.secondaryContent)
                 .lineLimit(1)
             Spacer()
             Button {
                 action()
             } label: {
-                Image(systemName: "x.circle")
-                    .font(.element.callout)
+                Image(systemName: "xmark")
+                    .font(.element.caption2.weight(.medium))
                     .foregroundColor(.element.secondaryContent)
-                    .padding(4.0)
+                    .padding(12.0)
             }
         }
     }
@@ -135,6 +156,14 @@ struct MessageComposer_Previews: PreviewProvider {
             MessageComposer(text: .constant(""),
                             focused: .constant(false),
                             sendingDisabled: true,
+                            type: .default,
+                            sendAction: { },
+                            replyCancellationAction: { },
+                            editCancellationAction: { })
+            
+            MessageComposer(text: .constant("This is a short message."),
+                            focused: .constant(false),
+                            sendingDisabled: false,
                             type: .default,
                             sendAction: { },
                             replyCancellationAction: { },

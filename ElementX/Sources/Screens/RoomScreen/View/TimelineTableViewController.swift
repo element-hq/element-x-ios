@@ -108,6 +108,7 @@ class TimelineTableViewController: UIViewController {
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.keyboardDismissMode = .onDrag
+        tableView.backgroundColor = .element.background
         view.addSubview(tableView)
         
         scrollToBottomPublisher
@@ -189,7 +190,6 @@ class TimelineTableViewController: UIViewController {
             // A local reference to avoid capturing self in the cell configuration.
             let coordinator = self.coordinator
             let opacity = self.opacity(for: timelineItem)
-            let contextMenuActionProvider = self.contextMenuActionProvider
             
             cell.item = timelineItem
             cell.contentConfiguration = UIHostingConfiguration {
@@ -197,13 +197,6 @@ class TimelineTableViewController: UIViewController {
                     .id(timelineItem.id)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .opacity(opacity)
-                    .contextMenu {
-                        contextMenuActionProvider?(timelineItem.id).map { actions in
-                            TimelineItemContextMenu(contextMenuActions: actions) { action in
-                                coordinator.send(viewAction: .contextMenuAction(itemID: timelineItem.id, action: action))
-                            }
-                        }
-                    }
                     .onAppear {
                         coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
                     }
@@ -223,6 +216,7 @@ class TimelineTableViewController: UIViewController {
             }
             .margins(.all, self.timelineStyle.rowInsets)
             .minSize(height: 1)
+            .background(Color.clear)
             
             return cell
         }

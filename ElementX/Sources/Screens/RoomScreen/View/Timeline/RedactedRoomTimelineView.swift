@@ -31,12 +31,15 @@ struct RedactedRoomTimelineView: View {
 }
 
 struct RedactedRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
         VStack(alignment: .leading, spacing: 20.0) {
             RedactedRoomTimelineView(timelineItem: itemWith(text: ElementL10n.eventRedacted,
                                                             timestamp: "Later",
                                                             senderId: "Anne"))
         }
+        .environmentObject(viewModel.context)
     }
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> RedactedRoomTimelineItem {

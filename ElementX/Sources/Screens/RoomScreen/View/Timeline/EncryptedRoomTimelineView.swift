@@ -17,46 +17,36 @@
 import SwiftUI
 
 struct EncryptedRoomTimelineView: View {
-    @State private var showEncryptionInfo = false
-    
     let timelineItem: EncryptedRoomTimelineItem
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Button {
-                showEncryptionInfo = !showEncryptionInfo
-            } label: {
-                Label {
-                    if showEncryptionInfo {
-                        FormattedBodyText(text: encryptionDetails)
-                    } else {
-                        FormattedBodyText(text: timelineItem.text)
-                    }
-                } icon: {
-                    Image(systemName: "lock.shield")
-                        .foregroundColor(.red)
-                }
-                .animation(nil, value: showEncryptionInfo)
+            Label {
+                FormattedBodyText(text: timelineItem.text)
+            } icon: {
+                Image(systemName: "lock.shield")
+                    .foregroundColor(.element.secondaryContent)
             }
+            .labelStyle(RoomTimelineViewLabelStyle())
         }
     }
-    
-    private var encryptionDetails: String {
-        switch timelineItem.encryptionType {
-        case .unknown:
-            return "Unknown"
-        case .megolmV1AesSha2(let sessionId):
-            return "Megolm session id: \(sessionId)"
-        case .olmV1Curve25519AesSha2(let senderKey):
-            return "Olm sender key: \(senderKey)"
+}
+
+struct RoomTimelineViewLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(spacing: 8) {
+            configuration.icon
+            configuration.title
         }
     }
 }
 
 struct EncryptedRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
-        body
-        body.timelineStyle(.plain)
+        body.environmentObject(viewModel.context)
+        body.timelineStyle(.plain).environmentObject(viewModel.context)
     }
     
     static var body: some View {
