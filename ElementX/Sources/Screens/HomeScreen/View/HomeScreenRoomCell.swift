@@ -71,10 +71,8 @@ struct HomeScreenRoomCell: View {
                     .font(.element.footnote)
                     .foregroundColor(room.hasUnreads ? .element.brand : .element.tertiaryContent)
                     .id(timestamp)
-                    .transition(.opacity.animation(.elementDefault))
             }
         }
-        .animation(.elementDefault, value: room)
     }
     
     @ViewBuilder
@@ -88,7 +86,6 @@ struct HomeScreenRoomCell: View {
                     Text(lastMessage)
                         .lastMessageFormatting()
                         .id(lastMessage)
-                        .transition(.opacity.animation(.elementDefault))
                 }
             }
             
@@ -99,7 +96,6 @@ struct HomeScreenRoomCell: View {
                     .frame(width: 12, height: 12)
                     .foregroundColor(.element.brand)
                     .clipShape(Circle())
-                    .transition(.opacity.animation(.elementDefault))
                     .padding(.leading, 12)
             } else {
                 // Force extra padding between last message text and the right border of the screen if there is no unread dot
@@ -108,7 +104,6 @@ struct HomeScreenRoomCell: View {
                     .frame(width: 12, height: 12)
             }
         }
-        .animation(.elementDefault, value: room)
     }
 }
 
