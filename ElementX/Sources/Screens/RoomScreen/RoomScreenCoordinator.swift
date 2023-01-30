@@ -84,10 +84,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         let params = FilePreviewCoordinatorParameters(fileURL: fileURL, title: title)
         let coordinator = FilePreviewCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
-            self?.navigationStackCoordinator.setFullScreenCoverCoordinator(nil)
+            self?.navigationStackCoordinator.pop()
         }
         
-        navigationStackCoordinator.setFullScreenCoverCoordinator(coordinator)
+        navigationStackCoordinator.push(coordinator)
     }
     
     private func displayEmojiPickerScreen(for itemId: String) {
