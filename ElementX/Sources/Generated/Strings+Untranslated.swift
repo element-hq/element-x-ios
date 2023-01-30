@@ -104,9 +104,9 @@ extension ElementL10n {
   public static func roomTimelineReplyingTo(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "room_timeline_replying_to", String(describing: p1))
   }
-  /// Bubbled Timeline
+  /// Bubbles
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
-  /// Plain Timeline
+  /// Modern
   public static let roomTimelineStylePlainLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_plain_long_description")
   /// Syncing
   public static let roomTimelineSyncing = ElementL10n.tr("Untranslated", "room_timeline_syncing")
@@ -116,13 +116,17 @@ extension ElementL10n {
   public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
   /// You can only connect to an existing server
   public static let serverSelectionServerFooter = ElementL10n.tr("Untranslated", "server_selection_server_footer")
-  /// Looks like you’re using a new device. Verify its you.
+  /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
   public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")
-  /// Help keep your messages secure
+  /// Access your message history
   public static let sessionVerificationBannerTitle = ElementL10n.tr("Untranslated", "session_verification_banner_title")
+  /// Start
+  public static let sessionVerificationStart = ElementL10n.tr("Untranslated", "session_verification_start")
   /// Appearance
   public static let settingsAppearance = ElementL10n.tr("Untranslated", "settings_appearance")
-  /// Timeline Style
+  /// Complete verification
+  public static let settingsSessionVerification = ElementL10n.tr("Untranslated", "settings_session_verification")
+  /// Message layout
   public static let settingsTimelineStyle = ElementL10n.tr("Untranslated", "settings_timeline_style")
   /// Untranslated
   public static let untranslated = ElementL10n.tr("Untranslated", "untranslated")
@@ -130,6 +134,24 @@ extension ElementL10n {
   public static func untranslatedPlural(_ p1: Int) -> String {
     return ElementL10n.tr("Untranslated", "untranslated_plural", p1)
   }
+  /// Confirm that the emojis below match those shown on your other session.
+  public static let verificationCompareEmojisDetail = ElementL10n.tr("Untranslated", "verification_compare_emojis_detail")
+  /// Compare emojis
+  public static let verificationCompareEmojisTitle = ElementL10n.tr("Untranslated", "verification_compare_emojis_title")
+  /// Verification complete
+  public static let verificationConclusionOkSelfNoticeTitle = ElementL10n.tr("Untranslated", "verification_conclusion_ok_self_notice_title")
+  /// Prove it’s you in order to access your encrypted message history.
+  public static let verificationOpenOtherToVerifyDetail = ElementL10n.tr("Untranslated", "verification_open_other_to_verify_detail")
+  /// Open an existing session
+  public static let verificationOpenOtherToVerifyTitle = ElementL10n.tr("Untranslated", "verification_open_other_to_verify_title")
+  /// Something doesn’t seem right. Either the request timed out or the request was denied.
+  public static let verificationRequestCancelledDetail = ElementL10n.tr("Untranslated", "verification_request_cancelled_detail")
+  /// Verification cancelled
+  public static let verificationRequestCancelledTitle = ElementL10n.tr("Untranslated", "verification_request_cancelled_title")
+  /// Accept the request to start the verification process in your other session to continue.
+  public static let verificationRequestWaitingAcceptRequestDetail = ElementL10n.tr("Untranslated", "verification_request_waiting_accept_request_detail")
+  /// Waiting to accept request
+  public static let verificationRequestWaitingAcceptRequestTitle = ElementL10n.tr("Untranslated", "verification_request_waiting_accept_request_title")
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces

@@ -35,7 +35,7 @@ public struct ElementCapsuleButtonStyle: ButtonStyle {
         configuration.label
             .padding(7)
             .frame(maxWidth: .infinity)
-            .font(.element.footnote)
+            .font(.element.headline)
             .foregroundColor(fontColor)
             .multilineTextAlignment(.center)
             .background(background)

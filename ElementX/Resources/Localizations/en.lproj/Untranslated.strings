@@ -8,10 +8,11 @@
 "screenshot_detected_message" = "Would you like to submit a bug report?";
 
 "settings_appearance" = "Appearance";
-"settings_timeline_style" = "Timeline Style";
+"settings_timeline_style" = "Message layout";
+"settings_session_verification" = "Complete verification";
 
-"room_timeline_style_plain_long_description" = "Plain Timeline";
-"room_timeline_style_bubbled_long_description" = "Bubbled Timeline";
+"room_timeline_style_plain_long_description" = "Modern";
+"room_timeline_style_bubbled_long_description" = "Bubbles";
 
 "room_timeline_permalink_creation_failure" = "Failed creating the permalink";
 "room_timeline_backpagination_failure" = "Failed loading messages";
@@ -38,8 +39,9 @@
 "noticeRoomUnknownMembershipChange" = "%1$@ made an unknown change to their membership";
 
 
-"session_verification_banner_title" = "Help keep your messages secure";
-"session_verification_banner_message" = "Looks like you’re using a new device. Verify its you.";
+"session_verification_banner_title" = "Access your message history";
+"session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
+"session_verification_start" = "Start";
 
 "server_selection_server_footer" = "You can only connect to an existing server";
 
@@ -70,3 +72,46 @@
 "bug_report_screen_description" = "Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.";
 "bug_report_screen_include_logs" = "Send logs to help";
 "bug_report_screen_logs_description" = "To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.";
+
+
+// Session verification
+/*
+ "verification_open_other_to_verify" = "Use an existing session to verify this one, granting it access to encrypted messages.";
+ "verification_profile_verify" = "Verify";
+ "verification_profile_verified" = "Verified";
+ "verification_profile_warning" = "Warning";
+"verification_conclusion_warning" = "Untrusted sign in";
+"verification_sas_match" = "They match";
+"verification_sas_do_not_match" = "They don\'t match";
+"verification_conclusion_not_secure" = "Not secure";
+"verification_conclusion_compromised" = "One of the following may be compromised:\n\n   - Your homeserver\n   - The homeserver the user you’re verifying is connected to\n   - Yours, or the other users’ internet connection\n   - Yours, or the other users’ device";
+"verification_request_waiting" = "Waiting…";
+"verification_request_other_cancelled" = "%@ cancelled";
+"verification_request_you_cancelled" = "You cancelled";
+"verification_request_other_accepted" = "%@ accepted";
+"verification_request_you_accepted" = "You accepted";
+"verification_sent" = "Verification Sent";
+"verification_request" = "Verification Request";
+"verification_verify_device" = "Verify this session";
+"verification_scan_notice" = "Scan the code with the other user\'s device to securely verify each other";
+"verification_scan_self_notice" = "Scan the code with your other device or switch and scan with this device";
+"verification_scan_their_code" = "Scan their code";
+"verification_scan_with_this_device" = "Scan with this device";
+"verification_scan_emoji_title" = "Can\'t scan";
+"verification_scan_emoji_subtitle" = "If you\'re not in person, compare emoji instead";
+"verification_scan_self_emoji_subtitle" = "Verify by comparing emoji instead";
+"verification_no_scan_emoji_title" = "Verify by comparing emojis";
+"verification_verify_user" = "Verify %@";
+"verification_verified_user" = "Verified %@";
+"verification_request_waiting_for" = "Waiting for %@…";
+*/
+
+"verification_open_other_to_verify_title" = "Open an existing session";
+"verification_open_other_to_verify_detail" = "Prove it’s you in order to access your encrypted message history.";
+"verification_request_waiting_accept_request_title" = "Waiting to accept request";
+"verification_request_waiting_accept_request_detail" = "Accept the request to start the verification process in your other session to continue.";
+"verification_request_cancelled_title" = "Verification cancelled";
+"verification_request_cancelled_detail" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
+"verification_compare_emojis_title" = "Compare emojis";
+"verification_compare_emojis_detail" = "Confirm that the emojis below match those shown on your other session.";
+"verification_conclusion_ok_self_notice_title" = "Verification complete";

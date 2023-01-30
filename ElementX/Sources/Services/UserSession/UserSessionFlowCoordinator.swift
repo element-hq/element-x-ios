@@ -31,7 +31,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
-    
+
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
     init(userSession: UserSessionProtocol,
@@ -91,7 +91,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.presentSessionVerification()
             case (.sessionVerificationScreen, .dismissedSessionVerificationScreen, .roomList):
                 break
-
+                
             case (.roomList, .showSettingsScreen, .settingsScreen):
                 self.presentSettingsScreen()
             case (.settingsScreen, .dismissedSettingsScreen, .roomList):

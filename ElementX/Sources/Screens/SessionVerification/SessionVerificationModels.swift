@@ -22,13 +22,40 @@ enum SessionVerificationViewModelAction {
 
 struct SessionVerificationViewState: BindableState {
     var verificationState: SessionVerificationStateMachine.State = .initial
+    
+    var title: String? {
+        switch verificationState {
+        case .initial:
+            return ElementL10n.verificationOpenOtherToVerifyTitle
+        case .requestingVerification:
+            return ElementL10n.verificationRequestWaitingAcceptRequestTitle
+        case .verificationRequestAccepted:
+            return ElementL10n.verificationCompareEmojisTitle
+        case .startingSasVerification:
+            return nil
+        case .sasVerificationStarted:
+            return nil
+        case .showingChallenge:
+            return ElementL10n.verificationCompareEmojisTitle
+        case .acceptingChallenge:
+            return ElementL10n.verificationCompareEmojisTitle
+        case .decliningChallenge:
+            return nil
+        case .verified:
+            return ElementL10n.verificationConclusionOkSelfNoticeTitle
+        case .cancelling:
+            return nil
+        case .cancelled:
+            return ElementL10n.verificationCancelled
+        }
+    }
         
     var message: String {
         switch verificationState {
         case .initial:
-            return ElementL10n.verificationOpenOtherToVerify
+            return ElementL10n.verificationOpenOtherToVerifyDetail
         case .requestingVerification:
-            return ElementL10n.verificationRequestWaiting
+            return ElementL10n.verificationRequestWaitingAcceptRequestDetail
         case .verificationRequestAccepted:
             return ElementL10n.verificationEmojiNotice
         case .startingSasVerification:
@@ -36,17 +63,17 @@ struct SessionVerificationViewState: BindableState {
         case .sasVerificationStarted:
             return ElementL10n.verificationRequestWaiting
         case .acceptingChallenge:
-            return ElementL10n.verificationRequestWaiting
+            return ElementL10n.verificationCompareEmojisDetail
         case .decliningChallenge:
             return ElementL10n.verificationRequestWaiting
         case .cancelling:
             return ElementL10n.verificationRequestWaiting
         case .showingChallenge:
-            return ElementL10n.verificationCodeNotice
+            return ElementL10n.verificationCompareEmojisDetail
         case .verified:
             return ElementL10n.verificationConclusionOkSelfNotice
         case .cancelled:
-            return ElementL10n.verificationCancelled
+            return ElementL10n.verificationRequestCancelledDetail
         }
     }
 }

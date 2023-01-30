@@ -71,7 +71,7 @@ enum RoomAvatarSizeOnScreen {
         case .timeline:
             return 32
         case .home:
-            return 44
+            return 52
         case .details:
             return 70
         }

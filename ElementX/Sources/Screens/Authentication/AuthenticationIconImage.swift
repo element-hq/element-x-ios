@@ -25,8 +25,9 @@ struct AuthenticationIconImage: View {
             .resizable()
             .renderingMode(.template)
             .foregroundColor(.element.secondaryContent)
+            .aspectRatio(contentMode: .fit)
             .accessibilityHidden(true)
-            .padding(20)
+            .padding(16)
             .frame(width: 72, height: 72)
             .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.quinaryContent))
     }

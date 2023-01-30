@@ -20,7 +20,8 @@ struct SplashScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(
             ZStack {
-                Image(asset: Asset.Images.appLogo)
+                Image(asset: Asset.Images.onboardingAppLogo)
+                    .renderingMode(.original)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         )

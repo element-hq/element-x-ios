@@ -106,6 +106,12 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
                 self.declineChallenge()
             case (_, .cancel, .cancelling):
                 self.cancelVerification()
+            case (_, _, .verified):
+                // Dismiss the success screen automatically.
+                Task {
+                    try await Task.sleep(for: .seconds(2))
+                    self.callback?(.finished)
+                }
             default:
                 break
             }

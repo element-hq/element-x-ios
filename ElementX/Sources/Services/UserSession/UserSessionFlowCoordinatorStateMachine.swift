@@ -28,7 +28,7 @@ class UserSessionFlowCoordinatorStateMachine {
                 
         /// Showing the session verification flows
         case sessionVerificationScreen(selectedRoomId: String?)
-        
+
         /// Showing the session verification flows
         case feedbackScreen(selectedRoomId: String?)
         

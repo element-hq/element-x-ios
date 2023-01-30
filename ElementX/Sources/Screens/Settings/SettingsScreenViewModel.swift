@@ -26,7 +26,10 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         let bindings = SettingsScreenViewStateBindings()
-        super.init(initialViewState: .init(bindings: bindings, deviceID: userSession.deviceId, userID: userSession.userID),
+        super.init(initialViewState: .init(bindings: bindings,
+                                           deviceID: userSession.deviceId,
+                                           userID: userSession.userID,
+                                           showSessionVerificationSection: !(userSession.sessionVerificationController?.isVerified ?? false)),
                    imageProvider: userSession.mediaProvider)
         
         Task {
@@ -40,6 +43,20 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                 state.userDisplayName = userDisplayName
             }
         }
+        
+        userSession.callbacks
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] callback in
+                switch callback {
+                case .sessionVerificationNeeded:
+                    self?.state.showSessionVerificationSection = true
+                case .didVerifySession:
+                    self?.state.showSessionVerificationSection = false
+                default:
+                    break
+                }
+            }
+            .store(in: &cancellables)
     }
     
     override func process(viewAction: SettingsScreenViewAction) async {
@@ -52,6 +69,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.reportBug)
         case .logout:
             callback?(.logout)
+        case .sessionVerification:
+            callback?(.sessionVerification)
         }
     }
 }

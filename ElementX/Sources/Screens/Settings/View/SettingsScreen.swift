@@ -32,17 +32,16 @@ struct SettingsScreen: View {
             userSection
                 .listRowBackground(rowBackgroundColor)
             
+            if context.viewState.showSessionVerificationSection {
+                sessionVerificationSection
+                    .listRowBackground(rowBackgroundColor)
+            }
+            
             simplifiedSection
                 .listRowBackground(rowBackgroundColor)
-
-//            analyticsSection
-//                .listRowBackground(rowBackgroundColor)
-
-//            userInterfaceSection
-//                .listRowBackground(rowBackgroundColor)
-
-//            logoutSection
-//                .listRowBackground(rowBackgroundColor)
+            
+            signOutSection
+                .listRowBackground(rowBackgroundColor)
         }
         .introspectTableView { tableView in
             tableView.backgroundColor = .clear
@@ -80,10 +79,10 @@ struct SettingsScreen: View {
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
-                        .font(.title3)
+                        .font(.element.title3)
                         .foregroundColor(.element.primaryContent)
                     Text(context.viewState.userID)
-                        .font(.subheadline)
+                        .font(.element.subheadline)
                         .foregroundColor(.element.primaryContent)
                 }
             }
@@ -91,14 +90,38 @@ struct SettingsScreen: View {
         }
     }
     
+    private var sessionVerificationSection: some View {
+        Section {
+            SettingsDefaultRow(title: ElementL10n.settingsSessionVerification,
+                               image: Image(systemName: "checkmark.shield")) {
+                context.send(viewAction: .sessionVerification)
+            }
+            .accessibilityIdentifier("sessionVerificationButton")
+        }
+    }
+    
     private var simplifiedSection: some View {
         Section {
+            SettingsPickerRow(title: ElementL10n.settingsTimelineStyle,
+                              image: Image(systemName: "rectangle.grid.1x2"),
+                              selection: $settings.timelineStyle) {
+                ForEach(TimelineStyle.allCases, id: \.self) { style in
+                    Text(style.description)
+                        .tag(style)
+                }
+            }
+            .accessibilityIdentifier("timelineStylePicker")
+            
             SettingsDefaultRow(title: ElementL10n.sendBugReport,
                                image: Image(systemName: "questionmark.circle")) {
                 context.send(viewAction: .reportBug)
             }
             .accessibilityIdentifier("reportBugButton")
-            
+        }
+    }
+    
+    private var signOutSection: some View {
+        Section {
             SettingsDefaultRow(title: ElementL10n.actionSignOut,
                                image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
                 showingLogoutConfirmation = true
@@ -112,76 +135,20 @@ struct SettingsScreen: View {
             } message: {
                 Text(ElementL10n.actionSignOutConfirmationSimple)
             }
-        }
-    }
-    
-    private var analyticsSection: some View {
-        Section {
-            Button { context.send(viewAction: .reportBug) } label: {
-                HStack {
-                    Text(ElementL10n.sendBugReport)
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .foregroundColor(.element.tertiaryContent)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .listRowSeparator(.hidden)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("reportBugButton")
-        }
-    }
-
-    @ViewBuilder
-    private var userInterfaceSection: some View {
-        Section {
-            Picker(ElementL10n.settingsTimelineStyle, selection: $settings.timelineStyle) {
-                ForEach(TimelineStyle.allCases, id: \.self) { style in
-                    Text(style.description)
-                        .tag(style)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .accessibilityIdentifier("timelineStylePicker")
-        }
-    }
-    
-    private var logoutSection: some View {
-        Section {
-            Button { showingLogoutConfirmation = true } label: {
-                HStack {
-                    Image(systemName: "rectangle.portrait.and.arrow.right")
-                        .foregroundColor(.element.systemGray)
-                        .padding(4)
-                        .background(Color.element.systemGray6)
-                        .clipShape(Circle())
-                        .frame(width: menuIconSize, height: menuIconSize)
-                    Text(ElementL10n.actionSignOut)
-                    Spacer()
-                    Image(systemName: "chevron.forward")
-                        .foregroundColor(.element.tertiaryContent)
-                }
-            }
-            .listRowInsets(listRowInsets)
-            .foregroundColor(.element.primaryContent)
-            .accessibilityIdentifier("logoutButton")
-            .alert(ElementL10n.actionSignOut,
-                   isPresented: $showingLogoutConfirmation) {
-                Button(ElementL10n.actionSignOut,
-                       role: .destructive,
-                       action: logout)
-            } message: {
-                Text(ElementL10n.actionSignOutConfirmationSimple)
-            }
         } footer: {
             VStack {
                 versionText
+                    .font(.element.caption1)
+                    .foregroundColor(.element.tertiaryContent)
                     .frame(maxWidth: .infinity)
                 
                 if let deviceId = context.viewState.deviceID {
                     Text(deviceId)
+                        .font(.element.caption1)
+                        .foregroundColor(.element.tertiaryContent)
                 }
             }
+            .padding(.top, 24)
         }
     }
 

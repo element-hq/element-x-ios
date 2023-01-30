@@ -76,6 +76,7 @@ struct HomeScreen: View {
                 userMenuButton
             }
         }
+        .background(Color.element.background)
     }
 
     @ViewBuilder
@@ -83,15 +84,15 @@ struct HomeScreen: View {
         Menu {
             Section {
                 Button(action: settings) {
-                    Label(ElementL10n.settingsUserSettings, systemImage: "gearshape")
+                    Label(ElementL10n.settings, systemImage: "gearshape")
                 }
             }
             Section {
                 Button(action: inviteFriends) {
-                    Label(ElementL10n.inviteFriends, systemImage: "square.and.arrow.up")
+                    Label(ElementL10n.actionInvite, systemImage: "square.and.arrow.up")
                 }
                 Button(action: feedback) {
-                    Label(ElementL10n.feedback, systemImage: "questionmark.circle")
+                    Label(ElementL10n.bugReportScreenTitle, systemImage: "questionmark.circle")
                 }
             }
             Section {
@@ -122,31 +123,35 @@ struct HomeScreen: View {
     
     private var sessionVerificationBanner: some View {
         VStack(alignment: .leading, spacing: 16) {
-            VStack(alignment: .leading, spacing: 2) {
-                Text(ElementL10n.sessionVerificationBannerTitle)
-                    .font(.element.subheadlineBold)
-                    .foregroundColor(.element.systemPrimaryLabel)
+            VStack(alignment: .leading, spacing: 4) {
+                HStack(spacing: 16) {
+                    Text(ElementL10n.sessionVerificationBannerTitle)
+                        .font(.element.headline)
+                        .foregroundColor(.element.systemPrimaryLabel)
+                    
+                    Spacer()
+                    
+                    Button {
+                        context.send(viewAction: .skipSessionVerification)
+                    } label: {
+                        Image(systemName: "xmark")
+                            .foregroundColor(.element.secondaryContent)
+                            .frame(width: 12, height: 12)
+                    }
+                }
                 Text(ElementL10n.sessionVerificationBannerMessage)
-                    .font(.element.footnote)
-                    .foregroundColor(.element.systemSecondaryLabel)
+                    .font(.element.subheadline)
+                    .foregroundColor(.element.secondaryContent)
             }
             
-            HStack(spacing: 16) {
-                Button(ElementL10n.actionSkip) {
-                    context.send(viewAction: .skipSessionVerification)
-                }
-                .frame(maxWidth: .infinity)
-                .buttonStyle(.elementCapsule)
-                
-                Button(ElementL10n.continue) {
-                    context.send(viewAction: .verifySession)
-                }
-                .frame(maxWidth: .infinity)
-                .buttonStyle(.elementCapsuleProminent)
+            Button(ElementL10n.continue) {
+                context.send(viewAction: .verifySession)
             }
+            .frame(maxWidth: .infinity)
+            .buttonStyle(.elementCapsuleProminent)
         }
         .padding(16)
-        .background(Color.element.systemSecondaryBackground)
+        .background(Color.element.system)
         .cornerRadius(14)
         .padding(.horizontal, 16)
     }
