@@ -54,8 +54,10 @@ enum TimelineItemContextMenuAction: Identifiable, Hashable {
 }
 
 public struct TimelineItemContextMenu: View {
+    @EnvironmentObject private var context: RoomScreenViewModel.Context
+    
+    let itemID: String
     let contextMenuActions: TimelineItemContextMenuActions
-    let callback: (TimelineItemContextMenuAction) -> Void
     
     public var body: some View {
         viewsForActions(contextMenuActions.actions)
@@ -67,45 +69,49 @@ public struct TimelineItemContextMenu: View {
     }
     
     private func viewsForActions(_ actions: [TimelineItemContextMenuAction]) -> some View {
-        ForEach(actions, id: \.self) { item in
-            switch item {
+        ForEach(actions, id: \.self) { action in
+            switch action {
             case .react:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.reactions, systemImage: "face.smiling")
                 }
             case .copy:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.actionCopy, systemImage: "doc.on.doc")
                 }
             case .edit:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.edit, systemImage: "pencil.line")
                 }
             case .quote:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.actionQuote, systemImage: "quote.bubble")
                 }
             case .copyPermalink:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.permalink, systemImage: "link")
                 }
             case .reply:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.reply, systemImage: "arrowshape.turn.up.left")
                 }
             case .redact:
-                Button(role: .destructive) { callback(item) } label: {
+                Button(role: .destructive) { send(action) } label: {
                     Label(ElementL10n.messageActionItemRedact, systemImage: "trash")
                 }
             case .viewSource:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.viewSource, systemImage: "doc.text.below.ecg")
                 }
             case .retryDecryption:
-                Button { callback(item) } label: {
+                Button { send(action) } label: {
                     Label(ElementL10n.roomTimelineContextMenuRetryDecryption, systemImage: "arrow.down.message")
                 }
             }
         }
+    }
+    
+    private func send(_ action: TimelineItemContextMenuAction) {
+        context.send(viewAction: .contextMenuAction(itemID: itemID, action: action))
     }
 }
