@@ -259,7 +259,7 @@ class ClientProxy: ClientProxyProtocol {
             // Build the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache
             let visibleRoomsView = try SlidingSyncViewBuilder()
-                .timelineLimit(limit: 1)
+                .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
                 .requiredState(requiredState: slidingSyncRequiredState)
                 .filters(filters: slidingSyncFilters)
                 .name(name: "CurrentlyVisibleRooms")
@@ -301,8 +301,8 @@ class ClientProxy: ClientProxyProtocol {
         
         // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
         visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.diffPublisher.sink { [weak self] _ in
-            MXLog.info("Visible rooms view received first update, registering all rooms view")
-            self?.registerAllRoomSlidingSyncView()
+            MXLog.info("Visible rooms view received first update, configuring views post initial sync")
+            self?.configureViewsPostInitialSync()
             self?.visibleRoomsViewProxyStateObservationToken = nil
         }
     }
@@ -349,13 +349,21 @@ class ClientProxy: ClientProxyProtocol {
                                                                         tags: [],
                                                                         notTags: [])
     
-    private func registerAllRoomSlidingSyncView() {
-        guard let allRoomsSlidingSyncView else {
-            MXLog.error("All rooms sliding sync view unavailable")
-            return
+    private func configureViewsPostInitialSync() {
+        if let visibleRoomsSlidingSyncView {
+            MXLog.info("Setting visible rooms view timeline limit to \(SlidingSyncConstants.lastMessageTimelineLimit)")
+            visibleRoomsSlidingSyncView.setTimelineLimit(value: UInt32(SlidingSyncConstants.lastMessageTimelineLimit))
+        } else {
+            MXLog.error("Visible rooms sliding sync view unavailable")
         }
         
-        _ = slidingSync?.addView(view: allRoomsSlidingSyncView)
+        if let allRoomsSlidingSyncView {
+            MXLog.info("Registering all rooms view")
+            _ = slidingSync?.addView(view: allRoomsSlidingSyncView)
+        } else {
+            MXLog.error("All rooms sliding sync view unavailable")
+        }
+        
         restartSync()
     }
     

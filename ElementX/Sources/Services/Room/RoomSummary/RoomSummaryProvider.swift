@@ -61,8 +61,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             .store(in: &cancellables)
     }
     
-    func updateVisibleRange(_ range: Range<Int>) {
-        slidingSyncViewProxy.updateVisibleRange(range)
+    func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
+        slidingSyncViewProxy.updateVisibleRange(range, timelineLimit: timelineLimit)
     }
     
     // MARK: - Private

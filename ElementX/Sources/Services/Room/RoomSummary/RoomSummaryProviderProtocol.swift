@@ -50,5 +50,5 @@ protocol RoomSummaryProviderProtocol {
     /// Publishes the total number of rooms
     var countPublisher: CurrentValueSubject<UInt, Never> { get }
         
-    func updateVisibleRange(_ range: Range<Int>)
+    func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt)
 }
