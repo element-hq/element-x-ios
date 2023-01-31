@@ -1,1 +1,1 @@
-Fixed a bug that recognised any amount in dollars to be recognised as a link.
+Fixed a bug that recognised any amount in dollars as an untappable link.
