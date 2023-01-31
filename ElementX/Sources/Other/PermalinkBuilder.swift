@@ -63,9 +63,6 @@ enum PermalinkBuilder {
     }
     
     static func permalinkTo(eventIdentifier: String, roomIdentifier: String) throws -> URL {
-        guard MatrixEntityRegex.isMatrixEventIdentifier(eventIdentifier) else {
-            throw PermalinkBuilderError.invalidEventIdentifier
-        }
         guard MatrixEntityRegex.isMatrixRoomIdentifier(roomIdentifier) else {
             throw PermalinkBuilderError.invalidRoomIdentifier
         }
