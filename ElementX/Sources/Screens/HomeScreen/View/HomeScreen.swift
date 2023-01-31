@@ -19,14 +19,10 @@ import SwiftUI
 struct HomeScreen: View {
     @ObservedObject var context: HomeScreenViewModel.Context
     
+    @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var showingLogoutConfirmation = false
-    @State private var visibleItemIdentifiers = Set<String>() {
-        didSet {
-            if visibleItemIdentifiers != oldValue {
-                updateVisibleRange()
-            }
-        }
-    }
+    @State private var visibleItemIdentifiers = Set<String>()
+    @State private var hasTriggeredInitialVisibleItemUpdate = false
     
     var body: some View {
         ScrollView {
@@ -65,6 +61,10 @@ struct HomeScreen: View {
                 .disableAutocorrection(true)
             }
         }
+        .introspectScrollView { scrollView in
+            guard scrollView != scrollViewAdapter.scrollView else { return }
+            scrollViewAdapter.scrollView = scrollView
+        }
         .scrollDismissesKeyboard(.immediately)
         .disabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
@@ -75,6 +75,17 @@ struct HomeScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
             }
+        }
+        .onChange(of: visibleItemIdentifiers) { _ in
+            if !hasTriggeredInitialVisibleItemUpdate {
+                updateVisibleRange()
+                hasTriggeredInitialVisibleItemUpdate = true
+            }
+        }
+        .onReceive(scrollViewAdapter.isScrolling) { isScrolling in
+            context.isScrolling = isScrolling
+
+            updateVisibleRange()
         }
         .background(Color.element.background)
     }

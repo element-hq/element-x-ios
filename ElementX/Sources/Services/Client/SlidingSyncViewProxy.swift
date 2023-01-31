@@ -102,10 +102,11 @@ class SlidingSyncViewProxy {
         try slidingSync.getRoom(roomId: identifier)
     }
     
-    func updateVisibleRange(_ range: Range<Int>) {
-        MXLog.info("Setting sliding sync view range to \(range)")
+    func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
+        MXLog.info("Setting sliding sync view range to \(range), timelineLimit: \(timelineLimit)")
         
         slidingSyncView.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
+        slidingSyncView.setTimelineLimit(value: UInt32(timelineLimit))
         
         visibleRangeUpdatePublisher.send(())
     }

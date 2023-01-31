@@ -44,7 +44,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    func updateVisibleRange(_ range: Range<Int>) { }
+    func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) { }
     
     // MARK: - Private
     

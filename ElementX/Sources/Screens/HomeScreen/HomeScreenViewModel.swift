@@ -35,7 +35,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
@@ -64,7 +64,17 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .debounce(for: 0.1, scheduler: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] range in
-                self?.updateVisibleRange(range)
+                guard let self else { return }
+                
+                guard self.state.bindings.searchQuery.isEmpty else {
+                    return
+                }
+                
+                if self.state.bindings.isScrolling {
+                    self.updateVisibleRange(range, timelineLimit: SlidingSyncConstants.lastMessageTimelineLimit)
+                } else {
+                    self.updateVisibleRange(range, timelineLimit: SlidingSyncConstants.timelinePrecachingTimelineLimit)
+                }
             }
             .store(in: &cancellables)
         
@@ -234,7 +244,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         return room
     }
     
-    private func updateVisibleRange(_ range: Range<Int>) {
+    private func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
         guard visibleRoomsSummaryProvider?.statePublisher.value == .live,
               !range.isEmpty else { return }
         
@@ -246,6 +256,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         let lowerBound = max(0, range.lowerBound - Constants.slidingWindowBoundsPadding)
         let upperBound = min(Int(visibleRoomsSummaryProvider.countPublisher.value), range.upperBound + Constants.slidingWindowBoundsPadding)
         
-        visibleRoomsSummaryProvider.updateVisibleRange(lowerBound..<upperBound)
+        visibleRoomsSummaryProvider.updateVisibleRange(lowerBound..<upperBound, timelineLimit: timelineLimit)
     }
 }

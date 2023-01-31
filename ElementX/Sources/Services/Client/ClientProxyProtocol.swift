@@ -58,6 +58,12 @@ enum PushFormat {
 //    }
 }
 
+enum SlidingSyncConstants {
+    static let initialTimelineLimit: UInt = 0
+    static let lastMessageTimelineLimit: UInt = 1
+    static let timelinePrecachingTimelineLimit: UInt = 20
+}
+
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     

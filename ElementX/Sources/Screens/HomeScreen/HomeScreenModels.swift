@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import UIKit
 
@@ -89,6 +90,8 @@ struct HomeScreenViewState: BindableState {
 
 struct HomeScreenViewStateBindings {
     var searchQuery = ""
+    
+    var isScrolling = false
     
     var alertInfo: AlertInfo<UUID>?
 }
