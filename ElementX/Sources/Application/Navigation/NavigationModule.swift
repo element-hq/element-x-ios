@@ -18,9 +18,15 @@ import Foundation
 
 /// A CoordinatorProtocol wrapper and type erasing component that allows
 /// dynamically presenting arbitrary screens
-struct NavigationModule: Identifiable, Hashable {
+@MainActor
+class NavigationModule: Identifiable, Hashable {
     let id = UUID()
-    let coordinator: any CoordinatorProtocol
+    
+    /// The NavigationStack has a tendency to hold on to path items for longer than needed. We work around that by manually nilling the coordinator
+    /// when a NavigationModule is dismissed, reason why this is an optional property
+    /// As the NavigationModule is just a wrapper multiple instances of it continuing living is of no consequence
+    /// https://stackoverflow.com/questions/73885353/found-a-strange-behaviour-of-state-when-combined-to-the-new-navigation-stack/
+    var coordinator: (any CoordinatorProtocol)?
     let dismissalCallback: (() -> Void)?
     
     init(_ coordinator: any CoordinatorProtocol, dismissalCallback: (() -> Void)? = nil) {
@@ -28,11 +34,17 @@ struct NavigationModule: Identifiable, Hashable {
         self.dismissalCallback = dismissalCallback
     }
     
-    static func == (lhs: NavigationModule, rhs: NavigationModule) -> Bool {
+    func tearDown() {
+        coordinator?.stop()
+        dismissalCallback?()
+        coordinator = nil
+    }
+    
+    nonisolated static func == (lhs: NavigationModule, rhs: NavigationModule) -> Bool {
         lhs.id == rhs.id
     }
     
-    func hash(into hasher: inout Hasher) {
+    nonisolated func hash(into hasher: inout Hasher) {
         hasher.combine(id)
     }
 }

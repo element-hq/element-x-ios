@@ -35,8 +35,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
-    // MARK: - Setup
-    
     // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
@@ -65,8 +63,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         visibleItemRangePublisher
             .debounce(for: 0.1, scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .sink { range in
-                self.updateVisibleRange(range)
+            .sink { [weak self] range in
+                self?.updateVisibleRange(range)
             }
             .store(in: &cancellables)
         
@@ -93,7 +91,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                   visibleRoomsSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state, totalCount, rooms in
-                guard let self = self else { return }
+                guard let self else { return }
                 
                 let isLoadingData = state != .live && (totalCount == 0 || rooms.count != totalCount)
                 let hasNoRooms = state == .live && totalCount == 0

@@ -44,6 +44,7 @@ enum RoomScreenViewAction {
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
+    case contextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
 }
 
 struct RoomScreenViewState: BindableState {
@@ -56,7 +57,7 @@ struct RoomScreenViewState: BindableState {
     var showLoading = false
     var bindings: RoomScreenViewStateBindings
     
-    var contextMenuBuilder: (@MainActor (_ itemId: String) -> TimelineItemContextMenu)?
+    var contextMenuActionProvider: (@MainActor (_ itemId: String) -> TimelineItemContextMenuActions?)?
     
     var composerMode: RoomScreenComposerMode = .default
     

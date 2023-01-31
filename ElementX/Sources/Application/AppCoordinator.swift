@@ -29,8 +29,9 @@ class AppCoordinator: AppCoordinatorProtocol {
     
     private var userSession: UserSessionProtocol! {
         didSet {
-            deobserveUserSessionChanges()
-            if let userSession, !userSession.isSoftLogout {
+            userSessionCancellables.removeAll()
+            
+            if userSession != nil {
                 configureNotificationManager()
                 observeUserSessionChanges()
             }
@@ -145,14 +146,16 @@ class AppCoordinator: AppCoordinatorProtocol {
                 self.setupUserSession()
             case (_, .signOut, .signingOut):
                 self.showLoadingIndicator()
-                self.tearDownUserSession()
+                self.logout(isSoftLogout: false)
             case (.signingOut, .completedSigningOut, .signedOut):
+                self.tearDownUserSession()
                 self.presentSplashScreen()
                 self.hideLoadingIndicator()
             case (_, .remoteSignOut(let isSoft), .remoteSigningOut):
                 self.showLoadingIndicator()
-                self.tearDownUserSession(isSoftLogout: isSoft)
+                self.logout(isSoftLogout: isSoft)
             case (.remoteSigningOut(let isSoft), .completedSigningOut, .signedOut):
+                self.tearDownUserSession()
                 self.presentSplashScreen(isSoftLogout: isSoft)
                 self.hideLoadingIndicator()
             default:
@@ -251,11 +254,9 @@ class AppCoordinator: AppCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
-    private func tearDownUserSession(isSoftLogout: Bool = false) {
+    private func logout(isSoftLogout: Bool) {
         userSession.clientProxy.stopSync()
         userSessionFlowCoordinator?.stop()
-        
-        deobserveUserSessionChanges()
         
         guard !isSoftLogout else {
             stateMachine.processEvent(.completedSigningOut)
@@ -263,21 +264,23 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
         
         Task {
-            showLoadingIndicator()
-            
             //  first log out from the server
             _ = await userSession.clientProxy.logout()
             
             //  regardless of the result, clear user data
             userSessionStore.logout(userSession: userSession)
-            userSession = nil
-            notificationManager?.delegate = nil
-            notificationManager = nil
             
             stateMachine.processEvent(.completedSigningOut)
-            
-            hideLoadingIndicator()
         }
+    }
+    
+    private func tearDownUserSession() {
+        userSession = nil
+        
+        userSessionFlowCoordinator = nil
+        
+        notificationManager?.delegate = nil
+        notificationManager = nil
     }
 
     private func presentSplashScreen(isSoftLogout: Bool = false) {
@@ -339,10 +342,6 @@ class AppCoordinator: AppCoordinatorProtocol {
                 }
             }
             .store(in: &userSessionCancellables)
-    }
-
-    private func deobserveUserSessionChanges() {
-        userSessionCancellables.removeAll()
     }
     
     // MARK: Toasts and loading indicators
