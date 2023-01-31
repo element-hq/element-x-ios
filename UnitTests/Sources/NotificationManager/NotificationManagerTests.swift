@@ -60,7 +60,7 @@ final class NotificationManagerTests: XCTestCase {
         XCTAssertEqual(clientProxy.setPusherAppId, settings?.pusherAppId)
         XCTAssertEqual(clientProxy.setPusherKind, .http)
         XCTAssertEqual(clientProxy.setPusherAppId, settings?.pusherAppId)
-        XCTAssertEqual(clientProxy.setPusherAppDisplayName, "\(InfoPlistReader.target.bundleDisplayName) (iOS)")
+        XCTAssertEqual(clientProxy.setPusherAppDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
         XCTAssertEqual(clientProxy.setPusherDeviceDisplayName, UIDevice.current.name)
         XCTAssertNotNil(clientProxy.setPusherProfileTag)
         XCTAssertEqual(clientProxy.setPusherLang, Bundle.preferredLanguages.first)

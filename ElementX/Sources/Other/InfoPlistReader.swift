@@ -25,8 +25,8 @@ struct InfoPlistReader {
         static let bundleDisplayName = "CFBundleDisplayName"
     }
 
-    /// Info.plist reader on the current target
-    static let target = InfoPlistReader(bundle: .main)
+    /// Info.plist reader on the bundle object that contains the current executable.
+    static let main = InfoPlistReader(bundle: .main)
 
     private let bundle: Bundle
 

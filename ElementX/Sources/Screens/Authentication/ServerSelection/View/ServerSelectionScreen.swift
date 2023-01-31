@@ -71,16 +71,6 @@ struct ServerSelectionScreen: View {
                 .onSubmit(submit)
                 .accessibilityIdentifier("addressTextField")
             
-            TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.slidingSyncProxyAddress)
-                .textFieldStyle(.elementInput(labelText: "Sliding sync proxy URL"))
-                .keyboardType(.URL)
-                .autocapitalization(.none)
-                .disableAutocorrection(true)
-                .submitLabel(.done)
-                .onSubmit(submit)
-                .accessibilityIdentifier("slidingSyncProxyAddressTextField")
-                .padding(.bottom, 8)
-            
             Button(action: submit) {
                 Text(context.viewState.buttonTitle)
             }
