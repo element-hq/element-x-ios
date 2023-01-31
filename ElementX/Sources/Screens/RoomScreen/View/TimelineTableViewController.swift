@@ -200,7 +200,7 @@ class TimelineTableViewController: UIViewController {
                     .contextMenu {
                         contextMenuActionProvider?(timelineItem.id).map { actions in
                             TimelineItemContextMenu(contextMenuActions: actions) { action in
-                                coordinator.send(viewAction: .handleContextMenuAction(itemID: timelineItem.id, action: action))
+                                coordinator.send(viewAction: .contextMenuAction(itemID: timelineItem.id, action: action))
                             }
                         }
                     }

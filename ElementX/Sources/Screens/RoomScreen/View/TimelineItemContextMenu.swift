@@ -19,6 +19,15 @@ import SwiftUI
 struct TimelineItemContextMenuActions {
     let actions: [TimelineItemContextMenuAction]
     let debugActions: [TimelineItemContextMenuAction]
+    
+    init?(actions: [TimelineItemContextMenuAction], debugActions: [TimelineItemContextMenuAction]) {
+        if actions.isEmpty, debugActions.isEmpty {
+            return nil
+        }
+        
+        self.actions = actions
+        self.debugActions = debugActions
+    }
 }
 
 enum TimelineItemContextMenuAction: Identifiable, Hashable {

@@ -34,7 +34,7 @@ class NavigationModule: Identifiable, Hashable {
         self.dismissalCallback = dismissalCallback
     }
     
-    func dismiss() {
+    func tearDown() {
         coordinator?.stop()
         dismissalCallback?()
         coordinator = nil

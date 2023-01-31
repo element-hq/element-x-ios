@@ -91,7 +91,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                   visibleRoomsSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] state, totalCount, rooms in
-                guard let self = self else { return }
+                guard let self else { return }
                 
                 let isLoadingData = state != .live && (totalCount == 0 || rooms.count != totalCount)
                 let hasNoRooms = state == .live && totalCount == 0

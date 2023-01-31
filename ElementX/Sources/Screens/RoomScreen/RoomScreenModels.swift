@@ -44,7 +44,7 @@ enum RoomScreenViewAction {
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
-    case handleContextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
+    case contextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
 }
 
 struct RoomScreenViewState: BindableState {

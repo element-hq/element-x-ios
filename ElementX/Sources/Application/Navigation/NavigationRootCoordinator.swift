@@ -20,7 +20,7 @@ class NavigationRootCoordinator: ObservableObject, CoordinatorProtocol, CustomSt
     @Published fileprivate var rootModule: NavigationModule? {
         didSet {
             if let oldValue {
-                oldValue.dismiss()
+                oldValue.tearDown()
             }
             
             if let rootModule {

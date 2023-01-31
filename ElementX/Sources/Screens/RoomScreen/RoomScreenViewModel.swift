@@ -71,7 +71,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             .store(in: &cancellables)
         
         state.contextMenuActionProvider = { [weak self] itemId -> TimelineItemContextMenuActions? in
-            guard let self = self else {
+            guard let self else {
                 return nil
             }
             
@@ -113,7 +113,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = ""
         case .markRoomAsRead:
             await markRoomAsRead()
-        case .handleContextMenuAction(let itemID, let action):
+        case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
         }
     }
