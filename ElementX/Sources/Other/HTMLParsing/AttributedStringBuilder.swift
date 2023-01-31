@@ -153,7 +153,8 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         
         var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: [], range: range)
         matches.append(contentsOf: MatrixEntityRegex.roomIdentifierRegex.matches(in: string, options: [], range: range))
-        matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: [], range: range))
+        // As of right now we do not handle event id links in any way so there is no need to add them as links
+//        matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: [], range: range))
         matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: [], range: range))
         matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: [], range: range))
         
