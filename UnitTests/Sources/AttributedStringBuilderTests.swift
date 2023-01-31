@@ -179,13 +179,14 @@ class AttributedStringBuilderTests: XCTestCase {
         checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: roomId)
         checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: roomId)
     }
-    
-    func testEventIdLink() {
-        let eventId = "$eventidentifier"
-        let string = "The event is \(eventId)."
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: eventId)
-        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: eventId)
-    }
+
+    // As of right now we do not handle event id links in any way so there is no need to add them as links
+//    func testEventIdLink() {
+//        let eventId = "$eventidentifier"
+//        let string = "The event is \(eventId)."
+//        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromHTML(string), expected: eventId)
+//        checkMatrixEntityLinkIn(attributedString: attributedStringBuilder.fromPlain(string), expected: eventId)
+//    }
     
     func testDefaultFont() {
         let htmlString = "<b>Test</b> <i>string</i>."
