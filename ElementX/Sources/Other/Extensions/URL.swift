@@ -27,7 +27,7 @@ extension URL {
 
     /// The URL of the primary app group container.
     static var appGroupContainerDirectory: URL {
-        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.target.appGroupIdentifier) else {
+        guard let url = FileManager.default.containerURL(forSecurityApplicationGroupIdentifier: InfoPlistReader.main.appGroupIdentifier) else {
             fatalError("Should always be able to retrieve the container directory")
         }
         return url
@@ -64,7 +64,7 @@ extension URL {
         var url = appGroupContainerDirectory
             .appendingPathComponent("Library", isDirectory: true)
             .appendingPathComponent("Application Support", isDirectory: true)
-            .appendingPathComponent(InfoPlistReader.target.baseBundleIdentifier, isDirectory: true)
+            .appendingPathComponent(InfoPlistReader.main.baseBundleIdentifier, isDirectory: true)
 
         try? FileManager.default.createDirectoryIfNeeded(at: url)
         

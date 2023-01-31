@@ -17,6 +17,7 @@
 import Combine
 import MatrixRustSDK
 import SwiftUI
+import Version
 
 class AppCoordinator: AppCoordinatorProtocol {
     private let stateMachine: AppCoordinatorStateMachine
@@ -66,12 +67,17 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
-        // Reset everything if the app has been deleted since the previous run
-        if !ServiceLocator.shared.settings.hasAppLaunchedOnce {
-            AppSettings.reset()
-            userSessionStore.reset()
-            ServiceLocator.shared.settings.hasAppLaunchedOnce = true
+        guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
+            fatalError("The app's version number **must** use semver for migration purposes.")
         }
+        
+        if let previousVersion = ServiceLocator.shared.settings.lastVersionLaunched.flatMap(Version.init) {
+            performMigrationsIfNecessary(from: previousVersion, to: currentVersion)
+        } else {
+            // The app has been deleted since the previous run. Reset everything.
+            wipeUserData(includingSettings: true)
+        }
+        ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
         
         setupStateMachine()
         
@@ -124,6 +130,27 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
       
         MXLog.configure(loggerConfiguration)
+    }
+    
+    /// Perform any required migrations for the app to function correctly.
+    private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
+        guard oldVersion != newVersion else { return }
+        
+        if oldVersion < Version(1, 0, 17) {
+            // Version 1.0.17 hardcoded a new sliding sync proxy for matrix.org
+            // Force a sign out for the user to log in with the new proxy.
+            MXLog.warning("Clearing user data for hardcoded proxy.")
+            wipeUserData()
+        }
+    }
+    
+    /// Clears the keychain, app support directory etc ready for a fresh use.
+    /// - Parameter includingSettings: Whether to additionally wipe the user's app settings too.
+    private func wipeUserData(includingSettings: Bool = false) {
+        if includingSettings {
+            AppSettings.reset()
+        }
+        userSessionStore.reset()
     }
     
     // swiftlint:disable:next cyclomatic_complexity

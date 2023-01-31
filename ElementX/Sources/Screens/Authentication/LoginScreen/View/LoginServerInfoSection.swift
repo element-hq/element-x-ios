@@ -48,6 +48,7 @@ struct LoginServerInfoSection: View {
                     Image(systemName: "chevron.right")
                         .foregroundColor(.element.tertiaryContent)
                         .padding(.trailing, 16)
+                        .hidden() // The button is disabled for this demo.
                 }
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.system))
             }

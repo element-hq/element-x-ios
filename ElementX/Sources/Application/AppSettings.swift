@@ -20,7 +20,7 @@ import SwiftUI
 /// Store Element specific app settings.
 final class AppSettings: ObservableObject {
     private enum UserDefaultsKeys: String {
-        case hasAppLaunchedOnce
+        case lastVersionLaunched
         case timelineStyle
         case enableAnalytics
         case isIdentifiedForAnalytics
@@ -29,7 +29,7 @@ final class AppSettings: ObservableObject {
         case pusherProfileTag
     }
     
-    private static var suiteName: String = InfoPlistReader.target.appGroupIdentifier
+    private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
@@ -50,20 +50,27 @@ final class AppSettings: ObservableObject {
     
     // MARK: - Application
     
-    /// Simple flag to check if app has been deleted between runs.
-    /// Used to clear data stored in the shared container and keychain
-    @AppStorage(UserDefaultsKeys.hasAppLaunchedOnce.rawValue, store: store)
-    var hasAppLaunchedOnce = false
+    /// The last known version of the app that was launched on this device, which is
+    /// used to detect when migrations should be run. When `nil` the app may have been
+    /// deleted between runs so should clear data in the shared container and keychain.
+    @AppStorage(UserDefaultsKeys.lastVersionLaunched.rawValue, store: store)
+    var lastVersionLaunched: String?
     
+    /// The default homeserver address used. This is intentionally a string without a scheme
+    /// so that it can be passed to Rust as a ServerName for well-known discovery.
     let defaultHomeserverAddress = "matrix.org"
+    
+    /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
+    /// that don't yet have an officially trusted proxy configured in their well-known.
+    let slidingSyncProxyURL = URL(staticString: "https://slidingsync.lab.matrix.org")
     
     // MARK: - Notifications
     
     var pusherAppId: String {
         #if DEBUG
-        InfoPlistReader.target.baseBundleIdentifier + ".ios.dev"
+        InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
         #else
-        InfoPlistReader.target.baseBundleIdentifier + ".ios.prod"
+        InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
         #endif
     }
     
@@ -84,14 +91,14 @@ final class AppSettings: ObservableObject {
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.element.dev",
                                                         apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                                                         termsURL: URL(staticString: "https://element.io/cookie-policy"))
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.hss.element.io",
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                         termsURL: URL(staticString: "https://element.io/cookie-policy"))
@@ -116,11 +123,6 @@ final class AppSettings: ObservableObject {
     
     @AppStorage(UserDefaultsKeys.timelineStyle.rawValue, store: store)
     var timelineStyle = TimelineStyle.bubbles
-
-    // MARK: - Client
-
-    @AppStorage(UserDefaultsKeys.slidingSyncProxyBaseURLString.rawValue, store: store)
-    var slidingSyncProxyBaseURLString = "https://slidingsync.lab.element.dev"
 
     // MARK: - Notifications
 

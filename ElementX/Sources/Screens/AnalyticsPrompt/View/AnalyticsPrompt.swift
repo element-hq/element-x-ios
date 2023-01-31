@@ -59,7 +59,7 @@ struct AnalyticsPrompt: View {
             Image(uiImage: Asset.Images.analyticsLogo.image)
                 .padding(.bottom, 25)
             
-            Text(ElementL10n.analyticsOptInTitle(InfoPlistReader.target.bundleDisplayName))
+            Text(ElementL10n.analyticsOptInTitle(InfoPlistReader.main.bundleDisplayName))
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
