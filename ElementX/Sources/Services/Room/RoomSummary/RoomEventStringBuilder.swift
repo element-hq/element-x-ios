@@ -71,8 +71,8 @@ struct RoomEventStringBuilder {
                                           previousDisplayName: prevDisplayName,
                                           avatarURLString: avatarUrl,
                                           previousAvatarURLString: prevAvatarUrl,
-                                          member: sender.id, // FIXME: This is a bad assumption
-                                          memberIsYou: isOutgoing) // FIXME: This is a bad assumption
+                                          member: sender.id,
+                                          memberIsYou: isOutgoing)
                 .map(AttributedString.init)
         }
     }

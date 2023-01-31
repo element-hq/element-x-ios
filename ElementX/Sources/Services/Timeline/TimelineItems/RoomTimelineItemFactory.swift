@@ -373,8 +373,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                                           previousDisplayName: previousDisplayName,
                                                                           avatarURLString: avatarURLString,
                                                                           previousAvatarURLString: previousAvatarURLString,
-                                                                          member: eventItemProxy.sender.id, // FIXME: This is a bad assumption
-                                                                          memberIsYou: isOutgoing) else { return nil } // FIXME: This is a bad assumption
+                                                                          member: eventItemProxy.sender.id,
+                                                                          memberIsYou: isOutgoing) else { return nil }
         return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }
     
