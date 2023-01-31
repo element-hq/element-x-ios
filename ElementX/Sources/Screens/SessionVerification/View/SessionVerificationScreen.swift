@@ -37,6 +37,7 @@ struct SessionVerificationScreen: View {
             .safeAreaInset(edge: .bottom) { actionButtons.padding() }
         }
         .navigationViewStyle(.stack)
+        .interactiveDismissDisabled() // Make sure dismissal goes through the state machine(s).
     }
     
     // MARK: - Private
