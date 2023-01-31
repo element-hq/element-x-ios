@@ -82,12 +82,12 @@ struct TimelineView: UIViewControllerRepresentable {
 // MARK: - Previews
 
 struct TimelineTableView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                               timelineViewFactory: RoomTimelineViewFactory(),
+                                               mediaProvider: MockMediaProvider(),
+                                               roomName: "Preview room")
+    
     static var previews: some View {
-        let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                            timelineViewFactory: RoomTimelineViewFactory(),
-                                            mediaProvider: MockMediaProvider(),
-                                            roomName: "Preview room")
-        
         NavigationView {
             RoomScreen(context: viewModel.context)
         }

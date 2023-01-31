@@ -23,9 +23,12 @@ struct RoomScreen: View {
     
     var body: some View {
         timeline
+            .background(Color.element.background) // Kills the toolbar translucency.
             .safeAreaInset(edge: .bottom) { messageComposer }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
+            .toolbarRole(.editor) // Hide the back button title.
+            .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo) { $0.alert }
             .sheet(item: $context.debugInfo) { DebugScreen(info: $0) }
@@ -88,14 +91,6 @@ struct RoomScreen: View {
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
-        }
-        
-        ToolbarItem(id: "RoomDetailsAction", placement: .secondaryAction, showsByDefault: false) {
-            Button {
-                context.send(viewAction: .displayRoomDetails)
-            } label: {
-                Label("Room Details", systemImage: "info.circle")
-            }
         }
     }
     

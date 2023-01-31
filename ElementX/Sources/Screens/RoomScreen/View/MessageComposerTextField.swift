@@ -22,8 +22,6 @@ struct MessageComposerTextField: View {
     @Binding private var text: String
     @Binding private var focused: Bool
     
-    @State private var dynamicHeight: CGFloat = 100
-    
     private let placeholder: String
     private let maxHeight: CGFloat
     private let onEnterKeyHandler: OnEnterKeyHandler
@@ -50,11 +48,9 @@ struct MessageComposerTextField: View {
     
     var body: some View {
         UITextViewWrapper(text: $text,
-                          calculatedHeight: $dynamicHeight,
                           focused: $focused,
                           maxHeight: maxHeight,
                           onEnterKeyHandler: onEnterKeyHandler)
-            .frame(minHeight: dynamicHeight, maxHeight: dynamicHeight)
             .background(placeholderView, alignment: .topLeading)
     }
     
@@ -71,7 +67,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     typealias UIViewType = UITextView
 
     @Binding var text: String
-    @Binding var calculatedHeight: CGFloat
     @Binding var focused: Bool
     
     let maxHeight: CGFloat
@@ -84,7 +79,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.keyDelegate = context.coordinator
         textView.textColor = .element.primaryContent
         textView.isEditable = true
-        textView.font = UIFont.preferredFont(forTextStyle: .body)
+        textView.font = .preferredFont(forTextStyle: .body)
         textView.isSelectable = true
         textView.isUserInteractionEnabled = true
         textView.backgroundColor = UIColor.clear
@@ -96,6 +91,15 @@ private struct UITextViewWrapper: UIViewRepresentable {
         textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
                 
         return textView
+    }
+    
+    func sizeThatFits(_ proposal: ProposedViewSize, uiView: UITextView, context: Context) -> CGSize? {
+        // Note: Coalescing a width of zero here returns a size for the view with 1 line of text visible.
+        let newSize = uiView.sizeThatFits(CGSize(width: proposal.width ?? .zero,
+                                                 height: CGFloat.greatestFiniteMagnitude))
+        let width = proposal.width ?? newSize.width
+        let height = min(maxHeight, newSize.height)
+        return CGSize(width: width, height: height)
     }
 
     func updateUIView(_ textView: UITextView, context: UIViewRepresentableContext<UITextViewWrapper>) {
@@ -114,8 +118,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
             }
         }
         
-        UITextViewWrapper.recalculateHeight(view: textView, result: $calculatedHeight, maxHeight: maxHeight)
-        
         DispatchQueue.main.async { // Avoid cycle detected through attribute warnings
             if focused, textView.window != nil, !textView.isFirstResponder {
                 textView.becomeFirstResponder()
@@ -125,36 +127,21 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
-                    height: $calculatedHeight,
                     focused: $focused,
                     maxHeight: maxHeight,
                     onEnterKeyHandler: onEnterKeyHandler)
     }
     
-    fileprivate static func recalculateHeight(view: UIView, result: Binding<CGFloat>, maxHeight: CGFloat) {
-        let newSize = view.sizeThatFits(CGSize(width: view.frame.size.width, height: CGFloat.greatestFiniteMagnitude))
-        
-        let height = min(maxHeight, newSize.height)
-        
-        if result.wrappedValue != height {
-            DispatchQueue.main.async {
-                result.wrappedValue = height // Must be called asynchronously
-            }
-        }
-    }
-    
     final class Coordinator: NSObject, UITextViewDelegate, TextViewWithKeyDetectionDelegate {
         private var text: Binding<String>
-        private var calculatedHeight: Binding<CGFloat>
         private var focused: Binding<Bool>
         
         private let maxHeight: CGFloat
         
         private let onEnterKeyHandler: OnEnterKeyHandler
         
-        init(text: Binding<String>, height: Binding<CGFloat>, focused: Binding<Bool>, maxHeight: CGFloat, onEnterKeyHandler: @escaping OnEnterKeyHandler) {
+        init(text: Binding<String>, focused: Binding<Bool>, maxHeight: CGFloat, onEnterKeyHandler: @escaping OnEnterKeyHandler) {
             self.text = text
-            calculatedHeight = height
             self.focused = focused
             self.maxHeight = maxHeight
             self.onEnterKeyHandler = onEnterKeyHandler
@@ -162,9 +149,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         func textViewDidChange(_ textView: UITextView) {
             text.wrappedValue = textView.text
-            UITextViewWrapper.recalculateHeight(view: textView,
-                                                result: calculatedHeight,
-                                                maxHeight: maxHeight)
         }
         
         func textViewDidBeginEditing(_ textView: UITextView) {
@@ -212,6 +196,7 @@ struct MessageComposerTextField_Previews: PreviewProvider {
         VStack {
             PreviewWrapper(text: "123")
             PreviewWrapper(text: "")
+            PreviewWrapper(text: "A really long message that will wrap to multiple lines on a phone in portrait.")
         }
     }
     

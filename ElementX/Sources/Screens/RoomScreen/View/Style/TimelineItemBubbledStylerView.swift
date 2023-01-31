@@ -25,6 +25,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
 
     @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric private var senderNameVerticalPadding = 3
+    private let cornerRadius: CGFloat = 12
 
     var body: some View {
         ZStack(alignment: .trailingFirstTextBaseline) {
@@ -39,7 +40,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         Spacer()
                     }
                     
-                    styledContentWithReactions
+                    messageBubbleWithReactions
                 }
                 .padding(.horizontal, 16.0)
                 .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
@@ -71,11 +72,11 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
         }
     }
     
-    private var styledContentWithReactions: some View {
+    private var messageBubbleWithReactions: some View {
         // Figma has a spacing of -4 but it doesn't take into account
         // the centre aligned stroke width so we use -5 here
         VStack(alignment: alignment, spacing: -5) {
-            styledContent
+            messageBubble
                 .accessibilityElement(children: .combine)
             
             if !timelineItem.properties.reactions.isEmpty {
@@ -86,24 +87,25 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             }
         }
     }
-
+    
+    var messageBubble: some View {
+        styledContent
+            .contentShape(.contextMenuPreview, RoundedCornerShape(radius: cornerRadius, corners: timelineItem.roundedCorners)) // Rounded corners for the context menu animation.
+            .contextMenu { [weak context] in
+                context?.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
+                    TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
+                }
+            }
+            .padding(.top, messageBubbleTopPadding)
+    }
+    
     @ViewBuilder
     var styledContent: some View {
-        if timelineItem.isOutgoing {
-            styledContentOutgoing
-        } else {
-            styledContentIncoming
-        }
-    }
-
-    @ViewBuilder
-    var styledContentOutgoing: some View {
-        let topPadding: CGFloat? = timelineItem.groupState == .single || timelineItem.groupState == .beginning ? 8 : 0
-        
         if shouldAvoidBubbling {
             content()
-                .cornerRadius(12, corners: timelineItem.roundedCorners)
-                .padding(.top, topPadding)
+                .bubbleStyle(inset: false,
+                             cornerRadius: cornerRadius,
+                             corners: timelineItem.roundedCorners)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
@@ -114,36 +116,20 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                         .foregroundColor(.element.tertiaryContent)
                 }
             }
-            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
-            .background(Color.element.systemGray5)
-            .cornerRadius(12, corners: timelineItem.roundedCorners)
-            .padding(.top, topPadding)
+            .bubbleStyle(inset: true,
+                         color: timelineItem.isOutgoing ? .element.systemGray5 : .element.systemGray6,
+                         cornerRadius: cornerRadius,
+                         corners: timelineItem.roundedCorners)
         }
     }
-
-    @ViewBuilder
-    var styledContentIncoming: some View {
-        if shouldAvoidBubbling {
-            content()
-                .cornerRadius(12, corners: timelineItem.roundedCorners)
-        } else {
-            VStack(alignment: .trailing, spacing: 4) {
-                content()
-
-                if timelineItem.properties.isEdited {
-                    Text(ElementL10n.editedSuffix)
-                        .font(.element.caption2)
-                        .foregroundColor(.element.tertiaryContent)
-                }
-            }
-            .padding(EdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12))
-            .background(Color.element.systemGray6)
-            .cornerRadius(12, corners: timelineItem.roundedCorners)
-        }
+    
+    private var messageBubbleTopPadding: CGFloat {
+        guard timelineItem.isOutgoing else { return 0 }
+        return timelineItem.groupState == .single || timelineItem.groupState == .beginning ? 8 : 0
     }
 
     private var shouldAvoidBubbling: Bool {
-        timelineItem is ImageRoomTimelineItem || timelineItem is VideoRoomTimelineItem
+        timelineItem is ImageRoomTimelineItem || timelineItem is VideoRoomTimelineItem || timelineItem is StickerRoomTimelineItem
     }
     
     private var alignment: HorizontalAlignment {
@@ -151,16 +137,27 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
 }
 
+private extension View {
+    func bubbleStyle(inset: Bool, color: Color? = nil, cornerRadius: CGFloat, corners: UIRectCorner) -> some View {
+        padding(inset ? 8 : 0)
+            .background(inset ? color : nil)
+            .cornerRadius(cornerRadius, corners: corners)
+    }
+}
+
 struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
                 RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
+                    .padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
             }
         }
         .timelineStyle(.bubbles)
-        .padding(.horizontal, 8)
         .previewLayout(.sizeThatFits)
+        .environmentObject(viewModel.context)
     }
 }

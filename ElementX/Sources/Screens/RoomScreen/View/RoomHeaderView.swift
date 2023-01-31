@@ -24,13 +24,15 @@ struct RoomHeaderView: View {
     @ObservedObject var context: RoomScreenViewModel.Context
 
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 12) {
             roomAvatar
                 .accessibilityHidden(true)
             Text(context.viewState.roomTitle)
                 .font(.element.headline)
                 .accessibilityIdentifier("roomNameLabel")
         }
+        // Leading align whilst using the principal toolbar position.
+        .frame(maxWidth: .infinity, alignment: .leading)
         // Using a button stops is from getting truncated in the navigation bar
         .onTapGesture {
             context.send(viewAction: .displayRoomDetails)

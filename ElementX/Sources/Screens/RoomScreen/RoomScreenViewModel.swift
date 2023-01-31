@@ -211,7 +211,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
         
         var actions: [TimelineItemContextMenuAction] = [
-            .react, .copy, .quote, .copyPermalink, .reply
+            .react, .copy, .reply
+            // Disabled for FOSDEM
+            // .quote, .copyPermalink
         ]
 
         if item.isEditable {
@@ -279,4 +281,13 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.composerMode = .default
         }
     }
+}
+
+// MARK: - Mocks
+
+extension RoomScreenViewModel {
+    static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                          timelineViewFactory: RoomTimelineViewFactory(),
+                                          mediaProvider: MockMediaProvider(),
+                                          roomName: "Preview room")
 }

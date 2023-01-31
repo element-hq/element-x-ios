@@ -28,6 +28,7 @@ struct StickerRoomTimelineView: View {
                           imageProvider: context.imageProvider) {
                 placeholder
             }
+            .frame(maxHeight: 300)
             .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
         .accessibilityLabel(timelineItem.text)
@@ -46,9 +47,11 @@ struct StickerRoomTimelineView: View {
 }
 
 struct StickerRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
-        body
-        body.timelineStyle(.plain)
+        body.environmentObject(viewModel.context)
+        body.timelineStyle(.plain).environmentObject(viewModel.context)
     }
     
     static var body: some View {

@@ -21,7 +21,7 @@ struct StateRoomTimelineView: View {
     
     var body: some View {
         Text(timelineItem.text)
-            .font(.element.caption1Bold)
+            .font(.element.footnote)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.secondaryContent)
             .frame(maxWidth: .infinity, alignment: .center)
@@ -37,7 +37,14 @@ struct StateRoomTimelineView_Previews: PreviewProvider {
     }
     
     static var body: some View {
-        let item = StateRoomTimelineItem(id: UUID().uuidString, text: "Alice joined", timestamp: "Now", groupState: .beginning, isOutgoing: false, isEditable: false, sender: .init(id: ""))
-        return StateRoomTimelineView(timelineItem: item)
+        StateRoomTimelineView(timelineItem: item)
     }
+    
+    static let item = StateRoomTimelineItem(id: UUID().uuidString,
+                                            text: "Alice joined",
+                                            timestamp: "Now",
+                                            groupState: .beginning,
+                                            isOutgoing: false,
+                                            isEditable: false,
+                                            sender: .init(id: ""))
 }

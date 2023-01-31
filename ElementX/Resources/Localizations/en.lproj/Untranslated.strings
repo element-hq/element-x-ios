@@ -4,6 +4,8 @@
 "action_confirm" = "Confirm";
 "action_match" = "Match";
 
+"new_message" = "New message";
+
 "screenshot_detected_title" = "You took a screenshot";
 "screenshot_detected_message" = "Would you like to submit a bug report?";
 
@@ -20,6 +22,7 @@
 "room_timeline_replying_to" = "Replying to %@";
 "room_timeline_editing" = "Editing";
 "room_timeline_syncing" = "Syncing";
+"room_timeline_unable_to_decrypt" = "Unable to decrypt";
 
 "room_timeline_context_menu_retry_decryption" = "Retry decryption";
 

@@ -70,7 +70,6 @@ struct HomeScreenRoomCell: View {
                 Text(timestamp)
                     .font(.element.footnote)
                     .foregroundColor(room.hasUnreads ? .element.brand : .element.tertiaryContent)
-                    .id(timestamp)
             }
         }
     }
@@ -85,7 +84,9 @@ struct HomeScreenRoomCell: View {
                 if let lastMessage = room.lastMessage, !String(lastMessage.characters).isEmpty {
                     Text(lastMessage)
                         .lastMessageFormatting()
-                        .id(lastMessage)
+                } else {
+                    Text(ElementL10n.newMessage)
+                        .lastMessageFormatting()
                 }
             }
             

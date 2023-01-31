@@ -24,7 +24,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     @ViewBuilder let content: () -> Content
 
     var body: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 4) {
             header
             
             VStack(alignment: .leading, spacing: 4) {
@@ -48,7 +48,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             HStack {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
                 Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
-                    .font(.body)
+                    .font(.subheadline)
                     .foregroundColor(.element.primaryContent)
                     .fontWeight(.semibold)
                     .lineLimit(1)
@@ -57,6 +57,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     .foregroundColor(Color.element.tertiaryContent)
                     .font(.element.caption2)
             }
+            .padding(.top, 16)
         }
     }
     
@@ -80,15 +81,18 @@ struct TimelineItemPlainStylerView<Content: View>: View {
 }
 
 struct TimelineItemPlainStylerView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
     static var previews: some View {
-        VStack(alignment: .leading) {
+        VStack(alignment: .leading, spacing: 0) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
                 RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
+                    .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
             }
         }
         .timelineStyle(.plain)
-        .padding(.horizontal, 8)
         .previewLayout(.sizeThatFits)
+        .environmentObject(viewModel.context)
     }
 }

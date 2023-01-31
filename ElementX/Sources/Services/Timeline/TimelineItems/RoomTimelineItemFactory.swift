@@ -152,7 +152,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return EncryptedRoomTimelineItem(id: eventItemProxy.id,
-                                         text: ElementL10n.encryptionInformationDecryptionError,
+                                         text: ElementL10n.roomTimelineUnableToDecrypt,
                                          encryptionType: encryptionType,
                                          timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                          groupState: groupState,

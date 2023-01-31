@@ -43,16 +43,16 @@ struct TimelineReactionButton: View {
     var label: some View {
         HStack(spacing: 4) {
             Text(reaction.key)
-                .font(.element.caption1)
+                .font(.element.subheadline)
             Text(String(reaction.count))
-                .font(.element.caption1)
+                .font(.element.subheadline)
                 .foregroundColor(.element.secondaryContent)
         }
-        .padding(.vertical, 5)
-        .padding(.horizontal, 6)
+        .padding(.vertical, 6)
+        .padding(.horizontal, 8)
         .background(
             Capsule()
-                .strokeBorder(reaction.isHighlighted ? Color.element.accent : .element.background, lineWidth: 2)
+                .strokeBorder(reaction.isHighlighted ? Color.element.secondaryContent : .element.background, lineWidth: 2)
                 .background(reaction.isHighlighted ? Color.element.accent.opacity(0.1) : .element.system, in: Capsule())
         )
         .accessibilityElement(children: .combine)

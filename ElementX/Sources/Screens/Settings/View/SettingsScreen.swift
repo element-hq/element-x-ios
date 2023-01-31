@@ -50,8 +50,8 @@ struct SettingsScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .background(backgroundColor, ignoresSafeAreaEdges: .all)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                closeButton
+            ToolbarItem(placement: .confirmationAction) {
+                doneButton
             }
         }
     }
@@ -152,8 +152,8 @@ struct SettingsScreen: View {
         }
     }
 
-    private var closeButton: some View {
-        Button(ElementL10n.actionCancel, action: close)
+    private var doneButton: some View {
+        Button(ElementL10n.done, action: close)
             .accessibilityIdentifier("closeButton")
     }
 

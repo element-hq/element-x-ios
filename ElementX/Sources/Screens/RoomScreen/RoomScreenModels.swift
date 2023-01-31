@@ -28,6 +28,15 @@ enum RoomScreenComposerMode: Equatable {
     case `default`
     case reply(id: String, displayName: String)
     case edit(originalItemId: String)
+    
+    var isEdit: Bool {
+        switch self {
+        case .edit:
+            return true
+        default:
+            return false
+        }
+    }
 }
 
 enum RoomScreenViewAction {
