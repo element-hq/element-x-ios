@@ -29,7 +29,7 @@ final class AppSettings: ObservableObject {
         case pusherProfileTag
     }
     
-    private static var suiteName: String = InfoPlistReader.target.appGroupIdentifier
+    private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
 
     /// UserDefaults to be used on reads and writes.
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
@@ -68,9 +68,9 @@ final class AppSettings: ObservableObject {
     
     var pusherAppId: String {
         #if DEBUG
-        InfoPlistReader.target.baseBundleIdentifier + ".ios.dev"
+        InfoPlistReader.main.baseBundleIdentifier + ".ios.dev"
         #else
-        InfoPlistReader.target.baseBundleIdentifier + ".ios.prod"
+        InfoPlistReader.main.baseBundleIdentifier + ".ios.prod"
         #endif
     }
     
@@ -91,14 +91,14 @@ final class AppSettings: ObservableObject {
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.element.dev",
                                                         apiKey: "phc_VtA1L35nw3aeAtHIx1ayrGdzGkss7k1xINeXcoIQzXN",
                                                         termsURL: URL(staticString: "https://element.io/cookie-policy"))
     #else
     /// The configuration to use for analytics. Set `isEnabled` to false to disable analytics.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
-    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.target.bundleIdentifier.starts(with: "io.element.elementx"),
+    let analyticsConfiguration = AnalyticsConfiguration(isEnabled: InfoPlistReader.main.bundleIdentifier.starts(with: "io.element.elementx"),
                                                         host: "https://posthog.hss.element.io",
                                                         apiKey: "phc_Jzsm6DTm6V2705zeU5dcNvQDlonOR68XvX2sh1sEOHO",
                                                         termsURL: URL(staticString: "https://element.io/cookie-policy"))
