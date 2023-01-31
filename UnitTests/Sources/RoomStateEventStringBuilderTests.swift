@@ -48,10 +48,12 @@ class RoomStateEventStringBuilderTests: XCTestCase {
     
     func validateDisplayNameChange(senderID: String, oldName: String?, newName: String?, expectedString: String) {
         let sender = TimelineItemSender(id: senderID, displayName: newName)
-        let change = MembershipChange.profileChanged(displayName: newName, prevDisplayName: oldName, avatarUrl: nil, prevAvatarUrl: nil)
-        
-        let string = stringBuilder.buildString(for: change, member: sender.id, sender: sender, isOutgoing: sender.id == userID)
-        
+        let string = stringBuilder.buildProfileChangeString(displayName: newName,
+                                                            previousDisplayName: oldName,
+                                                            avatarURLString: nil,
+                                                            previousAvatarURLString: nil,
+                                                            member: sender.id,
+                                                            memberIsYou: sender.id == userID)
         XCTAssertEqual(string, expectedString)
     }
     
@@ -79,11 +81,12 @@ class RoomStateEventStringBuilderTests: XCTestCase {
                               oldAvatarURL: String?, newAvatarURL: String?,
                               expectedString: String) {
         let sender = TimelineItemSender(id: senderID, displayName: senderName)
-        let change = MembershipChange.profileChanged(displayName: senderName, prevDisplayName: senderName,
-                                                     avatarUrl: oldAvatarURL, prevAvatarUrl: newAvatarURL)
-        
-        let string = stringBuilder.buildString(for: change, member: sender.id, sender: sender, isOutgoing: sender.id == userID)
-        
+        let string = stringBuilder.buildProfileChangeString(displayName: senderName,
+                                                            previousDisplayName: senderName,
+                                                            avatarURLString: newAvatarURL,
+                                                            previousAvatarURLString: oldAvatarURL,
+                                                            member: sender.id,
+                                                            memberIsYou: sender.id == userID)
         XCTAssertEqual(string, expectedString)
     }
 }

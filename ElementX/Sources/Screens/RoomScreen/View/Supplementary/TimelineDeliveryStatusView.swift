@@ -22,10 +22,12 @@ struct TimelineDeliveryStatusView: View {
     
     private var systemImageName: String {
         switch deliveryStatus {
-        case .sending, .unknown:
+        case .sending:
             return "circle"
         case .sent:
             return "checkmark.circle"
+        case .sendingFailed:
+            return "exclamationmark.circle"
         }
     }
     
@@ -33,12 +35,10 @@ struct TimelineDeliveryStatusView: View {
         self.deliveryStatus = deliveryStatus
         
         switch deliveryStatus {
-        case .sending:
+        case .sending, .sendingFailed:
             showDeliveryStatus = true
         case let .sent(elapsedTime: elapsedTime):
             showDeliveryStatus = elapsedTime < 3
-        case .unknown:
-            showDeliveryStatus = false
         }
     }
     

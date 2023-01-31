@@ -50,9 +50,9 @@ enum TimelineItemProxy {
 
 /// The delivery status for the item.
 enum TimelineItemDeliveryStatus: Hashable {
-    case unknown
     case sending
     case sent(elapsedTime: TimeInterval)
+    case sendingFailed
 }
 
 /// A light wrapper around event timeline items returned from Rust.
@@ -64,19 +64,18 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     }
     
     var id: String {
-        switch item.key() {
-        case .transactionId(let txnID):
-            return txnID
-        case .eventId(let eventID):
-            return eventID
-        }
+        item.uniqueIdentifier()
     }
     
-    var deliveryStatus: TimelineItemDeliveryStatus {
-        switch item.key() {
-        case .transactionId:
+    var deliveryStatus: TimelineItemDeliveryStatus? {
+        guard let localSendState = item.localSendState() else { return nil }
+        
+        switch localSendState {
+        case .notSendYet:
             return .sending
-        case .eventId:
+        case .sendingFailed:
+            return .sendingFailed
+        case .sent:
             return .sent(elapsedTime: Date().timeIntervalSince1970 - timestamp.timeIntervalSince1970)
         }
     }
@@ -113,7 +112,7 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     }
 
     var reactions: [Reaction] {
-        item.reactions()
+        item.reactions() ?? []
     }
     
     var timestamp: Date {

@@ -20,8 +20,13 @@ import UIKit
 struct RoomStateEventStringBuilder {
     let userID: String
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
-    func buildString(for change: MembershipChange, member: String, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
+    // swiftlint:disable:next cyclomatic_complexity
+    func buildString(for change: MembershipChange?, member: String, sender: TimelineItemSender, isOutgoing: Bool) -> String? {
+        guard let change else {
+            MXLog.verbose("Filtering timeline item for membership change that is nil")
+            return nil
+        }
+        
         let senderName = sender.displayName ?? sender.id
         let senderIsYou = isOutgoing
         let memberIsYou = member == userID
@@ -65,22 +70,16 @@ struct RoomStateEventStringBuilder {
             } else {
                 return ElementL10n.noticeRoomKnockDenied(senderName, member)
             }
-        case .profileChanged(let displayName, let previousDisplayName, let avatarURLString, let previousAvatarURLString):
-            return profileChangedString(displayName: displayName, previousDisplayName: previousDisplayName,
-                                        avatarURLString: avatarURLString, previousAvatarURLString: previousAvatarURLString,
-                                        member: member, memberIsYou: memberIsYou,
-                                        sender: sender, senderIsYou: senderIsYou)
-        case .none, .error, .notImplemented, .unknown: // Not useful information for the user.
+        case .none, .error, .notImplemented: // Not useful information for the user.
             MXLog.verbose("Filtering timeline item for membership change: \(change)")
             return nil
         }
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_parameter_count
-    private func profileChangedString(displayName: String?, previousDisplayName: String?,
-                                      avatarURLString: String?, previousAvatarURLString: String?,
-                                      member: String, memberIsYou: Bool,
-                                      sender: TimelineItemSender, senderIsYou: Bool) -> String {
+    func buildProfileChangeString(displayName: String?, previousDisplayName: String?,
+                                  avatarURLString: String?, previousAvatarURLString: String?,
+                                  member: String, memberIsYou: Bool) -> String? {
         let displayNameChanged = displayName != previousDisplayName
         let avatarChanged = avatarURLString != previousAvatarURLString
         
@@ -93,8 +92,8 @@ struct RoomStateEventStringBuilder {
             } else if let previousDisplayName {
                 return ElementL10n.noticeDisplayNameRemoved(member, previousDisplayName)
             } else {
-                MXLog.error("The display name changed from nil to nil, shouldn't be possible.")
-                return ElementL10n.noticeMemberNoChanges(member)
+                MXLog.error("The display name changed from nil to nil, filtering the item.")
+                return nil
             }
         case (false, true, false):
             return ElementL10n.noticeAvatarUrlChanged(displayName ?? member)
@@ -106,20 +105,20 @@ struct RoomStateEventStringBuilder {
             } else if let previousDisplayName {
                 return ElementL10n.noticeDisplayNameRemovedByYou(previousDisplayName)
             } else {
-                MXLog.error("The display name changed from nil to nil, shouldn't be possible.")
-                return ElementL10n.noticeMemberNoChangesByYou
+                MXLog.error("The display name changed from nil to nil, filtering the item.")
+                return nil
             }
         case (false, true, true):
             return ElementL10n.noticeAvatarUrlChangedByYou
         case (true, true, _):
             // When both have changed, get the string for the display name and tack on that the avatar changed too.
-            return profileChangedString(displayName: displayName, previousDisplayName: previousDisplayName,
-                                        avatarURLString: nil, previousAvatarURLString: nil,
-                                        member: member, memberIsYou: memberIsYou,
-                                        sender: sender, senderIsYou: senderIsYou) + "\n" + ElementL10n.noticeAvatarChangedToo
+            guard let string = buildProfileChangeString(displayName: displayName, previousDisplayName: previousDisplayName,
+                                                        avatarURLString: nil, previousAvatarURLString: nil,
+                                                        member: member, memberIsYou: memberIsYou) else { return nil }
+            return string + "\n" + ElementL10n.noticeAvatarChangedToo
         case (false, false, _):
-            MXLog.error("Nothing changed, shouldn't be possible.")
-            return ElementL10n.noticeMemberNoChangesByYou
+            MXLog.error("Nothing changed, shouldn't be possible. Filtering the item.")
+            return nil
         }
     }
     
