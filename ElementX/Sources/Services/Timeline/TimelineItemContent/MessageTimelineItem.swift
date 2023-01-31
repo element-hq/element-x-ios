@@ -30,12 +30,7 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
     let content: Content
 
     var id: String {
-        switch item.key() {
-        case .transactionId(let txnID):
-            return txnID
-        case .eventId(let eventID):
-            return eventID
-        }
+        item.uniqueIdentifier()
     }
 
     var body: String {

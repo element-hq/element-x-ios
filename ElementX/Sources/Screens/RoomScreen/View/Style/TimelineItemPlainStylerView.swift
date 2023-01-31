@@ -33,8 +33,8 @@ struct TimelineItemPlainStylerView<Content: View>: View {
                     
                     Spacer()
                     
-                    if timelineItem.isOutgoing {
-                        TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus)
+                    if let deliveryStatus = timelineItem.properties.deliveryStatus {
+                        TimelineDeliveryStatusView(deliveryStatus: deliveryStatus)
                     }
                 }
                 supplementaryViews

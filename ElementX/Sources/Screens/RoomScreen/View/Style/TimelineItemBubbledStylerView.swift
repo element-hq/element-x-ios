@@ -45,8 +45,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 .padding(timelineItem.isOutgoing ? .leading : .trailing, 40) // Extra padding to differentiate alignment.
             }
             
-            if timelineItem.isOutgoing {
-                TimelineDeliveryStatusView(deliveryStatus: timelineItem.properties.deliveryStatus)
+            if let deliveryStatus = timelineItem.properties.deliveryStatus {
+                TimelineDeliveryStatusView(deliveryStatus: deliveryStatus)
             }
         }
     }

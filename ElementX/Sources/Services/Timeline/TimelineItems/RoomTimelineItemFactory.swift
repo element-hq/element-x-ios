@@ -85,6 +85,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             return buildStateTimelineItemFor(eventItemProxy: eventItemProxy, state: content, stateKey: stateKey, isOutgoing: isOutgoing)
         case .roomMembership(userId: let userID, change: let change):
             return buildStateMembershipChangeTimelineItemFor(eventItemProxy: eventItemProxy, member: userID, membershipChange: change, isOutgoing: isOutgoing)
+        case .profileChange(let displayName, let prevDisplayName, let avatarUrl, let prevAvatarUrl):
+            return buildStateProfileChangeTimelineItemFor(eventItemProxy: eventItemProxy, displayName: displayName, previousDisplayName: prevDisplayName, avatarURLString: avatarUrl, previousAvatarURLString: prevAvatarUrl, isOutgoing: isOutgoing)
         }
     }
     
@@ -354,9 +356,25 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildStateMembershipChangeTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
                                                            member: String,
-                                                           membershipChange: MembershipChange,
+                                                           membershipChange: MembershipChange?,
                                                            isOutgoing: Bool) -> RoomTimelineItemProtocol? {
         guard let text = stateEventStringBuilder.buildString(for: membershipChange, member: member, sender: eventItemProxy.sender, isOutgoing: isOutgoing) else { return nil }
+        return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, isOutgoing: isOutgoing)
+    }
+    
+    // swiftlint:disable:next function_parameter_count
+    private func buildStateProfileChangeTimelineItemFor(eventItemProxy: EventTimelineItemProxy,
+                                                        displayName: String?,
+                                                        previousDisplayName: String?,
+                                                        avatarURLString: String?,
+                                                        previousAvatarURLString: String?,
+                                                        isOutgoing: Bool) -> RoomTimelineItemProtocol? {
+        guard let text = stateEventStringBuilder.buildProfileChangeString(displayName: displayName,
+                                                                          previousDisplayName: previousDisplayName,
+                                                                          avatarURLString: avatarURLString,
+                                                                          previousAvatarURLString: previousAvatarURLString,
+                                                                          member: eventItemProxy.sender.id, // FIXME: This is a bad assumption
+                                                                          memberIsYou: isOutgoing) else { return nil } // FIXME: This is a bad assumption
         return buildStateTimelineItem(eventItemProxy: eventItemProxy, text: text, isOutgoing: isOutgoing)
     }
     

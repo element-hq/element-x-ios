@@ -23,5 +23,5 @@ struct RoomTimelineItemProperties: Hashable {
     /// The aggregated reactions that have been sent for this item.
     var reactions: [AggregatedReaction] = []
     /// The delivery status for this item.
-    var deliveryStatus: TimelineItemDeliveryStatus = .unknown
+    var deliveryStatus: TimelineItemDeliveryStatus?
 }
