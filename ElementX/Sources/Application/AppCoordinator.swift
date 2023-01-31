@@ -67,13 +67,15 @@ class AppCoordinator: AppCoordinatorProtocol {
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
         
-        let currentVersion = Bundle.main.version
+        guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
+            fatalError("The app's version number **must** use semver for migration purposes.")
+        }
+        
         if let previousVersion = ServiceLocator.shared.settings.lastVersionLaunched.flatMap(Version.init) {
-            migrateIfNecessary(from: previousVersion, to: currentVersion)
+            performMigrationsIfNecessary(from: previousVersion, to: currentVersion)
         } else {
             // The app has been deleted since the previous run. Reset everything.
-            AppSettings.reset()
-            userSessionStore.reset()
+            wipeUserData(includingSettings: true)
         }
         ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
         
@@ -131,15 +133,24 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     /// Perform any required migrations for the app to function correctly.
-    private func migrateIfNecessary(from oldVersion: Version, to newVersion: Version) {
+    private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
         guard oldVersion != newVersion else { return }
         
         if oldVersion < Version(1, 0, 17) {
             // Version 1.0.17 hardcoded a new sliding sync proxy for matrix.org
             // Force a sign out for the user to log in with the new proxy.
             MXLog.warning("Clearing user data for hardcoded proxy.")
-            userSessionStore.reset()
+            wipeUserData()
         }
+    }
+    
+    /// Clears the keychain, app support directory etc ready for a fresh use.
+    /// - Parameter includingSettings: Whether to additionally wipe the user's app settings too.
+    private func wipeUserData(includingSettings: Bool = false) {
+        if includingSettings {
+            AppSettings.reset()
+        }
+        userSessionStore.reset()
     }
     
     // swiftlint:disable:next cyclomatic_complexity
