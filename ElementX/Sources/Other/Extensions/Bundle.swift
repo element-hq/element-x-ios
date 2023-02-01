@@ -17,12 +17,24 @@
 import Foundation
 
 public extension Bundle {
+    private static var cachedLocalizationBundles = [String: Bundle]()
+    
     /// Get an lproj language bundle from the receiver bundle.
     /// - Parameter language: The language to try to load.
     /// - Returns: The lproj bundle if found otherwise nil.
     func lprojBundle(for language: String) -> Bundle? {
-        guard let lprojURL = url(forResource: language, withExtension: "lproj") else { return nil }
-        return Bundle(url: lprojURL)
+        if let bundle = Self.cachedLocalizationBundles[language] {
+            return bundle
+        }
+        
+        guard let lprojURL = url(forResource: language, withExtension: "lproj") else {
+            return nil
+        }
+        
+        let bundle = Bundle(url: lprojURL)
+        Self.cachedLocalizationBundles[language] = bundle
+        
+        return bundle
     }
 
     /// Preferred app language for translations. Takes the highest priority in translations. The priority list for translations:
