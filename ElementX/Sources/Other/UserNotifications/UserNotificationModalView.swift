@@ -14,16 +14,22 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct UserNotificationModalView: View {
     let notification: UserNotification
-    
+    @State var progressFraction: Double?
+
     var body: some View {
         ZStack {
             VStack(spacing: 12.0) {
-                ProgressView()
-                
+                if let progressFraction = progressFraction {
+                    ProgressView(value: progressFraction)
+                } else {
+                    ProgressView()
+                }
+
                 HStack {
                     if let iconName = notification.iconName {
                         Image(systemName: iconName)
@@ -39,6 +45,9 @@ struct UserNotificationModalView: View {
             .clipShape(RoundedCornerShape(radius: 12.0, corners: .allCorners))
             .shadow(color: .black.opacity(0.1), radius: 10.0, y: 4.0)
             .transition(.opacity)
+            .onReceive(notification.progressTracker?.progressFractionPublisher ?? Empty().eraseToAnyPublisher()) { progress in
+                progressFraction = progress
+            }
         }
         .id(notification.id)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

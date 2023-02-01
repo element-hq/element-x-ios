@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import UIKit
 
@@ -30,5 +31,19 @@ protocol BugReportServiceProtocol {
                          includeLogs: Bool,
                          includeCrashLog: Bool,
                          githubLabels: [String],
-                         files: [URL]) async throws -> SubmitBugReportResponse
+                         files: [URL],
+                         progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse
+}
+
+final class ProgressTracker: NSObject, URLSessionTaskDelegate {
+    private var progressObservation: NSKeyValueObservation?
+    @Published private var progressFraction = 0.0
+
+    var progressFractionPublisher: AnyPublisher<Double, Never> { $progressFraction.eraseToAnyPublisher() }
+
+    func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
+        progressObservation = task.progress.observe(\.fractionCompleted) { [weak self] progress, _ in
+            self?.progressFraction = progress.fractionCompleted
+        }
+    }
 }

@@ -78,7 +78,8 @@ class BugReportService: BugReportServiceProtocol {
                          includeLogs: Bool,
                          includeCrashLog: Bool,
                          githubLabels: [String],
-                         files: [URL]) async throws -> SubmitBugReportResponse {
+                         files: [URL],
+                         progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse {
         var params = [MultipartFormData(key: "text", type: .text(value: text))]
         params.append(contentsOf: defaultParams)
         for label in githubLabels {
@@ -124,7 +125,7 @@ class BugReportService: BugReportServiceProtocol {
         request.httpMethod = "POST"
         request.httpBody = body as Data
 
-        let (data, _) = try await session.data(for: request)
+        let (data, _) = try await session.data(for: request, delegate: progressTracker)
 
         // Parse the JSON data
         let decoder = JSONDecoder()

@@ -22,7 +22,8 @@ class MockBugReportService: BugReportServiceProtocol {
                          includeLogs: Bool,
                          includeCrashLog: Bool,
                          githubLabels: [String],
-                         files: [URL]) async throws -> SubmitBugReportResponse {
+                         files: [URL],
+                         progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse {
         SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
     }
 

@@ -27,4 +27,5 @@ struct UserNotification: Equatable, Identifiable {
     var title: String
     var iconName: String?
     var persistent = false
+    var progressTracker: ProgressTracker?
 }
