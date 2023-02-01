@@ -200,7 +200,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     if case let .invalidated(details) = summary {
-                        rooms.append(buildRoom(with: details, invalidated: true))
+                        rooms.append(buildRoom(with: details, invalidated: true, isLoading: false))
                     } else {
                         rooms.append(HomeScreenRoom.placeholder())
                     }
@@ -211,10 +211,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .empty:
                     rooms.append(HomeScreenRoom.placeholder())
                 case .filled(let details), .invalidated(let details):
-                    rooms.append(buildRoom(with: details, invalidated: false))
+                    rooms.append(buildRoom(with: details, invalidated: false, isLoading: true))
                 }
             case .filled(let details):
-                rooms.append(buildRoom(with: details, invalidated: false))
+                rooms.append(buildRoom(with: details, invalidated: false, isLoading: false))
             }
         }
         
@@ -223,7 +223,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         MXLog.info("Finished updating rooms")
     }
     
-    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
+    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool, isLoading: Bool) -> HomeScreenRoom {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
         
         return HomeScreenRoom(id: identifier,
@@ -231,7 +231,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               name: details.name,
                               hasUnreads: details.unreadNotificationCount > 0,
                               timestamp: details.lastMessageFormattedTimestamp,
-                              lastMessage: details.lastMessage,
+                              lastMessage: .init(attributedString: details.lastMessage, isLoading: isLoading),
                               avatarURL: details.avatarURL)
     }
     
