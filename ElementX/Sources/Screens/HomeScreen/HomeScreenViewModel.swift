@@ -31,8 +31,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
     
-    private var roomsForIdentifiers = [String: HomeScreenRoom]()
-    
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
     // swiftlint:disable:next function_body_length cyclomatic_complexity
@@ -202,7 +200,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     if case let .invalidated(details) = summary {
-                        rooms.append(buildRoom(with: details))
+                        rooms.append(buildRoom(with: details, invalidated: true))
                     } else {
                         rooms.append(HomeScreenRoom.placeholder())
                     }
@@ -213,10 +211,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .empty:
                     rooms.append(HomeScreenRoom.placeholder())
                 case .filled(let details), .invalidated(let details):
-                    rooms.append(buildRoom(with: details))
+                    rooms.append(buildRoom(with: details, invalidated: false))
                 }
             case .filled(let details):
-                rooms.append(buildRoom(with: details))
+                rooms.append(buildRoom(with: details, invalidated: false))
             }
         }
         
@@ -225,23 +223,16 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         MXLog.info("Finished updating rooms")
     }
     
-    private func buildRoom(with details: RoomSummaryDetails) -> HomeScreenRoom {
-        var room: HomeScreenRoom! = roomsForIdentifiers[details.id]
+    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
+        let identifier = invalidated ? "invalidated-" + details.id : details.id
         
-        if room == nil {
-            room = HomeScreenRoom(id: details.id,
-                                  roomId: details.id,
-                                  avatarURL: details.avatarURL)
-        }
-        
-        room.name = details.name
-        room.hasUnreads = details.unreadNotificationCount > 0
-        room.lastMessage = details.lastMessage
-        room.timestamp = details.lastMessageFormattedTimestamp
-        
-        roomsForIdentifiers[details.id] = room
-        
-        return room
+        return HomeScreenRoom(id: identifier,
+                              roomId: details.id,
+                              name: details.name,
+                              hasUnreads: details.unreadNotificationCount > 0,
+                              timestamp: details.lastMessageFormattedTimestamp,
+                              lastMessage: details.lastMessage,
+                              avatarURL: details.avatarURL)
     }
     
     private func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
