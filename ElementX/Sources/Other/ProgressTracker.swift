@@ -18,7 +18,6 @@ import Combine
 import Foundation
 
 final class ProgressTracker: NSObject, URLSessionTaskDelegate {
-    private var progressObservation: NSKeyValueObservation?
     @Published private var progressFraction: Double
 
     var progressFractionPublisher: AnyPublisher<Double, Never> {
@@ -32,8 +31,6 @@ final class ProgressTracker: NSObject, URLSessionTaskDelegate {
     }
 
     func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
-        progressObservation = task.progress.observe(\.fractionCompleted) { [weak self] progress, _ in
-            self?.progressFraction = progress.fractionCompleted
-        }
+        task.progress.publisher(for: \.fractionCompleted).assign(to: &$progressFraction)
     }
 }
