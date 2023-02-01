@@ -39,7 +39,11 @@ final class ProgressTracker: NSObject, URLSessionTaskDelegate {
     private var progressObservation: NSKeyValueObservation?
     @Published private var progressFraction = 0.0
 
-    var progressFractionPublisher: AnyPublisher<Double, Never> { $progressFraction.eraseToAnyPublisher() }
+    var progressFractionPublisher: AnyPublisher<Double, Never> {
+        $progressFraction
+            .receive(on: RunLoop.main)
+            .eraseToAnyPublisher()
+    }
 
     func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
         progressObservation = task.progress.observe(\.fractionCompleted) { [weak self] progress, _ in
