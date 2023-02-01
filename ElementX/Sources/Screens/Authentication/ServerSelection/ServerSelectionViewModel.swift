@@ -45,6 +45,16 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
             withElementAnimation {
                 state.footerErrorMessage = message
             }
+        case .slidingSyncAlert:
+            // TODO: Pick a better URL before merging.
+            let learnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync")
+            let openURL = { UIApplication.shared.open(learnMoreURL) }
+            
+            state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
+                                                 title: ElementL10n.serverSelectionSlidingSyncAlertTitle,
+                                                 message: ElementL10n.serverSelectionSlidingSyncAlertMessage,
+                                                 primaryButton: .init(title: ElementL10n.actionLearnMore, role: .cancel, action: openURL),
+                                                 secondaryButton: .init(title: ElementL10n.actionCancel, action: nil))
         }
     }
     

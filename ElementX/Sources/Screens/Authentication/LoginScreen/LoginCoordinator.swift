@@ -197,10 +197,8 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        let userNotificationController = UserNotificationController(rootCoordinator: navigationStackCoordinator)
-        
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              userNotificationController: userNotificationController,
+                                                              userNotificationController: ServiceLocator.shared.userNotificationController,
                                                               isModallyPresented: false)
         
         let coordinator = ServerSelectionCoordinator(parameters: parameters)

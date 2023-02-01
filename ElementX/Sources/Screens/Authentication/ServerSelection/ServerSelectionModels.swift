@@ -71,4 +71,6 @@ enum ServerSelectionViewAction {
 enum ServerSelectionErrorType: Hashable {
     /// An error message to be shown in the text field footer.
     case footerMessage(String)
+    /// An alert that allows the user to learn about sliding sync.
+    case slidingSyncAlert
 }

@@ -26,7 +26,9 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
     
     init(userSessionStore: UserSessionStoreProtocol) {
         self.userSessionStore = userSessionStore
-        authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path, passphrase: nil)
+        authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
+                                                      passphrase: nil,
+                                                      customSyncProxy: ServiceLocator.shared.settings.slidingSyncProxyURL?.absoluteString)
     }
     
     // MARK: - Public
@@ -51,6 +53,9 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             
             self.homeserver = homeserver
             return .success(())
+        } catch AuthenticationError.SlidingSyncNotAvailable {
+            MXLog.info("User entered a homeserver that isn't configured for sliding sync.")
+            return .failure(.slidingSyncNotAvailable)
         } catch {
             MXLog.error("Failed configuring a server: \(error)")
             return .failure(.invalidHomeserverAddress)

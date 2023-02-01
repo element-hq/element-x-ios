@@ -64,7 +64,6 @@ struct LoginScreen: View {
         LoginServerInfoSection(address: context.viewState.homeserver.address) {
             context.send(viewAction: .selectServer)
         }
-        .disabled(true) // The button is disabled for this demo.
     }
     
     /// The form with text fields for username and password, along with a submit button.
