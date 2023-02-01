@@ -65,10 +65,16 @@ struct UserNotificationModalView: View {
 
 struct UserNotificationModalView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
+        Group {
             UserNotificationModalView(notification: UserNotification(type: .modal,
                                                                      title: "Successfully logged in",
                                                                      iconName: "checkmark"))
+            .previewDisplayName("Spinner")
+            UserNotificationModalView(notification: UserNotification(type: .modal,
+                                                                     title: "Successfully logged in",
+                                                                     iconName: "checkmark",
+                                                                     progressTracker: ProgressTracker(initialValue: 0.5)))
+            .previewDisplayName("Progress Bar")
         }
     }
 }

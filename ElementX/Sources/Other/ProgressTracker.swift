@@ -19,12 +19,16 @@ import Foundation
 
 final class ProgressTracker: NSObject, URLSessionTaskDelegate {
     private var progressObservation: NSKeyValueObservation?
-    @Published private var progressFraction = 0.0
+    @Published private var progressFraction: Double
 
     var progressFractionPublisher: AnyPublisher<Double, Never> {
         $progressFraction
             .receive(on: RunLoop.main)
             .eraseToAnyPublisher()
+    }
+
+    init(initialValue: Double = 0.0) {
+        self.progressFraction = initialValue
     }
 
     func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
