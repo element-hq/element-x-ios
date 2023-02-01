@@ -18,11 +18,8 @@ import Foundation
 import UIKit
 
 class MockBugReportService: BugReportServiceProtocol {
-    func submitBugReport(text: String,
-                         includeLogs: Bool,
-                         includeCrashLog: Bool,
-                         githubLabels: [String],
-                         files: [URL],
+    
+    func submitBugReport(_ bugReport: BugReport,
                          progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse {
         SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
     }

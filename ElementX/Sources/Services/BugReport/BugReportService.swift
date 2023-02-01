@@ -74,19 +74,15 @@ class BugReportService: BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    func submitBugReport(text: String,
-                         includeLogs: Bool,
-                         includeCrashLog: Bool,
-                         githubLabels: [String],
-                         files: [URL],
+    func submitBugReport(_ bugReport: BugReport,
                          progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse {
-        var params = [MultipartFormData(key: "text", type: .text(value: text))]
+        var params = [MultipartFormData(key: "text", type: .text(value: bugReport.text))]
         params.append(contentsOf: defaultParams)
-        for label in githubLabels {
+        for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
-        let zippedFiles = try await zipFiles(includeLogs: includeLogs,
-                                             includeCrashLog: includeCrashLog)
+        let zippedFiles = try await zipFiles(includeLogs: bugReport.includeLogs,
+                                             includeCrashLog: bugReport.includeCrashLog)
         //  log or compressed-log
         if !zippedFiles.isEmpty {
             for url in zippedFiles {
@@ -98,7 +94,7 @@ class BugReportService: BugReportServiceProtocol {
             params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventId)>")))
         }
         
-        for url in files {
+        for url in bugReport.files {
             params.append(MultipartFormData(key: "file", type: .file(url: url)))
         }
 

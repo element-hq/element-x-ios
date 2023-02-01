@@ -14,9 +14,16 @@
 // limitations under the License.
 //
 
-import Combine
 import Foundation
 import UIKit
+
+struct BugReport {
+    let text: String
+    let includeLogs: Bool
+    let includeCrashLog: Bool
+    let githubLabels: [String]
+    let files: [URL]
+}
 
 struct SubmitBugReportResponse: Decodable {
     var reportUrl: String
@@ -27,27 +34,7 @@ protocol BugReportServiceProtocol {
 
     func crash()
 
-    func submitBugReport(text: String,
-                         includeLogs: Bool,
-                         includeCrashLog: Bool,
-                         githubLabels: [String],
-                         files: [URL],
+    func submitBugReport(_ bugReport: BugReport,
                          progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse
 }
 
-final class ProgressTracker: NSObject, URLSessionTaskDelegate {
-    private var progressObservation: NSKeyValueObservation?
-    @Published private var progressFraction = 0.0
-
-    var progressFractionPublisher: AnyPublisher<Double, Never> {
-        $progressFraction
-            .receive(on: RunLoop.main)
-            .eraseToAnyPublisher()
-    }
-
-    func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
-        progressObservation = task.progress.observe(\.fractionCompleted) { [weak self] progress, _ in
-            self?.progressFraction = progress.fractionCompleted
-        }
-    }
-}

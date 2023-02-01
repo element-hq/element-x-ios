@@ -19,7 +19,7 @@ import SwiftUI
 
 struct UserNotificationModalView: View {
     let notification: UserNotification
-    @State var progressFraction: Double?
+    @State private var progressFraction: Double?
 
     var body: some View {
         ZStack {
