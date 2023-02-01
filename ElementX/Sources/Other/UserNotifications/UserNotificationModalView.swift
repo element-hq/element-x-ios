@@ -68,12 +68,14 @@ struct UserNotificationModalView_Previews: PreviewProvider {
         Group {
             UserNotificationModalView(notification: UserNotification(type: .modal,
                                                                      title: "Successfully logged in",
-                                                                     iconName: "checkmark"))
+                                                                     iconName: "checkmark")
+            )
             .previewDisplayName("Spinner")
             UserNotificationModalView(notification: UserNotification(type: .modal,
                                                                      title: "Successfully logged in",
                                                                      iconName: "checkmark",
-                                                                     progressTracker: ProgressTracker(initialValue: 0.5)))
+                                                                     progressTracker: ProgressTracker(initialValue: 0.5))
+            )
             .previewDisplayName("Progress Bar")
         }
     }

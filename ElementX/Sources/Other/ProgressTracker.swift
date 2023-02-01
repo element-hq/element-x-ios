@@ -28,7 +28,7 @@ final class ProgressTracker: NSObject, URLSessionTaskDelegate {
     }
 
     init(initialValue: Double = 0.0) {
-        self.progressFraction = initialValue
+        progressFraction = initialValue
     }
 
     func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
