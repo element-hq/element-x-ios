@@ -37,4 +37,3 @@ protocol BugReportServiceProtocol {
     func submitBugReport(_ bugReport: BugReport,
                          progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse
 }
-
