@@ -24,8 +24,6 @@
 "room_timeline_syncing" = "Syncing";
 "room_timeline_unable_to_decrypt" = "Unable to decrypt";
 
-"room_timeline_context_menu_retry_decryption" = "Retry decryption";
-
 "room_timeline_item_unsupported" = "Unsupported event";
 
 "noticeRoomInviteAccepted" = "%1$@ accepted the invite";

@@ -67,22 +67,19 @@ public struct ElementColors {
     
     // MARK: - Temp
     
-    private var tempActionBlack: UIColor { UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 1.0) }
-    
-    public var tempActionBackground: Color {
+    public var bubblesYou: Color {
         Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? tempActionBlack : .white
+            // Note: Light colour doesn't currently match Figma.
+            collection.userInterfaceStyle == .light ? .element.systemGray5 : UIColor(red: 0.16, green: 0.18, blue: 0.21, alpha: 1)
         })
     }
     
-    public var tempActionForeground: Color {
+    public var bubblesNotYou: Color {
         Color(UIColor { collection in
-            collection.userInterfaceStyle == .light ? .white : tempActionBlack
+            // Note: Light colour doesn't currently match Figma.
+            collection.userInterfaceStyle == .light ? .element.systemGray6 : .element.system
         })
     }
-    
-    public var tempActionBackgroundTint: Color { tempActionBackground.opacity(0.2) }
-    public var tempActionForegroundTint: Color { tempActionForeground.opacity(0.2) }
 }
 
 // MARK: UIKit

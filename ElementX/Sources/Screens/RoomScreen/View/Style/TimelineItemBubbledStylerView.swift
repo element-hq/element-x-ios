@@ -117,7 +117,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
             .bubbleStyle(inset: true,
-                         color: timelineItem.isOutgoing ? .element.systemGray5 : .element.systemGray6,
+                         color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
                          cornerRadius: cornerRadius,
                          corners: timelineItem.roundedCorners)
         }

@@ -23,8 +23,9 @@ struct RoomScreen: View {
     
     var body: some View {
         timeline
-            .background(Color.element.background) // Kills the toolbar translucency.
-            .safeAreaInset(edge: .bottom) { messageComposer }
+            .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
+            .safeAreaInset(edge: .top, spacing: 0) { encryptionBanner }
+            .safeAreaInset(edge: .bottom, spacing: 0) { messageComposer }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .toolbarRole(.editor) // Hide the back button title.
@@ -47,6 +48,42 @@ struct RoomScreen: View {
             .environmentObject(context)
             .timelineStyle(settings.timelineStyle)
             .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
+    }
+    
+    @ViewBuilder
+    var encryptionBanner: some View {
+        if context.viewState.showEncryptionBanner {
+            VStack(alignment: .leading, spacing: 4) {
+                Label {
+                    Text("Unable to decrypt all messages")
+                        .foregroundColor(.element.primaryContent)
+                } icon: {
+                    Image(systemName: "lock.shield")
+                        .foregroundColor(.element.background)
+                        .padding(4)
+                        .background(Color.element.tertiaryContent)
+                        .cornerRadius(5)
+                }
+                .font(.element.bodyBold)
+                
+                Text("Accessing your encrypted message history is not fully supported yet.")
+                    .font(.element.subheadline)
+                    .foregroundColor(.element.secondaryContent)
+                    .padding(.bottom, 8)
+                
+                Button(ElementL10n.globalRetry) {
+                    context.send(viewAction: .retryDecryption)
+                }
+                .buttonStyle(.elementCapsuleProminent)
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background {
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(Color.element.system)
+            }
+            .padding([.horizontal, .top], 16)
+        }
     }
     
     var messageComposer: some View {
@@ -110,7 +147,8 @@ struct RoomScreen_Previews: PreviewProvider {
                                             roomName: "Preview room")
         
         NavigationView {
-            RoomScreen(context: viewModel.context)
+            RoomScreen(context: viewModel.context).encryptionBanner
+                .padding()
         }
     }
 }

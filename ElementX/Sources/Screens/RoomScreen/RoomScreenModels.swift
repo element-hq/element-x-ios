@@ -53,6 +53,7 @@ enum RoomScreenViewAction {
     case cancelEdit
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
+    case retryDecryption
     case contextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
 }
 
@@ -63,6 +64,7 @@ struct RoomScreenViewState: BindableState {
     var items: [RoomTimelineViewProvider] = []
     var canBackPaginate = true
     var isBackPaginating = false
+    var showEncryptionBanner = false
     var showLoading = false
     var bindings: RoomScreenViewStateBindings
     

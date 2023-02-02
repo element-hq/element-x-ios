@@ -21,6 +21,7 @@ struct MessageComposer: View {
     @Binding var focused: Bool
     let sendingDisabled: Bool
     let type: RoomScreenComposerMode
+    @State private var isMultiline = false
     
     let sendAction: () -> Void
     let replyCancellationAction: () -> Void
@@ -34,10 +35,11 @@ struct MessageComposer: View {
                 MessageComposerTextField(placeholder: ElementL10n.roomMessagePlaceholder,
                                          text: $text,
                                          focused: $focused,
+                                         isMultiline: $isMultiline,
                                          maxHeight: 300,
                                          onEnterKeyHandler: sendAction)
                     .tint(.element.brand)
-                    .padding(.vertical, 12)
+                    .padding(.vertical, 10)
                 
                 Button {
                     sendAction()
@@ -55,7 +57,8 @@ struct MessageComposer: View {
                 .disabled(sendingDisabled)
                 .animation(.elementDefault, value: sendingDisabled)
                 .keyboardShortcut(.return, modifiers: [.command])
-                .padding(8)
+                .padding(.trailing, 8)
+                .padding(.vertical, 6)
             }
         }
         .padding(.leading, 12.0)
@@ -67,8 +70,8 @@ struct MessageComposer: View {
                     .stroke(Color.element.quinaryContent, lineWidth: 1)
                     .opacity(focused ? 1 : 0)
             }
+            .animation(.easeOut(duration: 0.25), value: isMultiline)
         }
-        .clipShape(roundedRectangle)
         .animation(.elementDefault, value: type)
     }
 
@@ -98,9 +101,9 @@ struct MessageComposer: View {
     private var borderRadius: CGFloat {
         switch type {
         case .default:
-            return 28.0
+            return isMultiline ? 8 : 28
         case .reply, .edit:
-            return 12.0
+            return 8
         }
     }
 }

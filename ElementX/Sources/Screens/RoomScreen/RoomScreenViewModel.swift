@@ -66,6 +66,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                     if self.state.isBackPaginating != isBackPaginating {
                         self.state.isBackPaginating = isBackPaginating
                     }
+                case .hasEncryptedItems(let hasEncryptedItems):
+                    if self.state.showEncryptionBanner != hasEncryptedItems {
+                        self.state.showEncryptionBanner = hasEncryptedItems
+                    }
                 }
             }
             .store(in: &cancellables)
@@ -113,6 +117,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = ""
         case .markRoomAsRead:
             await markRoomAsRead()
+        case .retryDecryption:
+            retryDecryption()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
         }
@@ -182,6 +188,27 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
+    /// The task responsible for retrying decryption of any encrypted items in the timeline.
+    private var retryDecryptionTask: Task<Void, Never>? {
+        didSet { oldValue?.cancel() }
+    }
+    
+    /// Retry decrypting any encrypted items in the timeline.
+    private func retryDecryption() {
+        retryDecryptionTask = Task {
+            for timelineItem in state.items.reversed() {
+                guard !Task.isCancelled else { break }
+                
+                guard case let .encrypted(item) = timelineItem,
+                      case let .megolmV1AesSha2(sessionID) = item.encryptionType
+                else { continue }
+                
+                MXLog.debug("Retrying decryption for: \(sessionID)")
+                await timelineController.retryDecryption(for: sessionID)
+            }
+        }
+    }
+    
     private func displayError(_ type: RoomScreenErrorType) {
         switch type {
         case .alert(let message):
@@ -224,12 +251,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.redact)
         }
         
-        var debugActions: [TimelineItemContextMenuAction] = [.viewSource]
-        
-        if let item = timelineItem as? EncryptedRoomTimelineItem,
-           case let .megolmV1AesSha2(sessionId) = item.encryptionType {
-            debugActions.append(.retryDecryption(sessionId: sessionId))
-        }
+        let debugActions: [TimelineItemContextMenuAction] = [.viewSource]
         
         return .init(actions: actions, debugActions: debugActions)
     }
@@ -271,10 +293,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             let debugDescription = timelineController.debugDescription(for: item.id)
             MXLog.info(debugDescription)
             state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
-        case .retryDecryption(let sessionId):
-            Task {
-                await timelineController.retryDecryption(for: sessionId)
-            }
         }
         
         if action.switchToDefaultComposer {

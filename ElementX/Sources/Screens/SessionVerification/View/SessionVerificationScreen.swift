@@ -33,7 +33,7 @@ struct SessionVerificationScreen: View {
                 .navigationBarTitleDisplayMode(.inline)
                 .toolbar { toolbarContent }
             }
-            .background(Color.element.background)
+            .background(Color.element.background.ignoresSafeArea())
             .safeAreaInset(edge: .bottom) { actionButtons.padding() }
         }
         .navigationViewStyle(.stack)
