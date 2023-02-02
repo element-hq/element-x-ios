@@ -97,7 +97,23 @@ struct HomeScreenViewStateBindings {
 }
 
 struct HomeScreenRoom: Identifiable, Equatable {
-    private static let placeholderLastMessage = AttributedString("Last message")
+    static let placeholderLastMessage = AttributedString("Hidden last message")
+    
+    enum LastMessage: Equatable {
+        case loaded(AttributedString)
+        case loading
+        case unknown
+        
+        init(attributedString: AttributedString?, isLoading: Bool) {
+            if let message = attributedString, !message.characters.isEmpty {
+                self = .loaded(message)
+            } else if isLoading {
+                self = .loading
+            } else {
+                self = .unknown
+            }
+        }
+    }
     
     /// The list item identifier can be a real room identifier, a custom one for invalidated entries
     /// or a completely unique one for empty items and skeletons
@@ -112,7 +128,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
     
     var timestamp: String?
     
-    var lastMessage: AttributedString?
+    var lastMessage: LastMessage
     
     var avatarURL: URL?
     
@@ -124,7 +140,7 @@ struct HomeScreenRoom: Identifiable, Equatable {
                        name: "Placeholder room name",
                        hasUnreads: false,
                        timestamp: "Now",
-                       lastMessage: Self.placeholderLastMessage,
+                       lastMessage: .loading,
                        isPlaceholder: true)
     }
 }

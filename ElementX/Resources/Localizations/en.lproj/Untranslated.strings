@@ -4,7 +4,7 @@
 "action_confirm" = "Confirm";
 "action_match" = "Match";
 
-"new_message" = "New message";
+"message" = "Message";
 
 "screenshot_detected_title" = "You took a screenshot";
 "screenshot_detected_message" = "Would you like to submit a bug report?";
