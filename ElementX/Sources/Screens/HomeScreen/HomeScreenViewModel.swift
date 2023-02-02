@@ -76,18 +76,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        Task {
-            if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
-                state.userAvatarURL = url
-            }
-        }
-        
-        Task {
-            if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
-                state.userDisplayName = userDisplayName
-            }
-        }
-        
         guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
@@ -98,28 +86,43 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                   visibleRoomsSummaryProvider.countPublisher,
                                   visibleRoomsSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state, totalCount, rooms in
+            .sink { [weak self] roomSummaryProviderState, totalCount, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = state != .live && (totalCount == 0 || rooms.count != totalCount)
-                let hasNoRooms = state == .live && totalCount == 0
+                let isLoadingData = roomSummaryProviderState != .live && (totalCount == 0 || rooms.count != totalCount)
+                let hasNoRooms = roomSummaryProviderState == .live && totalCount == 0
                 
-                var newState = self.state.roomListMode
+                var roomListMode = self.state.roomListMode
                 if isLoadingData {
-                    newState = .skeletons
+                    roomListMode = .skeletons
                 } else if hasNoRooms {
-                    newState = .skeletons
+                    roomListMode = .skeletons
                 } else {
-                    newState = .rooms
+                    roomListMode = .rooms
                 }
                 
-                guard newState != self.state.roomListMode else {
+                guard roomListMode != self.state.roomListMode else {
                     return
                 }
                 
-                self.state.roomListMode = newState
+                self.state.roomListMode = roomListMode
                 
                 MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
+                
+                // Delay user profile detail loading until after the initial room list loads
+                if roomListMode == .rooms {
+                    Task {
+                        if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
+                            self.state.userAvatarURL = url
+                        }
+                    }
+                    
+                    Task {
+                        if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
+                            self.state.userDisplayName = userDisplayName
+                        }
+                    }
+                }
             }
             .store(in: &cancellables)
         
