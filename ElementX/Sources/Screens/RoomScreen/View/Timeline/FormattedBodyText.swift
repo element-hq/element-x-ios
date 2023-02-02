@@ -47,7 +47,7 @@ struct FormattedBodyText: View {
                     }
                 } else {
                     Text(component.attributedString)
-                        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0) // FIXME: Configurable
+                        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.element.primaryContent)
                 }

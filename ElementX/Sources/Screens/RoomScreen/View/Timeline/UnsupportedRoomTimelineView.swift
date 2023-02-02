@@ -25,17 +25,15 @@ struct UnsupportedRoomTimelineView: View {
                 VStack(alignment: .leading) {
                     Text("\(timelineItem.text): \(timelineItem.eventType)")
                         .fixedSize(horizontal: false, vertical: true)
-                        .foregroundColor(.element.primaryContent)
                     
                     Text(timelineItem.error)
                         .fixedSize(horizontal: false, vertical: true)
                         .font(.element.footnote)
-                        .foregroundColor(.element.primaryContent)
                 }
             } icon: {
                 Image(systemName: "exclamationmark.bubble")
-                    .foregroundColor(.element.secondaryContent)
             }
+            .labelStyle(RoomTimelineViewLabelStyle())
         }
     }
 }

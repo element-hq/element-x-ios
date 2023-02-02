@@ -22,14 +22,22 @@ struct NoticeRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            HStack(alignment: .firstTextBaseline) {
-                Image(systemName: "exclamationmark.bubble").padding(.top, 2.0)
+            // Don't use RoomTimelineViewLabelStyle with FormattedBodyText as the formatted text
+            // adds additional padding so the spacing between the icon and text is inconsistent.
+            
+            // Spacing: 6 = label spacing - formatted text padding
+            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                // TODO: Check for a symbol with Amsha
+                Image(systemName: "megaphone").padding(.top, 2.0)
+                    .foregroundColor(.element.secondaryContent)
+                
                 if let attributedComponents = timelineItem.attributedComponents {
                     FormattedBodyText(attributedComponents: attributedComponents)
                 } else {
                     FormattedBodyText(text: timelineItem.text)
                 }
             }
+            .padding(.leading, 4) // Trailing padding is provided by FormattedBodyText
         }
     }
 }

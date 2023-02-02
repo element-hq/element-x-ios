@@ -22,10 +22,9 @@ struct RedactedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            HStack {
-                Image(systemName: "trash")
-                FormattedBodyText(text: timelineItem.text)
-            }
+            Label(timelineItem.text, systemImage: "trash")
+                .labelStyle(RoomTimelineViewLabelStyle())
+                .imageScale(.small) // TODO: Check with Amsha.
         }
     }
 }
