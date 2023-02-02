@@ -231,6 +231,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
         var isBackPaginating = false
+        
+        var createdIdentifiers = [String: Bool]()
 
         for (index, itemProxy) in timelineProvider.itemsPublisher.value.enumerated() {
             if Task.isCancelled {
@@ -245,7 +247,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             switch itemProxy {
             case .event(let eventItemProxy):
                 if let timelineItem = timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy, groupState: groupState) {
-                    newTimelineItems.append(timelineItem)
+                    #warning("This works around duplicated items coming out of the SDK, remove once fixed")
+                    if createdIdentifiers[timelineItem.id] == nil {
+                        newTimelineItems.append(timelineItem)
+                        createdIdentifiers[timelineItem.id] = true
+                    } else {
+                        MXLog.error("Found duplicated timeline item, ignoring")
+                    }
                 }
             case .virtual(let virtualItem):
                 switch virtualItem {
@@ -274,7 +282,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         if Task.isCancelled {
             return
         }
-        
+
         timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems)
