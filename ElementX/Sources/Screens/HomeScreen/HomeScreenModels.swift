@@ -39,7 +39,7 @@ enum HomeScreenViewAction {
     case userMenu(action: HomeScreenViewUserMenuAction)
     case verifySession
     case skipSessionVerification
-    case updatedVisibleItemRange(Range<Int>)
+    case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -90,8 +90,6 @@ struct HomeScreenViewState: BindableState {
 
 struct HomeScreenViewStateBindings {
     var searchQuery = ""
-    
-    var isScrolling = false
     
     var alertInfo: AlertInfo<UUID>?
 }
