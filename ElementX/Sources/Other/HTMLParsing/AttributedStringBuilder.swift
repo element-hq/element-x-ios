@@ -94,7 +94,11 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 attributedString.removeSubrange(range)
             }
             
-            return AttributedStringBuilderComponent(attributedString: attributedString, isBlockquote: value != nil)
+            let isBlockquote = value != nil
+            /// This is a temporary workaround until replies are retrieved from the SDK.
+            let isReply = isBlockquote && attributedString.characters.starts(with: "In reply to @")
+            
+            return AttributedStringBuilderComponent(attributedString: attributedString, isBlockquote: isBlockquote, isReply: isReply)
         }
     }
     

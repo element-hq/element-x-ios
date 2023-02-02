@@ -39,7 +39,7 @@ struct FormattedBodyText: View {
                         Text(component.attributedString.mergingAttributes(blockquoteAttributes))
                             .fixedSize(horizontal: false, vertical: true)
                             .foregroundColor(.element.tertiaryContent)
-                            .lineLimit(3) // FIXME: Quotes vs replies
+                            .lineLimit(component.isReply ? 3 : nil)
                             .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
                             .clipped()
                             .background(Color.element.background)
@@ -65,7 +65,7 @@ struct FormattedBodyText: View {
 
 extension FormattedBodyText {
     init(text: String) {
-        attributedComponents = [.init(attributedString: AttributedString(text), isBlockquote: false)]
+        attributedComponents = [.init(attributedString: AttributedString(text), isBlockquote: false, isReply: false)]
     }
 }
 

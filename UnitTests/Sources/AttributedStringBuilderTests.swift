@@ -314,6 +314,29 @@ class AttributedStringBuilderTests: XCTestCase {
         XCTAssertNotNil(foundBlockquoteAndLink, "Couldn't find blockquote or link")
     }
     
+    func testReplyBlockquote() {
+        let htmlString = "<blockquote><a href=\"https://matrix.to/#/someroom/someevent\">In reply to</a> <a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>The future is <code>swift run tools</code> 😎</blockquote>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        guard let coalescedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) else {
+            XCTFail("Could not build the attributed string components")
+            return
+        }
+        XCTAssertEqual(coalescedComponents.count, 1)
+        
+        guard let component = coalescedComponents.first else {
+            XCTFail("Could not get the first component")
+            return
+        }
+        
+        XCTAssertTrue(component.isBlockquote, "The reply quote should be a blockquote.")
+        XCTAssertTrue(component.isReply, "The reply quote should be detected as a reply")
+    }
+    
     func testMultipleGroupedBlockquotes() {
         let htmlString = """
         <blockquote>First blockquote with a <a href=\"https://www.matrix.org/\">link</a> in it</blockquote>
@@ -355,7 +378,15 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 12)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 6)
+        guard let coalescedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) else {
+            XCTFail("Could not build the attributed string components")
+            return
+        }
+        
+        XCTAssertEqual(coalescedComponents.count, 6)
+        for component in coalescedComponents where component.isReply {
+            XCTFail("None of the blockquotes should be detected as replies.")
+        }
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
