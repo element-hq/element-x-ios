@@ -25,7 +25,9 @@ struct ImageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(mediaSource: timelineItem.source,
                           blurhash: timelineItem.blurhash,
-                          imageProvider: context.imageProvider) {
+                          imageProvider: context.imageProvider) { image in
+                image.overlay { overlay }
+            } placeholder: {
                 placeholder
             }
             .frame(maxHeight: 300)
@@ -41,6 +43,20 @@ struct ImageRoomTimelineView: View {
             
             ProgressView(ElementL10n.loading)
                 .frame(maxWidth: .infinity)
+        }
+    }
+    
+    @ViewBuilder
+    var overlay: some View {
+        if timelineItem.type == .gif {
+            Text(ElementL10n.roomTimelineImageGif)
+                .font(.element.bodyBold)
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
+                .background(.thinMaterial)
+                .cornerRadius(8)
+                .environment(\.colorScheme, .dark)
         }
     }
 }
@@ -82,7 +98,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       sender: .init(id: "Bob"),
                                                                       source: nil,
                                                                       aspectRatio: 0.7,
-                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
+                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
+                                                                      type: .gif))
         }
     }
 }

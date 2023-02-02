@@ -21,12 +21,17 @@ struct ReadMarkerRoomTimelineView: View {
     let timelineItem: ReadMarkerRoomTimelineItem
     
     var body: some View {
-        VStack {
-            Spacer(minLength: 4.0)
-            Divider()
-                .frame(maxWidth: .infinity)
-                .overlay(Color.element.accent)
+        VStack(alignment: .trailing, spacing: 2) {
+            Text(ElementL10n.roomTimelineReadMarkerTitle)
+                .textCase(.uppercase)
+                .font(.element.caption2Bold)
+                .foregroundColor(.element.quaternaryContent)
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(.element.quaternaryContent)
         }
+        .padding([.horizontal, .bottom], 20)
+        .padding(.top, 16)
     }
 }
 

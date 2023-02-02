@@ -15,6 +15,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
@@ -33,6 +34,7 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     var height: CGFloat?
     var aspectRatio: CGFloat?
     var blurhash: String?
+    var type: UTType?
     
     var properties = RoomTimelineItemProperties()
 }

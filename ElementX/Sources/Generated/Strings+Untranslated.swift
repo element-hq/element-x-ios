@@ -96,10 +96,14 @@ extension ElementL10n {
   public static let roomTimelineBackpaginationFailure = ElementL10n.tr("Untranslated", "room_timeline_backpagination_failure")
   /// Editing
   public static let roomTimelineEditing = ElementL10n.tr("Untranslated", "room_timeline_editing")
+  /// GIF
+  public static let roomTimelineImageGif = ElementL10n.tr("Untranslated", "room_timeline_image_gif")
   /// Unsupported event
   public static let roomTimelineItemUnsupported = ElementL10n.tr("Untranslated", "room_timeline_item_unsupported")
   /// Failed creating the permalink
   public static let roomTimelinePermalinkCreationFailure = ElementL10n.tr("Untranslated", "room_timeline_permalink_creation_failure")
+  /// New
+  public static let roomTimelineReadMarkerTitle = ElementL10n.tr("Untranslated", "room_timeline_read_marker_title")
   /// Replying to %@
   public static func roomTimelineReplyingTo(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "room_timeline_replying_to", String(describing: p1))

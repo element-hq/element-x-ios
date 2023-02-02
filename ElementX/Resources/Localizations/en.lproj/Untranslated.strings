@@ -25,6 +25,8 @@
 "room_timeline_unable_to_decrypt" = "Unable to decrypt";
 
 "room_timeline_item_unsupported" = "Unsupported event";
+"room_timeline_image_gif" = "GIF";
+"room_timeline_read_marker_title" = "New";
 
 "noticeRoomInviteAccepted" = "%1$@ accepted the invite";
 "noticeRoomInviteAcceptedByYou" = "You accepted the invite";

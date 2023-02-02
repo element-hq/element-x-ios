@@ -25,8 +25,8 @@ struct StateRoomTimelineView: View {
             .multilineTextAlignment(.center)
             .foregroundColor(.element.secondaryContent)
             .frame(maxWidth: .infinity, alignment: .center)
-            .padding(.horizontal, 16)
-            .padding(.vertical, 4)
+            .padding(.horizontal, 36)
+            .padding(.vertical, 8)
     }
 }
 
