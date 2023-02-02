@@ -29,7 +29,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
-    private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
+    private var visibleItemRangeObservationToken: AnyCancellable?
+    private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
@@ -58,36 +59,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
-        visibleItemRangePublisher
-            .debounce(for: 0.1, scheduler: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] range in
-                guard let self else { return }
-                
-                guard self.state.bindings.searchQuery.isEmpty else {
-                    return
-                }
-                
-                if self.state.bindings.isScrolling {
-                    self.updateVisibleRange(range, timelineLimit: SlidingSyncConstants.lastMessageTimelineLimit)
-                } else {
-                    self.updateVisibleRange(range, timelineLimit: SlidingSyncConstants.timelinePrecachingTimelineLimit)
-                }
-            }
-            .store(in: &cancellables)
-        
-        Task {
-            if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
-                state.userAvatarURL = url
-            }
-        }
-        
-        Task {
-            if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
-                state.userDisplayName = userDisplayName
-            }
-        }
-        
         guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
@@ -98,28 +69,43 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                                   visibleRoomsSummaryProvider.countPublisher,
                                   visibleRoomsSummaryProvider.roomListPublisher)
             .receive(on: DispatchQueue.main)
-            .sink { [weak self] state, totalCount, rooms in
+            .sink { [weak self] roomSummaryProviderState, totalCount, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = state != .live && (totalCount == 0 || rooms.count != totalCount)
-                let hasNoRooms = state == .live && totalCount == 0
+                let isLoadingData = roomSummaryProviderState != .live && (totalCount == 0 || rooms.count != totalCount)
+                let hasNoRooms = roomSummaryProviderState == .live && totalCount == 0
                 
-                var newState = self.state.roomListMode
+                var roomListMode = self.state.roomListMode
                 if isLoadingData {
-                    newState = .skeletons
+                    roomListMode = .skeletons
                 } else if hasNoRooms {
-                    newState = .skeletons
+                    roomListMode = .skeletons
                 } else {
-                    newState = .rooms
+                    roomListMode = .rooms
                 }
                 
-                guard newState != self.state.roomListMode else {
+                guard roomListMode != self.state.roomListMode else {
                     return
                 }
                 
-                self.state.roomListMode = newState
+                self.state.roomListMode = roomListMode
                 
                 MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
+                
+                // Delay user profile detail loading until after the initial room list loads
+                if roomListMode == .rooms {
+                    Task {
+                        if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
+                            self.state.userAvatarURL = url
+                        }
+                    }
+                    
+                    Task {
+                        if case let .success(userDisplayName) = await userSession.clientProxy.loadUserDisplayName() {
+                            self.state.userDisplayName = userDisplayName
+                        }
+                    }
+                }
             }
             .store(in: &cancellables)
         
@@ -133,9 +119,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         allRoomsSummaryProvider.roomListPublisher
+            .dropFirst(1) // We don't care about its initial value
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.updateRooms()
+                
+                // Wait for the all rooms view to receive its first update before installing
+                // dynamic timeline modifiers
+                self?.installDynamicTimelineLimitModifiers()
             }
             .store(in: &cancellables)
         
@@ -163,8 +154,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.presentSessionVerificationScreen)
         case .skipSessionVerification:
             state.showSessionVerificationBanner = false
-        case .updatedVisibleItemRange(let range):
-            visibleItemRangePublisher.send(range)
+        case .updateVisibleItemRange(let range, let isScrolling):
+            visibleItemRangePublisher.send((range, isScrolling))
         }
     }
     
@@ -178,6 +169,29 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    /// We want the timeline limit to be set to 1 while scrolling the list so that last messages load up fast. We also want to set that back to 20 when the scrolling
+    /// stops to load room history. Also we don't want this to be setup before the initial sync is over so we only call it when the allRoomsSummaryProvider
+    /// first receives some changes
+    private func installDynamicTimelineLimitModifiers() {
+        guard visibleItemRangeObservationToken == nil else {
+            return
+        }
+        
+        visibleItemRangeObservationToken = visibleItemRangePublisher
+            .removeDuplicates(by: { $0.isScrolling == $1.isScrolling && $0.range == $1.range })
+            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] value in
+                guard let self else { return }
+                
+                // Ignore scrolling while filtering rooms
+                guard self.state.bindings.searchQuery.isEmpty else {
+                    return
+                }
+                
+                self.updateVisibleRange(value.range, timelineLimit: value.isScrolling ? SlidingSyncConstants.lastMessageTimelineLimit : SlidingSyncConstants.timelinePrecachingTimelineLimit)
+            }
+    }
         
     /// This method will update all view state rooms by merging the data from both summary providers
     /// If a room is empty in the visible room summary provider it will try to get it from the allRooms one
@@ -200,7 +214,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             case .empty, .invalidated:
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     if case let .invalidated(details) = summary {
-                        rooms.append(buildRoom(with: details, invalidated: true))
+                        rooms.append(buildRoom(with: details, invalidated: true, isLoading: false))
                     } else {
                         rooms.append(HomeScreenRoom.placeholder())
                     }
@@ -211,10 +225,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 case .empty:
                     rooms.append(HomeScreenRoom.placeholder())
                 case .filled(let details), .invalidated(let details):
-                    rooms.append(buildRoom(with: details, invalidated: false))
+                    rooms.append(buildRoom(with: details, invalidated: false, isLoading: true))
                 }
             case .filled(let details):
-                rooms.append(buildRoom(with: details, invalidated: false))
+                rooms.append(buildRoom(with: details, invalidated: false, isLoading: false))
             }
         }
         
@@ -223,7 +237,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         MXLog.info("Finished updating rooms")
     }
     
-    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool) -> HomeScreenRoom {
+    private func buildRoom(with details: RoomSummaryDetails, invalidated: Bool, isLoading: Bool) -> HomeScreenRoom {
         let identifier = invalidated ? "invalidated-" + details.id : details.id
         
         return HomeScreenRoom(id: identifier,
@@ -231,7 +245,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                               name: details.name,
                               hasUnreads: details.unreadNotificationCount > 0,
                               timestamp: details.lastMessageFormattedTimestamp,
-                              lastMessage: details.lastMessage,
+                              lastMessage: .init(attributedString: details.lastMessage, isLoading: isLoading),
                               avatarURL: details.avatarURL)
     }
     

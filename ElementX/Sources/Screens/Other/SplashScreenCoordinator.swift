@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SplashScreenCoordinator: CoordinatorProtocol {
+class SplashScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(
             ZStack {

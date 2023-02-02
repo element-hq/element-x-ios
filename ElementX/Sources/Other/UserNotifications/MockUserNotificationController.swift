@@ -16,7 +16,7 @@
 
 import Foundation
 
-struct MockUserNotificationController: UserNotificationControllerProtocol {
+class MockUserNotificationController: UserNotificationControllerProtocol {
     func submitNotification(_ notification: UserNotification) { }
     
     func retractNotificationWithId(_ id: String) { }

@@ -16,8 +16,12 @@
 
 import SwiftUI
 
-struct InviteFriendsCoordinator: CoordinatorProtocol {
+class InviteFriendsCoordinator: CoordinatorProtocol {
     let userId: String
+    
+    init(userId: String) {
+        self.userId = userId
+    }
     
     func toPresentable() -> AnyView {
         guard let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userId).absoluteString else {

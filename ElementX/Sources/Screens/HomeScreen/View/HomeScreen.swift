@@ -21,8 +21,11 @@ struct HomeScreen: View {
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var showingLogoutConfirmation = false
-    @State private var visibleItemIdentifiers = Set<String>()
-    @State private var hasTriggeredInitialVisibleItemUpdate = false
+    @State private var visibleItemIdentifiers = Set<String>() {
+        didSet {
+            updateVisibleRange()
+        }
+    }
     
     var body: some View {
         ScrollView {
@@ -65,6 +68,11 @@ struct HomeScreen: View {
             guard scrollView != scrollViewAdapter.scrollView else { return }
             scrollViewAdapter.scrollView = scrollView
         }
+        .onReceive(scrollViewAdapter.isScrolling) { isScrolling in
+            if !isScrolling {
+                updateVisibleRange()
+            }
+        }
         .scrollDismissesKeyboard(.immediately)
         .disabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
@@ -75,17 +83,6 @@ struct HomeScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
             }
-        }
-        .onChange(of: visibleItemIdentifiers) { _ in
-            if !hasTriggeredInitialVisibleItemUpdate {
-                updateVisibleRange()
-                hasTriggeredInitialVisibleItemUpdate = true
-            }
-        }
-        .onReceive(scrollViewAdapter.isScrolling) { isScrolling in
-            context.isScrolling = isScrolling
-
-            updateVisibleRange()
         }
         .background(Color.element.background)
     }
@@ -196,7 +193,7 @@ struct HomeScreen: View {
             return
         }
         
-        context.send(viewAction: .updatedVisibleItemRange(firstIndex..<lastIndex))
+        context.send(viewAction: .updateVisibleItemRange(range: firstIndex..<lastIndex, isScrolling: scrollViewAdapter.isScrolling.value))
     }
 }
 

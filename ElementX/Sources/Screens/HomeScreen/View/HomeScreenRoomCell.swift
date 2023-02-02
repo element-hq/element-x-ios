@@ -81,11 +81,16 @@ struct HomeScreenRoomCell: View {
                 // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
                 Text(" \n ").lastMessageFormatting().hidden()
                 
-                if let lastMessage = room.lastMessage, !String(lastMessage.characters).isEmpty {
+                switch room.lastMessage {
+                case .loaded(let lastMessage):
                     Text(lastMessage)
                         .lastMessageFormatting()
-                } else {
-                    Text(ElementL10n.newMessage)
+                case .loading:
+                    Text(HomeScreenRoom.placeholderLastMessage)
+                        .lastMessageFormatting()
+                        .redacted(reason: .placeholder)
+                case .unknown:
+                    Text(ElementL10n.message)
                         .lastMessageFormatting()
                 }
             }
@@ -156,7 +161,8 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
                                       name: details.name,
                                       hasUnreads: details.unreadNotificationCount > 0,
                                       timestamp: Date.now.formattedMinimal(),
-                                      lastMessage: details.lastMessage)
+                                      lastMessage: .init(attributedString: details.lastMessage,
+                                                         isLoading: false))
             }
         }
 

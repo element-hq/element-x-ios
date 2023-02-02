@@ -16,9 +16,14 @@
 
 import SwiftUI
 
-struct UITestsRootCoordinator: CoordinatorProtocol {
+class UITestsRootCoordinator: CoordinatorProtocol {
     let mockScreens: [MockScreen]
     var selectionCallback: ((UITestScreenIdentifier) -> Void)?
+    
+    init(mockScreens: [MockScreen], selectionCallback: ((UITestScreenIdentifier) -> Void)? = nil) {
+        self.mockScreens = mockScreens
+        self.selectionCallback = selectionCallback
+    }
     
     func toPresentable() -> AnyView {
         AnyView(body)
@@ -26,8 +31,8 @@ struct UITestsRootCoordinator: CoordinatorProtocol {
     
     private var body: some View {
         List(mockScreens) { coordinator in
-            Button(coordinator.id.description) {
-                selectionCallback?(coordinator.id)
+            Button(coordinator.id.description) { [weak self] in
+                self?.selectionCallback?(coordinator.id)
             }
             .accessibilityIdentifier(coordinator.id.rawValue)
         }
