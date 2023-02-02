@@ -97,15 +97,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemAppearance(_ itemID: String) async {
-        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
-            return
-        }
-        
-        if let item = timelineItem as? EventBasedTimelineItemProtocol {
-            await loadUserDisplayNameForTimelineItem(item)
-        }
-    }
+    func processItemAppearance(_ itemID: String) async { }
     
     func processItemDisappearance(_ itemID: String) { }
 
@@ -431,28 +423,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
             item.cachedFileURL = fileURL
             timelineItems[index] = item
-        case .failure:
-            break
-        }
-    }
-        
-    #warning("This is here because sender profiles aren't working properly. Remove it entirely later")
-    private func loadUserDisplayNameForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
-        if timelineItem.shouldShowSenderDetails == false || timelineItem.sender.displayName != nil {
-            return
-        }
-        
-        switch await roomProxy.loadDisplayNameForUserId(timelineItem.sender.id) {
-        case .success(let displayName):
-            guard let displayName,
-                  let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
-                return
-            }
-            
-            item.sender.displayName = displayName
-            timelineItems[index] = item
-            callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:
             break
         }

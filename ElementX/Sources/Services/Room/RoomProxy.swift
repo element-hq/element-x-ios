@@ -152,6 +152,9 @@ class RoomProxy: RoomProxyProtocol {
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
         if let token = slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: nil) {
             timelineObservationToken = token
+            Task {
+                await fetchMembers()
+            }
             return .success(())
         } else {
             return .failure(.failedAddingTimelineListener)
@@ -195,17 +198,17 @@ class RoomProxy: RoomProxyProtocol {
         let transactionId = genTransactionId()
         
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                if let eventID {
+            if let eventID {
+                do {
                     try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
-                } else {
-                    let messageContent = messageEventContentFromMarkdown(md: message)
-                    try self.room.send(msg: messageContent, txnId: transactionId)
+                } catch {
+                    return .failure(.failedSendingMessage)
                 }
-                return .success(())
-            } catch {
-                return .failure(.failedSendingMessage)
+            } else {
+                let messageContent = messageEventContentFromMarkdown(md: message)
+                self.room.send(msg: messageContent, txnId: transactionId)
             }
+            return .success(())
         }
     }
     
@@ -279,6 +282,14 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     // MARK: - Private
+    
+    /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
+    /// This should become automatic on the RustSDK side at some point
+    private func fetchMembers() async {
+        await Task.dispatch(on: .global()) {
+            self.room.fetchMembers()
+        }
+    }
     
     private func update(url: URL?, forUserId userId: String) {
         memberAvatars[userId] = url
