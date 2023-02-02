@@ -212,6 +212,6 @@ class NavigationStackCoordinatorTests: XCTestCase {
     }
 }
 
-private struct SomeTestCoordinator: CoordinatorProtocol {
+private class SomeTestCoordinator: CoordinatorProtocol {
     let id = UUID()
 }

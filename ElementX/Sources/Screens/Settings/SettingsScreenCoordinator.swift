@@ -17,8 +17,8 @@
 import SwiftUI
 
 struct SettingsScreenCoordinatorParameters {
-    let navigationStackCoordinator: NavigationStackCoordinator
-    let userNotificationController: UserNotificationControllerProtocol
+    weak var navigationStackCoordinator: NavigationStackCoordinator?
+    weak var userNotificationController: UserNotificationControllerProtocol?
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
 }
@@ -88,10 +88,10 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 break
             }
             
-            self?.parameters.navigationStackCoordinator.pop()
+            self?.parameters.navigationStackCoordinator?.pop()
         }
         
-        parameters.navigationStackCoordinator.push(coordinator)
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
     
     private func verifySession() {
@@ -103,15 +103,15 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         let coordinator = SessionVerificationCoordinator(parameters: verificationParameters)
         
         coordinator.callback = { [weak self] in
-            self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+            self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         }
         
-        parameters.navigationStackCoordinator.setSheetCoordinator(coordinator) { [weak self] in
-            self?.parameters.navigationStackCoordinator.setSheetCoordinator(nil)
+        parameters.navigationStackCoordinator?.setSheetCoordinator(coordinator) { [weak self] in
+            self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         }
     }
 
     private func showSuccess(label: String) {
-        parameters.userNotificationController.submitNotification(UserNotification(title: label))
+        parameters.userNotificationController?.submitNotification(UserNotification(title: label))
     }
 }

@@ -119,7 +119,7 @@ class MockScreen: Identifiable {
         case .settings:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = SettingsScreenCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
-                                                                          userNotificationController: MockUserNotificationController(),
+                                                                          userNotificationController: nil,
                                                                           userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
                                                                                                        mediaProvider: MockMediaProvider()),
                                                                           bugReportService: MockBugReportService()))
@@ -128,7 +128,7 @@ class MockScreen: Identifiable {
         case .bugReport:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
-                                                                     userNotificationController: MockUserNotificationController(),
+                                                                     userNotificationController: nil,
                                                                      screenshot: nil,
                                                                      isModallyPresented: true))
             navigationStackCoordinator.setRootCoordinator(coordinator)
@@ -136,7 +136,7 @@ class MockScreen: Identifiable {
         case .bugReportWithScreenshot:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
-                                                                     userNotificationController: MockUserNotificationController(),
+                                                                     userNotificationController: nil,
                                                                      screenshot: Asset.Images.appLogo.image,
                                                                      isModallyPresented: false))
             navigationStackCoordinator.setRootCoordinator(coordinator)

@@ -27,7 +27,7 @@ class NavigationModule: Identifiable, Hashable {
     /// As the NavigationModule is just a wrapper multiple instances of it continuing living is of no consequence
     /// https://stackoverflow.com/questions/73885353/found-a-strange-behaviour-of-state-when-combined-to-the-new-navigation-stack/
     var coordinator: (any CoordinatorProtocol)?
-    let dismissalCallback: (() -> Void)?
+    var dismissalCallback: (() -> Void)?
     
     init(_ coordinator: any CoordinatorProtocol, dismissalCallback: (() -> Void)? = nil) {
         self.coordinator = coordinator
@@ -38,6 +38,7 @@ class NavigationModule: Identifiable, Hashable {
         coordinator?.stop()
         dismissalCallback?()
         coordinator = nil
+        dismissalCallback = nil
     }
     
     nonisolated static func == (lhs: NavigationModule, rhs: NavigationModule) -> Bool {
