@@ -23,7 +23,7 @@ enum BugReportCoordinatorResult {
 
 struct BugReportCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
-    let userNotificationController: UserNotificationControllerProtocol
+    weak var userNotificationController: UserNotificationControllerProtocol?
     let screenshot: UIImage?
     let isModallyPresented: Bool
 }
@@ -76,17 +76,17 @@ final class BugReportCoordinator: CoordinatorProtocol {
     static let loadingIndicatorIdentifier = "BugReportLoading"
     
     private func startLoading(label: String = ElementL10n.loading) {
-        parameters.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
-                                                                                  type: .modal,
-                                                                                  title: label,
-                                                                                  persistent: true))
+        parameters.userNotificationController?.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
+                                                                                   type: .modal,
+                                                                                   title: label,
+                                                                                   persistent: true))
     }
     
     private func stopLoading() {
-        parameters.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
+        parameters.userNotificationController?.retractNotificationWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func showError(label: String) {
-        parameters.userNotificationController.submitNotification(UserNotification(title: label))
+        parameters.userNotificationController?.submitNotification(UserNotification(title: label))
     }
 }

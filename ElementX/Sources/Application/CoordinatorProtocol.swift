@@ -17,7 +17,7 @@
 import SwiftUI
 
 @MainActor
-protocol CoordinatorProtocol {
+protocol CoordinatorProtocol: AnyObject {
     func start()
     func stop()
     func toPresentable() -> AnyView

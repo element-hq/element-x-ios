@@ -16,8 +16,12 @@
 
 import SwiftUI
 
-struct ActivityCoordinator: CoordinatorProtocol {
+class ActivityCoordinator: CoordinatorProtocol {
     let items: [Any]
+    
+    init(items: [Any]) {
+        self.items = items
+    }
     
     func toPresentable() -> AnyView {
         AnyView(UIActivityViewControllerWrapper(activityItems: items)

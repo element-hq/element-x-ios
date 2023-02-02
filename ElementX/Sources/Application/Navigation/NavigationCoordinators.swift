@@ -213,14 +213,14 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
     ///
     /// For added complexity, the NavigationSplitCoordinator has an internal compact layout NavigationStack for which we need to manually nil things again
     private func releaseAllCoordinatorReferences() {
-        sidebarModule?.coordinator = nil
-        detailModule?.coordinator = nil
-        sheetModule?.coordinator = nil
-        fullScreenCoverModule?.coordinator = nil
+        sidebarModule?.tearDown()
+        detailModule?.tearDown()
+        sheetModule?.tearDown()
+        fullScreenCoverModule?.tearDown()
         
-        compactLayoutRootModule?.coordinator = nil
+        compactLayoutRootModule?.tearDown()
         compactLayoutStackModules.forEach { module in
-            module.coordinator = nil
+            module.tearDown()
         }
     }
     
@@ -592,6 +592,19 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     func toPresentable() -> AnyView {
         AnyView(NavigationStackCoordinatorView(navigationStackCoordinator: self)
             .presentationDetents(presentationDetents))
+    }
+    
+    /// The NavigationStack has a tendency to hold on to path items for longer than needed. We work around that by manually nilling the coordinator
+    /// when a NavigationModule is dismissed. As the NavigationModule is just a wrapper multiple instances of it continuing living is of no consequence
+    /// https://stackoverflow.com/questions/73885353/found-a-strange-behaviour-of-state-when-combined-to-the-new-navigation-stack/
+    func stop() {
+        rootModule?.tearDown()
+        sheetModule?.tearDown()
+        fullScreenCoverModule?.tearDown()
+        
+        stackModules.forEach { module in
+            module.tearDown()
+        }
     }
     
     // MARK: - CustomStringConvertible
