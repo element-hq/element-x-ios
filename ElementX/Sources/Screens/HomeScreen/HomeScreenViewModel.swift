@@ -29,7 +29,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
-    private let visibleItemRangePublisher = CurrentValueSubject<Range<Int>, Never>(0..<0)
+    private var visibleItemRangeObservationToken: AnyCancellable?
+    private let visibleItemRangePublisher = CurrentValueSubject<(range: Range<Int>, isScrolling: Bool), Never>((0..<0, false))
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
@@ -54,24 +55,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     self?.state.showSessionVerificationBanner = false
                 default:
                     break
-                }
-            }
-            .store(in: &cancellables)
-        
-        visibleItemRangePublisher
-            .debounce(for: 0.1, scheduler: DispatchQueue.main)
-            .removeDuplicates()
-            .sink { [weak self] range in
-                guard let self else { return }
-                
-                guard self.state.bindings.searchQuery.isEmpty else {
-                    return
-                }
-                
-                if self.state.bindings.isScrolling {
-                    self.updateVisibleRange(range, timelineLimit: SlidingSyncConstants.lastMessageTimelineLimit)
-                } else {
-                    self.updateVisibleRange(range, timelineLimit: SlidingSyncConstants.timelinePrecachingTimelineLimit)
                 }
             }
             .store(in: &cancellables)
@@ -136,9 +119,14 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .store(in: &cancellables)
         
         allRoomsSummaryProvider.roomListPublisher
+            .dropFirst(1) // We don't care about its initial value
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
                 self?.updateRooms()
+                
+                // Wait for the all rooms view to receive its first update before installing
+                // dynamic timeline modifiers
+                self?.installDynamicTimelineLimitModifiers()
             }
             .store(in: &cancellables)
         
@@ -166,8 +154,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             callback?(.presentSessionVerificationScreen)
         case .skipSessionVerification:
             state.showSessionVerificationBanner = false
-        case .updatedVisibleItemRange(let range):
-            visibleItemRangePublisher.send(range)
+        case .updateVisibleItemRange(let range, let isScrolling):
+            visibleItemRangePublisher.send((range, isScrolling))
         }
     }
     
@@ -181,6 +169,29 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     // MARK: - Private
+    
+    /// We want the timeline limit to be set to 1 while scrolling the list so that last messages load up fast. We also want to set that back to 20 when the scrolling
+    /// stops to load room history. Also we don't want this to be setup before the initial sync is over so we only call it when the allRoomsSummaryProvider
+    /// first receives some changes
+    private func installDynamicTimelineLimitModifiers() {
+        guard visibleItemRangeObservationToken == nil else {
+            return
+        }
+        
+        visibleItemRangeObservationToken = visibleItemRangePublisher
+            .removeDuplicates(by: { $0.isScrolling == $1.isScrolling && $0.range == $1.range })
+            .throttle(for: 0.5, scheduler: DispatchQueue.main, latest: true)
+            .sink { [weak self] value in
+                guard let self else { return }
+                
+                // Ignore scrolling while filtering rooms
+                guard self.state.bindings.searchQuery.isEmpty else {
+                    return
+                }
+                
+                self.updateVisibleRange(value.range, timelineLimit: value.isScrolling ? SlidingSyncConstants.lastMessageTimelineLimit : SlidingSyncConstants.timelinePrecachingTimelineLimit)
+            }
+    }
         
     /// This method will update all view state rooms by merging the data from both summary providers
     /// If a room is empty in the visible room summary provider it will try to get it from the allRooms one
