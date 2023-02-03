@@ -27,8 +27,7 @@ struct NoticeRoomTimelineView: View {
             
             // Spacing: 6 = label spacing - formatted text padding
             HStack(alignment: .firstTextBaseline, spacing: 6) {
-                // TODO: Check for a symbol with Amsha
-                Image(systemName: "megaphone").padding(.top, 2.0)
+                Image(systemName: "info.bubble").padding(.top, 2.0)
                     .foregroundColor(.element.secondaryContent)
                 
                 if let attributedComponents = timelineItem.attributedComponents {

@@ -24,7 +24,7 @@ struct RedactedRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             Label(timelineItem.text, systemImage: "trash")
                 .labelStyle(RoomTimelineViewLabelStyle())
-                .imageScale(.small) // TODO: Check with Amsha.
+                .imageScale(.small)
         }
     }
 }

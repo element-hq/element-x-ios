@@ -36,6 +36,10 @@ extension ElementL10n {
   public static let ftueAuthCarouselWelcomeTitle = ElementL10n.tr("Untranslated", "ftue_auth_carousel_welcome_title")
   /// Enter your details
   public static let ftueAuthSignInEnterDetails = ElementL10n.tr("Untranslated", "ftue_auth_sign_in_enter_details")
+  /// No
+  public static let iosNo = ElementL10n.tr("Untranslated", "ios_no")
+  /// Yes
+  public static let iosYes = ElementL10n.tr("Untranslated", "ios_yes")
   /// Mobile
   public static let loginMobileDevice = ElementL10n.tr("Untranslated", "login_mobile_device")
   /// Tablet

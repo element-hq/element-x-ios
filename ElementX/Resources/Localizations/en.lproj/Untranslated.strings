@@ -1,6 +1,8 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
+"ios_yes" = "Yes";
+"ios_no" = "No";
 "action_confirm" = "Confirm";
 "action_match" = "Match";
 

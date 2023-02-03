@@ -30,14 +30,38 @@ struct ReadMarkerRoomTimelineView: View {
                 .frame(height: 0.5)
                 .foregroundColor(.element.quaternaryContent)
         }
-        .padding([.horizontal, .bottom], 20)
-        .padding(.top, 16)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
     }
 }
 
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
+    static let item = ReadMarkerRoomTimelineItem()
     static var previews: some View {
-        let item = ReadMarkerRoomTimelineItem()
-        ReadMarkerRoomTimelineView(timelineItem: item)
+        VStack(alignment: .leading, spacing: 0) {
+            RoomTimelineViewProvider.separator(.init(text: "Today"))
+            RoomTimelineViewProvider.text(.init(id: "",
+                                                text: "This is another message",
+                                                timestamp: "",
+                                                groupState: .single,
+                                                isOutgoing: true,
+                                                isEditable: false,
+                                                sender: .init(id: "1", displayName: "Bob")))
+            
+            ReadMarkerRoomTimelineView(timelineItem: item)
+            
+            RoomTimelineViewProvider.separator(.init(text: "Today"))
+            RoomTimelineViewProvider.text(.init(id: "",
+                                                text: "This is a message",
+                                                timestamp: "",
+                                                groupState: .single,
+                                                isOutgoing: false,
+                                                isEditable: false,
+                                                sender: .init(id: "", displayName: "Alice")))
+        }
+        .padding(.horizontal, 8)
+        .environmentObject(viewModel.context)
     }
 }

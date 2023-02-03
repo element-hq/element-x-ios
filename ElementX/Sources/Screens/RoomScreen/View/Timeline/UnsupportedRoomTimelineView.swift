@@ -31,7 +31,7 @@ struct UnsupportedRoomTimelineView: View {
                         .font(.element.footnote)
                 }
             } icon: {
-                Image(systemName: "exclamationmark.bubble")
+                Image(systemName: "exclamationmark.triangle")
             }
             .labelStyle(RoomTimelineViewLabelStyle())
         }
