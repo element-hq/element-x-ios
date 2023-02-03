@@ -77,7 +77,6 @@ protocol RoomProxyProtocol {
 }
 
 extension RoomProxyProtocol {
-    
     var permalink: URL? {
         if let canonicalAlias, let link = try? PermalinkBuilder.permalinkTo(roomAlias: canonicalAlias) {
             return link

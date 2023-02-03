@@ -29,6 +29,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
     
+    // swiftlint:disable:next cyclomatic_complexity
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -188,22 +189,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
-    /// The task responsible for retrying decryption of any encrypted items in the timeline.
-    private var retryDecryptionTask: Task<Void, Never>? {
-        didSet { oldValue?.cancel() }
-    }
-    
     /// Retry decrypting any encrypted items in the timeline.
     private func retryDecryption() {
-        retryDecryptionTask = Task {
-            for timelineItem in state.items.reversed() {
-                guard !Task.isCancelled else { break }
-                
-                guard case let .encrypted(item) = timelineItem,
-                      case let .megolmV1AesSha2(sessionID) = item.encryptionType
-                else { continue }
-                
-                MXLog.debug("Retrying decryption for: \(sessionID)")
+        Task {
+            let firstEncryptedItem = state.items.first { $0.sessionID != nil }
+            
+            if let sessionID = firstEncryptedItem?.sessionID {
+                // Request for the first encrypted item to be decrypted as the SDK
+                // will continue to decrypt any following items automatically.
                 await timelineController.retryDecryption(for: sessionID)
             }
         }
@@ -308,4 +301,13 @@ extension RoomScreenViewModel {
                                           timelineViewFactory: RoomTimelineViewFactory(),
                                           mediaProvider: MockMediaProvider(),
                                           roomName: "Preview room")
+}
+
+private extension RoomTimelineViewProvider {
+    var sessionID: String? {
+        guard case let .encrypted(item) = self,
+              case let .megolmV1AesSha2(sessionID) = item.encryptionType
+        else { return nil }
+        return sessionID
+    }
 }

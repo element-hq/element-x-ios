@@ -24,7 +24,7 @@ struct RoomScreen: View {
     var body: some View {
         timeline
             .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
-            .safeAreaInset(edge: .top, spacing: 0) { encryptionBanner }
+            .overlay(alignment: .top) { encryptionBanner } // Overlay for now, safeAreaInset breaks timeline offset.
             .safeAreaInset(edge: .bottom, spacing: 0) { messageComposer }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
@@ -83,6 +83,7 @@ struct RoomScreen: View {
                     .fill(Color.element.system)
             }
             .padding([.horizontal, .top], 16)
+            .background(Color.element.background)
         }
     }
     

@@ -141,7 +141,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     final class Coordinator: NSObject, UITextViewDelegate, TextViewWithKeyDetectionDelegate {
         private var text: Binding<String>
         private var focused: Binding<Bool>
-//        private var isMultiline: Binding<Bool>
         
         private let maxHeight: CGFloat
         
