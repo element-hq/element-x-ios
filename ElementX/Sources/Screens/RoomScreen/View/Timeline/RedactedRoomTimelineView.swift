@@ -24,7 +24,7 @@ struct RedactedRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             Label(timelineItem.text, systemImage: "trash")
                 .labelStyle(RoomTimelineViewLabelStyle())
-                .imageScale(.small)
+                .imageScale(.small) // Smaller icon so that the bubble remains rounded on the outside.
         }
     }
 }

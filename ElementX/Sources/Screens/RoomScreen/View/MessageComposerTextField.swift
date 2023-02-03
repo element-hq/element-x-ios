@@ -68,6 +68,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
     
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
         let textView = TextViewWithKeyDetection()
+        textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
         textView.keyDelegate = context.coordinator
         textView.textColor = .element.primaryContent
@@ -92,17 +93,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
                                                  height: CGFloat.greatestFiniteMagnitude))
         let width = proposal.width ?? newSize.width
         let height = min(maxHeight, newSize.height)
-        
-        let numberOfLines = height / font.lineHeight
-        if numberOfLines > 1.5 {
-            if !isMultiline {
-                DispatchQueue.main.async { isMultiline = true }
-            }
-        } else {
-            if isMultiline {
-                DispatchQueue.main.async { isMultiline = false }
-            }
-        }
         
         return CGSize(width: width, height: height)
     }
@@ -133,7 +123,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
     func makeCoordinator() -> Coordinator {
         Coordinator(text: $text,
                     focused: $focused,
-                    isMultiline: $isMultiline,
                     maxHeight: maxHeight,
                     onEnterKeyHandler: onEnterKeyHandler)
     }
@@ -148,7 +137,6 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         init(text: Binding<String>,
              focused: Binding<Bool>,
-             isMultiline: Binding<Bool>,
              maxHeight: CGFloat,
              onEnterKeyHandler: @escaping OnEnterKeyHandler) {
             self.text = text
@@ -187,6 +175,8 @@ private protocol TextViewWithKeyDetectionDelegate: AnyObject {
 private class TextViewWithKeyDetection: UITextView {
     weak var keyDelegate: TextViewWithKeyDetectionDelegate?
     
+    var isMultiline: Binding<Bool>?
+    
     override var keyCommands: [UIKeyCommand]? {
         [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
          UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(enterKeyPressed))]
@@ -198,6 +188,23 @@ private class TextViewWithKeyDetection: UITextView {
     
     @objc func enterKeyPressed(sender: UIKeyCommand) {
         keyDelegate?.enterKeyWasPressed(textView: self)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        guard let isMultiline, let font else { return }
+        
+        let numberOfLines = frame.height / font.lineHeight
+        if numberOfLines > 1.5 {
+            if !isMultiline.wrappedValue {
+                isMultiline.wrappedValue = true
+            }
+        } else {
+            if isMultiline.wrappedValue {
+                isMultiline.wrappedValue = false
+            }
+        }
     }
 }
 

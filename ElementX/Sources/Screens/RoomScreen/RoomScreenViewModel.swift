@@ -304,6 +304,8 @@ extension RoomScreenViewModel {
 }
 
 private extension RoomTimelineViewProvider {
+    /// The item's session ID if it was unable to decrypt and uses megolm.
+    /// This will be nil for items that have already been decrypted.
     var sessionID: String? {
         guard case let .encrypted(item) = self,
               case let .megolmV1AesSha2(sessionID) = item.encryptionType
