@@ -91,8 +91,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var messageBubble: some View {
         styledContent
             .contentShape(.contextMenuPreview, RoundedCornerShape(radius: cornerRadius, corners: timelineItem.roundedCorners)) // Rounded corners for the context menu animation.
-            .contextMenu { [weak context] in
-                context?.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
+            .contextMenu {
+                context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
                     TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
                 }
             }
