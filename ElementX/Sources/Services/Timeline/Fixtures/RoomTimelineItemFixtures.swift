@@ -77,11 +77,7 @@ enum RoomTimelineItemFixtures {
                              ])),
         TextRoomTimelineItem(id: UUID().uuidString,
                              text: "",
-                             attributedComponents: [
-                                 AttributedStringBuilderComponent(attributedString: "Hol' up", isBlockquote: false, isReply: false),
-                                 AttributedStringBuilderComponent(attributedString: "New home office set up!", isBlockquote: true, isReply: false),
-                                 AttributedStringBuilderComponent(attributedString: "That's amazing! Congrats 🥳", isBlockquote: false, isReply: false)
-                             ],
+                             attributedBodyString: AttributedStringBuilder().fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳"),
                              timestamp: "5 PM",
                              groupState: .single,
                              isOutgoing: false,

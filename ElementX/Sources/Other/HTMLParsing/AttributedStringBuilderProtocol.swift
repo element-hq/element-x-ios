@@ -26,6 +26,4 @@ protocol AttributedStringBuilderProtocol {
     func fromPlain(_ string: String?) -> AttributedString?
     
     func fromHTML(_ htmlString: String?) -> AttributedString?
-    
-    func blockquoteCoalescedComponentsFrom(_ attributedString: AttributedString?) -> [AttributedStringBuilderComponent]?
 }

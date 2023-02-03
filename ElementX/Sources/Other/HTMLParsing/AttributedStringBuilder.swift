@@ -80,28 +80,6 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         return try? AttributedString(mutableAttributedString, including: \.elementX)
     }
     
-    func blockquoteCoalescedComponentsFrom(_ attributedString: AttributedString?) -> [AttributedStringBuilderComponent]? {
-        guard let attributedString else {
-            return nil
-        }
-        
-        return attributedString.runs[\.blockquote].map { value, range in
-            var attributedString = AttributedString(attributedString[range])
-            
-            // Remove trailing new lines if any
-            if attributedString.characters.last?.isNewline ?? false,
-               let range = attributedString.range(of: "\n", options: .backwards, locale: nil) {
-                attributedString.removeSubrange(range)
-            }
-            
-            let isBlockquote = value != nil
-            /// This is a temporary workaround until replies are retrieved from the SDK.
-            let isReply = isBlockquote && attributedString.characters.starts(with: "In reply to @")
-            
-            return AttributedStringBuilderComponent(attributedString: attributedString, isBlockquote: isBlockquote, isReply: isReply)
-        }
-    }
-    
     // MARK: - Private
     
     private func replaceMarkedBlockquotes(_ attributedString: NSMutableAttributedString) {

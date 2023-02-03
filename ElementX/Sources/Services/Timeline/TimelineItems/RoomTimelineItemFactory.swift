@@ -180,12 +180,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildFallbackTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                            _ isOutgoing: Bool,
                                            _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        let attributedText = attributedStringBuilder.fromPlain(eventItemProxy.body)
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+        let attributedBodyString = attributedStringBuilder.fromPlain(eventItemProxy.body)
         
         return TextRoomTimelineItem(id: eventItemProxy.id,
                                     text: eventItemProxy.body ?? "",
-                                    attributedComponents: attributedComponents,
+                                    attributedBodyString: attributedBodyString,
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                     groupState: groupState,
                                     isOutgoing: isOutgoing,
@@ -199,12 +198,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                   _ message: MessageTimelineItem<TextMessageContent>,
                                                   _ isOutgoing: Bool,
                                                   _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+        let attributedBodyString = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         
         return TextRoomTimelineItem(id: message.id,
                                     text: message.body,
-                                    attributedComponents: attributedComponents,
+                                    attributedBodyString: attributedBodyString,
                                     timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                     groupState: groupState,
                                     isOutgoing: isOutgoing,
@@ -294,12 +292,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                     _ message: MessageTimelineItem<NoticeMessageContent>,
                                                     _ isOutgoing: Bool,
                                                     _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+        let attributedBodyString = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         
         return NoticeRoomTimelineItem(id: message.id,
                                       text: message.body,
-                                      attributedComponents: attributedComponents,
+                                      attributedBodyString: attributedBodyString,
                                       timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                       groupState: groupState,
                                       isOutgoing: isOutgoing,
@@ -316,18 +313,16 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
         let name = eventItemProxy.sender.displayName ?? eventItemProxy.sender.id
 
-        var attributedText: AttributedString?
+        var attributedBodyString: AttributedString?
         if let htmlBody = message.htmlBody {
-            attributedText = attributedStringBuilder.fromHTML("* \(name) \(htmlBody)")
+            attributedBodyString = attributedStringBuilder.fromHTML("* \(name) \(htmlBody)")
         } else {
-            attributedText = attributedStringBuilder.fromPlain("* \(name) \(message.body)")
+            attributedBodyString = attributedStringBuilder.fromPlain("* \(name) \(message.body)")
         }
-        
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
         
         return EmoteRoomTimelineItem(id: message.id,
                                      text: message.body,
-                                     attributedComponents: attributedComponents,
+                                     attributedBodyString: attributedBodyString,
                                      timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                      groupState: groupState,
                                      isOutgoing: isOutgoing,

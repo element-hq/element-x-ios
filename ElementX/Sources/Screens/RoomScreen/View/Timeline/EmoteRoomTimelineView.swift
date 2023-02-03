@@ -22,8 +22,8 @@ struct EmoteRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let attributedComponents = timelineItem.attributedComponents {
-                FormattedBodyText(attributedComponents: attributedComponents)
+            if let attributedString = timelineItem.attributedBodyString {
+                FormattedBodyText(attributedString: attributedString)
             } else {
                 FormattedBodyText(text: timelineItem.text)
             }

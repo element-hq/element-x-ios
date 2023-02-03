@@ -76,7 +76,11 @@ struct FormattedBodyTextBubbleLayout: Layout {
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
     
-    let attributedComponents: [AttributedStringBuilderComponent]
+    private let attributedComponents: [AttributedStringBuilderComponent]
+    
+    init(attributedString: AttributedString) {
+        attributedComponents = attributedString.blockquoteCoalescedComponents
+    }
     
     var body: some View {
         if timelineStyle == .bubbles {
@@ -155,7 +159,7 @@ struct FormattedBodyText: View {
 
 extension FormattedBodyText {
     init(text: String) {
-        attributedComponents = [.init(attributedString: AttributedString(text), isBlockquote: false, isReply: false)]
+        self.init(attributedString: AttributedString(text))
     }
 }
 
@@ -204,10 +208,8 @@ struct FormattedBodyText_Previews: PreviewProvider {
         
         VStack(alignment: .leading, spacing: 24.0) {
             ForEach(htmlStrings, id: \.self) { htmlString in
-                let attributedString = attributedStringBuilder.fromHTML(htmlString)
-                
-                if let components = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) {
-                    FormattedBodyText(attributedComponents: components)
+                if let attributedString = attributedStringBuilder.fromHTML(htmlString) {
+                    FormattedBodyText(attributedString: attributedString)
                         .previewBubble()
                 }
             }

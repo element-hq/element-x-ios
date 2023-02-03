@@ -19,7 +19,7 @@ import UIKit
 struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
+    var attributedBodyString: AttributedString?
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
