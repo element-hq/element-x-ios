@@ -218,7 +218,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         updateTimelineItems()
     }
     
-    // swiftlint:disable:next cyclomatic_complexity function_body_length
+    // swiftlint:disable:next cyclomatic_complexity
     private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
