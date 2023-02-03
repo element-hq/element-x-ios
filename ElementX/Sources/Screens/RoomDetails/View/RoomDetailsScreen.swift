@@ -61,17 +61,21 @@ struct RoomDetailsScreen: View {
                     .font(.element.body)
                     .multilineTextAlignment(.center)
             }
-
-            // TODO: uncomment this code to display copy link and invite buttons
-//            HStack(spacing: 32) {
-//                SettingsActionButton(title: ElementL10n.roomDetailsCopyLink, image: Image(systemName: "link")) {
-//                    context.send(viewAction: .copyRoomLink)
-//                }
-//                SettingsActionButton(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized, image: Image(systemName: "square.and.arrow.up")) {
-//                    context.send(viewAction: .inviteToRoom)
-//                }
-//            }
-//            .padding(.top, 32)
+            
+            if let permalink = context.viewState.permalink {
+                HStack(spacing: 32) {
+                    Button { context.send(viewAction: .copyRoomLink) } label: {
+                        Image(systemName: "link")
+                    }
+                    .buttonStyle(SettingsActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
+                    
+                    ShareLink(item: permalink) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .buttonStyle(SettingsActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
+                }
+                .padding(.top, 32)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
