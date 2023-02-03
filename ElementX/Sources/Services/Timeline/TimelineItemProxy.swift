@@ -106,9 +106,17 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     
     var sender: TimelineItemSender {
         let profile = item.senderProfile()
-        return .init(id: item.sender(),
-                     displayName: profile.displayName,
-                     avatarURL: profile.avatarUrl.flatMap(URL.init(string:)))
+        
+        switch profile {
+        case let .ready(displayName, _, avatarUrl):
+            return .init(id: item.sender(),
+                         displayName: displayName,
+                         avatarURL: avatarUrl.flatMap(URL.init(string:)))
+        default:
+            return .init(id: item.sender(),
+                         displayName: nil,
+                         avatarURL: nil)
+        }
     }
 
     var reactions: [Reaction] {

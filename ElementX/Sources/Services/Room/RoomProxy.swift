@@ -31,9 +31,6 @@ class RoomProxy: RoomProxyProtocol {
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
-    private var memberAvatars = [String: URL]()
-    private var memberDisplayNames = [String: String]()
-    
     private(set) var displayName: String?
     
     private var timelineObservationToken: StoppableSpawn?
@@ -109,10 +106,6 @@ class RoomProxy: RoomProxyProtocol {
         return Asset.Images.encryptionTrusted.image
     }
     
-    func avatarURLForUserId(_ userId: String) -> URL? {
-        memberAvatars[userId]
-    }
-    
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         do {
             guard let urlString = try await Task.dispatch(on: lowPriorityDispatchQueue, {
@@ -126,15 +119,10 @@ class RoomProxy: RoomProxyProtocol {
                 return .failure(.failedRetrievingMemberAvatarURL)
             }
             
-            update(url: avatarURL, forUserId: userId)
             return .success(avatarURL)
         } catch {
             return .failure(.failedRetrievingMemberAvatarURL)
         }
-    }
-    
-    func displayNameForUserId(_ userId: String) -> String? {
-        memberDisplayNames[userId]
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
@@ -142,7 +130,6 @@ class RoomProxy: RoomProxyProtocol {
             let displayName = try await Task.dispatch(on: lowPriorityDispatchQueue) {
                 try self.room.memberDisplayName(userId: userId)
             }
-            update(displayName: displayName, forUserId: userId)
             return .success(displayName)
         } catch {
             return .failure(.failedRetrievingMemberDisplayName)
@@ -152,6 +139,9 @@ class RoomProxy: RoomProxyProtocol {
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
         if let token = slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: nil) {
             timelineObservationToken = token
+            Task {
+                await fetchMembers()
+            }
             return .success(())
         } else {
             return .failure(.failedAddingTimelineListener)
@@ -195,17 +185,17 @@ class RoomProxy: RoomProxyProtocol {
         let transactionId = genTransactionId()
         
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            do {
-                if let eventID {
+            if let eventID {
+                do {
                     try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
-                } else {
-                    let messageContent = messageEventContentFromMarkdown(md: message)
-                    try self.room.send(msg: messageContent, txnId: transactionId)
+                } catch {
+                    return .failure(.failedSendingMessage)
                 }
-                return .success(())
-            } catch {
-                return .failure(.failedSendingMessage)
+            } else {
+                let messageContent = messageEventContentFromMarkdown(md: message)
+                self.room.send(msg: messageContent, txnId: transactionId)
             }
+            return .success(())
         }
     }
     
@@ -280,14 +270,14 @@ class RoomProxy: RoomProxyProtocol {
     
     // MARK: - Private
     
-    private func update(url: URL?, forUserId userId: String) {
-        memberAvatars[userId] = url
+    /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
+    /// This should become automatic on the RustSDK side at some point
+    private func fetchMembers() async {
+        await Task.dispatch(on: .global()) {
+            self.room.fetchMembers()
+        }
     }
-    
-    private func update(displayName: String?, forUserId userId: String) {
-        memberDisplayNames[userId] = displayName
-    }
-    
+        
     private func update(displayName: String) {
         self.displayName = displayName
     }

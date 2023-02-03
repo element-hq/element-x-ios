@@ -40,18 +40,10 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.failedRetrievingMemberDisplayName)
     }
     
-    func avatarURLForUserId(_ userId: String) -> URL? {
-        nil
-    }
-    
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         .failure(.failedRetrievingMemberAvatarURL)
     }
     
-    func displayNameForUserId(_ userId: String) -> String? {
-        nil
-    }
-        
     func startLiveEventListener() { }
     
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
