@@ -84,7 +84,7 @@ struct HomeScreen: View {
                 userMenuButton
             }
         }
-        .background(Color.element.background)
+        .background(Color.element.background.ignoresSafeArea())
     }
 
     @ViewBuilder

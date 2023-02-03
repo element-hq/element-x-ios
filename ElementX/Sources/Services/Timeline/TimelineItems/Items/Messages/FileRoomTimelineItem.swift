@@ -24,7 +24,7 @@ struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hasha
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
 
     let source: MediaSourceProxy?
     let thumbnailSource: MediaSourceProxy?

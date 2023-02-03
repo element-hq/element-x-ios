@@ -36,6 +36,7 @@ struct RoomDetailsViewState: BindableState {
     var title = ""
     var topic: String?
     var avatarURL: URL?
+    let permalink: URL?
     var members: [RoomDetailsMember]
     
     var isLoadingMembers: Bool {
@@ -58,7 +59,6 @@ enum RoomDetailsErrorType: Hashable {
 enum RoomDetailsViewAction {
     case processTapPeople
     case copyRoomLink
-    case inviteToRoom
 }
 
 struct RoomDetailsMember: Identifiable, Equatable {

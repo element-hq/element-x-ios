@@ -21,18 +21,47 @@ struct ReadMarkerRoomTimelineView: View {
     let timelineItem: ReadMarkerRoomTimelineItem
     
     var body: some View {
-        VStack {
-            Spacer(minLength: 4.0)
-            Divider()
-                .frame(maxWidth: .infinity)
-                .overlay(Color.element.accent)
+        VStack(alignment: .trailing, spacing: 2) {
+            Text(ElementL10n.roomTimelineReadMarkerTitle)
+                .textCase(.uppercase)
+                .font(.element.caption2Bold)
+                .foregroundColor(.element.quaternaryContent)
+            Rectangle()
+                .frame(height: 0.5)
+                .foregroundColor(.element.quaternaryContent)
         }
+        .padding(.horizontal, 20)
+        .padding(.vertical, 16)
     }
 }
 
 struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel.mock
+    
+    static let item = ReadMarkerRoomTimelineItem()
     static var previews: some View {
-        let item = ReadMarkerRoomTimelineItem()
-        ReadMarkerRoomTimelineView(timelineItem: item)
+        VStack(alignment: .leading, spacing: 0) {
+            RoomTimelineViewProvider.separator(.init(text: "Today"))
+            RoomTimelineViewProvider.text(.init(id: "",
+                                                text: "This is another message",
+                                                timestamp: "",
+                                                groupState: .single,
+                                                isOutgoing: true,
+                                                isEditable: false,
+                                                sender: .init(id: "1", displayName: "Bob")))
+            
+            ReadMarkerRoomTimelineView(timelineItem: item)
+            
+            RoomTimelineViewProvider.separator(.init(text: "Today"))
+            RoomTimelineViewProvider.text(.init(id: "",
+                                                text: "This is a message",
+                                                timestamp: "",
+                                                groupState: .single,
+                                                isOutgoing: false,
+                                                isEditable: false,
+                                                sender: .init(id: "", displayName: "Alice")))
+        }
+        .padding(.horizontal, 8)
+        .environmentObject(viewModel.context)
     }
 }

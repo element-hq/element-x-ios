@@ -25,7 +25,7 @@ struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Has
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
 }

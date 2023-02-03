@@ -36,6 +36,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
                                            title: roomProxy.displayName ?? roomProxy.name ?? "Unknown Room",
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
+                                           permalink: roomProxy.permalink,
                                            members: [],
                                            bindings: .init()),
                    imageProvider: mediaProvider)
@@ -59,19 +60,17 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             callback?(.requestMemberDetailsPresentation(members))
         case .copyRoomLink:
             copyRoomLink()
-        case .inviteToRoom:
-            inviteToRoom()
         }
     }
     
     // MARK: - Private
     
     private func copyRoomLink() {
-        // TODO: to be implemented
-//        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.linkCopiedToClipboard))
-    }
-    
-    private func inviteToRoom() {
-        // TODO: to be implemented
+        if let roomLink = state.permalink {
+            UIPasteboard.general.url = roomLink
+            ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.linkCopiedToClipboard))
+        } else {
+            ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.unknownError))
+        }
     }
 }

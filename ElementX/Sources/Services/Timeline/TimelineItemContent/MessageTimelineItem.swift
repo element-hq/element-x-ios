@@ -17,6 +17,7 @@
 import CoreGraphics
 import Foundation
 import MatrixRustSDK
+import UniformTypeIdentifiers
 
 /// A protocol that contains the base `m.room.message` event content properties.
 /// The `CustomStringConvertible` conformance is to redact specific properties from the logs.
@@ -94,6 +95,10 @@ extension MessageTimelineItem where Content == MatrixRustSDK.ImageMessageContent
 
     var blurhash: String? {
         content.info?.blurhash
+    }
+    
+    var type: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
     }
 }
 

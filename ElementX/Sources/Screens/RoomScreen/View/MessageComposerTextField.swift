@@ -19,27 +19,16 @@ import SwiftUI
 typealias OnEnterKeyHandler = () -> Void
 
 struct MessageComposerTextField: View {
-    @Binding private var text: String
-    @Binding private var focused: Bool
+    let placeholder: String
+    @Binding var text: String
+    @Binding var focused: Bool
+    @Binding var isMultiline: Bool
     
-    private let placeholder: String
-    private let maxHeight: CGFloat
-    private let onEnterKeyHandler: OnEnterKeyHandler
+    let maxHeight: CGFloat
+    let onEnterKeyHandler: OnEnterKeyHandler
     
     private var showingPlaceholder: Bool {
         text.isEmpty
-    }
-    
-    init(placeholder: String,
-         text: Binding<String>,
-         focused: Binding<Bool>,
-         maxHeight: CGFloat,
-         onEnterKeyHandler: @escaping OnEnterKeyHandler) {
-        self.placeholder = placeholder
-        _text = text
-        _focused = focused
-        self.maxHeight = maxHeight
-        self.onEnterKeyHandler = onEnterKeyHandler
     }
     
     private var placeholderColor: Color {
@@ -49,6 +38,7 @@ struct MessageComposerTextField: View {
     var body: some View {
         UITextViewWrapper(text: $text,
                           focused: $focused,
+                          isMultiline: $isMultiline,
                           maxHeight: maxHeight,
                           onEnterKeyHandler: onEnterKeyHandler)
             .background(placeholderView, alignment: .topLeading)
@@ -68,18 +58,22 @@ private struct UITextViewWrapper: UIViewRepresentable {
 
     @Binding var text: String
     @Binding var focused: Bool
+    @Binding var isMultiline: Bool
     
     let maxHeight: CGFloat
 
     let onEnterKeyHandler: OnEnterKeyHandler
     
+    private let font = UIFont.preferredFont(forTextStyle: .body)
+    
     func makeUIView(context: UIViewRepresentableContext<UITextViewWrapper>) -> UITextView {
         let textView = TextViewWithKeyDetection()
+        textView.isMultiline = $isMultiline
         textView.delegate = context.coordinator
         textView.keyDelegate = context.coordinator
         textView.textColor = .element.primaryContent
         textView.isEditable = true
-        textView.font = .preferredFont(forTextStyle: .body)
+        textView.font = font
         textView.isSelectable = true
         textView.isUserInteractionEnabled = true
         textView.backgroundColor = UIColor.clear
@@ -99,6 +93,7 @@ private struct UITextViewWrapper: UIViewRepresentable {
                                                  height: CGFloat.greatestFiniteMagnitude))
         let width = proposal.width ?? newSize.width
         let height = min(maxHeight, newSize.height)
+        
         return CGSize(width: width, height: height)
     }
 
@@ -140,7 +135,10 @@ private struct UITextViewWrapper: UIViewRepresentable {
         
         private let onEnterKeyHandler: OnEnterKeyHandler
         
-        init(text: Binding<String>, focused: Binding<Bool>, maxHeight: CGFloat, onEnterKeyHandler: @escaping OnEnterKeyHandler) {
+        init(text: Binding<String>,
+             focused: Binding<Bool>,
+             maxHeight: CGFloat,
+             onEnterKeyHandler: @escaping OnEnterKeyHandler) {
             self.text = text
             self.focused = focused
             self.maxHeight = maxHeight
@@ -177,6 +175,8 @@ private protocol TextViewWithKeyDetectionDelegate: AnyObject {
 private class TextViewWithKeyDetection: UITextView {
     weak var keyDelegate: TextViewWithKeyDetectionDelegate?
     
+    var isMultiline: Binding<Bool>?
+    
     override var keyCommands: [UIKeyCommand]? {
         [UIKeyCommand(input: "\r", modifierFlags: .shift, action: #selector(shiftEnterKeyPressed)),
          UIKeyCommand(input: "\r", modifierFlags: [], action: #selector(enterKeyPressed))]
@@ -188,6 +188,23 @@ private class TextViewWithKeyDetection: UITextView {
     
     @objc func enterKeyPressed(sender: UIKeyCommand) {
         keyDelegate?.enterKeyWasPressed(textView: self)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        guard let isMultiline, let font else { return }
+        
+        let numberOfLines = frame.height / font.lineHeight
+        if numberOfLines > 1.5 {
+            if !isMultiline.wrappedValue {
+                isMultiline.wrappedValue = true
+            }
+        } else {
+            if isMultiline.wrappedValue {
+                isMultiline.wrappedValue = false
+            }
+        }
     }
 }
 
@@ -203,14 +220,21 @@ struct MessageComposerTextField_Previews: PreviewProvider {
     struct PreviewWrapper: View {
         @State var text: String
         @State var focused: Bool
+        @State var isMultiline: Bool
         
         init(text: String) {
             _text = .init(initialValue: text)
             _focused = .init(initialValue: false)
+            _isMultiline = .init(initialValue: false)
         }
         
         var body: some View {
-            MessageComposerTextField(placeholder: "Placeholder", text: $text, focused: $focused, maxHeight: 300, onEnterKeyHandler: { })
+            MessageComposerTextField(placeholder: "Placeholder",
+                                     text: $text,
+                                     focused: $focused,
+                                     isMultiline: $isMultiline,
+                                     maxHeight: 300,
+                                     onEnterKeyHandler: { })
         }
     }
 }

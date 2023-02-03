@@ -29,6 +29,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private let timelineController: RoomTimelineControllerProtocol
     private let timelineViewFactory: RoomTimelineViewFactoryProtocol
     
+    // swiftlint:disable:next cyclomatic_complexity
     init(timelineController: RoomTimelineControllerProtocol,
          timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
@@ -65,6 +66,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 case .isBackPaginating(let isBackPaginating):
                     if self.state.isBackPaginating != isBackPaginating {
                         self.state.isBackPaginating = isBackPaginating
+                    }
+                case .hasEncryptedItems(let hasEncryptedItems):
+                    if self.state.showEncryptionBanner != hasEncryptedItems {
+                        self.state.showEncryptionBanner = hasEncryptedItems
                     }
                 }
             }
@@ -113,6 +118,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerText = ""
         case .markRoomAsRead:
             await markRoomAsRead()
+        case .retryDecryption:
+            retryDecryption()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
         }
@@ -182,6 +189,19 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         }
     }
     
+    /// Retry decrypting any encrypted items in the timeline.
+    private func retryDecryption() {
+        Task {
+            let firstEncryptedItem = state.items.first { $0.sessionID != nil }
+            
+            if let sessionID = firstEncryptedItem?.sessionID {
+                // Request for the first encrypted item to be decrypted as the SDK
+                // will continue to decrypt any following items automatically.
+                await timelineController.retryDecryption(for: sessionID)
+            }
+        }
+    }
+    
     private func displayError(_ type: RoomScreenErrorType) {
         switch type {
         case .alert(let message):
@@ -224,12 +244,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.redact)
         }
         
-        var debugActions: [TimelineItemContextMenuAction] = [.viewSource]
-        
-        if let item = timelineItem as? EncryptedRoomTimelineItem,
-           case let .megolmV1AesSha2(sessionId) = item.encryptionType {
-            debugActions.append(.retryDecryption(sessionId: sessionId))
-        }
+        let debugActions: [TimelineItemContextMenuAction] = [.viewSource]
         
         return .init(actions: actions, debugActions: debugActions)
     }
@@ -271,10 +286,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             let debugDescription = timelineController.debugDescription(for: item.id)
             MXLog.info(debugDescription)
             state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
-        case .retryDecryption(let sessionId):
-            Task {
-                await timelineController.retryDecryption(for: sessionId)
-            }
         }
         
         if action.switchToDefaultComposer {
@@ -290,4 +301,15 @@ extension RoomScreenViewModel {
                                           timelineViewFactory: RoomTimelineViewFactory(),
                                           mediaProvider: MockMediaProvider(),
                                           roomName: "Preview room")
+}
+
+private extension RoomTimelineViewProvider {
+    /// The item's session ID if it was unable to decrypt and uses megolm.
+    /// This will be nil for items that have already been decrypted.
+    var sessionID: String? {
+        guard case let .encrypted(item) = self,
+              case let .megolmV1AesSha2(sessionID) = item.encryptionType
+        else { return nil }
+        return sessionID
+    }
 }

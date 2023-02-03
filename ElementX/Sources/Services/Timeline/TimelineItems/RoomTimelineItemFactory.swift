@@ -237,6 +237,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      height: message.height,
                                      aspectRatio: aspectRatio,
                                      blurhash: message.blurhash,
+                                     type: message.type,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus))

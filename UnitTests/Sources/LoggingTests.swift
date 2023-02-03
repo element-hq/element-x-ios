@@ -212,17 +212,20 @@ class LoggingTests: XCTestCase {
         let textAttributedString = "TextAttributed"
         let textMessage = TextRoomTimelineItem(id: "mytextmessage", text: "TextString",
                                                attributedComponents: [.init(attributedString: AttributedString(textAttributedString),
-                                                                            isBlockquote: false)],
+                                                                            isBlockquote: false,
+                                                                            isReply: false)],
                                                timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let noticeAttributedString = "NoticeAttributed"
         let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage", text: "NoticeString",
                                                    attributedComponents: [.init(attributedString: AttributedString(noticeAttributedString),
-                                                                                isBlockquote: false)],
+                                                                                isBlockquote: false,
+                                                                                isReply: false)],
                                                    timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let emoteAttributedString = "EmoteAttributed"
         let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage", text: "EmoteString",
                                                  attributedComponents: [.init(attributedString: AttributedString(emoteAttributedString),
-                                                                              isBlockquote: false)],
+                                                                              isBlockquote: false,
+                                                                              isReply: false)],
                                                  timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", text: "ImageString",
                                                  timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,

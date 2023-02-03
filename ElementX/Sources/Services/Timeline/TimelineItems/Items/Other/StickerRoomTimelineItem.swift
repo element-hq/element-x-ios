@@ -24,7 +24,7 @@ struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Ha
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     let imageURL: URL
     

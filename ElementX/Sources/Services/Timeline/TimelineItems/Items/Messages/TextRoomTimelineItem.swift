@@ -25,7 +25,7 @@ struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hasha
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
 }

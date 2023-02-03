@@ -218,11 +218,12 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         updateTimelineItems()
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
         var isBackPaginating = false
+        var hasEncryptedItems = false
         
         var createdIdentifiers = [String: Bool]()
 
@@ -243,6 +244,9 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                     if createdIdentifiers[timelineItem.id] == nil {
                         newTimelineItems.append(timelineItem)
                         createdIdentifiers[timelineItem.id] = true
+                        if timelineItem is EncryptedRoomTimelineItem {
+                            hasEncryptedItems = true
+                        }
                     } else {
                         MXLog.error("Found duplicated timeline item, ignoring")
                     }
@@ -280,6 +284,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.canBackPaginate(canBackPaginate))
         callbacks.send(.isBackPaginating(isBackPaginating))
+        callbacks.send(.hasEncryptedItems(hasEncryptedItems))
     }
     
     private func computeGroupState(for itemProxy: TimelineItemProxy,

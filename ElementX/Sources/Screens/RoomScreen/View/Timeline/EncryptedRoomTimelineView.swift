@@ -21,23 +21,24 @@ struct EncryptedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label {
-                FormattedBodyText(text: timelineItem.text)
-            } icon: {
-                Image(systemName: "lock.shield")
-                    .foregroundColor(.element.secondaryContent)
-            }
-            .labelStyle(RoomTimelineViewLabelStyle())
+            Label(timelineItem.text, systemImage: "lock.shield")
+                .labelStyle(RoomTimelineViewLabelStyle())
         }
     }
 }
 
 struct RoomTimelineViewLabelStyle: LabelStyle {
+    @Environment(\.timelineStyle) private var timelineStyle
+    
     func makeBody(configuration: Configuration) -> some View {
-        HStack(spacing: 8) {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
             configuration.icon
+                .foregroundColor(.element.secondaryContent)
             configuration.title
+                .font(.body)
+                .foregroundColor(.element.primaryContent)
         }
+        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
     }
 }
 

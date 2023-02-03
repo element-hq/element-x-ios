@@ -41,7 +41,7 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }
     
-    var sender: TimelineItemSender { get set }
+    var sender: TimelineItemSender { get }
     
     var properties: RoomTimelineItemProperties { get }
 }

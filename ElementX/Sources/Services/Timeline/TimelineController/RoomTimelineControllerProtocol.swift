@@ -23,6 +23,7 @@ enum RoomTimelineControllerCallback {
     case updatedTimelineItem(_ itemId: String)
     case canBackPaginate(Bool)
     case isBackPaginating(Bool)
+    case hasEncryptedItems(Bool)
 }
 
 enum RoomTimelineControllerAction {
