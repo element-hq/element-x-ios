@@ -26,6 +26,8 @@
 "room_timeline_syncing" = "Syncing";
 "room_timeline_unable_to_decrypt" = "Unable to decrypt";
 
+"room_timeline_context_menu_retry_decryption" = "Retry decryption";
+
 "room_timeline_item_unsupported" = "Unsupported event";
 "room_timeline_image_gif" = "GIF";
 "room_timeline_read_marker_title" = "New";
