@@ -31,9 +31,6 @@ class RoomProxy: RoomProxyProtocol {
     
     private var sendMessageBackgroundTask: BackgroundTaskProtocol?
     
-    private var memberAvatars = [String: URL]()
-    private var memberDisplayNames = [String: String]()
-    
     private(set) var displayName: String?
     
     private var timelineObservationToken: StoppableSpawn?
@@ -109,10 +106,6 @@ class RoomProxy: RoomProxyProtocol {
         return Asset.Images.encryptionTrusted.image
     }
     
-    func avatarURLForUserId(_ userId: String) -> URL? {
-        memberAvatars[userId]
-    }
-    
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         do {
             guard let urlString = try await Task.dispatch(on: lowPriorityDispatchQueue, {
@@ -126,15 +119,10 @@ class RoomProxy: RoomProxyProtocol {
                 return .failure(.failedRetrievingMemberAvatarURL)
             }
             
-            update(url: avatarURL, forUserId: userId)
             return .success(avatarURL)
         } catch {
             return .failure(.failedRetrievingMemberAvatarURL)
         }
-    }
-    
-    func displayNameForUserId(_ userId: String) -> String? {
-        memberDisplayNames[userId]
     }
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
@@ -142,7 +130,6 @@ class RoomProxy: RoomProxyProtocol {
             let displayName = try await Task.dispatch(on: lowPriorityDispatchQueue) {
                 try self.room.memberDisplayName(userId: userId)
             }
-            update(displayName: displayName, forUserId: userId)
             return .success(displayName)
         } catch {
             return .failure(.failedRetrievingMemberDisplayName)
@@ -290,15 +277,7 @@ class RoomProxy: RoomProxyProtocol {
             self.room.fetchMembers()
         }
     }
-    
-    private func update(url: URL?, forUserId userId: String) {
-        memberAvatars[userId] = url
-    }
-    
-    private func update(displayName: String?, forUserId userId: String) {
-        memberDisplayNames[userId] = displayName
-    }
-    
+        
     private func update(displayName: String) {
         self.displayName = displayName
     }
