@@ -31,7 +31,7 @@ struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, 
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
 }

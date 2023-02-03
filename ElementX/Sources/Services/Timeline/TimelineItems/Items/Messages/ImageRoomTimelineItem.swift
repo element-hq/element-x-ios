@@ -25,7 +25,7 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     let source: MediaSourceProxy?
     var cachedFileURL: URL?

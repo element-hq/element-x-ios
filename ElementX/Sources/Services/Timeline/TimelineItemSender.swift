@@ -16,11 +16,14 @@
 
 import UIKit
 
-#warning("This could be replaced by RoomMemberProxy if Rust includes a RoomMember.")
 struct TimelineItemSender: Identifiable, Hashable {
     let id: String
+    let displayName: String?
+    let avatarURL: URL?
     
-    // Lazy loaded properties, displayName and avatarURL will be come lets.
-    var displayName: String?
-    var avatarURL: URL?
+    init(id: String, displayName: String? = nil, avatarURL: URL? = nil) {
+        self.id = id
+        self.displayName = displayName
+        self.avatarURL = avatarURL
+    }
 }
