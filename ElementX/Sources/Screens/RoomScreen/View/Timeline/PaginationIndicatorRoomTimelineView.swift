@@ -22,6 +22,8 @@ struct PaginationIndicatorRoomTimelineView: View {
     var body: some View {
         ProgressView()
             .frame(maxWidth: .infinity)
+            .padding(.top, 12)
+            // There should always be padding at the bottom from a date separator.
     }
 }
 
