@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct ShimmerModifier: ViewModifier {
-    @Environment(\.colorScheme) private var colorScheme
     @State private var toggle = false
     
     private let startStart = UnitPoint(x: -5, y: 0)
@@ -38,32 +37,23 @@ struct ShimmerModifier: ViewModifier {
         ]
     }
     
-    var highlight: Color { colorScheme == .light ? .init(white: 0.7) : .init(white: 0.7) }
-    var normal: Color { colorScheme == .light ? .black : .white }
+    var highlight: Color { .white.opacity(0.5) }
+    var normal: Color { .white }
     
     private var stops2: [Gradient.Stop] {
         [
             .init(color: normal, location: 0),
             .init(color: normal, location: 0.3),
-            .init(color: highlight.opacity(0.7), location: 0.45),
-            .init(color: highlight.opacity(0.7), location: 0.55),
+            .init(color: highlight, location: 0.45),
+            .init(color: highlight, location: 0.55),
             .init(color: normal, location: 0.7),
             .init(color: normal, location: 1)
         ]
     }
     
-    var blendMode: BlendMode { colorScheme == .light ? .screen : .destinationOver }
-    
     func body(content: Content) -> some View {
         content
-            .overlay { overlay }
-    }
-    
-    var overlay: some View {
-        Rectangle()
-            .fill(gradient)
-            .blendMode(blendMode)
-            .opacity(0.8)
+            .mask { gradient }
             .onAppear {
                 withAnimation(.linear(duration: 1.2).delay(0.5).repeatForever(autoreverses: false)) {
                     toggle.toggle()
