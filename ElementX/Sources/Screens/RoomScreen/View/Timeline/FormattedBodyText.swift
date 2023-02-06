@@ -20,13 +20,13 @@ import SwiftUI
 /// Layout priority constants for `FormattedBodyText`. These priorities are abused within
 /// `FormattedBodyTextBubbleLayout` to create the layout we would like. They aren't
 /// used in the expected way that SwiftUI would normally use layout priorities.
-private extension Double {
-    /// The priority of hidden blockquote views that are used for layout purposes only.
-    static let blockquoteLayoutPriority: Double = -1
-    /// The priority of visible blockquote views that are rendered in the view.
-    static let blockquoteRenderPriority: Double = 0
-    /// The priority of regular text.
-    static let regularTextPriority: Double = 1
+private enum LayoutPriority {
+    /// The priority of hidden blockquotes that are only used for layout calculations.
+    static let hiddenBlockquote: Double = -1
+    /// The priority of visible blockquotes that are placed in the view with a full width.
+    static let visibleBlockquote: Double = 0
+    /// The priority of regular text that is used for layout calculations and placed in the view.
+    static let regularText: Double = 1
 }
 
 /// A custom layout used for formatted text components when in the bubbles timeline style.
@@ -41,33 +41,33 @@ struct FormattedBodyTextBubbleLayout: Layout {
         guard !subviews.isEmpty else { return .zero }
         
         // Calculate the natural size using the regular text and non-greedy blockquote bubbles.
-        let layoutSubviews = subviews.filter { $0.priority != .blockquoteRenderPriority }
+        let layoutSubviews = subviews.filter { $0.priority != LayoutPriority.visibleBlockquote }
         
         let subviewSizes = layoutSubviews.map { $0.sizeThatFits(proposal) }
-        let subviewHeight = subviewSizes.map(\.height).reduce(0, +)
-        let width = subviewSizes.map(\.width).reduce(0, max)
+        let maxWidth = subviewSizes.map(\.width).reduce(0, max)
+        let totalHeight = subviewSizes.map(\.height).reduce(0, +)
         let totalSpacing = CGFloat(layoutSubviews.count - 1) * spacing
         
-        return CGSize(width: width, height: subviewHeight + totalSpacing)
+        return CGSize(width: maxWidth, height: totalHeight + totalSpacing)
     }
     
     func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
         guard !subviews.isEmpty else { return }
         
         // Calculate the width using the regular text and the non-greedy blockquote bubbles.
-        let layoutSubviews = subviews.filter { $0.priority != .blockquoteRenderPriority }
-        let width = layoutSubviews.map { $0.sizeThatFits(proposal).width }.reduce(0, max)
+        let layoutSubviews = subviews.filter { $0.priority != LayoutPriority.visibleBlockquote }
+        let maxWidth = layoutSubviews.map { $0.sizeThatFits(proposal).width }.reduce(0, max)
         
         // Place the regular text and greedy blockquote bubbles using the calculated width.
-        let visibleSubviews = subviews.filter { $0.priority != .blockquoteLayoutPriority }
-        let subviewSizes = visibleSubviews.map { $0.sizeThatFits(ProposedViewSize(width: width, height: proposal.height)) }
+        let visibleSubviews = subviews.filter { $0.priority != LayoutPriority.hiddenBlockquote }
+        let subviewSizes = visibleSubviews.map { $0.sizeThatFits(ProposedViewSize(width: maxWidth, height: proposal.height)) }
         
         var y = bounds.minY
         for index in visibleSubviews.indices {
             let height = subviewSizes[index].height
             visibleSubviews[index].place(at: CGPoint(x: bounds.minX, y: y),
                                          anchor: .topLeading,
-                                         proposal: ProposedViewSize(width: width, height: height))
+                                         proposal: ProposedViewSize(width: maxWidth, height: height))
             y += height + spacing
         }
     }
@@ -93,20 +93,20 @@ struct FormattedBodyText: View {
         FormattedBodyTextBubbleLayout(spacing: 8) {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    // The rendered blockquote with a greedy width. The infinite width is prevented
-                    // from making the whole view fill its available width in the custom layout.
+                    // The rendered blockquote with a greedy width. The custom layout prevents the
+                    // infinite width from increasing the overall width of the view.
                     Text(component.attributedString.mergingAttributes(blockquoteAttributes))
                         .blockquoteFormatting(isReply: component.isReply)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .background(Color.element.background)
                         .cornerRadius(8)
-                        .layoutPriority(.blockquoteRenderPriority)
+                        .layoutPriority(LayoutPriority.visibleBlockquote)
                 } else {
                     Text(component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.element.primaryContent)
-                        .layoutPriority(.regularTextPriority)
+                        .layoutPriority(LayoutPriority.regularText)
                 }
             }
             
@@ -116,7 +116,7 @@ struct FormattedBodyText: View {
                 if component.isBlockquote {
                     Text(component.attributedString.mergingAttributes(blockquoteAttributes))
                         .blockquoteFormatting(isReply: component.isReply)
-                        .layoutPriority(.blockquoteLayoutPriority)
+                        .layoutPriority(LayoutPriority.hiddenBlockquote)
                         .hidden()
                 }
             }
@@ -141,7 +141,6 @@ struct FormattedBodyText: View {
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
                         .fixedSize(horizontal: false, vertical: true)
                         .foregroundColor(.element.primaryContent)
-                        .layoutPriority(.regularTextPriority)
                 }
             }
         }
