@@ -35,14 +35,8 @@ extension URL {
 
     /// The base directory where all session data is stored.
     static var sessionsBaseDirectory: URL {
-        let cacheSessionsURL = cacheBaseDirectory.appendingPathComponent("Sessions", isDirectory: true)
         let applicationSupportSessionsURL = applicationSupportBaseDirectory.appendingPathComponent("Sessions", isDirectory: true)
         
-        #warning("Migration from caches to application support. Remove this in a couple of releases.")
-        if FileManager.default.directoryExists(at: cacheSessionsURL) {
-            try? FileManager.default.moveItem(at: cacheSessionsURL, to: applicationSupportSessionsURL)
-        }
-
         try? FileManager.default.createDirectoryIfNeeded(at: applicationSupportSessionsURL)
 
         return applicationSupportSessionsURL
