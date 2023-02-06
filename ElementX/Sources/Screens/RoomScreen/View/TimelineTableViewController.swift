@@ -197,6 +197,7 @@ class TimelineTableViewController: UIViewController {
                     .id(timelineItem.id)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .opacity(opacity)
+                    .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                     .onAppear {
                         coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
                     }
