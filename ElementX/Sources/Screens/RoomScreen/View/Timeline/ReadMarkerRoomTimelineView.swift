@@ -43,7 +43,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
         VStack(alignment: .leading, spacing: 0) {
             RoomTimelineViewProvider.separator(.init(text: "Today"))
             RoomTimelineViewProvider.text(.init(id: "",
-                                                text: "This is another message",
+                                                body: "This is another message",
                                                 timestamp: "",
                                                 groupState: .single,
                                                 isOutgoing: true,
@@ -54,7 +54,7 @@ struct ReadMarkerRoomTimelineView_Previews: PreviewProvider {
             
             RoomTimelineViewProvider.separator(.init(text: "Today"))
             RoomTimelineViewProvider.text(.init(id: "",
-                                                text: "This is a message",
+                                                body: "This is a message",
                                                 timestamp: "",
                                                 groupState: .single,
                                                 isOutgoing: false,

@@ -23,7 +23,7 @@ struct UnsupportedRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             Label {
                 VStack(alignment: .leading) {
-                    Text("\(timelineItem.text): \(timelineItem.eventType)")
+                    Text("\(timelineItem.body): \(timelineItem.eventType)")
                         .fixedSize(horizontal: false, vertical: true)
                     
                     Text(timelineItem.error)
@@ -62,7 +62,7 @@ struct UnsupportedRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> UnsupportedRoomTimelineItem {
         UnsupportedRoomTimelineItem(id: UUID().uuidString,
-                                    text: text,
+                                    body: text,
                                     eventType: "Some Event Type",
                                     error: "Something went wrong",
                                     timestamp: timestamp,

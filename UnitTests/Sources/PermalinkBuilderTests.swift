@@ -106,4 +106,21 @@ class PermalinkBuilderTests: XCTestCase {
             XCTAssertEqual(error as? PermalinkBuilderError, PermalinkBuilderError.invalidEventIdentifier)
         }
     }
+    
+    func testPermalinkDetection() {
+        var url = URL(staticString: "https://www.matrix.org")
+        XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url), nil)
+
+        url = URL(staticString: "https://matrix.to/#/@bob:matrix.org?via=matrix.org")
+        XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url), PermalinkType.userIdentifier("@bob:matrix.org"))
+
+        url = URL(staticString: "https://matrix.to/#/!roomidentifier:matrix.org?via=matrix.org")
+        XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url), PermalinkType.roomIdentifier("!roomidentifier:matrix.org"))
+
+        url = URL(staticString: "https://matrix.to/#/%23roomalias:matrix.org?via=matrix.org")
+        XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url), PermalinkType.roomAlias("#roomalias:matrix.org"))
+        
+        url = URL(staticString: "https://matrix.to/#/!roomidentifier:matrix.org/$eventidentifier?via=matrix.org")
+        XCTAssertEqual(PermalinkBuilder.detectPermalink(in: url), PermalinkType.event(roomIdentifier: "!roomidentifier:matrix.org", eventIdentifier: "$eventidentifier"))
+    }
 }

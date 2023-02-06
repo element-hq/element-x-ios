@@ -253,7 +253,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 1)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
+        XCTAssertEqual(attributedString.formattedComponents.count, 1)
         
         for run in attributedString.runs where run.elementX.blockquote ?? false {
             return
@@ -277,7 +277,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 3)
+        XCTAssertEqual(attributedString.formattedComponents.count, 3)
         
         for run in attributedString.runs where run.elementX.blockquote ?? false {
             return
@@ -298,10 +298,8 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        guard let coalescedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) else {
-            XCTFail("Could not build the attributed string components")
-            return
-        }
+        let coalescedComponents = attributedString.formattedComponents
+        
         XCTAssertEqual(coalescedComponents.count, 1)
         
         XCTAssertEqual(coalescedComponents.first?.attributedString.runs.count, 3, "Link not present in the component")
@@ -322,10 +320,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        guard let coalescedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) else {
-            XCTFail("Could not build the attributed string components")
-            return
-        }
+        let coalescedComponents = attributedString.formattedComponents
         XCTAssertEqual(coalescedComponents.count, 1)
         
         guard let component = coalescedComponents.first else {
@@ -351,7 +346,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 7)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
+        XCTAssertEqual(attributedString.formattedComponents.count, 1)
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
@@ -378,10 +373,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 12)
         
-        guard let coalescedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) else {
-            XCTFail("Could not build the attributed string components")
-            return
-        }
+        let coalescedComponents = attributedString.formattedComponents
         
         XCTAssertEqual(coalescedComponents.count, 6)
         for component in coalescedComponents where component.isReply {

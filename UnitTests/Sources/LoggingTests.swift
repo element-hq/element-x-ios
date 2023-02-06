@@ -210,30 +210,24 @@ class LoggingTests: XCTestCase {
     func testTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
-        let textMessage = TextRoomTimelineItem(id: "mytextmessage", text: "TextString",
-                                               attributedComponents: [.init(attributedString: AttributedString(textAttributedString),
-                                                                            isBlockquote: false,
-                                                                            isReply: false)],
+        let textMessage = TextRoomTimelineItem(id: "mytextmessage", body: "TextString",
+                                               formattedBody: AttributedString(textAttributedString),
                                                timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let noticeAttributedString = "NoticeAttributed"
-        let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage", text: "NoticeString",
-                                                   attributedComponents: [.init(attributedString: AttributedString(noticeAttributedString),
-                                                                                isBlockquote: false,
-                                                                                isReply: false)],
+        let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage", body: "NoticeString",
+                                                   formattedBody: AttributedString(noticeAttributedString),
                                                    timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let emoteAttributedString = "EmoteAttributed"
-        let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage", text: "EmoteString",
-                                                 attributedComponents: [.init(attributedString: AttributedString(emoteAttributedString),
-                                                                              isBlockquote: false,
-                                                                              isReply: false)],
+        let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage", body: "EmoteString",
+                                                 formattedBody: AttributedString(emoteAttributedString),
                                                  timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
-        let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", text: "ImageString",
+        let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", body: "ImageString",
                                                  timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
                                                  sender: .init(id: "sender"), source: nil)
-        let videoMessage = VideoRoomTimelineItem(id: "myvideomessage", text: "VideoString",
+        let videoMessage = VideoRoomTimelineItem(id: "myvideomessage", body: "VideoString",
                                                  timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
                                                  sender: .init(id: "sender"), duration: 0, source: nil, thumbnailSource: nil)
-        let fileMessage = FileRoomTimelineItem(id: "myfilemessage", text: "FileString",
+        let fileMessage = FileRoomTimelineItem(id: "myfilemessage", body: "FileString",
                                                timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
                                                sender: .init(id: "sender"), source: nil, thumbnailSource: nil)
         
@@ -258,25 +252,25 @@ class LoggingTests: XCTestCase {
 
         let content = try String(contentsOf: logFile)
         XCTAssertTrue(content.contains(textMessage.id))
-        XCTAssertFalse(content.contains(textMessage.text))
+        XCTAssertFalse(content.contains(textMessage.body))
         XCTAssertFalse(content.contains(textAttributedString))
         
         XCTAssertTrue(content.contains(noticeMessage.id))
-        XCTAssertFalse(content.contains(noticeMessage.text))
+        XCTAssertFalse(content.contains(noticeMessage.body))
         XCTAssertFalse(content.contains(noticeAttributedString))
         
         XCTAssertTrue(content.contains(emoteMessage.id))
-        XCTAssertFalse(content.contains(emoteMessage.text))
+        XCTAssertFalse(content.contains(emoteMessage.body))
         XCTAssertFalse(content.contains(emoteAttributedString))
         
         XCTAssertTrue(content.contains(imageMessage.id))
-        XCTAssertFalse(content.contains(imageMessage.text))
+        XCTAssertFalse(content.contains(imageMessage.body))
         
         XCTAssertTrue(content.contains(videoMessage.id))
-        XCTAssertFalse(content.contains(videoMessage.text))
+        XCTAssertFalse(content.contains(videoMessage.body))
         
         XCTAssertTrue(content.contains(fileMessage.id))
-        XCTAssertFalse(content.contains(fileMessage.text))
+        XCTAssertFalse(content.contains(fileMessage.body))
     }
     
     func testRustMessageContentIsRedacted() throws {

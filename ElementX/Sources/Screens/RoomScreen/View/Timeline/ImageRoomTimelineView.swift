@@ -72,7 +72,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Some image",
+                                                                      body: "Some image",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
@@ -81,7 +81,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       source: nil))
 
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Some other image",
+                                                                      body: "Some other image",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
@@ -90,7 +90,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       source: nil))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Blurhashed image",
+                                                                      body: "Blurhashed image",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,

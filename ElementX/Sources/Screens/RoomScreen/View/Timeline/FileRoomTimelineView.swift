@@ -25,7 +25,7 @@ struct FileRoomTimelineView: View {
             HStack {
                 Image(systemName: "doc.text.fill")
                     .foregroundColor(.element.primaryContent)
-                FormattedBodyText(text: timelineItem.text)
+                FormattedBodyText(text: timelineItem.body)
             }
             .padding(.vertical, 12)
             .padding(.horizontal, 6)
@@ -44,7 +44,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
-                                                                    text: "document.pdf",
+                                                                    body: "document.pdf",
                                                                     timestamp: "Now",
                                                                     groupState: .single,
                                                                     isOutgoing: false,
@@ -54,7 +54,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     thumbnailSource: nil))
 
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
-                                                                    text: "document.docx",
+                                                                    body: "document.docx",
                                                                     timestamp: "Now",
                                                                     groupState: .single,
                                                                     isOutgoing: false,
@@ -64,7 +64,7 @@ struct FileRoomTimelineView_Previews: PreviewProvider {
                                                                     thumbnailSource: nil))
             
             FileRoomTimelineView(timelineItem: FileRoomTimelineItem(id: UUID().uuidString,
-                                                                    text: "document.txt",
+                                                                    body: "document.txt",
                                                                     timestamp: "Now",
                                                                     groupState: .single,
                                                                     isOutgoing: false,

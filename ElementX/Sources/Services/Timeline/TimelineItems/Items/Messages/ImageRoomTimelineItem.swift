@@ -19,7 +19,7 @@ import UniformTypeIdentifiers
 
 struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let text: String
+    let body: String
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool

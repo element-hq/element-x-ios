@@ -21,7 +21,7 @@ struct EncryptedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            Label(timelineItem.text, systemImage: "lock.shield")
+            Label(timelineItem.body, systemImage: "lock.shield")
                 .labelStyle(RoomTimelineViewLabelStyle())
         }
     }
@@ -66,7 +66,7 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, isOutgoing: Bool, senderId: String) -> EncryptedRoomTimelineItem {
         EncryptedRoomTimelineItem(id: UUID().uuidString,
-                                  text: text,
+                                  body: text,
                                   encryptionType: .unknown,
                                   timestamp: timestamp,
                                   groupState: .single,

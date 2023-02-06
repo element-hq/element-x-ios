@@ -26,14 +26,15 @@ struct NoticeRoomTimelineView: View {
             // adds additional padding so the spacing between the icon and text is inconsistent.
             
             // Spacing: 6 = label spacing - formatted text padding
-            HStack(alignment: .firstTextBaseline, spacing: 6) {
+            
+            HStack(alignment: .firstTextBaseline, spacing: 6.0) {
                 Image(systemName: "info.bubble").padding(.top, 2.0)
                     .foregroundColor(.element.secondaryContent)
                 
-                if let attributedComponents = timelineItem.attributedComponents {
-                    FormattedBodyText(attributedComponents: attributedComponents)
+                if let attributedString = timelineItem.formattedBody {
+                    FormattedBodyText(attributedString: attributedString)
                 } else {
-                    FormattedBodyText(text: timelineItem.text)
+                    FormattedBodyText(text: timelineItem.body)
                 }
             }
             .padding(.leading, 4) // Trailing padding is provided by FormattedBodyText
@@ -63,7 +64,7 @@ struct NoticeRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> NoticeRoomTimelineItem {
         NoticeRoomTimelineItem(id: UUID().uuidString,
-                               text: text,
+                               body: text,
                                timestamp: timestamp,
                                groupState: .single,
                                isOutgoing: false,

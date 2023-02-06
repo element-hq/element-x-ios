@@ -67,7 +67,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Some video",
+                                                                      body: "Some video",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
@@ -78,7 +78,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       thumbnailSource: nil))
 
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Some other video",
+                                                                      body: "Some other video",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
@@ -89,7 +89,7 @@ struct VideoRoomTimelineView_Previews: PreviewProvider {
                                                                       thumbnailSource: nil))
             
             VideoRoomTimelineView(timelineItem: VideoRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Blurhashed video",
+                                                                      body: "Blurhashed video",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
