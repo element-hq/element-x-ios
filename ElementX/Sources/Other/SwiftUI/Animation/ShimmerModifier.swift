@@ -17,6 +17,7 @@
 import SwiftUI
 
 struct ShimmerModifier: ViewModifier {
+    @Environment(\.colorScheme) private var colorScheme
     @State private var toggle = false
     
     private let startStart = UnitPoint(x: -5, y: 0)
@@ -24,25 +25,34 @@ struct ShimmerModifier: ViewModifier {
     private let startEnd = UnitPoint(x: 1, y: 0)
     private let endEnd = UnitPoint(x: 5, y: 0)
     
-    private let stops: [Gradient.Stop] = [
-        .init(color: .black, location: 0),
-        .init(color: .white.opacity(0.7), location: 0.21),
-        .init(color: .white.opacity(0.7), location: 0.25),
-        .init(color: .black, location: 0.39),
-        .init(color: .black, location: 0.61),
-        .init(color: .white.opacity(0.7), location: 0.8),
-        .init(color: .white.opacity(0.7), location: 0.85),
-        .init(color: .black, location: 1)
-    ]
+    private var stops: [Gradient.Stop] {
+        [
+            .init(color: normal, location: 0),
+            .init(color: highlight, location: 0.21),
+            .init(color: highlight, location: 0.25),
+            .init(color: normal, location: 0.39),
+            .init(color: normal, location: 0.61),
+            .init(color: highlight, location: 0.8),
+            .init(color: highlight, location: 0.85),
+            .init(color: normal, location: 1)
+        ]
+    }
     
-    private let stops2: [Gradient.Stop] = [
-        .init(color: .black, location: 0),
-        .init(color: .black, location: 0.3),
-        .init(color: .white.opacity(0.7), location: 0.45),
-        .init(color: .white.opacity(0.7), location: 0.55),
-        .init(color: .black, location: 0.7),
-        .init(color: .black, location: 1)
-    ]
+    var highlight: Color { colorScheme == .light ? .init(white: 0.7) : .init(white: 0.7) }
+    var normal: Color { colorScheme == .light ? .black : .white }
+    
+    private var stops2: [Gradient.Stop] {
+        [
+            .init(color: normal, location: 0),
+            .init(color: normal, location: 0.3),
+            .init(color: highlight.opacity(0.7), location: 0.45),
+            .init(color: highlight.opacity(0.7), location: 0.55),
+            .init(color: normal, location: 0.7),
+            .init(color: normal, location: 1)
+        ]
+    }
+    
+    var blendMode: BlendMode { colorScheme == .light ? .screen : .destinationOver }
     
     func body(content: Content) -> some View {
         content
@@ -52,7 +62,7 @@ struct ShimmerModifier: ViewModifier {
     var overlay: some View {
         Rectangle()
             .fill(gradient)
-            .blendMode(.screen)
+            .blendMode(blendMode)
             .opacity(0.8)
             .onAppear {
                 withAnimation(.linear(duration: 1.2).delay(0.5).repeatForever(autoreverses: false)) {
