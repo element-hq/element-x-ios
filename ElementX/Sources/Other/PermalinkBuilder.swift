@@ -25,12 +25,58 @@ enum PermalinkBuilderError: Error {
     case failedAddingPercentEncoding
 }
 
+enum PermalinkType: Equatable {
+    case userIdentifier(String)
+    case roomIdentifier(String)
+    case roomAlias(String)
+    case event(roomId: String, eventId: String)
+}
+
 enum PermalinkBuilder {
-    static var uriComponentCharacterSet: CharacterSet = {
+    private static var uriComponentCharacterSet: CharacterSet = {
         var charset = CharacterSet.alphanumerics
         charset.insert(charactersIn: "-_.!~*'()")
         return charset
     }()
+    
+    static func detectPermalinkIn(url: URL) -> PermalinkType? {
+        guard url.absoluteString.hasPrefix(ServiceLocator.shared.settings.permalinkBaseURL.absoluteString) else {
+            return nil
+        }
+        
+        guard let urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: true) else {
+            return nil
+        }
+        
+        guard var fragment = urlComponents.fragment else {
+            return nil
+        }
+        
+        if fragment.hasPrefix("/") {
+            fragment = String(fragment.dropFirst(1))
+        }
+        
+        if let userIdentifierRange = MatrixEntityRegex.userIdentifierRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+            return .userIdentifier((fragment as NSString).substring(with: userIdentifierRange))
+        }
+        
+        if let roomAliasRange = MatrixEntityRegex.roomAliasRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+            return .roomAlias((fragment as NSString).substring(with: roomAliasRange))
+        }
+        
+        if let roomIdentifierRange = MatrixEntityRegex.roomIdentifierRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+            let roomIdentifier = (fragment as NSString).substring(with: roomIdentifierRange)
+            
+            if let eventIdentifierRange = MatrixEntityRegex.eventIdentifierRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+                let eventIdentifier = (fragment as NSString).substring(with: eventIdentifierRange)
+                return .event(roomId: roomIdentifier, eventId: eventIdentifier)
+            }
+            
+            return .roomIdentifier(roomIdentifier)
+        }
+
+        return nil
+    }
     
     static func permalinkTo(userIdentifier: String) throws -> URL {
         guard MatrixEntityRegex.isMatrixUserIdentifier(userIdentifier) else {

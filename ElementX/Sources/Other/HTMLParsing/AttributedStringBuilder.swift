@@ -72,6 +72,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
+        detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
@@ -166,6 +167,27 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
+    private func detectPermalinks(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if value != nil {
+                if let url = value as? URL {
+                    switch PermalinkBuilder.detectPermalinkIn(url: url) {
+                    case .userIdentifier(let identifier):
+                        attributedString.addAttributes([.MXUserID: identifier], range: range)
+                    case .roomIdentifier(let identifier):
+                        attributedString.addAttributes([.MXRoomID: identifier], range: range)
+                    case .roomAlias(let alias):
+                        attributedString.addAttributes([.MXRoomAlias: alias], range: range)
+                    case .event(let roomIdentifier, let eventIdentifier):
+                        attributedString.addAttributes([.MXEventID: EventIDAttributeValue(roomID: roomIdentifier, eventID: eventIdentifier)], range: range)
+                    case .none:
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
     private func removeDefaultForegroundColor(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.foregroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value as? UIColor == UIColor.black {
@@ -220,4 +242,8 @@ extension UIColor {
 extension NSAttributedString.Key {
     static let DTTextBlocks: NSAttributedString.Key = .init(rawValue: DTTextBlocksAttribute)
     static let MXBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MXUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
+    static let MXRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
+    static let MXRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
+    static let MXEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
 }
