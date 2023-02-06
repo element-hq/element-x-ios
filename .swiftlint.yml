@@ -1,17 +1,14 @@
-# # rule identifiers to exclude from running
 disabled_rules:
   - trailing_whitespace
   - unused_setter_value
   - redundant_discardable_let
   - identifier_name
 
-# some rules are only opt-in
 opt_in_rules:  
   - force_unwrapping
   - private_action
   - explicit_init
 
-# paths to include during linting. `--path` is ignored if present.
 included:
   - ElementX
   - UnitTests
@@ -29,14 +26,18 @@ file_length:
   error: 1000
 
 type_name:
-  min_length: 3 # only warning
-  max_length: # warning and error
+  min_length: 3
+  max_length:
     warning: 150
     error: 1000
 
 type_body_length:
   warning: 700
   error: 1000
+
+function_body_length:
+  warning: 50
+  error: 100
 
 custom_rules:
   print_deprecation:
