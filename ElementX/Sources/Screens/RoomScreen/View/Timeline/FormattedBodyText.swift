@@ -17,34 +17,125 @@
 import Foundation
 import SwiftUI
 
+/// Layout priority constants for `FormattedBodyText`. These priorities are abused within
+/// `FormattedBodyTextBubbleLayout` to create the layout we would like. They aren't
+/// used in the expected way that SwiftUI would normally use layout priorities.
+private enum LayoutPriority {
+    /// The priority of hidden blockquotes that are only used for layout calculations.
+    static let hiddenBlockquote: Double = -1
+    /// The priority of visible blockquotes that are placed in the view with a full width.
+    static let visibleBlockquote: Double = 0
+    /// The priority of regular text that is used for layout calculations and placed in the view.
+    static let regularText: Double = 1
+}
+
+/// A custom layout used for formatted text components when in the bubbles timeline style.
+///
+/// A custom layout is required as the embedded blockquotes should fill the entire width of the message
+/// bubble, without causing the width of the bubble to fill all of the available space.
+struct FormattedBodyTextBubbleLayout: Layout {
+    /// The spacing between the components in the bubble.
+    let spacing: CGFloat
+    
+    func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+        guard !subviews.isEmpty else { return .zero }
+        
+        // Calculate the natural size using the regular text and non-greedy blockquote bubbles.
+        let layoutSubviews = subviews.filter { $0.priority != LayoutPriority.visibleBlockquote }
+        
+        let subviewSizes = layoutSubviews.map { $0.sizeThatFits(proposal) }
+        let maxWidth = subviewSizes.map(\.width).reduce(0, max)
+        let totalHeight = subviewSizes.map(\.height).reduce(0, +)
+        let totalSpacing = CGFloat(layoutSubviews.count - 1) * spacing
+        
+        return CGSize(width: maxWidth, height: totalHeight + totalSpacing)
+    }
+    
+    func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+        guard !subviews.isEmpty else { return }
+        
+        // Calculate the width using the regular text and the non-greedy blockquote bubbles.
+        let layoutSubviews = subviews.filter { $0.priority != LayoutPriority.visibleBlockquote }
+        let maxWidth = layoutSubviews.map { $0.sizeThatFits(proposal).width }.reduce(0, max)
+        
+        // Place the regular text and greedy blockquote bubbles using the calculated width.
+        let visibleSubviews = subviews.filter { $0.priority != LayoutPriority.hiddenBlockquote }
+        let subviewSizes = visibleSubviews.map { $0.sizeThatFits(ProposedViewSize(width: maxWidth, height: proposal.height)) }
+        
+        var y = bounds.minY
+        for index in visibleSubviews.indices {
+            let height = subviewSizes[index].height
+            visibleSubviews[index].place(at: CGPoint(x: bounds.minX, y: y),
+                                         anchor: .topLeading,
+                                         proposal: ProposedViewSize(width: maxWidth, height: height))
+            y += height + spacing
+        }
+    }
+}
+
 struct FormattedBodyText: View {
     @Environment(\.timelineStyle) private var timelineStyle
     
     let attributedComponents: [AttributedStringBuilderComponent]
     
     var body: some View {
+        if timelineStyle == .bubbles {
+            bubbleLayout
+                .tint(.element.links)
+        } else {
+            plainLayout
+                .tint(.element.links)
+        }
+    }
+    
+    /// The attributed components laid out for the bubbles timeline style.
+    var bubbleLayout: some View {
+        FormattedBodyTextBubbleLayout(spacing: 8) {
+            ForEach(attributedComponents, id: \.self) { component in
+                if component.isBlockquote {
+                    // The rendered blockquote with a greedy width. The custom layout prevents the
+                    // infinite width from increasing the overall width of the view.
+                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                        .blockquoteFormatting(isReply: component.isReply)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(Color.element.background)
+                        .cornerRadius(8)
+                        .layoutPriority(LayoutPriority.visibleBlockquote)
+                } else {
+                    Text(component.attributedString)
+                        .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .foregroundColor(.element.primaryContent)
+                        .layoutPriority(LayoutPriority.regularText)
+                }
+            }
+            
+            // Make a second iteration through the components adding fixed width blockquotes
+            // which are used for layout calculations but won't be rendered.
+            ForEach(attributedComponents, id: \.self) { component in
+                if component.isBlockquote {
+                    Text(component.attributedString.mergingAttributes(blockquoteAttributes))
+                        .blockquoteFormatting(isReply: component.isReply)
+                        .layoutPriority(LayoutPriority.hiddenBlockquote)
+                        .hidden()
+                }
+            }
+        }
+    }
+    
+    /// The attributed components laid out for the plain timeline style.
+    var plainLayout: some View {
         VStack(alignment: .leading, spacing: 8.0) {
             ForEach(attributedComponents, id: \.self) { component in
                 if component.isBlockquote {
-                    if timelineStyle == .plain {
-                        HStack(spacing: 4.0) {
-                            Rectangle()
-                                .foregroundColor(Color.red)
-                                .frame(width: 4.0)
-                            Text(component.attributedString)
-                                .foregroundColor(.element.primaryContent)
-                        }
-                        .fixedSize(horizontal: false, vertical: true)
-                    } else {
-                        Text(component.attributedString.mergingAttributes(blockquoteAttributes))
-                            .fixedSize(horizontal: false, vertical: true)
-                            .foregroundColor(.element.tertiaryContent)
-                            .lineLimit(component.isReply ? 3 : nil)
-                            .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
-                            .clipped()
-                            .background(Color.element.background)
-                            .cornerRadius(8)
+                    HStack(spacing: 4.0) {
+                        Rectangle()
+                            .foregroundColor(Color.red)
+                            .frame(width: 4.0)
+                        Text(component.attributedString)
+                            .foregroundColor(.element.primaryContent)
                     }
+                    .fixedSize(horizontal: false, vertical: true)
                 } else {
                     Text(component.attributedString)
                         .padding(.horizontal, timelineStyle == .bubbles ? 4 : 0)
@@ -53,7 +144,6 @@ struct FormattedBodyText: View {
                 }
             }
         }
-        .tint(.element.links)
     }
 
     private var blockquoteAttributes: AttributeContainer {
@@ -69,13 +159,20 @@ extension FormattedBodyText {
     }
 }
 
+private extension View {
+    func blockquoteFormatting(isReply: Bool) -> some View {
+        lineLimit(isReply ? 3 : nil)
+            .foregroundColor(.element.tertiaryContent)
+            .fixedSize(horizontal: false, vertical: true)
+            .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
+    }
+}
+
+// MARK: - Previews
+
 struct FormattedBodyText_Previews: PreviewProvider {
     static var previews: some View {
         body
-            .padding(8)
-            .background(Color.element.systemGray6)
-            .cornerRadius(12)
-        
         body
             .timelineStyle(.plain)
     }
@@ -111,10 +208,31 @@ struct FormattedBodyText_Previews: PreviewProvider {
                 
                 if let components = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) {
                     FormattedBodyText(attributedComponents: components)
-                        .fixedSize()
+                        .previewBubble()
                 }
             }
             FormattedBodyText(text: "Some plain text that's not an attributed component.")
+                .previewBubble()
+            FormattedBodyText(text: "Some plain text that's not an attributed component. This one is really long.")
+                .previewBubble()
         }
+        .padding()
+    }
+}
+
+private struct PreviewBubbleModifier: ViewModifier {
+    @Environment(\.timelineStyle) private var timelineStyle
+    
+    func body(content: Content) -> some View {
+        content
+            .padding(timelineStyle == .bubbles ? 8 : 0)
+            .background(timelineStyle == .bubbles ? Color.element.systemGray6 : nil)
+            .cornerRadius(timelineStyle == .bubbles ? 12 : 0)
+    }
+}
+
+private extension View {
+    func previewBubble() -> some View {
+        modifier(PreviewBubbleModifier())
     }
 }
