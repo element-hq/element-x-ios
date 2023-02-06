@@ -253,7 +253,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 1)
         
-        XCTAssertEqual(attributedString.blockquoteCoalescedComponents.count, 1)
+        XCTAssertEqual(attributedString.formattedComponents.count, 1)
         
         for run in attributedString.runs where run.elementX.blockquote ?? false {
             return
@@ -277,7 +277,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        XCTAssertEqual(attributedString.blockquoteCoalescedComponents.count, 3)
+        XCTAssertEqual(attributedString.formattedComponents.count, 3)
         
         for run in attributedString.runs where run.elementX.blockquote ?? false {
             return
@@ -298,7 +298,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        let coalescedComponents = attributedString.blockquoteCoalescedComponents
+        let coalescedComponents = attributedString.formattedComponents
         
         XCTAssertEqual(coalescedComponents.count, 1)
         
@@ -320,7 +320,7 @@ class AttributedStringBuilderTests: XCTestCase {
             return
         }
         
-        let coalescedComponents = attributedString.blockquoteCoalescedComponents
+        let coalescedComponents = attributedString.formattedComponents
         XCTAssertEqual(coalescedComponents.count, 1)
         
         guard let component = coalescedComponents.first else {
@@ -346,7 +346,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 7)
         
-        XCTAssertEqual(attributedString.blockquoteCoalescedComponents.count, 1)
+        XCTAssertEqual(attributedString.formattedComponents.count, 1)
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
@@ -373,7 +373,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 12)
         
-        let coalescedComponents = attributedString.blockquoteCoalescedComponents
+        let coalescedComponents = attributedString.formattedComponents
         
         XCTAssertEqual(coalescedComponents.count, 6)
         for component in coalescedComponents where component.isReply {

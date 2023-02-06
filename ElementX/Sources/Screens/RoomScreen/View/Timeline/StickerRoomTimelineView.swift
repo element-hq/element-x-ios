@@ -31,7 +31,7 @@ struct StickerRoomTimelineView: View {
             .frame(maxHeight: 300)
             .aspectRatio(timelineItem.aspectRatio, contentMode: .fit)
         }
-        .accessibilityLabel(timelineItem.text)
+        .accessibilityLabel(timelineItem.body)
     }
     
     private var placeholder: some View {
@@ -57,7 +57,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
-                                                                          text: "Some image",
+                                                                          body: "Some image",
                                                                           timestamp: "Now",
                                                                           groupState: .single,
                                                                           isOutgoing: false,
@@ -66,7 +66,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           imageURL: URL.picturesDirectory))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
-                                                                          text: "Some other image",
+                                                                          body: "Some other image",
                                                                           timestamp: "Now",
                                                                           groupState: .single,
                                                                           isOutgoing: false,
@@ -75,7 +75,7 @@ struct StickerRoomTimelineView_Previews: PreviewProvider {
                                                                           imageURL: URL.picturesDirectory))
             
             StickerRoomTimelineView(timelineItem: StickerRoomTimelineItem(id: UUID().uuidString,
-                                                                          text: "Blurhashed image",
+                                                                          body: "Blurhashed image",
                                                                           timestamp: "Now",
                                                                           groupState: .single,
                                                                           isOutgoing: false,

@@ -22,10 +22,10 @@ struct EmoteRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            if let attributedString = timelineItem.attributedBodyString {
+            if let attributedString = timelineItem.formattedBody {
                 FormattedBodyText(attributedString: attributedString)
             } else {
-                FormattedBodyText(text: timelineItem.text)
+                FormattedBodyText(text: timelineItem.body)
             }
         }
     }
@@ -53,7 +53,7 @@ struct EmoteRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> EmoteRoomTimelineItem {
         EmoteRoomTimelineItem(id: UUID().uuidString,
-                              text: text,
+                              body: text,
                               timestamp: timestamp,
                               groupState: .single,
                               isOutgoing: false,

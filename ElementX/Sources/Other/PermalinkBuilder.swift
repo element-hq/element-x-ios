@@ -29,7 +29,7 @@ enum PermalinkType: Equatable {
     case userIdentifier(String)
     case roomIdentifier(String)
     case roomAlias(String)
-    case event(roomId: String, eventId: String)
+    case event(roomIdentifier: String, eventIdentifier: String)
 }
 
 enum PermalinkBuilder {
@@ -39,7 +39,7 @@ enum PermalinkBuilder {
         return charset
     }()
     
-    static func detectPermalinkIn(url: URL) -> PermalinkType? {
+    static func detectPermalink(in url: URL) -> PermalinkType? {
         guard url.absoluteString.hasPrefix(ServiceLocator.shared.settings.permalinkBaseURL.absoluteString) else {
             return nil
         }
@@ -69,7 +69,7 @@ enum PermalinkBuilder {
             
             if let eventIdentifierRange = MatrixEntityRegex.eventIdentifierRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
                 let eventIdentifier = (fragment as NSString).substring(with: eventIdentifierRange)
-                return .event(roomId: roomIdentifier, eventId: eventIdentifier)
+                return .event(roomIdentifier: roomIdentifier, eventIdentifier: eventIdentifier)
             }
             
             return .roomIdentifier(roomIdentifier)

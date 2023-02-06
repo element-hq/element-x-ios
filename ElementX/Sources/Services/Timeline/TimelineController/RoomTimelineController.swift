@@ -115,7 +115,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .none
             }
             if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.text)
+                return .displayFile(fileURL: fileURL, title: item.body)
             }
             return .none
         case let item as VideoRoomTimelineItem:
@@ -125,7 +125,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .none
             }
             if let videoURL = item.cachedVideoURL {
-                return .displayVideo(videoURL: videoURL, title: item.text)
+                return .displayVideo(videoURL: videoURL, title: item.body)
             }
             return .none
         case let item as FileRoomTimelineItem:
@@ -135,7 +135,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .none
             }
             if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.text)
+                return .displayFile(fileURL: fileURL, title: item.body)
             }
             return .none
         default:
@@ -337,7 +337,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        let fileExtension = movieFileExtension(for: timelineItem.text)
+        let fileExtension = movieFileExtension(for: timelineItem.body)
         switch await mediaProvider.loadFileFromSource(source, fileExtension: fileExtension) {
         case .success(let fileURL):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
@@ -383,7 +383,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
 
         // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtension = timelineItem.text.split(separator: ".").last else {
+        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
             return
         }
         switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
@@ -411,7 +411,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
 
         // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtension = timelineItem.text.split(separator: ".").last else {
+        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
             return
         }
         switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {

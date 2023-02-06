@@ -79,7 +79,7 @@ struct FormattedBodyText: View {
     private let attributedComponents: [AttributedStringBuilderComponent]
     
     init(attributedString: AttributedString) {
-        attributedComponents = attributedString.blockquoteCoalescedComponents
+        attributedComponents = attributedString.formattedComponents
     }
     
     var body: some View {

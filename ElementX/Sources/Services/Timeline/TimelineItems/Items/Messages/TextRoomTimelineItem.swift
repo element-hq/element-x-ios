@@ -18,8 +18,8 @@ import UIKit
 
 struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let text: String
-    var attributedBodyString: AttributedString?
+    let body: String
+    var formattedBody: AttributedString?
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool

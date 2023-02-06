@@ -245,14 +245,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .react:
             callback?(.displayEmojiPicker(itemId: item.id))
         case .copy:
-            UIPasteboard.general.string = item.text
+            UIPasteboard.general.string = item.body
         case .edit:
             state.bindings.composerFocused = true
-            state.bindings.composerText = item.text
+            state.bindings.composerText = item.body
             state.composerMode = .edit(originalItemId: item.id)
         case .quote:
             state.bindings.composerFocused = true
-            state.bindings.composerText = "> \(item.text)"
+            state.bindings.composerText = "> \(item.body)"
         case .copyPermalink:
             do {
                 let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomID)

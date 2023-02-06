@@ -17,7 +17,7 @@
 import Foundation
 
 extension AttributedString {
-    var blockquoteCoalescedComponents: [AttributedStringBuilderComponent] {
+    var formattedComponents: [AttributedStringBuilderComponent] {
         runs[\.blockquote].map { value, range in
             var attributedString = AttributedString(self[range])
             

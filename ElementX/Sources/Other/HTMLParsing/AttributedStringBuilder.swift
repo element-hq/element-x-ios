@@ -94,7 +94,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return
             }
             
-            attributedString.addAttribute(.MXBlockquote, value: true, range: range)
+            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
         }
         
         attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
@@ -104,7 +104,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
             
             attributedString.removeAttribute(.backgroundColor, range: range)
-            attributedString.addAttribute(.MXBlockquote, value: true, range: range)
+            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
         }
     }
     
@@ -171,15 +171,15 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value != nil {
                 if let url = value as? URL {
-                    switch PermalinkBuilder.detectPermalinkIn(url: url) {
+                    switch PermalinkBuilder.detectPermalink(in: url) {
                     case .userIdentifier(let identifier):
-                        attributedString.addAttributes([.MXUserID: identifier], range: range)
+                        attributedString.addAttributes([.MatrixUserID: identifier], range: range)
                     case .roomIdentifier(let identifier):
-                        attributedString.addAttributes([.MXRoomID: identifier], range: range)
+                        attributedString.addAttributes([.MatrixRoomID: identifier], range: range)
                     case .roomAlias(let alias):
-                        attributedString.addAttributes([.MXRoomAlias: alias], range: range)
+                        attributedString.addAttributes([.MatrixRoomAlias: alias], range: range)
                     case .event(let roomIdentifier, let eventIdentifier):
-                        attributedString.addAttributes([.MXEventID: EventIDAttributeValue(roomID: roomIdentifier, eventID: eventIdentifier)], range: range)
+                        attributedString.addAttributes([.MatrixEventID: EventIDAttributeValue(roomID: roomIdentifier, eventID: eventIdentifier)], range: range)
                     case .none:
                         break
                     }
@@ -241,9 +241,9 @@ extension UIColor {
 
 extension NSAttributedString.Key {
     static let DTTextBlocks: NSAttributedString.Key = .init(rawValue: DTTextBlocksAttribute)
-    static let MXBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
-    static let MXUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
-    static let MXRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
-    static let MXRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
-    static let MXEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
+    static let MatrixBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MatrixUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
+    static let MatrixRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
+    static let MatrixRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
+    static let MatrixEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
 }
