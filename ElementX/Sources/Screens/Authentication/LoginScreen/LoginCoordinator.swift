@@ -124,6 +124,8 @@ final class LoginCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
         case .accountDeactivated:
             viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+        case .slidingSyncNotAvailable:
+            viewModel.displayError(.slidingSyncAlert)
         default:
             viewModel.displayError(.alert(ElementL10n.unknownError))
         }

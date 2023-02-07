@@ -46,10 +46,7 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
                 state.footerErrorMessage = message
             }
         case .slidingSyncAlert:
-            // TODO: Pick a better URL before merging.
-            let learnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync")
-            let openURL = { UIApplication.shared.open(learnMoreURL) }
-            
+            let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: ElementL10n.serverSelectionSlidingSyncAlertTitle,
                                                  message: ElementL10n.serverSelectionSlidingSyncAlertMessage,

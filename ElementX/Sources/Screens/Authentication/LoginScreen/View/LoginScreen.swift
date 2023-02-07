@@ -95,14 +95,6 @@ struct LoginScreen: View {
                 .onSubmit(submit)
                 .accessibilityIdentifier("passwordTextField")
             
-            // uncomment this piece of code once forgot password will be available
-//            Button { context.send(viewAction: .forgotPassword) } label: {
-//                Text(ElementL10n.ftueAuthForgotPassword)
-//                    .font(.element.body)
-//            }
-//            .frame(maxWidth: .infinity, alignment: .trailing)
-//            .padding(.bottom, 8)
-            
             Spacer().frame(height: 32)
 
             Button(action: submit) {

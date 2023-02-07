@@ -63,6 +63,12 @@ final class AppSettings: ObservableObject {
     /// that don't yet have an officially trusted proxy configured in their well-known.
     let slidingSyncProxyURL: URL? = nil
     
+    // MARK: - Authentication
+    
+    // TODO: Pick a better URL before merging.
+    /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.
+    let slidingSyncLearnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync")
+    
     // MARK: - Notifications
     
     var pusherAppId: String {
