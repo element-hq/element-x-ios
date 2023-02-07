@@ -16,59 +16,50 @@
 
 import SwiftUI
 
+/// A view modifier that applies a shimmering effect to the view.
 struct ShimmerModifier: ViewModifier {
-    @State private var toggle = false
+    /// Whether the gradient is positioned at the end of the animation.
+    @State private var endPosition = false
     
+    /// The position of the start of the gradient at the start of the animation.
     private let startStart = UnitPoint(x: -5, y: 0)
+    /// The position of the end of the gradient at the start of the animation.
     private let endStart = UnitPoint(x: 0, y: 0)
+    /// The position of the start of the gradient at the end of the animation.
     private let startEnd = UnitPoint(x: 1, y: 0)
+    /// The position of the end of the gradient at the end of the animation.
     private let endEnd = UnitPoint(x: 5, y: 0)
     
-    private var stops: [Gradient.Stop] {
-        [
-            .init(color: normal, location: 0),
-            .init(color: highlight, location: 0.21),
-            .init(color: highlight, location: 0.25),
-            .init(color: normal, location: 0.39),
-            .init(color: normal, location: 0.61),
-            .init(color: highlight, location: 0.8),
-            .init(color: highlight, location: 0.85),
-            .init(color: normal, location: 1)
-        ]
-    }
-    
-    var highlight: Color { .white.opacity(0.5) }
-    var normal: Color { .white }
-    
-    private var stops2: [Gradient.Stop] {
-        [
-            .init(color: normal, location: 0),
-            .init(color: normal, location: 0.3),
-            .init(color: highlight, location: 0.45),
-            .init(color: highlight, location: 0.55),
-            .init(color: normal, location: 0.7),
-            .init(color: normal, location: 1)
-        ]
-    }
+    /// The colour that causes a highlight to be shown.
+    private let highlightColor = Color.white.opacity(0.5)
+    /// The colour that causes the view to remain unchanged.
+    private let regularColor = Color.white
     
     func body(content: Content) -> some View {
         content
             .mask { gradient }
             .onAppear {
-                withAnimation(.linear(duration: 1.2).delay(0.5).repeatForever(autoreverses: false)) {
-                    toggle.toggle()
+                withAnimation(.linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
+                    endPosition.toggle()
                 }
             }
     }
     
+    /// The gradient used to create the shimmer.
     var gradient: LinearGradient {
-        LinearGradient(stops: stops,
-                       startPoint: toggle ? startEnd : startStart,
-                       endPoint: toggle ? endEnd : endStart)
+        LinearGradient(stops: [.init(color: regularColor, location: 0),
+                               .init(color: regularColor, location: 0.3),
+                               .init(color: highlightColor, location: 0.45),
+                               .init(color: highlightColor, location: 0.55),
+                               .init(color: regularColor, location: 0.7),
+                               .init(color: regularColor, location: 1)],
+                       startPoint: endPosition ? startEnd : startStart,
+                       endPoint: endPosition ? endEnd : endStart)
     }
 }
 
 extension View {
+    /// Applies a shimmering effect to the view.
     func shimmer() -> some View {
         modifier(ShimmerModifier())
     }
