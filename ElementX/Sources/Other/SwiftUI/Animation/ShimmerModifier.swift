@@ -18,17 +18,21 @@ import SwiftUI
 
 /// A view modifier that applies a shimmering effect to the view.
 struct ShimmerModifier: ViewModifier {
-    /// Whether the gradient is positioned at the end of the animation.
-    @State private var endPosition = false
+    /// A boolean which is toggled to trigger the animation.
+    @State private var animationTrigger = false
     
-    /// The position of the start of the gradient at the start of the animation.
-    private let startStart = UnitPoint(x: -5, y: 0)
-    /// The position of the end of the gradient at the start of the animation.
-    private let endStart = UnitPoint(x: 0, y: 0)
-    /// The position of the start of the gradient at the end of the animation.
-    private let startEnd = UnitPoint(x: 1, y: 0)
-    /// The position of the end of the gradient at the end of the animation.
-    private let endEnd = UnitPoint(x: 5, y: 0)
+    /// The start and end points of a gradient.
+    private struct GradientPoints {
+        /// The start point of the gradient.
+        let start: UnitPoint
+        /// The end point of the gradient.
+        let end: UnitPoint
+    }
+    
+    /// The initial points used by the gradient before animation occurs.
+    private let initialPoints = GradientPoints(start: UnitPoint(x: -5, y: 0), end: UnitPoint(x: 0, y: 0))
+    /// The final points used by the gradient once the animation has completed.
+    private let finalPoints = GradientPoints(start: UnitPoint(x: 1, y: 0), end: UnitPoint(x: 5, y: 0))
     
     /// The colour that causes a highlight to be shown.
     private let highlightColor = Color.white.opacity(0.5)
@@ -40,7 +44,7 @@ struct ShimmerModifier: ViewModifier {
             .mask { gradient }
             .onAppear {
                 withAnimation(.linear(duration: 1.75).delay(0.5).repeatForever(autoreverses: false)) {
-                    endPosition.toggle()
+                    animationTrigger.toggle()
                 }
             }
     }
@@ -53,8 +57,8 @@ struct ShimmerModifier: ViewModifier {
                                .init(color: highlightColor, location: 0.55),
                                .init(color: regularColor, location: 0.7),
                                .init(color: regularColor, location: 1)],
-                       startPoint: endPosition ? startEnd : startStart,
-                       endPoint: endPosition ? endEnd : endStart)
+                       startPoint: animationTrigger ? finalPoints.start : initialPoints.start,
+                       endPoint: animationTrigger ? finalPoints.end : initialPoints.end)
     }
 }
 
