@@ -28,7 +28,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
         self.userSessionStore = userSessionStore
         authenticationService = AuthenticationService(basePath: userSessionStore.baseDirectory.path,
                                                       passphrase: nil,
-                                                      customSyncProxy: ServiceLocator.shared.settings.slidingSyncProxyURL?.absoluteString)
+                                                      customSlidingSyncProxy: ServiceLocator.shared.settings.slidingSyncProxyURL?.absoluteString)
     }
     
     // MARK: - Public
