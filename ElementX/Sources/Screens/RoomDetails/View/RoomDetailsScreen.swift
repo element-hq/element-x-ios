@@ -103,13 +103,13 @@ struct RoomDetailsScreen: View {
                             .background(Color.element.system)
                             .clipShape(RoundedCornerShape(radius: 8, corners: .allCorners))
                             .frame(width: menuIconSize, height: menuIconSize)
-                    
+
                         Text(ElementL10n.bottomActionPeople)
                             .foregroundColor(.element.primaryContent)
                             .font(.body)
-                    
+
                         Spacer()
-                    
+
                         if context.viewState.isLoadingMembers {
                             ProgressView()
                         } else {
@@ -138,19 +138,19 @@ struct RoomDetailsScreen: View {
                         .background(Color.element.system)
                         .clipShape(RoundedCornerShape(radius: 8, corners: .allCorners))
                         .frame(width: menuIconSize, height: menuIconSize)
-                
+
                     VStack(alignment: .leading, spacing: 2) {
                         Text(ElementL10n.encryptionEnabled)
                             .foregroundColor(.element.primaryContent)
                             .font(.element.body)
-                    
+
                         Text(ElementL10n.encryptionEnabledTileDescription)
                             .foregroundColor(.element.secondaryContent)
                             .font(.element.footnote)
                     }
-                
+
                     Spacer()
-                
+
                     Image(systemName: "checkmark")
                         .foregroundColor(.element.quaternaryContent)
                 }
@@ -175,7 +175,8 @@ struct RoomDetails_Previews: PreviewProvider {
                                           isEncrypted: true,
                                           canonicalAlias: "#alias:domain.com",
                                           members: members)
-            let viewModel = RoomDetailsViewModel(roomProxy: roomProxy,
+            let viewModel = RoomDetailsViewModel(roomId: "RoomIdentifier",
+                                                 roomProxy: roomProxy,
                                                  mediaProvider: MockMediaProvider())
             RoomDetailsScreen(context: viewModel.context)
         }

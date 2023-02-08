@@ -27,9 +27,10 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     var callback: ((RoomDetailsViewModelAction) -> Void)?
     
-    init(roomProxy: RoomProxyProtocol,
+    init(roomId: String,
+         roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
-        super.init(initialViewState: .init(roomId: roomProxy.id,
+        super.init(initialViewState: .init(roomId: roomId,
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
                                            isDirect: roomProxy.isDirect,

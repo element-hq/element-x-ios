@@ -105,7 +105,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     private func displayRoomDetails() {
-        let params = RoomDetailsCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+        let params = RoomDetailsCoordinatorParameters(roomID: parameters.timelineController.roomID,
+                                                      navigationStackCoordinator: navigationStackCoordinator,
                                                       roomProxy: parameters.roomProxy,
                                                       mediaProvider: parameters.mediaProvider)
         let coordinator = RoomDetailsCoordinator(parameters: params)
