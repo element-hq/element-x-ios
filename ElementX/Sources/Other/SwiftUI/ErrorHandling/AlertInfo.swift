@@ -38,7 +38,12 @@ struct AlertInfo<T: Hashable>: Identifiable {
 
 struct AlertButton {
     let title: String
+    var role: Role = .default
     let action: (() -> Void)?
+    
+    enum Role {
+        case `default`, cancel, destructive
+    }
 }
 
 extension AlertInfo {
@@ -85,10 +90,19 @@ extension AlertInfo {
     }
     
     private func alertButton(for buttonParameters: AlertButton) -> Alert.Button {
-        guard let action = buttonParameters.action else {
+        switch (buttonParameters.role, buttonParameters.action) {
+        case (.default, nil):
             return .default(Text(buttonParameters.title))
+        case (.default, let action):
+            return .default(Text(buttonParameters.title), action: action)
+        case (.cancel, nil):
+            return .cancel(Text(buttonParameters.title))
+        case (.cancel, let action):
+            return .cancel(Text(buttonParameters.title), action: action)
+        case (.destructive, nil):
+            return .destructive(Text(buttonParameters.title))
+        case (.destructive, let action):
+            return .destructive(Text(buttonParameters.title), action: action)
         }
-        
-        return .default(Text(buttonParameters.title), action: action)
     }
 }

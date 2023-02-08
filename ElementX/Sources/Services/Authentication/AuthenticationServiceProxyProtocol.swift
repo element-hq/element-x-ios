@@ -23,6 +23,7 @@ enum AuthenticationServiceError: Error {
     case invalidServer
     case invalidCredentials
     case invalidHomeserverAddress
+    case slidingSyncNotAvailable
     case accountDeactivated
     case failedLoggingIn
 }

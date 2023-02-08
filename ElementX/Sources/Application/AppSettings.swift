@@ -24,7 +24,6 @@ final class AppSettings: ObservableObject {
         case timelineStyle
         case enableAnalytics
         case isIdentifiedForAnalytics
-        case slidingSyncProxyBaseURLString
         case enableInAppNotifications
         case pusherProfileTag
     }
@@ -62,7 +61,12 @@ final class AppSettings: ObservableObject {
     
     /// An override of the homeserver's Sliding Sync proxy URL. This allows development against servers
     /// that don't yet have an officially trusted proxy configured in their well-known.
-    let slidingSyncProxyURL = URL(staticString: "https://slidingsync.lab.matrix.org")
+    let slidingSyncProxyURL: URL? = nil
+    
+    // MARK: - Authentication
+    
+    /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.
+    let slidingSyncLearnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md")
     
     // MARK: - Notifications
     

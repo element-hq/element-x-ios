@@ -102,6 +102,8 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
         switch error {
         case .invalidServer, .invalidHomeserverAddress:
             viewModel.displayError(.footerMessage(ElementL10n.loginErrorHomeserverNotFound))
+        case .slidingSyncNotAvailable:
+            viewModel.displayError(.slidingSyncAlert)
         default:
             viewModel.displayError(.footerMessage(ElementL10n.unknownError))
         }

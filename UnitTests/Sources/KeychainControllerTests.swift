@@ -32,7 +32,13 @@ class KeychainControllerTests: XCTestCase {
         
         // When adding an restoration token.
         let username = "@test:example.com"
-        let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+        let restorationToken = RestorationToken(session: .init(accessToken: "accessToken",
+                                                               refreshToken: "refreshToken",
+                                                               userId: "userId",
+                                                               deviceId: "deviceId",
+                                                               homeserverUrl: "homeserverUrl",
+                                                               isSoftLogout: false,
+                                                               slidingSyncProxy: "https://my.sync.proxy"))
         keychain.setRestorationToken(restorationToken, forUsername: username)
         
         // Then the restoration token should be stored in the keychain.
@@ -42,7 +48,13 @@ class KeychainControllerTests: XCTestCase {
     func testRemovingRestorationToken() {
         // Given a keychain with a stored restoration token.
         let username = "@test:example.com"
-        let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+        let restorationToken = RestorationToken(session: .init(accessToken: "accessToken",
+                                                               refreshToken: "refreshToken",
+                                                               userId: "userId",
+                                                               deviceId: "deviceId",
+                                                               homeserverUrl: "homeserverUrl",
+                                                               isSoftLogout: false,
+                                                               slidingSyncProxy: "https://my.sync.proxy"))
         keychain.setRestorationToken(restorationToken, forUsername: username)
         XCTAssertEqual(keychain.restorationTokens().count, 1, "The keychain should have 1 restoration token.")
         XCTAssertEqual(keychain.restorationTokenForUsername(username), restorationToken, "The initial restoration token should match the value that was stored.")
@@ -58,7 +70,13 @@ class KeychainControllerTests: XCTestCase {
     func testRemovingAllRestorationTokens() {
         // Given a keychain with 5 stored restoration tokens.
         for index in 0..<5 {
-            let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+            let restorationToken = RestorationToken(session: .init(accessToken: "accessToken",
+                                                                   refreshToken: "refreshToken",
+                                                                   userId: "userId",
+                                                                   deviceId: "deviceId",
+                                                                   homeserverUrl: "homeserverUrl",
+                                                                   isSoftLogout: false,
+                                                                   slidingSyncProxy: "https://my.sync.proxy"))
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
         }
         XCTAssertEqual(keychain.restorationTokens().count, 5, "The keychain should have 5 restoration tokens.")
@@ -73,7 +91,13 @@ class KeychainControllerTests: XCTestCase {
     func testRemovingSingleRestorationTokens() {
         // Given a keychain with 5 stored restoration tokens.
         for index in 0..<5 {
-            let restorationToken = RestorationToken(session: .init(accessToken: "accessToken", refreshToken: "refreshToken", userId: "userId", deviceId: "deviceId", homeserverUrl: "homeserverUrl", isSoftLogout: false))
+            let restorationToken = RestorationToken(session: .init(accessToken: "accessToken",
+                                                                   refreshToken: "refreshToken",
+                                                                   userId: "userId",
+                                                                   deviceId: "deviceId",
+                                                                   homeserverUrl: "homeserverUrl",
+                                                                   isSoftLogout: false,
+                                                                   slidingSyncProxy: "https://my.sync.proxy"))
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
         }
         XCTAssertEqual(keychain.restorationTokens().count, 5, "The keychain should have 5 restoration tokens.")
