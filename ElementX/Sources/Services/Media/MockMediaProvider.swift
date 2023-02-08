@@ -19,7 +19,7 @@ import UIKit
 
 struct MockMediaProvider: MediaProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage? {
-        return imageFromURL(source?.url, size: size)
+        nil
     }
     
     func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
