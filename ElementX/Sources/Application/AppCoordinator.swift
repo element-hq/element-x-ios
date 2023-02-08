@@ -136,9 +136,10 @@ class AppCoordinator: AppCoordinatorProtocol {
     private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
         guard oldVersion != newVersion else { return }
         
-        if oldVersion < Version(1, 0, 17) {
-            // Version 1.0.17 hardcoded a new sliding sync proxy for matrix.org
-            // Force a sign out for the user to log in with the new proxy.
+        if oldVersion < Version(1, 0, 20) {
+            // Version 1.0.20 introduced a new format for restoration tokens.
+            // Remove user data to prevent conflict in the crypto store
+            // with the newly generated device ID when signing in again.
             MXLog.warning("Clearing user data for hardcoded proxy.")
             wipeUserData()
         }

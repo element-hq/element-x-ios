@@ -94,6 +94,8 @@ enum LoginErrorType: Hashable {
     case alert(String)
     /// Looking up the homeserver from the username failed.
     case invalidHomeserver
+    /// An alert that allows the user to learn about sliding sync.
+    case slidingSyncAlert
     /// The response from the homeserver was unexpected.
     case unknown
 }

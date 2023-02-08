@@ -128,6 +128,10 @@ extension ElementL10n {
   public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
   /// You can only connect to an existing server
   public static let serverSelectionServerFooter = ElementL10n.tr("Untranslated", "server_selection_server_footer")
+  /// This server currently doesn’t support sliding sync.
+  public static let serverSelectionSlidingSyncAlertMessage = ElementL10n.tr("Untranslated", "server_selection_sliding_sync_alert_message")
+  /// Server not supported
+  public static let serverSelectionSlidingSyncAlertTitle = ElementL10n.tr("Untranslated", "server_selection_sliding_sync_alert_title")
   /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
   public static let sessionVerificationBannerMessage = ElementL10n.tr("Untranslated", "session_verification_banner_message")
   /// Access your message history
