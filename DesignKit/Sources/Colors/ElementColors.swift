@@ -21,6 +21,7 @@ import SwiftUI
 
 public extension Color {
     static let element = ElementColors()
+    static let global = Color.global
 }
 
 public struct ElementColors {
@@ -128,25 +129,6 @@ public extension UIColor {
         let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))
         return contentAndAvatars[colorIndex % contentAndAvatars.count]
     }
-    
-    // MARK: - Temp
-    
-    private var tempActionBlack: UIColor { UIColor(red: 20 / 255, green: 20 / 255, blue: 20 / 255, alpha: 1.0) }
-    
-    public var tempActionBackground: UIColor {
-        UIColor { collection in
-            collection.userInterfaceStyle == .light ? self.tempActionBlack : .white
-        }
-    }
-    
-    public var tempActionForeground: UIColor {
-        UIColor { collection in
-            collection.userInterfaceStyle == .light ? .white : self.tempActionBlack
-        }
-    }
-    
-    public var tempActionBackgroundTint: UIColor { tempActionBackground.withAlphaComponent(0.2) }
-    public var tempActionForegroundTint: UIColor { tempActionForeground.withAlphaComponent(0.2) }
 }
 
 private extension String {
