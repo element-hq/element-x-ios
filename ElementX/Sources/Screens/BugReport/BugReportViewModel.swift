@@ -58,7 +58,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
                                       githubLabels: [],
                                       files: [])
             let result = try await bugReportService.submitBugReport(bugReport,
-                                                                    progressTracker: progressTracker)
+                                                                    progressListener: progressTracker)
             MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")
             callback?(.submitFinished)
         } catch {

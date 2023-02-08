@@ -35,5 +35,5 @@ protocol BugReportServiceProtocol {
     func crash()
 
     func submitBugReport(_ bugReport: BugReport,
-                         progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse
+                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse
 }

@@ -14,17 +14,20 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import GZIP
 import Sentry
 import UIKit
 
-class BugReportService: BugReportServiceProtocol {
+class BugReportService: NSObject, BugReportServiceProtocol {
     private let baseURL: URL
     private let sentryURL: URL
     private let applicationId: String
     private let session: URLSession
     private var lastCrashEventId: String?
+    private let progressSubject = PassthroughSubject<Double, Never>()
+    private var cancellables = Set<AnyCancellable>()
     
     init(withBaseURL baseURL: URL,
          sentryURL: URL,
@@ -34,6 +37,7 @@ class BugReportService: BugReportServiceProtocol {
         self.sentryURL = sentryURL
         self.applicationId = applicationId
         self.session = session
+        super.init()
         
         //  enable SentrySDK
         SentrySDK.start { options in
@@ -75,7 +79,7 @@ class BugReportService: BugReportServiceProtocol {
     }
 
     func submitBugReport(_ bugReport: BugReport,
-                         progressTracker: ProgressTracker?) async throws -> SubmitBugReportResponse {
+                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
         var params = [MultipartFormData(key: "text", type: .text(value: bugReport.text))]
         params.append(contentsOf: defaultParams)
         for label in bugReport.githubLabels {
@@ -121,7 +125,16 @@ class BugReportService: BugReportServiceProtocol {
         request.httpMethod = "POST"
         request.httpBody = body as Data
 
-        let (data, _) = try await session.data(for: request, delegate: progressTracker)
+        let data: Data
+        if let progressListener {
+            progressSubject
+                .receive(on: DispatchQueue.main)
+                .assign(to: \.value, on: progressListener.progressSubject)
+                .store(in: &cancellables)
+            (data, _) = try await session.data(for: request, delegate: self)
+        } else {
+            (data, _) = try await session.data(for: request)
+        }
 
         // Parse the JSON data
         let decoder = JSONDecoder()
@@ -230,4 +243,14 @@ private struct MultipartFormData {
 private enum MultipartFormDataType {
     case text(value: String)
     case file(url: URL)
+}
+
+extension BugReportService: URLSessionTaskDelegate {
+    func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
+        task.progress.publisher(for: \.fractionCompleted)
+            .sink { [weak self] value in
+                self?.progressSubject.send(value)
+            }
+            .store(in: &cancellables)
+    }
 }

@@ -52,7 +52,7 @@ final class BugReportCoordinator: CoordinatorProtocol {
             case .cancel:
                 self.completion?(.cancel)
             case let .submitStarted(progressTracker):
-                self.startLoading(progressTracker: progressTracker)
+                self.startLoading(progressPublisher: progressTracker)
             case .submitFinished:
                 self.stopLoading()
                 self.completion?(.finish)
@@ -75,13 +75,13 @@ final class BugReportCoordinator: CoordinatorProtocol {
     
     static let loadingIndicatorIdentifier = "BugReportLoading"
     
-    private func startLoading(label: String = ElementL10n.loading, progressTracker: ProgressTracker) {
+    private func startLoading(label: String = ElementL10n.loading, progressPublisher: ProgressPublisher) {
         parameters.userNotificationController?.submitNotification(
             UserNotification(id: Self.loadingIndicatorIdentifier,
                              type: .modal,
                              title: label,
                              persistent: true,
-                             progressTracker: progressTracker)
+                             progressPublisher: progressPublisher)
         )
     }
     

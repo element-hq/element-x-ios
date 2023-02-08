@@ -31,7 +31,7 @@ class BugReportServiceTests: XCTestCase {
                                   includeCrashLog: true,
                                   githubLabels: [],
                                   files: [])
-        let result = try await bugReportService.submitBugReport(bugReport, progressTracker: nil)
+        let result = try await bugReportService.submitBugReport(bugReport, progressListener: nil)
         XCTAssertFalse(result.reportUrl.isEmpty)
     }
     
@@ -54,7 +54,7 @@ class BugReportServiceTests: XCTestCase {
                                   includeCrashLog: true,
                                   githubLabels: [],
                                   files: [])
-        let result = try await service.submitBugReport(bugReport, progressTracker: nil)
+        let result = try await service.submitBugReport(bugReport, progressListener: nil)
         
         XCTAssertEqual(result.reportUrl, "https://example.com/123")
     }

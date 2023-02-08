@@ -22,10 +22,18 @@ enum UserNotificationType {
 }
 
 struct UserNotification: Equatable, Identifiable {
+    static func == (lhs: UserNotification, rhs: UserNotification) -> Bool {
+        lhs.id == rhs.id &&
+            lhs.type == rhs.type &&
+            lhs.title == rhs.title &&
+            lhs.iconName == rhs.iconName &&
+            lhs.persistent == rhs.persistent
+    }
+
     var id: String = UUID().uuidString
     var type = UserNotificationType.toast
     var title: String
     var iconName: String?
     var persistent = false
-    var progressTracker: ProgressTracker?
+    var progressPublisher: ProgressPublisher?
 }

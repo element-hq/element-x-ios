@@ -40,26 +40,19 @@ struct UserNotificationModalView: View {
                 }
             }
             .padding()
-            .frame(minWidth: 150.0)
+            .frame(minWidth: 150.0, maxWidth: 250.0)
             .background(Color.element.quinaryContent)
             .clipShape(RoundedCornerShape(radius: 12.0, corners: .allCorners))
             .shadow(color: .black.opacity(0.1), radius: 10.0, y: 4.0)
-            .transition(.opacity)
-            .onReceive(notification.progressTracker?.progressFractionPublisher ?? Empty().eraseToAnyPublisher()) { progress in
+            .onReceive(notification.progressPublisher?.publisher ?? Empty().eraseToAnyPublisher()) { progress in
                 progressFraction = progress
             }
+            .transition(.opacity)
         }
         .id(notification.id)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black.opacity(0.1))
         .ignoresSafeArea()
-    }
-    
-    private var toastTransition: AnyTransition {
-        AnyTransition
-            .asymmetric(insertion: .move(edge: .top),
-                        removal: .move(edge: .bottom))
-            .combined(with: .opacity)
     }
 }
 
@@ -74,7 +67,7 @@ struct UserNotificationModalView_Previews: PreviewProvider {
             UserNotificationModalView(notification: UserNotification(type: .modal,
                                                                      title: "Successfully logged in",
                                                                      iconName: "checkmark",
-                                                                     progressTracker: ProgressTracker(initialValue: 0.5))
+                                                                     progressPublisher: ProgressTracker(initialValue: 0.5))
             )
             .previewDisplayName("Progress Bar")
         }

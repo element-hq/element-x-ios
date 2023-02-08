@@ -17,20 +17,23 @@
 import Combine
 import Foundation
 
-final class ProgressTracker: NSObject, URLSessionTaskDelegate {
-    @Published private var progressFraction: Double
+protocol ProgressListener {
+    var progressSubject: CurrentValueSubject<Double, Never> { get }
+}
 
-    var progressFractionPublisher: AnyPublisher<Double, Never> {
-        $progressFraction
-            .receive(on: RunLoop.main)
+protocol ProgressPublisher {
+    var publisher: AnyPublisher<Double, Never> { get }
+}
+
+final class ProgressTracker: ProgressListener, ProgressPublisher {
+    let progressSubject: CurrentValueSubject<Double, Never>
+
+    var publisher: AnyPublisher<Double, Never> {
+        progressSubject
             .eraseToAnyPublisher()
     }
 
     init(initialValue: Double = 0.0) {
-        progressFraction = initialValue
-    }
-
-    func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
-        task.progress.publisher(for: \.fractionCompleted).assign(to: &$progressFraction)
+        progressSubject = .init(initialValue)
     }
 }
