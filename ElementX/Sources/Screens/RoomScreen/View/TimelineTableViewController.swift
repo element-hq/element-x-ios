@@ -162,6 +162,13 @@ class TimelineTableViewController: UIViewController {
         hasAppearedOnce = true
     }
     
+    override func didMove(toParent parent: UIViewController?) {
+        super.didMove(toParent: parent)
+        
+        // Ensure the padding is correct before display.
+        updateTopPadding()
+    }
+    
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         
@@ -286,11 +293,14 @@ class TimelineTableViewController: UIViewController {
     /// Updates the additional padding added to the top of the table (via a header)
     /// in order to fill the timeline from the bottom of the view upwards.
     private func updateTopPadding() {
-        let contentHeight = tableView.contentSize.height - (tableView.tableHeaderView?.frame.height ?? 0)
-        let height = tableView.visibleSize.height - contentHeight
+        let headerHeight = tableView.tableHeaderView?.frame.height ?? 0
+        let contentHeight = tableView.contentSize.height - headerHeight
+        let newHeight = max(0, tableView.visibleSize.height - contentHeight)
         
-        if height > 0 {
-            let frame = CGRect(origin: .zero, size: CGSize(width: tableView.contentSize.width, height: height))
+        guard newHeight != headerHeight else { return }
+        
+        if newHeight > 0 {
+            let frame = CGRect(origin: .zero, size: CGSize(width: tableView.contentSize.width, height: newHeight))
             tableView.tableHeaderView = UIView(frame: frame) // Updating an existing view's height doesn't move the cells.
         } else {
             tableView.tableHeaderView = nil
