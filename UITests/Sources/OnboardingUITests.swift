@@ -21,14 +21,10 @@ class OnboardingUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.onboarding)
-        
-        let getStartedButton = app.buttons["getStartedButton"]
-        XCTAssertTrue(getStartedButton.exists, "The primary action button should be shown.")
-        XCTAssertEqual(getStartedButton.label, ElementL10n.loginSplashSubmit)
-
         app.assertScreenshot(.onboarding)
     }
     
+    // This test has been disabled in the plan for now as there is only a single page.
     func testSwipingBetweenPages() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.onboarding)

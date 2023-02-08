@@ -34,30 +34,9 @@ enum OnboardingViewModelAction {
 }
 
 struct OnboardingViewState: BindableState {
-    /// The colours of the background gradient shown behind the 4 pages.
-    private let gradientColors = [
-        Color(red: 0.95, green: 0.98, blue: 0.96),
-        Color(red: 0.89, green: 0.96, blue: 0.97),
-        Color(red: 0.95, green: 0.89, blue: 0.97),
-        Color(red: 0.81, green: 0.95, blue: 0.91),
-        Color(red: 0.95, green: 0.98, blue: 0.96)
-    ]
-    
     /// An array containing all content of the carousel pages
     let content: [OnboardingPageContent]
     var bindings: OnboardingBindings
-    
-    /// The background gradient for all 4 pages and the hidden page at the start of the carousel.
-    var backgroundGradient: Gradient {
-        if Tests.isRunningUITests {
-            return Gradient(colors: [.white])
-        }
-        // Include the extra stop for the hidden page at the start of the carousel.
-        // (The last color is the right-hand stop, but we need the left-hand stop,
-        // so take the last but one color from the array).
-        let hiddenPageColor = gradientColors[gradientColors.count - 2]
-        return Gradient(colors: [hiddenPageColor] + gradientColors)
-    }
     
     init() {
         content = [
