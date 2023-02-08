@@ -29,7 +29,7 @@ struct MessageComposer: View {
     
     var body: some View {
         let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
-        VStack(alignment: .leading, spacing: 0) {
+        VStack(alignment: .leading, spacing: -6) {
             header
             HStack(alignment: .bottom) {
                 MessageComposerTextField(placeholder: ElementL10n.roomMessagePlaceholder,
@@ -47,7 +47,7 @@ struct MessageComposer: View {
                     submitButtonImage
                         .symbolVariant(.fill)
                         .font(.element.body)
-                        .foregroundColor(sendingDisabled ? .element.quaternaryContent : .element.background)
+                        .foregroundColor(sendingDisabled ? .element.quaternaryContent : .global.white)
                         .padding(5)
                         .background {
                             Circle()
@@ -57,8 +57,7 @@ struct MessageComposer: View {
                 .disabled(sendingDisabled)
                 .animation(.elementDefault, value: sendingDisabled)
                 .keyboardShortcut(.return, modifiers: [.command])
-                .padding(.trailing, 8)
-                .padding(.vertical, 6)
+                .padding([.vertical, .trailing], 6)
             }
         }
         .padding(.leading, 12.0)
@@ -70,7 +69,6 @@ struct MessageComposer: View {
                     .stroke(Color.element.quinaryContent, lineWidth: 1)
                     .opacity(focused ? 1 : 0)
             }
-            .animation(.easeOut(duration: 0.25), value: isMultiline)
         }
         .animation(.elementDefault, value: type)
     }
@@ -93,17 +91,21 @@ struct MessageComposer: View {
             Image(systemName: "checkmark")
                 .opacity(type.isEdit ? 1 : 0)
                 .fontWeight(.medium)
+                .accessibilityLabel(ElementL10n.actionConfirm)
+                .accessibilityHidden(!type.isEdit)
             Image(systemName: "paperplane")
+                .offset(x: -1, y: 0)
                 .opacity(type.isEdit ? 0 : 1)
+                .accessibilityHidden(type.isEdit)
         }
     }
     
     private var borderRadius: CGFloat {
         switch type {
         case .default:
-            return isMultiline ? 8 : 28
+            return isMultiline ? 20 : 28
         case .reply, .edit:
-            return 8
+            return 20
         }
     }
 }
@@ -115,13 +117,9 @@ private struct MessageComposerReplyHeader: View {
     var body: some View {
         HStack(alignment: .center) {
             Label(ElementL10n.roomTimelineReplyingTo(displayName), systemImage: "arrowshape.turn.up.left")
-                .font(.element.caption1)
-                .foregroundColor(.element.secondaryContent)
-                .lineLimit(1)
+                .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
-            Button {
-                action()
-            } label: {
+            Button(action: action) {
                 Image(systemName: "xmark")
                     .font(.element.caption2.weight(.medium))
                     .foregroundColor(.element.secondaryContent)
@@ -137,19 +135,27 @@ private struct MessageComposerEditHeader: View {
     var body: some View {
         HStack(alignment: .center) {
             Label(ElementL10n.roomTimelineEditing, systemImage: "pencil.line")
-                .font(.element.caption1)
-                .foregroundColor(.element.secondaryContent)
-                .lineLimit(1)
+                .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
-            Button {
-                action()
-            } label: {
+            Button(action: action) {
                 Image(systemName: "xmark")
                     .font(.element.caption2.weight(.medium))
                     .foregroundColor(.element.secondaryContent)
                     .padding(12.0)
             }
         }
+    }
+}
+
+private struct MessageComposerHeaderLabelStyle: LabelStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack(alignment: .firstTextBaseline, spacing: 5) {
+            configuration.icon
+            configuration.title
+        }
+        .font(.element.caption1)
+        .foregroundColor(.element.secondaryContent)
+        .lineLimit(1)
     }
 }
 
