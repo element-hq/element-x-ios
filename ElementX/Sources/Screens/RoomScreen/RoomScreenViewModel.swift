@@ -227,8 +227,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         var debugActions: [TimelineItemContextMenuAction] = [.viewSource]
         
         if let item = timelineItem as? EncryptedRoomTimelineItem,
-           case let .megolmV1AesSha2(sessionId) = item.encryptionType {
-            debugActions.append(.retryDecryption(sessionId: sessionId))
+           case let .megolmV1AesSha2(sessionID) = item.encryptionType {
+            debugActions.append(.retryDecryption(sessionID: sessionID))
         }
         
         return .init(actions: actions, debugActions: debugActions)
@@ -245,14 +245,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .react:
             callback?(.displayEmojiPicker(itemId: item.id))
         case .copy:
-            UIPasteboard.general.string = item.text
+            UIPasteboard.general.string = item.body
         case .edit:
             state.bindings.composerFocused = true
-            state.bindings.composerText = item.text
+            state.bindings.composerText = item.body
             state.composerMode = .edit(originalItemId: item.id)
         case .quote:
             state.bindings.composerFocused = true
-            state.bindings.composerText = "> \(item.text)"
+            state.bindings.composerText = "> \(item.body)"
         case .copyPermalink:
             do {
                 let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomID)
@@ -271,9 +271,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             let debugDescription = timelineController.debugDescription(for: item.id)
             MXLog.info(debugDescription)
             state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
-        case .retryDecryption(let sessionId):
+        case .retryDecryption(let sessionID):
             Task {
-                await timelineController.retryDecryption(for: sessionId)
+                await timelineController.retryDecryption(for: sessionID)
             }
         }
         

@@ -25,7 +25,9 @@ struct ImageRoomTimelineView: View {
         TimelineStyler(timelineItem: timelineItem) {
             LoadableImage(mediaSource: timelineItem.source,
                           blurhash: timelineItem.blurhash,
-                          imageProvider: context.imageProvider) {
+                          imageProvider: context.imageProvider) { image in
+                image.overlay { overlay }
+            } placeholder: {
                 placeholder
             }
             .frame(maxHeight: 300)
@@ -43,6 +45,20 @@ struct ImageRoomTimelineView: View {
                 .frame(maxWidth: .infinity)
         }
     }
+    
+    @ViewBuilder
+    var overlay: some View {
+        if timelineItem.type == .gif {
+            Text(ElementL10n.roomTimelineImageGif)
+                .font(.element.bodyBold)
+                .foregroundStyle(.primary)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 7)
+                .background(.thinMaterial)
+                .cornerRadius(8)
+                .environment(\.colorScheme, .dark)
+        }
+    }
 }
 
 struct ImageRoomTimelineView_Previews: PreviewProvider {
@@ -56,7 +72,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
     static var body: some View {
         VStack(spacing: 20.0) {
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Some image",
+                                                                      body: "Some image",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
@@ -65,7 +81,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       source: nil))
 
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Some other image",
+                                                                      body: "Some other image",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
@@ -74,7 +90,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       source: nil))
             
             ImageRoomTimelineView(timelineItem: ImageRoomTimelineItem(id: UUID().uuidString,
-                                                                      text: "Blurhashed image",
+                                                                      body: "Blurhashed image",
                                                                       timestamp: "Now",
                                                                       groupState: .single,
                                                                       isOutgoing: false,
@@ -82,7 +98,8 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       sender: .init(id: "Bob"),
                                                                       source: nil,
                                                                       aspectRatio: 0.7,
-                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW"))
+                                                                      blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
+                                                                      type: .gif))
         }
     }
 }

@@ -39,7 +39,7 @@ enum TimelineItemContextMenuAction: Identifiable, Hashable {
     case redact
     case reply
     case viewSource
-    case retryDecryption(sessionId: String)
+    case retryDecryption(sessionID: String)
     
     var id: Self { self }
 
@@ -97,7 +97,7 @@ public struct TimelineItemContextMenu: View {
                 }
             case .redact:
                 Button(role: .destructive) { send(action) } label: {
-                    Label(ElementL10n.messageActionItemRedact, systemImage: "trash")
+                    Label(ElementL10n.actionRemove, systemImage: "trash")
                 }
             case .viewSource:
                 Button { send(action) } label: {

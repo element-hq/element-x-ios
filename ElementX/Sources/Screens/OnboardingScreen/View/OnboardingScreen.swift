@@ -19,7 +19,6 @@ import SwiftUI
 
 /// The screen shown at the beginning of the onboarding flow.
 struct OnboardingScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
     @Environment(\.layoutDirection) private var layoutDirection
     @Environment(\.verticalSizeClass) private var verticalSizeClass
 
@@ -35,7 +34,8 @@ struct OnboardingScreen: View {
     
     var body: some View {
         ZStack {
-            OnboardingBackgroundView()
+            OnboardingBackgroundView(isAnimated: !Tests.isRunningUITests)
+            
             GeometryReader { geometry in
                 ZStack {
                     VStack(alignment: .leading) {
@@ -97,19 +97,6 @@ struct OnboardingScreen: View {
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()
-    }
-    
-    @ViewBuilder
-    /// The view's background, showing a gradient in light mode and a solid colour in dark mode.
-    var background: some View {
-        if colorScheme == .light {
-            LinearGradient(gradient: context.viewState.backgroundGradient,
-                           startPoint: .leading,
-                           endPoint: .trailing)
-                .flipsForRightToLeftLayoutDirection(true)
-        } else {
-            Color.element.background
-        }
     }
     
     // MARK: - Animation

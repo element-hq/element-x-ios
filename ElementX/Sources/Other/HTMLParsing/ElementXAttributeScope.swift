@@ -21,9 +21,39 @@ enum BlockquoteAttribute: AttributedStringKey {
     public static var name = "MXBlockquoteAttribute"
 }
 
+enum UserIDAttribute: AttributedStringKey {
+    typealias Value = String
+    public static var name = "MXUserIDAttribute"
+}
+
+enum RoomIDAttribute: AttributedStringKey {
+    typealias Value = String
+    public static var name = "MXRoomIDAttribute"
+}
+
+enum RoomAliasAttribute: AttributedStringKey {
+    typealias Value = String
+    public static var name = "MXRoomAliasAttribute"
+}
+
+struct EventIDAttributeValue: Hashable {
+    let roomID: String
+    let eventID: String
+}
+
+enum EventIDAttribute: AttributedStringKey {
+    typealias Value = EventIDAttributeValue
+    public static var name = "MXEventIDAttribute"
+}
+
 extension AttributeScopes {
     struct ElementXAttributes: AttributeScope {
         let blockquote: BlockquoteAttribute
+        
+        let userID: UserIDAttribute
+        let roomID: RoomIDAttribute
+        let roomAlias: RoomAliasAttribute
+        let eventID: EventIDAttribute
         
         let swiftUI: SwiftUIAttributes
         let uiKit: UIKitAttributes

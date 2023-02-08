@@ -41,6 +41,7 @@ struct HomeScreen: View {
                             .disabled(true)
                     }
                 }
+                .shimmer()
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleRooms) { room in
@@ -84,7 +85,7 @@ struct HomeScreen: View {
                 userMenuButton
             }
         }
-        .background(Color.element.background)
+        .background(Color.element.background.ignoresSafeArea())
     }
 
     @ViewBuilder

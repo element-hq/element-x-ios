@@ -16,32 +16,26 @@
 
 import SwiftUI
 
-/// Small squared action button for settings screens
-struct SettingsActionButton: View {
-    // MARK: Public
-    
+/// Small squared action button style for settings screens
+struct SettingsActionButtonStyle: ButtonStyle {
     let title: String
-    let image: Image
-    let action: () -> Void
-    
-    // MARK: Private
     
     @ScaledMetric private var menuIconSize = 54.0
-
-    // MARK: Views
     
-    var body: some View {
-        Button(action: action) {
-            VStack {
-                image
-                    .renderingMode(.template)
-                    .foregroundColor(.element.primaryContent)
-                    .frame(width: menuIconSize, height: menuIconSize)
-                    .background(RoundedRectangle(cornerRadius: 16).fill(Color.element.background))
-                Text(title)
-                    .foregroundColor(.element.secondaryContent)
-                    .font(.element.subheadline)
-            }
+    func makeBody(configuration: Configuration) -> some View {
+        VStack {
+            configuration.label
+                .buttonStyle(.plain)
+                .foregroundColor(.element.primaryContent)
+                .frame(width: menuIconSize, height: menuIconSize)
+                .background {
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(Color.element.background.opacity(configuration.isPressed ? 0.5 : 1))
+                }
+            
+            Text(title)
+                .foregroundColor(.element.secondaryContent)
+                .font(.element.subheadline)
         }
     }
 }

@@ -72,30 +72,13 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         removeDefaultForegroundColor(mutableAttributedString)
         addLinks(mutableAttributedString)
+        detectPermalinks(mutableAttributedString)
         removeLinkColors(mutableAttributedString)
         replaceMarkedBlockquotes(mutableAttributedString)
         replaceMarkedCodeBlocks(mutableAttributedString)
         removeDTCoreTextArtifacts(mutableAttributedString)
         
         return try? AttributedString(mutableAttributedString, including: \.elementX)
-    }
-    
-    func blockquoteCoalescedComponentsFrom(_ attributedString: AttributedString?) -> [AttributedStringBuilderComponent]? {
-        guard let attributedString else {
-            return nil
-        }
-        
-        return attributedString.runs[\.blockquote].map { value, range in
-            var attributedString = AttributedString(attributedString[range])
-            
-            // Remove trailing new lines if any
-            if attributedString.characters.last?.isNewline ?? false,
-               let range = attributedString.range(of: "\n", options: .backwards, locale: nil) {
-                attributedString.removeSubrange(range)
-            }
-            
-            return AttributedStringBuilderComponent(attributedString: attributedString, isBlockquote: value != nil)
-        }
     }
     
     // MARK: - Private
@@ -111,7 +94,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
                 return
             }
             
-            attributedString.addAttribute(.MXBlockquote, value: true, range: range)
+            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
         }
         
         attributedString.enumerateAttribute(.backgroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
@@ -121,7 +104,7 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
             }
             
             attributedString.removeAttribute(.backgroundColor, range: range)
-            attributedString.addAttribute(.MXBlockquote, value: true, range: range)
+            attributedString.addAttribute(.MatrixBlockquote, value: true, range: range)
         }
     }
     
@@ -184,6 +167,27 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
         }
     }
     
+    private func detectPermalinks(_ attributedString: NSMutableAttributedString) {
+        attributedString.enumerateAttribute(.link, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
+            if value != nil {
+                if let url = value as? URL {
+                    switch PermalinkBuilder.detectPermalink(in: url) {
+                    case .userIdentifier(let identifier):
+                        attributedString.addAttributes([.MatrixUserID: identifier], range: range)
+                    case .roomIdentifier(let identifier):
+                        attributedString.addAttributes([.MatrixRoomID: identifier], range: range)
+                    case .roomAlias(let alias):
+                        attributedString.addAttributes([.MatrixRoomAlias: alias], range: range)
+                    case .event(let roomIdentifier, let eventIdentifier):
+                        attributedString.addAttributes([.MatrixEventID: EventIDAttributeValue(roomID: roomIdentifier, eventID: eventIdentifier)], range: range)
+                    case .none:
+                        break
+                    }
+                }
+            }
+        }
+    }
+    
     private func removeDefaultForegroundColor(_ attributedString: NSMutableAttributedString) {
         attributedString.enumerateAttribute(.foregroundColor, in: .init(location: 0, length: attributedString.length), options: []) { value, range, _ in
             if value as? UIColor == UIColor.black {
@@ -237,5 +241,9 @@ extension UIColor {
 
 extension NSAttributedString.Key {
     static let DTTextBlocks: NSAttributedString.Key = .init(rawValue: DTTextBlocksAttribute)
-    static let MXBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MatrixBlockquote: NSAttributedString.Key = .init(rawValue: BlockquoteAttribute.name)
+    static let MatrixUserID: NSAttributedString.Key = .init(rawValue: UserIDAttribute.name)
+    static let MatrixRoomID: NSAttributedString.Key = .init(rawValue: RoomIDAttribute.name)
+    static let MatrixRoomAlias: NSAttributedString.Key = .init(rawValue: RoomAliasAttribute.name)
+    static let MatrixEventID: NSAttributedString.Key = .init(rawValue: EventIDAttribute.name)
 }

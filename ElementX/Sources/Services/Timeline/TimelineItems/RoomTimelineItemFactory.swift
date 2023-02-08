@@ -98,7 +98,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                               _ isOutgoing: Bool,
                                               _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
         UnsupportedRoomTimelineItem(id: eventItemProxy.id,
-                                    text: ElementL10n.roomTimelineItemUnsupported,
+                                    body: ElementL10n.roomTimelineItemUnsupported,
                                     eventType: eventType,
                                     error: error,
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
@@ -124,7 +124,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return StickerRoomTimelineItem(id: eventItemProxy.id,
-                                       text: body,
+                                       body: body,
                                        timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                        groupState: groupState,
                                        isOutgoing: isOutgoing,
@@ -154,7 +154,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return EncryptedRoomTimelineItem(id: eventItemProxy.id,
-                                         text: ElementL10n.roomTimelineUnableToDecrypt,
+                                         body: ElementL10n.roomTimelineUnableToDecrypt,
                                          encryptionType: encryptionType,
                                          timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                          groupState: groupState,
@@ -168,7 +168,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                            _ isOutgoing: Bool,
                                            _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
         RedactedRoomTimelineItem(id: eventItemProxy.id,
-                                 text: ElementL10n.eventRedacted,
+                                 body: ElementL10n.eventRedacted,
                                  timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                  groupState: groupState,
                                  isOutgoing: isOutgoing,
@@ -180,12 +180,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildFallbackTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                            _ isOutgoing: Bool,
                                            _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        let attributedText = attributedStringBuilder.fromPlain(eventItemProxy.body)
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+        let formattedBody = attributedStringBuilder.fromPlain(eventItemProxy.body)
         
         return TextRoomTimelineItem(id: eventItemProxy.id,
-                                    text: eventItemProxy.body ?? "",
-                                    attributedComponents: attributedComponents,
+                                    body: eventItemProxy.body ?? "",
+                                    formattedBody: formattedBody,
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                     groupState: groupState,
                                     isOutgoing: isOutgoing,
@@ -199,12 +198,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                   _ message: MessageTimelineItem<TextMessageContent>,
                                                   _ isOutgoing: Bool,
                                                   _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+        let formattedBody = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         
         return TextRoomTimelineItem(id: message.id,
-                                    text: message.body,
-                                    attributedComponents: attributedComponents,
+                                    body: message.body,
+                                    formattedBody: formattedBody,
                                     timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                     groupState: groupState,
                                     isOutgoing: isOutgoing,
@@ -226,7 +224,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return ImageRoomTimelineItem(id: message.id,
-                                     text: message.body,
+                                     body: message.body,
                                      timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                      groupState: groupState,
                                      isOutgoing: isOutgoing,
@@ -237,6 +235,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      height: message.height,
                                      aspectRatio: aspectRatio,
                                      blurhash: message.blurhash,
+                                     type: message.type,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus))
@@ -253,7 +252,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return VideoRoomTimelineItem(id: message.id,
-                                     text: message.body,
+                                     body: message.body,
                                      timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                      groupState: groupState,
                                      isOutgoing: isOutgoing,
@@ -276,7 +275,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                   _ isOutgoing: Bool,
                                                   _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
         FileRoomTimelineItem(id: message.id,
-                             text: message.body,
+                             body: message.body,
                              timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                              groupState: groupState,
                              isOutgoing: isOutgoing,
@@ -293,12 +292,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                     _ message: MessageTimelineItem<NoticeMessageContent>,
                                                     _ isOutgoing: Bool,
                                                     _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
-        let attributedText = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
+        let formattedBody = (message.htmlBody != nil ? attributedStringBuilder.fromHTML(message.htmlBody) : attributedStringBuilder.fromPlain(message.body))
         
         return NoticeRoomTimelineItem(id: message.id,
-                                      text: message.body,
-                                      attributedComponents: attributedComponents,
+                                      body: message.body,
+                                      formattedBody: formattedBody,
                                       timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                       groupState: groupState,
                                       isOutgoing: isOutgoing,
@@ -315,18 +313,16 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                                    _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
         let name = eventItemProxy.sender.displayName ?? eventItemProxy.sender.id
 
-        var attributedText: AttributedString?
+        var formattedBody: AttributedString?
         if let htmlBody = message.htmlBody {
-            attributedText = attributedStringBuilder.fromHTML("* \(name) \(htmlBody)")
+            formattedBody = attributedStringBuilder.fromHTML("* \(name) \(htmlBody)")
         } else {
-            attributedText = attributedStringBuilder.fromPlain("* \(name) \(message.body)")
+            formattedBody = attributedStringBuilder.fromPlain("* \(name) \(message.body)")
         }
         
-        let attributedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedText)
-        
         return EmoteRoomTimelineItem(id: message.id,
-                                     text: message.body,
-                                     attributedComponents: attributedComponents,
+                                     body: message.body,
+                                     formattedBody: formattedBody,
                                      timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
                                      groupState: groupState,
                                      isOutgoing: isOutgoing,
@@ -380,7 +376,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     
     private func buildStateTimelineItem(eventItemProxy: EventTimelineItemProxy, text: String, isOutgoing: Bool) -> RoomTimelineItemProtocol {
         StateRoomTimelineItem(id: eventItemProxy.id,
-                              text: text,
+                              body: text,
                               timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                               groupState: .single,
                               isOutgoing: isOutgoing,

@@ -26,21 +26,10 @@ class ServerSelectionUITests: XCTestCase {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.serverSelection)
         
-        // Then it should be configured for matrix.org and with a cancel button
-        let serverTextField = app.textFields[textFieldIdentifier]
-        XCTAssertEqual(serverTextField.value as? String, "matrix.org", "The server shown should be matrix.org with the https scheme hidden.")
-
-        let confirmButton = app.buttons["confirmButton"]
-        XCTAssertEqual(confirmButton.label, ElementL10n.actionConfirm, "The confirm button should say Confirm when in modal presentation.")
-        XCTAssertTrue(confirmButton.exists, "The confirm button should always be shown.")
-        XCTAssertTrue(confirmButton.isEnabled, "The confirm button should be enabled when there is an address.")
-
-        XCTAssertTrue(app.staticTexts[ElementL10n.serverSelectionServerFooter].exists)
-
-        let dismissButton = app.buttons["dismissButton"]
-        XCTAssertTrue(dismissButton.exists, "The dismiss button should be shown during modal presentation.")
-
-        app.assertScreenshot(.serverSelection)
+        // Then it should be configured for matrix.org
+        app.assertScreenshot(.serverSelection, step: 0)
+        XCTAssertEqual(app.textFields[textFieldIdentifier].value as? String, "matrix.org", "The server shown should be matrix.org with the https scheme hidden.")
+        XCTAssertEqual(app.buttons["confirmButton"].label, ElementL10n.continue, "The confirm button should say Confirm when in modal presentation.")
     }
 
     func testEmptyAddress() async {
@@ -53,11 +42,9 @@ class ServerSelectionUITests: XCTestCase {
         app.textFields[textFieldIdentifier].buttons.element.tap()
         
         // Then the screen should not allow the user to continue.
+        app.assertScreenshot(.serverSelection, step: 1)
         XCTAssertEqual(app.textFields[textFieldIdentifier].value as? String, ElementL10n.ftueAuthChooseServerEntryHint, "The text field should show placeholder text in this state.")
-
-        let confirmButton = app.buttons["confirmButton"]
-        XCTAssertTrue(confirmButton.exists, "The confirm button should always be shown.")
-        XCTAssertFalse(confirmButton.isEnabled, "The confirm button should be disabled when the address is empty.")
+        XCTAssertFalse(app.buttons["confirmButton"].isEnabled, "The confirm button should be disabled when the address is empty.")
     }
 
     func testInvalidAddress() {
@@ -69,13 +56,9 @@ class ServerSelectionUITests: XCTestCase {
         app.textFields[textFieldIdentifier].clearAndTypeText("thisisbad\n") // The tests only accept an address from LoginHomeserver.mockXYZ
         
         // Then an error should be shown and the confirmation button disabled.
-        XCTAssertEqual(app.textFields[textFieldIdentifier].value as? String, "thisisbad", "The text field should show the entered server.")
-
-        let confirmButton = app.buttons["confirmButton"]
-        XCTAssertTrue(confirmButton.exists, "The confirm button should always be shown.")
-        XCTAssertFalse(confirmButton.isEnabled, "The confirm button should be disabled when there is an error.")
-
+        app.assertScreenshot(.serverSelection, step: 2)
         XCTAssertTrue(app.staticTexts[ElementL10n.loginErrorHomeserverNotFound].exists)
+        XCTAssertFalse(app.buttons["confirmButton"].isEnabled, "The confirm button should be disabled when there is an error.")
     }
 
     func testNonModalPresentation() {
@@ -84,12 +67,8 @@ class ServerSelectionUITests: XCTestCase {
         app.goToScreenWithIdentifier(.serverSelectionNonModal)
         
         // Then the screen should be tweaked slightly to reflect the change of navigation.
-        let dismissButton = app.buttons["dismissButton"]
-        XCTAssertFalse(dismissButton.exists, "The dismiss button should be hidden when not in modal presentation.")
-
-        let confirmButton = app.buttons["confirmButton"]
-        XCTAssertEqual(confirmButton.label, ElementL10n.actionNext, "The confirm button should say Next when not in modal presentation.")
-
         app.assertScreenshot(.serverSelectionNonModal)
+        XCTAssertFalse(app.buttons["dismissButton"].exists, "The dismiss button should be hidden when not in modal presentation.")
+        XCTAssertEqual(app.buttons["confirmButton"].label, ElementL10n.actionNext, "The confirm button should say Next when not in modal presentation.")
     }
 }

@@ -18,13 +18,13 @@ import UIKit
 
 struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let text: String
+    let body: String
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
 
     let source: MediaSourceProxy?
     let thumbnailSource: MediaSourceProxy?

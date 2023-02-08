@@ -15,16 +15,17 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let text: String
+    let body: String
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     let source: MediaSourceProxy?
     var cachedFileURL: URL?
@@ -33,6 +34,7 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     var height: CGFloat?
     var aspectRatio: CGFloat?
     var blurhash: String?
+    var type: UTType?
     
     var properties = RoomTimelineItemProperties()
 }

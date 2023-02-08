@@ -51,11 +51,9 @@ protocol RoomProxyProtocol {
     
     var avatarURL: URL? { get }
     
-    func avatarURLForUserId(_ userId: String) -> URL?
+    var permalink: URL? { get }
     
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
-    
-    func displayNameForUserId(_ userId: String) -> String?
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
@@ -79,6 +77,17 @@ protocol RoomProxyProtocol {
 }
 
 extension RoomProxyProtocol {
+    var permalink: URL? {
+        if let canonicalAlias, let link = try? PermalinkBuilder.permalinkTo(roomAlias: canonicalAlias) {
+            return link
+        } else if let link = try? PermalinkBuilder.permalinkTo(roomIdentifier: id) {
+            return link
+        } else {
+            MXLog.error("Failed to build permalink for Room: \(id)")
+            return nil
+        }
+    }
+    
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
         await sendMessage(message, inReplyTo: nil)
     }

@@ -91,8 +91,8 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     var messageBubble: some View {
         styledContent
             .contentShape(.contextMenuPreview, RoundedCornerShape(radius: cornerRadius, corners: timelineItem.roundedCorners)) // Rounded corners for the context menu animation.
-            .contextMenu { [weak context] in
-                context?.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
+            .contextMenu {
+                context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
                     TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
                 }
             }
@@ -117,7 +117,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 }
             }
             .bubbleStyle(inset: true,
-                         color: timelineItem.isOutgoing ? .element.systemGray5 : .element.systemGray6,
+                         color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
                          cornerRadius: cornerRadius,
                          corners: timelineItem.roundedCorners)
         }

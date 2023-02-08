@@ -34,14 +34,14 @@ enum TimelineItemGroupState: Hashable {
 }
 
 protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
-    var text: String { get }
+    var body: String { get }
     var timestamp: String { get }
     var shouldShowSenderDetails: Bool { get }
     var groupState: TimelineItemGroupState { get }
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }
     
-    var sender: TimelineItemSender { get set }
+    var sender: TimelineItemSender { get }
     
     var properties: RoomTimelineItemProperties { get }
 }

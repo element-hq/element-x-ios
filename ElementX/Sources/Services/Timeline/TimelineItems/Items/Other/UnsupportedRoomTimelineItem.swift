@@ -18,7 +18,7 @@ import UIKit
 
 struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let text: String
+    let body: String
     
     let eventType: String
     let error: String
@@ -28,7 +28,7 @@ struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
 }

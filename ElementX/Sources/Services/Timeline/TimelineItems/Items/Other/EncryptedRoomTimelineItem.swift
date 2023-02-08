@@ -24,14 +24,14 @@ struct EncryptedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, 
     }
     
     let id: String
-    let text: String
+    let body: String
     let encryptionType: EncryptionType
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
 }

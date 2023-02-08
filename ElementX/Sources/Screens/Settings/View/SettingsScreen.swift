@@ -48,7 +48,7 @@ struct SettingsScreen: View {
         }
         .navigationTitle(ElementL10n.settings)
         .navigationBarTitleDisplayMode(.inline)
-        .background(backgroundColor, ignoresSafeAreaEdges: .all)
+        .background(backgroundColor.ignoresSafeArea())
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 doneButton

@@ -18,13 +18,13 @@ import UIKit
 
 struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let text: String
+    let body: String
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
 
     let duration: UInt64
     let source: MediaSourceProxy?

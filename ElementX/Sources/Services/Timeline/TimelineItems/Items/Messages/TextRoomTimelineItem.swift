@@ -18,14 +18,14 @@ import UIKit
 
 struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let text: String
-    var attributedComponents: [AttributedStringBuilderComponent]?
+    let body: String
+    var formattedBody: AttributedString?
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
 }

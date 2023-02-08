@@ -19,12 +19,11 @@ import Foundation
 struct AttributedStringBuilderComponent: Hashable {
     let attributedString: AttributedString
     let isBlockquote: Bool
+    let isReply: Bool
 }
 
 protocol AttributedStringBuilderProtocol {
     func fromPlain(_ string: String?) -> AttributedString?
     
     func fromHTML(_ htmlString: String?) -> AttributedString?
-    
-    func blockquoteCoalescedComponentsFrom(_ attributedString: AttributedString?) -> [AttributedStringBuilderComponent]?
 }

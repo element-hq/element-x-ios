@@ -97,15 +97,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
     }
     
-    func processItemAppearance(_ itemID: String) async {
-        guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
-            return
-        }
-        
-        if let item = timelineItem as? EventBasedTimelineItemProtocol {
-            await loadUserDisplayNameForTimelineItem(item)
-        }
-    }
+    func processItemAppearance(_ itemID: String) async { }
     
     func processItemDisappearance(_ itemID: String) { }
 
@@ -123,7 +115,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .none
             }
             if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.text)
+                return .displayFile(fileURL: fileURL, title: item.body)
             }
             return .none
         case let item as VideoRoomTimelineItem:
@@ -133,7 +125,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .none
             }
             if let videoURL = item.cachedVideoURL {
-                return .displayVideo(videoURL: videoURL, title: item.text)
+                return .displayVideo(videoURL: videoURL, title: item.body)
             }
             return .none
         case let item as FileRoomTimelineItem:
@@ -143,7 +135,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .none
             }
             if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.text)
+                return .displayFile(fileURL: fileURL, title: item.body)
             }
             return .none
         default:
@@ -231,6 +223,8 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
         var isBackPaginating = false
+        
+        var createdIdentifiers = [String: Bool]()
 
         for (index, itemProxy) in timelineProvider.itemsPublisher.value.enumerated() {
             if Task.isCancelled {
@@ -245,7 +239,13 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             switch itemProxy {
             case .event(let eventItemProxy):
                 if let timelineItem = timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy, groupState: groupState) {
-                    newTimelineItems.append(timelineItem)
+                    #warning("This works around duplicated items coming out of the SDK, remove once fixed")
+                    if createdIdentifiers[timelineItem.id] == nil {
+                        newTimelineItems.append(timelineItem)
+                        createdIdentifiers[timelineItem.id] = true
+                    } else {
+                        MXLog.error("Found duplicated timeline item, ignoring")
+                    }
                 }
             case .virtual(let virtualItem):
                 switch virtualItem {
@@ -274,7 +274,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         if Task.isCancelled {
             return
         }
-        
+
         timelineItems = newTimelineItems
         
         callbacks.send(.updatedTimelineItems)
@@ -337,7 +337,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             return
         }
         
-        let fileExtension = movieFileExtension(for: timelineItem.text)
+        let fileExtension = movieFileExtension(for: timelineItem.body)
         switch await mediaProvider.loadFileFromSource(source, fileExtension: fileExtension) {
         case .success(let fileURL):
             guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
@@ -383,7 +383,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
 
         // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtension = timelineItem.text.split(separator: ".").last else {
+        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
             return
         }
         switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
@@ -411,7 +411,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
 
         // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtension = timelineItem.text.split(separator: ".").last else {
+        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
             return
         }
         switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
@@ -423,28 +423,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
 
             item.cachedFileURL = fileURL
             timelineItems[index] = item
-        case .failure:
-            break
-        }
-    }
-        
-    #warning("This is here because sender profiles aren't working properly. Remove it entirely later")
-    private func loadUserDisplayNameForTimelineItem(_ timelineItem: EventBasedTimelineItemProtocol) async {
-        if timelineItem.shouldShowSenderDetails == false || timelineItem.sender.displayName != nil {
-            return
-        }
-        
-        switch await roomProxy.loadDisplayNameForUserId(timelineItem.sender.id) {
-        case .success(let displayName):
-            guard let displayName,
-                  let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? EventBasedTimelineItemProtocol else {
-                return
-            }
-            
-            item.sender.displayName = displayName
-            timelineItems[index] = item
-            callbacks.send(.updatedTimelineItem(timelineItem.id))
         case .failure:
             break
         }

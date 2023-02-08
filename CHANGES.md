@@ -1,3 +1,21 @@
+## Changes in 1.0.18 (2023-02-03)
+
+No significant changes.
+
+
+## Changes in 1.0.17 (2023-02-03)
+
+🙌 Improvements
+
+- Hardcode the sliding sync proxy to matrix.org for FOSDEM demo. ([#502](https://github.com/vector-im/element-x-ios/pull/502))
+- Add different states for a room's last message to distinguish loading from loaded from unknown. ([#514](https://github.com/vector-im/element-x-ios/pull/514))
+- Finish the design review ready for a public TestFlight. ([#430](https://github.com/vector-im/element-x-ios/issues/430))
+
+🐛 Bugfixes
+
+- Fixed a bug that recognised any amount in dollars as an untappable link. ([#500](https://github.com/vector-im/element-x-ios/issues/500))
+
+
 ## Changes in 1.0.15 (2023-01-26)
 
 🙌 Improvements

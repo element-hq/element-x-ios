@@ -23,8 +23,8 @@ struct RoomScreen: View {
     
     var body: some View {
         timeline
-            .background(Color.element.background) // Kills the toolbar translucency.
-            .safeAreaInset(edge: .bottom) { messageComposer }
+            .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
+            .safeAreaInset(edge: .bottom, spacing: 0) { messageComposer }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .toolbarRole(.editor) // Hide the back button title.

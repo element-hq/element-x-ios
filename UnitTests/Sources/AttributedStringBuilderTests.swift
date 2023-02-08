@@ -253,7 +253,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 1)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
+        XCTAssertEqual(attributedString.formattedComponents.count, 1)
         
         for run in attributedString.runs where run.elementX.blockquote ?? false {
             return
@@ -277,7 +277,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 3)
+        XCTAssertEqual(attributedString.formattedComponents.count, 3)
         
         for run in attributedString.runs where run.elementX.blockquote ?? false {
             return
@@ -298,10 +298,8 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 3)
         
-        guard let coalescedComponents = attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString) else {
-            XCTFail("Could not build the attributed string components")
-            return
-        }
+        let coalescedComponents = attributedString.formattedComponents
+        
         XCTAssertEqual(coalescedComponents.count, 1)
         
         XCTAssertEqual(coalescedComponents.first?.attributedString.runs.count, 3, "Link not present in the component")
@@ -312,6 +310,26 @@ class AttributedStringBuilderTests: XCTestCase {
         }
         
         XCTAssertNotNil(foundBlockquoteAndLink, "Couldn't find blockquote or link")
+    }
+    
+    func testReplyBlockquote() {
+        let htmlString = "<blockquote><a href=\"https://matrix.to/#/someroom/someevent\">In reply to</a> <a href=\"https://matrix.to/#/@user:matrix.org\">@user:matrix.org</a><br>The future is <code>swift run tools</code> 😎</blockquote>"
+        
+        guard let attributedString = attributedStringBuilder.fromHTML(htmlString) else {
+            XCTFail("Could not build the attributed string")
+            return
+        }
+        
+        let coalescedComponents = attributedString.formattedComponents
+        XCTAssertEqual(coalescedComponents.count, 1)
+        
+        guard let component = coalescedComponents.first else {
+            XCTFail("Could not get the first component")
+            return
+        }
+        
+        XCTAssertTrue(component.isBlockquote, "The reply quote should be a blockquote.")
+        XCTAssertTrue(component.isReply, "The reply quote should be detected as a reply")
     }
     
     func testMultipleGroupedBlockquotes() {
@@ -328,7 +346,7 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 7)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 1)
+        XCTAssertEqual(attributedString.formattedComponents.count, 1)
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {
@@ -355,7 +373,12 @@ class AttributedStringBuilderTests: XCTestCase {
         
         XCTAssertEqual(attributedString.runs.count, 12)
         
-        XCTAssertEqual(attributedStringBuilder.blockquoteCoalescedComponentsFrom(attributedString)?.count, 6)
+        let coalescedComponents = attributedString.formattedComponents
+        
+        XCTAssertEqual(coalescedComponents.count, 6)
+        for component in coalescedComponents where component.isReply {
+            XCTFail("None of the blockquotes should be detected as replies.")
+        }
         
         var numberOfBlockquotes = 0
         for run in attributedString.runs where run.elementX.blockquote ?? false && run.link != nil {

@@ -22,10 +22,9 @@ struct RedactedRoomTimelineView: View {
     
     var body: some View {
         TimelineStyler(timelineItem: timelineItem) {
-            HStack {
-                Image(systemName: "trash")
-                FormattedBodyText(text: timelineItem.text)
-            }
+            Label(timelineItem.body, systemImage: "trash")
+                .labelStyle(RoomTimelineViewLabelStyle())
+                .imageScale(.small) // Smaller icon so that the bubble remains rounded on the outside.
         }
     }
 }
@@ -44,7 +43,7 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider {
     
     private static func itemWith(text: String, timestamp: String, senderId: String) -> RedactedRoomTimelineItem {
         RedactedRoomTimelineItem(id: UUID().uuidString,
-                                 text: text,
+                                 body: text,
                                  timestamp: timestamp,
                                  groupState: .single,
                                  isOutgoing: false,
