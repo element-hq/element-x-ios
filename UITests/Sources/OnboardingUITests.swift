@@ -24,8 +24,8 @@ class OnboardingUITests: XCTestCase {
         app.assertScreenshot(.onboarding)
     }
     
-    // This test has been disabled in the plan for now as there is only a single page.
-    func testSwipingBetweenPages() {
+    // This test has been disabled for now as there is only a single page.
+    func disabled_testSwipingBetweenPages() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.onboarding)
         
