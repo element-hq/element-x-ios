@@ -105,17 +105,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         let boundary = "Boundary-\(UUID().uuidString)"
         var body = Data()
         for param in params {
-            body.appendString(string: "--\(boundary)\r\n")
-            body.appendString(string: "Content-Disposition:form-data; name=\"\(param.key)\"")
-            switch param.type {
-            case .text(let value):
-                body.appendString(string: "\r\n\r\n\(value)\r\n")
-            case .file(let url):
-                body.appendString(string: "; filename=\"\(url.lastPathComponent)\"\r\n")
-                body.appendString(string: "Content-Type: \"content-type header\"\r\n\r\n")
-                body.append(try Data(contentsOf: url))
-                body.appendString(string: "\r\n")
-            }
+            try body.appendParam(param, boundary: boundary)
         }
         body.appendString(string: "--\(boundary)--\r\n")
 
@@ -231,6 +221,20 @@ private extension Data {
     mutating func appendString(string: String, encoding: String.Encoding = .utf8) {
         if let data = string.data(using: encoding) {
             append(data)
+        }
+    }
+
+    mutating func appendParam(_ param: MultipartFormData, boundary: String) throws {
+        appendString(string: "--\(boundary)\r\n")
+        appendString(string: "Content-Disposition:form-data; name=\"\(param.key)\"")
+        switch param.type {
+        case .text(let value):
+            appendString(string: "\r\n\r\n\(value)\r\n")
+        case .file(let url):
+            appendString(string: "; filename=\"\(url.lastPathComponent)\"\r\n")
+            appendString(string: "Content-Type: \"content-type header\"\r\n\r\n")
+            append(try Data(contentsOf: url))
+            appendString(string: "\r\n")
         }
     }
 }
