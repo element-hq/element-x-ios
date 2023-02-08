@@ -254,7 +254,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let slidingSyncBuilder = try client.slidingSync().homeserver(url: ServiceLocator.shared.settings.slidingSyncProxyURL.absoluteString)
+            let slidingSyncBuilder = client.slidingSync()
             
             // Build the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache

@@ -124,6 +124,8 @@ final class LoginCoordinator: CoordinatorProtocol {
             viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
         case .accountDeactivated:
             viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+        case .slidingSyncNotAvailable:
+            viewModel.displayError(.slidingSyncAlert)
         default:
             viewModel.displayError(.alert(ElementL10n.unknownError))
         }
@@ -197,10 +199,8 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
-        let userNotificationController = UserNotificationController(rootCoordinator: navigationStackCoordinator)
-        
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              userNotificationController: userNotificationController,
+                                                              userNotificationController: ServiceLocator.shared.userNotificationController,
                                                               isModallyPresented: false)
         
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
