@@ -21,6 +21,8 @@ import SwiftUI
 struct OnboardingBackgroundView: View {
     @Environment(\.colorScheme) private var colorScheme
     
+    var isAnimated = true
+    
     @State private var factor = 0.0
     @State private var isReversed = false
     
@@ -39,6 +41,8 @@ struct OnboardingBackgroundView: View {
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
             .onReceive(timer) { _ in
+                guard isAnimated else { return }
+                
                 if isReversed {
                     guard factor > 0 else {
                         isReversed = false

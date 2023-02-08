@@ -21,13 +21,9 @@ class BugReportUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.bugReport)
-
-        verifyInitialStateComponents(in: app)
-
-        XCTAssertFalse(app.images["screenshotImage"].exists)
-        XCTAssertFalse(app.buttons["removeScreenshotButton"].exists)
-
-        app.assertScreenshot(.bugReport)
+        
+        // Initial state without a screenshot attached.
+        app.assertScreenshot(.bugReport, step: 0)
     }
 
     func testToggleSendingLogs() {
@@ -39,52 +35,33 @@ class BugReportUITests: XCTestCase {
         let sendingLogsToggle = app.switches["sendLogsToggle"]
         XCTAssert(sendingLogsToggle.exists)
         XCTAssertFalse(sendingLogsToggle.isOn)
+        
+        app.assertScreenshot(.bugReport, step: 1)
     }
 
     func testReportText() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.bugReport)
 
-        //  type 4 chars
+        // Type 4 characters and the send button should be disabled.
         app.textViews["reportTextView"].clearAndTypeText("Text")
         XCTAssertFalse(app.buttons["sendButton"].isEnabled)
+        app.assertScreenshot(.bugReport, step: 2)
 
-        //  type one more char and see the button enabled
+        // Type more than 4 characters and send the button should become enabled.
         app.textViews["reportTextView"].clearAndTypeText("Longer text")
         XCTAssert(app.buttons["sendButton"].isEnabled)
+        app.assertScreenshot(.bugReport, step: 3)
     }
 
     func testInitialStateComponentsWithScreenshot() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.bugReportWithScreenshot)
-
-        verifyInitialStateComponents(in: app)
         
+        // Initial state with a screenshot attached.
         XCTAssert(app.images["screenshotImage"].exists)
         XCTAssert(app.buttons["removeScreenshotButton"].exists)
-
         app.assertScreenshot(.bugReportWithScreenshot)
-    }
-
-    func verifyInitialStateComponents(in app: XCUIApplication) {
-        XCTAssert(app.navigationBars[ElementL10n.titleActivityBugReport].exists)
-        let descLabel = app.staticTexts["reportBugDescription"]
-        XCTAssert(descLabel.exists)
-        XCTAssertEqual(descLabel.label, ElementL10n.sendBugReportDescription)
-        let sendLogsDescLabel = app.staticTexts["sendLogsDescription"]
-        XCTAssert(sendLogsDescLabel.exists)
-        XCTAssertEqual(sendLogsDescLabel.label, ElementL10n.sendBugReportLogsDescription)
-        XCTAssert(app.textViews["reportTextView"].exists)
-        let sendLogsToggle = app.switches["sendLogsToggle"]
-        XCTAssert(sendLogsToggle.exists)
-        XCTAssert(sendLogsToggle.isOn)
-        let sendLogsLabel = app.staticTexts["sendLogsText"]
-        XCTAssert(sendLogsLabel.exists)
-        XCTAssertEqual(sendLogsLabel.label, ElementL10n.sendBugReportIncludeLogs)
-        let sendButton = app.buttons["sendButton"]
-        XCTAssert(sendButton.exists)
-        XCTAssertEqual(sendButton.label, ElementL10n.actionSend)
-        XCTAssertFalse(sendButton.isEnabled)
     }
 }
 
