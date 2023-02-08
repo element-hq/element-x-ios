@@ -65,9 +65,8 @@ final class AppSettings: ObservableObject {
     
     // MARK: - Authentication
     
-    // TODO: Pick a better URL before merging.
     /// The URL that is opened when tapping the Learn more button on the sliding sync alert during authentication.
-    let slidingSyncLearnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync")
+    let slidingSyncLearnMoreURL = URL(staticString: "https://github.com/matrix-org/sliding-sync/blob/main/docs/Landing.md")
     
     // MARK: - Notifications
     
