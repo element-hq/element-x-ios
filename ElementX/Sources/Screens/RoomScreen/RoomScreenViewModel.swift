@@ -79,10 +79,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             return self.contextMenuActionsForItemId(itemId)
         }
         
-        ServiceLocator.shared.settings.$timelineStyle.sink { [weak self] timelineStyle in
-            self?.state.timelineStyle = timelineStyle
-        }
-        .store(in: &cancellables)
+        ServiceLocator.shared.settings.$timelineStyle
+            .weakAssign(to: \.state.timelineStyle, on: self)
+            .store(in: &cancellables)
         
         buildTimelineViews()
     }
