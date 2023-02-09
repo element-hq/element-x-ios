@@ -29,7 +29,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
-        let x = 6
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
