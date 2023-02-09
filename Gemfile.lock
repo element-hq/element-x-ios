@@ -113,6 +113,8 @@ GEM
       xcpretty (~> 0.3.0)
       xcpretty-travis-formatter (>= 0.0.3)
     fastlane-plugin-brew (0.1.1)
+    fastlane-plugin-browserstack (0.3.2)
+      rest-client (~> 2.0, >= 2.0.2)
     fastlane-plugin-diawi (2.1.0)
       rest-client (>= 2.0.0)
     fastlane-plugin-sentry (1.15.0)
@@ -254,6 +256,7 @@ PLATFORMS
 
 DEPENDENCIES
   fastlane
+  fastlane-plugin-browserstack
   fastlane-plugin-diawi
   fastlane-plugin-sentry
   fastlane-plugin-xcodegen
