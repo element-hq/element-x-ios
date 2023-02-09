@@ -17,6 +17,14 @@
 import Foundation
 import UIKit
 
+struct BugReport {
+    let text: String
+    let includeLogs: Bool
+    let includeCrashLog: Bool
+    let githubLabels: [String]
+    let files: [URL]
+}
+
 struct SubmitBugReportResponse: Decodable {
     var reportUrl: String
 }
@@ -26,9 +34,6 @@ protocol BugReportServiceProtocol {
 
     func crash()
 
-    func submitBugReport(text: String,
-                         includeLogs: Bool,
-                         includeCrashLog: Bool,
-                         githubLabels: [String],
-                         files: [URL]) async throws -> SubmitBugReportResponse
+    func submitBugReport(_ bugReport: BugReport,
+                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse
 }

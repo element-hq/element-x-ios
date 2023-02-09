@@ -14,16 +14,22 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct UserNotificationModalView: View {
     let notification: UserNotification
-    
+    @State private var progressFraction: Double?
+
     var body: some View {
         ZStack {
             VStack(spacing: 12.0) {
-                ProgressView()
-                
+                if let progressFraction = progressFraction {
+                    ProgressView(value: progressFraction)
+                } else {
+                    ProgressView()
+                }
+
                 HStack {
                     if let iconName = notification.iconName {
                         Image(systemName: iconName)
@@ -34,10 +40,13 @@ struct UserNotificationModalView: View {
                 }
             }
             .padding()
-            .frame(minWidth: 150.0)
+            .frame(minWidth: 150.0, maxWidth: 250.0)
             .background(Color.element.quinaryContent)
             .clipShape(RoundedCornerShape(radius: 12.0, corners: .allCorners))
             .shadow(color: .black.opacity(0.1), radius: 10.0, y: 4.0)
+            .onReceive(notification.progressPublisher?.publisher ?? Empty().eraseToAnyPublisher()) { progress in
+                progressFraction = progress
+            }
             .transition(.opacity)
         }
         .id(notification.id)
@@ -45,21 +54,22 @@ struct UserNotificationModalView: View {
         .background(.black.opacity(0.1))
         .ignoresSafeArea()
     }
-    
-    private var toastTransition: AnyTransition {
-        AnyTransition
-            .asymmetric(insertion: .move(edge: .top),
-                        removal: .move(edge: .bottom))
-            .combined(with: .opacity)
-    }
 }
 
 struct UserNotificationModalView_Previews: PreviewProvider {
     static var previews: some View {
-        VStack {
+        Group {
             UserNotificationModalView(notification: UserNotification(type: .modal,
                                                                      title: "Successfully logged in",
-                                                                     iconName: "checkmark"))
+                                                                     iconName: "checkmark")
+            )
+            .previewDisplayName("Spinner")
+            UserNotificationModalView(notification: UserNotification(type: .modal,
+                                                                     title: "Successfully logged in",
+                                                                     iconName: "checkmark",
+                                                                     progressPublisher: ProgressTracker(initialValue: 0.5))
+            )
+            .previewDisplayName("Progress Bar")
         }
     }
 }

@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias SettingsScreenViewModelType = StateStoreViewModel<SettingsScreenViewState, SettingsScreenViewAction>
@@ -25,12 +26,16 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
 
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        let bindings = SettingsScreenViewStateBindings()
+        let bindings = SettingsScreenViewStateBindings(timelineStyle: ServiceLocator.shared.settings.timelineStyle)
         super.init(initialViewState: .init(bindings: bindings,
                                            deviceID: userSession.deviceId,
                                            userID: userSession.userID,
                                            showSessionVerificationSection: !(userSession.sessionVerificationController?.isVerified ?? false)),
                    imageProvider: userSession.mediaProvider)
+        
+        ServiceLocator.shared.settings.$timelineStyle
+            .weakAssign(to: \.state.bindings.timelineStyle, on: self)
+            .store(in: &cancellables)
         
         Task {
             if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL() {
@@ -71,6 +76,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.logout)
         case .sessionVerification:
             callback?(.sessionVerification)
+        case .changedTimelineStyle:
+            ServiceLocator.shared.settings.timelineStyle = state.bindings.timelineStyle
         }
     }
 }

@@ -35,7 +35,7 @@ struct SettingsScreenViewState: BindableState {
 }
 
 struct SettingsScreenViewStateBindings {
-    var enableAnalytics = ServiceLocator.shared.settings.enableAnalytics
+    var timelineStyle: TimelineStyle
 }
 
 enum SettingsScreenViewAction {
@@ -44,4 +44,5 @@ enum SettingsScreenViewAction {
     case reportBug
     case sessionVerification
     case logout
+    case changedTimelineStyle
 }

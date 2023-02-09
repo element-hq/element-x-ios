@@ -26,11 +26,12 @@ class BugReportServiceTests: XCTestCase {
     }
 
     func testSubmitBugReportWithMockService() async throws {
-        let result = try await bugReportService.submitBugReport(text: "i cannot send message",
-                                                                includeLogs: true,
-                                                                includeCrashLog: true,
-                                                                githubLabels: [],
-                                                                files: [])
+        let bugReport = BugReport(text: "i cannot send message",
+                                  includeLogs: true,
+                                  includeCrashLog: true,
+                                  githubLabels: [],
+                                  files: [])
+        let result = try await bugReportService.submitBugReport(bugReport, progressListener: nil)
         XCTAssertFalse(result.reportUrl.isEmpty)
     }
     
@@ -47,12 +48,13 @@ class BugReportServiceTests: XCTestCase {
                                        sentryURL: URL(staticString: "https://1234@sentry.com/1234"),
                                        applicationId: "mock_app_id",
                                        session: .mock)
-        
-        let result = try await service.submitBugReport(text: "i cannot send message",
-                                                       includeLogs: true,
-                                                       includeCrashLog: true,
-                                                       githubLabels: [],
-                                                       files: [])
+
+        let bugReport = BugReport(text: "i cannot send message",
+                                  includeLogs: true,
+                                  includeCrashLog: true,
+                                  githubLabels: [],
+                                  files: [])
+        let result = try await service.submitBugReport(bugReport, progressListener: nil)
         
         XCTAssertEqual(result.reportUrl, "https://example.com/123")
     }

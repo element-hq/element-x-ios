@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,26 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
-import UIKit
 
-class MockBugReportService: BugReportServiceProtocol {
-    func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
-        SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
+protocol ProgressListener {
+    var progressSubject: CurrentValueSubject<Double, Never> { get }
+}
+
+protocol ProgressPublisher {
+    var publisher: AnyPublisher<Double, Never> { get }
+}
+
+final class ProgressTracker: ProgressListener, ProgressPublisher {
+    let progressSubject: CurrentValueSubject<Double, Never>
+
+    var publisher: AnyPublisher<Double, Never> {
+        progressSubject
+            .eraseToAnyPublisher()
     }
 
-    var crashedLastRun = false
-
-    func crash() {
-        // no-op
+    init(initialValue: Double = 0.0) {
+        progressSubject = .init(initialValue)
     }
 }

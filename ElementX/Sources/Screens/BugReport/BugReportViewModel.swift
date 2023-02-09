@@ -49,13 +49,16 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     // MARK: Private
 
     private func submitBugReport() async {
-        callback?(.submitStarted)
+        let progressTracker = ProgressTracker()
+        callback?(.submitStarted(progressTracker: progressTracker))
         do {
-            let result = try await bugReportService.submitBugReport(text: context.reportText,
-                                                                    includeLogs: context.sendingLogsEnabled,
-                                                                    includeCrashLog: true,
-                                                                    githubLabels: [],
-                                                                    files: [])
+            let bugReport = BugReport(text: context.reportText,
+                                      includeLogs: context.sendingLogsEnabled,
+                                      includeCrashLog: true,
+                                      githubLabels: [],
+                                      files: [])
+            let result = try await bugReportService.submitBugReport(bugReport,
+                                                                    progressListener: progressTracker)
             MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")
             callback?(.submitFinished)
         } catch {

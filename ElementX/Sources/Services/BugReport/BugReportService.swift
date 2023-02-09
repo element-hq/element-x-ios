@@ -14,17 +14,20 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 import GZIP
 import Sentry
 import UIKit
 
-class BugReportService: BugReportServiceProtocol {
+class BugReportService: NSObject, BugReportServiceProtocol {
     private let baseURL: URL
     private let sentryURL: URL
     private let applicationId: String
     private let session: URLSession
     private var lastCrashEventId: String?
+    private let progressSubject = PassthroughSubject<Double, Never>()
+    private var cancellables = Set<AnyCancellable>()
     
     init(withBaseURL baseURL: URL,
          sentryURL: URL,
@@ -34,6 +37,7 @@ class BugReportService: BugReportServiceProtocol {
         self.sentryURL = sentryURL
         self.applicationId = applicationId
         self.session = session
+        super.init()
         
         //  enable SentrySDK
         SentrySDK.start { options in
@@ -74,18 +78,15 @@ class BugReportService: BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    func submitBugReport(text: String,
-                         includeLogs: Bool,
-                         includeCrashLog: Bool,
-                         githubLabels: [String],
-                         files: [URL]) async throws -> SubmitBugReportResponse {
-        var params = [MultipartFormData(key: "text", type: .text(value: text))]
+    func submitBugReport(_ bugReport: BugReport,
+                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
+        var params = [MultipartFormData(key: "text", type: .text(value: bugReport.text))]
         params.append(contentsOf: defaultParams)
-        for label in githubLabels {
+        for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
-        let zippedFiles = try await zipFiles(includeLogs: includeLogs,
-                                             includeCrashLog: includeCrashLog)
+        let zippedFiles = try await zipFiles(includeLogs: bugReport.includeLogs,
+                                             includeCrashLog: bugReport.includeCrashLog)
         //  log or compressed-log
         if !zippedFiles.isEmpty {
             for url in zippedFiles {
@@ -97,24 +98,14 @@ class BugReportService: BugReportServiceProtocol {
             params.append(MultipartFormData(key: "crash_report", type: .text(value: "<https://sentry.tools.element.io/organizations/element/issues/?project=44&query=\(crashEventId)>")))
         }
         
-        for url in files {
+        for url in bugReport.files {
             params.append(MultipartFormData(key: "file", type: .file(url: url)))
         }
 
         let boundary = "Boundary-\(UUID().uuidString)"
         var body = Data()
         for param in params {
-            body.appendString(string: "--\(boundary)\r\n")
-            body.appendString(string: "Content-Disposition:form-data; name=\"\(param.key)\"")
-            switch param.type {
-            case .text(let value):
-                body.appendString(string: "\r\n\r\n\(value)\r\n")
-            case .file(let url):
-                body.appendString(string: "; filename=\"\(url.lastPathComponent)\"\r\n")
-                body.appendString(string: "Content-Type: \"content-type header\"\r\n\r\n")
-                body.append(try Data(contentsOf: url))
-                body.appendString(string: "\r\n")
-            }
+            try body.appendParam(param, boundary: boundary)
         }
         body.appendString(string: "--\(boundary)--\r\n")
 
@@ -124,7 +115,16 @@ class BugReportService: BugReportServiceProtocol {
         request.httpMethod = "POST"
         request.httpBody = body as Data
 
-        let (data, _) = try await session.data(for: request)
+        let data: Data
+        if let progressListener {
+            progressSubject
+                .receive(on: DispatchQueue.main)
+                .assign(to: \.value, on: progressListener.progressSubject)
+                .store(in: &cancellables)
+            (data, _) = try await session.data(for: request, delegate: self)
+        } else {
+            (data, _) = try await session.data(for: request)
+        }
 
         // Parse the JSON data
         let decoder = JSONDecoder()
@@ -223,6 +223,20 @@ private extension Data {
             append(data)
         }
     }
+
+    mutating func appendParam(_ param: MultipartFormData, boundary: String) throws {
+        appendString(string: "--\(boundary)\r\n")
+        appendString(string: "Content-Disposition:form-data; name=\"\(param.key)\"")
+        switch param.type {
+        case .text(let value):
+            appendString(string: "\r\n\r\n\(value)\r\n")
+        case .file(let url):
+            appendString(string: "; filename=\"\(url.lastPathComponent)\"\r\n")
+            appendString(string: "Content-Type: \"content-type header\"\r\n\r\n")
+            append(try Data(contentsOf: url))
+            appendString(string: "\r\n")
+        }
+    }
 }
 
 private struct MultipartFormData {
@@ -233,4 +247,14 @@ private struct MultipartFormData {
 private enum MultipartFormDataType {
     case text(value: String)
     case file(url: URL)
+}
+
+extension BugReportService: URLSessionTaskDelegate {
+    func urlSession(_ session: URLSession, didCreateTask task: URLSessionTask) {
+        task.progress.publisher(for: \.fractionCompleted)
+            .sink { [weak self] value in
+                self?.progressSubject.send(value)
+            }
+            .store(in: &cancellables)
+    }
 }
