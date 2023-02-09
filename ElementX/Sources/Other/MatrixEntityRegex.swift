@@ -49,7 +49,7 @@ enum MatrixEntityRegex: String {
     // swiftlint:enable force_try
     
     static func isMatrixHomeserver(_ homeserver: String) -> Bool {
-        guard let match = homeserverRegex.firstMatch(in: homeserver, range: .init(location: 0, length: homeserver.count)) else {
+        guard let match = homeserverRegex.firstMatch(in: homeserver) else {
             return false
         }
         
@@ -57,7 +57,7 @@ enum MatrixEntityRegex: String {
     }
     
     static func isMatrixUserIdentifier(_ identifier: String) -> Bool {
-        guard let match = userIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+        guard let match = userIdentifierRegex.firstMatch(in: identifier) else {
             return false
         }
         
@@ -65,7 +65,7 @@ enum MatrixEntityRegex: String {
     }
     
     static func isMatrixRoomAlias(_ alias: String) -> Bool {
-        guard let match = roomAliasRegex.firstMatch(in: alias, range: .init(location: 0, length: alias.count)) else {
+        guard let match = roomAliasRegex.firstMatch(in: alias) else {
             return false
         }
         
@@ -73,7 +73,7 @@ enum MatrixEntityRegex: String {
     }
     
     static func isMatrixRoomIdentifier(_ identifier: String) -> Bool {
-        guard let match = roomIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+        guard let match = roomIdentifierRegex.firstMatch(in: identifier) else {
             return false
         }
         
@@ -81,7 +81,7 @@ enum MatrixEntityRegex: String {
     }
         
     static func isMatrixEventIdentifier(_ identifier: String) -> Bool {
-        guard let match = eventIdentifierRegex.firstMatch(in: identifier, range: .init(location: 0, length: identifier.count)) else {
+        guard let match = eventIdentifierRegex.firstMatch(in: identifier) else {
             return false
         }
         
