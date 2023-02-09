@@ -29,7 +29,7 @@ class UserSessionScreenTests: XCTestCase {
         
         app.buttons["roomName:\(roomName)"].tap()
         
-        XCTAssert(app.staticTexts[roomName].exists)
+        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
         
         try await Task.sleep(for: .seconds(1))
     

@@ -274,11 +274,24 @@ class MockScreen: Identifiable {
             return navigationSplitCoordinator
         case .roomDetailsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let userNotificationController = UserNotificationController(rootCoordinator: navigationStackCoordinator)
+            let roomProxy = MockRoomProxy(id: "MockRoomIdentifier",
+                                          displayName: "Room",
+                                          isEncrypted: true,
+                                          members: [.mockAlice, .mockBob, .mockCharlie])
             let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
-                                                                       roomProxy: MockRoomProxy(displayName: "Room",
-                                                                                                isEncrypted: true,
-                                                                                                members: [.mockAlice, .mockBob, .mockCharlie]),
+                                                                       roomProxy: roomProxy,
+                                                                       mediaProvider: MockMediaProvider()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomDetailsScreenWithRoomAvatar:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let roomProxy = MockRoomProxy(id: "MockRoomIdentifier",
+                                          displayName: "Room",
+                                          avatarURL: URL.picturesDirectory,
+                                          isEncrypted: true,
+                                          members: [.mockAlice, .mockBob, .mockCharlie])
+            let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                       roomProxy: roomProxy,
                                                                        mediaProvider: MockMediaProvider()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
