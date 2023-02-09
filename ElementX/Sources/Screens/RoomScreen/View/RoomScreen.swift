@@ -75,6 +75,7 @@ struct RoomScreen: View {
                 .background {
                     Circle()
                         .fill(Color.element.background)
+                        // Intentionally using system primary colour to get white/black.
                         .shadow(color: .primary.opacity(0.33), radius: 2.0)
                 }
                 .padding()
