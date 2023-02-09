@@ -1,3 +1,10 @@
 #!/bin/bash
+
 export PATH="$PATH:/opt/homebrew/bin"
-swiftformat . 
+
+if ! swiftformat --lint .
+then
+  echo "pre-commit: Commit aborted to run SwiftFormat, please try again"
+  swiftformat .
+  exit 1
+fi
