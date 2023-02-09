@@ -147,7 +147,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomLayoutBottom)
         
         let connection = try await listener.connection()
-        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
+        try await Task.sleep(for: .seconds(2)) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // When an incoming message arrives.

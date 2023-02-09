@@ -26,7 +26,7 @@ class RoomDetailsScreenUITests: XCTestCase {
         app.assertScreenshot(.roomDetailsScreen)
     }
 
-    func testInitialStateComponentsWith() {
+    func testInitialStateComponentsWithRoomAvatar() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomDetailsScreenWithRoomAvatar)
 
