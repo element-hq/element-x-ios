@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct RoomDetailsCoordinatorParameters {
-    let roomID: String
     let navigationStackCoordinator: NavigationStackCoordinator
     let roomProxy: RoomProxyProtocol
     let mediaProvider: MediaProviderProtocol
@@ -37,8 +36,7 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
     init(parameters: RoomDetailsCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = RoomDetailsViewModel(roomId: parameters.roomID,
-                                         roomProxy: parameters.roomProxy,
+        viewModel = RoomDetailsViewModel(roomProxy: parameters.roomProxy,
                                          mediaProvider: parameters.mediaProvider)
     }
     

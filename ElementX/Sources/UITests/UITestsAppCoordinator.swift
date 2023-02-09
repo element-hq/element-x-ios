@@ -275,27 +275,29 @@ class MockScreen: Identifiable {
         case .roomDetailsScreen:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userNotificationController = UserNotificationController(rootCoordinator: navigationStackCoordinator)
-            let coordinator = RoomDetailsCoordinator(parameters: .init(roomID: "MockRoomIdentifier",
-                                                                       navigationStackCoordinator: navigationStackCoordinator,
-                                                                       roomProxy: MockRoomProxy(
-                                                                           displayName: "Room",
-                                                                           isEncrypted: true,
-                                                                           members: [.mockAlice, .mockBob, .mockCharlie]
-                                                                       ),
+            var roomProxy = MockRoomProxy(
+                displayName: "Room",
+                isEncrypted: true,
+                members: [.mockAlice, .mockBob, .mockCharlie]
+            )
+            roomProxy.id = "MockRoomIdentifier"
+            let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                       roomProxy: roomProxy,
                                                                        mediaProvider: MockMediaProvider()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .roomDetailsScreenWithRoomAvatar:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let userNotificationController = UserNotificationController(rootCoordinator: navigationStackCoordinator)
-            let coordinator = RoomDetailsCoordinator(parameters: .init(roomID: "MockRoomIdentifier",
-                                                                       navigationStackCoordinator: navigationStackCoordinator,
-                                                                       roomProxy: MockRoomProxy(
-                                                                           displayName: "Room",
-                                                                           avatarURL: URL.picturesDirectory,
-                                                                           isEncrypted: true,
-                                                                           members: [.mockAlice, .mockBob, .mockCharlie]
-                                                                       ),
+            var roomProxy = MockRoomProxy(
+                displayName: "Room",
+                avatarURL: URL.picturesDirectory,
+                isEncrypted: true,
+                members: [.mockAlice, .mockBob, .mockCharlie]
+            )
+            roomProxy.id = "MockRoomIdentifier"
+            let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
+                                                                       roomProxy: roomProxy,
                                                                        mediaProvider: MockMediaProvider()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator

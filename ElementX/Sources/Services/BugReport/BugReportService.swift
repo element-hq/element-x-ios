@@ -119,7 +119,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         if let progressListener {
             progressSubject
                 .receive(on: DispatchQueue.main)
-                .assign(to: \.value, on: progressListener.progressSubject)
+                .weakAssign(to: \.value, on: progressListener.progressSubject)
                 .store(in: &cancellables)
             (data, _) = try await session.data(for: request, delegate: self)
         } else {

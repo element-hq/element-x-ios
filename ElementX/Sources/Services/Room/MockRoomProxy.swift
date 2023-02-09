@@ -19,7 +19,7 @@ import Foundation
 import MatrixRustSDK
 
 struct MockRoomProxy: RoomProxyProtocol {
-    let id = UUID().uuidString
+    var id = UUID().uuidString
     let name: String? = nil
     let displayName: String?
     var topic: String?

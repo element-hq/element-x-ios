@@ -175,8 +175,7 @@ struct RoomDetails_Previews: PreviewProvider {
                                           isEncrypted: true,
                                           canonicalAlias: "#alias:domain.com",
                                           members: members)
-            let viewModel = RoomDetailsViewModel(roomId: "RoomIdentifier",
-                                                 roomProxy: roomProxy,
+            let viewModel = RoomDetailsViewModel(roomProxy: roomProxy,
                                                  mediaProvider: MockMediaProvider())
             RoomDetailsScreen(context: viewModel.context)
         }
