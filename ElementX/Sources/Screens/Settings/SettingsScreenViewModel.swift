@@ -33,7 +33,9 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
                                            showSessionVerificationSection: !(userSession.sessionVerificationController?.isVerified ?? false)),
                    imageProvider: userSession.mediaProvider)
         
-        listenToSettingsChange(publisher: ServiceLocator.shared.settings.$timelineStyle, keyPath: \.timelineStyle)
+        ServiceLocator.shared.settings.$timelineStyle
+            .weakAssign(to: \.state.bindings.timelineStyle, on: self)
+            .store(in: &cancellables)
         
         Task {
             if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL() {
@@ -77,17 +79,5 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         case .changedTimelineStyle:
             ServiceLocator.shared.settings.timelineStyle = state.bindings.timelineStyle
         }
-    }
-    
-    private func listenToSettingsChange<Value>(publisher: AnyPublisher<Value, Never>,
-                                               keyPath: WritableKeyPath<SettingsScreenViewStateBindings, Value>) where Value: Equatable {
-        publisher.sink { [weak self] newValue in
-            guard newValue != self?.state.bindings[keyPath: keyPath] else {
-                return
-            }
-            
-            self?.state.bindings[keyPath: keyPath] = newValue
-        }
-        .store(in: &cancellables)
     }
 }
