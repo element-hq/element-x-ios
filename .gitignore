@@ -35,6 +35,9 @@ build
 Tools/Scripts/element-android
 /vendor/
 
+#brew
+Brewfile.lock.json
+
 ## macOS Files
 .DS_Store
 ._*

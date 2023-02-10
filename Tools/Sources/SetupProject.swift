@@ -11,14 +11,14 @@ struct SetupProject: ParsableCommand {
     }
 
     func setupGitHooks() throws {
-        try Utils.zsh("git config core.hooksPath .githooks")
+        try Utilities.zsh("git config core.hooksPath .githooks")
     }
 
     func brewBundleInstall() throws {
-        try Utils.zsh("brew bundle install")
+        try Utilities.zsh("brew bundle install")
     }
 
     func xcodegen() throws {
-        try Utils.zsh("xcodegen")
+        try Utilities.zsh("xcodegen")
     }
 }

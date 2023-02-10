@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-enum Utils {
+enum Utilities {
     enum Error: LocalizedError {
         case scriptFailed(command: String, path: String)
 
