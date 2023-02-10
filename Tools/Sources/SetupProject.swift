@@ -1,7 +1,7 @@
 import ArgumentParser
 import Foundation
 
-struct Setup: ParsableCommand {
+struct SetupProject: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A tool to setup the required components to efficiently run and contribute to Element X iOS")
 
     func run() throws {

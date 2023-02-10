@@ -5,5 +5,5 @@ import Foundation
 struct Tools: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A collection of command line tools for ElementX",
                                                     subcommands: [BuildSDK.self,
-                                                                  Setup.self])
+                                                                  SetupProject.self])
 }
