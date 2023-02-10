@@ -35,7 +35,7 @@ build
 Tools/Scripts/element-android
 /vendor/
 
-#brew
+## brew
 Brewfile.lock.json
 
 ## macOS Files
