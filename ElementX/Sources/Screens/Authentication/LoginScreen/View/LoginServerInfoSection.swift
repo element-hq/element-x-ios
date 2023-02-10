@@ -51,7 +51,7 @@ struct LoginServerInfoSection: View {
                 }
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.system))
             }
-            .accessibilityIdentifier("editServerButton")
+            .accessibilityIdentifier("login-change_server")
         }
     }
 }

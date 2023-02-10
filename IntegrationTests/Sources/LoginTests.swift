@@ -43,11 +43,11 @@ class LoginTests: XCTestCase {
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 5.0))
         getStartedButton.tap()
         
-        let editHomeserverButton = app.buttons["editServerButton"]
+        let editHomeserverButton = app.buttons["login-change_server"]
         XCTAssertTrue(editHomeserverButton.waitForExistence(timeout: 5.0))
         editHomeserverButton.tap()
         
-        let homeserverTextField = app.textFields["addressTextField"]
+        let homeserverTextField = app.textFields["change_server-server"]
         XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 5.0))
         
         homeserverTextField.clearAndTypeText(app.homeserver)
@@ -57,7 +57,7 @@ class LoginTests: XCTestCase {
         
         slidingSyncTextField.clearAndTypeText(app.homeserver)
         
-        let confirmButton = app.buttons["confirmButton"]
+        let confirmButton = app.buttons["change_server-continue"]
         XCTAssertTrue(confirmButton.exists)
         confirmButton.tap()
         

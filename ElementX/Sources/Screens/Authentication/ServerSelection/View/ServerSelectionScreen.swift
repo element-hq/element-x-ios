@@ -69,14 +69,14 @@ struct ServerSelectionScreen: View {
                 .onChange(of: context.homeserverAddress) { _ in context.send(viewAction: .clearFooterError) }
                 .submitLabel(.done)
                 .onSubmit(submit)
-                .accessibilityIdentifier("addressTextField")
+                .accessibilityIdentifier("change_server-server")
             
             Button(action: submit) {
                 Text(context.viewState.buttonTitle)
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(context.viewState.hasValidationError)
-            .accessibilityIdentifier("confirmButton")
+            .accessibilityIdentifier("change_server-continue")
         }
     }
     

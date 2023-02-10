@@ -71,13 +71,13 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         
         // Login Screen: Tap edit server button.
         XCTAssertFalse(app.buttons["oidcButton"].exists, "The OIDC button shouldn't be shown before entering a supported homeserver.")
-        app.buttons["editServerButton"].tap()
+        app.buttons["login-change_server"].tap()
         
         // Server Selection: Clear the default and enter OIDC server.
-        app.textFields["addressTextField"].clearAndTypeText("company.com")
+        app.textFields["change_server-server"].clearAndTypeText("company.com")
         
         // Dismiss server screen.
-        app.buttons["confirmButton"].tap()
+        app.buttons["change_server-continue"].tap()
         
         // Then the login form should be updated for OIDC.
         XCTAssertTrue(app.buttons["oidcButton"].waitForExistence(timeout: 1), "The OIDC button should be shown after selecting a homeserver with OIDC.")
