@@ -25,17 +25,17 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons["getStartedButton"].tap()
+        app.buttons["onboarding-sign_in"].tap()
         
         // Login Screen: Enter valid credentials
         
-        app.textFields["usernameTextField"].clearAndTypeText("alice\n")
-        app.secureTextFields["passwordTextField"].clearAndTypeText("12345678")
+        app.textFields["login-email_username"].clearAndTypeText("alice\n")
+        app.secureTextFields["login-password"].clearAndTypeText("12345678")
 
         app.assertScreenshot(.authenticationFlow)
         
         // Login Screen: Tap next
-        app.buttons["nextButton"].tap()
+        app.buttons["login-continue"].tap()
         
         // Then login should succeed.
         XCTAssertFalse(app.alerts.element.exists, "No alert should be shown when logging in with valid credentials.")
@@ -46,14 +46,14 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons["getStartedButton"].tap()
+        app.buttons["onboarding-sign_in"].tap()
         
         // Login Screen: Enter invalid credentials
-        app.textFields["usernameTextField"].clearAndTypeText("alice")
-        app.secureTextFields["passwordTextField"].clearAndTypeText("87654321")
+        app.textFields["login-username"].clearAndTypeText("alice")
+        app.secureTextFields["login-email_password"].clearAndTypeText("87654321")
 
         // Login Screen: Tap next
-        let nextButton = app.buttons["nextButton"]
+        let nextButton = app.buttons["login-continue"]
         XCTAssertTrue(nextButton.waitForExistence(timeout: 2.0))
         XCTAssertTrue(nextButton.isEnabled)
         nextButton.tap()
@@ -67,7 +67,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons["getStartedButton"].tap()
+        app.buttons["onboarding-sign_in"].tap()
         
         // Login Screen: Tap edit server button.
         XCTAssertFalse(app.buttons["oidcButton"].exists, "The OIDC button shouldn't be shown before entering a supported homeserver.")

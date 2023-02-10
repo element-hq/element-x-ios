@@ -84,7 +84,7 @@ struct LoginScreen: View {
                 .submitLabel(.next)
                 .onChange(of: isUsernameFocused, perform: usernameFocusChanged)
                 .onSubmit { isPasswordFocused = true }
-                .accessibilityIdentifier("usernameTextField")
+                .accessibilityIdentifier("login-email_username")
                 .padding(.bottom, 20)
             
             SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
@@ -93,7 +93,7 @@ struct LoginScreen: View {
                 .textContentType(.password)
                 .submitLabel(.done)
                 .onSubmit(submit)
-                .accessibilityIdentifier("passwordTextField")
+                .accessibilityIdentifier("login-password")
             
             Spacer().frame(height: 32)
 
@@ -102,7 +102,7 @@ struct LoginScreen: View {
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(!context.viewState.canSubmit)
-            .accessibilityIdentifier("nextButton")
+            .accessibilityIdentifier("login-continue")
         }
     }
 

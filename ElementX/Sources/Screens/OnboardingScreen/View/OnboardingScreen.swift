@@ -93,7 +93,7 @@ struct OnboardingScreen: View {
                 Text(ElementL10n.loginContinue)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("getStartedButton")
+            .accessibilityIdentifier("onboarding-sign_in")
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()

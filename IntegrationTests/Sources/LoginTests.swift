@@ -61,17 +61,17 @@ class LoginTests: XCTestCase {
         XCTAssertTrue(confirmButton.exists)
         confirmButton.tap()
         
-        let usernameTextField = app.textFields["usernameTextField"]
+        let usernameTextField = app.textFields["login-email_username"]
         XCTAssertTrue(usernameTextField.exists)
         
         usernameTextField.clearAndTypeText(app.username)
         
-        let passwordTextField = app.secureTextFields["passwordTextField"]
+        let passwordTextField = app.secureTextFields["login-password"]
         XCTAssertTrue(passwordTextField.exists)
         
         passwordTextField.clearAndTypeText(app.password)
         
-        let nextButton = app.buttons["nextButton"]
+        let nextButton = app.buttons["login-continue"]
         XCTAssertTrue(nextButton.exists)
         XCTAssertTrue(nextButton.isEnabled)
         
