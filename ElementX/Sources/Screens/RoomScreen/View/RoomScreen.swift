@@ -17,8 +17,6 @@
 import SwiftUI
 
 struct RoomScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
     @ObservedObject var context: RoomScreenViewModel.Context
     @State private var showReactionsMenuForItemId = ""
     
