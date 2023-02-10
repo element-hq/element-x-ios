@@ -69,6 +69,8 @@ lane :alpha do
   )
 
   upload_to_diawi()
+
+  upload_to_browserstack()
 end
 
 lane :app_store_release do
@@ -277,6 +279,21 @@ private_lane :upload_to_diawi do
   # Set "DIAWI_FILE_LINK" to GitHub environment variables for Github actions
   sh("echo DIAWI_FILE_LINK=#{diawi_link} >> $GITHUB_ENV")
   sh("echo DIAWI_QR_CODE_LINK=#{diawi_qr_code_link} >> $GITHUB_ENV")
+end
+
+private_lane :upload_to_browserstack do
+  browserstack_username = ENV["BROWSERSTACK_USERNAME"]
+  UI.user_error!("Invalid BrowserStack username.") unless !browserstack_username.to_s.empty?
+
+  browserstack_access_key = ENV["BROWSERSTACK_ACCESS_KEY"]
+  UI.user_error!("Invalid BrowserStack access key.") unless !browserstack_access_key.to_s.empty?
+
+  upload_to_browserstack_app_automate(
+    browserstack_username: browserstack_username,
+    browserstack_access_key: browserstack_access_key,
+    file_path: lane_context[SharedValues::IPA_OUTPUT_PATH],
+    custom_id: "element-x-ios-pr"
+  )
 end
 
 private_lane :bump_build_number do
