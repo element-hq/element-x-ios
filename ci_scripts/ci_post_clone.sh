@@ -2,10 +2,12 @@
 
 source ci_common.sh
 
+setup_environment
+
+install_brew_dependencies
+
 if [ "$CI_WORKFLOW" = "Nightly" ]; then
-    setup_environment
-
-    install_brew_dependencies
-
     bundle exec fastlane config_nightly
+else
+    xcodegen
 fi
