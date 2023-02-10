@@ -89,7 +89,7 @@ class TestMeasurementParser {
             }
             
             let string = String(data: handle.availableData, encoding: .utf8) ?? "<Non-ascii data of size\(handle.availableData.count)>\n"
-            self.regex.matches(in: string, options: .reportCompletion, range: NSRange(location: 0, length: string.count)).forEach {
+            self.regex.matches(in: string, options: .reportCompletion).forEach {
                 if let nameIndex = Range($0.range(at: 1), in: string),
                    let averageIndex = Range($0.range(at: 3), in: string) {
                     let name = String(string[nameIndex])

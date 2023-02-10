@@ -21,11 +21,13 @@ struct MessageComposer: View {
     @Binding var focused: Bool
     let sendingDisabled: Bool
     let type: RoomScreenComposerMode
-    @State private var isMultiline = false
     
     let sendAction: () -> Void
     let replyCancellationAction: () -> Void
     let editCancellationAction: () -> Void
+    
+    @State private var isMultiline = false
+    @ScaledMetric private var sendButtonIconSize = 16
     
     var body: some View {
         let roundedRectangle = RoundedRectangle(cornerRadius: borderRadius)
@@ -48,14 +50,13 @@ struct MessageComposer: View {
                         .symbolVariant(.fill)
                         .font(.element.body)
                         .foregroundColor(sendingDisabled ? .element.quaternaryContent : .global.white)
-                        .padding(5)
                         .background {
                             Circle()
                                 .foregroundColor(sendingDisabled ? .clear : .element.brand)
                         }
                 }
                 .disabled(sendingDisabled)
-                .animation(.elementDefault, value: sendingDisabled)
+                .animation(.linear(duration: 0.1), value: sendingDisabled)
                 .keyboardShortcut(.return, modifiers: [.command])
                 .padding([.vertical, .trailing], 6)
             }
@@ -70,7 +71,9 @@ struct MessageComposer: View {
                     .opacity(focused ? 1 : 0)
             }
         }
-        .animation(.elementDefault, value: type)
+        // Explicitly disable all animations to fix weirdness with the header immediately
+        // appearing whilst the text field and keyboard are still animating up to it.
+        .animation(.noAnimation, value: type)
     }
 
     @ViewBuilder
@@ -93,9 +96,12 @@ struct MessageComposer: View {
                 .fontWeight(.medium)
                 .accessibilityLabel(ElementL10n.actionConfirm)
                 .accessibilityHidden(!type.isEdit)
-            Image(systemName: "paperplane")
-                .offset(x: -1, y: 0)
+            Image(asset: Asset.Images.timelineComposerSendMessage)
+                .resizable()
+                .frame(width: sendButtonIconSize, height: sendButtonIconSize)
+                .padding(EdgeInsets(top: 7, leading: 8, bottom: 7, trailing: 6))
                 .opacity(type.isEdit ? 0 : 1)
+                .accessibilityLabel(ElementL10n.actionSend)
                 .accessibilityHidden(type.isEdit)
         }
     }

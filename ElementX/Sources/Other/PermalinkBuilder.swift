@@ -56,18 +56,18 @@ enum PermalinkBuilder {
             fragment = String(fragment.dropFirst(1))
         }
         
-        if let userIdentifierRange = MatrixEntityRegex.userIdentifierRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+        if let userIdentifierRange = MatrixEntityRegex.userIdentifierRegex.firstMatch(in: fragment)?.range {
             return .userIdentifier((fragment as NSString).substring(with: userIdentifierRange))
         }
         
-        if let roomAliasRange = MatrixEntityRegex.roomAliasRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+        if let roomAliasRange = MatrixEntityRegex.roomAliasRegex.firstMatch(in: fragment)?.range {
             return .roomAlias((fragment as NSString).substring(with: roomAliasRange))
         }
         
-        if let roomIdentifierRange = MatrixEntityRegex.roomIdentifierRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+        if let roomIdentifierRange = MatrixEntityRegex.roomIdentifierRegex.firstMatch(in: fragment)?.range {
             let roomIdentifier = (fragment as NSString).substring(with: roomIdentifierRange)
             
-            if let eventIdentifierRange = MatrixEntityRegex.eventIdentifierRegex.firstMatch(in: fragment, range: .init(location: 0, length: fragment.count))?.range {
+            if let eventIdentifierRange = MatrixEntityRegex.eventIdentifierRegex.firstMatch(in: fragment)?.range {
                 let eventIdentifier = (fragment as NSString).substring(with: eventIdentifierRange)
                 return .event(roomIdentifier: roomIdentifier, eventIdentifier: eventIdentifier)
             }

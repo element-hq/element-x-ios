@@ -132,14 +132,13 @@ struct AttributedStringBuilder: AttributedStringBuilderProtocol {
     
     private func addLinks(_ attributedString: NSMutableAttributedString) {
         let string = attributedString.string
-        let range = NSRange(location: 0, length: attributedString.string.count)
         
-        var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: [], range: range)
-        matches.append(contentsOf: MatrixEntityRegex.roomIdentifierRegex.matches(in: string, options: [], range: range))
+        var matches = MatrixEntityRegex.userIdentifierRegex.matches(in: string, options: [])
+        matches.append(contentsOf: MatrixEntityRegex.roomIdentifierRegex.matches(in: string, options: []))
         // As of right now we do not handle event id links in any way so there is no need to add them as links
-//        matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: [], range: range))
-        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: [], range: range))
-        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: [], range: range))
+//        matches.append(contentsOf: MatrixEntityRegex.eventIdentifierRegex.matches(in: string, options: []))
+        matches.append(contentsOf: MatrixEntityRegex.roomAliasRegex.matches(in: string, options: []))
+        matches.append(contentsOf: MatrixEntityRegex.linkRegex.matches(in: string, options: []))
         
         guard matches.count > 0 else {
             return
