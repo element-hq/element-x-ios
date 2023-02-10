@@ -1,3 +1,16 @@
+## Ignore project files as we generate them with xcodegen (https://github.com/yonaskolb/XcodeGen)
+
+# Plus ridiculous workaround to unignore the Package.resolved file for SwiftPM.
+# https://stackoverflow.com/a/16318111/730924
+ElementX.xcodeproj/*
+!ElementX.xcodeproj/project.xcworkspace
+ElementX.xcodeproj/project.xcworkspace/*
+!ElementX.xcodeproj/project.xcworkspace/xcshareddata
+ElementX.xcodeproj/project.xcworkspace/xcshareddata/*
+!ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm
+ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/*
+!ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved
+
 ## User settings
 xcuserdata/
 
