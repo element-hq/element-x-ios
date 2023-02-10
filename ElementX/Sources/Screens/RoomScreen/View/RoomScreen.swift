@@ -64,8 +64,18 @@ struct RoomScreen: View {
     
     var scrollToBottomButton: some View {
         Button { context.viewState.scrollToBottomPublisher.send(()) } label: {
-            Image(uiImage: Asset.Images.timelineScrollToBottom.image)
-                .shadow(radius: 2.0)
+            Image(systemName: "chevron.down")
+                .font(.element.body)
+                .fontWeight(.semibold)
+                .foregroundColor(.element.secondaryContent)
+                .padding(13)
+                .offset(y: 1)
+                .background {
+                    Circle()
+                        .fill(Color.element.background)
+                        // Intentionally using system primary colour to get white/black.
+                        .shadow(color: .primary.opacity(0.33), radius: 2.0)
+                }
                 .padding()
         }
         .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
