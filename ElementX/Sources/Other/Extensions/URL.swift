@@ -32,11 +32,8 @@ extension URL {
             // Browserstack doesn't properly handle AppGroup entitlements so this fails, presumably because of the resigning happening on their side
             // Try using the normal app folder instead of the app group
             // https://www.browserstack.com/docs/app-automate/appium/troubleshooting/entitlements-error
-            guard let url = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first?.deletingLastPathComponent().deletingLastPathComponent() else {
-                fatalError("Should always be able to retrieve the app directory")
-            }
             
-            return url
+            return URL.applicationSupportDirectory.deletingLastPathComponent().deletingLastPathComponent()
         }
         
         return url
