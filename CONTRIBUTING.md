@@ -51,7 +51,7 @@ The project depends on some tools for the build process. These are all included 
 brew bundle
 ```
 
-Git LFS is used to store UI test snapshots. `brew bundle` will already install it, however it can also be installed after a checkout by running:
+Git LFS is used to store UI test snapshots. `swift run tools setup-project` will already install it, however it can also be installed after a checkout by running:
 
 ```
 git lfs install
