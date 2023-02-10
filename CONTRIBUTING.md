@@ -6,11 +6,24 @@ Element iOS support can be found in this room: [![Element iOS Matrix room #eleme
 
 ## Setting up a development environment
 
+### Setup Project
+
+It's mandatory to have [homebrew](https://brew.sh/) installed on your mac, and run after the checkout:
+
+```
+swift run tools setup-project
+```
+
+This will:
+- Install various brew dependencies required for the project (like xcodegen).
+- Set up git to use the shared githooks from the repo, instead of the default ones.
+- Automatically run xcodegen for the first time.
+
 ### Xcode
 
 We suggest using an Xcode version later than 13.2.1.
 
-The Xcode project can be directly compiled after checkout through the shared ElementX scheme which includes the main application as well as the unit and UI tests.
+The Xcode project can be directly compiled through the shared ElementX scheme which includes the main application as well as the unit and UI tests.
 
 The Xcode project itself is generated through [xcodegen](https://github.com/yonaskolb/XcodeGen) so any changes shouldn't be made directly to it but to the configuration files.
 
@@ -38,10 +51,18 @@ The project depends on some tools for the build process. These are all included 
 brew bundle
 ```
 
-Git LFS is used to store UI test snapshots. After cloning the repo this can be configured by running
+Git LFS is used to store UI test snapshots. `swift run tools setup-project` will already install it, however it can also be installed after a checkout by running:
 
 ```
 git lfs install
+```
+
+### Githooks
+
+The project uses its own shared githooks stored in the .githooks folder, you will need to configure git to use such folder, this is already done if you have run the setup tool with `swift run tools setup-project` otherwise you would need to run:
+
+```
+git config core.hooksPath .githooks
 ```
 
 ### Continuous Integration
