@@ -33,7 +33,7 @@ extension Date {
             return formatted(.dateTime.weekday(.wide))
         } else if let oneYearAgo = calendar.date(byAdding: .year, value: -1, to: .now),
                   oneYearAgo <= self {
-            // The day and month if it was in the last 6 days.
+            // The day and month if it was in the past year
             return formatted(.dateTime.day().month())
         } else {
             // The day, month and year if it is any older.
