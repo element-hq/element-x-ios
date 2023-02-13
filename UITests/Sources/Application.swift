@@ -64,7 +64,11 @@ extension XCUIApplication {
     }
 
     private var deviceName: String {
-        UIDevice.current.name
+        var name = UIDevice.current.name
+        if name.starts(with: "Clone "), let range = name.range(of: " of ") {
+            name = String(name[range.upperBound...])
+        }
+        return name
     }
 
     private var languageCode: String {
