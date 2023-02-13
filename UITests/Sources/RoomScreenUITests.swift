@@ -19,6 +19,8 @@ import XCTest
 
 @MainActor
 class RoomScreenUITests: XCTestCase {
+    let connectionWaitDuration: Duration = .seconds(10)
+    
     func testPlainNoAvatar() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.roomPlainNoAvatar)
@@ -54,7 +56,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
         
         let connection = try await listener.connection()
-        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
+        try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // When a back pagination occurs and an incoming message arrives.
@@ -72,7 +74,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
         
         let connection = try await listener.connection()
-        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
+        try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // When a large back pagination occurs.
@@ -89,7 +91,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomLayoutMiddle)
         
         let connection = try await listener.connection()
-        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
+        try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // Given a timeline that is neither at the top nor the bottom.
@@ -123,7 +125,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomLayoutTop)
         
         let connection = try await listener.connection()
-        try await Task.sleep(for: .seconds(1)) // Allow the connection to settle on CI/Intel...
+        try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // Given a timeline that is scrolled to the top.
@@ -147,7 +149,7 @@ class RoomScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.roomLayoutBottom)
         
         let connection = try await listener.connection()
-        try await Task.sleep(for: .seconds(2)) // Allow the connection to settle on CI/Intel...
+        try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
         defer { connection.disconnect() }
         
         // When an incoming message arrives.

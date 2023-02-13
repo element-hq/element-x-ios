@@ -51,9 +51,7 @@ class LoginScreenUITests: XCTestCase {
         app.goToScreenWithIdentifier(.login)
         
         // When entering a username on a homeserver with an unsupported flow.
-        let usernameTextField = app.textFields["usernameTextField"]
-        XCTAssertTrue(usernameTextField.waitForExistence(timeout: 5.0))
-        usernameTextField.clearAndTypeText("@test:server.net\n")
+        app.textFields["usernameTextField"].clearAndTypeText("@test:server.net\n")
         
         // Then the screen should not allow login to continue.
         app.assertScreenshot(.login, step: 2)
