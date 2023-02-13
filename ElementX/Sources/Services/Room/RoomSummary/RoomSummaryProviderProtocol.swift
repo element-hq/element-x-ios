@@ -25,7 +25,7 @@ enum RoomSummaryProviderState {
     case live
 }
 
-enum RoomSummary {
+enum RoomSummary: CustomStringConvertible {
     case empty
     case filled(details: RoomSummaryDetails)
     case invalidated(details: RoomSummaryDetails)
@@ -36,6 +36,17 @@ enum RoomSummary {
             return nil
         case .invalidated(let details), .filled(let details):
             return details.id
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .empty:
+            return "\(String(describing: Self.self)): Empty"
+        case .invalidated(let details):
+            return "\(String(describing: Self.self)): Invalidated(\(details.id))"
+        case .filled(let details):
+            return "\(String(describing: Self.self)): Filled(\(details.id))"
         }
     }
 }

@@ -205,16 +205,32 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         MXLog.info("Updating rooms")
         
         var rooms = [HomeScreenRoom]()
+        var createdRoomIdentifiers = [String: Bool]()
+        
+        func appendRoom(_ room: HomeScreenRoom, allRoomsProvider: Bool, invalidated: Bool) {
+            guard createdRoomIdentifiers[room.id] == nil else {
+                MXLog.error("Built duplicated room for identifier: \(room.id). AllRoomsProvider: \(allRoomsProvider) Invalidated: \(invalidated). Ignoring")
+                return
+            }
+            
+            createdRoomIdentifiers[room.id] = true
+            rooms.append(room)
+        }
         
         // Try merging together results from both the visibleRoomsSummaryProvider and the allRoomsSummaryProvider
         // Empty or invalidated items in the visibleRoomsSummaryProvider might have more details in the allRoomsSummaryProvider
         // If items are unavailable in the allRoomsSummaryProvider (hasn't be added to SS yet / cold cache) then use what's available
         for (index, summary) in visibleRoomsSummaryProvider.roomListPublisher.value.enumerated() {
             switch summary {
+            case .filled(let details):
+                let room = buildRoom(with: details, invalidated: false, isLoading: false)
+                appendRoom(room, allRoomsProvider: false, invalidated: false)
             case .empty, .invalidated:
+                // Try getting details from the allRoomsSummaryProvider
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     if case let .invalidated(details) = summary {
-                        rooms.append(buildRoom(with: details, invalidated: true, isLoading: false))
+                        let room = buildRoom(with: details, invalidated: true, isLoading: false)
+                        appendRoom(room, allRoomsProvider: true, invalidated: true)
                     } else {
                         rooms.append(HomeScreenRoom.placeholder())
                     }
@@ -224,11 +240,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 switch allRoomsRoomSummary {
                 case .empty:
                     rooms.append(HomeScreenRoom.placeholder())
-                case .filled(let details), .invalidated(let details):
-                    rooms.append(buildRoom(with: details, invalidated: false, isLoading: true))
+                case .filled(let details):
+                    let room = buildRoom(with: details, invalidated: false, isLoading: true)
+                    appendRoom(room, allRoomsProvider: true, invalidated: false)
+                case .invalidated(let details):
+                    let room = buildRoom(with: details, invalidated: true, isLoading: true)
+                    appendRoom(room, allRoomsProvider: true, invalidated: true)
                 }
-            case .filled(let details):
-                rooms.append(buildRoom(with: details, invalidated: false, isLoading: false))
             }
         }
         
