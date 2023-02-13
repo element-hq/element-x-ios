@@ -21,7 +21,7 @@ struct FormSectionHeaderStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .foregroundColor(.element.secondaryContent)
-            .font(.element.footnoteBold)
+            .font(.element.caption1)
     }
 }
 
