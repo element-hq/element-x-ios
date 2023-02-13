@@ -1,6 +1,6 @@
 #!/bin/sh
 
-setup_environment () {
+setup_xcode_cloud_environment () {
     # Return on failures
     # Fail when expanding unset variables
     # Trace each command before executing it
@@ -21,7 +21,7 @@ setup_environment () {
     export PATH="/Users/local/Library/Python/3.9/bin:$PATH"
 
     # Things don't work well on the default ruby version
-    brew install "ruby@2.7"
+    brew install ruby@2.7
 
     gem install bundler
 
@@ -29,11 +29,22 @@ setup_environment () {
     bundle install --jobs 4 --retry 3
 }
 
-install_brew_dependencies () {
-    brew install "xcodegen"
-    brew install "imagemagick"
+install_xcode_cloud_brew_dependencies () {
+    brew install xcodegen imagemagick
 }
 
-install_python_dependencies () {
-    pip3 install -r requirements.txt # Install towncrier for generating changelogs
+install_xcode_cloud_python_dependencies () {
+    pip3 install towncrier # Install towncrier for generating changelogs
+}
+
+setup_github_actions_environment() {
+    brew install xcodegen swiftformat git-lfs
+    
+    # brew "swiftlint" # Fails on the CI: `Target /usr/local/bin/swiftlint Target /usr/local/bin/swiftlint already exists`. Installed through https://github.com/actions/virtual-environments/blob/main/images/macos/macos-12-Readme.md#linters
+    # brew "imagemagick" # Upgrading imagemagick has failed!
+
+    bundle config path vendor/bundle
+    bundle install --jobs 4 --retry 3
+
+    xcodegen
 }

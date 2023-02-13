@@ -2,10 +2,10 @@
 
 source ci_common.sh
 
-setup_environment
+setup_xcode_cloud_environment
 
 if [ "$CI_WORKFLOW" = "Release" ]; then
-    install_python_dependencies
+    install_xcode_cloud_python_dependencies
 
     bundle exec fastlane release_to_github
     bundle exec fastlane prepare_next_release

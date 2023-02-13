@@ -24,20 +24,20 @@ class DateTests: XCTestCase {
     let startOfYesterday = Calendar.current.startOfDay(for: Calendar.current.date(byAdding: .day, value: -1, to: .now)!)
     
     func testMinimalDateFormatting() {
-        let today = calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday)
-        XCTAssertEqual(today?.formattedMinimal(), "9:30 AM")
+        let today = calendar.date(byAdding: DateComponents(hour: 9, minute: 30), to: startOfToday)!
+        XCTAssertEqual(today.formattedMinimal(), today.formatted(date: .omitted, time: .shortened))
         
-        let yesterday = calendar.date(byAdding: .hour, value: 1, to: startOfYesterday)
-        XCTAssertEqual(yesterday?.formattedMinimal(), "Yesterday")
+        let yesterday = calendar.date(byAdding: .hour, value: 1, to: startOfYesterday)!
+        XCTAssertEqual(yesterday.formattedMinimal(), yesterday.formatted(Date.RelativeFormatStyle(presentation: .named, capitalizationContext: .beginningOfSentence)))
         
-        let saturday = calendar.nextWeekend(startingAfter: startOfToday, direction: .backward)?.start
-        XCTAssertEqual(saturday?.formattedMinimal(), "Saturday")
+        let threeDaysAgo = calendar.date(byAdding: .day, value: -3, to: startOfToday)!
+        XCTAssertEqual(threeDaysAgo.formattedMinimal(), threeDaysAgo.formatted(.dateTime.weekday(.wide)))
         
         // This test will fail during the first 6 days of the year.
-        let newYearsDay = calendar.date(from: DateComponents(year: calendar.component(.year, from: startOfToday), month: 1, day: 1))!
-        XCTAssertEqual(newYearsDay.formattedMinimal(), "Jan 1")
+        let sometimeThisYear = calendar.date(byAdding: .month, value: -10, to: startOfToday)!
+        XCTAssertEqual(sometimeThisYear.formattedMinimal(), sometimeThisYear.formatted(.dateTime.day().month()))
         
         let theMillennium = calendar.date(from: DateComponents(year: 2000, month: 1, day: 1))!
-        XCTAssertEqual(theMillennium.formattedMinimal(), "Jan 1, 2000")
+        XCTAssertEqual(theMillennium.formattedMinimal(), theMillennium.formatted(.dateTime.year().day().month()))
     }
 }
