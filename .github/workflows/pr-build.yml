@@ -21,27 +21,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache Ruby gems
-        uses: actions/cache@v3
+      - uses: actions/cache@v3
         with:
           path: vendor/bundle
           key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
           restore-keys: |
             ${{ runner.os }}-gems-
 
-      - name: Brew bundle
+      - name: Setup environment
         run:
-          brew bundle
+          source ci_scripts/ci_common.sh && setup_github_actions_environment
 
-      - name: SwiftFormat
-        run:
-          swiftformat --lint .
-
-      - name: Bundle install
-        run: |
-          bundle config path vendor/bundle
-          bundle install --jobs 4 --retry 3
-      
       - name: Import signing certificate
         uses: apple-actions/import-codesign-certs@v1
         with:
