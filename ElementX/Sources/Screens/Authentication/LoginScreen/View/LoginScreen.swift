@@ -77,23 +77,21 @@ struct LoginScreen: View {
             
             TextField(ElementL10n.loginSigninUsernameHint, text: $context.username)
                 .focused($isUsernameFocused)
-                .textFieldStyle(.elementInput())
+                .textFieldStyle(.elementInput(accessibilityIdentifier: "login-email_username"))
                 .disableAutocorrection(true)
                 .textContentType(.username)
                 .autocapitalization(.none)
                 .submitLabel(.next)
                 .onChange(of: isUsernameFocused, perform: usernameFocusChanged)
                 .onSubmit { isPasswordFocused = true }
-                .accessibilityIdentifier("login-email_username")
                 .padding(.bottom, 20)
             
             SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
                 .focused($isPasswordFocused)
-                .textFieldStyle(.elementInput())
+                .textFieldStyle(.elementInput(accessibilityIdentifier: "login-password"))
                 .textContentType(.password)
                 .submitLabel(.done)
                 .onSubmit(submit)
-                .accessibilityIdentifier("login-password")
             
             Spacer().frame(height: 32)
 

@@ -62,14 +62,14 @@ struct ServerSelectionScreen: View {
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
                 .textFieldStyle(.elementInput(labelText: ElementL10n.hsUrl,
                                               footerText: context.viewState.footerMessage,
-                                              isError: context.viewState.isShowingFooterError))
+                                              isError: context.viewState.isShowingFooterError,
+                                              accessibilityIdentifier: "change_server-server"))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .onChange(of: context.homeserverAddress) { _ in context.send(viewAction: .clearFooterError) }
                 .submitLabel(.done)
                 .onSubmit(submit)
-                .accessibilityIdentifier("change_server-server")
             
             Button(action: submit) {
                 Text(context.viewState.buttonTitle)
