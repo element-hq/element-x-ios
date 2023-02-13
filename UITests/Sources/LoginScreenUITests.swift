@@ -21,8 +21,7 @@ import XCTest
 class LoginScreenUITests: XCTestCase {
     func testMatrixDotOrg() {
         // Given the initial login screen which defaults to matrix.org.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.login)
+        let app = Application.launch(.login)
         app.assertScreenshot(.login)
         
         // When typing in a username and password.
@@ -35,8 +34,7 @@ class LoginScreenUITests: XCTestCase {
     
     func testOIDC() {
         // Given the initial login screen.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.login)
+        let app = Application.launch(.login)
         
         // When entering a username on a homeserver that only supports OIDC.
         app.textFields["usernameTextField"].clearAndTypeText("@test:company.com\n")
@@ -47,8 +45,7 @@ class LoginScreenUITests: XCTestCase {
     
     func testUnsupported() {
         // Given the initial login screen.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.login)
+        let app = Application.launch(.login)
         
         // When entering a username on a homeserver with an unsupported flow.
         app.textFields["usernameTextField"].clearAndTypeText("@test:server.net\n")

@@ -22,8 +22,7 @@ import XCTest
 class AuthenticationCoordinatorUITests: XCTestCase {
     func testLoginWithPassword() {
         // Given the authentication flow.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.authenticationFlow)
+        let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
         app.buttons["getStartedButton"].tap()
@@ -44,8 +43,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
     
     func testLoginWithIncorrectPassword() async throws {
         // Given the authentication flow.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.authenticationFlow)
+        let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
         app.buttons["getStartedButton"].tap()
@@ -66,8 +64,7 @@ class AuthenticationCoordinatorUITests: XCTestCase {
     
     func testSelectingOIDCServer() {
         // Given the authentication flow.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.authenticationFlow)
+        let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
         app.buttons["getStartedButton"].tap()

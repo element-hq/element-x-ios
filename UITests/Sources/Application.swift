@@ -18,9 +18,12 @@ import SnapshotTesting
 import XCTest
 
 struct Application {
-    static func launch() -> XCUIApplication {
+    static func launch(_ identifier: UITestsScreenIdentifier) -> XCUIApplication {
         let app = XCUIApplication()
-        app.launchEnvironment = ["IS_RUNNING_UI_TESTS": "1"]
+        app.launchEnvironment = [
+            "IS_RUNNING_UI_TESTS": "1",
+            "UI_TESTS_SCREEN": identifier.rawValue
+        ]
         Bundle.elementFallbackLanguage = "en"
         app.launch()
         return app
@@ -28,22 +31,11 @@ struct Application {
 }
 
 extension XCUIApplication {
-    func goToScreenWithIdentifier(_ identifier: UITestScreenIdentifier) {
-        let button = buttons[identifier.rawValue]
-        let lastLabel = staticTexts["lastItem"]
-        
-        while !button.isHittable, !lastLabel.isHittable {
-            swipeUp()
-        }
-        
-        button.tap()
-    }
-
     /// Assert screenshot for a screen with the given identifier. Does not fail if a screenshot is newly created.
     /// - Parameter identifier: Identifier of the UI test screen
     /// - Parameter step: An optional integer that can be used to take multiple snapshots per test identifier.
     /// - Parameter insets: Optional insets with which to crop the image by.
-    func assertScreenshot(_ identifier: UITestScreenIdentifier, step: Int? = nil, insets: UIEdgeInsets? = nil) {
+    func assertScreenshot(_ identifier: UITestsScreenIdentifier, step: Int? = nil, insets: UIEdgeInsets? = nil) {
         var snapshotName = identifier.rawValue
         if let step {
             snapshotName += "-\(step)"

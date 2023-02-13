@@ -23,8 +23,7 @@ class ServerSelectionUITests: XCTestCase {
     
     func testNormalState() async {
         // Given the initial server selection screen as a modal.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.serverSelection)
+        let app = Application.launch(.serverSelection)
         
         // Then it should be configured for matrix.org
         app.assertScreenshot(.serverSelection, step: 0)
@@ -34,8 +33,7 @@ class ServerSelectionUITests: XCTestCase {
 
     func testEmptyAddress() async {
         // Given the initial server selection screen as a modal.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.serverSelection)
+        let app = Application.launch(.serverSelection)
         
         // When clearing the server address text field.
         app.textFields[textFieldIdentifier].tap()
@@ -49,8 +47,7 @@ class ServerSelectionUITests: XCTestCase {
 
     func testInvalidAddress() {
         // Given the initial server selection screen as a modal.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.serverSelection)
+        let app = Application.launch(.serverSelection)
         
         // When typing in an invalid homeserver
         app.textFields[textFieldIdentifier].clearAndTypeText("thisisbad\n") // The tests only accept an address from LoginHomeserver.mockXYZ
@@ -63,8 +60,7 @@ class ServerSelectionUITests: XCTestCase {
 
     func testNonModalPresentation() {
         // Given the initial server selection screen pushed onto the stack.
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.serverSelectionNonModal)
+        let app = Application.launch(.serverSelectionNonModal)
         
         // Then the screen should be tweaked slightly to reflect the change of navigation.
         app.assertScreenshot(.serverSelectionNonModal)

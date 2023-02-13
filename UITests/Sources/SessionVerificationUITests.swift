@@ -31,8 +31,7 @@ class SessionVerificationUITests: XCTestCase {
     }
     
     func testChallengeMatches() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.sessionVerification)
+        let app = Application.launch(.sessionVerification)
         app.assertScreenshot(.sessionVerification, step: Step.initialState)
         
         app.buttons["requestVerificationButton"].tap()
@@ -57,8 +56,7 @@ class SessionVerificationUITests: XCTestCase {
     }
     
     func testChallengeDoesNotMatch() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.sessionVerification)
+        let app = Application.launch(.sessionVerification)
         app.assertScreenshot(.sessionVerification, step: Step.initialState)
         
         app.buttons["requestVerificationButton"].tap()
@@ -80,8 +78,7 @@ class SessionVerificationUITests: XCTestCase {
     }
     
     func testSessionVerificationCancelation() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.sessionVerification)
+        let app = Application.launch(.sessionVerification)
         app.assertScreenshot(.sessionVerification, step: Step.initialState)
         
         app.buttons["requestVerificationButton"].tap()

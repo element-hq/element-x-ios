@@ -22,8 +22,7 @@ class RoomScreenUITests: XCTestCase {
     let connectionWaitDuration: Duration = .seconds(10)
     
     func testPlainNoAvatar() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomPlainNoAvatar)
+        let app = Application.launch(.roomPlainNoAvatar)
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
         XCTAssert(app.staticTexts["roomAvatarImage"].exists)
@@ -32,8 +31,7 @@ class RoomScreenUITests: XCTestCase {
     }
 
     func testEncryptedWithAvatar() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomEncryptedWithAvatar)
+        let app = Application.launch(.roomEncryptedWithAvatar)
 
         XCTAssert(app.staticTexts["roomNameLabel"].exists)
         XCTAssert(app.images["roomAvatarImage"].waitForExistence(timeout: 1))
@@ -42,8 +40,7 @@ class RoomScreenUITests: XCTestCase {
     }
     
     func testSmallTimelineLayout() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomSmallTimeline)
+        let app = Application.launch(.roomSmallTimeline)
         
         // The messages should be bottom aligned.
         app.assertScreenshot(.roomSmallTimeline)
@@ -52,8 +49,7 @@ class RoomScreenUITests: XCTestCase {
     func testSmallTimelineWithIncomingAndPagination() async throws {
         let listener = try UITestsSignalling.Listener()
         
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomSmallTimelineIncomingAndSmallPagination)
+        let app = Application.launch(.roomSmallTimelineIncomingAndSmallPagination)
         
         let connection = try await listener.connection()
         try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
@@ -70,8 +66,7 @@ class RoomScreenUITests: XCTestCase {
     func testSmallTimelineWithLargePagination() async throws {
         let listener = try UITestsSignalling.Listener()
         
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomSmallTimelineLargePagination)
+        let app = Application.launch(.roomSmallTimelineLargePagination)
         
         let connection = try await listener.connection()
         try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
@@ -87,8 +82,7 @@ class RoomScreenUITests: XCTestCase {
     func testTimelineLayoutInMiddle() async throws {
         let listener = try UITestsSignalling.Listener()
         
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomLayoutMiddle)
+        let app = Application.launch(.roomLayoutMiddle)
         
         let connection = try await listener.connection()
         try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
@@ -121,8 +115,7 @@ class RoomScreenUITests: XCTestCase {
     func testTimelineLayoutAtTop() async throws {
         let listener = try UITestsSignalling.Listener()
         
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomLayoutTop)
+        let app = Application.launch(.roomLayoutTop)
         
         let connection = try await listener.connection()
         try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
@@ -145,8 +138,7 @@ class RoomScreenUITests: XCTestCase {
     func testTimelineLayoutAtBottom() async throws {
         let listener = try UITestsSignalling.Listener()
         
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.roomLayoutBottom)
+        let app = Application.launch(.roomLayoutBottom)
         
         let connection = try await listener.connection()
         try await Task.sleep(for: connectionWaitDuration) // Allow the connection to settle on CI/Intel...
