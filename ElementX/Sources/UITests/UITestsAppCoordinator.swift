@@ -289,6 +289,7 @@ class MockScreen: Identifiable {
                                           displayName: "Room",
                                           avatarURL: URL.picturesDirectory,
                                           isEncrypted: true,
+                                          canonicalAlias: "#mock:room.org",
                                           members: [.mockAlice, .mockBob, .mockCharlie])
             let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                        roomProxy: roomProxy,

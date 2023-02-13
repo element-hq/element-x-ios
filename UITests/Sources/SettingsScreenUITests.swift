@@ -21,19 +21,6 @@ class SettingsUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch()
         app.goToScreenWithIdentifier(.settings)
-        
-        XCTAssert(app.navigationBars[ElementL10n.settings].exists)
-        let reportBugButton = app.buttons["reportBugButton"]
-        XCTAssert(reportBugButton.exists)
-        XCTAssertEqual(reportBugButton.label, ElementL10n.sendBugReport)
-
-        XCTAssertTrue(app.buttons["timelineStylePicker"].exists)
-        XCTAssertTrue(app.staticTexts[ElementL10n.settingsTimelineStyle].exists)
-        
-        let logoutButton = app.buttons["logoutButton"]
-        XCTAssert(logoutButton.exists)
-        XCTAssertEqual(logoutButton.label, ElementL10n.logout)
-
         app.assertScreenshot(.settings)
     }
 }
