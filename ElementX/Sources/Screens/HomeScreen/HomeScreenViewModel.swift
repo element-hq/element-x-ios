@@ -207,9 +207,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         var rooms = [HomeScreenRoom]()
         var createdRoomIdentifiers = [String: Bool]()
         
-        func appendRoom(_ room: HomeScreenRoom, allRoomsProvider: Bool, invalidated: Bool) {
+        #warning("This works around duplicated room list items coming out of the SDK, remove once fixed")
+        func appendRoom(_ room: HomeScreenRoom, allRoomsProvider: Bool) {
             guard createdRoomIdentifiers[room.id] == nil else {
-                MXLog.error("Built duplicated room for identifier: \(room.id). AllRoomsProvider: \(allRoomsProvider) Invalidated: \(invalidated). Ignoring")
+                MXLog.error("Built duplicated room for identifier: \(room.id). AllRoomsSummaryProvider: \(allRoomsProvider). Ignoring")
                 return
             }
             
@@ -224,13 +225,13 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             switch summary {
             case .filled(let details):
                 let room = buildRoom(with: details, invalidated: false, isLoading: false)
-                appendRoom(room, allRoomsProvider: false, invalidated: false)
+                appendRoom(room, allRoomsProvider: false)
             case .empty, .invalidated:
                 // Try getting details from the allRoomsSummaryProvider
                 guard let allRoomsRoomSummary = allRoomsSummaryProvider?.roomListPublisher.value[safe: index] else {
                     if case let .invalidated(details) = summary {
                         let room = buildRoom(with: details, invalidated: true, isLoading: false)
-                        appendRoom(room, allRoomsProvider: true, invalidated: true)
+                        appendRoom(room, allRoomsProvider: true)
                     } else {
                         rooms.append(HomeScreenRoom.placeholder())
                     }
@@ -242,10 +243,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     rooms.append(HomeScreenRoom.placeholder())
                 case .filled(let details):
                     let room = buildRoom(with: details, invalidated: false, isLoading: true)
-                    appendRoom(room, allRoomsProvider: true, invalidated: false)
+                    appendRoom(room, allRoomsProvider: true)
                 case .invalidated(let details):
                     let room = buildRoom(with: details, invalidated: true, isLoading: true)
-                    appendRoom(room, allRoomsProvider: true, invalidated: true)
+                    appendRoom(room, allRoomsProvider: true)
                 }
             }
         }
