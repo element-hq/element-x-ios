@@ -68,9 +68,9 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     private func copyRoomLink() {
         if let roomLink = state.permalink {
             UIPasteboard.general.url = roomLink
-            ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.linkCopiedToClipboard))
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.linkCopiedToClipboard))
         } else {
-            ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.unknownError))
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.unknownError))
         }
     }
 }

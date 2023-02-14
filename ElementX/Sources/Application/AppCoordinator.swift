@@ -101,13 +101,13 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     func toPresentable() -> AnyView {
-        ServiceLocator.shared.userNotificationController.toPresentable()
+        ServiceLocator.shared.userIndicatorController.toPresentable()
     }
         
     // MARK: - Private
     
     private static func setupServiceLocator(navigationRootCoordinator: NavigationRootCoordinator) {
-        ServiceLocator.shared.register(userNotificationController: UserNotificationController(rootCoordinator: navigationRootCoordinator))
+        ServiceLocator.shared.register(userIndicatorController: UserIndicatorController(rootCoordinator: navigationRootCoordinator))
         ServiceLocator.shared.register(appSettings: AppSettings())
         ServiceLocator.shared.register(networkMonitor: NetworkMonitor())
     }
@@ -377,18 +377,18 @@ class AppCoordinator: AppCoordinatorProtocol {
     static let loadingIndicatorIdentifier = "AppCoordinatorLoading"
     
     private func showLoadingIndicator() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
-                                                                                             type: .modal,
-                                                                                             title: ElementL10n.loading,
-                                                                                             persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                    type: .modal,
+                                                                                    title: ElementL10n.loading,
+                                                                                    persistent: true))
     }
     
     private func hideLoadingIndicator() {
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func showLoginErrorToast() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: "Failed logging in"))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: "Failed logging in"))
     }
 
     // MARK: - Application State
@@ -447,11 +447,11 @@ class AppCoordinator: AppCoordinatorProtocol {
             MXLog.info("Reachability changed to \(reachable)")
             
             if reachable {
-                ServiceLocator.shared.userNotificationController.retractNotificationWithId(reachabilityNotificationIdentifier)
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
             } else {
-                ServiceLocator.shared.userNotificationController.submitNotification(.init(id: reachabilityNotificationIdentifier,
-                                                                                          title: ElementL10n.a11yPresenceOffline,
-                                                                                          persistent: true))
+                ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
+                                                                                    title: ElementL10n.a11yPresenceOffline,
+                                                                                    persistent: true))
             }
         }.store(in: &cancellables)
     }

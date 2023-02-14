@@ -73,7 +73,7 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     
     private func showServerSelectionScreen() {
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              userNotificationController: ServiceLocator.shared.userNotificationController,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               isModallyPresented: false)
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         
@@ -123,13 +123,13 @@ class AuthenticationCoordinator: CoordinatorProtocol {
     static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"
     
     private func startLoading() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
-                                                                                             type: .modal,
-                                                                                             title: ElementL10n.loading,
-                                                                                             persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                    type: .modal,
+                                                                                    title: ElementL10n.loading,
+                                                                                    persistent: true))
     }
     
     private func stopLoading() {
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

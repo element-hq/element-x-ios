@@ -188,10 +188,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private func presentSettingsScreen() {
         let settingsNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let userNotificationController = UserNotificationController(rootCoordinator: settingsNavigationStackCoordinator)
+        let userIndicatorController = UserIndicatorController(rootCoordinator: settingsNavigationStackCoordinator)
         
         let parameters = SettingsScreenCoordinatorParameters(navigationStackCoordinator: settingsNavigationStackCoordinator,
-                                                             userNotificationController: userNotificationController,
+                                                             userIndicatorController: userIndicatorController,
                                                              userSession: userSession,
                                                              bugReportService: bugReportService)
         let settingsScreenCoordinator = SettingsScreenCoordinator(parameters: parameters)
@@ -208,7 +208,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         settingsNavigationStackCoordinator.setRootCoordinator(settingsScreenCoordinator)
         
-        navigationSplitCoordinator.setSheetCoordinator(userNotificationController) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSettingsScreen)
         }
     }
@@ -238,10 +238,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private func presentFeedbackScreen(for image: UIImage? = nil) {
         let feedbackNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let userNotificationController = UserNotificationController(rootCoordinator: feedbackNavigationStackCoordinator)
+        let userIndicatorController = UserIndicatorController(rootCoordinator: feedbackNavigationStackCoordinator)
         
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
-                                                        userNotificationController: userNotificationController,
+                                                        userIndicatorController: userIndicatorController,
                                                         screenshot: image,
                                                         isModallyPresented: true)
         let coordinator = BugReportCoordinator(parameters: parameters)
@@ -251,7 +251,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
 
         feedbackNavigationStackCoordinator.setRootCoordinator(coordinator)
         
-        navigationSplitCoordinator.setSheetCoordinator(userNotificationController) { [weak self] in
+        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
         }
     }

@@ -92,10 +92,10 @@ final class LoginCoordinator: CoordinatorProtocol {
     static let loadingIndicatorIdentifier = "LoginCoordinatorLoading"
     
     private func startLoading(isInteractionBlocking: Bool) {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Self.loadingIndicatorIdentifier,
-                                                                                             type: .modal,
-                                                                                             title: ElementL10n.loading,
-                                                                                             persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                    type: .modal,
+                                                                                    title: ElementL10n.loading,
+                                                                                    persistent: true))
         
         if !isInteractionBlocking {
             viewModel.update(isLoading: true)
@@ -104,15 +104,15 @@ final class LoginCoordinator: CoordinatorProtocol {
     
     private func stopLoading() {
         viewModel.update(isLoading: false)
-        ServiceLocator.shared.userNotificationController.retractNotificationWithId(Self.loadingIndicatorIdentifier)
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
     
     private func indicateSuccess() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.dialogTitleSuccess))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.dialogTitleSuccess))
     }
     
     private func indicateFailure() {
-        ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(title: ElementL10n.dialogTitleError))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.dialogTitleError))
     }
     
     /// Processes an error to either update the flow or display it to the user.
@@ -200,7 +200,7 @@ final class LoginCoordinator: CoordinatorProtocol {
     /// Presents the server selection screen as a modal.
     private func presentServerSelectionScreen() {
         let parameters = ServerSelectionCoordinatorParameters(authenticationService: authenticationService,
-                                                              userNotificationController: ServiceLocator.shared.userNotificationController,
+                                                              userIndicatorController: ServiceLocator.shared.userIndicatorController,
                                                               isModallyPresented: false)
         
         let coordinator = ServerSelectionCoordinator(parameters: parameters)

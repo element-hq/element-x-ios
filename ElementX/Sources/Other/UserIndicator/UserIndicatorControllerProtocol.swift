@@ -16,10 +16,8 @@
 
 import Foundation
 
-class MockUserNotificationController: UserNotificationControllerProtocol {
-    func submitNotification(_ notification: UserNotification) { }
-    
-    func retractNotificationWithId(_ id: String) { }
-    
-    func retractAllNotifications() { }
+protocol UserIndicatorControllerProtocol: CoordinatorProtocol {
+    func submitIndicator(_ indicator: UserIndicator)
+    func retractIndicatorWithId(_ id: String)
+    func retractAllIndicators()
 }

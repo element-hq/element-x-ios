@@ -18,7 +18,7 @@ import SwiftUI
 
 struct SettingsScreenCoordinatorParameters {
     weak var navigationStackCoordinator: NavigationStackCoordinator?
-    weak var userNotificationController: UserNotificationControllerProtocol?
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
     let userSession: UserSessionProtocol
     let bugReportService: BugReportServiceProtocol
 }
@@ -76,7 +76,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
 
     private func presentBugReportScreen() {
         let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
-                                                    userNotificationController: parameters.userNotificationController,
+                                                    userIndicatorController: parameters.userIndicatorController,
                                                     screenshot: nil,
                                                     isModallyPresented: false)
         let coordinator = BugReportCoordinator(parameters: params)
@@ -112,6 +112,6 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
     }
 
     private func showSuccess(label: String) {
-        parameters.userNotificationController?.submitNotification(UserNotification(title: label))
+        parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label))
     }
 }
