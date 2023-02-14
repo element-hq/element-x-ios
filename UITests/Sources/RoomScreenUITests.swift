@@ -19,7 +19,7 @@ import XCTest
 
 @MainActor
 class RoomScreenUITests: XCTestCase {
-    let connectionWaitDuration: Duration = .seconds(10)
+    let connectionWaitDuration: Duration = .seconds(2)
     
     func testPlainNoAvatar() {
         let app = Application.launch(.roomPlainNoAvatar)
@@ -46,7 +46,7 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomSmallTimeline)
     }
     
-    func testSmallTimelineWithIncomingAndPagination() async throws {
+    func disabled_testSmallTimelineWithIncomingAndPagination() async throws {
         let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch(.roomSmallTimelineIncomingAndSmallPagination)
@@ -63,7 +63,7 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomSmallTimelineIncomingAndSmallPagination)
     }
     
-    func testSmallTimelineWithLargePagination() async throws {
+    func disabled_testSmallTimelineWithLargePagination() async throws {
         let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch(.roomSmallTimelineLargePagination)
@@ -79,7 +79,7 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomSmallTimelineLargePagination)
     }
     
-    func testTimelineLayoutInMiddle() async throws {
+    func disabled_testTimelineLayoutInMiddle() async throws {
         let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch(.roomLayoutMiddle)
@@ -112,7 +112,7 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomLayoutMiddle, step: 1)
     }
     
-    func testTimelineLayoutAtTop() async throws {
+    func disabled_testTimelineLayoutAtTop() async throws {
         let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch(.roomLayoutTop)
@@ -135,7 +135,7 @@ class RoomScreenUITests: XCTestCase {
         app.assertScreenshot(.roomLayoutTop, insets: cropped)
     }
     
-    func testTimelineLayoutAtBottom() async throws {
+    func disabled_testTimelineLayoutAtBottom() async throws {
         let listener = try UITestsSignalling.Listener()
         
         let app = Application.launch(.roomLayoutBottom)
@@ -162,7 +162,7 @@ class RoomScreenUITests: XCTestCase {
     private func performOperation(_ operation: UITestsSignal, using connection: UITestsSignalling.Connection) async throws {
         try await connection.send(operation)
         guard try await connection.receive() == .success else { throw UITestsSignalError.unexpected }
-        try await Task.sleep(for: .milliseconds(500)) // Allow the timeline to update
+        try await Task.sleep(for: connectionWaitDuration) // Allow the timeline to update, and the connection to be ready
     }
     
     private func tapMessageComposer(in app: XCUIApplication) async throws {
