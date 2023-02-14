@@ -88,7 +88,7 @@ struct RoomScreenViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
     
-    var debugInfo: DebugScreen.DebugInfo?
+    var debugInfo: TimelineItemDebugScreen.DebugInfo?
 }
 
 enum RoomScreenErrorType: Hashable {

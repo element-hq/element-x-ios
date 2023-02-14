@@ -30,7 +30,7 @@ struct RoomScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo) { $0.alert }
-            .sheet(item: $context.debugInfo) { DebugScreen(info: $0) }
+            .sheet(item: $context.debugInfo) { TimelineItemDebugScreen(info: $0) }
             .task(id: context.viewState.roomId) {
                 // Give a couple of seconds for items to load and to see them.
                 try? await Task.sleep(for: .seconds(2))
