@@ -65,9 +65,13 @@ extension XCUIApplication {
 
     private var deviceName: String {
         var name = UIDevice.current.name
+        
+        // When running with parallel execution simulators are named "Clone 2 of iPhone 14" etc.
+        // Tidy this prefix out of the name to generate snapshots with the correct name.
         if name.starts(with: "Clone "), let range = name.range(of: " of ") {
             name = String(name[range.upperBound...])
         }
+        
         return name
     }
 
