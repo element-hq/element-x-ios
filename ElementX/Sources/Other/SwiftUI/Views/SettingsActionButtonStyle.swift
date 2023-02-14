@@ -30,7 +30,7 @@ struct SettingsActionButtonStyle: ButtonStyle {
                 .frame(width: menuIconSize, height: menuIconSize)
                 .background {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.element.background.opacity(configuration.isPressed ? 0.5 : 1))
+                        .fill(Color.element.formRowBackground.opacity(configuration.isPressed ? 0.5 : 1))
                 }
             
             Text(title)
