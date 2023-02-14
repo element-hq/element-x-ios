@@ -14,6 +14,7 @@
 "settings_appearance" = "Appearance";
 "settings_timeline_style" = "Message layout";
 "settings_session_verification" = "Complete verification";
+"settings_developer_options" = "Developer options";
 
 "room_timeline_style_plain_long_description" = "Modern";
 "room_timeline_style_bubbled_long_description" = "Bubbles";

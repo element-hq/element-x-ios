@@ -40,6 +40,11 @@ struct SettingsScreen: View {
             simplifiedSection
                 .listRowBackground(Color.element.formRowBackground)
             
+            if context.viewState.showDeveloperOptions {
+                developerOptionsSection
+                    .listRowBackground(Color.element.formRowBackground)
+            }
+            
             signOutSection
                 .listRowBackground(Color.element.formRowBackground)
         }
@@ -86,6 +91,16 @@ struct SettingsScreen: View {
                                image: Image(systemName: "checkmark.shield")) {
                 context.send(viewAction: .sessionVerification)
             }
+        }
+    }
+    
+    private var developerOptionsSection: some View {
+        Section {
+            SettingsDefaultRow(title: ElementL10n.settingsDeveloperOptions,
+                               image: Image(systemName: "hammer.circle")) {
+                context.send(viewAction: .developerOptions)
+            }
+            .accessibilityIdentifier("sessionVerificationButton")
         }
     }
     

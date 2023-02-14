@@ -52,6 +52,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 self.presentBugReportScreen()
             case .sessionVerification:
                 self.verifySession()
+            case .developerOptions:
+                self.presentDeveloperOptions()
             case .logout:
                 self.callback?(.logout)
             }
@@ -110,6 +112,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
             self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         }
     }
+    
+    private func presentDeveloperOptions() { }
 
     private func showSuccess(label: String) {
         parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label))

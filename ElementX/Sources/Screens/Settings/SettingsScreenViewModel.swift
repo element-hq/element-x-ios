@@ -23,14 +23,15 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     private let userSession: UserSessionProtocol
 
     var callback: ((SettingsScreenViewModelAction) -> Void)?
-
+    
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         let bindings = SettingsScreenViewStateBindings(timelineStyle: ServiceLocator.shared.settings.timelineStyle)
         super.init(initialViewState: .init(bindings: bindings,
                                            deviceID: userSession.deviceId,
                                            userID: userSession.userID,
-                                           showSessionVerificationSection: !(userSession.sessionVerificationController?.isVerified ?? false)),
+                                           showSessionVerificationSection: !(userSession.sessionVerificationController?.isVerified ?? false),
+                                           showDeveloperOptions: ServiceLocator.shared.settings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         
         ServiceLocator.shared.settings.$timelineStyle
@@ -78,6 +79,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             callback?(.sessionVerification)
         case .changedTimelineStyle:
             ServiceLocator.shared.settings.timelineStyle = state.bindings.timelineStyle
+        case .developerOptions:
+            callback?(.developerOptions)
         }
     }
 }
