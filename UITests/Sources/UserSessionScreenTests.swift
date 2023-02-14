@@ -22,8 +22,7 @@ class UserSessionScreenTests: XCTestCase {
     func testUserSessionFlows() async throws {
         let roomName = "First room"
         
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.userSessionScreen)
+        let app = Application.launch(.userSessionScreen)
 
         app.assertScreenshot(.userSessionScreen, step: 1)
         

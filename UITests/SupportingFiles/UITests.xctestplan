@@ -30,6 +30,7 @@
         }
       ]
     },
+    "defaultTestExecutionTimeAllowance" : 60,
     "environmentVariableEntries" : [
       {
         "key" : "SNAPSHOT_ARTIFACTS",
@@ -45,12 +46,14 @@
       "identifier" : "0E28CD62691FDBC63147D5E3",
       "name" : "UITests"
     },
+    "testTimeoutsEnabled" : true,
     "uiTestingScreenshotsLifetime" : "keepNever",
     "undefinedBehaviorSanitizerEnabled" : true,
     "userAttachmentLifetime" : "keepNever"
   },
   "testTargets" : [
     {
+      "parallelizable" : true,
       "target" : {
         "containerPath" : "container:ElementX.xcodeproj",
         "identifier" : "0E28CD62691FDBC63147D5E3",

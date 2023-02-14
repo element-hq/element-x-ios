@@ -16,7 +16,7 @@
 
 import Foundation
 
-enum UITestScreenIdentifier: String {
+enum UITestsScreenIdentifier: String {
     case login
     case serverSelection
     case serverSelectionNonModal
@@ -45,13 +45,11 @@ enum UITestScreenIdentifier: String {
     case roomMemberDetailsScreen
 }
 
-extension UITestScreenIdentifier: CustomStringConvertible {
+extension UITestsScreenIdentifier: CustomStringConvertible {
     var description: String {
         rawValue.titlecased()
     }
 }
-
-extension UITestScreenIdentifier: CaseIterable { }
 
 private extension String {
     func titlecased() -> String {

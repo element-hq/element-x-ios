@@ -19,8 +19,7 @@ import XCTest
 
 class TemplateScreenUITests: XCTestCase {
     func testRegularScreen() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.simpleRegular)
+        let app = Application.launch(.simpleRegular)
         
         let title = app.staticTexts["title"]
         XCTAssert(title.exists)
@@ -31,8 +30,7 @@ class TemplateScreenUITests: XCTestCase {
     }
     
     func testUpgradeScreen() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.simpleUpgrade)
+        let app = Application.launch(.simpleUpgrade)
         
         let title = app.staticTexts["title"]
         XCTAssert(title.exists)

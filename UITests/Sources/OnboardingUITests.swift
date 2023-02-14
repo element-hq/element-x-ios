@@ -19,15 +19,13 @@ import XCTest
 @MainActor
 class OnboardingUITests: XCTestCase {
     func testInitialStateComponents() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.onboarding)
+        let app = Application.launch(.onboarding)
         app.assertScreenshot(.onboarding)
     }
     
     // This test has been disabled for now as there is only a single page.
     func disabled_testSwipingBetweenPages() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.onboarding)
+        let app = Application.launch(.onboarding)
         
         // Given the splash screen in its initial state.
         let page1TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselSecureTitle]

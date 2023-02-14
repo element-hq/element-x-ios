@@ -19,13 +19,12 @@ import UIKit
 
 class UITestsAppCoordinator: AppCoordinatorProtocol {
     private let navigationRootCoordinator: NavigationRootCoordinator
-    private var mockScreens: [MockScreen] = []
+    private var mockScreen: MockScreen?
     var notificationManager: NotificationManagerProtocol?
     
     init() {
         UIView.setAnimationsEnabled(false)
         navigationRootCoordinator = NavigationRootCoordinator()
-        mockScreens = UITestScreenIdentifier.allCases.map { MockScreen(id: $0, navigationRootCoordinator: navigationRootCoordinator) }
         
         ServiceLocator.shared.register(userIndicatorController: MockUserIndicatorController())
         
@@ -35,15 +34,11 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     }
     
     func start() {
-        let rootCoordinator = UITestsRootCoordinator(mockScreens: mockScreens) { id in
-            guard let screen = self.mockScreens.first(where: { $0.id == id }) else {
-                fatalError()
-            }
-            
-            self.navigationRootCoordinator.setRootCoordinator(screen.coordinator)
-        }
+        guard let screenID = Tests.screenID else { fatalError("Unable to launch with unknown screen.") }
         
-        navigationRootCoordinator.setRootCoordinator(rootCoordinator)
+        let mockScreen = MockScreen(id: screenID)
+        navigationRootCoordinator.setRootCoordinator(mockScreen.coordinator)
+        self.mockScreen = mockScreen
         
         Bundle.elementFallbackLanguage = "en"
     }
@@ -55,14 +50,12 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
 
 @MainActor
 class MockScreen: Identifiable {
-    let id: UITestScreenIdentifier
+    let id: UITestsScreenIdentifier
     
-    private let navigationRootCoordinator: NavigationRootCoordinator
     private var retainedState = [Any]()
     
-    init(id: UITestScreenIdentifier, navigationRootCoordinator: NavigationRootCoordinator) {
+    init(id: UITestsScreenIdentifier) {
         self.id = id
-        self.navigationRootCoordinator = navigationRootCoordinator
     }
     
     lazy var coordinator: CoordinatorProtocol = {
