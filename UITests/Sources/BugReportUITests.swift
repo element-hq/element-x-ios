@@ -28,9 +28,9 @@ class BugReportUITests: XCTestCase {
     func testToggleSendingLogs() {
         let app = Application.launch(.bugReport)
 
-        app.switches["sendLogsToggle"].tap()
+        app.switches[A11yIdentifiers.bugReportScreen.sendLogs].tap()
 
-        let sendingLogsToggle = app.switches["sendLogsToggle"]
+        let sendingLogsToggle = app.switches[A11yIdentifiers.bugReportScreen.sendLogs]
         XCTAssert(sendingLogsToggle.exists)
         XCTAssertFalse(sendingLogsToggle.isOn)
         
@@ -41,13 +41,13 @@ class BugReportUITests: XCTestCase {
         let app = Application.launch(.bugReport)
 
         // Type 4 characters and the send button should be disabled.
-        app.textViews["reportTextView"].clearAndTypeText("Text")
-        XCTAssertFalse(app.buttons["sendButton"].isEnabled)
+        app.textViews[A11yIdentifiers.bugReportScreen.report].clearAndTypeText("Text")
+        XCTAssertFalse(app.buttons[A11yIdentifiers.bugReportScreen.send].isEnabled)
         app.assertScreenshot(.bugReport, step: 2)
 
         // Type more than 4 characters and send the button should become enabled.
-        app.textViews["reportTextView"].clearAndTypeText("Longer text")
-        XCTAssert(app.buttons["sendButton"].isEnabled)
+        app.textViews[A11yIdentifiers.bugReportScreen.report].clearAndTypeText("Longer text")
+        XCTAssert(app.buttons[A11yIdentifiers.bugReportScreen.send].isEnabled)
         app.assertScreenshot(.bugReport, step: 3)
     }
 
@@ -55,8 +55,8 @@ class BugReportUITests: XCTestCase {
         let app = Application.launch(.bugReportWithScreenshot)
         
         // Initial state with a screenshot attached.
-        XCTAssert(app.images["screenshotImage"].exists)
-        XCTAssert(app.buttons["removeScreenshotButton"].exists)
+        XCTAssert(app.images[A11yIdentifiers.bugReportScreen.screenshot].exists)
+        XCTAssert(app.buttons[A11yIdentifiers.bugReportScreen.removeScreenshot].exists)
         app.assertScreenshot(.bugReportWithScreenshot)
     }
 }

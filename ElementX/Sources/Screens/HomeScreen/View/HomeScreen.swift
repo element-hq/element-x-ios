@@ -117,7 +117,7 @@ struct HomeScreen: View {
                                 contentID: context.viewState.userID,
                                 avatarSize: .user(on: .home),
                                 imageProvider: context.imageProvider)
-                .accessibilityIdentifier("userAvatarImage")
+                .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
         }
         .alert(ElementL10n.actionSignOut,
                isPresented: $showingLogoutConfirmation) {

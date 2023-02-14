@@ -26,7 +26,7 @@ class UserSessionScreenTests: XCTestCase {
 
         app.assertScreenshot(.userSessionScreen, step: 1)
         
-        app.buttons["roomName:\(roomName)"].tap()
+        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
         
         XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
         

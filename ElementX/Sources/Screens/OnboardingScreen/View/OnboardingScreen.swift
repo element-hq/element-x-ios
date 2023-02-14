@@ -47,7 +47,7 @@ struct OnboardingScreen: View {
                             // Add a hidden page at the start of the carousel duplicating the content of the last page
                             OnboardingPageView(content: context.viewState.content[pageCount - 1])
                                 .frame(width: geometry.size.width)
-                                .accessibilityIdentifier("hiddenPage")
+                                .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.hidden)
                             
                             ForEach(0..<pageCount, id: \.self) { index in
                                 OnboardingPageView(content: context.viewState.content[index])
@@ -93,7 +93,7 @@ struct OnboardingScreen: View {
                 Text(ElementL10n.loginContinue)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("onboarding-sign_in")
+            .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.signIn)
         }
         .padding(.horizontal, verticalSizeClass == .compact ? 128 : 24)
         .readableFrame()

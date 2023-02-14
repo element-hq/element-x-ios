@@ -29,7 +29,7 @@ struct RoomHeaderView: View {
                 .accessibilityHidden(true)
             Text(context.viewState.roomTitle)
                 .font(.element.headline)
-                .accessibilityIdentifier("roomNameLabel")
+                .accessibilityIdentifier(A11yIdentifiers.roomScreen.name)
         }
         // Leading align whilst using the principal toolbar position.
         .frame(maxWidth: .infinity, alignment: .leading)
@@ -45,7 +45,7 @@ struct RoomHeaderView: View {
                             contentID: context.viewState.roomId,
                             avatarSize: .room(on: .timeline),
                             imageProvider: context.imageProvider)
-            .accessibilityIdentifier("roomAvatarImage")
+            .accessibilityIdentifier(A11yIdentifiers.roomScreen.avatar)
     }
 }
 

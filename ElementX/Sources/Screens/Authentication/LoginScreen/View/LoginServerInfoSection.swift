@@ -51,7 +51,7 @@ struct LoginServerInfoSection: View {
                 }
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.system))
             }
-            .accessibilityIdentifier("login-change_server")
+            .accessibilityIdentifier(A11yIdentifiers.loginScreen.changeServer)
         }
     }
 }

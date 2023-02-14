@@ -77,7 +77,7 @@ struct LoginScreen: View {
             
             TextField(ElementL10n.loginSigninUsernameHint, text: $context.username)
                 .focused($isUsernameFocused)
-                .textFieldStyle(.elementInput(accessibilityIdentifier: "login-email_username"))
+                .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
                 .disableAutocorrection(true)
                 .textContentType(.username)
                 .autocapitalization(.none)
@@ -88,7 +88,7 @@ struct LoginScreen: View {
             
             SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
                 .focused($isPasswordFocused)
-                .textFieldStyle(.elementInput(accessibilityIdentifier: "login-password"))
+                .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
                 .textContentType(.password)
                 .submitLabel(.done)
                 .onSubmit(submit)
@@ -100,7 +100,7 @@ struct LoginScreen: View {
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(!context.viewState.canSubmit)
-            .accessibilityIdentifier("login-continue")
+            .accessibilityIdentifier(A11yIdentifiers.loginScreen.continue)
         }
     }
 
@@ -110,7 +110,7 @@ struct LoginScreen: View {
             Text(ElementL10n.loginContinue)
         }
         .buttonStyle(.elementAction(.xLarge))
-        .accessibilityIdentifier("oidcButton")
+        .accessibilityIdentifier(A11yIdentifiers.loginScreen.oidc)
     }
     
     /// Text shown if neither password or OIDC login is supported.
@@ -120,7 +120,7 @@ struct LoginScreen: View {
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
             .frame(maxWidth: .infinity)
-            .accessibilityIdentifier("unsupportedServerText")
+            .accessibilityIdentifier(A11yIdentifiers.loginScreen.unsupportedServer)
     }
     
     /// Parses the username for a homeserver.

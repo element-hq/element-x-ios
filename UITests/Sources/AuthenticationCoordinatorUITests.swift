@@ -25,17 +25,17 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons["onboarding-sign_in"].tap()
+        app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
         
         // Login Screen: Enter valid credentials
         
-        app.textFields["login-email_username"].clearAndTypeText("alice\n")
-        app.secureTextFields["login-password"].clearAndTypeText("12345678")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice\n")
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
 
         app.assertScreenshot(.authenticationFlow)
         
         // Login Screen: Tap next
-        app.buttons["login-continue"].tap()
+        app.buttons[A11yIdentifiers.loginScreen.continue].tap()
         
         // Then login should succeed.
         XCTAssertFalse(app.alerts.element.exists, "No alert should be shown when logging in with valid credentials.")
@@ -46,14 +46,14 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons["onboarding-sign_in"].tap()
+        app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
         
         // Login Screen: Enter invalid credentials
-        app.textFields["login-username"].clearAndTypeText("alice")
-        app.secureTextFields["login-email_password"].clearAndTypeText("87654321")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("alice")
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("87654321")
 
         // Login Screen: Tap next
-        let nextButton = app.buttons["login-continue"]
+        let nextButton = app.buttons[A11yIdentifiers.loginScreen.continue]
         XCTAssertTrue(nextButton.waitForExistence(timeout: 2.0))
         XCTAssertTrue(nextButton.isEnabled)
         nextButton.tap()
@@ -67,19 +67,19 @@ class AuthenticationCoordinatorUITests: XCTestCase {
         let app = Application.launch(.authenticationFlow)
         
         // Splash Screen: Tap get started button
-        app.buttons["onboarding-sign_in"].tap()
+        app.buttons[A11yIdentifiers.onboardingScreen.signIn].tap()
         
         // Login Screen: Tap edit server button.
-        XCTAssertFalse(app.buttons["oidcButton"].exists, "The OIDC button shouldn't be shown before entering a supported homeserver.")
-        app.buttons["login-change_server"].tap()
+        XCTAssertFalse(app.buttons[A11yIdentifiers.loginScreen.oidc].exists, "The OIDC button shouldn't be shown before entering a supported homeserver.")
+        app.buttons[A11yIdentifiers.loginScreen.changeServer].tap()
         
         // Server Selection: Clear the default and enter OIDC server.
-        app.textFields["change_server-server"].clearAndTypeText("company.com")
+        app.textFields[A11yIdentifiers.changeServerScreen.server].clearAndTypeText("company.com")
         
         // Dismiss server screen.
-        app.buttons["change_server-continue"].tap()
+        app.buttons[A11yIdentifiers.changeServerScreen.continue].tap()
         
         // Then the login form should be updated for OIDC.
-        XCTAssertTrue(app.buttons["oidcButton"].waitForExistence(timeout: 1), "The OIDC button should be shown after selecting a homeserver with OIDC.")
+        XCTAssertTrue(app.buttons[A11yIdentifiers.loginScreen.oidc].waitForExistence(timeout: 1), "The OIDC button should be shown after selecting a homeserver with OIDC.")
     }
 }

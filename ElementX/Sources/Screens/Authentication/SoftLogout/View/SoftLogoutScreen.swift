@@ -58,20 +58,19 @@ struct SoftLogoutScreen: View {
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("titleLabel")
+                .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.title)
 
             Text(ElementL10n.softLogoutSigninNotice(context.viewState.credentials.homeserverName, context.viewState.credentials.userDisplayName, context.viewState.credentials.userId))
                 .font(.element.body)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("messageLabel1")
+                .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.message)
 
             if context.viewState.showRecoverEncryptionKeysMessage {
                 Text(ElementL10n.softLogoutSigninE2eWarningNotice)
                     .font(.element.body)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.element.primaryContent)
-                    .accessibilityIdentifier("messageLabel2")
             }
         }
     }
@@ -85,7 +84,7 @@ struct SoftLogoutScreen: View {
                 .textContentType(.password)
                 .submitLabel(.done)
                 .onSubmit(submit)
-                .accessibilityIdentifier("passwordTextField")
+                .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.password)
 
             Button { context.send(viewAction: .forgotPassword) } label: {
                 Text(ElementL10n.ftueAuthForgotPassword)
@@ -93,14 +92,14 @@ struct SoftLogoutScreen: View {
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
             .padding(.bottom, 8)
-            .accessibilityIdentifier("forgotPasswordButton")
+            .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.forgotPassword)
 
             Button(action: submit) {
                 Text(ElementL10n.loginSignupSubmit)
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(!context.viewState.canSubmit)
-            .accessibilityIdentifier("nextButton")
+            .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.next)
         }
     }
 
@@ -110,7 +109,6 @@ struct SoftLogoutScreen: View {
             Text(ElementL10n.loginContinue)
         }
         .buttonStyle(.elementAction(.xLarge))
-        .accessibilityIdentifier("oidcButton")
     }
 
     /// Text shown if neither password or OIDC login is supported.
@@ -120,7 +118,6 @@ struct SoftLogoutScreen: View {
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
             .frame(maxWidth: .infinity)
-            .accessibilityIdentifier("unsupportedServerText")
     }
 
     /// The text field and submit button where the user enters an email address.
@@ -130,20 +127,20 @@ struct SoftLogoutScreen: View {
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("clearDataTitleLabel")
+                .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataTitle)
 
             Text(ElementL10n.softLogoutClearDataNotice)
                 .font(.element.body)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("clearDataMessageLabel")
+                .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataMessage)
                 .padding(.bottom, 12)
 
             Button(action: clearData) {
                 Text(ElementL10n.softLogoutClearDataSubmit)
             }
             .buttonStyle(.elementAction(.xLarge, color: .element.alert))
-            .accessibilityIdentifier("clearDataButton")
+            .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearData)
             .alert(ElementL10n.softLogoutClearDataDialogTitle,
                    isPresented: $showingClearDataConfirmation) {
                 Button(ElementL10n.actionSignOut,

@@ -63,7 +63,7 @@ struct ServerSelectionScreen: View {
                 .textFieldStyle(.elementInput(labelText: ElementL10n.hsUrl,
                                               footerText: context.viewState.footerMessage,
                                               isError: context.viewState.isShowingFooterError,
-                                              accessibilityIdentifier: "change_server-server"))
+                                              accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
@@ -76,7 +76,7 @@ struct ServerSelectionScreen: View {
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(context.viewState.hasValidationError)
-            .accessibilityIdentifier("change_server-continue")
+            .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.continue)
         }
     }
     
@@ -87,7 +87,7 @@ struct ServerSelectionScreen: View {
                 Button { context.send(viewAction: .dismiss) } label: {
                     Text(ElementL10n.actionCancel)
                 }
-                .accessibilityIdentifier("dismissButton")
+                .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
             }
         }
     }
