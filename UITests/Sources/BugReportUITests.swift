@@ -19,16 +19,14 @@ import XCTest
 
 class BugReportUITests: XCTestCase {
     func testInitialStateComponents() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.bugReport)
+        let app = Application.launch(.bugReport)
         
         // Initial state without a screenshot attached.
         app.assertScreenshot(.bugReport, step: 0)
     }
 
     func testToggleSendingLogs() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.bugReport)
+        let app = Application.launch(.bugReport)
 
         app.switches["sendLogsToggle"].tap()
 
@@ -40,8 +38,7 @@ class BugReportUITests: XCTestCase {
     }
 
     func testReportText() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.bugReport)
+        let app = Application.launch(.bugReport)
 
         // Type 4 characters and the send button should be disabled.
         app.textViews["reportTextView"].clearAndTypeText("Text")
@@ -55,8 +52,7 @@ class BugReportUITests: XCTestCase {
     }
 
     func testInitialStateComponentsWithScreenshot() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.bugReportWithScreenshot)
+        let app = Application.launch(.bugReportWithScreenshot)
         
         // Initial state with a screenshot attached.
         XCTAssert(app.images["screenshotImage"].exists)

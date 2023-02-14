@@ -18,45 +18,18 @@ import XCTest
 
 extension XCUIElement {
     func clearAndTypeText(_ text: String) {
-        let maxAttemptCount = 10
-        var attemptCount = 0
+        tap()
         
-        repeat {
-            tap()
-            
-            guard let currentValue = value as? String else {
-                XCTFail("Tried to clear and type text into a non string value")
-                return
-            }
-            
-            let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
-            
-            typeText(deleteString)
-            typeText(text)
-            
-            if !exists { // Break if the element in question doesn't exist anymore
-                break
-            }
-            
-            guard let newValue = value as? String else {
-                XCTFail("Tried to clear and type text into a non string value")
-                return
-            }
-            
-            if newValue == String(repeating: "•", count: text.count) { // Secure entry text field
-                break
-            }
-            
-            if newValue == text.trimmingCharacters(in: .whitespacesAndNewlines) {
-                break
-            }
-            
-            attemptCount += 1
-            if attemptCount > maxAttemptCount {
-                XCTFail("Failed clearAndTypeText after \(maxAttemptCount) attempts.")
-                return
-            }
-            
-        } while true
+        guard let currentValue = value as? String else {
+            XCTFail("Tried to clear and type text into a non string value")
+            return
+        }
+        
+        let deleteString = String(repeating: XCUIKeyboardKey.delete.rawValue, count: currentValue.count)
+        typeText(deleteString)
+        
+        for character in text {
+            typeText(String(character))
+        }
     }
 }

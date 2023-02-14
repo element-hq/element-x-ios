@@ -20,8 +20,7 @@ import XCTest
 class AnalyticsPromptUITests: XCTestCase {
     /// Verify that the prompt is displayed correctly.
     func testAnalyticsPrompt() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.analyticsPrompt)
+        let app = Application.launch(.analyticsPrompt)
         app.assertScreenshot(.analyticsPrompt)
     }
 }

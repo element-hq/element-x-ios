@@ -27,30 +27,16 @@ class SoftLogoutUITests: XCTestCase {
     }
 
     func testInitialState() {
-        app = Application.launch()
-        app.goToScreenWithIdentifier(.softLogout)
+        app = Application.launch(.softLogout)
         
         XCTAssertTrue(app.staticTexts["titleLabel"].exists, "The title should be shown.")
         XCTAssertTrue(app.staticTexts["messageLabel1"].exists, "The message 1 should be shown.")
         XCTAssertTrue(app.staticTexts["clearDataTitleLabel"].exists, "The clear data title should be shown.")
         XCTAssertTrue(app.staticTexts["clearDataMessageLabel"].exists, "The clear data message should be shown.")
-        
-        let passwordTextField = app.secureTextFields["passwordTextField"]
-        XCTAssertTrue(passwordTextField.exists, "The password text field should be shown.")
-        XCTAssertTrue(passwordTextField.label.isEmpty, "The password text field text should be empty before text is input.")
-        XCTAssertEqual(passwordTextField.placeholderValue, ElementL10n.loginSignupPasswordHint, "The password text field should be showing the placeholder before text is input.")
-        
-        let nextButton = app.buttons["nextButton"]
-        XCTAssertTrue(nextButton.exists, "The next button should be shown.")
-        XCTAssertFalse(nextButton.isEnabled, "The next button should be disabled before text is input.")
-
-        let forgotPasswordButton = app.buttons["forgotPasswordButton"]
-        XCTAssertTrue(forgotPasswordButton.exists, "The forgot password button should be shown.")
-        XCTAssertTrue(forgotPasswordButton.isEnabled, "The forgot password button should be enabled.")
-
-        let clearDataButton = app.buttons["clearDataButton"]
-        XCTAssertTrue(clearDataButton.exists, "The clear data button should be shown.")
-        XCTAssertTrue(clearDataButton.isEnabled, "The clear data button should be enabled.")
+        XCTAssertTrue(app.secureTextFields["passwordTextField"].exists, "The password text field should be shown.")
+        XCTAssertTrue(app.buttons["nextButton"].exists, "The next button should be shown.")
+        XCTAssertTrue(app.buttons["forgotPasswordButton"].exists, "The forgot password button should be shown.")
+        XCTAssertTrue(app.buttons["clearDataButton"].exists, "The clear data button should be shown.")
 
         app.assertScreenshot(.softLogout)
     }

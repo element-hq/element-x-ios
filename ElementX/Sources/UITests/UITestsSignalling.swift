@@ -50,7 +50,7 @@ enum UITestsSignalError: Error {
 enum UITestsSignalling {
     /// The Bonjour service name used for the connection. The device name
     /// is included to allow UI tests to run on multiple devices simultaneously.
-    private static let serviceName = "UITestsSignalling \(UIDevice.current.name)"
+    private static let serviceName = "UITestsSignalling \(UIDevice.current.name) (\(Locale.current.identifier))"
     /// The Bonjour service type used for the connection.
     private static let serviceType = "_signalling._udp."
     /// The Bonjour domain used for the connection.

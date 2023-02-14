@@ -34,4 +34,13 @@ public enum Tests {
         false
         #endif
     }
+    
+    /// The identifier of the screen to be loaded when running UI tests.
+    static var screenID: UITestsScreenIdentifier? {
+        #if DEBUG
+        ProcessInfo.processInfo.environment["UI_TESTS_SCREEN"].flatMap(UITestsScreenIdentifier.init)
+        #else
+        nil
+        #endif
+    }
 }

@@ -17,10 +17,9 @@
 import ElementX
 import XCTest
 
-class SettingsUITests: XCTestCase {
+class SettingsScreenUITests: XCTestCase {
     func testInitialStateComponents() {
-        let app = Application.launch()
-        app.goToScreenWithIdentifier(.settings)
+        let app = Application.launch(.settings)
         app.assertScreenshot(.settings)
     }
 }
