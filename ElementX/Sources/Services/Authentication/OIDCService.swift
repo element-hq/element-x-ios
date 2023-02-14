@@ -64,15 +64,13 @@ class OIDCService {
             "policy_uri": "https://element.io/privacy"
         ]
         
-        let nonTemplatizedRequest = OIDRegistrationRequest(
-            configuration: metadata,
-            redirectURIs: [redirectURI],
-            responseTypes: nil,
-            grantTypes: [OIDGrantTypeAuthorizationCode, OIDGrantTypeRefreshToken],
-            subjectType: nil,
-            tokenEndpointAuthMethod: "none",
-            additionalParameters: extraParams
-        )
+        let nonTemplatizedRequest = OIDRegistrationRequest(configuration: metadata,
+                                                           redirectURIs: [redirectURI],
+                                                           responseTypes: nil,
+                                                           grantTypes: [OIDGrantTypeAuthorizationCode, OIDGrantTypeRefreshToken],
+                                                           subjectType: nil,
+                                                           tokenEndpointAuthMethod: "none",
+                                                           additionalParameters: extraParams)
         
         let registrationResponse = try await OIDAuthorizationService.perform(nonTemplatizedRequest)
         

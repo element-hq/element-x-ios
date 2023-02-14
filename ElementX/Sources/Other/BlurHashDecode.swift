@@ -80,11 +80,9 @@ private func decodeAC(_ value: Int, maximumValue: Float) -> (Float, Float, Float
     let quantG = (value / 19) % 19
     let quantB = value % 19
 
-    let rgb = (
-        signPow((Float(quantR) - 9) / 9, 2) * maximumValue,
-        signPow((Float(quantG) - 9) / 9, 2) * maximumValue,
-        signPow((Float(quantB) - 9) / 9, 2) * maximumValue
-    )
+    let rgb = (signPow((Float(quantR) - 9) / 9, 2) * maximumValue,
+               signPow((Float(quantG) - 9) / 9, 2) * maximumValue,
+               signPow((Float(quantB) - 9) / 9, 2) * maximumValue)
 
     return rgb
 }

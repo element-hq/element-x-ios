@@ -1,6 +1,6 @@
 --swiftversion 5.6
 
---exclude ElementX/Sources/Generated,vendor
+--exclude ElementX/Sources/Generated,vendor,**/Package.swift
 
 --disable wrapMultiLineStatementBraces
 --disable hoistPatternLet
@@ -10,6 +10,7 @@
 --nospaceoperators ...,..<
 --stripunusedargs closure-only
 --trimwhitespace nonblank-lines
+--wraparguments after-first
 --wrapparameters after-first
 --redundanttype inferred
 --emptybraces spaced
