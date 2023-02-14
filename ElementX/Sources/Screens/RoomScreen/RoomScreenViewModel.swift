@@ -194,10 +194,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                  title: ElementL10n.dialogTitleError,
                                                  message: message)
         case .toast(let message):
-            ServiceLocator.shared.userNotificationController.submitNotification(UserNotification(id: Constants.toastErrorID,
-                                                                                                 type: .toast,
-                                                                                                 title: message,
-                                                                                                 iconName: "xmark"))
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,
+                                                                                        type: .toast,
+                                                                                        title: message,
+                                                                                        iconName: "xmark"))
         }
     }
     

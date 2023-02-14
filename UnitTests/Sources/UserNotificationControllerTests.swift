@@ -21,19 +21,19 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class UserNotificationControllerTests: XCTestCase {
-    private var notificationController: UserNotificationController!
+class UserIndicatorControllerTests: XCTestCase {
+    private var notificationController: UserIndicatorController!
     
     override func setUp() {
-        notificationController = UserNotificationController(rootCoordinator: SplashScreenCoordinator())
+        notificationController = UserIndicatorController(rootCoordinator: SplashScreenCoordinator())
     }
     
     func testNotificationQueueing() {
         notificationController.minimumDisplayDuration = 0.0
         
-        notificationController.submitNotification(.init(id: "First", title: ""))
-        notificationController.submitNotification(.init(id: "Second", title: ""))
-        notificationController.submitNotification(.init(id: "Third", title: ""))
+        notificationController.submitIndicator(.init(id: "First", title: ""))
+        notificationController.submitIndicator(.init(id: "Second", title: ""))
+        notificationController.submitIndicator(.init(id: "Third", title: ""))
         
         XCTAssertEqual(notificationController.notificationQueue.count, 3)
         XCTAssertEqual(notificationController.notificationQueue[2].id, "Third")
@@ -55,9 +55,9 @@ class UserNotificationControllerTests: XCTestCase {
         notificationController.minimumDisplayDuration = 0.25
         notificationController.nonPersistentDisplayDuration = 2.5
         
-        notificationController.submitNotification(.init(id: "First", title: ""))
-        notificationController.submitNotification(.init(id: "Second", title: ""))
-        notificationController.submitNotification(.init(id: "Third", title: ""))
+        notificationController.submitIndicator(.init(id: "First", title: ""))
+        notificationController.submitIndicator(.init(id: "Second", title: ""))
+        notificationController.submitIndicator(.init(id: "Third", title: ""))
         
         XCTAssertEqual(notificationController.activeNotification?.id, "Third")
         
@@ -76,9 +76,9 @@ class UserNotificationControllerTests: XCTestCase {
         notificationController.minimumDisplayDuration = 0.25
         notificationController.nonPersistentDisplayDuration = 2.5
         
-        notificationController.submitNotification(.init(id: "First", title: ""))
-        notificationController.submitNotification(.init(id: "Second", title: ""))
-        notificationController.submitNotification(.init(id: "Third", title: ""))
+        notificationController.submitIndicator(.init(id: "First", title: ""))
+        notificationController.submitIndicator(.init(id: "Second", title: ""))
+        notificationController.submitIndicator(.init(id: "Third", title: ""))
         
         notificationController.retractNotificationWithId("Second")
         

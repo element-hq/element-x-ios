@@ -17,8 +17,8 @@
 import Combine
 import SwiftUI
 
-struct UserNotificationModalView: View {
-    let notification: UserNotification
+struct UserIndicatorModalView: View {
+    let indicator: UserIndicator
     @State private var progressFraction: Double?
 
     var body: some View {
@@ -31,10 +31,10 @@ struct UserNotificationModalView: View {
                 }
 
                 HStack {
-                    if let iconName = notification.iconName {
+                    if let iconName = indicator.iconName {
                         Image(systemName: iconName)
                     }
-                    Text(notification.title)
+                    Text(indicator.title)
                         .font(.element.body)
                         .foregroundColor(.element.primaryContent)
                 }
@@ -45,30 +45,30 @@ struct UserNotificationModalView: View {
             .background(Color.element.quinaryContent)
             .clipShape(RoundedCornerShape(radius: 12.0, corners: .allCorners))
             .shadow(color: .black.opacity(0.1), radius: 10.0, y: 4.0)
-            .onReceive(notification.progressPublisher?.publisher ?? Empty().eraseToAnyPublisher()) { progress in
+            .onReceive(indicator.progressPublisher?.publisher ?? Empty().eraseToAnyPublisher()) { progress in
                 progressFraction = progress
             }
             .transition(.opacity)
         }
-        .id(notification.id)
+        .id(indicator.id)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.black.opacity(0.1))
         .ignoresSafeArea()
     }
 }
 
-struct UserNotificationModalView_Previews: PreviewProvider {
+struct UserIndicatorModalView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            UserNotificationModalView(notification: UserNotification(type: .modal,
-                                                                     title: "Successfully logged in",
-                                                                     iconName: "checkmark")
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal,
+                                                            title: "Successfully logged in",
+                                                            iconName: "checkmark")
             )
             .previewDisplayName("Spinner")
-            UserNotificationModalView(notification: UserNotification(type: .modal,
-                                                                     title: "Successfully logged in",
-                                                                     iconName: "checkmark",
-                                                                     progressPublisher: ProgressTracker(initialValue: 0.5))
+            UserIndicatorModalView(indicator: UserIndicator(type: .modal,
+                                                            title: "Successfully logged in",
+                                                            iconName: "checkmark",
+                                                            progressPublisher: ProgressTracker(initialValue: 0.5))
             )
             .previewDisplayName("Progress Bar")
         }

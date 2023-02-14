@@ -16,27 +16,27 @@
 
 import SwiftUI
 
-struct UserNotificationPresenter: View {
-    @ObservedObject var userNotificationController: UserNotificationController
+struct UserIndicatorPresenter: View {
+    @ObservedObject var userIndicatorController: UserIndicatorController
     let rootView: AnyView
     
     var body: some View {
         ZStack(alignment: .top) {
             rootView
-            notificationViewFor(notification: userNotificationController.activeNotification)
+            indicatorViewFor(indicator: userIndicatorController.activeIndicator)
         }
-        .animation(.elementDefault, value: userNotificationController.activeNotification)
+        .animation(.elementDefault, value: userIndicatorController.activeIndicator)
     }
     
     @ViewBuilder
-    private func notificationViewFor(notification: UserNotification?) -> some View {
+    private func indicatorViewFor(indicator: UserIndicator?) -> some View {
         ZStack { // Need a container to properly animate transitions
-            if let notification {
-                switch notification.type {
+            if let indicator {
+                switch indicator.type {
                 case .toast:
-                    UserNotificationToastView(notification: notification)
+                    UserIndicatorToastView(indicator: indicator)
                 case .modal:
-                    UserNotificationModalView(notification: notification)
+                    UserIndicatorModalView(indicator: indicator)
                 }
             }
         }

@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-class UserNotificationController: ObservableObject, UserNotificationControllerProtocol, CustomStringConvertible {
+class UserIndicatorController: ObservableObject, UserIndicatorControllerProtocol, CustomStringConvertible {
     private let rootCoordinator: CoordinatorProtocol
     
     private var dismisalTimer: Timer?
@@ -25,15 +25,15 @@ class UserNotificationController: ObservableObject, UserNotificationControllerPr
     var nonPersistentDisplayDuration = 2.5
     var minimumDisplayDuration = 0.5
     
-    @Published private(set) var activeNotification: UserNotification?
-    private(set) var notificationQueue = [UserNotification]() {
+    @Published private(set) var activeIndicator: UserIndicator?
+    private(set) var indicatorQueue = [UserIndicator]() {
         didSet {
-            activeNotification = notificationQueue.last
+            activeIndicator = indicatorQueue.last
             
-            if let activeNotification, !activeNotification.persistent {
+            if let activeIndicator, !activeIndicator.persistent {
                 dismisalTimer?.invalidate()
                 dismisalTimer = Timer.scheduledTimer(withTimeInterval: nonPersistentDisplayDuration, repeats: false) { [weak self] _ in
-                    self?.retractNotificationWithId(activeNotification.id)
+                    self?.retractIndicatorWithId(activeIndicator.id)
                 }
             }
         }
@@ -45,35 +45,35 @@ class UserNotificationController: ObservableObject, UserNotificationControllerPr
         
     func toPresentable() -> AnyView {
         AnyView(
-            UserNotificationPresenter(userNotificationController: self, rootView: rootCoordinator.toPresentable())
+            UserIndicatorPresenter(userIndicatorController: self, rootView: rootCoordinator.toPresentable())
         )
     }
     
-    func submitNotification(_ notification: UserNotification) {
-        if let index = notificationQueue.firstIndex(where: { $0.id == notification.id }) {
-            notificationQueue[index] = notification
+    func submitIndicator(_ indicator: UserIndicator) {
+        if let index = indicatorQueue.firstIndex(where: { $0.id == indicator.id }) {
+            indicatorQueue[index] = indicator
         } else {
-            retractNotificationWithId(notification.id)
-            notificationQueue.append(notification)
+            retractIndicatorWithId(indicator.id)
+            indicatorQueue.append(indicator)
         }
         
-        displayTimes[notification.id] = .now
+        displayTimes[indicator.id] = .now
     }
     
-    func retractAllNotifications() {
-        for notification in notificationQueue {
-            retractNotificationWithId(notification.id)
+    func retractAllIndicators() {
+        for indicator in indicatorQueue {
+            retractIndicatorWithId(indicator.id)
         }
     }
     
-    func retractNotificationWithId(_ id: String) {
+    func retractIndicatorWithId(_ id: String) {
         guard let displayTime = displayTimes[id], abs(displayTime.timeIntervalSinceNow) <= minimumDisplayDuration else {
-            notificationQueue.removeAll { $0.id == id }
+            indicatorQueue.removeAll { $0.id == id }
             return
         }
     
         Timer.scheduledTimer(withTimeInterval: minimumDisplayDuration, repeats: false) { [weak self] _ in
-            self?.notificationQueue.removeAll { $0.id == id }
+            self?.indicatorQueue.removeAll { $0.id == id }
             self?.displayTimes[id] = nil
         }
     }
@@ -81,6 +81,6 @@ class UserNotificationController: ObservableObject, UserNotificationControllerPr
     // MARK: - CustomStringConvertible
     
     var description: String {
-        "UserNotificationController(\(String(describing: rootCoordinator)))"
+        "UserIndicatorController(\(String(describing: rootCoordinator)))"
     }
 }

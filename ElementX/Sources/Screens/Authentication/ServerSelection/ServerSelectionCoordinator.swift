@@ -19,7 +19,7 @@ import SwiftUI
 struct ServerSelectionCoordinatorParameters {
     /// The service used to authenticate the user.
     let authenticationService: AuthenticationServiceProxyProtocol
-    let userNotificationController: UserNotificationControllerProtocol
+    let userIndicatorController: UserIndicatorControllerProtocol
     /// Whether the screen is presented modally or within a navigation stack.
     let isModallyPresented: Bool
 }
@@ -31,7 +31,7 @@ enum ServerSelectionCoordinatorAction {
 
 final class ServerSelectionCoordinator: CoordinatorProtocol {
     private let parameters: ServerSelectionCoordinatorParameters
-    private let userNotificationController: UserNotificationControllerProtocol
+    private let userIndicatorController: UserIndicatorControllerProtocol
     private var viewModel: ServerSelectionViewModelProtocol
     private var authenticationService: AuthenticationServiceProxyProtocol { parameters.authenticationService }
 
@@ -41,7 +41,7 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         viewModel = ServerSelectionViewModel(homeserverAddress: parameters.authenticationService.homeserver.address,
                                              isModallyPresented: parameters.isModallyPresented)
-        userNotificationController = parameters.userNotificationController
+        userIndicatorController = parameters.userIndicatorController
     }
     
     // MARK: - Public
@@ -70,13 +70,13 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func startLoading(label: String = ElementL10n.loading) {
-        userNotificationController.submitNotification(UserNotification(type: .modal,
-                                                                       title: label,
-                                                                       persistent: true))
+        userIndicatorController.submitIndicator(UserIndicator(type: .modal,
+                                                              title: label,
+                                                              persistent: true))
     }
     
     private func stopLoading() {
-        userNotificationController.retractAllNotifications()
+        userIndicatorController.retractAllIndicators()
     }
     
     /// Updates the login flow using the supplied homeserver address, or shows an error when this isn't possible.

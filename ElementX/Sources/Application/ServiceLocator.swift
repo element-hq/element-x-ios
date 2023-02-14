@@ -21,10 +21,10 @@ class ServiceLocator {
     
     private init() { }
     
-    private(set) var userNotificationController: UserNotificationControllerProtocol!
+    private(set) var userIndicatorController: UserIndicatorControllerProtocol!
     
-    func register(userNotificationController: UserNotificationControllerProtocol) {
-        self.userNotificationController = userNotificationController
+    func register(userIndicatorController: UserIndicatorControllerProtocol) {
+        self.userIndicatorController = userIndicatorController
     }
     
     private(set) var settings: AppSettings!

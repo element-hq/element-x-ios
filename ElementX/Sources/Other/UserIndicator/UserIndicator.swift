@@ -14,15 +14,15 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import Foundation
 
-enum UserNotificationType {
+enum UserIndicatorType {
     case toast
     case modal
 }
 
-struct UserNotification: Equatable, Identifiable {
-    static func == (lhs: UserNotification, rhs: UserNotification) -> Bool {
+struct UserIndicator: Equatable, Identifiable {
+    static func == (lhs: UserIndicator, rhs: UserIndicator) -> Bool {
         lhs.id == rhs.id &&
             lhs.type == rhs.type &&
             lhs.title == rhs.title &&
@@ -31,7 +31,7 @@ struct UserNotification: Equatable, Identifiable {
     }
 
     var id: String = UUID().uuidString
-    var type = UserNotificationType.toast
+    var type = UserIndicatorType.toast
     var title: String
     var iconName: String?
     var persistent = false

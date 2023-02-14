@@ -16,19 +16,19 @@
 
 import SwiftUI
 
-struct UserNotificationToastView: View {
-    let notification: UserNotification
+struct UserIndicatorToastView: View {
+    let indicator: UserIndicator
     
     var body: some View {
         HStack {
-            if let iconName = notification.iconName {
+            if let iconName = indicator.iconName {
                 Image(systemName: iconName)
             }
-            Text(notification.title)
+            Text(indicator.title)
                 .font(.element.footnote)
                 .foregroundColor(.element.primaryContent)
         }
-        .id(notification.id)
+        .id(indicator.id)
         .padding(.horizontal, 12.0)
         .padding(.vertical, 10.0)
         .frame(minWidth: 150.0)
@@ -46,13 +46,13 @@ struct UserNotificationToastView: View {
     }
 }
 
-struct UserNotificationToastView_Previews: PreviewProvider {
+struct UserIndicatorToastView_Previews: PreviewProvider {
     static var previews: some View {
         VStack {
-            UserNotificationToastView(notification: UserNotification(title: "Successfully logged in",
-                                                                     iconName: "checkmark"))
+            UserIndicatorToastView(indicator: UserIndicator(title: "Successfully logged in",
+                                                            iconName: "checkmark"))
             
-            UserNotificationToastView(notification: UserNotification(title: "Toast without icon"))
+            UserIndicatorToastView(indicator: UserIndicator(title: "Toast without icon"))
         }
     }
 }
