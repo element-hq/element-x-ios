@@ -18,7 +18,6 @@ import SwiftUI
 
 struct SettingsScreen: View {
     @State private var showingLogoutConfirmation = false
-    @Environment(\.colorScheme) private var colorScheme
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     @ScaledMetric private var menuIconSize = 30.0

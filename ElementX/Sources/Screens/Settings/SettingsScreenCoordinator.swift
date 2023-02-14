@@ -113,7 +113,10 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         }
     }
     
-    private func presentDeveloperOptions() { }
+    private func presentDeveloperOptions() {
+        let coordinator = DeveloperOptionsScreenCoordinator()
+        parameters.navigationStackCoordinator?.push(coordinator)
+    }
 
     private func showSuccess(label: String) {
         parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label))
