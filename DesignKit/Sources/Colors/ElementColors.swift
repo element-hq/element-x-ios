@@ -81,6 +81,26 @@ public struct ElementColors {
             collection.userInterfaceStyle == .light ? .element.systemGray6 : .element.system
         })
     }
+    
+    /// The colour to use on the background of a Form or grouped List.
+    ///
+    /// This colour is a special case as it uses `system` in light mode and `background` in dark mode.
+    public var formBackground: Color {
+        Color(UIColor { collection in
+            // Note: Light colour doesn't currently match Figma.
+            collection.userInterfaceStyle == .light ? .element.system : .element.background
+        })
+    }
+    
+    /// The background colour of a row in a Form or grouped List.
+    ///
+    /// This colour is a special case as it uses `background` in light mode and `system` in dark mode.
+    public var formRowBackground: Color {
+        Color(UIColor { collection in
+            // Note: Light colour doesn't currently match Figma.
+            collection.userInterfaceStyle == .light ? .element.background : .element.system
+        })
+    }
 }
 
 // MARK: UIKit

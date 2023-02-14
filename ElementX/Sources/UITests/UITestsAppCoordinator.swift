@@ -287,8 +287,10 @@ class MockScreen: Identifiable {
             let navigationStackCoordinator = NavigationStackCoordinator()
             let roomProxy = MockRoomProxy(id: "MockRoomIdentifier",
                                           displayName: "Room",
+                                          topic: "Bacon ipsum dolor amet commodo incididunt ribeye dolore cupidatat short ribs.",
                                           avatarURL: URL.picturesDirectory,
                                           isEncrypted: true,
+                                          canonicalAlias: "#mock:room.org",
                                           members: [.mockAlice, .mockBob, .mockCharlie])
             let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                        roomProxy: roomProxy,

@@ -22,6 +22,7 @@ struct SettingsScreen: View {
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     @ScaledMetric private var menuIconSize = 30.0
+    
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     
     @ObservedObject var context: SettingsScreenViewModel.Context
@@ -29,25 +30,23 @@ struct SettingsScreen: View {
     var body: some View {
         Form {
             userSection
-                .listRowBackground(rowBackgroundColor)
+                .listRowBackground(Color.element.formRowBackground)
             
             if context.viewState.showSessionVerificationSection {
                 sessionVerificationSection
-                    .listRowBackground(rowBackgroundColor)
+                    .listRowBackground(Color.element.formRowBackground)
             }
             
             simplifiedSection
-                .listRowBackground(rowBackgroundColor)
+                .listRowBackground(Color.element.formRowBackground)
             
             signOutSection
-                .listRowBackground(rowBackgroundColor)
+                .listRowBackground(Color.element.formRowBackground)
         }
-        .introspectTableView { tableView in
-            tableView.backgroundColor = .clear
-        }
+        .scrollContentBackground(.hidden)
+        .background(Color.element.formBackground.ignoresSafeArea())
         .navigationTitle(ElementL10n.settings)
         .navigationBarTitleDisplayMode(.inline)
-        .background(backgroundColor.ignoresSafeArea())
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
                 doneButton
@@ -57,14 +56,6 @@ struct SettingsScreen: View {
 
     private var versionText: some View {
         Text(ElementL10n.settingsVersion + ": " + InfoPlistReader.main.bundleShortVersionString + " (" + InfoPlistReader.main.bundleVersion + ")")
-    }
-
-    private var backgroundColor: Color {
-        .element.system
-    }
-
-    private var rowBackgroundColor: Color {
-        colorScheme == .light ? .element.background : .element.system
     }
 
     private var userSection: some View {
@@ -189,7 +180,7 @@ struct SettingsScreen_Previews: PreviewProvider {
         
         NavigationView {
             SettingsScreen(context: viewModel.context)
-                .previewInterfaceOrientation(.portrait)
+                .tint(.element.accent)
         }
     }
 }

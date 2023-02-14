@@ -32,7 +32,7 @@ struct BugReportScreen: View {
                 .padding(.horizontal, horizontalPadding)
         }
         .scrollDismissesKeyboard(.immediately)
-        .background(Color.element.system)
+        .background(Color.element.formBackground.ignoresSafeArea())
         .navigationTitle(ElementL10n.bugReportScreenTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -52,18 +52,15 @@ struct BugReportScreen: View {
     private var descriptionTextEditor: some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.element.background)
+                .fill(Color.element.formRowBackground)
 
             TextEditor(text: $context.reportText)
                 .tint(.element.brand)
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
-                .background(Color.clear)
                 .cornerRadius(14)
                 .accessibilityIdentifier("reportTextView")
-                .introspectTextView { textView in
-                    textView.backgroundColor = .clear
-                }
+                .scrollContentBackground(.hidden)
 
             if context.reportText.isEmpty {
                 Text(ElementL10n.bugReportScreenDescription)
@@ -90,7 +87,7 @@ struct BugReportScreen: View {
                 .accessibilityIdentifier("sendLogsToggle")
                 .padding(.horizontal, 16)
                 .padding(.vertical, 11)
-                .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.background))
+                .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.formRowBackground))
             
             Text(ElementL10n.bugReportScreenLogsDescription)
                 .font(.element.caption1)
@@ -142,9 +139,11 @@ struct BugReportScreen: View {
 // MARK: - Previews
 
 struct BugReport_Previews: PreviewProvider {
+    static let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+                                              screenshot: Asset.Images.appLogo.image,
+                                              isModallyPresented: false)
+    
     static var previews: some View {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: Asset.Images.appLogo.image, isModallyPresented: false)
         BugReportScreen(context: viewModel.context)
-            .previewInterfaceOrientation(.portrait)
     }
 }
