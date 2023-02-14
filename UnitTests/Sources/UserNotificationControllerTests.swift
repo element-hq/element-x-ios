@@ -22,86 +22,86 @@ import XCTest
 
 @MainActor
 class UserIndicatorControllerTests: XCTestCase {
-    private var notificationController: UserIndicatorController!
+    private var indicatorController: UserIndicatorController!
     
     override func setUp() {
-        notificationController = UserIndicatorController(rootCoordinator: SplashScreenCoordinator())
+        indicatorController = UserIndicatorController(rootCoordinator: SplashScreenCoordinator())
     }
     
-    func testNotificationQueueing() {
-        notificationController.minimumDisplayDuration = 0.0
+    func testIndicatorQueueing() {
+        indicatorController.minimumDisplayDuration = 0.0
         
-        notificationController.submitIndicator(.init(id: "First", title: ""))
-        notificationController.submitIndicator(.init(id: "Second", title: ""))
-        notificationController.submitIndicator(.init(id: "Third", title: ""))
+        indicatorController.submitIndicator(.init(id: "First", title: ""))
+        indicatorController.submitIndicator(.init(id: "Second", title: ""))
+        indicatorController.submitIndicator(.init(id: "Third", title: ""))
         
-        XCTAssertEqual(notificationController.notificationQueue.count, 3)
-        XCTAssertEqual(notificationController.notificationQueue[2].id, "Third")
-        XCTAssertEqual(notificationController.notificationQueue[1].id, "Second")
-        XCTAssertEqual(notificationController.notificationQueue[0].id, "First")
+        XCTAssertEqual(indicatorController.indicatorQueue.count, 3)
+        XCTAssertEqual(indicatorController.indicatorQueue[2].id, "Third")
+        XCTAssertEqual(indicatorController.indicatorQueue[1].id, "Second")
+        XCTAssertEqual(indicatorController.indicatorQueue[0].id, "First")
         
-        notificationController.retractNotificationWithId("Second")
+        indicatorController.retractIndicatorWithId("Second")
         
-        XCTAssertEqual(notificationController.notificationQueue.count, 2)
-        XCTAssertEqual(notificationController.notificationQueue[1].id, "Third")
-        XCTAssertEqual(notificationController.notificationQueue[0].id, "First")
+        XCTAssertEqual(indicatorController.indicatorQueue.count, 2)
+        XCTAssertEqual(indicatorController.indicatorQueue[1].id, "Third")
+        XCTAssertEqual(indicatorController.indicatorQueue[0].id, "First")
         
-        notificationController.retractAllNotifications()
+        indicatorController.retractAllIndicators()
         
-        XCTAssertEqual(notificationController.notificationQueue.count, 0)
+        XCTAssertEqual(indicatorController.indicatorQueue.count, 0)
     }
     
     func testChainedPresentation() {
-        notificationController.minimumDisplayDuration = 0.25
-        notificationController.nonPersistentDisplayDuration = 2.5
+        indicatorController.minimumDisplayDuration = 0.25
+        indicatorController.nonPersistentDisplayDuration = 2.5
         
-        notificationController.submitIndicator(.init(id: "First", title: ""))
-        notificationController.submitIndicator(.init(id: "Second", title: ""))
-        notificationController.submitIndicator(.init(id: "Third", title: ""))
+        indicatorController.submitIndicator(.init(id: "First", title: ""))
+        indicatorController.submitIndicator(.init(id: "Second", title: ""))
+        indicatorController.submitIndicator(.init(id: "Third", title: ""))
         
-        XCTAssertEqual(notificationController.activeNotification?.id, "Third")
+        XCTAssertEqual(indicatorController.activeIndicator?.id, "Third")
         
-        let expectation = expectation(description: "Waiting for last notification to be dismissed")
-        DispatchQueue.main.asyncAfter(deadline: .now() + notificationController.nonPersistentDisplayDuration) {
+        let expectation = expectation(description: "Waiting for last indicator to be dismissed")
+        DispatchQueue.main.asyncAfter(deadline: .now() + indicatorController.nonPersistentDisplayDuration) {
             expectation.fulfill()
         }
         
         waitForExpectations(timeout: 5.0)
         
-        XCTAssertEqual(notificationController.notificationQueue.count, 2)
-        XCTAssertEqual(notificationController.activeNotification?.id, "Second")
+        XCTAssertEqual(indicatorController.indicatorQueue.count, 2)
+        XCTAssertEqual(indicatorController.activeIndicator?.id, "Second")
     }
     
     func testMinimumDisplayDuration() {
-        notificationController.minimumDisplayDuration = 0.25
-        notificationController.nonPersistentDisplayDuration = 2.5
+        indicatorController.minimumDisplayDuration = 0.25
+        indicatorController.nonPersistentDisplayDuration = 2.5
         
-        notificationController.submitIndicator(.init(id: "First", title: ""))
-        notificationController.submitIndicator(.init(id: "Second", title: ""))
-        notificationController.submitIndicator(.init(id: "Third", title: ""))
+        indicatorController.submitIndicator(.init(id: "First", title: ""))
+        indicatorController.submitIndicator(.init(id: "Second", title: ""))
+        indicatorController.submitIndicator(.init(id: "Third", title: ""))
         
-        notificationController.retractNotificationWithId("Second")
+        indicatorController.retractIndicatorWithId("Second")
         
-        XCTAssertEqual(notificationController.notificationQueue.count, 3)
+        XCTAssertEqual(indicatorController.indicatorQueue.count, 3)
         
         let dismissalExpectation = expectation(description: "Waiting for minimum display duration to pass")
-        DispatchQueue.main.asyncAfter(deadline: .now() + notificationController.minimumDisplayDuration) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + indicatorController.minimumDisplayDuration) {
             dismissalExpectation.fulfill()
         }
         
         waitForExpectations(timeout: 5.0)
         
-        XCTAssertEqual(notificationController.notificationQueue.count, 2)
-        XCTAssertEqual(notificationController.activeNotification?.id, "Third")
+        XCTAssertEqual(indicatorController.indicatorQueue.count, 2)
+        XCTAssertEqual(indicatorController.activeIndicator?.id, "Third")
         
-        let dismissalExpectation2 = expectation(description: "Waiting for last notification to be dismissed")
-        DispatchQueue.main.asyncAfter(deadline: .now() + notificationController.nonPersistentDisplayDuration) {
+        let dismissalExpectation2 = expectation(description: "Waiting for last indicator to be dismissed")
+        DispatchQueue.main.asyncAfter(deadline: .now() + indicatorController.nonPersistentDisplayDuration) {
             dismissalExpectation2.fulfill()
         }
         
         waitForExpectations(timeout: 5.0)
         
-        XCTAssertEqual(notificationController.notificationQueue.count, 1)
-        XCTAssertEqual(notificationController.activeNotification?.id, "First")
+        XCTAssertEqual(indicatorController.indicatorQueue.count, 1)
+        XCTAssertEqual(indicatorController.activeIndicator?.id, "First")
     }
 }
