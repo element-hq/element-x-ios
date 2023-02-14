@@ -56,7 +56,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
         do {
             var files: [URL] = []
             if let screenshot = context.viewState.screenshot {
-                var imageURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("Screenshot.png")
+                let imageURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("Screenshot.png")
                 let pngData = screenshot.pngData()
                 try pngData?.write(to: imageURL)
                 files.append(imageURL)
