@@ -23,6 +23,7 @@ class BugReportUITests: XCTestCase {
         app.goToScreenWithIdentifier(.bugReport)
         
         // Initial state without a screenshot attached.
+        XCTAssert(app.buttons["attachScreenshotButton"].exists)
         app.assertScreenshot(.bugReport, step: 0)
     }
 
@@ -35,7 +36,8 @@ class BugReportUITests: XCTestCase {
         let sendingLogsToggle = app.switches["sendLogsToggle"]
         XCTAssert(sendingLogsToggle.exists)
         XCTAssertFalse(sendingLogsToggle.isOn)
-        
+
+        XCTAssert(app.buttons["attachScreenshotButton"].exists)
         app.assertScreenshot(.bugReport, step: 1)
     }
 
@@ -61,6 +63,7 @@ class BugReportUITests: XCTestCase {
         // Initial state with a screenshot attached.
         XCTAssert(app.images["screenshotImage"].exists)
         XCTAssert(app.buttons["removeScreenshotButton"].exists)
+        XCTAssertFalse(app.buttons["attachScreenshotButton"].exists)
         app.assertScreenshot(.bugReportWithScreenshot)
     }
 }

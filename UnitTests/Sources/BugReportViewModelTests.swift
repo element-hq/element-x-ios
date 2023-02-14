@@ -37,4 +37,13 @@ class BugReportViewModelTests: XCTestCase {
         try await Task.sleep(nanoseconds: 100_000_000)
         XCTAssertNil(context.viewState.screenshot)
     }
+
+    func testAttachScreenshot() async throws {
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil, isModallyPresented: false)
+        let context = viewModel.context
+        XCTAssertNil(context.viewState.screenshot)
+        context.send(viewAction: .attachScreenshot(UIImage.actions))
+        try await Task.sleep(nanoseconds: 100_000_000)
+        XCTAssert(context.viewState.screenshot == UIImage.actions)
+    }
 }

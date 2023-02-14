@@ -39,4 +39,5 @@ enum BugReportViewAction {
     case cancel
     case submit
     case removeScreenshot
+    case attachScreenshot(UIImage)
 }

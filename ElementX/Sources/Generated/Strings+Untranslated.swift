@@ -16,6 +16,8 @@ extension ElementL10n {
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
   /// Match
   public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
+  /// Attach Screenshot
+  public static let bugReportScreenAttachScreenshot = ElementL10n.tr("Untranslated", "bug_report_screen_attach_screenshot")
   /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
   public static let bugReportScreenDescription = ElementL10n.tr("Untranslated", "bug_report_screen_description")
   /// Send logs to help

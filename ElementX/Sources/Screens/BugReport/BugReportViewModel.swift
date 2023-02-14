@@ -43,6 +43,8 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
             await submitBugReport()
         case .removeScreenshot:
             state.screenshot = nil
+        case let .attachScreenshot(image):
+            state.screenshot = image
         }
     }
     
@@ -52,11 +54,18 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
         let progressTracker = ProgressTracker()
         callback?(.submitStarted(progressTracker: progressTracker))
         do {
+            var files: [URL] = []
+            if let screenshot = context.viewState.screenshot {
+                var imageURL = URL(fileURLWithPath: NSTemporaryDirectory()).appendingPathComponent("Screenshot.png")
+                let pngData = screenshot.pngData()
+                try pngData?.write(to: imageURL)
+                files.append(imageURL)
+            }
             let bugReport = BugReport(text: context.reportText,
                                       includeLogs: context.sendingLogsEnabled,
                                       includeCrashLog: true,
                                       githubLabels: [],
-                                      files: [])
+                                      files: files)
             let result = try await bugReportService.submitBugReport(bugReport,
                                                                     progressListener: progressTracker)
             MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")

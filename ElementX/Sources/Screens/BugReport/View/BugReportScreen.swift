@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct BugReportScreen: View {
@@ -22,6 +23,8 @@ struct BugReportScreen: View {
     private var horizontalPadding: CGFloat {
         horizontalSizeClass == .regular ? 50 : 16
     }
+
+    @State private var selectedScreenshot: PhotosPickerItem?
     
     @ObservedObject var context: BugReportViewModel.Context
     
@@ -37,6 +40,16 @@ struct BugReportScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
+        .onChange(of: selectedScreenshot) { newItem in
+            Task {
+                guard let data = try? await newItem?.loadTransferable(type: Data.self),
+                      let image = UIImage(data: data)
+                else {
+                    return
+                }
+                context.send(viewAction: .attachScreenshot(image))
+            }
+        }
     }
 
     /// The main content of the view to be shown in a scroll view.
@@ -44,7 +57,7 @@ struct BugReportScreen: View {
         VStack(alignment: .leading, spacing: 24) {
             descriptionTextEditor
             sendLogsToggle
-            screenshot
+            attachScreenshot
         }
     }
     
@@ -95,9 +108,9 @@ struct BugReportScreen: View {
                 .padding(.horizontal, -8)
         }
     }
-    
+
     @ViewBuilder
-    private var screenshot: some View {
+    private var attachScreenshot: some View {
         if let screenshot = context.viewState.screenshot {
             ZStack(alignment: .topTrailing) {
                 Image(uiImage: screenshot)
@@ -113,6 +126,21 @@ struct BugReportScreen: View {
             }
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
+        } else {
+            PhotosPicker(
+                selection: $selectedScreenshot,
+                matching: .screenshots,
+                photoLibrary: .shared()
+            ) {
+                HStack {
+                    Text(ElementL10n.bugReportScreenAttachScreenshot)
+                    Spacer()
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 11)
+            .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.formRowBackground))
+            .accessibilityIdentifier("attachScreenshotButton")
         }
     }
     
@@ -140,10 +168,19 @@ struct BugReportScreen: View {
 
 struct BugReport_Previews: PreviewProvider {
     static let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
-                                              screenshot: Asset.Images.appLogo.image,
+                                              screenshot: nil,
                                               isModallyPresented: false)
     
     static var previews: some View {
-        BugReportScreen(context: viewModel.context)
+        Group {
+            BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+                                                        screenshot: nil,
+                                                        isModallyPresented: false).context)
+                .previewDisplayName("Without Screenshot")
+            BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+                                                        screenshot: Asset.Images.appLogo.image,
+                                                        isModallyPresented: false).context)
+                .previewDisplayName("With Screenshot")
+        }
     }
 }
