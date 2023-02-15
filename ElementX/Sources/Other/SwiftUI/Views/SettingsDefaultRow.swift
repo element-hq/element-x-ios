@@ -38,9 +38,7 @@ struct SettingsDefaultRow: View {
                 }, icon: {
                     image
                 })
-                .labelStyle(RowLabelStyle(titleColor: .element.primaryContent,
-                                          iconColor: .element.systemGray,
-                                          backgroundColor: .element.systemGray6))
+                .labelStyle(SettingsRowLabelStyle())
                 
                 Spacer()
                 

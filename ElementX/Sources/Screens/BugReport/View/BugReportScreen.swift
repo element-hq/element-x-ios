@@ -117,9 +117,7 @@ struct BugReportScreen: View {
                          photoLibrary: .shared()) {
                 HStack(spacing: 16) {
                     Label(context.viewState.screenshot == nil ? ElementL10n.bugReportScreenAttachScreenshot : ElementL10n.bugReportScreenEditScreenshot, systemImage: "camera")
-                        .labelStyle(RowLabelStyle(titleColor: .element.primaryContent,
-                                                  iconColor: .element.secondaryContent,
-                                                  backgroundColor: .element.formBackground))
+                        .labelStyle(SettingsRowLabelStyle())
                     Spacer()
                 }
             }

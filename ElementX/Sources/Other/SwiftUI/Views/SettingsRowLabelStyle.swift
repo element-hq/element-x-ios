@@ -16,24 +16,20 @@
 
 import SwiftUI
 
-struct RowLabelStyle: LabelStyle {
-    let titleColor: Color
-    let iconColor: Color
-    let backgroundColor: Color
-    
-    @ScaledMetric private var menuiconSize = 30.0
+struct SettingsRowLabelStyle: LabelStyle {
+    @ScaledMetric private var menuIconSize = 30.0
 
     func makeBody(configuration: Configuration) -> some View {
-        HStack(spacing: 16) {
+        HStack(alignment: .top, spacing: 16) {
             configuration.icon
-                .foregroundColor(iconColor)
+                .foregroundColor(.element.secondaryContent)
                 .padding(4)
-                .background(backgroundColor)
+                .background(Color.element.formBackground)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
-                .frame(width: menuiconSize, height: menuiconSize)
+                .frame(width: menuIconSize, height: menuIconSize)
             configuration.title
                 .font(.element.body)
-                .foregroundColor(titleColor)
+                .foregroundColor(.element.primaryContent)
         }
     }
 }
