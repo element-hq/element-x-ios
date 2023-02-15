@@ -146,6 +146,8 @@ extension ElementL10n {
   public static let sessionVerificationStart = ElementL10n.tr("Untranslated", "session_verification_start")
   /// Appearance
   public static let settingsAppearance = ElementL10n.tr("Untranslated", "settings_appearance")
+  /// Developer options
+  public static let settingsDeveloperOptions = ElementL10n.tr("Untranslated", "settings_developer_options")
   /// Complete verification
   public static let settingsSessionVerification = ElementL10n.tr("Untranslated", "settings_session_verification")
   /// Message layout
