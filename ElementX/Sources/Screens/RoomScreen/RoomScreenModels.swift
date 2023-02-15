@@ -54,6 +54,8 @@ enum RoomScreenViewAction {
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
     case contextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
+    case cancelReport
+    case report
 }
 
 struct RoomScreenViewState: BindableState {
@@ -87,8 +89,13 @@ struct RoomScreenViewStateBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
-    
+
     var debugInfo: TimelineItemDebugView.DebugInfo?
+
+    // Report
+    var showReport = false
+    var reportReason = ""
+    var itemToReport: String?
 }
 
 enum RoomScreenErrorType: Hashable {

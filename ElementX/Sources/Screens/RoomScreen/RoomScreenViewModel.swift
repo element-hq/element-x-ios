@@ -120,10 +120,23 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await markRoomAsRead()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
+        case .cancelReport:
+            resetReportState()
+        case .report:
+            report()
         }
     }
     
     // MARK: - Private
+    
+    private func report() {
+        // TODO: Implement
+    }
+
+    private func resetReportState() {
+        context.reportReason = ""
+        context.itemToReport = nil
+    }
     
     private func paginateBackwards() async {
         switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
@@ -227,6 +240,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         if item.isOutgoing {
             actions.append(.redact)
+        } else {
+            actions.append(.report)
         }
         
         var debugActions: [TimelineItemContextMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
@@ -280,6 +295,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task {
                 await timelineController.retryDecryption(for: sessionID)
             }
+        case .report:
+            resetReportState()
+            state.bindings.showReport = true
+            state.bindings.itemToReport = itemID
         }
         
         if action.switchToDefaultComposer {

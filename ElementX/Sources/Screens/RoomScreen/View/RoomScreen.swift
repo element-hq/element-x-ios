@@ -30,6 +30,9 @@ struct RoomScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo) { $0.alert }
+            .alert(ElementL10n.reportContentCustomHint, isPresented: $context.showReport) {
+                reportAlert
+            }
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
             .task(id: context.viewState.roomId) {
                 // Give a couple of seconds for items to load and to see them.
@@ -38,6 +41,17 @@ struct RoomScreen: View {
                 guard !Task.isCancelled else { return }
                 context.send(viewAction: .markRoomAsRead)
             }
+    }
+
+    @ViewBuilder
+    var reportAlert: some View {
+        TextField("", text: $context.reportReason)
+        Button(ElementL10n.actionSend, action: {
+            context.send(viewAction: .cancelEdit)
+        })
+        Button(ElementL10n.actionCancel, role: .cancel, action: {
+            context.send(viewAction: .report)
+        })
     }
     
     var timeline: some View {
