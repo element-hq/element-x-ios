@@ -59,7 +59,7 @@ struct BugReportScreen: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .cornerRadius(14)
-                .accessibilityIdentifier("reportTextView")
+                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
                 .scrollContentBackground(.hidden)
 
             if context.reportText.isEmpty {
@@ -84,7 +84,7 @@ struct BugReportScreen: View {
         VStack(spacing: 8) {
             Toggle(ElementL10n.bugReportScreenIncludeLogs, isOn: $context.sendingLogsEnabled)
                 .tint(Color.element.brand)
-                .accessibilityIdentifier("sendLogsToggle")
+                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
                 .padding(.horizontal, 16)
                 .padding(.vertical, 11)
                 .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.formRowBackground))
@@ -104,12 +104,12 @@ struct BugReportScreen: View {
                     .resizable()
                     .scaledToFit()
                     .frame(width: 100)
-                    .accessibilityIdentifier("screenshotImage")
+                    .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
                 Button { context.send(viewAction: .removeScreenshot) } label: {
                     Image(uiImage: Asset.Images.closeCircle.image)
                 }
                 .offset(x: 10, y: -10)
-                .accessibilityIdentifier("removeScreenshotButton")
+                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.removeScreenshot)
             }
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
@@ -131,7 +131,7 @@ struct BugReportScreen: View {
                 context.send(viewAction: .submit)
             }
             .disabled(context.reportText.count < 5)
-            .accessibilityIdentifier("sendButton")
+            .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.send)
         }
     }
 }

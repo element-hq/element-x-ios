@@ -63,5 +63,6 @@ targets:
     - path: ../../ElementX/Sources/Generated/Strings.swift
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
     - path: ../../ElementX/Resources
+    - path: ../../ElementX/Sources/Other/AccessibilityIdentifiers.swift
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/XCUIElement.swift

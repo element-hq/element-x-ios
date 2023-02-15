@@ -58,4 +58,6 @@ targets:
     sources:
     - path: ../Sources
     - path: ../SupportingFiles
+    - path: ../../ElementX/Sources/Other/AccessibilityIdentifiers.swift
     - path: ../../ElementX/Sources/Other/Extensions/XCUIElement.swift
+    - path: ../../ElementX/Sources/Other/Extensions/NSRegularExpresion.swift

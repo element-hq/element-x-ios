@@ -62,21 +62,21 @@ struct ServerSelectionScreen: View {
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
                 .textFieldStyle(.elementInput(labelText: ElementL10n.hsUrl,
                                               footerText: context.viewState.footerMessage,
-                                              isError: context.viewState.isShowingFooterError))
+                                              isError: context.viewState.isShowingFooterError,
+                                              accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
                 .keyboardType(.URL)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
                 .onChange(of: context.homeserverAddress) { _ in context.send(viewAction: .clearFooterError) }
                 .submitLabel(.done)
                 .onSubmit(submit)
-                .accessibilityIdentifier("addressTextField")
             
             Button(action: submit) {
                 Text(context.viewState.buttonTitle)
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(context.viewState.hasValidationError)
-            .accessibilityIdentifier("confirmButton")
+            .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.continue)
         }
     }
     
@@ -87,7 +87,7 @@ struct ServerSelectionScreen: View {
                 Button { context.send(viewAction: .dismiss) } label: {
                     Text(ElementL10n.actionCancel)
                 }
-                .accessibilityIdentifier("dismissButton")
+                .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
             }
         }
     }

@@ -99,14 +99,12 @@ struct AnalyticsPrompt: View {
                     .font(.element.bodyBold)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("enableButton")
             
             Button { context.send(viewAction: .disable) } label: {
                 Text(ElementL10n.actionNotNow)
                     .font(.element.bodyBold)
                     .padding(12)
             }
-            .accessibilityIdentifier("disableButton")
         }
     }
 }

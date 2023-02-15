@@ -30,7 +30,7 @@ class OnboardingUITests: XCTestCase {
         // Given the splash screen in its initial state.
         let page1TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselSecureTitle]
         let page2TitleText = app.staticTexts[ElementL10n.ftueAuthCarouselControlTitle]
-        let hiddenPageTitleText = app.staticTexts["hiddenPage"].firstMatch
+        let hiddenPageTitleText = app.staticTexts[A11yIdentifiers.onboardingScreen.hidden].firstMatch
         
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be onscreen.")
         XCTAssertFalse(page2TitleText.isHittable, "The title from the second page of the carousel should be offscreen.")
