@@ -24,6 +24,8 @@ extension ElementL10n {
   public static let bugReportScreenIncludeLogs = ElementL10n.tr("Untranslated", "bug_report_screen_include_logs")
   /// To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.
   public static let bugReportScreenLogsDescription = ElementL10n.tr("Untranslated", "bug_report_screen_logs_description")
+  /// Sending...
+  public static let bugReportScreenSending = ElementL10n.tr("Untranslated", "bug_report_screen_sending")
   /// Report a bug
   public static let bugReportScreenTitle = ElementL10n.tr("Untranslated", "bug_report_screen_title")
   /// %@ iOS

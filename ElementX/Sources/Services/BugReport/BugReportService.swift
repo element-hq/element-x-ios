@@ -189,7 +189,7 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         var zippedFiles: [URL] = []
 
         for url in filesToCompress {
-            let zippedFileURL = URL(fileURLWithPath: NSTemporaryDirectory())
+            let zippedFileURL = URL.temporaryDirectory
                 .appendingPathComponent(url.lastPathComponent)
 
             //  remove old zipped file if exists

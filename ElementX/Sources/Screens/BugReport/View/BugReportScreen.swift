@@ -127,11 +127,9 @@ struct BugReportScreen: View {
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
         } else {
-            PhotosPicker(
-                selection: $selectedScreenshot,
-                matching: .screenshots,
-                photoLibrary: .shared()
-            ) {
+            PhotosPicker(selection: $selectedScreenshot,
+                         matching: .screenshots,
+                         photoLibrary: .shared()) {
                 HStack {
                     Text(ElementL10n.bugReportScreenAttachScreenshot)
                     Spacer()

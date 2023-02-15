@@ -82,7 +82,7 @@
 "bug_report_screen_include_logs" = "Send logs to help";
 "bug_report_screen_logs_description" = "To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.";
 "bug_report_screen_attach_screenshot" = "Attach Screenshot";
-
+"bug_report_screen_sending" = "Sending...";
 
 // Session verification
 /*
