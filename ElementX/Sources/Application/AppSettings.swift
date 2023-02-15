@@ -26,6 +26,7 @@ final class AppSettings: ObservableObject {
         case isIdentifiedForAnalytics
         case enableInAppNotifications
         case pusherProfileTag
+        case shouldCollapseRoomStateEvents
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -61,7 +62,7 @@ final class AppSettings: ObservableObject {
     /// The last known version of the app that was launched on this device, which is
     /// used to detect when migrations should be run. When `nil` the app may have been
     /// deleted between runs so should clear data in the shared container and keychain.
-    @UserSetting(key: UserDefaultsKeys.lastVersionLaunched.rawValue, defaultValue: nil, storage: store)
+    @UserSetting(key: UserDefaultsKeys.lastVersionLaunched.rawValue, defaultValue: nil, persistIn: store)
     var lastVersionLaunched: String?
     
     /// The default homeserver address used. This is intentionally a string without a scheme
@@ -123,27 +124,30 @@ final class AppSettings: ObservableObject {
     }
     
     /// `true` when the user has opted in to send analytics.
-    @UserSetting(key: UserDefaultsKeys.enableAnalytics.rawValue, defaultValue: false, storage: store)
+    @UserSetting(key: UserDefaultsKeys.enableAnalytics.rawValue, defaultValue: false, persistIn: store)
     var enableAnalytics
     
     /// Indicates if the device has already called identify for this session to PostHog.
     /// This is separate to `enableAnalytics` as logging out leaves analytics
     /// enabled, but requires the next account to be identified separately.
-    @UserSetting(key: UserDefaultsKeys.isIdentifiedForAnalytics.rawValue, defaultValue: false, storage: store)
+    @UserSetting(key: UserDefaultsKeys.isIdentifiedForAnalytics.rawValue, defaultValue: false, persistIn: store)
     var isIdentifiedForAnalytics
     
     // MARK: - Room Screen
     
-    @UserSettingRawRepresentable(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: TimelineStyle.bubbles, storage: store)
+    @UserSettingRawRepresentable(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: TimelineStyle.bubbles, persistIn: store)
     var timelineStyle
+    
+    @UserSetting(key: UserDefaultsKeys.shouldCollapseRoomStateEvents.rawValue, defaultValue: true, persistIn: nil)
+    var shouldCollapseRoomStateEvents
 
     // MARK: - Notifications
 
-    @UserSetting(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: true, storage: store)
+    @UserSetting(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: true, persistIn: store)
     var enableInAppNotifications
 
     /// Tag describing which set of device specific rules a pusher executes.
-    @UserSetting(key: UserDefaultsKeys.pusherProfileTag.rawValue, defaultValue: nil, storage: store)
+    @UserSetting(key: UserDefaultsKeys.pusherProfileTag.rawValue, defaultValue: nil, persistIn: store)
     var pusherProfileTag: String?
         
     // MARK: - Other

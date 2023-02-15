@@ -67,7 +67,6 @@ struct TextRoomTimelineView_Previews: PreviewProvider {
         TextRoomTimelineItem(id: UUID().uuidString,
                              body: text,
                              timestamp: timestamp,
-                             groupState: .single,
                              isOutgoing: isOutgoing,
                              isEditable: isOutgoing,
                              sender: .init(id: senderId))

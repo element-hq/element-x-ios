@@ -16,17 +16,28 @@
 
 import Foundation
 
-struct AudioRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct CollapsibleTimelineItem: RoomTimelineItemProtocol, Identifiable, Hashable {
     let id: String
-    let body: String
-    let timestamp: String
-    let isOutgoing: Bool
-    let isEditable: Bool
-    let sender: TimelineItemSender
-
-    let duration: UInt64
-    let source: MediaSourceProxy?
-    var cachedAudioURL: URL?
-
-    var properties = RoomTimelineItemProperties()
+    let items: [RoomTimelineItemProtocol]
+    
+    init(items: [RoomTimelineItemProtocol]) {
+        guard let firstItem = items.first else {
+            fatalError()
+        }
+        
+        self.items = items
+        id = firstItem.id
+    }
+    
+    // MARK: - Equatable
+    
+    static func == (lhs: CollapsibleTimelineItem, rhs: CollapsibleTimelineItem) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    // MARK: - Hashable
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+    }
 }

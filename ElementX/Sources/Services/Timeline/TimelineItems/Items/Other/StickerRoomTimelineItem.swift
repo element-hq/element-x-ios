@@ -20,7 +20,6 @@ struct StickerRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Ha
     let id: String
     let body: String
     let timestamp: String
-    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     

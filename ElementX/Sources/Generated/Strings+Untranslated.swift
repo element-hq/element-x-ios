@@ -120,6 +120,10 @@ extension ElementL10n {
   public static func roomTimelineReplyingTo(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "room_timeline_replying_to", String(describing: p1))
   }
+  /// %d room changes
+  public static func roomTimelineStateChanges(_ p1: Int) -> String {
+    return ElementL10n.tr("Untranslated", "room_timeline_state_changes", p1)
+  }
   /// Bubbles
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
   /// Modern

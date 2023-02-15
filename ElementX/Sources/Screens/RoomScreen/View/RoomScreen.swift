@@ -125,7 +125,6 @@ struct RoomScreen: View {
 struct RoomScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                            timelineViewFactory: RoomTimelineViewFactory(),
                                             mediaProvider: MockMediaProvider(),
                                             roomName: "Preview room")
         

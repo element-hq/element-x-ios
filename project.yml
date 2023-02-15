@@ -44,6 +44,9 @@ packages:
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit
+  Algorithms:
+    url: https://github.com/apple/swift-algorithms
+    majorVersion: 1.0.0
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
     exactVersion: 0.4.0

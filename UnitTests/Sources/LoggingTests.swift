@@ -212,23 +212,23 @@ class LoggingTests: XCTestCase {
         let textAttributedString = "TextAttributed"
         let textMessage = TextRoomTimelineItem(id: "mytextmessage", body: "TextString",
                                                formattedBody: AttributedString(textAttributedString),
-                                               timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
+                                               timestamp: "", isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let noticeAttributedString = "NoticeAttributed"
         let noticeMessage = NoticeRoomTimelineItem(id: "mynoticemessage", body: "NoticeString",
                                                    formattedBody: AttributedString(noticeAttributedString),
-                                                   timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
+                                                   timestamp: "", isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let emoteAttributedString = "EmoteAttributed"
         let emoteMessage = EmoteRoomTimelineItem(id: "myemotemessage", body: "EmoteString",
                                                  formattedBody: AttributedString(emoteAttributedString),
-                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
+                                                 timestamp: "", isOutgoing: false, isEditable: false, sender: .init(id: "sender"))
         let imageMessage = ImageRoomTimelineItem(id: "myimagemessage", body: "ImageString",
-                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
+                                                 timestamp: "", isOutgoing: false, isEditable: false,
                                                  sender: .init(id: "sender"), source: nil)
         let videoMessage = VideoRoomTimelineItem(id: "myvideomessage", body: "VideoString",
-                                                 timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
+                                                 timestamp: "", isOutgoing: false, isEditable: false,
                                                  sender: .init(id: "sender"), duration: 0, source: nil, thumbnailSource: nil)
         let fileMessage = FileRoomTimelineItem(id: "myfilemessage", body: "FileString",
-                                               timestamp: "", groupState: .single, isOutgoing: false, isEditable: false,
+                                               timestamp: "", isOutgoing: false, isEditable: false,
                                                sender: .init(id: "sender"), source: nil, thumbnailSource: nil)
         
         // When logging that value

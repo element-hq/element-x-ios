@@ -32,20 +32,6 @@ enum TimelineItemProxy {
             self = .unknown(item)
         }
     }
-
-    func canBeGrouped(with previousItemProxy: TimelineItemProxy) -> Bool {
-        guard case let .event(selfEventItemProxy) = self, case let .event(previousEventItemProxy) = previousItemProxy else {
-            return false
-        }
-        
-        // State events aren't rendered as messages so shouldn't be grouped.
-        if selfEventItemProxy.isRoomState || previousEventItemProxy.isRoomState {
-            return false
-        }
-        
-        //  can be improved by adding a date threshold
-        return previousEventItemProxy.reactions.isEmpty && selfEventItemProxy.sender == previousEventItemProxy.sender
-    }
 }
 
 /// The delivery status for the item.

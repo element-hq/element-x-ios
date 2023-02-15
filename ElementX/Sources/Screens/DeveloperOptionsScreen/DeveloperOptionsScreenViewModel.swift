@@ -20,8 +20,19 @@ typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOpt
 
 class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
     var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
-
+    
     init() {
-        super.init(initialViewState: DeveloperOptionsScreenViewState(bindings: DeveloperOptionsScreenViewStateBindings()))
+        super.init(initialViewState: DeveloperOptionsScreenViewState(bindings: DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: ServiceLocator.shared.settings.shouldCollapseRoomStateEvents)))
+        
+        ServiceLocator.shared.settings.$shouldCollapseRoomStateEvents
+            .weakAssign(to: \.state.bindings.shouldCollapseRoomStateEvents, on: self)
+            .store(in: &cancellables)
+    }
+    
+    override func process(viewAction: DeveloperOptionsScreenViewAction) async {
+        switch viewAction {
+        case .changedShouldCollapseRoomStateEvents:
+            ServiceLocator.shared.settings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
+        }
     }
 }

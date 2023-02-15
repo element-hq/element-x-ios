@@ -36,7 +36,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
-                                        timelineViewFactory: RoomTimelineViewFactory(),
                                         mediaProvider: parameters.mediaProvider,
                                         roomName: parameters.roomProxy.displayName ?? parameters.roomProxy.name,
                                         roomAvatarUrl: parameters.roomProxy.avatarURL)
