@@ -38,7 +38,7 @@ class LoginTests: XCTestCase {
     private func runLoginLogoutFlow() {
         let app = Application.launch()
         
-        let getStartedButton = app.buttons[A11yIdentifiers.onboarding.signIn]
+        let getStartedButton = app.buttons[A11yIdentifiers.onboardingScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 5.0))
         getStartedButton.tap()
@@ -47,12 +47,12 @@ class LoginTests: XCTestCase {
         XCTAssertTrue(editHomeserverButton.waitForExistence(timeout: 5.0))
         editHomeserverButton.tap()
         
-        let homeserverTextField = app.textFields[A11yIdentifiers.changeServer.server]
+        let homeserverTextField = app.textFields[A11yIdentifiers.changeServerScreen.server]
         XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 5.0))
         
         homeserverTextField.clearAndTypeText(app.homeserver)
                 
-        let confirmButton = app.buttons[A11yIdentifiers.changeServer.server]
+        let confirmButton = app.buttons[A11yIdentifiers.changeServerScreen.continue]
         XCTAssertTrue(confirmButton.exists)
         confirmButton.tap()
         
