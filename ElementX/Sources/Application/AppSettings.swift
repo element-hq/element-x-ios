@@ -49,6 +49,15 @@ final class AppSettings: ObservableObject {
     
     // MARK: - Application
     
+    lazy var canShowDeveloperOptions: Bool = {
+        #if DEBUG
+        true
+        #else
+        let apps = ["io.element.elementx.nightly", "io.element.elementx.pr"]
+        return apps.contains(InfoPlistReader.main.baseBundleIdentifier)
+        #endif
+    }()
+    
     /// The last known version of the app that was launched on this device, which is
     /// used to detect when migrations should be run. When `nil` the app may have been
     /// deleted between runs so should clear data in the shared container and keychain.
