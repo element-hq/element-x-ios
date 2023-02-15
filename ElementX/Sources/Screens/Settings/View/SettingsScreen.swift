@@ -21,7 +21,6 @@ struct SettingsScreen: View {
     @Environment(\.colorScheme) private var colorScheme
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
-    @ScaledMetric private var menuIconSize = 30.0
     
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
     

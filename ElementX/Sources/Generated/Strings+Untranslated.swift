@@ -20,6 +20,8 @@ extension ElementL10n {
   public static let bugReportScreenAttachScreenshot = ElementL10n.tr("Untranslated", "bug_report_screen_attach_screenshot")
   /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
   public static let bugReportScreenDescription = ElementL10n.tr("Untranslated", "bug_report_screen_description")
+  /// Edit Screenshot
+  public static let bugReportScreenEditScreenshot = ElementL10n.tr("Untranslated", "bug_report_screen_edit_screenshot")
   /// Send logs to help
   public static let bugReportScreenIncludeLogs = ElementL10n.tr("Untranslated", "bug_report_screen_include_logs")
   /// To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.

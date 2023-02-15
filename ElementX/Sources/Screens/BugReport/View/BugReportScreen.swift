@@ -56,8 +56,8 @@ struct BugReportScreen: View {
     var mainContent: some View {
         VStack(alignment: .leading, spacing: 24) {
             descriptionTextEditor
-            sendLogsToggle
             attachScreenshot
+            sendLogsToggle
         }
     }
     
@@ -88,7 +88,7 @@ struct BugReportScreen: View {
                 .stroke(Color.element.quaternaryContent)
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 300)
+        .frame(height: 220)
         .font(.body)
     }
     
@@ -111,27 +111,15 @@ struct BugReportScreen: View {
 
     @ViewBuilder
     private var attachScreenshot: some View {
-        if let screenshot = context.viewState.screenshot {
-            ZStack(alignment: .topTrailing) {
-                Image(uiImage: screenshot)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 100)
-                    .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
-                Button { context.send(viewAction: .removeScreenshot) } label: {
-                    Image(uiImage: Asset.Images.closeCircle.image)
-                }
-                .offset(x: 10, y: -10)
-                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.removeScreenshot)
-            }
-            .padding(.vertical, 16)
-            .padding(.horizontal, 16)
-        } else {
+        VStack(alignment: .leading, spacing: 16) {
             PhotosPicker(selection: $selectedScreenshot,
                          matching: .screenshots,
                          photoLibrary: .shared()) {
-                HStack {
-                    Text(ElementL10n.bugReportScreenAttachScreenshot)
+                HStack(spacing: 16) {
+                    Label(context.viewState.screenshot == nil ? ElementL10n.bugReportScreenAttachScreenshot : ElementL10n.bugReportScreenEditScreenshot, systemImage: "camera")
+                        .labelStyle(RowLabelStyle(titleColor: .element.primaryContent,
+                                                  iconColor: .element.secondaryContent,
+                                                  backgroundColor: .element.formBackground))
                     Spacer()
                 }
             }
@@ -139,6 +127,23 @@ struct BugReportScreen: View {
             .padding(.vertical, 11)
             .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.formRowBackground))
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)
+            if let screenshot = context.viewState.screenshot {
+                ZStack(alignment: .topTrailing) {
+                    Image(uiImage: screenshot)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 100)
+                        .cornerRadius(4)
+                        .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
+                    Button { context.send(viewAction: .removeScreenshot) } label: {
+                        Image(Asset.Images.closeCircle.name)
+                    }
+                    .offset(x: 10, y: -10)
+                    .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.removeScreenshot)
+                }
+                .padding(.vertical, 16)
+                .padding(.horizontal, 16)
+            }
         }
     }
     

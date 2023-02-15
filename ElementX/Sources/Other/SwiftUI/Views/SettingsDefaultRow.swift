@@ -26,7 +26,6 @@ struct SettingsDefaultRow: View {
     
     // MARK: Private
     
-    @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
     // MARK: Views
@@ -34,16 +33,14 @@ struct SettingsDefaultRow: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                image
-                    .foregroundColor(.element.systemGray)
-                    .padding(4)
-                    .background(Color.element.systemGray6)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .frame(width: menuIconSize, height: menuIconSize)
-                
-                Text(title)
-                    .font(.element.body)
-                    .foregroundColor(.element.primaryContent)
+                Label(title: {
+                    Text(title)
+                }, icon: {
+                    image
+                })
+                .labelStyle(RowLabelStyle(titleColor: .element.primaryContent,
+                                          iconColor: .element.systemGray,
+                                          backgroundColor: .element.systemGray6))
                 
                 Spacer()
                 

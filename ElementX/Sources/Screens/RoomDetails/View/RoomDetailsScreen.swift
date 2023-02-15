@@ -102,16 +102,10 @@ struct RoomDetailsScreen: View {
                 context.send(viewAction: .processTapPeople)
             } label: {
                 HStack {
-                    Image(systemName: "person")
-                        .foregroundColor(.element.secondaryContent)
-                        .padding(4)
-                        .background(Color.element.formBackground)
-                        .cornerRadius(8)
-                        .frame(width: menuIconSize, height: menuIconSize)
-                    
-                    Text(ElementL10n.bottomActionPeople)
-                        .foregroundColor(.element.primaryContent)
-                        .font(.body)
+                    Label(ElementL10n.bottomActionPeople, systemImage: "person")
+                        .labelStyle(RowLabelStyle(titleColor: .element.primaryContent,
+                                                  iconColor: .element.secondaryContent,
+                                                  backgroundColor: .element.formBackground))
                     
                     Spacer()
                     
