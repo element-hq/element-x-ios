@@ -138,7 +138,7 @@ struct BugReportScreen: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 11)
             .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.formRowBackground))
-            .accessibilityIdentifier("attachScreenshotButton")
+            .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)
         }
     }
     
