@@ -18,7 +18,7 @@ import SwiftUI
 
 struct SettingsRowLabelStyle: LabelStyle {
     @ScaledMetric private var menuIconSize = 30.0
-    let alignment: VerticalAlignment
+    private let alignment: VerticalAlignment
 
     init(alignment: VerticalAlignment = .center) {
         self.alignment = alignment
