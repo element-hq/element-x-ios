@@ -39,6 +39,10 @@ function_body_length:
   warning: 50
   error: 100
 
+nesting:
+  type_level:
+    warning: 5
+
 custom_rules:
   print_deprecation:
     regex: "\\b(print)\\b"

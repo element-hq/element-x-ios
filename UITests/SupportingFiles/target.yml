@@ -34,6 +34,7 @@ targets:
     - package: DTCoreText
     - package: KeychainAccess
     - package: Kingfisher
+    - package: KZFileWatchers
     - package: PostHog
     - package: SwiftyBeaver
     - package: SwiftState

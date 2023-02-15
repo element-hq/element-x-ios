@@ -32,12 +32,15 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     var timelineItems: [RoomTimelineItemProtocol] = RoomTimelineItemFixtures.default
     
-    private var connection: UITestsSignalling.Connection?
+    private var client: UITestsSignalling.Client?
     
     init(listenForSignals: Bool = false) {
-        if listenForSignals {
-            connection = .init()
-            Task { try await startListening() }
+        guard listenForSignals else { return }
+        
+        do {
+            try startListening()
+        } catch {
+            fatalError("Failure setting up signalling: \(error)")
         }
     }
     
@@ -70,20 +73,18 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     
     // MARK: - UI Test signalling
     
+    /// The cancellable used for UI Tests signalling.
+    private var signalCancellable: AnyCancellable?
+    
     /// Allows the simulation of server responses by listening for signals from UI tests.
-    private func startListening() async throws {
-        try await connection?.connect()
+    private func startListening() throws {
+        let client = try UITestsSignalling.Client(mode: .app)
         
-        Task {
-            while let connection {
-                do {
-                    try await handleSignal(connection.receive())
-                } catch {
-                    connection.disconnect()
-                    self.connection = nil
-                }
-            }
+        signalCancellable = client.signals.sink { [weak self] signal in
+            Task { try await self?.handleSignal(signal) }
         }
+        
+        self.client = client
     }
     
     /// Handles a UI test signal as necessary.
@@ -106,7 +107,7 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         timelineItems.append(incomingItem)
         callbacks.send(.updatedTimelineItems)
         
-        try? await connection?.send(.success)
+        try client?.send(.success)
     }
     
     /// Prepends the next chunk of items to the `timelineItems` array.
@@ -119,6 +120,6 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.updatedTimelineItems)
         callbacks.send(.isBackPaginating(false))
         
-        try? await connection?.send(.success)
+        try client?.send(.success)
     }
 }

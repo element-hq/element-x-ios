@@ -14,12 +14,13 @@
 // limitations under the License.
 //
 
-import Network
+import Combine
+import KZFileWatchers
 import SwiftUI
 
 enum UITestsSignal: String {
-    /// An internal signal used to bring up the connection.
-    case connect
+    /// An internal signal used to indicate that one side of the connection is ready.
+    case ready
     /// Ask the app to back paginate.
     case paginate
     /// Ask the app to simulate an incoming message.
@@ -28,211 +29,127 @@ enum UITestsSignal: String {
     case success
 }
 
-enum UITestsSignalError: Error {
-    /// An unknown error occurred.
-    case unknown
-    /// Signalling could not be used as is hasn't been enabled.
-    case disabled
-    /// The connection was cancelled.
-    case cancelled
-    /// The connection hasn't been established.
+enum UITestsSignalError: String, LocalizedError {
+    /// The app client failed to start as the tests client isn't ready.
+    case testsClientNotReady
+    /// Failed to send a signal as a connection hasn't been established.
     case notConnected
-    /// Attempted to receive multiple signals at once.
-    case awaitingAnotherSignal
-    /// Receiving the next signal timed out.
-    case timeout
-    /// A network error occurred.
-    case nwError(NWError)
-    /// An unexpected signal was received. This error isn't used internally.
-    case unexpected
+    
+    var errorDescription: String? { "UITestsSignalError.\(rawValue)" }
 }
 
 enum UITestsSignalling {
-    /// The Bonjour service name used for the connection. The device name
-    /// is included to allow UI tests to run on multiple devices simultaneously.
-    private static let serviceName = "UITestsSignalling \(UIDevice.current.name) (\(Locale.current.identifier))"
-    /// The Bonjour service type used for the connection.
-    private static let serviceType = "_signalling._udp."
-    /// The Bonjour domain used for the connection.
-    private static let domain = "local."
-    /// The DispatchQueue used for networking.
-    private static let queue: DispatchQueue = .main
-    
-    /// A network listener that can be used in the UI tests runner to create a two-way `Connection` with the app.
-    class Listener {
-        /// The underlying network listener.
-        private let listener: NWListener
-        
-        /// The established connection. This is stored in case the connection is established
-        /// before `connection()` is awaited and so the continuation is still `nil`.
-        private var establishedConnection: Connection?
-        /// The continuation to call when a connection is established.
-        private var connectionContinuation: CheckedContinuation<Connection, Error>?
-        
-        /// Creates a new signalling `Listener` and starts listening.
-        init() throws {
-            let service = NWListener.Service(name: UITestsSignalling.serviceName, type: UITestsSignalling.serviceType, domain: UITestsSignalling.domain)
-            listener = try NWListener(service: service, using: .udp)
-            listener.newConnectionHandler = { [weak self] nwConnection in
-                let connection = Connection(nwConnection: nwConnection)
-                nwConnection.start(queue: UITestsSignalling.queue)
-                nwConnection.stateUpdateHandler = { state in
-                    switch state {
-                    case .ready:
-                        connection.receiveNextMessage()
-                        self?.establishedConnection = connection
-                        self?.connectionContinuation?.resume(returning: connection)
-                    case .failed(let error):
-                        self?.connectionContinuation?.resume(with: .failure(error))
-                    default:
-                        break
-                    }
-                }
-                self?.listener.cancel() // Stop listening for connections when one is discovered.
-            }
-            listener.start(queue: UITestsSignalling.queue)
-        }
-        
-        /// Returns the negotiated `Connection` as and when it has been established.
-        func connection() async throws -> Connection {
-            guard listener.state == .setup else { throw UITestsSignalError.unknown }
-            if let establishedConnection {
-                return establishedConnection
-            }
-            return try await withCheckedThrowingContinuation { [weak self] continuation in
-                self?.connectionContinuation = continuation
-            }
-        }
-        
-        /// Stops the listening when a connection hasn't been established.
-        func cancel() {
-            listener.cancel()
-            if let connectionContinuation {
-                connectionContinuation.resume(throwing: UITestsSignalError.cancelled)
-                self.connectionContinuation = nil
-            }
-        }
-    }
-
-    /// A two-way UDP connection that can be used for signalling between the app and the UI tests runner.
+    /// A two-way file-based signalling client that can be used to signal between the app and the UI tests runner.
     /// The connection should be created as follows:
-    /// - Create a `Listener` in the UI tests before launching the app. This will automatically start listening for a connection.
-    /// - With in the App, create a `Connection` and call `connect()` to establish a connection.
-    /// - Await the `connection()` on the `Listener` when you need to send the signal.
-    /// - The two `Connection` objects can now be used for two-way signalling.
-    class Connection {
-        /// The underlying network connection.
-        private let connection: NWConnection
-        /// A continuation to call each time a signal is received.
-        private var nextMessageContinuation: CheckedContinuation<UITestsSignal, Error>?
-        /// A task to handle the timeout when receiving a signal.
-        private var nextMessageTimeoutTask: Task<Void, Never>? {
-            didSet {
-                oldValue?.cancel()
-            }
-        }
+    /// - Create a `Client` in `tests` mode in your UI tests before launching the app. It will start listening for signals.
+    /// - Within the app, create a `Client` in `app` mode. This will check that the tests are ready and echo back that the app is too.
+    /// - Call `waitForApp()` in the tests when you need to send the signal. This will suspend execution until the app has signalled it is ready.
+    /// - The two `Client` objects can now be used for two-way signalling.
+    class Client {
+        /// The file watcher responsible for receiving signals.
+        private let fileWatcher: FileWatcher.Local
         
-        /// Creates a new signalling `Connection`.
-        init() {
-            let endpoint = NWEndpoint.service(name: UITestsSignalling.serviceName,
-                                              type: UITestsSignalling.serviceType,
-                                              domain: UITestsSignalling.domain,
-                                              interface: nil)
-            connection = NWConnection(to: endpoint, using: .udp)
-        }
+        /// The file name used for the connection.
+        ///
+        /// The device name is included to allow UI tests to run on multiple devices simultaneously.
+        /// When using parallel execution, each execution will spawn a simulator clone with its own unique name.
+        private let fileURL = {
+            let directory = URL(filePath: "/Users/Shared")
+            let deviceName = (UIDevice.current.name).replacing(" ", with: "-")
+            return directory.appending(component: "UITestsSignalling-\(deviceName)")
+        }()
         
-        /// Creates a new signalling `Connection` from an established `NWConnection`.
-        fileprivate init(nwConnection: NWConnection) {
-            connection = nwConnection
-        }
+        /// A mode that defines the behaviour of the client.
+        enum Mode: String { case app, tests }
+        /// The mode that the client is using.
+        let mode: Mode
         
-        /// Attempts to establish a connection with a `Listener`.
-        func connect() async throws {
-            guard connection.state == .setup else { return }
+        /// A publisher the will be sent every time a new signal is received.
+        let signals = PassthroughSubject<UITestsSignal, Never>()
+        
+        /// Whether or not the client has established a connection.
+        private(set) var isConnected = false
+        
+        /// Creates a new signalling `Client`.
+        init(mode: Mode) throws {
+            fileWatcher = .init(path: fileURL.path())
+            self.mode = mode
             
-            return try await withCheckedThrowingContinuation { continuation in
-                connection.start(queue: UITestsSignalling.queue)
-                connection.stateUpdateHandler = { state in
-                    switch state {
-                    case .ready:
-                        self.receiveNextMessage()
-                        continuation.resume()
-                        Task { try await self.send(.connect) }
-                    case .failed(let error):
-                        continuation.resume(with: .failure(error))
-                    default:
-                        break
-                    }
-                }
+            switch mode {
+            case .tests:
+                // The tests client is started first and writes to the file saying it is ready.
+                try rawSignal(.ready).write(to: fileURL, atomically: false, encoding: .utf8)
+            case .app:
+                // The app client is started second and checks that there is a ready signal from the tests.
+                guard try String(contentsOf: fileURL) == "\(Mode.tests):\(UITestsSignal.ready)" else { throw UITestsSignalError.testsClientNotReady }
+                isConnected = true
+                // The app client then echoes back to the tests that it is now ready.
+                try send(.ready)
             }
-        }
-        
-        /// Stops the connection.
-        func disconnect() {
-            connection.cancel()
-            if let nextMessageContinuation {
-                nextMessageContinuation.resume(throwing: UITestsSignalError.cancelled)
-                self.nextMessageContinuation = nil
-                nextMessageTimeoutTask = nil
-            }
-        }
-        
-        /// Sends a message to the other side of the connection.
-        func send(_ signal: UITestsSignal) async throws {
-            guard connection.state == .ready else { throw UITestsSignalError.notConnected }
-            let data = signal.rawValue.data(using: .utf8)
-            connection.send(content: data, completion: .idempotent)
-        }
-        
-        /// Returns the next message received from the other side of the connection.
-        func receive() async throws -> UITestsSignal {
-            guard connection.state == .ready else { throw UITestsSignalError.notConnected }
-            guard nextMessageContinuation == nil else { throw UITestsSignalError.awaitingAnotherSignal }
             
-            return try await withCheckedThrowingContinuation { continuation in
-                self.nextMessageContinuation = continuation
-                
-                // Add a 30 second timeout to stop tests from hanging
-                self.nextMessageTimeoutTask = Task { [weak self] in
-                    guard let self else { return }
-                    try? await Task.sleep(for: .seconds(30))
-                    
-                    guard !Task.isCancelled,
-                          let nextMessageContinuation = self.nextMessageContinuation
-                    else { return }
-                    
-                    nextMessageContinuation.resume(throwing: UITestsSignalError.timeout)
-                    self.nextMessageContinuation = nil
-                    self.nextMessageTimeoutTask = nil
-                }
+            try fileWatcher.start { [weak self] result in
+                self?.handleFileRefresh(result)
             }
         }
         
-        /// Processes the next message received by the connection.
-        fileprivate func receiveNextMessage() {
-            connection.receiveMessage { [weak self] completeContent, _, isComplete, error in
-                guard let self else { return }
-                guard isComplete else { fatalError("Partial messages not supported") }
-                
-                guard let completeContent,
-                      let message = String(data: completeContent, encoding: .utf8),
-                      let signal = UITestsSignal(rawValue: message)
-                else {
-                    let error: UITestsSignalError = error.map { .nwError($0) } ?? .unknown
-                    self.nextMessageContinuation?.resume(with: .failure(error))
-                    self.nextMessageContinuation = nil
-                    self.nextMessageTimeoutTask = nil
-                    return
-                }
-                
-                if signal != .connect {
-                    self.nextMessageContinuation?.resume(returning: signal)
-                    self.nextMessageContinuation = nil
-                    self.nextMessageTimeoutTask = nil
-                }
-                
-                self.receiveNextMessage()
+        /// Suspends execution until the app's Client has signalled that it's ready.
+        func waitForApp() async {
+            guard mode == .tests else { fatalError("The app can't wait for itself.") }
+            
+            guard !isConnected else { return }
+            await _ = signals.values.first { $0 == .ready }
+            NSLog("UITestsSignalling: Connected to app.")
+        }
+
+        /// Stops listening for signals.
+        func stop() throws {
+            try fileWatcher.stop()
+        }
+
+        /// Sends a signal.
+        func send(_ signal: UITestsSignal) throws {
+            guard isConnected else { throw UITestsSignalError.notConnected }
+            
+            let rawSignal = rawSignal(signal)
+            try rawSignal.write(to: fileURL, atomically: false, encoding: .utf8)
+            NSLog("UITestsSignalling: Sent \(rawSignal)")
+        }
+        
+        /// The signal formatted as a string, prefixed with an identifier for the sender.
+        /// E.g. The tests client would produce `tests:ready` for the ready signal.
+        private func rawSignal(_ signal: UITestsSignal) -> String {
+            "\(mode.rawValue):\(signal.rawValue)"
+        }
+        
+        /// Handles a file refresh to receive a new signal.
+        fileprivate func handleFileRefresh(_ result: FileWatcher.RefreshResult) {
+            switch result {
+            case .noChanges:
+                guard let data = try? Data(contentsOf: fileURL) else { return }
+                processFileData(data)
+            case .updated(let data):
+                processFileData(data)
             }
+        }
+        
+        /// Processes string data from the file and publishes its signal.
+        private func processFileData(_ data: Data) {
+            guard let message = String(data: data, encoding: .utf8) else { return }
+            
+            let components = message.components(separatedBy: ":")
+            
+            guard components.count == 2,
+                  components[0] != mode.rawValue, // Filter out messages sent by this client.
+                  let signal = UITestsSignal(rawValue: components[1])
+            else { return }
+            
+            if signal == .ready {
+                isConnected = true
+            }
+            
+            signals.send(signal)
+            
+            NSLog("UITestsSignalling: Received \(message)")
         }
     }
 }
