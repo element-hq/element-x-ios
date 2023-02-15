@@ -18,11 +18,8 @@ import SwiftUI
 
 struct SettingsRowLabelStyle: LabelStyle {
     @ScaledMetric private var menuIconSize = 30.0
-    private let alignment: VerticalAlignment
-
-    init(alignment: VerticalAlignment = .center) {
-        self.alignment = alignment
-    }
+    
+    var alignment: VerticalAlignment = .firstTextBaseline
 
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: alignment, spacing: 16) {
