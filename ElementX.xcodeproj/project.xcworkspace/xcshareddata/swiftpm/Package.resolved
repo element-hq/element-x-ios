@@ -73,12 +73,21 @@
       }
     },
     {
+      "identity" : "kzfilewatchers",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/krzysztofzablocki/KZFileWatchers",
+      "state" : {
+        "branch" : "master",
+        "revision" : "d27a9557427d261adccdf4b566acc9d9c0fec6f4"
+      }
+    },
+    {
       "identity" : "matrix-analytics-events",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-analytics-events",
       "state" : {
-        "branch" : "main",
-        "revision" : "4bcc7f566b165cd2d8fde07d23bda77e1d9fbb2d"
+        "revision" : "94598bd8ef3aa2a3d3848c656c37d5e95b6b1cff",
+        "version" : "0.4.0"
       }
     },
     {
