@@ -18,13 +18,37 @@ import SwiftUI
 
 struct DeveloperOptionsScreenScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
+    @State private var showConfetti = false
     
     var body: some View {
-        Form { }
-            .scrollContentBackground(.hidden)
-            .background(Color.element.formBackground.ignoresSafeArea())
-            .navigationTitle(ElementL10n.settingsDeveloperOptions)
-            .navigationBarTitleDisplayMode(.inline)
+        Form {
+            Section {
+                Button {
+                    showConfetti = true
+                } label: {
+                    Text("🥳")
+                        .frame(maxWidth: .infinity)
+                }
+            }
+        }
+        .overlay(effectsView)
+        .scrollContentBackground(.hidden)
+        .background(Color.element.formBackground.ignoresSafeArea())
+        .navigationTitle(ElementL10n.settingsDeveloperOptions)
+        .navigationBarTitleDisplayMode(.inline)
+    }
+    
+    @ViewBuilder
+    private var effectsView: some View {
+        if showConfetti {
+            EffectsView(effect: .confetti)
+                .task { await removeConfettiAfterDelay() }
+        }
+    }
+    
+    private func removeConfettiAfterDelay() async {
+        try? await Task.sleep(for: .seconds(4))
+        showConfetti = false
     }
 }
 
