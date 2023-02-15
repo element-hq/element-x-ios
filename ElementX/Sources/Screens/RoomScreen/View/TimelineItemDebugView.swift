@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct TimelineItemDebugScreen: View {
+struct TimelineItemDebugView: View {
     struct DebugInfo: Identifiable {
         let id = UUID()
         let title: String

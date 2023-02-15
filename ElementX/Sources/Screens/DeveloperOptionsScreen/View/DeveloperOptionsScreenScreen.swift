@@ -30,6 +30,7 @@ struct DeveloperOptionsScreenScreen: View {
                         .frame(maxWidth: .infinity)
                 }
             }
+            .listRowBackground(Color.element.formRowBackground)
         }
         .overlay(effectsView)
         .scrollContentBackground(.hidden)

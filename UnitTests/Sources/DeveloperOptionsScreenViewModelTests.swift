@@ -19,34 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class DeveloperOptionsScreenScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
-    var viewModel: DeveloperOptionsScreenViewModelProtocol!
-    var context: DeveloperOptionsScreenViewModelType.Context!
-    
-    @MainActor override func setUpWithError() throws {
-        viewModel = DeveloperOptionsScreenViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-        context = viewModel.context
-    }
-
-    func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
-    }
-
-    func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
-    }
-}
+class DeveloperOptionsScreenViewModelTests: XCTestCase { }
