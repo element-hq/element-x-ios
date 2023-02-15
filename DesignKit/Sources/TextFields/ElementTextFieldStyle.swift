@@ -21,8 +21,9 @@ import SwiftUI
 public extension TextFieldStyle where Self == ElementTextFieldStyle {
     static func elementInput(labelText: String? = nil,
                              footerText: String? = nil,
-                             isError: Bool = false) -> ElementTextFieldStyle {
-        ElementTextFieldStyle(labelText: labelText, footerText: footerText, isError: isError)
+                             isError: Bool = false,
+                             accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
+        ElementTextFieldStyle(labelText: labelText, footerText: footerText, isError: isError, accessibilityIdentifier: accessibilityIdentifier)
     }
 }
 
@@ -38,6 +39,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     public let labelText: String?
     public let footerText: String?
     public let isError: Bool
+    public let accessibilityIdentifier: String?
     
     /// The color of the text field's border.
     private var borderColor: Color {
@@ -91,10 +93,11 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     ///   - labelText: The text shown in the label above the field.
     ///   - footerText: The text shown in the footer label below the field.
     ///   - isError: Whether or not the text field is currently in the error state.
-    public init(labelText: String? = nil, footerText: String? = nil, isError: Bool = false) {
+    public init(labelText: String? = nil, footerText: String? = nil, isError: Bool = false, accessibilityIdentifier: String? = nil) {
         self.labelText = labelText
         self.footerText = footerText
         self.isError = isError
+        self.accessibilityIdentifier = accessibilityIdentifier
     }
     
     public func _body(configuration: TextField<_Label>) -> some View {
@@ -128,8 +131,9 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                     textField.clearButtonMode = .whileEditing
                     textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder ?? "",
                                                                          attributes: [NSAttributedString.Key.foregroundColor: UIColor(placeholderColor)])
+                    textField.accessibilityIdentifier = accessibilityIdentifier
                 }
-            
+ 
             if let footerText {
                 Text(footerText)
                     .font(.element.caption1)

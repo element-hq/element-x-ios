@@ -86,7 +86,6 @@ struct SettingsScreen: View {
                                image: Image(systemName: "checkmark.shield")) {
                 context.send(viewAction: .sessionVerification)
             }
-            .accessibilityIdentifier("sessionVerificationButton")
         }
     }
     
@@ -147,7 +146,6 @@ struct SettingsScreen: View {
 
     private var doneButton: some View {
         Button(ElementL10n.done, action: close)
-            .accessibilityIdentifier("closeButton")
     }
 
     private func close() {

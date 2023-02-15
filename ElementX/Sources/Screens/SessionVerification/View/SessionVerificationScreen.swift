@@ -79,14 +79,12 @@ struct SessionVerificationScreen: View {
                 .font(.title2.bold())
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("titleLabel")
                 .padding(.bottom, 8)
 
             Text(context.viewState.message)
                 .font(.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.tertiaryContent)
-                .accessibilityIdentifier("detailLabel")
         }
     }
     
@@ -129,21 +127,20 @@ struct SessionVerificationScreen: View {
                 context.send(viewAction: .requestVerification)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("requestVerificationButton")
+            .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
         
         case .cancelled:
             Button(ElementL10n.globalRetry) {
                 context.send(viewAction: .restart)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("restartButton")
             
         case .verificationRequestAccepted:
             Button(ElementL10n.sessionVerificationStart) {
                 context.send(viewAction: .startSasVerification)
             }
             .buttonStyle(.elementAction(.xLarge))
-            .accessibilityIdentifier("sasVerificationStartButton")
+            .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.startSasVerification)
         
         case .showingChallenge:
             VStack(spacing: 30) {
@@ -151,13 +148,13 @@ struct SessionVerificationScreen: View {
                     Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
                 }
                 .buttonStyle(.elementAction(.xLarge))
-                .accessibilityIdentifier("challengeAcceptButton")
+                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 
                 Button(ElementL10n.verificationSasDoNotMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
-                .accessibilityIdentifier("challengeDeclineButton")
+                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
             }
             
         case .acceptingChallenge:
@@ -170,14 +167,14 @@ struct SessionVerificationScreen: View {
                     }
                 }
                 .buttonStyle(.elementAction(.xLarge))
-                .accessibilityIdentifier("challengeAcceptButton")
+                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 .disabled(true)
 
                 Button(ElementL10n.verificationSasDoNotMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
-                .accessibilityIdentifier("challengeDeclineButton")
+                .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.declineChallenge)
                 .disabled(true)
             }
 
@@ -193,7 +190,7 @@ struct SessionVerificationScreen: View {
                 context.send(viewAction: .close)
             }
             .foregroundColor(.element.accent)
-            .accessibilityIdentifier("closeButton")
+            .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.close)
         }
     }
     

@@ -38,7 +38,7 @@ struct HomeScreenRoomCell: View {
             .accessibilityElement(children: .combine)
         }
         .buttonStyle(HomeScreenRoomCellButtonStyle())
-        .accessibilityIdentifier("roomName:\(room.name)")
+        .accessibilityIdentifier(A11yIdentifiers.homeScreen.roomName(room.name))
         .overlay(alignment: .bottom) {
             Divider()
                 .frame(height: 0.5)
