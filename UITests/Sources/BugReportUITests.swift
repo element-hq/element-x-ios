@@ -33,7 +33,7 @@ class BugReportUITests: XCTestCase {
         let sendingLogsToggle = app.switches[A11yIdentifiers.bugReportScreen.sendLogs]
         XCTAssert(sendingLogsToggle.exists)
         XCTAssertFalse(sendingLogsToggle.isOn)
-        
+
         app.assertScreenshot(.bugReport, step: 1)
     }
 

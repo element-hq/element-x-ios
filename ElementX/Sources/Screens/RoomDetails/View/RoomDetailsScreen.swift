@@ -17,7 +17,6 @@
 import SwiftUI
 
 struct RoomDetailsScreen: View {
-    @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
     @ObservedObject var context: RoomDetailsViewModel.Context
@@ -102,16 +101,8 @@ struct RoomDetailsScreen: View {
                 context.send(viewAction: .processTapPeople)
             } label: {
                 HStack {
-                    Image(systemName: "person")
-                        .foregroundColor(.element.secondaryContent)
-                        .padding(4)
-                        .background(Color.element.formBackground)
-                        .cornerRadius(8)
-                        .frame(width: menuIconSize, height: menuIconSize)
-                    
-                    Text(ElementL10n.bottomActionPeople)
-                        .foregroundColor(.element.primaryContent)
-                        .font(.body)
+                    Label(ElementL10n.bottomActionPeople, systemImage: "person")
+                        .labelStyle(SettingsRowLabelStyle())
                     
                     Spacer()
                     
@@ -138,22 +129,17 @@ struct RoomDetailsScreen: View {
     private var securitySection: some View {
         Section {
             HStack(alignment: .top) {
-                Image(systemName: "lock.shield")
-                    .foregroundColor(.element.secondaryContent)
-                    .padding(4)
-                    .background(Color.element.formBackground)
-                    .cornerRadius(8)
-                    .frame(width: menuIconSize, height: menuIconSize)
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(ElementL10n.encryptionEnabled)
-                        .foregroundColor(.element.primaryContent)
-                        .font(.element.body)
-                    
-                    Text(ElementL10n.encryptionEnabledTileDescription)
-                        .foregroundColor(.element.secondaryContent)
-                        .font(.element.footnote)
-                }
+                Label(title: {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(ElementL10n.encryptionEnabled)
+                        Text(ElementL10n.encryptionEnabledTileDescription)
+                            .foregroundColor(.element.secondaryContent)
+                            .font(.element.footnote)
+                    }
+                }, icon: {
+                    Image(systemName: "lock.shield")
+                })
+                .labelStyle(SettingsRowLabelStyle(alignment: .top))
                 
                 Spacer()
                 

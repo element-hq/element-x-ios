@@ -32,6 +32,7 @@ struct A11yIdentifiers {
         let screenshot = "bug_report-screenshot"
         let removeScreenshot = "bug_report-remove_screenshot"
         let send = "bug_report-send"
+        let attachScreenshot = "bug-report-attach_screenshot"
     }
     
     struct ChangeServer {
