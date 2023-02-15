@@ -8,6 +8,7 @@ opt_in_rules:
   - force_unwrapping
   - private_action
   - explicit_init
+  - shorthand_optional_binding
 
 included:
   - ElementX

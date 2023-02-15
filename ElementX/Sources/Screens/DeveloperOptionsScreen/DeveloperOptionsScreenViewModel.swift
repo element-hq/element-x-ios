@@ -14,24 +14,14 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+import SwiftUI
 
-@MainActor
-class UserSessionScreenTests: XCTestCase {
-    func testUserSessionFlows() async throws {
-        let roomName = "First room"
-        
-        let app = Application.launch(.userSessionScreen)
+typealias DeveloperOptionsScreenViewModelType = StateStoreViewModel<DeveloperOptionsScreenViewState, DeveloperOptionsScreenViewAction>
 
-        app.assertScreenshot(.userSessionScreen, step: 1)
-        
-        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
-        
-        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
-        
-        try await Task.sleep(for: .seconds(1))
-    
-        app.assertScreenshot(.userSessionScreen, step: 2)
+class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, DeveloperOptionsScreenViewModelProtocol {
+    var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
+
+    init() {
+        super.init(initialViewState: DeveloperOptionsScreenViewState(bindings: DeveloperOptionsScreenViewStateBindings()))
     }
 }

@@ -18,7 +18,6 @@ import SwiftUI
 
 struct SettingsScreen: View {
     @State private var showingLogoutConfirmation = false
-    @Environment(\.colorScheme) private var colorScheme
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     @ScaledMetric private var menuIconSize = 30.0
@@ -39,6 +38,11 @@ struct SettingsScreen: View {
             
             simplifiedSection
                 .listRowBackground(Color.element.formRowBackground)
+            
+            if context.viewState.showDeveloperOptions {
+                developerOptionsSection
+                    .listRowBackground(Color.element.formRowBackground)
+            }
             
             signOutSection
                 .listRowBackground(Color.element.formRowBackground)
@@ -85,6 +89,15 @@ struct SettingsScreen: View {
             SettingsDefaultRow(title: ElementL10n.settingsSessionVerification,
                                image: Image(systemName: "checkmark.shield")) {
                 context.send(viewAction: .sessionVerification)
+            }
+        }
+    }
+    
+    private var developerOptionsSection: some View {
+        Section {
+            SettingsDefaultRow(title: ElementL10n.settingsDeveloperOptions,
+                               image: Image(systemName: "hammer.circle")) {
+                context.send(viewAction: .developerOptions)
             }
             .accessibilityIdentifier("sessionVerificationButton")
         }
@@ -147,7 +160,6 @@ struct SettingsScreen: View {
 
     private var doneButton: some View {
         Button(ElementL10n.done, action: close)
-            .accessibilityIdentifier("closeButton")
     }
 
     private func close() {

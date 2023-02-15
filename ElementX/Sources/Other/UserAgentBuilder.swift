@@ -31,39 +31,31 @@ final class UserAgentBuilder {
         let clientVersion = InfoPlistReader.main.bundleShortVersionString
 
         #if os(iOS)
-        return String(
-            format: "%@/%@ (%@; iOS %@; Scale/%0.2f)",
-            clientName,
-            clientVersion,
-            Device.current.safeDescription,
-            UIDevice.current.systemVersion,
-            UIScreen.main.scale
-        )
+        return String(format: "%@/%@ (%@; iOS %@; Scale/%0.2f)",
+                      clientName,
+                      clientVersion,
+                      Device.current.safeDescription,
+                      UIDevice.current.systemVersion,
+                      UIScreen.main.scale)
         #elseif os(tvOS)
-        return String(
-            format: "%@/%@ (%@; tvOS %@; Scale/%0.2f)",
-            clientName,
-            clientVersion,
-            Device.current.safeDescription,
-            UIDevice.current.systemVersion,
-            UIScreen.main.scale
-        )
+        return String(format: "%@/%@ (%@; tvOS %@; Scale/%0.2f)",
+                      clientName,
+                      clientVersion,
+                      Device.current.safeDescription,
+                      UIDevice.current.systemVersion,
+                      UIScreen.main.scale)
         #elseif os(watchOS)
-        return String(
-            format: "%@/%@ (%@; watchOS %@; Scale/%0.2f)",
-            clientName,
-            clientVersion,
-            Device.current.safeDescription,
-            WKInterfaceDevice.current.systemVersion,
-            WKInterfaceDevice.currentDevice.screenScale
-        )
+        return String(format: "%@/%@ (%@; watchOS %@; Scale/%0.2f)",
+                      clientName,
+                      clientVersion,
+                      Device.current.safeDescription,
+                      WKInterfaceDevice.current.systemVersion,
+                      WKInterfaceDevice.currentDevice.screenScale)
         #elseif os(OSX)
-        return String(
-            format: "%@/%@ (Mac; Mac OS X %@)",
-            clientName,
-            clientVersion,
-            NSProcessInfo.processInfo.operatingSystemVersionString
-        )
+        return String(format: "%@/%@ (Mac; Mac OS X %@)",
+                      clientName,
+                      clientVersion,
+                      NSProcessInfo.processInfo.operatingSystemVersionString)
         #else
         return nil
         #endif

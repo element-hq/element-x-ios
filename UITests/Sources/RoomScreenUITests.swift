@@ -22,8 +22,8 @@ class RoomScreenUITests: XCTestCase {
     func testPlainNoAvatar() {
         let app = Application.launch(.roomPlainNoAvatar)
 
-        XCTAssert(app.staticTexts["roomNameLabel"].exists)
-        XCTAssert(app.staticTexts["roomAvatarImage"].exists)
+        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].exists)
+        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.avatar].exists)
 
         app.assertScreenshot(.roomPlainNoAvatar)
     }
@@ -31,8 +31,8 @@ class RoomScreenUITests: XCTestCase {
     func testEncryptedWithAvatar() {
         let app = Application.launch(.roomEncryptedWithAvatar)
 
-        XCTAssert(app.staticTexts["roomNameLabel"].exists)
-        XCTAssert(app.images["roomAvatarImage"].waitForExistence(timeout: 1))
+        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.name].exists)
+        XCTAssert(app.images[A11yIdentifiers.roomScreen.avatar].waitForExistence(timeout: 1))
 
         app.assertScreenshot(.roomEncryptedWithAvatar)
     }

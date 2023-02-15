@@ -38,46 +38,41 @@ class LoginTests: XCTestCase {
     private func runLoginLogoutFlow() {
         let app = Application.launch()
         
-        let getStartedButton = app.buttons["Get started"]
+        let getStartedButton = app.buttons[A11yIdentifiers.onboardingScreen.signIn]
         
         XCTAssertTrue(getStartedButton.waitForExistence(timeout: 5.0))
         getStartedButton.tap()
         
-        let editHomeserverButton = app.buttons["editServerButton"]
+        let editHomeserverButton = app.buttons[A11yIdentifiers.loginScreen.changeServer]
         XCTAssertTrue(editHomeserverButton.waitForExistence(timeout: 5.0))
         editHomeserverButton.tap()
         
-        let homeserverTextField = app.textFields["addressTextField"]
+        let homeserverTextField = app.textFields[A11yIdentifiers.changeServerScreen.server]
         XCTAssertTrue(homeserverTextField.waitForExistence(timeout: 5.0))
         
         homeserverTextField.clearAndTypeText(app.homeserver)
-        
-        let slidingSyncTextField = app.textFields["slidingSyncProxyAddressTextField"]
-        XCTAssertTrue(slidingSyncTextField.waitForExistence(timeout: 5.0))
-        
-        slidingSyncTextField.clearAndTypeText(app.homeserver)
-        
-        let confirmButton = app.buttons["confirmButton"]
+                
+        let confirmButton = app.buttons[A11yIdentifiers.changeServerScreen.continue]
         XCTAssertTrue(confirmButton.exists)
         confirmButton.tap()
         
-        let usernameTextField = app.textFields["usernameTextField"]
+        let usernameTextField = app.textFields[A11yIdentifiers.loginScreen.emailUsername]
         XCTAssertTrue(usernameTextField.exists)
         
         usernameTextField.clearAndTypeText(app.username)
         
-        let passwordTextField = app.secureTextFields["passwordTextField"]
+        let passwordTextField = app.secureTextFields[A11yIdentifiers.loginScreen.password]
         XCTAssertTrue(passwordTextField.exists)
         
         passwordTextField.clearAndTypeText(app.password)
         
-        let nextButton = app.buttons["nextButton"]
+        let nextButton = app.buttons[A11yIdentifiers.loginScreen.continue]
         XCTAssertTrue(nextButton.exists)
         XCTAssertTrue(nextButton.isEnabled)
         
         nextButton.tap()
         
-        let profileButton = app.buttons["userAvatarImage"]
+        let profileButton = app.buttons[A11yIdentifiers.homeScreen.userAvatar]
         XCTAssertTrue(profileButton.waitForExistence(timeout: expectedDuration))
         profileButton.tap()
         

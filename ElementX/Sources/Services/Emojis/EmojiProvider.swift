@@ -40,7 +40,7 @@ class EmojiProvider: EmojiProviderProtocol {
     
     func getCategories(searchString: String? = nil) async -> [EmojiCategory] {
         let emojiCategories = await loadIfNeeded()
-        if let searchString = searchString, searchString.isEmpty == false {
+        if let searchString, searchString.isEmpty == false {
             return search(searchString: searchString, emojiCategories: emojiCategories)
         } else {
             return emojiCategories

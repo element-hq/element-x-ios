@@ -24,7 +24,7 @@ struct UserIndicatorModalView: View {
     var body: some View {
         ZStack {
             VStack(spacing: 12.0) {
-                if let progressFraction = progressFraction {
+                if let progressFraction {
                     ProgressView(value: progressFraction)
                 } else {
                     ProgressView()

@@ -229,7 +229,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             actions.append(.redact)
         }
         
-        var debugActions: [TimelineItemContextMenuAction] = [.viewSource]
+        var debugActions: [TimelineItemContextMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
         
         if let item = timelineItem as? EncryptedRoomTimelineItem,
            case let .megolmV1AesSha2(sessionID) = item.encryptionType {

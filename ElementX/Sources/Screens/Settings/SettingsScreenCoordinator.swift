@@ -52,6 +52,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
                 self.presentBugReportScreen()
             case .sessionVerification:
                 self.verifySession()
+            case .developerOptions:
+                self.presentDeveloperOptions()
             case .logout:
                 self.callback?(.logout)
             }
@@ -109,6 +111,11 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         parameters.navigationStackCoordinator?.setSheetCoordinator(coordinator) { [weak self] in
             self?.parameters.navigationStackCoordinator?.setSheetCoordinator(nil)
         }
+    }
+    
+    private func presentDeveloperOptions() {
+        let coordinator = DeveloperOptionsScreenCoordinator()
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
 
     private func showSuccess(label: String) {

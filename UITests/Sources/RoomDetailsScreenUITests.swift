@@ -21,14 +21,14 @@ class RoomDetailsScreenUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch(.roomDetailsScreen)
         
-        XCTAssert(app.staticTexts["roomAvatarImage"].exists)
+        XCTAssert(app.staticTexts[A11yIdentifiers.roomScreen.avatar].exists)
         app.assertScreenshot(.roomDetailsScreen)
     }
 
     func testInitialStateComponentsWithRoomAvatar() {
         let app = Application.launch(.roomDetailsScreenWithRoomAvatar)
 
-        XCTAssert(app.images["roomAvatarImage"].waitForExistence(timeout: 1))
+        XCTAssert(app.images[A11yIdentifiers.roomScreen.avatar].waitForExistence(timeout: 1))
         app.assertScreenshot(.roomDetailsScreenWithRoomAvatar)
     }
 }

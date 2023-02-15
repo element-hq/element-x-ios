@@ -14,24 +14,10 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+import Foundation
 
 @MainActor
-class UserSessionScreenTests: XCTestCase {
-    func testUserSessionFlows() async throws {
-        let roomName = "First room"
-        
-        let app = Application.launch(.userSessionScreen)
-
-        app.assertScreenshot(.userSessionScreen, step: 1)
-        
-        app.buttons[A11yIdentifiers.homeScreen.roomName(roomName)].tap()
-        
-        XCTAssert(app.staticTexts[roomName].waitForExistence(timeout: 5.0))
-        
-        try await Task.sleep(for: .seconds(1))
-    
-        app.assertScreenshot(.userSessionScreen, step: 2)
-    }
+protocol DeveloperOptionsScreenViewModelProtocol {
+    var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)? { get set }
+    var context: DeveloperOptionsScreenViewModelType.Context { get }
 }
