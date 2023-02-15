@@ -25,8 +25,8 @@ class LoginScreenUITests: XCTestCase {
         app.assertScreenshot(.login)
         
         // When typing in a username and password.
-        app.textFields["usernameTextField"].clearAndTypeText("@test:matrix.org")
-        app.secureTextFields["passwordTextField"].clearAndTypeText("12345678")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:matrix.org")
+        app.secureTextFields[A11yIdentifiers.loginScreen.password].clearAndTypeText("12345678")
         
         // Then the form should be ready to submit.
         app.assertScreenshot(.login, step: 0)
@@ -37,7 +37,7 @@ class LoginScreenUITests: XCTestCase {
         let app = Application.launch(.login)
         
         // When entering a username on a homeserver that only supports OIDC.
-        app.textFields["usernameTextField"].clearAndTypeText("@test:company.com\n")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:company.com\n")
         
         // Then the screen should be configured for OIDC.
         app.assertScreenshot(.login, step: 1)
@@ -48,7 +48,7 @@ class LoginScreenUITests: XCTestCase {
         let app = Application.launch(.login)
         
         // When entering a username on a homeserver with an unsupported flow.
-        app.textFields["usernameTextField"].clearAndTypeText("@test:server.net\n")
+        app.textFields[A11yIdentifiers.loginScreen.emailUsername].clearAndTypeText("@test:server.net\n")
         
         // Then the screen should not allow login to continue.
         app.assertScreenshot(.login, step: 2)

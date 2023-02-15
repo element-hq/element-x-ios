@@ -56,7 +56,6 @@ struct EmojiPickerScreen: View {
             Button { context.send(viewAction: .dismiss) } label: {
                 Text(ElementL10n.actionCancel)
             }
-            .accessibilityIdentifier("dismissButton")
         }
     }
 }

@@ -29,14 +29,14 @@ class SoftLogoutUITests: XCTestCase {
     func testInitialState() {
         app = Application.launch(.softLogout)
         
-        XCTAssertTrue(app.staticTexts["titleLabel"].exists, "The title should be shown.")
-        XCTAssertTrue(app.staticTexts["messageLabel1"].exists, "The message 1 should be shown.")
-        XCTAssertTrue(app.staticTexts["clearDataTitleLabel"].exists, "The clear data title should be shown.")
-        XCTAssertTrue(app.staticTexts["clearDataMessageLabel"].exists, "The clear data message should be shown.")
-        XCTAssertTrue(app.secureTextFields["passwordTextField"].exists, "The password text field should be shown.")
-        XCTAssertTrue(app.buttons["nextButton"].exists, "The next button should be shown.")
-        XCTAssertTrue(app.buttons["forgotPasswordButton"].exists, "The forgot password button should be shown.")
-        XCTAssertTrue(app.buttons["clearDataButton"].exists, "The clear data button should be shown.")
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.softLogoutScreen.title].exists, "The title should be shown.")
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.softLogoutScreen.message].exists, "The message 1 should be shown.")
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.softLogoutScreen.clearDataTitle].exists, "The clear data title should be shown.")
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.softLogoutScreen.clearDataMessage].exists, "The clear data message should be shown.")
+        XCTAssertTrue(app.secureTextFields[A11yIdentifiers.softLogoutScreen.password].exists, "The password text field should be shown.")
+        XCTAssertTrue(app.buttons[A11yIdentifiers.softLogoutScreen.next].exists, "The next button should be shown.")
+        XCTAssertTrue(app.buttons[A11yIdentifiers.softLogoutScreen.forgotPassword].exists, "The forgot password button should be shown.")
+        XCTAssertTrue(app.buttons[A11yIdentifiers.softLogoutScreen.clearData].exists, "The clear data button should be shown.")
 
         app.assertScreenshot(.softLogout)
     }
