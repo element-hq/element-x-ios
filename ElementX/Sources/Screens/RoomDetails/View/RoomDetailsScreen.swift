@@ -139,7 +139,7 @@ struct RoomDetailsScreen: View {
                 }, icon: {
                     Image(systemName: "lock.shield")
                 })
-                .labelStyle(SettingsRowLabelStyle())
+                .labelStyle(SettingsRowLabelStyle(alignment: .top))
                 
                 Spacer()
                 
