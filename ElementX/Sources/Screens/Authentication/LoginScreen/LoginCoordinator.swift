@@ -205,7 +205,7 @@ final class LoginCoordinator: CoordinatorProtocol {
         
         let coordinator = ServerSelectionCoordinator(parameters: parameters)
         coordinator.callback = { [weak self, weak coordinator] action in
-            guard let self, let coordinator = coordinator else { return }
+            guard let self, let coordinator else { return }
             self.serverSelectionCoordinator(coordinator, didCompleteWith: action)
         }
         
