@@ -33,6 +33,8 @@
 "room_timeline_image_gif" = "GIF";
 "room_timeline_read_marker_title" = "New";
 
+"room_timeline_state_changes" = "%d room changes";
+
 "noticeRoomInviteAccepted" = "%1$@ accepted the invite";
 "noticeRoomInviteAcceptedByYou" = "You accepted the invite";
 "noticeRoomKnock" = "%1$@ requested to join";

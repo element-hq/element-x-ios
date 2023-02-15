@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Algorithms
 import Combine
 import SwiftUI
 
@@ -27,15 +28,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
 
     private let timelineController: RoomTimelineControllerProtocol
-    private let timelineViewFactory: RoomTimelineViewFactoryProtocol
     
     init(timelineController: RoomTimelineControllerProtocol,
-         timelineViewFactory: RoomTimelineViewFactoryProtocol,
          mediaProvider: MediaProviderProtocol,
          roomName: String?,
          roomAvatarUrl: URL? = nil) {
         self.timelineController = timelineController
-        self.timelineViewFactory = timelineViewFactory
         
         super.init(initialViewState: RoomScreenViewState(roomId: timelineController.roomID,
                                                          roomTitle: roomName ?? "Unknown room 💥",
@@ -52,13 +50,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 switch callback {
                 case .updatedTimelineItems:
                     self.buildTimelineViews()
-                case .updatedTimelineItem(let itemId):
-                    guard let timelineItem = self.timelineController.timelineItems.first(where: { $0.id == itemId }),
-                          let viewIndex = self.state.items.firstIndex(where: { $0.id == itemId }) else {
-                        return
-                    }
-                    
-                    self.state.items[viewIndex] = timelineViewFactory.buildTimelineViewFor(timelineItem: timelineItem)
                 case .canBackPaginate(let canBackPaginate):
                     if self.state.canBackPaginate != canBackPaginate {
                         self.state.canBackPaginate = canBackPaginate
@@ -161,13 +152,57 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     }
     
     private func buildTimelineViews() {
-        let stateItems = timelineController.timelineItems.map { item in
-            timelineViewFactory.buildTimelineViewFor(timelineItem: item)
+        var timelineViews = [RoomTimelineViewProvider]()
+        
+        let itemsGroupedByTimelineDisplayStyle = timelineController.timelineItems.chunked { current, next in
+            canGroupItem(timelineItem: current, with: next)
         }
         
-        state.items = stateItems
+        for itemGroup in itemsGroupedByTimelineDisplayStyle {
+            guard !itemGroup.isEmpty else {
+                MXLog.error("Found empty item group")
+                continue
+            }
+            
+            if itemGroup.count == 1 {
+                if let firstItem = itemGroup.first {
+                    timelineViews.append(RoomTimelineViewProvider(timelineItem: firstItem, grouping: .single))
+                }
+            } else {
+                for (index, item) in itemGroup.enumerated() {
+                    if index == 0 {
+                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, grouping: .first))
+                    } else if index == itemGroup.count - 1 {
+                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, grouping: .last))
+                    } else {
+                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, grouping: .middle))
+                    }
+                }
+            }
+        }
+        
+        state.items = timelineViews
     }
-    
+        
+    private func canGroupItem(timelineItem: RoomTimelineItemProtocol, with otherTimelineItem: RoomTimelineItemProtocol) -> Bool {
+        if timelineItem is CollapsibleTimelineItem || otherTimelineItem is CollapsibleTimelineItem {
+            return false
+        }
+        
+        guard let eventTimelineItem = timelineItem as? EventBasedTimelineItemProtocol,
+              let otherEventTimelineItem = otherTimelineItem as? EventBasedTimelineItemProtocol else {
+            return false
+        }
+        
+        // State events aren't rendered as messages so shouldn't be grouped.
+        if eventTimelineItem is StateRoomTimelineItem || otherEventTimelineItem is StateRoomTimelineItem {
+            return false
+        }
+        
+        //  can be improved by adding a date threshold
+        return otherEventTimelineItem.properties.reactions.isEmpty && eventTimelineItem.sender == otherEventTimelineItem.sender
+    }
+
     private func sendCurrentMessage() async {
         guard !state.bindings.composerText.isEmpty else {
             fatalError("This message should never be empty")
@@ -298,7 +333,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
 
 extension RoomScreenViewModel {
     static let mock = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                          timelineViewFactory: RoomTimelineViewFactory(),
                                           mediaProvider: MockMediaProvider(),
                                           roomName: "Preview room")
 }

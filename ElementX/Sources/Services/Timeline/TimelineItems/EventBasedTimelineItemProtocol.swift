@@ -17,27 +17,9 @@
 import Foundation
 import UIKit
 
-enum TimelineItemGroupState: Hashable {
-    case single
-    case beginning
-    case middle
-    case end
-
-    var shouldShowSenderDetails: Bool {
-        switch self {
-        case .single, .beginning:
-            return true
-        default:
-            return false
-        }
-    }
-}
-
 protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringConvertible {
     var body: String { get }
     var timestamp: String { get }
-    var shouldShowSenderDetails: Bool { get }
-    var groupState: TimelineItemGroupState { get }
     var isOutgoing: Bool { get }
     var isEditable: Bool { get }
     
@@ -47,31 +29,6 @@ protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringC
 }
 
 extension EventBasedTimelineItemProtocol {
-    var shouldShowSenderDetails: Bool {
-        groupState.shouldShowSenderDetails
-    }
-    
-    var roundedCorners: UIRectCorner {
-        switch groupState {
-        case .single:
-            return .allCorners
-        case .beginning:
-            if isOutgoing {
-                return [.topLeft, .topRight, .bottomLeft]
-            } else {
-                return [.topLeft, .topRight, .bottomRight]
-            }
-        case .middle:
-            return isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
-        case .end:
-            if isOutgoing {
-                return [.topLeft, .bottomLeft, .bottomRight]
-            } else {
-                return [.topRight, .bottomLeft, .bottomRight]
-            }
-        }
-    }
-
     var description: String {
         "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
     }

@@ -45,7 +45,6 @@ struct AudioRoomTimelineView_Previews: PreviewProvider {
         AudioRoomTimelineView(timelineItem: AudioRoomTimelineItem(id: UUID().uuidString,
                                                                   body: "audio.ogg",
                                                                   timestamp: "Now",
-                                                                  groupState: .single,
                                                                   isOutgoing: false,
                                                                   isEditable: false,
                                                                   sender: .init(id: "Bob"),

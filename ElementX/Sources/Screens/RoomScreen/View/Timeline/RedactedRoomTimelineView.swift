@@ -45,7 +45,6 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider {
         RedactedRoomTimelineItem(id: UUID().uuidString,
                                  body: text,
                                  timestamp: timestamp,
-                                 groupState: .single,
                                  isOutgoing: false,
                                  isEditable: false,
                                  sender: .init(id: senderId))

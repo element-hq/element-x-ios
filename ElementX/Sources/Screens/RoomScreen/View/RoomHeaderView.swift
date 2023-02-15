@@ -58,7 +58,6 @@ struct RoomHeaderView_Previews: PreviewProvider {
     @ViewBuilder
     static var bodyPlain: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                            timelineViewFactory: RoomTimelineViewFactory(),
                                             mediaProvider: MockMediaProvider(),
                                             roomName: "Some Room name",
                                             roomAvatarUrl: URL.picturesDirectory)
@@ -67,11 +66,10 @@ struct RoomHeaderView_Previews: PreviewProvider {
             .previewLayout(.sizeThatFits)
             .padding()
     }
-
+    
     @ViewBuilder
     static var bodyEncrypted: some View {
         let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                            timelineViewFactory: RoomTimelineViewFactory(),
                                             mediaProvider: MockMediaProvider(),
                                             roomName: "Some Room name",
                                             roomAvatarUrl: nil)

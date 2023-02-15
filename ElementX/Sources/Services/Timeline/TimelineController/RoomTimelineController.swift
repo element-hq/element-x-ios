@@ -230,61 +230,30 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         updateTimelineItems()
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
         var isBackPaginating = false
         
         var createdIdentifiers = [String: Bool]()
-
-        for (index, itemProxy) in timelineProvider.itemsPublisher.value.enumerated() {
-            if Task.isCancelled {
-                return
-            }
-
-            let previousItemProxy = timelineProvider.itemsPublisher.value[safe: index - 1]
-            let nextItemProxy = timelineProvider.itemsPublisher.value[safe: index + 1]
-
-            let groupState = computeGroupState(for: itemProxy, previousItemProxy: previousItemProxy, nextItemProxy: nextItemProxy)
-            
-            switch itemProxy {
-            case .event(let eventItemProxy):
-                if let timelineItem = timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy, groupState: groupState) {
-                    #warning("This works around duplicated items coming out of the SDK, remove once fixed")
-                    if createdIdentifiers[timelineItem.id] == nil {
-                        newTimelineItems.append(timelineItem)
-                        createdIdentifiers[timelineItem.id] = true
-                    } else {
-                        MXLog.error("Found duplicated timeline item, ignoring")
-                    }
-                }
-            case .virtual(let virtualItem):
-                switch virtualItem {
-                case .dayDivider(let timestamp):
-                    // These components will be replaced by a timestamp in upcoming releases
-                    let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-                    let dateString = date.formatted(date: .complete, time: .omitted)
-                    newTimelineItems.append(SeparatorRoomTimelineItem(text: dateString))
-                case .readMarker:
-                    // Don't show the read marker if it's the last item in the timeline
-                    if index != timelineProvider.itemsPublisher.value.indices.last {
-                        newTimelineItems.append(ReadMarkerRoomTimelineItem())
-                    }
-                case .loadingIndicator:
-                    newTimelineItems.append(PaginationIndicatorRoomTimelineItem())
-                    isBackPaginating = true
-                case .timelineStart:
-                    newTimelineItems.append(TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name))
-                    canBackPaginate = false
-                }
-            default:
-                break
-            }
-        }
         
-        if Task.isCancelled {
-            return
+        let collapsibleChunks = timelineProvider.itemsPublisher.value.groupBy { isItemCollapsible($0) }
+        
+        for (index, itemGroup) in collapsibleChunks.enumerated() {
+            if itemGroup.count == 1, let itemProxy = itemGroup.first {
+                let isLastItem = index == collapsibleChunks.indices.last
+                if let item = buildTimelineItemFor(itemProxy: itemProxy, isLastItem: isLastItem, createdIdentifiers: &createdIdentifiers, isBackPaginating: &isBackPaginating, canBackPaginate: &canBackPaginate) {
+                    newTimelineItems.append(item)
+                }
+            } else {
+                let items = itemGroup.compactMap { itemProxy in
+                    buildTimelineItemFor(itemProxy: itemProxy, isLastItem: false, createdIdentifiers: &createdIdentifiers, isBackPaginating: &isBackPaginating, canBackPaginate: &canBackPaginate)
+                }
+                
+                if !items.isEmpty {
+                    newTimelineItems.append(CollapsibleTimelineItem(items: items))
+                }
+            }
         }
 
         timelineItems = newTimelineItems
@@ -294,49 +263,63 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func computeGroupState(for itemProxy: TimelineItemProxy,
-                                   previousItemProxy: TimelineItemProxy?,
-                                   nextItemProxy: TimelineItemProxy?) -> TimelineItemGroupState {
-        guard let previousItem = previousItemProxy else {
-            //  no previous item, check next item
-            guard let nextItem = nextItemProxy else {
-                //  no next item neither, this is single
-                return .single
+    private func buildTimelineItemFor(itemProxy: TimelineItemProxy,
+                                      isLastItem: Bool,
+                                      createdIdentifiers: inout [String: Bool],
+                                      isBackPaginating: inout Bool,
+                                      canBackPaginate: inout Bool) -> RoomTimelineItemProtocol? {
+        switch itemProxy {
+        case .event(let eventItemProxy):
+            if let timelineItem = timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy) {
+                #warning("This works around duplicated items coming out of the SDK, remove once fixed")
+                if createdIdentifiers[timelineItem.id] == nil {
+                    createdIdentifiers[timelineItem.id] = true
+                    return timelineItem
+                } else {
+                    MXLog.error("Found duplicated timeline item, ignoring")
+                }
             }
-            guard nextItem.canBeGrouped(with: itemProxy) else {
-                //  there is a next item but can't be grouped, this is single
-                return .single
+        case .virtual(let virtualItem):
+            switch virtualItem {
+            case .dayDivider(let timestamp):
+                // These components will be replaced by a timestamp in upcoming releases
+                let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+                let dateString = date.formatted(date: .complete, time: .omitted)
+                return SeparatorRoomTimelineItem(text: dateString)
+            case .readMarker:
+                // Don't show the read marker if it's the last item in the timeline
+                if !isLastItem {
+                    return ReadMarkerRoomTimelineItem()
+                }
+            case .loadingIndicator:
+                isBackPaginating = true
+                return PaginationIndicatorRoomTimelineItem()
+            case .timelineStart:
+                canBackPaginate = false
+                return TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
             }
-            //  next will be grouped with this one, this is the start
-            return .beginning
+        case .unknown:
+            return nil
         }
-
-        guard let nextItem = nextItemProxy else {
-            //  no next item
-            guard itemProxy.canBeGrouped(with: previousItem) else {
-                //  there is a previous item but can't be grouped, this is single
-                return .single
+        
+        return nil
+    }
+    
+    private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
+        if !ServiceLocator.shared.settings.shouldCollapseRoomStateEvents {
+            return false
+        }
+        
+        if case let .event(eventItem) = item {
+            switch eventItem.content.kind() {
+            case .profileChange, .roomMembership, .state:
+                return true
+            default:
+                return false
             }
-            //  will be grouped with previous, this is the end
-            return .end
         }
-
-        guard itemProxy.canBeGrouped(with: previousItem) else {
-            guard nextItem.canBeGrouped(with: itemProxy) else {
-                //  there is a next item but can't be grouped, this is single
-                return .single
-            }
-            //  next will be grouped with this one, this is the start
-            return .beginning
-        }
-
-        guard nextItem.canBeGrouped(with: itemProxy) else {
-            //  there is a next item but can't be grouped, this is the end
-            return .end
-        }
-
-        //  next will be grouped with this one, this is the start
-        return .middle
+        
+        return false
     }
     
     private func loadVideoForTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
