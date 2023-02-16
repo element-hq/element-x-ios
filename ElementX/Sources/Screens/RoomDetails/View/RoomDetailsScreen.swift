@@ -52,6 +52,7 @@ struct RoomDetailsScreen: View {
                                 contentID: context.viewState.roomId,
                                 avatarSize: .room(on: .details),
                                 imageProvider: context.imageProvider)
+                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
 
             Text(context.viewState.title)
                 .foregroundColor(.element.primaryContent)
@@ -119,6 +120,7 @@ struct RoomDetailsScreen: View {
             }
             .listRowInsets(listRowInsets)
             .foregroundColor(.element.primaryContent)
+            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             .disabled(context.viewState.isLoadingMembers)
         } header: {
             Text(ElementL10n.roomDetailsAboutSectionTitle)

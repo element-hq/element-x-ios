@@ -23,6 +23,7 @@ struct A11yIdentifiers {
     static let loginScreen = LoginScreen()
     static let onboardingScreen = OnboardingScreen()
     static let roomScreen = RoomScreen()
+    static let roomDetailsScreen = RoomDetailsScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let softLogoutScreen = SoftLogoutScreen()
         
@@ -64,15 +65,20 @@ struct A11yIdentifiers {
     }
         
     struct RoomScreen {
-        let name = "room_name"
-        let avatar = "room_avatar"
+        let name = "room-name"
+        let avatar = "room-avatar"
+    }
+    
+    struct RoomDetailsScreen {
+        let avatar = "room_details-avatar"
+        let people = "room_details-people"
     }
     
     struct SessionVerificationScreen {
         let requestVerification = "session_verification-request_verification"
         let startSasVerification = "session_verification-start_sas_verification"
         let acceptChallenge = "session_verification-accept_challenge"
-        let declineChallenge = "session_verification-accept_challenge"
+        let declineChallenge = "session_verification-decline_challenge"
         let close = "session_verification-close"
     }
         
