@@ -50,7 +50,6 @@ struct A11yIdentifiers {
         func roomName(_ name: String) -> String {
             "home_screen-room_name:\(name)"
         }
-
     }
 
     struct LoginScreen {
