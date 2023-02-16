@@ -137,7 +137,10 @@ class RoomProxy: RoomProxyProtocol {
     }
         
     func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
-        if let token = slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: nil) {
+        let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),
+                                                        RequiredState(key: "m.room.canonical_alias", value: "")],
+                                        timelineLimit: nil)
+        if let token = slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: settings) {
             timelineObservationToken = token
             Task {
                 await fetchMembers()
