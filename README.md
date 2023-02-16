@@ -21,12 +21,6 @@ ElementX leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-ru
 
 We're doing this as a way to share code between platforms and while we've seen promising results it's still in the experimental stage and bound to change.
 
-## Roadmap
-
-Our current roadmap is available [here](https://github.com/orgs/vector-im/projects/43/views/23) but as the projects are in their initial stages this is subject to change.
-
-We are aiming to have a fast and fully functional personal messaging application by the end of the year.
-
 ## Contributing
 
 Please see our [contribution guide](CONTRIBUTING.md).
