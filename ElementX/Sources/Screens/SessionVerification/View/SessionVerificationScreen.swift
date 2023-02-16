@@ -93,8 +93,10 @@ struct SessionVerificationScreen: View {
         switch context.viewState.verificationState {
         case .showingChallenge(let emojis):
             emojisPanel(with: emojis)
+            .accessibilityIdentifier(A11yIdentifers.sessionVerificationScreen.emojis)
         case .acceptingChallenge(let emojis):
             emojisPanel(with: emojis)
+            .accessibilityIdentifier(A11yIdentifers.sessionVerificationScreen.emojis)
         case .requestingVerification:
             ProgressView()
                 .tint(.element.secondaryContent)

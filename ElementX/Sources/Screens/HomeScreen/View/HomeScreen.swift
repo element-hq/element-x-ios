@@ -158,6 +158,7 @@ struct HomeScreen: View {
             }
             .frame(maxWidth: .infinity)
             .buttonStyle(.elementCapsuleProminent)
+            .accessibilityIdentifier(A11yIdentifiers.homeScreen.verificationBannerContinue)
         }
         .padding(16)
         .background(Color.element.system)
