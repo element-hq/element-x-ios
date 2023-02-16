@@ -123,14 +123,17 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .cancelReport:
             resetReportState()
         case .report:
-            report()
+            reportContent()
         }
     }
     
     // MARK: - Private
     
-    private func report() {
-        // TODO: Implement
+    private func reportContent() {
+        guard let itemToReport = context.itemToReport else { return }
+        Task {
+            await timelineController.reportContent(itemToReport, reason: context.reportReason)
+        }
     }
 
     private func resetReportState() {

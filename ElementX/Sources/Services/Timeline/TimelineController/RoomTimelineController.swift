@@ -187,6 +187,16 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             MXLog.error("Failed redacting message with error: \(error)")
         }
     }
+
+    func reportContent(_ itemID: String, reason: String?) async {
+        MXLog.info("Send report content in \(roomID)")
+        switch await roomProxy.reportContent(itemID, reason: reason) {
+        case .success:
+            MXLog.info("Finished reporting content")
+        case .failure(let error):
+            MXLog.error("Failed reporing content with error: \(error)")
+        }
+    }
     
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
