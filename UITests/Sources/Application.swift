@@ -24,7 +24,6 @@ struct Application {
             "IS_RUNNING_UI_TESTS": "1",
             "UI_TESTS_SCREEN": identifier.rawValue
         ]
-        Bundle.elementFallbackLanguage = "en"
         app.launch()
         return app
     }
