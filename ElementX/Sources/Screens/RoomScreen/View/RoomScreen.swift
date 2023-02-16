@@ -47,10 +47,10 @@ struct RoomScreen: View {
     var reportAlert: some View {
         TextField("", text: $context.reportReason)
         Button(ElementL10n.actionSend, action: {
-            context.send(viewAction: .cancelEdit)
+            context.send(viewAction: .report)
         })
         Button(ElementL10n.actionCancel, role: .cancel, action: {
-            context.send(viewAction: .report)
+            context.send(viewAction: .cancelReport)
         })
     }
     
