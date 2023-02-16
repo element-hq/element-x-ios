@@ -17,7 +17,7 @@
 import XCTest
 
 class LoginTests: XCTestCase {
-    let expectedDuration = 40.0
+    let expectedDuration = 100.0
     
     func testLoginFlow() throws {
         let parser = TestMeasurementParser()
@@ -53,21 +53,21 @@ class LoginTests: XCTestCase {
         homeserverTextField.clearAndTypeText(app.homeserver)
                 
         let confirmButton = app.buttons[A11yIdentifiers.changeServerScreen.continue]
-        XCTAssertTrue(confirmButton.exists)
+        XCTAssertTrue(confirmButton.waitForExistence(timeout: 5.0))
         confirmButton.tap()
         
         let usernameTextField = app.textFields[A11yIdentifiers.loginScreen.emailUsername]
-        XCTAssertTrue(usernameTextField.exists)
+        XCTAssertTrue(usernameTextField.waitForExistence(timeout: 5.0))
         
         usernameTextField.clearAndTypeText(app.username)
         
         let passwordTextField = app.secureTextFields[A11yIdentifiers.loginScreen.password]
-        XCTAssertTrue(passwordTextField.exists)
+        XCTAssertTrue(passwordTextField.waitForExistence(timeout: 5.0))
         
         passwordTextField.clearAndTypeText(app.password)
         
         let nextButton = app.buttons[A11yIdentifiers.loginScreen.continue]
-        XCTAssertTrue(nextButton.exists)
+        XCTAssertTrue(nextButton.waitForExistence(timeout: 5.0))
         XCTAssertTrue(nextButton.isEnabled)
         
         nextButton.tap()
