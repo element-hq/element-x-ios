@@ -1,9 +1,6 @@
 // Generated using Sourcery 2.0.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
-// swiftlint:disable line_length
-// swiftlint:disable variable_name
-
 import Foundation
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
@@ -13,50 +10,67 @@ import AppKit
 
 import MatrixRustSDK
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 class RoomProxyProtocolMock: RoomProxyProtocol {
+
+
     var id: String {
-        get { underlyingId }
+        get { return underlyingId }
         set(value) { underlyingId = value }
     }
-
     var underlyingId: String!
     var isDirect: Bool {
-        get { underlyingIsDirect }
+        get { return underlyingIsDirect }
         set(value) { underlyingIsDirect = value }
     }
-
     var underlyingIsDirect: Bool!
     var isPublic: Bool {
-        get { underlyingIsPublic }
+        get { return underlyingIsPublic }
         set(value) { underlyingIsPublic = value }
     }
-
     var underlyingIsPublic: Bool!
     var isSpace: Bool {
-        get { underlyingIsSpace }
+        get { return underlyingIsSpace }
         set(value) { underlyingIsSpace = value }
     }
-
     var underlyingIsSpace: Bool!
     var isEncrypted: Bool {
-        get { underlyingIsEncrypted }
+        get { return underlyingIsEncrypted }
         set(value) { underlyingIsEncrypted = value }
     }
-
     var underlyingIsEncrypted: Bool!
     var isTombstoned: Bool {
-        get { underlyingIsTombstoned }
+        get { return underlyingIsTombstoned }
         set(value) { underlyingIsTombstoned = value }
     }
-
     var underlyingIsTombstoned: Bool!
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications: Bool {
-        get { underlyingHasUnreadNotifications }
+        get { return underlyingHasUnreadNotifications }
         set(value) { underlyingHasUnreadNotifications = value }
     }
-
     var underlyingHasUnreadNotifications: Bool!
     var name: String?
     var displayName: String?
@@ -64,13 +78,13 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
     var avatarURL: URL?
     var permalink: URL?
 
-    // MARK: - loadAvatarURLForUserId
+
+    //MARK: - loadAvatarURLForUserId
 
     var loadAvatarURLForUserIdCallsCount = 0
     var loadAvatarURLForUserIdCalled: Bool {
-        loadAvatarURLForUserIdCallsCount > 0
+        return loadAvatarURLForUserIdCallsCount > 0
     }
-
     var loadAvatarURLForUserIdReceivedUserId: String?
     var loadAvatarURLForUserIdReceivedInvocations: [String] = []
     var loadAvatarURLForUserIdReturnValue: Result<URL?, RoomProxyError>!
@@ -87,13 +101,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - loadDisplayNameForUserId
+    //MARK: - loadDisplayNameForUserId
 
     var loadDisplayNameForUserIdCallsCount = 0
     var loadDisplayNameForUserIdCalled: Bool {
-        loadDisplayNameForUserIdCallsCount > 0
+        return loadDisplayNameForUserIdCallsCount > 0
     }
-
     var loadDisplayNameForUserIdReceivedUserId: String?
     var loadDisplayNameForUserIdReceivedInvocations: [String] = []
     var loadDisplayNameForUserIdReturnValue: Result<String?, RoomProxyError>!
@@ -110,13 +123,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - addTimelineListener
+    //MARK: - addTimelineListener
 
     var addTimelineListenerListenerCallsCount = 0
     var addTimelineListenerListenerCalled: Bool {
-        addTimelineListenerListenerCallsCount > 0
+        return addTimelineListenerListenerCallsCount > 0
     }
-
     var addTimelineListenerListenerReceivedListener: TimelineListener?
     var addTimelineListenerListenerReceivedInvocations: [TimelineListener] = []
     var addTimelineListenerListenerReturnValue: Result<Void, RoomProxyError>!
@@ -133,13 +145,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - paginateBackwards
+    //MARK: - paginateBackwards
 
     var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
     var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
-        paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount > 0
+        return paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount > 0
     }
-
     var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments: (requestSize: UInt, untilNumberOfItems: UInt)?
     var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations: [(requestSize: UInt, untilNumberOfItems: UInt)] = []
     var paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue: Result<Void, RoomProxyError>!
@@ -156,13 +167,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - sendReadReceipt
+    //MARK: - sendReadReceipt
 
     var sendReadReceiptForCallsCount = 0
     var sendReadReceiptForCalled: Bool {
-        sendReadReceiptForCallsCount > 0
+        return sendReadReceiptForCallsCount > 0
     }
-
     var sendReadReceiptForReceivedEventID: String?
     var sendReadReceiptForReceivedInvocations: [String] = []
     var sendReadReceiptForReturnValue: Result<Void, RoomProxyError>!
@@ -179,13 +189,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - sendMessage
+    //MARK: - sendMessage
 
     var sendMessageInReplyToCallsCount = 0
     var sendMessageInReplyToCalled: Bool {
-        sendMessageInReplyToCallsCount > 0
+        return sendMessageInReplyToCallsCount > 0
     }
-
     var sendMessageInReplyToReceivedArguments: (message: String, eventID: String?)?
     var sendMessageInReplyToReceivedInvocations: [(message: String, eventID: String?)] = []
     var sendMessageInReplyToReturnValue: Result<Void, RoomProxyError>!
@@ -202,13 +211,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - sendReaction
+    //MARK: - sendReaction
 
     var sendReactionToCallsCount = 0
     var sendReactionToCalled: Bool {
-        sendReactionToCallsCount > 0
+        return sendReactionToCallsCount > 0
     }
-
     var sendReactionToReceivedArguments: (reaction: String, eventID: String)?
     var sendReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
     var sendReactionToReturnValue: Result<Void, RoomProxyError>!
@@ -225,13 +233,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - editMessage
+    //MARK: - editMessage
 
     var editMessageOriginalCallsCount = 0
     var editMessageOriginalCalled: Bool {
-        editMessageOriginalCallsCount > 0
+        return editMessageOriginalCallsCount > 0
     }
-
     var editMessageOriginalReceivedArguments: (newMessage: String, eventID: String)?
     var editMessageOriginalReceivedInvocations: [(newMessage: String, eventID: String)] = []
     var editMessageOriginalReturnValue: Result<Void, RoomProxyError>!
@@ -248,13 +255,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - redact
+    //MARK: - redact
 
     var redactCallsCount = 0
     var redactCalled: Bool {
-        redactCallsCount > 0
+        return redactCallsCount > 0
     }
-
     var redactReceivedEventID: String?
     var redactReceivedInvocations: [String] = []
     var redactReturnValue: Result<Void, RoomProxyError>!
@@ -271,13 +277,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - members
+    //MARK: - members
 
     var membersCallsCount = 0
     var membersCalled: Bool {
-        membersCallsCount > 0
+        return membersCallsCount > 0
     }
-
     var membersReturnValue: Result<[RoomMemberProxy], RoomProxyError>!
     var membersClosure: (() async -> Result<[RoomMemberProxy], RoomProxyError>)?
 
@@ -290,13 +295,12 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    // MARK: - retryDecryption
+    //MARK: - retryDecryption
 
     var retryDecryptionForCallsCount = 0
     var retryDecryptionForCalled: Bool {
-        retryDecryptionForCallsCount > 0
+        return retryDecryptionForCallsCount > 0
     }
-
     var retryDecryptionForReceivedSessionID: String?
     var retryDecryptionForReceivedInvocations: [String] = []
     var retryDecryptionForClosure: ((String) async -> Void)?
@@ -307,4 +311,5 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         retryDecryptionForReceivedInvocations.append(sessionID)
         await retryDecryptionForClosure?(sessionID)
     }
+
 }

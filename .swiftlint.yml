@@ -17,6 +17,7 @@ included:
   - Tools/Scripts/Templates
 excluded:
   - IntegrationTests
+  - ElementX/Sources/Mocks/Generated
 
 line_length:
   warning: 250
