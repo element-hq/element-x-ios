@@ -120,26 +120,14 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await markRoomAsRead()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
-        case .cancelReport:
-            resetReportState()
-        case .report:
-            reportContent()
+        case let .report(itemID, reason):
+            Task {
+                await timelineController.reportContent(itemID, reason: reason)
+            }
         }
     }
     
     // MARK: - Private
-    
-    private func reportContent() {
-        guard let itemToReport = context.itemToReport else { return }
-        Task {
-            await timelineController.reportContent(itemToReport, reason: context.reportReason)
-        }
-    }
-
-    private func resetReportState() {
-        context.reportReason = ""
-        context.itemToReport = nil
-    }
     
     private func paginateBackwards() async {
         switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
@@ -299,9 +287,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 await timelineController.retryDecryption(for: sessionID)
             }
         case .report:
-            resetReportState()
-            state.bindings.showReport = true
-            state.bindings.itemToReport = itemID
+            state.bindings.report = ReportAlertItem(itemID: itemID)
         }
         
         if action.switchToDefaultComposer {
