@@ -1,6 +1,8 @@
 // Generated using Sourcery 2.0.1 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
+// swiftlint: disable all
+
 import Foundation
 #if os(iOS) || os(tvOS) || os(watchOS)
 import UIKit
@@ -313,3 +315,5 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
     }
 
 }
+
+// swiftlint: enable all
