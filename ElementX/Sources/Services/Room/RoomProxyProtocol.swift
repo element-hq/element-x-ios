@@ -33,7 +33,7 @@ enum RoomProxyError: Error {
 }
 
 @MainActor
-protocol RoomProxyProtocol {
+protocol RoomProxyProtocol: AutoMockable {
     var id: String { get }
     var isDirect: Bool { get }
     var isPublic: Bool { get }
