@@ -38,6 +38,7 @@ struct TracingConfiguration {
         case matrix_sdk_ffi_uniffi_api = "matrix_sdk_ffi::uniffi_api"
         case matrix_sdk_sliding_sync = "matrix_sdk::sliding_sync"
         case matrix_sdk_base_sliding_sync = "matrix_sdk_base::sliding_sync"
+        case matrix_sdk_room_timeline = "matrix_sdk::room::timeline"
     }
     
     let targets: OrderedDictionary<Target, LogLevel> = [
@@ -48,7 +49,8 @@ struct TracingConfiguration {
         .matrix_sdk_crypto: .debug,
         .matrix_sdk_http_client: .debug,
         .matrix_sdk_sliding_sync: .trace,
-        .matrix_sdk_base_sliding_sync: .trace
+        .matrix_sdk_base_sliding_sync: .trace,
+        .matrix_sdk_room_timeline: .info
     ]
     
     var overrides = [Target: LogLevel]()

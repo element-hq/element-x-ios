@@ -34,13 +34,13 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
     }
     
     func start() {
+        Bundle.elementFallbackLanguage = "en"
+        
         guard let screenID = Tests.screenID else { fatalError("Unable to launch with unknown screen.") }
         
         let mockScreen = MockScreen(id: screenID)
         navigationRootCoordinator.setRootCoordinator(mockScreen.coordinator)
         self.mockScreen = mockScreen
-        
-        Bundle.elementFallbackLanguage = "en"
     }
     
     func toPresentable() -> AnyView {
