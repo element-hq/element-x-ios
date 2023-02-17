@@ -105,9 +105,9 @@ final class ReportAlertItem: AlertItem {
     let itemID: String
 
     private(set) var reason = ""
-    lazy var reasonBinding = Binding<String>(get: {
+    lazy var reasonBinding = Binding<String>(get: { [unowned self] in
         self.reason
-    }, set: { newValue in
+    }, set: { [unowned self] newValue in
         self.reason = newValue
     })
 }
