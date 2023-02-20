@@ -6,11 +6,6 @@
 	<string>development</string>
 	<key>com.apple.developer.associated-domains</key>
 	<array>
-		<string>applinks:www.vector.im</string>
-		<string>applinks:vector.im</string>
-		<string>applinks:riot.im</string>
-		<string>applinks:www.riot.im</string>
-		<string>webcredentials:riot.im</string>
 		<string>applinks:element.io</string>
 		<string>applinks:app.element.io</string>
 		<string>applinks:staging.element.io</string>
