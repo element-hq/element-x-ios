@@ -196,14 +196,12 @@ class TimelineTableViewController: UIViewController {
             
             // A local reference to avoid capturing self in the cell configuration.
             let coordinator = self.coordinator
-            let opacity = self.opacity(for: timelineItem)
-            
+
             cell.item = timelineItem
             cell.contentConfiguration = UIHostingConfiguration {
                 timelineItem
                     .id(timelineItem.id)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .opacity(opacity)
                     .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                     .onAppear {
                         coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
@@ -350,12 +348,6 @@ class TimelineTableViewController: UIViewController {
         else { return }
         
         coordinator.send(viewAction: .paginateBackwards)
-    }
-    
-    /// Returns the opacity that the supplied timeline item's cell should be.
-    private func opacity(for item: RoomTimelineViewProvider) -> CGFloat {
-        guard case let .reply(selectedItemID, _) = composerMode else { return 1.0 }
-        return selectedItemID == item.id ? 1.0 : 0.5
     }
 }
 
