@@ -194,7 +194,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case .success:
             MXLog.info("Finished reporting content")
         case .failure(let error):
-            MXLog.error("Failed reporing content with error: \(error)")
+            MXLog.error("Failed reporting content with error: \(error)")
         }
     }
     
