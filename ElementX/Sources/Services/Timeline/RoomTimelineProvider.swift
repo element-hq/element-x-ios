@@ -54,11 +54,11 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
                 .store(in: &cancellables)
             
             switch await roomProxy.addTimelineListener(listener: roomTimelineListener) {
+            case .success(let items):
+                itemProxies = items.map(TimelineItemProxy.init)
             case .failure:
                 let roomID = await roomProxy.id
                 MXLog.error("Failed adding timeline listener on room with identifier: \(roomID)")
-            default:
-                break
             }
         }
     }
@@ -87,79 +87,76 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         
         MXLog.verbose("Finished applying diff")
     }
-     
+    
     // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func buildDiff(from diff: TimelineDiff, on itemProxies: [TimelineItemProxy]) -> CollectionDifference<TimelineItemProxy>? {
         var changes = [CollectionDifference<TimelineItemProxy>.Change]()
         
         switch diff.change() {
-        case .push:
-            guard let item = diff.push() else {
-                fatalError()
-            }
+        case .pushFront:
+            guard let item = diff.pushFront() else { fatalError() }
             
-            MXLog.verbose("Push")
+            MXLog.verbose("Push Front")
+            let itemProxy = TimelineItemProxy(item: item)
+            changes.append(.insert(offset: 0, element: itemProxy, associatedWith: nil))
+        case .pushBack:
+            guard let item = diff.pushBack() else { fatalError() }
+            
+            MXLog.verbose("Push Back")
             let itemProxy = TimelineItemProxy(item: item)
             changes.append(.insert(offset: Int(itemProxies.count), element: itemProxy, associatedWith: nil))
-        case .updateAt:
-            guard let update = diff.updateAt() else {
-                fatalError()
+        case .insert:
+            guard let update = diff.insert() else { fatalError() }
+            
+            MXLog.verbose("Insert at \(update.index), current total count: \(itemProxies.count)")
+            let itemProxy = TimelineItemProxy(item: update.item)
+            changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
+        case .append:
+            guard let items = diff.append() else { fatalError() }
+            
+            MXLog.verbose("Append new items with new count: \(items.count), to current total count: \(itemProxies.count)")
+            for (index, item) in items.enumerated() {
+                changes.append(.insert(offset: index, element: TimelineItemProxy(item: item), associatedWith: nil))
             }
+        case .set:
+            guard let update = diff.set() else { fatalError() }
             
             MXLog.verbose("Update \(update.index), current total count: \(itemProxies.count)")
             let itemProxy = TimelineItemProxy(item: update.item)
             changes.append(.remove(offset: Int(update.index), element: itemProxy, associatedWith: nil))
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
-        case .insertAt:
-            guard let update = diff.insertAt() else {
-                fatalError()
-            }
+        case .popFront:
+            MXLog.verbose("Pop Front, current total count: \(itemProxies.count)")
+            guard let itemProxy = itemProxies.last else { fatalError() }
             
-            MXLog.verbose("Insert at \(update.index), current total count: \(itemProxies.count)")
-            let itemProxy = TimelineItemProxy(item: update.item)
-            changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
-        case .move:
-            guard let update = diff.move() else {
-                fatalError()
-            }
-                
-            MXLog.verbose("Move from: \(update.oldIndex) to: \(update.newIndex), current total count: \(itemProxies.count)")
-            let itemProxy = itemProxies[Int(update.oldIndex)]
-            changes.append(.remove(offset: Int(update.oldIndex), element: itemProxy, associatedWith: nil))
-            changes.append(.insert(offset: Int(update.newIndex), element: itemProxy, associatedWith: nil))
-        case .removeAt:
-            guard let index = diff.removeAt() else {
-                fatalError()
-            }
+            changes.append(.remove(offset: 0, element: itemProxy, associatedWith: nil))
+        case .popBack:
+            MXLog.verbose("Pop Back, current total count: \(itemProxies.count)")
+            guard let itemProxy = itemProxies.last else { fatalError() }
+            
+            changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
+        case .remove:
+            guard let index = diff.remove() else { fatalError() }
             
             MXLog.verbose("Remove from: \(index), current total count: \(itemProxies.count)")
             let itemProxy = itemProxies[Int(index)]
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
-        case .replace:
-            guard let items = diff.replace() else {
-                fatalError()
+        case .clear:
+            MXLog.verbose("Clear all items, current total count: \(itemProxies.count)")
+            for (index, itemProxy) in itemProxies.enumerated() {
+                changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
+        case .reset:
+            guard let items = diff.reset() else { fatalError() }
             
             MXLog.verbose("Replace all items with new count: \(items.count), current total count: \(itemProxies.count)")
             for (index, itemProxy) in itemProxies.enumerated() {
                 changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
             }
             
-            for (index, item) in items.enumerated() {
-                changes.append(.insert(offset: index, element: TimelineItemProxy(item: item), associatedWith: nil))
+            for (index, timelineItem) in items.enumerated() {
+                changes.append(.insert(offset: index, element: TimelineItemProxy(item: timelineItem), associatedWith: nil))
             }
-        case .clear:
-            MXLog.verbose("Clear all items, current total count: \(itemProxies.count)")
-            for (index, itemProxy) in itemProxies.enumerated() {
-                changes.append(.remove(offset: index, element: itemProxy, associatedWith: nil))
-            }
-        case .pop:
-            MXLog.verbose("Pop, current total count: \(itemProxies.count)")
-            guard let itemProxy = itemProxies.last else {
-                fatalError()
-            }
-            
-            changes.append(.remove(offset: itemProxies.count - 1, element: itemProxy, associatedWith: nil))
         }
         
         return CollectionDifference(changes)

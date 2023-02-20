@@ -46,7 +46,7 @@ struct MockRoomProxy: RoomProxyProtocol {
     
     func startLiveEventListener() { }
     
-    func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
+    func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError> {
         .failure(.failedAddingTimelineListener)
     }
     

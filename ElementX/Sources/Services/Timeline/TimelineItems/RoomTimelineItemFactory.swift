@@ -78,6 +78,9 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .emote(content: let content):
                 let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
                 return buildEmoteTimelineItemFromMessage(eventItemProxy, message, isOutgoing, groupState)
+            case .audio:
+                #warning("Audio timeline items not currently supported")
+                return nil
             case .none:
                 return buildFallbackTimelineItem(eventItemProxy, isOutgoing, groupState)
             }
