@@ -1,4 +1,4 @@
-// swiftlint: disable all
+// swiftlint:disable all
 
 import Foundation
 #if os(iOS) || os(tvOS) || os(watchOS)
@@ -225,4 +225,4 @@ import {{ import }}
 }
 {% endif %}{% endfor %}
 
-// swiftlint: enable all
+// swiftlint:enable all
