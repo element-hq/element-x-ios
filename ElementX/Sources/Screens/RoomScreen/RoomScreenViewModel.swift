@@ -121,9 +121,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
         case let .report(itemID, reason):
-            Task {
-                await timelineController.reportContent(itemID, reason: reason)
-            }
+            await timelineController.reportContent(itemID, reason: reason)
         }
     }
     
