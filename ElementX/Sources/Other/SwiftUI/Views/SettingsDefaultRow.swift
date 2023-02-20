@@ -22,32 +22,37 @@ struct SettingsDefaultRow: View {
     
     let title: String
     let image: Image
+    var accessory: SettingsRowAccessory?
     let action: () -> Void
     
     // MARK: Private
     
-    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+    private let listRowInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 
     // MARK: Views
     
     var body: some View {
         Button(action: action) {
-            HStack(spacing: 16) {
-                Label(title: {
-                    Text(title)
-                }, icon: {
-                    image
-                })
-                .labelStyle(SettingsRowLabelStyle())
-                
-                Spacer()
-                
-                Image(systemName: "chevron.forward")
-                    .foregroundColor(.element.tertiaryContent)
-            }
+            Label { Text(title) } icon: { image }
         }
+        .buttonStyle(SettingsButtonStyle(accessory: accessory))
         .listRowInsets(listRowInsets)
         .listRowSeparator(.hidden)
         .foregroundColor(.element.primaryContent)
+    }
+}
+
+struct SettingsDefaultRow_Previews: PreviewProvider {
+    static var previews: some View {
+        Form {
+            Section {
+                SettingsDefaultRow(title: "Sign out", image: Image(systemName: "person")) { }
+                SettingsDefaultRow(title: "Sign out", image: Image(systemName: "person"), accessory: .navigationLink) { }
+                ShareLink(item: "test")
+                    .listRowInsets(EdgeInsets())
+                    .listRowSeparator(.hidden)
+                    .buttonStyle(SettingsButtonStyle())
+            }
+        }
     }
 }

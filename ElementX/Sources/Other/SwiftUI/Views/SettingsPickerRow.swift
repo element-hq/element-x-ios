@@ -27,7 +27,6 @@ struct SettingsPickerRow<SelectionValue: Hashable, Content: View>: View {
     
     // MARK: Private
     
-    @ScaledMetric private var menuIconSize = 30.0
     private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
 
     // MARK: Views
@@ -35,16 +34,12 @@ struct SettingsPickerRow<SelectionValue: Hashable, Content: View>: View {
     var body: some View {
         Picker(selection: $selection, content: content) {
             HStack(spacing: 16) {
-                image
-                    .foregroundColor(.element.systemGray)
-                    .padding(4)
-                    .background(Color.element.systemGray6)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-                    .frame(width: menuIconSize, height: menuIconSize)
-                
-                Text(title)
-                    .font(.element.body)
-                    .foregroundColor(.element.primaryContent)
+                Label {
+                    Text(title)
+                } icon: {
+                    image
+                }
+                .labelStyle(SettingsRowLabelStyle())
             }
         }
         .listRowInsets(listRowInsets)

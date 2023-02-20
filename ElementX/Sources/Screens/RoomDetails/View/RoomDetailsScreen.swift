@@ -131,16 +131,16 @@ struct RoomDetailsScreen: View {
     private var securitySection: some View {
         Section {
             HStack(alignment: .top) {
-                Label(title: {
+                Label {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(ElementL10n.encryptionEnabled)
                         Text(ElementL10n.encryptionEnabledTileDescription)
                             .foregroundColor(.element.secondaryContent)
                             .font(.element.footnote)
                     }
-                }, icon: {
+                } icon: {
                     Image(systemName: "lock.shield")
-                })
+                }
                 .labelStyle(SettingsRowLabelStyle(alignment: .top))
                 
                 Spacer()

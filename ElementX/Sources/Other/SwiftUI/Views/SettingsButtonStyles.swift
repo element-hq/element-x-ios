@@ -16,6 +16,39 @@
 
 import SwiftUI
 
+/// A view to be added on the trailing edge of a form row.
+enum SettingsRowAccessory: View {
+    case navigationLink
+    
+    var body: some View {
+        switch self {
+        case .navigationLink:
+            return Image(systemName: "chevron.forward")
+                .font(.element.subheadlineBold)
+                .foregroundColor(.element.tertiaryContent)
+        }
+    }
+}
+
+/// Default button styling for settings screen rows.
+struct SettingsButtonStyle: ButtonStyle {
+    var accessory: SettingsRowAccessory?
+    
+    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+    
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            configuration.label
+                .labelStyle(SettingsRowLabelStyle())
+                .frame(maxWidth: .infinity, alignment: .leading)
+            
+            accessory
+        }
+        .padding(listRowInsets)
+        .background(configuration.isPressed ? Color.element.quinaryContent : .element.formRowBackground)
+    }
+}
+
 /// Small squared action button style for settings screens
 struct SettingsActionButtonStyle: ButtonStyle {
     let title: String
@@ -30,7 +63,7 @@ struct SettingsActionButtonStyle: ButtonStyle {
                 .frame(width: menuIconSize, height: menuIconSize)
                 .background {
                     RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.element.formRowBackground.opacity(configuration.isPressed ? 0.5 : 1))
+                        .fill(configuration.isPressed ? Color.element.quinaryContent : .element.formRowBackground)
                 }
             
             Text(title)

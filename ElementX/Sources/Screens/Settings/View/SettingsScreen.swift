@@ -95,7 +95,8 @@ struct SettingsScreen: View {
     private var developerOptionsSection: some View {
         Section {
             SettingsDefaultRow(title: ElementL10n.settingsDeveloperOptions,
-                               image: Image(systemName: "hammer.circle")) {
+                               image: Image(systemName: "hammer.circle"),
+                               accessory: .navigationLink) {
                 context.send(viewAction: .developerOptions)
             }
             .accessibilityIdentifier("sessionVerificationButton")
@@ -118,7 +119,8 @@ struct SettingsScreen: View {
             }
             
             SettingsDefaultRow(title: ElementL10n.sendBugReport,
-                               image: Image(systemName: "questionmark.circle")) {
+                               image: Image(systemName: "questionmark.circle"),
+                               accessory: .navigationLink) {
                 context.send(viewAction: .reportBug)
             }
             .accessibilityIdentifier("reportBugButton")
