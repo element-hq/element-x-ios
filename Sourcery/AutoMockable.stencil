@@ -59,7 +59,7 @@ import {{ import }}
 {% macro methodClosureCallParameters method %}{% for param in method.parameters %}{{ param.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endmacro %}
 
 {% macro mockMethod method %}
-    //MARK: - {{ method.shortName }}
+    // MARK: - {{ method.shortName }}
 
     {% if method.throws %}
         {% call methodThrowableErrorDeclaration method %}
@@ -120,7 +120,7 @@ import {{ import }}
 
 {% macro resetMethod method %}
         {# for type method which are mocked, a way to reset the invocation, argument, etc #}
-        {% if method.isStatic and not method.isInitializer %} //MARK: - {{ method.shortName }}
+        {% if method.isStatic and not method.isInitializer %} // MARK: - {{ method.shortName }}
         {% if not method.isInitializer %}
         {% call swiftifyMethodName method.selectorName %}CallsCount = 0
         {% endif %}

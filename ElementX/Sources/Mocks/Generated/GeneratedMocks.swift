@@ -82,7 +82,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
     var permalink: URL?
 
 
-    //MARK: - loadAvatarURLForUserId
+    // MARK: - loadAvatarURLForUserId
 
     var loadAvatarURLForUserIdCallsCount = 0
     var loadAvatarURLForUserIdCalled: Bool {
@@ -104,7 +104,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - loadDisplayNameForUserId
+    // MARK: - loadDisplayNameForUserId
 
     var loadDisplayNameForUserIdCallsCount = 0
     var loadDisplayNameForUserIdCalled: Bool {
@@ -126,7 +126,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - addTimelineListener
+    // MARK: - addTimelineListener
 
     var addTimelineListenerListenerCallsCount = 0
     var addTimelineListenerListenerCalled: Bool {
@@ -148,7 +148,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - paginateBackwards
+    // MARK: - paginateBackwards
 
     var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
     var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
@@ -170,7 +170,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - sendReadReceipt
+    // MARK: - sendReadReceipt
 
     var sendReadReceiptForCallsCount = 0
     var sendReadReceiptForCalled: Bool {
@@ -192,7 +192,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - sendMessage
+    // MARK: - sendMessage
 
     var sendMessageInReplyToCallsCount = 0
     var sendMessageInReplyToCalled: Bool {
@@ -214,7 +214,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - sendReaction
+    // MARK: - sendReaction
 
     var sendReactionToCallsCount = 0
     var sendReactionToCalled: Bool {
@@ -236,7 +236,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - editMessage
+    // MARK: - editMessage
 
     var editMessageOriginalCallsCount = 0
     var editMessageOriginalCalled: Bool {
@@ -258,7 +258,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - redact
+    // MARK: - redact
 
     var redactCallsCount = 0
     var redactCalled: Bool {
@@ -280,7 +280,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - members
+    // MARK: - members
 
     var membersCallsCount = 0
     var membersCalled: Bool {
@@ -298,7 +298,7 @@ class RoomProxyProtocolMock: RoomProxyProtocol {
         }
     }
 
-    //MARK: - retryDecryption
+    // MARK: - retryDecryption
 
     var retryDecryptionForCallsCount = 0
     var retryDecryptionForCalled: Bool {
@@ -331,7 +331,7 @@ class SessionVerificationControllerProxyProtocolMock: SessionVerificationControl
     var underlyingIsVerified: Bool!
 
 
-    //MARK: - requestVerification
+    // MARK: - requestVerification
 
     var requestVerificationCallsCount = 0
     var requestVerificationCalled: Bool {
@@ -349,7 +349,7 @@ class SessionVerificationControllerProxyProtocolMock: SessionVerificationControl
         }
     }
 
-    //MARK: - startSasVerification
+    // MARK: - startSasVerification
 
     var startSasVerificationCallsCount = 0
     var startSasVerificationCalled: Bool {
@@ -367,7 +367,7 @@ class SessionVerificationControllerProxyProtocolMock: SessionVerificationControl
         }
     }
 
-    //MARK: - approveVerification
+    // MARK: - approveVerification
 
     var approveVerificationCallsCount = 0
     var approveVerificationCalled: Bool {
@@ -385,7 +385,7 @@ class SessionVerificationControllerProxyProtocolMock: SessionVerificationControl
         }
     }
 
-    //MARK: - declineVerification
+    // MARK: - declineVerification
 
     var declineVerificationCallsCount = 0
     var declineVerificationCalled: Bool {
@@ -403,7 +403,7 @@ class SessionVerificationControllerProxyProtocolMock: SessionVerificationControl
         }
     }
 
-    //MARK: - cancelVerification
+    // MARK: - cancelVerification
 
     var cancelVerificationCallsCount = 0
     var cancelVerificationCalled: Bool {
