@@ -31,7 +31,7 @@ struct RoomScreen: View {
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo) { $0.alert }
             .alert(item: $context.report,
-                   actions: { reportAlert(report: $0) })
+                   actions: { reportAlertActions($0) })
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
             .task(id: context.viewState.roomId) {
                 // Give a couple of seconds for items to load and to see them.
@@ -43,7 +43,7 @@ struct RoomScreen: View {
     }
 
     @ViewBuilder
-    func reportAlert(report: ReportAlertItem) -> some View {
+    func reportAlertActions(_ report: ReportAlertItem) -> some View {
         TextField("", text: report.reasonBinding)
         Button(ElementL10n.actionSend, action: {
             context.send(viewAction: .report(itemID: report.itemID, reason: report.reason))
