@@ -54,9 +54,13 @@ struct HomeScreen: View {
                             }
                         }
                         .onAppear {
+                            // Ignore while filtering rooms
+                            guard context.searchQuery.isEmpty else { return }
                             visibleItemIdentifiers.insert(room.id)
                         }
                         .onDisappear {
+                            // Ignore while filtering rooms
+                            guard context.searchQuery.isEmpty else { return }
                             visibleItemIdentifiers.remove(room.id)
                         }
                     }
