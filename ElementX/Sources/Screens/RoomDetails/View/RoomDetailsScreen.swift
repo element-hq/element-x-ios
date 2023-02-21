@@ -103,7 +103,7 @@ struct RoomDetailsScreen: View {
                         ProgressView()
                     } else {
                         Text(String(context.viewState.members.count))
-                            .foregroundColor(.element.secondaryContent)
+                            .foregroundColor(.element.tertiaryContent)
                             .font(.element.body)
                     }
                 } label: {
@@ -111,7 +111,6 @@ struct RoomDetailsScreen: View {
                 }
             }
             .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
-            .listRowInsets(EdgeInsets()) // Remove insets to use button background.
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             .disabled(context.viewState.isLoadingMembers)
@@ -142,7 +141,6 @@ struct RoomDetailsScreen: View {
                 Image(systemName: "checkmark")
                     .foregroundColor(.element.quaternaryContent)
             }
-            .padding(.horizontal, -3)
         } header: {
             Text(ElementL10n.roomProfileSectionSecurity)
                 .formSectionHeader()

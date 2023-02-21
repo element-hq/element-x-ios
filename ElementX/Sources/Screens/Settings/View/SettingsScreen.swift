@@ -78,21 +78,20 @@ struct SettingsScreen: View {
     
     private var sessionVerificationSection: some View {
         Section {
-            FormDefaultRow(title: ElementL10n.settingsSessionVerification,
-                           image: Image(systemName: "checkmark.shield")) {
-                context.send(viewAction: .sessionVerification)
+            Button { context.send(viewAction: .sessionVerification) } label: {
+                Label(ElementL10n.settingsSessionVerification, systemImage: "checkmark.shield")
             }
+            .buttonStyle(FormButtonStyle())
         }
         .formSectionStyle()
     }
     
     private var developerOptionsSection: some View {
         Section {
-            FormDefaultRow(title: ElementL10n.settingsDeveloperOptions,
-                           image: Image(systemName: "hammer.circle"),
-                           accessory: .navigationLink) {
-                context.send(viewAction: .developerOptions)
+            Button { context.send(viewAction: .developerOptions) } label: {
+                Label(ElementL10n.settingsDeveloperOptions, systemImage: "hammer.circle")
             }
+            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
             .accessibilityIdentifier("sessionVerificationButton")
         }
         .formSectionStyle()
@@ -113,12 +112,11 @@ struct SettingsScreen: View {
             .onChange(of: context.timelineStyle) { _ in
                 context.send(viewAction: .changedTimelineStyle)
             }
-
-            FormDefaultRow(title: ElementL10n.sendBugReport,
-                           image: Image(systemName: "questionmark.circle"),
-                           accessory: .navigationLink) {
-                context.send(viewAction: .reportBug)
+            
+            Button { context.send(viewAction: .reportBug) } label: {
+                Label(ElementL10n.sendBugReport, systemImage: "questionmark.circle")
             }
+            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
             .accessibilityIdentifier("reportBugButton")
         }
         .formSectionStyle()
@@ -126,13 +124,12 @@ struct SettingsScreen: View {
     
     private var signOutSection: some View {
         Section {
-            FormDefaultRow(title: ElementL10n.actionSignOut,
-                           image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
-                showingLogoutConfirmation = true
+            Button { showingLogoutConfirmation = true } label: {
+                Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
             }
+            .buttonStyle(FormButtonStyle())
             .accessibilityIdentifier("logoutButton")
-            .alert(ElementL10n.actionSignOut,
-                   isPresented: $showingLogoutConfirmation) {
+            .alert(ElementL10n.actionSignOut, isPresented: $showingLogoutConfirmation) {
                 Button(ElementL10n.actionSignOut,
                        role: .destructive,
                        action: logout)

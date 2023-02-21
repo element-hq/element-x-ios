@@ -31,20 +31,39 @@ enum FormRowAccessory: View {
 }
 
 /// Default button styling for form rows.
-struct FormButtonStyle: ButtonStyle {
+///
+/// The primitive style is needed to set the list row insets to `0`. The inner style is then needed
+/// to change the background colour depending on whether the button is currently pressed or not.
+struct FormButtonStyle: PrimitiveButtonStyle {
+    /// An accessory to be added on the trailing side of the row.
     var accessory: FormRowAccessory?
     
     func makeBody(configuration: Configuration) -> some View {
-        HStack {
+        Button(action: configuration.trigger) {
             configuration.label
-                .labelStyle(FormRowLabelStyle())
-                .frame(maxWidth: .infinity, alignment: .leading)
-            
-            accessory
+                .frame(maxHeight: .infinity) // Make sure the label fills the cell vertically.
         }
-        .contentShape(Rectangle())
-        .padding(FormConstants.rowInsets)
-        .background(configuration.isPressed ? Color.element.quinaryContent : .clear)
+        .buttonStyle(Style(accessory: accessory))
+        .listRowInsets(EdgeInsets()) // Remove insets so the background fills the cell.
+    }
+    
+    /// Inner style used to set the pressed background colour.
+    struct Style: ButtonStyle {
+        var accessory: FormRowAccessory?
+        
+        func makeBody(configuration: Configuration) -> some View {
+            HStack {
+                configuration.label
+                    .labelStyle(FormRowLabelStyle())
+                    .foregroundColor(.element.primaryContent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                
+                accessory
+            }
+            .contentShape(Rectangle())
+            .padding(FormConstants.rowInsets) // Re-apply the normal insets using padding.
+            .background(configuration.isPressed ? Color.element.quinaryContent : .clear)
+        }
     }
 }
 
@@ -79,12 +98,23 @@ struct FormButtonStyles_Previews: PreviewProvider {
                 Button { } label: {
                     Label("Hello world", systemImage: "globe")
                 }
-                .listRowInsets(EdgeInsets())
                 .buttonStyle(FormButtonStyle())
                 
+                Button { } label: {
+                    Label("Show something", systemImage: "rectangle.portrait")
+                }
+                .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+                
                 ShareLink(item: "test")
-                    .listRowInsets(EdgeInsets())
                     .buttonStyle(FormButtonStyle())
+            }
+            .formSectionStyle()
+            
+            Section {
+                Button { } label: {
+                    Text("Hello world")
+                }
+                .buttonStyle(FormButtonStyle())
             }
             .formSectionStyle()
         }
