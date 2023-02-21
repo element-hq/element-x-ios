@@ -100,13 +100,14 @@ struct SettingsScreen: View {
     
     private var simplifiedSection: some View {
         Section {
-            FormPickerRow(title: ElementL10n.settingsTimelineStyle,
-                          image: Image(systemName: "rectangle.grid.1x2"),
-                          selection: $context.timelineStyle) {
+            Picker(selection: $context.timelineStyle) {
                 ForEach(TimelineStyle.allCases, id: \.self) { style in
                     Text(style.name)
                         .tag(style)
                 }
+            } label: {
+                Label(ElementL10n.settingsTimelineStyle, systemImage: "rectangle.grid.1x2")
+                    .labelStyle(FormRowLabelStyle())
             }
             .accessibilityIdentifier("timelineStylePicker")
             .onChange(of: context.timelineStyle) { _ in
