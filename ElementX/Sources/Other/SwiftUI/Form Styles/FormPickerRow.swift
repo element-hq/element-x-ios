@@ -16,8 +16,8 @@
 
 import SwiftUI
 
-/// Picker row that can be reused for settings screens
-struct SettingsPickerRow<SelectionValue: Hashable, Content: View>: View {
+/// Picker row that can be reused for forms.
+struct FormPickerRow<SelectionValue: Hashable, Content: View>: View {
     // MARK: Public
     
     let title: String
@@ -25,24 +25,16 @@ struct SettingsPickerRow<SelectionValue: Hashable, Content: View>: View {
     @Binding var selection: SelectionValue
     let content: () -> Content
     
-    // MARK: Private
-    
-    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-
     // MARK: Views
     
     var body: some View {
         Picker(selection: $selection, content: content) {
-            HStack(spacing: 16) {
-                Label {
-                    Text(title)
-                } icon: {
-                    image
-                }
-                .labelStyle(SettingsRowLabelStyle())
+            Label {
+                Text(title)
+            } icon: {
+                image
             }
+            .labelStyle(FormRowLabelStyle())
         }
-        .listRowInsets(listRowInsets)
-        .listRowSeparator(.hidden)
     }
 }

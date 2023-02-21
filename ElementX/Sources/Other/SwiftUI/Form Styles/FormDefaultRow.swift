@@ -16,18 +16,14 @@
 
 import SwiftUI
 
-/// Default row that can be reused for settings screens
-struct SettingsDefaultRow: View {
+/// Default row that can be reused for forms.
+struct FormDefaultRow: View {
     // MARK: Public
     
     let title: String
     let image: Image
-    var accessory: SettingsRowAccessory?
+    var accessory: FormRowAccessory?
     let action: () -> Void
-    
-    // MARK: Private
-    
-    private let listRowInsets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
 
     // MARK: Views
     
@@ -35,9 +31,8 @@ struct SettingsDefaultRow: View {
         Button(action: action) {
             Label { Text(title) } icon: { image }
         }
-        .buttonStyle(SettingsButtonStyle(accessory: accessory))
-        .listRowInsets(listRowInsets)
-        .listRowSeparator(.hidden)
+        .buttonStyle(FormButtonStyle(accessory: accessory))
+        .listRowInsets(EdgeInsets()) // Remove insets to use button background.
         .foregroundColor(.element.primaryContent)
     }
 }
@@ -46,12 +41,8 @@ struct SettingsDefaultRow_Previews: PreviewProvider {
     static var previews: some View {
         Form {
             Section {
-                SettingsDefaultRow(title: "Sign out", image: Image(systemName: "person")) { }
-                SettingsDefaultRow(title: "Sign out", image: Image(systemName: "person"), accessory: .navigationLink) { }
-                ShareLink(item: "test")
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
-                    .buttonStyle(SettingsButtonStyle())
+                FormDefaultRow(title: "Sign out", image: Image(systemName: "person")) { }
+                FormDefaultRow(title: "Sign out", image: Image(systemName: "person"), accessory: .navigationLink) { }
             }
         }
     }

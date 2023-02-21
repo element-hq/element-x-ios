@@ -17,7 +17,7 @@
 import SwiftUI
 
 /// A view to be added on the trailing edge of a form row.
-enum SettingsRowAccessory: View {
+enum FormRowAccessory: View {
     case navigationLink
     
     var body: some View {
@@ -25,32 +25,31 @@ enum SettingsRowAccessory: View {
         case .navigationLink:
             return Image(systemName: "chevron.forward")
                 .font(.element.subheadlineBold)
-                .foregroundColor(.element.tertiaryContent)
+                .foregroundColor(.element.quaternaryContent)
         }
     }
 }
 
-/// Default button styling for settings screen rows.
-struct SettingsButtonStyle: ButtonStyle {
-    var accessory: SettingsRowAccessory?
-    
-    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
+/// Default button styling for form rows.
+struct FormButtonStyle: ButtonStyle {
+    var accessory: FormRowAccessory?
     
     func makeBody(configuration: Configuration) -> some View {
         HStack {
             configuration.label
-                .labelStyle(SettingsRowLabelStyle())
+                .labelStyle(FormRowLabelStyle())
                 .frame(maxWidth: .infinity, alignment: .leading)
             
             accessory
         }
-        .padding(listRowInsets)
-        .background(configuration.isPressed ? Color.element.quinaryContent : .element.formRowBackground)
+        .contentShape(Rectangle())
+        .padding(FormConstants.rowInsets)
+        .background(configuration.isPressed ? Color.element.quinaryContent : .clear)
     }
 }
 
 /// Small squared action button style for settings screens
-struct SettingsActionButtonStyle: ButtonStyle {
+struct FormActionButtonStyle: ButtonStyle {
     let title: String
     
     @ScaledMetric private var menuIconSize = 54.0
@@ -69,6 +68,25 @@ struct SettingsActionButtonStyle: ButtonStyle {
             Text(title)
                 .foregroundColor(.element.secondaryContent)
                 .font(.element.subheadline)
+        }
+    }
+}
+
+struct FormButtonStyles_Previews: PreviewProvider {
+    static var previews: some View {
+        Form {
+            Section {
+                Button { } label: {
+                    Label("Hello world", systemImage: "globe")
+                }
+                .listRowInsets(EdgeInsets())
+                .buttonStyle(FormButtonStyle())
+                
+                ShareLink(item: "test")
+                    .listRowInsets(EdgeInsets())
+                    .buttonStyle(FormButtonStyle())
+            }
+            .formSectionStyle()
         }
     }
 }

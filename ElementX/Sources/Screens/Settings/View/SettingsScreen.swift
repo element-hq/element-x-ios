@@ -21,30 +21,23 @@ struct SettingsScreen: View {
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     
-    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-    
     @ObservedObject var context: SettingsScreenViewModel.Context
     
     var body: some View {
         Form {
             userSection
-                .listRowBackground(Color.element.formRowBackground)
             
             if context.viewState.showSessionVerificationSection {
                 sessionVerificationSection
-                    .listRowBackground(Color.element.formRowBackground)
             }
             
             simplifiedSection
-                .listRowBackground(Color.element.formRowBackground)
             
             if context.viewState.showDeveloperOptions {
                 developerOptionsSection
-                    .listRowBackground(Color.element.formRowBackground)
             }
             
             signOutSection
-                .listRowBackground(Color.element.formRowBackground)
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -79,35 +72,37 @@ struct SettingsScreen: View {
                         .foregroundColor(.element.primaryContent)
                 }
             }
-            .listRowInsets(listRowInsets)
         }
+        .formSectionStyle()
     }
     
     private var sessionVerificationSection: some View {
         Section {
-            SettingsDefaultRow(title: ElementL10n.settingsSessionVerification,
-                               image: Image(systemName: "checkmark.shield")) {
+            FormDefaultRow(title: ElementL10n.settingsSessionVerification,
+                           image: Image(systemName: "checkmark.shield")) {
                 context.send(viewAction: .sessionVerification)
             }
         }
+        .formSectionStyle()
     }
     
     private var developerOptionsSection: some View {
         Section {
-            SettingsDefaultRow(title: ElementL10n.settingsDeveloperOptions,
-                               image: Image(systemName: "hammer.circle"),
-                               accessory: .navigationLink) {
+            FormDefaultRow(title: ElementL10n.settingsDeveloperOptions,
+                           image: Image(systemName: "hammer.circle"),
+                           accessory: .navigationLink) {
                 context.send(viewAction: .developerOptions)
             }
             .accessibilityIdentifier("sessionVerificationButton")
         }
+        .formSectionStyle()
     }
     
     private var simplifiedSection: some View {
         Section {
-            SettingsPickerRow(title: ElementL10n.settingsTimelineStyle,
-                              image: Image(systemName: "rectangle.grid.1x2"),
-                              selection: $context.timelineStyle) {
+            FormPickerRow(title: ElementL10n.settingsTimelineStyle,
+                          image: Image(systemName: "rectangle.grid.1x2"),
+                          selection: $context.timelineStyle) {
                 ForEach(TimelineStyle.allCases, id: \.self) { style in
                     Text(style.name)
                         .tag(style)
@@ -117,20 +112,21 @@ struct SettingsScreen: View {
             .onChange(of: context.timelineStyle) { _ in
                 context.send(viewAction: .changedTimelineStyle)
             }
-            
-            SettingsDefaultRow(title: ElementL10n.sendBugReport,
-                               image: Image(systemName: "questionmark.circle"),
-                               accessory: .navigationLink) {
+
+            FormDefaultRow(title: ElementL10n.sendBugReport,
+                           image: Image(systemName: "questionmark.circle"),
+                           accessory: .navigationLink) {
                 context.send(viewAction: .reportBug)
             }
             .accessibilityIdentifier("reportBugButton")
         }
+        .formSectionStyle()
     }
     
     private var signOutSection: some View {
         Section {
-            SettingsDefaultRow(title: ElementL10n.actionSignOut,
-                               image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
+            FormDefaultRow(title: ElementL10n.actionSignOut,
+                           image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
                 showingLogoutConfirmation = true
             }
             .accessibilityIdentifier("logoutButton")
@@ -157,6 +153,7 @@ struct SettingsScreen: View {
             }
             .padding(.top, 24)
         }
+        .formSectionStyle()
     }
 
     private var doneButton: some View {

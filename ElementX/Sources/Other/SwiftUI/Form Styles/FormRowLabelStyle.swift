@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SettingsRowLabelStyle: LabelStyle {
+struct FormRowLabelStyle: LabelStyle {
     @ScaledMetric private var menuIconSize = 30.0
     
     var alignment: VerticalAlignment = .firstTextBaseline
