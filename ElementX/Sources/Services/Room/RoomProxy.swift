@@ -253,6 +253,22 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
+
+    func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.reportContent(eventId: eventID, score: nil, reason: reason)
+                return .success(())
+            } catch {
+                return .failure(.failedReportingContent)
+            }
+        }
+    }
     
     func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
         await Task.dispatch(on: .global()) {
