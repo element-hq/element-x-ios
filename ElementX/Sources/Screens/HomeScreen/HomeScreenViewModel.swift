@@ -20,10 +20,6 @@ import SwiftUI
 typealias HomeScreenViewModelType = StateStoreViewModel<HomeScreenViewState, HomeScreenViewAction>
 
 class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol {
-    enum Constants {
-        static let slidingWindowBoundsPadding = 5
-    }
-    
     private let userSession: UserSessionProtocol
     private let visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
     private let allRoomsSummaryProvider: RoomSummaryProviderProtocol?
@@ -277,9 +273,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             return
         }
         
-        let lowerBound = max(0, range.lowerBound - Constants.slidingWindowBoundsPadding)
-        let upperBound = min(Int(visibleRoomsSummaryProvider.countPublisher.value), range.upperBound + Constants.slidingWindowBoundsPadding)
-        
-        visibleRoomsSummaryProvider.updateVisibleRange(lowerBound..<upperBound, timelineLimit: timelineLimit)
+        visibleRoomsSummaryProvider.updateVisibleRange(range, timelineLimit: timelineLimit)
     }
 }
