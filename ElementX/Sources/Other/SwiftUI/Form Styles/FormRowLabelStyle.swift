@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SettingsRowLabelStyle: LabelStyle {
+struct FormRowLabelStyle: LabelStyle {
     @ScaledMetric private var menuIconSize = 30.0
     
     var alignment: VerticalAlignment = .firstTextBaseline
@@ -26,12 +26,31 @@ struct SettingsRowLabelStyle: LabelStyle {
             configuration.icon
                 .foregroundColor(.element.secondaryContent)
                 .padding(4)
+                .frame(width: menuIconSize, height: menuIconSize)
                 .background(Color.element.formBackground)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
-                .frame(width: menuIconSize, height: menuIconSize)
             configuration.title
                 .font(.element.body)
                 .foregroundColor(.element.primaryContent)
         }
+    }
+}
+
+struct FormRowLabelStyle_Previews: PreviewProvider {
+    static var previews: some View {
+        VStack(alignment: .leading) {
+            Label("Person", systemImage: "person")
+                .labelStyle(FormRowLabelStyle())
+            
+            Label("Help", systemImage: "questionmark.circle")
+                .labelStyle(FormRowLabelStyle())
+            
+            Label("Camera", systemImage: "camera")
+                .labelStyle(FormRowLabelStyle())
+            
+            Label("Help", systemImage: "questionmark")
+                .labelStyle(FormRowLabelStyle())
+        }
+        .padding()
     }
 }

@@ -58,7 +58,7 @@ protocol RoomProxyProtocol {
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
     
-    func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError>
+    func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError>
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
     

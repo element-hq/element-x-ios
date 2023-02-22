@@ -29,8 +29,9 @@ struct DeveloperOptionsScreenScreen: View {
                     Text("🥳")
                         .frame(maxWidth: .infinity)
                 }
+                .buttonStyle(FormButtonStyle())
             }
-            .listRowBackground(Color.element.formRowBackground)
+            .formSectionStyle()
         }
         .overlay(effectsView)
         .scrollContentBackground(.hidden)
@@ -43,6 +44,8 @@ struct DeveloperOptionsScreenScreen: View {
     private var effectsView: some View {
         if showConfetti {
             EffectsView(effect: .confetti)
+                .ignoresSafeArea()
+                .allowsHitTesting(false)
                 .task { await removeConfettiAfterDelay() }
         }
     }

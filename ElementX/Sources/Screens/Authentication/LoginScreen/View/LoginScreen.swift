@@ -75,7 +75,10 @@ struct LoginScreen: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
             
-            TextField(ElementL10n.loginSigninUsernameHint, text: $context.username)
+            TextField(ElementL10n.loginSigninUsernameHint,
+                      text: $context.username,
+                      // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
+                      prompt: Text(ElementL10n.loginSigninUsernameHint).foregroundColor(.element.tertiaryContent))
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
                 .disableAutocorrection(true)
@@ -86,7 +89,10 @@ struct LoginScreen: View {
                 .onSubmit { isPasswordFocused = true }
                 .padding(.bottom, 20)
             
-            SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
+            SecureField(ElementL10n.loginSignupPasswordHint,
+                        text: $context.password,
+                        // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
+                        prompt: Text(ElementL10n.loginSignupPasswordHint).foregroundColor(.element.tertiaryContent))
                 .focused($isPasswordFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
                 .textContentType(.password)
@@ -133,6 +139,8 @@ struct LoginScreen: View {
     private func submit() {
         guard context.viewState.canSubmit else { return }
         context.send(viewAction: .next)
+        isUsernameFocused = false
+        isPasswordFocused = false
     }
 }
 
