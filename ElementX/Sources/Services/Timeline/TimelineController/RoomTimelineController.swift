@@ -111,44 +111,36 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case let item as ImageRoomTimelineItem:
             await loadFileForImageTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? ImageRoomTimelineItem else {
+                  let item = timelineItems[index] as? ImageRoomTimelineItem,
+                  let fileURL = item.cachedFileURL else {
                 return .none
             }
-            if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.body)
-            }
-            return .none
+            return .displayFile(fileURL: fileURL, title: item.body)
         case let item as VideoRoomTimelineItem:
             await loadVideoForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? VideoRoomTimelineItem else {
+                  let item = timelineItems[index] as? VideoRoomTimelineItem,
+                  let videoURL = item.cachedVideoURL else {
                 return .none
             }
-            if let videoURL = item.cachedVideoURL {
-                return .displayVideo(videoURL: videoURL, title: item.body)
-            }
-            return .none
+            return .displayVideo(videoURL: videoURL, title: item.body)
         case let item as FileRoomTimelineItem:
             await loadFileForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? FileRoomTimelineItem else {
+                  let item = timelineItems[index] as? FileRoomTimelineItem,
+                  let fileURL = item.cachedFileURL else {
                 return .none
             }
-            if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.body)
-            }
-            return .none
+            return .displayFile(fileURL: fileURL, title: item.body)
         case let item as AudioRoomTimelineItem:
             await loadAudioForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? AudioRoomTimelineItem else {
+                  let item = timelineItems[index] as? AudioRoomTimelineItem,
+                  let audioURL = item.cachedAudioURL else {
                 return .none
             }
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            if let audioURL = item.cachedAudioURL {
-                return .displayVideo(videoURL: audioURL, title: item.body)
-            }
-            return .none
+            return .displayFile(fileURL: audioURL, title: item.body)
         default:
             return .none
         }
