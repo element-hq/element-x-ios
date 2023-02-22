@@ -30,7 +30,7 @@ struct FormSectionStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
             .listRowSeparator(.hidden)
-            .listRowInsets(FormConstants.rowInsets)
+            .listRowInsets(FormRow.insets)
             .listRowBackground(Color.element.formRowBackground)
     }
 }

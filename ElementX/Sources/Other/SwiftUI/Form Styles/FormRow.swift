@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-enum FormConstants {
-    /// Custom insets that are used in all Forms.
-    static let rowInsets = EdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16)
+enum FormRow {
+    /// Element specific insets that are used for all our Form rows.
+    static let insets = EdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16)
 }

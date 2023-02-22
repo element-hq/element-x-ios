@@ -61,7 +61,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
                 accessory
             }
             .contentShape(Rectangle())
-            .padding(FormConstants.rowInsets) // Re-apply the normal insets using padding.
+            .padding(FormRow.insets) // Re-apply the normal insets using padding.
             .background(configuration.isPressed ? Color.element.quinaryContent : .clear)
         }
     }
