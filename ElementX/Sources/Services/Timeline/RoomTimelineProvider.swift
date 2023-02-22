@@ -114,9 +114,9 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .append:
             guard let items = diff.append() else { fatalError() }
             
-            MXLog.verbose("Append new items with new count: \(items.count), to current total count: \(itemProxies.count)")
+            MXLog.verbose("Append new items with count: \(items.count), to current total count: \(itemProxies.count)")
             for (index, item) in items.enumerated() {
-                changes.append(.insert(offset: index, element: TimelineItemProxy(item: item), associatedWith: nil))
+                changes.append(.insert(offset: Int(itemProxies.count) + index, element: TimelineItemProxy(item: item), associatedWith: nil))
             }
         case .set:
             guard let update = diff.set() else { fatalError() }
@@ -127,7 +127,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
             changes.append(.insert(offset: Int(update.index), element: itemProxy, associatedWith: nil))
         case .popFront:
             MXLog.verbose("Pop Front, current total count: \(itemProxies.count)")
-            guard let itemProxy = itemProxies.last else { fatalError() }
+            guard let itemProxy = itemProxies.first else { fatalError() }
             
             changes.append(.remove(offset: 0, element: itemProxy, associatedWith: nil))
         case .popBack:
@@ -138,7 +138,7 @@ class RoomTimelineProvider: RoomTimelineProviderProtocol {
         case .remove:
             guard let index = diff.remove() else { fatalError() }
             
-            MXLog.verbose("Remove from: \(index), current total count: \(itemProxies.count)")
+            MXLog.verbose("Remove item at: \(index), current total count: \(itemProxies.count)")
             let itemProxy = itemProxies[Int(index)]
             changes.append(.remove(offset: Int(index), element: itemProxy, associatedWith: nil))
         case .clear:
