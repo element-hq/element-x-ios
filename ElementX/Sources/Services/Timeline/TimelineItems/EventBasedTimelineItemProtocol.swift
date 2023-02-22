@@ -33,7 +33,7 @@ enum TimelineItemGroupState: Hashable {
     }
 }
 
-protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol {
+protocol EventBasedTimelineItemProtocol: RoomTimelineItemProtocol, CustomStringConvertible {
     var body: String { get }
     var timestamp: String { get }
     var shouldShowSenderDetails: Bool { get }
@@ -70,5 +70,9 @@ extension EventBasedTimelineItemProtocol {
                 return [.topRight, .bottomLeft, .bottomRight]
             }
         }
+    }
+
+    var description: String {
+        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
     }
 }

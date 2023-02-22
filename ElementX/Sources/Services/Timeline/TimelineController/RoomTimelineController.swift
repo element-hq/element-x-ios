@@ -138,6 +138,17 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 return .displayFile(fileURL: fileURL, title: item.body)
             }
             return .none
+        case let item as AudioRoomTimelineItem:
+            await loadAudioForTimelineItem(item)
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
+                  let item = timelineItems[index] as? AudioRoomTimelineItem else {
+                return .none
+            }
+            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
+            if let audioURL = item.cachedAudioURL {
+                return .displayVideo(videoURL: audioURL, title: item.body)
+            }
+            return .none
         default:
             return .none
         }
@@ -422,6 +433,35 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
 
             item.cachedFileURL = fileURL
+            timelineItems[index] = item
+        case .failure:
+            break
+        }
+    }
+
+    private func loadAudioForTimelineItem(_ timelineItem: AudioRoomTimelineItem) async {
+        if timelineItem.cachedAudioURL != nil {
+            // already cached
+            return
+        }
+
+        guard let source = timelineItem.source else {
+            return
+        }
+
+        // This is not great. We could better estimate file extension from the mimetype.
+        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
+            return
+        }
+
+        switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
+        case .success(let audioURL):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? AudioRoomTimelineItem else {
+                return
+            }
+
+            item.cachedAudioURL = audioURL
             timelineItems[index] = item
         case .failure:
             break

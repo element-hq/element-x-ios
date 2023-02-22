@@ -26,6 +26,8 @@ struct RoomTimelineViewFactory: RoomTimelineViewFactoryProtocol {
             return .image(item)
         case let item as VideoRoomTimelineItem:
             return .video(item)
+        case let item as AudioRoomTimelineItem:
+            return .audio(item)
         case let item as FileRoomTimelineItem:
             return .file(item)
         case let item as SeparatorRoomTimelineItem:

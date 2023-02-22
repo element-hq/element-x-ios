@@ -29,11 +29,3 @@ struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     
     var properties = RoomTimelineItemProperties()
 }
-
-// MARK: - Redact content from logs
-
-extension EmoteRoomTimelineItem: CustomStringConvertible {
-    var description: String {
-        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
-    }
-}

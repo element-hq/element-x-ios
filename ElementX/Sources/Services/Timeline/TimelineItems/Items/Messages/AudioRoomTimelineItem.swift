@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,21 @@
 // limitations under the License.
 //
 
-import UIKit
+import Foundation
 
-struct TextRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+struct AudioRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let body: String
-    var formattedBody: AttributedString?
     let timestamp: String
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
-    
-    let sender: TimelineItemSender
-    
+
+    var sender: TimelineItemSender
+
+    let duration: UInt64
+    let source: MediaSourceProxy?
+    var cachedAudioURL: URL?
+
     var properties = RoomTimelineItemProperties()
 }

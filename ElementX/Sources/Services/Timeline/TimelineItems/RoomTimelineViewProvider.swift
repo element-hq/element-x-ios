@@ -22,6 +22,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     case separator(SeparatorRoomTimelineItem)
     case image(ImageRoomTimelineItem)
     case video(VideoRoomTimelineItem)
+    case audio(AudioRoomTimelineItem)
     case file(FileRoomTimelineItem)
     case emote(EmoteRoomTimelineItem)
     case notice(NoticeRoomTimelineItem)
@@ -43,6 +44,8 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
         case .image(let item):
             return item.id
         case .video(let item):
+            return item.id
+        case .audio(let item):
             return item.id
         case .file(let item):
             return item.id
@@ -72,7 +75,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     /// Whether or not it is possible to send a reaction to this timeline item.
     var isReactable: Bool {
         switch self {
-        case .text, .image, .video, .file, .emote, .notice, .sticker:
+        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker:
             return true
         case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
             return false
@@ -93,6 +96,8 @@ extension RoomTimelineViewProvider: View {
             ImageRoomTimelineView(timelineItem: item)
         case .video(let item):
             VideoRoomTimelineView(timelineItem: item)
+        case .audio(let item):
+            AudioRoomTimelineView(timelineItem: item)
         case .file(let item):
             FileRoomTimelineView(timelineItem: item)
         case .emote(let item):
