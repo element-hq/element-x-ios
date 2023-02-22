@@ -64,6 +64,8 @@ class MockRoomTimelineController: RoomTimelineControllerProtocol {
     func editMessage(_ newMessage: String, original itemID: String) async { }
     
     func redact(_ itemID: String) async { }
+
+    func reportContent(_ itemID: String, reason: String?) async { }
     
     func debugDescription(for itemID: String) -> String {
         "Mock debug description"

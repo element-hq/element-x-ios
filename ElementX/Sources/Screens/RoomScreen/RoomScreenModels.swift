@@ -15,6 +15,7 @@
 //
 
 import Combine
+import SwiftUI
 import UIKit
 
 enum RoomScreenViewModelAction {
@@ -54,6 +55,7 @@ enum RoomScreenViewAction {
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
     case contextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
+    case report(itemID: String, reason: String)
 }
 
 struct RoomScreenViewState: BindableState {
@@ -87,8 +89,27 @@ struct RoomScreenViewStateBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
-    
+
     var debugInfo: TimelineItemDebugView.DebugInfo?
+
+    // Report
+    var report: ReportAlertItem?
+}
+
+final class ReportAlertItem: AlertItem {
+    init(itemID: String) {
+        self.itemID = itemID
+    }
+
+    let title = ElementL10n.reportContentCustomHint
+    let itemID: String
+
+    private(set) var reason = ""
+    lazy var reasonBinding = Binding<String>(get: { [unowned self] in
+        self.reason
+    }, set: { [unowned self] newValue in
+        self.reason = newValue
+    })
 }
 
 enum RoomScreenErrorType: Hashable {
