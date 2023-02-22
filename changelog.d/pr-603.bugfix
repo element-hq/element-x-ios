@@ -1,1 +1,0 @@
-Fix incorrect visible room ranges: correctly remove duplicates and ignore appearance changes while filtering

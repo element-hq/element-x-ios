@@ -1,1 +1,0 @@
-Enable auto-discovery of sliding sync proxy, directing users to more information when their server doesn't support it.
