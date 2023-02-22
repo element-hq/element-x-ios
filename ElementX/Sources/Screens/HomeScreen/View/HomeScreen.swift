@@ -41,7 +41,7 @@ struct HomeScreen: View {
                     }
                 }
                 .shimmer()
-                .disabled(context.viewState.roomListMode == .skeletons)
+                .disabled(true)
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleRooms) { room in
@@ -79,6 +79,7 @@ struct HomeScreen: View {
             }
         }
         .scrollDismissesKeyboard(.immediately)
+        .scrollDisabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
         .alert(item: $context.alertInfo) { $0.alert }

@@ -92,12 +92,12 @@ final class LoginCoordinator: CoordinatorProtocol {
     static let loadingIndicatorIdentifier = "LoginCoordinatorLoading"
     
     private func startLoading(isInteractionBlocking: Bool) {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
-                                                                                    type: .modal,
-                                                                                    title: ElementL10n.loading,
-                                                                                    persistent: true))
-        
-        if !isInteractionBlocking {
+        if isInteractionBlocking {
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                                                        type: .modal,
+                                                                                        title: ElementL10n.loading,
+                                                                                        persistent: true))
+        } else {
             viewModel.update(isLoading: true)
         }
     }

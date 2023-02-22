@@ -96,11 +96,15 @@ struct BugReportScreen: View {
     private var sendLogsToggle: some View {
         VStack(spacing: 8) {
             Toggle(ElementL10n.bugReportScreenIncludeLogs, isOn: $context.sendingLogsEnabled)
+                .foregroundColor(.element.primaryContent)
                 .tint(Color.element.brand)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
                 .padding(.horizontal, 16)
-                .padding(.vertical, 11)
-                .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.formRowBackground))
+                .padding(.vertical, 6.5)
+                .background {
+                    RoundedRectangle(cornerRadius: 14)
+                        .fill(Color.element.formRowBackground)
+                }
             
             Text(ElementL10n.bugReportScreenLogsDescription)
                 .font(.element.caption1)
@@ -117,13 +121,13 @@ struct BugReportScreen: View {
                          photoLibrary: .shared()) {
                 HStack(spacing: 16) {
                     Label(context.viewState.screenshot == nil ? ElementL10n.bugReportScreenAttachScreenshot : ElementL10n.bugReportScreenEditScreenshot, systemImage: "camera")
-                        .labelStyle(SettingsRowLabelStyle())
+                        .labelStyle(FormRowLabelStyle())
                     Spacer()
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 11)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.formRowBackground))
+            .buttonStyle(FormButtonStyle())
+            .background(Color.element.formRowBackground)
+            .cornerRadius(14)
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)
             if let screenshot = context.viewState.screenshot {
                 ZStack(alignment: .topTrailing) {
@@ -173,11 +177,14 @@ struct BugReport_Previews: PreviewProvider {
                                               isModallyPresented: false)
     
     static var previews: some View {
-        Group {
+        NavigationStack {
             BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
                                                         screenshot: nil,
                                                         isModallyPresented: false).context)
                 .previewDisplayName("Without Screenshot")
+        }
+        
+        NavigationStack {
             BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
                                                         screenshot: Asset.Images.appLogo.image,
                                                         isModallyPresented: false).context)

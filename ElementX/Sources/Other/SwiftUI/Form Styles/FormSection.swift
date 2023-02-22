@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-/// Style for section header
+/// Style for form section headers
 struct FormSectionHeaderStyle: ViewModifier {
     func body(content: Content) -> some View {
         content
@@ -25,9 +25,23 @@ struct FormSectionHeaderStyle: ViewModifier {
     }
 }
 
+/// Standard style for form sections
+struct FormSectionStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .listRowSeparator(.hidden)
+            .listRowInsets(FormRow.insets)
+            .listRowBackground(Color.element.formRowBackground)
+    }
+}
+
 extension View {
     /// Applies the `FormSectionHeaderStyle` modifier to the view
     func formSectionHeader() -> some View {
         modifier(FormSectionHeaderStyle())
+    }
+    
+    func formSectionStyle() -> some View {
+        modifier(FormSectionStyle())
     }
 }
