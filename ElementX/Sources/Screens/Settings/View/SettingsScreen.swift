@@ -62,6 +62,7 @@ struct SettingsScreen: View {
                                     contentID: context.viewState.userID,
                                     avatarSize: .user(on: .settings),
                                     imageProvider: context.imageProvider)
+                    .accessibilityHidden(true)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
@@ -71,6 +72,7 @@ struct SettingsScreen: View {
                         .font(.element.subheadline)
                         .foregroundColor(.element.primaryContent)
                 }
+                .accessibilityElement(children: .combine)
             }
         }
         .formSectionStyle()
