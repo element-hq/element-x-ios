@@ -120,6 +120,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await markRoomAsRead()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
+        case let .report(itemID, reason):
+            await timelineController.reportContent(itemID, reason: reason)
         }
     }
     
@@ -227,6 +229,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         if item.isOutgoing {
             actions.append(.redact)
+        } else {
+            actions.append(.report)
         }
         
         var debugActions: [TimelineItemContextMenuAction] = ServiceLocator.shared.settings.canShowDeveloperOptions ? [.viewSource] : []
@@ -280,6 +284,8 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             Task {
                 await timelineController.retryDecryption(for: sessionID)
             }
+        case .report:
+            state.bindings.report = ReportAlertItem(itemID: itemID)
         }
         
         if action.switchToDefaultComposer {
