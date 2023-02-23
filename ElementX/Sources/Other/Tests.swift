@@ -29,7 +29,7 @@ public enum Tests {
     /// Flag indicating whether the app is running the UI tests.
     static var isRunningUITests: Bool {
         #if DEBUG
-        ProcessInfo.processInfo.environment["IS_RUNNING_UI_TESTS"] == "1"
+        ProcessInfo.processInfo.environment["UI_TESTS_SCREEN"] != nil
         #else
         false
         #endif
