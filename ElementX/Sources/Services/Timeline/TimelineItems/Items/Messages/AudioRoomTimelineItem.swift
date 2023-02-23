@@ -23,8 +23,7 @@ struct AudioRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
-
-    var sender: TimelineItemSender
+    let sender: TimelineItemSender
 
     let duration: UInt64
     let source: MediaSourceProxy?

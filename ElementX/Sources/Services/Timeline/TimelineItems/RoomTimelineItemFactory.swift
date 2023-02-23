@@ -284,7 +284,8 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isOutgoing: isOutgoing,
                               isEditable: eventItemProxy.isEditable,
                               sender: eventItemProxy.sender,
-                              duration: message.duration, source: message.source)
+                              duration: message.duration,
+                              source: message.source)
     }
 
     private func buildFileTimelineItemFromMessage(_ eventItemProxy: EventTimelineItemProxy,
