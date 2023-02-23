@@ -21,7 +21,6 @@ struct Application {
     static func launch(_ identifier: UITestsScreenIdentifier) -> XCUIApplication {
         let app = XCUIApplication()
         app.launchEnvironment = [
-            "IS_RUNNING_UI_TESTS": "1",
             "UI_TESTS_SCREEN": identifier.rawValue
         ]
         
