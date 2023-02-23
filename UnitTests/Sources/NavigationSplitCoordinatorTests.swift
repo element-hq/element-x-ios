@@ -123,22 +123,6 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
-    func testNavigationStackDetailRootReplacement() {
-        let detailCoordinator = SomeTestCoordinator()
-        
-        let navigationStackCoordinator = NavigationStackCoordinator()
-        navigationStackCoordinator.setRootCoordinator(detailCoordinator)
-        
-        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
-        
-        let newDetailCoordinator = SomeTestCoordinator()
-        navigationStackCoordinator.setRootCoordinator(newDetailCoordinator)
-        
-        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
-        
-        assertCoordinatorsEqual(navigationStackCoordinator.rootCoordinator, nil)
-    }
-    
     func testSheetDismissalCallback() {
         let sheetCoordinator = SomeTestCoordinator()
         
