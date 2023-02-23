@@ -1,3 +1,15 @@
+## Changes in 1.0.21 (2023-02-23)
+
+✨ Features
+
+- Added a feature that allows a user to report content posted by another user by opening the context menu and provide a reason. ([#115](https://github.com/vector-im/element-x-ios/issues/115))
+- Added support for audio messages in the timeline as previewable files. ([#594](https://github.com/vector-im/element-x-ios/issues/594))
+
+🐛 Bugfixes
+
+- Fix broken split layout room navigation ([#613](https://github.com/vector-im/element-x-ios/pull/613))
+
+
 ## Changes in 1.0.20 (2023-02-22)
 
 ✨ Features
