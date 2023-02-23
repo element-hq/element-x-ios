@@ -19,6 +19,10 @@ import Foundation
 import MatrixRustSDK
 
 class MockClientProxy: ClientProxyProtocol {
+    var avatarUrlPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
+
+    func loadUserAvatar() async { }
+
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userID: String
@@ -55,10 +59,6 @@ class MockClientProxy: ClientProxyProtocol {
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         .success("User display name")
-    }
-    
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
-        .failure(.failedRetrievingAvatarURL)
     }
     
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {

@@ -55,7 +55,7 @@ class ClientProxy: ClientProxyProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
     
-    private var slidingSyncObserverToken: StoppableSpawn?
+    private var slidingSyncObserverToken: TaskHandle?
     private var slidingSync: SlidingSync?
     
     var visibleRoomsSlidingSyncView: SlidingSyncView?
@@ -63,6 +63,11 @@ class ClientProxy: ClientProxyProtocol {
     
     var allRoomsSlidingSyncView: SlidingSyncView?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
+
+    private let avatarUrlSubject = CurrentValueSubject<URL?, Never>(nil)
+    var avatarUrlPublisher: AnyPublisher<URL?, Never> {
+        avatarUrlSubject.eraseToAnyPublisher()
+    }
     
     private var cancellables = Set<AnyCancellable>()
     private var visibleRoomsViewProxyStateObservationToken: AnyCancellable?
@@ -163,21 +168,19 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-    
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
+
+    func loadUserAvatar() async {
         await Task.dispatch(on: clientQueue) {
-            do {
-                let urlString = try self.client.avatarUrl()
-                
-                guard let url = URL(string: urlString) else {
-                    MXLog.error("Invalid avatar URL string: \(String(describing: urlString))")
-                    return .failure(.failedRetrievingAvatarURL)
-                }
-                 
-                return .success(url)
-            } catch {
-                return .failure(.failedRetrievingAvatarURL)
+            guard let urlString = try? self.client.cachedAvatarUrl() else {
+                return
             }
+            self.avatarUrlSubject.value = URL(string: urlString)
+        }
+        await Task.dispatch(on: clientQueue) {
+            guard let urlString = try? self.client.avatarUrl() else {
+                return
+            }
+            self.avatarUrlSubject.value = URL(string: urlString)
         }
     }
     

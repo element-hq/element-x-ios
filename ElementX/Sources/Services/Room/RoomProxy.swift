@@ -33,7 +33,7 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var displayName: String?
     
-    private var timelineObservationToken: StoppableSpawn?
+    private var timelineObservationToken: TaskHandle?
         
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
