@@ -72,15 +72,15 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
             case .file(let content):
                 let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
                 return buildFileTimelineItemFromMessage(eventItemProxy, message, isOutgoing, groupState)
-            case .notice(content: let content):
+            case .notice(let content):
                 let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
                 return buildNoticeTimelineItemFromMessage(eventItemProxy, message, isOutgoing, groupState)
-            case .emote(content: let content):
+            case .emote(let content):
                 let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
                 return buildEmoteTimelineItemFromMessage(eventItemProxy, message, isOutgoing, groupState)
-            case .audio:
-                #warning("Audio timeline items not currently supported")
-                return nil
+            case .audio(let content):
+                let message = MessageTimelineItem(item: eventItemProxy.item, content: content)
+                return buildAudioTimelineItem(eventItemProxy, message, isOutgoing, groupState)
             case .none:
                 return buildFallbackTimelineItem(eventItemProxy, isOutgoing, groupState)
             }
@@ -271,6 +271,21 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus))
+    }
+
+    private func buildAudioTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
+                                        _ message: MessageTimelineItem<AudioMessageContent>,
+                                        _ isOutgoing: Bool,
+                                        _ groupState: TimelineItemGroupState) -> RoomTimelineItemProtocol {
+        AudioRoomTimelineItem(id: eventItemProxy.id,
+                              body: message.body,
+                              timestamp: message.timestamp.formatted(date: .omitted, time: .shortened),
+                              groupState: groupState,
+                              isOutgoing: isOutgoing,
+                              isEditable: eventItemProxy.isEditable,
+                              sender: eventItemProxy.sender,
+                              duration: message.duration,
+                              source: message.source)
     }
 
     private func buildFileTimelineItemFromMessage(_ eventItemProxy: EventTimelineItemProxy,

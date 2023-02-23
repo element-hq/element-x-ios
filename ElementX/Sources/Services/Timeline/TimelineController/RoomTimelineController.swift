@@ -101,7 +101,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: String) { }
 
-    // swiftlint:disable:next cyclomatic_complexity
     func processItemTap(_ itemID: String) async -> RoomTimelineControllerAction {
         guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
             return .none
@@ -111,33 +110,36 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case let item as ImageRoomTimelineItem:
             await loadFileForImageTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? ImageRoomTimelineItem else {
+                  let item = timelineItems[index] as? ImageRoomTimelineItem,
+                  let fileURL = item.cachedFileURL else {
                 return .none
             }
-            if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.body)
-            }
-            return .none
+            return .displayFile(fileURL: fileURL, title: item.body)
         case let item as VideoRoomTimelineItem:
             await loadVideoForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? VideoRoomTimelineItem else {
+                  let item = timelineItems[index] as? VideoRoomTimelineItem,
+                  let videoURL = item.cachedVideoURL else {
                 return .none
             }
-            if let videoURL = item.cachedVideoURL {
-                return .displayVideo(videoURL: videoURL, title: item.body)
-            }
-            return .none
+            return .displayVideo(videoURL: videoURL, title: item.body)
         case let item as FileRoomTimelineItem:
             await loadFileForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? FileRoomTimelineItem else {
+                  let item = timelineItems[index] as? FileRoomTimelineItem,
+                  let fileURL = item.cachedFileURL else {
                 return .none
             }
-            if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.body)
+            return .displayFile(fileURL: fileURL, title: item.body)
+        case let item as AudioRoomTimelineItem:
+            await loadAudioForTimelineItem(item)
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
+                  let item = timelineItems[index] as? AudioRoomTimelineItem,
+                  let audioURL = item.cachedAudioURL else {
+                return .none
             }
-            return .none
+            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
+            return .displayFile(fileURL: audioURL, title: item.body)
         default:
             return .none
         }
@@ -432,6 +434,35 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
 
             item.cachedFileURL = fileURL
+            timelineItems[index] = item
+        case .failure:
+            break
+        }
+    }
+
+    private func loadAudioForTimelineItem(_ timelineItem: AudioRoomTimelineItem) async {
+        if timelineItem.cachedAudioURL != nil {
+            // already cached
+            return
+        }
+
+        guard let source = timelineItem.source else {
+            return
+        }
+
+        // This is not great. We could better estimate file extension from the mimetype.
+        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
+            return
+        }
+
+        switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
+        case .success(let audioURL):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? AudioRoomTimelineItem else {
+                return
+            }
+
+            item.cachedAudioURL = audioURL
             timelineItems[index] = item
         case .failure:
             break
