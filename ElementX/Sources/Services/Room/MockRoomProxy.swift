@@ -44,11 +44,11 @@ struct MockRoomProxy: RoomProxyProtocol {
         .failure(.failedRetrievingMemberAvatarURL)
     }
     
-    func startLiveEventListener() { }
-    
     func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError> {
         .failure(.failedAddingTimelineListener)
     }
+    
+    func removeTimelineListener() { }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         .failure(.failedPaginatingBackwards)

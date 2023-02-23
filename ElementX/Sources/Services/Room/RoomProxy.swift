@@ -34,11 +34,7 @@ class RoomProxy: RoomProxyProtocol {
     private(set) var displayName: String?
     
     private var timelineObservationToken: StoppableSpawn?
-    
-    deinit {
-        timelineObservationToken?.cancel()
-    }
-    
+        
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
@@ -149,6 +145,11 @@ class RoomProxy: RoomProxyProtocol {
         } else {
             return .failure(.failedAddingTimelineListener)
         }
+    }
+    
+    func removeTimelineListener() {
+        timelineObservationToken?.cancel()
+        timelineObservationToken = nil
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
