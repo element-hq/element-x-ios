@@ -23,6 +23,9 @@ enum BugReportCoordinatorResult {
 
 struct BugReportCoordinatorParameters {
     let bugReportService: BugReportServiceProtocol
+    let userID: String
+    let deviceID: String?
+    
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     let screenshot: UIImage?
     let isModallyPresented: Bool
@@ -38,6 +41,8 @@ final class BugReportCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = BugReportViewModel(bugReportService: parameters.bugReportService,
+                                       userID: parameters.userID,
+                                       deviceID: parameters.deviceID,
                                        screenshot: parameters.screenshot,
                                        isModallyPresented: parameters.isModallyPresented)
     }

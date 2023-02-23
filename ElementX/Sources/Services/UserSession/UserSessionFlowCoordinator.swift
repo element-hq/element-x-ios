@@ -244,6 +244,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let userIndicatorController = UserIndicatorController(rootCoordinator: feedbackNavigationStackCoordinator)
         
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
+                                                        userID: userSession.userID,
+                                                        deviceID: userSession.deviceID,
                                                         userIndicatorController: userIndicatorController,
                                                         screenshot: image,
                                                         isModallyPresented: true)

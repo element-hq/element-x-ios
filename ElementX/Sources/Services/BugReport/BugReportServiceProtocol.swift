@@ -18,6 +18,8 @@ import Foundation
 import UIKit
 
 struct BugReport {
+    let userID: String
+    let deviceID: String?
     let text: String
     let includeLogs: Bool
     let includeCrashLog: Bool

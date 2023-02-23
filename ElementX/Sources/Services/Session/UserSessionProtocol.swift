@@ -25,10 +25,11 @@ enum UserSessionCallback {
 }
 
 protocol UserSessionProtocol {
-    var userID: String { get }
-    var isSoftLogout: Bool { get }
-    var deviceId: String? { get }
     var homeserver: String { get }
+    var userID: String { get }
+    var deviceID: String? { get }
+    
+    var isSoftLogout: Bool { get }
     
     var clientProxy: ClientProxyProtocol { get }
     var mediaProvider: MediaProviderProtocol { get }

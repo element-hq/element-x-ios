@@ -235,7 +235,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             let credentials = SoftLogoutCredentials(userId: userSession.userID,
                                                     homeserverName: userSession.homeserver,
                                                     userDisplayName: displayName,
-                                                    deviceId: userSession.deviceId)
+                                                    deviceId: userSession.deviceID)
             
             let authenticationService = AuthenticationServiceProxy(userSessionStore: userSessionStore)
             _ = await authenticationService.configure(for: userSession.homeserver)

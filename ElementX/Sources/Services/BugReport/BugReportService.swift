@@ -78,10 +78,19 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
-        var params = [MultipartFormData(key: "text", type: .text(value: bugReport.text))]
+    // swiftlint:disable:next function_body_length
+    func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
+        var params = [
+            MultipartFormData(key: "user_id", type: .text(value: bugReport.userID)),
+            MultipartFormData(key: "text", type: .text(value: bugReport.text))
+        ]
+        
+        if let deviceID = bugReport.deviceID {
+            params.append(.init(key: "device_id", type: .text(value: deviceID)))
+        }
+        
         params.append(contentsOf: defaultParams)
+        
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
