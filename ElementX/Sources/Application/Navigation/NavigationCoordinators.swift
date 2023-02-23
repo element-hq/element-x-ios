@@ -138,6 +138,10 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
             return
         }
         
+        if sidebarModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+        
         sidebarModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
     }
     
@@ -149,6 +153,10 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         guard let coordinator else {
             detailModule = nil
             return
+        }
+        
+        if detailModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
         }
         
         detailModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
@@ -164,6 +172,10 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
             return
         }
         
+        if sheetModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+        
         sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
     }
     
@@ -175,6 +187,10 @@ class NavigationSplitCoordinator: CoordinatorProtocol, ObservableObject, CustomS
         guard let coordinator else {
             fullScreenCoverModule = nil
             return
+        }
+        
+        if fullScreenCoverModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
         }
         
         fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
@@ -509,6 +525,10 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
             return
         }
         
+        if rootModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+        
         popToRoot(animated: false)
         
         rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
@@ -565,6 +585,10 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
             return
         }
         
+        if sheetModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
+        }
+        
         sheetModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
     }
     
@@ -582,6 +606,10 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         guard let coordinator else {
             fullScreenCoverModule = nil
             return
+        }
+        
+        if fullScreenCoverModule?.coordinator === coordinator {
+            fatalError("Cannot use the same coordinator more than once")
         }
         
         fullScreenCoverModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
