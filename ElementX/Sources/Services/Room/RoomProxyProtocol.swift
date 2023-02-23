@@ -60,6 +60,8 @@ protocol RoomProxyProtocol {
     
     func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError>
     
+    func removeTimelineListener()
+    
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError>
     
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError>

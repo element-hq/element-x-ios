@@ -60,6 +60,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
     
     func stop() {
+        parameters.roomProxy.removeTimelineListener()
         viewModel.context.send(viewAction: .markRoomAsRead)
     }
     
