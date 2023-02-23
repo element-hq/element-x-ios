@@ -123,6 +123,22 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         waitForExpectations(timeout: 1.0)
     }
     
+    func testNavigationStackDetailRootReplacement() {
+        let detailCoordinator = SomeTestCoordinator()
+        
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        navigationStackCoordinator.setRootCoordinator(detailCoordinator)
+        
+        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
+        
+        let newDetailCoordinator = SomeTestCoordinator()
+        navigationStackCoordinator.setRootCoordinator(newDetailCoordinator)
+        
+        navigationSplitCoordinator.setDetailCoordinator(navigationStackCoordinator)
+        
+        assertCoordinatorsEqual(navigationStackCoordinator.rootCoordinator, nil)
+    }
+    
     func testSheetDismissalCallback() {
         let sheetCoordinator = SomeTestCoordinator()
         
@@ -259,9 +275,13 @@ class NavigationSplitCoordinatorTests: XCTestCase {
     // MARK: - Private
     
     private func assertCoordinatorsEqual(_ lhs: CoordinatorProtocol?, _ rhs: CoordinatorProtocol?) {
+        if lhs == nil, rhs == nil {
+            return
+        }
+        
         guard let lhs = lhs as? SomeTestCoordinator,
               let rhs = rhs as? SomeTestCoordinator else {
-            XCTFail("Coordinators are not the same")
+            XCTFail("Coordinators are not the same: \(String(describing: lhs)) != \(String(describing: rhs))")
             return
         }
         
