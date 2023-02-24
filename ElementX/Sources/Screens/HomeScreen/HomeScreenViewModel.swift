@@ -30,7 +30,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
+    // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder

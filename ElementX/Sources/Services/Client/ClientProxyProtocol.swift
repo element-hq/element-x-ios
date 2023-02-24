@@ -25,7 +25,6 @@ enum ClientProxyCallback {
 }
 
 enum ClientProxyError: Error {
-    case failedRetrievingAvatarURL
     case failedRetrievingDisplayName
     case failedRetrievingAccountData
     case failedSettingAccountData

@@ -66,7 +66,9 @@ class ClientProxy: ClientProxyProtocol {
 
     private let avatarUrlSubject = CurrentValueSubject<URL?, Never>(nil)
     var avatarUrlPublisher: AnyPublisher<URL?, Never> {
-        avatarUrlSubject.eraseToAnyPublisher()
+        avatarUrlSubject
+            .removeDuplicates()
+            .eraseToAnyPublisher()
     }
     
     private var cancellables = Set<AnyCancellable>()
@@ -177,10 +179,15 @@ class ClientProxy: ClientProxyProtocol {
             self.avatarUrlSubject.value = URL(string: urlString)
         }
         await Task.dispatch(on: clientQueue) {
-            guard let urlString = try? self.client.avatarUrl() else {
+            do {
+                if let urlString = try self.client.avatarUrl() {
+                    self.avatarUrlSubject.value = URL(string: urlString)
+                } else {
+                    self.avatarUrlSubject.value = nil
+                }
+            } catch {
                 return
             }
-            self.avatarUrlSubject.value = URL(string: urlString)
         }
     }
     
