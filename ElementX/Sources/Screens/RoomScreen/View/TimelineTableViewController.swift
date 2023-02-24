@@ -48,6 +48,10 @@ class TimelineTableViewController: UIViewController {
             }
             
             applySnapshot()
+            
+            if timelineItems.isEmpty {
+                paginateBackwardsPublisher.send()
+            }
         }
     }
     
@@ -139,14 +143,6 @@ class TimelineTableViewController: UIViewController {
             .sink { [weak self] _ in
                 guard let self, let layout = self.keyboardWillShowLayout, layout.isBottomVisible else { return }
                 self.scrollToBottom(animated: false) // Force the bottom to be visible as some timelines misbehave.
-            }
-            .store(in: &cancellables)
-        
-        // The sliding sync session can expire while the app is in the background. In that case the
-        // timeline receives a clear() diff. Run this to make sure we load up items if needed
-        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
-            .sink { [weak self] _ in
-                self?.paginateBackwardsPublisher.send()
             }
             .store(in: &cancellables)
         
