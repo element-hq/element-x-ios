@@ -78,6 +78,8 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
 
     private func presentBugReportScreen() {
         let params = BugReportCoordinatorParameters(bugReportService: parameters.bugReportService,
+                                                    userID: parameters.userSession.userID,
+                                                    deviceID: parameters.userSession.deviceID,
                                                     userIndicatorController: parameters.userIndicatorController,
                                                     screenshot: nil,
                                                     isModallyPresented: false)

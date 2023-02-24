@@ -173,12 +173,16 @@ struct BugReportScreen: View {
 
 struct BugReport_Previews: PreviewProvider {
     static let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+                                              userID: "@mock.client.com",
+                                              deviceID: nil,
                                               screenshot: nil,
                                               isModallyPresented: false)
     
     static var previews: some View {
         NavigationStack {
             BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+                                                        userID: "@mock.client.com",
+                                                        deviceID: nil,
                                                         screenshot: nil,
                                                         isModallyPresented: false).context)
                 .previewDisplayName("Without Screenshot")
@@ -186,6 +190,8 @@ struct BugReport_Previews: PreviewProvider {
         
         NavigationStack {
             BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+                                                        userID: "@mock.client.com",
+                                                        deviceID: nil,
                                                         screenshot: Asset.Images.appLogo.image,
                                                         isModallyPresented: false).context)
                 .previewDisplayName("With Screenshot")
