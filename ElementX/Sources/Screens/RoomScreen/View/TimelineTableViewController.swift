@@ -142,6 +142,14 @@ class TimelineTableViewController: UIViewController {
             }
             .store(in: &cancellables)
         
+        // The sliding sync session can expire while the app is in the background. In that case the
+        // timeline receives a clear() diff. Run this to make sure we load up items if needed
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .sink { [weak self] _ in
+                self?.paginateBackwardsPublisher.send()
+            }
+            .store(in: &cancellables)
+        
         configureDataSource()
     }
     
