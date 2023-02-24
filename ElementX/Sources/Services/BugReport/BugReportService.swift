@@ -164,7 +164,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             MultipartFormData(key: "user_language", type: .text(value: Bundle.elementLanguage ?? "null")),
             MultipartFormData(key: "fallback_language", type: .text(value: Bundle.elementFallbackLanguage ?? "null")),
             MultipartFormData(key: "local_time", type: .text(value: localTime)),
-            MultipartFormData(key: "utc_time", type: .text(value: utcTime))
+            MultipartFormData(key: "utc_time", type: .text(value: utcTime)),
+            MultipartFormData(key: "base_bundle_identifier", type: .text(value: InfoPlistReader.main.baseBundleIdentifier))
         ]
     }
 
