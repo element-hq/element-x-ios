@@ -166,16 +166,16 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             
             if itemGroup.count == 1 {
                 if let firstItem = itemGroup.first {
-                    timelineViews.append(RoomTimelineViewProvider(timelineItem: firstItem, grouping: .single))
+                    timelineViews.append(RoomTimelineViewProvider(timelineItem: firstItem, groupStyle: .single))
                 }
             } else {
                 for (index, item) in itemGroup.enumerated() {
                     if index == 0 {
-                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, grouping: .first))
+                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, groupStyle: .first))
                     } else if index == itemGroup.count - 1 {
-                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, grouping: .last))
+                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, groupStyle: .last))
                     } else {
-                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, grouping: .middle))
+                        timelineViews.append(RoomTimelineViewProvider(timelineItem: item, groupStyle: .middle))
                     }
                 }
             }

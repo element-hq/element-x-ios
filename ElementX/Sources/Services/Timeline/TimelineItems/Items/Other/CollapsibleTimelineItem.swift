@@ -19,25 +19,31 @@ import Foundation
 struct CollapsibleTimelineItem: RoomTimelineItemProtocol, Identifiable, Hashable {
     let id: String
     let items: [RoomTimelineItemProtocol]
+    let itemIDs: [String]
     
     init(items: [RoomTimelineItemProtocol]) {
-        guard let firstItem = items.first else {
+        self.items = items
+        itemIDs = items.map(\.id)
+        
+        guard let firstItemID = itemIDs.first else {
             fatalError()
         }
         
-        self.items = items
-        id = firstItem.id
+        id = firstItemID
     }
     
     // MARK: - Equatable
     
     static func == (lhs: CollapsibleTimelineItem, rhs: CollapsibleTimelineItem) -> Bool {
-        lhs.id == rhs.id
+        // Technically not a correct implementation of equality as the items themselves could be updated.
+        lhs.id == rhs.id && lhs.itemIDs == rhs.itemIDs
     }
     
     // MARK: - Hashable
     
     func hash(into hasher: inout Hasher) {
+        // Technically not a correct implementation of hashing as the items themselves could be updated.
         hasher.combine(id)
+        hasher.combine(itemIDs)
     }
 }

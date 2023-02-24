@@ -75,7 +75,7 @@ extension View {
         environment(\.timelineStyle, style)
     }
     
-    func timelineStyleGrouping(_ grouping: TimelineGroupStyle) -> some View {
-        environment(\.timelineGroupStyle, grouping)
+    func timelineGroupStyle(_ groupStyle: TimelineGroupStyle) -> some View {
+        environment(\.timelineGroupStyle, groupStyle)
     }
 }

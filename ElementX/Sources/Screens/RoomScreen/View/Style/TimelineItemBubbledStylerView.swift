@@ -19,7 +19,7 @@ import SwiftUI
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
-    @Environment(\.timelineGroupStyle) private var timelineStyleGrouping
+    @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
@@ -125,7 +125,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     private var messageBubbleTopPadding: CGFloat {
         guard timelineItem.isOutgoing else { return 0 }
-        return timelineStyleGrouping == .single || timelineStyleGrouping == .first ? 8 : 0
+        return timelineGroupStyle == .single || timelineGroupStyle == .first ? 8 : 0
     }
 
     private var shouldAvoidBubbling: Bool {
@@ -137,7 +137,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private var roundedCorners: UIRectCorner {
-        switch timelineStyleGrouping {
+        switch timelineGroupStyle {
         case .single:
             return .allCorners
         case .first:
@@ -158,7 +158,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     }
     
     private var shouldShowSenderDetails: Bool {
-        timelineStyleGrouping.shouldShowSenderDetails
+        timelineGroupStyle.shouldShowSenderDetails
     }
 }
 
@@ -177,7 +177,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
-                RoomTimelineViewProvider(timelineItem: item, grouping: .single)
+                RoomTimelineViewProvider(timelineItem: item, groupStyle: .single)
                     .padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
             }
         }
