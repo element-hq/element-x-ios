@@ -1,3 +1,8 @@
+## Changes in 1.0.23 (2023-02-24)
+
+No significant changes.
+
+
 ## Changes in 1.0.22 (2023-02-24)
 
 No significant changes.
