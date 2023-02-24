@@ -37,42 +37,42 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     case group(CollapsibleTimelineItem, TimelineGroupStyle)
     
     // swiftlint:disable:next cyclomatic_complexity
-    init(timelineItem: RoomTimelineItemProtocol, grouping: TimelineGroupStyle) {
+    init(timelineItem: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
         switch timelineItem {
         case let item as TextRoomTimelineItem:
-            self = .text(item, grouping)
+            self = .text(item, groupStyle)
         case let item as ImageRoomTimelineItem:
-            self = .image(item, grouping)
+            self = .image(item, groupStyle)
         case let item as VideoRoomTimelineItem:
-            self = .video(item, grouping)
+            self = .video(item, groupStyle)
         case let item as AudioRoomTimelineItem:
-            self = .audio(item, grouping)
+            self = .audio(item, groupStyle)
         case let item as FileRoomTimelineItem:
-            self = .file(item, grouping)
+            self = .file(item, groupStyle)
         case let item as SeparatorRoomTimelineItem:
-            self = .separator(item, grouping)
+            self = .separator(item, groupStyle)
         case let item as NoticeRoomTimelineItem:
-            self = .notice(item, grouping)
+            self = .notice(item, groupStyle)
         case let item as EmoteRoomTimelineItem:
-            self = .emote(item, grouping)
+            self = .emote(item, groupStyle)
         case let item as RedactedRoomTimelineItem:
-            self = .redacted(item, grouping)
+            self = .redacted(item, groupStyle)
         case let item as EncryptedRoomTimelineItem:
-            self = .encrypted(item, grouping)
+            self = .encrypted(item, groupStyle)
         case let item as ReadMarkerRoomTimelineItem:
-            self = .readMarker(item, grouping)
+            self = .readMarker(item, groupStyle)
         case let item as PaginationIndicatorRoomTimelineItem:
-            self = .paginationIndicator(item, grouping)
+            self = .paginationIndicator(item, groupStyle)
         case let item as StickerRoomTimelineItem:
-            self = .sticker(item, grouping)
+            self = .sticker(item, groupStyle)
         case let item as UnsupportedRoomTimelineItem:
-            self = .unsupported(item, grouping)
+            self = .unsupported(item, groupStyle)
         case let item as TimelineStartRoomTimelineItem:
-            self = .timelineStart(item, grouping)
+            self = .timelineStart(item, groupStyle)
         case let item as StateRoomTimelineItem:
-            self = .state(item, grouping)
+            self = .state(item, groupStyle)
         case let item as CollapsibleTimelineItem:
-            self = .group(item, grouping)
+            self = .group(item, groupStyle)
         default:
             fatalError("Unknown timeline item")
         }
@@ -119,7 +119,7 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
 extension RoomTimelineViewProvider: View {
     var body: some View {
         timelineView
-            .environment(\.timelineGroupStyle, timelineStyleGrouping)
+            .timelineGroupStyle(timelineGroupStyle)
     }
     
     @ViewBuilder private var timelineView: some View {
@@ -161,26 +161,26 @@ extension RoomTimelineViewProvider: View {
         }
     }
     
-    private var timelineStyleGrouping: TimelineGroupStyle {
+    private var timelineGroupStyle: TimelineGroupStyle {
         switch self {
-        case .text(_, let grouping),
-             .separator(_, let grouping),
-             .image(_, let grouping),
-             .video(_, let grouping),
-             .audio(_, let grouping),
-             .file(_, let grouping),
-             .emote(_, let grouping),
-             .notice(_, let grouping),
-             .redacted(_, let grouping),
-             .encrypted(_, let grouping),
-             .readMarker(_, let grouping),
-             .paginationIndicator(_, let grouping),
-             .sticker(_, let grouping),
-             .unsupported(_, let grouping),
-             .timelineStart(_, let grouping),
-             .state(_, let grouping),
-             .group(_, let grouping):
-            return grouping
+        case .text(_, let groupStyle),
+             .separator(_, let groupStyle),
+             .image(_, let groupStyle),
+             .video(_, let groupStyle),
+             .audio(_, let groupStyle),
+             .file(_, let groupStyle),
+             .emote(_, let groupStyle),
+             .notice(_, let groupStyle),
+             .redacted(_, let groupStyle),
+             .encrypted(_, let groupStyle),
+             .readMarker(_, let groupStyle),
+             .paginationIndicator(_, let groupStyle),
+             .sticker(_, let groupStyle),
+             .unsupported(_, let groupStyle),
+             .timelineStart(_, let groupStyle),
+             .state(_, let groupStyle),
+             .group(_, let groupStyle):
+            return groupStyle
         }
     }
 }

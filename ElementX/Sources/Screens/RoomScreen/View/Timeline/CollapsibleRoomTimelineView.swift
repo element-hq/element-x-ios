@@ -24,7 +24,7 @@ struct CollapsibleRoomTimelineView: View {
 
     init(timelineItem: CollapsibleTimelineItem) {
         self.timelineItem = timelineItem
-        timelineViews = timelineItem.items.map { RoomTimelineViewProvider(timelineItem: $0, grouping: .single) }
+        timelineViews = timelineItem.items.map { RoomTimelineViewProvider(timelineItem: $0, groupStyle: .single) }
     }
     
     var body: some View {
