@@ -45,6 +45,10 @@ struct TimelineView: UIViewControllerRepresentable {
         
         init(viewModelContext: RoomScreenViewModel.Context) {
             context = viewModelContext
+            
+            if viewModelContext.viewState.items.isEmpty {
+                viewModelContext.send(viewAction: .paginateBackwards)
+            }
         }
         
         /// Updates the specified table view's properties from the current view state.
