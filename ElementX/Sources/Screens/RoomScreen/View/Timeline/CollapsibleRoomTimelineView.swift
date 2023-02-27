@@ -53,7 +53,7 @@ struct CollapsibleRoomTimelineView_Previews: PreviewProvider {
 
 private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupStyle {
     func makeBody(configuration: Configuration) -> some View {
-        VStack {
+        VStack(spacing: 0.0) {
             HStack(alignment: .center) {
                 configuration.label
                 Text(Image(systemName: "chevron.forward"))
@@ -63,8 +63,10 @@ private struct CollapsibleRoomTimelineItemDisclosureGroupStyle: DisclosureGroupS
             .frame(maxWidth: .infinity)
             .font(.element.footnote)
             .foregroundColor(.element.secondaryContent)
-            .padding(.horizontal, 36)
-            .padding(.vertical, 8)
+            .padding(.horizontal, 36.0)
+            .padding(.top, 20.0)
+            .padding(.bottom, 12.0)
+
             .onTapGesture {
                 configuration.isExpanded.toggle()
             }
