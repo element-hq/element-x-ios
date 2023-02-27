@@ -235,24 +235,37 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         var canBackPaginate = true
         var isBackPaginating = false
         
-        var createdIdentifiers = [String: Bool]()
-        
         let collapsibleChunks = timelineProvider.itemsPublisher.value.groupBy { isItemCollapsible($0) }
         
-        for (index, itemGroup) in collapsibleChunks.enumerated() {
-            if itemGroup.count == 1, let itemProxy = itemGroup.first {
-                let isLastItem = index == collapsibleChunks.indices.last
-                if let item = buildTimelineItemFor(itemProxy: itemProxy, isLastItem: isLastItem, createdIdentifiers: &createdIdentifiers, isBackPaginating: &isBackPaginating, canBackPaginate: &canBackPaginate) {
-                    newTimelineItems.append(item)
-                }
-            } else {
-                let items = itemGroup.compactMap { itemProxy in
-                    buildTimelineItemFor(itemProxy: itemProxy, isLastItem: false, createdIdentifiers: &createdIdentifiers, isBackPaginating: &isBackPaginating, canBackPaginate: &canBackPaginate)
+        for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
+            let isLastItem = index == collapsibleChunks.indices.last
+            
+            let items = collapsibleChunk.compactMap { itemProxy in
+                let timelineItem = buildTimelineItemFor(itemProxy: itemProxy)
+                
+                if timelineItem is PaginationIndicatorRoomTimelineItem {
+                    isBackPaginating = true
+                } else if timelineItem is TimelineStartRoomTimelineItem {
+                    canBackPaginate = false
                 }
                 
-                if !items.isEmpty {
-                    newTimelineItems.append(CollapsibleTimelineItem(items: items))
+                return timelineItem
+            }
+            
+            if items.isEmpty {
+                continue
+            }
+            
+            if items.count == 1, let timelineItem = items.first {
+                // Don't show the read marker if it's the last item in the timeline
+                // https://github.com/matrix-org/matrix-rust-sdk/issues/1546
+                guard !(timelineItem is ReadMarkerRoomTimelineItem && isLastItem) else {
+                    continue
                 }
+                
+                newTimelineItems.append(timelineItem)
+            } else {
+                newTimelineItems.append(CollapsibleTimelineItem(items: items))
             }
         }
 
@@ -263,22 +276,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func buildTimelineItemFor(itemProxy: TimelineItemProxy,
-                                      isLastItem: Bool,
-                                      createdIdentifiers: inout [String: Bool],
-                                      isBackPaginating: inout Bool,
-                                      canBackPaginate: inout Bool) -> RoomTimelineItemProtocol? {
+    private func buildTimelineItemFor(itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
         switch itemProxy {
         case .event(let eventItemProxy):
-            if let timelineItem = timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy) {
-                #warning("This works around duplicated items coming out of the SDK, remove once fixed")
-                if createdIdentifiers[timelineItem.id] == nil {
-                    createdIdentifiers[timelineItem.id] = true
-                    return timelineItem
-                } else {
-                    MXLog.error("Found duplicated timeline item, ignoring")
-                }
-            }
+            return timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy)
         case .virtual(let virtualItem):
             switch virtualItem {
             case .dayDivider(let timestamp):
@@ -287,15 +288,10 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
                 let dateString = date.formatted(date: .complete, time: .omitted)
                 return SeparatorRoomTimelineItem(text: dateString)
             case .readMarker:
-                // Don't show the read marker if it's the last item in the timeline
-                if !isLastItem {
-                    return ReadMarkerRoomTimelineItem()
-                }
+                return ReadMarkerRoomTimelineItem()
             case .loadingIndicator:
-                isBackPaginating = true
                 return PaginationIndicatorRoomTimelineItem()
             case .timelineStart:
-                canBackPaginate = false
                 return TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
             }
         case .unknown:
