@@ -5,30 +5,6 @@ on:
     types: [labeled]
 
 jobs:
-  move_element_x_issues:
-    name: ElementX issues to ElementX project board
-    runs-on: ubuntu-latest
-    # Skip in forks
-    if: >
-      github.repository == 'vector-im/element-x-ios'
-    steps:
-      - uses: octokit/graphql-action@v2.x
-        with:
-          headers: '{"GraphQL-Features": "projects_next_graphql"}'
-          query: |
-            mutation add_to_project($projectid:ID!,$contentid:ID!) {
-              addProjectV2ItemById(input: {projectId: $projectid contentId: $contentid}) {
-                item {
-                  id
-                }
-              }
-            }
-          projectid: ${{ env.PROJECT_ID }}
-          contentid: ${{ github.event.issue.node_id }}
-        env:
-          PROJECT_ID: "PVT_kwDOAM0swc4ABTXY"
-          GITHUB_TOKEN: ${{ secrets.ELEMENT_BOT_TOKEN }}
-
   ex_plorers:
     name: Add labelled issues to X-Plorer project
     runs-on: ubuntu-latest
