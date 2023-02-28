@@ -186,7 +186,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             let summary = rooms[0]
             changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
         case .popBack:
-            MXLog.verbose("Pop, current total count: \(rooms.count)")
+            MXLog.verbose("Pop Back, current total count: \(rooms.count)")
             guard let value = rooms.last else {
                 fatalError()
             }
