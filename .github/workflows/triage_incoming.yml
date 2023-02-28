@@ -57,6 +57,6 @@ jobs:
       - name: 'Auto-assign issue'
         uses: pozil/auto-assign-issue@v1
         with:
-                assignees: VolkerJunginger
-                  numOfAssignee: 1
-                  allowSelfAssign: true
+          assignees: VolkerJunginger
+          numOfAssignee: 1
+          allowSelfAssign: true
