@@ -55,7 +55,7 @@ class ClientProxy: ClientProxyProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
     
-    private var slidingSyncObserverToken: StoppableSpawn?
+    private var slidingSyncObserverToken: TaskHandle?
     private var slidingSync: SlidingSync?
     
     var visibleRoomsSlidingSyncView: SlidingSyncView?
