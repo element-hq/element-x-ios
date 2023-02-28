@@ -70,7 +70,7 @@ struct LoginScreen: View {
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(ElementL10n.ftueAuthSignInEnterDetails)
-                .font(.element.subheadline)
+                .font(.element.footnote)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
