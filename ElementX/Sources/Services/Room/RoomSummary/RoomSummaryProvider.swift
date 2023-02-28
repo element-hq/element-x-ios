@@ -135,7 +135,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func buildDiff(from diff: SlidingSyncViewRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
@@ -213,23 +213,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         if duplicates.count > 0 {
             MXLog.error("Found duplicated room room list items: \(duplicates)")
-        }
-    }
-}
-
-extension SlidingSyncViewRoomsListDiff {
-    var isInvalidation: Bool {
-        switch self {
-            #warning("What about set and reset??")
-        case .pushFront(let value), .pushBack(let value), .set(_, let value), .insert(_, let value):
-            switch value {
-            case .invalidated:
-                return true
-            default:
-                return false
-            }
-        default:
-            return false
         }
     }
 }
