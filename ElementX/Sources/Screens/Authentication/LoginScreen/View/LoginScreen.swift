@@ -28,7 +28,7 @@ struct LoginScreen: View {
         ScrollView {
             VStack(spacing: 0) {
                 header
-                    .padding(.top, UIConstants.topPaddingToNavigationBar)
+                    .padding(.top, UIConstants.titleTopPaddingToNavigationBar)
                     .padding(.bottom, 32)
                 
                 serverInfo
@@ -162,11 +162,18 @@ struct Login_Previews: PreviewProvider {
     }
     
     static func screen(for viewModel: LoginViewModel) -> some View {
-        NavigationView {
+        NavigationStack {
             LoginScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)
                 .tint(.element.accent)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { } label: {
+                            Text("\(Image(systemName: "chevron.backward")) Back")
+                        }
+                    }
+                }
         }
-        .navigationViewStyle(.stack)
+        .tint(.element.accent)
     }
 }

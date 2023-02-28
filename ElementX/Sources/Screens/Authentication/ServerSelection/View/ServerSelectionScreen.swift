@@ -23,7 +23,7 @@ struct ServerSelectionScreen: View {
         ScrollView {
             VStack(spacing: 0) {
                 header
-                    .padding(.top, UIConstants.topPaddingToNavigationBar)
+                    .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
                     .padding(.bottom, 36)
                 
                 serverForm
@@ -48,7 +48,7 @@ struct ServerSelectionScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
             
-            Text(ElementL10n.ftueAuthChooseServerSubtitle)
+            Text(ElementL10n.ftueAuthChooseServerSignInSubtitle)
                 .font(.element.body)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.tertiaryContent)
@@ -104,11 +104,10 @@ struct ServerSelectionScreen: View {
 struct ServerSelection_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(MockServerSelectionScreenState.allCases, id: \.self) { state in
-            NavigationView {
+            NavigationStack {
                 ServerSelectionScreen(context: state.viewModel.context)
                     .tint(.element.accent)
             }
-            .navigationViewStyle(.stack)
         }
     }
 }
