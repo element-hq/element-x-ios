@@ -54,9 +54,9 @@ class SlidingSyncViewProxy {
     private let slidingSync: SlidingSyncProtocol
     private let slidingSyncView: SlidingSyncViewProtocol
     
-    private var listUpdateObserverToken: StoppableSpawn?
-    private var stateUpdateObserverToken: StoppableSpawn?
-    private var countUpdateObserverToken: StoppableSpawn?
+    private var listUpdateObserverToken: TaskHandle?
+    private var stateUpdateObserverToken: TaskHandle?
+    private var countUpdateObserverToken: TaskHandle?
     
     private var cancellables = Set<AnyCancellable>()
     
