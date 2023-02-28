@@ -87,7 +87,7 @@ struct TimelineTableView_Previews: PreviewProvider {
                                                roomName: "Preview room")
     
     static var previews: some View {
-        NavigationView {
+        NavigationStack {
             RoomScreen(context: viewModel.context)
         }
     }
