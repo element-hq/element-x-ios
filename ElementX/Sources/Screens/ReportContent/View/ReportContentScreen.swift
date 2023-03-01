@@ -17,75 +17,82 @@
 import SwiftUI
 
 struct ReportContentScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
-    }
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     
     @ObservedObject var context: ReportContentViewModel.Context
     
+    private var horizontalPadding: CGFloat {
+        horizontalSizeClass == .regular ? 50 : 16
+    }
+
     var body: some View {
         ScrollView {
             mainContent
                 .padding(.top, 50)
-                .padding(.horizontal)
-                .readableFrame()
+                .padding(.horizontal, horizontalPadding)
         }
-        .safeAreaInset(edge: .bottom) {
-            buttons
-                .padding(.horizontal)
-                .padding(.vertical)
-                .readableFrame()
-                .background(Color.element.system)
-        }
+        .scrollDismissesKeyboard(.immediately)
+        .background(Color.element.formBackground.ignoresSafeArea())
+        .navigationTitle(ElementL10n.bugReportScreenTitle)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar { toolbar }
+        .interactiveDismissDisabled()
     }
-    
+
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
-        VStack(spacing: 36) {
-            Text(context.viewState.promptType.title)
-                .font(.element.title2Bold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("title")
-            
-            Image(systemName: context.viewState.promptType.imageSystemName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100)
-            
-            HStack {
-                Text("Counter: \(context.viewState.count)")
-                    .font(.element.body)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(counterColor)
-                
-                Button("−") {
-                    context.send(viewAction: .decrementCount)
-                }
-                .buttonStyle(.elementGhost())
-                
-                Button("+") {
-                    context.send(viewAction: .incrementCount)
-                }
-                .buttonStyle(.elementGhost())
-            }
+        VStack(alignment: .leading, spacing: 24) {
+            Text(ElementL10n.reportContentInfo)
+                .font(.element.body)
+                .foregroundColor(Color.element.primaryContent)
+            descriptionTextEditor
         }
     }
-    
-    /// The action buttons shown at the bottom of the view.
-    var buttons: some View {
-        VStack {
-            Button { context.send(viewAction: .accept) } label: {
-                Text("Accept")
-            }
-            .buttonStyle(.elementAction(.xLarge))
-            
-            Button { context.send(viewAction: .cancel) } label: {
-                Text("Cancel")
+
+    @ViewBuilder
+    private var descriptionTextEditor: some View {
+        ZStack(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(Color.element.formRowBackground)
+
+            TextEditor(text: $context.reasonText)
+                .tint(.element.brand)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4)
+                .cornerRadius(14)
+                .accessibilityIdentifier(A11yIdentifiers.reportContentScreen.reason)
+                .scrollContentBackground(.hidden)
+
+            if context.reasonText.isEmpty {
+                Text(ElementL10n.reportContentCustomHint)
+                    .font(.element.body)
+                    .foregroundColor(Color.element.secondaryContent)
+                    .padding(.horizontal, 16)
                     .padding(.vertical, 12)
+                    .allowsHitTesting(false)
             }
+
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .stroke(Color.element.quaternaryContent)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 220)
+        .font(.body)
+    }
+
+    @ToolbarContentBuilder
+    private var toolbar: some ToolbarContent {
+        ToolbarItem(placement: .cancellationAction) {
+            Button(ElementL10n.actionCancel) {
+                context.send(viewAction: .cancel)
+            }
+        }
+
+        ToolbarItem(placement: .confirmationAction) {
+            Button(ElementL10n.actionSend) {
+                context.send(viewAction: .submit)
+            }
+            .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.send)
         }
     }
 }
@@ -95,12 +102,8 @@ struct ReportContentScreen: View {
 struct ReportContent_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let regularViewModel = ReportContentViewModel(promptType: .regular)
-            ReportContentScreen(context: regularViewModel.context)
-            
-            let upgradeViewModel = ReportContentViewModel(promptType: .upgrade)
-            ReportContentScreen(context: upgradeViewModel.context)
+            let viewModel = ReportContentViewModel()
+            ReportContentScreen(context: viewModel.context)
         }
-        .tint(.element.accent)
     }
 }

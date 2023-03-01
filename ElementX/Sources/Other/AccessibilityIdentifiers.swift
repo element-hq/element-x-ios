@@ -26,6 +26,7 @@ struct A11yIdentifiers {
     static let roomDetailsScreen = RoomDetailsScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let softLogoutScreen = SoftLogoutScreen()
+    static let reportContentScreen = ReportContentScreen()
         
     struct BugReportScreen {
         let report = "bug_report-report"
@@ -92,5 +93,9 @@ struct A11yIdentifiers {
         let clearDataTitle = "soft_logout-clear_data_title"
         let clearDataMessage = "soft_logout-clear_data_message"
         let clearData = "soft_logout-clear_data"
+    }
+
+    struct ReportContentScreen {
+        let reason = "report_content-reason"
     }
 }

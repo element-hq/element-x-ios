@@ -16,50 +16,22 @@
 
 import Foundation
 
-enum ReportContentPromptType {
-    case regular
-    case upgrade
-}
-
-extension ReportContentPromptType: Identifiable, CaseIterable {
-    var id: Self { self }
-    
-    var title: String {
-        switch self {
-        case .regular:
-            return "Make this chat public?"
-        case .upgrade:
-            return "Privacy warning"
-        }
-    }
-    
-    var imageSystemName: String {
-        switch self {
-        case .regular:
-            return "app.gift"
-        case .upgrade:
-            return "shield"
-        }
-    }
-}
-
 enum ReportContentViewModelAction {
-    case accept
     case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case submitStarted
+    case submitFinished
+    case submitFailed(error: Error)
 }
 
 struct ReportContentViewState: BindableState {
-    var promptType: ReportContentPromptType
-    var count: Int
+    var bindings: ReportContentViewStateBindings
+}
+
+struct ReportContentViewStateBindings {
+    var reasonText: String
 }
 
 enum ReportContentViewAction {
-    case incrementCount
-    case decrementCount
-    case accept
     case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case submit
 }

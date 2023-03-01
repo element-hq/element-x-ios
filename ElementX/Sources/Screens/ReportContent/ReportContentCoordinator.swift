@@ -16,9 +16,7 @@
 
 import SwiftUI
 
-struct ReportContentCoordinatorParameters {
-    let promptType: ReportContentPromptType
-}
+struct ReportContentCoordinatorParameters { }
 
 enum ReportContentCoordinatorAction {
     case accept
@@ -36,16 +34,19 @@ final class ReportContentCoordinator: CoordinatorProtocol {
     init(parameters: ReportContentCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = ReportContentViewModel(promptType: parameters.promptType)
+        viewModel = ReportContentViewModel()
     }
     
     func start() {
         viewModel.callback = { [weak self] action in
             guard let self else { return }
             switch action {
-            case .accept:
-                MXLog.info("User accepted the prompt.")
-                self.callback?(.accept)
+            case .submitStarted:
+                break
+            case let .submitFailed(error):
+                break
+            case .submitFinished:
+                break
             case .cancel:
                 self.callback?(.cancel)
             }

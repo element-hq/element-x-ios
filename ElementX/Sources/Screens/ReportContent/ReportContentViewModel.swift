@@ -21,22 +21,18 @@ typealias ReportContentViewModelType = StateStoreViewModel<ReportContentViewStat
 class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModelProtocol {
     var callback: ((ReportContentViewModelAction) -> Void)?
 
-    init(promptType: ReportContentPromptType, initialCount: Int = 0) {
-        super.init(initialViewState: ReportContentViewState(promptType: promptType, count: 0))
+    init() {
+        super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "")))
     }
-    
+
     // MARK: - Public
     
     override func process(viewAction: ReportContentViewAction) async {
         switch viewAction {
-        case .accept:
-            callback?(.accept)
         case .cancel:
-            callback?(.cancel)
-        case .incrementCount:
-            state.count += 1
-        case .decrementCount:
-            state.count -= 1
+            break
+        case .submit:
+            break
         }
     }
 }

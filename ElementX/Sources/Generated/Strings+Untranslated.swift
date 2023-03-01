@@ -96,6 +96,8 @@ extension ElementL10n {
   }
   /// Notification
   public static let notification = ElementL10n.tr("Untranslated", "Notification")
+  /// Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.
+  public static let reportContentInfo = ElementL10n.tr("Untranslated", "report_content_info")
   /// About
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
   /// Copy Link

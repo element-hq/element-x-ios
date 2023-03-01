@@ -88,6 +88,9 @@
 "bug_report_screen_edit_screenshot" = "Edit Screenshot";
 "bug_report_screen_sending" = "Sending...";
 
+// Report Content
+"report_content_info" = "Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.";
+
 // Session verification
 /*
  "verification_open_other_to_verify" = "Use an existing session to verify this one, granting it access to encrypted messages.";
