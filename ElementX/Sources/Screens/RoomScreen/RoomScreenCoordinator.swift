@@ -135,10 +135,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             }
         }
         navCoordinator.setRootCoordinator(coordinator)
-        navigationStackCoordinator.setSheetCoordinator(navCoordinator)
+        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
 
     private func showSuccess(label: String) {
-        parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label, iconName: "checkmark"))
+        parameters.userIndicatorController?.submitIndicator(UserIndicator(type: .modal, title: label, iconName: "checkmark"))
     }
 }

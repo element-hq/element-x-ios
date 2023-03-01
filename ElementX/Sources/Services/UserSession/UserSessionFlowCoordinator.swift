@@ -160,14 +160,12 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                                                                roomProxy: roomProxy,
                                                                                                timelineItemFactory: timelineItemFactory,
                                                                                                mediaProvider: userSession.mediaProvider)
-            let userIndicatorController = UserIndicatorController(rootCoordinator: detailNavigationStackCoordinator)
 
             let parameters = RoomScreenCoordinatorParameters(navigationStackCoordinator: detailNavigationStackCoordinator,
                                                              roomProxy: roomProxy,
                                                              timelineController: timelineController,
                                                              mediaProvider: userSession.mediaProvider,
-                                                             emojiProvider: emojiProvider,
-                                                             userIndicatorController: userIndicatorController)
+                                                             emojiProvider: emojiProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
             detailNavigationStackCoordinator.setRootCoordinator(coordinator) { [weak self, roomIdentifier] in

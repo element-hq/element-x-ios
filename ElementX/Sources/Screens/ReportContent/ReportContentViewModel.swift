@@ -37,7 +37,7 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
         case .cancel:
             callback?(.cancel)
         case .submit:
-            callback?(.submitStarted)
+            await submitReport()
         }
     }
 
