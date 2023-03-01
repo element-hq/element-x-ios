@@ -91,6 +91,7 @@
 
 // Report Content
 "report_content_info" = "Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.";
+"report_content_submitted" = "Report Submitted";
 
 // Session verification
 /*
