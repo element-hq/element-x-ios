@@ -22,7 +22,6 @@ struct RoomScreenCoordinatorParameters {
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let emojiProvider: EmojiProviderProtocol
-    weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -139,6 +138,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
 
     private func showSuccess(label: String) {
-        parameters.userIndicatorController?.submitIndicator(UserIndicator(type: .modal, title: label, iconName: "checkmark"))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: label, iconName: "checkmark"))
     }
 }
