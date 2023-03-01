@@ -36,9 +36,11 @@ class NavigationModule: Identifiable, Hashable {
     
     func tearDown() {
         coordinator?.stop()
-        dismissalCallback?()
         coordinator = nil
+        
+        let callback = dismissalCallback
         dismissalCallback = nil
+        callback?()
     }
     
     nonisolated static func == (lhs: NavigationModule, rhs: NavigationModule) -> Bool {
