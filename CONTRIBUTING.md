@@ -2,7 +2,7 @@
 
 Please read https://github.com/matrix-org/synapse/blob/master/CONTRIBUTING.md.
 
-Element iOS support can be found in this room: [![Element iOS Matrix room #element-ios:matrix.org](https://img.shields.io/matrix/element-ios:matrix.org.svg?label=%23element-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-ios:matrix.org)
+Element iOS support can be found in this room: [![Element X iOS Matrix room #element-x-ios:matrix.org](https://img.shields.io/matrix/element-x-ios:matrix.org.svg?label=%23element-x-ios:matrix.org&logo=matrix&server_fqdn=matrix.org)](https://matrix.to/#/#element-x-ios:matrix.org)
 
 ## Setting up a development environment
 
