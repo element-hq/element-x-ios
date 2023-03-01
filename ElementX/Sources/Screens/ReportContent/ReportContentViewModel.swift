@@ -21,7 +21,12 @@ typealias ReportContentViewModelType = StateStoreViewModel<ReportContentViewStat
 class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModelProtocol {
     var callback: ((ReportContentViewModelAction) -> Void)?
 
-    init() {
+    private let itemID: String
+    private let timelineController: RoomTimelineControllerProtocol
+
+    init(itemID: String, timelineController: RoomTimelineControllerProtocol) {
+        self.itemID = itemID
+        self.timelineController = timelineController
         super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "")))
     }
 
@@ -30,9 +35,9 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
     override func process(viewAction: ReportContentViewAction) async {
         switch viewAction {
         case .cancel:
-            break
+            callback?(.cancel)
         case .submit:
-            break
+            callback?(.submitStarted)
         }
     }
 }

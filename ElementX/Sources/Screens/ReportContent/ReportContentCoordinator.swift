@@ -16,13 +16,14 @@
 
 import SwiftUI
 
-struct ReportContentCoordinatorParameters { }
+struct ReportContentCoordinatorParameters {
+    let itemID: String
+    let timelineController: RoomTimelineControllerProtocol
+}
 
 enum ReportContentCoordinatorAction {
-    case accept
     case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
+    case finish
 }
 
 final class ReportContentCoordinator: CoordinatorProtocol {
@@ -34,7 +35,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
     init(parameters: ReportContentCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = ReportContentViewModel()
+        viewModel = ReportContentViewModel(itemID: parameters.itemID, timelineController: parameters.timelineController)
     }
     
     func start() {
@@ -46,7 +47,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
             case let .submitFailed(error):
                 break
             case .submitFinished:
-                break
+                self.callback?(.finish)
             case .cancel:
                 self.callback?(.cancel)
             }

@@ -54,6 +54,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayFile(for: fileURL, with: title)
             case .displayEmojiPicker(let itemId):
                 self.displayEmojiPickerScreen(for: itemId)
+            case .displayReportContent(let itemId):
+                self.displayReportContent(for: itemId)
             }
         }
     }
@@ -114,5 +116,16 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         }
 
         navigationStackCoordinator.push(coordinator)
+    }
+
+    private func displayReportContent(for itemId: String) {
+        let parameters = ReportContentCoordinatorParameters(itemID: itemId, timelineController: parameters.timelineController)
+        let coordinator = ReportContentCoordinator(parameters: parameters)
+        let navCoordinator = NavigationStackCoordinator()
+        navCoordinator.setRootCoordinator(coordinator)
+        coordinator.callback = { [weak self] _ in
+            self?.navigationStackCoordinator.setSheetCoordinator(nil)
+        }
+        navigationStackCoordinator.setSheetCoordinator(navCoordinator)
     }
 }

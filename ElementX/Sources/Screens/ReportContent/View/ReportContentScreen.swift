@@ -33,7 +33,7 @@ struct ReportContentScreen: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .navigationTitle(ElementL10n.bugReportScreenTitle)
+        .navigationTitle(ElementL10n.reportContent)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
@@ -102,7 +102,7 @@ struct ReportContentScreen: View {
 struct ReportContent_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = ReportContentViewModel()
+            let viewModel = ReportContentViewModel(itemID: "", timelineController: MockRoomTimelineController())
             ReportContentScreen(context: viewModel.context)
         }
     }
