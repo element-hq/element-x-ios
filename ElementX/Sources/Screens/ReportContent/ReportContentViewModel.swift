@@ -22,11 +22,11 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
     var callback: ((ReportContentViewModelAction) -> Void)?
 
     private let itemID: String
-    private let timelineController: RoomTimelineControllerProtocol
+    private let roomProxy: RoomProxyProtocol
 
-    init(itemID: String, timelineController: RoomTimelineControllerProtocol) {
+    init(itemID: String, roomProxy: RoomProxyProtocol) {
         self.itemID = itemID
-        self.timelineController = timelineController
+        self.roomProxy = roomProxy
         super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "")))
     }
 
@@ -38,6 +38,20 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
             callback?(.cancel)
         case .submit:
             callback?(.submitStarted)
+        }
+    }
+
+    // MARK: Private
+
+    private func submitReport() async {
+        callback?(.submitStarted)
+        switch await roomProxy.reportContent(itemID, reason: state.bindings.reasonText) {
+        case .success:
+            MXLog.info("Submit Report Content succeeded")
+            callback?(.submitFinished)
+        case let .failure(error):
+            MXLog.error("Submit Report Content failed: \(error)")
+            callback?(.submitFailed(error: error))
         }
     }
 }

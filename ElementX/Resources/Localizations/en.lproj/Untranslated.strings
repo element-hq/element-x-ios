@@ -8,6 +8,8 @@
 
 "message" = "Message";
 
+"sending" = "Sending...";
+
 "screenshot_detected_title" = "You took a screenshot";
 "screenshot_detected_message" = "Would you like to submit a bug report?";
 
@@ -86,7 +88,6 @@
 "bug_report_screen_logs_description" = "To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.";
 "bug_report_screen_attach_screenshot" = "Attach Screenshot";
 "bug_report_screen_edit_screenshot" = "Edit Screenshot";
-"bug_report_screen_sending" = "Sending...";
 
 // Report Content
 "report_content_info" = "Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.";

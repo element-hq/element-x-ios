@@ -22,6 +22,7 @@ struct RoomScreenCoordinatorParameters {
     let timelineController: RoomTimelineControllerProtocol
     let mediaProvider: MediaProviderProtocol
     let emojiProvider: EmojiProviderProtocol
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -119,13 +120,25 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
 
     private func displayReportContent(for itemId: String) {
-        let parameters = ReportContentCoordinatorParameters(itemID: itemId, timelineController: parameters.timelineController)
-        let coordinator = ReportContentCoordinator(parameters: parameters)
         let navCoordinator = NavigationStackCoordinator()
-        navCoordinator.setRootCoordinator(coordinator)
-        coordinator.callback = { [weak self] _ in
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navCoordinator)
+        let parameters = ReportContentCoordinatorParameters(itemID: itemId,
+                                                            roomProxy: parameters.roomProxy,
+                                                            userIndicatorController: userIndicatorController)
+        let coordinator = ReportContentCoordinator(parameters: parameters)
+        coordinator.callback = { [weak self] completion in
             self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            switch completion {
+            case .cancel: break
+            case .finish:
+                self?.showSuccess(label: "Report Submitted")
+            }
         }
+        navCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(navCoordinator)
+    }
+
+    private func showSuccess(label: String) {
+        parameters.userIndicatorController?.submitIndicator(UserIndicator(title: label, iconName: "checkmark"))
     }
 }

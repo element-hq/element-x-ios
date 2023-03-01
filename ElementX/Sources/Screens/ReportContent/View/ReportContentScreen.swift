@@ -102,7 +102,7 @@ struct ReportContentScreen: View {
 struct ReportContent_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-            let viewModel = ReportContentViewModel(itemID: "", timelineController: MockRoomTimelineController())
+            let viewModel = ReportContentViewModel(itemID: "", roomProxy: MockRoomProxy(displayName: nil))
             ReportContentScreen(context: viewModel.context)
         }
     }

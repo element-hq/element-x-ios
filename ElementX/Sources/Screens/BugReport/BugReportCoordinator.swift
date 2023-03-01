@@ -57,7 +57,7 @@ final class BugReportCoordinator: CoordinatorProtocol {
             case .cancel:
                 self.completion?(.cancel)
             case let .submitStarted(progressTracker):
-                self.startLoading(label: ElementL10n.bugReportScreenSending, progressPublisher: progressTracker)
+                self.startLoading(label: ElementL10n.sending, progressPublisher: progressTracker)
             case .submitFinished:
                 self.stopLoading()
                 self.completion?(.finish)
