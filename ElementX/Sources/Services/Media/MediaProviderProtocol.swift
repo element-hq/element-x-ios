@@ -27,8 +27,4 @@ protocol MediaProviderProtocol: ImageProviderProtocol {
     func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL?
 
     @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError>
-
-    func fileFromURL(_ url: URL?, fileExtension: String) -> URL?
-
-    @discardableResult func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError>
 }
