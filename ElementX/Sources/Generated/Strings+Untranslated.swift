@@ -140,8 +140,10 @@ extension ElementL10n {
   public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
   /// Sending...
   public static let sending = ElementL10n.tr("Untranslated", "sending")
-  /// You can only connect to an existing server
-  public static let serverSelectionServerFooter = ElementL10n.tr("Untranslated", "server_selection_server_footer")
+  /// You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %@
+  public static func serverSelectionServerFooter(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "server_selection_server_footer", String(describing: p1))
+  }
   /// This server currently doesn’t support sliding sync.
   public static let serverSelectionSlidingSyncAlertMessage = ElementL10n.tr("Untranslated", "server_selection_sliding_sync_alert_message")
   /// Server not supported
