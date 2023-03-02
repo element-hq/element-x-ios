@@ -120,7 +120,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
     private func displayReportContent(for itemId: String) {
         let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: navCoordinator)
+        let userIndicatorController = UserIndicatorController(rootCoordinator: NavigationStackCoordinator())
         let parameters = ReportContentCoordinatorParameters(itemID: itemId,
                                                             roomProxy: parameters.roomProxy,
                                                             userIndicatorController: userIndicatorController)
@@ -133,7 +133,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self?.showSuccess(label: ElementL10n.reportContentSubmitted)
             }
         }
-        navCoordinator.setRootCoordinator(coordinator)
+        navigationCoordinator.setRootCoordinator(coordinator)
         navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
     }
 
