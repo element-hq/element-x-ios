@@ -20,33 +20,10 @@ import XCTest
 
 @MainActor
 class ReportContentScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
-    var viewModel: ReportContentViewModelProtocol!
-    var context: ReportContentViewModelType.Context!
-    
-    @MainActor override func setUpWithError() throws {
-        viewModel = ReportContentViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-        context = viewModel.context
-    }
-
     func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
-    }
+        let viewModel = ReportContentViewModel(itemID: "test-id", roomProxy: MockRoomProxy(displayName: "test"))
+        let context = viewModel.context
 
-    func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
+        XCTAssertEqual(context.reasonText, "")
     }
 }
