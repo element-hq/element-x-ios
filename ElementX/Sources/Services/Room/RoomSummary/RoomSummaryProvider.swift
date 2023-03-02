@@ -67,7 +67,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     
     // MARK: - Private
         
-    fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncViewRoomsListDiff]) {
+    fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncListRoomsListDiff]) {
         MXLog.info("Received \(diffs.count) diffs")
         
         rooms = diffs
@@ -136,7 +136,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     }
     
     // swiftlint:disable:next cyclomatic_complexity function_body_length
-    private func buildDiff(from diff: SlidingSyncViewRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
+    private func buildDiff(from diff: SlidingSyncListRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
