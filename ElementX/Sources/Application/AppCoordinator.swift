@@ -168,24 +168,19 @@ class AppCoordinator: AppCoordinatorProtocol {
                 self.restoreUserSession()
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 self.showLoginErrorToast()
-                self.presentSplashScreen(isSoftLogout: false)
+                self.presentSplashScreen()
             case (.restoringSession, .succeededRestoringSession, .signedIn):
-                self.hideLoadingIndicator()
                 self.setupUserSession()
             case (_, .signOut, .signingOut):
-                self.showLoadingIndicator()
                 self.logout(isSoftLogout: false)
             case (.signingOut, .completedSigningOut, .signedOut):
                 self.tearDownUserSession()
                 self.presentSplashScreen()
-                self.hideLoadingIndicator()
-            case (_, .remoteSignOut(let isSoft), .remoteSigningOut):
-                self.showLoadingIndicator()
-                self.logout(isSoftLogout: isSoft)
-            case (.remoteSigningOut(let isSoft), .completedSigningOut, .signedOut):
+            case (_, .remoteSignOut(let isSoftLogout), .remoteSigningOut):
+                self.logout(isSoftLogout: isSoftLogout)
+            case (.remoteSigningOut(let isSoftLogout), .completedSigningOut, .signedOut):
                 self.tearDownUserSession()
-                self.presentSplashScreen(isSoftLogout: isSoft)
-                self.hideLoadingIndicator()
+                self.presentSplashScreen(isSoftLogout: isSoftLogout)
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -283,6 +278,12 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
     
     private func logout(isSoftLogout: Bool) {
+        showLoadingIndicator()
+        
+        defer {
+            hideLoadingIndicator()
+        }
+        
         userSession.clientProxy.stopSync()
         userSessionFlowCoordinator?.stop()
         
