@@ -92,7 +92,6 @@ struct ReportContentScreen: View {
             Button(ElementL10n.actionSend) {
                 context.send(viewAction: .submit)
             }
-            .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.send)
         }
     }
 }
