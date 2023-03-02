@@ -61,35 +61,10 @@ struct BugReportScreen: View {
         }
     }
     
-    @ViewBuilder
     private var descriptionTextEditor: some View {
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.element.formRowBackground)
-
-            TextEditor(text: $context.reportText)
-                .tint(.element.brand)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .cornerRadius(14)
-                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
-                .scrollContentBackground(.hidden)
-
-            if context.reportText.isEmpty {
-                Text(ElementL10n.bugReportScreenDescription)
-                    .font(.element.body)
-                    .foregroundColor(Color.element.secondaryContent)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .allowsHitTesting(false)
-            }
-            
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.element.quaternaryContent)
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 220)
-        .font(.body)
+        FormTextEditor(text: $context.reportText,
+                       placeholder: ElementL10n.bugReportScreenDescription,
+                       editorAccessibilityIdentifier: A11yIdentifiers.bugReportScreen.report)
     }
     
     @ViewBuilder

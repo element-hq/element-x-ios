@@ -42,41 +42,19 @@ struct ReportContentScreen: View {
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
         VStack(alignment: .leading, spacing: 24) {
-            Text(ElementL10n.reportContentInfo)
-                .font(.element.body)
-                .foregroundColor(Color.element.primaryContent)
-            descriptionTextEditor
+            infoText
+            reasonTextEditor
         }
     }
 
-    @ViewBuilder
-    private var descriptionTextEditor: some View {
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.element.formRowBackground)
+    private var infoText: some View {
+        Text(ElementL10n.reportContentInfo)
+            .font(.element.body)
+            .foregroundColor(Color.element.primaryContent)
+    }
 
-            TextEditor(text: $context.reasonText)
-                .tint(.element.brand)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .cornerRadius(14)
-                .scrollContentBackground(.hidden)
-
-            if context.reasonText.isEmpty {
-                Text(ElementL10n.reportContentCustomHint)
-                    .font(.element.body)
-                    .foregroundColor(Color.element.secondaryContent)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .allowsHitTesting(false)
-            }
-
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.element.quaternaryContent)
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 220)
-        .font(.body)
+    private var reasonTextEditor: some View {
+        FormTextEditor(text: $context.reasonText, placeholder: ElementL10n.reportContentCustomHint)
     }
 
     @ToolbarContentBuilder
