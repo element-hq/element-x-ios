@@ -119,7 +119,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     }
 
     private func displayReportContent(for itemId: String) {
-        let navCoordinator = NavigationStackCoordinator()
+        let navigationCoordinator = NavigationStackCoordinator()
         let userIndicatorController = UserIndicatorController(rootCoordinator: navCoordinator)
         let parameters = ReportContentCoordinatorParameters(itemID: itemId,
                                                             roomProxy: parameters.roomProxy,
