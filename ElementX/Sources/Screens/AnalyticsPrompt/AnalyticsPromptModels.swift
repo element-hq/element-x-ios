@@ -45,19 +45,9 @@ struct AnalyticsPromptStrings {
         // Create the opt in content with a placeholder.
         let linkPlaceholder = "{link}"
         var optInContent = AttributedString(ElementL10n.analyticsOptInContent(InfoPlistReader.main.bundleDisplayName, linkPlaceholder))
-        
-        guard let range = optInContent.range(of: linkPlaceholder) else {
-            self.optInContent = AttributedString(ElementL10n.analyticsOptInContent(InfoPlistReader.main.bundleDisplayName,
-                                                                                   ElementL10n.analyticsOptInContentLink))
-            MXLog.failure("Failed to add a link attribute to the opt in content.")
-            return
-        }
-        
-        // Replace the placeholder with a link.
-        var link = AttributedString(ElementL10n.analyticsOptInContentLink)
-        link.link = ServiceLocator.shared.settings.analyticsConfiguration.termsURL
-        optInContent.replaceSubrange(range, with: link)
-        
+        optInContent.replace(linkPlaceholder,
+                             with: ElementL10n.analyticsOptInContentLink,
+                             asLinkTo: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
         self.optInContent = optInContent
     }
 }

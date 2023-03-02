@@ -75,10 +75,10 @@ struct LoginScreen: View {
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
             
-            TextField(ElementL10n.loginSigninUsernameHint,
+            TextField(ElementL10n.username,
                       text: $context.username,
                       // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
-                      prompt: Text(ElementL10n.loginSigninUsernameHint).foregroundColor(.element.tertiaryContent))
+                      prompt: Text(ElementL10n.username).foregroundColor(.element.tertiaryContent))
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
                 .disableAutocorrection(true)

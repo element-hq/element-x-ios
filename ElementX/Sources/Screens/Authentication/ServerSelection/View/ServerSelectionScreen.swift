@@ -40,7 +40,7 @@ struct ServerSelectionScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(spacing: 8) {
-            AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon))
+            AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
                 .padding(.bottom, 8)
             
             Text(ElementL10n.ftueAuthChooseServerTitle)
@@ -49,7 +49,7 @@ struct ServerSelectionScreen: View {
                 .foregroundColor(.element.primaryContent)
             
             Text(ElementL10n.ftueAuthChooseServerSignInSubtitle)
-                .font(.element.body)
+                .font(.element.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.tertiaryContent)
         }
@@ -60,8 +60,8 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
-                .textFieldStyle(.elementInput(labelText: ElementL10n.hsUrl,
-                                              footerText: context.viewState.footerMessage,
+                .textFieldStyle(.elementInput(labelText: Text(ElementL10n.hsUrl),
+                                              footerText: Text(context.viewState.footerMessage),
                                               isError: context.viewState.isShowingFooterError,
                                               accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
                 .keyboardType(.URL)
