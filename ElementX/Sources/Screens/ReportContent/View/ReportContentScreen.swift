@@ -100,10 +100,9 @@ struct ReportContentScreen: View {
 // MARK: - Previews
 
 struct ReportContent_Previews: PreviewProvider {
+    static let viewModel = ReportContentViewModel(itemID: "", roomProxy: MockRoomProxy(displayName: nil))
+    
     static var previews: some View {
-        Group {
-            let viewModel = ReportContentViewModel(itemID: "", roomProxy: MockRoomProxy(displayName: nil))
-            ReportContentScreen(context: viewModel.context)
-        }
+        ReportContentScreen(context: viewModel.context)
     }
 }
