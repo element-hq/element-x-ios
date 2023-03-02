@@ -164,7 +164,6 @@ struct BugReportScreen: View {
                 context.send(viewAction: .submit)
             }
             .disabled(context.reportText.count < 5)
-            .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.send)
         }
     }
 }
