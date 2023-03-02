@@ -60,7 +60,6 @@ struct ReportContentScreen: View {
                 .padding(.horizontal, 10)
                 .padding(.vertical, 4)
                 .cornerRadius(14)
-                .accessibilityIdentifier(A11yIdentifiers.reportContentScreen.reason)
                 .scrollContentBackground(.hidden)
 
             if context.reasonText.isEmpty {
