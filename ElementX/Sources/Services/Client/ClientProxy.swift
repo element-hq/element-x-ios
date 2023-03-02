@@ -35,11 +35,6 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
-    func didUpdateRestoreToken() {
-        MXLog.info("Did update restoration token")
-        clientProxy?.didUpdateRestoreToken()
-    }
-    
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
@@ -98,10 +93,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    var isSoftLogout: Bool {
-        client.isSoftLogout()
-    }
-
     var deviceId: String? {
         do {
             return try client.deviceId()
@@ -126,7 +117,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func startSync() {
         MXLog.info("Starting sync")
-        guard !client.isSoftLogout(), slidingSyncObserverToken == nil else {
+        guard slidingSyncObserverToken == nil else {
             return
         }
         
@@ -381,10 +372,6 @@ class ClientProxy: ClientProxyProtocol {
     
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
         callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
-    }
-
-    fileprivate func didUpdateRestoreToken() {
-        callbacks.send(.updatedRestoreToken)
     }
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {

@@ -31,10 +31,7 @@ class AppCoordinatorStateMachine {
         case signedIn
 
         /// Processing a sign out request
-        case signingOut
-
-        /// Processing a remote sign out
-        case remoteSigningOut(isSoft: Bool)
+        case signingOut(isSoft: Bool)
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -52,11 +49,9 @@ class AppCoordinatorStateMachine {
         case failedRestoringSession
         
         /// Request sign out
-        case signOut
-        /// Remote sign out.
-        case remoteSignOut(isSoft: Bool)
+        case signOut(isSoft: Bool)
         /// Signing out completed
-        case completedSigningOut
+        case completedSigningOut(isSoft: Bool)
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -78,15 +73,12 @@ class AppCoordinatorStateMachine {
         stateMachine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
 
-        stateMachine.addRoutes(event: .signOut, transitions: [.any => .signingOut])
-        stateMachine.addRoutes(event: .completedSigningOut, transitions: [.signingOut => .signedOut])
-
         // Transitions with associated values need to be handled through `addRouteMapping`
         stateMachine.addRouteMapping { event, fromState, _ in
             switch (event, fromState) {
-            case (.remoteSignOut(let isSoft), _):
-                return .remoteSigningOut(isSoft: isSoft)
-            case (.completedSigningOut, .remoteSigningOut):
+            case (.signOut(let isSoft), _):
+                return .signingOut(isSoft: isSoft)
+            case (.completedSigningOut, .signingOut):
                 return .signedOut
             default:
                 return nil
