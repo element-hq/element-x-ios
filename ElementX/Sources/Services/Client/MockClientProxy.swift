@@ -69,10 +69,6 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedSettingAccountData)
     }
     
-    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
-        .init(url: url)
-    }
-    
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
         throw ClientProxyError.failedLoadingMedia
     }

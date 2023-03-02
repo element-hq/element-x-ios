@@ -33,10 +33,6 @@ actor MediaLoader: MediaLoaderProtocol {
         self.client = client
         self.clientQueue = clientQueue
     }
-
-    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
-        .init(url: url)
-    }
     
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
         try await enqueueLoadMediaRequest(forSource: source) {
