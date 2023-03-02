@@ -38,7 +38,7 @@ class AuthenticationServiceProxy: AuthenticationServiceProxyProtocol {
             var homeserver = LoginHomeserver(address: homeserverAddress, loginMode: .unknown)
             
             try await Task.dispatch(on: .global()) {
-                try self.authenticationService.configureHomeserver(serverName: homeserverAddress)
+                try self.authenticationService.configureHomeserver(serverNameOrHomeserverUrl: homeserverAddress)
             }
             
             if let details = authenticationService.homeserverDetails() {

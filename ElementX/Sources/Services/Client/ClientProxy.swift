@@ -55,7 +55,7 @@ class ClientProxy: ClientProxyProtocol {
     private let mediaLoader: MediaLoaderProtocol
     private let clientQueue: DispatchQueue
     
-    private var slidingSyncObserverToken: StoppableSpawn?
+    private var slidingSyncObserverToken: TaskHandle?
     private var slidingSync: SlidingSync?
     
     var visibleRoomsSlidingSyncView: SlidingSyncView?
@@ -404,10 +404,6 @@ class ClientProxy: ClientProxyProtocol {
 }
 
 extension ClientProxy: MediaLoaderProtocol {
-    func mediaSourceForURL(_ url: URL) async -> MediaSourceProxy {
-        await mediaLoader.mediaSourceForURL(url)
-    }
-
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
         try await mediaLoader.loadMediaContentForSource(source)
     }

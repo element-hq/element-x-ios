@@ -78,10 +78,19 @@ class BugReportService: NSObject, BugReportServiceProtocol {
         SentrySDK.crash()
     }
 
-    func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
-        var params = [MultipartFormData(key: "text", type: .text(value: bugReport.text))]
+    // swiftlint:disable:next function_body_length
+    func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
+        var params = [
+            MultipartFormData(key: "user_id", type: .text(value: bugReport.userID)),
+            MultipartFormData(key: "text", type: .text(value: bugReport.text))
+        ]
+        
+        if let deviceID = bugReport.deviceID {
+            params.append(.init(key: "device_id", type: .text(value: deviceID)))
+        }
+        
         params.append(contentsOf: defaultParams)
+        
         for label in bugReport.githubLabels {
             params.append(MultipartFormData(key: "label", type: .text(value: label)))
         }
@@ -155,7 +164,8 @@ class BugReportService: NSObject, BugReportServiceProtocol {
             MultipartFormData(key: "user_language", type: .text(value: Bundle.elementLanguage ?? "null")),
             MultipartFormData(key: "fallback_language", type: .text(value: Bundle.elementFallbackLanguage ?? "null")),
             MultipartFormData(key: "local_time", type: .text(value: localTime)),
-            MultipartFormData(key: "utc_time", type: .text(value: utcTime))
+            MultipartFormData(key: "utc_time", type: .text(value: utcTime)),
+            MultipartFormData(key: "base_bundle_identifier", type: .text(value: InfoPlistReader.main.baseBundleIdentifier))
         ]
     }
 

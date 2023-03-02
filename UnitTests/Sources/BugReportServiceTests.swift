@@ -26,7 +26,9 @@ class BugReportServiceTests: XCTestCase {
     }
 
     func testSubmitBugReportWithMockService() async throws {
-        let bugReport = BugReport(text: "i cannot send message",
+        let bugReport = BugReport(userID: "@mock:client.com",
+                                  deviceID: nil,
+                                  text: "i cannot send message",
                                   includeLogs: true,
                                   includeCrashLog: true,
                                   githubLabels: [],
@@ -49,7 +51,9 @@ class BugReportServiceTests: XCTestCase {
                                        applicationId: "mock_app_id",
                                        session: .mock)
 
-        let bugReport = BugReport(text: "i cannot send message",
+        let bugReport = BugReport(userID: "@mock:client.com",
+                                  deviceID: nil,
+                                  text: "i cannot send message",
                                   includeLogs: true,
                                   includeCrashLog: true,
                                   githubLabels: [],

@@ -21,19 +21,10 @@ struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let body: String
     var formattedBody: AttributedString?
     let timestamp: String
-    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
     let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
-}
-
-// MARK: - Redact content from logs
-
-extension EmoteRoomTimelineItem: CustomStringConvertible {
-    var description: String {
-        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
-    }
 }

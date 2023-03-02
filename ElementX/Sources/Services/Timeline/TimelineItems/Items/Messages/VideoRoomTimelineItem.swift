@@ -20,7 +20,6 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let id: String
     let body: String
     let timestamp: String
-    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
@@ -37,12 +36,4 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     var blurhash: String?
     
     var properties = RoomTimelineItemProperties()
-}
-
-// MARK: - Redact content from logs
-
-extension VideoRoomTimelineItem: CustomStringConvertible {
-    var description: String {
-        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
-    }
 }

@@ -168,8 +168,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                              emojiProvider: emojiProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             
-            detailNavigationStackCoordinator.setRootCoordinator(coordinator)
-            navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator) { [weak self, roomIdentifier] in
+            detailNavigationStackCoordinator.setRootCoordinator(coordinator) { [weak self, roomIdentifier] in
                 guard let self else { return }
                 
                 // Move the state machine to no room selected if the room currently being dimissed
@@ -179,6 +178,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                     self.stateMachine.processEvent(.deselectRoom)
                     self.detailNavigationStackCoordinator.setRootCoordinator(nil)
                 }
+            }
+            
+            if navigationSplitCoordinator.detailCoordinator == nil {
+                navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator)
             }
         }
     }
@@ -241,6 +244,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let userIndicatorController = UserIndicatorController(rootCoordinator: feedbackNavigationStackCoordinator)
         
         let parameters = BugReportCoordinatorParameters(bugReportService: bugReportService,
+                                                        userID: userSession.userID,
+                                                        deviceID: userSession.deviceID,
                                                         userIndicatorController: userIndicatorController,
                                                         screenshot: image,
                                                         isModallyPresented: true)

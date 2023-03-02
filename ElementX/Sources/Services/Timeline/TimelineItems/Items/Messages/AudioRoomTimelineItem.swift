@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,20 +14,19 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import Foundation
 
-/// Style for section header
-struct FormSectionHeaderStyle: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .foregroundColor(.element.secondaryContent)
-            .font(.element.caption1)
-    }
-}
+struct AudioRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
+    let id: String
+    let body: String
+    let timestamp: String
+    let isOutgoing: Bool
+    let isEditable: Bool
+    let sender: TimelineItemSender
 
-extension View {
-    /// Applies the `FormSectionHeaderStyle` modifier to the view
-    func formSectionHeader() -> some View {
-        modifier(FormSectionHeaderStyle())
-    }
+    let duration: UInt64
+    let source: MediaSourceProxy?
+    var cachedAudioURL: URL?
+
+    var properties = RoomTimelineItemProperties()
 }

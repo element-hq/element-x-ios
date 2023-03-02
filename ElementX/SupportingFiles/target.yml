@@ -25,6 +25,9 @@ schemes:
         - variable: HTTPS_PROXY
           value: 192.168.0.111:9090
           isEnabled: false
+        - variable: UI_TESTS_SCREEN
+          value: ""
+          isEnabled: false
     test:
       config: Debug
       gatherCoverageData: true
@@ -113,6 +116,7 @@ targets:
     - target: NSE
     - package: MatrixRustSDK
     - package: DesignKit
+    - package: Algorithms
     - package: AnalyticsEvents
     - package: AppAuth
     - package: Collections

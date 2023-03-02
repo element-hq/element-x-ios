@@ -53,3 +53,9 @@ extension VideoMessageContent: CustomStringConvertible {
         String(describing: Self.self)
     }
 }
+
+extension AudioMessageContent: CustomStringConvertible {
+    public var description: String {
+        String(describing: Self.self)
+    }
+}

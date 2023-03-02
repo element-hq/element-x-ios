@@ -19,6 +19,7 @@ import SwiftUI
 
 struct TimelineItemPlainStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
@@ -44,7 +45,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
 
     @ViewBuilder
     private var header: some View {
-        if timelineItem.shouldShowSenderDetails {
+        if shouldShowSenderDetails {
             HStack {
                 TimelineSenderAvatarView(timelineItem: timelineItem)
                 Text(timelineItem.sender.displayName ?? timelineItem.sender.id)
@@ -78,6 +79,10 @@ struct TimelineItemPlainStylerView<Content: View>: View {
             }
         }
     }
+    
+    private var shouldShowSenderDetails: Bool {
+        timelineGroupStyle.shouldShowSenderDetails
+    }
 }
 
 struct TimelineItemPlainStylerView_Previews: PreviewProvider {
@@ -87,7 +92,7 @@ struct TimelineItemPlainStylerView_Previews: PreviewProvider {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
-                RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
+                RoomTimelineViewProvider(timelineItem: item, groupStyle: .single)
                     .padding(TimelineStyle.plain.rowInsets) // Insets added in the table view cells
             }
         }

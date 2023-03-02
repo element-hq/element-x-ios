@@ -39,8 +39,9 @@ struct RoomMemberDetailsScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
-        .alert(item: $context.alertInfo) { $0.alert }
+        .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(ElementL10n.bottomActionPeople)
+        .alert(item: $context.alertInfo) { $0.alert }
     }
 }
 

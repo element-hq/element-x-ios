@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
+import SwiftUI
 
-@MainActor
-protocol RoomTimelineViewFactoryProtocol {
-    func buildTimelineViewFor(timelineItem: RoomTimelineItemProtocol) -> RoomTimelineViewProvider
+enum FormRow {
+    /// Element specific insets that are used for all our Form rows.
+    static let insets = EdgeInsets(top: 7, leading: 16, bottom: 7, trailing: 16)
 }

@@ -56,26 +56,6 @@ final class MediaProviderTests: XCTestCase {
         XCTAssertNil(image)
     }
     
-    func test_whenImageFromURLStringWithURLStringNil_nilReturned() throws {
-        let image = mediaProvider.imageFromURL(nil, size: AvatarSize.room(on: .timeline).scaledSize)
-        XCTAssertNil(image)
-    }
-    
-    func test_whenImageFromURLStringWithURLStringNotNilAndImageCacheContainsImage_imageIsReturned() throws {
-        let avatarSize = AvatarSize.room(on: .timeline)
-        let url = URL.picturesDirectory
-        let key = "\(url.absoluteString){\(avatarSize.scaledValue),\(avatarSize.scaledValue)}"
-        let imageForKey = UIImage()
-        imageCache.retrievedImagesInMemory[key] = imageForKey
-        let image = mediaProvider.imageFromURL(url, size: avatarSize.scaledSize)
-        XCTAssertEqual(image, imageForKey)
-    }
-    
-    func test_whenImageFromURLStringWithURLStringNotNilAndImageNotCached_nilReturned() throws {
-        let image = mediaProvider.imageFromURL(URL.picturesDirectory, size: AvatarSize.room(on: .timeline).scaledSize)
-        XCTAssertNil(image)
-    }
-    
     func test_whenLoadImageFromSourceAndImageCacheContainsImage_successIsReturned() async throws {
         let avatarSize = AvatarSize.room(on: .timeline)
         let url = URL.picturesDirectory
@@ -210,27 +190,6 @@ final class MediaProviderTests: XCTestCase {
         let expectedResult: Result<URL, MediaProviderError> = .failure(.failedRetrievingImage)
         mediaLoader.mediaContentData = try loadTestImage().pngData()
         let result = await mediaProvider.loadFileFromSource(MediaSourceProxy(url: URL(staticString: "test/test1")), fileExtension: "png")
-        XCTAssertEqual(result, expectedResult)
-    }
-    
-    func test_whenFileFromURLStringAndURLIsNil_nilIsReturned() async throws {
-        mediaLoader.mediaContentData = try loadTestImage().pngData()
-        let url = mediaProvider.fileFromURL(nil, fileExtension: "png")
-        XCTAssertNil(url)
-    }
-    
-    func test_whenFileFromURLString_correctURLIsReturned() throws {
-        let expectedURL = URL(filePath: "/some/file/path")
-        fileCache.fileURLToReturn = expectedURL
-        let url = mediaProvider.fileFromURL(URL(staticString: "test/test1"), fileExtension: "png")
-        XCTAssertEqual(url?.absoluteString, expectedURL.absoluteString)
-    }
-    
-    func test_whenLoadFileFromURLString_correctURLIsReturned() async throws {
-        let expectedURL = URL(filePath: "/some/file/path")
-        let expectedResult: Result<URL, MediaProviderError> = .success(expectedURL)
-        fileCache.fileURLToReturn = expectedURL
-        let result = await mediaProvider.loadFileFromURL(URL(staticString: "test/test1"), fileExtension: "png")
         XCTAssertEqual(result, expectedResult)
     }
     

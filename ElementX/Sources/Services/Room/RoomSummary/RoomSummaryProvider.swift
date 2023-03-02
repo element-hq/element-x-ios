@@ -135,34 +135,39 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         }
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
+    // swiftlint:disable:next cyclomatic_complexity function_body_length
     private func buildDiff(from diff: SlidingSyncViewRoomsListDiff, on rooms: [RoomSummary]) -> CollectionDifference<RoomSummary>? {
         var changes = [CollectionDifference<RoomSummary>.Change]()
         
         switch diff {
-        case .push(value: let value):
-            MXLog.verbose("Push")
+        case .pushFront(let value):
+            MXLog.verbose("Push Front")
             let summary = buildSummaryForRoomListEntry(value)
-            changes.append(.insert(offset: Int(rooms.count), element: summary, associatedWith: nil))
-        case .updateAt(let index, let value):
+            changes.append(.insert(offset: 0, element: summary, associatedWith: nil))
+        case .pushBack(let value):
+            MXLog.verbose("Push Back")
+            let summary = buildSummaryForRoomListEntry(value)
+            changes.append(.insert(offset: rooms.count, element: summary, associatedWith: nil))
+        case .append(values: let values):
+            MXLog.verbose("Append \(values.count) rooms, current total count: \(rooms.count)")
+            for (index, value) in values.enumerated() {
+                let summary = buildSummaryForRoomListEntry(value)
+                changes.append(.insert(offset: rooms.count + index, element: summary, associatedWith: nil))
+            }
+        case .set(let index, let value):
             MXLog.verbose("Update \(index), current total count: \(rooms.count)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
-        case .insertAt(let index, let value):
+        case .insert(let index, let value):
             MXLog.verbose("Insert at \(index), current total count: \(rooms.count)")
             let summary = buildSummaryForRoomListEntry(value)
             changes.append(.insert(offset: Int(index), element: summary, associatedWith: nil))
-        case .move(let oldIndex, let newIndex):
-            MXLog.verbose("Move from: \(oldIndex) to: \(newIndex), current total count: \(rooms.count)")
-            let summary = rooms[Int(oldIndex)]
-            changes.append(.remove(offset: Int(oldIndex), element: summary, associatedWith: nil))
-            changes.append(.insert(offset: Int(newIndex), element: summary, associatedWith: nil))
-        case .removeAt(let index):
+        case .remove(let index):
             MXLog.verbose("Remove from: \(index), current total count: \(rooms.count)")
             let summary = rooms[Int(index)]
             changes.append(.remove(offset: Int(index), element: summary, associatedWith: nil))
-        case .replace(let values):
+        case .reset(let values):
             MXLog.verbose("Replace all items with new count: \(values.count), current total count: \(rooms.count)")
             for (index, summary) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: summary, associatedWith: nil))
@@ -176,8 +181,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             for (index, value) in rooms.enumerated() {
                 changes.append(.remove(offset: index, element: value, associatedWith: nil))
             }
-        case .pop:
-            MXLog.verbose("Pop, current total count: \(rooms.count)")
+        case .popFront:
+            MXLog.verbose("Pop Front, current total count: \(rooms.count)")
+            let summary = rooms[0]
+            changes.append(.remove(offset: 0, element: summary, associatedWith: nil))
+        case .popBack:
+            MXLog.verbose("Pop Back, current total count: \(rooms.count)")
             guard let value = rooms.last else {
                 fatalError()
             }
@@ -204,22 +213,6 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         if duplicates.count > 0 {
             MXLog.error("Found duplicated room room list items: \(duplicates)")
-        }
-    }
-}
-
-extension SlidingSyncViewRoomsListDiff {
-    var isInvalidation: Bool {
-        switch self {
-        case .push(let value), .updateAt(_, let value), .insertAt(_, let value):
-            switch value {
-            case .invalidated:
-                return true
-            default:
-                return false
-            }
-        default:
-            return false
         }
     }
 }

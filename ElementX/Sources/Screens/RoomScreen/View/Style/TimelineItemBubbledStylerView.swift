@@ -19,11 +19,11 @@ import SwiftUI
 
 struct TimelineItemBubbledStylerView<Content: View>: View {
     @EnvironmentObject private var context: RoomScreenViewModel.Context
+    @Environment(\.timelineGroupStyle) private var timelineGroupStyle
     
     let timelineItem: EventBasedTimelineItemProtocol
     @ViewBuilder let content: () -> Content
 
-    @Environment(\.colorScheme) private var colorScheme
     @ScaledMetric private var senderNameVerticalPadding = 3
     private let cornerRadius: CGFloat = 12
 
@@ -54,7 +54,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     @ViewBuilder
     private var header: some View {
-        if timelineItem.shouldShowSenderDetails {
+        if shouldShowSenderDetails {
             VStack {
                 Spacer()
                     .frame(height: 8)
@@ -90,7 +90,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     var messageBubble: some View {
         styledContent
-            .contentShape(.contextMenuPreview, RoundedCornerShape(radius: cornerRadius, corners: timelineItem.roundedCorners)) // Rounded corners for the context menu animation.
+            .contentShape(.contextMenuPreview, RoundedCornerShape(radius: cornerRadius, corners: roundedCorners)) // Rounded corners for the context menu animation.
             .contextMenu {
                 context.viewState.contextMenuActionProvider?(timelineItem.id).map { actions in
                     TimelineItemContextMenu(itemID: timelineItem.id, contextMenuActions: actions)
@@ -105,7 +105,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             content()
                 .bubbleStyle(inset: false,
                              cornerRadius: cornerRadius,
-                             corners: timelineItem.roundedCorners)
+                             corners: roundedCorners)
         } else {
             VStack(alignment: .trailing, spacing: 4) {
                 content()
@@ -119,13 +119,13 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
             .bubbleStyle(inset: true,
                          color: timelineItem.isOutgoing ? .element.bubblesYou : .element.bubblesNotYou,
                          cornerRadius: cornerRadius,
-                         corners: timelineItem.roundedCorners)
+                         corners: roundedCorners)
         }
     }
     
     private var messageBubbleTopPadding: CGFloat {
         guard timelineItem.isOutgoing else { return 0 }
-        return timelineItem.groupState == .single || timelineItem.groupState == .beginning ? 8 : 0
+        return timelineGroupStyle == .single || timelineGroupStyle == .first ? 8 : 0
     }
 
     private var shouldAvoidBubbling: Bool {
@@ -134,6 +134,31 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
     
     private var alignment: HorizontalAlignment {
         timelineItem.isOutgoing ? .trailing : .leading
+    }
+    
+    private var roundedCorners: UIRectCorner {
+        switch timelineGroupStyle {
+        case .single:
+            return .allCorners
+        case .first:
+            if timelineItem.isOutgoing {
+                return [.topLeft, .topRight, .bottomLeft]
+            } else {
+                return [.topLeft, .topRight, .bottomRight]
+            }
+        case .middle:
+            return timelineItem.isOutgoing ? [.topLeft, .bottomLeft] : [.topRight, .bottomRight]
+        case .last:
+            if timelineItem.isOutgoing {
+                return [.topLeft, .bottomLeft, .bottomRight]
+            } else {
+                return [.topRight, .bottomLeft, .bottomRight]
+            }
+        }
+    }
+    
+    private var shouldShowSenderDetails: Bool {
+        timelineGroupStyle.shouldShowSenderDetails
     }
 }
 
@@ -152,7 +177,7 @@ struct TimelineItemBubbledStylerView_Previews: PreviewProvider {
         VStack(alignment: .leading, spacing: 0) {
             ForEach(1..<MockRoomTimelineController().timelineItems.count, id: \.self) { index in
                 let item = MockRoomTimelineController().timelineItems[index]
-                RoomTimelineViewFactory().buildTimelineViewFor(timelineItem: item)
+                RoomTimelineViewProvider(timelineItem: item, groupStyle: .single)
                     .padding(TimelineStyle.bubbles.rowInsets) // Insets added in the table view cells
             }
         }

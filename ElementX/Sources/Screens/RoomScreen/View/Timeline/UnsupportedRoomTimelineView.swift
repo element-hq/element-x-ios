@@ -66,7 +66,6 @@ struct UnsupportedRoomTimelineView_Previews: PreviewProvider {
                                     eventType: "Some Event Type",
                                     error: "Something went wrong",
                                     timestamp: timestamp,
-                                    groupState: .single,
                                     isOutgoing: isOutgoing,
                                     isEditable: false,
                                     sender: .init(id: senderId))

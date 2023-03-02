@@ -35,6 +35,7 @@ struct OnboardingScreen: View {
     var body: some View {
         ZStack {
             OnboardingBackgroundView(isAnimated: !Tests.isRunningUITests)
+                .accessibilityHidden(true)
             
             GeometryReader { geometry in
                 ZStack {

@@ -121,6 +121,8 @@ class MockScreen: Identifiable {
         case .bugReport:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                                     userID: "@mock:client.com",
+                                                                     deviceID: nil,
                                                                      userIndicatorController: nil,
                                                                      screenshot: nil,
                                                                      isModallyPresented: true))
@@ -129,6 +131,8 @@ class MockScreen: Identifiable {
         case .bugReportWithScreenshot:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = BugReportCoordinator(parameters: .init(bugReportService: MockBugReportService(),
+                                                                     userID: "@mock:client.com",
+                                                                     deviceID: nil,
                                                                      userIndicatorController: nil,
                                                                      screenshot: Asset.Images.appLogo.image,
                                                                      isModallyPresented: false))

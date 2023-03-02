@@ -18,53 +18,85 @@ import Foundation
 import SwiftUI
 
 enum RoomTimelineViewProvider: Identifiable, Hashable {
-    case text(TextRoomTimelineItem)
-    case separator(SeparatorRoomTimelineItem)
-    case image(ImageRoomTimelineItem)
-    case video(VideoRoomTimelineItem)
-    case file(FileRoomTimelineItem)
-    case emote(EmoteRoomTimelineItem)
-    case notice(NoticeRoomTimelineItem)
-    case redacted(RedactedRoomTimelineItem)
-    case encrypted(EncryptedRoomTimelineItem)
-    case readMarker(ReadMarkerRoomTimelineItem)
-    case paginationIndicator(PaginationIndicatorRoomTimelineItem)
-    case sticker(StickerRoomTimelineItem)
-    case unsupported(UnsupportedRoomTimelineItem)
-    case timelineStart(TimelineStartRoomTimelineItem)
-    case state(StateRoomTimelineItem)
+    case text(TextRoomTimelineItem, TimelineGroupStyle)
+    case separator(SeparatorRoomTimelineItem, TimelineGroupStyle)
+    case image(ImageRoomTimelineItem, TimelineGroupStyle)
+    case video(VideoRoomTimelineItem, TimelineGroupStyle)
+    case audio(AudioRoomTimelineItem, TimelineGroupStyle)
+    case file(FileRoomTimelineItem, TimelineGroupStyle)
+    case emote(EmoteRoomTimelineItem, TimelineGroupStyle)
+    case notice(NoticeRoomTimelineItem, TimelineGroupStyle)
+    case redacted(RedactedRoomTimelineItem, TimelineGroupStyle)
+    case encrypted(EncryptedRoomTimelineItem, TimelineGroupStyle)
+    case readMarker(ReadMarkerRoomTimelineItem, TimelineGroupStyle)
+    case paginationIndicator(PaginationIndicatorRoomTimelineItem, TimelineGroupStyle)
+    case sticker(StickerRoomTimelineItem, TimelineGroupStyle)
+    case unsupported(UnsupportedRoomTimelineItem, TimelineGroupStyle)
+    case timelineStart(TimelineStartRoomTimelineItem, TimelineGroupStyle)
+    case state(StateRoomTimelineItem, TimelineGroupStyle)
+    case group(CollapsibleTimelineItem, TimelineGroupStyle)
+    
+    // swiftlint:disable:next cyclomatic_complexity
+    init(timelineItem: RoomTimelineItemProtocol, groupStyle: TimelineGroupStyle) {
+        switch timelineItem {
+        case let item as TextRoomTimelineItem:
+            self = .text(item, groupStyle)
+        case let item as ImageRoomTimelineItem:
+            self = .image(item, groupStyle)
+        case let item as VideoRoomTimelineItem:
+            self = .video(item, groupStyle)
+        case let item as AudioRoomTimelineItem:
+            self = .audio(item, groupStyle)
+        case let item as FileRoomTimelineItem:
+            self = .file(item, groupStyle)
+        case let item as SeparatorRoomTimelineItem:
+            self = .separator(item, groupStyle)
+        case let item as NoticeRoomTimelineItem:
+            self = .notice(item, groupStyle)
+        case let item as EmoteRoomTimelineItem:
+            self = .emote(item, groupStyle)
+        case let item as RedactedRoomTimelineItem:
+            self = .redacted(item, groupStyle)
+        case let item as EncryptedRoomTimelineItem:
+            self = .encrypted(item, groupStyle)
+        case let item as ReadMarkerRoomTimelineItem:
+            self = .readMarker(item, groupStyle)
+        case let item as PaginationIndicatorRoomTimelineItem:
+            self = .paginationIndicator(item, groupStyle)
+        case let item as StickerRoomTimelineItem:
+            self = .sticker(item, groupStyle)
+        case let item as UnsupportedRoomTimelineItem:
+            self = .unsupported(item, groupStyle)
+        case let item as TimelineStartRoomTimelineItem:
+            self = .timelineStart(item, groupStyle)
+        case let item as StateRoomTimelineItem:
+            self = .state(item, groupStyle)
+        case let item as CollapsibleTimelineItem:
+            self = .group(item, groupStyle)
+        default:
+            fatalError("Unknown timeline item")
+        }
+    }
     
     var id: String {
         switch self {
-        case .text(let item):
-            return item.id
-        case .separator(let item):
-            return item.id
-        case .image(let item):
-            return item.id
-        case .video(let item):
-            return item.id
-        case .file(let item):
-            return item.id
-        case .emote(let item):
-            return item.id
-        case .notice(let item):
-            return item.id
-        case .redacted(let item):
-            return item.id
-        case .encrypted(let item):
-            return item.id
-        case .readMarker(let item):
-            return item.id
-        case .paginationIndicator(let item):
-            return item.id
-        case .sticker(let item):
-            return item.id
-        case .unsupported(let item):
-            return item.id
-        case .timelineStart(let item):
-            return item.id
-        case .state(let item):
+        case .text(let item as RoomTimelineItemProtocol, _),
+             .separator(let item as RoomTimelineItemProtocol, _),
+             .image(let item as RoomTimelineItemProtocol, _),
+             .video(let item as RoomTimelineItemProtocol, _),
+             .audio(let item as RoomTimelineItemProtocol, _),
+             .file(let item as RoomTimelineItemProtocol, _),
+             .emote(let item as RoomTimelineItemProtocol, _),
+             .notice(let item as RoomTimelineItemProtocol, _),
+             .redacted(let item as RoomTimelineItemProtocol, _),
+             .encrypted(let item as RoomTimelineItemProtocol, _),
+             .readMarker(let item as RoomTimelineItemProtocol, _),
+             .paginationIndicator(let item as RoomTimelineItemProtocol, _),
+             .sticker(let item as RoomTimelineItemProtocol, _),
+             .unsupported(let item as RoomTimelineItemProtocol, _),
+             .timelineStart(let item as RoomTimelineItemProtocol, _),
+             .state(let item as RoomTimelineItemProtocol, _),
+             .group(let item as RoomTimelineItemProtocol, _):
             return item.id
         }
     }
@@ -72,49 +104,83 @@ enum RoomTimelineViewProvider: Identifiable, Hashable {
     /// Whether or not it is possible to send a reaction to this timeline item.
     var isReactable: Bool {
         switch self {
-        case .text, .image, .video, .file, .emote, .notice, .sticker:
+        case .text, .image, .video, .audio, .file, .emote, .notice, .sticker:
             return true
         case .redacted, .encrypted, .unsupported, .state: // Event based items that aren't reactable
             return false
         case .timelineStart, .separator, .readMarker, .paginationIndicator: // Virtual items are never reactable
+            return false
+        case .group:
             return false
         }
     }
 }
 
 extension RoomTimelineViewProvider: View {
-    @ViewBuilder var body: some View {
+    var body: some View {
+        timelineView
+            .timelineGroupStyle(timelineGroupStyle)
+    }
+    
+    @ViewBuilder private var timelineView: some View {
         switch self {
-        case .text(let item):
+        case .text(let item, _):
             TextRoomTimelineView(timelineItem: item)
-        case .separator(let item):
+        case .separator(let item, _):
             SeparatorRoomTimelineView(timelineItem: item)
-        case .image(let item):
+        case .image(let item, _):
             ImageRoomTimelineView(timelineItem: item)
-        case .video(let item):
+        case .video(let item, _):
             VideoRoomTimelineView(timelineItem: item)
-        case .file(let item):
+        case .audio(let item, _):
+            AudioRoomTimelineView(timelineItem: item)
+        case .file(let item, _):
             FileRoomTimelineView(timelineItem: item)
-        case .emote(let item):
+        case .emote(let item, _):
             EmoteRoomTimelineView(timelineItem: item)
-        case .notice(let item):
+        case .notice(let item, _):
             NoticeRoomTimelineView(timelineItem: item)
-        case .redacted(let item):
+        case .redacted(let item, _):
             RedactedRoomTimelineView(timelineItem: item)
-        case .encrypted(let item):
+        case .encrypted(let item, _):
             EncryptedRoomTimelineView(timelineItem: item)
-        case .readMarker(let item):
+        case .readMarker(let item, _):
             ReadMarkerRoomTimelineView(timelineItem: item)
-        case .paginationIndicator(let item):
+        case .paginationIndicator(let item, _):
             PaginationIndicatorRoomTimelineView(timelineItem: item)
-        case .sticker(let item):
+        case .sticker(let item, _):
             StickerRoomTimelineView(timelineItem: item)
-        case .unsupported(let item):
+        case .unsupported(let item, _):
             UnsupportedRoomTimelineView(timelineItem: item)
-        case .timelineStart(let item):
+        case .timelineStart(let item, _):
             TimelineStartRoomTimelineView(timelineItem: item)
-        case .state(let item):
+        case .state(let item, _):
             StateRoomTimelineView(timelineItem: item)
+        case .group(let item, _):
+            CollapsibleRoomTimelineView(timelineItem: item)
+        }
+    }
+    
+    private var timelineGroupStyle: TimelineGroupStyle {
+        switch self {
+        case .text(_, let groupStyle),
+             .separator(_, let groupStyle),
+             .image(_, let groupStyle),
+             .video(_, let groupStyle),
+             .audio(_, let groupStyle),
+             .file(_, let groupStyle),
+             .emote(_, let groupStyle),
+             .notice(_, let groupStyle),
+             .redacted(_, let groupStyle),
+             .encrypted(_, let groupStyle),
+             .readMarker(_, let groupStyle),
+             .paginationIndicator(_, let groupStyle),
+             .sticker(_, let groupStyle),
+             .unsupported(_, let groupStyle),
+             .timelineStart(_, let groupStyle),
+             .state(_, let groupStyle),
+             .group(_, let groupStyle):
+            return groupStyle
         }
     }
 }

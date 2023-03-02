@@ -17,25 +17,18 @@
 import SwiftUI
 
 struct RoomDetailsScreen: View {
-    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-
     @ObservedObject var context: RoomDetailsViewModel.Context
     
     var body: some View {
         Form {
             headerSection
-
-            if let topic = context.viewState.topic {
-                topicSection(with: topic)
-                    .listRowBackground(Color.element.formRowBackground)
-            }
-
+            
+            topicSection
+            
             aboutSection
-                .listRowBackground(Color.element.formRowBackground)
-
+            
             if context.viewState.isEncrypted {
                 securitySection
-                    .listRowBackground(Color.element.formRowBackground)
             }
         }
         .scrollContentBackground(.hidden)
@@ -71,12 +64,12 @@ struct RoomDetailsScreen: View {
                     Button { context.send(viewAction: .copyRoomLink) } label: {
                         Image(systemName: "link")
                     }
-                    .buttonStyle(SettingsActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
+                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
                     
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    .buttonStyle(SettingsActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
+                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
                 }
                 .padding(.top, 32)
             }
@@ -85,14 +78,18 @@ struct RoomDetailsScreen: View {
         .listRowBackground(Color.clear)
     }
     
-    private func topicSection(with topic: String) -> some View {
-        Section {
-            Text(topic)
-                .foregroundColor(.element.secondaryContent)
-                .font(.element.footnote)
-        } header: {
-            Text(ElementL10n.roomSettingsTopic)
-                .formSectionHeader()
+    @ViewBuilder
+    private var topicSection: some View {
+        if let topic = context.viewState.topic {
+            Section {
+                Text(topic)
+                    .foregroundColor(.element.secondaryContent)
+                    .font(.element.footnote)
+            } header: {
+                Text(ElementL10n.roomSettingsTopic)
+                    .formSectionHeader()
+            }
+            .formSectionStyle()
         }
     }
 
@@ -101,24 +98,19 @@ struct RoomDetailsScreen: View {
             Button {
                 context.send(viewAction: .processTapPeople)
             } label: {
-                HStack {
-                    Label(ElementL10n.bottomActionPeople, systemImage: "person")
-                        .labelStyle(SettingsRowLabelStyle())
-                    
-                    Spacer()
-                    
+                LabeledContent {
                     if context.viewState.isLoadingMembers {
                         ProgressView()
                     } else {
                         Text(String(context.viewState.members.count))
-                            .foregroundColor(.element.secondaryContent)
+                            .foregroundColor(.element.tertiaryContent)
                             .font(.element.body)
-                        Image(systemName: "chevron.forward")
-                            .foregroundColor(.element.quaternaryContent)
                     }
+                } label: {
+                    Label(ElementL10n.bottomActionPeople, systemImage: "person")
                 }
             }
-            .listRowInsets(listRowInsets)
+            .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             .disabled(context.viewState.isLoadingMembers)
@@ -126,33 +118,34 @@ struct RoomDetailsScreen: View {
             Text(ElementL10n.roomDetailsAboutSectionTitle)
                 .formSectionHeader()
         }
+        .formSectionStyle()
     }
     
     private var securitySection: some View {
         Section {
             HStack(alignment: .top) {
-                Label(title: {
+                Label {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(ElementL10n.encryptionEnabled)
                         Text(ElementL10n.encryptionEnabledTileDescription)
                             .foregroundColor(.element.secondaryContent)
                             .font(.element.footnote)
                     }
-                }, icon: {
+                } icon: {
                     Image(systemName: "lock.shield")
-                })
-                .labelStyle(SettingsRowLabelStyle(alignment: .top))
+                }
+                .labelStyle(FormRowLabelStyle(alignment: .top))
                 
                 Spacer()
                 
                 Image(systemName: "checkmark")
                     .foregroundColor(.element.quaternaryContent)
             }
-            .padding(.horizontal, -3)
         } header: {
             Text(ElementL10n.roomProfileSectionSecurity)
                 .formSectionHeader()
         }
+        .formSectionStyle()
     }
 }
 

@@ -48,18 +48,16 @@ class TimelineTableViewController: UIViewController {
             }
             
             applySnapshot()
+            
+            if timelineItems.isEmpty {
+                paginateBackwardsPublisher.send()
+            }
         }
     }
     
     /// The mode of the message composer. This is used to render selected
     /// items in the timeline when replying, editing etc.
-    var composerMode: RoomScreenComposerMode = .default {
-        didSet {
-            // Reload the visible items in order to update their opacity.
-            // Applying a snapshot won't work in this instance as the items don't change.
-            reloadVisibleItems()
-        }
-    }
+    var composerMode: RoomScreenComposerMode = .default
     
     /// Whether or not the timeline has more messages to back paginate.
     var canBackPaginate = true
@@ -196,14 +194,12 @@ class TimelineTableViewController: UIViewController {
             
             // A local reference to avoid capturing self in the cell configuration.
             let coordinator = self.coordinator
-            let opacity = self.opacity(for: timelineItem)
-            
+
             cell.item = timelineItem
             cell.contentConfiguration = UIHostingConfiguration {
                 timelineItem
                     .id(timelineItem.id)
                     .frame(maxWidth: .infinity, alignment: .leading)
-                    .opacity(opacity)
                     .environmentObject(coordinator.context) // Attempted fix at a crash in TimelineItemContextMenu
                     .onAppear {
                         coordinator.send(viewAction: .itemAppeared(id: timelineItem.id))
@@ -252,18 +248,6 @@ class TimelineTableViewController: UIViewController {
         } else if let pinnedItem = previousLayout.pinnedItem {
             restoreScrollPosition(using: pinnedItem, and: snapshot)
         }
-    }
-    
-    /// Reloads all of the visible timeline items.
-    ///
-    /// This only needs to be called when some state internal to this table view changes that
-    /// will affect the appearance of those items. Any updates to the items themselves should
-    /// use ``applySnapshot()`` which handles everything in the diffable data source.
-    private func reloadVisibleItems() {
-        guard let visibleIndexPaths = tableView.indexPathsForVisibleRows, let dataSource else { return }
-        var snapshot = dataSource.snapshot()
-        snapshot.reloadItems(visibleIndexPaths.compactMap { dataSource.itemIdentifier(for: $0) })
-        dataSource.apply(snapshot)
     }
     
     /// Returns a description of the current layout in order to update the
@@ -350,12 +334,6 @@ class TimelineTableViewController: UIViewController {
         else { return }
         
         coordinator.send(viewAction: .paginateBackwards)
-    }
-    
-    /// Returns the opacity that the supplied timeline item's cell should be.
-    private func opacity(for item: RoomTimelineViewProvider) -> CGFloat {
-        guard case let .reply(selectedItemID, _) = composerMode else { return 1.0 }
-        return selectedItemID == item.id ? 1.0 : 0.5
     }
 }
 
