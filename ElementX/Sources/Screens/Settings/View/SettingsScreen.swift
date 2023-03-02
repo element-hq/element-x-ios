@@ -183,12 +183,14 @@ private extension TimelineStyle {
 // MARK: - Previews
 
 struct SettingsScreen_Previews: PreviewProvider {
-    static var previews: some View {
+    static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let viewModel = SettingsScreenViewModel(withUserSession: userSession)
-        
-        NavigationView {
+        return SettingsScreenViewModel(withUserSession: userSession)
+    }()
+    
+    static var previews: some View {
+        NavigationStack {
             SettingsScreen(context: viewModel.context)
                 .tint(.element.accent)
         }

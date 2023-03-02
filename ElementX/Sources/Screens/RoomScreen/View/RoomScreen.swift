@@ -123,12 +123,12 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                               mediaProvider: MockMediaProvider(),
+                                               roomName: "Preview room")
+    
     static var previews: some View {
-        let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                            mediaProvider: MockMediaProvider(),
-                                            roomName: "Preview room")
-        
-        NavigationView {
+        NavigationStack {
             RoomScreen(context: viewModel.context)
         }
     }

@@ -35,7 +35,8 @@ class ServerSelectionViewModelTests: XCTestCase {
     func testErrorMessage() async throws {
         // Given a new instance of the view model.
         XCTAssertNil(context.viewState.footerErrorMessage, "There should not be an error message for a new view model.")
-        XCTAssertEqual(context.viewState.footerMessage, ElementL10n.serverSelectionServerFooter, "The standard footer message should be shown.")
+        XCTAssertEqual(String(context.viewState.footerMessage.characters), ElementL10n.serverSelectionServerFooter(ElementL10n.actionLearnMore),
+                       "The standard footer message should be shown.")
         
         // When an error occurs.
         let message = "Unable to contact server."
@@ -43,7 +44,7 @@ class ServerSelectionViewModelTests: XCTestCase {
         
         // Then the footer should now be showing an error.
         XCTAssertEqual(context.viewState.footerErrorMessage, message, "The error message should be stored.")
-        XCTAssertEqual(context.viewState.footerMessage, message, "The error message should be shown.")
+        XCTAssertEqual(String(context.viewState.footerMessage.characters), message, "The error message should be shown.")
         
         // And when clearing the error.
         context.send(viewAction: .clearFooterError)
@@ -53,6 +54,7 @@ class ServerSelectionViewModelTests: XCTestCase {
         
         // Then the error message should now be removed.
         XCTAssertNil(context.viewState.footerErrorMessage, "The error message should have been cleared.")
-        XCTAssertEqual(context.viewState.footerMessage, ElementL10n.serverSelectionServerFooter, "The standard footer message should be shown again.")
+        XCTAssertEqual(String(context.viewState.footerMessage.characters), ElementL10n.serverSelectionServerFooter(ElementL10n.actionLearnMore),
+                       "The standard footer message should be shown again.")
     }
 }
