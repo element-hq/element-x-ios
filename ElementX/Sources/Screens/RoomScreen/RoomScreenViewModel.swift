@@ -111,8 +111,6 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await markRoomAsRead()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
-        case let .report(itemID, reason):
-            await timelineController.reportContent(itemID, reason: reason)
         }
     }
     
@@ -320,7 +318,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 await timelineController.retryDecryption(for: sessionID)
             }
         case .report:
-            state.bindings.report = ReportAlertItem(itemID: itemID)
+            callback?(.displayReportContent(itemId: itemID))
         }
         
         if action.switchToDefaultComposer {

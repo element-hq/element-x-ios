@@ -26,13 +26,12 @@ struct A11yIdentifiers {
     static let roomDetailsScreen = RoomDetailsScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let softLogoutScreen = SoftLogoutScreen()
-        
+
     struct BugReportScreen {
         let report = "bug_report-report"
         let sendLogs = "bug_report-send_logs"
         let screenshot = "bug_report-screenshot"
         let removeScreenshot = "bug_report-remove_screenshot"
-        let send = "bug_report-send"
         let attachScreenshot = "bug-report-attach_screenshot"
     }
     

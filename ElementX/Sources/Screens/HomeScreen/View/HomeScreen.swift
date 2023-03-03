@@ -238,7 +238,7 @@ struct HomeScreen_Previews: PreviewProvider {
         let viewModel = HomeScreenViewModel(userSession: userSession,
                                             attributedStringBuilder: AttributedStringBuilder())
         
-        return NavigationView {
+        return NavigationStack {
             HomeScreen(context: viewModel.context)
         }
     }

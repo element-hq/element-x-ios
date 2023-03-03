@@ -28,7 +28,7 @@ struct SoftLogoutScreen: View {
         ScrollView {
             VStack(spacing: 0) {
                 header
-                    .padding(.top, UIConstants.topPaddingToNavigationBar)
+                    .padding(.top, UIConstants.titleTopPaddingToNavigationBar)
                     .padding(.bottom, 36)
 
                 switch context.viewState.loginMode {
@@ -179,11 +179,18 @@ struct SoftLogout_Previews: PreviewProvider {
     }
 
     static func screen(for viewModel: SoftLogoutViewModel) -> some View {
-        NavigationView {
+        NavigationStack {
             SoftLogoutScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)
                 .tint(.element.accent)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { } label: {
+                            Text("\(Image(systemName: "chevron.backward")) Back")
+                        }
+                    }
+                }
         }
-        .navigationViewStyle(.stack)
+        .tint(.element.accent)
     }
 }
