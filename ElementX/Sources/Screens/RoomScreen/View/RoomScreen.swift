@@ -79,6 +79,7 @@ struct RoomScreen: View {
                 .padding()
         }
         .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
+        .accessibilityHidden(!context.scrollToBottomButtonVisible)
         .animation(.elementDefault, value: context.scrollToBottomButtonVisible)
     }
     
