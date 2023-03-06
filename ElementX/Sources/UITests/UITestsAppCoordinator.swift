@@ -300,6 +300,11 @@ class MockScreen: Identifiable {
                                                                              members: [.mockAlice, .mockBob, .mockCharlie]))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .reportContent:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = ReportContentCoordinator(parameters: .init(itemID: "test", roomProxy: MockRoomProxy(displayName: "test")))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }

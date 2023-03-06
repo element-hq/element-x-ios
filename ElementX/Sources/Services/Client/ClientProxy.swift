@@ -35,11 +35,6 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
-    func didUpdateRestoreToken() {
-        MXLog.info("Did update restoration token")
-        clientProxy?.didUpdateRestoreToken()
-    }
-    
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
@@ -58,10 +53,10 @@ class ClientProxy: ClientProxyProtocol {
     private var slidingSyncObserverToken: TaskHandle?
     private var slidingSync: SlidingSync?
     
-    var visibleRoomsSlidingSyncView: SlidingSyncView?
+    var visibleRoomsSlidingSyncView: SlidingSyncList?
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
     
-    var allRoomsSlidingSyncView: SlidingSyncView?
+    var allRoomsSlidingSyncView: SlidingSyncList?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
     
     private var cancellables = Set<AnyCancellable>()
@@ -98,10 +93,6 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    var isSoftLogout: Bool {
-        client.isSoftLogout()
-    }
-
     var deviceId: String? {
         do {
             return try client.deviceId()
@@ -126,7 +117,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func startSync() {
         MXLog.info("Starting sync")
-        guard !client.isSoftLogout(), slidingSyncObserverToken == nil else {
+        guard slidingSyncObserverToken == nil else {
             return
         }
         
@@ -258,7 +249,7 @@ class ClientProxy: ClientProxyProtocol {
             
             // Build the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache
-            let visibleRoomsView = try SlidingSyncViewBuilder()
+            let visibleRoomsView = try SlidingSyncListBuilder()
                 .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
                 .requiredState(requiredState: slidingSyncRequiredState)
                 .filters(filters: slidingSyncFilters)
@@ -269,7 +260,7 @@ class ClientProxy: ClientProxyProtocol {
                 .build()
             
             let slidingSync = try slidingSyncBuilder
-                .addView(v: visibleRoomsView)
+                .addList(v: visibleRoomsView)
                 .withCommonExtensions()
                 .coldCache(name: "ElementX")
                 .build()
@@ -285,7 +276,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    private func buildAndConfigureVisibleRoomsSlidingSyncView(slidingSync: SlidingSyncProtocol, visibleRoomsView: SlidingSyncView) {
+    private func buildAndConfigureVisibleRoomsSlidingSyncView(slidingSync: SlidingSyncProtocol, visibleRoomsView: SlidingSyncList) {
         let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSync: slidingSync, slidingSyncView: visibleRoomsView)
         
         visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
@@ -313,7 +304,7 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let allRoomsView = try SlidingSyncViewBuilder()
+            let allRoomsView = try SlidingSyncListBuilder()
                 .noTimelineLimit()
                 .requiredState(requiredState: slidingSyncRequiredState)
                 .filters(filters: slidingSyncFilters)
@@ -359,7 +350,7 @@ class ClientProxy: ClientProxyProtocol {
         
         if let allRoomsSlidingSyncView {
             MXLog.info("Registering all rooms view")
-            _ = slidingSync?.addView(view: allRoomsSlidingSyncView)
+            _ = slidingSync?.addList(list: allRoomsSlidingSyncView)
         } else {
             MXLog.error("All rooms sliding sync view unavailable")
         }
@@ -382,10 +373,6 @@ class ClientProxy: ClientProxyProtocol {
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
         callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
     }
-
-    fileprivate func didUpdateRestoreToken() {
-        callbacks.send(.updatedRestoreToken)
-    }
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         callbacks.send(.receivedSyncUpdate)
@@ -404,10 +391,6 @@ class ClientProxy: ClientProxyProtocol {
 }
 
 extension ClientProxy: MediaLoaderProtocol {
-    func mediaSourceForURL(_ url: URL) async -> MediaSourceProxy {
-        await mediaLoader.mediaSourceForURL(url)
-    }
-
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
         try await mediaLoader.loadMediaContentForSource(source)
     }

@@ -20,8 +20,10 @@ import SwiftUI
 struct UIConstants {
     static let maxContentHeight: CGFloat = 750
     
-    /// The padding used between the top of the main content and the navigation bar.
-    static let topPaddingToNavigationBar: CGFloat = 16
+    /// The padding used between the top of the main content's icon and the navigation bar.
+    static let iconTopPaddingToNavigationBar: CGFloat = 43
+    /// The padding used between the top of the main content's title and the navigation bar.
+    static let titleTopPaddingToNavigationBar: CGFloat = 32
     /// The padding used between the footer and the bottom of the view.
     static let actionButtonBottomPadding: CGFloat = 24
     

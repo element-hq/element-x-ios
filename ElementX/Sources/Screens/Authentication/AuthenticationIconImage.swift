@@ -18,7 +18,10 @@ import SwiftUI
 
 /// An image that is styled for use as the screen icon in the onboarding flow.
 struct AuthenticationIconImage: View {
+    /// The icon that is shown.
     let image: Image
+    /// The amount of padding between the icon and the borders. Defaults to 16.
+    var insets: CGFloat = 16
     
     var body: some View {
         image
@@ -27,9 +30,12 @@ struct AuthenticationIconImage: View {
             .foregroundColor(.element.secondaryContent)
             .aspectRatio(contentMode: .fit)
             .accessibilityHidden(true)
-            .padding(16)
-            .frame(width: 72, height: 72)
-            .background(RoundedRectangle(cornerRadius: 14).fill(Color.element.quinaryContent))
+            .padding(insets)
+            .frame(width: 70, height: 70)
+            .background {
+                RoundedRectangle(cornerRadius: 14)
+                    .fill(Color.element.quinaryContent)
+            }
     }
 }
 
@@ -37,6 +43,9 @@ struct AuthenticationIconImage: View {
 
 struct AuthenticationIconImage_Previews: PreviewProvider {
     static var previews: some View {
-        AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon))
+        HStack(spacing: 20) {
+            AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
+            AuthenticationIconImage(image: Image(systemName: "hourglass"))
+        }
     }
 }

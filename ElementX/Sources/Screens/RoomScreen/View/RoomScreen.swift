@@ -30,8 +30,6 @@ struct RoomScreen: View {
             .toolbarBackground(.visible, for: .navigationBar) // Fix the toolbar's background.
             .overlay { loadingIndicator }
             .alert(item: $context.alertInfo) { $0.alert }
-            .alert(item: $context.report,
-                   actions: { reportAlertActions($0) })
             .sheet(item: $context.debugInfo) { TimelineItemDebugView(info: $0) }
             .task(id: context.viewState.roomId) {
                 // Give a couple of seconds for items to load and to see them.
@@ -40,15 +38,6 @@ struct RoomScreen: View {
                 guard !Task.isCancelled else { return }
                 context.send(viewAction: .markRoomAsRead)
             }
-    }
-
-    @ViewBuilder
-    func reportAlertActions(_ report: ReportAlertItem) -> some View {
-        TextField("", text: report.reasonBinding)
-        Button(ElementL10n.actionSend, action: {
-            context.send(viewAction: .report(itemID: report.itemID, reason: report.reason))
-        })
-        Button(ElementL10n.actionCancel, role: .cancel, action: { })
     }
     
     var timeline: some View {
@@ -90,6 +79,7 @@ struct RoomScreen: View {
                 .padding()
         }
         .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
+        .accessibilityHidden(!context.scrollToBottomButtonVisible)
         .animation(.elementDefault, value: context.scrollToBottomButtonVisible)
     }
     
@@ -123,12 +113,12 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                               mediaProvider: MockMediaProvider(),
+                                               roomName: "Preview room")
+    
     static var previews: some View {
-        let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                            mediaProvider: MockMediaProvider(),
-                                            roomName: "Preview room")
-        
-        NavigationView {
+        NavigationStack {
             RoomScreen(context: viewModel.context)
         }
     }

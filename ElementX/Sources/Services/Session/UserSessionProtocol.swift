@@ -21,15 +21,12 @@ enum UserSessionCallback {
     case sessionVerificationNeeded
     case didVerifySession
     case didReceiveAuthError(isSoftLogout: Bool)
-    case updateRestoreTokenNeeded
 }
 
 protocol UserSessionProtocol {
     var homeserver: String { get }
     var userID: String { get }
     var deviceID: String? { get }
-    
-    var isSoftLogout: Bool { get }
     
     var clientProxy: ClientProxyProtocol { get }
     var mediaProvider: MediaProviderProtocol { get }

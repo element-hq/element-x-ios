@@ -43,18 +43,6 @@ struct MediaProvider: MediaProviderProtocol {
         return imageCache.retrieveImageInMemoryCache(forKey: cacheKey, options: nil)
     }
     
-    func imageFromURL(_ url: URL?, size: CGSize?) -> UIImage? {
-        guard let url else {
-            return nil
-        }
-        
-        return imageFromSource(.init(url: url), size: size)
-    }
-    
-    func loadImageFromURL(_ url: URL, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
-        await loadImageFromSource(.init(url: url), size: size)
-    }
-    
     func loadImageFromSource(_ source: MediaSourceProxy, size: CGSize?) async -> Result<UIImage, MediaProviderError> {
         if let image = imageFromSource(source, size: size) {
             return .success(image)
@@ -102,18 +90,6 @@ struct MediaProvider: MediaProviderProtocol {
         }
         let cacheKey = fileCacheKeyForURL(source.url)
         return fileCache.file(forKey: cacheKey, fileExtension: fileExtension)
-    }
-    
-    func fileFromURL(_ url: URL?, fileExtension: String) -> URL? {
-        guard let url else {
-            return nil
-        }
-        
-        return fileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
-    }
-    
-    func loadFileFromURL(_ url: URL, fileExtension: String) async -> Result<URL, MediaProviderError> {
-        await loadFileFromSource(MediaSourceProxy(url: url), fileExtension: fileExtension)
     }
 
     @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError> {

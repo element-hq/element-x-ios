@@ -22,7 +22,6 @@ class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userID: String
-    let isSoftLogout = false
     let deviceId: String? = nil
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
@@ -67,10 +66,6 @@ class MockClientProxy: ClientProxyProtocol {
     
     func setAccountData<Content>(content: Content, type: String) async -> Result<Void, ClientProxyError> where Content: Encodable {
         .failure(.failedSettingAccountData)
-    }
-    
-    func mediaSourceForURL(_ url: URL) -> MediaSourceProxy {
-        .init(url: url)
     }
     
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {

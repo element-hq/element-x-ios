@@ -20,7 +20,7 @@ struct SessionVerificationScreen: View {
     @ObservedObject var context: SessionVerificationViewModel.Context
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 VStack(spacing: 32) {
                     screenHeader
@@ -36,7 +36,6 @@ struct SessionVerificationScreen: View {
             .background(Color.element.background.ignoresSafeArea())
             .safeAreaInset(edge: .bottom) { actionButtons.padding() }
         }
-        .navigationViewStyle(.stack)
         .interactiveDismissDisabled() // Make sure dismissal goes through the state machine(s).
     }
     

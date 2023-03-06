@@ -23,7 +23,7 @@ struct ServerSelectionScreen: View {
         ScrollView {
             VStack(spacing: 0) {
                 header
-                    .padding(.top, UIConstants.topPaddingToNavigationBar)
+                    .padding(.top, UIConstants.iconTopPaddingToNavigationBar)
                     .padding(.bottom, 36)
                 
                 serverForm
@@ -40,7 +40,7 @@ struct ServerSelectionScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(spacing: 8) {
-            AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon))
+            AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
                 .padding(.bottom, 8)
             
             Text(ElementL10n.ftueAuthChooseServerTitle)
@@ -48,8 +48,8 @@ struct ServerSelectionScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
             
-            Text(ElementL10n.ftueAuthChooseServerSubtitle)
-                .font(.element.body)
+            Text(ElementL10n.ftueAuthChooseServerSignInSubtitle)
+                .font(.element.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.tertiaryContent)
         }
@@ -60,8 +60,8 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
-                .textFieldStyle(.elementInput(labelText: ElementL10n.hsUrl,
-                                              footerText: context.viewState.footerMessage,
+                .textFieldStyle(.elementInput(labelText: Text(ElementL10n.hsUrl),
+                                              footerText: Text(context.viewState.footerMessage),
                                               isError: context.viewState.isShowingFooterError,
                                               accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
                 .keyboardType(.URL)
@@ -104,11 +104,10 @@ struct ServerSelectionScreen: View {
 struct ServerSelection_Previews: PreviewProvider {
     static var previews: some View {
         ForEach(MockServerSelectionScreenState.allCases, id: \.self) { state in
-            NavigationView {
+            NavigationStack {
                 ServerSelectionScreen(context: state.viewModel.context)
                     .tint(.element.accent)
             }
-            .navigationViewStyle(.stack)
         }
     }
 }

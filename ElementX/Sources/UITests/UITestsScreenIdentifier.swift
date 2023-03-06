@@ -43,6 +43,7 @@ enum UITestsScreenIdentifier: String {
     case roomDetailsScreen
     case roomDetailsScreenWithRoomAvatar
     case roomMemberDetailsScreen
+    case reportContent
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {
