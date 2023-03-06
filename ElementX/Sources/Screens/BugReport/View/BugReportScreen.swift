@@ -146,7 +146,7 @@ struct BugReportScreen: View {
 // MARK: - Previews
 
 struct BugReport_Previews: PreviewProvider {
-    static let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+    static let viewModel = BugReportViewModel(bugReportService: BugReportServiceProtocolMock(),
                                               userID: "@mock.client.com",
                                               deviceID: nil,
                                               screenshot: nil,
@@ -154,7 +154,7 @@ struct BugReport_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationStack {
-            BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+            BugReportScreen(context: BugReportViewModel(bugReportService: BugReportServiceProtocolMock(),
                                                         userID: "@mock.client.com",
                                                         deviceID: nil,
                                                         screenshot: nil,
@@ -163,7 +163,7 @@ struct BugReport_Previews: PreviewProvider {
         }
         
         NavigationStack {
-            BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+            BugReportScreen(context: BugReportViewModel(bugReportService: BugReportServiceProtocolMock(),
                                                         userID: "@mock.client.com",
                                                         deviceID: nil,
                                                         screenshot: Asset.Images.appLogo.image,
