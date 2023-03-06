@@ -42,12 +42,12 @@ class BugReportUITests: XCTestCase {
 
         // Type 4 characters and the send button should be disabled.
         app.textViews[A11yIdentifiers.bugReportScreen.report].clearAndTypeText("Text")
-        XCTAssertFalse(app.buttons[A11yIdentifiers.bugReportScreen.send].isEnabled)
+        XCTAssert(app.switches[A11yIdentifiers.bugReportScreen.sendLogs].isOn)
         app.assertScreenshot(.bugReport, step: 2)
 
         // Type more than 4 characters and send the button should become enabled.
         app.textViews[A11yIdentifiers.bugReportScreen.report].clearAndTypeText("Longer text")
-        XCTAssert(app.buttons[A11yIdentifiers.bugReportScreen.send].isEnabled)
+        XCTAssert(app.switches[A11yIdentifiers.bugReportScreen.sendLogs].isOn)
         app.assertScreenshot(.bugReport, step: 3)
     }
 
