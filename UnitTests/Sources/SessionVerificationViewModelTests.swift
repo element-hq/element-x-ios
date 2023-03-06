@@ -23,7 +23,7 @@ import XCTest
 class SessionVerificationViewModelTests: XCTestCase {
     var viewModel: SessionVerificationViewModelProtocol!
     var context: SessionVerificationViewModelType.Context!
-    var sessionVerificationController: SessionVerificationControllerProxyProtocol!
+    var sessionVerificationController: MockSessionVerificationControllerProxy!
     
     @MainActor
     override func setUpWithError() throws {
@@ -32,13 +32,13 @@ class SessionVerificationViewModelTests: XCTestCase {
         context = viewModel.context
     }
 
-    func testRequestVerification() async {
+    func testRequestVerification() async throws {
         XCTAssertEqual(context.viewState.verificationState, .initial)
         
         context.send(viewAction: .requestVerification)
         
-        await Task.yield()
-        
+        try await Task.sleep(for: .seconds(1))
+        XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
         XCTAssertEqual(context.viewState.verificationState, .requestingVerification)
     }
     
@@ -53,7 +53,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         XCTAssertEqual(context.viewState.verificationState, .cancelling)
         
-        try await Task.sleep(nanoseconds: 100_000_000)
+        try await Task.sleep(for: .milliseconds(100))
         
         XCTAssertEqual(context.viewState.verificationState, .cancelled)
         
@@ -62,6 +62,9 @@ class SessionVerificationViewModelTests: XCTestCase {
         await Task.yield()
         
         XCTAssertEqual(context.viewState.verificationState, .initial)
+
+        XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
+        XCTAssert(sessionVerificationController.cancelVerificationCallsCount == 1)
     }
     
     func testReceiveChallenge() {
@@ -93,6 +96,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         wait(for: [waitForAcceptance], timeout: 10.0)
         
         XCTAssertEqual(context.viewState.verificationState, .verified)
+        XCTAssert(sessionVerificationController.approveVerificationCallsCount == 1)
     }
     
     func testDeclineChallenge() {
@@ -120,6 +124,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         wait(for: [expectation], timeout: 10.0)
         
         XCTAssertEqual(context.viewState.verificationState, .cancelled)
+        XCTAssert(sessionVerificationController.declineVerificationCallsCount == 1)
     }
     
     // MARK: - Private
@@ -158,5 +163,8 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         wait(for: [verificationDataReceivalExpectation], timeout: 10.0)
         XCTAssertEqual(context.viewState.verificationState, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
+
+        XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
+        XCTAssert(sessionVerificationController.startSasVerificationCallsCount == 1)
     }
 }
