@@ -103,6 +103,12 @@ struct HomeScreen: View {
                 userMenuButton
             }
         }
+        .toolbar {
+            ToolbarItemGroup(placement: .bottomBar) {
+                Spacer()
+                addNewRoom
+            }
+        }
         .background(Color.element.background.ignoresSafeArea())
     }
 
@@ -148,6 +154,14 @@ struct HomeScreen: View {
         .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
     }
     
+    private var addNewRoom: some View {
+        Button(action: startChat) {
+            Image(systemName: "square.and.pencil")
+                .resizable()
+                .frame(width: 24, height: 24)
+        }
+    }
+    
     private var sessionVerificationBanner: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
@@ -191,6 +205,10 @@ struct HomeScreen: View {
         context.send(viewAction: .userMenu(action: .inviteFriends))
     }
 
+    private func startChat() {
+        context.send(viewAction: .startChat)
+    }
+    
     private func feedback() {
         context.send(viewAction: .userMenu(action: .feedback))
     }

@@ -115,6 +115,7 @@
 "all_chats" = "All Chats";
 "start_chat" = "Start Chat";
 "create_room" = "Create Room";
+"create_a_room" = "Create a room";
 "change_space" = "Change Space";
 "explore_rooms" = "Explore Rooms";
 "a11y_expand_space_children" = "Expand %@ children";
@@ -1865,6 +1866,7 @@
 "inviting_users_to_room" = "Inviting users…";
 "invite_users_to_room_title" = "Invite Users";
 "invite_friends" = "Invite friends";
+"invite_friends_to_element" = "Invite friends to Element";
 "invite_friends_text" = "Hey, talk to me on %@: %@";
 "invite_friends_rich_title" = "🔐️ Join me on %@";
 "invitation_sent_to_one_user" = "Invitation sent to %1$@";
@@ -2355,3 +2357,4 @@
 "emoji_picker_objects_category" = "Objects";
 "emoji_picker_symbols_category" = "Symbols";
 "emoji_picker_flags_category" = "Flags";
+"search_for_someone" = "Search for someone";
