@@ -161,14 +161,14 @@ class AppCoordinator: AppCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
                 self.startAuthentication()
-            case (.signedOut, .succeededSigningIn, .signedIn):
+            case (.signedOut, .createdUserSession, .signedIn):
                 self.setupUserSession()
             case (.initial, .startWithExistingSession, .restoringSession):
                 self.restoreUserSession()
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 self.showLoginErrorToast()
                 self.presentSplashScreen()
-            case (.restoringSession, .succeededRestoringSession, .signedIn):
+            case (.restoringSession, .createdUserSession, .signedIn):
                 self.setupUserSession()
             case (_, .signOut(let isSoft), .signingOut):
                 self.logout(isSoft: isSoft)
@@ -189,7 +189,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             switch await userSessionStore.restoreUserSession() {
             case .success(let userSession):
                 self.userSession = userSession
-                stateMachine.processEvent(.succeededRestoringSession)
+                stateMachine.processEvent(.createdUserSession)
             case .failure:
                 MXLog.error("Failed to restore an existing session.")
                 stateMachine.processEvent(.failedRestoringSession)
@@ -232,7 +232,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                 switch result {
                 case .signedIn(let session):
                     self.userSession = session
-                    self.stateMachine.processEvent(.succeededSigningIn)
+                    self.stateMachine.processEvent(.createdUserSession)
                 case .clearAllData:
                     self.stateMachine.processEvent(.signOut(isSoft: false))
                 }
@@ -446,7 +446,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 extension AppCoordinator: AuthenticationCoordinatorDelegate {
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        stateMachine.processEvent(.succeededSigningIn)
+        stateMachine.processEvent(.createdUserSession)
     }
 }
 

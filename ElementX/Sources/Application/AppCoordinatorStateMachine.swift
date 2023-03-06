@@ -38,15 +38,15 @@ class AppCoordinatorStateMachine {
     enum Event: EventType {
         /// Start the `AppCoordinator` by showing authentication.
         case startWithAuthentication
-        /// Signing in succeeded
-        case succeededSigningIn
         
         /// Start the `AppCoordinator` by restoring an existing account.
         case startWithExistingSession
-        /// Restoring session succeeded.
-        case succeededRestoringSession
+
         /// Restoring session failed.
         case failedRestoringSession
+        
+        /// A session has been created
+        case createdUserSession
         
         /// Request sign out
         case signOut(isSoft: Bool)
@@ -67,10 +67,10 @@ class AppCoordinatorStateMachine {
 
     private func configure() {
         stateMachine.addRoutes(event: .startWithAuthentication, transitions: [.initial => .signedOut])
-        stateMachine.addRoutes(event: .succeededSigningIn, transitions: [.signedOut => .signedIn])
+        stateMachine.addRoutes(event: .createdUserSession, transitions: [.signedOut => .signedIn])
 
         stateMachine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
-        stateMachine.addRoutes(event: .succeededRestoringSession, transitions: [.restoringSession => .signedIn])
+        stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])
 
         // Transitions with associated values need to be handled through `addRouteMapping`
