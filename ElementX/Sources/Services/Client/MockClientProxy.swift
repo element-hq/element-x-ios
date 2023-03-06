@@ -22,7 +22,6 @@ class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userID: String
-    let isSoftLogout = false
     let deviceId: String? = nil
     let homeserver = ""
     let restorationToken: RestorationToken? = nil

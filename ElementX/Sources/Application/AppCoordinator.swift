@@ -154,7 +154,6 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionStore.reset()
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func setupStateMachine() {
         stateMachine.addTransitionHandler { [weak self] context in
             guard let self else { return }
@@ -162,25 +161,19 @@ class AppCoordinator: AppCoordinatorProtocol {
             switch (context.fromState, context.event, context.toState) {
             case (.initial, .startWithAuthentication, .signedOut):
                 self.startAuthentication()
-            case (.signedOut, .succeededSigningIn, .signedIn):
+            case (.signedOut, .createdUserSession, .signedIn):
                 self.setupUserSession()
             case (.initial, .startWithExistingSession, .restoringSession):
                 self.restoreUserSession()
             case (.restoringSession, .failedRestoringSession, .signedOut):
                 self.showLoginErrorToast()
                 self.presentSplashScreen()
-            case (.restoringSession, .succeededRestoringSession, .signedIn):
+            case (.restoringSession, .createdUserSession, .signedIn):
                 self.setupUserSession()
-            case (_, .signOut, .signingOut):
-                self.logout(isSoftLogout: false)
-            case (.signingOut, .completedSigningOut, .signedOut):
-                self.tearDownUserSession()
-                self.presentSplashScreen()
-            case (_, .remoteSignOut(let isSoftLogout), .remoteSigningOut):
-                self.logout(isSoftLogout: isSoftLogout)
-            case (.remoteSigningOut(let isSoftLogout), .completedSigningOut, .signedOut):
-                self.tearDownUserSession()
-                self.presentSplashScreen(isSoftLogout: isSoftLogout)
+            case (_, .signOut(let isSoft), .signingOut):
+                self.logout(isSoft: isSoft)
+            case (.signingOut, .completedSigningOut(let isSoft), .signedOut):
+                self.presentSplashScreen(isSoftLogout: isSoft)
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -196,11 +189,7 @@ class AppCoordinator: AppCoordinatorProtocol {
             switch await userSessionStore.restoreUserSession() {
             case .success(let userSession):
                 self.userSession = userSession
-                if userSession.isSoftLogout {
-                    stateMachine.processEvent(.remoteSignOut(isSoft: true))
-                } else {
-                    stateMachine.processEvent(.succeededRestoringSession)
-                }
+                stateMachine.processEvent(.createdUserSession)
             case .failure:
                 MXLog.error("Failed to restore an existing session.")
                 stateMachine.processEvent(.failedRestoringSession)
@@ -243,12 +232,9 @@ class AppCoordinator: AppCoordinatorProtocol {
                 switch result {
                 case .signedIn(let session):
                     self.userSession = session
-                    self.stateMachine.processEvent(.succeededSigningIn)
+                    self.stateMachine.processEvent(.createdUserSession)
                 case .clearAllData:
-                    //  clear user data
-                    self.userSessionStore.logout(userSession: self.userSession)
-                    self.userSession = nil
-                    self.startAuthentication()
+                    self.stateMachine.processEvent(.signOut(isSoft: false))
                 }
             }
             
@@ -266,7 +252,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSessionFlowCoordinator.callback = { [weak self] action in
             switch action {
             case .signOut:
-                self?.stateMachine.processEvent(.signOut)
+                self?.stateMachine.processEvent(.signOut(isSoft: false))
             }
         }
         
@@ -277,7 +263,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
     }
     
-    private func logout(isSoftLogout: Bool) {
+    private func logout(isSoft: Bool) {
         showLoadingIndicator()
         
         defer {
@@ -287,8 +273,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSession.clientProxy.stopSync()
         userSessionFlowCoordinator?.stop()
         
-        guard !isSoftLogout else {
-            stateMachine.processEvent(.completedSigningOut)
+        guard !isSoft else {
+            stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
             return
         }
         
@@ -298,8 +284,9 @@ class AppCoordinator: AppCoordinatorProtocol {
             
             //  regardless of the result, clear user data
             userSessionStore.logout(userSession: userSession)
+            tearDownUserSession()
             
-            stateMachine.processEvent(.completedSigningOut)
+            stateMachine.processEvent(.completedSigningOut(isSoft: isSoft))
         }
     }
     
@@ -361,11 +348,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                 guard let self else { return }
                 switch callback {
                 case .didReceiveAuthError(let isSoftLogout):
-                    self.stateMachine.processEvent(.remoteSignOut(isSoft: isSoftLogout))
-                case .updateRestoreTokenNeeded:
-                    if let userSession = self.userSession {
-                        _ = self.userSessionStore.refreshRestorationToken(for: userSession)
-                    }
+                    self.stateMachine.processEvent(.signOut(isSoft: isSoftLogout))
                 default:
                     break
                 }
@@ -463,7 +446,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 extension AppCoordinator: AuthenticationCoordinatorDelegate {
     func authenticationCoordinator(_ authenticationCoordinator: AuthenticationCoordinator, didLoginWithSession userSession: UserSessionProtocol) {
         self.userSession = userSession
-        stateMachine.processEvent(.succeededSigningIn)
+        stateMachine.processEvent(.createdUserSession)
     }
 }
 

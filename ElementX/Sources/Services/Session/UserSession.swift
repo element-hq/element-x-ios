@@ -21,10 +21,8 @@ class UserSession: UserSessionProtocol {
     private var cancellables = Set<AnyCancellable>()
     private var checkForSessionVerificationControllerCancellable: AnyCancellable?
     private var authErrorCancellable: AnyCancellable?
-    private var restoreTokenUpdateCancellable: AnyCancellable?
     
     var userID: String { clientProxy.userID }
-    var isSoftLogout: Bool { clientProxy.isSoftLogout }
     var deviceID: String? { clientProxy.deviceId }
     var homeserver: String { clientProxy.homeserver }
 
@@ -39,7 +37,6 @@ class UserSession: UserSessionProtocol {
         
         setupSessionVerificationWatchdog()
         setupAuthErrorWatchdog()
-        setupRestoreTokenUpdateWatchdog()
     }
     
     // MARK: - Private
@@ -101,22 +98,5 @@ class UserSession: UserSessionProtocol {
 
     private func tearDownAuthErrorWatchdog() {
         authErrorCancellable = nil
-    }
-
-    // MARK: Restore Token Update Watchdog
-
-    private func setupRestoreTokenUpdateWatchdog() {
-        restoreTokenUpdateCancellable = clientProxy.callbacks
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] callback in
-                if case .updatedRestoreToken = callback {
-                    self?.callbacks.send(.updateRestoreTokenNeeded)
-                    self?.tearDownRestoreTokenUpdateWatchdog()
-                }
-            }
-    }
-
-    private func tearDownRestoreTokenUpdateWatchdog() {
-        restoreTokenUpdateCancellable = nil
     }
 }
