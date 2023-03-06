@@ -21,19 +21,10 @@ struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Has
     let body: String
     var formattedBody: AttributedString?
     let timestamp: String
-    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     
     let sender: TimelineItemSender
     
     var properties = RoomTimelineItemProperties()
-}
-
-// MARK: - Redact content from logs
-
-extension NoticeRoomTimelineItem: CustomStringConvertible {
-    var description: String {
-        "\(String(describing: Self.self)): id: \(id), timestamp: \(timestamp), isOutgoing: \(isOutgoing), properties: \(properties)"
-    }
 }

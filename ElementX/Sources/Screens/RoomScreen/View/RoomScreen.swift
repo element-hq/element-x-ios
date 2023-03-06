@@ -79,6 +79,7 @@ struct RoomScreen: View {
                 .padding()
         }
         .opacity(context.scrollToBottomButtonVisible ? 1.0 : 0.0)
+        .accessibilityHidden(!context.scrollToBottomButtonVisible)
         .animation(.elementDefault, value: context.scrollToBottomButtonVisible)
     }
     
@@ -112,13 +113,12 @@ struct RoomScreen: View {
 // MARK: - Previews
 
 struct RoomScreen_Previews: PreviewProvider {
+    static let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
+                                               mediaProvider: MockMediaProvider(),
+                                               roomName: "Preview room")
+    
     static var previews: some View {
-        let viewModel = RoomScreenViewModel(timelineController: MockRoomTimelineController(),
-                                            timelineViewFactory: RoomTimelineViewFactory(),
-                                            mediaProvider: MockMediaProvider(),
-                                            roomName: "Preview room")
-        
-        NavigationView {
+        NavigationStack {
             RoomScreen(context: viewModel.context)
         }
     }

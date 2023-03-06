@@ -36,7 +36,6 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         self.parameters = parameters
         
         viewModel = RoomScreenViewModel(timelineController: parameters.timelineController,
-                                        timelineViewFactory: RoomTimelineViewFactory(),
                                         mediaProvider: parameters.mediaProvider,
                                         roomName: parameters.roomProxy.displayName ?? parameters.roomProxy.name,
                                         roomAvatarUrl: parameters.roomProxy.avatarURL)
@@ -55,11 +54,14 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayFile(for: fileURL, with: title)
             case .displayEmojiPicker(let itemId):
                 self.displayEmojiPickerScreen(for: itemId)
+            case .displayReportContent(let itemId):
+                self.displayReportContent(for: itemId)
             }
         }
     }
     
     func stop() {
+        parameters.roomProxy.removeTimelineListener()
         viewModel.context.send(viewAction: .markRoomAsRead)
     }
     
@@ -114,5 +116,28 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         }
 
         navigationStackCoordinator.push(coordinator)
+    }
+
+    private func displayReportContent(for itemId: String) {
+        let navigationCoordinator = NavigationStackCoordinator()
+        let userIndicatorController = UserIndicatorController(rootCoordinator: NavigationStackCoordinator())
+        let parameters = ReportContentCoordinatorParameters(itemID: itemId,
+                                                            roomProxy: parameters.roomProxy,
+                                                            userIndicatorController: userIndicatorController)
+        let coordinator = ReportContentCoordinator(parameters: parameters)
+        coordinator.callback = { [weak self] completion in
+            self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            switch completion {
+            case .cancel: break
+            case .finish:
+                self?.showSuccess(label: ElementL10n.reportContentSubmitted)
+            }
+        }
+        navigationCoordinator.setRootCoordinator(coordinator)
+        navigationStackCoordinator.setSheetCoordinator(userIndicatorController)
+    }
+
+    private func showSuccess(label: String) {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: label, iconName: "checkmark"))
     }
 }

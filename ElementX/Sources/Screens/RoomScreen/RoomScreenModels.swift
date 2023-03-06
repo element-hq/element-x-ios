@@ -15,6 +15,7 @@
 //
 
 import Combine
+import SwiftUI
 import UIKit
 
 enum RoomScreenViewModelAction {
@@ -22,6 +23,7 @@ enum RoomScreenViewModelAction {
     case displayVideo(videoURL: URL, title: String?)
     case displayFile(fileURL: URL, title: String?)
     case displayEmojiPicker(itemId: String)
+    case displayReportContent(itemId: String)
 }
 
 enum RoomScreenComposerMode: Equatable {
@@ -87,7 +89,7 @@ struct RoomScreenViewStateBindings {
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomScreenErrorType>?
-    
+
     var debugInfo: TimelineItemDebugView.DebugInfo?
 }
 

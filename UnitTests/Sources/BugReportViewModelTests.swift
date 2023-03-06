@@ -21,25 +21,36 @@ import XCTest
 @MainActor
 class BugReportViewModelTests: XCTestCase {
     func testInitialState() {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil, isModallyPresented: false)
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+                                           userID: "@mock.client.com",
+                                           deviceID: nil,
+                                           screenshot: nil,
+                                           isModallyPresented: false)
         let context = viewModel.context
-
+        
         XCTAssertEqual(context.reportText, "")
         XCTAssertNil(context.viewState.screenshot)
         XCTAssertTrue(context.sendingLogsEnabled)
     }
-
+    
     func testClearScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: UIImage.actions, isModallyPresented: false)
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+                                           userID: "@mock.client.com",
+                                           deviceID: nil,
+                                           screenshot: UIImage.actions,
+                                           isModallyPresented: false)
         let context = viewModel.context
-
+        
         context.send(viewAction: .removeScreenshot)
         try await Task.sleep(nanoseconds: 100_000_000)
         XCTAssertNil(context.viewState.screenshot)
     }
-
+    
     func testAttachScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(), screenshot: nil, isModallyPresented: false)
+        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+                                           userID: "@mock.client.com",
+                                           deviceID: nil,
+                                           screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         XCTAssertNil(context.viewState.screenshot)
         context.send(viewAction: .attachScreenshot(UIImage.actions))

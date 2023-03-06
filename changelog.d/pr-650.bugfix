@@ -1,0 +1,1 @@
+Fixed crash on the settings screen when showing the "complete verification" button before the session verification controller proxy was ready

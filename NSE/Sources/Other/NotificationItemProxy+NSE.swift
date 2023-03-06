@@ -94,6 +94,11 @@ extension NotificationItemProxy {
                                           senderId: senderId,
                                           roomId: roomId,
                                           mediaProvider: mediaProvider)
+        case .audio(content: let content):
+            return try await processAudio(content: content,
+                                          senderId: senderId,
+                                          roomId: roomId,
+                                          mediaProvider: mediaProvider)
         case .video(content: let content):
             return try await processVideo(content: content,
                                           senderId: senderId,
@@ -216,6 +221,18 @@ extension NotificationItemProxy {
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "🫥 " + content.body
+
+        return notification
+    }
+
+    private func processAudio(content: AudioMessageContent,
+                              senderId: String,
+                              roomId: String,
+                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
+        let notification = try await processCommon(senderId: senderId,
+                                                   roomId: roomId,
+                                                   mediaProvider: mediaProvider)
+        notification.body = "🔊 " + content.body
 
         return notification
     }

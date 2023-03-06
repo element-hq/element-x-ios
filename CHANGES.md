@@ -1,3 +1,60 @@
+## Changes in 1.0.23 (2023-02-24)
+
+No significant changes.
+
+
+## Changes in 1.0.22 (2023-02-24)
+
+No significant changes.
+
+
+## Changes in 1.0.21 (2023-02-23)
+
+✨ Features
+
+- Added a feature that allows a user to report content posted by another user by opening the context menu and provide a reason. ([#115](https://github.com/vector-im/element-x-ios/issues/115))
+- Added support for audio messages in the timeline as previewable files. ([#594](https://github.com/vector-im/element-x-ios/issues/594))
+
+🐛 Bugfixes
+
+- Fix broken split layout room navigation ([#613](https://github.com/vector-im/element-x-ios/pull/613))
+
+
+## Changes in 1.0.20 (2023-02-22)
+
+✨ Features
+
+- Enable auto-discovery of sliding sync proxy, directing users to more information when their server doesn't support it. ([#410](https://github.com/vector-im/element-x-ios/issues/410))
+
+🙌 Improvements
+
+- Added the functionality to attach a screenshot in the Bug Report View. ([#127](https://github.com/vector-im/element-x-ios/issues/127))
+- Added associated domains applinks. ([#301](https://github.com/vector-im/element-x-ios/issues/301))
+- Add missing shimmer effect on home screen and tweak the message composer. ([#430](https://github.com/vector-im/element-x-ios/issues/430))
+- Added a progress bar to to the bug report screen, when sending the report. ([#495](https://github.com/vector-im/element-x-ios/issues/495))
+- Launch UI tests directly in the screen that will be tested and type character by character instead of retrying. ([#534](https://github.com/vector-im/element-x-ios/issues/534))
+- Removed reply/edit dimming for all non highlighted messages to increase readability. ([#542](https://github.com/vector-im/element-x-ios/issues/542))
+- Refactored UserNotification into UserIndicator. ([#547](https://github.com/vector-im/element-x-ios/issues/547))
+- Update appearance of forms in the app. Add formBackground and formRowBackground colours. ([#565](https://github.com/vector-im/element-x-ios/issues/565))
+- Rename SettingsRow… to Form…Style and use these everywhere (sparingly on the Bug Report Screen which isn't a real form). ([#602](https://github.com/vector-im/element-x-ios/issues/602))
+
+🐛 Bugfixes
+
+- Allow blockquote bubbles to fill the message bubble ([#527](https://github.com/vector-im/element-x-ios/pull/527))
+- Fixed and updated some UI Tests. ([#554](https://github.com/vector-im/element-x-ios/pull/554))
+- Fix incorrect visible room ranges: correctly remove duplicates and ignore appearance changes while filtering ([#603](https://github.com/vector-im/element-x-ios/pull/603))
+- Fixed incorrect link detection on messages containing emojis ([#464](https://github.com/vector-im/element-x-ios/issues/464))
+- Context Menu Crash: Attempted fix by explicitly passing in the context to each cell. ([#532](https://github.com/vector-im/element-x-ios/issues/532))
+- Fix UI Tests for OnboardingScreen, BugReportScreen, ServerSelectionScreen, and UserSessionFlows. Fix UITestsSignalling by switching to file-based communication with a publisher. ([#534](https://github.com/vector-im/element-x-ios/issues/534))
+- Fix the background colour of the room members screen in dark mode. ([#583](https://github.com/vector-im/element-x-ios/issues/583))
+- Make sure forms have pressed states, remove incorrect disclosure indicators, stop login screen placeholders from flickering and don't block the loging screen when parsing a username. ([#602](https://github.com/vector-im/element-x-ios/issues/602))
+
+🧱 Build
+
+- Update PR Build workflow triggers. ([#564](https://github.com/vector-im/element-x-ios/pull/564))
+- Update SwiftLint and SwiftFormat rules. ([#579](https://github.com/vector-im/element-x-ios/pull/579))
+
+
 ## Changes in 1.0.18 (2023-02-03)
 
 No significant changes.

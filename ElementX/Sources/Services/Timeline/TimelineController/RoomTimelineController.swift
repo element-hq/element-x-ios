@@ -101,7 +101,6 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     func processItemDisappearance(_ itemID: String) { }
 
-    // swiftlint:disable:next cyclomatic_complexity
     func processItemTap(_ itemID: String) async -> RoomTimelineControllerAction {
         guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
             return .none
@@ -111,33 +110,36 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         case let item as ImageRoomTimelineItem:
             await loadFileForImageTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? ImageRoomTimelineItem else {
+                  let item = timelineItems[index] as? ImageRoomTimelineItem,
+                  let fileURL = item.cachedFileURL else {
                 return .none
             }
-            if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.body)
-            }
-            return .none
+            return .displayFile(fileURL: fileURL, title: item.body)
         case let item as VideoRoomTimelineItem:
             await loadVideoForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? VideoRoomTimelineItem else {
+                  let item = timelineItems[index] as? VideoRoomTimelineItem,
+                  let videoURL = item.cachedVideoURL else {
                 return .none
             }
-            if let videoURL = item.cachedVideoURL {
-                return .displayVideo(videoURL: videoURL, title: item.body)
-            }
-            return .none
+            return .displayVideo(videoURL: videoURL, title: item.body)
         case let item as FileRoomTimelineItem:
             await loadFileForTimelineItem(item)
             guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? FileRoomTimelineItem else {
+                  let item = timelineItems[index] as? FileRoomTimelineItem,
+                  let fileURL = item.cachedFileURL else {
                 return .none
             }
-            if let fileURL = item.cachedFileURL {
-                return .displayFile(fileURL: fileURL, title: item.body)
+            return .displayFile(fileURL: fileURL, title: item.body)
+        case let item as AudioRoomTimelineItem:
+            await loadAudioForTimelineItem(item)
+            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
+                  let item = timelineItems[index] as? AudioRoomTimelineItem,
+                  let audioURL = item.cachedAudioURL else {
+                return .none
             }
-            return .none
+            // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
+            return .displayFile(fileURL: audioURL, title: item.body)
         default:
             return .none
         }
@@ -218,61 +220,43 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         updateTimelineItems()
     }
     
-    // swiftlint:disable:next cyclomatic_complexity
     private func updateTimelineItems() {
         var newTimelineItems = [RoomTimelineItemProtocol]()
         var canBackPaginate = true
         var isBackPaginating = false
         
-        var createdIdentifiers = [String: Bool]()
-
-        for (index, itemProxy) in timelineProvider.itemsPublisher.value.enumerated() {
-            if Task.isCancelled {
-                return
-            }
-
-            let previousItemProxy = timelineProvider.itemsPublisher.value[safe: index - 1]
-            let nextItemProxy = timelineProvider.itemsPublisher.value[safe: index + 1]
-
-            let groupState = computeGroupState(for: itemProxy, previousItemProxy: previousItemProxy, nextItemProxy: nextItemProxy)
+        let collapsibleChunks = timelineProvider.itemsPublisher.value.groupBy { isItemCollapsible($0) }
+        
+        for (index, collapsibleChunk) in collapsibleChunks.enumerated() {
+            let isLastItem = index == collapsibleChunks.indices.last
             
-            switch itemProxy {
-            case .event(let eventItemProxy):
-                if let timelineItem = timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy, groupState: groupState) {
-                    #warning("This works around duplicated items coming out of the SDK, remove once fixed")
-                    if createdIdentifiers[timelineItem.id] == nil {
-                        newTimelineItems.append(timelineItem)
-                        createdIdentifiers[timelineItem.id] = true
-                    } else {
-                        MXLog.error("Found duplicated timeline item, ignoring")
-                    }
-                }
-            case .virtual(let virtualItem):
-                switch virtualItem {
-                case .dayDivider(let timestamp):
-                    // These components will be replaced by a timestamp in upcoming releases
-                    let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
-                    let dateString = date.formatted(date: .complete, time: .omitted)
-                    newTimelineItems.append(SeparatorRoomTimelineItem(text: dateString))
-                case .readMarker:
-                    // Don't show the read marker if it's the last item in the timeline
-                    if index != timelineProvider.itemsPublisher.value.indices.last {
-                        newTimelineItems.append(ReadMarkerRoomTimelineItem())
-                    }
-                case .loadingIndicator:
-                    newTimelineItems.append(PaginationIndicatorRoomTimelineItem())
+            let items = collapsibleChunk.compactMap { itemProxy in
+                let timelineItem = buildTimelineItemFor(itemProxy: itemProxy)
+                
+                if timelineItem is PaginationIndicatorRoomTimelineItem {
                     isBackPaginating = true
-                case .timelineStart:
-                    newTimelineItems.append(TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name))
+                } else if timelineItem is TimelineStartRoomTimelineItem {
                     canBackPaginate = false
                 }
-            default:
-                break
+                
+                return timelineItem
             }
-        }
-        
-        if Task.isCancelled {
-            return
+            
+            if items.isEmpty {
+                continue
+            }
+            
+            if items.count == 1, let timelineItem = items.first {
+                // Don't show the read marker if it's the last item in the timeline
+                // https://github.com/matrix-org/matrix-rust-sdk/issues/1546
+                guard !(timelineItem is ReadMarkerRoomTimelineItem && isLastItem) else {
+                    continue
+                }
+                
+                newTimelineItems.append(timelineItem)
+            } else {
+                newTimelineItems.append(CollapsibleTimelineItem(items: items))
+            }
         }
 
         timelineItems = newTimelineItems
@@ -282,49 +266,44 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         callbacks.send(.isBackPaginating(isBackPaginating))
     }
     
-    private func computeGroupState(for itemProxy: TimelineItemProxy,
-                                   previousItemProxy: TimelineItemProxy?,
-                                   nextItemProxy: TimelineItemProxy?) -> TimelineItemGroupState {
-        guard let previousItem = previousItemProxy else {
-            //  no previous item, check next item
-            guard let nextItem = nextItemProxy else {
-                //  no next item neither, this is single
-                return .single
+    private func buildTimelineItemFor(itemProxy: TimelineItemProxy) -> RoomTimelineItemProtocol? {
+        switch itemProxy {
+        case .event(let eventItemProxy):
+            return timelineItemFactory.buildTimelineItemFor(eventItemProxy: eventItemProxy)
+        case .virtual(let virtualItem):
+            switch virtualItem {
+            case .dayDivider(let timestamp):
+                // These components will be replaced by a timestamp in upcoming releases
+                let date = Date(timeIntervalSince1970: TimeInterval(timestamp / 1000))
+                let dateString = date.formatted(date: .complete, time: .omitted)
+                return SeparatorRoomTimelineItem(text: dateString)
+            case .readMarker:
+                return ReadMarkerRoomTimelineItem()
+            case .loadingIndicator:
+                return PaginationIndicatorRoomTimelineItem()
+            case .timelineStart:
+                return TimelineStartRoomTimelineItem(name: roomProxy.displayName ?? roomProxy.name)
             }
-            guard nextItem.canBeGrouped(with: itemProxy) else {
-                //  there is a next item but can't be grouped, this is single
-                return .single
+        case .unknown:
+            return nil
+        }
+    }
+    
+    private func isItemCollapsible(_ item: TimelineItemProxy) -> Bool {
+        if !ServiceLocator.shared.settings.shouldCollapseRoomStateEvents {
+            return false
+        }
+        
+        if case let .event(eventItem) = item {
+            switch eventItem.content.kind() {
+            case .profileChange, .roomMembership, .state:
+                return true
+            default:
+                return false
             }
-            //  next will be grouped with this one, this is the start
-            return .beginning
         }
-
-        guard let nextItem = nextItemProxy else {
-            //  no next item
-            guard itemProxy.canBeGrouped(with: previousItem) else {
-                //  there is a previous item but can't be grouped, this is single
-                return .single
-            }
-            //  will be grouped with previous, this is the end
-            return .end
-        }
-
-        guard itemProxy.canBeGrouped(with: previousItem) else {
-            guard nextItem.canBeGrouped(with: itemProxy) else {
-                //  there is a next item but can't be grouped, this is single
-                return .single
-            }
-            //  next will be grouped with this one, this is the start
-            return .beginning
-        }
-
-        guard nextItem.canBeGrouped(with: itemProxy) else {
-            //  there is a next item but can't be grouped, this is the end
-            return .end
-        }
-
-        //  next will be grouped with this one, this is the start
-        return .middle
+        
+        return false
     }
     
     private func loadVideoForTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
@@ -422,6 +401,35 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
             }
 
             item.cachedFileURL = fileURL
+            timelineItems[index] = item
+        case .failure:
+            break
+        }
+    }
+
+    private func loadAudioForTimelineItem(_ timelineItem: AudioRoomTimelineItem) async {
+        if timelineItem.cachedAudioURL != nil {
+            // already cached
+            return
+        }
+
+        guard let source = timelineItem.source else {
+            return
+        }
+
+        // This is not great. We could better estimate file extension from the mimetype.
+        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
+            return
+        }
+
+        switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
+        case .success(let audioURL):
+            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
+                  var item = timelineItems[index] as? AudioRoomTimelineItem else {
+                return
+            }
+
+            item.cachedAudioURL = audioURL
             timelineItems[index] = item
         case .failure:
             break

@@ -37,7 +37,6 @@ class KeychainControllerTests: XCTestCase {
                                                                userId: "userId",
                                                                deviceId: "deviceId",
                                                                homeserverUrl: "homeserverUrl",
-                                                               isSoftLogout: false,
                                                                slidingSyncProxy: "https://my.sync.proxy"))
         keychain.setRestorationToken(restorationToken, forUsername: username)
         
@@ -53,7 +52,6 @@ class KeychainControllerTests: XCTestCase {
                                                                userId: "userId",
                                                                deviceId: "deviceId",
                                                                homeserverUrl: "homeserverUrl",
-                                                               isSoftLogout: false,
                                                                slidingSyncProxy: "https://my.sync.proxy"))
         keychain.setRestorationToken(restorationToken, forUsername: username)
         XCTAssertEqual(keychain.restorationTokens().count, 1, "The keychain should have 1 restoration token.")
@@ -75,7 +73,6 @@ class KeychainControllerTests: XCTestCase {
                                                                    userId: "userId",
                                                                    deviceId: "deviceId",
                                                                    homeserverUrl: "homeserverUrl",
-                                                                   isSoftLogout: false,
                                                                    slidingSyncProxy: "https://my.sync.proxy"))
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
         }
@@ -96,7 +93,6 @@ class KeychainControllerTests: XCTestCase {
                                                                    userId: "userId",
                                                                    deviceId: "deviceId",
                                                                    homeserverUrl: "homeserverUrl",
-                                                                   isSoftLogout: false,
                                                                    slidingSyncProxy: "https://my.sync.proxy"))
             keychain.setRestorationToken(restorationToken, forUsername: "@test\(index):example.com")
         }

@@ -28,7 +28,7 @@ struct LoginScreen: View {
         ScrollView {
             VStack(spacing: 0) {
                 header
-                    .padding(.top, UIConstants.topPaddingToNavigationBar)
+                    .padding(.top, UIConstants.titleTopPaddingToNavigationBar)
                     .padding(.bottom, 32)
                 
                 serverInfo
@@ -70,12 +70,15 @@ struct LoginScreen: View {
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
             Text(ElementL10n.ftueAuthSignInEnterDetails)
-                .font(.element.subheadline)
+                .font(.element.footnote)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
             
-            TextField(ElementL10n.loginSigninUsernameHint, text: $context.username)
+            TextField(ElementL10n.username,
+                      text: $context.username,
+                      // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
+                      prompt: Text(ElementL10n.username).foregroundColor(.element.tertiaryContent))
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
                 .disableAutocorrection(true)
@@ -86,7 +89,10 @@ struct LoginScreen: View {
                 .onSubmit { isPasswordFocused = true }
                 .padding(.bottom, 20)
             
-            SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
+            SecureField(ElementL10n.loginSignupPasswordHint,
+                        text: $context.password,
+                        // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
+                        prompt: Text(ElementL10n.loginSignupPasswordHint).foregroundColor(.element.tertiaryContent))
                 .focused($isPasswordFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
                 .textContentType(.password)
@@ -133,6 +139,8 @@ struct LoginScreen: View {
     private func submit() {
         guard context.viewState.canSubmit else { return }
         context.send(viewAction: .next)
+        isUsernameFocused = false
+        isPasswordFocused = false
     }
 }
 
@@ -154,11 +162,18 @@ struct Login_Previews: PreviewProvider {
     }
     
     static func screen(for viewModel: LoginViewModel) -> some View {
-        NavigationView {
+        NavigationStack {
             LoginScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)
                 .tint(.element.accent)
+                .toolbar {
+                    ToolbarItem(placement: .cancellationAction) {
+                        Button { } label: {
+                            Text("\(Image(systemName: "chevron.backward")) Back")
+                        }
+                    }
+                }
         }
-        .navigationViewStyle(.stack)
+        .tint(.element.accent)
     }
 }

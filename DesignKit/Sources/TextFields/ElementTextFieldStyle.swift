@@ -23,7 +23,21 @@ public extension TextFieldStyle where Self == ElementTextFieldStyle {
                              footerText: String? = nil,
                              isError: Bool = false,
                              accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
-        ElementTextFieldStyle(labelText: labelText, footerText: footerText, isError: isError, accessibilityIdentifier: accessibilityIdentifier)
+        ElementTextFieldStyle(labelText: labelText.map(Text.init),
+                              footerText: footerText.map(Text.init),
+                              isError: isError,
+                              accessibilityIdentifier: accessibilityIdentifier)
+    }
+    
+    @_disfavoredOverload
+    static func elementInput(labelText: Text? = nil,
+                             footerText: Text? = nil,
+                             isError: Bool = false,
+                             accessibilityIdentifier: String? = nil) -> ElementTextFieldStyle {
+        ElementTextFieldStyle(labelText: labelText,
+                              footerText: footerText,
+                              isError: isError,
+                              accessibilityIdentifier: accessibilityIdentifier)
     }
 }
 
@@ -36,8 +50,8 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     @Environment(\.colorScheme) private var colorScheme
     
     @FocusState private var isFocused: Bool
-    public let labelText: String?
-    public let footerText: String?
+    public let labelText: Text?
+    public let footerText: Text?
     public let isError: Bool
     public let accessibilityIdentifier: String?
     
@@ -93,7 +107,7 @@ public struct ElementTextFieldStyle: TextFieldStyle {
     ///   - labelText: The text shown in the label above the field.
     ///   - footerText: The text shown in the footer label below the field.
     ///   - isError: Whether or not the text field is currently in the error state.
-    public init(labelText: String? = nil, footerText: String? = nil, isError: Bool = false, accessibilityIdentifier: String? = nil) {
+    public init(labelText: Text? = nil, footerText: Text? = nil, isError: Bool = false, accessibilityIdentifier: String? = nil) {
         self.labelText = labelText
         self.footerText = footerText
         self.isError = isError
@@ -104,12 +118,10 @@ public struct ElementTextFieldStyle: TextFieldStyle {
         let rectangle = RoundedRectangle(cornerRadius: 14.0)
         
         return VStack(alignment: .leading, spacing: 8) {
-            if let labelText {
-                Text(labelText)
-                    .font(.element.footnote)
-                    .foregroundColor(labelColor)
-                    .padding(.horizontal, 16)
-            }
+            labelText
+                .font(.element.footnote)
+                .foregroundColor(labelColor)
+                .padding(.horizontal, 16)
             
             configuration
                 .focused($isFocused)
@@ -134,12 +146,11 @@ public struct ElementTextFieldStyle: TextFieldStyle {
                     textField.accessibilityIdentifier = accessibilityIdentifier
                 }
  
-            if let footerText {
-                Text(footerText)
-                    .font(.element.caption1)
-                    .foregroundColor(footerColor)
-                    .padding(.horizontal, 16)
-            }
+            footerText
+                .tint(.element.links)
+                .font(.element.caption1)
+                .foregroundColor(footerColor)
+                .padding(.horizontal, 16)
         }
     }
 }

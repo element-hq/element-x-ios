@@ -21,30 +21,23 @@ struct SettingsScreen: View {
 
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     
-    private let listRowInsets = EdgeInsets(top: 8, leading: 16, bottom: 8, trailing: 16)
-    
     @ObservedObject var context: SettingsScreenViewModel.Context
     
     var body: some View {
         Form {
             userSection
-                .listRowBackground(Color.element.formRowBackground)
             
             if context.viewState.showSessionVerificationSection {
                 sessionVerificationSection
-                    .listRowBackground(Color.element.formRowBackground)
             }
             
             simplifiedSection
-                .listRowBackground(Color.element.formRowBackground)
             
             if context.viewState.showDeveloperOptions {
                 developerOptionsSection
-                    .listRowBackground(Color.element.formRowBackground)
             }
             
             signOutSection
-                .listRowBackground(Color.element.formRowBackground)
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -69,6 +62,7 @@ struct SettingsScreen: View {
                                     contentID: context.viewState.userID,
                                     avatarSize: .user(on: .settings),
                                     imageProvider: context.imageProvider)
+                    .accessibilityHidden(true)
                 
                 VStack(alignment: .leading, spacing: 4) {
                     Text(context.viewState.userDisplayName ?? "")
@@ -78,62 +72,66 @@ struct SettingsScreen: View {
                         .font(.element.subheadline)
                         .foregroundColor(.element.primaryContent)
                 }
+                .accessibilityElement(children: .combine)
             }
-            .listRowInsets(listRowInsets)
         }
+        .formSectionStyle()
     }
     
     private var sessionVerificationSection: some View {
         Section {
-            SettingsDefaultRow(title: ElementL10n.settingsSessionVerification,
-                               image: Image(systemName: "checkmark.shield")) {
-                context.send(viewAction: .sessionVerification)
+            Button { context.send(viewAction: .sessionVerification) } label: {
+                Label(ElementL10n.settingsSessionVerification, systemImage: "checkmark.shield")
             }
+            .buttonStyle(FormButtonStyle())
         }
+        .formSectionStyle()
     }
     
     private var developerOptionsSection: some View {
         Section {
-            SettingsDefaultRow(title: ElementL10n.settingsDeveloperOptions,
-                               image: Image(systemName: "hammer.circle")) {
-                context.send(viewAction: .developerOptions)
+            Button { context.send(viewAction: .developerOptions) } label: {
+                Label(ElementL10n.settingsDeveloperOptions, systemImage: "hammer.circle")
             }
+            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
             .accessibilityIdentifier("sessionVerificationButton")
         }
+        .formSectionStyle()
     }
     
     private var simplifiedSection: some View {
         Section {
-            SettingsPickerRow(title: ElementL10n.settingsTimelineStyle,
-                              image: Image(systemName: "rectangle.grid.1x2"),
-                              selection: $context.timelineStyle) {
+            Picker(selection: $context.timelineStyle) {
                 ForEach(TimelineStyle.allCases, id: \.self) { style in
                     Text(style.name)
                         .tag(style)
                 }
+            } label: {
+                Label(ElementL10n.settingsTimelineStyle, systemImage: "rectangle.grid.1x2")
+                    .labelStyle(FormRowLabelStyle())
             }
             .accessibilityIdentifier("timelineStylePicker")
             .onChange(of: context.timelineStyle) { _ in
                 context.send(viewAction: .changedTimelineStyle)
             }
             
-            SettingsDefaultRow(title: ElementL10n.sendBugReport,
-                               image: Image(systemName: "questionmark.circle")) {
-                context.send(viewAction: .reportBug)
+            Button { context.send(viewAction: .reportBug) } label: {
+                Label(ElementL10n.sendBugReport, systemImage: "questionmark.circle")
             }
+            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
             .accessibilityIdentifier("reportBugButton")
         }
+        .formSectionStyle()
     }
     
     private var signOutSection: some View {
         Section {
-            SettingsDefaultRow(title: ElementL10n.actionSignOut,
-                               image: Image(systemName: "rectangle.portrait.and.arrow.right")) {
-                showingLogoutConfirmation = true
+            Button { showingLogoutConfirmation = true } label: {
+                Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
             }
+            .buttonStyle(FormButtonStyle())
             .accessibilityIdentifier("logoutButton")
-            .alert(ElementL10n.actionSignOut,
-                   isPresented: $showingLogoutConfirmation) {
+            .alert(ElementL10n.actionSignOut, isPresented: $showingLogoutConfirmation) {
                 Button(ElementL10n.actionSignOut,
                        role: .destructive,
                        action: logout)
@@ -155,6 +153,7 @@ struct SettingsScreen: View {
             }
             .padding(.top, 24)
         }
+        .formSectionStyle()
     }
 
     private var doneButton: some View {
@@ -184,12 +183,14 @@ private extension TimelineStyle {
 // MARK: - Previews
 
 struct SettingsScreen_Previews: PreviewProvider {
-    static var previews: some View {
+    static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let viewModel = SettingsScreenViewModel(withUserSession: userSession)
-        
-        NavigationView {
+        return SettingsScreenViewModel(withUserSession: userSession)
+    }()
+    
+    static var previews: some View {
+        NavigationStack {
             SettingsScreen(context: viewModel.context)
                 .tint(.element.accent)
         }

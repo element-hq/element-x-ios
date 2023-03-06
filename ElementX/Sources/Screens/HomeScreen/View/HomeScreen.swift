@@ -17,13 +17,21 @@
 import SwiftUI
 
 struct HomeScreen: View {
+    enum Constants {
+        static let slidingWindowBoundsPadding = 5
+    }
+    
     @ObservedObject var context: HomeScreenViewModel.Context
+    
+    @State private var isViewVisible = false
     
     @State private var scrollViewAdapter = ScrollViewAdapter()
     @State private var showingLogoutConfirmation = false
     @State private var visibleItemIdentifiers = Set<String>() {
         didSet {
-            updateVisibleRange()
+            if isViewVisible {
+                updateVisibleRange()
+            }
         }
     }
     
@@ -38,10 +46,10 @@ struct HomeScreen: View {
                     ForEach(context.viewState.visibleRooms) { room in
                         HomeScreenRoomCell(room: room, context: context)
                             .redacted(reason: .placeholder)
-                            .disabled(true)
                     }
                 }
                 .shimmer()
+                .disabled(true)
             } else {
                 LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleRooms) { room in
@@ -54,9 +62,13 @@ struct HomeScreen: View {
                             }
                         }
                         .onAppear {
+                            // Ignore while filtering rooms
+                            guard context.searchQuery.isEmpty else { return }
                             visibleItemIdentifiers.insert(room.id)
                         }
                         .onDisappear {
+                            // Ignore while filtering rooms
+                            guard context.searchQuery.isEmpty else { return }
                             visibleItemIdentifiers.remove(room.id)
                         }
                     }
@@ -64,6 +76,12 @@ struct HomeScreen: View {
                 .searchable(text: $context.searchQuery)
                 .disableAutocorrection(true)
             }
+        }
+        .onAppear {
+            isViewVisible = true
+        }
+        .onDisappear {
+            isViewVisible = false
         }
         .introspectScrollView { scrollView in
             guard scrollView != scrollViewAdapter.scrollView else { return }
@@ -75,7 +93,7 @@ struct HomeScreen: View {
             }
         }
         .scrollDismissesKeyboard(.immediately)
-        .disabled(context.viewState.roomListMode == .skeletons)
+        .scrollDisabled(context.viewState.roomListMode == .skeletons)
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
         .alert(item: $context.alertInfo) { $0.alert }
@@ -194,7 +212,10 @@ struct HomeScreen: View {
             return
         }
         
-        context.send(viewAction: .updateVisibleItemRange(range: firstIndex..<lastIndex, isScrolling: scrollViewAdapter.isScrolling.value))
+        let lowerBound = max(0, firstIndex - Constants.slidingWindowBoundsPadding)
+        let upperBound = min(Int(context.viewState.rooms.count), lastIndex + Constants.slidingWindowBoundsPadding)
+        
+        context.send(viewAction: .updateVisibleItemRange(range: lowerBound..<upperBound, isScrolling: scrollViewAdapter.isScrolling.value))
     }
 }
 
@@ -216,7 +237,7 @@ struct HomeScreen_Previews: PreviewProvider {
         let viewModel = HomeScreenViewModel(userSession: userSession,
                                             attributedStringBuilder: AttributedStringBuilder())
         
-        return NavigationView {
+        return NavigationStack {
             HomeScreen(context: viewModel.context)
         }
     }

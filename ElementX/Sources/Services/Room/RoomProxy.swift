@@ -33,12 +33,8 @@ class RoomProxy: RoomProxyProtocol {
     
     private(set) var displayName: String?
     
-    private var timelineObservationToken: StoppableSpawn?
-    
-    deinit {
-        timelineObservationToken?.cancel()
-    }
-    
+    private var timelineObservationToken: TaskHandle?
+        
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
          backgroundTaskService: BackgroundTaskServiceProtocol) {
@@ -136,19 +132,24 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
         
-    func addTimelineListener(listener: TimelineListener) -> Result<Void, RoomProxyError> {
+    func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError> {
         let settings = RoomSubscription(requiredState: [RequiredState(key: "m.room.topic", value: ""),
                                                         RequiredState(key: "m.room.canonical_alias", value: "")],
                                         timelineLimit: nil)
-        if let token = slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: settings) {
-            timelineObservationToken = token
+        if let result = try? slidingSyncRoom.subscribeAndAddTimelineListener(listener: listener, settings: settings) {
+            timelineObservationToken = result.taskHandle
             Task {
                 await fetchMembers()
             }
-            return .success(())
+            return .success(result.items)
         } else {
             return .failure(.failedAddingTimelineListener)
         }
+    }
+    
+    func removeTimelineListener() {
+        timelineObservationToken?.cancel()
+        timelineObservationToken = nil
     }
     
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
@@ -250,6 +251,22 @@ class RoomProxy: RoomProxyProtocol {
                 return .success(())
             } catch {
                 return .failure(.failedRedactingEvent)
+            }
+        }
+    }
+
+    func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.reportContent(eventId: eventID, score: nil, reason: reason)
+                return .success(())
+            } catch {
+                return .failure(.failedReportingContent)
             }
         }
     }

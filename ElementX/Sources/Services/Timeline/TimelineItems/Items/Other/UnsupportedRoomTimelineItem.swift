@@ -24,7 +24,6 @@ struct UnsupportedRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable
     let error: String
     
     let timestamp: String
-    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     

@@ -149,3 +149,16 @@ extension MessageTimelineItem where Content == MatrixRustSDK.FileMessageContent 
         return .init(source: src)
     }
 }
+
+extension MatrixRustSDK.AudioMessageContent: MessageContentProtocol { }
+
+/// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.audio`.
+extension MessageTimelineItem where Content == MatrixRustSDK.AudioMessageContent {
+    var source: MediaSourceProxy {
+        .init(source: content.source)
+    }
+
+    var duration: UInt64 {
+        content.info?.duration ?? 0
+    }
+}

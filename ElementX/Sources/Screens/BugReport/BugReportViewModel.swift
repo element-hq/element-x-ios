@@ -19,14 +19,21 @@ import SwiftUI
 typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState, BugReportViewAction>
 
 class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
-    let bugReportService: BugReportServiceProtocol
+    private let bugReportService: BugReportServiceProtocol
+    private let userID: String
+    private let deviceID: String?
 
     var callback: ((BugReportViewModelAction) -> Void)?
-
+    
     init(bugReportService: BugReportServiceProtocol,
+         userID: String,
+         deviceID: String?,
          screenshot: UIImage?,
          isModallyPresented: Bool) {
         self.bugReportService = bugReportService
+        self.userID = userID
+        self.deviceID = deviceID
+        
         let bindings = BugReportViewStateBindings(reportText: "", sendingLogsEnabled: true)
         super.init(initialViewState: BugReportViewState(screenshot: screenshot,
                                                         bindings: bindings,
@@ -61,7 +68,9 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
                 try pngData?.write(to: imageURL)
                 files.append(imageURL)
             }
-            let bugReport = BugReport(text: context.reportText,
+            let bugReport = BugReport(userID: userID,
+                                      deviceID: deviceID,
+                                      text: context.reportText,
                                       includeLogs: context.sendingLogsEnabled,
                                       includeCrashLog: true,
                                       githubLabels: [],

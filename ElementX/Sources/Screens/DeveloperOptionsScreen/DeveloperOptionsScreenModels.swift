@@ -22,6 +22,10 @@ struct DeveloperOptionsScreenViewState: BindableState {
     var bindings: DeveloperOptionsScreenViewStateBindings
 }
 
-struct DeveloperOptionsScreenViewStateBindings { }
+struct DeveloperOptionsScreenViewStateBindings {
+    var shouldCollapseRoomStateEvents: Bool
+}
 
-enum DeveloperOptionsScreenViewAction { }
+enum DeveloperOptionsScreenViewAction {
+    case changedShouldCollapseRoomStateEvents
+}

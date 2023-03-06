@@ -8,6 +8,8 @@
 
 "message" = "Message";
 
+"sending" = "Sending...";
+
 "screenshot_detected_title" = "You took a screenshot";
 "screenshot_detected_message" = "Would you like to submit a bug report?";
 
@@ -33,6 +35,8 @@
 "room_timeline_image_gif" = "GIF";
 "room_timeline_read_marker_title" = "New";
 
+"room_timeline_state_changes" = "%d room changes";
+
 "noticeRoomInviteAccepted" = "%1$@ accepted the invite";
 "noticeRoomInviteAcceptedByYou" = "You accepted the invite";
 "noticeRoomKnock" = "%1$@ requested to join";
@@ -51,7 +55,7 @@
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
 "session_verification_start" = "Start";
 
-"server_selection_server_footer" = "You can only connect to an existing server";
+"server_selection_server_footer" = "You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %@";
 "server_selection_sliding_sync_alert_title" = "Server not supported";
 "server_selection_sliding_sync_alert_message" = "This server currently doesn’t support sliding sync.";
 
@@ -84,7 +88,10 @@
 "bug_report_screen_logs_description" = "To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.";
 "bug_report_screen_attach_screenshot" = "Attach Screenshot";
 "bug_report_screen_edit_screenshot" = "Edit Screenshot";
-"bug_report_screen_sending" = "Sending...";
+
+// Report Content
+"report_content_info" = "Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.";
+"report_content_submitted" = "Report Submitted";
 
 // Session verification
 /*

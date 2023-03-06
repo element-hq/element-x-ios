@@ -69,20 +69,4 @@ final class UserSessionTests: XCTestCase {
         controller.callbacks.send(.finished)
         waitForExpectations(timeout: 1.0)
     }
-    
-    func test_whenUserSessionReceivesUpdatedRestoreToken_updateRestoreTokenNeededEventReceived() throws {
-        let expectation = expectation(description: "UpdatedRestoreToken expectation")
-        userSession.callbacks.sink { callback in
-            switch callback {
-            case .updateRestoreTokenNeeded:
-                expectation.fulfill()
-            default:
-                break
-            }
-        }
-        .store(in: &cancellables)
-        
-        clientProxy.callbacks.send(.updatedRestoreToken)
-        waitForExpectations(timeout: 1.0)
-    }
 }
