@@ -35,7 +35,7 @@ import MatrixRustSDK
 
 
 
-class BugReportServiceProtocolMock: BugReportServiceProtocol {
+class BugReportServiceMock: BugReportServiceProtocol {
 
 
     var crashedLastRun: Bool {
@@ -85,7 +85,7 @@ class BugReportServiceProtocolMock: BugReportServiceProtocol {
     }
 
 }
-class SessionVerificationControllerProxyProtocolMock: SessionVerificationControllerProxyProtocol {
+class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
 
 
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {

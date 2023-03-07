@@ -16,7 +16,7 @@
 
 import Combine
 
-final class MockSessionVerificationControllerProxy: SessionVerificationControllerProxyProtocolMock {
+final class MockSessionVerificationControllerProxy: SessionVerificationControllerProxyMock {
     static let emojis = [SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
                          SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
                          SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),

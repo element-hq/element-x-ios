@@ -105,7 +105,7 @@ class MockScreen: Identifiable {
                                           mediaProvider: MockMediaProvider())
             let coordinator = HomeScreenCoordinator(parameters: .init(userSession: session,
                                                                       attributedStringBuilder: AttributedStringBuilder(),
-                                                                      bugReportService: BugReportServiceProtocolMock(),
+                                                                      bugReportService: BugReportServiceMock(),
                                                                       navigationStackCoordinator: navigationStackCoordinator))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
@@ -115,12 +115,12 @@ class MockScreen: Identifiable {
                                                                           userIndicatorController: nil,
                                                                           userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
                                                                                                        mediaProvider: MockMediaProvider()),
-                                                                          bugReportService: BugReportServiceProtocolMock()))
+                                                                          bugReportService: BugReportServiceMock()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .bugReport:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = BugReportCoordinator(parameters: .init(bugReportService: BugReportServiceProtocolMock(),
+            let coordinator = BugReportCoordinator(parameters: .init(bugReportService: BugReportServiceMock(),
                                                                      userID: "@mock:client.com",
                                                                      deviceID: nil,
                                                                      userIndicatorController: nil,
@@ -130,7 +130,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .bugReportWithScreenshot:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = BugReportCoordinator(parameters: .init(bugReportService: BugReportServiceProtocolMock(),
+            let coordinator = BugReportCoordinator(parameters: .init(bugReportService: BugReportServiceMock(),
                                                                      userID: "@mock:client.com",
                                                                      deviceID: nil,
                                                                      userIndicatorController: nil,
@@ -261,7 +261,7 @@ class MockScreen: Identifiable {
             
             let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
-                                                         bugReportService: BugReportServiceProtocolMock(),
+                                                         bugReportService: BugReportServiceMock(),
                                                          roomTimelineControllerFactory: MockRoomTimelineControllerFactory())
             
             coordinator.start()
