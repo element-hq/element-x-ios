@@ -91,38 +91,26 @@ class MockClientProxy: ClientProxyProtocol {
     
     var setPusherCalled = false
     var setPusherErrorToThrow: Error?
-    var setPusherPushkey: String?
+    var setPusherIdentifiers: PusherIdentifiers?
     var setPusherKind: PusherKind?
-    var setPusherAppId: String?
     var setPusherAppDisplayName: String?
     var setPusherDeviceDisplayName: String?
     var setPusherProfileTag: String?
     var setPusherLang: String?
-    var setPusherUrl: URL?
-    var setPusherFormat: PushFormat?
-    var setPusherDefaultPayload: [AnyHashable: Any]?
-    // swiftlint:disable:next function_parameter_count
-    func setPusher(pushkey: String,
-                   kind: PusherKind?,
-                   appId: String,
+
+    func setPusher(identifiers: PusherIdentifiers,
+                   kind: PusherKind,
                    appDisplayName: String,
                    deviceDisplayName: String,
                    profileTag: String?,
-                   lang: String,
-                   url: URL?,
-                   format: PushFormat?,
-                   defaultPayload: [AnyHashable: Any]?) async throws {
+                   lang: String) async throws {
         if let setPusherErrorToThrow { throw setPusherErrorToThrow }
         setPusherCalled = true
-        setPusherPushkey = pushkey
+        setPusherIdentifiers = identifiers
         setPusherKind = kind
-        setPusherAppId = appId
         setPusherAppDisplayName = appDisplayName
         setPusherDeviceDisplayName = deviceDisplayName
         setPusherProfileTag = profileTag
         setPusherLang = lang
-        setPusherUrl = url
-        setPusherFormat = format
-        setPusherDefaultPayload = defaultPayload
     }
 }

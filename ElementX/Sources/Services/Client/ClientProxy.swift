@@ -205,30 +205,20 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    // swiftlint:disable:next function_parameter_count
-    func setPusher(pushkey: String,
-                   kind: PusherKind?,
-                   appId: String,
+    func setPusher(identifiers: PusherIdentifiers,
+                   kind: PusherKind,
                    appDisplayName: String,
                    deviceDisplayName: String,
                    profileTag: String?,
-                   lang: String,
-                   url: URL?,
-                   format: PushFormat?,
-                   defaultPayload: [AnyHashable: Any]?) async throws {
-//        let defaultPayloadString = jsonString(from: defaultPayload)
-//        try await Task.dispatch(on: .global()) {
-//            try self.client.setPusher(pushkey: pushkey,
-//                                      kind: kind?.rustValue,
-//                                      appId: appId,
-//                                      appDisplayName: appDisplayName,
-//                                      deviceDisplayName: deviceDisplayName,
-//                                      profileTag: profileTag,
-//                                      lang: lang,
-//                                      url: url,
-//                                      format: format?.rustValue,
-//                                      defaultPayload: defaultPayloadString)
-//        }
+                   lang: String) async throws {
+        try await Task.dispatch(on: .global()) {
+            try self.client.setPusher(identifiers: identifiers,
+                                      kind: kind,
+                                      appDisplayName: appDisplayName,
+                                      deviceDisplayName: deviceDisplayName,
+                                      profileTag: profileTag,
+                                      lang: lang)
+        }
     }
     
     // MARK: Private
@@ -376,17 +366,6 @@ class ClientProxy: ClientProxyProtocol {
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         callbacks.send(.receivedSyncUpdate)
-    }
-    
-    /// Convenience method to get the json string of an Encodable
-    private func jsonString(from dictionary: [AnyHashable: Any]?) -> String? {
-        guard let dictionary,
-              let data = try? JSONSerialization.data(withJSONObject: dictionary,
-                                                     options: [.fragmentsAllowed]) else {
-            return nil
-        }
-
-        return String(data: data, encoding: .utf8)
     }
 }
 

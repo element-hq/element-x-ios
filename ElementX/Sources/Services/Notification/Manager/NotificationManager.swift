@@ -18,6 +18,8 @@ import Foundation
 import UIKit
 import UserNotifications
 
+import MatrixRustSDK
+
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private let clientProxy: ClientProxyProtocol
@@ -84,24 +86,24 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
-            try await clientProxy.setPusher(pushkey: deviceToken.base64EncodedString(),
-                                            kind: .http,
-                                            appId: ServiceLocator.shared.settings.pusherAppId,
+            let identifiers = PusherIdentifiers(pushkey: deviceToken.base64EncodedString(), appId: ServiceLocator.shared.settings.pusherAppId)
+            let defaultPayload = [
+                "aps": [
+                    "mutable-content": 1,
+                    "alert": [
+                        "loc-key": "Notification",
+                        "loc-args": []
+                    ]
+                ]
+            ]
+            let kind = PusherKind.http(data: HttpPusherData(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
+                                                            format: .eventIdOnly, defaultPayload: jsonString(from: defaultPayload)))
+            try await clientProxy.setPusher(identifiers: identifiers,
+                                            kind: kind,
                                             appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
                                             deviceDisplayName: UIDevice.current.name,
                                             profileTag: pusherProfileTag(),
-                                            lang: Bundle.preferredLanguages.first ?? "en",
-                                            url: ServiceLocator.shared.settings.pushGatewayBaseURL,
-                                            format: .eventIdOnly,
-                                            defaultPayload: [
-                                                "aps": [
-                                                    "mutable-content": 1,
-                                                    "alert": [
-                                                        "loc-key": "Notification",
-                                                        "loc-args": []
-                                                    ]
-                                                ]
-                                            ])
+                                            lang: Bundle.preferredLanguages.first ?? "en")
             MXLog.info("[NotificationManager] set pusher succeeded")
             return true
         } catch {
@@ -122,6 +124,17 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
         ServiceLocator.shared.settings.pusherProfileTag = newTag
         return newTag
+    }
+
+    /// Convenience method to get the json string of an Encodable
+    private func jsonString(from dictionary: [AnyHashable: Any]?) -> String? {
+        guard let dictionary,
+              let data = try? JSONSerialization.data(withJSONObject: dictionary,
+                                                     options: [.fragmentsAllowed]) else {
+            return nil
+        }
+
+        return String(data: data, encoding: .utf8)
     }
 }
 

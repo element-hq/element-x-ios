@@ -32,31 +32,6 @@ enum ClientProxyError: Error {
     case failedLoadingMedia
 }
 
-enum PusherKind {
-    case http
-    case email
-
-//    var rustValue: MatrixRustSDK.PusherKind {
-//        switch self {
-//        case .http:
-//            return .http
-//        case .email:
-//            return .email
-//        }
-//    }
-}
-
-enum PushFormat {
-    case eventIdOnly
-
-//    var rustValue: MatrixRustSDK.PushFormat {
-//        switch self {
-//        case .eventIdOnly:
-//            return .eventIdOnly
-//        }
-//    }
-}
-
 enum SlidingSyncConstants {
     static let initialTimelineLimit: UInt = 0
     static let lastMessageTimelineLimit: UInt = 1
@@ -96,15 +71,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func logout() async
 
-    // swiftlint:disable:next function_parameter_count
-    func setPusher(pushkey: String,
-                   kind: PusherKind?,
-                   appId: String,
+    func setPusher(identifiers: PusherIdentifiers,
+                   kind: PusherKind,
                    appDisplayName: String,
                    deviceDisplayName: String,
                    profileTag: String?,
-                   lang: String,
-                   url: URL?,
-                   format: PushFormat?,
-                   defaultPayload: [AnyHashable: Any]?) async throws
+                   lang: String) async throws
 }
