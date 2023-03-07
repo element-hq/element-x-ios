@@ -14,6 +14,6 @@
 // limitations under the License.
 //
 
-// This protoclo is used only as a marker
+// This protocol is used only as a marker
 // to mark protocols that can be auto-mocked by Sourcery
 protocol AutoMockable { }
