@@ -13,7 +13,7 @@
 
 ElementX iOS is a [Matrix](https://matrix.org/) iOS Client provided by [Element](https://element.io/).
 
-The application is a total rewrite of [Element-iOS](https://github.com/vector-im/element-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targetting devices running iOS 15+.
+The application is a total rewrite of [Element-iOS](https://github.com/vector-im/element-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targetting devices running iOS 16+.
 
 ## Rust SDK
 
