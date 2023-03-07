@@ -162,24 +162,32 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func loadUserAvatar() async {
-        await Task.dispatch(on: clientQueue) {
-            guard let urlString = try? self.client.cachedAvatarUrl() else {
-                return
-            }
-            self.avatarUrlSubject.value = URL(string: urlString)
-        }
-        await Task.dispatch(on: clientQueue) {
-            do {
-                if let urlString = try self.client.avatarUrl() {
-                    self.avatarUrlSubject.value = URL(string: urlString)
-                } else {
-                    self.avatarUrlSubject.value = nil
+    func loadUserAvatar(policy: AvatarLoadingPolicy) async {
+        if policy != .skipCache {
+            await Task.dispatch(on: clientQueue) {
+                guard let urlString = try? self.client.cachedAvatarUrl() else {
+                    return
                 }
-            } catch {
-                return
+                self.avatarUrlSubject.value = URL(string: urlString)
             }
         }
+        if policy != .cacheOnly {
+            await Task.dispatch(on: clientQueue) {
+                do {
+                    if let urlString = try self.client.avatarUrl() {
+                        self.avatarUrlSubject.value = URL(string: urlString)
+                    } else {
+                        self.avatarUrlSubject.value = nil
+                    }
+                } catch {
+                    return
+                }
+            }
+        }
+    }
+
+    func loadUserAvatar() async {
+        await loadUserAvatar(policy: .default)
     }
     
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {

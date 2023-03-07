@@ -19,10 +19,6 @@ import Foundation
 import MatrixRustSDK
 
 class MockClientProxy: ClientProxyProtocol {
-    var avatarUrlPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
-
-    func loadUserAvatar() async { }
-
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userID: String
@@ -33,11 +29,17 @@ class MockClientProxy: ClientProxyProtocol {
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+
+    var avatarUrlPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
     
     internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         visibleRoomsSummaryProvider = roomSummaryProvider
     }
+
+    func loadUserAvatar(policy: AvatarLoadingPolicy) async { }
+
+    func loadUserAvatar() async { }
     
     func startSync() { }
     

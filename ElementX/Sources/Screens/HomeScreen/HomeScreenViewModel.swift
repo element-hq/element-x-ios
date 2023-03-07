@@ -61,6 +61,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 self?.state.userAvatarURL = url
             }
             .store(in: &cancellables)
+
+        Task {
+            await userSession.clientProxy.loadUserAvatar(policy: .cacheOnly)
+        }
         
         guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
@@ -98,7 +102,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
                     Task {
-                        await userSession.clientProxy.loadUserAvatar()
+                        await userSession.clientProxy.loadUserAvatar(policy: .skipCache)
                     }
                     
                     Task {
