@@ -31,7 +31,7 @@ if let ticketNumberRegex = try? NSRegularExpression(pattern: "#\\d+") {
     }.isEmpty
     
     if missingTicketNumber {
-        warn("Some of the commits are missing ticket numbers. Please consinder using them for better tracking.")
+        warn("Some of the commits are missing ticket numbers. Please consider squashing all commits that don't have a tracking number.")
     }
 }
 
