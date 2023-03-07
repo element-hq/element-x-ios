@@ -24,7 +24,7 @@ class BugReportServiceTests: XCTestCase {
     override func setUpWithError() throws {
         bugReportService = BugReportServiceProtocolMock()
         bugReportService.underlyingCrashedLastRun = false
-        bugReportService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
+        bugReportService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://www.example.com/123")
     }
 
     func testInitialStateWithMockService() {
