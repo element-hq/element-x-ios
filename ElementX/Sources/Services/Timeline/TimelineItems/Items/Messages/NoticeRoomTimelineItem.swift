@@ -21,7 +21,6 @@ struct NoticeRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Has
     let body: String
     var formattedBody: AttributedString?
     let timestamp: String
-    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     

@@ -23,6 +23,15 @@ struct DeveloperOptionsScreenScreen: View {
     var body: some View {
         Form {
             Section {
+                Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
+                    Text("Collapse room state events")
+                }
+                .onChange(of: context.shouldCollapseRoomStateEvents) { _ in
+                    context.send(viewAction: .changedShouldCollapseRoomStateEvents)
+                }
+            }
+            
+            Section {
                 Button {
                     showConfetti = true
                 } label: {

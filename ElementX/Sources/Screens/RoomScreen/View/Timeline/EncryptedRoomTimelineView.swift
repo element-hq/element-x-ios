@@ -69,7 +69,6 @@ struct EncryptedRoomTimelineView_Previews: PreviewProvider {
                                   body: text,
                                   encryptionType: .unknown,
                                   timestamp: timestamp,
-                                  groupState: .single,
                                   isOutgoing: isOutgoing,
                                   isEditable: false,
                                   sender: .init(id: senderId))

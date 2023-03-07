@@ -21,7 +21,6 @@ import MatrixRustSDK
 enum ClientProxyCallback {
     case receivedSyncUpdate
     case receivedAuthError(isSoftLogout: Bool)
-    case updatedRestoreToken
 }
 
 enum ClientProxyError: Error {
@@ -67,8 +66,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
     var userID: String { get }
-
-    var isSoftLogout: Bool { get }
 
     var deviceId: String? { get }
 

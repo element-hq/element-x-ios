@@ -23,7 +23,6 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              body: "That looks so good!",
                              timestamp: "10:10 AM",
-                             groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Jacob"),
@@ -31,7 +30,6 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              body: "Let’s get lunch soon! New salad place opened up 🥗. When are y’all free? 🤗",
                              timestamp: "10:11 AM",
-                             groupState: .beginning,
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
@@ -41,7 +39,6 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              body: "I can be around on Wednesday. How about some 🌮 instead? Like https://www.tortilla.co.uk/",
                              timestamp: "10:11 AM",
-                             groupState: .end,
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"),
@@ -53,21 +50,18 @@ enum RoomTimelineItemFixtures {
         TextRoomTimelineItem(id: UUID().uuidString,
                              body: "Wow, cool. Ok, lets go the usual place tomorrow?! Is that too soon?  Here’s the menu, let me know what you want it’s on me!",
                              timestamp: "5 PM",
-                             groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena")),
         TextRoomTimelineItem(id: UUID().uuidString,
                              body: "And John's speech was amazing!",
                              timestamp: "5 PM",
-                             groupState: .beginning,
                              isOutgoing: true,
                              isEditable: true,
                              sender: .init(id: "", displayName: "Bob")),
         TextRoomTimelineItem(id: UUID().uuidString,
                              body: "New home office set up!",
                              timestamp: "5 PM",
-                             groupState: .end,
                              isOutgoing: true,
                              isEditable: true,
                              sender: .init(id: "", displayName: "Bob"),
@@ -79,7 +73,6 @@ enum RoomTimelineItemFixtures {
                              body: "",
                              formattedBody: AttributedStringBuilder().fromHTML("Hol' up <blockquote>New home office set up!</blockquote>That's amazing! Congrats 🥳"),
                              timestamp: "5 PM",
-                             groupState: .single,
                              isOutgoing: false,
                              isEditable: false,
                              sender: .init(id: "", displayName: "Helena"))
@@ -88,24 +81,20 @@ enum RoomTimelineItemFixtures {
     /// A small chunk of events, containing 2 text items.
     static var smallChunk: [RoomTimelineItemProtocol] {
         [TextRoomTimelineItem(text: "Hey there 👋",
-                              groupState: .beginning,
                               senderDisplayName: "Alice"),
          TextRoomTimelineItem(text: "How are you?",
-                              groupState: .end,
                               senderDisplayName: "Alice")]
     }
     
     /// A chunk of events that contains a single text item.
     static var singleMessageChunk: [RoomTimelineItemProtocol] {
         [TextRoomTimelineItem(text: "Tap tap tap 🎙️. Is this thing on?",
-                              groupState: .single,
                               senderDisplayName: "Helena")]
     }
     
     /// A single text item.
     static var incomingMessage: RoomTimelineItemProtocol {
         TextRoomTimelineItem(text: "Hello, World!",
-                             groupState: .single,
                              senderDisplayName: "Bob")
     }
     
@@ -196,11 +185,10 @@ enum RoomTimelineItemFixtures {
 }
 
 private extension TextRoomTimelineItem {
-    init(text: String, groupState: TimelineItemGroupState = .single, senderDisplayName: String) {
+    init(text: String, senderDisplayName: String) {
         self.init(id: UUID().uuidString,
                   body: text,
                   timestamp: "10:47 am",
-                  groupState: groupState,
                   isOutgoing: senderDisplayName == "Alice",
                   isEditable: false,
                   sender: .init(id: "", displayName: senderDisplayName))

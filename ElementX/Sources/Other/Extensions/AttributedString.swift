@@ -34,4 +34,21 @@ extension AttributedString {
             return AttributedStringBuilderComponent(attributedString: attributedString, isBlockquote: isBlockquote, isReply: isReply)
         }
     }
+    
+    /// Replaces the specified placeholder with the a string that links to the specified URL.
+    /// - Parameters:
+    ///   - linkPlaceholder: The text in the string that will be replaced. Make sure this is unique within the string.
+    ///   - string: The text for the link that will be substituted into the placeholder.
+    ///   - url: The URL that the link should open.
+    mutating func replace(_ linkPlaceholder: String, with string: String, asLinkTo url: URL) {
+        guard let range = range(of: linkPlaceholder) else {
+            MXLog.failure("Failed to find the link placeholder to be replaced.")
+            return
+        }
+        
+        // Replace the placeholder with a link.
+        var replacement = AttributedString(string)
+        replacement.link = url
+        replaceSubrange(range, with: replacement)
+    }
 }

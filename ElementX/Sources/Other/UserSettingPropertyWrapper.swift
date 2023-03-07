@@ -26,25 +26,31 @@ import Foundation
 @propertyWrapper
 struct UserSetting<Value: Equatable> {
     private let key: String
-    private let defaultValue: Value
-    private let storage: UserDefaults
+    private var defaultValue: Value
+    private let storage: UserDefaults?
     private let publisher: CurrentValueSubject<Value, Never>
     
-    init(key: String, defaultValue: Value, storage: UserDefaults = .standard) {
+    init(key: String, defaultValue: Value, persistIn storage: UserDefaults?) {
         self.key = key
         self.defaultValue = defaultValue
         self.storage = storage
         
-        let value = storage.value(forKey: key) as? Value ?? defaultValue
+        let value = storage?.value(forKey: key) as? Value ?? defaultValue
         publisher = CurrentValueSubject<Value, Never>(value)
     }
     
     var wrappedValue: Value {
         get {
-            let value = storage.value(forKey: key) as? Value
+            let value = storage?.value(forKey: key) as? Value
             return value ?? defaultValue
         }
         set {
+            guard let storage else {
+                defaultValue = newValue
+                publisher.send(defaultValue)
+                return
+            }
+            
             if let optional = newValue as? AnyOptional, optional.isNil {
                 storage.removeObject(forKey: key)
                 publisher.send(defaultValue)
@@ -61,8 +67,8 @@ struct UserSetting<Value: Equatable> {
 }
 
 extension UserSetting where Value: ExpressibleByNilLiteral {
-    init(key: String, storage: UserDefaults = .standard) {
-        self.init(key: key, defaultValue: nil, storage: storage)
+    init(key: String, persistIn storage: UserDefaults?) {
+        self.init(key: key, defaultValue: nil, persistIn: storage)
     }
 }
 
@@ -74,28 +80,34 @@ extension UserSetting where Value: ExpressibleByNilLiteral {
 @propertyWrapper
 struct UserSettingRawRepresentable<Value: RawRepresentable & Equatable> {
     private let key: String
-    private let defaultValue: Value
-    private let storage: UserDefaults
+    private var defaultValue: Value
+    private let storage: UserDefaults?
     private let publisher: CurrentValueSubject<Value, Never>
     
-    init(key: String, defaultValue: Value, storage: UserDefaults = .standard) {
+    init(key: String, defaultValue: Value, persistIn storage: UserDefaults?) {
         self.key = key
         self.defaultValue = defaultValue
         self.storage = storage
         
-        let value = (storage.value(forKey: key) as? Value.RawValue).flatMap { Value(rawValue: $0) } ?? defaultValue
+        let value = (storage?.value(forKey: key) as? Value.RawValue).flatMap { Value(rawValue: $0) } ?? defaultValue
         publisher = CurrentValueSubject<Value, Never>(value)
     }
     
     var wrappedValue: Value {
         get {
-            guard let value = storage.value(forKey: key) as? Value.RawValue else {
+            guard let value = storage?.value(forKey: key) as? Value.RawValue else {
                 return defaultValue
             }
             
             return Value(rawValue: value) ?? defaultValue
         }
         set {
+            guard let storage else {
+                defaultValue = newValue
+                publisher.send(defaultValue)
+                return
+            }
+            
             if let optional = newValue as? AnyOptional, optional.isNil {
                 storage.removeObject(forKey: key)
                 publisher.send(newValue)
@@ -112,8 +124,8 @@ struct UserSettingRawRepresentable<Value: RawRepresentable & Equatable> {
 }
 
 extension UserSettingRawRepresentable where Value: ExpressibleByNilLiteral {
-    init(key: String, storage: UserDefaults = .standard) {
-        self.init(key: key, defaultValue: nil, storage: storage)
+    init(key: String, persistIn storage: UserDefaults?) {
+        self.init(key: key, defaultValue: nil, persistIn: storage)
     }
 }
 

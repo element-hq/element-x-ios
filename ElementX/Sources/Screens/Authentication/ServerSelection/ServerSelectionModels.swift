@@ -24,6 +24,16 @@ enum ServerSelectionViewModelAction {
 }
 
 struct ServerSelectionViewState: BindableState {
+    /// The message to be shown in the text field footer when no error has occurred.
+    private let regularFooterMessage = {
+        let linkPlaceholder = "{link}"
+        var message = AttributedString(ElementL10n.serverSelectionServerFooter(linkPlaceholder))
+        message.replace(linkPlaceholder,
+                        with: ElementL10n.actionLearnMore,
+                        asLinkTo: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
+        return message
+    }()
+    
     /// View state that can be bound to from SwiftUI.
     var bindings: ServerSelectionBindings
     /// An error message to be shown in the text field footer.
@@ -32,8 +42,8 @@ struct ServerSelectionViewState: BindableState {
     var isModallyPresented: Bool
     
     /// The message to show in the text field footer.
-    var footerMessage: String {
-        footerErrorMessage ?? ElementL10n.serverSelectionServerFooter
+    var footerMessage: AttributedString {
+        footerErrorMessage.map(AttributedString.init) ?? regularFooterMessage
     }
     
     /// The title shown on the confirm button.

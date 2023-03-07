@@ -16,7 +16,22 @@
 
 import Foundation
 
-@MainActor
-protocol RoomTimelineViewFactoryProtocol {
-    func buildTimelineViewFor(timelineItem: RoomTimelineItemProtocol) -> RoomTimelineViewProvider
+enum ReportContentViewModelAction {
+    case cancel
+    case submitStarted
+    case submitFinished
+    case submitFailed(error: Error)
+}
+
+struct ReportContentViewState: BindableState {
+    var bindings: ReportContentViewStateBindings
+}
+
+struct ReportContentViewStateBindings {
+    var reasonText: String
+}
+
+enum ReportContentViewAction {
+    case cancel
+    case submit
 }

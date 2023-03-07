@@ -21,7 +21,6 @@ struct EmoteRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let body: String
     var formattedBody: AttributedString?
     let timestamp: String
-    let groupState: TimelineItemGroupState
     let isOutgoing: Bool
     let isEditable: Bool
     

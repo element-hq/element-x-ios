@@ -20,7 +20,6 @@ import UIKit
 
 enum RoomTimelineControllerCallback {
     case updatedTimelineItems
-    case updatedTimelineItem(_ itemId: String)
     case canBackPaginate(Bool)
     case isBackPaginating(Bool)
 }
@@ -59,8 +58,6 @@ protocol RoomTimelineControllerProtocol {
     func sendReaction(_ reaction: String, to itemID: String) async
 
     func redact(_ itemID: String) async
-
-    func reportContent(_ itemID: String, reason: String?) async
     
     func debugDescription(for itemID: String) -> String
     

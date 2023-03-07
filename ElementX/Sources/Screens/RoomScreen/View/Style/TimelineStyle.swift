@@ -32,10 +32,30 @@ enum TimelineStyle: String, CaseIterable {
     }
 }
 
+enum TimelineGroupStyle: Hashable {
+    case single
+    case first
+    case middle
+    case last
+
+    var shouldShowSenderDetails: Bool {
+        switch self {
+        case .single, .first:
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 // MARK: - Environment
 
 private struct TimelineStyleKey: EnvironmentKey {
     static let defaultValue = TimelineStyle.bubbles
+}
+
+private struct TimelineGroupStyleKey: EnvironmentKey {
+    static let defaultValue = TimelineGroupStyle.single
 }
 
 extension EnvironmentValues {
@@ -43,10 +63,19 @@ extension EnvironmentValues {
         get { self[TimelineStyleKey.self] }
         set { self[TimelineStyleKey.self] = newValue }
     }
+    
+    var timelineGroupStyle: TimelineGroupStyle {
+        get { self[TimelineGroupStyleKey.self] }
+        set { self[TimelineGroupStyleKey.self] = newValue }
+    }
 }
 
 extension View {
     func timelineStyle(_ style: TimelineStyle) -> some View {
         environment(\.timelineStyle, style)
+    }
+    
+    func timelineGroupStyle(_ groupStyle: TimelineGroupStyle) -> some View {
+        environment(\.timelineGroupStyle, groupStyle)
     }
 }

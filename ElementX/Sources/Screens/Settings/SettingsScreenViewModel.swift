@@ -27,10 +27,16 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
     init(withUserSession userSession: UserSessionProtocol) {
         self.userSession = userSession
         let bindings = SettingsScreenViewStateBindings(timelineStyle: ServiceLocator.shared.settings.timelineStyle)
+        
+        var showSessionVerificationSection = false
+        if let sessionVerificationController = userSession.sessionVerificationController {
+            showSessionVerificationSection = !sessionVerificationController.isVerified
+        }
+        
         super.init(initialViewState: .init(bindings: bindings,
-                                           deviceID: userSession.deviceId,
+                                           deviceID: userSession.deviceID,
                                            userID: userSession.userID,
-                                           showSessionVerificationSection: !(userSession.sessionVerificationController?.isVerified ?? false),
+                                           showSessionVerificationSection: showSessionVerificationSection,
                                            showDeveloperOptions: ServiceLocator.shared.settings.canShowDeveloperOptions),
                    imageProvider: userSession.mediaProvider)
         

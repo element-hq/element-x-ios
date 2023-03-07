@@ -23,23 +23,25 @@ struct TimelineItemDebugView: View {
         var content: String
     }
     
-    @Environment(\.presentationMode) private var presentationMode
+    @Environment(\.dismiss) private var dismiss
     
     let info: DebugInfo
     
     var body: some View {
-        NavigationView {
+        NavigationStack {
             ScrollView {
                 Text(info.content)
                     .padding()
                     .font(.element.footnote)
+                    .foregroundColor(.element.primaryContent)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .navigationBarTitleDisplayMode(.inline)
             .navigationTitle(info.title)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(ElementL10n.actionCancel) {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                 }
                 ToolbarItem(placement: .secondaryAction) {
@@ -49,5 +51,27 @@ struct TimelineItemDebugView: View {
                 }
             }
         }
+        .tint(.element.accent)
+    }
+}
+
+struct TimelineItemDebugView_Previews: PreviewProvider {
+    static let smallContent = """
+    {
+        SomeItem(
+            event_id: "$1234546634535",
+            sender: "@user:server.com",
+            timestamp: 42354534534
+            content: Message(
+                Message {
+                    …
+                }
+            )
+        )
+    }
+    """
+    
+    static var previews: some View {
+        TimelineItemDebugView(info: .init(title: "Timeline item", content: smallContent))
     }
 }

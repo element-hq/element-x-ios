@@ -61,35 +61,10 @@ struct BugReportScreen: View {
         }
     }
     
-    @ViewBuilder
     private var descriptionTextEditor: some View {
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.element.formRowBackground)
-
-            TextEditor(text: $context.reportText)
-                .tint(.element.brand)
-                .padding(.horizontal, 10)
-                .padding(.vertical, 4)
-                .cornerRadius(14)
-                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
-                .scrollContentBackground(.hidden)
-
-            if context.reportText.isEmpty {
-                Text(ElementL10n.bugReportScreenDescription)
-                    .font(.element.body)
-                    .foregroundColor(Color.element.secondaryContent)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 12)
-                    .allowsHitTesting(false)
-            }
-            
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .stroke(Color.element.quaternaryContent)
-        }
-        .frame(maxWidth: .infinity)
-        .frame(height: 220)
-        .font(.body)
+        FormTextEditor(text: $context.reportText,
+                       placeholder: ElementL10n.bugReportScreenDescription,
+                       editorAccessibilityIdentifier: A11yIdentifiers.bugReportScreen.report)
     }
     
     @ViewBuilder
@@ -164,7 +139,6 @@ struct BugReportScreen: View {
                 context.send(viewAction: .submit)
             }
             .disabled(context.reportText.count < 5)
-            .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.send)
         }
     }
 }
@@ -173,12 +147,16 @@ struct BugReportScreen: View {
 
 struct BugReport_Previews: PreviewProvider {
     static let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+                                              userID: "@mock.client.com",
+                                              deviceID: nil,
                                               screenshot: nil,
                                               isModallyPresented: false)
     
     static var previews: some View {
         NavigationStack {
             BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+                                                        userID: "@mock.client.com",
+                                                        deviceID: nil,
                                                         screenshot: nil,
                                                         isModallyPresented: false).context)
                 .previewDisplayName("Without Screenshot")
@@ -186,6 +164,8 @@ struct BugReport_Previews: PreviewProvider {
         
         NavigationStack {
             BugReportScreen(context: BugReportViewModel(bugReportService: MockBugReportService(),
+                                                        userID: "@mock.client.com",
+                                                        deviceID: nil,
                                                         screenshot: Asset.Images.appLogo.image,
                                                         isModallyPresented: false).context)
                 .previewDisplayName("With Screenshot")

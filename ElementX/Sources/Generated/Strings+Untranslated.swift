@@ -26,8 +26,6 @@ extension ElementL10n {
   public static let bugReportScreenIncludeLogs = ElementL10n.tr("Untranslated", "bug_report_screen_include_logs")
   /// To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.
   public static let bugReportScreenLogsDescription = ElementL10n.tr("Untranslated", "bug_report_screen_logs_description")
-  /// Sending...
-  public static let bugReportScreenSending = ElementL10n.tr("Untranslated", "bug_report_screen_sending")
   /// Report a bug
   public static let bugReportScreenTitle = ElementL10n.tr("Untranslated", "bug_report_screen_title")
   /// %@ iOS
@@ -96,6 +94,10 @@ extension ElementL10n {
   }
   /// Notification
   public static let notification = ElementL10n.tr("Untranslated", "Notification")
+  /// Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.
+  public static let reportContentInfo = ElementL10n.tr("Untranslated", "report_content_info")
+  /// Report Submitted
+  public static let reportContentSubmitted = ElementL10n.tr("Untranslated", "report_content_submitted")
   /// About
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
   /// Copy Link
@@ -120,6 +122,10 @@ extension ElementL10n {
   public static func roomTimelineReplyingTo(_ p1: Any) -> String {
     return ElementL10n.tr("Untranslated", "room_timeline_replying_to", String(describing: p1))
   }
+  /// %d room changes
+  public static func roomTimelineStateChanges(_ p1: Int) -> String {
+    return ElementL10n.tr("Untranslated", "room_timeline_state_changes", p1)
+  }
   /// Bubbles
   public static let roomTimelineStyleBubbledLongDescription = ElementL10n.tr("Untranslated", "room_timeline_style_bubbled_long_description")
   /// Modern
@@ -132,8 +138,12 @@ extension ElementL10n {
   public static let screenshotDetectedMessage = ElementL10n.tr("Untranslated", "screenshot_detected_message")
   /// You took a screenshot
   public static let screenshotDetectedTitle = ElementL10n.tr("Untranslated", "screenshot_detected_title")
-  /// You can only connect to an existing server
-  public static let serverSelectionServerFooter = ElementL10n.tr("Untranslated", "server_selection_server_footer")
+  /// Sending...
+  public static let sending = ElementL10n.tr("Untranslated", "sending")
+  /// You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %@
+  public static func serverSelectionServerFooter(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "server_selection_server_footer", String(describing: p1))
+  }
   /// This server currently doesn’t support sliding sync.
   public static let serverSelectionSlidingSyncAlertMessage = ElementL10n.tr("Untranslated", "server_selection_sliding_sync_alert_message")
   /// Server not supported

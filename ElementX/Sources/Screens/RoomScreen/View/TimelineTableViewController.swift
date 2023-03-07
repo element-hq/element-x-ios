@@ -48,6 +48,10 @@ class TimelineTableViewController: UIViewController {
             }
             
             applySnapshot()
+            
+            if timelineItems.isEmpty {
+                paginateBackwardsPublisher.send()
+            }
         }
     }
     

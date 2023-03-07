@@ -18,9 +18,9 @@ import Combine
 import Foundation
 import MatrixRustSDK
 
-private class SlidingSyncViewObserver: SlidingSyncViewRoomListObserver, SlidingSyncViewStateObserver, SlidingSyncViewRoomsCountObserver {
+private class SlidingSyncViewObserver: SlidingSyncListRoomListObserver, SlidingSyncListStateObserver, SlidingSyncListRoomsCountObserver {
     /// Publishes room list diffs as they come in through sliding sync
-    let roomListDiffPublisher = PassthroughSubject<SlidingSyncViewRoomsListDiff, Never>()
+    let roomListDiffPublisher = PassthroughSubject<SlidingSyncListRoomsListDiff, Never>()
     
     /// Publishes the current state of sliding sync, such as whether its catching up or live.
     let stateUpdatePublisher = CurrentValueSubject<SlidingSyncState, Never>(.cold)
@@ -28,21 +28,21 @@ private class SlidingSyncViewObserver: SlidingSyncViewRoomListObserver, SlidingS
     /// Publishes the number of available rooms
     let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
         
-    // MARK: - SlidingSyncViewRoomListObserver
+    // MARK: - SlidingSyncListRoomListObserver
     
-    func didReceiveUpdate(diff: SlidingSyncViewRoomsListDiff) {
+    func didReceiveUpdate(diff: SlidingSyncListRoomsListDiff) {
         MXLog.verbose("Received room diff")
         roomListDiffPublisher.send(diff)
     }
     
-    // MARK: - SlidingSyncViewStateObserver
+    // MARK: - SlidingSyncListStateObserver
     
     func didReceiveUpdate(newState: SlidingSyncState) {
         MXLog.info("Updated state: \(newState)")
         stateUpdatePublisher.send(newState)
     }
     
-    // MARK: - SlidingSyncViewRoomsCountObserver
+    // MARK: - SlidingSyncListRoomsCountObserver
     
     func didReceiveUpdate(count: UInt32) {
         MXLog.info("Updated room count: \(count)")
@@ -52,7 +52,7 @@ private class SlidingSyncViewObserver: SlidingSyncViewRoomListObserver, SlidingS
 
 class SlidingSyncViewProxy {
     private let slidingSync: SlidingSyncProtocol
-    private let slidingSyncView: SlidingSyncViewProtocol
+    private let slidingSyncView: SlidingSyncListProtocol
     
     private var listUpdateObserverToken: TaskHandle?
     private var stateUpdateObserverToken: TaskHandle?
@@ -60,7 +60,7 @@ class SlidingSyncViewProxy {
     
     private var cancellables = Set<AnyCancellable>()
     
-    let diffPublisher = PassthroughSubject<SlidingSyncViewRoomsListDiff, Never>()
+    let diffPublisher = PassthroughSubject<SlidingSyncListRoomsListDiff, Never>()
     let statePublisher = PassthroughSubject<SlidingSyncState, Never>()
     let countPublisher = PassthroughSubject<UInt, Never>()
     let visibleRangeUpdatePublisher = PassthroughSubject<Void, Never>()
@@ -71,7 +71,7 @@ class SlidingSyncViewProxy {
         countUpdateObserverToken?.cancel()
     }
     
-    init(slidingSync: SlidingSyncProtocol, slidingSyncView: SlidingSyncViewProtocol) {
+    init(slidingSync: SlidingSyncProtocol, slidingSyncView: SlidingSyncListProtocol) {
         self.slidingSync = slidingSync
         self.slidingSyncView = slidingSyncView
         

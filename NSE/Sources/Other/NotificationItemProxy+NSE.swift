@@ -94,9 +94,11 @@ extension NotificationItemProxy {
                                           senderId: senderId,
                                           roomId: roomId,
                                           mediaProvider: mediaProvider)
-        case .audio:
-            #warning("Audio timeline items not currently supported")
-            return nil
+        case .audio(content: let content):
+            return try await processAudio(content: content,
+                                          senderId: senderId,
+                                          roomId: roomId,
+                                          mediaProvider: mediaProvider)
         case .video(content: let content):
             return try await processVideo(content: content,
                                           senderId: senderId,
@@ -114,11 +116,6 @@ extension NotificationItemProxy {
                                            mediaProvider: mediaProvider)
         case .emote(content: let content):
             return try await processEmote(content: content,
-                                          senderId: senderId,
-                                          roomId: roomId,
-                                          mediaProvider: mediaProvider)
-        case .audio(content: let content):
-            return try await processAudio(content: content,
                                           senderId: senderId,
                                           roomId: roomId,
                                           mediaProvider: mediaProvider)
