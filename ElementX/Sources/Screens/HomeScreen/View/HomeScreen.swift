@@ -102,11 +102,11 @@ struct HomeScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
             }
-        }
-        .toolbar {
-            ToolbarItemGroup(placement: .bottomBar) {
-                Spacer()
-                addNewRoom
+            if context.viewState.showStartChatFlowEnabled {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    addNewRoom
+                }
             }
         }
         .background(Color.element.background.ignoresSafeArea())
