@@ -92,9 +92,7 @@ class ClientProxy: ClientProxyProtocol {
         
         configureSlidingSync()
 
-        clientQueue.async {
-            self.loadUserAvatarURLFromCache()
-        }
+        loadUserAvatarURLFromCache()
     }
     
     var userID: String {
@@ -244,13 +242,16 @@ class ClientProxy: ClientProxyProtocol {
 
     private func loadUserAvatarURLFromCache() {
         loadCachedAavatarTask = Task {
-            do {
-                let urlString = try self.client.cachedAvatarUrl()
-                self.avatarURLSubject.value = urlString.flatMap(URL.init)
-            } catch {
-                MXLog.error("Failed to look for the avatar url in the cache: \(error)")
-                return
+            let urlString = await Task.dispatch(on: clientQueue) {
+                do {
+                    return try self.client.avatarUrl()
+                } catch {
+                    MXLog.error("Failed to look for the avatar url in the cache: \(error)")
+                    return nil
+                }
             }
+            guard !Task.isCancelled else { return }
+            self.avatarURLSubject.value = urlString.flatMap(URL.init)
         }
     }
     
