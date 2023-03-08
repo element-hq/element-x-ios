@@ -30,14 +30,12 @@ class MockClientProxy: ClientProxyProtocol {
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
-    var avatarUrlPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
+    var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
     
     internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         visibleRoomsSummaryProvider = roomSummaryProvider
     }
-
-    func loadUserAvatar(policy: AvatarLoadingPolicy) async { }
 
     func loadUserAvatar() async { }
     

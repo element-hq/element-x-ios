@@ -44,11 +44,8 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .weakAssign(to: \.state.bindings.timelineStyle, on: self)
             .store(in: &cancellables)
 
-        userSession.clientProxy.avatarUrlPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] url in
-                self?.state.userAvatarURL = url
-            }
+        userSession.clientProxy.avatarURLPublisher
+            .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
         Task {

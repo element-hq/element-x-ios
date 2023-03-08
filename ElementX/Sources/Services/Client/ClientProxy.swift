@@ -59,10 +59,12 @@ class ClientProxy: ClientProxyProtocol {
     var allRoomsSlidingSyncView: SlidingSyncList?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
 
-    private let avatarUrlSubject = CurrentValueSubject<URL?, Never>(nil)
-    var avatarUrlPublisher: AnyPublisher<URL?, Never> {
-        avatarUrlSubject
+    private var loadCachedAavatarTask: Task<Void, Never>?
+    private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
+    var avatarURLPublisher: AnyPublisher<URL?, Never> {
+        avatarURLSubject
             .removeDuplicates()
+            .receive(on: DispatchQueue.main)
             .eraseToAnyPublisher()
     }
     
@@ -89,6 +91,10 @@ class ClientProxy: ClientProxyProtocol {
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         
         configureSlidingSync()
+
+        clientQueue.async {
+            self.loadUserAvatarFromCache()
+        }
     }
     
     var userID: String {
@@ -154,6 +160,7 @@ class ClientProxy: ClientProxyProtocol {
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
+                self.loadCachedAavatarTask?.cancel()
                 let displayName = try self.client.displayName()
                 return .success(displayName)
             } catch {
@@ -162,34 +169,20 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func loadUserAvatar(policy: AvatarLoadingPolicy) async {
-        if policy != .skipCache {
-            await Task.dispatch(on: clientQueue) {
-                guard let urlString = try? self.client.cachedAvatarUrl() else {
-                    return
+    func loadUserAvatar() async {
+        await Task.dispatch(on: clientQueue) {
+            do {
+                if let urlString = try self.client.avatarUrl() {
+                    self.avatarURLSubject.value = URL(string: urlString)
+                } else {
+                    self.avatarURLSubject.value = nil
                 }
-                self.avatarUrlSubject.value = URL(string: urlString)
-            }
-        }
-        if policy != .cacheOnly {
-            await Task.dispatch(on: clientQueue) {
-                do {
-                    if let urlString = try self.client.avatarUrl() {
-                        self.avatarUrlSubject.value = URL(string: urlString)
-                    } else {
-                        self.avatarUrlSubject.value = nil
-                    }
-                } catch {
-                    return
-                }
+            } catch {
+                return
             }
         }
     }
 
-    func loadUserAvatar() async {
-        await loadUserAvatar(policy: .default)
-    }
-    
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
         await Task.dispatch(on: clientQueue) {
             .failure(.failedRetrievingAccountData)
@@ -250,6 +243,15 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
+
+    private func loadUserAvatarFromCache() {
+        loadCachedAavatarTask = Task {
+            guard let urlString = try? self.client.cachedAvatarUrl() else {
+                return
+            }
+            self.avatarURLSubject.value = URL(string: urlString)
+        }
+    }
     
     private func restartSync() {
         MXLog.info("Restarting sync")

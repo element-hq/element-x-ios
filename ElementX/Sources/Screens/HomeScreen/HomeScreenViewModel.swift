@@ -55,16 +55,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
 
-        userSession.clientProxy.avatarUrlPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] url in
-                self?.state.userAvatarURL = url
-            }
+        userSession.clientProxy.avatarURLPublisher
+            .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
-
-        Task {
-            await userSession.clientProxy.loadUserAvatar(policy: .cacheOnly)
-        }
         
         guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
@@ -102,7 +95,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
                     Task {
-                        await userSession.clientProxy.loadUserAvatar(policy: .skipCache)
+                        await userSession.clientProxy.loadUserAvatar()
                     }
                     
                     Task {

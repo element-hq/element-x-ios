@@ -62,12 +62,6 @@ enum SlidingSyncConstants {
     static let timelinePrecachingTimelineLimit: UInt = 20
 }
 
-enum AvatarLoadingPolicy {
-    case cacheOnly
-    case skipCache
-    case `default`
-}
-
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
@@ -77,7 +71,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
 
-    var avatarUrlPublisher: AnyPublisher<URL?, Never> { get }
+    var avatarURLPublisher: AnyPublisher<URL?, Never> { get }
 
     var restorationToken: RestorationToken? { get }
     
@@ -95,8 +89,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func loadUserAvatar() async
 
-    func loadUserAvatar(policy: AvatarLoadingPolicy) async
-            
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     
     func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError>
