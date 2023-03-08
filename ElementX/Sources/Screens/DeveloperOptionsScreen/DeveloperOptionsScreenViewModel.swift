@@ -22,7 +22,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     var callback: ((DeveloperOptionsScreenViewModelAction) -> Void)?
     
     init() {
-        super.init(initialViewState: DeveloperOptionsScreenViewState(bindings: DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: ServiceLocator.shared.settings.shouldCollapseRoomStateEvents, showStartChatFlow: ServiceLocator.shared.settings.showStartChatFlow)))
+        super.init(initialViewState: DeveloperOptionsScreenViewState(bindings: DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: ServiceLocator.shared.settings.shouldCollapseRoomStateEvents, showStartChatFlow: ServiceLocator.shared.settings.startChatFlowFeatureFlag)))
         
         ServiceLocator.shared.settings.$shouldCollapseRoomStateEvents
             .weakAssign(to: \.state.bindings.shouldCollapseRoomStateEvents, on: self)
@@ -33,8 +33,8 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         switch viewAction {
         case .changedShouldCollapseRoomStateEvents:
             ServiceLocator.shared.settings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
-        case .showStartChatFlow:
-            ServiceLocator.shared.settings.showStartChatFlow = state.bindings.showStartChatFlow
+        case .changedShowStartChatFlow:
+            ServiceLocator.shared.settings.startChatFlowFeatureFlag = state.bindings.showStartChatFlow
         }
     }
 }

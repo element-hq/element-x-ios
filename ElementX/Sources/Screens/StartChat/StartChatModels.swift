@@ -30,7 +30,6 @@ struct StartChatViewState: BindableState {
 
 struct StartChatScreenViewStateBindings {
     var searchQuery = ""
-    var alertInfo: AlertInfo<UUID>?
 }
 
 enum StartChatViewAction {

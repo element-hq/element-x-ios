@@ -245,9 +245,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     // MARK: Start Chat
     
     private func presentStartChat() {
-        let startchatNavigationStackCoordinator = NavigationStackCoordinator()
+        let startChatNavigationStackCoordinator = NavigationStackCoordinator()
         
-        let userIndicatorController = UserIndicatorController(rootCoordinator: startchatNavigationStackCoordinator)
+        let userIndicatorController = UserIndicatorController(rootCoordinator: startChatNavigationStackCoordinator)
         
         let parameters = StartChatCoordinatorParameters(userSession: userSession)
         let coordinator = StartChatCoordinator(parameters: parameters)
@@ -259,7 +259,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             }
         }
 
-        startchatNavigationStackCoordinator.setRootCoordinator(coordinator)
+        startChatNavigationStackCoordinator.setRootCoordinator(coordinator)
         
         navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedStartChatScreen)

@@ -30,10 +30,10 @@ struct DeveloperOptionsScreenScreen: View {
                     context.send(viewAction: .changedShouldCollapseRoomStateEvents)
                 }
                 Toggle(isOn: $context.showStartChatFlow) {
-                    Text("Show Start Chat flow from home")
+                    Text("Show Start Chat flow")
                 }
                 .onChange(of: context.showStartChatFlow) { _ in
-                    context.send(viewAction: .showStartChatFlow)
+                    context.send(viewAction: .changedShowStartChatFlow)
                 }
             }
             

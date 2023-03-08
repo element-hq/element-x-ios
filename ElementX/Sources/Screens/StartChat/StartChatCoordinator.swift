@@ -33,7 +33,7 @@ final class StartChatCoordinator: CoordinatorProtocol {
     init(parameters: StartChatCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StartChatViewModel(withUserSession: parameters.userSession)
+        viewModel = StartChatViewModel(userSession: parameters.userSession)
     }
     
     func start() {

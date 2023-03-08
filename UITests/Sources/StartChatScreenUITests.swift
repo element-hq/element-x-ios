@@ -18,25 +18,8 @@ import ElementX
 import XCTest
 
 class StartChatScreenUITests: XCTestCase {
-    func testRegularScreen() {
-        let app = Application.launch(.simpleRegular)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Make this chat public?")
-
-        app.assertScreenshot(.simpleRegular)
-    }
-    
-    func testUpgradeScreen() {
-        let app = Application.launch(.simpleUpgrade)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Privacy warning")
-
-        app.assertScreenshot(.simpleUpgrade)
+    func testStartChatScreen() {
+        let app = Application.launch(.startChat)
+        app.assertScreenshot(.startChat)
     }
 }

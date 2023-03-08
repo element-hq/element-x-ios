@@ -105,7 +105,7 @@ struct HomeScreen: View {
             if context.viewState.showStartChatFlowEnabled {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()
-                    addNewRoom
+                    newRoomButton
                 }
             }
         }
@@ -154,11 +154,9 @@ struct HomeScreen: View {
         .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
     }
     
-    private var addNewRoom: some View {
+    private var newRoomButton: some View {
         Button(action: startChat) {
             Image(systemName: "square.and.pencil")
-                .resizable()
-                .frame(width: 24, height: 24)
         }
     }
     

@@ -29,5 +29,5 @@ struct DeveloperOptionsScreenViewStateBindings {
 
 enum DeveloperOptionsScreenViewAction {
     case changedShouldCollapseRoomStateEvents
-    case showStartChatFlow
+    case changedShowStartChatFlow
 }

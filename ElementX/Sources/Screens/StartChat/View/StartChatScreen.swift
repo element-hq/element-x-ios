@@ -17,12 +17,6 @@
 import SwiftUI
 
 struct StartChatScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
-    }
-    
     @ObservedObject var context: StartChatViewModel.Context
     
     var body: some View {
@@ -49,7 +43,6 @@ struct StartChatScreen: View {
                 Label(ElementL10n.createARoom, systemImage: "person.3")
             }
             .buttonStyle(FormButtonStyle(accessory: .navigationLink))
-            .accessibilityIdentifier("createARoomButton")
         }
         .formSectionStyle()
     }
@@ -68,7 +61,7 @@ struct StartChatScreen: View {
     private var suggestionsSection: some View {
         Section {
             ForEach(context.viewState.suggestedUsers, id: \.userId) { user in
-                UserSuggested(user: user, imageProvider: context.imageProvider)
+                StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
             }
         } header: {
             Text(ElementL10n.directRoomUserListSuggestionsTitle)
@@ -100,7 +93,7 @@ struct StartChat_Previews: PreviewProvider {
     static var previews: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = StartChatViewModel(withUserSession: userSession)
+        let regularViewModel = StartChatViewModel(userSession: userSession)
         NavigationView {
             StartChatScreen(context: regularViewModel.context)
                 .tint(.element.accent)

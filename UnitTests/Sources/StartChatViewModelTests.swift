@@ -20,33 +20,13 @@ import XCTest
 
 @MainActor
 class StartChatScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
     var viewModel: StartChatViewModelProtocol!
     var context: StartChatViewModelType.Context!
     
     @MainActor override func setUpWithError() throws {
-        viewModel = StartChatViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: ""),
+                                          mediaProvider: MockMediaProvider())
+        viewModel = StartChatViewModel(userSession: userSession)
         context = viewModel.context
-    }
-
-    func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
-    }
-
-    func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
     }
 }

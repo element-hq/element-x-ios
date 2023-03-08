@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct UserSuggested: View {
+struct StartChatSuggestedUserCell: View {
     let user: RoomMemberProxy
     let imageProvider: ImageProviderProtocol?
     
@@ -30,9 +30,11 @@ struct UserSuggested: View {
                 .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 4) {
-                Text(user.displayName ?? "")
-                    .font(.element.title3)
-                    .foregroundColor(.element.primaryContent)
+                if let displayName = user.displayName {
+                    Text(displayName)
+                        .font(.element.title3)
+                        .foregroundColor(.element.primaryContent)
+                }
                 Text(user.userId)
                     .font(.element.subheadline)
                     .foregroundColor(.element.tertiaryContent)

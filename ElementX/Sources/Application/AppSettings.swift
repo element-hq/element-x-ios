@@ -141,11 +141,6 @@ final class AppSettings: ObservableObject {
     
     @UserSetting(key: UserDefaultsKeys.shouldCollapseRoomStateEvents.rawValue, defaultValue: true, persistIn: nil)
     var shouldCollapseRoomStateEvents
-
-    // MARK: - Start Chat
-    
-    @UserSetting(key: UserDefaultsKeys.showStartChatFlow.rawValue, defaultValue: false, persistIn: store)
-    var showStartChatFlow
     
     // MARK: - Notifications
 
@@ -159,4 +154,11 @@ final class AppSettings: ObservableObject {
     // MARK: - Other
     
     let permalinkBaseURL = URL(staticString: "https://matrix.to")
+    
+    // MARK: - Feature Flags
+    
+    // MARK: Start Chat
+    
+    @UserSetting(key: UserDefaultsKeys.showStartChatFlow.rawValue, defaultValue: false, persistIn: store)
+    var startChatFlowFeatureFlag
 }

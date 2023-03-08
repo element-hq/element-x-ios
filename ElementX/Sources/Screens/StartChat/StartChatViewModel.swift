@@ -23,7 +23,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     var callback: ((StartChatViewModelAction) -> Void)?
 
-    init(withUserSession userSession: UserSessionProtocol) {
+    init(userSession: UserSessionProtocol) {
         self.userSession = userSession
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
     }
