@@ -37,7 +37,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         context.send(viewAction: .requestVerification)
         
-        try await Task.sleep(for: .seconds(1))
+        try await Task.sleep(for: .milliseconds(100))
         XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
         XCTAssertEqual(context.viewState.verificationState, .requestingVerification)
     }
