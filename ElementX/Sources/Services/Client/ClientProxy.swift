@@ -244,7 +244,7 @@ class ClientProxy: ClientProxyProtocol {
         loadCachedAvatarURLTask = Task {
             let urlString = await Task.dispatch(on: clientQueue) {
                 do {
-                    return try self.client.avatarUrl()
+                    return try self.client.cachedAvatarUrl()
                 } catch {
                     MXLog.error("Failed to look for the avatar url in the cache: \(error)")
                     return nil
