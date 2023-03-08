@@ -1,0 +1,1 @@
+Auto Mocks generator added to the project.

@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,18 +14,6 @@
 // limitations under the License.
 //
 
-import Foundation
-import UIKit
-
-class MockBugReportService: BugReportServiceProtocol {
-    func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
-        SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
-    }
-
-    var crashedLastRun = false
-
-    func crash() {
-        // no-op
-    }
-}
+// This protocol is used only as a marker
+// to mark protocols that can be auto-mocked by Sourcery
+protocol AutoMockable { }

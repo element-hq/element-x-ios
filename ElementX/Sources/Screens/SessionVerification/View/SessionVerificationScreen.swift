@@ -231,14 +231,14 @@ struct SessionVerification_Previews: PreviewProvider {
             sessionVerificationScreen(state: .requestingVerification)
             sessionVerificationScreen(state: .cancelled)
             
-            sessionVerificationScreen(state: .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
+            sessionVerificationScreen(state: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
             sessionVerificationScreen(state: .verified)
         }
         .tint(Color.element.accent)
     }
     
     static func sessionVerificationScreen(state: SessionVerificationStateMachine.State) -> some View {
-        let viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: MockSessionVerificationControllerProxy(),
+        let viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: SessionVerificationControllerProxyMock.configureMock(),
                                                      initialState: SessionVerificationViewState(verificationState: state))
         
         return SessionVerificationScreen(context: viewModel.context)
