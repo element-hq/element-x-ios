@@ -53,7 +53,7 @@ public extension Task where Success == Never, Failure == Never {
         try await withCheckedThrowingContinuation(function: function) { continuation in
             queue.async {
                 do {
-                    continuation.resume(returning: try body())
+                    try continuation.resume(returning: body())
                 } catch {
                     continuation.resume(throwing: error)
                 }
