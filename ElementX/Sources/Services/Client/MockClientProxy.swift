@@ -37,7 +37,7 @@ class MockClientProxy: ClientProxyProtocol {
         visibleRoomsSummaryProvider = roomSummaryProvider
     }
 
-    func loadUserAvatar() async { }
+    func loadUserAvatarURL() async { }
     
     func startSync() { }
     

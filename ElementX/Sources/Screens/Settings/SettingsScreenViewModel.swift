@@ -49,7 +49,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .store(in: &cancellables)
         
         Task {
-            await userSession.clientProxy.loadUserAvatar()
+            await userSession.clientProxy.loadUserAvatarURL()
         }
         
         Task {

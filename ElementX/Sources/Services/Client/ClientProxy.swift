@@ -93,7 +93,7 @@ class ClientProxy: ClientProxyProtocol {
         configureSlidingSync()
 
         clientQueue.async {
-            self.loadUserAvatarFromCache()
+            self.loadUserAvatarURLFromCache()
         }
     }
     
@@ -169,7 +169,7 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func loadUserAvatar() async {
+    func loadUserAvatarURL() async {
         await Task.dispatch(on: clientQueue) {
             do {
                 if let urlString = try self.client.avatarUrl() {
@@ -178,6 +178,7 @@ class ClientProxy: ClientProxyProtocol {
                     self.avatarURLSubject.value = nil
                 }
             } catch {
+                MXLog.error("Failed fetching the user avatar url: \(error)")
                 return
             }
         }
@@ -244,7 +245,7 @@ class ClientProxy: ClientProxyProtocol {
     
     // MARK: Private
 
-    private func loadUserAvatarFromCache() {
+    private func loadUserAvatarURLFromCache() {
         loadCachedAavatarTask = Task {
             guard let urlString = try? self.client.cachedAvatarUrl() else {
                 return

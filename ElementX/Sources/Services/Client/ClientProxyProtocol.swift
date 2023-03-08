@@ -87,7 +87,7 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
 
-    func loadUserAvatar() async
+    func loadUserAvatarURL() async
 
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     

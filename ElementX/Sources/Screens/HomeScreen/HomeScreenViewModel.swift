@@ -95,7 +95,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
                     Task {
-                        await userSession.clientProxy.loadUserAvatar()
+                        await userSession.clientProxy.loadUserAvatarURL()
                     }
                     
                     Task {
