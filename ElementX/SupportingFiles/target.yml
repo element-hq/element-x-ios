@@ -94,7 +94,7 @@ targets:
       script: |
         export PATH="$PATH:/opt/homebrew/bin"
         if which sourcery >/dev/null; then
-            sourcery --config Sourcery/sourcery_automockable_config.yml
+            sourcery --config Tools/Sourcery/sourcery_automockable_config.yml
         else
             echo "warning: Sourcert not installed, run swift run tools setup-project"
         fi
