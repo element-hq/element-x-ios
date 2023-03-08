@@ -158,7 +158,6 @@ class ClientProxy: ClientProxyProtocol {
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                self.loadCachedAvatarURLTask?.cancel()
                 let displayName = try self.client.displayName()
                 return .success(displayName)
             } catch {
@@ -171,6 +170,7 @@ class ClientProxy: ClientProxyProtocol {
         await Task.dispatch(on: clientQueue) {
             do {
                 let urlString = try self.client.avatarUrl()
+                self.loadCachedAvatarURLTask?.cancel()
                 self.avatarURLSubject.value = urlString.flatMap(URL.init)
             } catch {
                 MXLog.error("Failed fetching the user avatar url: \(error)")
