@@ -30,7 +30,7 @@ setup_xcode_cloud_environment () {
 }
 
 install_xcode_cloud_brew_dependencies () {
-    brew update && install xcodegen imagemagick
+    brew update && brew install xcodegen imagemagick
 }
 
 install_xcode_cloud_python_dependencies () {
