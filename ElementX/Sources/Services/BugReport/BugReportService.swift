@@ -243,7 +243,7 @@ private extension Data {
         case .file(let url):
             appendString(string: "; filename=\"\(url.lastPathComponent)\"\r\n")
             appendString(string: "Content-Type: \"content-type header\"\r\n\r\n")
-            append(try Data(contentsOf: url))
+            try append(Data(contentsOf: url))
             appendString(string: "\r\n")
         }
     }

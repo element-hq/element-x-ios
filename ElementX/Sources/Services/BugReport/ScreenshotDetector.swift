@@ -47,7 +47,7 @@ class ScreenshotDetector {
             findScreenshot()
         } else if authStatus == .notDetermined, autoRequestPHAuthorization {
             Task {
-                self.handleAuthStatus(await PHPhotoLibrary.requestAuthorization(for: .readWrite))
+                await self.handleAuthStatus(PHPhotoLibrary.requestAuthorization(for: .readWrite))
             }
         } else {
             fail(withError: ScreenshotDetectorError.notAuthorized)
