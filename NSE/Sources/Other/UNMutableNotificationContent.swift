@@ -51,12 +51,12 @@ extension UNMutableNotificationContent {
         case .success(let url):
             // Initialize only the sender for a one-to-one message intent.
             let handle = INPersonHandle(value: senderId, type: .unknown)
-            let sender = INPerson(personHandle: handle,
-                                  nameComponents: nil,
-                                  displayName: senderName,
-                                  image: INImage(imageData: try Data(contentsOf: url)),
-                                  contactIdentifier: nil,
-                                  customIdentifier: nil)
+            let sender = try INPerson(personHandle: handle,
+                                      nameComponents: nil,
+                                      displayName: senderName,
+                                      image: INImage(imageData: Data(contentsOf: url)),
+                                      contactIdentifier: nil,
+                                      customIdentifier: nil)
 
             // Because this communication is incoming, you can infer that the current user is
             // a recipient. Don't include the current user when initializing the intent.
