@@ -59,7 +59,7 @@ class ClientProxy: ClientProxyProtocol {
     var allRoomsSlidingSyncView: SlidingSyncList?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
 
-    private var loadCachedAavatarTask: Task<Void, Never>?
+    private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
     var avatarURLPublisher: AnyPublisher<URL?, Never> {
         avatarURLSubject
@@ -158,7 +158,7 @@ class ClientProxy: ClientProxyProtocol {
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                self.loadCachedAavatarTask?.cancel()
+                self.loadCachedAvatarURLTask?.cancel()
                 let displayName = try self.client.displayName()
                 return .success(displayName)
             } catch {
@@ -241,7 +241,7 @@ class ClientProxy: ClientProxyProtocol {
     // MARK: Private
 
     private func loadUserAvatarURLFromCache() {
-        loadCachedAavatarTask = Task {
+        loadCachedAvatarURLTask = Task {
             let urlString = await Task.dispatch(on: clientQueue) {
                 do {
                     return try self.client.avatarUrl()
