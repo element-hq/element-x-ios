@@ -20,6 +20,8 @@ struct HomeScreenRoomCell: View {
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
     
+    @Environment(\.dynamicTypeSize) var size
+    
     var body: some View {
         Button {
             if let roomId = room.roomId {
@@ -49,12 +51,14 @@ struct HomeScreenRoomCell: View {
     
     @ViewBuilder
     var avatar: some View {
-        LoadableAvatarImage(url: room.avatarURL,
-                            name: room.name,
-                            contentID: room.roomId,
-                            avatarSize: .room(on: .home),
-                            imageProvider: context.imageProvider)
-            .accessibilityHidden(true)
+        if size < .accessibility4 {
+            LoadableAvatarImage(url: room.avatarURL,
+                                name: room.name,
+                                contentID: room.roomId,
+                                avatarSize: .room(on: .home),
+                                imageProvider: context.imageProvider)
+                .accessibilityHidden(true)
+        }
     }
     
     @ViewBuilder
