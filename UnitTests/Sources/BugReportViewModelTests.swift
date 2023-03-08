@@ -25,7 +25,7 @@ class BugReportViewModelTests: XCTestCase {
     }
 
     func testInitialState() {
-        let viewModel = BugReportViewModel(bugReportService: BugReportServiceProtocolMock(),
+        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
                                            userID: "@mock.client.com",
                                            deviceID: nil,
                                            screenshot: nil,
@@ -38,7 +38,7 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testClearScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: BugReportServiceProtocolMock(),
+        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
                                            userID: "@mock.client.com",
                                            deviceID: nil,
                                            screenshot: UIImage.actions,
@@ -51,7 +51,7 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testAttachScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: BugReportServiceProtocolMock(),
+        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
                                            userID: "@mock.client.com",
                                            deviceID: nil,
                                            screenshot: nil, isModallyPresented: false)
@@ -63,7 +63,7 @@ class BugReportViewModelTests: XCTestCase {
     }
 
     func testSendReportWithSuccess() async throws {
-        let mockService = BugReportServiceProtocolMock()
+        let mockService = BugReportServiceMock()
         mockService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://test.test")
         let viewModel = BugReportViewModel(bugReportService: mockService,
                                            userID: "@mock.client.com",
@@ -86,7 +86,7 @@ class BugReportViewModelTests: XCTestCase {
     }
 
     func testSendReportWithError() async throws {
-        let mockService = BugReportServiceProtocolMock()
+        let mockService = BugReportServiceMock()
         mockService.submitBugReportProgressListenerClosure = { _, _ in
             throw TestError.testError
         }

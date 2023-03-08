@@ -23,11 +23,11 @@ import XCTest
 class SessionVerificationViewModelTests: XCTestCase {
     var viewModel: SessionVerificationViewModelProtocol!
     var context: SessionVerificationViewModelType.Context!
-    var sessionVerificationController: MockSessionVerificationControllerProxy!
+    var sessionVerificationController: SessionVerificationControllerProxyMock!
     
     @MainActor
     override func setUpWithError() throws {
-        sessionVerificationController = MockSessionVerificationControllerProxy()
+        sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
         viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: sessionVerificationController)
         context = viewModel.context
     }
@@ -162,7 +162,7 @@ class SessionVerificationViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.verificationState, .sasVerificationStarted)
         
         wait(for: [verificationDataReceivalExpectation], timeout: 10.0)
-        XCTAssertEqual(context.viewState.verificationState, .showingChallenge(emojis: MockSessionVerificationControllerProxy.emojis))
+        XCTAssertEqual(context.viewState.verificationState, .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
 
         XCTAssert(sessionVerificationController.requestVerificationCallsCount == 1)
         XCTAssert(sessionVerificationController.startSasVerificationCallsCount == 1)

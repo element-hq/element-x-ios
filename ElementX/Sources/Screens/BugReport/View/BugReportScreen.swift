@@ -163,7 +163,7 @@ struct BugReport_Previews: PreviewProvider {
         }
         
         NavigationStack {
-            BugReportScreen(context: BugReportViewModel(bugReportService: BugReportServiceProtocolMock(),
+            BugReportScreen(context: BugReportViewModel(bugReportService: BugReportServiceMock(),
                                                         userID: "@mock.client.com",
                                                         deviceID: nil,
                                                         screenshot: Asset.Images.appLogo.image,

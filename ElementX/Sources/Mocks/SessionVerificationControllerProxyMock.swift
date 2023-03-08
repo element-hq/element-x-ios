@@ -16,7 +16,7 @@
 
 import Combine
 
-final class MockSessionVerificationControllerProxy: SessionVerificationControllerProxyMock {
+extension SessionVerificationControllerProxyMock {
     static let emojis = [SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
                          SessionVerificationEmoji(symbol: "🐘", description: "Elephant"),
                          SessionVerificationEmoji(symbol: "🦋", description: "Butterfly"),
@@ -24,65 +24,64 @@ final class MockSessionVerificationControllerProxy: SessionVerificationControlle
                          SessionVerificationEmoji(symbol: "🎂", description: "Cake"),
                          SessionVerificationEmoji(symbol: "🏁", description: "Flag"),
                          SessionVerificationEmoji(symbol: "🌏", description: "Globe")]
-    
-    var requestDelay: Duration
 
-    init(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> = .init(),
-         isVerified: Bool = false,
-         requestDelay: Duration = .seconds(1)) {
-        self.requestDelay = requestDelay
-        super.init()
-        underlyingCallbacks = .init()
-        underlyingIsVerified = false
+    static func configureMock(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> = .init(),
+                              isVerified: Bool = false,
+                              requestDelay: Duration = .seconds(1)) -> SessionVerificationControllerProxyMock {
+        let mock = SessionVerificationControllerProxyMock()
+        mock.underlyingCallbacks = callbacks
+        mock.underlyingIsVerified = isVerified
 
-        requestVerificationClosure = { [unowned self] in
+        mock.requestVerificationClosure = { [unowned mock] in
             Task.detached {
-                try await Task.sleep(for: self.requestDelay)
-                self.callbacks.send(.acceptedVerificationRequest)
+                try await Task.sleep(for: requestDelay)
+                mock.callbacks.send(.acceptedVerificationRequest)
             }
 
             return .success(())
         }
 
-        startSasVerificationClosure = { [unowned self] in
+        mock.startSasVerificationClosure = { [unowned mock] in
             Task.detached {
-                try await Task.sleep(for: self.requestDelay)
-                self.callbacks.send(.startedSasVerification)
+                try await Task.sleep(for: requestDelay)
+                mock.callbacks.send(.startedSasVerification)
 
                 Task.detached {
-                    try await Task.sleep(for: self.requestDelay)
-                    self.callbacks.send(.receivedVerificationData(Self.emojis))
+                    try await Task.sleep(for: requestDelay)
+                    mock.callbacks.send(.receivedVerificationData(Self.emojis))
                 }
             }
 
             return .success(())
         }
 
-        approveVerificationClosure = { [unowned self] in
+        mock.approveVerificationClosure = { [unowned mock] in
             Task.detached {
-                try await Task.sleep(for: self.requestDelay)
-                self.callbacks.send(.finished)
+                try await Task.sleep(for: requestDelay)
+                mock.callbacks.send(.finished)
             }
 
             return .success(())
         }
 
-        declineVerificationClosure = { [unowned self] in
+        mock.declineVerificationClosure = { [unowned mock] in
             Task.detached {
-                try await Task.sleep(for: self.requestDelay)
-                self.callbacks.send(.cancelled)
+                try await Task.sleep(for: requestDelay)
+                mock.callbacks.send(.cancelled)
             }
 
             return .success(())
         }
 
-        cancelVerificationClosure = { [unowned self] in
+        mock.cancelVerificationClosure = { [unowned mock] in
             Task.detached {
-                try await Task.sleep(for: self.requestDelay)
-                self.callbacks.send(.cancelled)
+                try await Task.sleep(for: requestDelay)
+                mock.callbacks.send(.cancelled)
             }
 
             return .success(())
         }
+        
+        return mock
     }
 }
