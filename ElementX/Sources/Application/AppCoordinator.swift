@@ -473,11 +473,11 @@ extension AppCoordinator: NotificationManagerDelegate {
     func notificationTapped(_ service: NotificationManagerProtocol, content: UNNotificationContent) async {
         MXLog.info("[AppCoordinator] tappedNotification")
 
-        guard let roomId = content.userInfo[NotificationConstants.UserInfoKey.roomIdentifier] as? String else {
+        guard !content.threadIdentifier.isEmpty else {
             return
         }
 
-        userSessionFlowCoordinator?.tryDisplayingRoomScreen(roomId: roomId)
+        userSessionFlowCoordinator?.tryDisplayingRoomScreen(roomId: content.threadIdentifier)
     }
 
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

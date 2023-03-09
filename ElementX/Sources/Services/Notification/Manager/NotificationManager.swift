@@ -157,6 +157,7 @@ extension NotificationManager: UNUserNotificationCenterDelegate {
         return [.badge, .sound, .list, .banner]
     }
 
+    @MainActor
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse) async {
         switch response.actionIdentifier {
