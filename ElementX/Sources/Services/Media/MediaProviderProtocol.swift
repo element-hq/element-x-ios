@@ -16,6 +16,7 @@
 
 import Foundation
 import UIKit
+import UniformTypeIdentifiers
 
 enum MediaProviderError: Error {
     case failedRetrievingImage
@@ -24,7 +25,5 @@ enum MediaProviderError: Error {
 }
 
 protocol MediaProviderProtocol: ImageProviderProtocol {
-    func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL?
-
-    @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError>
+    func loadFileFromSource(_ source: MediaSourceProxy, type: UTType) async -> Result<MediaFileProxy, MediaProviderError>
 }

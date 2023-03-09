@@ -15,6 +15,7 @@
 //
 
 import Foundation
+import UniformTypeIdentifiers
 
 struct AudioRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
@@ -26,7 +27,7 @@ struct AudioRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
 
     let duration: UInt64
     let source: MediaSourceProxy?
-    var cachedAudioURL: URL?
+    var type: UTType?
 
     var properties = RoomTimelineItemProperties()
 }

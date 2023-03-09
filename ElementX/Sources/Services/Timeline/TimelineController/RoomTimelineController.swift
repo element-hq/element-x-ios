@@ -105,42 +105,38 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         guard let timelineItem = timelineItems.first(where: { $0.id == itemID }) else {
             return .none
         }
-
+        
+        var source: MediaSourceProxy?
+        var type: UTType?
+        var title: String
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
-            await loadFileForImageTimelineItem(item)
-            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? ImageRoomTimelineItem,
-                  let fileURL = item.cachedFileURL else {
-                return .none
-            }
-            return .displayFile(fileURL: fileURL, title: item.body)
+            source = item.source
+            type = item.type
+            title = item.body
         case let item as VideoRoomTimelineItem:
-            await loadVideoForTimelineItem(item)
-            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? VideoRoomTimelineItem,
-                  let videoURL = item.cachedVideoURL else {
-                return .none
-            }
-            return .displayVideo(videoURL: videoURL, title: item.body)
+            source = item.source
+            type = item.type
+            title = item.body
         case let item as FileRoomTimelineItem:
-            await loadFileForTimelineItem(item)
-            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? FileRoomTimelineItem,
-                  let fileURL = item.cachedFileURL else {
-                return .none
-            }
-            return .displayFile(fileURL: fileURL, title: item.body)
+            source = item.source
+            type = item.type
+            title = item.body
         case let item as AudioRoomTimelineItem:
-            await loadAudioForTimelineItem(item)
-            guard let index = timelineItems.firstIndex(where: { $0.id == itemID }),
-                  let item = timelineItems[index] as? AudioRoomTimelineItem,
-                  let audioURL = item.cachedAudioURL else {
-                return .none
-            }
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
-            return .displayFile(fileURL: audioURL, title: item.body)
+            source = item.source
+            type = item.type
+            title = item.body
         default:
+            return .none
+        }
+        
+        #warning("Try a type fallback base on the title?")
+        guard let source, let type else { return .none }
+        switch await mediaProvider.loadFileFromSource(source, type: type) {
+        case .success(let file):
+            return .displayMediaFile(file: file, title: title)
+        case .failure:
             return .none
         }
     }
@@ -306,31 +302,7 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         return false
     }
     
-    private func loadVideoForTimelineItem(_ timelineItem: VideoRoomTimelineItem) async {
-        if timelineItem.cachedVideoURL != nil {
-            // already cached
-            return
-        }
-
-        guard let source = timelineItem.source else {
-            return
-        }
-        
-        let fileExtension = movieFileExtension(for: timelineItem.body)
-        switch await mediaProvider.loadFileFromSource(source, fileExtension: fileExtension) {
-        case .success(let fileURL):
-            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? VideoRoomTimelineItem else {
-                return
-            }
-
-            item.cachedVideoURL = fileURL
-            timelineItems[index] = item
-        case .failure:
-            break
-        }
-    }
-    
+    #warning("Move me to Rust, or replace me?")
     /// Temporary method that generates a file extension for a video file name
     /// using `UTType.movie` and falls back to .mp4 if anything goes wrong.
     ///
@@ -349,90 +321,5 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         else { return fallbackExtension }
         
         return fileExtension
-    }
-
-    private func loadFileForImageTimelineItem(_ timelineItem: ImageRoomTimelineItem) async {
-        if timelineItem.cachedFileURL != nil {
-            // already cached
-            return
-        }
-
-        guard let source = timelineItem.source else {
-            return
-        }
-
-        // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
-            return
-        }
-        switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
-        case .success(let fileURL):
-            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? ImageRoomTimelineItem else {
-                return
-            }
-
-            item.cachedFileURL = fileURL
-            timelineItems[index] = item
-        case .failure:
-            break
-        }
-    }
-
-    private func loadFileForTimelineItem(_ timelineItem: FileRoomTimelineItem) async {
-        if timelineItem.cachedFileURL != nil {
-            // already cached
-            return
-        }
-
-        guard let source = timelineItem.source else {
-            return
-        }
-
-        // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
-            return
-        }
-        switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
-        case .success(let fileURL):
-            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? FileRoomTimelineItem else {
-                return
-            }
-
-            item.cachedFileURL = fileURL
-            timelineItems[index] = item
-        case .failure:
-            break
-        }
-    }
-
-    private func loadAudioForTimelineItem(_ timelineItem: AudioRoomTimelineItem) async {
-        if timelineItem.cachedAudioURL != nil {
-            // already cached
-            return
-        }
-
-        guard let source = timelineItem.source else {
-            return
-        }
-
-        // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtension = timelineItem.body.split(separator: ".").last else {
-            return
-        }
-
-        switch await mediaProvider.loadFileFromSource(source, fileExtension: String(fileExtension)) {
-        case .success(let audioURL):
-            guard let index = timelineItems.firstIndex(where: { $0.id == timelineItem.id }),
-                  var item = timelineItems[index] as? AudioRoomTimelineItem else {
-                return
-            }
-
-            item.cachedAudioURL = audioURL
-            timelineItems[index] = item
-        case .failure:
-            break
-        }
     }
 }

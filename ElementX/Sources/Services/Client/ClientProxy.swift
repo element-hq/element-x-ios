@@ -18,6 +18,7 @@ import Combine
 import Foundation
 import MatrixRustSDK
 import UIKit
+import UniformTypeIdentifiers
 
 private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
     private weak var clientProxy: ClientProxy?
@@ -393,5 +394,9 @@ extension ClientProxy: MediaLoaderProtocol {
 
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
         try await mediaLoader.loadMediaThumbnailForSource(source, width: width, height: height)
+    }
+    
+    func loadMediaFileForSource(_ source: MediaSourceProxy, type: UTType) async throws -> MediaFileProxy {
+        try await mediaLoader.loadMediaFileForSource(source, type: type)
     }
 }

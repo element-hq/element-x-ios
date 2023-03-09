@@ -132,6 +132,10 @@ extension MessageTimelineItem where Content == MatrixRustSDK.VideoMessageContent
     var blurhash: String? {
         content.info?.blurhash
     }
+    
+    var type: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
+    }
 }
 
 extension MatrixRustSDK.FileMessageContent: MessageContentProtocol { }
@@ -148,6 +152,10 @@ extension MessageTimelineItem where Content == MatrixRustSDK.FileMessageContent 
         }
         return .init(source: src)
     }
+    
+    var type: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
+    }
 }
 
 extension MatrixRustSDK.AudioMessageContent: MessageContentProtocol { }
@@ -160,5 +168,9 @@ extension MessageTimelineItem where Content == MatrixRustSDK.AudioMessageContent
 
     var duration: UInt64 {
         content.info?.duration ?? 0
+    }
+    
+    var type: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
     }
 }

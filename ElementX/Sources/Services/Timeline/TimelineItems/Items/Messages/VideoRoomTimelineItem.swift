@@ -15,6 +15,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
@@ -28,12 +29,12 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let duration: UInt64
     let source: MediaSourceProxy?
     let thumbnailSource: MediaSourceProxy?
-    var cachedVideoURL: URL?
     
     var width: CGFloat?
     var height: CGFloat?
     var aspectRatio: CGFloat?
     var blurhash: String?
+    var type: UTType?
     
     var properties = RoomTimelineItemProperties()
 }

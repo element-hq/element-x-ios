@@ -79,7 +79,6 @@ targets:
     - path: ../../ElementX/Sources/Services/Media
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskServiceProtocol.swift
     - path: ../../ElementX/Sources/Services/Background/BackgroundTaskProtocol.swift
-    - path: ../../ElementX/Sources/Services/Cache/FileCache.swift
     - path: ../../ElementX/Sources/Other/Logging
     - path: ../../ElementX/Sources/Other/Extensions/Task.swift
     - path: ../../ElementX/Sources/Other/Extensions/FileManager.swift

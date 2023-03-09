@@ -250,6 +250,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      height: message.height,
                                      aspectRatio: aspectRatio,
                                      blurhash: message.blurhash,
+                                     type: message.type,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus))
@@ -265,7 +266,11 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               isEditable: eventItemProxy.isEditable,
                               sender: eventItemProxy.sender,
                               duration: message.duration,
-                              source: message.source)
+                              source: message.source,
+                              type: message.type,
+                              properties: RoomTimelineItemProperties(isEdited: message.isEdited,
+                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
+                                                                     deliveryStatus: eventItemProxy.deliveryStatus))
     }
 
     private func buildFileTimelineItemFromMessage(_ eventItemProxy: EventTimelineItemProxy,
@@ -279,6 +284,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              sender: eventItemProxy.sender,
                              source: message.source,
                              thumbnailSource: message.thumbnailSource,
+                             type: message.type,
                              properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
                                                                     deliveryStatus: eventItemProxy.deliveryStatus))

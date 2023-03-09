@@ -17,6 +17,7 @@
 import Combine
 import Foundation
 import MatrixRustSDK
+import UniformTypeIdentifiers
 
 class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -73,6 +74,10 @@ class MockClientProxy: ClientProxyProtocol {
     }
     
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
+        throw ClientProxyError.failedLoadingMedia
+    }
+    
+    func loadMediaFileForSource(_ source: MediaSourceProxy, type: UTType) async throws -> MediaFileProxy {
         throw ClientProxyError.failedLoadingMedia
     }
     

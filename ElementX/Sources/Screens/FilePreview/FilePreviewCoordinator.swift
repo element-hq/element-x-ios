@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct FilePreviewCoordinatorParameters {
-    let fileURL: URL
+    let mediaFile: MediaFileProxy
     let title: String?
 }
 
@@ -34,7 +34,7 @@ final class FilePreviewCoordinator: CoordinatorProtocol {
     init(parameters: FilePreviewCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = FilePreviewViewModel(fileURL: parameters.fileURL, title: parameters.title)
+        viewModel = FilePreviewViewModel(mediaFile: parameters.mediaFile, title: parameters.title)
     }
     
     // MARK: - Public

@@ -15,6 +15,7 @@
 //
 
 import UIKit
+import UniformTypeIdentifiers
 
 struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hashable {
     let id: String
@@ -27,7 +28,7 @@ struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hasha
 
     let source: MediaSourceProxy?
     let thumbnailSource: MediaSourceProxy?
-    var cachedFileURL: URL?
+    var type: UTType?
     
     var properties = RoomTimelineItemProperties()
 }
