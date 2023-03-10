@@ -99,7 +99,9 @@ struct HomeScreenRoomCell: View {
         HStack(alignment: .firstTextBaseline) {
             ZStack(alignment: .topLeading) {
                 // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
-                Text(" \n ").lastMessageFormatting().hidden()
+                Text(" \n ")
+                    .lastMessageFormatting()
+                    .hidden()
                     .environment(\.redactionReasons, []) // Always maintain consistent height
                 
                 lastMessage
