@@ -18,8 +18,6 @@ import Foundation
 import UIKit
 import UserNotifications
 
-import MatrixRustSDK
-
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
     private let clientProxy: ClientProxyProtocol
@@ -86,7 +84,6 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
-            let identifiers = PusherIdentifiers(pushkey: deviceToken.base64EncodedString(), appId: ServiceLocator.shared.settings.pusherAppId)
             let defaultPayload = [
                 "aps": [
                     "mutable-content": 1,
@@ -96,14 +93,16 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                     ]
                 ]
             ]
-            let kind = PusherKind.http(data: HttpPusherData(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
-                                                            format: .eventIdOnly, defaultPayload: jsonString(from: defaultPayload)))
-            try await clientProxy.setPusher(identifiers: identifiers,
-                                            kind: kind,
-                                            appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
-                                            deviceDisplayName: UIDevice.current.name,
-                                            profileTag: pusherProfileTag(),
-                                            lang: Bundle.preferredLanguages.first ?? "en")
+            let pusher = Pusher(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
+                                                   appId: ServiceLocator.shared.settings.pusherAppId),
+                                kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
+                                                        format: .eventIdOnly,
+                                                        defaultPayload: jsonString(from: defaultPayload))),
+                                appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
+                                deviceDisplayName: await UIDevice.current.name,
+                                profileTag: pusherProfileTag(),
+                                lang: Bundle.preferredLanguages.first ?? "en")
+            try await clientProxy.setPusher(pusher)
             MXLog.info("[NotificationManager] set pusher succeeded")
             return true
         } catch {

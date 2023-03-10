@@ -38,6 +38,15 @@ enum SlidingSyncConstants {
     static let timelinePrecachingTimelineLimit: UInt = 20
 }
 
+struct Pusher {
+    let identifiers: PusherIdentifiers
+    let kind: PusherKind
+    let appDisplayName: String
+    let deviceDisplayName: String
+    let profileTag: String?
+    let lang: String
+}
+
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var callbacks: PassthroughSubject<ClientProxyCallback, Never> { get }
     
@@ -71,10 +80,5 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func logout() async
 
-    func setPusher(identifiers: PusherIdentifiers,
-                   kind: PusherKind,
-                   appDisplayName: String,
-                   deviceDisplayName: String,
-                   profileTag: String?,
-                   lang: String) async throws
+    func setPusher(_ pusher: Pusher) async throws
 }

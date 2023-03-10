@@ -89,28 +89,11 @@ class MockClientProxy: ClientProxyProtocol {
         // no-op
     }
     
-    var setPusherCalled = false
     var setPusherErrorToThrow: Error?
-    var setPusherIdentifiers: PusherIdentifiers?
-    var setPusherKind: PusherKind?
-    var setPusherAppDisplayName: String?
-    var setPusherDeviceDisplayName: String?
-    var setPusherProfileTag: String?
-    var setPusherLang: String?
+    var setPusherArgument: Pusher?
 
-    func setPusher(identifiers: PusherIdentifiers,
-                   kind: PusherKind,
-                   appDisplayName: String,
-                   deviceDisplayName: String,
-                   profileTag: String?,
-                   lang: String) async throws {
+    func setPusher(_ pusher: Pusher) async throws {
         if let setPusherErrorToThrow { throw setPusherErrorToThrow }
-        setPusherCalled = true
-        setPusherIdentifiers = identifiers
-        setPusherKind = kind
-        setPusherAppDisplayName = appDisplayName
-        setPusherDeviceDisplayName = deviceDisplayName
-        setPusherProfileTag = profileTag
-        setPusherLang = lang
+        setPusherArgument = pusher
     }
 }

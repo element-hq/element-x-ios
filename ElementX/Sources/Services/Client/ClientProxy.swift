@@ -205,19 +205,14 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func setPusher(identifiers: PusherIdentifiers,
-                   kind: PusherKind,
-                   appDisplayName: String,
-                   deviceDisplayName: String,
-                   profileTag: String?,
-                   lang: String) async throws {
+    func setPusher(_ pusher: Pusher) async throws {
         try await Task.dispatch(on: .global()) {
-            try self.client.setPusher(identifiers: identifiers,
-                                      kind: kind,
-                                      appDisplayName: appDisplayName,
-                                      deviceDisplayName: deviceDisplayName,
-                                      profileTag: profileTag,
-                                      lang: lang)
+            try self.client.setPusher(identifiers: pusher.identifiers,
+                                      kind: pusher.kind,
+                                      appDisplayName: pusher.appDisplayName,
+                                      deviceDisplayName: pusher.deviceDisplayName,
+                                      profileTag: pusher.profileTag,
+                                      lang: pusher.lang)
         }
     }
     
