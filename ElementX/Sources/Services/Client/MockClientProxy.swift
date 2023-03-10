@@ -29,11 +29,15 @@ class MockClientProxy: ClientProxyProtocol {
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+
+    var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
     
     internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         visibleRoomsSummaryProvider = roomSummaryProvider
     }
+
+    func loadUserAvatarURL() async { }
     
     func startSync() { }
     
@@ -54,10 +58,6 @@ class MockClientProxy: ClientProxyProtocol {
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         .success("User display name")
-    }
-    
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
-        .failure(.failedRetrievingAvatarURL)
     }
     
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {

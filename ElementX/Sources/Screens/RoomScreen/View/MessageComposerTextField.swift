@@ -41,6 +41,7 @@ struct MessageComposerTextField: View {
                           isMultiline: $isMultiline,
                           maxHeight: maxHeight,
                           onEnterKeyHandler: onEnterKeyHandler)
+            .accessibilityLabel(placeholder)
             .background(placeholderView, alignment: .topLeading)
     }
     
@@ -49,6 +50,7 @@ struct MessageComposerTextField: View {
         if showingPlaceholder {
             Text(placeholder)
                 .foregroundColor(placeholderColor)
+                .accessibilityHidden(true)
         }
     }
 }

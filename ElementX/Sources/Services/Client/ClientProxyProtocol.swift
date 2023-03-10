@@ -24,7 +24,6 @@ enum ClientProxyCallback {
 }
 
 enum ClientProxyError: Error {
-    case failedRetrievingAvatarURL
     case failedRetrievingDisplayName
     case failedRetrievingAccountData
     case failedSettingAccountData
@@ -56,6 +55,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     var homeserver: String { get }
 
+    var avatarURLPublisher: AnyPublisher<URL?, Never> { get }
+
     var restorationToken: RestorationToken? { get }
     
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? { get }
@@ -69,9 +70,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
-        
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError>
-    
+
+    func loadUserAvatarURL() async
+
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     
     func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError>
