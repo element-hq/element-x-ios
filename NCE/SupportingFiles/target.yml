@@ -45,7 +45,7 @@ targets:
         keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
         NSExtension:
           NSExtensionPointIdentifier: com.apple.usernotifications.content-extension
-          NSExtensionMainStoryboard: MainInterface
+          NSExtensionPrincipalClass: NCE.NotificationViewController
           NSExtensionAttributes:
             UNNotificationExtensionCategory: myNotificationCategory
             UNNotificationExtensionInitialContentSizeRatio: 1
