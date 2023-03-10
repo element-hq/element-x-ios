@@ -91,9 +91,11 @@ class MockClientProxy: ClientProxyProtocol {
     
     var setPusherErrorToThrow: Error?
     var setPusherArgument: Pusher?
+    var setPusherCalled = false
 
     func setPusher(_ pusher: Pusher) async throws {
         if let setPusherErrorToThrow { throw setPusherErrorToThrow }
+        setPusherCalled = true
         setPusherArgument = pusher
     }
 }

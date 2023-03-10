@@ -97,7 +97,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                    appId: ServiceLocator.shared.settings.pusherAppId),
                                 kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
                                                         format: .eventIdOnly,
-                                                        defaultPayload: jsonString(from: defaultPayload))),
+                                                        defaultPayload: defaultPayload.jsonString)),
                                 appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
                                 deviceDisplayName: await UIDevice.current.name,
                                 profileTag: pusherProfileTag(),
@@ -123,17 +123,6 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
 
         ServiceLocator.shared.settings.pusherProfileTag = newTag
         return newTag
-    }
-
-    /// Convenience method to get the json string of an Encodable
-    private func jsonString(from dictionary: [AnyHashable: Any]?) -> String? {
-        guard let dictionary,
-              let data = try? JSONSerialization.data(withJSONObject: dictionary,
-                                                     options: [.fragmentsAllowed]) else {
-            return nil
-        }
-
-        return String(data: data, encoding: .utf8)
     }
 }
 

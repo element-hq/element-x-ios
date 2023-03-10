@@ -114,4 +114,7 @@ private class MockMediaLoadingClient: ClientProtocol {
     func slidingSync() -> MatrixRustSDK.SlidingSyncBuilder { fatalError() }
     
     func startSync(timelineLimit: UInt16?) { }
+
+    // swiftlint:disable:next function_parameter_count
+    func setPusher(identifiers: MatrixRustSDK.PusherIdentifiers, kind: MatrixRustSDK.PusherKind, appDisplayName: String, deviceDisplayName: String, profileTag: String?, lang: String) throws { }
 }

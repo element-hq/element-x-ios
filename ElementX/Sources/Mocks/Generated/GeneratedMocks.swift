@@ -3,19 +3,13 @@
 
 // swiftlint:disable all
 import Combine
-import Foundation
 import MatrixRustSDK
-
-
 class BugReportServiceMock: BugReportServiceProtocol {
-
-
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
         set(value) { underlyingCrashedLastRun = value }
     }
     var underlyingCrashedLastRun: Bool!
-
 
     //MARK: - crash
 
@@ -56,8 +50,6 @@ class BugReportServiceMock: BugReportServiceProtocol {
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
-
-
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
         get { return underlyingCallbacks }
         set(value) { underlyingCallbacks = value }
@@ -68,7 +60,6 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         set(value) { underlyingIsVerified = value }
     }
     var underlyingIsVerified: Bool!
-
 
     //MARK: - requestVerification
 
