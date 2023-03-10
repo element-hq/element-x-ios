@@ -83,7 +83,9 @@ private class MockMediaLoadingClient: ClientProtocol {
     
     func setDisplayName(name: String) throws { }
     
-    func avatarUrl() throws -> String { fatalError() }
+    func avatarUrl() throws -> String? { fatalError() }
+
+    func cachedAvatarUrl() throws -> String? { fatalError() }
     
     func deviceId() throws -> String { fatalError() }
     

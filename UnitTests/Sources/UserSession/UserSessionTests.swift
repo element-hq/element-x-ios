@@ -40,9 +40,9 @@ final class UserSessionTests: XCTestCase {
         }
         .store(in: &cancellables)
         
-        let controller = MockSessionVerificationControllerProxy(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
-                                                                isVerified: false,
-                                                                requestDelay: .zero)
+        let controller = SessionVerificationControllerProxyMock.configureMock(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
+                                                                              isVerified: false,
+                                                                              requestDelay: .zero)
         clientProxy.sessionVerificationControllerProxyResult = .success(controller)
         clientProxy.callbacks.send(.receivedSyncUpdate)
         waitForExpectations(timeout: 1.0)
@@ -50,9 +50,9 @@ final class UserSessionTests: XCTestCase {
     
     func test_whenUserSessionReceivesSyncUpdateAndSessionIsVerified_didVerifySessionEventReceived() throws {
         let expectation = expectation(description: "DidVerifySessionEvent expectation")
-        let controller = MockSessionVerificationControllerProxy(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
-                                                                isVerified: false,
-                                                                requestDelay: .zero)
+        let controller = SessionVerificationControllerProxyMock.configureMock(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
+                                                                              isVerified: false,
+                                                                              requestDelay: .zero)
         clientProxy.sessionVerificationControllerProxyResult = .success(controller)
         
         controller.callbacks.sink { value in

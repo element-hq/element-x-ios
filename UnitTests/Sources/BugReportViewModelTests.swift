@@ -20,8 +20,12 @@ import XCTest
 
 @MainActor
 class BugReportViewModelTests: XCTestCase {
+    enum TestError: Error {
+        case testError
+    }
+
     func testInitialState() {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
                                            userID: "@mock.client.com",
                                            deviceID: nil,
                                            screenshot: nil,
@@ -34,7 +38,7 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testClearScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
                                            userID: "@mock.client.com",
                                            deviceID: nil,
                                            screenshot: UIImage.actions,
@@ -47,7 +51,7 @@ class BugReportViewModelTests: XCTestCase {
     }
     
     func testAttachScreenshot() async throws {
-        let viewModel = BugReportViewModel(bugReportService: MockBugReportService(),
+        let viewModel = BugReportViewModel(bugReportService: BugReportServiceMock(),
                                            userID: "@mock.client.com",
                                            deviceID: nil,
                                            screenshot: nil, isModallyPresented: false)
@@ -56,5 +60,55 @@ class BugReportViewModelTests: XCTestCase {
         context.send(viewAction: .attachScreenshot(UIImage.actions))
         try await Task.sleep(nanoseconds: 100_000_000)
         XCTAssert(context.viewState.screenshot == UIImage.actions)
+    }
+
+    func testSendReportWithSuccess() async throws {
+        let mockService = BugReportServiceMock()
+        mockService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://test.test")
+        let viewModel = BugReportViewModel(bugReportService: mockService,
+                                           userID: "@mock.client.com",
+                                           deviceID: nil,
+                                           screenshot: nil, isModallyPresented: false)
+        let context = viewModel.context
+        var isSuccess = false
+        viewModel.callback = { result in
+            switch result {
+            case .submitFinished:
+                isSuccess = true
+            default: break
+            }
+        }
+        context.send(viewAction: .submit)
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
+        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
+        XCTAssertTrue(isSuccess)
+    }
+
+    func testSendReportWithError() async throws {
+        let mockService = BugReportServiceMock()
+        mockService.submitBugReportProgressListenerClosure = { _, _ in
+            throw TestError.testError
+        }
+        let viewModel = BugReportViewModel(bugReportService: mockService,
+                                           userID: "@mock.client.com",
+                                           deviceID: nil,
+                                           screenshot: nil, isModallyPresented: false)
+        let context = viewModel.context
+        var isFailure = false
+
+        viewModel.callback = { result in
+            switch result {
+            case .submitFailed:
+                isFailure = true
+            default: break
+            }
+        }
+
+        context.send(viewAction: .submit)
+        try await Task.sleep(for: .milliseconds(100))
+        XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
+        XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
+        XCTAssertTrue(isFailure)
     }
 }

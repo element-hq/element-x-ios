@@ -30,7 +30,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
+    // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
@@ -53,6 +53,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                     break
                 }
             }
+            .store(in: &cancellables)
+
+        userSession.clientProxy.avatarURLPublisher
+            .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
         guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
@@ -91,9 +95,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
                     Task {
-                        if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
-                            self.state.userAvatarURL = url
-                        }
+                        await userSession.clientProxy.loadUserAvatarURL()
                     }
                     
                     Task {

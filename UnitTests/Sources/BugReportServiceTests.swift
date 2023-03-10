@@ -19,7 +19,13 @@ import Foundation
 import XCTest
 
 class BugReportServiceTests: XCTestCase {
-    let bugReportService = MockBugReportService()
+    var bugReportService: BugReportServiceMock!
+
+    override func setUpWithError() throws {
+        bugReportService = BugReportServiceMock()
+        bugReportService.underlyingCrashedLastRun = false
+        bugReportService.submitBugReportProgressListenerReturnValue = SubmitBugReportResponse(reportUrl: "https://www.example.com/123")
+    }
 
     func testInitialStateWithMockService() {
         XCTAssertFalse(bugReportService.crashedLastRun)

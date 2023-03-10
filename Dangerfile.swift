@@ -31,7 +31,7 @@ if let ticketNumberRegex = try? NSRegularExpression(pattern: "#\\d+") {
     }.isEmpty
     
     if missingTicketNumber {
-        warn("Some of the commits are missing ticket numbers. Please consinder using them for better tracking.")
+        warn("Some of the commits are missing ticket numbers. Please consider squashing all commits that don't have a tracking number.")
     }
 }
 
@@ -50,7 +50,8 @@ let allowList = ["stefanceriu",
                  "gileluard",
                  "phlniji",
                  "aringenbach",
-                 "flescio"]
+                 "flescio",
+                 "Velin92"]
 
 let requiresSignOff = !allowList.contains(where: {
     $0.caseInsensitiveCompare(danger.github.pullRequest.user.login) == .orderedSame
