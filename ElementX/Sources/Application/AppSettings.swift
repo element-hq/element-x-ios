@@ -141,7 +141,6 @@ final class AppSettings: ObservableObject {
     
     @UserSetting(key: UserDefaultsKeys.shouldCollapseRoomStateEvents.rawValue, defaultValue: true, persistIn: nil)
     var shouldCollapseRoomStateEvents
-    
     // MARK: - Notifications
 
     @UserSetting(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: true, persistIn: store)

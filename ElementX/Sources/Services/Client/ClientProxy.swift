@@ -58,6 +58,15 @@ class ClientProxy: ClientProxyProtocol {
     
     var allRoomsSlidingSyncView: SlidingSyncList?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
+
+    private var loadCachedAvatarURLTask: Task<Void, Never>?
+    private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
+    var avatarURLPublisher: AnyPublisher<URL?, Never> {
+        avatarURLSubject
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
     
     private var cancellables = Set<AnyCancellable>()
     private var visibleRoomsViewProxyStateObservationToken: AnyCancellable?
@@ -82,6 +91,8 @@ class ClientProxy: ClientProxyProtocol {
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         
         configureSlidingSync()
+
+        loadUserAvatarURLFromCache()
     }
     
     var userID: String {
@@ -154,24 +165,20 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-    
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
+
+    func loadUserAvatarURL() async {
         await Task.dispatch(on: clientQueue) {
             do {
                 let urlString = try self.client.avatarUrl()
-                
-                guard let url = URL(string: urlString) else {
-                    MXLog.error("Invalid avatar URL string: \(String(describing: urlString))")
-                    return .failure(.failedRetrievingAvatarURL)
-                }
-                 
-                return .success(url)
+                self.loadCachedAvatarURLTask?.cancel()
+                self.avatarURLSubject.value = urlString.flatMap(URL.init)
             } catch {
-                return .failure(.failedRetrievingAvatarURL)
+                MXLog.error("Failed fetching the user avatar url: \(error)")
+                return
             }
         }
     }
-    
+
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
         await Task.dispatch(on: clientQueue) {
             .failure(.failedRetrievingAccountData)
@@ -232,6 +239,21 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     // MARK: Private
+
+    private func loadUserAvatarURLFromCache() {
+        loadCachedAvatarURLTask = Task {
+            let urlString = await Task.dispatch(on: clientQueue) {
+                do {
+                    return try self.client.cachedAvatarUrl()
+                } catch {
+                    MXLog.error("Failed to look for the avatar url in the cache: \(error)")
+                    return nil
+                }
+            }
+            guard !Task.isCancelled else { return }
+            self.avatarURLSubject.value = urlString.flatMap(URL.init)
+        }
+    }
     
     private func restartSync() {
         MXLog.info("Restarting sync")

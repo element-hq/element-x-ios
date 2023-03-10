@@ -43,11 +43,13 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.bindings.timelineStyle, on: self)
             .store(in: &cancellables)
+
+        userSession.clientProxy.avatarURLPublisher
+            .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
         
         Task {
-            if case let .success(userAvatarURL) = await userSession.clientProxy.loadUserAvatarURL() {
-                state.userAvatarURL = userAvatarURL
-            }
+            await userSession.clientProxy.loadUserAvatarURL()
         }
         
         Task {
