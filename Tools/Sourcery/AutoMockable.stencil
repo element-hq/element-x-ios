@@ -1,5 +1,4 @@
 // swiftlint:disable all
-
 {% for import in argument.autoMockableImports %}
 import {{ import }}
 {% endfor %}
@@ -40,7 +39,7 @@ import {{ import }}
 {% endmacro %}
 {% macro methodClosureCallParameters method %}{% for param in method.parameters %}{{ param.name }}{% if not forloop.last %}, {% endif %}{% endfor %}{% endmacro %}
 {% macro mockMethod method %}
-    // MARK: - {{ method.shortName }}
+    //MARK: - {{ method.shortName }}
 
     {% if method.throws %}
         {% call methodThrowableErrorDeclaration method %}
@@ -67,6 +66,7 @@ import {{ import }}
     {% call accessLevel method.accessLevel %}{% call staticSpecifier method %}var {% call swiftifyMethodName method.selectorName %}ReturnValue: {{ '(' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ method.returnTypeName }}{{ ')' if method.returnTypeName.isClosure and not method.isOptionalReturnType }}{{ '!' if not method.isOptionalReturnType }}
     {% endif %}
     {% call methodClosureDeclaration method %}
+
 {% if method.isInitializer %}
     {% call accessLevel method.accessLevel %}required {{ method.name }} {
         {% call methodReceivedParameters method %}
@@ -98,7 +98,7 @@ import {{ import }}
 {% endmacro %}
 {% macro resetMethod method %}
         {# for type method which are mocked, a way to reset the invocation, argument, etc #}
-        {% if method.isStatic and not method.isInitializer %} // MARK: - {{ method.shortName }}
+        {% if method.isStatic and not method.isInitializer %} //MARK: - {{ method.shortName }}
         {% if not method.isInitializer %}
         {% call swiftifyMethodName method.selectorName %}CallsCount = 0
         {% endif %}
@@ -127,7 +127,8 @@ import {{ import }}
         get { return {% call underlyingMockedVariableName variable %} }
         set(value) { {% call underlyingMockedVariableName variable %} = value }
     }
-    {% call accessLevel variable.readAccess %}var {% call underlyingMockedVariableName variable %}: {{ variable.typeName }}!
+    {% set wrappedTypeName %}{% if variable.typeName.isProtocolComposition %}({{ variable.typeName }}){% else %}{{ variable.typeName }}{% endif %}{% endset %}
+    {% call accessLevel variable.readAccess %}var {% call underlyingMockedVariableName variable %}: {{ wrappedTypeName }}!
 {% endmacro %}
 {% macro variableThrowableErrorDeclaration variable %}
     {% call accessLevel variable.readAccess %}var {% call mockedVariableName variable %}ThrowableError: Error?
@@ -146,6 +147,7 @@ import {{ import }}
     {% call accessLevel variable.readAccess %}var {% call mockedVariableName variable %}Called: Bool {
         return {% call mockedVariableName variable %}CallsCount > 0
     }
+
     {% call accessLevel variable.readAccess %}var {% call mockedVariableName variable %}: {{ variable.typeName }} {
         get {% if variable.isAsync %}async {% endif %}{% if variable.throws %}throws {% endif %}{
             {% if variable.throws %}
@@ -181,10 +183,10 @@ import {{ import }}
     {% endfor %}
     }
 {% endif %}
+
 {% for method in type.allMethods|!definedInExtension %}
     {% call mockMethod method %}
 {% endfor %}
 }
 {% endif %}{% endfor %}
-
 // swiftlint:enable all
