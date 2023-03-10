@@ -36,6 +36,7 @@ include:
   - path: UITests/SupportingFiles/target.yml
   - path: IntegrationTests/SupportingFiles/target.yml
   - path: NSE/SupportingFiles/target.yml
+  - path  NCE/SupportingFiles/target.yml
 
 packages:
   MatrixRustSDK:
