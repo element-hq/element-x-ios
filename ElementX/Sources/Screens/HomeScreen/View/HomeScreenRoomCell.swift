@@ -17,8 +17,13 @@
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
+    @Environment(\.redactionReasons) private var redactionReasons
+    
     let room: HomeScreenRoom
     let context: HomeScreenViewModel.Context
+    
+    private let verticalInsets = 12.0
+    private let horizontalInsets = 16.0
     
     var body: some View {
         Button {
@@ -29,22 +34,20 @@ struct HomeScreenRoomCell: View {
             HStack(spacing: 16.0) {
                 avatar
                 
-                VStack(alignment: .leading, spacing: 2) {
-                    header
-                    footer
-                }
+                content
+                    .padding(.vertical, verticalInsets)
+                    .overlay(alignment: .bottom) {
+                        Rectangle()
+                            .fill(Color.element.quinaryContent)
+                            .frame(height: 1 / UIScreen.main.scale)
+                            .padding(.trailing, -horizontalInsets)
+                    }
             }
-            .frame(minHeight: 84.0)
+            .padding(.horizontal, horizontalInsets)
             .accessibilityElement(children: .combine)
         }
-        .buttonStyle(HomeScreenRoomCellButtonStyle())
+        .buttonStyle(HomeScreenRoomCellButtonStyle(isSelected: false))
         .accessibilityIdentifier(A11yIdentifiers.homeScreen.roomName(room.name))
-        .overlay(alignment: .bottom) {
-            Divider()
-                .frame(height: 0.5)
-                .background(Color.element.quinaryContent)
-                .padding(.leading, 84)
-        }
     }
     
     @ViewBuilder
@@ -55,6 +58,23 @@ struct HomeScreenRoomCell: View {
                             avatarSize: .room(on: .home),
                             imageProvider: context.imageProvider)
             .accessibilityHidden(true)
+    }
+    
+    var content: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            header
+            footer
+        }
+        // Hide the normal content for Skeletons and overlay centre aligned placeholders.
+        .opacity(redactionReasons.contains(.placeholder) ? 0 : 1)
+        .overlay {
+            if redactionReasons.contains(.placeholder) {
+                VStack(alignment: .leading, spacing: 2) {
+                    header
+                    lastMessage
+                }
+            }
+        }
     }
     
     @ViewBuilder
@@ -79,44 +99,53 @@ struct HomeScreenRoomCell: View {
         HStack(alignment: .firstTextBaseline) {
             ZStack(alignment: .topLeading) {
                 // Hidden text with 2 lines to maintain consistent height, scaling with dynamic text.
-                Text(" \n ").lastMessageFormatting().hidden()
+                Text(" \n ")
+                    .lastMessageFormatting()
+                    .hidden()
+                    .environment(\.redactionReasons, []) // Always maintain consistent height
                 
-                switch room.lastMessage {
-                case .loaded(let lastMessage):
-                    Text(lastMessage)
-                        .lastMessageFormatting()
-                case .loading:
-                    Text(HomeScreenRoom.placeholderLastMessage)
-                        .lastMessageFormatting()
-                        .redacted(reason: .placeholder)
-                case .unknown:
-                    Text(ElementL10n.message)
-                        .lastMessageFormatting()
-                }
+                lastMessage
             }
             
             Spacer()
             
             if room.hasUnreads {
-                Rectangle()
+                Circle()
                     .frame(width: 12, height: 12)
                     .foregroundColor(.element.brand)
-                    .clipShape(Circle())
                     .padding(.leading, 12)
             } else {
                 // Force extra padding between last message text and the right border of the screen if there is no unread dot
-                Rectangle()
-                    .fill(Color.clear)
+                Circle()
                     .frame(width: 12, height: 12)
+                    .hidden()
             }
+        }
+    }
+    
+    @ViewBuilder
+    var lastMessage: some View {
+        switch room.lastMessage {
+        case .loaded(let lastMessage):
+            Text(lastMessage)
+                .lastMessageFormatting()
+        case .loading:
+            Text(HomeScreenRoom.placeholderLastMessage)
+                .lastMessageFormatting()
+                .redacted(reason: .placeholder)
+        case .unknown:
+            Text(ElementL10n.message)
+                .lastMessageFormatting()
         }
     }
 }
 
 struct HomeScreenRoomCellButtonStyle: ButtonStyle {
+    let isSelected: Bool
+    
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .roomCellBackground(configuration.isPressed ? .element.system : .clear)
+            .background(configuration.isPressed || isSelected ? Color.element.system : .clear)
             .contentShape(Rectangle())
     }
 }
@@ -127,13 +156,6 @@ private extension View {
             .foregroundColor(.element.tertiaryContent)
             .lineLimit(2)
             .multilineTextAlignment(.leading)
-    }
-    
-    // To be used to indicate the selected room too
-    func roomCellBackground(_ background: Color) -> some View {
-        padding(.horizontal, 8)
-            .padding(.horizontal, 8)
-            .background { background }
     }
 }
 
@@ -170,6 +192,13 @@ struct HomeScreenRoomCell_Previews: PreviewProvider {
             ForEach(rooms) { room in
                 HomeScreenRoomCell(room: room, context: viewModel.context)
             }
+            
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context)
+                .redacted(reason: .placeholder)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context)
+                .redacted(reason: .placeholder)
+            HomeScreenRoomCell(room: .placeholder(), context: viewModel.context)
+                .redacted(reason: .placeholder)
         }
     }
 }
