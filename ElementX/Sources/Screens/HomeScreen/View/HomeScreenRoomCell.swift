@@ -37,10 +37,9 @@ struct HomeScreenRoomCell: View {
                 content
                     .padding(.vertical, verticalInsets)
                     .overlay(alignment: .bottom) {
-                        Divider()
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 0.5)
-                            .overlay(Color.element.quinaryContent)
+                        Rectangle()
+                            .fill(Color.element.quinaryContent)
+                            .frame(height: 1 / UIScreen.main.scale)
                             .padding(.trailing, -horizontalInsets)
                     }
             }
