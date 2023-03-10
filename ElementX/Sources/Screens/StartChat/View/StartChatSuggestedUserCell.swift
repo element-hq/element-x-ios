@@ -30,14 +30,16 @@ struct StartChatSuggestedUserCell: View {
                 .accessibilityHidden(true)
             
             VStack(alignment: .leading, spacing: 4) {
-                if let displayName = user.displayName {
-                    Text(displayName)
-                        .font(.element.title3)
-                        .foregroundColor(.element.primaryContent)
+                // covers both nil and empty state
+                let displayName = user.displayName ?? ""
+                Text(displayName.isEmpty ? user.userId : displayName)
+                    .font(.element.title3)
+                    .foregroundColor(.element.primaryContent)
+                if !displayName.isEmpty {
+                    Text(user.userId)
+                        .font(.element.subheadline)
+                        .foregroundColor(.element.tertiaryContent)
                 }
-                Text(user.userId)
-                    .font(.element.subheadline)
-                    .foregroundColor(.element.tertiaryContent)
             }
             .accessibilityElement(children: .combine)
         }
