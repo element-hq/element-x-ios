@@ -82,6 +82,7 @@ class UserSessionFlowCoordinatorStateMachine {
         configure()
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     private func configure() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomId: nil)])
 
