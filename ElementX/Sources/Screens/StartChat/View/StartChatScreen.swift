@@ -53,7 +53,7 @@ struct StartChatScreen: View {
                 Label(ElementL10n.inviteFriendsToElement, systemImage: "square.and.arrow.up")
             }
             .buttonStyle(FormButtonStyle())
-            .accessibilityIdentifier("inviteFriendsToElement")
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.inviteFriends)
         }
         .formSectionStyle()
     }
@@ -71,7 +71,7 @@ struct StartChatScreen: View {
     
     private var closeButton: some View {
         Button(ElementL10n.actionCancel, action: close)
-            .accessibilityIdentifier("closeStartChatScreen")
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.closeStartChat)
     }
     
     private func createRoom() {
