@@ -82,12 +82,12 @@ struct MediaProvider: MediaProviderProtocol {
     
     // MARK: Files
     
-    func loadFileFromSource(_ source: MediaSourceProxy, type: UTType) async -> Result<MediaFileProxy, MediaProviderError> {
+    func loadFileFromSource(_ source: MediaSourceProxy, contentType: UTType) async -> Result<MediaFileProxy, MediaProviderError> {
         let loadFileBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadFile: \(source.url.hashValue)")
         defer { loadFileBgTask?.stop() }
         
         do {
-            let file = try await mediaLoader.loadMediaFileForSource(source, type: type)
+            let file = try await mediaLoader.loadMediaFileForSource(source, contentType: contentType)
             return .success(file)
         } catch {
             MXLog.error("Failed retrieving file with error: \(error)")

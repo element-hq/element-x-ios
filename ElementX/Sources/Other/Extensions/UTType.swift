@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,16 +14,13 @@
 // limitations under the License.
 //
 
-import Foundation
-import UIKit
 import UniformTypeIdentifiers
 
-enum MediaProviderError: Error {
-    case failedRetrievingImage
-    case failedRetrievingFile
-    case invalidImageData
-}
-
-protocol MediaProviderProtocol: ImageProviderProtocol {
-    func loadFileFromSource(_ source: MediaSourceProxy, contentType: UTType) async -> Result<MediaFileProxy, MediaProviderError>
+extension UTType {
+    /// Creates a type based on a filename.
+    init?(filename: String) {
+        let components = filename.split(separator: ".")
+        guard components.count > 1, let filenameExtension = components.last else { return nil }
+        self.init(filenameExtension: String(filenameExtension))
+    }
 }

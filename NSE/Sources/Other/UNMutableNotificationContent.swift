@@ -26,7 +26,7 @@ extension UNMutableNotificationContent {
             return self
         }
         // FIXME: The type needs handling
-        switch await mediaProvider.loadFileFromSource(mediaSource, type: .content) {
+        switch await mediaProvider.loadFileFromSource(mediaSource, contentType: .content) {
         case .success(let file):
             let attachment = try UNNotificationAttachment(identifier: ProcessInfo.processInfo.globallyUniqueString,
                                                           url: file.url, // FIXME: This won't work, as the media handle will be dropped.
@@ -48,7 +48,7 @@ extension UNMutableNotificationContent {
             return self
         }
 
-        switch await mediaProvider.loadFileFromSource(mediaSource, type: .image) {
+        switch await mediaProvider.loadFileFromSource(mediaSource, contentType: .image) {
         case .success(let mediaFile):
             // Initialize only the sender for a one-to-one message intent.
             let handle = INPersonHandle(value: senderId, type: .unknown)

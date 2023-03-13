@@ -28,7 +28,7 @@ struct FileRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hasha
 
     let source: MediaSourceProxy?
     let thumbnailSource: MediaSourceProxy?
-    var type: UTType?
+    var contentType: UTType?
     
     var properties = RoomTimelineItemProperties()
 }

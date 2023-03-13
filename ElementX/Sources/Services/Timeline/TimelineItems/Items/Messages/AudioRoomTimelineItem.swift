@@ -27,7 +27,7 @@ struct AudioRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
 
     let duration: UInt64
     let source: MediaSourceProxy?
-    var type: UTType?
+    var contentType: UTType?
 
     var properties = RoomTimelineItemProperties()
 }

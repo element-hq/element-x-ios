@@ -27,7 +27,7 @@ protocol MessageContentProtocol: RoomMessageEventContentProtocol, CustomStringCo
 
 /// A timeline item that represents an `m.room.message` event.
 struct MessageTimelineItem<Content: MessageContentProtocol> {
-    let item: MatrixRustSDK.EventTimelineItem
+    let item: MatrixRustSDK.EventTimelineItemProtocol
     let content: Content
 
     var id: String {
@@ -97,8 +97,8 @@ extension MessageTimelineItem where Content == MatrixRustSDK.ImageMessageContent
         content.info?.blurhash
     }
     
-    var type: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
+    var contentType: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
     }
 }
 
@@ -133,8 +133,8 @@ extension MessageTimelineItem where Content == MatrixRustSDK.VideoMessageContent
         content.info?.blurhash
     }
     
-    var type: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
+    var contentType: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
     }
 }
 
@@ -153,8 +153,8 @@ extension MessageTimelineItem where Content == MatrixRustSDK.FileMessageContent 
         return .init(source: src)
     }
     
-    var type: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
+    var contentType: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
     }
 }
 
@@ -170,7 +170,7 @@ extension MessageTimelineItem where Content == MatrixRustSDK.AudioMessageContent
         content.info?.duration ?? 0
     }
     
-    var type: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
+    var contentType: UTType? {
+        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
     }
 }

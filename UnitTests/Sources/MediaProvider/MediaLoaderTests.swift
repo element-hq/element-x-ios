@@ -97,6 +97,8 @@ private class MockMediaLoadingClient: ClientProtocol {
     
     func getMediaFile(source: MatrixRustSDK.MediaSource, mimeType: String) throws -> MatrixRustSDK.MediaFileHandle { fatalError() }
     
+    func getMediaFile(source: MatrixRustSDK.MediaSource, mimeType: String) throws -> MatrixRustSDK.MediaFileHandle { fatalError() }
+    
     func getSessionVerificationController() throws -> MatrixRustSDK.SessionVerificationController { fatalError() }
     
     func fullSlidingSync() throws -> MatrixRustSDK.SlidingSync { fatalError() }

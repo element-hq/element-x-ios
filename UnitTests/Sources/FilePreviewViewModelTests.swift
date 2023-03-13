@@ -24,7 +24,7 @@ class FilePreviewScreenViewModelTests: XCTestCase {
     var context: FilePreviewViewModelType.Context!
 
     @MainActor override func setUpWithError() throws {
-        viewModel = FilePreviewViewModel(fileURL: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"))
+        viewModel = FilePreviewViewModel(mediaFile: .init(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
         context = viewModel.context
     }
 

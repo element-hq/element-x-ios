@@ -222,7 +222,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      height: message.height,
                                      aspectRatio: aspectRatio,
                                      blurhash: message.blurhash,
-                                     type: message.type,
+                                     contentType: message.contentType,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus))
@@ -250,7 +250,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                      height: message.height,
                                      aspectRatio: aspectRatio,
                                      blurhash: message.blurhash,
-                                     type: message.type,
+                                     contentType: message.contentType,
                                      properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                             reactions: aggregateReactions(eventItemProxy.reactions),
                                                                             deliveryStatus: eventItemProxy.deliveryStatus))
@@ -267,7 +267,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                               sender: eventItemProxy.sender,
                               duration: message.duration,
                               source: message.source,
-                              type: message.type,
+                              contentType: message.contentType,
                               properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                      reactions: aggregateReactions(eventItemProxy.reactions),
                                                                      deliveryStatus: eventItemProxy.deliveryStatus))
@@ -284,7 +284,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                              sender: eventItemProxy.sender,
                              source: message.source,
                              thumbnailSource: message.thumbnailSource,
-                             type: message.type,
+                             contentType: message.contentType,
                              properties: RoomTimelineItemProperties(isEdited: message.isEdited,
                                                                     reactions: aggregateReactions(eventItemProxy.reactions),
                                                                     deliveryStatus: eventItemProxy.deliveryStatus))

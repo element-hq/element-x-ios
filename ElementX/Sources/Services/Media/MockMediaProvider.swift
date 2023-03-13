@@ -43,7 +43,7 @@ struct MockMediaProvider: MediaProviderProtocol {
         return .success(image)
     }
     
-    func loadFileFromSource(_ source: MediaSourceProxy, type: UTType) async -> Result<MediaFileProxy, MediaProviderError> {
+    func loadFileFromSource(_ source: MediaSourceProxy, contentType: UTType) async -> Result<MediaFileProxy, MediaProviderError> {
         .failure(.failedRetrievingFile)
     }
 }

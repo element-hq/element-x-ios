@@ -107,33 +107,32 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         var source: MediaSourceProxy?
-        var type: UTType?
+        var contentType: UTType?
         var title: String
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
             source = item.source
-            type = item.type
+            contentType = item.contentType
             title = item.body
         case let item as VideoRoomTimelineItem:
             source = item.source
-            type = item.type
+            contentType = item.contentType
             title = item.body
         case let item as FileRoomTimelineItem:
             source = item.source
-            type = item.type
+            contentType = item.contentType
             title = item.body
         case let item as AudioRoomTimelineItem:
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
             source = item.source
-            type = item.type
+            contentType = item.contentType
             title = item.body
         default:
             return .none
         }
         
-        #warning("Try a type fallback base on the title?")
-        guard let source, let type else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, type: type) {
+        guard let source, let contentType else { return .none }
+        switch await mediaProvider.loadFileFromSource(source, contentType: contentType) {
         case .success(let file):
             return .displayMediaFile(file: file, title: title)
         case .failure:

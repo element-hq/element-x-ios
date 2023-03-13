@@ -34,7 +34,7 @@ struct VideoRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     var height: CGFloat?
     var aspectRatio: CGFloat?
     var blurhash: String?
-    var type: UTType?
+    var contentType: UTType?
     
     var properties = RoomTimelineItemProperties()
 }
