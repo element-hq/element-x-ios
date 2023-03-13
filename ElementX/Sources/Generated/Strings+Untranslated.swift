@@ -102,6 +102,8 @@ extension ElementL10n {
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
   /// Copy Link
   public static let roomDetailsCopyLink = ElementL10n.tr("Untranslated", "room_details_copy_link")
+  /// Are you sure that you want to leave the room?
+  public static let roomDetailsLeaveRoomAlertSubtitle = ElementL10n.tr("Untranslated", "room_details_leave_room_alert_subtitle")
   /// Info
   public static let roomDetailsTitle = ElementL10n.tr("Untranslated", "room_details_title")
   /// Failed loading messages

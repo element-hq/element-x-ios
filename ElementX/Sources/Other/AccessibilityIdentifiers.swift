@@ -71,6 +71,7 @@ struct A11yIdentifiers {
     struct RoomDetailsScreen {
         let avatar = "room_details-avatar"
         let people = "room_details-people"
+        let leave = "room_details-leave"
     }
     
     struct SessionVerificationScreen {

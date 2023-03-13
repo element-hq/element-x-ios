@@ -60,6 +60,8 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             callback?(.requestMemberDetailsPresentation(members))
         case .copyRoomLink:
             copyRoomLink()
+        case .processTapLeave:
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem()
         }
     }
     

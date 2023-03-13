@@ -30,10 +30,17 @@ struct RoomDetailsScreen: View {
             if context.viewState.isEncrypted {
                 securitySection
             }
+
+            leaveRoomSection
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
         .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.leaveRoomAlertItem, actions: { item in
+            leaveRoomAlertActions(item)
+        }, message: { item in
+            leaveRoomAlertMessage(item)
+        })
     }
     
     // MARK: - Private
@@ -146,6 +153,32 @@ struct RoomDetailsScreen: View {
                 .formSectionHeader()
         }
         .formSectionStyle()
+    }
+
+    private var leaveRoomSection: some View {
+        Section {
+            Button {
+                context.send(viewAction: .processTapLeave)
+            } label: {
+                Label(ElementL10n.roomProfileSectionMoreLeave, systemImage: "door.right.hand.open")
+            }
+            .buttonStyle(FormButtonStyle(accessory: nil))
+            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.leave)
+        }
+        .formSectionStyle()
+    }
+
+    @ViewBuilder
+    private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
+        Button(item.cancelTitle, action: { })
+        Button(item.confirmationTitle, action: {
+            context.send(viewAction: .confirmLeave)
+        })
+    }
+
+    @ViewBuilder
+    private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
+        Text(item.subtitle)
     }
 }
 

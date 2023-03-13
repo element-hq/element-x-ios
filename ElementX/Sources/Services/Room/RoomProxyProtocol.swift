@@ -31,6 +31,7 @@ enum RoomProxyError: Error {
     case failedReportingContent
     case failedAddingTimelineListener
     case failedRetrievingMembers
+    case failedLeavingRoom
 }
 
 @MainActor
@@ -79,6 +80,8 @@ protocol RoomProxyProtocol {
     func members() async -> Result<[RoomMemberProxy], RoomProxyError>
     
     func retryDecryption(for sessionID: String) async
+
+    func leaveRoom() async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {

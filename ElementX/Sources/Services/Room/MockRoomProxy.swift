@@ -86,4 +86,8 @@ struct MockRoomProxy: RoomProxyProtocol {
     }
     
     func retryDecryption(for sessionID: String) async { }
+
+    func leaveRoom() async -> Result<Void, RoomProxyError> {
+        .failure(.failedLeavingRoom)
+    }
 }

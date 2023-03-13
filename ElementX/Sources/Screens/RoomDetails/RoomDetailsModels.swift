@@ -49,6 +49,14 @@ struct RoomDetailsViewState: BindableState {
 struct RoomDetailsViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomDetailsErrorType>?
+    var leaveRoomAlertItem: LeaveRoomAlertItem?
+}
+
+struct LeaveRoomAlertItem: AlertItem {
+    let title = ElementL10n.roomProfileSectionMoreLeave
+    let subtitle = ElementL10n.roomDetailsLeaveRoomAlertSubtitle
+    let confirmationTitle = ElementL10n.actionLeave
+    let cancelTitle = ElementL10n.actionCancel
 }
 
 enum RoomDetailsErrorType: Hashable {
@@ -58,6 +66,8 @@ enum RoomDetailsErrorType: Hashable {
 
 enum RoomDetailsViewAction {
     case processTapPeople
+    case processTapLeave
+    case confirmLeave
     case copyRoomLink
 }
 
