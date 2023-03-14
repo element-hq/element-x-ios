@@ -93,14 +93,12 @@ struct TemplateScreen: View {
 // MARK: - Previews
 
 struct Template_Previews: PreviewProvider {
+    static let regularViewModel = TemplateViewModel(promptType: .regular)
+    static let upgradeViewModel = TemplateViewModel(promptType: .upgrade)
     static var previews: some View {
-        Group {
-            let regularViewModel = TemplateViewModel(promptType: .regular)
-            TemplateScreen(context: regularViewModel.context)
-            
-            let upgradeViewModel = TemplateViewModel(promptType: .upgrade)
-            TemplateScreen(context: upgradeViewModel.context)
-        }
-        .tint(.element.accent)
+        TemplateScreen(context: regularViewModel.context)
+            .previewDisplayName("Regular")
+        TemplateScreen(context: upgradeViewModel.context)
+            .previewDisplayName("Upgrade")
     }
 }
