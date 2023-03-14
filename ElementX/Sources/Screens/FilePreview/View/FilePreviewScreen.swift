@@ -98,6 +98,5 @@ struct FilePreview_Previews: PreviewProvider {
             let upgradeViewModel = FilePreviewViewModel(fileURL: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"))
             FilePreviewScreen(context: upgradeViewModel.context)
         }
-        .tint(.element.accent)
     }
 }

@@ -59,6 +59,5 @@ struct RoomMemberDetails_Previews: PreviewProvider {
                                                        members: members)
             RoomMemberDetailsScreen(context: viewModel.context)
         }
-        .tint(.element.accent)
     }
 }

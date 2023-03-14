@@ -192,7 +192,6 @@ struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
-                .tint(.element.accent)
         }
     }
 }

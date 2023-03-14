@@ -226,15 +226,12 @@ struct SessionVerificationScreen: View {
 
 struct SessionVerification_Previews: PreviewProvider {
     static var previews: some View {
-        Group {
-            sessionVerificationScreen(state: .initial)
-            sessionVerificationScreen(state: .requestingVerification)
-            sessionVerificationScreen(state: .cancelled)
-            
-            sessionVerificationScreen(state: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
-            sessionVerificationScreen(state: .verified)
-        }
-        .tint(Color.element.accent)
+        sessionVerificationScreen(state: .initial)
+        sessionVerificationScreen(state: .requestingVerification)
+        sessionVerificationScreen(state: .cancelled)
+        
+        sessionVerificationScreen(state: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+        sessionVerificationScreen(state: .verified)
     }
     
     static func sessionVerificationScreen(state: SessionVerificationStateMachine.State) -> some View {

@@ -217,7 +217,6 @@ struct MessageComposer_Previews: PreviewProvider {
                             replyCancellationAction: { },
                             editCancellationAction: { })
         }
-        .tint(.element.accent)
         .padding(.horizontal)
     }
 }

@@ -51,7 +51,6 @@ struct TimelineItemDebugView: View {
                 }
             }
         }
-        .tint(.element.accent)
     }
 }
 
