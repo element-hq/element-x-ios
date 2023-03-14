@@ -102,6 +102,12 @@ struct HomeScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
             }
+            if context.viewState.showStartChatFlowEnabled {
+                ToolbarItemGroup(placement: .bottomBar) {
+                    Spacer()
+                    newRoomButton
+                }
+            }
         }
         .background(Color.element.background.ignoresSafeArea())
     }
@@ -148,6 +154,12 @@ struct HomeScreen: View {
         .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
     }
     
+    private var newRoomButton: some View {
+        Button(action: startChat) {
+            Image(systemName: "square.and.pencil")
+        }
+    }
+    
     private var sessionVerificationBanner: some View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
@@ -191,6 +203,10 @@ struct HomeScreen: View {
         context.send(viewAction: .userMenu(action: .inviteFriends))
     }
 
+    private func startChat() {
+        context.send(viewAction: .startChat)
+    }
+    
     private func feedback() {
         context.send(viewAction: .userMenu(action: .feedback))
     }

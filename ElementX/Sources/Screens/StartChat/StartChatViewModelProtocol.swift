@@ -16,18 +16,8 @@
 
 import Foundation
 
-enum DeveloperOptionsScreenViewModelAction { }
-
-struct DeveloperOptionsScreenViewState: BindableState {
-    var bindings: DeveloperOptionsScreenViewStateBindings
-}
-
-struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var showStartChatFlow: Bool
-}
-
-enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedShowStartChatFlow
+@MainActor
+protocol StartChatViewModelProtocol {
+    var callback: ((StartChatViewModelAction) -> Void)? { get set }
+    var context: StartChatViewModelType.Context { get }
 }

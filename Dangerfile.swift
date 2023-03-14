@@ -50,6 +50,7 @@ let allowList = ["stefanceriu",
                  "gileluard",
                  "phlniji",
                  "aringenbach",
+                 "flescio",
                  "Velin92"]
 
 let requiresSignOff = !allowList.contains(where: {

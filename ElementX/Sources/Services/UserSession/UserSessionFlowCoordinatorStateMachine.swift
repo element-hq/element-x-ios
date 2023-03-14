@@ -34,6 +34,9 @@ class UserSessionFlowCoordinatorStateMachine {
         
         /// Showing the settings screen
         case settingsScreen(selectedRoomId: String?)
+        
+        /// Showing the start chat screen
+        case startChatScreen(selectedRoomId: String?)
     }
 
     /// Events that can be triggered on the AppCoordinator state machine
@@ -61,6 +64,11 @@ class UserSessionFlowCoordinatorStateMachine {
         case showSessionVerificationScreen
         /// Session verification has finished
         case dismissedSessionVerificationScreen
+        
+        /// Request the start of the start chat flow
+        case showStartChatScreen
+        /// Start chat has been dismissed
+        case dismissedStartChatScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -74,6 +82,7 @@ class UserSessionFlowCoordinatorStateMachine {
         configure()
     }
 
+    // swiftlint:disable:next cyclomatic_complexity
     private func configure() {
         stateMachine.addRoutes(event: .start, transitions: [.initial => .roomList(selectedRoomId: nil)])
 
@@ -99,6 +108,10 @@ class UserSessionFlowCoordinatorStateMachine {
             case (.dismissedSessionVerificationScreen, .sessionVerificationScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
                 
+            case (.showStartChatScreen, .roomList(let selectedRoomId)):
+                return .startChatScreen(selectedRoomId: selectedRoomId)
+            case (.dismissedStartChatScreen, .startChatScreen(let selectedRoomId)):
+                return .roomList(selectedRoomId: selectedRoomId)
             default:
                 return nil
             }

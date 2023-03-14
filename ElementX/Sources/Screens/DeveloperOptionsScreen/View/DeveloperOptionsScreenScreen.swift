@@ -29,6 +29,12 @@ struct DeveloperOptionsScreenScreen: View {
                 .onChange(of: context.shouldCollapseRoomStateEvents) { _ in
                     context.send(viewAction: .changedShouldCollapseRoomStateEvents)
                 }
+                Toggle(isOn: $context.showStartChatFlow) {
+                    Text("Show Start Chat flow")
+                }
+                .onChange(of: context.showStartChatFlow) { _ in
+                    context.send(viewAction: .changedShowStartChatFlow)
+                }
             }
             
             Section {

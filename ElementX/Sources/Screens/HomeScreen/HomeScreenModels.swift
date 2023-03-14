@@ -24,6 +24,7 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentInviteFriendsScreen
     case presentFeedbackScreen
+    case presentStartChatScreen
     case signOut
 }
 
@@ -37,6 +38,7 @@ enum HomeScreenViewUserMenuAction {
 enum HomeScreenViewAction {
     case selectRoom(roomIdentifier: String)
     case userMenu(action: HomeScreenViewUserMenuAction)
+    case startChat
     case verifySession
     case skipSessionVerification
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
@@ -66,6 +68,10 @@ struct HomeScreenViewState: BindableState {
     var rooms: [HomeScreenRoom] = []
     
     var roomListMode: HomeScreenRoomListMode = .skeletons
+    
+    var showStartChatFlowEnabled: Bool {
+        ServiceLocator.shared.settings.startChatFlowFeatureFlag
+    }
     
     var visibleRooms: [HomeScreenRoom] {
         if roomListMode == .skeletons {
