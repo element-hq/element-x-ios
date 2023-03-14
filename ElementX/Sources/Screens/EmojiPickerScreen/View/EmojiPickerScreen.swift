@@ -68,6 +68,5 @@ struct EmojiPickerScreen_Previews: PreviewProvider {
         NavigationStack {
             EmojiPickerScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
         }
-        .tint(.element.accent)
     }
 }

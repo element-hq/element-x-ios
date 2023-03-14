@@ -26,6 +26,8 @@ struct DeveloperOptionsScreenScreen: View {
                 Toggle(isOn: $context.shouldCollapseRoomStateEvents) {
                     Text("Collapse room state events")
                 }
+                .tint(.element.brand)
+                .labelStyle(FormRowLabelStyle())
                 .onChange(of: context.shouldCollapseRoomStateEvents) { _ in
                     context.send(viewAction: .changedShouldCollapseRoomStateEvents)
                 }
@@ -77,6 +79,5 @@ struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = DeveloperOptionsScreenViewModel()
         DeveloperOptionsScreenScreen(context: viewModel.context)
-            .tint(.element.accent)
     }
 }

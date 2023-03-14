@@ -241,9 +241,7 @@ struct HomeScreen: View {
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         body(.loading)
-            .tint(.element.accent)
         body(.loaded)
-            .tint(.element.accent)
     }
     
     static func body(_ state: MockRoomSummaryProviderState) -> some View {

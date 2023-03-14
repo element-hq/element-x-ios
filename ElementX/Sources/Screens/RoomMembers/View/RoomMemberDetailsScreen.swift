@@ -63,6 +63,5 @@ struct RoomMemberDetails_Previews: PreviewProvider {
         NavigationStack {
             RoomMemberDetailsScreen(context: viewModel.context)
         }
-        .tint(.element.accent)
     }
 }
