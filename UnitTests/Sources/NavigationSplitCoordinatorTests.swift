@@ -257,10 +257,27 @@ class NavigationSplitCoordinatorTests: XCTestCase {
     }
 
     func testSetRootDetailToNil() {
-        // Create the split with some test coordinator
-        // Add a STACK  of coordinators to the details only
-        // Remove entirely the root detail coordinator
-        // TODO: Write a test
+        navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SomeTestCoordinator())
+        let sidebarCoordinator = NavigationStackCoordinator()
+        sidebarCoordinator.setRootCoordinator(SomeTestCoordinator())
+
+        let detailCoordinator = NavigationStackCoordinator()
+        detailCoordinator.setRootCoordinator(SomeTestCoordinator())
+        detailCoordinator.push(SomeTestCoordinator())
+
+        navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
+        navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
+
+        let expectation = expectation(description: "Details coordinator should be nil, and the compact layout revert to the sidebar root ")
+        DispatchQueue.main.async {
+            self.navigationSplitCoordinator.setDetailCoordinator(nil)
+            DispatchQueue.main.async {
+                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.detailCoordinator, nil)
+                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                expectation.fulfill()
+            }
+        }
+        waitForExpectations(timeout: 1.0)
     }
     
     // MARK: - Private

@@ -170,7 +170,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             coordinator.callback = { [weak self] action in
                 switch action {
                 case .leaveRoom:
-                    self?.leaveRoom()
+                    self?.navigationSplitCoordinator.setDetailCoordinator(nil)
                 }
             }
             
@@ -190,11 +190,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator)
             }
         }
-    }
-
-    private func leaveRoom() {
-        navigationSplitCoordinator.setDetailCoordinator(nil)
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.roomDetailsRoomLeftToast, iconName: "checkmark"))
     }
         
     // MARK: Settings
