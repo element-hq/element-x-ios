@@ -49,7 +49,7 @@ actor MediaLoader: MediaLoaderProtocol {
     
     func loadMediaFileForSource(_ source: MediaSourceProxy, contentType: UTType) async throws -> MediaFileProxy {
         let result = try await Task.dispatch(on: clientQueue) {
-            try self.client.getMediaFile(source: source.underlyingSource, mimeType: contentType.preferredMIMEType ?? "") // FIXME: Find a good fallback.
+            try self.client.getMediaFile(source: source.underlyingSource, mimeType: contentType.preferredMIMEType ?? "application/octet-stream")
         }
         
         return MediaFileProxy(handle: result)

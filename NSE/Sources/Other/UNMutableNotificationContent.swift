@@ -21,15 +21,15 @@ import UserNotifications
 
 extension UNMutableNotificationContent {
     func addMediaAttachment(using mediaProvider: MediaProviderProtocol?,
-                            mediaSource: MediaSourceProxy) async throws -> UNMutableNotificationContent {
+                            mediaSource: MediaSourceProxy,
+                            contentType: UTType) async throws -> UNMutableNotificationContent {
         guard let mediaProvider else {
             return self
         }
-        // FIXME: The type needs handling
-        switch await mediaProvider.loadFileFromSource(mediaSource, contentType: .content) {
+        switch await mediaProvider.loadFileFromSource(mediaSource, contentType: contentType) {
         case .success(let file):
             let attachment = try UNNotificationAttachment(identifier: ProcessInfo.processInfo.globallyUniqueString,
-                                                          url: file.url, // FIXME: This won't work, as the media handle will be dropped.
+                                                          url: file.url, // FIXME: Unsure if this will be copied before the media handle is be dropped.
                                                           options: nil)
             attachments.append(attachment)
         case .failure(let error):

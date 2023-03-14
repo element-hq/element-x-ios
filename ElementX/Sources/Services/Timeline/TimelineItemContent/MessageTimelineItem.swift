@@ -98,7 +98,7 @@ extension MessageTimelineItem where Content == MatrixRustSDK.ImageMessageContent
     }
     
     var contentType: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
     }
 }
 
@@ -134,7 +134,7 @@ extension MessageTimelineItem where Content == MatrixRustSDK.VideoMessageContent
     }
     
     var contentType: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
     }
 }
 
@@ -154,7 +154,7 @@ extension MessageTimelineItem where Content == MatrixRustSDK.FileMessageContent 
     }
     
     var contentType: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
     }
 }
 
@@ -171,6 +171,6 @@ extension MessageTimelineItem where Content == MatrixRustSDK.AudioMessageContent
     }
     
     var contentType: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) } ?? UTType(filename: content.body)
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
     }
 }

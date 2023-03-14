@@ -86,5 +86,6 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/Bundle.swift
     - path: ../../ElementX/Sources/Other/Extensions/Date.swift
     - path: ../../ElementX/Sources/Other/Extensions/ImageCache.swift
+    - path: ../../ElementX/Sources/Other/Extensions/UTType.swift
     - path: ../../ElementX/Sources/Other/AvatarSize.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift

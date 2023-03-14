@@ -147,14 +147,14 @@ final class MediaProviderTests: XCTestCase {
         let expectedURL = URL(filePath: "/some/file/path")
         let expectedResult: Result<MediaFileProxy, MediaProviderError> = .success(.init(url: expectedURL))
         mediaLoader.mediaFileURL = expectedURL
-        let result = await mediaProvider.loadFileFromSource(MediaSourceProxy(url: URL(staticString: "test/test1")), type: .png)
+        let result = await mediaProvider.loadFileFromSource(MediaSourceProxy(url: URL(staticString: "test/test1")), contentType: .png)
         XCTAssertEqual(result, expectedResult)
     }
     
     func test_whenLoadFileFromSourceAndNoFileFromSourceExistsAndLoadContentSourceFails_failureIsReturned() async throws {
         let expectedResult: Result<MediaFileProxy, MediaProviderError> = .failure(.failedRetrievingFile)
         mediaLoader.mediaFileURL = nil
-        let result = await mediaProvider.loadFileFromSource(MediaSourceProxy(url: URL(staticString: "test/test1")), type: .png)
+        let result = await mediaProvider.loadFileFromSource(MediaSourceProxy(url: URL(staticString: "test/test1")), contentType: .png)
         XCTAssertEqual(result, expectedResult)
     }
     

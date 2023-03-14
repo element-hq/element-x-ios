@@ -300,25 +300,4 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         
         return false
     }
-    
-    #warning("Move me to Rust, or replace me?")
-    /// Temporary method that generates a file extension for a video file name
-    /// using `UTType.movie` and falls back to .mp4 if anything goes wrong.
-    ///
-    /// Ideally Rust should be able to handle this for us, otherwise we should be
-    /// attempting to detect the file type from the data itself.
-    private func movieFileExtension(for text: String) -> String {
-        let fallbackExtension = "mp4"
-        
-        // This is not great. We could better estimate file extension from the mimetype.
-        guard let fileExtensionComponent = text.split(separator: ".").last else { return fallbackExtension }
-        let fileExtension = String(fileExtensionComponent)
-        
-        // We can't trust that the extension provided is an extension that AVFoundation will accept.
-        guard let fileType = UTType(filenameExtension: fileExtension),
-              fileType.isSubtype(of: .movie)
-        else { return fallbackExtension }
-        
-        return fileExtension
-    }
 }
