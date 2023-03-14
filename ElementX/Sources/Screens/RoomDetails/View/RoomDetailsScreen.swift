@@ -162,6 +162,9 @@ struct RoomDetailsScreen: View {
                 context.send(viewAction: .processTapLeave)
             } label: {
                 Label(ElementL10n.roomProfileSectionMoreLeave, systemImage: "door.right.hand.open")
+                    .labelStyle(FormRowLabelStyle(titleColor: .element.alert,
+                                                  iconBackgroundColor: .element.alert.opacity(0.1),
+                                                  iconForegroundColor: .element.alert))
             }
             .buttonStyle(FormButtonStyle(accessory: nil))
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.leave)

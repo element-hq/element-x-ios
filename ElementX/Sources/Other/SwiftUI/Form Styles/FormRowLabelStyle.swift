@@ -20,18 +20,21 @@ struct FormRowLabelStyle: LabelStyle {
     @ScaledMetric private var menuIconSize = 30.0
     
     var alignment: VerticalAlignment = .firstTextBaseline
+    var titleColor = Color.element.primaryContent
+    var iconBackgroundColor = Color.element.formBackground
+    var iconForegroundColor = Color.element.secondaryContent
 
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: alignment, spacing: 16) {
             configuration.icon
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(iconForegroundColor)
                 .padding(4)
                 .frame(width: menuIconSize, height: menuIconSize)
-                .background(Color.element.formBackground)
+                .background(iconBackgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             configuration.title
                 .font(.element.body)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(titleColor)
         }
     }
 }

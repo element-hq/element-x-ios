@@ -104,6 +104,8 @@ extension ElementL10n {
   public static let roomDetailsCopyLink = ElementL10n.tr("Untranslated", "room_details_copy_link")
   /// Are you sure that you want to leave the room?
   public static let roomDetailsLeaveRoomAlertSubtitle = ElementL10n.tr("Untranslated", "room_details_leave_room_alert_subtitle")
+  /// Room left
+  public static let roomDetailsRoomLeftToast = ElementL10n.tr("Untranslated", "room_details_room_left_toast")
   /// Info
   public static let roomDetailsTitle = ElementL10n.tr("Untranslated", "room_details_title")
   /// Failed loading messages

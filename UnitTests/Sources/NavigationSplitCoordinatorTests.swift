@@ -257,7 +257,7 @@ class NavigationSplitCoordinatorTests: XCTestCase {
     }
 
     func testSetRootDetailToNil() {
-        // Create the split with some tedt coordinator
+        // Create the split with some test coordinator
         // Add a STACK  of coordinators to the details only
         // Remove entirely the root detail coordinator
         // TODO: Write a test
