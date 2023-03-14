@@ -299,6 +299,7 @@ class RoomProxy: RoomProxyProtocol {
                 try self.room.leave()
                 return .success(())
             } catch {
+                MXLog.error("Failed to leave the room: \(error)")
                 return .failure(.failedLeavingRoom)
             }
         }

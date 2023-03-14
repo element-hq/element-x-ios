@@ -23,6 +23,7 @@ import UIKit
 
 enum RoomDetailsViewModelAction {
     case requestMemberDetailsPresentation([RoomMemberProxy])
+    case leaveRoom
     case cancel
 }
 
