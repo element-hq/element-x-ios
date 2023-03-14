@@ -167,7 +167,6 @@ struct RoomDetailsScreen: View {
                                                   iconForegroundColor: .element.alert))
             }
             .buttonStyle(FormButtonStyle(accessory: nil))
-            .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.leave)
         }
         .formSectionStyle()
     }
