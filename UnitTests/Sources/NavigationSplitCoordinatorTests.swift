@@ -255,6 +255,13 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         }
         waitForExpectations(timeout: 1.0)
     }
+
+    func testSetRootDetailToNil() {
+        // Create the split with some tedt coordinator
+        // Add a STACK  of coordinators to the details only
+        // Remove entirely the root detail coordinator
+        // TODO: Write a test
+    }
     
     // MARK: - Private
     

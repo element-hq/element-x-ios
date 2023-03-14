@@ -24,6 +24,10 @@ struct RoomScreenCoordinatorParameters {
     let emojiProvider: EmojiProviderProtocol
 }
 
+enum RoomScreenCoordinatorAction {
+    case leaveRoom
+}
+
 final class RoomScreenCoordinator: CoordinatorProtocol {
     private var parameters: RoomScreenCoordinatorParameters
 
@@ -31,6 +35,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     private var navigationStackCoordinator: NavigationStackCoordinator {
         parameters.navigationStackCoordinator
     }
+
+    var callback: ((RoomScreenCoordinatorAction) -> Void)?
     
     init(parameters: RoomScreenCoordinatorParameters) {
         self.parameters = parameters
@@ -116,7 +122,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             case .cancel:
                 self?.navigationStackCoordinator.pop()
             case .leaveRoom:
-                self?.navigationStackCoordinator.popToRoot()
+                self?.callback?(.leaveRoom)
             }
         }
 
