@@ -36,11 +36,12 @@ struct RoomDetailsScreen: View {
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
         .alert(item: $context.alertInfo) { $0.alert }
-        .alert(item: $context.leaveRoomAlertItem, actions: { item in
-            leaveRoomAlertActions(item)
-        }, message: { item in
-            leaveRoomAlertMessage(item)
-        })
+        .alert(item: $context.leaveRoomAlertItem,
+               actions: { item in
+                   leaveRoomAlertActions(item)
+               }, message: { item in
+                   leaveRoomAlertMessage(item)
+               })
     }
     
     // MARK: - Private
@@ -176,7 +177,6 @@ struct RoomDetailsScreen: View {
         })
     }
 
-    @ViewBuilder
     private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
         Text(item.subtitle)
     }

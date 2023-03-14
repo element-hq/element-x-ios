@@ -62,6 +62,9 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             copyRoomLink()
         case .processTapLeave:
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem()
+        case .confirmLeave:
+            // TODO: Implement
+            break
         }
     }
     

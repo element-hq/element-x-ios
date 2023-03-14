@@ -21,7 +21,7 @@ protocol AlertItem {
 }
 
 extension View {
-    func alert<I, V>(item: Binding<I?>, actions: (I) -> V, message: (I) -> V) -> some View where I: AlertItem, V: View {
+    func alert<I, A, M>(item: Binding<I?>, actions: (I) -> A, message: (I) -> M) -> some View where I: AlertItem, A: View, M: View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
@@ -32,7 +32,7 @@ extension View {
         return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions, message: message)
     }
 
-    func alert<I, V>(item: Binding<I?>, actions: (I) -> V) -> some View where I: AlertItem, V: View {
+    func alert<I, A>(item: Binding<I?>, actions: (I) -> A) -> some View where I: AlertItem, A: View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
