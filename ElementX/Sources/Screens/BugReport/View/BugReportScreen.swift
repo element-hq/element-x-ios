@@ -14,28 +14,25 @@
 // limitations under the License.
 //
 
+import Compound
 import PhotosUI
 import SwiftUI
 
 struct BugReportScreen: View {
-    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    
-    private var horizontalPadding: CGFloat {
-        horizontalSizeClass == .regular ? 50 : 16
-    }
-
     @State private var selectedScreenshot: PhotosPickerItem?
     
     @ObservedObject var context: BugReportViewModel.Context
     
     var body: some View {
-        ScrollView {
-            mainContent
-                .padding(.top, 50)
-                .padding(.horizontal, horizontalPadding)
+        Form {
+            textFieldSection
+            
+            attachScreenshotSection
+            
+            sendLogsSection
         }
         .scrollDismissesKeyboard(.immediately)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .compoundForm()
         .navigationTitle(ElementL10n.bugReportScreenTitle)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
@@ -51,77 +48,65 @@ struct BugReportScreen: View {
             }
         }
     }
-
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            descriptionTextEditor
-            attachScreenshot
-            sendLogsToggle
+    
+    private var textFieldSection: some View {
+        Section {
+            TextField(ElementL10n.bugReportScreenEditorPlaceholder,
+                      text: $context.reportText,
+                      prompt: Text(ElementL10n.bugReportScreenEditorPlaceholder).foregroundColor(.compound.textPlaceholder),
+                      axis: .vertical)
+                .lineLimit(4, reservesSpace: true)
+                .tint(.compound.iconAccentTertiary)
+                .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
+        } footer: {
+            Text(ElementL10n.bugReportScreenDescription)
+                .compoundFormSectionFooter()
         }
+        .compoundFormSection()
     }
     
-    private var descriptionTextEditor: some View {
-        FormTextEditor(text: $context.reportText,
-                       placeholder: ElementL10n.bugReportScreenDescription,
-                       editorAccessibilityIdentifier: A11yIdentifiers.bugReportScreen.report)
-    }
-    
-    @ViewBuilder
-    private var sendLogsToggle: some View {
-        VStack(spacing: 8) {
+    private var sendLogsSection: some View {
+        Section {
             Toggle(ElementL10n.bugReportScreenIncludeLogs, isOn: $context.sendingLogsEnabled)
-                .foregroundColor(.element.primaryContent)
-                .tint(Color.element.brand)
+                .toggleStyle(.compoundForm())
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 6.5)
-                .background {
-                    RoundedRectangle(cornerRadius: 14)
-                        .fill(Color.element.formRowBackground)
-                }
-            
+        } footer: {
             Text(ElementL10n.bugReportScreenLogsDescription)
-                .font(.element.caption1)
-                .foregroundColor(Color.element.secondaryContent)
-                .padding(.horizontal, -8)
+                .compoundFormSectionFooter()
         }
+        .compoundFormSection()
     }
 
     @ViewBuilder
-    private var attachScreenshot: some View {
-        VStack(alignment: .leading, spacing: 16) {
+    private var attachScreenshotSection: some View {
+        Section {
             PhotosPicker(selection: $selectedScreenshot,
                          matching: .screenshots,
                          photoLibrary: .shared()) {
-                HStack(spacing: 16) {
-                    Label(context.viewState.screenshot == nil ? ElementL10n.bugReportScreenAttachScreenshot : ElementL10n.bugReportScreenEditScreenshot, systemImage: "camera")
-                        .labelStyle(FormRowLabelStyle())
-                    Spacer()
-                }
+                Label(context.viewState.screenshot == nil ? ElementL10n.bugReportScreenAttachScreenshot : ElementL10n.bugReportScreenEditScreenshot, systemImage: "camera")
             }
-            .buttonStyle(FormButtonStyle())
-            .background(Color.element.formRowBackground)
-            .cornerRadius(14)
+            .buttonStyle(.compoundForm())
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)
+        } footer: {
             if let screenshot = context.viewState.screenshot {
-                ZStack(alignment: .topTrailing) {
-                    Image(uiImage: screenshot)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100)
-                        .cornerRadius(4)
-                        .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
-                    Button { context.send(viewAction: .removeScreenshot) } label: {
-                        Image(Asset.Images.closeCircle.name)
+                Image(uiImage: screenshot)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: 100)
+                    .cornerRadius(4)
+                    .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.screenshot)
+                    .overlay(alignment: .topTrailing) {
+                        Button { context.send(viewAction: .removeScreenshot) } label: {
+                            Image(Asset.Images.closeCircle.name)
+                        }
+                        .offset(x: 10, y: -10)
+                        .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.removeScreenshot)
                     }
-                    .offset(x: 10, y: -10)
-                    .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.removeScreenshot)
-                }
-                .padding(.vertical, 16)
-                .padding(.horizontal, 16)
+                    .padding(.vertical, 16)
+                    .padding(.horizontal, 16)
             }
         }
+        .compoundFormSection()
     }
     
     @ToolbarContentBuilder

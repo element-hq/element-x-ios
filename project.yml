@@ -46,6 +46,10 @@ packages:
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit
+  Compound:
+    # url: https://github.com/matrix-org/compound-ios
+    # branch: main
+    path: ../compound-ios
   Algorithms:
     url: https://github.com/apple/swift-algorithms
     majorVersion: 1.0.0

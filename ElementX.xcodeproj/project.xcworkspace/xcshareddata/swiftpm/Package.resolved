@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "compound-design-tokens",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vector-im/compound-design-tokens.git",
+      "state" : {
+        "branch" : "develop",
+        "revision" : "1878bf41ef9c096bc1e353bed35fb88528798073"
+      }
+    },
+    {
       "identity" : "devicekit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
