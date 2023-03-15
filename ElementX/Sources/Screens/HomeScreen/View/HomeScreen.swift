@@ -74,6 +74,7 @@ struct HomeScreen: View {
                     }
                 }
                 .searchable(text: $context.searchQuery)
+                .searchableStyle(.list)
                 .disableAutocorrection(true)
             }
         }

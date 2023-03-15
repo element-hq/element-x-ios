@@ -73,7 +73,7 @@ packages:
     branch: master
   Introspect:
     url: https://github.com/siteline/SwiftUI-Introspect
-    majorVersion: 0.1.4
+    majorVersion: 0.2.3
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     majorVersion: 1.4.4
