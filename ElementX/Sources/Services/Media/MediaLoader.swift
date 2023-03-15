@@ -36,13 +36,13 @@ actor MediaLoader: MediaLoaderProtocol {
     
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data {
         try await enqueueLoadMediaRequest(forSource: source) {
-            try self.client.getMediaContent(source: source.underlyingSource)
+            try self.client.getMediaContent(mediaSource: source.underlyingSource)
         }
     }
     
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
         try await enqueueLoadMediaRequest(forSource: source) {
-            try self.client.getMediaThumbnail(source: source.underlyingSource, width: UInt64(width), height: UInt64(height))
+            try self.client.getMediaThumbnail(mediaSource: source.underlyingSource, width: UInt64(width), height: UInt64(height))
         }
     }
     
