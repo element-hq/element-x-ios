@@ -119,6 +119,7 @@ private class MockMediaLoadingClient: ClientProtocol {
     
     func createRoom(request: MatrixRustSDK.CreateRoomParameters) throws -> String { fatalError() }
     
+    // swiftlint:disable:next function_parameter_count
     func setPusher(identifiers: MatrixRustSDK.PusherIdentifiers,
                    kind: MatrixRustSDK.PusherKind,
                    appDisplayName: String,
