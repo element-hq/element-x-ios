@@ -92,7 +92,6 @@ class RoomProxyMock: RoomProxyProtocol {
     var displayName: String?
     var topic: String?
     var avatarURL: URL?
-    var permalink: URL?
 
     //MARK: - loadAvatarURLForUserId
 

@@ -53,9 +53,7 @@ protocol RoomProxyProtocol {
     var topic: String? { get }
     
     var avatarURL: URL? { get }
-    
-    var permalink: URL? { get }
-    
+        
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
