@@ -520,7 +520,6 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
     func setRootCoordinator(_ coordinator: (any CoordinatorProtocol)?, dismissalCallback: (() -> Void)? = nil) {
         guard let coordinator else {
             rootModule = nil
-            popToRoot(animated: true)
             return
         }
         

@@ -83,14 +83,14 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     }
 
     private func leaveRoom() async {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: ElementL10n.loading, persistent: true))
-        let result = await roomProxy.leaveRoom()
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
-        switch result {
-        case .failure:
-            state.bindings.alertInfo = AlertInfo(id: .unknown)
-        case .success:
-            callback?(.leftRoom)
-        }
+//        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: ElementL10n.loading, persistent: true))
+//        let result = await roomProxy.leaveRoom()
+//        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+//        switch result {
+//        case .failure:
+//            state.bindings.alertInfo = AlertInfo(id: .unknown)
+//        case .success:
+        callback?(.leftRoom)
+//        }
     }
 }
