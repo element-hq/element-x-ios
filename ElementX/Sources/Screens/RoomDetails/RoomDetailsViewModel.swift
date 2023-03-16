@@ -87,7 +87,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         let result = await roomProxy.leaveRoom()
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingId)
         switch result {
-        case let .failure(error):
+        case .failure:
             state.bindings.alertInfo = AlertInfo(id: .leaveRoomAlert, title: ElementL10n.roomDetailsLeaveRoomError)
         case .success:
             callback?(.leaveRoom)

@@ -19,4 +19,31 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class RoomDetailsScreenViewModelTests: XCTestCase { }
+class RoomDetailsScreenViewModelTests: XCTestCase {
+    var viewModel: RoomDetailsViewModelProtocol!
+    var context: RoomDetailsViewModelType.Context!
+    var roomProxyMock: RoomProxyMock!
+
+    override func setUp() {
+        roomProxyMock = RoomProxyMock.configureMock(with: .init(displayName: "Test"))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        context = viewModel.context
+    }
+
+    func testLeaveRoomSuccess() async {
+        roomProxyMock.leaveRoomClosure = {
+            .success(())
+        }
+        viewModel.callback = { action in
+            switch action {
+            case .leaveRoom:
+                break
+            default:
+                XCTFail("leaveRoom expected")
+            }
+        }
+        context.send(viewAction: .confirmLeave)
+        await Task.yield()
+        XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
+    }
+}
