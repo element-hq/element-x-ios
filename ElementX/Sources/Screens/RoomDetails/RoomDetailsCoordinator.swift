@@ -52,7 +52,7 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
                 self.presentRoomMemberDetails(members)
             case .cancel:
                 self.callback?(.cancel)
-            case .leaveRoom:
+            case .leftRoom:
                 self.callback?(.leaveRoom)
             }
         }

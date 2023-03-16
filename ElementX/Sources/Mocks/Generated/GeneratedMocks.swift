@@ -93,7 +93,8 @@ class RoomProxyMock: RoomProxyProtocol {
     var topic: String?
     var avatarURL: URL?
     var permalink: URL?
-    // MARK: - loadAvatarURLForUserId
+
+    //MARK: - loadAvatarURLForUserId
 
     var loadAvatarURLForUserIdCallsCount = 0
     var loadAvatarURLForUserIdCalled: Bool {
@@ -103,6 +104,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var loadAvatarURLForUserIdReceivedInvocations: [String] = []
     var loadAvatarURLForUserIdReturnValue: Result<URL?, RoomProxyError>!
     var loadAvatarURLForUserIdClosure: ((String) async -> Result<URL?, RoomProxyError>)?
+
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError> {
         loadAvatarURLForUserIdCallsCount += 1
         loadAvatarURLForUserIdReceivedUserId = userId
@@ -113,7 +115,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadAvatarURLForUserIdReturnValue
         }
     }
-    // MARK: - loadDisplayNameForUserId
+    //MARK: - loadDisplayNameForUserId
 
     var loadDisplayNameForUserIdCallsCount = 0
     var loadDisplayNameForUserIdCalled: Bool {
@@ -123,6 +125,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var loadDisplayNameForUserIdReceivedInvocations: [String] = []
     var loadDisplayNameForUserIdReturnValue: Result<String?, RoomProxyError>!
     var loadDisplayNameForUserIdClosure: ((String) async -> Result<String?, RoomProxyError>)?
+
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError> {
         loadDisplayNameForUserIdCallsCount += 1
         loadDisplayNameForUserIdReceivedUserId = userId
@@ -133,7 +136,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return loadDisplayNameForUserIdReturnValue
         }
     }
-    // MARK: - addTimelineListener
+    //MARK: - addTimelineListener
 
     var addTimelineListenerListenerCallsCount = 0
     var addTimelineListenerListenerCalled: Bool {
@@ -143,6 +146,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var addTimelineListenerListenerReceivedInvocations: [TimelineListener] = []
     var addTimelineListenerListenerReturnValue: Result<[TimelineItem], RoomProxyError>!
     var addTimelineListenerListenerClosure: ((TimelineListener) -> Result<[TimelineItem], RoomProxyError>)?
+
     func addTimelineListener(listener: TimelineListener) -> Result<[TimelineItem], RoomProxyError> {
         addTimelineListenerListenerCallsCount += 1
         addTimelineListenerListenerReceivedListener = listener
@@ -153,18 +157,19 @@ class RoomProxyMock: RoomProxyProtocol {
             return addTimelineListenerListenerReturnValue
         }
     }
-    // MARK: - removeTimelineListener
+    //MARK: - removeTimelineListener
 
     var removeTimelineListenerCallsCount = 0
     var removeTimelineListenerCalled: Bool {
         return removeTimelineListenerCallsCount > 0
     }
     var removeTimelineListenerClosure: (() -> Void)?
+
     func removeTimelineListener() {
         removeTimelineListenerCallsCount += 1
         removeTimelineListenerClosure?()
     }
-    // MARK: - paginateBackwards
+    //MARK: - paginateBackwards
 
     var paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount = 0
     var paginateBackwardsRequestSizeUntilNumberOfItemsCalled: Bool {
@@ -174,6 +179,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var paginateBackwardsRequestSizeUntilNumberOfItemsReceivedInvocations: [(requestSize: UInt, untilNumberOfItems: UInt)] = []
     var paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue: Result<Void, RoomProxyError>!
     var paginateBackwardsRequestSizeUntilNumberOfItemsClosure: ((UInt, UInt) async -> Result<Void, RoomProxyError>)?
+
     func paginateBackwards(requestSize: UInt, untilNumberOfItems: UInt) async -> Result<Void, RoomProxyError> {
         paginateBackwardsRequestSizeUntilNumberOfItemsCallsCount += 1
         paginateBackwardsRequestSizeUntilNumberOfItemsReceivedArguments = (requestSize: requestSize, untilNumberOfItems: untilNumberOfItems)
@@ -184,7 +190,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return paginateBackwardsRequestSizeUntilNumberOfItemsReturnValue
         }
     }
-    // MARK: - sendReadReceipt
+    //MARK: - sendReadReceipt
 
     var sendReadReceiptForCallsCount = 0
     var sendReadReceiptForCalled: Bool {
@@ -194,6 +200,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var sendReadReceiptForReceivedInvocations: [String] = []
     var sendReadReceiptForReturnValue: Result<Void, RoomProxyError>!
     var sendReadReceiptForClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
     func sendReadReceipt(for eventID: String) async -> Result<Void, RoomProxyError> {
         sendReadReceiptForCallsCount += 1
         sendReadReceiptForReceivedEventID = eventID
@@ -204,7 +211,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendReadReceiptForReturnValue
         }
     }
-    // MARK: - sendMessage
+    //MARK: - sendMessage
 
     var sendMessageInReplyToCallsCount = 0
     var sendMessageInReplyToCalled: Bool {
@@ -214,6 +221,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var sendMessageInReplyToReceivedInvocations: [(message: String, eventID: String?)] = []
     var sendMessageInReplyToReturnValue: Result<Void, RoomProxyError>!
     var sendMessageInReplyToClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
+
     func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError> {
         sendMessageInReplyToCallsCount += 1
         sendMessageInReplyToReceivedArguments = (message: message, eventID: eventID)
@@ -224,7 +232,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendMessageInReplyToReturnValue
         }
     }
-    // MARK: - sendReaction
+    //MARK: - sendReaction
 
     var sendReactionToCallsCount = 0
     var sendReactionToCalled: Bool {
@@ -234,6 +242,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var sendReactionToReceivedInvocations: [(reaction: String, eventID: String)] = []
     var sendReactionToReturnValue: Result<Void, RoomProxyError>!
     var sendReactionToClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
+
     func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError> {
         sendReactionToCallsCount += 1
         sendReactionToReceivedArguments = (reaction: reaction, eventID: eventID)
@@ -244,7 +253,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendReactionToReturnValue
         }
     }
-    // MARK: - editMessage
+    //MARK: - editMessage
 
     var editMessageOriginalCallsCount = 0
     var editMessageOriginalCalled: Bool {
@@ -254,6 +263,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var editMessageOriginalReceivedInvocations: [(newMessage: String, eventID: String)] = []
     var editMessageOriginalReturnValue: Result<Void, RoomProxyError>!
     var editMessageOriginalClosure: ((String, String) async -> Result<Void, RoomProxyError>)?
+
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
         editMessageOriginalCallsCount += 1
         editMessageOriginalReceivedArguments = (newMessage: newMessage, eventID: eventID)
@@ -264,7 +274,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return editMessageOriginalReturnValue
         }
     }
-    // MARK: - redact
+    //MARK: - redact
 
     var redactCallsCount = 0
     var redactCalled: Bool {
@@ -274,6 +284,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var redactReceivedInvocations: [String] = []
     var redactReturnValue: Result<Void, RoomProxyError>!
     var redactClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError> {
         redactCallsCount += 1
         redactReceivedEventID = eventID
@@ -284,7 +295,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return redactReturnValue
         }
     }
-    // MARK: - reportContent
+    //MARK: - reportContent
 
     var reportContentReasonCallsCount = 0
     var reportContentReasonCalled: Bool {
@@ -294,6 +305,7 @@ class RoomProxyMock: RoomProxyProtocol {
     var reportContentReasonReceivedInvocations: [(eventID: String, reason: String?)] = []
     var reportContentReasonReturnValue: Result<Void, RoomProxyError>!
     var reportContentReasonClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
+
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
         reportContentReasonCallsCount += 1
         reportContentReasonReceivedArguments = (eventID: eventID, reason: reason)
@@ -304,7 +316,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return reportContentReasonReturnValue
         }
     }
-    // MARK: - members
+    //MARK: - members
 
     var membersCallsCount = 0
     var membersCalled: Bool {
@@ -312,6 +324,7 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var membersReturnValue: Result<[RoomMemberProxy], RoomProxyError>!
     var membersClosure: (() async -> Result<[RoomMemberProxy], RoomProxyError>)?
+
     func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
         membersCallsCount += 1
         if let membersClosure = membersClosure {
@@ -320,7 +333,7 @@ class RoomProxyMock: RoomProxyProtocol {
             return membersReturnValue
         }
     }
-    // MARK: - retryDecryption
+    //MARK: - retryDecryption
 
     var retryDecryptionForCallsCount = 0
     var retryDecryptionForCalled: Bool {
@@ -329,13 +342,14 @@ class RoomProxyMock: RoomProxyProtocol {
     var retryDecryptionForReceivedSessionID: String?
     var retryDecryptionForReceivedInvocations: [String] = []
     var retryDecryptionForClosure: ((String) async -> Void)?
+
     func retryDecryption(for sessionID: String) async {
         retryDecryptionForCallsCount += 1
         retryDecryptionForReceivedSessionID = sessionID
         retryDecryptionForReceivedInvocations.append(sessionID)
         await retryDecryptionForClosure?(sessionID)
     }
-    // MARK: - leaveRoom
+    //MARK: - leaveRoom
 
     var leaveRoomCallsCount = 0
     var leaveRoomCalled: Bool {
@@ -343,6 +357,7 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     var leaveRoomReturnValue: Result<Void, RoomProxyError>!
     var leaveRoomClosure: (() async -> Result<Void, RoomProxyError>)?
+
     func leaveRoom() async -> Result<Void, RoomProxyError> {
         leaveRoomCallsCount += 1
         if let leaveRoomClosure = leaveRoomClosure {

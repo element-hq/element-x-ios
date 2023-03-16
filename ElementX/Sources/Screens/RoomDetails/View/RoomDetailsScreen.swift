@@ -37,11 +37,8 @@ struct RoomDetailsScreen: View {
         .background(Color.element.formBackground.ignoresSafeArea())
         .alert(item: $context.alertInfo) { $0.alert }
         .alert(item: $context.leaveRoomAlertItem,
-               actions: { item in
-                   leaveRoomAlertActions(item)
-               }, message: { item in
-                   leaveRoomAlertMessage(item)
-               })
+               actions: leaveRoomAlertActions,
+               message: leaveRoomAlertMessage)
     }
     
     // MARK: - Private
@@ -170,10 +167,10 @@ struct RoomDetailsScreen: View {
 
     @ViewBuilder
     private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
-        Button(item.cancelTitle, role: .cancel, action: { })
-        Button(item.confirmationTitle, role: .destructive, action: {
+        Button(item.cancelTitle, role: .cancel) { }
+        Button(item.confirmationTitle, role: .destructive) {
             context.send(viewAction: .confirmLeave)
-        })
+        }
     }
 
     private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {

@@ -71,7 +71,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     // MARK: - Private
 
-    private static let leaveRoomLoadingId = "LeaveRoomLoading"
+    private static let leaveRoomLoadingID = "LeaveRoomLoading"
     
     private func copyRoomLink() {
         if let roomLink = state.permalink {
@@ -83,14 +83,14 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     }
 
     private func leaveRoom() async {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingId, type: .modal, title: ElementL10n.loading, persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: ElementL10n.loading, persistent: true))
         let result = await roomProxy.leaveRoom()
-        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingId)
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
         switch result {
         case .failure:
             state.bindings.alertInfo = AlertInfo(id: .unknown)
         case .success:
-            callback?(.leaveRoom)
+            callback?(.leftRoom)
         }
     }
 }
