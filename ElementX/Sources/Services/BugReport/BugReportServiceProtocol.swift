@@ -31,7 +31,8 @@ struct SubmitBugReportResponse: Decodable {
     var reportUrl: String
 }
 
-protocol BugReportServiceProtocol: AutoMockable {
+// sourcery: AutoMockable
+protocol BugReportServiceProtocol {
     var crashedLastRun: Bool { get }
 
     func crash()

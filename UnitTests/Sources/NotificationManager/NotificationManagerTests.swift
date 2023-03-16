@@ -56,16 +56,18 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenRegistered_pusherIsCalledWithCorrectValues() async throws {
         let pushkeyData = Data("1234".utf8)
         _ = await notificationManager.register(with: pushkeyData)
-        XCTAssertEqual(clientProxy.setPusherPushkey, pushkeyData.base64EncodedString())
-        XCTAssertEqual(clientProxy.setPusherAppId, settings?.pusherAppId)
-        XCTAssertEqual(clientProxy.setPusherKind, .http)
-        XCTAssertEqual(clientProxy.setPusherAppId, settings?.pusherAppId)
-        XCTAssertEqual(clientProxy.setPusherAppDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
-        XCTAssertEqual(clientProxy.setPusherDeviceDisplayName, UIDevice.current.name)
-        XCTAssertNotNil(clientProxy.setPusherProfileTag)
-        XCTAssertEqual(clientProxy.setPusherLang, Bundle.preferredLanguages.first)
-        XCTAssertEqual(clientProxy.setPusherUrl, settings?.pushGatewayBaseURL)
-        XCTAssertEqual(clientProxy.setPusherFormat, .eventIdOnly)
+        XCTAssertEqual(clientProxy.setPusherArgument?.identifiers.pushkey, pushkeyData.base64EncodedString())
+        XCTAssertEqual(clientProxy.setPusherArgument?.identifiers.appId, settings?.pusherAppId)
+        XCTAssertEqual(clientProxy.setPusherArgument?.appDisplayName, "\(InfoPlistReader.main.bundleDisplayName) (iOS)")
+        XCTAssertEqual(clientProxy.setPusherArgument?.deviceDisplayName, UIDevice.current.name)
+        XCTAssertNotNil(clientProxy.setPusherArgument?.profileTag)
+        XCTAssertEqual(clientProxy.setPusherArgument?.lang, Bundle.preferredLanguages.first)
+        guard case let .http(data) = clientProxy.setPusherArgument?.kind else {
+            XCTFail("Http kind expected")
+            return
+        }
+        XCTAssertEqual(data.url, settings?.pushGatewayBaseURL.absoluteString)
+        XCTAssertEqual(data.format, .eventIdOnly)
         let defaultPayload: [AnyHashable: Any] = [
             "aps": [
                 "mutable-content": 1,
@@ -75,8 +77,7 @@ final class NotificationManagerTests: XCTestCase {
                 ]
             ]
         ]
-        let actualPayload = NSDictionary(dictionary: clientProxy.setPusherDefaultPayload ?? [:])
-        XCTAssertTrue(actualPayload.isEqual(to: defaultPayload))
+        XCTAssertEqual(data.defaultPayload, defaultPayload.jsonString)
     }
     
     func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async throws {
