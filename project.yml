@@ -21,6 +21,7 @@ options:
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "Colors/AccentColor"
   ENABLE_BITCODE: NO
   BASE_APP_GROUP_IDENTIFIER: io.element
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
@@ -88,7 +89,7 @@ packages:
     majorVersion: 1.3.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    majorVersion: 7.15.0
+    majorVersion: 8.3.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     majorVersion: 1.10.0
