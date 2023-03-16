@@ -2,7 +2,6 @@
 // DO NOT EDIT
 
 // swiftlint:disable all
-
 import Combine
 import MatrixRustSDK
 class BugReportServiceMock: BugReportServiceProtocol {
@@ -11,18 +10,20 @@ class BugReportServiceMock: BugReportServiceProtocol {
         set(value) { underlyingCrashedLastRun = value }
     }
     var underlyingCrashedLastRun: Bool!
-    // MARK: - crash
+
+    //MARK: - crash
 
     var crashCallsCount = 0
     var crashCalled: Bool {
         return crashCallsCount > 0
     }
     var crashClosure: (() -> Void)?
+
     func crash() {
         crashCallsCount += 1
         crashClosure?()
     }
-    // MARK: - submitBugReport
+    //MARK: - submitBugReport
 
     var submitBugReportProgressListenerThrowableError: Error?
     var submitBugReportProgressListenerCallsCount = 0
@@ -33,6 +34,7 @@ class BugReportServiceMock: BugReportServiceProtocol {
     var submitBugReportProgressListenerReceivedInvocations: [(bugReport: BugReport, progressListener: ProgressListener?)] = []
     var submitBugReportProgressListenerReturnValue: SubmitBugReportResponse!
     var submitBugReportProgressListenerClosure: ((BugReport, ProgressListener?) async throws -> SubmitBugReportResponse)?
+
     func submitBugReport(_ bugReport: BugReport, progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
         if let error = submitBugReportProgressListenerThrowableError {
             throw error
@@ -58,7 +60,8 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         set(value) { underlyingIsVerified = value }
     }
     var underlyingIsVerified: Bool!
-    // MARK: - requestVerification
+
+    //MARK: - requestVerification
 
     var requestVerificationCallsCount = 0
     var requestVerificationCalled: Bool {
@@ -66,6 +69,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
     var requestVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>!
     var requestVerificationClosure: (() async -> Result<Void, SessionVerificationControllerProxyError>)?
+
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         requestVerificationCallsCount += 1
         if let requestVerificationClosure = requestVerificationClosure {
@@ -74,7 +78,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return requestVerificationReturnValue
         }
     }
-    // MARK: - startSasVerification
+    //MARK: - startSasVerification
 
     var startSasVerificationCallsCount = 0
     var startSasVerificationCalled: Bool {
@@ -82,6 +86,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
     var startSasVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>!
     var startSasVerificationClosure: (() async -> Result<Void, SessionVerificationControllerProxyError>)?
+
     func startSasVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         startSasVerificationCallsCount += 1
         if let startSasVerificationClosure = startSasVerificationClosure {
@@ -90,7 +95,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return startSasVerificationReturnValue
         }
     }
-    // MARK: - approveVerification
+    //MARK: - approveVerification
 
     var approveVerificationCallsCount = 0
     var approveVerificationCalled: Bool {
@@ -98,6 +103,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
     var approveVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>!
     var approveVerificationClosure: (() async -> Result<Void, SessionVerificationControllerProxyError>)?
+
     func approveVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         approveVerificationCallsCount += 1
         if let approveVerificationClosure = approveVerificationClosure {
@@ -106,7 +112,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return approveVerificationReturnValue
         }
     }
-    // MARK: - declineVerification
+    //MARK: - declineVerification
 
     var declineVerificationCallsCount = 0
     var declineVerificationCalled: Bool {
@@ -114,6 +120,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
     var declineVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>!
     var declineVerificationClosure: (() async -> Result<Void, SessionVerificationControllerProxyError>)?
+
     func declineVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         declineVerificationCallsCount += 1
         if let declineVerificationClosure = declineVerificationClosure {
@@ -122,7 +129,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
             return declineVerificationReturnValue
         }
     }
-    // MARK: - cancelVerification
+    //MARK: - cancelVerification
 
     var cancelVerificationCallsCount = 0
     var cancelVerificationCalled: Bool {
@@ -130,6 +137,7 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
     var cancelVerificationReturnValue: Result<Void, SessionVerificationControllerProxyError>!
     var cancelVerificationClosure: (() async -> Result<Void, SessionVerificationControllerProxyError>)?
+
     func cancelVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
         cancelVerificationCallsCount += 1
         if let cancelVerificationClosure = cancelVerificationClosure {
@@ -139,5 +147,4 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
-
 // swiftlint:enable all

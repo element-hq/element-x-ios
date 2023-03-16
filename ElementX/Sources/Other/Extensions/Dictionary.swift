@@ -14,6 +14,15 @@
 // limitations under the License.
 //
 
-// This protocol is used only as a marker
-// to mark protocols that can be auto-mocked by Sourcery
-protocol AutoMockable { }
+import Foundation
+
+extension Dictionary {
+    var jsonString: String? {
+        guard let data = try? JSONSerialization.data(withJSONObject: self,
+                                                     options: [.fragmentsAllowed, .sortedKeys]) else {
+            return nil
+        }
+
+        return String(data: data, encoding: .utf8)
+    }
+}
