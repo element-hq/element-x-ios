@@ -76,7 +76,7 @@ struct ReportContentScreen: View {
 // MARK: - Previews
 
 struct ReportContent_Previews: PreviewProvider {
-    static let viewModel = ReportContentViewModel(itemID: "", roomProxy: MockRoomProxy(displayName: nil))
+    static let viewModel = ReportContentViewModel(itemID: "", roomProxy: RoomProxyMock.configureMock(with: .init(displayName: nil)))
     
     static var previews: some View {
         ReportContentScreen(context: viewModel.context)

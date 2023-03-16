@@ -35,6 +35,7 @@ enum RoomProxyError: Error {
 }
 
 @MainActor
+// sourcery: AutoMockable
 protocol RoomProxyProtocol {
     var id: String { get }
     var isDirect: Bool { get }

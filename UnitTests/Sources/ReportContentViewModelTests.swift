@@ -21,7 +21,7 @@ import XCTest
 @MainActor
 class ReportContentScreenViewModelTests: XCTestCase {
     func testInitialState() {
-        let viewModel = ReportContentViewModel(itemID: "test-id", roomProxy: MockRoomProxy(displayName: "test"))
+        let viewModel = ReportContentViewModel(itemID: "test-id", roomProxy: RoomProxyMock.configureMock(with: .init(displayName: "test")))
         let context = viewModel.context
 
         XCTAssertEqual(context.reasonText, "")

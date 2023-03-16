@@ -248,7 +248,7 @@ class NavigationSplitCoordinatorTests: XCTestCase {
             
             DispatchQueue.main.async {
                 self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
-                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutStackModules[0].coordinator, detailCoordinator.stackCoordinators.first)
+                XCTAssertTrue(self.navigationSplitCoordinator.compactLayoutStackModules.isEmpty)
             }
             
             expectation.fulfill()

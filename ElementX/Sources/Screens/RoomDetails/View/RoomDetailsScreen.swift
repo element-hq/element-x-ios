@@ -193,12 +193,12 @@ struct RoomDetails_Previews: PreviewProvider {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = MockRoomProxy(displayName: "Room A",
-                                      topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                      isDirect: false,
-                                      isEncrypted: true,
-                                      canonicalAlias: "#alias:domain.com",
-                                      members: members)
+        let roomProxy = RoomProxyMock.configureMock(with: .init(displayName: "Room A",
+                                                                topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                                                isDirect: false,
+                                                                isEncrypted: true,
+                                                                canonicalAlias: "#alias:domain.com",
+                                                                members: members))
         
         return RoomDetailsViewModel(roomProxy: roomProxy,
                                     mediaProvider: MockMediaProvider())

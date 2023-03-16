@@ -50,9 +50,9 @@ class MockClientProxy: ClientProxyProtocol {
     
         switch room {
         case .empty:
-            return MockRoomProxy(displayName: "Empty room")
+            return await RoomProxyMock.configureMock(with: .init(displayName: "Empty room"))
         case .filled(let details), .invalidated(let details):
-            return MockRoomProxy(displayName: details.name)
+            return await RoomProxyMock.configureMock(with: .init(displayName: details.name))
         }
     }
     
