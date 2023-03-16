@@ -304,6 +304,11 @@ class MockScreen: Identifiable {
             let coordinator = ReportContentCoordinator(parameters: .init(itemID: "test", roomProxy: MockRoomProxy(displayName: "test")))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .startChat:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }

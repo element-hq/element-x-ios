@@ -205,6 +205,5 @@ struct OnboardingScreen_Previews: PreviewProvider {
     
     static var previews: some View {
         OnboardingScreen(context: viewModel.context)
-            .tint(.element.accent)
     }
 }

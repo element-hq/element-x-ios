@@ -14,20 +14,19 @@
 // limitations under the License.
 //
 
-import Foundation
+import XCTest
 
-enum DeveloperOptionsScreenViewModelAction { }
+@testable import ElementX
 
-struct DeveloperOptionsScreenViewState: BindableState {
-    var bindings: DeveloperOptionsScreenViewStateBindings
-}
-
-struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var showStartChatFlow: Bool
-}
-
-enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedShowStartChatFlow
+@MainActor
+class StartChatScreenViewModelTests: XCTestCase {
+    var viewModel: StartChatViewModelProtocol!
+    var context: StartChatViewModelType.Context!
+    
+    @MainActor override func setUpWithError() throws {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: ""),
+                                          mediaProvider: MockMediaProvider())
+        viewModel = StartChatViewModel(userSession: userSession)
+        context = viewModel.context
+    }
 }

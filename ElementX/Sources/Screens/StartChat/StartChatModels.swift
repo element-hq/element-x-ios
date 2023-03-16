@@ -16,18 +16,24 @@
 
 import Foundation
 
-enum DeveloperOptionsScreenViewModelAction { }
-
-struct DeveloperOptionsScreenViewState: BindableState {
-    var bindings: DeveloperOptionsScreenViewStateBindings
+enum StartChatViewModelAction {
+    case close
+    case createRoom
 }
 
-struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var showStartChatFlow: Bool
+struct StartChatViewState: BindableState {
+    var bindings = StartChatScreenViewStateBindings()
+    
+    // TODO: bind with real service, and mock data only in preview
+    var suggestedUsers: [RoomMemberProxy] = [.mockAlice, .mockBob, .mockCharlie]
 }
 
-enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedShowStartChatFlow
+struct StartChatScreenViewStateBindings {
+    var searchQuery = ""
+}
+
+enum StartChatViewAction {
+    case close
+    case createRoom
+    case inviteFriends
 }

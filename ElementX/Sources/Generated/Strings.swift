@@ -797,6 +797,8 @@ public enum ElementL10n {
   public static var copiedToClipboard: String { return ElementL10n.tr("Localizable", "copied_to_clipboard") }
   /// Create
   public static var create: String { return ElementL10n.tr("Localizable", "create") }
+  /// Create a room
+  public static var createARoom: String { return ElementL10n.tr("Localizable", "create_a_room") }
   /// Create New Room
   public static var createNewRoom: String { return ElementL10n.tr("Localizable", "create_new_room") }
   /// Create New Space
@@ -1858,6 +1860,8 @@ public enum ElementL10n {
   public static func inviteFriendsText(_ p1: Any, _ p2: Any) -> String {
     return ElementL10n.tr("Localizable", "invite_friends_text", String(describing: p1), String(describing: p2))
   }
+  /// Invite friends to Element
+  public static var inviteFriendsToElement: String { return ElementL10n.tr("Localizable", "invite_friends_to_element") }
   /// Just to this room
   public static var inviteJustToThisRoom: String { return ElementL10n.tr("Localizable", "invite_just_to_this_room") }
   /// They won’t be a part of %@
@@ -4177,6 +4181,8 @@ public enum ElementL10n {
   public static var search: String { return ElementL10n.tr("Localizable", "search") }
   /// Filter banned users
   public static var searchBannedUserHint: String { return ElementL10n.tr("Localizable", "search_banned_user_hint") }
+  /// Search for someone
+  public static var searchForSomeone: String { return ElementL10n.tr("Localizable", "search_for_someone") }
   /// Search
   public static var searchHint: String { return ElementL10n.tr("Localizable", "search_hint") }
   /// Search Name

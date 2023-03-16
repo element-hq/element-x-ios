@@ -106,7 +106,6 @@ struct ServerSelection_Previews: PreviewProvider {
         ForEach(MockServerSelectionScreenState.allCases, id: \.self) { state in
             NavigationStack {
                 ServerSelectionScreen(context: state.viewModel.context)
-                    .tint(.element.accent)
             }
         }
     }

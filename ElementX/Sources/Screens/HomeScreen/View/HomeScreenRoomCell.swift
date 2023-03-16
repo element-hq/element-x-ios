@@ -161,10 +161,6 @@ private extension View {
 
 struct HomeScreenRoomCell_Previews: PreviewProvider {
     static var previews: some View {
-        body.tint(.element.accent)
-    }
-
-    static var body: some View {
         let summaryProvider = MockRoomSummaryProvider(state: .loaded)
 
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProvider),

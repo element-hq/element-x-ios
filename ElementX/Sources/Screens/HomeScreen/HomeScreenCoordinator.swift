@@ -29,6 +29,7 @@ enum HomeScreenCoordinatorAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentSessionVerificationScreen
+    case presentStartChatScreen
     case signOut
 }
 
@@ -62,6 +63,8 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                 self.callback?(.presentSessionVerificationScreen)
             case .signOut:
                 self.callback?(.signOut)
+            case .presentStartChatScreen:
+                self.callback?(.presentStartChatScreen)
             }
         }
     }
