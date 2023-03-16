@@ -93,16 +93,16 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                     ]
                 ]
             ]
-            let pusher = await Pusher(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
-                                                         appId: ServiceLocator.shared.settings.pusherAppId),
-                                      kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
-                                                              format: .eventIdOnly,
-                                                              defaultPayload: defaultPayload.jsonString)),
-                                      appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
-                                      deviceDisplayName: UIDevice.current.name,
-                                      profileTag: pusherProfileTag(),
-                                      lang: Bundle.preferredLanguages.first ?? "en")
-            try await clientProxy.setPusher(pusher)
+            let configuration = await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
+                                                                             appId: ServiceLocator.shared.settings.pusherAppId),
+                                                          kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
+                                                                                  format: .eventIdOnly,
+                                                                                  defaultPayload: defaultPayload.jsonString)),
+                                                          appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
+                                                          deviceDisplayName: UIDevice.current.name,
+                                                          profileTag: pusherProfileTag(),
+                                                          lang: Bundle.preferredLanguages.first ?? "en")
+            try await clientProxy.setPusher(with: configuration)
             MXLog.info("[NotificationManager] set pusher succeeded")
             return true
         } catch {

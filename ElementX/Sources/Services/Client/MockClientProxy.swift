@@ -90,12 +90,12 @@ class MockClientProxy: ClientProxyProtocol {
     }
     
     var setPusherErrorToThrow: Error?
-    var setPusherArgument: Pusher?
+    var setPusherArgument: PusherConfiguration?
     var setPusherCalled = false
 
-    func setPusher(_ pusher: Pusher) async throws {
+    func setPusher(with configuration: PusherConfiguration) async throws {
         if let setPusherErrorToThrow { throw setPusherErrorToThrow }
         setPusherCalled = true
-        setPusherArgument = pusher
+        setPusherArgument = configuration
     }
 }

@@ -37,7 +37,10 @@ enum SlidingSyncConstants {
     static let timelinePrecachingTimelineLimit: UInt = 20
 }
 
-struct Pusher {
+/// This struct represents the configuration that we are using to register the application through Pusher to Sygnal
+/// using the Matrix Rust SDK, more info here:
+/// https://github.com/matrix-org/sygnal
+struct PusherConfiguration {
     let identifiers: PusherIdentifiers
     let kind: PusherKind
     let appDisplayName: String
@@ -81,5 +84,5 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func logout() async
 
-    func setPusher(_ pusher: Pusher) async throws
+    func setPusher(with configuration: PusherConfiguration) async throws
 }

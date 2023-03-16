@@ -212,14 +212,14 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    func setPusher(_ pusher: Pusher) async throws {
+    func setPusher(with configuration: PusherConfiguration) async throws {
         try await Task.dispatch(on: .global()) {
-            try self.client.setPusher(identifiers: pusher.identifiers,
-                                      kind: pusher.kind,
-                                      appDisplayName: pusher.appDisplayName,
-                                      deviceDisplayName: pusher.deviceDisplayName,
-                                      profileTag: pusher.profileTag,
-                                      lang: pusher.lang)
+            try self.client.setPusher(identifiers: configuration.identifiers,
+                                      kind: configuration.kind,
+                                      appDisplayName: configuration.appDisplayName,
+                                      deviceDisplayName: configuration.deviceDisplayName,
+                                      profileTag: configuration.profileTag,
+                                      lang: configuration.lang)
         }
     }
     
