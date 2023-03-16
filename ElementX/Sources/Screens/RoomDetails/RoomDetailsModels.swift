@@ -60,11 +60,6 @@ struct LeaveRoomAlertItem: AlertItem {
     let cancelTitle = ElementL10n.actionCancel
 }
 
-enum RoomDetailsErrorType: Hashable {
-    /// A specific error message shown in an alert.
-    case alert(String)
-}
-
 enum RoomDetailsViewAction {
     case processTapPeople
     case processTapLeave
@@ -82,4 +77,11 @@ struct RoomDetailsMember: Identifiable, Equatable {
         name = proxy.displayName
         avatarURL = proxy.avatarURL
     }
+}
+
+enum RoomDetailsErrorType: Hashable {
+    /// A specific error message shown in an alert.
+    case alert(String)
+    /// Leaving room has failed..
+    case leaveRoomAlert
 }

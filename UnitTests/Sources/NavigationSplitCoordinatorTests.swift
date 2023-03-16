@@ -272,12 +272,12 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         DispatchQueue.main.async {
             self.navigationSplitCoordinator.setDetailCoordinator(nil)
             DispatchQueue.main.async {
-                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.detailCoordinator, nil)
+                XCTAssertNil(self.navigationSplitCoordinator.detailCoordinator)
                 self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
                 expectation.fulfill()
             }
         }
-        waitForExpectations(timeout: 2.0)
+        waitForExpectations(timeout: 1.0)
     }
     
     // MARK: - Private

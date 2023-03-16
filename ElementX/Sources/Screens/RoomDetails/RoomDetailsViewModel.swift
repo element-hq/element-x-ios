@@ -88,8 +88,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingId)
         switch result {
         case let .failure(error):
-            // TODO: What do we want to show here in case of error?
-            state.bindings.alertInfo = .init(id: .alert(error.localizedDescription))
+            state.bindings.alertInfo = AlertInfo(id: .leaveRoomAlert, title: ElementL10n.roomDetailsLeaveRoomError)
         case .success:
             callback?(.leaveRoom)
         }
