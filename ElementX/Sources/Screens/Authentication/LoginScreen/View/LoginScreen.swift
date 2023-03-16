@@ -165,7 +165,6 @@ struct Login_Previews: PreviewProvider {
         NavigationStack {
             LoginScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)
-                .tint(.element.accent)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button { } label: {
@@ -174,6 +173,5 @@ struct Login_Previews: PreviewProvider {
                     }
                 }
         }
-        .tint(.element.accent)
     }
 }

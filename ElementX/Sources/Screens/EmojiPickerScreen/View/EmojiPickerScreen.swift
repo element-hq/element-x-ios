@@ -45,6 +45,7 @@ struct EmojiPickerScreen: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .searchable(text: $searchString)
+        .searchableStyle(.list)
         .onChange(of: searchString) { _ in
             context.send(viewAction: .search(searchString: searchString))
         }
@@ -67,6 +68,5 @@ struct EmojiPickerScreen_Previews: PreviewProvider {
         NavigationStack {
             EmojiPickerScreen(context: EmojiPickerScreenViewModel(emojiProvider: EmojiProvider()).context)
         }
-        .tint(.element.accent)
     }
 }

@@ -154,6 +154,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             state.showSessionVerificationBanner = false
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
+        case .startChat:
+            callback?(.presentStartChatScreen)
         }
     }
     

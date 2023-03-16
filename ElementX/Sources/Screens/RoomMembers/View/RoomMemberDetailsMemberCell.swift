@@ -48,13 +48,6 @@ struct RoomMemberDetailsMemberCell: View {
 
 struct RoomMemberDetailsMemberCell_Previews: PreviewProvider {
     static var previews: some View {
-        body.preferredColorScheme(.light)
-            .tint(.element.accent)
-        body.preferredColorScheme(.dark)
-            .tint(.element.accent)
-    }
-
-    static var body: some View {
         let members: [RoomMemberProxy] = [
             .mockAlice,
             .mockBob,

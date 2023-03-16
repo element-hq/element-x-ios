@@ -171,6 +171,5 @@ struct RoomDetails_Previews: PreviewProvider {
     
     static var previews: some View {
         RoomDetailsScreen(context: viewModel.context)
-            .tint(.element.accent)
     }
 }

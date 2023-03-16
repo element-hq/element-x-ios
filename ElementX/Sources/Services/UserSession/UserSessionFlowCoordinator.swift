@@ -102,6 +102,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             case (.feedbackScreen, .dismissedFeedbackScreen, .roomList):
                 break
                 
+            case (.roomList, .showStartChatScreen, .startChatScreen):
+                self.presentStartChat()
+            case (.startChatScreen, .dismissedStartChatScreen, .roomList):
+                break
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -133,6 +137,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.stateMachine.processEvent(.feedbackScreen)
             case .presentSessionVerificationScreen:
                 self.stateMachine.processEvent(.showSessionVerificationScreen)
+            case .presentStartChatScreen:
+                self.stateMachine.processEvent(.showStartChatScreen)
             case .signOut:
                 self.callback?(.signOut)
             }
@@ -233,6 +239,30 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         navigationSplitCoordinator.setSheetCoordinator(coordinator) { [weak self] in
             self?.stateMachine.processEvent(.dismissedSessionVerificationScreen)
+        }
+    }
+    
+    // MARK: Start Chat
+    
+    private func presentStartChat() {
+        let startChatNavigationStackCoordinator = NavigationStackCoordinator()
+        
+        let userIndicatorController = UserIndicatorController(rootCoordinator: startChatNavigationStackCoordinator)
+        
+        let parameters = StartChatCoordinatorParameters(userSession: userSession)
+        let coordinator = StartChatCoordinator(parameters: parameters)
+        coordinator.callback = { [weak self] action in
+            guard let self else { return }
+            switch action {
+            case .close:
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+            }
+        }
+
+        startChatNavigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedStartChatScreen)
         }
     }
         
