@@ -88,7 +88,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingId)
         switch result {
         case .failure:
-            state.bindings.alertInfo = AlertInfo(id: .leaveRoomAlert, title: ElementL10n.roomDetailsLeaveRoomError)
+            state.bindings.alertInfo = AlertInfo(id: .unknown)
         case .success:
             callback?(.leaveRoom)
         }

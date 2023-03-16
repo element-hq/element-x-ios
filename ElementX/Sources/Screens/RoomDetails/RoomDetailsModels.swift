@@ -83,5 +83,5 @@ enum RoomDetailsErrorType: Hashable {
     /// A specific error message shown in an alert.
     case alert(String)
     /// Leaving room has failed..
-    case leaveRoomAlert
+    case unknown
 }

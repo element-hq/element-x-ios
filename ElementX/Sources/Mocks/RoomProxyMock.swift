@@ -34,30 +34,28 @@ struct RoomProxyMockConfiguration {
 }
 
 extension RoomProxyMock {
-    static func configureMock(with configuration: RoomProxyMockConfiguration) -> RoomProxyMock {
-        let mock = RoomProxyMock()
+    convenience init(with configuration: RoomProxyMockConfiguration) {
+        self.init()
 
-        mock.id = configuration.id
-        mock.name = configuration.name
-        mock.displayName = configuration.displayName
-        mock.topic = configuration.topic
-        mock.avatarURL = configuration.avatarURL
-        mock.isDirect = configuration.isDirect
-        mock.isSpace = configuration.isSpace
-        mock.isPublic = configuration.isPublic
-        mock.isEncrypted = configuration.isEncrypted
-        mock.isTombstoned = configuration.isTombstoned
-        mock.canonicalAlias = configuration.canonicalAlias
-        mock.alternativeAliases = configuration.alternativeAliases
-        mock.hasUnreadNotifications = configuration.hasUnreadNotifications
+        id = configuration.id
+        name = configuration.name
+        displayName = configuration.displayName
+        topic = configuration.topic
+        avatarURL = configuration.avatarURL
+        isDirect = configuration.isDirect
+        isSpace = configuration.isSpace
+        isPublic = configuration.isPublic
+        isEncrypted = configuration.isEncrypted
+        isTombstoned = configuration.isTombstoned
+        canonicalAlias = configuration.canonicalAlias
+        alternativeAliases = configuration.alternativeAliases
+        hasUnreadNotifications = configuration.hasUnreadNotifications
 
-        mock.membersClosure = {
+        membersClosure = {
             if let members = configuration.members {
                 return .success(members)
             }
             return .failure(.failedRetrievingMembers)
         }
-
-        return mock
     }
 }
