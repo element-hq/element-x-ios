@@ -174,11 +174,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                                                              emojiProvider: emojiProvider)
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             coordinator.callback = { [weak self] action in
-                guard let self else { return }
                 switch action {
                 case .leaveRoom:
-                    self.detailNavigationStackCoordinator.popToRoot(animated: true)
-                    self.navigationSplitCoordinator.setDetailCoordinator(nil)
+                    self?.leaveRoom()
                 }
             }
             
@@ -198,6 +196,11 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 navigationSplitCoordinator.setDetailCoordinator(detailNavigationStackCoordinator)
             }
         }
+    }
+
+    private func leaveRoom() {
+        detailNavigationStackCoordinator.popToRoot(animated: true)
+        navigationSplitCoordinator.setDetailCoordinator(nil)
     }
         
     // MARK: Settings
