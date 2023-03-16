@@ -25,9 +25,14 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     var roomProxyMock: RoomProxyMock!
 
     override func setUp() {
-        roomProxyMock = RoomProxyMock.configureMock(with: .init(displayName: "Test"))
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test"))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context = viewModel.context
+    }
+
+    func testLeaveRoomTapped() {
+        context.send(viewAction: .processTapLeave)
+        XCTAssertNotNil(context.leaveRoomAlertItem)
     }
 
     func testLeaveRoomSuccess() async {
@@ -36,7 +41,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         }
         viewModel.callback = { action in
             switch action {
-            case .leaveRoom:
+            case .leftRoom:
                 break
             default:
                 XCTFail("leaveRoom expected")
@@ -45,5 +50,15 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         context.send(viewAction: .confirmLeave)
         await Task.yield()
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
+    }
+
+    func testLeaveRoomError() async {
+        roomProxyMock.leaveRoomClosure = {
+            .failure(.failedLeavingRoom)
+        }
+        context.send(viewAction: .confirmLeave)
+        await Task.yield()
+        XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
+        XCTAssertNotNil(context.alertInfo)
     }
 }
