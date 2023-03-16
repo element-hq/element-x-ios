@@ -134,7 +134,7 @@ struct RoomStateEventStringBuilder {
             case (nil, false):
                 return ElementL10n.noticeRoomAvatarRemoved(senderName)
             case (.some, true):
-                return ElementL10n.noticeRoomAvatarRemovedByYou
+                return ElementL10n.noticeRoomAvatarChangedByYou
             case (nil, true):
                 return ElementL10n.noticeRoomAvatarRemovedByYou
             }
