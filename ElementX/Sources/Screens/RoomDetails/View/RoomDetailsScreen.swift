@@ -158,13 +158,10 @@ struct RoomDetailsScreen: View {
 
     private var leaveRoomSection: some View {
         Section {
-            Button {
+            Button(role: .destructive) {
                 context.send(viewAction: .processTapLeave)
             } label: {
                 Label(ElementL10n.roomProfileSectionMoreLeave, systemImage: "door.right.hand.open")
-                    .labelStyle(FormRowLabelStyle(titleColor: .element.alert,
-                                                  iconBackgroundColor: .element.alert.opacity(0.1),
-                                                  iconForegroundColor: .element.alert))
             }
             .buttonStyle(FormButtonStyle(accessory: nil))
         }
