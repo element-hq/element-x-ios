@@ -22,10 +22,6 @@ struct Application: App {
     private let applicationCoordinator: AppCoordinatorProtocol
 
     init() {
-        // Set the tint colour app-wide. Using UIView ensures that alerts, confirmation dialogs
-        // and Xcode previews all take on the tint colour, similar to defining it in an asset catalog.
-        UIView.appearance().tintColor = .element.accent
-        
         if Tests.isRunningUITests {
             applicationCoordinator = UITestsAppCoordinator()
         } else {
