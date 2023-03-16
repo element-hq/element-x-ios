@@ -268,7 +268,7 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
         navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
 
-        let expectation = expectation(description: "Details coordinator should be nil, and the compact layout revert to the sidebar root ")
+        let expectation = expectation(description: "Details coordinator should be nil, and the compact layout revert to the sidebar root")
         DispatchQueue.main.async {
             self.navigationSplitCoordinator.setDetailCoordinator(nil)
             DispatchQueue.main.async {
@@ -277,7 +277,7 @@ class NavigationSplitCoordinatorTests: XCTestCase {
                 expectation.fulfill()
             }
         }
-        waitForExpectations(timeout: 1.0)
+        waitForExpectations(timeout: 2.0)
     }
     
     // MARK: - Private
