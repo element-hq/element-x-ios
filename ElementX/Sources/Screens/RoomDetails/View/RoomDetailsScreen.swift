@@ -173,8 +173,8 @@ struct RoomDetailsScreen: View {
 
     @ViewBuilder
     private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
-        Button(item.cancelTitle, action: { })
-        Button(item.confirmationTitle, action: {
+        Button(item.cancelTitle, role: .cancel, action: { })
+        Button(item.confirmationTitle, role: .destructive, action: {
             context.send(viewAction: .confirmLeave)
         })
     }
