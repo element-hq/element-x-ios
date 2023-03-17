@@ -19,4 +19,65 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class RoomDetailsScreenViewModelTests: XCTestCase { }
+class RoomDetailsScreenViewModelTests: XCTestCase {
+    var viewModel: RoomDetailsViewModelProtocol!
+    var roomProxyMock: RoomProxyMock!
+    var context: RoomDetailsViewModelType.Context { viewModel.context }
+
+    override func setUp() {
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test"))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+    }
+
+    func testLeaveRoomTappedWhenPublic() async {
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: [.mockBob, .mockAlice]))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        context.send(viewAction: .processTapLeave)
+        await Task.yield()
+        XCTAssertEqual(context.leaveRoomAlertItem?.state, .public)
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeaveRoomAlertSubtitle)
+    }
+
+    func testLeavRoomTappedWhenRoomNotPublic() async {
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: [.mockBob, .mockAlice]))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        context.send(viewAction: .processTapLeave)
+        await Task.yield()
+        XCTAssertEqual(context.leaveRoomAlertItem?.state, .private)
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeavePrivateRoomAlertSubtitle)
+    }
+
+    func testLeaveRoomTappedWithLessThanTwoMembers() async {
+        context.send(viewAction: .processTapLeave)
+        await Task.yield()
+        XCTAssertEqual(context.leaveRoomAlertItem?.state, .empty)
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeaveEmptyRoomAlertSubtitle)
+    }
+
+    func testLeaveRoomSuccess() async {
+        roomProxyMock.leaveRoomClosure = {
+            .success(())
+        }
+        viewModel.callback = { action in
+            switch action {
+            case .leftRoom:
+                break
+            default:
+                XCTFail("leftRoom expected")
+            }
+        }
+        context.send(viewAction: .confirmLeave)
+        await Task.yield()
+        XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
+    }
+
+    func testLeaveRoomError() async {
+        roomProxyMock.leaveRoomClosure = {
+            .failure(.failedLeavingRoom)
+        }
+        context.send(viewAction: .confirmLeave)
+        await Task.yield()
+        XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
+        XCTAssertNotNil(context.alertInfo)
+    }
+}

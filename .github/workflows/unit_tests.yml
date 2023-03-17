@@ -41,6 +41,15 @@ jobs:
 
       - name: Run tests
         run: bundle exec fastlane unit_tests
+        
+      - name: Archive artifacts
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-output
+          path: fastlane/test_output
+          retention-days: 7
+          if-no-files-found: ignore
       
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

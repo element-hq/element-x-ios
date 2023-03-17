@@ -528,7 +528,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
         
         popToRoot(animated: false)
-        
+
         rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
     }
     

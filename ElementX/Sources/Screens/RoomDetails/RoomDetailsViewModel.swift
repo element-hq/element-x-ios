@@ -19,6 +19,7 @@ import SwiftUI
 typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, RoomDetailsViewAction>
 
 class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtocol {
+    private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxy] = [] {
         didSet {
             state.members = members.map { RoomDetailsMember(withProxy: $0) }
@@ -29,6 +30,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
+        self.roomProxy = roomProxy
         super.init(initialViewState: .init(roomId: roomProxy.id,
                                            canonicalAlias: roomProxy.canonicalAlias,
                                            isEncrypted: roomProxy.isEncrypted,
@@ -60,10 +62,20 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             callback?(.requestMemberDetailsPresentation(members))
         case .copyRoomLink:
             copyRoomLink()
+        case .processTapLeave:
+            guard members.count > 1 else {
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: .empty)
+                return
+            }
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: roomProxy.isPublic ? .public : .private)
+        case .confirmLeave:
+            await leaveRoom()
         }
     }
     
     // MARK: - Private
+
+    private static let leaveRoomLoadingID = "LeaveRoomLoading"
     
     private func copyRoomLink() {
         if let roomLink = state.permalink {
@@ -71,6 +83,18 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.linkCopiedToClipboard))
         } else {
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.unknownError))
+        }
+    }
+
+    private func leaveRoom() async {
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: ElementL10n.loading, persistent: true))
+        let result = await roomProxy.leaveRoom()
+        ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
+        switch result {
+        case .failure:
+            state.bindings.alertInfo = AlertInfo(id: .unknown)
+        case .success:
+            callback?(.leftRoom)
         }
     }
 }

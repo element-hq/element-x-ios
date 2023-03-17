@@ -19,19 +19,44 @@ import SwiftUI
 struct FormRowLabelStyle: LabelStyle {
     @ScaledMetric private var menuIconSize = 30.0
     
-    var alignment: VerticalAlignment = .firstTextBaseline
+    var alignment = VerticalAlignment.firstTextBaseline
+    var role: ButtonRole?
+
+    private var titleColor: Color {
+        if role == .destructive {
+            return .element.alert
+        } else {
+            return .element.primaryContent
+        }
+    }
+
+    private var iconBackgroundColor: Color {
+        if role == .destructive {
+            return .element.alert.opacity(0.1)
+        } else {
+            return .element.formBackground
+        }
+    }
+
+    private var iconForegroundColor: Color {
+        if role == .destructive {
+            return .element.alert
+        } else {
+            return .element.secondaryContent
+        }
+    }
 
     func makeBody(configuration: Configuration) -> some View {
         HStack(alignment: alignment, spacing: 16) {
             configuration.icon
-                .foregroundColor(.element.secondaryContent)
+                .foregroundColor(iconForegroundColor)
                 .padding(4)
                 .frame(width: menuIconSize, height: menuIconSize)
-                .background(Color.element.formBackground)
+                .background(iconBackgroundColor)
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             configuration.title
                 .font(.element.body)
-                .foregroundColor(.element.primaryContent)
+                .foregroundColor(titleColor)
         }
     }
 }
@@ -50,6 +75,9 @@ struct FormRowLabelStyle_Previews: PreviewProvider {
             
             Label("Help", systemImage: "questionmark")
                 .labelStyle(FormRowLabelStyle())
+
+            Label("Destroy", systemImage: "x.circle")
+                .labelStyle(FormRowLabelStyle(role: .destructive))
         }
         .padding()
     }
