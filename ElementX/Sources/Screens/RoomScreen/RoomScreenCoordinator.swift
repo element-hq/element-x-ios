@@ -25,7 +25,7 @@ struct RoomScreenCoordinatorParameters {
 }
 
 enum RoomScreenCoordinatorAction {
-    case leaveRoom
+    case leftRoom
 }
 
 final class RoomScreenCoordinator: CoordinatorProtocol {
@@ -121,8 +121,8 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             switch action {
             case .cancel:
                 self?.navigationStackCoordinator.pop()
-            case .leaveRoom:
-                self?.callback?(.leaveRoom)
+            case .leftRoom:
+                self?.callback?(.leftRoom)
             }
         }
 

@@ -24,7 +24,7 @@ struct RoomDetailsCoordinatorParameters {
 
 enum RoomDetailsCoordinatorAction {
     case cancel
-    case leaveRoom
+    case leftRoom
 }
 
 final class RoomDetailsCoordinator: CoordinatorProtocol {
@@ -53,7 +53,7 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
             case .cancel:
                 self.callback?(.cancel)
             case .leftRoom:
-                self.callback?(.leaveRoom)
+                self.callback?(.leftRoom)
             }
         }
     }

@@ -175,8 +175,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             let coordinator = RoomScreenCoordinator(parameters: parameters)
             coordinator.callback = { [weak self] action in
                 switch action {
-                case .leaveRoom:
-                    self?.leaveRoom()
+                case .leftRoom:
+                    self?.dismissRoom()
                 }
             }
             
@@ -198,7 +198,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         }
     }
 
-    private func leaveRoom() {
+    private func dismissRoom() {
         detailNavigationStackCoordinator.popToRoot(animated: true)
         navigationSplitCoordinator.setDetailCoordinator(nil)
     }

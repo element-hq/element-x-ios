@@ -60,7 +60,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             case .leftRoom:
                 break
             default:
-                XCTFail("leaveRoom expected")
+                XCTFail("leftRoom expected")
             }
         }
         context.send(viewAction: .confirmLeave)
