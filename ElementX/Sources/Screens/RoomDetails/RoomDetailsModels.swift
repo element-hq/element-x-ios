@@ -54,10 +54,24 @@ struct RoomDetailsViewStateBindings {
 }
 
 struct LeaveRoomAlertItem: AlertItem {
+    enum RoomState {
+        case empty
+        case `public`
+        case `private`
+    }
+
+    let state: RoomState
     let title = ElementL10n.roomProfileSectionMoreLeave
-    let subtitle: String
     let confirmationTitle = ElementL10n.actionLeave
     let cancelTitle = ElementL10n.actionCancel
+
+    var subtitle: String {
+        switch state {
+        case .empty: return ElementL10n.roomDetailsLeaveEmptyRoomAlertSubtitle
+        case .private: return ElementL10n.roomDetailsLeavePrivateRoomAlertSubtitle
+        case .public: return ElementL10n.roomDetailsLeaveRoomAlertSubtitle
+        }
+    }
 }
 
 enum RoomDetailsViewAction {
