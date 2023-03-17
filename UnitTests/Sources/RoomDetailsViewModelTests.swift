@@ -21,19 +21,34 @@ import XCTest
 @MainActor
 class RoomDetailsScreenViewModelTests: XCTestCase {
     var viewModel: RoomDetailsViewModelProtocol!
-    var context: RoomDetailsViewModelType.Context!
     var roomProxyMock: RoomProxyMock!
+    var context: RoomDetailsViewModelType.Context { viewModel.context }
 
     override func setUp() {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test"))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
-        context = viewModel.context
     }
 
-    func testLeaveRoomTapped() async {
+    func testLeaveRoomTappedWhenPublic() async {
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: [.mockBob, .mockAlice]))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .processTapLeave)
         await Task.yield()
-        XCTAssertNotNil(context.leaveRoomAlertItem)
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeaveRoomAlertSubtitle)
+    }
+
+    func testLeavRoomTappedWhenRoomNotPublic() async {
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: [.mockBob, .mockAlice]))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        context.send(viewAction: .processTapLeave)
+        await Task.yield()
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeavePrivateRoomAlertSubtitle)
+    }
+
+    func testLeaveRoomTappedWithLessThanTwoMembers() async {
+        context.send(viewAction: .processTapLeave)
+        await Task.yield()
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeaveEmptyRoomAlertSubtitle)
     }
 
     func testLeaveRoomSuccess() async {

@@ -55,7 +55,7 @@ struct RoomDetailsViewStateBindings {
 
 struct LeaveRoomAlertItem: AlertItem {
     let title = ElementL10n.roomProfileSectionMoreLeave
-    let subtitle = ElementL10n.roomDetailsLeaveRoomAlertSubtitle
+    let subtitle: String
     let confirmationTitle = ElementL10n.actionLeave
     let cancelTitle = ElementL10n.actionCancel
 }

@@ -63,7 +63,11 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         case .copyRoomLink:
             copyRoomLink()
         case .processTapLeave:
-            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem()
+            guard members.count > 1 else {
+                state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(subtitle: ElementL10n.roomDetailsLeaveEmptyRoomAlertSubtitle)
+                return
+            }
+            state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(subtitle: roomProxy.isPublic ? ElementL10n.roomDetailsLeaveRoomAlertSubtitle : ElementL10n.roomDetailsLeavePrivateRoomAlertSubtitle)
         case .confirmLeave:
             await leaveRoom()
         }
