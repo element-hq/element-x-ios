@@ -30,8 +30,9 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         context = viewModel.context
     }
 
-    func testLeaveRoomTapped() {
+    func testLeaveRoomTapped() async {
         context.send(viewAction: .processTapLeave)
+        await Task.yield()
         XCTAssertNotNil(context.leaveRoomAlertItem)
     }
 
