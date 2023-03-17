@@ -275,6 +275,7 @@ class NavigationSplitCoordinatorTests: XCTestCase {
             DispatchQueue.main.async {
                 XCTAssertNil(self.navigationSplitCoordinator.detailCoordinator)
                 self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                XCTAssertTrue(self.navigationSplitCoordinator.compactLayoutStackModules.isEmpty)
                 expectation.fulfill()
             }
         }
