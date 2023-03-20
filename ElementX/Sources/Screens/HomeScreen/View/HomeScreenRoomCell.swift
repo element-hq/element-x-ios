@@ -17,6 +17,7 @@
 import SwiftUI
 
 struct HomeScreenRoomCell: View {
+    @Environment(\.dynamicTypeSize) var dynamicTypeSize
     @Environment(\.redactionReasons) private var redactionReasons
     
     let room: HomeScreenRoom
@@ -52,12 +53,15 @@ struct HomeScreenRoomCell: View {
     
     @ViewBuilder
     var avatar: some View {
-        LoadableAvatarImage(url: room.avatarURL,
-                            name: room.name,
-                            contentID: room.roomId,
-                            avatarSize: .room(on: .home),
-                            imageProvider: context.imageProvider)
-            .accessibilityHidden(true)
+        if dynamicTypeSize < .accessibility3 {
+            LoadableAvatarImage(url: room.avatarURL,
+                                name: room.name,
+                                contentID: room.roomId,
+                                avatarSize: .room(on: .home),
+                                imageProvider: context.imageProvider)
+                .dynamicTypeSize(dynamicTypeSize < .accessibility1 ? dynamicTypeSize : .accessibility1)
+                .accessibilityHidden(true)
+        }
     }
     
     var content: some View {

@@ -25,8 +25,7 @@ enum RoomTimelineControllerCallback {
 }
 
 enum RoomTimelineControllerAction {
-    case displayVideo(videoURL: URL, title: String?)
-    case displayFile(fileURL: URL, title: String?)
+    case displayMediaFile(file: MediaFileHandleProxy, title: String?)
     case none
 }
 
