@@ -18,7 +18,7 @@ import SwiftUI
 
 struct RoomMemberDetailsCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
-    let members: [RoomMemberProxy]
+    let members: [any RoomMemberProxyProtocol]
 }
 
 enum RoomMemberDetailsCoordinatorAction {

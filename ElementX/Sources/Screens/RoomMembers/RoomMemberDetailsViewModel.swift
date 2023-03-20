@@ -24,7 +24,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
 
     init(mediaProvider: MediaProviderProtocol,
-         members: [RoomMemberProxy]) {
+         members: [any RoomMemberProxyProtocol]) {
         self.mediaProvider = mediaProvider
         super.init(initialViewState: .init(members: members.map { RoomDetailsMember(withProxy: $0) },
                                            bindings: .init()),

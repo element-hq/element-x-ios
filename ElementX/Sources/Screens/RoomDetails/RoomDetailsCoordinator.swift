@@ -62,7 +62,7 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
         AnyView(RoomDetailsScreen(context: viewModel.context))
     }
     
-    private func presentRoomMemberDetails(_ members: [RoomMemberProxy]) {
+    private func presentRoomMemberDetails(_ members: [any RoomMemberProxyProtocol]) {
         let params = RoomMemberDetailsCoordinatorParameters(mediaProvider: parameters.mediaProvider,
                                                             members: members)
         let coordinator = RoomMemberDetailsCoordinator(parameters: params)

@@ -30,7 +30,7 @@ struct RoomProxyMockConfiguration {
     var canonicalAlias: String?
     var alternativeAliases: [String] = []
     var hasUnreadNotifications = Bool.random()
-    var members: [RoomMemberProxy]?
+    var members: [any RoomMemberProxyProtocol]?
 }
 
 extension RoomProxyMock {

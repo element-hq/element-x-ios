@@ -50,6 +50,36 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class RoomMemberProxyMock: RoomMemberProxyProtocol {
+    var userId: String {
+        get { return underlyingUserId }
+        set(value) { underlyingUserId = value }
+    }
+    var underlyingUserId: String!
+    var displayName: String?
+    var avatarURL: URL?
+    var membership: MembershipState {
+        get { return underlyingMembership }
+        set(value) { underlyingMembership = value }
+    }
+    var underlyingMembership: MembershipState!
+    var isNameAmbiguous: Bool {
+        get { return underlyingIsNameAmbiguous }
+        set(value) { underlyingIsNameAmbiguous = value }
+    }
+    var underlyingIsNameAmbiguous: Bool!
+    var powerLevel: Int64 {
+        get { return underlyingPowerLevel }
+        set(value) { underlyingPowerLevel = value }
+    }
+    var underlyingPowerLevel: Int64!
+    var normalizedPowerLevel: Int64 {
+        get { return underlyingNormalizedPowerLevel }
+        set(value) { underlyingNormalizedPowerLevel = value }
+    }
+    var underlyingNormalizedPowerLevel: Int64!
+
+}
 class RoomProxyMock: RoomProxyProtocol {
     var id: String {
         get { return underlyingId }
@@ -321,10 +351,10 @@ class RoomProxyMock: RoomProxyProtocol {
     var membersCalled: Bool {
         return membersCallsCount > 0
     }
-    var membersReturnValue: Result<[RoomMemberProxy], RoomProxyError>!
-    var membersClosure: (() async -> Result<[RoomMemberProxy], RoomProxyError>)?
+    var membersReturnValue: Result<[any RoomMemberProxyProtocol], RoomProxyError>!
+    var membersClosure: (() async -> Result<[any RoomMemberProxyProtocol], RoomProxyError>)?
 
-    func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
+    func members() async -> Result<[any RoomMemberProxyProtocol], RoomProxyError> {
         membersCallsCount += 1
         if let membersClosure = membersClosure {
             return await membersClosure()

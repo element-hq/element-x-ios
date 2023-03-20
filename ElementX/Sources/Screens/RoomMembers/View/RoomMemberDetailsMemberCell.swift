@@ -48,7 +48,7 @@ struct RoomMemberDetailsMemberCell: View {
 
 struct RoomMemberDetailsMemberCell_Previews: PreviewProvider {
     static var previews: some View {
-        let members: [RoomMemberProxy] = [
+        let members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
             .mockCharlie

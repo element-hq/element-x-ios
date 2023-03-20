@@ -182,7 +182,7 @@ struct RoomDetailsScreen: View {
 
 struct RoomDetails_Previews: PreviewProvider {
     static let viewModel = {
-        let members: [RoomMemberProxy] = [
+        let members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
             .mockCharlie

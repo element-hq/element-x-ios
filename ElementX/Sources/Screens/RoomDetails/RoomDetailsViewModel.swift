@@ -20,7 +20,7 @@ typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, R
 
 class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtocol {
     private let roomProxy: RoomProxyProtocol
-    private var members: [RoomMemberProxy] = [] {
+    private var members: [any RoomMemberProxyProtocol] = [] {
         didSet {
             state.members = members.map { RoomDetailsMember(withProxy: $0) }
         }

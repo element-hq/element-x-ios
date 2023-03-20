@@ -271,7 +271,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func members() async -> Result<[RoomMemberProxy], RoomProxyError> {
+    func members() async -> Result<[any RoomMemberProxyProtocol], RoomProxyError> {
         await Task.dispatch(on: .global()) {
             do {
                 let members = try self.room.members()

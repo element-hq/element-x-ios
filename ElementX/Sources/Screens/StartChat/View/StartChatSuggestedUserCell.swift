@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct StartChatSuggestedUserCell: View {
-    let user: RoomMemberProxy
+    let user: any RoomMemberProxyProtocol
     let imageProvider: ImageProviderProtocol?
     
     var body: some View {
