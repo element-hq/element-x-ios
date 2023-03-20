@@ -220,13 +220,13 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
 extension RoomSummaryProviderState {
     init(slidingSyncState: SlidingSyncState) {
         switch slidingSyncState {
-        case .cold:
+        case .notLoaded:
             self = .cold
-        case .preload:
+        case .preloaded:
             self = .preload
-        case .catchingUp:
+        case .partiallyLoaded:
             self = .catchingUp
-        case .live:
+        case .fullyLoaded:
             self = .live
         }
     }
