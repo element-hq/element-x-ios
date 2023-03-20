@@ -18,9 +18,9 @@ import Foundation
 import MatrixRustSDK
 
 final class RoomMemberProxy: RoomMemberProxyProtocol {
-    private let member: RoomMember
+    private let member: RoomMemberProtocol
 
-    init(with member: RoomMember) {
+    init(with member: RoomMemberProtocol) {
         self.member = member
     }
 
