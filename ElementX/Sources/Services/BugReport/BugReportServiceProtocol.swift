@@ -17,7 +17,7 @@
 import Foundation
 import UIKit
 
-struct BugReport {
+struct BugReport: Equatable {
     let userID: String
     let deviceID: String?
     let text: String
@@ -31,6 +31,7 @@ struct SubmitBugReportResponse: Decodable {
     var reportUrl: String
 }
 
+// sourcery: AutoMockable
 protocol BugReportServiceProtocol {
     var crashedLastRun: Bool { get }
 

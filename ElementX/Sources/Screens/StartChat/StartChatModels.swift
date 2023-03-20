@@ -15,17 +15,25 @@
 //
 
 import Foundation
-import UIKit
 
-class MockBugReportService: BugReportServiceProtocol {
-    func submitBugReport(_ bugReport: BugReport,
-                         progressListener: ProgressListener?) async throws -> SubmitBugReportResponse {
-        SubmitBugReportResponse(reportUrl: "https://www.example/com/123")
-    }
+enum StartChatViewModelAction {
+    case close
+    case createRoom
+}
 
-    var crashedLastRun = false
+struct StartChatViewState: BindableState {
+    var bindings = StartChatScreenViewStateBindings()
+    
+    // TODO: bind with real service, and mock data only in preview
+    var suggestedUsers: [RoomMemberProxy] = [.mockAlice, .mockBob, .mockCharlie]
+}
 
-    func crash() {
-        // no-op
-    }
+struct StartChatScreenViewStateBindings {
+    var searchQuery = ""
+}
+
+enum StartChatViewAction {
+    case close
+    case createRoom
+    case inviteFriends
 }

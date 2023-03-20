@@ -97,7 +97,8 @@ end
 
 lane :unit_tests do
   run_tests(
-    scheme: "UnitTests"
+    scheme: "UnitTests",
+    result_bundle: true,
   )
 
   slather(

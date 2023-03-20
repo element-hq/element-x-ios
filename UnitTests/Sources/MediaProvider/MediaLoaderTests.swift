@@ -57,12 +57,12 @@ final class MediaLoaderTests: XCTestCase {
 private class MockMediaLoadingClient: ClientProtocol {
     private(set) var numberOfInvocations = 0
     
-    func getMediaContent(source: MatrixRustSDK.MediaSource) throws -> [UInt8] {
+    func getMediaContent(mediaSource: MatrixRustSDK.MediaSource) throws -> [UInt8] {
         numberOfInvocations += 1
         return []
     }
     
-    func getMediaThumbnail(source: MatrixRustSDK.MediaSource, width: UInt64, height: UInt64) throws -> [UInt8] {
+    func getMediaThumbnail(mediaSource: MatrixRustSDK.MediaSource, width: UInt64, height: UInt64) throws -> [UInt8] {
         numberOfInvocations += 1
         return []
     }
@@ -83,7 +83,9 @@ private class MockMediaLoadingClient: ClientProtocol {
     
     func setDisplayName(name: String) throws { }
     
-    func avatarUrl() throws -> String { fatalError() }
+    func avatarUrl() throws -> String? { fatalError() }
+
+    func cachedAvatarUrl() throws -> String? { fatalError() }
     
     func deviceId() throws -> String { fatalError() }
     
@@ -91,7 +93,9 @@ private class MockMediaLoadingClient: ClientProtocol {
     
     func setAccountData(eventType: String, content: String) throws { fatalError() }
     
-    func uploadMedia(mimeType: String, content: [UInt8]) throws -> String { fatalError() }
+    func uploadMedia(mimeType: String, data content: [UInt8]) throws -> String { fatalError() }
+    
+    func getMediaFile(source: MatrixRustSDK.MediaSource, mimeType: String) throws -> MatrixRustSDK.MediaFileHandle { fatalError() }
     
     func getSessionVerificationController() throws -> MatrixRustSDK.SessionVerificationController { fatalError() }
     
@@ -112,4 +116,16 @@ private class MockMediaLoadingClient: ClientProtocol {
     func slidingSync() -> MatrixRustSDK.SlidingSyncBuilder { fatalError() }
     
     func startSync(timelineLimit: UInt16?) { }
+    
+    func createRoom(request: MatrixRustSDK.CreateRoomParameters) throws -> String { fatalError() }
+    
+    // swiftlint:disable:next function_parameter_count
+    func setPusher(identifiers: MatrixRustSDK.PusherIdentifiers,
+                   kind: MatrixRustSDK.PusherKind,
+                   appDisplayName: String,
+                   deviceDisplayName: String,
+                   profileTag: String?,
+                   lang: String) throws {
+        fatalError()
+    }
 }

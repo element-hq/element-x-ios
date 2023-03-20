@@ -182,7 +182,6 @@ struct SoftLogout_Previews: PreviewProvider {
         NavigationStack {
             SoftLogoutScreen(context: viewModel.context)
                 .navigationBarTitleDisplayMode(.inline)
-                .tint(.element.accent)
                 .toolbar {
                     ToolbarItem(placement: .cancellationAction) {
                         Button { } label: {
@@ -191,6 +190,5 @@ struct SoftLogout_Previews: PreviewProvider {
                     }
                 }
         }
-        .tint(.element.accent)
     }
 }

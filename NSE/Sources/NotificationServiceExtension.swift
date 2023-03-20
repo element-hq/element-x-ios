@@ -108,7 +108,7 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         // There is some media to load, process it again
         if let latestContent = try await itemProxy.process(with: roomId,
-                                                           mediaProvider: try createMediaProvider(with: credentials)) {
+                                                           mediaProvider: createMediaProvider(with: credentials)) {
             // Processing finished, hopefully with some media
             modifiedContent = latestContent
             return notify()

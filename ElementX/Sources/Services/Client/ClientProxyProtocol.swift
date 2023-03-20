@@ -24,7 +24,6 @@ enum ClientProxyCallback {
 }
 
 enum ClientProxyError: Error {
-    case failedRetrievingAvatarURL
     case failedRetrievingDisplayName
     case failedRetrievingAccountData
     case failedSettingAccountData
@@ -32,35 +31,22 @@ enum ClientProxyError: Error {
     case failedLoadingMedia
 }
 
-enum PusherKind {
-    case http
-    case email
-
-//    var rustValue: MatrixRustSDK.PusherKind {
-//        switch self {
-//        case .http:
-//            return .http
-//        case .email:
-//            return .email
-//        }
-//    }
-}
-
-enum PushFormat {
-    case eventIdOnly
-
-//    var rustValue: MatrixRustSDK.PushFormat {
-//        switch self {
-//        case .eventIdOnly:
-//            return .eventIdOnly
-//        }
-//    }
-}
-
 enum SlidingSyncConstants {
     static let initialTimelineLimit: UInt = 0
     static let lastMessageTimelineLimit: UInt = 1
     static let timelinePrecachingTimelineLimit: UInt = 20
+}
+
+/// This struct represents the configuration that we are using to register the application through Pusher to Sygnal
+/// using the Matrix Rust SDK, more info here:
+/// https://github.com/matrix-org/sygnal
+struct PusherConfiguration {
+    let identifiers: PusherIdentifiers
+    let kind: PusherKind
+    let appDisplayName: String
+    let deviceDisplayName: String
+    let profileTag: String?
+    let lang: String
 }
 
 protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
@@ -71,6 +57,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     var deviceId: String? { get }
 
     var homeserver: String { get }
+
+    var avatarURLPublisher: AnyPublisher<URL?, Never> { get }
 
     var restorationToken: RestorationToken? { get }
     
@@ -85,9 +73,9 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError>
-        
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError>
-    
+
+    func loadUserAvatarURL() async
+
     func accountDataEvent<Content: Decodable>(type: String) async -> Result<Content?, ClientProxyError>
     
     func setAccountData<Content: Encodable>(content: Content, type: String) async -> Result<Void, ClientProxyError>
@@ -96,15 +84,5 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func logout() async
 
-    // swiftlint:disable:next function_parameter_count
-    func setPusher(pushkey: String,
-                   kind: PusherKind?,
-                   appId: String,
-                   appDisplayName: String,
-                   deviceDisplayName: String,
-                   profileTag: String?,
-                   lang: String,
-                   url: URL?,
-                   format: PushFormat?,
-                   defaultPayload: [AnyHashable: Any]?) async throws
+    func setPusher(with configuration: PusherConfiguration) async throws
 }

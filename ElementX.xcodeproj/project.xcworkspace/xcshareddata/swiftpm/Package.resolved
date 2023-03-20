@@ -95,8 +95,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "32645162ea39badc586d610d2ada6bbc52f398ba",
-        "version" : "1.0.43-alpha"
+        "revision" : "6e9c8b7f0f68fd8e617e9d6c1ad902736899557a",
+        "version" : "1.0.46-alpha"
       }
     },
     {
@@ -113,8 +113,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/getsentry/sentry-cocoa",
       "state" : {
-        "revision" : "71fd3032635fed58ae1c1ba22bb7ffa158dbb5ee",
-        "version" : "7.30.2"
+        "revision" : "2e7899aff930ed3b8d81be1909492f7684bbd481",
+        "version" : "8.3.1"
       }
     },
     {
@@ -167,8 +167,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
       "state" : {
-        "revision" : "f2616860a41f9d9932da412a8978fec79c06fe24",
-        "version" : "0.1.4"
+        "revision" : "c18951c747ab62af7c15e17a81bd37d4fd5a9979",
+        "version" : "0.2.3"
       }
     },
     {

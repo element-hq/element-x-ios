@@ -1,3 +1,28 @@
+## Changes in 1.0.24 (2023-03-10)
+
+✨ Features
+
+- Auto Mocks generator added to the project. ([#600](https://github.com/vector-im/element-x-ios/issues/600))
+
+🙌 Improvements
+
+- Improved report content UI. ([#115](https://github.com/vector-im/element-x-ios/issues/115))
+- Avatar url is now cached on the rust side. ([#550](https://github.com/vector-im/element-x-ios/issues/550))
+
+🐛 Bugfixes
+
+- Fixed crash on the settings screen when showing the "complete verification" button before the session verification controller proxy was ready ([#650](https://github.com/vector-im/element-x-ios/pull/650))
+- Ignore background images in OnboardingBackgroundView for VoiceOver users by Sem Pruijs ([#658](https://github.com/vector-im/element-x-ios/pull/658))
+- Hide the message composer textfield placeholder for VoiceOver users by Sem Pruijs ([#688](https://github.com/vector-im/element-x-ios/pull/688))
+- Hides the scroll down button for VoiceOver users if it is hidden for visual users by Sem Pruijs (pr670)
+- Prevent creating collapsible groups for one single event. Increase their padding and touch area. ([#631](https://github.com/vector-im/element-x-ios/issues/631))
+- Update top padding and a string in Login and Server Selection screens. ([#632](https://github.com/vector-im/element-x-ios/issues/632))
+
+⚠️ API Changes
+
+- Remove all APIs that load media from URLs. These were unused and we should continue to load media through MediaSource in the future. ([#444](https://github.com/vector-im/element-x-ios/issues/444))
+
+
 ## Changes in 1.0.23 (2023-02-24)
 
 No significant changes.

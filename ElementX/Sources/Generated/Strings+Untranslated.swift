@@ -102,6 +102,14 @@ extension ElementL10n {
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
   /// Copy Link
   public static let roomDetailsCopyLink = ElementL10n.tr("Untranslated", "room_details_copy_link")
+  /// Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.
+  public static let roomDetailsLeaveEmptyRoomAlertSubtitle = ElementL10n.tr("Untranslated", "room_details_leave_empty_room_alert_subtitle")
+  /// Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite.
+  public static let roomDetailsLeavePrivateRoomAlertSubtitle = ElementL10n.tr("Untranslated", "room_details_leave_private_room_alert_subtitle")
+  /// Are you sure that you want to leave the room?
+  public static let roomDetailsLeaveRoomAlertSubtitle = ElementL10n.tr("Untranslated", "room_details_leave_room_alert_subtitle")
+  /// Room left
+  public static let roomDetailsRoomLeftToast = ElementL10n.tr("Untranslated", "room_details_room_left_toast")
   /// Info
   public static let roomDetailsTitle = ElementL10n.tr("Untranslated", "room_details_title")
   /// Failed loading messages
