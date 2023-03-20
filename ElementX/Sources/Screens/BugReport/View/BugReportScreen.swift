@@ -53,10 +53,10 @@ struct BugReportScreen: View {
         Section {
             TextField(ElementL10n.bugReportScreenEditorPlaceholder,
                       text: $context.reportText,
-                      prompt: Text(ElementL10n.bugReportScreenEditorPlaceholder).foregroundColor(.compound.textPlaceholder),
+                      prompt: Text(ElementL10n.bugReportScreenEditorPlaceholder).compoundFormTextFieldPlaceholder(),
                       axis: .vertical)
                 .lineLimit(4, reservesSpace: true)
-                .tint(.compound.iconAccentTertiary)
+                .textFieldStyle(.compoundForm)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
         } footer: {
             Text(ElementL10n.bugReportScreenDescription)
@@ -68,7 +68,7 @@ struct BugReportScreen: View {
     private var sendLogsSection: some View {
         Section {
             Toggle(ElementL10n.bugReportScreenIncludeLogs, isOn: $context.sendingLogsEnabled)
-                .toggleStyle(.compoundForm())
+                .toggleStyle(.compoundForm)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
             Text(ElementL10n.bugReportScreenLogsDescription)

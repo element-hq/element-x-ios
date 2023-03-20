@@ -47,9 +47,9 @@ packages:
   DesignKit:
     path: DesignKit
   Compound:
-    # url: https://github.com/matrix-org/compound-ios
-    # branch: main
-    path: ../compound-ios
+    url: https://github.com/vector-im/compound-ios
+    revision: 0b1c62f9a9efac3d9ac06c51531392d55057a0eb
+    # path: ../compound-ios
   Algorithms:
     url: https://github.com/apple/swift-algorithms
     majorVersion: 1.0.0
