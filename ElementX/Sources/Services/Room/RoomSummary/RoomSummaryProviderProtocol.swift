@@ -19,10 +19,10 @@ import Foundation
 import MatrixRustSDK
 
 enum RoomSummaryProviderState {
-    case cold
-    case preload
-    case catchingUp
-    case live
+    case notLoaded
+    case preloaded
+    case partiallyLoaded
+    case fullyLoaded
 }
 
 enum RoomSummary: CustomStringConvertible {

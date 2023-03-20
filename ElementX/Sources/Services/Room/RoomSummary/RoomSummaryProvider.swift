@@ -26,7 +26,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     private var cancellables = Set<AnyCancellable>()
     
     let roomListPublisher = CurrentValueSubject<[RoomSummary], Never>([])
-    let statePublisher = CurrentValueSubject<RoomSummaryProviderState, Never>(.cold)
+    let statePublisher = CurrentValueSubject<RoomSummaryProviderState, Never>(.notLoaded)
     let countPublisher = CurrentValueSubject<UInt, Never>(0)
     
     private var rooms: [RoomSummary] = [] {
@@ -220,14 +220,14 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
 extension RoomSummaryProviderState {
     init(slidingSyncState: SlidingSyncState) {
         switch slidingSyncState {
-        case .cold:
-            self = .cold
-        case .preload:
-            self = .preload
-        case .catchingUp:
-            self = .catchingUp
-        case .live:
-            self = .live
+        case .notLoaded:
+            self = .notLoaded
+        case .preloaded:
+            self = .preloaded
+        case .partiallyLoaded:
+            self = .partiallyLoaded
+        case .fullyLoaded:
+            self = .fullyLoaded
         }
     }
 }
