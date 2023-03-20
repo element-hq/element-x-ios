@@ -23,7 +23,7 @@ private class SlidingSyncViewObserver: SlidingSyncListRoomListObserver, SlidingS
     let roomListDiffPublisher = PassthroughSubject<SlidingSyncListRoomsListDiff, Never>()
     
     /// Publishes the current state of sliding sync, such as whether its catching up or live.
-    let stateUpdatePublisher = CurrentValueSubject<SlidingSyncState, Never>(.fullyLoaded)
+    let stateUpdatePublisher = CurrentValueSubject<SlidingSyncState, Never>(.notLoaded)
     
     /// Publishes the number of available rooms
     let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
