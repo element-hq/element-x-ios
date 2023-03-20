@@ -27,7 +27,7 @@ protocol MessageContentProtocol: RoomMessageEventContentProtocol, CustomStringCo
 
 /// A timeline item that represents an `m.room.message` event.
 struct MessageTimelineItem<Content: MessageContentProtocol> {
-    let item: MatrixRustSDK.EventTimelineItem
+    let item: MatrixRustSDK.EventTimelineItemProtocol
     let content: Content
 
     var id: String {
@@ -82,7 +82,7 @@ extension MatrixRustSDK.ImageMessageContent: MessageContentProtocol { }
 /// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.image`.
 extension MessageTimelineItem where Content == MatrixRustSDK.ImageMessageContent {
     var source: MediaSourceProxy {
-        .init(source: content.source)
+        .init(source: content.source, mimeType: content.info?.mimetype)
     }
 
     var width: CGFloat? {
@@ -97,8 +97,8 @@ extension MessageTimelineItem where Content == MatrixRustSDK.ImageMessageContent
         content.info?.blurhash
     }
     
-    var type: UTType? {
-        content.info?.mimetype.flatMap { UTType(mimeType: $0) }
+    var contentType: UTType? {
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
     }
 }
 
@@ -107,14 +107,14 @@ extension MatrixRustSDK.VideoMessageContent: MessageContentProtocol { }
 /// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.video`.
 extension MessageTimelineItem where Content == MatrixRustSDK.VideoMessageContent {
     var source: MediaSourceProxy {
-        .init(source: content.source)
+        .init(source: content.source, mimeType: content.info?.mimetype)
     }
 
     var thumbnailSource: MediaSourceProxy? {
         guard let src = content.info?.thumbnailSource else {
             return nil
         }
-        return .init(source: src)
+        return .init(source: src, mimeType: content.info?.thumbnailInfo?.mimetype)
     }
 
     var duration: UInt64 {
@@ -132,6 +132,10 @@ extension MessageTimelineItem where Content == MatrixRustSDK.VideoMessageContent
     var blurhash: String? {
         content.info?.blurhash
     }
+    
+    var contentType: UTType? {
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
+    }
 }
 
 extension MatrixRustSDK.FileMessageContent: MessageContentProtocol { }
@@ -139,14 +143,18 @@ extension MatrixRustSDK.FileMessageContent: MessageContentProtocol { }
 /// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.file`.
 extension MessageTimelineItem where Content == MatrixRustSDK.FileMessageContent {
     var source: MediaSourceProxy {
-        .init(source: content.source)
+        .init(source: content.source, mimeType: content.info?.mimetype)
     }
 
     var thumbnailSource: MediaSourceProxy? {
         guard let src = content.info?.thumbnailSource else {
             return nil
         }
-        return .init(source: src)
+        return .init(source: src, mimeType: content.info?.thumbnailInfo?.mimetype)
+    }
+    
+    var contentType: UTType? {
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
     }
 }
 
@@ -155,10 +163,14 @@ extension MatrixRustSDK.AudioMessageContent: MessageContentProtocol { }
 /// A timeline item that represents an `m.room.message` event with a `msgtype` of `m.audio`.
 extension MessageTimelineItem where Content == MatrixRustSDK.AudioMessageContent {
     var source: MediaSourceProxy {
-        .init(source: content.source)
+        .init(source: content.source, mimeType: content.info?.mimetype)
     }
 
     var duration: UInt64 {
         content.info?.duration ?? 0
+    }
+    
+    var contentType: UTType? {
+        UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body)
     }
 }

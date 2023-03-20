@@ -21,8 +21,8 @@ typealias FilePreviewViewModelType = StateStoreViewModel<FilePreviewViewState, F
 class FilePreviewViewModel: FilePreviewViewModelType, FilePreviewViewModelProtocol {
     var callback: ((FilePreviewViewModelAction) -> Void)?
 
-    init(fileURL: URL, title: String? = nil) {
-        super.init(initialViewState: FilePreviewViewState(fileURL: fileURL, title: title))
+    init(mediaFile: MediaFileHandleProxy, title: String? = nil) {
+        super.init(initialViewState: FilePreviewViewState(mediaFile: mediaFile, title: title))
     }
     
     override func process(viewAction: FilePreviewViewAction) async {

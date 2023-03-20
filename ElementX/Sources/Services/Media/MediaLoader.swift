@@ -46,6 +46,14 @@ actor MediaLoader: MediaLoaderProtocol {
         }
     }
     
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
+        let result = try await Task.dispatch(on: clientQueue) {
+            try self.client.getMediaFile(source: source.underlyingSource, mimeType: source.mimeType ?? "application/octet-stream")
+        }
+        
+        return MediaFileHandleProxy(handle: result)
+    }
+    
     // MARK: - Private
     
     private func enqueueLoadMediaRequest(forSource source: MediaSourceProxy, operation: @escaping () throws -> [UInt8]) async throws -> Data {

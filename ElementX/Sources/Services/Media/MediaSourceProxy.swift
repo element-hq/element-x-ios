@@ -18,14 +18,20 @@ import Foundation
 import MatrixRustSDK
 
 struct MediaSourceProxy: Hashable {
+    /// The media source provided by Rust.
     let underlyingSource: MediaSource
+    /// The media's mime type, used when loading the media's file.
+    /// This is optional when loading images and thumbnails in memory.
+    let mimeType: String?
     
-    init(source: MediaSource) {
+    init(source: MediaSource, mimeType: String?) {
         underlyingSource = source
+        self.mimeType = mimeType
     }
     
-    init(url: URL) {
+    init(url: URL, mimeType: String?) {
         underlyingSource = mediaSourceFromUrl(url: url.absoluteString)
+        self.mimeType = mimeType
     }
 
     var url: URL! {

@@ -23,7 +23,7 @@ final class MediaLoaderTests: XCTestCase {
         let mediaLoadingClient = MockMediaLoadingClient()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
-        let mediaSource = MediaSourceProxy(url: URL.documentsDirectory)
+        let mediaSource = MediaSourceProxy(url: URL.documentsDirectory, mimeType: nil)
         
         do {
             for _ in 1...10 {
@@ -40,7 +40,7 @@ final class MediaLoaderTests: XCTestCase {
         let mediaLoadingClient = MockMediaLoadingClient()
         let mediaLoader = MediaLoader(client: mediaLoadingClient)
         
-        let mediaSource = MediaSourceProxy(url: URL.documentsDirectory)
+        let mediaSource = MediaSourceProxy(url: URL.documentsDirectory, mimeType: nil)
         
         do {
             for _ in 1...10 {

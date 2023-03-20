@@ -171,7 +171,7 @@ extension NotificationItemProxy {
         notification.body = "📷 " + content.body
 
         notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source))
+                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
 
         return notification
     }
@@ -186,7 +186,7 @@ extension NotificationItemProxy {
         notification.body = "📹 " + content.body
 
         notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source))
+                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
 
         return notification
     }
