@@ -30,10 +30,15 @@ struct RoomDetailsScreen: View {
             if context.viewState.isEncrypted {
                 securitySection
             }
+
+            leaveRoomSection
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
         .alert(item: $context.alertInfo) { $0.alert }
+        .alert(item: $context.leaveRoomAlertItem,
+               actions: leaveRoomAlertActions,
+               message: leaveRoomAlertMessage)
     }
     
     // MARK: - Private
@@ -147,6 +152,30 @@ struct RoomDetailsScreen: View {
         }
         .formSectionStyle()
     }
+
+    private var leaveRoomSection: some View {
+        Section {
+            Button(role: .destructive) {
+                context.send(viewAction: .processTapLeave)
+            } label: {
+                Label(ElementL10n.roomProfileSectionMoreLeave, systemImage: "door.right.hand.open")
+            }
+            .buttonStyle(FormButtonStyle(accessory: nil))
+        }
+        .formSectionStyle()
+    }
+
+    @ViewBuilder
+    private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
+        Button(item.cancelTitle, role: .cancel) { }
+        Button(item.confirmationTitle, role: .destructive) {
+            context.send(viewAction: .confirmLeave)
+        }
+    }
+
+    private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
+        Text(item.subtitle)
+    }
 }
 
 // MARK: - Previews
@@ -158,12 +187,12 @@ struct RoomDetails_Previews: PreviewProvider {
             .mockBob,
             .mockCharlie
         ]
-        let roomProxy = MockRoomProxy(displayName: "Room A",
-                                      topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
-                                      isDirect: false,
-                                      isEncrypted: true,
-                                      canonicalAlias: "#alias:domain.com",
-                                      members: members)
+        let roomProxy = RoomProxyMock(with: .init(displayName: "Room A",
+                                                  topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                                  isDirect: false,
+                                                  isEncrypted: true,
+                                                  canonicalAlias: "#alias:domain.com",
+                                                  members: members))
         
         return RoomDetailsViewModel(roomProxy: roomProxy,
                                     mediaProvider: MockMediaProvider())
@@ -171,6 +200,5 @@ struct RoomDetails_Previews: PreviewProvider {
     
     static var previews: some View {
         RoomDetailsScreen(context: viewModel.context)
-            .tint(.element.accent)
     }
 }

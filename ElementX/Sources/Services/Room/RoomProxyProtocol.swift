@@ -31,9 +31,11 @@ enum RoomProxyError: Error {
     case failedReportingContent
     case failedAddingTimelineListener
     case failedRetrievingMembers
+    case failedLeavingRoom
 }
 
 @MainActor
+// sourcery: AutoMockable
 protocol RoomProxyProtocol {
     var id: String { get }
     var isDirect: Bool { get }
@@ -51,9 +53,7 @@ protocol RoomProxyProtocol {
     var topic: String? { get }
     
     var avatarURL: URL? { get }
-    
-    var permalink: URL? { get }
-    
+        
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
@@ -79,6 +79,8 @@ protocol RoomProxyProtocol {
     func members() async -> Result<[RoomMemberProxy], RoomProxyError>
     
     func retryDecryption(for sessionID: String) async
+
+    func leaveRoom() async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {

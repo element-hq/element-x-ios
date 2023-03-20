@@ -39,7 +39,8 @@ struct SessionVerificationEmoji: Hashable {
     let description: String
 }
 
-protocol SessionVerificationControllerProxyProtocol: AutoMockable {
+// sourcery: AutoMockable
+protocol SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> { get }
     
     var isVerified: Bool { get }

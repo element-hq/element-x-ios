@@ -41,6 +41,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         Button(action: configuration.trigger) {
             configuration.label
+                .labelStyle(FormRowLabelStyle(role: configuration.role))
                 .frame(maxHeight: .infinity) // Make sure the label fills the cell vertically.
         }
         .buttonStyle(Style(accessory: accessory))
@@ -54,7 +55,7 @@ struct FormButtonStyle: PrimitiveButtonStyle {
         func makeBody(configuration: Configuration) -> some View {
             HStack {
                 configuration.label
-                    .labelStyle(FormRowLabelStyle())
+                    .labelStyle(FormRowLabelStyle(role: configuration.role))
                     .foregroundColor(.element.primaryContent)
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
@@ -104,6 +105,11 @@ struct FormButtonStyles_Previews: PreviewProvider {
                     Label("Show something", systemImage: "rectangle.portrait")
                 }
                 .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+
+                Button(role: .destructive) { } label: {
+                    Label("Show destruction", systemImage: "rectangle.portrait")
+                }
+                .buttonStyle(FormButtonStyle(accessory: .navigationLink))
                 
                 ShareLink(item: "test")
                     .buttonStyle(FormButtonStyle())
@@ -113,6 +119,14 @@ struct FormButtonStyles_Previews: PreviewProvider {
             Section {
                 Button { } label: {
                     Text("Hello world")
+                }
+                .buttonStyle(FormButtonStyle())
+            }
+            .formSectionStyle()
+
+            Section {
+                Button(role: .destructive) { } label: {
+                    Label("Destroy", systemImage: "x.circle")
                 }
                 .buttonStyle(FormButtonStyle())
             }

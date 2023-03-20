@@ -6,4 +6,4 @@ output:
   ../../ElementX/Sources/Mocks/Generated/GeneratedMocks.swift
 args:
   automMockableTestableImports: []
-  autoMockableImports: [Combine, MatrixRustSDK]
+  autoMockableImports: [Combine, Foundation, MatrixRustSDK]

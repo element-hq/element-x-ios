@@ -1,0 +1,66 @@
+name: NCE
+
+schemes:
+  NCE:
+    analyze:
+      config: Debug
+    archive:
+      config: Release
+    build:
+      targets:
+        NCE:
+        - running
+        - testing
+        - profiling
+        - analyzing
+        - archiving
+    profile:
+      config: Release
+    run:
+      askForAppToLaunch: true
+      config: Debug
+      debugEnabled: false
+      disableMainThreadChecker: false
+      launchAutomaticallySubstyle: 2
+    test:
+      config: Debug
+      disableMainThreadChecker: false
+
+targets:
+  NCE:
+    type: app-extension
+    platform: iOS
+
+    dependencies:
+      - package: MatrixRustSDK
+
+    info:
+      path: ../SupportingFiles/Info.plist
+      properties:
+        CFBundleDisplayName: $(PRODUCT_NAME)
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
+        appGroupIdentifier: $(APP_GROUP_IDENTIFIER)
+        baseBundleIdentifier: $(BASE_BUNDLE_IDENTIFIER)
+        keychainAccessGroupIdentifier: $(KEYCHAIN_ACCESS_GROUP_IDENTIFIER)
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.usernotifications.content-extension
+          NSExtensionPrincipalClass: NCE.NotificationViewController
+          NSExtensionAttributes:
+            UNNotificationExtensionCategory: myNotificationCategory
+            UNNotificationExtensionInitialContentSizeRatio: 1
+
+    settings:
+      base:
+        PRODUCT_NAME: NCE
+        PRODUCT_BUNDLE_IDENTIFIER: ${BASE_BUNDLE_IDENTIFIER}.nce
+        MARKETING_VERSION: $(MARKETING_VERSION)
+        CURRENT_PROJECT_VERSION: $(CURRENT_PROJECT_VERSION)
+        DEVELOPMENT_TEAM: $(DEVELOPMENT_TEAM)
+        SWIFT_OBJC_INTERFACE_HEADER_NAME: GeneratedInterface-Swift.h
+      debug:
+      release:
+
+    sources:
+    - path: ../Sources
+    - path: ../SupportingFiles

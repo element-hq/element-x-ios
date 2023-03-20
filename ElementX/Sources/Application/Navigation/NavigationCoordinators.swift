@@ -371,11 +371,9 @@ private struct NavigationSplitCoordinatorView: View {
         // through the NavigationSplitCoordinator as well.
         .sheet(item: $navigationSplitCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
-                .tint(.element.accent)
         }
         .fullScreenCover(item: $navigationSplitCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
-                .tint(.element.accent)
         }
     }
     
@@ -530,7 +528,7 @@ class NavigationStackCoordinator: ObservableObject, CoordinatorProtocol, CustomS
         }
         
         popToRoot(animated: false)
-        
+
         rootModule = NavigationModule(coordinator, dismissalCallback: dismissalCallback)
     }
     
@@ -666,11 +664,9 @@ private struct NavigationStackCoordinatorView: View {
         }
         .sheet(item: $navigationStackCoordinator.sheetModule) { module in
             module.coordinator?.toPresentable()
-                .tint(.element.accent)
         }
         .fullScreenCover(item: $navigationStackCoordinator.fullScreenCoverModule) { module in
             module.coordinator?.toPresentable()
-                .tint(.element.accent)
         }
     }
 }

@@ -73,6 +73,10 @@
 "room_details_title" = "Info";
 "room_details_about_section_title" = "About";
 "room_details_copy_link" = "Copy Link";
+"room_details_leave_room_alert_subtitle" = "Are you sure that you want to leave the room?";
+"room_details_leave_private_room_alert_subtitle" = "Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite.";
+"room_details_leave_empty_room_alert_subtitle" = "Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.";
+"room_details_room_left_toast" = "Room left";
 
 // Onboarding
 "ftue_auth_carousel_welcome_title" = "Be in your Element";
