@@ -16,7 +16,6 @@
 
 import Foundation
 import UIKit
-import UniformTypeIdentifiers
 
 struct MockMediaProvider: MediaProviderProtocol {
     func imageFromSource(_ source: MediaSourceProxy?, size: CGSize?) -> UIImage? {
@@ -43,7 +42,7 @@ struct MockMediaProvider: MediaProviderProtocol {
         return .success(image)
     }
     
-    func loadFileFromSource(_ source: MediaSourceProxy, contentType: UTType) async -> Result<MediaFileProxy, MediaProviderError> {
+    func loadFileFromSource(_ source: MediaSourceProxy) async -> Result<MediaFileHandleProxy, MediaProviderError> {
         .failure(.failedRetrievingFile)
     }
 }

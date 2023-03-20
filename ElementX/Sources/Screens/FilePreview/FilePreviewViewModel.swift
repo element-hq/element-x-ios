@@ -21,7 +21,7 @@ typealias FilePreviewViewModelType = StateStoreViewModel<FilePreviewViewState, F
 class FilePreviewViewModel: FilePreviewViewModelType, FilePreviewViewModelProtocol {
     var callback: ((FilePreviewViewModelAction) -> Void)?
 
-    init(mediaFile: MediaFileProxy, title: String? = nil) {
+    init(mediaFile: MediaFileHandleProxy, title: String? = nil) {
         super.init(initialViewState: FilePreviewViewState(mediaFile: mediaFile, title: title))
     }
     

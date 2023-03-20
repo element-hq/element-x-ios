@@ -25,7 +25,7 @@ enum RoomTimelineControllerCallback {
 }
 
 enum RoomTimelineControllerAction {
-    case displayMediaFile(file: MediaFileProxy, title: String?)
+    case displayMediaFile(file: MediaFileHandleProxy, title: String?)
     case none
 }
 

@@ -77,7 +77,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
 
     // MARK: - Private
 
-    private func displayFilePreview(for file: MediaFileProxy, with title: String?) {
+    private func displayFilePreview(for file: MediaFileHandleProxy, with title: String?) {
         let params = FilePreviewCoordinatorParameters(mediaFile: file, title: title)
         let coordinator = FilePreviewCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in

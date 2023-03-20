@@ -21,7 +21,7 @@ enum FilePreviewViewModelAction {
 }
 
 struct FilePreviewViewState: BindableState {
-    let mediaFile: MediaFileProxy
+    let mediaFile: MediaFileHandleProxy
     let title: String?
 }
 

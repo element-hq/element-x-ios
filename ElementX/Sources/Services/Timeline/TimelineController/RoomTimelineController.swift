@@ -17,7 +17,6 @@
 import Combine
 import Foundation
 import UIKit
-import UniformTypeIdentifiers
 
 class RoomTimelineController: RoomTimelineControllerProtocol {
     private let userId: String
@@ -107,32 +106,27 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
         }
         
         var source: MediaSourceProxy?
-        var contentType: UTType?
         var title: String
         switch timelineItem {
         case let item as ImageRoomTimelineItem:
             source = item.source
-            contentType = item.contentType
             title = item.body
         case let item as VideoRoomTimelineItem:
             source = item.source
-            contentType = item.contentType
             title = item.body
         case let item as FileRoomTimelineItem:
             source = item.source
-            contentType = item.contentType
             title = item.body
         case let item as AudioRoomTimelineItem:
             // For now we are just displaying audio messages with the File preview until we create a timeline player for them.
             source = item.source
-            contentType = item.contentType
             title = item.body
         default:
             return .none
         }
         
-        guard let source, let contentType else { return .none }
-        switch await mediaProvider.loadFileFromSource(source, contentType: contentType) {
+        guard let source else { return .none }
+        switch await mediaProvider.loadFileFromSource(source) {
         case .success(let file):
             return .displayMediaFile(file: file, title: title)
         case .failure:

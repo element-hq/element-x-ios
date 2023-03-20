@@ -15,12 +15,11 @@
 //
 
 import Foundation
-import UniformTypeIdentifiers
 
 protocol MediaLoaderProtocol {
     func loadMediaContentForSource(_ source: MediaSourceProxy) async throws -> Data
 
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy, contentType: UTType) async throws -> MediaFileProxy
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy
 }

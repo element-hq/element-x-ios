@@ -17,7 +17,7 @@
 import SwiftUI
 
 struct FilePreviewCoordinatorParameters {
-    let mediaFile: MediaFileProxy
+    let mediaFile: MediaFileHandleProxy
     let title: String?
 }
 

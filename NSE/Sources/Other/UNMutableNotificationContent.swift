@@ -16,17 +16,15 @@
 
 import Foundation
 import Intents
-import UniformTypeIdentifiers
 import UserNotifications
 
 extension UNMutableNotificationContent {
     func addMediaAttachment(using mediaProvider: MediaProviderProtocol?,
-                            mediaSource: MediaSourceProxy,
-                            contentType: UTType) async throws -> UNMutableNotificationContent {
+                            mediaSource: MediaSourceProxy) async throws -> UNMutableNotificationContent {
         guard let mediaProvider else {
             return self
         }
-        switch await mediaProvider.loadFileFromSource(mediaSource, contentType: contentType) {
+        switch await mediaProvider.loadFileFromSource(mediaSource) {
         case .success(let file):
             let attachment = try UNNotificationAttachment(identifier: ProcessInfo.processInfo.globallyUniqueString,
                                                           url: file.url, // Needs testing: Does the file get copied before the media handle is be dropped?
@@ -48,7 +46,7 @@ extension UNMutableNotificationContent {
             return self
         }
 
-        switch await mediaProvider.loadFileFromSource(mediaSource, contentType: .image) {
+        switch await mediaProvider.loadFileFromSource(mediaSource) {
         case .success(let mediaFile):
             // Initialize only the sender for a one-to-one message intent.
             let handle = INPersonHandle(value: senderId, type: .unknown)

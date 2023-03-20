@@ -93,7 +93,7 @@ private class PreviewItem: NSObject, QLPreviewItem {
 // MARK: - Previews
 
 struct FilePreview_Previews: PreviewProvider {
-    static let viewModel = FilePreviewViewModel(mediaFile: MediaFileProxy(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
+    static let viewModel = FilePreviewViewModel(mediaFile: .unmanaged(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
     
     static var previews: some View {
         FilePreviewScreen(context: viewModel.context)

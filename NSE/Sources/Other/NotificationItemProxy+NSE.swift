@@ -16,7 +16,6 @@
 
 import Foundation
 import MatrixRustSDK
-import UniformTypeIdentifiers
 import UserNotifications
 
 extension NotificationItemProxy {
@@ -171,10 +170,8 @@ extension NotificationItemProxy {
                                                    mediaProvider: mediaProvider)
         notification.body = "📷 " + content.body
 
-        let contentType = UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body) ?? .image
         notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source),
-                                                                 contentType: contentType)
+                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
 
         return notification
     }
@@ -188,10 +185,8 @@ extension NotificationItemProxy {
                                                    mediaProvider: mediaProvider)
         notification.body = "📹 " + content.body
 
-        let contentType = UTType(mimeType: content.info?.mimetype, fallbackFilename: content.body) ?? .video
         notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source),
-                                                                 contentType: contentType)
+                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
 
         return notification
     }

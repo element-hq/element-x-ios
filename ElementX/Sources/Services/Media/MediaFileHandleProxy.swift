@@ -19,21 +19,21 @@ import MatrixRustSDK
 
 /// A wrapper around Rust's `MediaFileHandle` type that provides us with a
 /// media file that is stored unencrypted in a temporary location for previewing.
-class MediaFileProxy {
+class MediaFileHandleProxy {
     /// The underlying handle for the file.
     private let handle: MediaFileHandleProtocol
     
     /// Creates a new instance from the Rust type.
-    init(handle: MediaFileHandle) {
+    init(handle: MediaFileHandleProtocol) {
         self.handle = handle
     }
     
-    /// Creates a new instance as a mock, using a raw `URL`
+    /// Creates an unmanaged instance (for mocking etc), using a raw `URL`
     ///
     /// A media file created from a URL won't have the automatic clean-up mechanism
     /// that is provided by the SDK's `MediaFileHandle`.
-    init(url: URL) {
-        handle = MockMediaFileHandle(url: url)
+    static func unmanaged(url: URL) -> MediaFileHandleProxy {
+        MediaFileHandleProxy(handle: UnmanagedMediaFileHandle(url: url))
     }
     
     /// The media file's location on disk.
@@ -44,8 +44,8 @@ class MediaFileProxy {
 
 // MARK: - Hashable
 
-extension MediaFileProxy: Hashable {
-    static func == (lhs: MediaFileProxy, rhs: MediaFileProxy) -> Bool {
+extension MediaFileHandleProxy: Hashable {
+    static func == (lhs: MediaFileHandleProxy, rhs: MediaFileHandleProxy) -> Bool {
         lhs.url == rhs.url
     }
     
@@ -56,10 +56,10 @@ extension MediaFileProxy: Hashable {
 
 // MARK: -
 
-/// A mock file handle that can be created direct from a URL.
+/// An unmanaged file handle that can be created direct from a URL.
 ///
-/// This mock type doesn't have the automatic clean-up mechanism provided by the SDK.
-struct MockMediaFileHandle: MediaFileHandleProtocol {
+/// This type allows for mocking but doesn't provide the automatic clean-up mechanism provided by the SDK.
+private struct UnmanagedMediaFileHandle: MediaFileHandleProtocol {
     let url: URL
     
     func path() -> String {

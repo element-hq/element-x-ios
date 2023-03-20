@@ -15,7 +15,6 @@
 //
 @testable import ElementX
 import Foundation
-import UniformTypeIdentifiers
 
 enum MockMediaLoaderError: Error {
     case someError
@@ -42,9 +41,9 @@ class MockMediaLoader: MediaLoaderProtocol {
         }
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy, contentType: UTType) async throws -> MediaFileProxy {
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
         if let mediaFileURL {
-            return .init(url: mediaFileURL)
+            return .unmanaged(url: mediaFileURL)
         } else {
             throw MockMediaLoaderError.someError
         }

@@ -16,7 +16,6 @@
 
 import Kingfisher
 import UIKit
-import UniformTypeIdentifiers
 
 struct MediaProvider: MediaProviderProtocol {
     private let mediaLoader: MediaLoaderProtocol
@@ -82,12 +81,12 @@ struct MediaProvider: MediaProviderProtocol {
     
     // MARK: Files
     
-    func loadFileFromSource(_ source: MediaSourceProxy, contentType: UTType) async -> Result<MediaFileProxy, MediaProviderError> {
+    func loadFileFromSource(_ source: MediaSourceProxy) async -> Result<MediaFileHandleProxy, MediaProviderError> {
         let loadFileBgTask = await backgroundTaskService?.startBackgroundTask(withName: "LoadFile: \(source.url.hashValue)")
         defer { loadFileBgTask?.stop() }
         
         do {
-            let file = try await mediaLoader.loadMediaFileForSource(source, contentType: contentType)
+            let file = try await mediaLoader.loadMediaFileForSource(source)
             return .success(file)
         } catch {
             MXLog.error("Failed retrieving file with error: \(error)")

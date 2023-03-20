@@ -18,7 +18,6 @@ import Combine
 import Foundation
 import MatrixRustSDK
 import UIKit
-import UniformTypeIdentifiers
 
 private final class MediaRequest {
     var continuations: [CheckedContinuation<Data, Error>] = []
@@ -47,12 +46,12 @@ actor MediaLoader: MediaLoaderProtocol {
         }
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy, contentType: UTType) async throws -> MediaFileProxy {
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
         let result = try await Task.dispatch(on: clientQueue) {
-            try self.client.getMediaFile(source: source.underlyingSource, mimeType: contentType.preferredMIMEType ?? "application/octet-stream")
+            try self.client.getMediaFile(source: source.underlyingSource, mimeType: source.mimeType ?? "application/octet-stream")
         }
         
-        return MediaFileProxy(handle: result)
+        return MediaFileHandleProxy(handle: result)
     }
     
     // MARK: - Private

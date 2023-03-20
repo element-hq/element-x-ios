@@ -17,7 +17,6 @@
 import Combine
 import Foundation
 import MatrixRustSDK
-import UniformTypeIdentifiers
 
 class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
@@ -77,7 +76,7 @@ class MockClientProxy: ClientProxyProtocol {
         throw ClientProxyError.failedLoadingMedia
     }
     
-    func loadMediaFileForSource(_ source: MediaSourceProxy, contentType: UTType) async throws -> MediaFileProxy {
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
         throw ClientProxyError.failedLoadingMedia
     }
     
