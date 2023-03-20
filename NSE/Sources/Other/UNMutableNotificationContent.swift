@@ -29,7 +29,7 @@ extension UNMutableNotificationContent {
         switch await mediaProvider.loadFileFromSource(mediaSource, contentType: contentType) {
         case .success(let file):
             let attachment = try UNNotificationAttachment(identifier: ProcessInfo.processInfo.globallyUniqueString,
-                                                          url: file.url, // FIXME: Unsure if this will be copied before the media handle is be dropped.
+                                                          url: file.url, // Needs testing: Does the file get copied before the media handle is be dropped?
                                                           options: nil)
             attachments.append(attachment)
         case .failure(let error):

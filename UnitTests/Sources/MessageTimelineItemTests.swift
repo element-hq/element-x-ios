@@ -27,7 +27,7 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = ImageMessageContent(body: "amazing.gif",
                                                source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                                info: makeImageInfo(mimetype: mimetype))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertEqual(messageItem.contentType, .gif)
     }
     
@@ -35,7 +35,7 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = ImageMessageContent(body: "amazing.jpeg",
                                                source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                                info: makeImageInfo(mimetype: nil))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertEqual(messageItem.contentType, .jpeg)
     }
     
@@ -56,7 +56,7 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = VideoMessageContent(body: "amazing.avi",
                                                source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                                info: makeVideoInfo(mimetype: mimetype))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertEqual(messageItem.contentType, .avi)
     }
     
@@ -64,7 +64,7 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = VideoMessageContent(body: "amazing.mp4",
                                                source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                                info: makeVideoInfo(mimetype: nil))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertEqual(messageItem.contentType, .mpeg4Movie)
     }
     
@@ -86,7 +86,7 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = AudioMessageContent(body: "amazing.mp3",
                                                source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                                info: makeAudioInfo(mimetype: mimetype))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertEqual(messageItem.contentType, .mp3)
     }
     
@@ -94,7 +94,7 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = AudioMessageContent(body: "amazing.m4a",
                                                source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                                info: makeAudioInfo(mimetype: nil))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertTrue(messageItem.contentType!.conforms(to: .mpeg4Audio))
     }
     
@@ -109,7 +109,7 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = FileMessageContent(body: "amazing.txt",
                                               source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                               info: makeFileInfo(mimetype: mimetype))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertEqual(messageItem.contentType, .plainText)
     }
     
@@ -117,24 +117,24 @@ class MessageTimelineItemTests: XCTestCase {
         let imageContent = FileMessageContent(body: "amazing.rtf",
                                               source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                               info: makeFileInfo(mimetype: nil))
-        let messageItem = makeMessageTimelineItem(content: imageContent)
+        let messageItem = MockEventTimelineItem.message(from: imageContent)
         XCTAssertEqual(messageItem.contentType, .rtf)
     }
     
     func makeFileInfo(mimetype: String?) -> FileInfo {
         FileInfo(mimetype: mimetype, size: nil, thumbnailInfo: nil, thumbnailSource: nil)
     }
-    
-    // MARK: - Helpers
-    
-    func makeMessageTimelineItem<Content: MessageContentProtocol>(content: Content) -> MessageTimelineItem<Content> {
+}
+
+// MARK: - Mocks
+
+// swiftlint:disable force_cast
+private struct MockEventTimelineItem: EventTimelineItemProtocol {
+    static func message<Content: MessageContentProtocol>(from content: Content) -> MessageTimelineItem<Content> {
         let item = MockEventTimelineItem(underlyingContent: content)
         return MessageTimelineItem(item: item, content: content)
     }
-}
-
-// swiftlint:disable force_cast
-struct MockEventTimelineItem: EventTimelineItemProtocol {
+    
     let underlyingContent: MessageContentProtocol
     
     func content() -> MatrixRustSDK.TimelineItemContent { underlyingContent as! TimelineItemContent }
