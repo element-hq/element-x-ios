@@ -108,7 +108,7 @@ final class LoginCoordinator: CoordinatorProtocol {
     }
     
     private func indicateSuccess() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.dialogTitleSuccess))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonSuccess))
     }
     
     private func indicateFailure() {
@@ -121,9 +121,9 @@ final class LoginCoordinator: CoordinatorProtocol {
         
         switch error {
         case .invalidCredentials:
-            viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
+            viewModel.displayError(.alert(L10n.loginErrorInvalidCredentials))
         case .accountDeactivated:
-            viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+            viewModel.displayError(.alert(L10n.loginErrorDeactivatedAccount))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:
@@ -159,7 +159,7 @@ final class LoginCoordinator: CoordinatorProtocol {
         Task {
             switch await authenticationService.login(username: username,
                                                      password: password,
-                                                     initialDeviceName: UIDevice.current.initialDisplayName,
+                                                     initialDeviceName: UIDevice.current.initialDeviceName,
                                                      deviceId: nil) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))

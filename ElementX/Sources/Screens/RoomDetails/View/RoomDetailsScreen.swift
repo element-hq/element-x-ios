@@ -158,7 +158,7 @@ struct RoomDetailsScreen: View {
             Button(role: .destructive) {
                 context.send(viewAction: .processTapLeave)
             } label: {
-                Label(ElementL10n.roomProfileSectionMoreLeave, systemImage: "door.right.hand.open")
+                Label(L10n.actionLeaveRoom, systemImage: "door.right.hand.open")
             }
             .buttonStyle(FormButtonStyle(accessory: nil))
         }

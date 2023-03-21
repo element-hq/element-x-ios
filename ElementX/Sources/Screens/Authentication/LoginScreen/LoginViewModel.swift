@@ -61,7 +61,7 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
         case .invalidHomeserver:
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
-                                                 message: ElementL10n.loginSigninMatrixIdErrorInvalidMatrixId)
+                                                 message: L10n.loginErrorInvalidUserId)
         case .slidingSyncAlert:
             let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,

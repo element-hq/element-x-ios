@@ -96,6 +96,10 @@ public enum L10n {
   public static var bugReportScreenIncludeLogs: String { return L10n.tr("Localizable", "bug_report_screen_include_logs") }
   /// To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.
   public static var bugReportScreenLogsDescription: String { return L10n.tr("Localizable", "bug_report_screen_logs_description") }
+  /// %1$@ crashed the last time it was used. Would you like to share a crash report with us?
+  public static func bugReportShareCrashLogsAlertTitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "bug_report_share_crash_logs_alert_title", String(describing: p1))
+  }
   /// About
   public static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// All Chats
@@ -152,6 +156,8 @@ public enum L10n {
   }
   /// Report a bug
   public static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
+  /// Report submitted
+  public static var commonReportSubmitted: String { return L10n.tr("Localizable", "common_report_submitted") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Security
@@ -168,6 +174,8 @@ public enum L10n {
   public static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
   /// Sticker
   public static var commonSticker: String { return L10n.tr("Localizable", "common_sticker") }
+  /// Success
+  public static var commonSuccess: String { return L10n.tr("Localizable", "common_success") }
   /// Suggestions
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
   /// They don’t match
@@ -190,6 +198,10 @@ public enum L10n {
   public static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Waiting…
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
+  /// Plural format key: "%#@COUNT@"
+  public static func commonXMembers(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_x_members", p1)
+  }
   /// Activities
   public static var emojiPickerCategoryActivity: String { return L10n.tr("Localizable", "emoji_picker_category_activity") }
   /// Flags
@@ -224,8 +236,18 @@ public enum L10n {
   public static var leaveRoomAlertPrivateSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_private_subtitle") }
   /// Are you sure that you want to leave the room?
   public static var leaveRoomAlertSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_subtitle") }
+  /// This account has been deactivated.
+  public static var loginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "login_error_deactivated_account") }
+  /// Incorrect username and/or password
+  public static var loginErrorInvalidCredentials: String { return L10n.tr("Localizable", "login_error_invalid_credentials") }
+  /// This is not a valid user identifier. Expected format: ‘@user:homeserver.org’
+  public static var loginErrorInvalidUserId: String { return L10n.tr("Localizable", "login_error_invalid_user_id") }
   /// The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.
   public static var loginErrorUnsupportedAuthentication: String { return L10n.tr("Localizable", "login_error_unsupported_authentication") }
+  /// %1$@ iOS
+  public static func loginInitialDeviceNameIos(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "login_initial_device_name_ios", String(describing: p1))
+  }
   /// Where your conversations live
   public static var loginServerHeader: String { return L10n.tr("Localizable", "login_server_header") }
   /// Welcome back!

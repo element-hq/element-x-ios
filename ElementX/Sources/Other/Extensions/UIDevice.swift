@@ -22,7 +22,7 @@ extension UIDevice {
         userInterfaceIdiom == .phone
     }
 
-    var initialDisplayName: String {
-        ElementL10n.defaultSessionDisplayName(InfoPlistReader.main.bundleDisplayName)
+    var initialDeviceName: String {
+        L10n.loginInitialDeviceNameIos(InfoPlistReader.main.bundleDisplayName)
     }
 }

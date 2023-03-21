@@ -161,7 +161,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     func presentCrashedLastRunAlert() {
         state.bindings.alertInfo = AlertInfo(id: UUID(),
-                                             title: ElementL10n.sendBugReportAppCrashed,
+                                             title: L10n.bugReportShareCrashLogsAlertTitle(InfoPlistReader.main.bundleDisplayName),
                                              primaryButton: .init(title: L10n.actionNo, action: nil),
                                              secondaryButton: .init(title: L10n.actionYes) { [weak self] in
                                                  self?.callback?(.presentFeedbackScreen)

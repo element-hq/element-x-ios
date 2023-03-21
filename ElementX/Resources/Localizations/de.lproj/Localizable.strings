@@ -41,6 +41,7 @@
 "bug_report_screen_editor_placeholder" = "Describe the bug…";
 "bug_report_screen_include_logs" = "Send logs to help";
 "bug_report_screen_logs_description" = "To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.";
+"bug_report_share_crash_logs_alert_title" = "%1$@ crashed the last time it was used. Would you like to share a crash report with us?";
 "common_about" = "About";
 "common_all_chats" = "All Chats";
 "common_bubbles" = "Bubbles";
@@ -68,6 +69,7 @@
 "common_reactions" = "Reactions";
 "common_replying_to" = "Replying to %1$@";
 "common_report_a_bug" = "Report a bug";
+"common_report_submitted" = "Report submitted";
 "common_search_for_someone" = "Search for someone";
 "common_security" = "Security";
 "common_select_your_server" = "Select your server";
@@ -76,6 +78,7 @@
 "common_server_url" = "Server URL";
 "common_settings" = "Settings";
 "common_sticker" = "Sticker";
+"common_success" = "Success";
 "common_suggestions" = "Suggestions";
 "common_they_dont_match" = "They don’t match";
 "common_they_match" = "They match";
@@ -103,7 +106,11 @@
 "leave_room_alert_empty_subtitle" = "Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.";
 "leave_room_alert_private_subtitle" = "Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite.";
 "leave_room_alert_subtitle" = "Are you sure that you want to leave the room?";
+"login_error_deactivated_account" = "This account has been deactivated.";
+"login_error_invalid_credentials" = "Incorrect username and/or password";
+"login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
 "login_error_unsupported_authentication" = "The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.";
+"login_initial_device_name_ios" = "%1$@ iOS";
 "login_server_header" = "Where your conversations live";
 "login_title" = "Welcome back!";
 "message_composer_placeholder" = "Message…";

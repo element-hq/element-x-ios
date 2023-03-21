@@ -95,7 +95,7 @@ struct SoftLogoutScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.forgotPassword)
 
             Button(action: submit) {
-                Text(ElementL10n.loginSignupSubmit)
+                Text(L10n.actionNext)
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(!context.viewState.canSubmit)
