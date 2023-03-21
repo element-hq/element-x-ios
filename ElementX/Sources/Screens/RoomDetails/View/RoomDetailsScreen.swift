@@ -74,7 +74,7 @@ struct RoomDetailsScreen: View {
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionInvite))
                 }
                 .padding(.top, 32)
             }
@@ -147,7 +147,7 @@ struct RoomDetailsScreen: View {
                     .foregroundColor(.element.quaternaryContent)
             }
         } header: {
-            Text(ElementL10n.roomProfileSectionSecurity)
+            Text(L10n.commonSecurity)
                 .formSectionHeader()
         }
         .formSectionStyle()

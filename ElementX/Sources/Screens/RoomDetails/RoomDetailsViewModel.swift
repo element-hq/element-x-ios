@@ -49,7 +49,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
                 self.members = members
             case .failure(let error):
                 MXLog.error("Failed retrieving room members: \(error)")
-                state.bindings.alertInfo = AlertInfo(id: .alert(ElementL10n.unknownError))
+                state.bindings.alertInfo = AlertInfo(id: .alert(L10n.errorUnknown))
             }
         }
     }
@@ -82,7 +82,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             UIPasteboard.general.url = roomLink
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonLinkCopiedToClipboard))
         } else {
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.unknownError))
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
         }
     }
 

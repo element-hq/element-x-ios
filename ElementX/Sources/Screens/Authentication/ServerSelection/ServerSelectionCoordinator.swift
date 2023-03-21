@@ -105,7 +105,7 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:
-            viewModel.displayError(.footerMessage(ElementL10n.unknownError))
+            viewModel.displayError(.footerMessage(L10n.errorUnknown))
         }
     }
 }

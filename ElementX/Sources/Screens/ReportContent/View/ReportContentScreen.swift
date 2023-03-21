@@ -33,7 +33,7 @@ struct ReportContentScreen: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .navigationTitle(ElementL10n.reportContent)
+        .navigationTitle(L10n.actionReportContent)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
@@ -48,13 +48,13 @@ struct ReportContentScreen: View {
     }
 
     private var infoText: some View {
-        Text(ElementL10n.reportContentInfo)
+        Text(L10n.reportContentExplanation)
             .font(.element.body)
             .foregroundColor(Color.element.primaryContent)
     }
 
     private var reasonTextEditor: some View {
-        FormTextEditor(text: $context.reasonText, placeholder: ElementL10n.reportContentCustomHint)
+        FormTextEditor(text: $context.reasonText, placeholder: L10n.reportContentHint)
     }
 
     @ToolbarContentBuilder

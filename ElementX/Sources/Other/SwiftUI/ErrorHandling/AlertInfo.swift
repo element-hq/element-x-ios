@@ -64,7 +64,7 @@ extension AlertInfo {
     init(id: T) {
         self.id = id
         title = L10n.commonError
-        message = ElementL10n.unknownError
+        message = L10n.errorUnknown
     }
 }
 

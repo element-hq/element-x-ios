@@ -164,7 +164,7 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
         case .accountDeactivated:
             viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
         default:
-            viewModel.displayError(.alert(ElementL10n.unknownError))
+            viewModel.displayError(.alert(L10n.errorUnknown))
         }
     }
 }

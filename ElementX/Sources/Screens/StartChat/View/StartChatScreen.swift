@@ -36,7 +36,7 @@ struct StartChatScreen: View {
                 closeButton
             }
         }
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: ElementL10n.searchForSomeone)
+        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
         .alert(item: $context.alertInfo) { $0.alert }
     }
     

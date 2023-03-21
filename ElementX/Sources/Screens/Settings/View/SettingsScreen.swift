@@ -79,7 +79,7 @@ struct SettingsScreen: View {
     private var sessionVerificationSection: some View {
         Section {
             Button { context.send(viewAction: .sessionVerification) } label: {
-                Label(ElementL10n.settingsSessionVerification, systemImage: "checkmark.shield")
+                Label(L10n.actionCompleteVerification, systemImage: "checkmark.shield")
             }
             .buttonStyle(.compoundForm())
         }

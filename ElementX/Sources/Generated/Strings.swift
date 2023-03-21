@@ -14,6 +14,8 @@ public enum L10n {
   public static var actionAttachScreenshot: String { return L10n.tr("Localizable", "action_attach_screenshot") }
   /// Cancel
   public static var actionCancel: String { return L10n.tr("Localizable", "action_cancel") }
+  /// Complete verification
+  public static var actionCompleteVerification: String { return L10n.tr("Localizable", "action_complete_verification") }
   /// Confirm
   public static var actionConfirm: String { return L10n.tr("Localizable", "action_confirm") }
   /// Continue
@@ -114,6 +116,10 @@ public enum L10n {
   public static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
   /// Reactions
   public static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
+  /// Search for someone
+  public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
+  /// Security
+  public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
   /// Settings
   public static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
   /// Sticker
@@ -130,6 +136,32 @@ public enum L10n {
   public static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Waiting…
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
+  /// Activities
+  public static var emojiPickerCategoryActivity: String { return L10n.tr("Localizable", "emoji_picker_category_activity") }
+  /// Flags
+  public static var emojiPickerCategoryFlags: String { return L10n.tr("Localizable", "emoji_picker_category_flags") }
+  /// Food & Drink
+  public static var emojiPickerCategoryFoods: String { return L10n.tr("Localizable", "emoji_picker_category_foods") }
+  /// Animals & Nature
+  public static var emojiPickerCategoryNature: String { return L10n.tr("Localizable", "emoji_picker_category_nature") }
+  /// Objects
+  public static var emojiPickerCategoryObjects: String { return L10n.tr("Localizable", "emoji_picker_category_objects") }
+  /// Smileys & People
+  public static var emojiPickerCategoryPeople: String { return L10n.tr("Localizable", "emoji_picker_category_people") }
+  /// Travel & Places
+  public static var emojiPickerCategoryPlaces: String { return L10n.tr("Localizable", "emoji_picker_category_places") }
+  /// Symbols
+  public static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
+  /// Sorry, an error occurred
+  public static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
+  /// Message…
+  public static var messageComposerPlaceholder: String { return L10n.tr("Localizable", "message_composer_placeholder") }
+  /// Notification
+  public static var notification: String { return L10n.tr("Localizable", "Notification") }
+  /// Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.
+  public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
+  /// Reason for reporting this content
+  public static var reportContentHint: String { return L10n.tr("Localizable", "report_content_hint") }
   /// (avatar was changed too)
   public static var stateEventAvatarChangedToo: String { return L10n.tr("Localizable", "state_event_avatar_changed_too") }
   /// %1$@ changed their avatar

@@ -127,7 +127,7 @@ final class LoginCoordinator: CoordinatorProtocol {
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:
-            viewModel.displayError(.alert(ElementL10n.unknownError))
+            viewModel.displayError(.alert(L10n.errorUnknown))
         }
     }
     

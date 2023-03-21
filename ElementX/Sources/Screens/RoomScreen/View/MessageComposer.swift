@@ -34,7 +34,7 @@ struct MessageComposer: View {
         VStack(alignment: .leading, spacing: -6) {
             header
             HStack(alignment: .bottom) {
-                MessageComposerTextField(placeholder: ElementL10n.roomMessagePlaceholder,
+                MessageComposerTextField(placeholder: L10n.messageComposerPlaceholder,
                                          text: $text,
                                          focused: $focused,
                                          isMultiline: $isMultiline,

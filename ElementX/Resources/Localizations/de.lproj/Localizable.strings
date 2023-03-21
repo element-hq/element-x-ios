@@ -1,5 +1,7 @@
+"Notification" = "Notification";
 "action_attach_screenshot" = "Attach screenshot";
 "action_cancel" = "Cancel";
+"action_complete_verification" = "Complete verification";
 "action_confirm" = "Bestätigen";
 "action_continue" = "Continue";
 "action_copy" = "Copy";
@@ -49,6 +51,8 @@
 "common_people" = "People";
 "common_permalink" = "Permalink";
 "common_reactions" = "Reactions";
+"common_search_for_someone" = "Search for someone";
+"common_security" = "Security";
 "common_settings" = "Settings";
 "common_sticker" = "Sticker";
 "common_suggestions" = "Suggestions";
@@ -57,6 +61,18 @@
 "common_username" = "Username";
 "common_video" = "Video";
 "common_waiting" = "Waiting…";
+"emoji_picker_category_activity" = "Activities";
+"emoji_picker_category_flags" = "Flags";
+"emoji_picker_category_foods" = "Food & Drink";
+"emoji_picker_category_nature" = "Animals & Nature";
+"emoji_picker_category_objects" = "Objects";
+"emoji_picker_category_people" = "Smileys & People";
+"emoji_picker_category_places" = "Travel & Places";
+"emoji_picker_category_symbols" = "Symbols";
+"error_unknown" = "Sorry, an error occurred";
+"message_composer_placeholder" = "Message…";
+"report_content_explanation" = "Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.";
+"report_content_hint" = "Reason for reporting this content";
 "state_event_avatar_changed_too" = "(avatar was changed too)";
 "state_event_avatar_url_changed" = "%1$@ changed their avatar";
 "state_event_avatar_url_changed_by_you" = "You changed your avatar";
