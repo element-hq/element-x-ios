@@ -67,9 +67,9 @@ struct LeaveRoomAlertItem: AlertItem {
 
     var subtitle: String {
         switch state {
-        case .empty: return ElementL10n.roomDetailsLeaveEmptyRoomAlertSubtitle
-        case .private: return ElementL10n.roomDetailsLeavePrivateRoomAlertSubtitle
-        case .public: return ElementL10n.roomDetailsLeaveRoomAlertSubtitle
+        case .empty: return L10n.leaveRoomAlertEmptySubtitle
+        case .private: return L10n.leaveRoomAlertPrivateSubtitle
+        case .public: return L10n.leaveRoomAlertSubtitle
         }
     }
 }

@@ -122,7 +122,7 @@ private struct MessageComposerReplyHeader: View {
     
     var body: some View {
         HStack(alignment: .center) {
-            Label(ElementL10n.roomTimelineReplyingTo(displayName), systemImage: "arrowshape.turn.up.left")
+            Label(L10n.commonReplyingTo(displayName), systemImage: "arrowshape.turn.up.left")
                 .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
             Button(action: action) {

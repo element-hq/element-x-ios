@@ -69,7 +69,7 @@ struct RoomDetailsScreen: View {
                     Button { context.send(viewAction: .copyRoomLink) } label: {
                         Image(systemName: "link")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.actionCopyLink))
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCopyLink))
                     
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
@@ -120,7 +120,7 @@ struct RoomDetailsScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             .disabled(context.viewState.isLoadingMembers)
         } header: {
-            Text(ElementL10n.roomDetailsAboutSectionTitle)
+            Text(L10n.commonAbout)
                 .formSectionHeader()
         }
         .formSectionStyle()
@@ -132,7 +132,7 @@ struct RoomDetailsScreen: View {
                 Label {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(L10n.commonEncryptionEnabled)
-                        Text(ElementL10n.encryptionEnabledTileDescription)
+                        Text(L10n.roomDetailsEncryptionEnabledDescription)
                             .foregroundColor(.element.secondaryContent)
                             .font(.element.footnote)
                     }

@@ -152,7 +152,7 @@ struct HomeScreen: View {
         } message: {
             Text(L10n.actionSignOutConfirmation)
         }
-        .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
+        .accessibilityLabel(L10n.a11yUserMenu)
     }
     
     private var newRoomButton: some View {
@@ -165,7 +165,7 @@ struct HomeScreen: View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 16) {
-                    Text(ElementL10n.sessionVerificationBannerTitle)
+                    Text(L10n.sessionVerificationBannerTitle)
                         .font(.element.headline)
                         .foregroundColor(.element.systemPrimaryLabel)
                     
@@ -179,7 +179,7 @@ struct HomeScreen: View {
                             .frame(width: 12, height: 12)
                     }
                 }
-                Text(ElementL10n.sessionVerificationBannerMessage)
+                Text(L10n.sessionVerificationBannerMessage)
                     .font(.element.subheadline)
                     .foregroundColor(.element.secondaryContent)
             }

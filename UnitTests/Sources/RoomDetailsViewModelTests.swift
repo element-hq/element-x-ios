@@ -36,7 +36,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         context.send(viewAction: .processTapLeave)
         await Task.yield()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .public)
-        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeaveRoomAlertSubtitle)
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
     }
 
     func testLeavRoomTappedWhenRoomNotPublic() async {
@@ -46,14 +46,14 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         context.send(viewAction: .processTapLeave)
         await Task.yield()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .private)
-        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeavePrivateRoomAlertSubtitle)
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
     }
 
     func testLeaveRoomTappedWithLessThanTwoMembers() async {
         context.send(viewAction: .processTapLeave)
         await Task.yield()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .empty)
-        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, ElementL10n.roomDetailsLeaveEmptyRoomAlertSubtitle)
+        XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertEmptySubtitle)
     }
 
     func testLeaveRoomSuccess() async {

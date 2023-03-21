@@ -28,9 +28,9 @@ struct TimelineStartRoomTimelineView: View {
     }
     
     var title: String {
-        var text = ElementL10n.thisIsTheBeginningOfRoomNoName
+        var text = L10n.roomTimelineBeginningOfRoomNoName
         if let name = timelineItem.name {
-            text = ElementL10n.thisIsTheBeginningOfRoom(name)
+            text = L10n.roomTimelineBeginningOfRoom(name)
         }
         return text
     }

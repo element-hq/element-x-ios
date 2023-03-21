@@ -119,7 +119,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     private func paginateBackwards() async {
         switch await timelineController.paginateBackwards(requestSize: Constants.backPaginationEventLimit, untilNumberOfItems: Constants.backPaginationPageSize) {
         case .failure:
-            displayError(.toast(ElementL10n.roomTimelineBackpaginationFailure))
+            displayError(.toast(L10n.errorFailedLoadingMessages))
         default:
             break
         }
@@ -298,7 +298,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 let permalink = try PermalinkBuilder.permalinkTo(eventIdentifier: item.id, roomIdentifier: timelineController.roomID)
                 UIPasteboard.general.url = permalink
             } catch {
-                displayError(.alert(ElementL10n.roomTimelinePermalinkCreationFailure))
+                displayError(.alert(L10n.errorFailedCreatingThePermalink))
             }
         case .redact:
             Task {

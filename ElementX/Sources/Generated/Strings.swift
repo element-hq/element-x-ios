@@ -10,6 +10,8 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum L10n {
+  /// User menu
+  public static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
   /// Attach screenshot
   public static var actionAttachScreenshot: String { return L10n.tr("Localizable", "action_attach_screenshot") }
   /// Cancel
@@ -22,6 +24,8 @@ public enum L10n {
   public static var actionContinue: String { return L10n.tr("Localizable", "action_continue") }
   /// Copy
   public static var actionCopy: String { return L10n.tr("Localizable", "action_copy") }
+  /// Copy link
+  public static var actionCopyLink: String { return L10n.tr("Localizable", "action_copy_link") }
   /// Create a room
   public static var actionCreateARoom: String { return L10n.tr("Localizable", "action_create_a_room") }
   /// Done
@@ -80,10 +84,24 @@ public enum L10n {
   public static var actionStartVerification: String { return L10n.tr("Localizable", "action_start_verification") }
   /// View Source
   public static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
+  /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
+  public static var bugReportScreenEditorDescription: String { return L10n.tr("Localizable", "bug_report_screen_editor_description") }
+  /// Describe the bug…
+  public static var bugReportScreenEditorPlaceholder: String { return L10n.tr("Localizable", "bug_report_screen_editor_placeholder") }
+  /// Send logs to help
+  public static var bugReportScreenIncludeLogs: String { return L10n.tr("Localizable", "bug_report_screen_include_logs") }
+  /// To check things work as intended, logs will be sent with your message. These will be private. To just send your message, turn off this setting.
+  public static var bugReportScreenLogsDescription: String { return L10n.tr("Localizable", "bug_report_screen_logs_description") }
+  /// About
+  public static var commonAbout: String { return L10n.tr("Localizable", "common_about") }
   /// All Chats
   public static var commonAllChats: String { return L10n.tr("Localizable", "common_all_chats") }
+  /// Bubbles
+  public static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
   /// Decryption error
   public static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
+  /// Developer options
+  public static var commonDeveloperOptions: String { return L10n.tr("Localizable", "common_developer_options") }
   /// (edited)
   public static var commonEditedSuffix: String { return L10n.tr("Localizable", "common_edited_suffix") }
   /// Editing
@@ -106,8 +124,12 @@ public enum L10n {
   public static var commonLoading: String { return L10n.tr("Localizable", "common_loading") }
   /// Message
   public static var commonMessage: String { return L10n.tr("Localizable", "common_message") }
+  /// Message layout
+  public static var commonMessageLayout: String { return L10n.tr("Localizable", "common_message_layout") }
   /// Message removed
   public static var commonMessageRemoved: String { return L10n.tr("Localizable", "common_message_removed") }
+  /// Modern
+  public static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
   /// Password
   public static var commonPassword: String { return L10n.tr("Localizable", "common_password") }
   /// People
@@ -116,6 +138,12 @@ public enum L10n {
   public static var commonPermalink: String { return L10n.tr("Localizable", "common_permalink") }
   /// Reactions
   public static var commonReactions: String { return L10n.tr("Localizable", "common_reactions") }
+  /// Replying to %1$@
+  public static func commonReplyingTo(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "common_replying_to", String(describing: p1))
+  }
+  /// Report a bug
+  public static var commonReportABug: String { return L10n.tr("Localizable", "common_report_a_bug") }
   /// Search for someone
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Security
@@ -152,8 +180,22 @@ public enum L10n {
   public static var emojiPickerCategoryPlaces: String { return L10n.tr("Localizable", "emoji_picker_category_places") }
   /// Symbols
   public static var emojiPickerCategorySymbols: String { return L10n.tr("Localizable", "emoji_picker_category_symbols") }
+  /// Failed creating the permalink
+  public static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
+  /// Failed loading messages
+  public static var errorFailedLoadingMessages: String { return L10n.tr("Localizable", "error_failed_loading_messages") }
   /// Sorry, an error occurred
   public static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
+  /// Hey, talk to me on %1$@: %2$@
+  public static func inviteFriendsText(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "invite_friends_text", String(describing: p1), String(describing: p2))
+  }
+  /// Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.
+  public static var leaveRoomAlertEmptySubtitle: String { return L10n.tr("Localizable", "leave_room_alert_empty_subtitle") }
+  /// Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite.
+  public static var leaveRoomAlertPrivateSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_private_subtitle") }
+  /// Are you sure that you want to leave the room?
+  public static var leaveRoomAlertSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_subtitle") }
   /// Message…
   public static var messageComposerPlaceholder: String { return L10n.tr("Localizable", "message_composer_placeholder") }
   /// Notification
@@ -162,6 +204,28 @@ public enum L10n {
   public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
   /// Reason for reporting this content
   public static var reportContentHint: String { return L10n.tr("Localizable", "report_content_hint") }
+  /// Messages in this room are end-to-end encrypted. Learn more & verify users in their profile.
+  public static var roomDetailsEncryptionEnabledDescription: String { return L10n.tr("Localizable", "room_details_encryption_enabled_description") }
+  /// This is the beginning of %1$@.
+  public static func roomTimelineBeginningOfRoom(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "room_timeline_beginning_of_room", String(describing: p1))
+  }
+  /// This is the beginning of this conversation.
+  public static var roomTimelineBeginningOfRoomNoName: String { return L10n.tr("Localizable", "room_timeline_beginning_of_room_no_name") }
+  /// New
+  public static var roomTimelineReadMarkerTitle: String { return L10n.tr("Localizable", "room_timeline_read_marker_title") }
+  /// %1$d room changes
+  public static func roomTimelineStateChanges(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "room_timeline_state_changes", p1)
+  }
+  /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
+  public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
+  /// Access your message history
+  public static var sessionVerificationBannerTitle: String { return L10n.tr("Localizable", "session_verification_banner_title") }
+  /// Version: %1$@ (%2$@)
+  public static func settingsVersionNumber(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "settings_version_number", String(describing: p1), String(describing: p2))
+  }
   /// (avatar was changed too)
   public static var stateEventAvatarChangedToo: String { return L10n.tr("Localizable", "state_event_avatar_changed_too") }
   /// %1$@ changed their avatar

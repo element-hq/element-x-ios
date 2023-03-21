@@ -49,7 +49,7 @@ struct SettingsScreen: View {
     }
 
     private var versionText: some View {
-        Text(ElementL10n.settingsVersion + ": " + InfoPlistReader.main.bundleShortVersionString + " (" + InfoPlistReader.main.bundleVersion + ")")
+        Text(L10n.settingsVersionNumber(InfoPlistReader.main.bundleShortVersionString, InfoPlistReader.main.bundleVersion))
     }
 
     private var userSection: some View {
@@ -89,7 +89,7 @@ struct SettingsScreen: View {
     private var developerOptionsSection: some View {
         Section {
             Button { context.send(viewAction: .developerOptions) } label: {
-                Label(ElementL10n.settingsDeveloperOptions, systemImage: "hammer.circle")
+                Label(L10n.commonDeveloperOptions, systemImage: "hammer.circle")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("sessionVerificationButton")
@@ -105,7 +105,7 @@ struct SettingsScreen: View {
                         .tag(style)
                 }
             } label: {
-                Label(ElementL10n.settingsTimelineStyle, systemImage: "rectangle.grid.1x2")
+                Label(L10n.commonMessageLayout, systemImage: "rectangle.grid.1x2")
             }
             .labelStyle(.compoundFormRow())
             .accessibilityIdentifier("timelineStylePicker")
@@ -166,9 +166,9 @@ private extension TimelineStyle {
     var name: String {
         switch self {
         case .plain:
-            return ElementL10n.roomTimelineStylePlainLongDescription
+            return L10n.commonModern
         case .bubbles:
-            return ElementL10n.roomTimelineStyleBubbledLongDescription
+            return L10n.commonBubbles
         }
     }
 }
