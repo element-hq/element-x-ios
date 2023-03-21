@@ -24,13 +24,12 @@ struct RestorationToken: Codable, Equatable {
 extension MatrixRustSDK.Session: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self = .init(accessToken: try container.decode(String.self, forKey: .accessToken),
-                     refreshToken: try container.decodeIfPresent(String.self, forKey: .refreshToken),
-                     userId: try container.decode(String.self, forKey: .userId),
-                     deviceId: try container.decode(String.self, forKey: .deviceId),
-                     homeserverUrl: try container.decode(String.self, forKey: .homeserverUrl),
-                     isSoftLogout: try container.decode(Bool.self, forKey: .isSoftLogout),
-                     slidingSyncProxy: try container.decode(String.self, forKey: .slidingSyncProxy))
+        self = try .init(accessToken: container.decode(String.self, forKey: .accessToken),
+                         refreshToken: container.decodeIfPresent(String.self, forKey: .refreshToken),
+                         userId: container.decode(String.self, forKey: .userId),
+                         deviceId: container.decode(String.self, forKey: .deviceId),
+                         homeserverUrl: container.decode(String.self, forKey: .homeserverUrl),
+                         slidingSyncProxy: container.decode(String.self, forKey: .slidingSyncProxy))
     }
     
     public func encode(to encoder: Encoder) throws {
@@ -40,11 +39,10 @@ extension MatrixRustSDK.Session: Codable {
         try container.encode(userId, forKey: .userId)
         try container.encode(deviceId, forKey: .deviceId)
         try container.encode(homeserverUrl, forKey: .homeserverUrl)
-        try container.encode(isSoftLogout, forKey: .isSoftLogout)
         try container.encode(slidingSyncProxy, forKey: .slidingSyncProxy)
     }
     
     enum CodingKeys: String, CodingKey {
-        case accessToken, refreshToken, userId, deviceId, homeserverUrl, isSoftLogout, slidingSyncProxy
+        case accessToken, refreshToken, userId, deviceId, homeserverUrl, slidingSyncProxy
     }
 }

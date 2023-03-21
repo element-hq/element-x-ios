@@ -132,6 +132,8 @@ extension NotificationItemProxy {
         if let subtitle = subtitle {
             notification.subtitle = subtitle
         }
+        // We can store the room identifier into the thread identifier since it's used for notifications
+        // that belong to the same group
         notification.threadIdentifier = roomId
         notification.categoryIdentifier = NotificationConstants.Category.reply
         notification.sound = isNoisy ? UNNotificationSound(named: UNNotificationSoundName(rawValue: "message.caf")) : nil
@@ -169,7 +171,7 @@ extension NotificationItemProxy {
         notification.body = "📷 " + content.body
 
         notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source))
+                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
 
         return notification
     }
@@ -184,7 +186,7 @@ extension NotificationItemProxy {
         notification.body = "📹 " + content.body
 
         notification = try await notification.addMediaAttachment(using: mediaProvider,
-                                                                 mediaSource: .init(source: content.source))
+                                                                 mediaSource: .init(source: content.source, mimeType: content.info?.mimetype))
 
         return notification
     }

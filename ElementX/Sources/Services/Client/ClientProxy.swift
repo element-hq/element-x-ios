@@ -35,11 +35,6 @@ private class WeakClientProxyWrapper: ClientDelegate, SlidingSyncObserver {
         clientProxy?.didReceiveAuthError(isSoftLogout: isSoftLogout)
     }
 
-    func didUpdateRestoreToken() {
-        MXLog.info("Did update restoration token")
-        clientProxy?.didUpdateRestoreToken()
-    }
-    
     // MARK: - SlidingSyncDelegate
     
     func didReceiveSyncUpdate(summary: UpdateSummary) {
@@ -63,6 +58,15 @@ class ClientProxy: ClientProxyProtocol {
     
     var allRoomsSlidingSyncView: SlidingSyncList?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
+
+    private var loadCachedAvatarURLTask: Task<Void, Never>?
+    private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
+    var avatarURLPublisher: AnyPublisher<URL?, Never> {
+        avatarURLSubject
+            .removeDuplicates()
+            .receive(on: DispatchQueue.main)
+            .eraseToAnyPublisher()
+    }
     
     private var cancellables = Set<AnyCancellable>()
     private var visibleRoomsViewProxyStateObservationToken: AnyCancellable?
@@ -87,6 +91,8 @@ class ClientProxy: ClientProxyProtocol {
         client.setDelegate(delegate: WeakClientProxyWrapper(clientProxy: self))
         
         configureSlidingSync()
+
+        loadUserAvatarURLFromCache()
     }
     
     var userID: String {
@@ -96,10 +102,6 @@ class ClientProxy: ClientProxyProtocol {
             MXLog.error("Failed retrieving room info with error: \(error)")
             return "Unknown user identifier"
         }
-    }
-
-    var isSoftLogout: Bool {
-        client.isSoftLogout()
     }
 
     var deviceId: String? {
@@ -126,7 +128,7 @@ class ClientProxy: ClientProxyProtocol {
     
     func startSync() {
         MXLog.info("Starting sync")
-        guard !client.isSoftLogout(), slidingSyncObserverToken == nil else {
+        guard slidingSyncObserverToken == nil else {
             return
         }
         
@@ -163,24 +165,20 @@ class ClientProxy: ClientProxyProtocol {
             }
         }
     }
-    
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
+
+    func loadUserAvatarURL() async {
         await Task.dispatch(on: clientQueue) {
             do {
                 let urlString = try self.client.avatarUrl()
-                
-                guard let url = URL(string: urlString) else {
-                    MXLog.error("Invalid avatar URL string: \(String(describing: urlString))")
-                    return .failure(.failedRetrievingAvatarURL)
-                }
-                 
-                return .success(url)
+                self.loadCachedAvatarURLTask?.cancel()
+                self.avatarURLSubject.value = urlString.flatMap(URL.init)
             } catch {
-                return .failure(.failedRetrievingAvatarURL)
+                MXLog.error("Failed fetching the user avatar url: \(error)")
+                return
             }
         }
     }
-    
+
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
         await Task.dispatch(on: clientQueue) {
             .failure(.failedRetrievingAccountData)
@@ -214,33 +212,33 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
 
-    // swiftlint:disable:next function_parameter_count
-    func setPusher(pushkey: String,
-                   kind: PusherKind?,
-                   appId: String,
-                   appDisplayName: String,
-                   deviceDisplayName: String,
-                   profileTag: String?,
-                   lang: String,
-                   url: URL?,
-                   format: PushFormat?,
-                   defaultPayload: [AnyHashable: Any]?) async throws {
-//        let defaultPayloadString = jsonString(from: defaultPayload)
-//        try await Task.dispatch(on: .global()) {
-//            try self.client.setPusher(pushkey: pushkey,
-//                                      kind: kind?.rustValue,
-//                                      appId: appId,
-//                                      appDisplayName: appDisplayName,
-//                                      deviceDisplayName: deviceDisplayName,
-//                                      profileTag: profileTag,
-//                                      lang: lang,
-//                                      url: url,
-//                                      format: format?.rustValue,
-//                                      defaultPayload: defaultPayloadString)
-//        }
+    func setPusher(with configuration: PusherConfiguration) async throws {
+        try await Task.dispatch(on: .global()) {
+            try self.client.setPusher(identifiers: configuration.identifiers,
+                                      kind: configuration.kind,
+                                      appDisplayName: configuration.appDisplayName,
+                                      deviceDisplayName: configuration.deviceDisplayName,
+                                      profileTag: configuration.profileTag,
+                                      lang: configuration.lang)
+        }
     }
     
     // MARK: Private
+
+    private func loadUserAvatarURLFromCache() {
+        loadCachedAvatarURLTask = Task {
+            let urlString = await Task.dispatch(on: clientQueue) {
+                do {
+                    return try self.client.cachedAvatarUrl()
+                } catch {
+                    MXLog.error("Failed to look for the avatar url in the cache: \(error)")
+                    return nil
+                }
+            }
+            guard !Task.isCancelled else { return }
+            self.avatarURLSubject.value = urlString.flatMap(URL.init)
+        }
+    }
     
     private func restartSync() {
         MXLog.info("Restarting sync")
@@ -382,24 +380,9 @@ class ClientProxy: ClientProxyProtocol {
     fileprivate func didReceiveAuthError(isSoftLogout: Bool) {
         callbacks.send(.receivedAuthError(isSoftLogout: isSoftLogout))
     }
-
-    fileprivate func didUpdateRestoreToken() {
-        callbacks.send(.updatedRestoreToken)
-    }
     
     fileprivate func didReceiveSlidingSyncUpdate(summary: UpdateSummary) {
         callbacks.send(.receivedSyncUpdate)
-    }
-    
-    /// Convenience method to get the json string of an Encodable
-    private func jsonString(from dictionary: [AnyHashable: Any]?) -> String? {
-        guard let dictionary,
-              let data = try? JSONSerialization.data(withJSONObject: dictionary,
-                                                     options: [.fragmentsAllowed]) else {
-            return nil
-        }
-
-        return String(data: data, encoding: .utf8)
     }
 }
 
@@ -410,5 +393,9 @@ extension ClientProxy: MediaLoaderProtocol {
 
     func loadMediaThumbnailForSource(_ source: MediaSourceProxy, width: UInt, height: UInt) async throws -> Data {
         try await mediaLoader.loadMediaThumbnailForSource(source, width: width, height: height)
+    }
+    
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
+        try await mediaLoader.loadMediaFileForSource(source)
     }
 }

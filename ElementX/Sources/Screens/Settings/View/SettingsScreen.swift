@@ -14,12 +14,11 @@
 // limitations under the License.
 //
 
+import Compound
 import SwiftUI
 
 struct SettingsScreen: View {
     @State private var showingLogoutConfirmation = false
-
-    @ScaledMetric private var avatarSize = AvatarSize.user(on: .settings).value
     
     @ObservedObject var context: SettingsScreenViewModel.Context
     
@@ -39,8 +38,7 @@ struct SettingsScreen: View {
             
             signOutSection
         }
-        .scrollContentBackground(.hidden)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .compoundForm()
         .navigationTitle(ElementL10n.settings)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -56,7 +54,7 @@ struct SettingsScreen: View {
 
     private var userSection: some View {
         Section {
-            HStack(spacing: 13) {
+            HStack(spacing: 12) {
                 LoadableAvatarImage(url: context.viewState.userAvatarURL,
                                     name: context.viewState.userDisplayName,
                                     contentID: context.viewState.userID,
@@ -64,18 +62,18 @@ struct SettingsScreen: View {
                                     imageProvider: context.imageProvider)
                     .accessibilityHidden(true)
                 
-                VStack(alignment: .leading, spacing: 4) {
+                VStack(alignment: .leading, spacing: 2) {
                     Text(context.viewState.userDisplayName ?? "")
-                        .font(.element.title3)
-                        .foregroundColor(.element.primaryContent)
+                        .font(.compound.headingMD)
+                        .foregroundColor(.compound.textPrimary)
                     Text(context.viewState.userID)
-                        .font(.element.subheadline)
-                        .foregroundColor(.element.primaryContent)
+                        .font(.compound.bodySM)
+                        .foregroundColor(.compound.textSecondary)
                 }
                 .accessibilityElement(children: .combine)
             }
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var sessionVerificationSection: some View {
@@ -83,9 +81,9 @@ struct SettingsScreen: View {
             Button { context.send(viewAction: .sessionVerification) } label: {
                 Label(ElementL10n.settingsSessionVerification, systemImage: "checkmark.shield")
             }
-            .buttonStyle(FormButtonStyle())
+            .buttonStyle(.compoundForm())
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var developerOptionsSection: some View {
@@ -93,10 +91,10 @@ struct SettingsScreen: View {
             Button { context.send(viewAction: .developerOptions) } label: {
                 Label(ElementL10n.settingsDeveloperOptions, systemImage: "hammer.circle")
             }
-            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+            .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("sessionVerificationButton")
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var simplifiedSection: some View {
@@ -108,8 +106,8 @@ struct SettingsScreen: View {
                 }
             } label: {
                 Label(ElementL10n.settingsTimelineStyle, systemImage: "rectangle.grid.1x2")
-                    .labelStyle(FormRowLabelStyle())
             }
+            .labelStyle(.compoundFormRow())
             .accessibilityIdentifier("timelineStylePicker")
             .onChange(of: context.timelineStyle) { _ in
                 context.send(viewAction: .changedTimelineStyle)
@@ -118,10 +116,10 @@ struct SettingsScreen: View {
             Button { context.send(viewAction: .reportBug) } label: {
                 Label(ElementL10n.sendBugReport, systemImage: "questionmark.circle")
             }
-            .buttonStyle(FormButtonStyle(accessory: .navigationLink))
+            .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("reportBugButton")
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
     
     private var signOutSection: some View {
@@ -129,7 +127,7 @@ struct SettingsScreen: View {
             Button { showingLogoutConfirmation = true } label: {
                 Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
             }
-            .buttonStyle(FormButtonStyle())
+            .buttonStyle(.compoundForm())
             .accessibilityIdentifier("logoutButton")
             .alert(ElementL10n.actionSignOut, isPresented: $showingLogoutConfirmation) {
                 Button(ElementL10n.actionSignOut,
@@ -141,19 +139,14 @@ struct SettingsScreen: View {
         } footer: {
             VStack {
                 versionText
-                    .font(.element.caption1)
-                    .foregroundColor(.element.tertiaryContent)
                     .frame(maxWidth: .infinity)
                 
-                if let deviceId = context.viewState.deviceID {
-                    Text(deviceId)
-                        .font(.element.caption1)
-                        .foregroundColor(.element.tertiaryContent)
-                }
+                context.viewState.deviceID.map(Text.init)
             }
+            .compoundFormSectionFooter()
             .padding(.top, 24)
         }
-        .formSectionStyle()
+        .compoundFormSection()
     }
 
     private var doneButton: some View {
@@ -192,7 +185,6 @@ struct SettingsScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
             SettingsScreen(context: viewModel.context)
-                .tint(.element.accent)
         }
     }
 }

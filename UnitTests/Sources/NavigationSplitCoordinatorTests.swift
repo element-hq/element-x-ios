@@ -255,6 +255,32 @@ class NavigationSplitCoordinatorTests: XCTestCase {
         }
         waitForExpectations(timeout: 1.0)
     }
+
+    func testSetRootDetailToNilAfterPoppingToRoot() {
+        navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SomeTestCoordinator())
+        let sidebarCoordinator = NavigationStackCoordinator()
+        sidebarCoordinator.setRootCoordinator(SomeTestCoordinator())
+
+        let detailCoordinator = NavigationStackCoordinator()
+        detailCoordinator.setRootCoordinator(SomeTestCoordinator())
+        detailCoordinator.push(SomeTestCoordinator())
+
+        navigationSplitCoordinator.setSidebarCoordinator(sidebarCoordinator)
+        navigationSplitCoordinator.setDetailCoordinator(detailCoordinator)
+
+        let expectation = expectation(description: "Details coordinator should be nil, and the compact layout revert to the sidebar root")
+        DispatchQueue.main.async {
+            detailCoordinator.popToRoot(animated: true)
+            self.navigationSplitCoordinator.setDetailCoordinator(nil)
+            DispatchQueue.main.async {
+                XCTAssertNil(self.navigationSplitCoordinator.detailCoordinator)
+                self.assertCoordinatorsEqual(self.navigationSplitCoordinator.compactLayoutRootCoordinator, sidebarCoordinator.rootCoordinator)
+                XCTAssertTrue(self.navigationSplitCoordinator.compactLayoutStackModules.isEmpty)
+                expectation.fulfill()
+            }
+        }
+        waitForExpectations(timeout: 1.0)
+    }
     
     // MARK: - Private
     

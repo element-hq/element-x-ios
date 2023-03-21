@@ -22,7 +22,6 @@ class MockClientProxy: ClientProxyProtocol {
     let callbacks = PassthroughSubject<ClientProxyCallback, Never>()
     
     let userID: String
-    let isSoftLogout = false
     let deviceId: String? = nil
     let homeserver = ""
     let restorationToken: RestorationToken? = nil
@@ -30,11 +29,15 @@ class MockClientProxy: ClientProxyProtocol {
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+
+    var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
     
     internal init(userID: String, roomSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()) {
         self.userID = userID
         visibleRoomsSummaryProvider = roomSummaryProvider
     }
+
+    func loadUserAvatarURL() async { }
     
     func startSync() { }
     
@@ -47,18 +50,14 @@ class MockClientProxy: ClientProxyProtocol {
     
         switch room {
         case .empty:
-            return MockRoomProxy(displayName: "Empty room")
+            return await RoomProxyMock(with: .init(displayName: "Empty room"))
         case .filled(let details), .invalidated(let details):
-            return MockRoomProxy(displayName: details.name)
+            return await RoomProxyMock(with: .init(displayName: details.name))
         }
     }
     
     func loadUserDisplayName() async -> Result<String, ClientProxyError> {
         .success("User display name")
-    }
-    
-    func loadUserAvatarURL() async -> Result<URL, ClientProxyError> {
-        .failure(.failedRetrievingAvatarURL)
     }
     
     func accountDataEvent<Content>(type: String) async -> Result<Content?, ClientProxyError> where Content: Decodable {
@@ -77,6 +76,10 @@ class MockClientProxy: ClientProxyProtocol {
         throw ClientProxyError.failedLoadingMedia
     }
     
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
+        throw ClientProxyError.failedLoadingMedia
+    }
+    
     var sessionVerificationControllerProxyResult: Result<SessionVerificationControllerProxyProtocol, ClientProxyError>?
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         if let sessionVerificationControllerProxyResult {
@@ -90,40 +93,13 @@ class MockClientProxy: ClientProxyProtocol {
         // no-op
     }
     
-    var setPusherCalled = false
     var setPusherErrorToThrow: Error?
-    var setPusherPushkey: String?
-    var setPusherKind: PusherKind?
-    var setPusherAppId: String?
-    var setPusherAppDisplayName: String?
-    var setPusherDeviceDisplayName: String?
-    var setPusherProfileTag: String?
-    var setPusherLang: String?
-    var setPusherUrl: URL?
-    var setPusherFormat: PushFormat?
-    var setPusherDefaultPayload: [AnyHashable: Any]?
-    // swiftlint:disable:next function_parameter_count
-    func setPusher(pushkey: String,
-                   kind: PusherKind?,
-                   appId: String,
-                   appDisplayName: String,
-                   deviceDisplayName: String,
-                   profileTag: String?,
-                   lang: String,
-                   url: URL?,
-                   format: PushFormat?,
-                   defaultPayload: [AnyHashable: Any]?) async throws {
+    var setPusherArgument: PusherConfiguration?
+    var setPusherCalled = false
+
+    func setPusher(with configuration: PusherConfiguration) async throws {
         if let setPusherErrorToThrow { throw setPusherErrorToThrow }
         setPusherCalled = true
-        setPusherPushkey = pushkey
-        setPusherKind = kind
-        setPusherAppId = appId
-        setPusherAppDisplayName = appDisplayName
-        setPusherDeviceDisplayName = deviceDisplayName
-        setPusherProfileTag = profileTag
-        setPusherLang = lang
-        setPusherUrl = url
-        setPusherFormat = format
-        setPusherDefaultPayload = defaultPayload
+        setPusherArgument = configuration
     }
 }

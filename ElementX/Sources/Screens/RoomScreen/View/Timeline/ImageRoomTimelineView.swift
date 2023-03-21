@@ -48,7 +48,7 @@ struct ImageRoomTimelineView: View {
     
     @ViewBuilder
     var overlay: some View {
-        if timelineItem.type == .gif {
+        if timelineItem.contentType == .gif {
             Text(ElementL10n.roomTimelineImageGif)
                 .font(.element.bodyBold)
                 .foregroundStyle(.primary)
@@ -96,7 +96,7 @@ struct ImageRoomTimelineView_Previews: PreviewProvider {
                                                                       source: nil,
                                                                       aspectRatio: 0.7,
                                                                       blurhash: "L%KUc%kqS$RP?Ks,WEf8OlrqaekW",
-                                                                      type: .gif))
+                                                                      contentType: .gif))
         }
     }
 }

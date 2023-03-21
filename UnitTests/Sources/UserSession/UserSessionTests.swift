@@ -40,9 +40,9 @@ final class UserSessionTests: XCTestCase {
         }
         .store(in: &cancellables)
         
-        let controller = MockSessionVerificationControllerProxy(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
-                                                                isVerified: false,
-                                                                requestDelay: .zero)
+        let controller = SessionVerificationControllerProxyMock.configureMock(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
+                                                                              isVerified: false,
+                                                                              requestDelay: .zero)
         clientProxy.sessionVerificationControllerProxyResult = .success(controller)
         clientProxy.callbacks.send(.receivedSyncUpdate)
         waitForExpectations(timeout: 1.0)
@@ -50,9 +50,9 @@ final class UserSessionTests: XCTestCase {
     
     func test_whenUserSessionReceivesSyncUpdateAndSessionIsVerified_didVerifySessionEventReceived() throws {
         let expectation = expectation(description: "DidVerifySessionEvent expectation")
-        let controller = MockSessionVerificationControllerProxy(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
-                                                                isVerified: false,
-                                                                requestDelay: .zero)
+        let controller = SessionVerificationControllerProxyMock.configureMock(callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never>(),
+                                                                              isVerified: false,
+                                                                              requestDelay: .zero)
         clientProxy.sessionVerificationControllerProxyResult = .success(controller)
         
         controller.callbacks.sink { value in
@@ -67,22 +67,6 @@ final class UserSessionTests: XCTestCase {
         
         clientProxy.callbacks.send(.receivedSyncUpdate)
         controller.callbacks.send(.finished)
-        waitForExpectations(timeout: 1.0)
-    }
-    
-    func test_whenUserSessionReceivesUpdatedRestoreToken_updateRestoreTokenNeededEventReceived() throws {
-        let expectation = expectation(description: "UpdatedRestoreToken expectation")
-        userSession.callbacks.sink { callback in
-            switch callback {
-            case .updateRestoreTokenNeeded:
-                expectation.fulfill()
-            default:
-                break
-            }
-        }
-        .store(in: &cancellables)
-        
-        clientProxy.callbacks.send(.updatedRestoreToken)
         waitForExpectations(timeout: 1.0)
     }
 }

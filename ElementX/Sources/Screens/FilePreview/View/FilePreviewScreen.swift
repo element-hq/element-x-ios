@@ -24,7 +24,7 @@ struct FilePreviewScreen: View {
     var body: some View {
         ZStack(alignment: .leading) {
             PreviewView(context: context,
-                        fileURL: context.viewState.fileURL,
+                        fileURL: context.viewState.mediaFile.url,
                         title: context.viewState.title)
                 .ignoresSafeArea(edges: .bottom)
             
@@ -93,11 +93,9 @@ private class PreviewItem: NSObject, QLPreviewItem {
 // MARK: - Previews
 
 struct FilePreview_Previews: PreviewProvider {
+    static let viewModel = FilePreviewViewModel(mediaFile: .unmanaged(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
+    
     static var previews: some View {
-        Group {
-            let upgradeViewModel = FilePreviewViewModel(fileURL: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf"))
-            FilePreviewScreen(context: upgradeViewModel.context)
-        }
-        .tint(.element.accent)
+        FilePreviewScreen(context: viewModel.context)
     }
 }

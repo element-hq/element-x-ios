@@ -39,6 +39,7 @@ struct RoomMemberDetailsScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
+        .searchableStyle(.list)
         .background(Color.element.background.ignoresSafeArea())
         .navigationTitle(ElementL10n.bottomActionPeople)
         .alert(item: $context.alertInfo) { $0.alert }
@@ -48,17 +49,19 @@ struct RoomMemberDetailsScreen: View {
 // MARK: - Previews
 
 struct RoomMemberDetails_Previews: PreviewProvider {
+    static let viewModel = {
+        let members: [RoomMemberProxy] = [
+            .mockAlice,
+            .mockBob,
+            .mockCharlie
+        ]
+        return RoomMemberDetailsViewModel(mediaProvider: MockMediaProvider(),
+                                          members: members)
+    }()
+    
     static var previews: some View {
-        Group {
-            let members: [RoomMemberProxy] = [
-                .mockAlice,
-                .mockBob,
-                .mockCharlie
-            ]
-            let viewModel = RoomMemberDetailsViewModel(mediaProvider: MockMediaProvider(),
-                                                       members: members)
+        NavigationStack {
             RoomMemberDetailsScreen(context: viewModel.context)
         }
-        .tint(.element.accent)
     }
 }

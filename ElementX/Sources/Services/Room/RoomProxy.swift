@@ -287,6 +287,23 @@ class RoomProxy: RoomProxyProtocol {
             self?.room.retryDecryption(sessionIds: [sessionID])
         }
     }
+
+    func leaveRoom() async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: .global()) {
+            do {
+                try self.room.leave()
+                return .success(())
+            } catch {
+                MXLog.error("Failed to leave the room: \(error)")
+                return .failure(.failedLeavingRoom)
+            }
+        }
+    }
     
     // MARK: - Private
     

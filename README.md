@@ -13,13 +13,17 @@
 
 ElementX iOS is a [Matrix](https://matrix.org/) iOS Client provided by [Element](https://element.io/).
 
-The application is a total rewrite of [Element-iOS](https://github.com/vector-im/element-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targetting devices running iOS 15+.
+The application is a total rewrite of [Element-iOS](https://github.com/vector-im/element-ios) using the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) underneath and targetting devices running iOS 16+.
 
 ## Rust SDK
 
 ElementX leverages the [Matrix Rust SDK](https://github.com/matrix-org/matrix-rust-sdk) through an FFI layer exposed as a [swift package](https://github.com/matrix-org/matrix-rust-components-swift) that the final client can directly import and use.
 
 We're doing this as a way to share code between platforms and while we've seen promising results it's still in the experimental stage and bound to change.
+
+## Status
+
+This project is in work in progress. The app does not cover yet all functionalities we expect.
 
 ## Contributing
 
@@ -34,8 +38,8 @@ Please refer to the [setting up a development environment](CONTRIBUTING.md#setti
 ## Support
 
 When you are experiencing an issue on ElementX iOS, please first search in [GitHub issues](https://github.com/vector-im/element-x-ios/issues)
-and then in [#element-ios:matrix.org](https://matrix.to/#/#element-ios:matrix.org).
-If after your research you still have a question, ask at [#element-ios:matrix.org](https://matrix.to/#/#element-ios:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by shaking your phone or going to the application settings. This is especially recommended when you encounter a crash.
+and then in [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org).
+If after your research you still have a question, ask at [#element-x-ios:matrix.org](https://matrix.to/#/#element-x-ios:matrix.org). Otherwise feel free to create a GitHub issue if you encounter a bug or a crash, by explaining clearly in detail what happened. You can also perform bug reporting (Rageshake) from the Element application by shaking your phone or going to the application settings. This is especially recommended when you encounter a crash.
 
 ## Copyright & License
 

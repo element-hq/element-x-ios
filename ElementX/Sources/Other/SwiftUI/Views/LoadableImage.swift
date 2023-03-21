@@ -56,7 +56,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
          imageProvider: ImageProviderProtocol?,
          transformer: @escaping (Image) -> TransformerView = { $0 },
          placeholder: @escaping () -> PlaceholderView) {
-        let mediaSource = url.map(MediaSourceProxy.init)
+        let mediaSource = url.map { MediaSourceProxy(url: $0, mimeType: nil) }
         
         self.init(mediaSource: mediaSource,
                   blurhash: blurhash,

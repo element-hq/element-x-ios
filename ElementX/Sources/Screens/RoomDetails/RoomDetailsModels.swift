@@ -23,6 +23,7 @@ import UIKit
 
 enum RoomDetailsViewModelAction {
     case requestMemberDetailsPresentation([RoomMemberProxy])
+    case leftRoom
     case cancel
 }
 
@@ -49,15 +50,34 @@ struct RoomDetailsViewState: BindableState {
 struct RoomDetailsViewStateBindings {
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomDetailsErrorType>?
+    var leaveRoomAlertItem: LeaveRoomAlertItem?
 }
 
-enum RoomDetailsErrorType: Hashable {
-    /// A specific error message shown in an alert.
-    case alert(String)
+struct LeaveRoomAlertItem: AlertItem {
+    enum RoomState {
+        case empty
+        case `public`
+        case `private`
+    }
+
+    let state: RoomState
+    let title = ElementL10n.roomProfileSectionMoreLeave
+    let confirmationTitle = ElementL10n.actionLeave
+    let cancelTitle = ElementL10n.actionCancel
+
+    var subtitle: String {
+        switch state {
+        case .empty: return ElementL10n.roomDetailsLeaveEmptyRoomAlertSubtitle
+        case .private: return ElementL10n.roomDetailsLeavePrivateRoomAlertSubtitle
+        case .public: return ElementL10n.roomDetailsLeaveRoomAlertSubtitle
+        }
+    }
 }
 
 enum RoomDetailsViewAction {
     case processTapPeople
+    case processTapLeave
+    case confirmLeave
     case copyRoomLink
 }
 
@@ -71,4 +91,11 @@ struct RoomDetailsMember: Identifiable, Equatable {
         name = proxy.displayName
         avatarURL = proxy.avatarURL
     }
+}
+
+enum RoomDetailsErrorType: Hashable {
+    /// A specific error message shown in an alert.
+    case alert(String)
+    /// Leaving room has failed..
+    case unknown
 }

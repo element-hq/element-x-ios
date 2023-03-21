@@ -24,11 +24,10 @@ extension UNMutableNotificationContent {
         guard let mediaProvider else {
             return self
         }
-
-        switch await mediaProvider.loadFileFromSource(mediaSource, fileExtension: "") {
-        case .success(let url):
+        switch await mediaProvider.loadFileFromSource(mediaSource) {
+        case .success(let file):
             let attachment = try UNNotificationAttachment(identifier: ProcessInfo.processInfo.globallyUniqueString,
-                                                          url: url,
+                                                          url: file.url, // Needs testing: Does the file get copied before the media handle is be dropped?
                                                           options: nil)
             attachments.append(attachment)
         case .failure(let error):
@@ -47,16 +46,16 @@ extension UNMutableNotificationContent {
             return self
         }
 
-        switch await mediaProvider.loadFileFromSource(mediaSource, fileExtension: "jpg") {
-        case .success(let url):
+        switch await mediaProvider.loadFileFromSource(mediaSource) {
+        case .success(let mediaFile):
             // Initialize only the sender for a one-to-one message intent.
             let handle = INPersonHandle(value: senderId, type: .unknown)
-            let sender = INPerson(personHandle: handle,
-                                  nameComponents: nil,
-                                  displayName: senderName,
-                                  image: INImage(imageData: try Data(contentsOf: url)),
-                                  contactIdentifier: nil,
-                                  customIdentifier: nil)
+            let sender = try INPerson(personHandle: handle,
+                                      nameComponents: nil,
+                                      displayName: senderName,
+                                      image: INImage(imageData: Data(contentsOf: mediaFile.url)),
+                                      contactIdentifier: nil,
+                                      customIdentifier: nil)
 
             // Because this communication is incoming, you can infer that the current user is
             // a recipient. Don't include the current user when initializing the intent.

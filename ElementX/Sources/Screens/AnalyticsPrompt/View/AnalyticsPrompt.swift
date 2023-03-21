@@ -69,6 +69,7 @@ struct AnalyticsPrompt: View {
                 .font(.element.body)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.secondaryContent)
+                .tint(.element.links)
             
             Divider()
                 .background(Color.element.quinaryContent)
@@ -115,6 +116,5 @@ struct AnalyticsPrompt_Previews: PreviewProvider {
     static let viewModel = AnalyticsPromptViewModel(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
     static var previews: some View {
         AnalyticsPrompt(context: viewModel.context)
-            .tint(.element.accent)
     }
 }

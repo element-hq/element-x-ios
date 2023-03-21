@@ -20,7 +20,6 @@ struct MockUserSession: UserSessionProtocol {
     let callbacks = PassthroughSubject<UserSessionCallback, Never>()
     let sessionVerificationController: SessionVerificationControllerProxyProtocol? = nil
     var userID: String { clientProxy.userID }
-    var isSoftLogout: Bool { clientProxy.isSoftLogout }
     var deviceID: String? { clientProxy.deviceId }
     var homeserver: String { clientProxy.homeserver }
     let clientProxy: ClientProxyProtocol

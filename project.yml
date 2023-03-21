@@ -21,12 +21,13 @@ options:
 
 settings:
   CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED: YES
+  ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: "Colors/AccentColor"
   ENABLE_BITCODE: NO
   BASE_APP_GROUP_IDENTIFIER: io.element
   APP_GROUP_IDENTIFIER: group.$(BASE_APP_GROUP_IDENTIFIER)
   BASE_BUNDLE_IDENTIFIER: io.element.elementx
   KEYCHAIN_ACCESS_GROUP_IDENTIFIER: $(AppIdentifierPrefix)$(BASE_BUNDLE_IDENTIFIER)
-  MARKETING_VERSION: 1.0.24
+  MARKETING_VERSION: 1.0.25
   CURRENT_PROJECT_VERSION: 1
   DEVELOPMENT_TEAM: 7J4U792NQT
 
@@ -36,14 +37,19 @@ include:
   - path: UITests/SupportingFiles/target.yml
   - path: IntegrationTests/SupportingFiles/target.yml
   - path: NSE/SupportingFiles/target.yml
+  - path: NCE/SupportingFiles/target.yml
 
 packages:
   MatrixRustSDK:
     url: https://github.com/matrix-org/matrix-rust-components-swift
-    exactVersion: 1.0.42-alpha
+    exactVersion: 1.0.47-alpha
     # path: ../matrix-rust-sdk
   DesignKit:
     path: DesignKit
+  Compound:
+    url: https://github.com/vector-im/compound-ios
+    revision: 0b1c62f9a9efac3d9ac06c51531392d55057a0eb
+    # path: ../compound-ios
   Algorithms:
     url: https://github.com/apple/swift-algorithms
     majorVersion: 1.0.0
@@ -73,7 +79,7 @@ packages:
     branch: master
   Introspect:
     url: https://github.com/siteline/SwiftUI-Introspect
-    majorVersion: 0.1.4
+    majorVersion: 0.2.3
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     majorVersion: 1.4.4
@@ -88,7 +94,7 @@ packages:
     majorVersion: 1.3.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    majorVersion: 7.15.0
+    majorVersion: 8.3.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
     majorVersion: 1.10.0

@@ -24,7 +24,5 @@ enum MediaProviderError: Error {
 }
 
 protocol MediaProviderProtocol: ImageProviderProtocol {
-    func fileFromSource(_ source: MediaSourceProxy?, fileExtension: String) -> URL?
-
-    @discardableResult func loadFileFromSource(_ source: MediaSourceProxy, fileExtension: String) async -> Result<URL, MediaProviderError>
+    func loadFileFromSource(_ source: MediaSourceProxy) async -> Result<MediaFileHandleProxy, MediaProviderError>
 }

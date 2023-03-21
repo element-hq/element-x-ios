@@ -30,7 +30,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     var callback: ((HomeScreenViewModelAction) -> Void)?
     
-    // swiftlint:disable:next function_body_length cyclomatic_complexity
+    // swiftlint:disable:next function_body_length
     init(userSession: UserSessionProtocol, attributedStringBuilder: AttributedStringBuilderProtocol) {
         self.userSession = userSession
         self.attributedStringBuilder = attributedStringBuilder
@@ -54,6 +54,10 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 }
             }
             .store(in: &cancellables)
+
+        userSession.clientProxy.avatarURLPublisher
+            .weakAssign(to: \.state.userAvatarURL, on: self)
+            .store(in: &cancellables)
         
         guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
@@ -68,8 +72,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] roomSummaryProviderState, totalCount, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = roomSummaryProviderState != .live && (totalCount == 0 || rooms.count != totalCount)
-                let hasNoRooms = roomSummaryProviderState == .live && totalCount == 0
+                let isLoadingData = roomSummaryProviderState != .fullyLoaded && (totalCount == 0 || rooms.count != totalCount)
+                let hasNoRooms = roomSummaryProviderState == .fullyLoaded && totalCount == 0
                 
                 var roomListMode = self.state.roomListMode
                 if isLoadingData {
@@ -91,9 +95,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
                     Task {
-                        if case let .success(url) = await userSession.clientProxy.loadUserAvatarURL() {
-                            self.state.userAvatarURL = url
-                        }
+                        await userSession.clientProxy.loadUserAvatarURL()
                     }
                     
                     Task {
@@ -152,6 +154,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             state.showSessionVerificationBanner = false
         case .updateVisibleItemRange(let range, let isScrolling):
             visibleItemRangePublisher.send((range, isScrolling))
+        case .startChat:
+            callback?(.presentStartChatScreen)
         }
     }
     
@@ -265,7 +269,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
-        guard visibleRoomsSummaryProvider?.statePublisher.value == .live,
+        guard visibleRoomsSummaryProvider?.statePublisher.value == .fullyLoaded,
               !range.isEmpty else { return }
         
         guard let visibleRoomsSummaryProvider else {

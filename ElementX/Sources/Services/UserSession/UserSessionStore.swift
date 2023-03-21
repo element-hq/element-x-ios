@@ -98,7 +98,6 @@ class UserSessionStore: UserSessionStoreProtocol {
         return UserSession(clientProxy: clientProxy,
                            mediaProvider: MediaProvider(mediaLoader: clientProxy,
                                                         imageCache: imageCache,
-                                                        fileCache: FileCache.default,
                                                         backgroundTaskService: backgroundTaskService))
     }
     
