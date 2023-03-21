@@ -33,42 +33,42 @@ struct RoomStateEventStringBuilder {
         
         switch change {
         case .joined:
-            return memberIsYou ? ElementL10n.noticeRoomJoinByYou : ElementL10n.noticeRoomJoin(member)
+            return memberIsYou ? L10n.stateEventRoomJoinByYou : L10n.stateEventRoomJoin(member)
         case .left:
-            return memberIsYou ? ElementL10n.noticeRoomLeaveByYou : ElementL10n.noticeRoomLeave(member)
+            return memberIsYou ? L10n.stateEventRoomLeaveByYou : L10n.stateEventRoomLeave(member)
         case .banned, .kickedAndBanned:
-            return senderIsYou ? ElementL10n.noticeRoomBanByYou(member) : ElementL10n.noticeRoomBan(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomBanByYou(member) : L10n.stateEventRoomBan(senderName, member)
         case .unbanned:
-            return senderIsYou ? ElementL10n.noticeRoomUnbanByYou(member) : ElementL10n.noticeRoomUnban(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomUnbanByYou(member) : L10n.stateEventRoomUnban(senderName, member)
         case .kicked:
-            return senderIsYou ? ElementL10n.noticeRoomRemoveByYou(member) : ElementL10n.noticeRoomRemove(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomRemoveByYou(member) : L10n.stateEventRoomRemove(senderName, member)
         case .invited:
             if senderIsYou {
-                return ElementL10n.noticeRoomInviteByYou(member)
+                return L10n.stateEventRoomInviteByYou(member)
             } else if memberIsYou {
-                return ElementL10n.noticeRoomInviteYou(senderName)
+                return L10n.stateEventRoomInviteYou(senderName)
             } else {
-                return ElementL10n.noticeRoomInvite(senderName, member)
+                return L10n.stateEventRoomInvite(senderName, member)
             }
         case .invitationAccepted:
-            return memberIsYou ? ElementL10n.noticeRoomInviteAcceptedByYou : ElementL10n.noticeRoomInviteAccepted(member)
+            return memberIsYou ? L10n.stateEventRoomInviteAcceptedByYou : L10n.stateEventRoomInviteAccepted(member)
         case .invitationRejected:
-            return memberIsYou ? ElementL10n.noticeRoomRejectByYou : ElementL10n.noticeRoomReject(member)
+            return memberIsYou ? L10n.stateEventRoomRejectByYou : L10n.stateEventRoomReject(member)
         case .invitationRevoked:
-            return senderIsYou ? ElementL10n.noticeRoomThirdPartyRevokedInviteByYou(member) : ElementL10n.noticeRoomThirdPartyRevokedInvite(sender, member)
+            return senderIsYou ? L10n.stateEventRoomThirdPartyRevokedInviteByYou(member) : L10n.stateEventRoomThirdPartyRevokedInvite(sender, member)
         case .knocked:
-            return memberIsYou ? ElementL10n.noticeRoomKnockByYou : ElementL10n.noticeRoomKnock(member)
+            return memberIsYou ? L10n.stateEventRoomKnockByYou : L10n.stateEventRoomKnock(member)
         case .knockAccepted:
-            return senderIsYou ? ElementL10n.noticeRoomKnockAcceptedByYou(senderName) : ElementL10n.noticeRoomKnockAccepted(senderName, member)
+            return senderIsYou ? L10n.stateEventRoomKnockAcceptedByYou(senderName) : L10n.stateEventRoomKnockAccepted(senderName, member)
         case .knockRetracted:
-            return memberIsYou ? ElementL10n.noticeRoomKnockRetractedByYou : ElementL10n.noticeRoomKnockRetracted(member)
+            return memberIsYou ? L10n.stateEventRoomKnockRetractedByYou : L10n.stateEventRoomKnockRetracted(member)
         case .knockDenied:
             if senderIsYou {
-                return ElementL10n.noticeRoomKnockDeniedByYou(member)
+                return L10n.stateEventRoomKnockDeniedByYou(member)
             } else if memberIsYou {
-                return ElementL10n.noticeRoomKnockDeniedYou(senderName)
+                return L10n.stateEventRoomKnockDeniedYou(senderName)
             } else {
-                return ElementL10n.noticeRoomKnockDenied(senderName, member)
+                return L10n.stateEventRoomKnockDenied(senderName, member)
             }
         case .none, .error, .notImplemented: // Not useful information for the user.
             MXLog.verbose("Filtering timeline item for membership change: \(change)")
@@ -86,36 +86,36 @@ struct RoomStateEventStringBuilder {
         switch (displayNameChanged, avatarChanged, memberIsYou) {
         case (true, false, false):
             if let displayName, let previousDisplayName {
-                return ElementL10n.noticeDisplayNameChangedFrom(member, previousDisplayName, displayName)
+                return L10n.stateEventDisplayNameChangedFrom(member, previousDisplayName, displayName)
             } else if let displayName {
-                return ElementL10n.noticeDisplayNameSet(member, displayName)
+                return L10n.stateEventDisplayNameSet(member, displayName)
             } else if let previousDisplayName {
-                return ElementL10n.noticeDisplayNameRemoved(member, previousDisplayName)
+                return L10n.stateEventDisplayNameRemoved(member, previousDisplayName)
             } else {
                 MXLog.error("The display name changed from nil to nil, filtering the item.")
                 return nil
             }
         case (false, true, false):
-            return ElementL10n.noticeAvatarUrlChanged(displayName ?? member)
+            return L10n.stateEventAvatarUrlChanged(displayName ?? member)
         case (true, false, true):
             if let displayName, let previousDisplayName {
-                return ElementL10n.noticeDisplayNameChangedFromByYou(previousDisplayName, displayName)
+                return L10n.stateEventDisplayNameChangedFromByYou(previousDisplayName, displayName)
             } else if let displayName {
-                return ElementL10n.noticeDisplayNameSetByYou(displayName)
+                return L10n.stateEventDisplayNameSetByYou(displayName)
             } else if let previousDisplayName {
-                return ElementL10n.noticeDisplayNameRemovedByYou(previousDisplayName)
+                return L10n.stateEventDisplayNameRemovedByYou(previousDisplayName)
             } else {
                 MXLog.error("The display name changed from nil to nil, filtering the item.")
                 return nil
             }
         case (false, true, true):
-            return ElementL10n.noticeAvatarUrlChangedByYou
+            return L10n.stateEventAvatarUrlChangedByYou
         case (true, true, _):
             // When both have changed, get the string for the display name and tack on that the avatar changed too.
             guard let string = buildProfileChangeString(displayName: displayName, previousDisplayName: previousDisplayName,
                                                         avatarURLString: nil, previousAvatarURLString: nil,
                                                         member: member, memberIsYou: memberIsYou) else { return nil }
-            return string + "\n" + ElementL10n.noticeAvatarChangedToo
+            return string + "\n" + L10n.stateEventAvatarChangedToo
         case (false, false, _):
             MXLog.error("Nothing changed, shouldn't be possible. Filtering the item.")
             return nil
@@ -130,28 +130,28 @@ struct RoomStateEventStringBuilder {
         case .roomAvatar(let url):
             switch (url, isOutgoing) {
             case (.some, false):
-                return ElementL10n.noticeRoomAvatarChanged(senderName)
+                return L10n.stateEventRoomAvatarChanged(senderName)
             case (nil, false):
-                return ElementL10n.noticeRoomAvatarRemoved(senderName)
+                return L10n.stateEventRoomAvatarRemoved(senderName)
             case (.some, true):
-                return ElementL10n.noticeRoomAvatarChangedByYou
+                return L10n.stateEventRoomAvatarChangedByYou
             case (nil, true):
-                return ElementL10n.noticeRoomAvatarRemovedByYou
+                return L10n.stateEventRoomAvatarRemovedByYou
             }
         case .roomCreate:
-            return isOutgoing ? ElementL10n.noticeRoomCreatedByYou : ElementL10n.noticeRoomCreated(senderName)
+            return isOutgoing ? L10n.stateEventRoomCreatedByYou : L10n.stateEventRoomCreated(senderName)
         case .roomEncryption:
             return L10n.commonEncryptionEnabled
         case .roomName(let name):
             switch (name, isOutgoing) {
             case (.some(let name), false):
-                return ElementL10n.noticeRoomNameChanged(senderName, name)
+                return L10n.stateEventRoomNameChanged(senderName, name)
             case (nil, false):
-                return ElementL10n.noticeRoomNameRemoved(senderName)
+                return L10n.stateEventRoomNameRemoved(senderName)
             case (.some(let name), true):
-                return ElementL10n.noticeRoomNameChangedByYou(name)
+                return L10n.stateEventRoomNameChangedByYou(name)
             case (nil, true):
-                return ElementL10n.noticeRoomNameRemovedByYou
+                return L10n.stateEventRoomNameRemovedByYou
             }
         case .roomThirdPartyInvite(let displayName):
             guard let displayName else {
@@ -160,20 +160,20 @@ struct RoomStateEventStringBuilder {
             }
             
             if isOutgoing {
-                return ElementL10n.noticeRoomThirdPartyInviteByYou(displayName)
+                return L10n.stateEventRoomThirdPartyInviteByYou(displayName)
             } else {
-                return ElementL10n.noticeRoomThirdPartyInvite(senderName, displayName)
+                return L10n.stateEventRoomThirdPartyInvite(senderName, displayName)
             }
         case .roomTopic(let topic):
             switch (topic, isOutgoing) {
             case (.some(let topic), false):
-                return ElementL10n.noticeRoomTopicChanged(senderName, topic)
+                return L10n.stateEventRoomTopicChanged(senderName, topic)
             case (nil, false):
-                return ElementL10n.noticeRoomTopicRemoved(senderName)
+                return L10n.stateEventRoomTopicRemoved(senderName)
             case (.some(let name), true):
-                return ElementL10n.noticeRoomTopicChangedByYou(name)
+                return L10n.stateEventRoomTopicChangedByYou(name)
             case (nil, true):
-                return ElementL10n.noticeRoomTopicRemovedByYou
+                return L10n.stateEventRoomTopicRemovedByYou
             }
         case .policyRuleRoom, .policyRuleServer, .policyRuleUser: // No strings available.
             break
