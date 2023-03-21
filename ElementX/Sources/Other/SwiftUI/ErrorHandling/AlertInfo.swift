@@ -63,7 +63,7 @@ extension AlertInfo {
     ///   - error: The Error that occurred.
     init(id: T) {
         self.id = id
-        title = ElementL10n.dialogTitleError
+        title = L10n.commonError
         message = ElementL10n.unknownError
     }
 }

@@ -141,7 +141,7 @@ struct RoomStateEventStringBuilder {
         case .roomCreate:
             return isOutgoing ? ElementL10n.noticeRoomCreatedByYou : ElementL10n.noticeRoomCreated(senderName)
         case .roomEncryption:
-            return ElementL10n.encryptionEnabled
+            return L10n.commonEncryptionEnabled
         case .roomName(let name):
             switch (name, isOutgoing) {
             case (.some(let name), false):

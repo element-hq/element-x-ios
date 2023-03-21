@@ -60,7 +60,7 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
             TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
-                .textFieldStyle(.elementInput(labelText: Text(ElementL10n.hsUrl),
+                .textFieldStyle(.elementInput(labelText: Text(L10n.commonHomeserverUrl),
                                               footerText: Text(context.viewState.footerMessage),
                                               isError: context.viewState.isShowingFooterError,
                                               accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
@@ -85,7 +85,7 @@ struct ServerSelectionScreen: View {
         ToolbarItem(placement: .cancellationAction) {
             if context.viewState.isModallyPresented {
                 Button { context.send(viewAction: .dismiss) } label: {
-                    Text(ElementL10n.actionCancel)
+                    Text(L10n.actionCancel)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
             }

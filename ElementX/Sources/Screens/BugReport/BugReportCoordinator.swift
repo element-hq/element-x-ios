@@ -80,7 +80,7 @@ final class BugReportCoordinator: CoordinatorProtocol {
     
     static let loadingIndicatorIdentifier = "BugReportLoading"
     
-    private func startLoading(label: String = ElementL10n.loading, progressPublisher: ProgressPublisher) {
+    private func startLoading(label: String = L10n.commonLoading, progressPublisher: ProgressPublisher) {
         parameters.userIndicatorController?.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
                           type: .modal,

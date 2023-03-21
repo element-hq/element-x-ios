@@ -62,8 +62,8 @@ struct LeaveRoomAlertItem: AlertItem {
 
     let state: RoomState
     let title = ElementL10n.roomProfileSectionMoreLeave
-    let confirmationTitle = ElementL10n.actionLeave
-    let cancelTitle = ElementL10n.actionCancel
+    let confirmationTitle = L10n.actionLeave
+    let cancelTitle = L10n.actionCancel
 
     var subtitle: String {
         switch state {

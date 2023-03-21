@@ -80,14 +80,14 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     private func copyRoomLink() {
         if let roomLink = state.permalink {
             UIPasteboard.general.url = roomLink
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.linkCopiedToClipboard))
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonLinkCopiedToClipboard))
         } else {
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.unknownError))
         }
     }
 
     private func leaveRoom() async {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: ElementL10n.loading, persistent: true))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
         let result = await roomProxy.leaveRoom()
         ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(Self.leaveRoomLoadingID)
         switch result {

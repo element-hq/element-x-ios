@@ -63,6 +63,6 @@ class ServerSelectionUITests: XCTestCase {
         // Then the screen should be tweaked slightly to reflect the change of navigation.
         app.assertScreenshot(.serverSelectionNonModal)
         XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.dismiss].exists, "The dismiss button should be hidden when not in modal presentation.")
-        XCTAssertEqual(app.buttons[A11yIdentifiers.changeServerScreen.continue].label, ElementL10n.actionNext, "The confirm button should say Next when not in modal presentation.")
+        XCTAssertEqual(app.buttons[A11yIdentifiers.changeServerScreen.continue].label, L10n.actionNext, "The confirm button should say Next when not in modal presentation.")
     }
 }

@@ -59,15 +59,15 @@ struct SessionVerificationViewState: BindableState {
         case .verificationRequestAccepted:
             return ElementL10n.verificationEmojiNotice
         case .startingSasVerification:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .sasVerificationStarted:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .acceptingChallenge:
             return ElementL10n.verificationCompareEmojisDetail
         case .decliningChallenge:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .cancelling:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .showingChallenge:
             return ElementL10n.verificationCompareEmojisDetail
         case .verified:

@@ -224,7 +224,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         switch type {
         case .alert(let message):
             state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: ElementL10n.dialogTitleError,
+                                                 title: L10n.commonError,
                                                  message: message)
         case .toast(let message):
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Constants.toastErrorID,

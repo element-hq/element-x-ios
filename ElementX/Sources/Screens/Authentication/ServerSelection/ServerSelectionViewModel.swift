@@ -50,8 +50,8 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: ElementL10n.serverSelectionSlidingSyncAlertTitle,
                                                  message: ElementL10n.serverSelectionSlidingSyncAlertMessage,
-                                                 primaryButton: .init(title: ElementL10n.actionLearnMore, role: .cancel, action: openURL),
-                                                 secondaryButton: .init(title: ElementL10n.actionCancel, action: nil))
+                                                 primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
+                                                 secondaryButton: .init(title: L10n.actionCancel, action: nil))
         }
     }
     

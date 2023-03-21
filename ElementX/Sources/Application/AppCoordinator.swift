@@ -363,7 +363,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     private func showLoadingIndicator() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                                     type: .modal,
-                                                                                    title: ElementL10n.loading,
+                                                                                    title: L10n.commonLoading,
                                                                                     persistent: true))
     }
     
@@ -493,7 +493,7 @@ extension AppCoordinator: NotificationManagerDelegate {
             break
         default:
             // error or no room proxy
-            await service.showLocalNotification(with: "⚠️ " + ElementL10n.dialogTitleError,
+            await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
                                                 subtitle: ElementL10n.a11yErrorSomeMessageNotSent)
         }
     }

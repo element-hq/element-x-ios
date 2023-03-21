@@ -78,7 +78,7 @@ struct SoftLogoutScreen: View {
     /// The form with text fields for username and password, along with a submit button.
     var loginForm: some View {
         VStack(spacing: 14) {
-            SecureField(ElementL10n.loginSignupPasswordHint, text: $context.password)
+            SecureField(L10n.commonPassword, text: $context.password)
                 .focused($isPasswordFocused)
                 .textFieldStyle(.elementInput())
                 .textContentType(.password)
@@ -106,7 +106,7 @@ struct SoftLogoutScreen: View {
     /// The OIDC button that can be used for login.
     var oidcButton: some View {
         Button { context.send(viewAction: .continueWithOIDC) } label: {
-            Text(ElementL10n.loginContinue)
+            Text(L10n.actionContinue)
         }
         .buttonStyle(.elementAction(.xLarge))
     }
@@ -143,7 +143,7 @@ struct SoftLogoutScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearData)
             .alert(ElementL10n.softLogoutClearDataDialogTitle,
                    isPresented: $showingClearDataConfirmation) {
-                Button(ElementL10n.actionSignOut,
+                Button(L10n.actionSignOut,
                        role: .destructive,
                        action: clearData)
             } message: {

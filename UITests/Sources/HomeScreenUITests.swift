@@ -20,7 +20,7 @@ class HomeScreenUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch(.home)
 
-        XCTAssert(app.navigationBars[ElementL10n.allChats].exists)
+        XCTAssert(app.navigationBars[L10n.commonAllChats].exists)
 
         app.assertScreenshot(.home)
     }

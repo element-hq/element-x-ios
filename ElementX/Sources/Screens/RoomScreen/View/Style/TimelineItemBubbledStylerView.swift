@@ -111,7 +111,7 @@ struct TimelineItemBubbledStylerView<Content: View>: View {
                 content()
 
                 if timelineItem.properties.isEdited {
-                    Text(ElementL10n.editedSuffix)
+                    Text(L10n.commonEditedSuffix)
                         .font(.element.caption2)
                         .foregroundColor(.element.tertiaryContent)
                 }

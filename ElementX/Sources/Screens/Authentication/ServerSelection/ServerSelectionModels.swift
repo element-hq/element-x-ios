@@ -29,7 +29,7 @@ struct ServerSelectionViewState: BindableState {
         let linkPlaceholder = "{link}"
         var message = AttributedString(ElementL10n.serverSelectionServerFooter(linkPlaceholder))
         message.replace(linkPlaceholder,
-                        with: ElementL10n.actionLearnMore,
+                        with: L10n.actionLearnMore,
                         asLinkTo: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)
         return message
     }()
@@ -48,7 +48,7 @@ struct ServerSelectionViewState: BindableState {
     
     /// The title shown on the confirm button.
     var buttonTitle: String {
-        isModallyPresented ? ElementL10n.continue : ElementL10n.actionNext
+        isModallyPresented ? L10n.actionContinue : L10n.actionNext
     }
     
     /// The text field is showing an error.

@@ -185,7 +185,7 @@ struct SessionVerificationScreen: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(ElementL10n.actionCancel) {
+            Button(L10n.actionCancel) {
                 context.send(viewAction: .close)
             }
             .foregroundColor(.element.accent)

@@ -56,19 +56,19 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
         switch type {
         case .alert(let message):
             state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: ElementL10n.dialogTitleError,
+                                                 title: L10n.commonError,
                                                  message: message)
         case .invalidHomeserver:
             state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: ElementL10n.dialogTitleError,
+                                                 title: L10n.commonError,
                                                  message: ElementL10n.loginSigninMatrixIdErrorInvalidMatrixId)
         case .slidingSyncAlert:
             let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: ElementL10n.serverSelectionSlidingSyncAlertTitle,
                                                  message: ElementL10n.serverSelectionSlidingSyncAlertMessage,
-                                                 primaryButton: .init(title: ElementL10n.actionLearnMore, role: .cancel, action: openURL),
-                                                 secondaryButton: .init(title: ElementL10n.actionCancel, action: nil))
+                                                 primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
+                                                 secondaryButton: .init(title: L10n.actionCancel, action: nil))
             
             // Clear out the invalid username to avoid an attempted login to matrix.org
             state.bindings.username = ""

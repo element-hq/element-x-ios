@@ -98,7 +98,7 @@ struct HomeScreen: View {
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
         .alert(item: $context.alertInfo) { $0.alert }
-        .navigationTitle(ElementL10n.allChats)
+        .navigationTitle(L10n.commonAllChats)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
@@ -118,22 +118,22 @@ struct HomeScreen: View {
         Menu {
             Section {
                 Button(action: settings) {
-                    Label(ElementL10n.settings, systemImage: "gearshape")
+                    Label(L10n.commonSettings, systemImage: "gearshape")
                 }
             }
             Section {
                 Button(action: inviteFriends) {
-                    Label(ElementL10n.actionInvite, systemImage: "square.and.arrow.up")
+                    Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
                 }
                 Button(action: feedback) {
-                    Label(ElementL10n.bugReportScreenTitle, systemImage: "questionmark.circle")
+                    Label(L10n.actionReportBug, systemImage: "questionmark.circle")
                 }
             }
             Section {
                 Button(role: .destructive) {
                     showingLogoutConfirmation = true
                 } label: {
-                    Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                    Label(L10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
                 }
             }
         } label: {
@@ -144,13 +144,13 @@ struct HomeScreen: View {
                                 imageProvider: context.imageProvider)
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
         }
-        .alert(ElementL10n.actionSignOut,
+        .alert(L10n.actionSignOut,
                isPresented: $showingLogoutConfirmation) {
-            Button(ElementL10n.actionSignOut,
+            Button(L10n.actionSignOut,
                    role: .destructive,
                    action: signOut)
         } message: {
-            Text(ElementL10n.actionSignOutConfirmationSimple)
+            Text(L10n.actionSignOutConfirmation)
         }
         .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
     }
@@ -184,7 +184,7 @@ struct HomeScreen: View {
                     .foregroundColor(.element.secondaryContent)
             }
             
-            Button(ElementL10n.continue) {
+            Button(L10n.actionContinue) {
                 context.send(viewAction: .verifySession)
             }
             .frame(maxWidth: .infinity)

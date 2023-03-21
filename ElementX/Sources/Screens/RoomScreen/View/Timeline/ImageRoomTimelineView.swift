@@ -41,7 +41,7 @@ struct ImageRoomTimelineView: View {
                 .foregroundColor(.element.systemGray6)
                 .opacity(0.3)
             
-            ProgressView(ElementL10n.loading)
+            ProgressView(L10n.commonLoading)
                 .frame(maxWidth: .infinity)
         }
     }
@@ -49,7 +49,7 @@ struct ImageRoomTimelineView: View {
     @ViewBuilder
     var overlay: some View {
         if timelineItem.contentType == .gif {
-            Text(ElementL10n.roomTimelineImageGif)
+            Text(L10n.commonGif)
                 .font(.element.bodyBold)
                 .foregroundStyle(.primary)
                 .padding(.horizontal, 10)

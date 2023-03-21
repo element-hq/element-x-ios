@@ -60,13 +60,13 @@ struct ReportContentScreen: View {
     @ToolbarContentBuilder
     private var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(ElementL10n.actionCancel) {
+            Button(L10n.actionCancel) {
                 context.send(viewAction: .cancel)
             }
         }
 
         ToolbarItem(placement: .confirmationAction) {
-            Button(ElementL10n.actionSend) {
+            Button(L10n.actionSend) {
                 context.send(viewAction: .submit)
             }
         }

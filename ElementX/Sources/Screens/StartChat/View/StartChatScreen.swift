@@ -78,7 +78,7 @@ struct StartChatScreen: View {
     }
     
     private var closeButton: some View {
-        Button(ElementL10n.actionCancel, action: close)
+        Button(L10n.actionCancel, action: close)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.closeStartChat)
     }
     

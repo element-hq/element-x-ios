@@ -95,7 +95,7 @@ final class LoginCoordinator: CoordinatorProtocol {
         if isInteractionBlocking {
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                                         type: .modal,
-                                                                                        title: ElementL10n.loading,
+                                                                                        title: L10n.commonLoading,
                                                                                         persistent: true))
         } else {
             viewModel.update(isLoading: true)
@@ -112,7 +112,7 @@ final class LoginCoordinator: CoordinatorProtocol {
     }
     
     private func indicateFailure() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.dialogTitleError))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonError))
     }
     
     /// Processes an error to either update the flow or display it to the user.

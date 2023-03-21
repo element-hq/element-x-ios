@@ -96,13 +96,13 @@ struct AnalyticsPrompt: View {
     private var buttons: some View {
         VStack {
             Button { context.send(viewAction: .enable) } label: {
-                Text(ElementL10n.actionEnable)
+                Text(L10n.actionEnable)
                     .font(.element.bodyBold)
             }
             .buttonStyle(.elementAction(.xLarge))
             
             Button { context.send(viewAction: .disable) } label: {
-                Text(ElementL10n.actionNotNow)
+                Text(L10n.actionNotNow)
                     .font(.element.bodyBold)
                     .padding(12)
             }

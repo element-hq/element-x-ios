@@ -94,14 +94,14 @@ struct MessageComposer: View {
             Image(systemName: "checkmark")
                 .opacity(type.isEdit ? 1 : 0)
                 .fontWeight(.medium)
-                .accessibilityLabel(ElementL10n.actionConfirm)
+                .accessibilityLabel(L10n.actionConfirm)
                 .accessibilityHidden(!type.isEdit)
             Image(asset: Asset.Images.timelineComposerSendMessage)
                 .resizable()
                 .frame(width: sendButtonIconSize, height: sendButtonIconSize)
                 .padding(EdgeInsets(top: 7, leading: 8, bottom: 7, trailing: 6))
                 .opacity(type.isEdit ? 0 : 1)
-                .accessibilityLabel(ElementL10n.actionSend)
+                .accessibilityLabel(L10n.actionSend)
                 .accessibilityHidden(type.isEdit)
         }
     }
@@ -140,7 +140,7 @@ private struct MessageComposerEditHeader: View {
 
     var body: some View {
         HStack(alignment: .center) {
-            Label(ElementL10n.roomTimelineEditing, systemImage: "pencil.line")
+            Label(L10n.commonEditing, systemImage: "pencil.line")
                 .labelStyle(MessageComposerHeaderLabelStyle())
             Spacer()
             Button(action: action) {

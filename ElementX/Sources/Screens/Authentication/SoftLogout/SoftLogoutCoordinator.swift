@@ -101,7 +101,7 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     @MainActor private func startLoading() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                                     type: .modal,
-                                                                                    title: ElementL10n.loading,
+                                                                                    title: L10n.commonLoading,
                                                                                     persistent: true))
     }
     

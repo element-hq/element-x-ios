@@ -91,7 +91,7 @@ struct RoomDetailsScreen: View {
                     .foregroundColor(.element.secondaryContent)
                     .font(.element.footnote)
             } header: {
-                Text(ElementL10n.roomSettingsTopic)
+                Text(L10n.commonTopic)
                     .formSectionHeader()
             }
             .formSectionStyle()
@@ -112,7 +112,7 @@ struct RoomDetailsScreen: View {
                             .font(.element.body)
                     }
                 } label: {
-                    Label(ElementL10n.bottomActionPeople, systemImage: "person")
+                    Label(L10n.commonPeople, systemImage: "person")
                 }
             }
             .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
@@ -131,7 +131,7 @@ struct RoomDetailsScreen: View {
             HStack(alignment: .top) {
                 Label {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(ElementL10n.encryptionEnabled)
+                        Text(L10n.commonEncryptionEnabled)
                         Text(ElementL10n.encryptionEnabledTileDescription)
                             .foregroundColor(.element.secondaryContent)
                             .font(.element.footnote)

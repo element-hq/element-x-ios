@@ -99,7 +99,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                               _ error: String,
                                               _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         UnsupportedRoomTimelineItem(id: eventItemProxy.id,
-                                    body: ElementL10n.roomTimelineItemUnsupported,
+                                    body: L10n.commonUnsupportedEvent,
                                     eventType: eventType,
                                     error: error,
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),

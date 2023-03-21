@@ -125,16 +125,16 @@ struct SettingsScreen: View {
     private var signOutSection: some View {
         Section {
             Button { showingLogoutConfirmation = true } label: {
-                Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                Label(L10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
             }
             .buttonStyle(.compoundForm())
             .accessibilityIdentifier("logoutButton")
-            .alert(ElementL10n.actionSignOut, isPresented: $showingLogoutConfirmation) {
-                Button(ElementL10n.actionSignOut,
+            .alert(L10n.actionSignOut, isPresented: $showingLogoutConfirmation) {
+                Button(L10n.actionSignOut,
                        role: .destructive,
                        action: logout)
             } message: {
-                Text(ElementL10n.actionSignOutConfirmationSimple)
+                Text(L10n.actionSignOutConfirmation)
             }
         } footer: {
             VStack {
