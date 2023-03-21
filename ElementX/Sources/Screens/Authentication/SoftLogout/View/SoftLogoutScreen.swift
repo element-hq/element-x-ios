@@ -113,7 +113,7 @@ struct SoftLogoutScreen: View {
 
     /// Text shown if neither password or OIDC login is supported.
     var loginUnavailableText: some View {
-        Text(ElementL10n.autodiscoverWellKnownError)
+        Text(L10n.loginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)

@@ -206,6 +206,27 @@ extension ElementL10n {
   public static let settingsSessionVerification = ElementL10n.tr("Untranslated", "settings_session_verification")
   /// Message layout
   public static let settingsTimelineStyle = ElementL10n.tr("Untranslated", "settings_timeline_style")
+  /// Clear all data currently stored on this device?
+  /// Sign in again to access your account data and messages.
+  public static let softLogoutClearDataDialogContent = ElementL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content")
+  /// Clear data
+  public static let softLogoutClearDataDialogTitle = ElementL10n.tr("Untranslated", "soft_logout_clear_data_dialog_title")
+  /// Warning: Your personal data (including encryption keys) is still stored on this device.
+  /// 
+  /// Clear it if you’re finished using this device, or want to sign in to another account.
+  public static let softLogoutClearDataNotice = ElementL10n.tr("Untranslated", "soft_logout_clear_data_notice")
+  /// Clear all data
+  public static let softLogoutClearDataSubmit = ElementL10n.tr("Untranslated", "soft_logout_clear_data_submit")
+  /// Clear personal data
+  public static let softLogoutClearDataTitle = ElementL10n.tr("Untranslated", "soft_logout_clear_data_title")
+  /// Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.
+  public static let softLogoutSigninE2eWarningNotice = ElementL10n.tr("Untranslated", "soft_logout_signin_e2e_warning_notice")
+  /// Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).
+  public static func softLogoutSigninNotice(_ p1: UnsafePointer<CChar>, _ p2: UnsafePointer<CChar>, _ p3: UnsafePointer<CChar>) -> String {
+    return ElementL10n.tr("Untranslated", "soft_logout_signin_notice", p1, p2, p3)
+  }
+  /// Sign in
+  public static let softLogoutSigninTitle = ElementL10n.tr("Untranslated", "soft_logout_signin_title")
   /// Untranslated
   public static let untranslated = ElementL10n.tr("Untranslated", "untranslated")
   /// Plural format key: "%#@VARIABLE@"

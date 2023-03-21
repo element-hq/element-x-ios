@@ -53,7 +53,7 @@ struct LoginScreen: View {
     
     /// The header containing a Welcome Back title.
     var header: some View {
-        Text(ElementL10n.ftueAuthWelcomeBackTitle)
+        Text(L10n.loginTitle)
             .font(.element.title1Bold)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
@@ -69,7 +69,7 @@ struct LoginScreen: View {
     /// The form with text fields for username and password, along with a submit button.
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(ElementL10n.ftueAuthSignInEnterDetails)
+            Text(L10n.commonEnterYourDetails)
                 .font(.element.footnote)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)
@@ -121,7 +121,7 @@ struct LoginScreen: View {
     
     /// Text shown if neither password or OIDC login is supported.
     var loginUnavailableText: some View {
-        Text(ElementL10n.autodiscoverWellKnownError)
+        Text(L10n.loginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
@@ -156,9 +156,13 @@ struct Login_Previews: PreviewProvider {
     
     static var previews: some View {
         screen(for: LoginViewModel(homeserver: .mockMatrixDotOrg))
+            .previewDisplayName("matrix.org")
         screen(for: credentialsViewModel)
-        screen(for: LoginViewModel(homeserver: .mockBasicServer))
+            .previewDisplayName("Credentials Entered")
         screen(for: LoginViewModel(homeserver: .mockOIDC))
+            .previewDisplayName("OIDC")
+        screen(for: LoginViewModel(homeserver: .mockUnsupported))
+            .previewDisplayName("Unsupported")
     }
     
     static func screen(for viewModel: LoginViewModel) -> some View {

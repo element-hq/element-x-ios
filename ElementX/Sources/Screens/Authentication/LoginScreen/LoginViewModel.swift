@@ -65,8 +65,8 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
         case .slidingSyncAlert:
             let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
-                                                 title: ElementL10n.serverSelectionSlidingSyncAlertTitle,
-                                                 message: ElementL10n.serverSelectionSlidingSyncAlertMessage,
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.serverSelectionSlidingSyncAlertMessage,
                                                  primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
                                                  secondaryButton: .init(title: L10n.actionCancel, action: nil))
             

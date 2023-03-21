@@ -27,7 +27,7 @@ struct ServerSelectionViewState: BindableState {
     /// The message to be shown in the text field footer when no error has occurred.
     private let regularFooterMessage = {
         let linkPlaceholder = "{link}"
-        var message = AttributedString(ElementL10n.serverSelectionServerFooter(linkPlaceholder))
+        var message = AttributedString(L10n.serverSelectionServerFooter(linkPlaceholder))
         message.replace(linkPlaceholder,
                         with: L10n.actionLearnMore,
                         asLinkTo: ServiceLocator.shared.settings.slidingSyncLearnMoreURL)

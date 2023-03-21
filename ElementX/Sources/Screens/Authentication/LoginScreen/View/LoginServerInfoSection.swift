@@ -30,7 +30,7 @@ struct LoginServerInfoSection: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(ElementL10n.ftueAuthSignInChooseServerHeader)
+            Text(L10n.loginServerHeader)
                 .font(.element.footnote)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)

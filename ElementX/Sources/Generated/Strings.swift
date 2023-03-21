@@ -112,6 +112,8 @@ public enum L10n {
   public static var commonEditing: String { return L10n.tr("Localizable", "common_editing") }
   /// Encryption enabled
   public static var commonEncryptionEnabled: String { return L10n.tr("Localizable", "common_encryption_enabled") }
+  /// Enter your details
+  public static var commonEnterYourDetails: String { return L10n.tr("Localizable", "common_enter_your_details") }
   /// Error
   public static var commonError: String { return L10n.tr("Localizable", "common_error") }
   /// File
@@ -154,8 +156,14 @@ public enum L10n {
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Security
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
+  /// Select your server
+  public static var commonSelectYourServer: String { return L10n.tr("Localizable", "common_select_your_server") }
   /// Sending…
   public static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
+  /// Server not supported
+  public static var commonServerNotSupported: String { return L10n.tr("Localizable", "common_server_not_supported") }
+  /// Server URL
+  public static var commonServerUrl: String { return L10n.tr("Localizable", "common_server_url") }
   /// Settings
   public static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
   /// Sticker
@@ -216,10 +224,22 @@ public enum L10n {
   public static var leaveRoomAlertPrivateSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_private_subtitle") }
   /// Are you sure that you want to leave the room?
   public static var leaveRoomAlertSubtitle: String { return L10n.tr("Localizable", "leave_room_alert_subtitle") }
+  /// The selected homeserver doesn't support password or OIDC login. Please contact your admin or choose another homeserver.
+  public static var loginErrorUnsupportedAuthentication: String { return L10n.tr("Localizable", "login_error_unsupported_authentication") }
+  /// Where your conversations live
+  public static var loginServerHeader: String { return L10n.tr("Localizable", "login_server_header") }
+  /// Welcome back!
+  public static var loginTitle: String { return L10n.tr("Localizable", "login_title") }
   /// Message…
   public static var messageComposerPlaceholder: String { return L10n.tr("Localizable", "message_composer_placeholder") }
   /// Notification
   public static var notification: String { return L10n.tr("Localizable", "Notification") }
+  /// Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.
+  public static func onboardingScreenSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "onboarding_screen_subtitle", String(describing: p1))
+  }
+  /// Be in your Element
+  public static var onboardingScreenTitle: String { return L10n.tr("Localizable", "onboarding_screen_title") }
   /// Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.
   public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
   /// Reason for reporting this content
@@ -238,6 +258,16 @@ public enum L10n {
   public static func roomTimelineStateChanges(_ p1: Int) -> String {
     return L10n.tr("Localizable", "room_timeline_state_changes", p1)
   }
+  /// Unable to find a homeserver at this URL, please check that you entered it correctly and try again.
+  public static var serverSelectionErrorHomeserverNotFound: String { return L10n.tr("Localizable", "server_selection_error_homeserver_not_found") }
+  /// You can only connect to an existing server that supports sliding sync. Your homeserver admin will need to configure it. %1$@
+  public static func serverSelectionServerFooter(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "server_selection_server_footer", String(describing: p1))
+  }
+  /// This server currently doesn’t support sliding sync.
+  public static var serverSelectionSlidingSyncAlertMessage: String { return L10n.tr("Localizable", "server_selection_sliding_sync_alert_message") }
+  /// What is the address of your server?
+  public static var serverSelectionSubtitle: String { return L10n.tr("Localizable", "server_selection_subtitle") }
   /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Access your message history

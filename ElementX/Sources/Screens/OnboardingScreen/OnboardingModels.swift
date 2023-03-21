@@ -40,8 +40,8 @@ struct OnboardingViewState: BindableState {
     
     init() {
         content = [
-            OnboardingPageContent(title: ElementL10n.ftueAuthCarouselWelcomeTitle.tinting(".", color: .element.accent),
-                                  message: ElementL10n.ftueAuthCarouselWelcomeBody(InfoPlistReader.main.bundleDisplayName),
+            OnboardingPageContent(title: L10n.onboardingScreenTitle.tinting(".", color: .element.accent),
+                                  message: L10n.onboardingScreenSubtitle(InfoPlistReader.main.bundleDisplayName),
                                   image: Asset.Images.onboardingAppLogo)
         ]
         bindings = OnboardingBindings()

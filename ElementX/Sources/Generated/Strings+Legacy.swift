@@ -5148,40 +5148,6 @@ public enum ElementL10n {
   public static var skipForNow: String { return ElementL10n.tr("Legacy", "skip_for_now") }
   /// Small
   public static var small: String { return ElementL10n.tr("Legacy", "small") }
-  /// Clear all data currently stored on this device?
-  /// Sign in again to access your account data and messages.
-  public static var softLogoutClearDataDialogContent: String { return ElementL10n.tr("Legacy", "soft_logout_clear_data_dialog_content") }
-  /// You’ll lose access to secure messages unless you sign in to recover your encryption keys.
-  public static var softLogoutClearDataDialogE2eWarningContent: String { return ElementL10n.tr("Legacy", "soft_logout_clear_data_dialog_e2e_warning_content") }
-  /// Clear data
-  public static var softLogoutClearDataDialogTitle: String { return ElementL10n.tr("Legacy", "soft_logout_clear_data_dialog_title") }
-  /// Warning: Your personal data (including encryption keys) is still stored on this device.
-  /// 
-  /// Clear it if you’re finished using this device, or want to sign in to another account.
-  public static var softLogoutClearDataNotice: String { return ElementL10n.tr("Legacy", "soft_logout_clear_data_notice") }
-  /// Clear all data
-  public static var softLogoutClearDataSubmit: String { return ElementL10n.tr("Legacy", "soft_logout_clear_data_submit") }
-  /// Clear personal data
-  public static var softLogoutClearDataTitle: String { return ElementL10n.tr("Legacy", "soft_logout_clear_data_title") }
-  /// Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.
-  public static var softLogoutSigninE2eWarningNotice: String { return ElementL10n.tr("Legacy", "soft_logout_signin_e2e_warning_notice") }
-  /// Your homeserver (%1$@) admin has signed you out of your account %2$@ (%3$@).
-  public static func softLogoutSigninNotice(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
-    return ElementL10n.tr("Legacy", "soft_logout_signin_notice", String(describing: p1), String(describing: p2), String(describing: p3))
-  }
-  /// Password
-  public static var softLogoutSigninPasswordHint: String { return ElementL10n.tr("Legacy", "soft_logout_signin_password_hint") }
-  /// Sign in
-  public static var softLogoutSigninSubmit: String { return ElementL10n.tr("Legacy", "soft_logout_signin_submit") }
-  /// Sign in
-  public static var softLogoutSigninTitle: String { return ElementL10n.tr("Legacy", "soft_logout_signin_title") }
-  /// The current session is for user %1$@ and you provide credentials for user %2$@. This is not supported by %@.
-  /// Please first clear data, then sign in again on another account.
-  public static func softLogoutSsoNotSameUserError(_ p1: Any, _ p2: Any) -> String {
-    return ElementL10n.tr("Legacy", "soft_logout_sso_not_same_user_error", String(describing: p1), String(describing: p2))
-  }
-  /// You’re signed out
-  public static var softLogoutTitle: String { return ElementL10n.tr("Legacy", "soft_logout_title") }
   /// Headset
   public static var soundDeviceHeadset: String { return ElementL10n.tr("Legacy", "sound_device_headset") }
   /// Phone
