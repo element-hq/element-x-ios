@@ -54,20 +54,20 @@ struct SoftLogoutScreen: View {
     /// The title, message and icon at the top of the screen.
     var header: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text(ElementL10n.softLogoutSigninTitle)
+            Text(UntranslatedL10n.softLogoutSigninTitle)
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.title)
 
-            Text(ElementL10n.softLogoutSigninNotice(context.viewState.credentials.homeserverName, context.viewState.credentials.userDisplayName, context.viewState.credentials.userId))
+            Text(UntranslatedL10n.softLogoutSigninNotice(context.viewState.credentials.homeserverName, context.viewState.credentials.userDisplayName, context.viewState.credentials.userId))
                 .font(.element.body)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.message)
 
             if context.viewState.showRecoverEncryptionKeysMessage {
-                Text(ElementL10n.softLogoutSigninE2eWarningNotice)
+                Text(UntranslatedL10n.softLogoutSigninE2eWarningNotice)
                     .font(.element.body)
                     .multilineTextAlignment(.leading)
                     .foregroundColor(.element.primaryContent)
@@ -87,7 +87,7 @@ struct SoftLogoutScreen: View {
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.password)
 
             Button { context.send(viewAction: .forgotPassword) } label: {
-                Text(ElementL10n.softLogoutForgotPassword)
+                Text(UntranslatedL10n.softLogoutForgotPassword)
                     .font(.element.body)
             }
             .frame(maxWidth: .infinity, alignment: .trailing)
@@ -123,13 +123,13 @@ struct SoftLogoutScreen: View {
     /// The text field and submit button where the user enters an email address.
     var clearDataForm: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(ElementL10n.softLogoutClearDataTitle)
+            Text(UntranslatedL10n.softLogoutClearDataTitle)
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
                 .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearDataTitle)
 
-            Text(ElementL10n.softLogoutClearDataNotice)
+            Text(UntranslatedL10n.softLogoutClearDataNotice)
                 .font(.element.body)
                 .multilineTextAlignment(.leading)
                 .foregroundColor(.element.primaryContent)
@@ -137,17 +137,17 @@ struct SoftLogoutScreen: View {
                 .padding(.bottom, 12)
 
             Button(action: clearData) {
-                Text(ElementL10n.softLogoutClearDataSubmit)
+                Text(UntranslatedL10n.softLogoutClearDataSubmit)
             }
             .buttonStyle(.elementAction(.xLarge, color: .element.alert))
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearData)
-            .alert(ElementL10n.softLogoutClearDataDialogTitle,
+            .alert(UntranslatedL10n.softLogoutClearDataDialogTitle,
                    isPresented: $showingClearDataConfirmation) {
                 Button(L10n.actionSignOut,
                        role: .destructive,
                        action: clearData)
             } message: {
-                Text(ElementL10n.softLogoutClearDataDialogContent)
+                Text(UntranslatedL10n.softLogoutClearDataDialogContent)
             }
         }
     }
