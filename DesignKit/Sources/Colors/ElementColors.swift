@@ -25,9 +25,9 @@ public extension Color {
 }
 
 public struct ElementColors {
-    // MARK: - Compound
+    // MARK: - Legacy Compound
     
-    private let compound = CompoundColors()
+    private let compound = DesignTokens.CompoundColors()
     
     public var accent: Color { systemPrimaryLabel }
     public var alert: Color { compound.alert }
@@ -44,23 +44,6 @@ public struct ElementColors {
     
     public var contentAndAvatars: [Color] { compound.contentAndAvatars }
     
-    // MARK: - System
-    
-    public var systemPrimaryLabel: Color { .primary }
-    public var systemSecondaryLabel: Color { .secondary }
-    public var systemTertiaryLabel: Color { Color(.tertiaryLabel) }
-    public var systemQuaternaryLabel: Color { Color(.quaternaryLabel) }
-    
-    public var systemPrimaryBackground: Color { Color(.systemBackground) }
-    public var systemSecondaryBackground: Color { Color(.secondarySystemBackground) }
-    
-    public var systemGray: Color { Color(.systemGray) }
-    public var systemGray2: Color { Color(.systemGray2) }
-    public var systemGray3: Color { Color(.systemGray3) }
-    public var systemGray4: Color { Color(.systemGray4) }
-    public var systemGray5: Color { Color(.systemGray5) }
-    public var systemGray6: Color { Color(.systemGray6) }
-
     public func avatarBackground(for contentId: String) -> Color {
         let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))
         return contentAndAvatars[colorIndex % contentAndAvatars.count]
@@ -68,17 +51,22 @@ public struct ElementColors {
     
     // MARK: - Temp
     
+    public var systemPrimaryLabel: Color { .primary }
+    public var systemPrimaryBackground: Color { Color(.systemBackground) }
+    public var systemGray4: Color { Color(.systemGray4) }
+    public var systemGray6: Color { Color(.systemGray6) }
+    
     public var bubblesYou: Color {
         Color(UIColor { collection in
             // Note: Light colour doesn't currently match Figma.
-            collection.userInterfaceStyle == .light ? .element.systemGray5 : UIColor(red: 0.16, green: 0.18, blue: 0.21, alpha: 1)
+            collection.userInterfaceStyle == .light ? .systemGray5 : UIColor(red: 0.16, green: 0.18, blue: 0.21, alpha: 1)
         })
     }
     
     public var bubblesNotYou: Color {
         Color(UIColor { collection in
             // Note: Light colour doesn't currently match Figma.
-            collection.userInterfaceStyle == .light ? .element.systemGray6 : .element.system
+            collection.userInterfaceStyle == .light ? .systemGray6 : .element.system
         })
     }
     
@@ -87,7 +75,6 @@ public struct ElementColors {
     /// This colour is a special case as it uses `system` in light mode and `background` in dark mode.
     public var formBackground: Color {
         Color(UIColor { collection in
-            // Note: Light colour doesn't currently match Figma.
             collection.userInterfaceStyle == .light ? .element.system : .element.background
         })
     }
@@ -97,7 +84,6 @@ public struct ElementColors {
     /// This colour is a special case as it uses `background` in light mode and `system` in dark mode.
     public var formRowBackground: Color {
         Color(UIColor { collection in
-            // Note: Light colour doesn't currently match Figma.
             collection.userInterfaceStyle == .light ? .element.background : .element.system
         })
     }
@@ -113,9 +99,9 @@ public extension UIColor {
 @objcMembers public class ElementUIColors: NSObject {
     // MARK: - Compound
     
-    private let compound = CompoundUIColors()
+    private let compound = DesignTokens.CompoundUIColors()
     
-    public var accent: UIColor { systemPrimaryLabel }
+    public var accent: UIColor { .label }
     public var alert: UIColor { compound.alert }
     public var links: UIColor { compound.links }
     public var primaryContent: UIColor { compound.primaryContent }
@@ -127,23 +113,6 @@ public extension UIColor {
     public var background: UIColor { compound.background }
     
     public var contentAndAvatars: [UIColor] { compound.contentAndAvatars }
-    
-    // MARK: - System
-    
-    public var systemPrimaryLabel: UIColor { .label }
-    public var systemSecondaryLabel: UIColor { .secondaryLabel }
-    public var systemTertiaryLabel: UIColor { .tertiaryLabel }
-    public var systemQuaternaryLabel: UIColor { .quaternaryLabel }
-    
-    public var systemPrimaryBackground: UIColor { .systemBackground }
-    public var systemSecondaryBackground: UIColor { .secondarySystemBackground }
-    
-    public var systemGray: UIColor { .systemGray }
-    public var systemGray2: UIColor { .systemGray2 }
-    public var systemGray3: UIColor { .systemGray3 }
-    public var systemGray4: UIColor { .systemGray4 }
-    public var systemGray5: UIColor { .systemGray5 }
-    public var systemGray6: UIColor { .systemGray6 }
 
     public func avatarBackground(for contentId: String) -> UIColor {
         let colorIndex = Int(contentId.hashCode % Int32(contentAndAvatars.count))

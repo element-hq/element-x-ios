@@ -1,0 +1,1 @@
+Adopt compound-ios on the Settings and Bug Report screens. 
