@@ -10,6 +10,22 @@
       }
     },
     {
+      "identity" : "compound-design-tokens",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vector-im/compound-design-tokens.git",
+      "state" : {
+        "revision" : "342145ff8044b58b967186b0efe34477e1f7c3ca"
+      }
+    },
+    {
+      "identity" : "compound-ios",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/vector-im/compound-ios",
+      "state" : {
+        "revision" : "0b1c62f9a9efac3d9ac06c51531392d55057a0eb"
+      }
+    },
+    {
       "identity" : "devicekit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
@@ -95,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "6e9c8b7f0f68fd8e617e9d6c1ad902736899557a",
-        "version" : "1.0.46-alpha"
+        "revision" : "cc68dbd95a35a481a7398e7cc324e26917fd4022",
+        "version" : "1.0.47-alpha"
       }
     },
     {

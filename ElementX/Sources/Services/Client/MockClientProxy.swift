@@ -84,6 +84,10 @@ class MockClientProxy: ClientProxyProtocol {
         throw ClientProxyError.failedLoadingMedia
     }
     
+    func loadMediaFileForSource(_ source: MediaSourceProxy) async throws -> MediaFileHandleProxy {
+        throw ClientProxyError.failedLoadingMedia
+    }
+    
     var sessionVerificationControllerProxyResult: Result<SessionVerificationControllerProxyProtocol, ClientProxyError>?
     func sessionVerificationControllerProxy() async -> Result<SessionVerificationControllerProxyProtocol, ClientProxyError> {
         if let sessionVerificationControllerProxyResult {

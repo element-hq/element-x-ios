@@ -2,6 +2,19 @@ import ArgumentParser
 import Foundation
 import Yams
 
+enum Profile: String, ExpressibleByArgument {
+    case debug = "dbg"
+    case reldbg, release
+}
+
+enum Target: String, ExpressibleByArgument, CaseIterable {
+    case iOS = "aarch64-apple-ios"
+    case simulatorARM64 = "aarch64-apple-ios-sim"
+    case simulatorIntel = "x86_64-apple-ios"
+    case macARM64 = "aarch64-apple-darwin"
+    case macIntel = "x86_64-apple-darwin"
+}
+
 struct BuildSDK: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A tool to checkout and build MatrixRustSDK locally for development.")
     
@@ -9,7 +22,10 @@ struct BuildSDK: ParsableCommand {
     var branch: String?
     
     @Option(help: "The target to build for such as aarch64-apple-ios. Omit this option to build for all targets.")
-    var target: String?
+    var target: Target?
+    
+    @Option(help: "The profile to use when building the SDK. Omit this option to build in debug mode.")
+    var profile: Profile = .debug
     
     private var parentDirectoryURL: URL { Utilities.projectDirectoryURL.deletingLastPathComponent() }
     private var sdkDirectoryURL: URL { parentDirectoryURL.appending(path: "matrix-rust-sdk") }
@@ -49,13 +65,10 @@ struct BuildSDK: ParsableCommand {
         guard target == nil else { return }
         guard let output = try Utilities.zsh("rustup show") else { throw Error.rustupOutputFailure }
         
-        var requiredTargets = [
-            "aarch64-apple-darwin": false,
-            "aarch64-apple-ios": false,
-            "aarch64-apple-ios-sim": false,
-            "x86_64-apple-darwin": false,
-            "x86_64-apple-ios": false
-        ]
+        var requiredTargets = Target.allCases.reduce(into: [String: Bool]()) { partialResult, target in
+            partialResult[target.rawValue] = false
+        }
+        
         output.enumerateLines { line, _ in
             if requiredTargets.keys.contains(line) {
                 requiredTargets[line] = true
@@ -80,9 +93,10 @@ struct BuildSDK: ParsableCommand {
     
     /// Build the Rust SDK as an XCFramework with the debug profile.
     func buildFramework() throws {
-        var buildCommand = "cargo xtask swift build-framework --profile dbg"
+        var buildCommand = "cargo xtask swift build-framework"
+        buildCommand.append(" --profile \(profile.rawValue)")
         if let target {
-            buildCommand.append(" --only-target \(target)")
+            buildCommand.append(" --only-target \(target.rawValue)")
         }
         try Utilities.zsh(buildCommand, workingDirectoryURL: sdkDirectoryURL)
     }

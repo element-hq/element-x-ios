@@ -27,13 +27,12 @@ struct ImageRoomTimelineItem: EventBasedTimelineItemProtocol, Identifiable, Hash
     let sender: TimelineItemSender
     
     let source: MediaSourceProxy?
-    var cachedFileURL: URL?
     
     var width: CGFloat?
     var height: CGFloat?
     var aspectRatio: CGFloat?
     var blurhash: String?
-    var type: UTType?
+    var contentType: UTType?
     
     var properties = RoomTimelineItemProperties()
 }

@@ -35,11 +35,11 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
         switch state {
         case .loading:
             roomListPublisher = .init([])
-            statePublisher = .init(.cold)
+            statePublisher = .init(.notLoaded)
             countPublisher = .init(0)
         case .loaded:
             roomListPublisher = .init(Self.rooms)
-            statePublisher = .init(.live)
+            statePublisher = .init(.fullyLoaded)
             countPublisher = .init(UInt(Self.rooms.count))
         }
     }
