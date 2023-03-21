@@ -39,7 +39,7 @@ struct SettingsScreen: View {
             signOutSection
         }
         .compoundForm()
-        .navigationTitle(ElementL10n.settings)
+        .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
@@ -114,7 +114,7 @@ struct SettingsScreen: View {
             }
             
             Button { context.send(viewAction: .reportBug) } label: {
-                Label(ElementL10n.sendBugReport, systemImage: "questionmark.circle")
+                Label(L10n.actionReportBug, systemImage: "questionmark.circle")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("reportBugButton")
@@ -150,7 +150,7 @@ struct SettingsScreen: View {
     }
 
     private var doneButton: some View {
-        Button(ElementL10n.done, action: close)
+        Button(L10n.actionDone, action: close)
     }
 
     private func close() {

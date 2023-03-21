@@ -18,6 +18,7 @@
 "action_leave" = "Leave";
 "action_leave_room" = "Leave room";
 "action_next" = "Next";
+"action_no" = "No";
 "action_not_now" = "Not now";
 "action_ok" = "Ok";
 "action_quick_reply" = "Quick reply";
@@ -35,6 +36,7 @@
 "action_start_chat" = "Start chat";
 "action_start_verification" = "Start verification";
 "action_view_source" = "View Source";
+"action_yes" = "Yes";
 "bug_report_screen_editor_description" = "Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.";
 "bug_report_screen_editor_placeholder" = "Describe the bug…";
 "bug_report_screen_include_logs" = "Send logs to help";
@@ -58,6 +60,7 @@
 "common_message_layout" = "Message layout";
 "common_message_removed" = "Message removed";
 "common_modern" = "Modern";
+"common_offline" = "Offline";
 "common_password" = "Password";
 "common_people" = "People";
 "common_permalink" = "Permalink";
@@ -66,12 +69,14 @@
 "common_report_a_bug" = "Report a bug";
 "common_search_for_someone" = "Search for someone";
 "common_security" = "Security";
+"common_sending" = "Sending…";
 "common_settings" = "Settings";
 "common_sticker" = "Sticker";
 "common_suggestions" = "Suggestions";
 "common_they_dont_match" = "They don’t match";
 "common_they_match" = "They match";
 "common_topic" = "Topic";
+"common_unable_to_decrypt" = "Unable to decrypt";
 "common_unsupported_event" = "Unsupported event";
 "common_username" = "Username";
 "common_verification_cancelled" = "Verification cancelled";
@@ -88,6 +93,7 @@
 "emoji_picker_category_symbols" = "Symbols";
 "error_failed_creating_the_permalink" = "Failed creating the permalink";
 "error_failed_loading_messages" = "Failed loading messages";
+"error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
 "invite_friends_text" = "Hey, talk to me on %1$@: %2$@";
 "leave_room_alert_empty_subtitle" = "Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.";

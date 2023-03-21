@@ -434,7 +434,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                 ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
             } else {
                 ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
-                                                                                    title: ElementL10n.a11yPresenceOffline,
+                                                                                    title: L10n.commonOffline,
                                                                                     persistent: true))
             }
         }.store(in: &cancellables)
@@ -494,7 +494,7 @@ extension AppCoordinator: NotificationManagerDelegate {
         default:
             // error or no room proxy
             await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
-                                                subtitle: ElementL10n.a11yErrorSomeMessageNotSent)
+                                                subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
         }
     }
 }

@@ -29,7 +29,7 @@ struct StartChatScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .navigationTitle(ElementL10n.startChat)
+        .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
@@ -43,7 +43,7 @@ struct StartChatScreen: View {
     private var createRoomSection: some View {
         Section {
             Button(action: createRoom) {
-                Label(ElementL10n.createARoom, systemImage: "person.3")
+                Label(L10n.actionCreateARoom, systemImage: "person.3")
             }
             .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         }
@@ -53,7 +53,7 @@ struct StartChatScreen: View {
     private var inviteFriendsSection: some View {
         Section {
             Button(action: inviteFriends) {
-                Label(ElementL10n.inviteFriendsToElement, systemImage: "square.and.arrow.up")
+                Label(L10n.actionInviteFriendsToApp(InfoPlistReader.main.bundleDisplayName), systemImage: "square.and.arrow.up")
             }
             .buttonStyle(FormButtonStyle())
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.inviteFriends)

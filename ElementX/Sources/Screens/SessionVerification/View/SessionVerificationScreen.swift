@@ -122,20 +122,20 @@ struct SessionVerificationScreen: View {
     private var actionButtons: some View {
         switch context.viewState.verificationState {
         case .initial:
-            Button(ElementL10n.startVerification) {
+            Button(L10n.actionStartVerification) {
                 context.send(viewAction: .requestVerification)
             }
             .buttonStyle(.elementAction(.xLarge))
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
         
         case .cancelled:
-            Button(ElementL10n.globalRetry) {
+            Button(L10n.actionRetry) {
                 context.send(viewAction: .restart)
             }
             .buttonStyle(.elementAction(.xLarge))
             
         case .verificationRequestAccepted:
-            Button(ElementL10n.sessionVerificationStart) {
+            Button(L10n.actionStart) {
                 context.send(viewAction: .startSasVerification)
             }
             .buttonStyle(.elementAction(.xLarge))

@@ -50,6 +50,8 @@ public enum L10n {
   public static var actionLeaveRoom: String { return L10n.tr("Localizable", "action_leave_room") }
   /// Next
   public static var actionNext: String { return L10n.tr("Localizable", "action_next") }
+  /// No
+  public static var actionNo: String { return L10n.tr("Localizable", "action_no") }
   /// Not now
   public static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
   /// Ok
@@ -84,6 +86,8 @@ public enum L10n {
   public static var actionStartVerification: String { return L10n.tr("Localizable", "action_start_verification") }
   /// View Source
   public static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
+  /// Yes
+  public static var actionYes: String { return L10n.tr("Localizable", "action_yes") }
   /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
   public static var bugReportScreenEditorDescription: String { return L10n.tr("Localizable", "bug_report_screen_editor_description") }
   /// Describe the bug…
@@ -130,6 +134,8 @@ public enum L10n {
   public static var commonMessageRemoved: String { return L10n.tr("Localizable", "common_message_removed") }
   /// Modern
   public static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
+  /// Offline
+  public static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
   /// Password
   public static var commonPassword: String { return L10n.tr("Localizable", "common_password") }
   /// People
@@ -148,6 +154,8 @@ public enum L10n {
   public static var commonSearchForSomeone: String { return L10n.tr("Localizable", "common_search_for_someone") }
   /// Security
   public static var commonSecurity: String { return L10n.tr("Localizable", "common_security") }
+  /// Sending…
+  public static var commonSending: String { return L10n.tr("Localizable", "common_sending") }
   /// Settings
   public static var commonSettings: String { return L10n.tr("Localizable", "common_settings") }
   /// Sticker
@@ -160,6 +168,8 @@ public enum L10n {
   public static var commonTheyMatch: String { return L10n.tr("Localizable", "common_they_match") }
   /// Topic
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
+  /// Unable to decrypt
+  public static var commonUnableToDecrypt: String { return L10n.tr("Localizable", "common_unable_to_decrypt") }
   /// Unsupported event
   public static var commonUnsupportedEvent: String { return L10n.tr("Localizable", "common_unsupported_event") }
   /// Username
@@ -192,6 +202,8 @@ public enum L10n {
   public static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
   /// Failed loading messages
   public static var errorFailedLoadingMessages: String { return L10n.tr("Localizable", "error_failed_loading_messages") }
+  /// Some messages have not been sent
+  public static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
   public static var errorUnknown: String { return L10n.tr("Localizable", "error_unknown") }
   /// Hey, talk to me on %1$@: %2$@

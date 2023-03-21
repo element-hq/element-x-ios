@@ -34,7 +34,7 @@ struct RedactedRoomTimelineView_Previews: PreviewProvider {
     
     static var previews: some View {
         VStack(alignment: .leading, spacing: 20.0) {
-            RedactedRoomTimelineView(timelineItem: itemWith(text: ElementL10n.eventRedacted,
+            RedactedRoomTimelineView(timelineItem: itemWith(text: L10n.commonMessageRemoved,
                                                             timestamp: "Later",
                                                             senderId: "Anne"))
         }
