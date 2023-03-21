@@ -19,10 +19,18 @@ import Foundation
 enum StartChatViewModelAction {
     case close
     case createRoom
+    case userSelected(RoomMemberProxy)
 }
 
 struct StartChatViewState: BindableState {
     var bindings = StartChatScreenViewStateBindings()
+    
+    var isSearching: Bool {
+        !bindings.searchQuery.isEmpty
+    }
+    
+    // user resulting from search
+    var searchedUsers: [RoomMemberProxy] = []
     
     // TODO: bind with real service, and mock data only in preview
     var suggestedUsers: [RoomMemberProxy] = [.mockAlice, .mockBob, .mockCharlie]
@@ -30,10 +38,14 @@ struct StartChatViewState: BindableState {
 
 struct StartChatScreenViewStateBindings {
     var searchQuery = ""
+    
+    /// Information describing the currently displayed alert.
+    var alertInfo: AlertInfo<ClientProxyError>?
 }
 
 enum StartChatViewAction {
     case close
     case createRoom
     case inviteFriends
+    case userSelected(RoomMemberProxy)
 }

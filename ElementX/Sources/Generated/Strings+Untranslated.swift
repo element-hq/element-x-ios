@@ -98,6 +98,8 @@ extension ElementL10n {
   public static let reportContentInfo = ElementL10n.tr("Untranslated", "report_content_info")
   /// Report Submitted
   public static let reportContentSubmitted = ElementL10n.tr("Untranslated", "report_content_submitted")
+  /// An error occurred when trying to start a chat
+  public static let retrievingDirectRoomError = ElementL10n.tr("Untranslated", "retrieving_direct_room_error")
   /// About
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
   /// Copy Link

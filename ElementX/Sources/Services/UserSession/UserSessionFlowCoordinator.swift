@@ -267,6 +267,9 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             switch action {
             case .close:
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
+            case .openRoom(let identifier):
+                self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                self.presentRoomWithIdentifier(identifier)
             }
         }
 

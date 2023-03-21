@@ -32,14 +32,14 @@ struct StartChatSuggestedUserCell: View {
             VStack(alignment: .leading, spacing: 4) {
                 // covers both nil and empty state
                 let displayName = user.displayName ?? ""
-                Text(displayName.isEmpty ? user.userId : displayName)
+                let firstRowText = displayName.isEmpty ? user.userId : displayName
+                Text(firstRowText)
                     .font(.element.title3)
                     .foregroundColor(.element.primaryContent)
-                if !displayName.isEmpty {
-                    Text(user.userId)
-                        .font(.element.subheadline)
-                        .foregroundColor(.element.tertiaryContent)
-                }
+                let secondRowText = displayName.isEmpty ? "" : user.userId
+                Text(secondRowText)
+                    .font(.element.subheadline)
+                    .foregroundColor(.element.tertiaryContent)
             }
             .accessibilityElement(children: .combine)
         }

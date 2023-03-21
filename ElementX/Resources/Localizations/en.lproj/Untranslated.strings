@@ -138,3 +138,5 @@
 "verification_compare_emojis_title" = "Compare emojis";
 "verification_compare_emojis_detail" = "Confirm that the emojis below match those shown on your other session.";
 "verification_conclusion_ok_self_notice_title" = "Verification complete";
+
+"retrieving_direct_room_error" = "An error occurred when trying to start a chat";

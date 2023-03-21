@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias StartChatViewModelType = StateStoreViewModel<StartChatViewState, StartChatViewAction>
@@ -26,6 +27,8 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
+        
+        start()
     }
     
     // MARK: - Public
@@ -39,6 +42,39 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .inviteFriends:
             // TODO: start invite people flow
             break
+        case .userSelected(let user):
+            callback?(.userSelected(user))
         }
+    }
+    
+    func displayError(_ type: ClientProxyError) {
+        switch type {
+        case .failedRetrievingDirectRoom:
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: ElementL10n.dialogTitleError,
+                                                 message: ElementL10n.retrievingDirectRoomError)
+        case .failedCreatingRoom: // this will likely be in the Room's screen while sending the first message
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: ElementL10n.dialogTitleError,
+                                                 message: ElementL10n.retrievingDirectRoomError)
+        default:
+            state.bindings.alertInfo = AlertInfo(id: type)
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func start() {
+        context.$viewState
+            .map(\.bindings.searchQuery)
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .sink(receiveValue: { [weak self] searchQuery in
+                if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
+                    self?.state.searchedUsers = [.init(id: searchQuery)]
+                } else {
+                    self?.state.searchedUsers = []
+                }
+            })
+            .store(in: &cancellables)
     }
 }

@@ -21,9 +21,13 @@ struct StartChatScreen: View {
     
     var body: some View {
         Form {
-            createRoomSection
-            inviteFriendsSection
-            suggestionsSection
+            if context.viewState.isSearching {
+                searchedUsersSection
+            } else {
+                createRoomSection
+                inviteFriendsSection
+                suggestionsSection
+            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -35,6 +39,7 @@ struct StartChatScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: ElementL10n.searchForSomeone)
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     private var createRoomSection: some View {
@@ -65,6 +70,18 @@ struct StartChatScreen: View {
             }
         } header: {
             Text(ElementL10n.directRoomUserListSuggestionsTitle)
+        }
+        .formSectionStyle()
+    }
+    
+    private var searchedUsersSection: some View {
+        Section {
+            ForEach(context.viewState.searchedUsers, id: \.userId) { user in
+                StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+                    .onTapGesture {
+                        context.send(viewAction: .userSelected(user))
+                    }
+            }
         }
         .formSectionStyle()
     }

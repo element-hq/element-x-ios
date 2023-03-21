@@ -141,6 +141,31 @@ class ClientProxy: ClientProxyProtocol {
         slidingSyncObserverToken = nil
     }
     
+    func currentDirectRoomWithUser(_ userId: String) async -> Result<String?, ClientProxyError> {
+        await Task.dispatch(on: clientQueue) {
+            do {
+                if let room = try self.client.getDmRoom(userId: userId) {
+                    return .success(room.id())
+                }
+            } catch {
+                return .failure(.failedRetrievingDirectRoom)
+            }
+            return .success(nil)
+        }
+    }
+    
+    func createDirectRoom(with user: RoomMemberProxy) async -> Result<String, ClientProxyError> {
+        await Task.dispatch(on: clientQueue) {
+            do {
+                let parameters = CreateRoomParameters(name: user.displayName ?? user.id, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .privateChat, invite: [user.userId], avatar: nil)
+                let result = try self.client.createRoom(request: parameters)
+                return .success(result)
+            } catch {
+                return .failure(.failedCreatingRoom)
+            }
+        }
+    }
+    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         let (slidingSyncRoom, room) = await Task.dispatch(on: clientQueue) {
             self.roomTupleForIdentifier(identifier)

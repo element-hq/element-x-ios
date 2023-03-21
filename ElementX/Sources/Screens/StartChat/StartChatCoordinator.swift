@@ -22,6 +22,7 @@ struct StartChatCoordinatorParameters {
 
 enum StartChatCoordinatorAction {
     case close
+    case openRoom(withIdentifier: String)
 }
 
 final class StartChatCoordinator: CoordinatorProtocol {
@@ -45,6 +46,27 @@ final class StartChatCoordinator: CoordinatorProtocol {
             case .createRoom:
                 // TODO: start create room flow
                 break
+            case .userSelected(let user):
+                Task {
+                    let currentDirectRoom = await self.parameters.userSession.clientProxy.currentDirectRoomWithUser(user.userId)
+                    switch currentDirectRoom {
+                    case .success(let roomId):
+                        if let roomId {
+                            self.callback?(.openRoom(withIdentifier: roomId))
+                        } else {
+                            // this flow will likely be in a dummy empty Room after sending the first message
+                            let result = await self.parameters.userSession.clientProxy.createDirectRoom(with: user)
+                            switch result {
+                            case .success(let roomId):
+                                self.callback?(.openRoom(withIdentifier: roomId))
+                            case .failure(let failure):
+                                self.viewModel.displayError(failure)
+                            }
+                        }
+                    case .failure(let failure):
+                        self.viewModel.displayError(failure)
+                    }
+                }
             }
         }
     }

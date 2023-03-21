@@ -23,6 +23,17 @@ struct RoomMemberProxy {
     init(with member: RoomMember) {
         self.member = member
     }
+    
+    // convenience init for start chat flow while a proper User Struct is missing from search result
+    init(id: String) {
+        self.init(with: .init(userId: id,
+                              displayName: nil,
+                              avatarUrl: nil,
+                              membership: .join,
+                              isNameAmbiguous: false,
+                              powerLevel: 50,
+                              normalizedPowerLevel: 50))
+    }
 
     var userId: String {
         member.userId
