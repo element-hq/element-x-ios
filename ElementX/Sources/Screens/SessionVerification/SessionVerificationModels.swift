@@ -26,54 +26,54 @@ struct SessionVerificationViewState: BindableState {
     var title: String? {
         switch verificationState {
         case .initial:
-            return ElementL10n.verificationOpenOtherToVerifyTitle
+            return L10n.sessionVerificationOpenExistingSessionTitle
         case .requestingVerification:
-            return ElementL10n.verificationRequestWaitingAcceptRequestTitle
+            return L10n.sessionVerificationWaitingToAcceptTitle
         case .verificationRequestAccepted:
-            return ElementL10n.verificationCompareEmojisTitle
+            return L10n.sessionVerificationCompareEmojisTitle
         case .startingSasVerification:
             return nil
         case .sasVerificationStarted:
             return nil
         case .showingChallenge:
-            return ElementL10n.verificationCompareEmojisTitle
+            return L10n.sessionVerificationCompareEmojisTitle
         case .acceptingChallenge:
-            return ElementL10n.verificationCompareEmojisTitle
+            return L10n.sessionVerificationCompareEmojisTitle
         case .decliningChallenge:
             return nil
         case .verified:
-            return ElementL10n.verificationConclusionOkSelfNoticeTitle
+            return L10n.commonVerificationComplete
         case .cancelling:
             return nil
         case .cancelled:
-            return ElementL10n.verificationCancelled
+            return L10n.commonVerificationCancelled
         }
     }
         
     var message: String {
         switch verificationState {
         case .initial:
-            return ElementL10n.verificationOpenOtherToVerifyDetail
+            return L10n.sessionVerificationOpenExistingSessionSubtitle
         case .requestingVerification:
-            return ElementL10n.verificationRequestWaitingAcceptRequestDetail
+            return L10n.sessionVerificationWaitingToAcceptSubtitle
         case .verificationRequestAccepted:
-            return ElementL10n.verificationEmojiNotice
+            return L10n.sessionVerificationRequestAcceptedSubtitle
         case .startingSasVerification:
             return L10n.commonWaiting
         case .sasVerificationStarted:
             return L10n.commonWaiting
         case .acceptingChallenge:
-            return ElementL10n.verificationCompareEmojisDetail
+            return L10n.sessionVerificationCompareEmojisSubtitle
         case .decliningChallenge:
             return L10n.commonWaiting
         case .cancelling:
             return L10n.commonWaiting
         case .showingChallenge:
-            return ElementL10n.verificationCompareEmojisDetail
+            return L10n.sessionVerificationCompareEmojisSubtitle
         case .verified:
-            return ElementL10n.verificationConclusionOkSelfNotice
+            return L10n.sessionVerificationCompleteSubtitle
         case .cancelled:
-            return ElementL10n.verificationRequestCancelledDetail
+            return L10n.sessionVerificationCancelledSubtitle
         }
     }
 }

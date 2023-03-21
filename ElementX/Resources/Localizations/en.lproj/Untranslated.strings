@@ -1,5 +1,17 @@
+/* This file can be used to temporarily add strings to the project without needing to use Localazy. */
+/***** None of the strings in here will be available for translation *****/
+
 /* Used for testing */
 "untranslated" = "Untranslated";
+
+// MARK: - Analytics
+
+"analytics_opt_in_title" = "Help improve %@";
+"analytics_opt_in_content" = "Help us identify issues and improve %@ by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.\n\nYou can read all our terms %@.";
+"analytics_opt_in_content_link" = "here";
+"analytics_opt_in_list_item_1" = "We <b>don\'t</b> record or profile any account data";
+"analytics_opt_in_list_item_2" = "We <b>don\'t</b> share information with third parties";
+"analytics_opt_in_list_item_3" = "You can turn this off anytime in settings";
 
 "ios_yes" = "Yes";
 "ios_no" = "No";
@@ -107,37 +119,7 @@
 "report_content_info" = "Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.";
 "report_content_submitted" = "Report Submitted";
 
-// Session verification
-/*
- "verification_open_other_to_verify" = "Use an existing session to verify this one, granting it access to encrypted messages.";
- "verification_profile_verify" = "Verify";
- "verification_profile_verified" = "Verified";
- "verification_profile_warning" = "Warning";
-"verification_conclusion_warning" = "Untrusted sign in";
-"verification_sas_match" = "They match";
-"verification_sas_do_not_match" = "They don\'t match";
-"verification_conclusion_not_secure" = "Not secure";
-"verification_conclusion_compromised" = "One of the following may be compromised:\n\n   - Your homeserver\n   - The homeserver the user you’re verifying is connected to\n   - Yours, or the other users’ internet connection\n   - Yours, or the other users’ device";
-"verification_request_waiting" = "Waiting…";
-"verification_request_other_cancelled" = "%@ cancelled";
-"verification_request_you_cancelled" = "You cancelled";
-"verification_request_other_accepted" = "%@ accepted";
-"verification_request_you_accepted" = "You accepted";
-"verification_sent" = "Verification Sent";
-"verification_request" = "Verification Request";
-"verification_verify_device" = "Verify this session";
-"verification_scan_notice" = "Scan the code with the other user\'s device to securely verify each other";
-"verification_scan_self_notice" = "Scan the code with your other device or switch and scan with this device";
-"verification_scan_their_code" = "Scan their code";
-"verification_scan_with_this_device" = "Scan with this device";
-"verification_scan_emoji_title" = "Can\'t scan";
-"verification_scan_emoji_subtitle" = "If you\'re not in person, compare emoji instead";
-"verification_scan_self_emoji_subtitle" = "Verify by comparing emoji instead";
-"verification_no_scan_emoji_title" = "Verify by comparing emojis";
-"verification_verify_user" = "Verify %@";
-"verification_verified_user" = "Verified %@";
-"verification_request_waiting_for" = "Waiting for %@…";
-*/
+// MARK: - Session verification
 
 "verification_open_other_to_verify_title" = "Open an existing session";
 "verification_open_other_to_verify_detail" = "Prove it’s you in order to access your encrypted message history.";

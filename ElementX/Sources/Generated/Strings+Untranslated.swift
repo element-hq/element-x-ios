@@ -20,6 +20,24 @@ extension ElementL10n {
   public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
   /// Share Link
   public static let actionShareLink = ElementL10n.tr("Untranslated", "action_share_link")
+  /// Help us identify issues and improve %@ by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.
+  /// 
+  /// You can read all our terms %@.
+  public static func analyticsOptInContent(_ p1: Any, _ p2: Any) -> String {
+    return ElementL10n.tr("Untranslated", "analytics_opt_in_content", String(describing: p1), String(describing: p2))
+  }
+  /// here
+  public static let analyticsOptInContentLink = ElementL10n.tr("Untranslated", "analytics_opt_in_content_link")
+  /// We <b>don't</b> record or profile any account data
+  public static let analyticsOptInListItem1 = ElementL10n.tr("Untranslated", "analytics_opt_in_list_item_1")
+  /// We <b>don't</b> share information with third parties
+  public static let analyticsOptInListItem2 = ElementL10n.tr("Untranslated", "analytics_opt_in_list_item_2")
+  /// You can turn this off anytime in settings
+  public static let analyticsOptInListItem3 = ElementL10n.tr("Untranslated", "analytics_opt_in_list_item_3")
+  /// Help improve %@
+  public static func analyticsOptInTitle(_ p1: Any) -> String {
+    return ElementL10n.tr("Untranslated", "analytics_opt_in_title", String(describing: p1))
+  }
   /// Attach Screenshot
   public static let bugReportScreenAttachScreenshot = ElementL10n.tr("Untranslated", "bug_report_screen_attach_screenshot")
   /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.

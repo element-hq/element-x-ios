@@ -154,12 +154,20 @@ public enum L10n {
   public static var commonSticker: String { return L10n.tr("Localizable", "common_sticker") }
   /// Suggestions
   public static var commonSuggestions: String { return L10n.tr("Localizable", "common_suggestions") }
+  /// They don’t match
+  public static var commonTheyDontMatch: String { return L10n.tr("Localizable", "common_they_dont_match") }
+  /// They match
+  public static var commonTheyMatch: String { return L10n.tr("Localizable", "common_they_match") }
   /// Topic
   public static var commonTopic: String { return L10n.tr("Localizable", "common_topic") }
   /// Unsupported event
   public static var commonUnsupportedEvent: String { return L10n.tr("Localizable", "common_unsupported_event") }
   /// Username
   public static var commonUsername: String { return L10n.tr("Localizable", "common_username") }
+  /// Verification cancelled
+  public static var commonVerificationCancelled: String { return L10n.tr("Localizable", "common_verification_cancelled") }
+  /// Verification complete
+  public static var commonVerificationComplete: String { return L10n.tr("Localizable", "common_verification_complete") }
   /// Video
   public static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Waiting…
@@ -222,6 +230,24 @@ public enum L10n {
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Access your message history
   public static var sessionVerificationBannerTitle: String { return L10n.tr("Localizable", "session_verification_banner_title") }
+  /// Something doesn’t seem right. Either the request timed out or the request was denied.
+  public static var sessionVerificationCancelledSubtitle: String { return L10n.tr("Localizable", "session_verification_cancelled_subtitle") }
+  /// Confirm that the emojis below match those shown on your other session.
+  public static var sessionVerificationCompareEmojisSubtitle: String { return L10n.tr("Localizable", "session_verification_compare_emojis_subtitle") }
+  /// Compare emojis
+  public static var sessionVerificationCompareEmojisTitle: String { return L10n.tr("Localizable", "session_verification_compare_emojis_title") }
+  /// Your new session is now verified. It has access to your encrypted messages, and other users will see it as trusted.
+  public static var sessionVerificationCompleteSubtitle: String { return L10n.tr("Localizable", "session_verification_complete_subtitle") }
+  /// Prove it’s you in order to access your encrypted message history.
+  public static var sessionVerificationOpenExistingSessionSubtitle: String { return L10n.tr("Localizable", "session_verification_open_existing_session_subtitle") }
+  /// Open an existing session
+  public static var sessionVerificationOpenExistingSessionTitle: String { return L10n.tr("Localizable", "session_verification_open_existing_session_title") }
+  /// Compare the unique emoji, ensuring they appear in the same order.
+  public static var sessionVerificationRequestAcceptedSubtitle: String { return L10n.tr("Localizable", "session_verification_request_accepted_subtitle") }
+  /// Accept the request to start the verification process in your other session to continue.
+  public static var sessionVerificationWaitingToAcceptSubtitle: String { return L10n.tr("Localizable", "session_verification_waiting_to_accept_subtitle") }
+  /// Waiting to accept request
+  public static var sessionVerificationWaitingToAcceptTitle: String { return L10n.tr("Localizable", "session_verification_waiting_to_accept_title") }
   /// Version: %1$@ (%2$@)
   public static func settingsVersionNumber(_ p1: Any, _ p2: Any) -> String {
     return L10n.tr("Localizable", "settings_version_number", String(describing: p1), String(describing: p2))

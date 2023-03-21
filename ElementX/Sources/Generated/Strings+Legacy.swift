@@ -286,24 +286,6 @@ public enum ElementL10n {
   public static var allRoomsYoureInWillBeShownInHome: String { return ElementL10n.tr("Legacy", "all_rooms_youre_in_will_be_shown_in_home") }
   /// Allow space members to find and access.
   public static var allowSpaceMemberToFindAndAccess: String { return ElementL10n.tr("Legacy", "allow_space_member_to_find_and_access") }
-  /// Help us identify issues and improve %@ by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.
-  /// 
-  /// You can read all our terms %@.
-  public static func analyticsOptInContent(_ p1: Any, _ p2: Any) -> String {
-    return ElementL10n.tr("Legacy", "analytics_opt_in_content", String(describing: p1), String(describing: p2))
-  }
-  /// here
-  public static var analyticsOptInContentLink: String { return ElementL10n.tr("Legacy", "analytics_opt_in_content_link") }
-  /// We <b>don't</b> record or profile any account data
-  public static var analyticsOptInListItem1: String { return ElementL10n.tr("Legacy", "analytics_opt_in_list_item_1") }
-  /// We <b>don't</b> share information with third parties
-  public static var analyticsOptInListItem2: String { return ElementL10n.tr("Legacy", "analytics_opt_in_list_item_2") }
-  /// You can turn this off anytime in settings
-  public static var analyticsOptInListItem3: String { return ElementL10n.tr("Legacy", "analytics_opt_in_list_item_3") }
-  /// Help improve %@
-  public static func analyticsOptInTitle(_ p1: Any) -> String {
-    return ElementL10n.tr("Legacy", "analytics_opt_in_title", String(describing: p1))
-  }
   /// %@ Web
   /// %@ Desktop
   public static func appDesktopWeb(_ p1: Any, _ p2: Any) -> String {

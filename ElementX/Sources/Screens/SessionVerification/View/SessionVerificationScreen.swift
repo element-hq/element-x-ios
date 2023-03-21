@@ -144,12 +144,12 @@ struct SessionVerificationScreen: View {
         case .showingChallenge:
             VStack(spacing: 30) {
                 Button { context.send(viewAction: .accept) } label: {
-                    Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
+                    Label(L10n.commonTheyMatch, systemImage: "checkmark")
                 }
                 .buttonStyle(.elementAction(.xLarge))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 
-                Button(ElementL10n.verificationSasDoNotMatch) {
+                Button(L10n.commonTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
@@ -162,14 +162,14 @@ struct SessionVerificationScreen: View {
                     HStack(spacing: 16) {
                         ProgressView()
                             .tint(.element.background)
-                        Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
+                        Label(L10n.commonTheyMatch, systemImage: "checkmark")
                     }
                 }
                 .buttonStyle(.elementAction(.xLarge))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 .disabled(true)
 
-                Button(ElementL10n.verificationSasDoNotMatch) {
+                Button(L10n.commonTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
@@ -227,11 +227,18 @@ struct SessionVerificationScreen: View {
 struct SessionVerification_Previews: PreviewProvider {
     static var previews: some View {
         sessionVerificationScreen(state: .initial)
+            .previewDisplayName("Initial")
         sessionVerificationScreen(state: .requestingVerification)
+            .previewDisplayName("Requesting Verification")
+        sessionVerificationScreen(state: .verificationRequestAccepted)
+            .previewDisplayName("Request Accepted")
         sessionVerificationScreen(state: .cancelled)
+            .previewDisplayName("Cancelled")
         
         sessionVerificationScreen(state: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+            .previewDisplayName("Showing Challenge")
         sessionVerificationScreen(state: .verified)
+            .previewDisplayName("Verified")
     }
     
     static func sessionVerificationScreen(state: SessionVerificationStateMachine.State) -> some View {
