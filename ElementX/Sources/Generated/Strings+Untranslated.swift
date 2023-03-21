@@ -41,6 +41,8 @@ extension ElementL10n {
   public static let softLogoutClearDataSubmit = ElementL10n.tr("Untranslated", "soft_logout_clear_data_submit")
   /// Clear personal data
   public static let softLogoutClearDataTitle = ElementL10n.tr("Untranslated", "soft_logout_clear_data_title")
+  /// Forgot password
+  public static let softLogoutForgotPassword = ElementL10n.tr("Untranslated", "soft_logout_forgot_password")
   /// Sign in to recover encryption keys stored exclusively on this device. You need them to read all of your secure messages on any device.
   public static let softLogoutSigninE2eWarningNotice = ElementL10n.tr("Untranslated", "soft_logout_signin_e2e_warning_notice")
   /// Your homeserver (%1$s) admin has signed you out of your account %2$s (%3$s).
