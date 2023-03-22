@@ -30,7 +30,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
 
     func testLeaveRoomTappedWhenPublic() async {
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: [.mockBob, .mockAlice]))
+        let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .processTapLeave)
         await Task.yield()
@@ -39,7 +40,8 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
     }
 
     func testLeavRoomTappedWhenRoomNotPublic() async {
-        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: [.mockBob, .mockAlice]))
+        let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .processTapLeave)
         await Task.yield()
