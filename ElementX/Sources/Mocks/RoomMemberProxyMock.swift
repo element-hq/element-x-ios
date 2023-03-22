@@ -18,20 +18,23 @@ import Foundation
 import MatrixRustSDK
 
 struct RoomMemberProxyMockConfiguration {
-    var userId: String
+    var userID: String
     var displayName: String
-    var avatarUrl: String?
+    var avatarURL: String?
     var membership: MembershipState
     var isNameAmbiguous: Bool
-    var powerLevel: Int64
-    var normalizedPowerLevel: Int64
+    var powerLevel: Int
+    var normalizedPowerLevel: Int
 }
 
 extension RoomMemberProxyMock {
     convenience init(with configuration: RoomMemberProxyMockConfiguration) {
         self.init()
-        userId = configuration.userId
+        userID = configuration.userID
         displayName = configuration.displayName
+        if let avatarURL = configuration.avatarURL {
+            self.avatarURL = URL(string: avatarURL)
+        }
         membership = configuration.membership
         isNameAmbiguous = configuration.isNameAmbiguous
         powerLevel = configuration.powerLevel
@@ -40,9 +43,9 @@ extension RoomMemberProxyMock {
 
     // Mocks
     static var mockAlice: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userId: "alice@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "alice@matrix.org",
                                         displayName: "Alice",
-                                        avatarUrl: nil,
+                                        avatarURL: nil,
                                         membership: .join,
                                         isNameAmbiguous: false,
                                         powerLevel: 50,
@@ -50,9 +53,9 @@ extension RoomMemberProxyMock {
     }
 
     static var mockBob: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userId: "bob@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "bob@matrix.org",
                                         displayName: "Bob",
-                                        avatarUrl: nil,
+                                        avatarURL: nil,
                                         membership: .join,
                                         isNameAmbiguous: false,
                                         powerLevel: 50,
@@ -60,9 +63,9 @@ extension RoomMemberProxyMock {
     }
 
     static var mockCharlie: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userId: "charlie@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "charlie@matrix.org",
                                         displayName: "Charlie",
-                                        avatarUrl: nil,
+                                        avatarURL: nil,
                                         membership: .join,
                                         isNameAmbiguous: false,
                                         powerLevel: 50,

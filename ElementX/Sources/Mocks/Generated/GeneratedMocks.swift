@@ -51,11 +51,11 @@ class BugReportServiceMock: BugReportServiceProtocol {
     }
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol {
-    var userId: String {
-        get { return underlyingUserId }
-        set(value) { underlyingUserId = value }
+    var userID: String {
+        get { return underlyingUserID }
+        set(value) { underlyingUserID = value }
     }
-    var underlyingUserId: String!
+    var underlyingUserID: String!
     var displayName: String?
     var avatarURL: URL?
     var membership: MembershipState {
@@ -68,16 +68,16 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingIsNameAmbiguous = value }
     }
     var underlyingIsNameAmbiguous: Bool!
-    var powerLevel: Int64 {
+    var powerLevel: Int {
         get { return underlyingPowerLevel }
         set(value) { underlyingPowerLevel = value }
     }
-    var underlyingPowerLevel: Int64!
-    var normalizedPowerLevel: Int64 {
+    var underlyingPowerLevel: Int!
+    var normalizedPowerLevel: Int {
         get { return underlyingNormalizedPowerLevel }
         set(value) { underlyingNormalizedPowerLevel = value }
     }
-    var underlyingNormalizedPowerLevel: Int64!
+    var underlyingNormalizedPowerLevel: Int!
 
 }
 class RoomProxyMock: RoomProxyProtocol {

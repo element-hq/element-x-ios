@@ -57,7 +57,7 @@ struct RoomMemberDetailsMemberCell_Previews: PreviewProvider {
                                                    members: members)
         
         return VStack {
-            ForEach(members, id: \.userId) { member in
+            ForEach(members, id: \.userID) { member in
                 RoomMemberDetailsMemberCell(member: .init(withProxy: member), context: viewModel.context)
             }
         }

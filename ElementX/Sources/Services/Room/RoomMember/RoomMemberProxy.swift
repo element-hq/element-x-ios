@@ -24,7 +24,7 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
         self.member = member
     }
 
-    var userId: String {
+    var userID: String {
         member.userId()
     }
 
@@ -44,11 +44,11 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
         member.isNameAmbiguous()
     }
 
-    var powerLevel: Int64 {
-        member.powerLevel()
+    var powerLevel: Int {
+        Int(member.powerLevel())
     }
 
-    var normalizedPowerLevel: Int64 {
-        member.normalizedPowerLevel()
+    var normalizedPowerLevel: Int {
+        Int(member.normalizedPowerLevel())
     }
 }

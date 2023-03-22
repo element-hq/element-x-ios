@@ -19,11 +19,11 @@ import MatrixRustSDK
 
 // sourcery: AutoMockable
 protocol RoomMemberProxyProtocol {
-    var userId: String { get }
+    var userID: String { get }
     var displayName: String? { get }
     var avatarURL: URL? { get }
     var membership: MembershipState { get }
     var isNameAmbiguous: Bool { get }
-    var powerLevel: Int64 { get }
-    var normalizedPowerLevel: Int64 { get }
+    var powerLevel: Int { get }
+    var normalizedPowerLevel: Int { get }
 }

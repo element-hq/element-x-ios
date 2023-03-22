@@ -87,7 +87,7 @@ struct RoomDetailsMember: Identifiable, Equatable {
     let avatarURL: URL?
 
     init(withProxy proxy: RoomMemberProxyProtocol) {
-        id = proxy.userId
+        id = proxy.userID
         name = proxy.displayName
         avatarURL = proxy.avatarURL
     }
