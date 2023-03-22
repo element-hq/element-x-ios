@@ -132,6 +132,10 @@ public enum L10n {
   public static var commonLinkCopiedToClipboard: String { return L10n.tr("Localizable", "common_link_copied_to_clipboard") }
   /// Loading…
   public static var commonLoading: String { return L10n.tr("Localizable", "common_loading") }
+  /// Plural format key: "%#@COUNT@"
+  public static func commonMemberCount(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "common_member_count", p1)
+  }
   /// Message
   public static var commonMessage: String { return L10n.tr("Localizable", "common_message") }
   /// Message layout
@@ -198,10 +202,6 @@ public enum L10n {
   public static var commonVideo: String { return L10n.tr("Localizable", "common_video") }
   /// Waiting…
   public static var commonWaiting: String { return L10n.tr("Localizable", "common_waiting") }
-  /// Plural format key: "%#@COUNT@"
-  public static func commonXMembers(_ p1: Int) -> String {
-    return L10n.tr("Localizable", "common_x_members", p1)
-  }
   /// Activities
   public static var emojiPickerCategoryActivity: String { return L10n.tr("Localizable", "emoji_picker_category_activity") }
   /// Flags

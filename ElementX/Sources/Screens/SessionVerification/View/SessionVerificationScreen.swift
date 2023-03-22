@@ -106,14 +106,16 @@ struct SessionVerificationScreen: View {
     
     @ViewBuilder
     private func emojisPanel(with emojis: [SessionVerificationEmoji]) -> some View {
-        HStack(spacing: 16) {
-            ForEach(emojis.prefix(4), id: \.self) { emoji in
-                EmojiView(emoji: emoji)
+        VStack(spacing: 32) {
+            HStack(spacing: 16) {
+                ForEach(emojis.prefix(4), id: \.self) { emoji in
+                    EmojiView(emoji: emoji)
+                }
             }
-        }
-        HStack(spacing: 16) {
-            ForEach(emojis.suffix(from: 4), id: \.self) { emoji in
-                EmojiView(emoji: emoji)
+            HStack(spacing: 16) {
+                ForEach(emojis.suffix(from: 4), id: \.self) { emoji in
+                    EmojiView(emoji: emoji)
+                }
             }
         }
     }
