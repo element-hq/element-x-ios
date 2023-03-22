@@ -10,22 +10,6 @@
       }
     },
     {
-      "identity" : "compound-design-tokens",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/compound-design-tokens.git",
-      "state" : {
-        "revision" : "342145ff8044b58b967186b0efe34477e1f7c3ca"
-      }
-    },
-    {
-      "identity" : "compound-ios",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/vector-im/compound-ios",
-      "state" : {
-        "revision" : "0b1c62f9a9efac3d9ac06c51531392d55057a0eb"
-      }
-    },
-    {
       "identity" : "devicekit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/devicekit/DeviceKit",
@@ -39,8 +23,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Cocoanetics/DTCoreText",
       "state" : {
-        "revision" : "9d2d4d2296e5d2d852a7d3c592b817d913a5d020",
-        "version" : "1.6.27"
+        "revision" : "b664664825da565b4c2b7a17dbe2369f68ae43d9",
+        "version" : "1.6.26"
       }
     },
     {
@@ -84,8 +68,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/onevcat/Kingfisher",
       "state" : {
-        "revision" : "af4be924ad984cf4d16f4ae4df424e79a443d435",
-        "version" : "7.6.2"
+        "revision" : "44e891bdb61426a95e31492a67c7c0dfad1f87c5",
+        "version" : "7.4.1"
       }
     },
     {
