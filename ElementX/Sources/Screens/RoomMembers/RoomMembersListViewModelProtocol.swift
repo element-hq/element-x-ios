@@ -14,13 +14,10 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+import Foundation
 
-class RoomMemberDetailsScreenUITests: XCTestCase {
-    func testInitialStateComponents() {
-        let app = Application.launch(.roomMemberDetailsScreen)
-        
-        app.assertScreenshot(.roomMemberDetailsScreen)
-    }
+@MainActor
+protocol RoomMembersListViewModelProtocol {
+    var callback: ((RoomMembersListViewModelAction) -> Void)? { get set }
+    var context: RoomMembersListViewModelType.Context { get }
 }

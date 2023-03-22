@@ -16,23 +16,23 @@
 
 import SwiftUI
 
-struct RoomMemberDetailsCoordinatorParameters {
+struct RoomMembersListCoordinatorParameters {
     let mediaProvider: MediaProviderProtocol
     let members: [RoomMemberProxyProtocol]
 }
 
-enum RoomMemberDetailsCoordinatorAction {
+enum RoomMembersListCoordinatorAction {
     case cancel
 }
 
-final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
-    private var viewModel: RoomMemberDetailsViewModelProtocol
+final class RoomMembersListCoordinator: CoordinatorProtocol {
+    private var viewModel: RoomMembersListViewModelProtocol
     
-    var callback: ((RoomMemberDetailsCoordinatorAction) -> Void)?
+    var callback: ((RoomMembersListCoordinatorAction) -> Void)?
     
-    init(parameters: RoomMemberDetailsCoordinatorParameters) {
-        viewModel = RoomMemberDetailsViewModel(mediaProvider: parameters.mediaProvider,
-                                               members: parameters.members)
+    init(parameters: RoomMembersListCoordinatorParameters) {
+        viewModel = RoomMembersListViewModel(mediaProvider: parameters.mediaProvider,
+                                             members: parameters.members)
     }
     
     func start() {
@@ -47,6 +47,6 @@ final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(RoomMemberDetailsScreen(context: viewModel.context))
+        AnyView(RoomMembersListScreen(context: viewModel.context))
     }
 }

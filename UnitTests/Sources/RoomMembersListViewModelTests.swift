@@ -14,10 +14,9 @@
 // limitations under the License.
 //
 
-import Foundation
+import XCTest
+
+@testable import ElementX
 
 @MainActor
-protocol RoomMemberDetailsViewModelProtocol {
-    var callback: ((RoomMemberDetailsViewModelAction) -> Void)? { get set }
-    var context: RoomMemberDetailsViewModelType.Context { get }
-}
+class RoomMembersListScreenViewModelTests: XCTestCase { }

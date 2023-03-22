@@ -49,7 +49,7 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
             
             switch action {
             case .requestMemberDetailsPresentation(let members):
-                self.presentRoomMemberDetails(members)
+                self.presentRoomMembersList(members)
             case .cancel:
                 self.callback?(.cancel)
             case .leftRoom:
@@ -62,10 +62,10 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
         AnyView(RoomDetailsScreen(context: viewModel.context))
     }
     
-    private func presentRoomMemberDetails(_ members: [RoomMemberProxyProtocol]) {
-        let params = RoomMemberDetailsCoordinatorParameters(mediaProvider: parameters.mediaProvider,
-                                                            members: members)
-        let coordinator = RoomMemberDetailsCoordinator(parameters: params)
+    private func presentRoomMembersList(_ members: [RoomMemberProxyProtocol]) {
+        let params = RoomMembersListCoordinatorParameters(mediaProvider: parameters.mediaProvider,
+                                                          members: members)
+        let coordinator = RoomMembersListCoordinator(parameters: params)
         coordinator.callback = { [weak self] _ in
             self?.navigationStackCoordinator.pop()
         }

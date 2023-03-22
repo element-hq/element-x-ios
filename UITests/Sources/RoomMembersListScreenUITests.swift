@@ -14,9 +14,13 @@
 // limitations under the License.
 //
 
+import ElementX
 import XCTest
 
-@testable import ElementX
-
-@MainActor
-class RoomMemberDetailsScreenViewModelTests: XCTestCase { }
+class RoomMembersListScreenUITests: XCTestCase {
+    func testInitialStateComponents() {
+        let app = Application.launch(.roomMemberDetailsScreen)
+        
+        app.assertScreenshot(.roomMemberDetailsScreen)
+    }
+}
