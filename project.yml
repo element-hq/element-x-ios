@@ -73,7 +73,7 @@ packages:
     majorVersion: 4.2.2
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    majorVersion: 7.2.0
+    majorVersion: 7.6.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     branch: master
@@ -97,7 +97,7 @@ packages:
     majorVersion: 8.3.1
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    majorVersion: 1.10.0
+    majorVersion: 1.11.0
   Version:
     url: https://github.com/mxcl/Version
     majorVersion: 2.0.1
