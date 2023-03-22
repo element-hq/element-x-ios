@@ -22,7 +22,7 @@ import UIKit
 // MARK: View model
 
 enum RoomDetailsViewModelAction {
-    case requestMemberDetailsPresentation([any RoomMemberProxyProtocol])
+    case requestMemberDetailsPresentation([RoomMemberProxyProtocol])
     case leftRoom
     case cancel
 }
@@ -86,7 +86,7 @@ struct RoomDetailsMember: Identifiable, Equatable {
     let name: String?
     let avatarURL: URL?
 
-    init(withProxy proxy: any RoomMemberProxyProtocol) {
+    init(withProxy proxy: RoomMemberProxyProtocol) {
         id = proxy.userId
         name = proxy.displayName
         avatarURL = proxy.avatarURL

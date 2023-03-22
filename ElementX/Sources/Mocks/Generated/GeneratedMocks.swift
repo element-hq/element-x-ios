@@ -351,10 +351,10 @@ class RoomProxyMock: RoomProxyProtocol {
     var membersCalled: Bool {
         return membersCallsCount > 0
     }
-    var membersReturnValue: Result<[any RoomMemberProxyProtocol], RoomProxyError>!
-    var membersClosure: (() async -> Result<[any RoomMemberProxyProtocol], RoomProxyError>)?
+    var membersReturnValue: Result<[RoomMemberProxyProtocol], RoomProxyError>!
+    var membersClosure: (() async -> Result<[RoomMemberProxyProtocol], RoomProxyError>)?
 
-    func members() async -> Result<[any RoomMemberProxyProtocol], RoomProxyError> {
+    func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError> {
         membersCallsCount += 1
         if let membersClosure = membersClosure {
             return await membersClosure()

@@ -18,7 +18,7 @@ import Foundation
 import MatrixRustSDK
 
 // sourcery: AutoMockable
-protocol RoomMemberProxyProtocol: Identifiable {
+protocol RoomMemberProxyProtocol {
     var userId: String { get }
     var displayName: String? { get }
     var avatarURL: URL? { get }
@@ -26,8 +26,4 @@ protocol RoomMemberProxyProtocol: Identifiable {
     var isNameAmbiguous: Bool { get }
     var powerLevel: Int64 { get }
     var normalizedPowerLevel: Int64 { get }
-}
-
-extension RoomMemberProxyProtocol {
-    var id: String { userId }
 }
