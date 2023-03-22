@@ -19,8 +19,8 @@ import XCTest
 
 class RoomMembersListScreenUITests: XCTestCase {
     func testInitialStateComponents() {
-        let app = Application.launch(.roomMemberDetailsScreen)
+        let app = Application.launch(.roomMembersListScreen)
         
-        app.assertScreenshot(.roomMemberDetailsScreen)
+        app.assertScreenshot(.roomMembersListScreen)
     }
 }
