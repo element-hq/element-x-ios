@@ -18,25 +18,9 @@ import ElementX
 import XCTest
 
 class RoomMemberDetailsScreenUITests: XCTestCase {
-    func testRegularScreen() {
-        let app = Application.launch(.simpleRegular)
+    func testInitialStateComponents() {
+        let app = Application.launch(.roomMemberDetailsScreen)
         
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Make this chat public?")
-
-        app.assertScreenshot(.simpleRegular)
-    }
-    
-    func testUpgradeScreen() {
-        let app = Application.launch(.simpleUpgrade)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Privacy warning")
-
-        app.assertScreenshot(.simpleUpgrade)
+        app.assertScreenshot(.roomMemberDetailsScreen)
     }
 }
