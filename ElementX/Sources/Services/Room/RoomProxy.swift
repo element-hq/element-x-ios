@@ -275,7 +275,7 @@ class RoomProxy: RoomProxyProtocol {
         await Task.dispatch(on: .global()) {
             do {
                 let members = try self.room.members()
-                return .success(members.map { RoomMemberProxy(with: $0) })
+                return .success(members.map { RoomMemberProxy(member: $0) })
             } catch {
                 return .failure(.failedRetrievingMembers)
             }

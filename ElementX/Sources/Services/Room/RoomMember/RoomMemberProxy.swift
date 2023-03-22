@@ -20,7 +20,7 @@ import MatrixRustSDK
 final class RoomMemberProxy: RoomMemberProxyProtocol {
     private let member: RoomMemberProtocol
 
-    init(with member: RoomMemberProtocol) {
+    init(member: RoomMemberProtocol) {
         self.member = member
     }
 
