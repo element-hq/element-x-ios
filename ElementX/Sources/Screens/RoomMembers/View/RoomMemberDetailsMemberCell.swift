@@ -48,7 +48,7 @@ struct RoomMemberDetailsMemberCell: View {
 
 struct RoomMemberDetailsMemberCell_Previews: PreviewProvider {
     static var previews: some View {
-        let members: [RoomMemberProxy] = [
+        let members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
             .mockCharlie
@@ -57,7 +57,7 @@ struct RoomMemberDetailsMemberCell_Previews: PreviewProvider {
                                                    members: members)
         
         return VStack {
-            ForEach(members) { member in
+            ForEach(members, id: \.userID) { member in
                 RoomMemberDetailsMemberCell(member: .init(withProxy: member), context: viewModel.context)
             }
         }

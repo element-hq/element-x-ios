@@ -15,25 +15,15 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
-enum StartChatViewModelAction {
-    case close
-    case createRoom
-}
-
-struct StartChatViewState: BindableState {
-    var bindings = StartChatScreenViewStateBindings()
-    
-    // TODO: bind with real service, and mock data only in preview
-    var suggestedUsers: [RoomMemberProxyMock] = [.mockAlice, .mockBob, .mockCharlie]
-}
-
-struct StartChatScreenViewStateBindings {
-    var searchQuery = ""
-}
-
-enum StartChatViewAction {
-    case close
-    case createRoom
-    case inviteFriends
+// sourcery: AutoMockable
+protocol RoomMemberProxyProtocol {
+    var userID: String { get }
+    var displayName: String? { get }
+    var avatarURL: URL? { get }
+    var membership: MembershipState { get }
+    var isNameAmbiguous: Bool { get }
+    var powerLevel: Int { get }
+    var normalizedPowerLevel: Int { get }
 }

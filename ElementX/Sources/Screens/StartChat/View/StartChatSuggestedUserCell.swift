@@ -17,14 +17,14 @@
 import SwiftUI
 
 struct StartChatSuggestedUserCell: View {
-    let user: RoomMemberProxy
+    let user: RoomMemberProxyProtocol
     let imageProvider: ImageProviderProtocol?
     
     var body: some View {
         HStack(spacing: 13) {
             LoadableAvatarImage(url: user.avatarURL,
                                 name: user.displayName,
-                                contentID: user.userId,
+                                contentID: user.userID,
                                 avatarSize: .user(on: .home),
                                 imageProvider: imageProvider)
                 .accessibilityHidden(true)
@@ -32,11 +32,11 @@ struct StartChatSuggestedUserCell: View {
             VStack(alignment: .leading, spacing: 4) {
                 // covers both nil and empty state
                 let displayName = user.displayName ?? ""
-                Text(displayName.isEmpty ? user.userId : displayName)
+                Text(displayName.isEmpty ? user.userID : displayName)
                     .font(.element.title3)
                     .foregroundColor(.element.primaryContent)
                 if !displayName.isEmpty {
-                    Text(user.userId)
+                    Text(user.userID)
                         .font(.element.subheadline)
                         .foregroundColor(.element.tertiaryContent)
                 }
