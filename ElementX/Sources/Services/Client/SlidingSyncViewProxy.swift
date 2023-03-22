@@ -51,7 +51,7 @@ private class SlidingSyncViewObserver: SlidingSyncListRoomListObserver, SlidingS
 }
 
 class SlidingSyncViewProxy {
-    private let slidingSync: SlidingSyncProtocol
+    private var slidingSync: SlidingSyncProtocol!
     private let slidingSyncView: SlidingSyncListProtocol
     
     private var listUpdateObserverToken: TaskHandle?
@@ -71,8 +71,7 @@ class SlidingSyncViewProxy {
         countUpdateObserverToken?.cancel()
     }
     
-    init(slidingSync: SlidingSyncProtocol, slidingSyncView: SlidingSyncListProtocol) {
-        self.slidingSync = slidingSync
+    init(slidingSyncView: SlidingSyncListProtocol) {
         self.slidingSyncView = slidingSyncView
         
         let slidingSyncViewObserver = SlidingSyncViewObserver()
@@ -92,6 +91,10 @@ class SlidingSyncViewProxy {
         listUpdateObserverToken = slidingSyncView.observeRoomList(observer: slidingSyncViewObserver)
         stateUpdateObserverToken = slidingSyncView.observeState(observer: slidingSyncViewObserver)
         countUpdateObserverToken = slidingSyncView.observeRoomsCount(observer: slidingSyncViewObserver)
+    }
+    
+    func setSlidingSync(slidingSync: SlidingSyncProtocol) {
+        self.slidingSync = slidingSync
     }
     
     func currentRoomsList() -> [RoomListEntry] {
