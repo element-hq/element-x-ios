@@ -118,9 +118,23 @@ private class MockMediaLoadingClient: ClientProtocol {
     func startSync(timelineLimit: UInt16?) { }
     
     func createRoom(request: MatrixRustSDK.CreateRoomParameters) throws -> String { fatalError() }
-    
-    func getDmRoom(userId: String) throws -> MatrixRustSDK.Room? { fatalError() }
-    
+
+    func getDmRoom(userId: String) throws -> MatrixRustSDK.Room? {
+        fatalError()
+    }
+
+    func ignoreUser(userId: String) throws {
+        fatalError()
+    }
+
+    func searchUsers(searchTerm: String, limit: UInt64) throws -> MatrixRustSDK.SearchUsersResults {
+        fatalError()
+    }
+
+    func unignoreUser(userId: String) throws {
+        fatalError()
+    }
+
     // swiftlint:disable:next function_parameter_count
     func setPusher(identifiers: MatrixRustSDK.PusherIdentifiers,
                    kind: MatrixRustSDK.PusherKind,

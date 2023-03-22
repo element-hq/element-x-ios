@@ -65,7 +65,7 @@ struct StartChatScreen: View {
     
     private var suggestionsSection: some View {
         Section {
-            ForEach(context.viewState.suggestedUsers, id: \.userId) { user in
+            ForEach(context.viewState.suggestedUsers, id: \.userID) { user in
                 StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
             }
         } header: {
