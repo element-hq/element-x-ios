@@ -55,7 +55,7 @@ packages:
     minorVersion: 1.0.0
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    exactVersion: 0.4.0
+    exactVersion: 0.5.0
   AppAuth:
     url: https://github.com/openid/AppAuth-iOS
     minorVersion: 1.6.0
@@ -64,7 +64,7 @@ packages:
     minorVersion: 1.0.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    minorVersion: 4.9.0
+    minorVersion: 5.0.0
   DTCoreText:
     url: https://github.com/Cocoanetics/DTCoreText
     minorVersion: 1.6.0
@@ -82,10 +82,10 @@ packages:
     minorVersion: 0.2.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    minorVersion: 1.4.0
+    minorVersion: 2.0.0
   SwiftyBeaver:
     url: https://github.com/SwiftyBeaver/SwiftyBeaver
-    minorVersion: 1.9.0
+    minorVersion: 2.0.0
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0
