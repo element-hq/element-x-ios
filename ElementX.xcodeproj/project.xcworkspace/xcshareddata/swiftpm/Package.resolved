@@ -96,7 +96,7 @@
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
         "revision" : "cc68dbd95a35a481a7398e7cc324e26917fd4022",
-        "version" : "1.0.47-alpha"
+        "version" : "1.0.48-alpha"
       }
     },
     {
