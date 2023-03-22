@@ -257,11 +257,11 @@ public enum L10n {
   /// Notification
   public static var notification: String { return L10n.tr("Localizable", "Notification") }
   /// Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.
-  public static func onboardingScreenSubtitle(_ p1: Any) -> String {
-    return L10n.tr("Localizable", "onboarding_screen_subtitle", String(describing: p1))
+  public static func onboardingWelcomeSubtitle(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "onboarding_welcome_subtitle", String(describing: p1))
   }
   /// Be in your Element
-  public static var onboardingScreenTitle: String { return L10n.tr("Localizable", "onboarding_screen_title") }
+  public static var onboardingWelcomeTitle: String { return L10n.tr("Localizable", "onboarding_welcome_title") }
   /// Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.
   public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
   /// Reason for reporting this content

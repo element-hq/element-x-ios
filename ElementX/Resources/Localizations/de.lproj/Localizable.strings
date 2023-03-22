@@ -20,7 +20,7 @@
 "action_next" = "Next";
 "action_no" = "No";
 "action_not_now" = "Not now";
-"action_ok" = "Ok";
+"action_ok" = "OK";
 "action_quick_reply" = "Quick reply";
 "action_quote" = "Quote";
 "action_remove" = "Remove";
@@ -114,8 +114,8 @@
 "login_server_header" = "Where your conversations live";
 "login_title" = "Welcome back!";
 "message_composer_placeholder" = "Message…";
-"onboarding_screen_subtitle" = "Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.";
-"onboarding_screen_title" = "Be in your Element";
+"onboarding_welcome_subtitle" = "Welcome to the %1$@ Beta. Supercharged, for speed and simplicity.";
+"onboarding_welcome_title" = "Be in your Element";
 "report_content_explanation" = "Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.";
 "report_content_hint" = "Reason for reporting this content";
 "room_details_encryption_enabled_description" = "Messages in this room are end-to-end encrypted. Learn more & verify users in their profile.";
