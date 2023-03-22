@@ -67,7 +67,7 @@ packages:
     minorVersion: 5.0.0
   DTCoreText:
     url: https://github.com/Cocoanetics/DTCoreText
-    minorVersion: 1.6.0
+    exactVersion: 1.6.26
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
     minorVersion: 4.2.0
