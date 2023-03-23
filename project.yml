@@ -52,52 +52,52 @@ packages:
     # path: ../compound-ios
   Algorithms:
     url: https://github.com/apple/swift-algorithms
-    majorVersion: 1.0.0
+    minorVersion: 1.0.0
   AnalyticsEvents:
     url: https://github.com/matrix-org/matrix-analytics-events
-    exactVersion: 0.4.0
+    minorVersion: 0.5.0
   AppAuth:
     url: https://github.com/openid/AppAuth-iOS
-    majorVersion: 1.5.0
+    minorVersion: 1.6.0
   Collections:
     url: https://github.com/apple/swift-collections
-    majorVersion: 1.0.4
+    minorVersion: 1.0.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
-    majorVersion: 4.7.0
+    minorVersion: 5.0.0
   DTCoreText:
     url: https://github.com/Cocoanetics/DTCoreText
-    majorVersion: 1.6.26
+    exactVersion: 1.6.26
   KeychainAccess:
     url: https://github.com/kishikawakatsumi/KeychainAccess
-    majorVersion: 4.2.2
+    minorVersion: 4.2.0
   Kingfisher:
     url: https://github.com/onevcat/Kingfisher
-    majorVersion: 7.2.0
+    minorVersion: 7.6.0
   KZFileWatchers:
     url: https://github.com/krzysztofzablocki/KZFileWatchers
     branch: master
   Introspect:
     url: https://github.com/siteline/SwiftUI-Introspect
-    majorVersion: 0.2.3
+    minorVersion: 0.2.0
   PostHog:
     url: https://github.com/PostHog/posthog-ios
-    majorVersion: 1.4.4
+    minorVersion: 2.0.0
   SwiftyBeaver:
     url: https://github.com/SwiftyBeaver/SwiftyBeaver
-    majorVersion: 1.9.5
+    minorVersion: 2.0.0
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
-    majorVersion: 6.0.0
+    minorVersion: 6.0.0
   GZIP:
     url: https://github.com/nicklockwood/GZIP
-    majorVersion: 1.3.0
+    minorVersion: 1.3.0
   Sentry:
     url: https://github.com/getsentry/sentry-cocoa
-    majorVersion: 8.3.1
+    minorVersion: 8.3.0
   SnapshotTesting:
     url: https://github.com/pointfreeco/swift-snapshot-testing
-    majorVersion: 1.10.0
+    minorVersion: 1.11.0
   Version:
     url: https://github.com/mxcl/Version
-    majorVersion: 2.0.1
+    minorVersion: 2.0.0
