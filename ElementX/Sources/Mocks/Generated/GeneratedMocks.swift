@@ -78,6 +78,11 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingNormalizedPowerLevel = value }
     }
     var underlyingNormalizedPowerLevel: Int!
+    var isAccountOwner: Bool {
+        get { return underlyingIsAccountOwner }
+        set(value) { underlyingIsAccountOwner = value }
+    }
+    var underlyingIsAccountOwner: Bool!
 
 }
 class RoomProxyMock: RoomProxyProtocol {

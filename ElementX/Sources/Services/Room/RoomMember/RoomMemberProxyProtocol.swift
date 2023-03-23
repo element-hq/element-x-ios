@@ -26,4 +26,11 @@ protocol RoomMemberProxyProtocol {
     var isNameAmbiguous: Bool { get }
     var powerLevel: Int { get }
     var normalizedPowerLevel: Int { get }
+    var isAccountOwner: Bool { get }
+}
+
+extension RoomMemberProxyProtocol {
+    var permalink: URL? {
+        try? PermalinkBuilder.permalinkTo(userIdentifier: userID)
+    }
 }

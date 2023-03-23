@@ -25,6 +25,7 @@ struct RoomMemberProxyMockConfiguration {
     var isNameAmbiguous: Bool
     var powerLevel: Int
     var normalizedPowerLevel: Int
+    var isAccountOwner: Bool
 }
 
 extension RoomMemberProxyMock {
@@ -37,6 +38,7 @@ extension RoomMemberProxyMock {
         isNameAmbiguous = configuration.isNameAmbiguous
         powerLevel = configuration.powerLevel
         normalizedPowerLevel = configuration.normalizedPowerLevel
+        isAccountOwner = configuration.isAccountOwner
     }
 
     // Mocks
@@ -47,7 +49,8 @@ extension RoomMemberProxyMock {
                                         membership: .join,
                                         isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        normalizedPowerLevel: 50,
+                                        isAccountOwner: false))
     }
 
     static var mockBob: RoomMemberProxyMock {
@@ -57,7 +60,8 @@ extension RoomMemberProxyMock {
                                         membership: .join,
                                         isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        normalizedPowerLevel: 50,
+                                        isAccountOwner: false))
     }
 
     static var mockCharlie: RoomMemberProxyMock {
@@ -67,7 +71,8 @@ extension RoomMemberProxyMock {
                                         membership: .join,
                                         isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        normalizedPowerLevel: 50,
+                                        isAccountOwner: false))
     }
 
     static var mockDan: RoomMemberProxyMock {
@@ -77,6 +82,18 @@ extension RoomMemberProxyMock {
                                         membership: .join,
                                         isNameAmbiguous: false,
                                         powerLevel: 50,
-                                        normalizedPowerLevel: 50))
+                                        normalizedPowerLevel: 50,
+                                        isAccountOwner: false))
+    }
+
+    static var mockMe: RoomMemberProxyMock {
+        RoomMemberProxyMock(with: .init(userID: "me@matrix.org",
+                                        displayName: "Me",
+                                        avatarURL: URL.picturesDirectory,
+                                        membership: .join,
+                                        isNameAmbiguous: false,
+                                        powerLevel: 50,
+                                        normalizedPowerLevel: 50,
+                                        isAccountOwner: true))
     }
 }

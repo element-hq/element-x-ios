@@ -51,4 +51,8 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
     var normalizedPowerLevel: Int {
         Int(member.normalizedPowerLevel())
     }
+
+    var isAccountOwner: Bool {
+        member.isAccountUser()
+    }
 }

@@ -38,12 +38,30 @@ struct RoomMemberDetailsScreen: View {
                                 contentID: context.viewState.userID,
                                 avatarSize: .user(on: .memberDetails),
                                 imageProvider: context.imageProvider)
-                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
 
             Text(context.viewState.name)
                 .foregroundColor(.element.primaryContent)
                 .font(.element.title1Bold)
                 .multilineTextAlignment(.center)
+            Text(context.viewState.userID)
+                .foregroundColor(.element.secondaryContent)
+                .font(.element.body)
+                .multilineTextAlignment(.center)
+
+            if let permalink = context.viewState.permalink {
+                HStack(spacing: 32) {
+                    Button { context.send(viewAction: .copyUserLink) } label: {
+                        Image(systemName: "link")
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
+
+                    ShareLink(item: permalink) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
+                }
+                .padding(.top, 32)
+            }
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
@@ -57,12 +75,22 @@ struct RoomMemberDetailsScreen: View {
 // MARK: - Previews
 
 struct RoomMemberDetails_Previews: PreviewProvider {
-    static let viewModel = {
+    static let otherUserViewModel = {
         let member = RoomMemberProxyMock.mockDan
+        return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+    }()
+
+    static let accountOwnerViewModel = {
+        let member = RoomMemberProxyMock.mockMe
         return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
     
     static var previews: some View {
-        RoomMemberDetailsScreen(context: viewModel.context)
+        Group {
+            RoomMemberDetailsScreen(context: otherUserViewModel.context)
+                .previewDisplayName("Other User")
+            RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
+                .previewDisplayName("Account Owner")
+        }
     }
 }

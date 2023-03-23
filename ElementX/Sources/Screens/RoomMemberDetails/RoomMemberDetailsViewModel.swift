@@ -22,7 +22,11 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
 
     init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
-        let initialViewState = RoomMemberDetailsViewState(userID: roomMemberProxy.userID, name: roomMemberProxy.displayName ?? "", avatarURL: roomMemberProxy.avatarURL)
+        let initialViewState = RoomMemberDetailsViewState(userID: roomMemberProxy.userID,
+                                                          name: roomMemberProxy.displayName ?? "",
+                                                          avatarURL: roomMemberProxy.avatarURL,
+                                                          isAccountOwner: roomMemberProxy.isAccountOwner,
+                                                          permalink: roomMemberProxy.permalink)
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
     }
     
@@ -31,6 +35,9 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     override func process(viewAction: RoomMemberDetailsViewAction) async {
         switch viewAction {
         case .ignore:
+            // TODO: Implement
+            break
+        case .copyUserLink:
             // TODO: Implement
             break
         }

@@ -22,8 +22,11 @@ struct RoomMemberDetailsViewState: BindableState {
     let userID: String
     let name: String
     let avatarURL: URL?
+    let isAccountOwner: Bool
+    let permalink: URL?
 }
 
 enum RoomMemberDetailsViewAction {
     case ignore
+    case copyUserLink
 }
