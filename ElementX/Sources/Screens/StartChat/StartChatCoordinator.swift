@@ -18,6 +18,7 @@ import SwiftUI
 
 struct StartChatCoordinatorParameters {
     let userSession: UserSessionProtocol
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
 
 enum StartChatCoordinatorAction {
@@ -34,7 +35,7 @@ final class StartChatCoordinator: CoordinatorProtocol {
     init(parameters: StartChatCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StartChatViewModel(userSession: parameters.userSession)
+        viewModel = StartChatViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
@@ -44,29 +45,9 @@ final class StartChatCoordinator: CoordinatorProtocol {
             case .close:
                 self.callback?(.close)
             case .createRoom:
-                // TODO: start create room flow
                 break
-            case .userSelected(let user):
-                Task {
-                    let currentDirectRoom = await self.parameters.userSession.clientProxy.currentDirectRoomWithUser(user.userId)
-                    switch currentDirectRoom {
-                    case .success(let roomId):
-                        if let roomId {
-                            self.callback?(.openRoom(withIdentifier: roomId))
-                        } else {
-                            // this flow will likely be in a dummy empty Room after sending the first message
-                            let result = await self.parameters.userSession.clientProxy.createDirectRoom(with: user)
-                            switch result {
-                            case .success(let roomId):
-                                self.callback?(.openRoom(withIdentifier: roomId))
-                            case .failure(let failure):
-                                self.viewModel.displayError(failure)
-                            }
-                        }
-                    case .failure(let failure):
-                        self.viewModel.displayError(failure)
-                    }
-                }
+            case .openRoom(let identifier):
+                self.callback?(.openRoom(withIdentifier: identifier))
             }
         }
     }

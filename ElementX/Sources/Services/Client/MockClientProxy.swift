@@ -43,11 +43,11 @@ class MockClientProxy: ClientProxyProtocol {
     
     func stopSync() { }
     
-    func currentDirectRoomWithUser(_ userId: String) async -> Result<String?, ClientProxyError> {
+    func directRoomForUserIdentifier(_ userId: String) async -> Result<String?, ClientProxyError> {
         .failure(.failedRetrievingDirectRoom)
     }
     
-    func createDirectRoom(with user: RoomMemberProxy) async -> Result<String, ClientProxyError> {
+    func createDirectRoom(with userId: String) async -> Result<String, ClientProxyError> {
         .failure(.failedCreatingRoom)
     }
     

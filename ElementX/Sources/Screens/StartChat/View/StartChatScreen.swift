@@ -22,7 +22,7 @@ struct StartChatScreen: View {
     var body: some View {
         Form {
             if context.viewState.isSearching {
-                searchedUsersSection
+                searchResultsSection
             } else {
                 createRoomSection
                 inviteFriendsSection
@@ -65,25 +65,26 @@ struct StartChatScreen: View {
     
     private var suggestionsSection: some View {
         Section {
-            ForEach(context.viewState.suggestedUsers, id: \.userID) { user in
-                StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+            ForEach(context.viewState.suggestedUsers, id: \.userId) { user in
+                Button { context.send(viewAction: .selectUser(user)) } label: {
+                    StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+                }
             }
         } header: {
             Text(ElementL10n.directRoomUserListSuggestionsTitle)
         }
-        .formSectionStyle()
+        .listSectionStyle()
     }
     
-    private var searchedUsersSection: some View {
+    private var searchResultsSection: some View {
         Section {
-            ForEach(context.viewState.searchedUsers, id: \.userId) { user in
-                StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
-                    .onTapGesture {
-                        context.send(viewAction: .userSelected(user))
-                    }
+            ForEach(context.viewState.searchResults, id: \.userId) { user in
+                Button { context.send(viewAction: .selectUser(user)) } label: {
+                    StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+                }
             }
         }
-        .formSectionStyle()
+        .listSectionStyle()
     }
     
     private var closeButton: some View {
@@ -110,7 +111,7 @@ struct StartChat_Previews: PreviewProvider {
     static var previews: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = StartChatViewModel(userSession: userSession)
+        let regularViewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
         NavigationView {
             StartChatScreen(context: regularViewModel.context)
                 .tint(.element.accent)

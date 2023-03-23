@@ -260,7 +260,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: startChatNavigationStackCoordinator)
         
-        let parameters = StartChatCoordinatorParameters(userSession: userSession)
+        let parameters = StartChatCoordinatorParameters(userSession: userSession, userIndicatorController: userIndicatorController)
         let coordinator = StartChatCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] action in
             guard let self else { return }
@@ -269,7 +269,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
             case .openRoom(let identifier):
                 self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                self.presentRoomWithIdentifier(identifier)
+                self.stateMachine.processEvent(.selectRoom(roomId: identifier))
             }
         }
 

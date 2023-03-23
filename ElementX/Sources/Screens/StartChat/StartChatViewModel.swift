@@ -23,12 +23,14 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private let userSession: UserSessionProtocol
     
     var callback: ((StartChatViewModelAction) -> Void)?
-
-    init(userSession: UserSessionProtocol) {
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    
+    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.userSession = userSession
+        self.userIndicatorController = userIndicatorController
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
-        start()
+        setupBindings()
     }
     
     // MARK: - Public
@@ -40,10 +42,22 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .createRoom:
             callback?(.createRoom)
         case .inviteFriends:
-            // TODO: start invite people flow
             break
-        case .userSelected(let user):
-            callback?(.userSelected(user))
+        case .selectUser(let user):
+            showLoadingIndicator()
+            Task {
+                let currentDirectRoom = await userSession.clientProxy.directRoomForUserIdentifier(user.userId)
+                switch currentDirectRoom {
+                case .success(.some(let roomId)):
+                    self.hideLoadingIndicator()
+                    self.callback?(.openRoom(withIdentifier: roomId))
+                case .success(nil):
+                    await self.createDirectRoom(with: user)
+                case .failure(let failure):
+                    self.hideLoadingIndicator()
+                    self.displayError(failure)
+                }
+            }
         }
     }
     
@@ -53,7 +67,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: ElementL10n.dialogTitleError,
                                                  message: ElementL10n.retrievingDirectRoomError)
-        case .failedCreatingRoom: // this will likely be in the Room's screen while sending the first message
+        case .failedCreatingRoom:
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: ElementL10n.dialogTitleError,
                                                  message: ElementL10n.retrievingDirectRoomError)
@@ -64,17 +78,44 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     // MARK: - Private
     
-    private func start() {
+    private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
             .sink(receiveValue: { [weak self] searchQuery in
                 if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-                    self?.state.searchedUsers = [.init(id: searchQuery)]
+                    self?.state.searchResults = [UserProfileProxy(userId: searchQuery, displayName: nil, avatarURL: nil)]
                 } else {
-                    self?.state.searchedUsers = []
+                    self?.state.searchResults = []
                 }
             })
             .store(in: &cancellables)
+    }
+    
+    private func createDirectRoom(with user: UserProfileProxyProtocol) async {
+        showLoadingIndicator()
+        let result = await userSession.clientProxy.createDirectRoom(with: user.userId)
+        hideLoadingIndicator()
+        switch result {
+        case .success(let roomId):
+            callback?(.openRoom(withIdentifier: roomId))
+        case .failure(let failure):
+            displayError(failure)
+        }
+    }
+    
+    // MARK: Loading indicator
+    
+    static let loadingIndicatorIdentifier = "StartChatLoading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                               type: .modal,
+                                                               title: ElementL10n.loading,
+                                                               persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }
