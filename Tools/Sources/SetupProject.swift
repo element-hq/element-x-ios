@@ -15,7 +15,6 @@ struct SetupProject: ParsableCommand {
     }
 
     func brewBundleInstall() throws {
-        // required for swift-outdated
         try Utilities.zsh("brew install xcodegen swiftgen swiftlint swiftformat git-lfs sourcery kiliankoe/formulae/swift-outdated")
     }
 
