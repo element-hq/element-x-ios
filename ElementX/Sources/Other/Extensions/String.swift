@@ -61,4 +61,8 @@ extension String {
         }
         return mutableString.trimmingCharacters(in: .whitespaces)
     }
+
+    var capitalizedFirstLetter: String {
+        prefix(1).uppercased() + lowercased().dropFirst()
+    }
 }

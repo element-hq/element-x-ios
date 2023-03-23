@@ -20,7 +20,7 @@ typealias RoomMemberDetailsViewModelType = StateStoreViewModel<RoomMemberDetails
 
 class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDetailsViewModelProtocol {
     let roomMemberProxy: RoomMemberProxyProtocol
-    
+
     var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
 
     init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
@@ -29,7 +29,8 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
                                                           name: roomMemberProxy.displayName ?? "",
                                                           avatarURL: roomMemberProxy.avatarURL,
                                                           isAccountOwner: roomMemberProxy.isAccountOwner,
-                                                          permalink: roomMemberProxy.permalink)
+                                                          permalink: roomMemberProxy.permalink,
+                                                          bindings: .init())
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
     }
     
@@ -37,11 +38,12 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     
     override func process(viewAction: RoomMemberDetailsViewAction) async {
         switch viewAction {
-        case .ignore:
-            // TODO: Implement
-            break
+        case .ignoreTapped:
+            state.bindings.blockUserAlertItem = .init()
         case .copyUserLink:
             copyUserLink()
+        case .ignoreConfirmed:
+            await ignore()
         }
     }
 
@@ -54,5 +56,9 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         } else {
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.unknownError))
         }
+    }
+
+    private func ignore() async {
+        // TODO: Implement
     }
 }

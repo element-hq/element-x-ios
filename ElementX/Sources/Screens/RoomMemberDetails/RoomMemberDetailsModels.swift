@@ -24,9 +24,24 @@ struct RoomMemberDetailsViewState: BindableState {
     let avatarURL: URL?
     let isAccountOwner: Bool
     let permalink: URL?
+
+    var bindings: RoomMemberDetailsViewStateBindings
+}
+
+struct RoomMemberDetailsViewStateBindings {
+    var blockUserAlertItem: BlockUserAlertItem?
+}
+
+struct BlockUserAlertItem: AlertItem {
+    // TODO: Localise strings (for the first you can reuse the one in the screen)
+    let title = "Block User"
+    let confirmationTitle = "Block"
+    let cancelTitle = ElementL10n.actionCancel
+    let description = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."
 }
 
 enum RoomMemberDetailsViewAction {
-    case ignore
+    case ignoreTapped
+    case ignoreConfirmed
     case copyUserLink
 }

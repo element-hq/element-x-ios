@@ -29,6 +29,7 @@ struct RoomMemberDetailsScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
+        .alert(item: $context.blockUserAlertItem, actions: blockUserAlertActions(_:), message: blockUserAlertMessage(_:))
     }
     
     // MARK: - Private
@@ -55,14 +56,14 @@ struct RoomMemberDetailsScreen: View {
                     Button { context.send(viewAction: .copyUserLink) } label: {
                         Image(systemName: "link")
                     }
-                    // TODO: Set right copy
+                    // TODO: Set this copy as an action
                     .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
 
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    // TODO: Set right copy
-                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
+                    // TODO: Localize copy
+                    .buttonStyle(FormActionButtonStyle(title: "Share Link"))
                 }
                 .padding(.top, 32)
             }
@@ -72,7 +73,28 @@ struct RoomMemberDetailsScreen: View {
     }
 
     private var blockUserSection: some View {
-        EmptyView()
+        Section {
+            Button(role: .destructive) {
+                context.send(viewAction: .ignoreTapped)
+            } label: {
+                // TODO: Set right copy
+                Label("Block user", systemImage: "slash.circle")
+            }
+            .buttonStyle(FormButtonStyle(accessory: nil))
+        }
+        .formSectionStyle()
+    }
+
+    @ViewBuilder
+    private func blockUserAlertActions(_ item: BlockUserAlertItem) -> some View {
+        Button(item.cancelTitle, role: .cancel) { }
+        Button(item.confirmationTitle, role: .destructive) {
+            context.send(viewAction: .ignoreConfirmed)
+        }
+    }
+
+    private func blockUserAlertMessage(_ item: BlockUserAlertItem) -> some View {
+        Text(item.title)
     }
 }
 
