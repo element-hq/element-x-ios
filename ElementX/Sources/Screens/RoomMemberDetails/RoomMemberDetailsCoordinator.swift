@@ -16,42 +16,26 @@
 
 import SwiftUI
 
-struct RoomMemberDetailsCoordinatorParameters {
-    let promptType: RoomMemberDetailsPromptType
-}
+struct RoomMemberDetailsCoordinatorParameters { }
 
-enum RoomMemberDetailsCoordinatorAction {
-    case accept
-    case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
-}
+enum RoomMemberDetailsCoordinatorAction { }
 
 final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
     private let parameters: RoomMemberDetailsCoordinatorParameters
     private var viewModel: RoomMemberDetailsViewModelProtocol
-    
+
     var callback: ((RoomMemberDetailsCoordinatorAction) -> Void)?
-    
+
     init(parameters: RoomMemberDetailsCoordinatorParameters) {
         self.parameters = parameters
-        
-        viewModel = RoomMemberDetailsViewModel(promptType: parameters.promptType)
+
+        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: RoomMemberProxyMock.mockAlice, mediaProvider: MockMediaProvider())
     }
-    
+
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .accept:
-                MXLog.info("User accepted the prompt.")
-                self.callback?(.accept)
-            case .cancel:
-                self.callback?(.cancel)
-            }
-        }
+//        viewModel.callback = { [weak self] action in }
     }
-        
+
     func toPresentable() -> AnyView {
         AnyView(RoomMemberDetailsScreen(context: viewModel.context))
     }

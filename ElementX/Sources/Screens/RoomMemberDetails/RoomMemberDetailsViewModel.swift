@@ -21,22 +21,12 @@ typealias RoomMemberDetailsViewModelType = StateStoreViewModel<RoomMemberDetails
 class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDetailsViewModelProtocol {
     var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
 
-    init(promptType: RoomMemberDetailsPromptType, initialCount: Int = 0) {
-        super.init(initialViewState: RoomMemberDetailsViewState(promptType: promptType, count: 0))
+    init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
+        let initialViewState = RoomMemberDetailsViewState(userID: roomMemberProxy.userID, name: roomMemberProxy.displayName ?? "", avatarURL: roomMemberProxy.avatarURL)
+        super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
     }
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMemberDetailsViewAction) async {
-        switch viewAction {
-        case .accept:
-            callback?(.accept)
-        case .cancel:
-            callback?(.cancel)
-        case .incrementCount:
-            state.count += 1
-        case .decrementCount:
-            state.count -= 1
-        }
-    }
+    override func process(viewAction: RoomMemberDetailsViewAction) async { }
 }

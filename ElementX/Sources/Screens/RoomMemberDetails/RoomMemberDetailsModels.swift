@@ -16,50 +16,12 @@
 
 import Foundation
 
-enum RoomMemberDetailsPromptType {
-    case regular
-    case upgrade
-}
-
-extension RoomMemberDetailsPromptType: Identifiable, CaseIterable {
-    var id: Self { self }
-    
-    var title: String {
-        switch self {
-        case .regular:
-            return "Make this chat public?"
-        case .upgrade:
-            return "Privacy warning"
-        }
-    }
-    
-    var imageSystemName: String {
-        switch self {
-        case .regular:
-            return "app.gift"
-        case .upgrade:
-            return "shield"
-        }
-    }
-}
-
-enum RoomMemberDetailsViewModelAction {
-    case accept
-    case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
-}
+enum RoomMemberDetailsViewModelAction { }
 
 struct RoomMemberDetailsViewState: BindableState {
-    var promptType: RoomMemberDetailsPromptType
-    var count: Int
+    let userID: String
+    let name: String
+    let avatarURL: URL?
 }
 
-enum RoomMemberDetailsViewAction {
-    case incrementCount
-    case decrementCount
-    case accept
-    case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
-}
+enum RoomMemberDetailsViewAction { }

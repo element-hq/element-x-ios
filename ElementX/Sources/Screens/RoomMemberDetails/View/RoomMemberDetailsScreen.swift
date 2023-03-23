@@ -17,88 +17,75 @@
 import SwiftUI
 
 struct RoomMemberDetailsScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
-    }
-    
     @ObservedObject var context: RoomMemberDetailsViewModel.Context
     
     var body: some View {
-        ScrollView {
-            mainContent
-                .padding(.top, 50)
-                .padding(.horizontal)
-                .readableFrame()
+        Form {
+            headerSection
+
+            blockUserSection
         }
-        .safeAreaInset(edge: .bottom) {
-            buttons
-                .padding(.horizontal)
-                .padding(.vertical)
-                .readableFrame()
-                .background(Color.element.system)
-        }
+        .scrollContentBackground(.hidden)
+        .background(Color.element.formBackground.ignoresSafeArea())
+//        .alert(item: $context.alertInfo) { $0.alert }
     }
     
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
-        VStack(spacing: 36) {
-            Text(context.viewState.promptType.title)
-                .font(.element.title2Bold)
-                .multilineTextAlignment(.center)
+    // MARK: - Private
+
+    private var headerSection: some View {
+        VStack(spacing: 8.0) {
+            LoadableAvatarImage(url: context.viewState.avatarURL,
+                                name: context.viewState.name,
+                                contentID: context.viewState.userID,
+                                avatarSize: .user(on: .memberDetails),
+                                imageProvider: context.imageProvider)
+                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
+
+            Text(context.viewState.name)
                 .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("title")
-            
-            Image(systemName: context.viewState.promptType.imageSystemName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100)
-            
-            HStack {
-                Text("Counter: \(context.viewState.count)")
-                    .font(.element.body)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(counterColor)
-                
-                Button("−") {
-                    context.send(viewAction: .decrementCount)
-                }
-                .buttonStyle(.elementGhost())
-                
-                Button("+") {
-                    context.send(viewAction: .incrementCount)
-                }
-                .buttonStyle(.elementGhost())
-            }
+                .font(.element.title1Bold)
+                .multilineTextAlignment(.center)
+
+//            if let canonicalAlias = context.viewState.canonicalAlias {
+//                Text(canonicalAlias)
+//                    .foregroundColor(.element.secondaryContent)
+//                    .font(.element.body)
+//                    .multilineTextAlignment(.center)
+//            }
+//
+//            if let permalink = context.viewState.permalink {
+//                HStack(spacing: 32) {
+//                    Button { context.send(viewAction: .copyRoomLink) } label: {
+//                        Image(systemName: "link")
+//                    }
+//                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
+//
+//                    ShareLink(item: permalink) {
+//                        Image(systemName: "square.and.arrow.up")
+//                    }
+//                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
+//                }
+//                .padding(.top, 32)
+//            }
         }
+        .frame(maxWidth: .infinity, alignment: .center)
+        .listRowBackground(Color.clear)
     }
-    
-    /// The action buttons shown at the bottom of the view.
-    var buttons: some View {
-        VStack {
-            Button { context.send(viewAction: .accept) } label: {
-                Text("Accept")
-            }
-            .buttonStyle(.elementAction(.xLarge))
-            
-            Button { context.send(viewAction: .cancel) } label: {
-                Text("Cancel")
-                    .padding(.vertical, 12)
-            }
-        }
+
+    private var blockUserSection: some View {
+        EmptyView()
     }
 }
 
 // MARK: - Previews
 
 struct RoomMemberDetails_Previews: PreviewProvider {
-    static let regularViewModel = RoomMemberDetailsViewModel(promptType: .regular)
-    static let upgradeViewModel = RoomMemberDetailsViewModel(promptType: .upgrade)
+    static let viewModel = {
+        let member = RoomMemberProxyMock.mockAlice
+        return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+    }()
+    
     static var previews: some View {
-        RoomMemberDetailsScreen(context: regularViewModel.context)
-            .previewDisplayName("Regular")
-        RoomMemberDetailsScreen(context: upgradeViewModel.context)
-            .previewDisplayName("Upgrade")
+        RoomMemberDetailsScreen(context: viewModel.context)
     }
 }
