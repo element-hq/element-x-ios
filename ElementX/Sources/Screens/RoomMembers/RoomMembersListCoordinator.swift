@@ -17,20 +17,23 @@
 import SwiftUI
 
 struct RoomMembersListCoordinatorParameters {
+    let navigationStackCoordinator: NavigationStackCoordinator
     let mediaProvider: MediaProviderProtocol
     let members: [RoomMemberProxyProtocol]
 }
 
-enum RoomMembersListCoordinatorAction {
-    case cancel
-}
+enum RoomMembersListCoordinatorAction { }
 
 final class RoomMembersListCoordinator: CoordinatorProtocol {
+    private let parameters: RoomMembersListCoordinatorParameters
     private var viewModel: RoomMembersListViewModelProtocol
+    private var navigationStackCoordinator: NavigationStackCoordinator { parameters.navigationStackCoordinator }
     
     var callback: ((RoomMembersListCoordinatorAction) -> Void)?
     
     init(parameters: RoomMembersListCoordinatorParameters) {
+        self.parameters = parameters
+
         viewModel = RoomMembersListViewModel(mediaProvider: parameters.mediaProvider,
                                              members: parameters.members)
     }
@@ -40,13 +43,22 @@ final class RoomMembersListCoordinator: CoordinatorProtocol {
             guard let self else { return }
             
             switch action {
-            case .cancel:
-                self.callback?(.cancel)
+            case let .selectMember(member):
+                self.selectMember(member)
             }
         }
     }
         
     func toPresentable() -> AnyView {
         AnyView(RoomMembersListScreen(context: viewModel.context))
+    }
+
+    // MARK: - Private
+
+    private func selectMember(_ member: RoomMemberProxyProtocol) {
+        let parameters = RoomMemberDetailsCoordinatorParameters(roomMemberProxy: member, mediaProvider: parameters.mediaProvider)
+        let coordinator = RoomMemberDetailsCoordinator(parameters: parameters)
+
+        navigationStackCoordinator.push(coordinator)
     }
 }

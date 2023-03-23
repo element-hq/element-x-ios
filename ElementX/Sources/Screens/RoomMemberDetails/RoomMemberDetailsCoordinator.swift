@@ -16,7 +16,10 @@
 
 import SwiftUI
 
-struct RoomMemberDetailsCoordinatorParameters { }
+struct RoomMemberDetailsCoordinatorParameters {
+    let roomMemberProxy: RoomMemberProxyProtocol
+    let mediaProvider: MediaProviderProtocol
+}
 
 enum RoomMemberDetailsCoordinatorAction { }
 
@@ -29,7 +32,7 @@ final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
     init(parameters: RoomMemberDetailsCoordinatorParameters) {
         self.parameters = parameters
 
-        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: RoomMemberProxyMock.mockAlice, mediaProvider: MockMediaProvider())
+        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: parameters.roomMemberProxy, mediaProvider: parameters.mediaProvider)
     }
 
     func start() {

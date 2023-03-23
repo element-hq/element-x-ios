@@ -63,12 +63,10 @@ final class RoomDetailsCoordinator: CoordinatorProtocol {
     }
     
     private func presentRoomMembersList(_ members: [RoomMemberProxyProtocol]) {
-        let params = RoomMembersListCoordinatorParameters(mediaProvider: parameters.mediaProvider,
+        let params = RoomMembersListCoordinatorParameters(navigationStackCoordinator: navigationStackCoordinator,
+                                                          mediaProvider: parameters.mediaProvider,
                                                           members: members)
         let coordinator = RoomMembersListCoordinator(parameters: params)
-        coordinator.callback = { [weak self] _ in
-            self?.navigationStackCoordinator.pop()
-        }
         
         navigationStackCoordinator.push(coordinator)
     }

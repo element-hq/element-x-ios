@@ -17,7 +17,7 @@
 import Foundation
 
 enum RoomMembersListViewModelAction {
-    case cancel
+    case selectMember(_ member: RoomMemberProxyProtocol)
 }
 
 struct RoomMembersListViewState: BindableState {
