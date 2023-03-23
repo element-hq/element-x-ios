@@ -30,6 +30,7 @@ struct RoomMemberDetailsScreen: View {
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
         .alert(item: $context.blockUserAlertItem, actions: blockUserAlertActions(_:), message: blockUserAlertMessage(_:))
+        .errorAlert(item: $context.errorAlert)
     }
     
     // MARK: - Private
@@ -74,13 +75,23 @@ struct RoomMemberDetailsScreen: View {
 
     private var blockUserSection: some View {
         Section {
-            Button(role: .destructive) {
-                context.send(viewAction: .ignoreTapped)
-            } label: {
-                // TODO: Set right copy
-                Label("Block user", systemImage: "slash.circle")
+            if context.viewState.isIgnored {
+                Button {
+                    context.send(viewAction: .unblockTapped)
+                } label: {
+                    // TODO: Set right copy
+                    Label("Unblock user", systemImage: "slash.circle")
+                }
+                .buttonStyle(FormButtonStyle(accessory: nil))
+            } else {
+                Button(role: .destructive) {
+                    context.send(viewAction: .blockTapped)
+                } label: {
+                    // TODO: Set right copy
+                    Label("Block user", systemImage: "slash.circle")
+                }
+                .buttonStyle(FormButtonStyle(accessory: nil))
             }
-            .buttonStyle(FormButtonStyle(accessory: nil))
         }
         .formSectionStyle()
     }
@@ -89,12 +100,12 @@ struct RoomMemberDetailsScreen: View {
     private func blockUserAlertActions(_ item: BlockUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle, role: .destructive) {
-            context.send(viewAction: .ignoreConfirmed)
+            context.send(viewAction: .blockConfirmed)
         }
     }
 
     private func blockUserAlertMessage(_ item: BlockUserAlertItem) -> some View {
-        Text(item.title)
+        Text(item.description)
     }
 }
 
@@ -110,6 +121,11 @@ struct RoomMemberDetails_Previews: PreviewProvider {
         let member = RoomMemberProxyMock.mockMe
         return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
+
+    static let ignoredUserViewModel = {
+        let member = RoomMemberProxyMock.mockIgnored
+        return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
+    }()
     
     static var previews: some View {
         Group {
@@ -117,6 +133,8 @@ struct RoomMemberDetails_Previews: PreviewProvider {
                 .previewDisplayName("Other User")
             RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
                 .previewDisplayName("Account Owner")
+            RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
+                .previewDisplayName("Ignored User")
         }
     }
 }

@@ -17,6 +17,12 @@
 import Foundation
 import MatrixRustSDK
 
+enum RoomMemberProxyError: Error {
+    case ignoreUserFailed
+    case unignoreUserFailed
+}
+
+@MainActor
 // sourcery: AutoMockable
 protocol RoomMemberProxyProtocol {
     var userID: String { get }
@@ -27,6 +33,10 @@ protocol RoomMemberProxyProtocol {
     var powerLevel: Int { get }
     var normalizedPowerLevel: Int { get }
     var isAccountOwner: Bool { get }
+    var isIgnored: Bool { get }
+
+    func blockUser() async -> Result<Void, RoomMemberProxyError>
+    func unblockUser() async -> Result<Void, RoomMemberProxyError>
 }
 
 extension RoomMemberProxyProtocol {

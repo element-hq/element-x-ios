@@ -43,3 +43,19 @@ extension View {
         return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions)
     }
 }
+
+// Only for Alerts that display a simple error message with a single button
+struct ErrorAlertItem: AlertItem {
+    let title: String
+    let message: String
+}
+
+extension View {
+    func errorAlert(item: Binding<ErrorAlertItem?>) -> some View {
+        alert(item: item, actions: { _ in
+            Button(ElementL10n.ok) { }
+        }, message: { item in
+            Text(item.message)
+        })
+    }
+}

@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,24 +16,22 @@
 
 import Foundation
 
-enum StartChatViewModelAction {
-    case close
-    case createRoom
-}
+extension Sequence {
+    func asyncMap<T>(_ transform: @escaping (Element) async -> T) async -> [T] {
+        await withTaskGroup(of: T.self) { group in
+            var transformedElements = [T]()
 
-struct StartChatViewState: BindableState {
-    var bindings = StartChatScreenViewStateBindings()
-    
-    // TODO: bind with real service, and mock data only in preview
-    var suggestedUsers: [RoomMemberProxyMock]
-}
+            for element in self {
+                group.addTask {
+                    await transform(element)
+                }
+            }
 
-struct StartChatScreenViewStateBindings {
-    var searchQuery = ""
-}
+            for await transformedElement in group {
+                transformedElements.append(transformedElement)
+            }
 
-enum StartChatViewAction {
-    case close
-    case createRoom
-    case inviteFriends
+            return transformedElements
+        }
+    }
 }

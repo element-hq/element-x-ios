@@ -24,12 +24,14 @@ struct RoomMemberDetailsViewState: BindableState {
     let avatarURL: URL?
     let isAccountOwner: Bool
     let permalink: URL?
+    var isIgnored: Bool
 
     var bindings: RoomMemberDetailsViewStateBindings
 }
 
 struct RoomMemberDetailsViewStateBindings {
     var blockUserAlertItem: BlockUserAlertItem?
+    var errorAlert: ErrorAlertItem?
 }
 
 struct BlockUserAlertItem: AlertItem {
@@ -41,7 +43,8 @@ struct BlockUserAlertItem: AlertItem {
 }
 
 enum RoomMemberDetailsViewAction {
-    case ignoreTapped
-    case ignoreConfirmed
+    case unblockTapped
+    case blockTapped
+    case blockConfirmed
     case copyUserLink
 }

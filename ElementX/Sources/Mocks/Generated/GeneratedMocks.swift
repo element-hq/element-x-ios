@@ -83,7 +83,46 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingIsAccountOwner = value }
     }
     var underlyingIsAccountOwner: Bool!
+    var isIgnored: Bool {
+        get { return underlyingIsIgnored }
+        set(value) { underlyingIsIgnored = value }
+    }
+    var underlyingIsIgnored: Bool!
 
+    //MARK: - blockUser
+
+    var blockUserCallsCount = 0
+    var blockUserCalled: Bool {
+        return blockUserCallsCount > 0
+    }
+    var blockUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var blockUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+
+    func blockUser() async -> Result<Void, RoomMemberProxyError> {
+        blockUserCallsCount += 1
+        if let blockUserClosure = blockUserClosure {
+            return await blockUserClosure()
+        } else {
+            return blockUserReturnValue
+        }
+    }
+    //MARK: - unblockUser
+
+    var unblockUserCallsCount = 0
+    var unblockUserCalled: Bool {
+        return unblockUserCallsCount > 0
+    }
+    var unblockUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var unblockUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+
+    func unblockUser() async -> Result<Void, RoomMemberProxyError> {
+        unblockUserCallsCount += 1
+        if let unblockUserClosure = unblockUserClosure {
+            return await unblockUserClosure()
+        } else {
+            return unblockUserReturnValue
+        }
+    }
 }
 class RoomProxyMock: RoomProxyProtocol {
     var id: String {

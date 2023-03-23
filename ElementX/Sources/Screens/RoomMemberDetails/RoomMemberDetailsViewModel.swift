@@ -30,6 +30,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
                                                           avatarURL: roomMemberProxy.avatarURL,
                                                           isAccountOwner: roomMemberProxy.isAccountOwner,
                                                           permalink: roomMemberProxy.permalink,
+                                                          isIgnored: roomMemberProxy.isIgnored,
                                                           bindings: .init())
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
     }
@@ -38,12 +39,14 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     
     override func process(viewAction: RoomMemberDetailsViewAction) async {
         switch viewAction {
-        case .ignoreTapped:
+        case .unblockTapped:
+            await unblockUser()
+        case .blockTapped:
             state.bindings.blockUserAlertItem = .init()
         case .copyUserLink:
             copyUserLink()
-        case .ignoreConfirmed:
-            await ignore()
+        case .blockConfirmed:
+            await blockUser()
         }
     }
 
@@ -58,7 +61,23 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         }
     }
 
-    private func ignore() async {
-        // TODO: Implement
+    private func blockUser() async {
+        switch await roomMemberProxy.blockUser() {
+        case .success:
+            state.isIgnored.toggle()
+        case .failure:
+            // TODO: Localise strings
+            state.bindings.errorAlert = .init(title: "Error", message: "Unknown Error")
+        }
+    }
+
+    private func unblockUser() async {
+        switch await roomMemberProxy.unblockUser() {
+        case .success:
+            state.isIgnored.toggle()
+        case .failure:
+            // TODO: Localise strings
+            state.bindings.errorAlert = .init(title: "Error", message: "Unknown Error")
+        }
     }
 }

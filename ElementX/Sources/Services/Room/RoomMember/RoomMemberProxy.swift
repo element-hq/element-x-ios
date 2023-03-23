@@ -18,9 +18,16 @@ import Foundation
 import MatrixRustSDK
 
 final class RoomMemberProxy: RoomMemberProxyProtocol {
+    private let backgroundTaskService: BackgroundTaskServiceProtocol
     private let member: RoomMemberProtocol
 
-    init(member: RoomMemberProtocol) {
+    private let backgroundAccountDataTaskName = "SendAccountDataEvent"
+    private var sendAccountDataEventBackgroundTask: BackgroundTaskProtocol?
+
+    private let userInitiatedDispatchQueue = DispatchQueue(label: "io.element.elementx.roommemberproxy.userinitiated", qos: .userInitiated)
+
+    init(member: RoomMemberProtocol, backgroundTaskService: BackgroundTaskServiceProtocol) {
+        self.backgroundTaskService = backgroundTaskService
         self.member = member
     }
 
@@ -54,5 +61,41 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
 
     var isAccountOwner: Bool {
         member.isAccountUser()
+    }
+
+    var isIgnored: Bool {
+        member.isIgnored()
+    }
+
+    func blockUser() async -> Result<Void, RoomMemberProxyError> {
+        sendAccountDataEventBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundAccountDataTaskName, isReusable: true)
+        defer {
+            sendAccountDataEventBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.member.ignore()
+                return .success(())
+            } catch {
+                return .failure(.ignoreUserFailed)
+            }
+        }
+    }
+
+    func unblockUser() async -> Result<Void, RoomMemberProxyError> {
+        sendAccountDataEventBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundAccountDataTaskName, isReusable: true)
+        defer {
+            sendAccountDataEventBackgroundTask?.stop()
+        }
+
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.member.unignore()
+                return .success(())
+            } catch {
+                return .failure(.unignoreUserFailed)
+            }
+        }
     }
 }

@@ -25,7 +25,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
 
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
-        super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: StartChatViewState(suggestedUsers: [.mockAlice, .mockBob, .mockCharlie]), imageProvider: userSession.mediaProvider)
     }
     
     // MARK: - Public
