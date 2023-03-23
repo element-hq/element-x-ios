@@ -47,9 +47,7 @@
       "name" : "UITests"
     },
     "testTimeoutsEnabled" : true,
-    "uiTestingScreenshotsLifetime" : "keepNever",
-    "undefinedBehaviorSanitizerEnabled" : true,
-    "userAttachmentLifetime" : "keepNever"
+    "undefinedBehaviorSanitizerEnabled" : true
   },
   "testTargets" : [
     {
