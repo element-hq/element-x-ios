@@ -96,7 +96,7 @@ targets:
         if which sourcery >/dev/null; then
             sourcery --config Tools/Sourcery/sourcery_automockable_config.yml
         else
-            echo "warning: Sourcert not installed, run swift run tools setup-project"
+            echo "warning: Sourcery not installed, run swift run tools setup-project"
         fi
 
     postBuildScripts:
