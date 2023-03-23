@@ -28,5 +28,11 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMemberDetailsViewAction) async { }
+    override func process(viewAction: RoomMemberDetailsViewAction) async {
+        switch viewAction {
+        case .ignore:
+            // TODO: Implement
+            break
+        }
+    }
 }

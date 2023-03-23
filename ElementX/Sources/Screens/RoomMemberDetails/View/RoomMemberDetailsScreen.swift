@@ -27,7 +27,6 @@ struct RoomMemberDetailsScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
-//        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     // MARK: - Private
@@ -45,28 +44,6 @@ struct RoomMemberDetailsScreen: View {
                 .foregroundColor(.element.primaryContent)
                 .font(.element.title1Bold)
                 .multilineTextAlignment(.center)
-
-//            if let canonicalAlias = context.viewState.canonicalAlias {
-//                Text(canonicalAlias)
-//                    .foregroundColor(.element.secondaryContent)
-//                    .font(.element.body)
-//                    .multilineTextAlignment(.center)
-//            }
-//
-//            if let permalink = context.viewState.permalink {
-//                HStack(spacing: 32) {
-//                    Button { context.send(viewAction: .copyRoomLink) } label: {
-//                        Image(systemName: "link")
-//                    }
-//                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
-//
-//                    ShareLink(item: permalink) {
-//                        Image(systemName: "square.and.arrow.up")
-//                    }
-//                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
-//                }
-//                .padding(.top, 32)
-//            }
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
@@ -81,7 +58,7 @@ struct RoomMemberDetailsScreen: View {
 
 struct RoomMemberDetails_Previews: PreviewProvider {
     static let viewModel = {
-        let member = RoomMemberProxyMock.mockAlice
+        let member = RoomMemberProxyMock.mockDan
         return RoomMemberDetailsViewModel(roomMemberProxy: member, mediaProvider: MockMediaProvider())
     }()
     

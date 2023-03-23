@@ -24,4 +24,6 @@ struct RoomMemberDetailsViewState: BindableState {
     let avatarURL: URL?
 }
 
-enum RoomMemberDetailsViewAction { }
+enum RoomMemberDetailsViewAction {
+    case ignore
+}
