@@ -81,24 +81,7 @@ class NSELogger {
         }
         isConfigured = true
 
-        let configuration = MXLogConfiguration()
-        configuration.maxLogFilesCount = 10
-        configuration.subLogName = "nse"
-
-        #if DEBUG
-        setupTracing(configuration: .debug)
-        configuration.logLevel = .debug
-        #else
-        setupTracing(configuration: .release)
-        configuration.logLevel = .info
-        #endif
-
-        // Avoid redirecting NSLogs to files if we are attached to a debugger.
-        if isatty(STDERR_FILENO) == 0 {
-            configuration.redirectLogsToFiles = true
-        }
-
-        MXLog.configure(configuration)
+        MXLog.configure(target: "nse")
     }
 
     static func logMemory(with tag: String) {

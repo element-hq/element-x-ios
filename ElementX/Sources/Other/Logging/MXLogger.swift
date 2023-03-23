@@ -39,12 +39,14 @@ class MXLogger {
     ///   - redirectToFiles: `true` to enable the redirection.
     ///   - numberOfFiles: number of files to keep (default is 10).
     ///   - sizeLimit: size limit of log files in bytes. 0 means no limitation, the default value for other methods
-    static func redirectNSLog(toFiles redirectToFiles: Bool, numberOfFiles: UInt = 10, sizeLimit: UInt = 0) {
+    static func configure(redirectToFiles: Bool,
+                          maxLogFileCount: UInt,
+                          logFileSizeLimit: UInt) {
         if redirectToFiles {
             var tempLog = ""
             
             // Do a circular buffer based on X files
-            for index in (0...(numberOfFiles - 2)).reversed() {
+            for index in (0...(maxLogFileCount - 2)).reversed() {
                 rotateLog(at: index, tempLog: &tempLog)
             }
 
@@ -60,10 +62,10 @@ class MXLogger {
                 MXLog.info(tempLog)
             }
             
-            removeExtraFiles(from: numberOfFiles)
+            removeExtraFiles(from: maxLogFileCount)
             
-            if sizeLimit > 0 {
-                removeFiles(after: sizeLimit)
+            if logFileSizeLimit > 0 {
+                removeFiles(after: logFileSizeLimit)
             }
         } else if stderrSave > 0 {
             // Flush before restoring stderr

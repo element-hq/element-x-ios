@@ -80,6 +80,12 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
     // MARK: - Private
         
     fileprivate func updateRoomsWithDiffs(_ diffs: [SlidingSyncListRoomsListDiff]) {
+        let span = MXLog.createSpan("process_room_list_diffs")
+        span.enter()
+        defer {
+            span.exit()
+        }
+        
         MXLog.info("Received \(diffs.count) diffs")
         
         rooms = diffs

@@ -36,9 +36,8 @@ class LoggingTests: XCTestCase {
 
         let log = UUID().uuidString
 
-        let configuration = MXLogConfiguration()
-        configuration.redirectLogsToFiles = true
-        MXLog.configure(configuration)
+        MXLog.configure(redirectToFiles: true)
+        
         MXLog.info(log)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
@@ -56,9 +55,7 @@ class LoggingTests: XCTestCase {
         // When launching the app 5 times.
         let launchCount = 5
         for index in 0..<launchCount {
-            let configuration = MXLogConfiguration()
-            configuration.redirectLogsToFiles = true
-            MXLog.configure(configuration) // This call is only made at app launch.
+            MXLog.configure(redirectToFiles: true)
             MXLog.info("Launch \(index + 1)")
         }
         
@@ -73,14 +70,13 @@ class LoggingTests: XCTestCase {
         // Given a fresh launch with no logs.
         XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
+        MXLog.configure()
+        
         // When launching the app 10 times, with a maxLogCount of 5.
         let launchCount = 10
         let logFileCount = 5
         for index in 0..<launchCount {
-            let configuration = MXLogConfiguration()
-            configuration.maxLogFilesCount = UInt(logFileCount)
-            configuration.redirectLogsToFiles = true
-            MXLog.configure(configuration) // This call is only made at app launch.
+            MXLog.configure(redirectToFiles: true, maxLogFileCount: UInt(logFileCount))
             MXLog.info("Launch \(index + 1)")
         }
         
@@ -95,14 +91,13 @@ class LoggingTests: XCTestCase {
         // Given a fresh launch with no logs.
         XCTAssertTrue(MXLogger.logFiles.isEmpty)
         
+        MXLog.configure()
+        
         // When launching the app 10 times, with a max total log size of 25KB and logging ~5KB data each time.
         let launchCount = 10
-        let logFileSizeLimit = 25 * 1024
+        let logFileSizeLimit: UInt = 25 * 1024
         for index in 0..<launchCount {
-            let configuration = MXLogConfiguration()
-            configuration.logFilesSizeLimit = UInt(logFileSizeLimit)
-            configuration.redirectLogsToFiles = true
-            MXLog.configure(configuration) // This call is only made at app launch.
+            MXLog.configure(redirectToFiles: true, logFileSizeLimit: logFileSizeLimit)
             MXLog.info("Launch \(index + 1)")
             
             // Add ~5KB of logs
@@ -142,11 +137,9 @@ class LoggingTests: XCTestCase {
 
         let log = UUID().uuidString
 
-        let configuration = MXLogConfiguration()
-        configuration.logLevel = .error
-        configuration.redirectLogsToFiles = true
-        MXLog.configure(configuration)
-        MXLog.info(log)
+        MXLog.configure(redirectToFiles: true)
+        
+        MXLog.verbose(log)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
@@ -159,19 +152,17 @@ class LoggingTests: XCTestCase {
     func testSubLogName() {
         XCTAssert(MXLogger.logFiles.isEmpty)
 
-        let subLogName = "nse"
+        let target = "nse"
 
-        let configuration = MXLogConfiguration()
-        configuration.subLogName = subLogName
-        configuration.redirectLogsToFiles = true
-        MXLog.configure(configuration)
+        MXLog.configure(target: target, redirectToFiles: true)
+        
         MXLog.info(UUID().uuidString)
         guard let logFile = MXLogger.logFiles.first else {
             XCTFail(Constants.genericFailure)
             return
         }
 
-        XCTAssertTrue(logFile.lastPathComponent.contains(subLogName))
+        XCTAssertTrue(logFile.lastPathComponent.contains(target))
     }
     
     func testRoomSummaryContentIsRedacted() throws {
@@ -189,10 +180,9 @@ class LoggingTests: XCTestCase {
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)
-        let configuration = MXLogConfiguration()
-        configuration.logLevel = .info
-        configuration.redirectLogsToFiles = true
-        MXLog.configure(configuration)
+        
+        MXLog.configure(redirectToFiles: true)
+        
         MXLog.info(roomSummary)
         
         // Then the log file should not include the sensitive information
@@ -207,7 +197,6 @@ class LoggingTests: XCTestCase {
         XCTAssertFalse(content.contains(lastMessage))
     }
     
-    // swiftlint:disable:next function_body_length
     func testTimelineContentIsRedacted() throws {
         // Given timeline items that contain text
         let textAttributedString = "TextAttributed"
@@ -235,10 +224,9 @@ class LoggingTests: XCTestCase {
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)
-        let configuration = MXLogConfiguration()
-        configuration.logLevel = .info
-        configuration.redirectLogsToFiles = true
-        MXLog.configure(configuration)
+        
+        MXLog.configure(redirectToFiles: true)
+        
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)
         MXLog.info(emoteMessage)
@@ -294,10 +282,9 @@ class LoggingTests: XCTestCase {
         
         // When logging that value
         XCTAssert(MXLogger.logFiles.isEmpty)
-        let configuration = MXLogConfiguration()
-        configuration.logLevel = .info
-        configuration.redirectLogsToFiles = true
-        MXLog.configure(configuration)
+        
+        MXLog.configure(redirectToFiles: true)
+        
         MXLog.info(textMessage)
         MXLog.info(noticeMessage)
         MXLog.info(emoteMessage)

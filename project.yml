@@ -83,9 +83,6 @@ packages:
   PostHog:
     url: https://github.com/PostHog/posthog-ios
     minorVersion: 2.0.0
-  SwiftyBeaver:
-    url: https://github.com/SwiftyBeaver/SwiftyBeaver
-    minorVersion: 2.0.0
   SwiftState:
     url: https://github.com/ReactKit/SwiftState
     minorVersion: 6.0.0

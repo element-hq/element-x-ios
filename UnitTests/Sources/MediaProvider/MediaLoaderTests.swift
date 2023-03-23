@@ -129,10 +129,6 @@ private class MockMediaLoadingClient: ClientProtocol {
         fatalError()
     }
 
-    func searchUsers(searchTerm: String, limit: UInt64) throws -> MatrixRustSDK.SearchUsersResults {
-        fatalError()
-    }
-
     func unignoreUser(userId: String) throws {
         fatalError()
     }

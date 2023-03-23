@@ -33,7 +33,6 @@ targets:
 
     dependencies:
       - package: MatrixRustSDK
-      - package: SwiftyBeaver
       - package: KeychainAccess
       - package: Kingfisher
       - package: Collections
