@@ -19,9 +19,12 @@ import SwiftUI
 typealias RoomMemberDetailsViewModelType = StateStoreViewModel<RoomMemberDetailsViewState, RoomMemberDetailsViewAction>
 
 class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDetailsViewModelProtocol {
+    let roomMemberProxy: RoomMemberProxyProtocol
+    
     var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
 
     init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
+        self.roomMemberProxy = roomMemberProxy
         let initialViewState = RoomMemberDetailsViewState(userID: roomMemberProxy.userID,
                                                           name: roomMemberProxy.displayName ?? "",
                                                           avatarURL: roomMemberProxy.avatarURL,
@@ -38,8 +41,18 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
             // TODO: Implement
             break
         case .copyUserLink:
-            // TODO: Implement
-            break
+            copyUserLink()
+        }
+    }
+
+    // MARK: - Private
+
+    private func copyUserLink() {
+        if let userLink = state.permalink {
+            UIPasteboard.general.url = userLink
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.linkCopiedToClipboard))
+        } else {
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.unknownError))
         }
     }
 }

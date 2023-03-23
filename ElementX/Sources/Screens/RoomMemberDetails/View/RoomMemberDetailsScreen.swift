@@ -23,7 +23,9 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
 
-            blockUserSection
+            if !context.viewState.isAccountOwner {
+                blockUserSection
+            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -53,11 +55,13 @@ struct RoomMemberDetailsScreen: View {
                     Button { context.send(viewAction: .copyUserLink) } label: {
                         Image(systemName: "link")
                     }
+                    // TODO: Set right copy
                     .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
 
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
+                    // TODO: Set right copy
                     .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
                 }
                 .padding(.top, 32)

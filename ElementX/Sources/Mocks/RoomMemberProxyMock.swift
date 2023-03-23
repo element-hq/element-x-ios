@@ -43,7 +43,7 @@ extension RoomMemberProxyMock {
 
     // Mocks
     static var mockAlice: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userID: "alice@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "@alice:matrix.org",
                                         displayName: "Alice",
                                         avatarURL: nil,
                                         membership: .join,
@@ -54,7 +54,7 @@ extension RoomMemberProxyMock {
     }
 
     static var mockBob: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userID: "bob@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "@bob:matrix.org",
                                         displayName: "Bob",
                                         avatarURL: nil,
                                         membership: .join,
@@ -65,7 +65,7 @@ extension RoomMemberProxyMock {
     }
 
     static var mockCharlie: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userID: "charlie@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "@charlie:matrix.org",
                                         displayName: "Charlie",
                                         avatarURL: nil,
                                         membership: .join,
@@ -76,7 +76,7 @@ extension RoomMemberProxyMock {
     }
 
     static var mockDan: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userID: "dan@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "@dan:matrix.org",
                                         displayName: "Dan",
                                         avatarURL: URL.picturesDirectory,
                                         membership: .join,
@@ -87,7 +87,7 @@ extension RoomMemberProxyMock {
     }
 
     static var mockMe: RoomMemberProxyMock {
-        RoomMemberProxyMock(with: .init(userID: "me@matrix.org",
+        RoomMemberProxyMock(with: .init(userID: "@me:matrix.org",
                                         displayName: "Me",
                                         avatarURL: URL.picturesDirectory,
                                         membership: .join,
