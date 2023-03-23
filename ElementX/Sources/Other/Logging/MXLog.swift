@@ -71,7 +71,7 @@ public class MXLog: NSObject {
                                function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
-        logger.verbose(message(), file, function, line: line, context: context)
+        logger.verbose(message(), file: file, function: function, line: line, context: context)
     }
     
     public static func debug(_ message: @autoclosure () -> Any,
@@ -79,7 +79,7 @@ public class MXLog: NSObject {
                              function: String = #function,
                              line: Int = #line,
                              context: Any? = nil) {
-        logger.debug(message(), file, function, line: line, context: context)
+        logger.debug(message(), file: file, function: function, line: line, context: context)
     }
     
     public static func info(_ message: @autoclosure () -> Any,
@@ -87,7 +87,7 @@ public class MXLog: NSObject {
                             function: String = #function,
                             line: Int = #line,
                             context: Any? = nil) {
-        logger.info(message(), file, function, line: line, context: context)
+        logger.info(message(), file: file, function: function, line: line, context: context)
     }
     
     public static func warning(_ message: @autoclosure () -> Any,
@@ -95,7 +95,7 @@ public class MXLog: NSObject {
                                function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
-        logger.warning(message(), file, function, line: line, context: context)
+        logger.warning(message(), file: file, function: function, line: line, context: context)
     }
     
     /// Log error with additional details
@@ -108,7 +108,7 @@ public class MXLog: NSObject {
                              function: String = #function,
                              line: Int = #line,
                              context: Any? = nil) {
-        logger.error(message(), file, function, line: line, context: context)
+        logger.error(message(), file: file, function: function, line: line, context: context)
     }
     
     /// Log failure with additional details
@@ -124,7 +124,7 @@ public class MXLog: NSObject {
                                function: String = #function,
                                line: Int = #line,
                                context: Any? = nil) {
-        logger.error(message, file, function, line: line, context: context)
+        logger.error(message, file: file, function: function, line: line, context: context)
         #if DEBUG
         assertionFailure("\(message)")
         #endif
