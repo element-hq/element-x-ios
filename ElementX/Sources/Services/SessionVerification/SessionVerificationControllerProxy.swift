@@ -57,7 +57,6 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     
     init(sessionVerificationController: SessionVerificationController) {
         self.sessionVerificationController = sessionVerificationController
-        sessionVerificationController.setDelegate(delegate: WeakSessionVerificationControllerProxy(proxy: self))
     }
     
     deinit {
@@ -71,7 +70,9 @@ class SessionVerificationControllerProxy: SessionVerificationControllerProxyProt
     }
     
     func requestVerification() async -> Result<Void, SessionVerificationControllerProxyError> {
-        await Task.dispatch(on: .global()) {
+        sessionVerificationController.setDelegate(delegate: WeakSessionVerificationControllerProxy(proxy: self))
+        
+        return await Task.dispatch(on: .global()) {
             do {
                 try self.sessionVerificationController.requestVerification()
                 return .success(())
