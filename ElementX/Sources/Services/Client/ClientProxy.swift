@@ -58,6 +58,7 @@ class ClientProxy: ClientProxyProtocol {
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
     
     var allRoomsSlidingSyncView: SlidingSyncList?
+    var allRoomsViewProxy: SlidingSyncViewProxy?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
 
     private var loadCachedAvatarURLTask: Task<Void, Never>?
@@ -270,6 +271,7 @@ class ClientProxy: ClientProxyProtocol {
             // List observers need to be setup before calling build() on the SlidingSyncBuilder otherwise
             // cold cache state and count updates will be lost
             buildAndConfigureVisibleRoomsSlidingSyncView(visibleRoomsView: visibleRoomsView)
+            buildAndConfigureAllRoomsSlidingSyncView()
             
             let slidingSync = try slidingSyncBuilder
                 .addList(v: visibleRoomsView)
@@ -277,13 +279,13 @@ class ClientProxy: ClientProxyProtocol {
                 .coldCache(name: "ElementX")
                 .build()
             
+            // Don't forget to update the view proxies after building the slidingSync
             visibleRoomsViewProxy?.setSlidingSync(slidingSync: slidingSync)
+            allRoomsViewProxy?.setSlidingSync(slidingSync: slidingSync)
             
             slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
             
             self.slidingSync = slidingSync
-            
-            buildAndConfigureAllRoomsSlidingSyncView()
         } catch {
             MXLog.error("Failed building sliding sync with error: \(error)")
         }
@@ -331,14 +333,12 @@ class ClientProxy: ClientProxyProtocol {
             
             let allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsView)
             
-            if let slidingSync {
-                allRoomsViewProxy.setSlidingSync(slidingSync: slidingSync)
-            }
-            
             allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
                                                           eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
             
             allRoomsSlidingSyncView = allRoomsView
+            
+            self.allRoomsViewProxy = allRoomsViewProxy
             
         } catch {
             MXLog.error("Failed building the all rooms sliding sync view with error: \(error)")
