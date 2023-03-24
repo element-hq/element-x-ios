@@ -495,11 +495,11 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
     }
 }
 class UserProfileProxyMock: UserProfileProxyProtocol {
-    var userId: String {
-        get { return underlyingUserId }
-        set(value) { underlyingUserId = value }
+    var userID: String {
+        get { return underlyingUserID }
+        set(value) { underlyingUserID = value }
     }
-    var underlyingUserId: String!
+    var underlyingUserID: String!
     var displayName: String?
     var avatarURL: URL?
 

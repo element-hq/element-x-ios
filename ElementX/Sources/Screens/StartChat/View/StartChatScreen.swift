@@ -21,13 +21,11 @@ struct StartChatScreen: View {
     
     var body: some View {
         Form {
-            if context.viewState.isSearching {
-                searchResultsSection
-            } else {
+            if !context.viewState.isSearching {
                 createRoomSection
                 inviteFriendsSection
-                suggestionsSection
             }
+            usersSection
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -63,28 +61,20 @@ struct StartChatScreen: View {
         .formSectionStyle()
     }
     
-    private var suggestionsSection: some View {
+    private var usersSection: some View {
         Section {
-            ForEach(context.viewState.suggestedUsers, id: \.userId) { user in
+            ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .selectUser(user)) } label: {
                     StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
                 }
             }
         } header: {
-            Text(ElementL10n.directRoomUserListSuggestionsTitle)
-        }
-        .listSectionStyle()
-    }
-    
-    private var searchResultsSection: some View {
-        Section {
-            ForEach(context.viewState.searchResults, id: \.userId) { user in
-                Button { context.send(viewAction: .selectUser(user)) } label: {
-                    StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
-                }
+            if let title = context.viewState.usersSection.type.title {
+                Text(title)
             }
         }
-        .listSectionStyle()
+        .listRowSeparator(.automatic)
+        .formSectionStyle()
     }
     
     private var closeButton: some View {

@@ -24,17 +24,17 @@ struct StartChatSuggestedUserCell: View {
         HStack(spacing: 16) {
             LoadableAvatarImage(url: user.avatarURL,
                                 name: user.displayName,
-                                contentID: user.userId,
+                                contentID: user.userID,
                                 avatarSize: .user(on: .startChat),
                                 imageProvider: imageProvider)
                 .padding(.vertical, 10)
                 .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 4) {
-                Text(user.displayName ?? user.userId)
+                Text(user.displayName ?? user.userID)
                     .font(.element.title3)
                     .foregroundColor(.element.primaryContent)
                 if user.displayName != nil {
-                    Text(user.userId)
+                    Text(user.userID)
                         .font(.element.subheadline)
                         .foregroundColor(.element.tertiaryContent)
                 }

@@ -29,9 +29,26 @@ struct StartChatViewState: BindableState {
         !bindings.searchQuery.isEmpty
     }
     
-    var searchResults: [UserProfileProxyProtocol] = []
+    var usersSection: StartChatUsersSection = .init(type: .suggestions, users: [])
+}
+
+enum StartChatUserSectionType {
+    case searchResult
+    case suggestions
     
-    var suggestedUsers: [UserProfileProxyProtocol] = [UserProfileProxyMock.mockAlice, UserProfileProxyMock.mockBob, UserProfileProxyMock.mockCharlie]
+    var title: String? {
+        switch self {
+        case .searchResult:
+            return nil
+        case .suggestions:
+            return ElementL10n.directRoomUserListSuggestionsTitle
+        }
+    }
+}
+
+struct StartChatUsersSection {
+    var type: StartChatUserSectionType
+    var users: [UserProfileProxyProtocol]
 }
 
 struct StartChatScreenViewStateBindings {

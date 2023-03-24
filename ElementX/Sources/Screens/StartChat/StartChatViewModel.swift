@@ -31,6 +31,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()
+        fetchSuggestion()
     }
     
     // MARK: - Public
@@ -46,7 +47,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .selectUser(let user):
             showLoadingIndicator()
             Task {
-                let currentDirectRoom = await userSession.clientProxy.directRoomForUserIdentifier(user.userId)
+                let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
                     self.hideLoadingIndicator()
@@ -81,20 +82,30 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
+            .removeDuplicates()
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
-            .sink(receiveValue: { [weak self] searchQuery in
-                if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-                    self?.state.searchResults = [UserProfileProxy(userId: searchQuery, displayName: nil, avatarURL: nil)]
+            .sink { [weak self] searchQuery in
+                if searchQuery.isEmpty {
+                    self?.fetchSuggestion()
+                } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
+                    self?.state.usersSection.type = .searchResult
+                    self?.state.usersSection.users = [UserProfileProxy(userID: searchQuery, displayName: nil, avatarURL: nil)]
                 } else {
-                    self?.state.searchResults = []
+                    self?.state.usersSection.type = .searchResult
+                    self?.state.usersSection.users = []
                 }
-            })
+            }
             .store(in: &cancellables)
+    }
+    
+    private func fetchSuggestion() {
+        state.usersSection.type = .suggestions
+        state.usersSection.users = [UserProfileProxyMock.mockAlice, UserProfileProxyMock.mockBob, UserProfileProxyMock.mockCharlie]
     }
     
     private func createDirectRoom(with user: UserProfileProxyProtocol) async {
         showLoadingIndicator()
-        let result = await userSession.clientProxy.createDirectRoom(with: user.userId)
+        let result = await userSession.clientProxy.createDirectRoom(with: user.userID)
         hideLoadingIndicator()
         switch result {
         case .success(let roomId):

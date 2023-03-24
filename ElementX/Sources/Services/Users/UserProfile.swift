@@ -19,18 +19,22 @@ import MatrixRustSDK
 
 // sourcery: AutoMockable
 protocol UserProfileProxyProtocol {
-    var userId: String { get }
+    var userID: String { get }
     var displayName: String? { get }
     var avatarURL: URL? { get }
 }
 
 struct UserProfileProxy: UserProfileProxyProtocol {
-    let userId: String
+    let userID: String
     let displayName: String?
     let avatarURL: URL?
 }
 
 extension UserProfile: UserProfileProxyProtocol {
+    var userID: String {
+        userId
+    }
+
     var avatarURL: URL? {
         avatarUrl.flatMap(URL.init(string:))
     }
