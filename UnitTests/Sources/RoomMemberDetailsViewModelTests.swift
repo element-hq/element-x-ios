@@ -19,7 +19,7 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class RoomMemberDetailsScreenViewModelTests: XCTestCase {
+class RoomMemberDetailsViewModelTests: XCTestCase {
     var viewModel: RoomMemberDetailsViewModelProtocol!
     var roomMemberProxyMock: RoomMemberProxyMock!
     var context: RoomMemberDetailsViewModelType.Context { viewModel.context }
