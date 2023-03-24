@@ -23,6 +23,7 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
 
+            // TODO: Uncomment when the feature is ready
 //            if !context.viewState.isAccountOwner {
 //                blockUserSection
 //            }
