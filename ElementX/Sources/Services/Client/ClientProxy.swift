@@ -144,13 +144,11 @@ class ClientProxy: ClientProxyProtocol {
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                if let room = try self.client.getDmRoom(userId: userID) {
-                    return .success(room.id())
-                }
+                let room = try self.client.getDmRoom(userId: userID)?.id()
+                return room.map { .success($0) } ?? .success(nil)
             } catch {
                 return .failure(.failedRetrievingDirectRoom)
             }
-            return .success(nil)
         }
     }
     
