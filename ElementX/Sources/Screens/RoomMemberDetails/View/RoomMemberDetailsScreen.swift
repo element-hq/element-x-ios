@@ -30,7 +30,7 @@ struct RoomMemberDetailsScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .alert(item: $context.blockUserAlertItem, actions: blockUserAlertActions, message: blockUserAlertMessage)
+        .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .errorAlert(item: $context.errorAlert)
     }
     
@@ -95,15 +95,15 @@ struct RoomMemberDetailsScreen: View {
     }
 
     @ViewBuilder
-    private func blockUserAlertActions(_ item: BlockUserAlertItem) -> some View {
+    private func blockUserAlertActions(_ item: IgnoreUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle,
-               role: item.action == .block ? .destructive : nil) {
+               role: item.action == .ignore ? .destructive : nil) {
             context.send(viewAction: item.viewAction)
         }
     }
 
-    private func blockUserAlertMessage(_ item: BlockUserAlertItem) -> some View {
+    private func blockUserAlertMessage(_ item: IgnoreUserAlertItem) -> some View {
         Text(item.description)
     }
 }

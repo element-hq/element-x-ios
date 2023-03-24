@@ -35,8 +35,8 @@ protocol RoomMemberProxyProtocol {
     var isAccountOwner: Bool { get }
     var isIgnored: Bool { get }
 
-    func blockUser() async -> Result<Void, RoomMemberProxyError>
-    func unblockUser() async -> Result<Void, RoomMemberProxyError>
+    func ignoreUser() async -> Result<Void, RoomMemberProxyError>
+    func unignoreUser() async -> Result<Void, RoomMemberProxyError>
 }
 
 extension RoomMemberProxyProtocol {

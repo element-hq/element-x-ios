@@ -34,7 +34,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.userID, "@alice:matrix.org")
         XCTAssertEqual(context.viewState.permalink, URL(string: "https://matrix.to/#/@alice:matrix.org"))
         XCTAssertEqual(context.viewState.avatarURL, nil)
-        XCTAssertNil(context.blockUserAlertItem)
+        XCTAssertNil(context.ignoreUserAlert)
         XCTAssertNil(context.errorAlert)
     }
 
@@ -48,7 +48,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.userID, "@me:matrix.org")
         XCTAssertEqual(context.viewState.permalink, URL(string: "https://matrix.to/#/@me:matrix.org"))
         XCTAssertEqual(context.viewState.avatarURL, URL.picturesDirectory)
-        XCTAssertNil(context.blockUserAlertItem)
+        XCTAssertNil(context.ignoreUserAlert)
         XCTAssertNil(context.errorAlert)
     }
 
@@ -62,7 +62,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.userID, "@ignored:matrix.org")
         XCTAssertEqual(context.viewState.permalink, URL(string: "https://matrix.to/#/@ignored:matrix.org"))
         XCTAssertEqual(context.viewState.avatarURL, nil)
-        XCTAssertNil(context.blockUserAlertItem)
+        XCTAssertNil(context.ignoreUserAlert)
         XCTAssertNil(context.errorAlert)
     }
 }
