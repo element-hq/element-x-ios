@@ -24,9 +24,9 @@ struct RoomMemberDetailsScreen: View {
             headerSection
 
             // TODO: Uncomment when the feature is ready
-//            if !context.viewState.isAccountOwner {
-//                blockUserSection
-//            }
+            if !context.viewState.isAccountOwner {
+                blockUserSection
+            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
