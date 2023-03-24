@@ -53,7 +53,6 @@ struct ErrorAlertItem: AlertItem {
 
     var title = ElementL10n.dialogTitleError
     var message = ElementL10n.unknownError
-    var cancelTitle = ElementL10n.actionCancel
     var cancelAction = Action(title: ElementL10n.ok, action: { })
     var primaryAction: Action?
 }
