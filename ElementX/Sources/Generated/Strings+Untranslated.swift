@@ -14,8 +14,12 @@ extension ElementL10n {
   public static let a11yAllChatsUserAvatarMenu = ElementL10n.tr("Untranslated", "a11y_all_chats_user_avatar_menu")
   /// Confirm
   public static let actionConfirm = ElementL10n.tr("Untranslated", "action_confirm")
+  /// Copy Link
+  public static let actionCopyLink = ElementL10n.tr("Untranslated", "action_copy_link")
   /// Match
   public static let actionMatch = ElementL10n.tr("Untranslated", "action_match")
+  /// Share Link
+  public static let actionShareLink = ElementL10n.tr("Untranslated", "action_share_link")
   /// Attach Screenshot
   public static let bugReportScreenAttachScreenshot = ElementL10n.tr("Untranslated", "bug_report_screen_attach_screenshot")
   /// Please describe the bug. What did you do? What did you expect to happen? What actually happened. Please go into as much detail as you can.
@@ -102,8 +106,6 @@ extension ElementL10n {
   public static let reportContentSubmitted = ElementL10n.tr("Untranslated", "report_content_submitted")
   /// About
   public static let roomDetailsAboutSectionTitle = ElementL10n.tr("Untranslated", "room_details_about_section_title")
-  /// Copy Link
-  public static let roomDetailsCopyLink = ElementL10n.tr("Untranslated", "room_details_copy_link")
   /// Are you sure that you want to leave this room? You are the only person here. If you leave, no one will be able to join in the future, including you.
   public static let roomDetailsLeaveEmptyRoomAlertSubtitle = ElementL10n.tr("Untranslated", "room_details_leave_empty_room_alert_subtitle")
   /// Are you sure that you want to leave this room? This room is not public and you will not be able to rejoin without an invite.
@@ -114,6 +116,18 @@ extension ElementL10n {
   public static let roomDetailsRoomLeftToast = ElementL10n.tr("Untranslated", "room_details_room_left_toast")
   /// Info
   public static let roomDetailsTitle = ElementL10n.tr("Untranslated", "room_details_title")
+  /// Block
+  public static let roomMemberDetailsBlockAlertAction = ElementL10n.tr("Untranslated", "room_member_details_block_alert_action")
+  /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
+  public static let roomMemberDetailsBlockAlertDescription = ElementL10n.tr("Untranslated", "room_member_details_block_alert_description")
+  /// Block user
+  public static let roomMemberDetailsBlockUser = ElementL10n.tr("Untranslated", "room_member_details_block_user")
+  /// Unblock
+  public static let roomMemberDetailsUnblockAlertAction = ElementL10n.tr("Untranslated", "room_member_details_unblock_alert_action")
+  /// On unblocking the user, you will be able to see all messages by them again.
+  public static let roomMemberDetailsUnblockAlertDescription = ElementL10n.tr("Untranslated", "room_member_details_unblock_alert_description")
+  /// Unblock user
+  public static let roomMemberDetailsUnblockUser = ElementL10n.tr("Untranslated", "room_member_details_unblock_user")
   /// Failed loading messages
   public static let roomTimelineBackpaginationFailure = ElementL10n.tr("Untranslated", "room_timeline_backpagination_failure")
   /// Retry decryption

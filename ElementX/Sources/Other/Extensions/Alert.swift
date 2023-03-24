@@ -21,7 +21,7 @@ protocol AlertItem {
 }
 
 extension View {
-    func alert<Item, Actions, Message>(item: Binding<Item?>, actions: (Item) -> Actions, message: (Item) -> Message) -> some View where Item: AlertItem, Actions: View, Message: View {
+    func alert<Item, Actions, Message>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions, @ViewBuilder message: (Item) -> Message) -> some View where Item: AlertItem, Actions: View, Message: View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
@@ -32,7 +32,7 @@ extension View {
         return alert(item.wrappedValue?.title ?? "", isPresented: binding, presenting: item.wrappedValue, actions: actions, message: message)
     }
 
-    func alert<Item, Actions>(item: Binding<Item?>, actions: (Item) -> Actions) -> some View where Item: AlertItem, Actions: View {
+    func alert<Item, Actions>(item: Binding<Item?>, @ViewBuilder actions: (Item) -> Actions) -> some View where Item: AlertItem, Actions: View {
         let binding = Binding<Bool>(get: {
             item.wrappedValue != nil
         }, set: { newValue in
@@ -44,16 +44,27 @@ extension View {
     }
 }
 
-// Only for Alerts that display a simple error message with a single button
+// Only for Alerts that display a simple error message with a message and one or two buttons
 struct ErrorAlertItem: AlertItem {
-    let title: String
-    let message: String
+    struct Action {
+        var title: String
+        var action: () -> Void
+    }
+
+    var title = ElementL10n.dialogTitleError
+    var message = ElementL10n.unknownError
+    var cancelTitle = ElementL10n.actionCancel
+    var cancelAction = Action(title: ElementL10n.ok, action: { })
+    var primaryAction: Action?
 }
 
 extension View {
     func errorAlert(item: Binding<ErrorAlertItem?>) -> some View {
-        alert(item: item, actions: { _ in
-            Button(ElementL10n.ok) { }
+        alert(item: item, actions: { item in
+            Button(item.cancelAction.title) { item.cancelAction.action() }
+            if let primaryAction = item.primaryAction {
+                Button(primaryAction.title) { primaryAction.action() }
+            }
         }, message: { item in
             Text(item.message)
         })

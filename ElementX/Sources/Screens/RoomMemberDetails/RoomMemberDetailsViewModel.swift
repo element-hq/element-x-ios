@@ -68,8 +68,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         case .success:
             state.isIgnored.toggle()
         case .failure:
-            // TODO: Localise strings
-            state.bindings.errorAlert = .init(title: "Error", message: "Unknown Error")
+            state.bindings.errorAlert = .init()
         }
     }
 
@@ -78,8 +77,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         case .success:
             state.isIgnored.toggle()
         case .failure:
-            // TODO: Localise strings
-            state.bindings.errorAlert = .init(title: "Error", message: "Unknown Error")
+            state.bindings.errorAlert = .init()
         }
     }
 }

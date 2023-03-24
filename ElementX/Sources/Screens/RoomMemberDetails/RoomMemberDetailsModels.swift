@@ -43,25 +43,24 @@ struct BlockUserAlertItem: AlertItem {
     let action: Action
     let cancelTitle = ElementL10n.actionCancel
 
-    // TODO: Localise strings (for the first you can reuse the one in the screen)
     var title: String {
         switch action {
-        case .block: return "Block user"
-        case .unblock: return "Unblock user"
+        case .block: return ElementL10n.roomMemberDetailsBlockUser
+        case .unblock: return ElementL10n.roomMemberDetailsUnblockUser
         }
     }
 
     var confirmationTitle: String {
         switch action {
-        case .block: return "Block"
-        case .unblock: return "Unblock"
+        case .block: return ElementL10n.roomMemberDetailsBlockAlertAction
+        case .unblock: return ElementL10n.roomMemberDetailsUnblockAlertAction
         }
     }
 
     var description: String {
         switch action {
-        case .block: return "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."
-        case .unblock: return "On unblocking the user, you will be able to see all messages by them again."
+        case .block: return ElementL10n.roomMemberDetailsBlockAlertDescription
+        case .unblock: return ElementL10n.roomMemberDetailsUnblockAlertDescription
         }
     }
 

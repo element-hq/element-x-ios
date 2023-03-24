@@ -23,9 +23,9 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
 
-            if !context.viewState.isAccountOwner {
-                blockUserSection
-            }
+//            if !context.viewState.isAccountOwner {
+//                blockUserSection
+//            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -57,14 +57,12 @@ struct RoomMemberDetailsScreen: View {
                     Button { context.send(viewAction: .copyUserLink) } label: {
                         Image(systemName: "link")
                     }
-                    // TODO: Set this copy as an action
-                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
+                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.actionCopyLink))
 
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    // TODO: Localize copy
-                    .buttonStyle(FormActionButtonStyle(title: "Share Link"))
+                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.actionShareLink))
                 }
                 .padding(.top, 32)
             }
@@ -79,16 +77,14 @@ struct RoomMemberDetailsScreen: View {
                 Button {
                     context.send(viewAction: .unblockTapped)
                 } label: {
-                    // TODO: Set right copy
-                    Label("Unblock user", systemImage: "slash.circle")
+                    Label(ElementL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
                 .buttonStyle(FormButtonStyle(accessory: nil))
             } else {
                 Button(role: .destructive) {
                     context.send(viewAction: .blockTapped)
                 } label: {
-                    // TODO: Set right copy
-                    Label("Block user", systemImage: "slash.circle")
+                    Label(ElementL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }
                 .buttonStyle(FormButtonStyle(accessory: nil))
             }
