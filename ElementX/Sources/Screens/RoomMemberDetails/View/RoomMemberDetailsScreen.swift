@@ -43,11 +43,12 @@ struct RoomMemberDetailsScreen: View {
                                 contentID: context.viewState.userID,
                                 avatarSize: .user(on: .memberDetails),
                                 imageProvider: context.imageProvider)
-
-            Text(context.viewState.name)
-                .foregroundColor(.element.primaryContent)
-                .font(.element.title1Bold)
-                .multilineTextAlignment(.center)
+            if let name = context.viewState.name {
+                Text(name)
+                    .foregroundColor(.element.primaryContent)
+                    .font(.element.title1Bold)
+                    .multilineTextAlignment(.center)
+            }
             Text(context.viewState.userID)
                 .foregroundColor(.element.secondaryContent)
                 .font(.element.body)

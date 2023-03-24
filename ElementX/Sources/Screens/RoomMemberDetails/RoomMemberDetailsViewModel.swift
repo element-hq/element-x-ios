@@ -26,7 +26,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.roomMemberProxy = roomMemberProxy
         let initialViewState = RoomMemberDetailsViewState(userID: roomMemberProxy.userID,
-                                                          name: roomMemberProxy.displayName ?? "",
+                                                          name: roomMemberProxy.displayName,
                                                           avatarURL: roomMemberProxy.avatarURL,
                                                           isAccountOwner: roomMemberProxy.isAccountOwner,
                                                           permalink: roomMemberProxy.permalink,
