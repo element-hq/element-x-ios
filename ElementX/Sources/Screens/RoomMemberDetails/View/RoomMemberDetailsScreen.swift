@@ -127,13 +127,11 @@ struct RoomMemberDetails_Previews: PreviewProvider {
     }()
     
     static var previews: some View {
-        Group {
-            RoomMemberDetailsScreen(context: otherUserViewModel.context)
-                .previewDisplayName("Other User")
-            RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
-                .previewDisplayName("Account Owner")
-            RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
-                .previewDisplayName("Ignored User")
-        }
+        RoomMemberDetailsScreen(context: otherUserViewModel.context)
+            .previewDisplayName("Other User")
+        RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
+            .previewDisplayName("Account Owner")
+        RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
+            .previewDisplayName("Ignored User")
     }
 }
