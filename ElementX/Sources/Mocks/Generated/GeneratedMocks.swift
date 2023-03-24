@@ -494,14 +494,4 @@ class SessionVerificationControllerProxyMock: SessionVerificationControllerProxy
         }
     }
 }
-class UserProfileProxyMock: UserProfileProxyProtocol {
-    var userID: String {
-        get { return underlyingUserID }
-        set(value) { underlyingUserID = value }
-    }
-    var underlyingUserID: String!
-    var displayName: String?
-    var avatarURL: URL?
-
-}
 // swiftlint:enable all

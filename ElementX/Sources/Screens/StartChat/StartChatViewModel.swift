@@ -100,10 +100,10 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func fetchSuggestion() {
         state.usersSection.type = .suggestions
-        state.usersSection.users = [UserProfileProxyMock.mockAlice, UserProfileProxyMock.mockBob, UserProfileProxyMock.mockCharlie]
+        state.usersSection.users = [.mockAlice, .mockBob, .mockCharlie]
     }
     
-    private func createDirectRoom(with user: UserProfileProxyProtocol) async {
+    private func createDirectRoom(with user: UserProfileProxy) async {
         showLoadingIndicator()
         let result = await userSession.clientProxy.createDirectRoom(with: user.userID)
         hideLoadingIndicator()

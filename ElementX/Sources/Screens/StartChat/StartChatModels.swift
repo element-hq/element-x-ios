@@ -48,7 +48,7 @@ enum StartChatUserSectionType {
 
 struct StartChatUsersSection {
     var type: StartChatUserSectionType
-    var users: [UserProfileProxyProtocol]
+    var users: [UserProfileProxy]
 }
 
 struct StartChatScreenViewStateBindings {
@@ -62,5 +62,5 @@ enum StartChatViewAction {
     case close
     case createRoom
     case inviteFriends
-    case selectUser(UserProfileProxyProtocol)
+    case selectUser(UserProfileProxy)
 }

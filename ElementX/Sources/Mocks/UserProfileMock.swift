@@ -16,24 +16,17 @@
 
 import Foundation
 
-extension UserProfileProxyMock {
-    convenience init(with userID: String, displayName: String?, avatarURL: URL?) {
-        self.init()
-        self.userID = userID
-        self.displayName = displayName
-        self.avatarURL = avatarURL
-    }
-    
+extension UserProfileProxy {
     // Mocks
-    static var mockAlice: UserProfileProxyMock {
-        .init(with: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
+    static var mockAlice: UserProfileProxy {
+        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
     }
 
-    static var mockBob: UserProfileProxyMock {
-        .init(with: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
+    static var mockBob: UserProfileProxy {
+        .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
     }
 
-    static var mockCharlie: UserProfileProxyMock {
-        .init(with: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
+    static var mockCharlie: UserProfileProxy {
+        .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
     }
 }

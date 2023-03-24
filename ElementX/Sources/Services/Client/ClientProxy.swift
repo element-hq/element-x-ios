@@ -144,20 +144,18 @@ class ClientProxy: ClientProxyProtocol {
     func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                if let room = try self.client.getDmRoom(userId: userID) {
-                    return .success(room.id())
-                }
+                let roomId = try self.client.getDmRoom(userId: userID)?.id()
+                return .success(roomId)
             } catch {
                 return .failure(.failedRetrievingDirectRoom)
             }
-            return .success(nil)
         }
     }
     
     func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                let parameters = CreateRoomParameters(name: "", topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .privateChat, invite: [userID], avatar: nil)
+                let parameters = CreateRoomParameters(name: "", topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userID], avatar: nil)
                 let result = try self.client.createRoom(request: parameters)
                 return .success(result)
             } catch {
