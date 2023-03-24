@@ -66,7 +66,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     private func blockUser() async {
         switch await roomMemberProxy.blockUser() {
         case .success:
-            state.isIgnored.toggle()
+            state.isIgnored = true
         case .failure:
             state.bindings.errorAlert = .init()
         }
@@ -75,7 +75,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     private func unblockUser() async {
         switch await roomMemberProxy.unblockUser() {
         case .success:
-            state.isIgnored.toggle()
+            state.isIgnored = false
         case .failure:
             state.bindings.errorAlert = .init()
         }
