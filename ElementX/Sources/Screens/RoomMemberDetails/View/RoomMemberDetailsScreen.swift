@@ -77,14 +77,14 @@ struct RoomMemberDetailsScreen: View {
         Section {
             if context.viewState.isIgnored {
                 Button {
-                    context.send(viewAction: .unblockTapped)
+                    context.send(viewAction: .showUnblockAlert)
                 } label: {
                     Label(ElementL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
                 .buttonStyle(FormButtonStyle(accessory: nil))
             } else {
                 Button(role: .destructive) {
-                    context.send(viewAction: .blockTapped)
+                    context.send(viewAction: .showBlockAlert)
                 } label: {
                     Label(ElementL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }

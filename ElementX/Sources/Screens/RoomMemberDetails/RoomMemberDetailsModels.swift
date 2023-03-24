@@ -73,8 +73,8 @@ struct BlockUserAlertItem: AlertItem {
 }
 
 enum RoomMemberDetailsViewAction {
-    case unblockTapped
-    case blockTapped
+    case showUnblockAlert
+    case showBlockAlert
     case blockConfirmed
     case unblockConfirmed
     case copyUserLink
