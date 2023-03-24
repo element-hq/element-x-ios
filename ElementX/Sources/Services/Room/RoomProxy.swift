@@ -284,7 +284,6 @@ class RoomProxy: RoomProxyProtocol {
 
             let proxiedMembers = await members.asyncMap { RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService) }
             return .success(proxiedMembers)
-
         } catch {
             return .failure(.failedRetrievingMembers)
         }
