@@ -43,6 +43,14 @@ class MockClientProxy: ClientProxyProtocol {
     
     func stopSync() { }
     
+    func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError> {
+        .failure(.failedRetrievingDirectRoom)
+    }
+    
+    func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError> {
+        .failure(.failedCreatingRoom)
+    }
+    
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         guard let room = visibleRoomsSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
             return nil

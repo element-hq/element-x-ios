@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,13 +15,22 @@
 //
 
 import Foundation
+import MatrixRustSDK
 
-@MainActor
-protocol StartChatViewModelProtocol {
-    var callback: ((StartChatViewModelAction) -> Void)? { get set }
-    var context: StartChatViewModelType.Context { get }
+struct UserProfileProxy {
+    let userID: String
+    let displayName: String?
+    let avatarURL: URL?
     
-    /// Display an error to the user.
-    /// - Parameter type: The type of error to be displayed.
-    func displayError(_ type: ClientProxyError)
+    init(userID: String, displayName: String?, avatarURL: URL?) {
+        self.userID = userID
+        self.displayName = displayName
+        self.avatarURL = avatarURL
+    }
+    
+    init(userProfile: UserProfile) {
+        userID = userProfile.userId
+        displayName = userProfile.displayName
+        avatarURL = userProfile.avatarUrl.flatMap(URL.init(string:))
+    }
 }

@@ -18,10 +18,12 @@ import SwiftUI
 
 struct StartChatCoordinatorParameters {
     let userSession: UserSessionProtocol
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
 
 enum StartChatCoordinatorAction {
     case close
+    case openRoom(withIdentifier: String)
 }
 
 final class StartChatCoordinator: CoordinatorProtocol {
@@ -33,7 +35,7 @@ final class StartChatCoordinator: CoordinatorProtocol {
     init(parameters: StartChatCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StartChatViewModel(userSession: parameters.userSession)
+        viewModel = StartChatViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController)
     }
     
     func start() {
@@ -43,8 +45,9 @@ final class StartChatCoordinator: CoordinatorProtocol {
             case .close:
                 self.callback?(.close)
             case .createRoom:
-                // TODO: start create room flow
                 break
+            case .openRoom(let identifier):
+                self.callback?(.openRoom(withIdentifier: identifier))
             }
         }
     }

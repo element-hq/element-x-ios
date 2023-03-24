@@ -21,9 +21,11 @@ struct StartChatScreen: View {
     
     var body: some View {
         Form {
-            createRoomSection
-            inviteFriendsSection
-            suggestionsSection
+            if !context.viewState.isSearching {
+                createRoomSection
+                inviteFriendsSection
+            }
+            usersSection
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -35,6 +37,7 @@ struct StartChatScreen: View {
             }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: ElementL10n.searchForSomeone)
+        .alert(item: $context.alertInfo) { $0.alert }
     }
     
     private var createRoomSection: some View {
@@ -58,14 +61,19 @@ struct StartChatScreen: View {
         .formSectionStyle()
     }
     
-    private var suggestionsSection: some View {
+    private var usersSection: some View {
         Section {
-            ForEach(context.viewState.suggestedUsers, id: \.userID) { user in
-                StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+            ForEach(context.viewState.usersSection.users, id: \.userID) { user in
+                Button { context.send(viewAction: .selectUser(user)) } label: {
+                    StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+                }
             }
         } header: {
-            Text(ElementL10n.directRoomUserListSuggestionsTitle)
+            if let title = context.viewState.usersSection.type.title {
+                Text(title)
+            }
         }
+        .listRowSeparator(.automatic)
         .formSectionStyle()
     }
     
@@ -93,7 +101,7 @@ struct StartChat_Previews: PreviewProvider {
     static var previews: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = StartChatViewModel(userSession: userSession)
+        let regularViewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
         NavigationView {
             StartChatScreen(context: regularViewModel.context)
                 .tint(.element.accent)
