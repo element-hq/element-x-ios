@@ -59,13 +59,13 @@ struct ErrorAlertItem: AlertItem {
 
 extension View {
     func errorAlert(item: Binding<ErrorAlertItem?>) -> some View {
-        alert(item: item, actions: { item in
+        alert(item: item) item in
             Button(item.cancelAction.title) { item.cancelAction.action() }
             if let primaryAction = item.primaryAction {
                 Button(primaryAction.title) { primaryAction.action() }
             }
-        }, message: { item in
+        } message: { item in
             Text(item.message)
-        })
+        }
     }
 }
