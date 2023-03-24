@@ -24,6 +24,8 @@ enum ClientProxyCallback {
 }
 
 enum ClientProxyError: Error {
+    case failedCreatingRoom
+    case failedRetrievingDirectRoom
     case failedRetrievingDisplayName
     case failedRetrievingAccountData
     case failedSettingAccountData
@@ -69,6 +71,10 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func startSync()
     
     func stopSync()
+    
+    func directRoomForUserID(_ userID: String) async -> Result<String?, ClientProxyError>
+    
+    func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError>
     
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol?
     

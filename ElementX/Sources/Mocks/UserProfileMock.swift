@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,12 +16,17 @@
 
 import Foundation
 
-@MainActor
-protocol StartChatViewModelProtocol {
-    var callback: ((StartChatViewModelAction) -> Void)? { get set }
-    var context: StartChatViewModelType.Context { get }
-    
-    /// Display an error to the user.
-    /// - Parameter type: The type of error to be displayed.
-    func displayError(_ type: ClientProxyError)
+extension UserProfileProxy {
+    // Mocks
+    static var mockAlice: UserProfileProxy {
+        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
+    }
+
+    static var mockBob: UserProfileProxy {
+        .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
+    }
+
+    static var mockCharlie: UserProfileProxy {
+        .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
+    }
 }

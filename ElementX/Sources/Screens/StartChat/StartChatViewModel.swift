@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias StartChatViewModelType = StateStoreViewModel<StartChatViewState, StartChatViewAction>
@@ -22,10 +23,15 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private let userSession: UserSessionProtocol
     
     var callback: ((StartChatViewModelAction) -> Void)?
-
-    init(userSession: UserSessionProtocol) {
+    weak var userIndicatorController: UserIndicatorControllerProtocol?
+    
+    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.userSession = userSession
-        super.init(initialViewState: StartChatViewState(suggestedUsers: [.mockAlice, .mockBob, .mockCharlie]), imageProvider: userSession.mediaProvider)
+        self.userIndicatorController = userIndicatorController
+        super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
+        
+        setupBindings()
+        fetchSuggestion()
     }
     
     // MARK: - Public
@@ -37,8 +43,90 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .createRoom:
             callback?(.createRoom)
         case .inviteFriends:
-            // TODO: start invite people flow
             break
+        case .selectUser(let user):
+            showLoadingIndicator()
+            Task {
+                let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
+                switch currentDirectRoom {
+                case .success(.some(let roomId)):
+                    self.hideLoadingIndicator()
+                    self.callback?(.openRoom(withIdentifier: roomId))
+                case .success(nil):
+                    await self.createDirectRoom(with: user)
+                case .failure(let failure):
+                    self.hideLoadingIndicator()
+                    self.displayError(failure)
+                }
+            }
         }
+    }
+    
+    func displayError(_ type: ClientProxyError) {
+        switch type {
+        case .failedRetrievingDirectRoom:
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: ElementL10n.dialogTitleError,
+                                                 message: ElementL10n.retrievingDirectRoomError)
+        case .failedCreatingRoom:
+            state.bindings.alertInfo = AlertInfo(id: type,
+                                                 title: ElementL10n.dialogTitleError,
+                                                 message: ElementL10n.retrievingDirectRoomError)
+        default:
+            state.bindings.alertInfo = AlertInfo(id: type)
+        }
+    }
+    
+    // MARK: - Private
+    
+    private func setupBindings() {
+        context.$viewState
+            .map(\.bindings.searchQuery)
+            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .removeDuplicates()
+            .sink { [weak self] searchQuery in
+                if searchQuery.isEmpty {
+                    self?.fetchSuggestion()
+                } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
+                    self?.state.usersSection.type = .searchResult
+                    self?.state.usersSection.users = [UserProfileProxy(userID: searchQuery, displayName: nil, avatarURL: nil)]
+                } else {
+                    self?.state.usersSection.type = .searchResult
+                    self?.state.usersSection.users = []
+                }
+            }
+            .store(in: &cancellables)
+    }
+    
+    private func fetchSuggestion() {
+        state.usersSection.type = .suggestions
+        state.usersSection.users = [.mockAlice, .mockBob, .mockCharlie]
+    }
+    
+    private func createDirectRoom(with user: UserProfileProxy) async {
+        showLoadingIndicator()
+        let result = await userSession.clientProxy.createDirectRoom(with: user.userID)
+        hideLoadingIndicator()
+        switch result {
+        case .success(let roomId):
+            callback?(.openRoom(withIdentifier: roomId))
+        case .failure(let failure):
+            displayError(failure)
+        }
+    }
+    
+    // MARK: Loading indicator
+    
+    static let loadingIndicatorIdentifier = "StartChatLoading"
+    
+    private func showLoadingIndicator() {
+        userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
+                                                               type: .modal,
+                                                               title: ElementL10n.loading,
+                                                               persistent: true))
+    }
+    
+    private func hideLoadingIndicator() {
+        userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
     }
 }

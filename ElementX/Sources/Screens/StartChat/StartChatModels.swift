@@ -19,21 +19,48 @@ import Foundation
 enum StartChatViewModelAction {
     case close
     case createRoom
+    case openRoom(withIdentifier: String)
 }
 
 struct StartChatViewState: BindableState {
     var bindings = StartChatScreenViewStateBindings()
     
-    // TODO: bind with real service, and mock data only in preview
-    var suggestedUsers: [RoomMemberProxyMock]
+    var isSearching: Bool {
+        !bindings.searchQuery.isEmpty
+    }
+    
+    var usersSection: StartChatUsersSection = .init(type: .suggestions, users: [])
+}
+
+enum StartChatUserSectionType {
+    case searchResult
+    case suggestions
+    
+    var title: String? {
+        switch self {
+        case .searchResult:
+            return nil
+        case .suggestions:
+            return ElementL10n.directRoomUserListSuggestionsTitle
+        }
+    }
+}
+
+struct StartChatUsersSection {
+    var type: StartChatUserSectionType
+    var users: [UserProfileProxy]
 }
 
 struct StartChatScreenViewStateBindings {
     var searchQuery = ""
+    
+    /// Information describing the currently displayed alert.
+    var alertInfo: AlertInfo<ClientProxyError>?
 }
 
 enum StartChatViewAction {
     case close
     case createRoom
     case inviteFriends
+    case selectUser(UserProfileProxy)
 }

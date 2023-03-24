@@ -46,6 +46,7 @@ enum UserAvatarSizeOnScreen {
     case home
     case settings
     case roomDetails
+    case startChat
     case memberDetails
 
     var value: CGFloat {
@@ -58,6 +59,8 @@ enum UserAvatarSizeOnScreen {
             return 60
         case .roomDetails:
             return 44
+        case .startChat:
+            return 36
         case .memberDetails:
             return 70
         }
