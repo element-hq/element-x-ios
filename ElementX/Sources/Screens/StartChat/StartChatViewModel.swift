@@ -82,8 +82,8 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .removeDuplicates()
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .removeDuplicates()
             .sink { [weak self] searchQuery in
                 if searchQuery.isEmpty {
                     self?.fetchSuggestion()
