@@ -30,7 +30,7 @@ struct RoomMemberDetailsScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .alert(item: $context.blockUserAlertItem, actions: blockUserAlertActions(_:), message: blockUserAlertMessage(_:))
+        .alert(item: $context.blockUserAlertItem, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .errorAlert(item: $context.errorAlert)
     }
     
