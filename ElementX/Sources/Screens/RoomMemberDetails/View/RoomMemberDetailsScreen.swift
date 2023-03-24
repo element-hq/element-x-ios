@@ -99,8 +99,9 @@ struct RoomMemberDetailsScreen: View {
     @ViewBuilder
     private func blockUserAlertActions(_ item: BlockUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
-        Button(item.confirmationTitle, role: .destructive) {
-            context.send(viewAction: .blockConfirmed)
+        Button(item.confirmationTitle,
+               role: item.action == .block ? .destructive : nil) {
+            context.send(viewAction: item.viewAction)
         }
     }
 

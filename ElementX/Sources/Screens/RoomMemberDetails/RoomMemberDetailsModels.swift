@@ -35,16 +35,48 @@ struct RoomMemberDetailsViewStateBindings {
 }
 
 struct BlockUserAlertItem: AlertItem {
-    // TODO: Localise strings (for the first you can reuse the one in the screen)
-    let title = "Block User"
-    let confirmationTitle = "Block"
+    enum Action {
+        case block
+        case unblock
+    }
+
+    let action: Action
     let cancelTitle = ElementL10n.actionCancel
-    let description = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."
+
+    // TODO: Localise strings (for the first you can reuse the one in the screen)
+    var title: String {
+        switch action {
+        case .block: return "Block user"
+        case .unblock: return "Unblock user"
+        }
+    }
+
+    var confirmationTitle: String {
+        switch action {
+        case .block: return "Block"
+        case .unblock: return "Unblock"
+        }
+    }
+
+    var description: String {
+        switch action {
+        case .block: return "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime."
+        case .unblock: return "On unblocking the user, you will be able to see all messages by them again."
+        }
+    }
+
+    var viewAction: RoomMemberDetailsViewAction {
+        switch action {
+        case .block: return .blockConfirmed
+        case .unblock: return .unblockConfirmed
+        }
+    }
 }
 
 enum RoomMemberDetailsViewAction {
     case unblockTapped
     case blockTapped
     case blockConfirmed
+    case unblockConfirmed
     case copyUserLink
 }
