@@ -35,9 +35,7 @@ final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: parameters.roomMemberProxy, mediaProvider: parameters.mediaProvider)
     }
 
-    func start() {
-//        viewModel.callback = { [weak self] action in }
-    }
+    func start() { }
 
     func toPresentable() -> AnyView {
         AnyView(RoomMemberDetailsScreen(context: viewModel.context))
