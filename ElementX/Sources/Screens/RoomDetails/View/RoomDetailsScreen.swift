@@ -69,7 +69,7 @@ struct RoomDetailsScreen: View {
                     Button { context.send(viewAction: .copyRoomLink) } label: {
                         Image(systemName: "link")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.roomDetailsCopyLink))
+                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.actionCopyLink))
                     
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")

@@ -17,35 +17,26 @@
 import SwiftUI
 
 struct RoomMemberDetailsCoordinatorParameters {
+    let roomMemberProxy: RoomMemberProxyProtocol
     let mediaProvider: MediaProviderProtocol
-    let members: [RoomMemberProxyProtocol]
 }
 
-enum RoomMemberDetailsCoordinatorAction {
-    case cancel
-}
+enum RoomMemberDetailsCoordinatorAction { }
 
 final class RoomMemberDetailsCoordinator: CoordinatorProtocol {
+    private let parameters: RoomMemberDetailsCoordinatorParameters
     private var viewModel: RoomMemberDetailsViewModelProtocol
-    
+
     var callback: ((RoomMemberDetailsCoordinatorAction) -> Void)?
-    
+
     init(parameters: RoomMemberDetailsCoordinatorParameters) {
-        viewModel = RoomMemberDetailsViewModel(mediaProvider: parameters.mediaProvider,
-                                               members: parameters.members)
+        self.parameters = parameters
+
+        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: parameters.roomMemberProxy, mediaProvider: parameters.mediaProvider)
     }
-    
-    func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            
-            switch action {
-            case .cancel:
-                self.callback?(.cancel)
-            }
-        }
-    }
-        
+
+    func start() { }
+
     func toPresentable() -> AnyView {
         AnyView(RoomMemberDetailsScreen(context: viewModel.context))
     }

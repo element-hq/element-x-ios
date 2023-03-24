@@ -78,7 +78,51 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
         set(value) { underlyingNormalizedPowerLevel = value }
     }
     var underlyingNormalizedPowerLevel: Int!
+    var isAccountOwner: Bool {
+        get { return underlyingIsAccountOwner }
+        set(value) { underlyingIsAccountOwner = value }
+    }
+    var underlyingIsAccountOwner: Bool!
+    var isIgnored: Bool {
+        get { return underlyingIsIgnored }
+        set(value) { underlyingIsIgnored = value }
+    }
+    var underlyingIsIgnored: Bool!
 
+    //MARK: - ignoreUser
+
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
+    }
+    var ignoreUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var ignoreUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+
+    func ignoreUser() async -> Result<Void, RoomMemberProxyError> {
+        ignoreUserCallsCount += 1
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure()
+        } else {
+            return ignoreUserReturnValue
+        }
+    }
+    //MARK: - unignoreUser
+
+    var unignoreUserCallsCount = 0
+    var unignoreUserCalled: Bool {
+        return unignoreUserCallsCount > 0
+    }
+    var unignoreUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var unignoreUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+
+    func unignoreUser() async -> Result<Void, RoomMemberProxyError> {
+        unignoreUserCallsCount += 1
+        if let unignoreUserClosure = unignoreUserClosure {
+            return await unignoreUserClosure()
+        } else {
+            return unignoreUserReturnValue
+        }
+    }
 }
 class RoomProxyMock: RoomProxyProtocol {
     var id: String {

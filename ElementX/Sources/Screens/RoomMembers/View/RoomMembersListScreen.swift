@@ -16,17 +16,17 @@
 
 import SwiftUI
 
-struct RoomMemberDetailsScreen: View {
+struct RoomMembersListScreen: View {
     @Environment(\.colorScheme) private var colorScheme
 
-    @ObservedObject var context: RoomMemberDetailsViewModel.Context
+    @ObservedObject var context: RoomMembersListViewModel.Context
     
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading) {
                 Section {
                     ForEach(context.viewState.visibleMembers) { member in
-                        RoomMemberDetailsMemberCell(member: member, context: context)
+                        RoomMembersListMemberCell(member: member, context: context)
                             .id(member.id)
                     }
                 } header: {
@@ -48,20 +48,20 @@ struct RoomMemberDetailsScreen: View {
 
 // MARK: - Previews
 
-struct RoomMemberDetails_Previews: PreviewProvider {
+struct RoomMembersList_Previews: PreviewProvider {
     static let viewModel = {
         let members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
             .mockCharlie
         ]
-        return RoomMemberDetailsViewModel(mediaProvider: MockMediaProvider(),
-                                          members: members)
+        return RoomMembersListViewModel(mediaProvider: MockMediaProvider(),
+                                        members: members)
     }()
     
     static var previews: some View {
         NavigationStack {
-            RoomMemberDetailsScreen(context: viewModel.context)
+            RoomMembersListScreen(context: viewModel.context)
         }
     }
 }

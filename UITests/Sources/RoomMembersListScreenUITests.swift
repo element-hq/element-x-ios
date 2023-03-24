@@ -17,9 +17,10 @@
 import ElementX
 import XCTest
 
-class RoomMemberDetailsScreenUITests: XCTestCase {
-    func testInitialStateComponentsForAccountOwner() {
-        let app = Application.launch(.roomMemberDetailsAccountOwner)
-        app.assertScreenshot(.roomMemberDetailsAccountOwner)
+class RoomMembersListScreenUITests: XCTestCase {
+    func testInitialStateComponents() {
+        let app = Application.launch(.roomMembersListScreen)
+        
+        app.assertScreenshot(.roomMembersListScreen)
     }
 }

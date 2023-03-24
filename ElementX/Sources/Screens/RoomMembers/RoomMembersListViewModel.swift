@@ -16,16 +16,18 @@
 
 import SwiftUI
 
-typealias RoomMemberDetailsViewModelType = StateStoreViewModel<RoomMemberDetailsViewState, RoomMemberDetailsViewAction>
+typealias RoomMembersListViewModelType = StateStoreViewModel<RoomMembersListViewState, RoomMembersListViewAction>
 
-class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDetailsViewModelProtocol {
+class RoomMembersListViewModel: RoomMembersListViewModelType, RoomMembersListViewModelProtocol {
     private let mediaProvider: MediaProviderProtocol
+    private let members: [RoomMemberProxyProtocol]
     
-    var callback: ((RoomMemberDetailsViewModelAction) -> Void)?
+    var callback: ((RoomMembersListViewModelAction) -> Void)?
 
     init(mediaProvider: MediaProviderProtocol,
          members: [RoomMemberProxyProtocol]) {
         self.mediaProvider = mediaProvider
+        self.members = members
         super.init(initialViewState: .init(members: members.map { RoomDetailsMember(withProxy: $0) },
                                            bindings: .init()),
                    imageProvider: mediaProvider)
@@ -33,10 +35,14 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMemberDetailsViewAction) async {
+    override func process(viewAction: RoomMembersListViewAction) async {
         switch viewAction {
         case .selectMember(let id):
-            MXLog.debug("Member selected: \(id)")
+            guard let member = members.first(where: { $0.userID == id }) else {
+                MXLog.error("Selected member \(id) not found")
+                return
+            }
+            callback?(.selectMember(member))
         }
     }
 }

@@ -272,13 +272,16 @@ class RoomProxy: RoomProxyProtocol {
     }
     
     func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError> {
-        await Task.dispatch(on: .global()) {
-            do {
+        do {
+            let members = try await Task.dispatch(on: .global()) {
                 let members = try self.room.members()
-                return .success(members.map { RoomMemberProxy(member: $0) })
-            } catch {
-                return .failure(.failedRetrievingMembers)
+                return members
             }
+            
+            let proxiedMembers = await members.asyncMap { RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService) }
+            return .success(proxiedMembers)
+        } catch {
+            return .failure(.failedRetrievingMembers)
         }
     }
     
