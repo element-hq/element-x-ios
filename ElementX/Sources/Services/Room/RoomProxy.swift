@@ -278,11 +278,16 @@ class RoomProxy: RoomProxyProtocol {
                 return members
             }
             
-            let proxiedMembers = await members.asyncMap { RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService) }
+            let proxiedMembers = buildRoomMemberProxies(members: members)
             return .success(proxiedMembers)
         } catch {
             return .failure(.failedRetrievingMembers)
         }
+    }
+
+    @MainActor
+    private func buildRoomMemberProxies(members: [RoomMember]) -> [RoomMemberProxy] {
+        members.map { RoomMemberProxy(member: $0, backgroundTaskService: backgroundTaskService) }
     }
     
     func retryDecryption(for sessionID: String) async {
