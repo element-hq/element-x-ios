@@ -24,6 +24,9 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     var callback: ((StartChatViewModelAction) -> Void)?
     weak var userIndicatorController: UserIndicatorControllerProtocol?
+    var searchTask: Task<Void, Error>? {
+        didSet { oldValue?.cancel() }
+    }
     
     init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.userSession = userSession
@@ -82,25 +85,23 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .removeDuplicates()
             .sink { [weak self] searchQuery in
-                if searchQuery.isEmpty {
+                if searchQuery.count < 3 {
                     self?.fetchSuggestion()
                 } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-                    self?.state.usersSection.type = .searchResult
-                    self?.state.usersSection.users = [UserProfileProxy(userID: searchQuery, displayName: nil, avatarURL: nil)]
+                    self?.state.usersSection = .init(type: .searchResult,
+                                                     users: [UserProfileProxy(userID: searchQuery, displayName: nil, avatarURL: nil)])
                 } else {
-                    self?.state.usersSection.type = .searchResult
-                    self?.state.usersSection.users = []
+                    self?.searchUsers(serachTerm: searchQuery)
                 }
             }
             .store(in: &cancellables)
     }
     
     private func fetchSuggestion() {
-        state.usersSection.type = .suggestions
-        state.usersSection.users = [.mockAlice, .mockBob, .mockCharlie]
+        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
     
     private func createDirectRoom(with user: UserProfileProxy) async {
@@ -112,6 +113,20 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             callback?(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
             displayError(failure)
+        }
+    }
+    
+    private func searchUsers(serachTerm: String) {
+        searchTask = Task {
+            let result = try await userSession.clientProxy.searchUsers(searchTerm: serachTerm, limit: 5)
+            
+            guard !Task.isCancelled else {
+                return
+            }
+            
+            await MainActor.run {
+                state.usersSection = .init(type: .searchResult, users: result.results)
+            }
         }
     }
     

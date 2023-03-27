@@ -47,8 +47,8 @@ enum StartChatUserSectionType {
 }
 
 struct StartChatUsersSection {
-    var type: StartChatUserSectionType
-    var users: [UserProfileProxy]
+    let type: StartChatUserSectionType
+    let users: [UserProfileProxy]
 }
 
 struct StartChatScreenViewStateBindings {
