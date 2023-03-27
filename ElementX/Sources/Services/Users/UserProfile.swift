@@ -34,3 +34,15 @@ struct UserProfileProxy {
         avatarURL = userProfile.avatarUrl.flatMap(URL.init(string:))
     }
 }
+
+struct SearchUsersResultsProxy {
+    let results: [UserProfileProxy]
+    let limited: Bool
+}
+
+extension SearchUsersResultsProxy {
+    init(sdkResults: SearchUsersResults) {
+        results = sdkResults.results.map(UserProfileProxy.init)
+        limited = sdkResults.limited
+    }
+}
