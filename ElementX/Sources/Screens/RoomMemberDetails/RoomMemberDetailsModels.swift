@@ -45,22 +45,22 @@ struct IgnoreUserAlertItem: AlertItem {
 
     var title: String {
         switch action {
-        case .ignore: return UntranslatedL10n.roomMemberDetailsBlockUser
-        case .unignore: return UntranslatedL10n.roomMemberDetailsUnblockUser
+        case .ignore: return L10n.screenRoomMemberDetailsBlockUser
+        case .unignore: return L10n.screenRoomMemberDetailsUnblockUser
         }
     }
 
     var confirmationTitle: String {
         switch action {
-        case .ignore: return UntranslatedL10n.roomMemberDetailsBlockAlertAction
-        case .unignore: return UntranslatedL10n.roomMemberDetailsUnblockAlertAction
+        case .ignore: return L10n.screenRoomMemberDetailsBlockAlertAction
+        case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertAction
         }
     }
 
     var description: String {
         switch action {
-        case .ignore: return UntranslatedL10n.roomMemberDetailsBlockAlertDescription
-        case .unignore: return UntranslatedL10n.roomMemberDetailsUnblockAlertDescription
+        case .ignore: return L10n.screenRoomMemberDetailsBlockAlertDescription
+        case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertDescription
         }
     }
 

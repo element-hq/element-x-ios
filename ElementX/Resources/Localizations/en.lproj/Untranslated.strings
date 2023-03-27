@@ -4,10 +4,6 @@
 /* Used for testing */
 "untranslated" = "Untranslated";
 
-// MARK: - Shared
-
-"action_share_link" = "Share link";
-
 // MARK: - Analytics
 
 "analytics_opt_in_title" = "Help improve %@";
@@ -28,16 +24,3 @@
 "soft_logout_clear_data_submit" = "Clear all data";
 "soft_logout_clear_data_dialog_title" = "Clear data";
 "soft_logout_clear_data_dialog_content" = "Clear all data currently stored on this device?\nSign in again to access your account data and messages.";
-
-// MARK: - Room member details
-
-"room_member_details_block_user" = "Block user";
-"room_member_details_unblock_user" = "Unblock user";
-"room_member_details_block_alert_action" = "Block";
-"room_member_details_unblock_alert_action" = "Unblock";
-"room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
-"room_member_details_unblock_alert_description" = "On unblocking the user, you will be able to see all messages by them again.";
-
-// MARK: - Start chat
-
-"start_chat_error_starting_chat" = "An error occurred when trying to start a chat";

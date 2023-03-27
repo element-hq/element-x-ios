@@ -88,6 +88,8 @@ public enum L10n {
   public static var actionSearch: String { return L10n.tr("Localizable", "action_search") }
   /// Send
   public static var actionSend: String { return L10n.tr("Localizable", "action_send") }
+  /// Share link
+  public static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
   /// Skip
   public static var actionSkip: String { return L10n.tr("Localizable", "action_skip") }
   /// Start
@@ -382,6 +384,18 @@ public enum L10n {
   public static var screenRoomDetailsSecurityTitle: String { return L10n.tr("Localizable", "screen_room_details_security_title") }
   /// Topic
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
+  /// Block
+  public static var screenRoomMemberDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_action") }
+  /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
+  public static var screenRoomMemberDetailsBlockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_block_alert_description") }
+  /// Block user
+  public static var screenRoomMemberDetailsBlockUser: String { return L10n.tr("Localizable", "screen_room_member_details_block_user") }
+  /// Unblock
+  public static var screenRoomMemberDetailsUnblockAlertAction: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_action") }
+  /// On unblocking the user, you will be able to see all messages by them again.
+  public static var screenRoomMemberDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_description") }
+  /// Unblock user
+  public static var screenRoomMemberDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_user") }
   /// Create a new conversation or room
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// All Chats
@@ -428,6 +442,8 @@ public enum L10n {
   public static var screenSignoutInProgressDialogContent: String { return L10n.tr("Localizable", "screen_signout_in_progress_dialog_content") }
   /// Sign out
   public static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
+  /// An error occurred when trying to start a chat
+  public static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
   /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Access your message history

@@ -64,7 +64,7 @@ struct RoomMemberDetailsScreen: View {
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: UntranslatedL10n.actionShareLink))
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionShareLink))
                 }
                 .padding(.top, 32)
             }
@@ -79,14 +79,14 @@ struct RoomMemberDetailsScreen: View {
                 Button {
                     context.send(viewAction: .showUnblockAlert)
                 } label: {
-                    Label(UntranslatedL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
+                    Label(L10n.screenRoomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
                 .buttonStyle(FormButtonStyle(accessory: nil))
             } else {
                 Button(role: .destructive) {
                     context.send(viewAction: .showBlockAlert)
                 } label: {
-                    Label(UntranslatedL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
+                    Label(L10n.screenRoomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }
                 .buttonStyle(FormButtonStyle(accessory: nil))
             }

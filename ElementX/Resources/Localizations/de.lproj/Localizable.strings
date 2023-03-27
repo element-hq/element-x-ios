@@ -37,6 +37,7 @@
 "action_save" = "Save";
 "action_search" = "Search";
 "action_send" = "Send";
+"action_share_link" = "Share link";
 "action_skip" = "Skip";
 "action_start" = "Start";
 "action_start_chat" = "Start chat";
@@ -171,6 +172,12 @@
 "screen_room_details_people_title" = "People";
 "screen_room_details_security_title" = "Security";
 "screen_room_details_topic_title" = "Topic";
+"screen_room_member_details_block_alert_action" = "Block";
+"screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
+"screen_room_member_details_block_user" = "Block user";
+"screen_room_member_details_unblock_alert_action" = "Unblock";
+"screen_room_member_details_unblock_alert_description" = "On unblocking the user, you will be able to see all messages by them again.";
+"screen_room_member_details_unblock_user" = "Unblock user";
 "screen_roomlist_a11y_create_message" = "Create a new conversation or room";
 "screen_roomlist_main_space_title" = "All Chats";
 "screen_session_verification_cancelled_subtitle" = "Something doesn’t seem right. Either the request timed out or the request was denied.";
@@ -194,6 +201,7 @@
 "screen_signout_confirmation_dialog_title" = "Sign out";
 "screen_signout_in_progress_dialog_content" = "Signing out…";
 "screen_signout_preference_item" = "Sign out";
+"screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
 "session_verification_banner_title" = "Access your message history";
 "settings_rageshake" = "Rageshake";

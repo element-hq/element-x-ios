@@ -10,8 +10,6 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
-  /// Share link
-  public static var actionShareLink: String { return UntranslatedL10n.tr("Untranslated", "action_share_link") }
   /// Help us identify issues and improve %@ by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.
   /// 
   /// You can read all our terms %@.
@@ -30,18 +28,6 @@ public enum UntranslatedL10n {
   public static func analyticsOptInTitle(_ p1: Any) -> String {
     return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_title", String(describing: p1))
   }
-  /// Block
-  public static var roomMemberDetailsBlockAlertAction: String { return UntranslatedL10n.tr("Untranslated", "room_member_details_block_alert_action") }
-  /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
-  public static var roomMemberDetailsBlockAlertDescription: String { return UntranslatedL10n.tr("Untranslated", "room_member_details_block_alert_description") }
-  /// Block user
-  public static var roomMemberDetailsBlockUser: String { return UntranslatedL10n.tr("Untranslated", "room_member_details_block_user") }
-  /// Unblock
-  public static var roomMemberDetailsUnblockAlertAction: String { return UntranslatedL10n.tr("Untranslated", "room_member_details_unblock_alert_action") }
-  /// On unblocking the user, you will be able to see all messages by them again.
-  public static var roomMemberDetailsUnblockAlertDescription: String { return UntranslatedL10n.tr("Untranslated", "room_member_details_unblock_alert_description") }
-  /// Unblock user
-  public static var roomMemberDetailsUnblockUser: String { return UntranslatedL10n.tr("Untranslated", "room_member_details_unblock_user") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   public static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }
@@ -65,8 +51,6 @@ public enum UntranslatedL10n {
   }
   /// Sign in
   public static var softLogoutSigninTitle: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_signin_title") }
-  /// An error occurred when trying to start a chat
-  public static var startChatErrorStartingChat: String { return UntranslatedL10n.tr("Untranslated", "start_chat_error_starting_chat") }
   /// Untranslated
   public static var untranslated: String { return UntranslatedL10n.tr("Untranslated", "untranslated") }
   /// Plural format key: "%#@VARIABLE@"

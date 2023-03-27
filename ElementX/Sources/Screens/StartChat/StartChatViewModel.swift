@@ -67,11 +67,11 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .failedRetrievingDirectRoom:
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
-                                                 message: UntranslatedL10n.startChatErrorStartingChat)
+                                                 message: L10n.screenStartChatErrorStartingChat)
         case .failedCreatingRoom:
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
-                                                 message: UntranslatedL10n.startChatErrorStartingChat)
+                                                 message: L10n.screenStartChatErrorStartingChat)
         default:
             state.bindings.alertInfo = AlertInfo(id: type)
         }
