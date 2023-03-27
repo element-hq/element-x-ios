@@ -91,4 +91,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func logout() async
 
     func setPusher(with configuration: PusherConfiguration) async throws
+    
+    func searchUsers(searchTerm: String, limit: UInt64) async throws -> SearchUsersResults
 }

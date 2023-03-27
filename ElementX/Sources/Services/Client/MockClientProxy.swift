@@ -110,4 +110,14 @@ class MockClientProxy: ClientProxyProtocol {
         setPusherCalled = true
         setPusherArgument = configuration
     }
+    
+    var searchUsersResult: Result<SearchUsersResults, ClientError> = .success(.init(results: [], limited: false))
+    func searchUsers(searchTerm: String, limit: UInt64) async throws -> MatrixRustSDK.SearchUsersResults {
+        switch searchUsersResult {
+        case .success(let success):
+            return success
+        case .failure(let failure):
+            throw failure
+        }
+    }
 }
