@@ -363,7 +363,7 @@ class AppCoordinator: AppCoordinatorProtocol {
     private func showLoadingIndicator() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                                     type: .modal,
-                                                                                    title: ElementL10n.loading,
+                                                                                    title: L10n.commonLoading,
                                                                                     persistent: true))
     }
     
@@ -434,7 +434,7 @@ class AppCoordinator: AppCoordinatorProtocol {
                 ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(reachabilityNotificationIdentifier)
             } else {
                 ServiceLocator.shared.userIndicatorController.submitIndicator(.init(id: reachabilityNotificationIdentifier,
-                                                                                    title: ElementL10n.a11yPresenceOffline,
+                                                                                    title: L10n.commonOffline,
                                                                                     persistent: true))
             }
         }.store(in: &cancellables)
@@ -493,8 +493,8 @@ extension AppCoordinator: NotificationManagerDelegate {
             break
         default:
             // error or no room proxy
-            await service.showLocalNotification(with: "⚠️ " + ElementL10n.dialogTitleError,
-                                                subtitle: ElementL10n.a11yErrorSomeMessageNotSent)
+            await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
+                                                subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
         }
     }
 }

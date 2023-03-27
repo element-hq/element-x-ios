@@ -95,7 +95,7 @@ final class LoginCoordinator: CoordinatorProtocol {
         if isInteractionBlocking {
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                                         type: .modal,
-                                                                                        title: ElementL10n.loading,
+                                                                                        title: L10n.commonLoading,
                                                                                         persistent: true))
         } else {
             viewModel.update(isLoading: true)
@@ -108,11 +108,11 @@ final class LoginCoordinator: CoordinatorProtocol {
     }
     
     private func indicateSuccess() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.dialogTitleSuccess))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonSuccess))
     }
     
     private func indicateFailure() {
-        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: ElementL10n.dialogTitleError))
+        ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonError))
     }
     
     /// Processes an error to either update the flow or display it to the user.
@@ -121,13 +121,13 @@ final class LoginCoordinator: CoordinatorProtocol {
         
         switch error {
         case .invalidCredentials:
-            viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
+            viewModel.displayError(.alert(L10n.screenLoginErrorInvalidCredentials))
         case .accountDeactivated:
-            viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+            viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:
-            viewModel.displayError(.alert(ElementL10n.unknownError))
+            viewModel.displayError(.alert(L10n.errorUnknown))
         }
     }
     
@@ -159,7 +159,7 @@ final class LoginCoordinator: CoordinatorProtocol {
         Task {
             switch await authenticationService.login(username: username,
                                                      password: password,
-                                                     initialDeviceName: UIDevice.current.initialDisplayName,
+                                                     initialDeviceName: UIDevice.current.initialDeviceName,
                                                      deviceId: nil) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))

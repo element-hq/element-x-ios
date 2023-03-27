@@ -41,26 +41,26 @@ struct IgnoreUserAlertItem: AlertItem {
     }
 
     let action: Action
-    let cancelTitle = ElementL10n.actionCancel
+    let cancelTitle = L10n.actionCancel
 
     var title: String {
         switch action {
-        case .ignore: return ElementL10n.roomMemberDetailsBlockUser
-        case .unignore: return ElementL10n.roomMemberDetailsUnblockUser
+        case .ignore: return L10n.screenRoomMemberDetailsBlockUser
+        case .unignore: return L10n.screenRoomMemberDetailsUnblockUser
         }
     }
 
     var confirmationTitle: String {
         switch action {
-        case .ignore: return ElementL10n.roomMemberDetailsBlockAlertAction
-        case .unignore: return ElementL10n.roomMemberDetailsUnblockAlertAction
+        case .ignore: return L10n.screenRoomMemberDetailsBlockAlertAction
+        case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertAction
         }
     }
 
     var description: String {
         switch action {
-        case .ignore: return ElementL10n.roomMemberDetailsBlockAlertDescription
-        case .unignore: return ElementL10n.roomMemberDetailsUnblockAlertDescription
+        case .ignore: return L10n.screenRoomMemberDetailsBlockAlertDescription
+        case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertDescription
         }
     }
 

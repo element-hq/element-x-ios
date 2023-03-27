@@ -62,7 +62,6 @@ targets:
     - path: ../../ElementX/Sources/UITests/UITestsScreenIdentifier.swift
     - path: ../../ElementX/Sources/UITests/UITestsSignalling.swift
     - path: ../../ElementX/Sources/Generated/Strings.swift
-    - path: ../../ElementX/Sources/Generated/Strings+Legacy.swift
     - path: ../../ElementX/Sources/Generated/Strings+Untranslated.swift
     - path: ../../ElementX/Resources
     - path: ../../ElementX/Sources/Other/AccessibilityIdentifiers.swift

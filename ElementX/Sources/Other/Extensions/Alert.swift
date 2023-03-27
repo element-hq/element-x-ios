@@ -51,9 +51,9 @@ struct ErrorAlertItem: AlertItem {
         var action: () -> Void
     }
 
-    var title = ElementL10n.dialogTitleError
-    var message = ElementL10n.unknownError
-    var cancelAction = Action(title: ElementL10n.ok, action: { })
+    var title = L10n.commonError
+    var message = L10n.errorUnknown
+    var cancelAction = Action(title: L10n.actionOk, action: { })
     var primaryAction: Action?
 }
 

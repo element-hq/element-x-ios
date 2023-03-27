@@ -141,7 +141,7 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
             switch completion {
             case .cancel: break
             case .finish:
-                self?.showSuccess(label: ElementL10n.reportContentSubmitted)
+                self?.showSuccess(label: L10n.commonReportSubmitted)
             }
         }
         navigationCoordinator.setRootCoordinator(coordinator)

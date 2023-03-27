@@ -69,12 +69,12 @@ struct RoomDetailsScreen: View {
                     Button { context.send(viewAction: .copyRoomLink) } label: {
                         Image(systemName: "link")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.actionCopyLink))
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCopyLink))
                     
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: ElementL10n.inviteUsersToRoomActionInvite.capitalized))
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionInvite))
                 }
                 .padding(.top, 32)
             }
@@ -91,7 +91,7 @@ struct RoomDetailsScreen: View {
                     .foregroundColor(.element.secondaryContent)
                     .font(.element.footnote)
             } header: {
-                Text(ElementL10n.roomSettingsTopic)
+                Text(L10n.commonTopic)
                     .formSectionHeader()
             }
             .formSectionStyle()
@@ -112,7 +112,7 @@ struct RoomDetailsScreen: View {
                             .font(.element.body)
                     }
                 } label: {
-                    Label(ElementL10n.bottomActionPeople, systemImage: "person")
+                    Label(L10n.commonPeople, systemImage: "person")
                 }
             }
             .buttonStyle(FormButtonStyle(accessory: context.viewState.isLoadingMembers ? nil : .navigationLink))
@@ -120,7 +120,7 @@ struct RoomDetailsScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             .disabled(context.viewState.isLoadingMembers)
         } header: {
-            Text(ElementL10n.roomDetailsAboutSectionTitle)
+            Text(L10n.commonAbout)
                 .formSectionHeader()
         }
         .formSectionStyle()
@@ -131,8 +131,8 @@ struct RoomDetailsScreen: View {
             HStack(alignment: .top) {
                 Label {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(ElementL10n.encryptionEnabled)
-                        Text(ElementL10n.encryptionEnabledTileDescription)
+                        Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
+                        Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
                             .foregroundColor(.element.secondaryContent)
                             .font(.element.footnote)
                     }
@@ -147,7 +147,7 @@ struct RoomDetailsScreen: View {
                     .foregroundColor(.element.quaternaryContent)
             }
         } header: {
-            Text(ElementL10n.roomProfileSectionSecurity)
+            Text(L10n.commonSecurity)
                 .formSectionHeader()
         }
         .formSectionStyle()
@@ -158,7 +158,7 @@ struct RoomDetailsScreen: View {
             Button(role: .destructive) {
                 context.send(viewAction: .processTapLeave)
             } label: {
-                Label(ElementL10n.roomProfileSectionMoreLeave, systemImage: "door.right.hand.open")
+                Label(L10n.actionLeaveRoom, systemImage: "door.right.hand.open")
             }
             .buttonStyle(FormButtonStyle(accessory: nil))
         }

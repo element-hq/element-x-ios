@@ -41,7 +41,7 @@ struct EmojiPickerScreen: View {
             }
             .padding(.horizontal, 6)
         }
-        .navigationTitle(ElementL10n.reactions)
+        .navigationTitle(L10n.commonReactions)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .searchable(text: $searchString)
@@ -55,7 +55,7 @@ struct EmojiPickerScreen: View {
     var toolbar: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
             Button { context.send(viewAction: .dismiss) } label: {
-                Text(ElementL10n.actionCancel)
+                Text(L10n.actionCancel)
             }
         }
     }

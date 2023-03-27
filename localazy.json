@@ -6,6 +6,7 @@
       {
         "type": "ios-strings",
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.strings",
+        "excludeKeys": ["REGEX:.*_android"],
         "filterPlurals": true,
         "replacements": {
           "%s": "%@",
@@ -15,6 +16,7 @@
       {
         "type": "ios-stringsdict",
         "output": "ElementX/Resources/Localizations/${iosLprojFolder}/Localizable.stringsdict",
+        "excludeKeys": ["REGEX:.*_android"],
         "replacements": {
           "%s": "%@",
           "$s": "$@"

@@ -138,7 +138,7 @@ struct HomeScreenRoomCell: View {
                 .lastMessageFormatting()
                 .redacted(reason: .placeholder)
         case .unknown:
-            Text(ElementL10n.message)
+            Text(L10n.commonMessage)
                 .lastMessageFormatting()
         }
     }

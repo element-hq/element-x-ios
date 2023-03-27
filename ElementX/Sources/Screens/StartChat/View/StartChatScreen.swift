@@ -29,21 +29,21 @@ struct StartChatScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .navigationTitle(ElementL10n.startChat)
+        .navigationTitle(L10n.actionStartChat)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 closeButton
             }
         }
-        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: ElementL10n.searchForSomeone)
+        .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
         .alert(item: $context.alertInfo) { $0.alert }
     }
     
     private var createRoomSection: some View {
         Section {
             Button(action: createRoom) {
-                Label(ElementL10n.createARoom, systemImage: "person.3")
+                Label(L10n.actionCreateARoom, systemImage: "person.3")
             }
             .buttonStyle(FormButtonStyle(accessory: .navigationLink))
         }
@@ -53,7 +53,7 @@ struct StartChatScreen: View {
     private var inviteFriendsSection: some View {
         Section {
             Button(action: inviteFriends) {
-                Label(ElementL10n.inviteFriendsToElement, systemImage: "square.and.arrow.up")
+                Label(L10n.actionInviteFriendsToApp(InfoPlistReader.main.bundleDisplayName), systemImage: "square.and.arrow.up")
             }
             .buttonStyle(FormButtonStyle())
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.inviteFriends)
@@ -78,7 +78,7 @@ struct StartChatScreen: View {
     }
     
     private var closeButton: some View {
-        Button(ElementL10n.actionCancel, action: close)
+        Button(L10n.actionCancel, action: close)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.closeStartChat)
     }
     

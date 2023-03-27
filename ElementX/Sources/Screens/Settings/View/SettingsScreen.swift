@@ -39,7 +39,7 @@ struct SettingsScreen: View {
             signOutSection
         }
         .compoundForm()
-        .navigationTitle(ElementL10n.settings)
+        .navigationTitle(L10n.commonSettings)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .confirmationAction) {
@@ -49,7 +49,7 @@ struct SettingsScreen: View {
     }
 
     private var versionText: some View {
-        Text(ElementL10n.settingsVersion + ": " + InfoPlistReader.main.bundleShortVersionString + " (" + InfoPlistReader.main.bundleVersion + ")")
+        Text(L10n.settingsVersionNumber(InfoPlistReader.main.bundleShortVersionString, InfoPlistReader.main.bundleVersion))
     }
 
     private var userSection: some View {
@@ -79,7 +79,7 @@ struct SettingsScreen: View {
     private var sessionVerificationSection: some View {
         Section {
             Button { context.send(viewAction: .sessionVerification) } label: {
-                Label(ElementL10n.settingsSessionVerification, systemImage: "checkmark.shield")
+                Label(L10n.actionCompleteVerification, systemImage: "checkmark.shield")
             }
             .buttonStyle(.compoundForm())
         }
@@ -89,7 +89,7 @@ struct SettingsScreen: View {
     private var developerOptionsSection: some View {
         Section {
             Button { context.send(viewAction: .developerOptions) } label: {
-                Label(ElementL10n.settingsDeveloperOptions, systemImage: "hammer.circle")
+                Label(L10n.commonDeveloperOptions, systemImage: "hammer.circle")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("sessionVerificationButton")
@@ -105,7 +105,7 @@ struct SettingsScreen: View {
                         .tag(style)
                 }
             } label: {
-                Label(ElementL10n.settingsTimelineStyle, systemImage: "rectangle.grid.1x2")
+                Label(L10n.commonMessageLayout, systemImage: "rectangle.grid.1x2")
             }
             .labelStyle(.compoundFormRow())
             .accessibilityIdentifier("timelineStylePicker")
@@ -114,7 +114,7 @@ struct SettingsScreen: View {
             }
             
             Button { context.send(viewAction: .reportBug) } label: {
-                Label(ElementL10n.sendBugReport, systemImage: "questionmark.circle")
+                Label(L10n.actionReportBug, systemImage: "questionmark.circle")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
             .accessibilityIdentifier("reportBugButton")
@@ -125,16 +125,16 @@ struct SettingsScreen: View {
     private var signOutSection: some View {
         Section {
             Button { showingLogoutConfirmation = true } label: {
-                Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                Label(L10n.screenSignoutPreferenceItem, systemImage: "rectangle.portrait.and.arrow.right")
             }
             .buttonStyle(.compoundForm())
             .accessibilityIdentifier("logoutButton")
-            .alert(ElementL10n.actionSignOut, isPresented: $showingLogoutConfirmation) {
-                Button(ElementL10n.actionSignOut,
+            .alert(L10n.screenSignoutConfirmationDialogTitle, isPresented: $showingLogoutConfirmation) {
+                Button(L10n.screenSignoutConfirmationDialogSubmit,
                        role: .destructive,
                        action: logout)
             } message: {
-                Text(ElementL10n.actionSignOutConfirmationSimple)
+                Text(L10n.screenSignoutConfirmationDialogContent)
             }
         } footer: {
             VStack {
@@ -150,7 +150,7 @@ struct SettingsScreen: View {
     }
 
     private var doneButton: some View {
-        Button(ElementL10n.done, action: close)
+        Button(L10n.actionDone, action: close)
     }
 
     private func close() {
@@ -166,9 +166,9 @@ private extension TimelineStyle {
     var name: String {
         switch self {
         case .plain:
-            return ElementL10n.roomTimelineStylePlainLongDescription
+            return L10n.commonModern
         case .bubbles:
-            return ElementL10n.roomTimelineStyleBubbledLongDescription
+            return L10n.commonBubbles
         }
     }
 }

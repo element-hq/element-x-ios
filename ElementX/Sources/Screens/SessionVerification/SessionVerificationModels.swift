@@ -26,54 +26,54 @@ struct SessionVerificationViewState: BindableState {
     var title: String? {
         switch verificationState {
         case .initial:
-            return ElementL10n.verificationOpenOtherToVerifyTitle
+            return L10n.screenSessionVerificationOpenExistingSessionTitle
         case .requestingVerification:
-            return ElementL10n.verificationRequestWaitingAcceptRequestTitle
+            return L10n.screenSessionVerificationWaitingToAcceptTitle
         case .verificationRequestAccepted:
-            return ElementL10n.verificationCompareEmojisTitle
+            return L10n.screenSessionVerificationCompareEmojisTitle
         case .startingSasVerification:
             return nil
         case .sasVerificationStarted:
             return nil
         case .showingChallenge:
-            return ElementL10n.verificationCompareEmojisTitle
+            return L10n.screenSessionVerificationCompareEmojisTitle
         case .acceptingChallenge:
-            return ElementL10n.verificationCompareEmojisTitle
+            return L10n.screenSessionVerificationCompareEmojisTitle
         case .decliningChallenge:
             return nil
         case .verified:
-            return ElementL10n.verificationConclusionOkSelfNoticeTitle
+            return L10n.commonVerificationComplete
         case .cancelling:
             return nil
         case .cancelled:
-            return ElementL10n.verificationCancelled
+            return L10n.commonVerificationCancelled
         }
     }
         
     var message: String {
         switch verificationState {
         case .initial:
-            return ElementL10n.verificationOpenOtherToVerifyDetail
+            return L10n.screenSessionVerificationOpenExistingSessionSubtitle
         case .requestingVerification:
-            return ElementL10n.verificationRequestWaitingAcceptRequestDetail
+            return L10n.screenSessionVerificationWaitingToAcceptSubtitle
         case .verificationRequestAccepted:
-            return ElementL10n.verificationEmojiNotice
+            return L10n.screenSessionVerificationRequestAcceptedSubtitle
         case .startingSasVerification:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .sasVerificationStarted:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .acceptingChallenge:
-            return ElementL10n.verificationCompareEmojisDetail
+            return L10n.screenSessionVerificationCompareEmojisSubtitle
         case .decliningChallenge:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .cancelling:
-            return ElementL10n.verificationRequestWaiting
+            return L10n.commonWaiting
         case .showingChallenge:
-            return ElementL10n.verificationCompareEmojisDetail
+            return L10n.screenSessionVerificationCompareEmojisSubtitle
         case .verified:
-            return ElementL10n.verificationConclusionOkSelfNotice
+            return L10n.screenSessionVerificationCompleteSubtitle
         case .cancelled:
-            return ElementL10n.verificationRequestCancelledDetail
+            return L10n.screenSessionVerificationCancelledSubtitle
         }
     }
 }
