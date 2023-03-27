@@ -80,6 +80,7 @@ struct RoomMemberDetailsScreen: View {
                 } label: {
                     Label(ElementL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
+                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.unignore)
                 .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
                 .disabled(context.viewState.isIgnoreLoading)
             } else {
@@ -88,6 +89,7 @@ struct RoomMemberDetailsScreen: View {
                 } label: {
                     Label(ElementL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }
+                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.ignore)
                 .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
                 .disabled(context.viewState.isIgnoreLoading)
             }

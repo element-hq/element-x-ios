@@ -27,6 +27,7 @@ struct A11yIdentifiers {
     static let sessionVerificationScreen = SessionVerificationScreen()
     static let softLogoutScreen = SoftLogoutScreen()
     static let startChatScreen = StartChatScreen()
+    static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
 
     struct BugReportScreen {
         let report = "bug_report-report"
@@ -97,5 +98,10 @@ struct A11yIdentifiers {
     struct StartChatScreen {
         let closeStartChat = "start_chat-close"
         let inviteFriends = "start_chat-invite_friends"
+    }
+
+    struct RoomMemberDetailsScreen {
+        let ignore = "room_member_details-ignore"
+        let unignore = "room_member_details-unignore"
     }
 }
