@@ -160,9 +160,9 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
         case .invalidCredentials:
-            viewModel.displayError(.alert(L10n.loginErrorInvalidCredentials))
+            viewModel.displayError(.alert(L10n.screenLoginErrorInvalidCredentials))
         case .accountDeactivated:
-            viewModel.displayError(.alert(L10n.loginErrorDeactivatedAccount))
+            viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         default:
             viewModel.displayError(.alert(L10n.errorUnknown))
         }

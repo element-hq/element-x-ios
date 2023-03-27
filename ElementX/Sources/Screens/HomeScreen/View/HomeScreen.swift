@@ -98,7 +98,7 @@ struct HomeScreen: View {
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
         .alert(item: $context.alertInfo) { $0.alert }
-        .navigationTitle(L10n.commonAllChats)
+        .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
@@ -133,7 +133,7 @@ struct HomeScreen: View {
                 Button(role: .destructive) {
                     showingLogoutConfirmation = true
                 } label: {
-                    Label(L10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                    Label(L10n.screenSignoutPreferenceItem, systemImage: "rectangle.portrait.and.arrow.right")
                 }
             }
         } label: {
@@ -144,13 +144,13 @@ struct HomeScreen: View {
                                 imageProvider: context.imageProvider)
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
         }
-        .alert(L10n.actionSignOut,
+        .alert(L10n.screenSignoutConfirmationDialogTitle,
                isPresented: $showingLogoutConfirmation) {
-            Button(L10n.actionSignOut,
+            Button(L10n.screenSignoutConfirmationDialogSubmit,
                    role: .destructive,
                    action: signOut)
         } message: {
-            Text(L10n.actionSignOutConfirmation)
+            Text(L10n.screenSignoutConfirmationDialogContent)
         }
         .accessibilityLabel(L10n.a11yUserMenu)
     }

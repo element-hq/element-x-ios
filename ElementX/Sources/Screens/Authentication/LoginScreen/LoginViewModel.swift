@@ -61,12 +61,12 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
         case .invalidHomeserver:
             state.bindings.alertInfo = AlertInfo(id: type,
                                                  title: L10n.commonError,
-                                                 message: L10n.loginErrorInvalidUserId)
+                                                 message: L10n.screenLoginErrorInvalidUserId)
         case .slidingSyncAlert:
             let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
                                                  title: L10n.commonServerNotSupported,
-                                                 message: L10n.serverSelectionSlidingSyncAlertMessage,
+                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
                                                  primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
                                                  secondaryButton: .init(title: L10n.actionCancel, action: nil))
             

@@ -113,7 +113,7 @@ struct SoftLogoutScreen: View {
 
     /// Text shown if neither password or OIDC login is supported.
     var loginUnavailableText: some View {
-        Text(L10n.loginErrorUnsupportedAuthentication)
+        Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
@@ -143,7 +143,7 @@ struct SoftLogoutScreen: View {
             .accessibilityIdentifier(A11yIdentifiers.softLogoutScreen.clearData)
             .alert(UntranslatedL10n.softLogoutClearDataDialogTitle,
                    isPresented: $showingClearDataConfirmation) {
-                Button(L10n.actionSignOut,
+                Button(L10n.screenSignoutConfirmationDialogSubmit,
                        role: .destructive,
                        action: clearData)
             } message: {

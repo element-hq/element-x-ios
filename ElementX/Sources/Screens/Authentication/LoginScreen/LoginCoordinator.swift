@@ -121,9 +121,9 @@ final class LoginCoordinator: CoordinatorProtocol {
         
         switch error {
         case .invalidCredentials:
-            viewModel.displayError(.alert(L10n.loginErrorInvalidCredentials))
+            viewModel.displayError(.alert(L10n.screenLoginErrorInvalidCredentials))
         case .accountDeactivated:
-            viewModel.displayError(.alert(L10n.loginErrorDeactivatedAccount))
+            viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:

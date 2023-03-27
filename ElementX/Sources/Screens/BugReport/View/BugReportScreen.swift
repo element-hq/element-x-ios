@@ -51,15 +51,15 @@ struct BugReportScreen: View {
     
     private var textFieldSection: some View {
         Section {
-            TextField(L10n.bugReportScreenEditorPlaceholder,
+            TextField(L10n.screenBugReportEditorPlaceholder,
                       text: $context.reportText,
-                      prompt: Text(L10n.bugReportScreenEditorPlaceholder).compoundFormTextFieldPlaceholder(),
+                      prompt: Text(L10n.screenBugReportEditorPlaceholder).compoundFormTextFieldPlaceholder(),
                       axis: .vertical)
                 .lineLimit(4, reservesSpace: true)
                 .textFieldStyle(.compoundForm)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
         } footer: {
-            Text(L10n.bugReportScreenEditorDescription)
+            Text(L10n.screenBugReportEditorDescription)
                 .compoundFormSectionFooter()
         }
         .compoundFormSection()
@@ -67,11 +67,11 @@ struct BugReportScreen: View {
     
     private var sendLogsSection: some View {
         Section {
-            Toggle(L10n.bugReportScreenIncludeLogs, isOn: $context.sendingLogsEnabled)
+            Toggle(L10n.screenBugReportIncludeLogs, isOn: $context.sendingLogsEnabled)
                 .toggleStyle(.compoundForm)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
-            Text(L10n.bugReportScreenLogsDescription)
+            Text(L10n.screenBugReportLogsDescription)
                 .compoundFormSectionFooter()
         }
         .compoundFormSection()
@@ -83,7 +83,7 @@ struct BugReportScreen: View {
             PhotosPicker(selection: $selectedScreenshot,
                          matching: .screenshots,
                          photoLibrary: .shared()) {
-                Label(context.viewState.screenshot == nil ? L10n.actionAttachScreenshot : L10n.actionEditScreenshot, systemImage: "camera")
+                Label(context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot, systemImage: "camera")
             }
             .buttonStyle(.compoundForm())
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)

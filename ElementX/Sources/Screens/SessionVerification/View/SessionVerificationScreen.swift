@@ -146,12 +146,12 @@ struct SessionVerificationScreen: View {
         case .showingChallenge:
             VStack(spacing: 30) {
                 Button { context.send(viewAction: .accept) } label: {
-                    Label(L10n.commonTheyMatch, systemImage: "checkmark")
+                    Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                 }
                 .buttonStyle(.elementAction(.xLarge))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 
-                Button(L10n.commonTheyDontMatch) {
+                Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
@@ -164,14 +164,14 @@ struct SessionVerificationScreen: View {
                     HStack(spacing: 16) {
                         ProgressView()
                             .tint(.element.background)
-                        Label(L10n.commonTheyMatch, systemImage: "checkmark")
+                        Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                     }
                 }
                 .buttonStyle(.elementAction(.xLarge))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 .disabled(true)
 
-                Button(L10n.commonTheyDontMatch) {
+                Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)

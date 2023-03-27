@@ -40,8 +40,8 @@ struct OnboardingViewState: BindableState {
     
     init() {
         content = [
-            OnboardingPageContent(title: L10n.onboardingWelcomeTitle.tinting(".", color: .element.accent),
-                                  message: L10n.onboardingWelcomeSubtitle(InfoPlistReader.main.bundleDisplayName),
+            OnboardingPageContent(title: L10n.screenOnboardingWelcomeTitle.tinting(".", color: .element.accent),
+                                  message: L10n.screenOnboardingWelcomeSubtitle(InfoPlistReader.main.bundleDisplayName),
                                   image: Asset.Images.onboardingAppLogo)
         ]
         bindings = OnboardingBindings()

@@ -101,7 +101,7 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
         case .invalidServer, .invalidHomeserverAddress:
-            viewModel.displayError(.footerMessage(L10n.serverSelectionErrorHomeserverNotFound))
+            viewModel.displayError(.footerMessage(L10n.screenChangeServerErrorInvalidHomeserver)) // FIXME: This one changed 🤦‍♂️
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:

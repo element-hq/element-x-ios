@@ -48,7 +48,7 @@ struct ServerSelectionScreen: View {
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
             
-            Text(L10n.serverSelectionSubtitle)
+            Text(L10n.screenChangeServerSubtitle)
                 .font(.element.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.tertiaryContent)
@@ -60,7 +60,7 @@ struct ServerSelectionScreen: View {
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
             TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
-                .textFieldStyle(.elementInput(labelText: Text(L10n.commonHomeserverUrl),
+                .textFieldStyle(.elementInput(labelText: Text(L10n.screenChangeServerFormHeader),
                                               footerText: Text(context.viewState.footerMessage),
                                               isError: context.viewState.isShowingFooterError,
                                               accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))

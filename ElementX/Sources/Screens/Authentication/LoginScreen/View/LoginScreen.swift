@@ -53,7 +53,7 @@ struct LoginScreen: View {
     
     /// The header containing a Welcome Back title.
     var header: some View {
-        Text(L10n.loginTitle)
+        Text(L10n.screenLoginTitle)
             .font(.element.title1Bold)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
@@ -69,7 +69,7 @@ struct LoginScreen: View {
     /// The form with text fields for username and password, along with a submit button.
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(L10n.commonEnterYourDetails)
+            Text(L10n.screenLoginFormHeader)
                 .font(.element.footnote)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)
@@ -121,7 +121,7 @@ struct LoginScreen: View {
     
     /// Text shown if neither password or OIDC login is supported.
     var loginUnavailableText: some View {
-        Text(L10n.loginErrorUnsupportedAuthentication)
+        Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)

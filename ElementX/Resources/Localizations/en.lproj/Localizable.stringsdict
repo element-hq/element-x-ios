@@ -18,5 +18,21 @@
 			<string>%1$d members</string>
 		</dict>
 	</dict>
+	<key>room_timeline_state_changes</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>%1$d room change</string>
+			<key>other</key>
+			<string>%1$d room changes</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

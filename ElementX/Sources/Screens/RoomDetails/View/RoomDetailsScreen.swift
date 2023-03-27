@@ -131,8 +131,8 @@ struct RoomDetailsScreen: View {
             HStack(alignment: .top) {
                 Label {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text(L10n.commonEncryptionEnabled)
-                        Text(L10n.roomDetailsEncryptionEnabledDescription)
+                        Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
+                        Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
                             .foregroundColor(.element.secondaryContent)
                             .font(.element.footnote)
                     }
