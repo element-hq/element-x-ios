@@ -28,8 +28,8 @@ class OnboardingUITests: XCTestCase {
         let app = Application.launch(.onboarding)
         
         // Given the splash screen in its initial state.
-        let page1TitleText = app.staticTexts[L10n.onboardingWelcomeTitle]
-        let page2TitleText = app.staticTexts[L10n.onboardingWelcomeTitle] // There isn't a second string to match any more.
+        let page1TitleText = app.staticTexts[L10n.screenOnboardingWelcomeTitle]
+        let page2TitleText = app.staticTexts[L10n.screenOnboardingWelcomeTitle] // There isn't a second string to match any more.
         let hiddenPageTitleText = app.staticTexts[A11yIdentifiers.onboardingScreen.hidden].firstMatch
         
         XCTAssertTrue(page1TitleText.isHittable, "The title from the first page of the carousel should be onscreen.")

@@ -25,7 +25,7 @@ class LocalizationTests: XCTestCase {
 
         XCTAssertEqual(L10n.actionOk, "OK")
         XCTAssertEqual(L10n.actionContinue, "Continue")
-        XCTAssertEqual(L10n.sessionVerificationWaitingToAcceptTitle, "Waiting to accept request")
+        XCTAssertEqual(L10n.screenSessionVerificationWaitingToAcceptTitle, "Waiting to accept request")
         XCTAssertEqual(L10n.inviteFriendsText("Element", "element.io"), "Hey, talk to me on Element: element.io")
 
         //  set app language to Turkish
@@ -33,7 +33,7 @@ class LocalizationTests: XCTestCase {
 
         XCTAssertEqual(L10n.actionOk, "Tamam")
         XCTAssertEqual(L10n.actionContinue, "Devam et")
-        XCTAssertEqual(L10n.sessionVerificationWaitingToAcceptTitle, "Github ile kayıt ol")
+        XCTAssertEqual(L10n.screenSessionVerificationWaitingToAcceptTitle, "Github ile kayıt ol")
         XCTAssertEqual(L10n.inviteFriendsText("Element", "element.io"), "Yalnızca Söz ve Anahtar Kelimeler")
     }
 

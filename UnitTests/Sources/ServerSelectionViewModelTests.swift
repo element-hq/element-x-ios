@@ -35,7 +35,7 @@ class ServerSelectionViewModelTests: XCTestCase {
     func testErrorMessage() async throws {
         // Given a new instance of the view model.
         XCTAssertNil(context.viewState.footerErrorMessage, "There should not be an error message for a new view model.")
-        XCTAssertEqual(String(context.viewState.footerMessage.characters), L10n.serverSelectionServerFooter(L10n.actionLearnMore),
+        XCTAssertEqual(String(context.viewState.footerMessage.characters), L10n.screenChangeServerFormNotice(L10n.actionLearnMore),
                        "The standard footer message should be shown.")
         
         // When an error occurs.
@@ -54,7 +54,7 @@ class ServerSelectionViewModelTests: XCTestCase {
         
         // Then the error message should now be removed.
         XCTAssertNil(context.viewState.footerErrorMessage, "The error message should have been cleared.")
-        XCTAssertEqual(String(context.viewState.footerMessage.characters), L10n.serverSelectionServerFooter(L10n.actionLearnMore),
+        XCTAssertEqual(String(context.viewState.footerMessage.characters), L10n.screenChangeServerFormNotice(L10n.actionLearnMore),
                        "The standard footer message should be shown again.")
     }
 }
