@@ -132,7 +132,6 @@ targets:
     - package: AnalyticsEvents
     - package: AppAuth
     - package: Collections
-    - package: CollectionConcurrencyKit
     - package: DeviceKit
     - package: DTCoreText
     - package: KeychainAccess

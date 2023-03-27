@@ -62,9 +62,6 @@ packages:
   Collections:
     url: https://github.com/apple/swift-collections
     minorVersion: 1.0.0
-  CollectionConcurrencyKit:
-    url: https://github.com/JohnSundell/CollectionConcurrencyKit
-    minorVersion: 0.2.0
   DeviceKit:
     url: https://github.com/devicekit/DeviceKit
     minorVersion: 5.0.0

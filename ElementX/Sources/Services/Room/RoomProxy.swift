@@ -18,7 +18,6 @@ import Combine
 import Foundation
 import UIKit
 
-import CollectionConcurrencyKit
 import MatrixRustSDK
 
 class RoomProxy: RoomProxyProtocol {
