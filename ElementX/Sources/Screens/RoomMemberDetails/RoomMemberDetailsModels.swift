@@ -35,7 +35,7 @@ struct RoomMemberDetailsViewStateBindings {
     var errorAlert: ErrorAlertItem?
 }
 
-struct IgnoreUserAlertItem: AlertItem {
+struct IgnoreUserAlertItem: AlertItem, Equatable {
     enum Action {
         case ignore
         case unignore
@@ -74,8 +74,8 @@ struct IgnoreUserAlertItem: AlertItem {
 }
 
 enum RoomMemberDetailsViewAction {
-    case showUnblockAlert
-    case showBlockAlert
+    case showUnignoreAlert
+    case showIgnoreAlert
     case ignoreConfirmed
     case unignoreConfirmed
     case copyUserLink

@@ -76,7 +76,7 @@ struct RoomMemberDetailsScreen: View {
         Section {
             if context.viewState.isIgnored {
                 Button {
-                    context.send(viewAction: .showUnblockAlert)
+                    context.send(viewAction: .showUnignoreAlert)
                 } label: {
                     Label(ElementL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
@@ -85,7 +85,7 @@ struct RoomMemberDetailsScreen: View {
                 .disabled(context.viewState.isIgnoreLoading)
             } else {
                 Button(role: .destructive) {
-                    context.send(viewAction: .showBlockAlert)
+                    context.send(viewAction: .showIgnoreAlert)
                 } label: {
                     Label(ElementL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }

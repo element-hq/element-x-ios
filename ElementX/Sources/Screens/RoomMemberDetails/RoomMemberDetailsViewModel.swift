@@ -39,9 +39,9 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     
     override func process(viewAction: RoomMemberDetailsViewAction) async {
         switch viewAction {
-        case .showUnblockAlert:
+        case .showUnignoreAlert:
             state.bindings.ignoreUserAlert = .init(action: .unignore)
-        case .showBlockAlert:
+        case .showIgnoreAlert:
             state.bindings.ignoreUserAlert = .init(action: .ignore)
         case .copyUserLink:
             copyUserLink()
