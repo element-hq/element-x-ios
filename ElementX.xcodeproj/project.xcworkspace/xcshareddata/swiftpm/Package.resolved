@@ -10,6 +10,15 @@
       }
     },
     {
+      "identity" : "collectionconcurrencykit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/JohnSundell/CollectionConcurrencyKit",
+      "state" : {
+        "revision" : "b4f23e24b5a1bff301efc5e70871083ca029ff95",
+        "version" : "0.2.0"
+      }
+    },
+    {
       "identity" : "compound-design-tokens",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vector-im/compound-design-tokens.git",
@@ -104,15 +113,6 @@
       "state" : {
         "revision" : "2f5fa5f1e2f6c6ae1a47c33d953a3ce289167eb0",
         "version" : "0.5.0"
-      }
-    },
-    {
-      "identity" : "matrix-rust-components-swift",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
-      "state" : {
-        "revision" : "9eee9ba2f14eaa4981759295790bcbdbdebca747",
-        "version" : "1.0.48-alpha"
       }
     },
     {
