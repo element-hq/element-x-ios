@@ -22,15 +22,13 @@ enum FormRowAccessory: View {
     case spinner
     
     var body: some View {
-        VStack {
-            switch self {
-            case .navigationLink:
-                Image(systemName: "chevron.forward")
-                    .font(.element.subheadlineBold)
-                    .foregroundColor(.element.quaternaryContent)
-            case .spinner:
-                ProgressView()
-            }
+        switch self {
+        case .navigationLink:
+            Image(systemName: "chevron.forward")
+                .font(.element.subheadlineBold)
+                .foregroundColor(.element.quaternaryContent)
+        case .spinner:
+            ProgressView()
         }
     }
 }
