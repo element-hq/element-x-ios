@@ -41,7 +41,7 @@ enum StartChatUserSectionType {
         case .searchResult:
             return nil
         case .suggestions:
-            return ElementL10n.directRoomUserListSuggestionsTitle
+            return L10n.commonSuggestions
         }
     }
 }

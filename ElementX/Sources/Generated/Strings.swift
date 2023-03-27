@@ -54,7 +54,7 @@ public enum L10n {
   public static var actionNo: String { return L10n.tr("Localizable", "action_no") }
   /// Not now
   public static var actionNotNow: String { return L10n.tr("Localizable", "action_not_now") }
-  /// Ok
+  /// OK
   public static var actionOk: String { return L10n.tr("Localizable", "action_ok") }
   /// Quick reply
   public static var actionQuickReply: String { return L10n.tr("Localizable", "action_quick_reply") }

@@ -66,12 +66,12 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         switch type {
         case .failedRetrievingDirectRoom:
             state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: ElementL10n.dialogTitleError,
-                                                 message: ElementL10n.retrievingDirectRoomError)
+                                                 title: L10n.commonError,
+                                                 message: UntranslatedL10n.startChatErrorStartingChat)
         case .failedCreatingRoom:
             state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: ElementL10n.dialogTitleError,
-                                                 message: ElementL10n.retrievingDirectRoomError)
+                                                 title: L10n.commonError,
+                                                 message: UntranslatedL10n.startChatErrorStartingChat)
         default:
             state.bindings.alertInfo = AlertInfo(id: type)
         }
@@ -122,7 +122,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func showLoadingIndicator() {
         userIndicatorController?.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                type: .modal,
-                                                               title: ElementL10n.loading,
+                                                               title: L10n.commonLoading,
                                                                persistent: true))
     }
     
