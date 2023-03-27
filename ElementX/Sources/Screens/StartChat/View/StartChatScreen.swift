@@ -22,10 +22,10 @@ struct StartChatScreen: View {
     var body: some View {
         Form {
             if !context.viewState.isSearching {
-                createRoomSection
-                inviteFriendsSection
+                beforeSearchContent
+            } else {
+                afterSearchContent
             }
-            usersSection
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -39,8 +39,26 @@ struct StartChatScreen: View {
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
         .alert(item: $context.alertInfo) { $0.alert }
     }
+}
+
+private extension StartChatScreen {
+    @ViewBuilder
+    var beforeSearchContent: some View {
+        createRoomSection
+        inviteFriendsSection
+        usersSection
+    }
     
-    private var createRoomSection: some View {
+    @ViewBuilder
+    var afterSearchContent: some View {
+        if context.viewState.hasEmptySearchResults {
+            emptyContent
+        } else {
+            usersSection
+        }
+    }
+    
+    var createRoomSection: some View {
         Section {
             Button(action: createRoom) {
                 Label(L10n.actionCreateARoom, systemImage: "person.3")
@@ -50,7 +68,7 @@ struct StartChatScreen: View {
         .formSectionStyle()
     }
     
-    private var inviteFriendsSection: some View {
+    var inviteFriendsSection: some View {
         Section {
             Button(action: inviteFriends) {
                 Label(L10n.actionInviteFriendsToApp(InfoPlistReader.main.bundleDisplayName), systemImage: "square.and.arrow.up")
@@ -61,7 +79,7 @@ struct StartChatScreen: View {
         .formSectionStyle()
     }
     
-    private var usersSection: some View {
+    var usersSection: some View {
         Section {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .selectUser(user)) } label: {
@@ -77,21 +95,27 @@ struct StartChatScreen: View {
         .formSectionStyle()
     }
     
-    private var closeButton: some View {
+    var closeButton: some View {
         Button(L10n.actionCancel, action: close)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.closeStartChat)
     }
     
-    private func createRoom() {
+    func createRoom() {
         context.send(viewAction: .createRoom)
     }
     
-    private func inviteFriends() {
+    func inviteFriends() {
         context.send(viewAction: .inviteFriends)
     }
     
-    private func close() {
+    func close() {
         context.send(viewAction: .close)
+    }
+    
+    var emptyContent: some View {
+        Text("some test")
+            .frame(maxWidth: .infinity)
+            .listRowBackground(Color.clear)
     }
 }
 
