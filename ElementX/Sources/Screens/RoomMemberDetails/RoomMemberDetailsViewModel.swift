@@ -26,7 +26,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.roomMemberProxy = roomMemberProxy
         let initialViewState = RoomMemberDetailsViewState(userID: roomMemberProxy.userID,
-                                                          name: roomMemberProxy.displayName ?? "",
+                                                          name: roomMemberProxy.displayName,
                                                           avatarURL: roomMemberProxy.avatarURL,
                                                           isAccountOwner: roomMemberProxy.isAccountOwner,
                                                           permalink: roomMemberProxy.permalink,
@@ -39,16 +39,16 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     
     override func process(viewAction: RoomMemberDetailsViewAction) async {
         switch viewAction {
-        case .unblockTapped:
-            state.bindings.blockUserAlertItem = .init(action: .unblock)
-        case .blockTapped:
-            state.bindings.blockUserAlertItem = .init(action: .block)
+        case .showUnblockAlert:
+            state.bindings.ignoreUserAlert = .init(action: .unignore)
+        case .showBlockAlert:
+            state.bindings.ignoreUserAlert = .init(action: .ignore)
         case .copyUserLink:
             copyUserLink()
-        case .blockConfirmed:
-            await blockUser()
-        case .unblockConfirmed:
-            await unblockUser()
+        case .ignoreConfirmed:
+            await ignoreUser()
+        case .unignoreConfirmed:
+            await unignoreUser()
         }
     }
 
@@ -63,25 +63,25 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         }
     }
 
-    private func blockUser() async {
+    private func ignoreUser() async {
         state.isIgnoreLoading = true
         let result = await roomMemberProxy.blockUser()
         state.isIgnoreLoading = false
         switch result {
         case .success:
-            state.isIgnored.toggle()
+            state.isIgnored = true
         case .failure:
             state.bindings.errorAlert = .init()
         }
     }
 
-    private func unblockUser() async {
+    private func unignoreUser() async {
         state.isIgnoreLoading = true
         let result = await roomMemberProxy.blockUser()
         state.isIgnoreLoading = false
         switch result {
         case .success:
-            state.isIgnored.toggle()
+            state.isIgnored = false
         case .failure:
             state.bindings.errorAlert = .init()
         }

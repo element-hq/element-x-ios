@@ -29,7 +29,7 @@ struct RoomMemberDetailsScreen: View {
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
-        .alert(item: $context.blockUserAlertItem, actions: blockUserAlertActions(_:), message: blockUserAlertMessage(_:))
+        .alert(item: $context.ignoreUserAlert, actions: blockUserAlertActions, message: blockUserAlertMessage)
         .errorAlert(item: $context.errorAlert)
     }
     
@@ -42,11 +42,12 @@ struct RoomMemberDetailsScreen: View {
                                 contentID: context.viewState.userID,
                                 avatarSize: .user(on: .memberDetails),
                                 imageProvider: context.imageProvider)
-
-            Text(context.viewState.name)
-                .foregroundColor(.element.primaryContent)
-                .font(.element.title1Bold)
-                .multilineTextAlignment(.center)
+            if let name = context.viewState.name {
+                Text(name)
+                    .foregroundColor(.element.primaryContent)
+                    .font(.element.title1Bold)
+                    .multilineTextAlignment(.center)
+            }
             Text(context.viewState.userID)
                 .foregroundColor(.element.secondaryContent)
                 .font(.element.body)
@@ -75,35 +76,33 @@ struct RoomMemberDetailsScreen: View {
         Section {
             if context.viewState.isIgnored {
                 Button {
-                    context.send(viewAction: .unblockTapped)
+                    context.send(viewAction: .showUnblockAlert)
                 } label: {
                     Label(ElementL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
-                .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
-                .disabled(context.viewState.isIgnoreLoading)
+                .buttonStyle(FormButtonStyle(accessory: nil))
             } else {
                 Button(role: .destructive) {
-                    context.send(viewAction: .blockTapped)
+                    context.send(viewAction: .showBlockAlert)
                 } label: {
                     Label(ElementL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }
-                .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
-                .disabled(context.viewState.isIgnoreLoading)
+                .buttonStyle(FormButtonStyle(accessory: nil))
             }
         }
         .formSectionStyle()
     }
 
     @ViewBuilder
-    private func blockUserAlertActions(_ item: BlockUserAlertItem) -> some View {
+    private func blockUserAlertActions(_ item: IgnoreUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle,
-               role: item.action == .block ? .destructive : nil) {
+               role: item.action == .ignore ? .destructive : nil) {
             context.send(viewAction: item.viewAction)
         }
     }
 
-    private func blockUserAlertMessage(_ item: BlockUserAlertItem) -> some View {
+    private func blockUserAlertMessage(_ item: IgnoreUserAlertItem) -> some View {
         Text(item.description)
     }
 }
@@ -127,13 +126,11 @@ struct RoomMemberDetails_Previews: PreviewProvider {
     }()
     
     static var previews: some View {
-        Group {
-            RoomMemberDetailsScreen(context: otherUserViewModel.context)
-                .previewDisplayName("Other User")
-            RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
-                .previewDisplayName("Account Owner")
-            RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
-                .previewDisplayName("Ignored User")
-        }
+        RoomMemberDetailsScreen(context: otherUserViewModel.context)
+            .previewDisplayName("Other User")
+        RoomMemberDetailsScreen(context: accountOwnerViewModel.context)
+            .previewDisplayName("Account Owner")
+        RoomMemberDetailsScreen(context: ignoredUserViewModel.context)
+            .previewDisplayName("Ignored User")
     }
 }

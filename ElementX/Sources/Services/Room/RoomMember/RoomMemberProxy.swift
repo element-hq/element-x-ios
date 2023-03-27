@@ -67,7 +67,7 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
         member.isIgnored()
     }
 
-    func blockUser() async -> Result<Void, RoomMemberProxyError> {
+    func ignoreUser() async -> Result<Void, RoomMemberProxyError> {
         sendAccountDataEventBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundAccountDataTaskName, isReusable: true)
         defer {
             sendAccountDataEventBackgroundTask?.stop()
@@ -83,7 +83,7 @@ final class RoomMemberProxy: RoomMemberProxyProtocol {
         }
     }
 
-    func unblockUser() async -> Result<Void, RoomMemberProxyError> {
+    func unignoreUser() async -> Result<Void, RoomMemberProxyError> {
         sendAccountDataEventBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundAccountDataTaskName, isReusable: true)
         defer {
             sendAccountDataEventBackgroundTask?.stop()

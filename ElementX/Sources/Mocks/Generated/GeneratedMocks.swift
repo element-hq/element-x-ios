@@ -89,38 +89,38 @@ class RoomMemberProxyMock: RoomMemberProxyProtocol {
     }
     var underlyingIsIgnored: Bool!
 
-    //MARK: - blockUser
+    //MARK: - ignoreUser
 
-    var blockUserCallsCount = 0
-    var blockUserCalled: Bool {
-        return blockUserCallsCount > 0
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
     }
-    var blockUserReturnValue: Result<Void, RoomMemberProxyError>!
-    var blockUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+    var ignoreUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var ignoreUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
 
-    func blockUser() async -> Result<Void, RoomMemberProxyError> {
-        blockUserCallsCount += 1
-        if let blockUserClosure = blockUserClosure {
-            return await blockUserClosure()
+    func ignoreUser() async -> Result<Void, RoomMemberProxyError> {
+        ignoreUserCallsCount += 1
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure()
         } else {
-            return blockUserReturnValue
+            return ignoreUserReturnValue
         }
     }
-    //MARK: - unblockUser
+    //MARK: - unignoreUser
 
-    var unblockUserCallsCount = 0
-    var unblockUserCalled: Bool {
-        return unblockUserCallsCount > 0
+    var unignoreUserCallsCount = 0
+    var unignoreUserCalled: Bool {
+        return unignoreUserCallsCount > 0
     }
-    var unblockUserReturnValue: Result<Void, RoomMemberProxyError>!
-    var unblockUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
+    var unignoreUserReturnValue: Result<Void, RoomMemberProxyError>!
+    var unignoreUserClosure: (() async -> Result<Void, RoomMemberProxyError>)?
 
-    func unblockUser() async -> Result<Void, RoomMemberProxyError> {
-        unblockUserCallsCount += 1
-        if let unblockUserClosure = unblockUserClosure {
-            return await unblockUserClosure()
+    func unignoreUser() async -> Result<Void, RoomMemberProxyError> {
+        unignoreUserCallsCount += 1
+        if let unignoreUserClosure = unignoreUserClosure {
+            return await unignoreUserClosure()
         } else {
-            return unblockUserReturnValue
+            return unignoreUserReturnValue
         }
     }
 }

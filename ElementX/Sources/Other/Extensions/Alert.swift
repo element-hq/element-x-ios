@@ -53,20 +53,19 @@ struct ErrorAlertItem: AlertItem {
 
     var title = ElementL10n.dialogTitleError
     var message = ElementL10n.unknownError
-    var cancelTitle = ElementL10n.actionCancel
     var cancelAction = Action(title: ElementL10n.ok, action: { })
     var primaryAction: Action?
 }
 
 extension View {
     func errorAlert(item: Binding<ErrorAlertItem?>) -> some View {
-        alert(item: item, actions: { item in
+        alert(item: item) { item in
             Button(item.cancelAction.title) { item.cancelAction.action() }
             if let primaryAction = item.primaryAction {
                 Button(primaryAction.title) { primaryAction.action() }
             }
-        }, message: { item in
+        } message: { item in
             Text(item.message)
-        })
+        }
     }
 }

@@ -20,7 +20,7 @@ enum RoomMemberDetailsViewModelAction { }
 
 struct RoomMemberDetailsViewState: BindableState {
     let userID: String
-    let name: String
+    let name: String?
     let avatarURL: URL?
     let isAccountOwner: Bool
     let permalink: URL?
@@ -31,14 +31,14 @@ struct RoomMemberDetailsViewState: BindableState {
 }
 
 struct RoomMemberDetailsViewStateBindings {
-    var blockUserAlertItem: BlockUserAlertItem?
+    var ignoreUserAlert: IgnoreUserAlertItem?
     var errorAlert: ErrorAlertItem?
 }
 
-struct BlockUserAlertItem: AlertItem {
+struct IgnoreUserAlertItem: AlertItem {
     enum Action {
-        case block
-        case unblock
+        case ignore
+        case unignore
     }
 
     let action: Action
@@ -46,37 +46,37 @@ struct BlockUserAlertItem: AlertItem {
 
     var title: String {
         switch action {
-        case .block: return ElementL10n.roomMemberDetailsBlockUser
-        case .unblock: return ElementL10n.roomMemberDetailsUnblockUser
+        case .ignore: return ElementL10n.roomMemberDetailsBlockUser
+        case .unignore: return ElementL10n.roomMemberDetailsUnblockUser
         }
     }
 
     var confirmationTitle: String {
         switch action {
-        case .block: return ElementL10n.roomMemberDetailsBlockAlertAction
-        case .unblock: return ElementL10n.roomMemberDetailsUnblockAlertAction
+        case .ignore: return ElementL10n.roomMemberDetailsBlockAlertAction
+        case .unignore: return ElementL10n.roomMemberDetailsUnblockAlertAction
         }
     }
 
     var description: String {
         switch action {
-        case .block: return ElementL10n.roomMemberDetailsBlockAlertDescription
-        case .unblock: return ElementL10n.roomMemberDetailsUnblockAlertDescription
+        case .ignore: return ElementL10n.roomMemberDetailsBlockAlertDescription
+        case .unignore: return ElementL10n.roomMemberDetailsUnblockAlertDescription
         }
     }
 
     var viewAction: RoomMemberDetailsViewAction {
         switch action {
-        case .block: return .blockConfirmed
-        case .unblock: return .unblockConfirmed
+        case .ignore: return .ignoreConfirmed
+        case .unignore: return .unignoreConfirmed
         }
     }
 }
 
 enum RoomMemberDetailsViewAction {
-    case unblockTapped
-    case blockTapped
-    case blockConfirmed
-    case unblockConfirmed
+    case showUnblockAlert
+    case showBlockAlert
+    case ignoreConfirmed
+    case unignoreConfirmed
     case copyUserLink
 }
