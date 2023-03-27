@@ -64,7 +64,10 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     }
 
     private func blockUser() async {
-        switch await roomMemberProxy.blockUser() {
+        state.isIgnoreLoading = true
+        let result = await roomMemberProxy.blockUser()
+        state.isIgnoreLoading = false
+        switch result {
         case .success:
             state.isIgnored.toggle()
         case .failure:
@@ -73,7 +76,10 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     }
 
     private func unblockUser() async {
-        switch await roomMemberProxy.unblockUser() {
+        state.isIgnoreLoading = true
+        let result = await roomMemberProxy.blockUser()
+        state.isIgnoreLoading = false
+        switch result {
         case .success:
             state.isIgnored.toggle()
         case .failure:

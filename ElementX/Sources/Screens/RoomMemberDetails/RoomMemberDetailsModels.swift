@@ -25,6 +25,7 @@ struct RoomMemberDetailsViewState: BindableState {
     let isAccountOwner: Bool
     let permalink: URL?
     var isIgnored: Bool
+    var isIgnoreLoading = false
 
     var bindings: RoomMemberDetailsViewStateBindings
 }

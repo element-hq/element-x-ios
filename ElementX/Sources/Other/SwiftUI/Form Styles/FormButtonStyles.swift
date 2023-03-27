@@ -19,13 +19,18 @@ import SwiftUI
 /// A view to be added on the trailing edge of a form row.
 enum FormRowAccessory: View {
     case navigationLink
+    case spinner
     
     var body: some View {
-        switch self {
-        case .navigationLink:
-            return Image(systemName: "chevron.forward")
-                .font(.element.subheadlineBold)
-                .foregroundColor(.element.quaternaryContent)
+        VStack {
+            switch self {
+            case .navigationLink:
+                Image(systemName: "chevron.forward")
+                    .font(.element.subheadlineBold)
+                    .foregroundColor(.element.quaternaryContent)
+            case .spinner:
+                ProgressView()
+            }
         }
     }
 }
