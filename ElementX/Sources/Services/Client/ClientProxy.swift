@@ -248,9 +248,9 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func searchUsers(searchTerm: String, limit: UInt64) async throws -> SearchUsersResults {
+    func searchUsers(searchTerm: String, limit: UInt64) async throws -> SearchUsersResultsProxy {
         try await Task.dispatch(on: clientQueue) {
-            try self.client.searchUsers(searchTerm: searchTerm, limit: limit)
+            try SearchUsersResultsProxy(sdkResults: self.client.searchUsers(searchTerm: searchTerm, limit: limit))
         }
     }
     
