@@ -80,14 +80,16 @@ struct RoomMemberDetailsScreen: View {
                 } label: {
                     Label(ElementL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
-                .buttonStyle(FormButtonStyle(accessory: nil))
+                .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
+                .disabled(context.viewState.isIgnoreLoading)
             } else {
                 Button(role: .destructive) {
                     context.send(viewAction: .showBlockAlert)
                 } label: {
                     Label(ElementL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }
-                .buttonStyle(FormButtonStyle(accessory: nil))
+                .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
+                .disabled(context.viewState.isIgnoreLoading)
             }
         }
         .formSectionStyle()

@@ -65,7 +65,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
 
     private func ignoreUser() async {
         state.isIgnoreLoading = true
-        let result = await roomMemberProxy.blockUser()
+        let result = await roomMemberProxy.ignoreUser()
         state.isIgnoreLoading = false
         switch result {
         case .success:
@@ -77,7 +77,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
 
     private func unignoreUser() async {
         state.isIgnoreLoading = true
-        let result = await roomMemberProxy.blockUser()
+        let result = await roomMemberProxy.unignoreUser()
         state.isIgnoreLoading = false
         switch result {
         case .success:
