@@ -23,14 +23,10 @@ struct MockMediaProvider: MediaProviderProtocol {
             return nil
         }
         
-        #warning("Fix me. this is stupid!")
-        if let size {
-            if size == AvatarSize.room(on: .details).scaledSize
-                || size == AvatarSize.room(on: .home).scaledSize
-                || size == AvatarSize.room(on: .timeline).scaledSize {
-                return Asset.Images.appLogo.image
-            }
+        if source?.url == .picturesDirectory {
+            return Asset.Images.appLogo.image
         }
+        
         return UIImage(systemName: "photo")
     }
     

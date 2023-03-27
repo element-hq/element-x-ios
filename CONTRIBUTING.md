@@ -65,6 +65,12 @@ The project uses its own shared githooks stored in the .githooks folder, you wil
 git config core.hooksPath .githooks
 ```
 
+### Strings and Translations
+
+The project uses Localazy and is sharing its translations with the ElementX Android project: https://localazy.com/p/element 
+
+Please read the [Android docs](https://github.com/vector-im/element-x-android/blob/develop/tools/localazy/README.md) for more information about how this works. Note: On iOS we don't have the additional step of filtering strings per module.
+
 ### Continuous Integration
 
 ElementX uses Fastlane for running actions on the CI and tries to keep the configuration confined to either [fastlane](fastlane/Fastfile) or [xcodegen](project.yml). 
