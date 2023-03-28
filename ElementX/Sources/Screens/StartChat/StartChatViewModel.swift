@@ -85,12 +85,12 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .removeDuplicates()
             .map { query in
                 let milliseconds = query.isEmpty ? 0 : 500
                 return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
             }
             .switchToLatest()
+            .removeDuplicates()
             .sink { [weak self] query in
                 self?.updateState(searchQuery: query)
             }
