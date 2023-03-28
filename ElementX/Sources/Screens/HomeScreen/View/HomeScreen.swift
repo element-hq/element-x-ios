@@ -98,7 +98,7 @@ struct HomeScreen: View {
         .animation(.elementDefault, value: context.viewState.showSessionVerificationBanner)
         .animation(.elementDefault, value: context.viewState.roomListMode)
         .alert(item: $context.alertInfo) { $0.alert }
-        .navigationTitle(ElementL10n.allChats)
+        .navigationTitle(L10n.screenRoomlistMainSpaceTitle)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
@@ -118,22 +118,22 @@ struct HomeScreen: View {
         Menu {
             Section {
                 Button(action: settings) {
-                    Label(ElementL10n.settings, systemImage: "gearshape")
+                    Label(L10n.commonSettings, systemImage: "gearshape")
                 }
             }
             Section {
                 Button(action: inviteFriends) {
-                    Label(ElementL10n.actionInvite, systemImage: "square.and.arrow.up")
+                    Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
                 }
                 Button(action: feedback) {
-                    Label(ElementL10n.bugReportScreenTitle, systemImage: "questionmark.circle")
+                    Label(L10n.actionReportBug, systemImage: "questionmark.circle")
                 }
             }
             Section {
                 Button(role: .destructive) {
                     showingLogoutConfirmation = true
                 } label: {
-                    Label(ElementL10n.actionSignOut, systemImage: "rectangle.portrait.and.arrow.right")
+                    Label(L10n.screenSignoutPreferenceItem, systemImage: "rectangle.portrait.and.arrow.right")
                 }
             }
         } label: {
@@ -144,15 +144,15 @@ struct HomeScreen: View {
                                 imageProvider: context.imageProvider)
                 .accessibilityIdentifier(A11yIdentifiers.homeScreen.userAvatar)
         }
-        .alert(ElementL10n.actionSignOut,
+        .alert(L10n.screenSignoutConfirmationDialogTitle,
                isPresented: $showingLogoutConfirmation) {
-            Button(ElementL10n.actionSignOut,
+            Button(L10n.screenSignoutConfirmationDialogSubmit,
                    role: .destructive,
                    action: signOut)
         } message: {
-            Text(ElementL10n.actionSignOutConfirmationSimple)
+            Text(L10n.screenSignoutConfirmationDialogContent)
         }
-        .accessibilityLabel(ElementL10n.a11yAllChatsUserAvatarMenu)
+        .accessibilityLabel(L10n.a11yUserMenu)
     }
     
     private var newRoomButton: some View {
@@ -165,7 +165,7 @@ struct HomeScreen: View {
         VStack(alignment: .leading, spacing: 16) {
             VStack(alignment: .leading, spacing: 4) {
                 HStack(spacing: 16) {
-                    Text(ElementL10n.sessionVerificationBannerTitle)
+                    Text(L10n.sessionVerificationBannerTitle)
                         .font(.element.headline)
                         .foregroundColor(.element.systemPrimaryLabel)
                     
@@ -179,12 +179,12 @@ struct HomeScreen: View {
                             .frame(width: 12, height: 12)
                     }
                 }
-                Text(ElementL10n.sessionVerificationBannerMessage)
+                Text(L10n.sessionVerificationBannerMessage)
                     .font(.element.subheadline)
                     .foregroundColor(.element.secondaryContent)
             }
             
-            Button(ElementL10n.continue) {
+            Button(L10n.actionContinue) {
                 context.send(viewAction: .verifySession)
             }
             .frame(maxWidth: .infinity)

@@ -33,7 +33,7 @@ struct BugReportScreen: View {
         }
         .scrollDismissesKeyboard(.immediately)
         .compoundForm()
-        .navigationTitle(ElementL10n.bugReportScreenTitle)
+        .navigationTitle(L10n.commonReportABug)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
@@ -51,15 +51,15 @@ struct BugReportScreen: View {
     
     private var textFieldSection: some View {
         Section {
-            TextField(ElementL10n.bugReportScreenEditorPlaceholder,
+            TextField(L10n.screenBugReportEditorPlaceholder,
                       text: $context.reportText,
-                      prompt: Text(ElementL10n.bugReportScreenEditorPlaceholder).compoundFormTextFieldPlaceholder(),
+                      prompt: Text(L10n.screenBugReportEditorPlaceholder).compoundFormTextFieldPlaceholder(),
                       axis: .vertical)
                 .lineLimit(4, reservesSpace: true)
                 .textFieldStyle(.compoundForm)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.report)
         } footer: {
-            Text(ElementL10n.bugReportScreenDescription)
+            Text(L10n.screenBugReportEditorDescription)
                 .compoundFormSectionFooter()
         }
         .compoundFormSection()
@@ -67,11 +67,11 @@ struct BugReportScreen: View {
     
     private var sendLogsSection: some View {
         Section {
-            Toggle(ElementL10n.bugReportScreenIncludeLogs, isOn: $context.sendingLogsEnabled)
+            Toggle(L10n.screenBugReportIncludeLogs, isOn: $context.sendingLogsEnabled)
                 .toggleStyle(.compoundForm)
                 .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.sendLogs)
         } footer: {
-            Text(ElementL10n.bugReportScreenLogsDescription)
+            Text(L10n.screenBugReportLogsDescription)
                 .compoundFormSectionFooter()
         }
         .compoundFormSection()
@@ -83,7 +83,7 @@ struct BugReportScreen: View {
             PhotosPicker(selection: $selectedScreenshot,
                          matching: .screenshots,
                          photoLibrary: .shared()) {
-                Label(context.viewState.screenshot == nil ? ElementL10n.bugReportScreenAttachScreenshot : ElementL10n.bugReportScreenEditScreenshot, systemImage: "camera")
+                Label(context.viewState.screenshot == nil ? L10n.screenBugReportAttachScreenshot : L10n.screenBugReportEditScreenshot, systemImage: "camera")
             }
             .buttonStyle(.compoundForm())
             .accessibilityIdentifier(A11yIdentifiers.bugReportScreen.attachScreenshot)
@@ -113,14 +113,14 @@ struct BugReportScreen: View {
     private var toolbar: some ToolbarContent {
         if context.viewState.isModallyPresented {
             ToolbarItem(placement: .cancellationAction) {
-                Button(ElementL10n.actionCancel) {
+                Button(L10n.actionCancel) {
                     context.send(viewAction: .cancel)
                 }
             }
         }
         
         ToolbarItem(placement: .confirmationAction) {
-            Button(ElementL10n.actionSend) {
+            Button(L10n.actionSend) {
                 context.send(viewAction: .submit)
             }
             .disabled(context.reportText.count < 5)

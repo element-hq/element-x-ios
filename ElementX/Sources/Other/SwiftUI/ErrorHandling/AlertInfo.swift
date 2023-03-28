@@ -31,7 +31,7 @@ struct AlertInfo<T: Hashable>: Identifiable {
     /// The alert's message (optional).
     var message: String?
     /// The alert's primary button title and action. Defaults to an Ok button with no action.
-    var primaryButton = AlertButton(title: ElementL10n.ok, action: nil)
+    var primaryButton = AlertButton(title: L10n.actionOk, action: nil)
     /// The alert's secondary button title and action.
     var secondaryButton: AlertButton?
 }
@@ -63,8 +63,8 @@ extension AlertInfo {
     ///   - error: The Error that occurred.
     init(id: T) {
         self.id = id
-        title = ElementL10n.dialogTitleError
-        message = ElementL10n.unknownError
+        title = L10n.commonError
+        message = L10n.errorUnknown
     }
 }
 

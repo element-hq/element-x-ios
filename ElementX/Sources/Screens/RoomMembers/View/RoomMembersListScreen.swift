@@ -30,7 +30,7 @@ struct RoomMembersListScreen: View {
                             .id(member.id)
                     }
                 } header: {
-                    Text(ElementL10n.roomTitleMembers(context.viewState.members.count))
+                    Text(L10n.commonMemberCount(context.viewState.members.count))
                         .foregroundColor(.element.secondaryContent)
                         .font(.element.body)
                         .padding(.vertical, 12)
@@ -41,7 +41,7 @@ struct RoomMembersListScreen: View {
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always))
         .searchableStyle(.list)
         .background(Color.element.background.ignoresSafeArea())
-        .navigationTitle(ElementL10n.bottomActionPeople)
+        .navigationTitle(L10n.commonPeople)
         .alert(item: $context.alertInfo) { $0.alert }
     }
 }

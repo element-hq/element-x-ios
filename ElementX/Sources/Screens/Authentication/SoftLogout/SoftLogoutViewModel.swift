@@ -50,7 +50,7 @@ class SoftLogoutViewModel: SoftLogoutViewModelType, SoftLogoutViewModelProtocol 
         switch type {
         case .alert(let message):
             state.bindings.alertInfo = AlertInfo(id: type,
-                                                 title: ElementL10n.dialogTitleError,
+                                                 title: L10n.commonError,
                                                  message: message)
         case .unknown:
             state.bindings.alertInfo = AlertInfo(id: type)

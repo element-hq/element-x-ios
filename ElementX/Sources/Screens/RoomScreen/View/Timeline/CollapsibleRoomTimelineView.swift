@@ -28,8 +28,7 @@ struct CollapsibleRoomTimelineView: View {
     }
     
     var body: some View {
-        DisclosureGroup(ElementL10n.roomTimelineStateChanges(timelineItem.items.count),
-                        isExpanded: $isExpanded) {
+        DisclosureGroup(L10n.roomTimelineStateChanges(timelineItem.items.count), isExpanded: $isExpanded) {
             Group {
                 ForEach(timelineViews) { timelineView in
                     timelineView.body

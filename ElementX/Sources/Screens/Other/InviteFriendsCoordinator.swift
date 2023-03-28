@@ -27,7 +27,7 @@ class InviteFriendsCoordinator: CoordinatorProtocol {
         guard let permalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userId).absoluteString else {
             return AnyView(EmptyView())
         }
-        let shareText = ElementL10n.inviteFriendsText(InfoPlistReader.main.bundleDisplayName, permalink)
+        let shareText = L10n.inviteFriendsText(InfoPlistReader.main.bundleDisplayName, permalink)
         
         return AnyView(UIActivityViewControllerWrapper(activityItems: [shareText])
             .presentationDetents([.medium])

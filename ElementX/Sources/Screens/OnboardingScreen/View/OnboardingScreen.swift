@@ -91,7 +91,7 @@ struct OnboardingScreen: View {
     var buttons: some View {
         VStack(spacing: 12) {
             Button { context.send(viewAction: .login) } label: {
-                Text(ElementL10n.loginContinue)
+                Text(L10n.actionContinue)
             }
             .buttonStyle(.elementAction(.xLarge))
             .accessibilityIdentifier(A11yIdentifiers.onboardingScreen.signIn)

@@ -43,12 +43,12 @@ struct ServerSelectionScreen: View {
             AuthenticationIconImage(image: Image(asset: Asset.Images.serverSelectionIcon), insets: 19)
                 .padding(.bottom, 8)
             
-            Text(ElementL10n.ftueAuthChooseServerTitle)
+            Text(L10n.commonSelectYourServer)
                 .font(.element.title2Bold)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.primaryContent)
             
-            Text(ElementL10n.ftueAuthChooseServerSignInSubtitle)
+            Text(L10n.screenChangeServerSubtitle)
                 .font(.element.subheadline)
                 .multilineTextAlignment(.center)
                 .foregroundColor(.element.tertiaryContent)
@@ -59,8 +59,8 @@ struct ServerSelectionScreen: View {
     /// The text field and confirm button where the user enters a server URL.
     var serverForm: some View {
         VStack(alignment: .leading, spacing: 24) {
-            TextField(ElementL10n.ftueAuthChooseServerEntryHint, text: $context.homeserverAddress)
-                .textFieldStyle(.elementInput(labelText: Text(ElementL10n.hsUrl),
+            TextField(L10n.commonServerUrl, text: $context.homeserverAddress)
+                .textFieldStyle(.elementInput(labelText: Text(L10n.screenChangeServerFormHeader),
                                               footerText: Text(context.viewState.footerMessage),
                                               isError: context.viewState.isShowingFooterError,
                                               accessibilityIdentifier: A11yIdentifiers.changeServerScreen.server))
@@ -85,7 +85,7 @@ struct ServerSelectionScreen: View {
         ToolbarItem(placement: .cancellationAction) {
             if context.viewState.isModallyPresented {
                 Button { context.send(viewAction: .dismiss) } label: {
-                    Text(ElementL10n.actionCancel)
+                    Text(L10n.actionCancel)
                 }
                 .accessibilityIdentifier(A11yIdentifiers.changeServerScreen.dismiss)
             }

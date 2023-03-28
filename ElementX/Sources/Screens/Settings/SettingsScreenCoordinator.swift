@@ -87,7 +87,7 @@ final class SettingsScreenCoordinator: CoordinatorProtocol {
         coordinator.completion = { [weak self] result in
             switch result {
             case .finish:
-                self?.showSuccess(label: ElementL10n.done)
+                self?.showSuccess(label: L10n.actionDone)
             default:
                 break
             }

@@ -50,7 +50,7 @@ struct VideoRoomTimelineView: View {
                 .foregroundColor(.element.systemGray6)
                 .opacity(0.3)
             
-            ProgressView(ElementL10n.loading)
+            ProgressView(L10n.commonLoading)
                 .frame(maxWidth: .infinity)
         }
     }

@@ -66,7 +66,7 @@ struct TimelineItemPlainStylerView<Content: View>: View {
     private var supplementaryViews: some View {
         VStack {
             if timelineItem.properties.isEdited {
-                Text(ElementL10n.editedSuffix)
+                Text(L10n.commonEditedSuffix)
                     .font(.element.footnote)
                     .foregroundColor(.element.tertiaryContent)
             }

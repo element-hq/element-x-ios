@@ -75,7 +75,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
         parameters.userIndicatorController?.submitIndicator(
             UserIndicator(id: Self.loadingIndicatorIdentifier,
                           type: .modal,
-                          title: ElementL10n.sending,
+                          title: L10n.commonSending,
                           persistent: true)
         )
     }

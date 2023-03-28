@@ -102,7 +102,7 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenStart_notificationCategoriesAreSet() throws {
         notificationManager.start()
         let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
-                                                        title: ElementL10n.actionQuickReply,
+                                                        title: L10n.actionQuickReply,
                                                         options: [])
         let replyCategory = UNNotificationCategory(identifier: NotificationConstants.Category.reply,
                                                    actions: [replyAction],

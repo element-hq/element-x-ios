@@ -74,43 +74,43 @@ public struct TimelineItemContextMenu: View {
             switch action {
             case .react:
                 Button { send(action) } label: {
-                    Label(ElementL10n.reactions, systemImage: "face.smiling")
+                    Label(L10n.commonReactions, systemImage: "face.smiling")
                 }
             case .copy:
                 Button { send(action) } label: {
-                    Label(ElementL10n.actionCopy, systemImage: "doc.on.doc")
+                    Label(L10n.actionCopy, systemImage: "doc.on.doc")
                 }
             case .edit:
                 Button { send(action) } label: {
-                    Label(ElementL10n.edit, systemImage: "pencil.line")
+                    Label(L10n.actionEdit, systemImage: "pencil.line")
                 }
             case .quote:
                 Button { send(action) } label: {
-                    Label(ElementL10n.actionQuote, systemImage: "quote.bubble")
+                    Label(L10n.actionQuote, systemImage: "quote.bubble")
                 }
             case .copyPermalink:
                 Button { send(action) } label: {
-                    Label(ElementL10n.permalink, systemImage: "link")
+                    Label(L10n.commonPermalink, systemImage: "link")
                 }
             case .reply:
                 Button { send(action) } label: {
-                    Label(ElementL10n.reply, systemImage: "arrowshape.turn.up.left")
+                    Label(L10n.actionReply, systemImage: "arrowshape.turn.up.left")
                 }
             case .redact:
                 Button(role: .destructive) { send(action) } label: {
-                    Label(ElementL10n.actionRemove, systemImage: "trash")
+                    Label(L10n.actionRemove, systemImage: "trash")
                 }
             case .viewSource:
                 Button { send(action) } label: {
-                    Label(ElementL10n.viewSource, systemImage: "doc.text.below.ecg")
+                    Label(L10n.actionViewSource, systemImage: "doc.text.below.ecg")
                 }
             case .retryDecryption:
                 Button { send(action) } label: {
-                    Label(ElementL10n.roomTimelineContextMenuRetryDecryption, systemImage: "arrow.down.message")
+                    Label(L10n.actionRetryDecryption, systemImage: "arrow.down.message")
                 }
             case .report:
                 Button(role: .destructive) { send(action) } label: {
-                    Label(ElementL10n.reportContent, systemImage: "exclamationmark.bubble")
+                    Label(L10n.actionReportContent, systemImage: "exclamationmark.bubble")
                 }
             }
         }

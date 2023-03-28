@@ -38,15 +38,15 @@ struct AnalyticsPromptViewState: BindableState {
 /// A collection of strings for the UI that need to be parsed from HTML
 struct AnalyticsPromptStrings {
     let optInContent: AttributedString
-    let point1 = AttributedStringBuilder().fromHTML(ElementL10n.analyticsOptInListItem1) ?? AttributedString(ElementL10n.analyticsOptInListItem1)
-    let point2 = AttributedStringBuilder().fromHTML(ElementL10n.analyticsOptInListItem2) ?? AttributedString(ElementL10n.analyticsOptInListItem2)
+    let point1 = AttributedStringBuilder().fromHTML(UntranslatedL10n.analyticsOptInListItem1) ?? AttributedString(UntranslatedL10n.analyticsOptInListItem1)
+    let point2 = AttributedStringBuilder().fromHTML(UntranslatedL10n.analyticsOptInListItem2) ?? AttributedString(UntranslatedL10n.analyticsOptInListItem2)
     
     init() {
         // Create the opt in content with a placeholder.
         let linkPlaceholder = "{link}"
-        var optInContent = AttributedString(ElementL10n.analyticsOptInContent(InfoPlistReader.main.bundleDisplayName, linkPlaceholder))
+        var optInContent = AttributedString(UntranslatedL10n.analyticsOptInContent(InfoPlistReader.main.bundleDisplayName, linkPlaceholder))
         optInContent.replace(linkPlaceholder,
-                             with: ElementL10n.analyticsOptInContentLink,
+                             with: UntranslatedL10n.analyticsOptInContentLink,
                              asLinkTo: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
         self.optInContent = optInContent
     }
