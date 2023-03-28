@@ -326,6 +326,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendReactionToReturnValue
         }
     }
+    //MARK: - sendImage
+
+    var sendImageBodyUrlCallsCount = 0
+    var sendImageBodyUrlCalled: Bool {
+        return sendImageBodyUrlCallsCount > 0
+    }
+    var sendImageBodyUrlReceivedArguments: (body: String, url: URL)?
+    var sendImageBodyUrlReceivedInvocations: [(body: String, url: URL)] = []
+    var sendImageBodyUrlReturnValue: Result<Void, RoomProxyError>!
+    var sendImageBodyUrlClosure: ((String, URL) async -> Result<Void, RoomProxyError>)?
+
+    func sendImage(body: String, url: URL) async -> Result<Void, RoomProxyError> {
+        sendImageBodyUrlCallsCount += 1
+        sendImageBodyUrlReceivedArguments = (body: body, url: url)
+        sendImageBodyUrlReceivedInvocations.append((body: body, url: url))
+        if let sendImageBodyUrlClosure = sendImageBodyUrlClosure {
+            return await sendImageBodyUrlClosure(body, url)
+        } else {
+            return sendImageBodyUrlReturnValue
+        }
+    }
     //MARK: - editMessage
 
     var editMessageOriginalCallsCount = 0

@@ -39,6 +39,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatarURL: roomAvatarUrl,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
+                                                         mediaUploadingFlowEnabled: ServiceLocator.shared.settings.mediaUploadingFlowEnabled,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
         
@@ -72,6 +73,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
+            .store(in: &cancellables)
+        
+        ServiceLocator.shared.settings.$mediaUploadingFlowEnabled
+            .weakAssign(to: \.state.mediaUploadingFlowEnabled, on: self)
             .store(in: &cancellables)
         
         buildTimelineViews()
@@ -111,6 +116,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await markRoomAsRead()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
+        case .displayCameraPicker:
+            callback?(.displayCameraPicker)
+        case .displayMediaPicker:
+            callback?(.displayMediaPicker)
+        case .displayDocumentPicker:
+            callback?(.displayDocumentPicker)
         }
     }
     
