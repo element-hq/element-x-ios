@@ -74,27 +74,28 @@ struct RoomMemberDetailsScreen: View {
 
     private var blockUserSection: some View {
         Section {
-            if context.viewState.isIgnored {
-                Button {
-                    context.send(viewAction: .showUnignoreAlert)
-                } label: {
-                    Label(L10n.screenRoomMemberDetailsUnblockUser, systemImage: "slash.circle")
-                }
-                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.unignore)
-                .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
-                .disabled(context.viewState.isProcessingIgnoreRequest)
-            } else {
-                Button(role: .destructive) {
-                    context.send(viewAction: .showIgnoreAlert)
-                } label: {
-                    Label(L10n.screenRoomMemberDetailsBlockUser, systemImage: "slash.circle")
-                }
-                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.ignore)
-                .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
-                .disabled(context.viewState.isProcessingIgnoreRequest)
+            Button {
+                context.send(viewAction: blockUserButtonAction)
+            } label: {
+                Label(blockUserButtonTitle, systemImage: "slash.circle")
             }
+            .accessibilityIdentifier(blockUserButtonAccessibilityIdentifier)
+            .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
+            .disabled(context.viewState.isProcessingIgnoreRequest)
         }
         .formSectionStyle()
+    }
+
+    private var blockUserButtonAction: RoomMemberDetailsViewAction {
+        context.viewState.isIgnored ? .showUnignoreAlert : .showIgnoreAlert
+    }
+
+    private var blockUserButtonTitle: String {
+        context.viewState.isIgnored ? L10n.screenRoomMemberDetailsUnblockUser : L10n.screenRoomMemberDetailsBlockUser
+    }
+
+    private var blockUserButtonAccessibilityIdentifier: String {
+        context.viewState.isIgnored ? A11yIdentifiers.roomMemberDetailsScreen.unignore : A11yIdentifiers.roomMemberDetailsScreen.ignore
     }
 
     @ViewBuilder
