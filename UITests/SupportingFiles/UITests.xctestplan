@@ -9,11 +9,10 @@
       }
     },
     {
-      "enabled" : false,
       "id" : "04E7AF54-391D-42D4-8193-7AD50C685639",
-      "name" : "German",
+      "name" : "Pseudolanguage",
       "options" : {
-        "language" : "de",
+        "language" : "IDELaunchSchemeLanguageDoubleLocalizedStrings",
         "region" : "DE"
       }
     }
@@ -48,9 +47,7 @@
       "name" : "UITests"
     },
     "testTimeoutsEnabled" : true,
-    "uiTestingScreenshotsLifetime" : "keepNever",
-    "undefinedBehaviorSanitizerEnabled" : true,
-    "userAttachmentLifetime" : "keepNever"
+    "undefinedBehaviorSanitizerEnabled" : true
   },
   "testTargets" : [
     {

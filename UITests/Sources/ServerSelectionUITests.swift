@@ -52,7 +52,6 @@ class ServerSelectionUITests: XCTestCase {
         
         // Then an error should be shown and the confirmation button disabled.
         app.assertScreenshot(.serverSelection, step: 2)
-        XCTAssertTrue(app.staticTexts[L10n.screenChangeServerErrorInvalidHomeserver].exists)
         XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.continue].isEnabled, "The confirm button should be disabled when there is an error.")
     }
 

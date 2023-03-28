@@ -62,7 +62,7 @@ extension XCUIApplication {
     }
 
     private var testName: String {
-        languageCode + "-" + regionCode + "-" + deviceName
+        localeCode + "-" + deviceName
     }
 
     private var deviceName: String {
@@ -76,6 +76,13 @@ extension XCUIApplication {
         
         return name
     }
+    
+    private var localeCode: String {
+        if UserDefaults.standard.bool(forKey: "NSDoubleLocalizedStrings") {
+            return "pseudo"
+        }
+        return languageCode + "-" + regionCode
+    }
 
     private var languageCode: String {
         Locale.current.language.languageCode?.identifier ?? ""
@@ -83,10 +90,6 @@ extension XCUIApplication {
 
     private var regionCode: String {
         Locale.current.language.region?.identifier ?? ""
-    }
-
-    private var osVersion: String {
-        UIDevice.current.systemVersion.replacingOccurrences(of: ".", with: "-")
     }
 }
 

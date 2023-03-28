@@ -56,7 +56,7 @@ Tools/Scripts/element-android
 # ignore all
 /UITests/Sources/__Snapshots__/Application/*
 # but keep the references
-!/UITests/Sources/__Snapshots__/Application/de-DE-iPad-9th-generation.*.png
 !/UITests/Sources/__Snapshots__/Application/en-GB-iPad-9th-generation.*.png
-!/UITests/Sources/__Snapshots__/Application/de-DE-iPhone-14.*.png
+!/UITests/Sources/__Snapshots__/Application/pseudo-iPad-9th-generation.*.png
 !/UITests/Sources/__Snapshots__/Application/en-GB-iPhone-14.*.png
+!/UITests/Sources/__Snapshots__/Application/pseudo-iPhone-14.*.png
