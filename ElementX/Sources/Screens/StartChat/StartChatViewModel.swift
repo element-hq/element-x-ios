@@ -99,6 +99,8 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     private func updateState(searchQuery: String) {
+        searchTask = nil
+        
         if searchQuery.count < 3 {
             fetchSuggestions()
         } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
