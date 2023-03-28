@@ -118,6 +118,7 @@ private extension StartChatScreen {
             .foregroundColor(.element.tertiaryContent)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
 }
 

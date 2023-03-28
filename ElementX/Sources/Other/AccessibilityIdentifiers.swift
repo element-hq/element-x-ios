@@ -98,6 +98,7 @@ struct A11yIdentifiers {
     struct StartChatScreen {
         let closeStartChat = "start_chat-close"
         let inviteFriends = "start_chat-invite_friends"
+        let searchNoResults = "start_chat-search_no_results"
     }
 
     struct RoomMemberDetailsScreen {
