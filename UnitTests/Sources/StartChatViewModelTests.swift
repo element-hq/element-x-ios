@@ -27,7 +27,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         viewModel.context
     }
     
-    @MainActor override func setUpWithError() throws {
+    override func setUpWithError() throws {
         clientProxy = .init(userID: "")
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
