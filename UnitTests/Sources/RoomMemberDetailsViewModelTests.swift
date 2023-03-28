@@ -38,6 +38,92 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         XCTAssertNil(context.errorAlert)
     }
 
+    func testIgnoreSuccess() async throws {
+        roomMemberProxyMock = RoomMemberProxyMock.mockAlice
+        roomMemberProxyMock.ignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .success(())
+        }
+        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+
+        context.send(viewAction: .showIgnoreAlert)
+        await Task.yield()
+        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .ignore))
+
+        context.send(viewAction: .ignoreConfirmed)
+        await Task.yield()
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertFalse(context.viewState.isIgnored)
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertTrue(context.viewState.isIgnored)
+    }
+
+    func testIgnoreFailure() async throws {
+        roomMemberProxyMock = RoomMemberProxyMock.mockAlice
+        roomMemberProxyMock.ignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .failure(.ignoreUserFailed)
+        }
+        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+
+        context.send(viewAction: .showIgnoreAlert)
+        await Task.yield()
+        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .ignore))
+
+        context.send(viewAction: .ignoreConfirmed)
+        await Task.yield()
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertFalse(context.viewState.isIgnored)
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertNotNil(context.errorAlert)
+        XCTAssertFalse(context.viewState.isIgnored)
+    }
+
+    func testUnignoreSuccess() async throws {
+        roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
+        roomMemberProxyMock.unignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .success(())
+        }
+        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+
+        context.send(viewAction: .showUnignoreAlert)
+        await Task.yield()
+        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .unignore))
+
+        context.send(viewAction: .unignoreConfirmed)
+        await Task.yield()
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertTrue(context.viewState.isIgnored)
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertFalse(context.viewState.isIgnored)
+    }
+
+    func testUnignoreFailure() async throws {
+        roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
+        roomMemberProxyMock.unignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .failure(.unignoreUserFailed)
+        }
+        viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
+
+        context.send(viewAction: .showUnignoreAlert)
+        await Task.yield()
+        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .unignore))
+
+        context.send(viewAction: .unignoreConfirmed)
+        await Task.yield()
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertTrue(context.viewState.isIgnored)
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssertTrue(context.viewState.isIgnored)
+        XCTAssertNotNil(context.errorAlert)
+    }
+
     func testInitialStateAccountOwner() async {
         roomMemberProxyMock = RoomMemberProxyMock.mockMe
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())

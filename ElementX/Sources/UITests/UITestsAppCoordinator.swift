@@ -318,6 +318,16 @@ class MockScreen: Identifiable {
             let coordinator = RoomMemberDetailsCoordinator(parameters: .init(roomMemberProxy: RoomMemberProxyMock.mockMe, mediaProvider: MockMediaProvider()))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .roomMemberDetails:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = RoomMemberDetailsCoordinator(parameters: .init(roomMemberProxy: RoomMemberProxyMock.mockAlice, mediaProvider: MockMediaProvider()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .roomMemberDetailsIgnoredUser:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = RoomMemberDetailsCoordinator(parameters: .init(roomMemberProxy: RoomMemberProxyMock.mockIgnored, mediaProvider: MockMediaProvider()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }

@@ -23,10 +23,9 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
 
-            // TODO: Uncomment when the feature is ready
-//            if !context.viewState.isAccountOwner {
-//                blockUserSection
-//            }
+            if !context.viewState.isAccountOwner {
+                blockUserSection
+            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -77,18 +76,22 @@ struct RoomMemberDetailsScreen: View {
         Section {
             if context.viewState.isIgnored {
                 Button {
-                    context.send(viewAction: .showUnblockAlert)
+                    context.send(viewAction: .showUnignoreAlert)
                 } label: {
                     Label(L10n.screenRoomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
-                .buttonStyle(FormButtonStyle(accessory: nil))
+                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.unignore)
+                .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
+                .disabled(context.viewState.isProcessingIgnoreRequest)
             } else {
                 Button(role: .destructive) {
-                    context.send(viewAction: .showBlockAlert)
+                    context.send(viewAction: .showIgnoreAlert)
                 } label: {
                     Label(L10n.screenRoomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }
-                .buttonStyle(FormButtonStyle(accessory: nil))
+                .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.ignore)
+                .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
+                .disabled(context.viewState.isProcessingIgnoreRequest)
             }
         }
         .formSectionStyle()
