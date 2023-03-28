@@ -18,8 +18,15 @@ import ElementX
 import XCTest
 
 class StartChatScreenUITests: XCTestCase {
-    func testStartChatScreen() {
+    func test_landing() {
         let app = Application.launch(.startChat)
         app.assertScreenshot(.startChat)
+    }
+    
+    func test_searchWithNoResults() {
+        let app = Application.launch(.startChat)
+        let searchField = app.searchFields.firstMatch
+        searchField.clearAndTypeText("Someone")
+        app.assertScreenshot(.startChat, step: 1)
     }
 }
