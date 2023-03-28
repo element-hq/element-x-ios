@@ -16,20 +16,8 @@
 
 import Foundation
 
-enum DeveloperOptionsScreenViewModelAction { }
-
-struct DeveloperOptionsScreenViewState: BindableState {
-    var bindings: DeveloperOptionsScreenViewStateBindings
-}
-
-struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var showStartChatFlow: Bool
-    var mediaUploadFlowEnabled: Bool
-}
-
-enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedShowStartChatFlow
-    case changedShowMediaUploadFlow
+@MainActor
+protocol MediaPickerPreviewScreenViewModelProtocol {
+    var callback: ((MediaPickerPreviewScreenViewModelAction) -> Void)? { get set }
+    var context: MediaPickerPreviewScreenViewModelType.Context { get }
 }

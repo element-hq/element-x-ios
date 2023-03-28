@@ -28,6 +28,7 @@ final class AppSettings: ObservableObject {
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
         case showStartChatFlow
+        case mediaUploadingFlowEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -162,4 +163,9 @@ final class AppSettings: ObservableObject {
     
     @UserSetting(key: UserDefaultsKeys.showStartChatFlow.rawValue, defaultValue: false, persistIn: store)
     var startChatFlowFeatureFlag
+    
+    // MARK: Media Uploading
+    
+    @UserSetting(key: UserDefaultsKeys.mediaUploadingFlowEnabled.rawValue, defaultValue: false, persistIn: nil)
+    var mediaUploadingFlowEnabled
 }

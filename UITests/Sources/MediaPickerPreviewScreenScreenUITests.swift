@@ -14,22 +14,7 @@
 // limitations under the License.
 //
 
-import Foundation
+import ElementX
+import XCTest
 
-enum DeveloperOptionsScreenViewModelAction { }
-
-struct DeveloperOptionsScreenViewState: BindableState {
-    var bindings: DeveloperOptionsScreenViewStateBindings
-}
-
-struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var showStartChatFlow: Bool
-    var mediaUploadFlowEnabled: Bool
-}
-
-enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedShowStartChatFlow
-    case changedShowMediaUploadFlow
-}
+class MediaPickerPreviewScreenScreenUITests: XCTestCase { }

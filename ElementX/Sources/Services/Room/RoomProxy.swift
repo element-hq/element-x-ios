@@ -189,15 +189,15 @@ class RoomProxy: RoomProxyProtocol {
         let transactionId = genTransactionId()
         
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            if let eventID {
-                do {
+            do {
+                if let eventID {
                     try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
-                } catch {
-                    return .failure(.failedSendingMessage)
+                } else {
+                    let messageContent = messageEventContentFromMarkdown(md: message)
+                    try self.room.send(msg: messageContent, txnId: transactionId)
                 }
-            } else {
-                let messageContent = messageEventContentFromMarkdown(md: message)
-                self.room.send(msg: messageContent, txnId: transactionId)
+            } catch {
+                return .failure(.failedSendingMessage)
             }
             return .success(())
         }
@@ -217,6 +217,10 @@ class RoomProxy: RoomProxyProtocol {
                 return .failure(.failedSendingReaction)
             }
         }
+    }
+    
+    func sendImage(body: String, url: URL) async -> Result<Void, RoomProxyError> {
+        .failure(.failedSendingMedia)
     }
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {

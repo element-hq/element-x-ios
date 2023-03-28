@@ -16,20 +16,17 @@
 
 import Foundation
 
-enum DeveloperOptionsScreenViewModelAction { }
-
-struct DeveloperOptionsScreenViewState: BindableState {
-    var bindings: DeveloperOptionsScreenViewStateBindings
+enum MediaPickerPreviewScreenViewModelAction {
+    case send
+    case cancel
 }
 
-struct DeveloperOptionsScreenViewStateBindings {
-    var shouldCollapseRoomStateEvents: Bool
-    var showStartChatFlow: Bool
-    var mediaUploadFlowEnabled: Bool
+struct MediaPickerPreviewScreenViewState: BindableState {
+    let url: URL
+    let title: String?
 }
 
-enum DeveloperOptionsScreenViewAction {
-    case changedShouldCollapseRoomStateEvents
-    case changedShowStartChatFlow
-    case changedShowMediaUploadFlow
+enum MediaPickerPreviewScreenViewAction {
+    case send
+    case cancel
 }
