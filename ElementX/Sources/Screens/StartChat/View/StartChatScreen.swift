@@ -114,6 +114,8 @@ private extension StartChatScreen {
     
     var emptyContent: some View {
         Text(L10n.screenStartchatNoresults)
+            .font(.element.body)
+            .foregroundColor(.element.tertiaryContent)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
     }
