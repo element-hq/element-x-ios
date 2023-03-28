@@ -248,9 +248,13 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    func searchUsers(searchTerm: String, limit: UInt) async throws -> SearchUsersResultsProxy {
-        try await Task.dispatch(on: clientQueue) {
-            try SearchUsersResultsProxy(sdkResults: self.client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit)))
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResultsProxy, ClientProxyError> {
+        await Task.dispatch(on: clientQueue) {
+            do {
+                return try .success(SearchUsersResultsProxy(sdkResults: self.client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
+            } catch {
+                return .failure(.failedSearchingUsers)
+            }
         }
     }
     
