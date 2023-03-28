@@ -52,7 +52,7 @@ private extension StartChatScreen {
     @ViewBuilder
     var afterSearchContent: some View {
         if context.viewState.hasEmptySearchResults {
-            emptyContent
+            noResultsContent
         } else {
             usersSection
         }
@@ -112,7 +112,7 @@ private extension StartChatScreen {
         context.send(viewAction: .close)
     }
     
-    var emptyContent: some View {
+    var noResultsContent: some View {
         Text(L10n.commonNoResults)
             .font(.element.body)
             .foregroundColor(.element.tertiaryContent)
