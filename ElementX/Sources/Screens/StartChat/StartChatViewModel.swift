@@ -34,7 +34,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()
-        fetchSuggestion()
+        fetchSuggestions()
     }
     
     // MARK: - Public
@@ -99,7 +99,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func updateState(searchQuery: String) {
         if searchQuery.count < 3 {
-            fetchSuggestion()
+            fetchSuggestions()
         } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
             state.usersSection = .init(type: .searchResult, users: [UserProfileProxy(userID: searchQuery)])
         } else {
@@ -107,7 +107,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    private func fetchSuggestion() {
+    private func fetchSuggestions() {
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
     

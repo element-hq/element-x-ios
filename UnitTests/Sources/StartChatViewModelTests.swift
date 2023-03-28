@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import XCTest
 
 @testable import ElementX
@@ -21,12 +22,46 @@ import XCTest
 @MainActor
 class StartChatScreenViewModelTests: XCTestCase {
     var viewModel: StartChatViewModelProtocol!
-    var context: StartChatViewModelType.Context!
+    var clientProxy: MockClientProxy!
+    
+    var context: StartChatViewModel.Context {
+        viewModel.context
+    }
     
     @MainActor override func setUpWithError() throws {
-        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: ""),
-                                          mediaProvider: MockMediaProvider())
+        clientProxy = .init(userID: "")
+        let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
         viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
-        context = viewModel.context
+    }
+    
+    func test_queryShowingNoResults() async throws {
+        viewModel.context.searchQuery = "A"
+        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        
+        viewModel.context.searchQuery = "AA"
+        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        
+        viewModel.context.searchQuery = "AAA"
+        _ = await context.$viewState.firstValue()
+        XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
+        XCTAssert(context.viewState.hasEmptySearchResults)
+    }
+    
+    func test_queryShowingResults() async throws {
+        clientProxy.searchUsersResult = .success(.init(results: [UserProfileProxy.mockAlice], limited: true))
+        
+        viewModel.context.searchQuery = "AAA"
+        _ = await context.$viewState.firstValue()
+        XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
+        XCTAssertEqual(context.viewState.usersSection.users.count, 1)
+        XCTAssertFalse(context.viewState.hasEmptySearchResults)
+    }
+}
+
+private extension Published.Publisher {
+    func firstValue(nextValue: Bool = true) async -> Output? {
+        var iterator = values.makeAsyncIterator()
+        let firstValue = await iterator.next()
+        return nextValue ? await iterator.next() : firstValue
     }
 }

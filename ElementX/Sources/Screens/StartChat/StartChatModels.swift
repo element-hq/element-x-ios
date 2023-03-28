@@ -37,10 +37,12 @@ extension StartChatViewState {
     }
 }
 
-enum StartChatUserSectionType {
+enum StartChatUserSectionType: Equatable {
     case searchResult
     case suggestions
-    
+}
+
+extension StartChatUserSectionType {
     var title: String? {
         switch self {
         case .searchResult:
