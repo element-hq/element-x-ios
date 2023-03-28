@@ -86,6 +86,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         context.$viewState
             .map(\.bindings.searchQuery)
             .map { query in
+                // debounce search queries but make sure clearing the search updates immediately
                 let milliseconds = query.isEmpty ? 0 : 500
                 return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
             }
