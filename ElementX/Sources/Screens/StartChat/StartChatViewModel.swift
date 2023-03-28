@@ -103,7 +103,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
             state.usersSection = .init(type: .searchResult, users: [UserProfileProxy(userID: searchQuery)])
         } else {
-            searchUsers(serachTerm: searchQuery)
+            searchUsers(searchTerm: searchQuery)
         }
     }
     
@@ -123,9 +123,9 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    private func searchUsers(serachTerm: String) {
+    private func searchUsers(searchTerm: String) {
         searchTask = Task { @MainActor in
-            let result = try await userSession.clientProxy.searchUsers(searchTerm: serachTerm, limit: 5)
+            let result = try await userSession.clientProxy.searchUsers(searchTerm: searchTerm, limit: 5)
             
             guard !Task.isCancelled else {
                 return
