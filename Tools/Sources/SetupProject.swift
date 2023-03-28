@@ -15,7 +15,7 @@ struct SetupProject: ParsableCommand {
     }
 
     func brewBundleInstall() throws {
-        try Utilities.zsh("brew install xcodegen swiftgen swiftlint swiftformat git-lfs sourcery kiliankoe/formulae/swift-outdated")
+        try Utilities.zsh("brew install xcodegen swiftgen swiftlint swiftformat git-lfs sourcery kiliankoe/formulae/swift-outdated localazy/tools/localazy")
     }
 
     func xcodegen() throws {
