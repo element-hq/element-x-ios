@@ -81,8 +81,8 @@ struct RoomMemberDetailsScreen: View {
                     Label(ElementL10n.roomMemberDetailsUnblockUser, systemImage: "slash.circle")
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.unignore)
-                .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
-                .disabled(context.viewState.isIgnoreLoading)
+                .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
+                .disabled(context.viewState.isProcessingIgnoreRequest)
             } else {
                 Button(role: .destructive) {
                     context.send(viewAction: .showIgnoreAlert)
@@ -90,8 +90,8 @@ struct RoomMemberDetailsScreen: View {
                     Label(ElementL10n.roomMemberDetailsBlockUser, systemImage: "slash.circle")
                 }
                 .accessibilityIdentifier(A11yIdentifiers.roomMemberDetailsScreen.ignore)
-                .buttonStyle(FormButtonStyle(accessory: context.viewState.isIgnoreLoading ? .spinner : nil))
-                .disabled(context.viewState.isIgnoreLoading)
+                .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
+                .disabled(context.viewState.isProcessingIgnoreRequest)
             }
         }
         .formSectionStyle()

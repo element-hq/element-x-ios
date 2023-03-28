@@ -52,10 +52,10 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .ignoreConfirmed)
         await Task.yield()
-        XCTAssertTrue(context.viewState.isIgnoreLoading)
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
         XCTAssertFalse(context.viewState.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
-        XCTAssertFalse(context.viewState.isIgnoreLoading)
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.isIgnored)
     }
 
@@ -73,10 +73,10 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .ignoreConfirmed)
         await Task.yield()
-        XCTAssertTrue(context.viewState.isIgnoreLoading)
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
         XCTAssertFalse(context.viewState.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
-        XCTAssertFalse(context.viewState.isIgnoreLoading)
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertNotNil(context.errorAlert)
         XCTAssertFalse(context.viewState.isIgnored)
     }
@@ -95,10 +95,10 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .unignoreConfirmed)
         await Task.yield()
-        XCTAssertTrue(context.viewState.isIgnoreLoading)
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
-        XCTAssertFalse(context.viewState.isIgnoreLoading)
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertFalse(context.viewState.isIgnored)
     }
 
@@ -116,10 +116,10 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .unignoreConfirmed)
         await Task.yield()
-        XCTAssertTrue(context.viewState.isIgnoreLoading)
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
-        XCTAssertFalse(context.viewState.isIgnoreLoading)
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.isIgnored)
         XCTAssertNotNil(context.errorAlert)
     }
