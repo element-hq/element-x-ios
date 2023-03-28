@@ -92,5 +92,5 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
 
     func setPusher(with configuration: PusherConfiguration) async throws
     
-    func searchUsers(searchTerm: String, limit: UInt64) async throws -> SearchUsersResultsProxy
+    func searchUsers(searchTerm: String, limit: UInt) async throws -> SearchUsersResultsProxy
 }
