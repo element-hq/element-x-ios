@@ -41,6 +41,8 @@ struct StartChatScreen: View {
     }
 }
 
+// MARK: - Private
+
 private extension StartChatScreen {
     @ViewBuilder
     var beforeSearchContent: some View {
