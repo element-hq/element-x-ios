@@ -42,7 +42,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
         
         viewModel.context.searchQuery = "AAA"
-        _ = await context.$viewState.firstValue()
+        _ = await context.$viewState.firstValue
         XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
         XCTAssert(context.viewState.hasEmptySearchResults)
     }
@@ -51,17 +51,9 @@ class StartChatScreenViewModelTests: XCTestCase {
         clientProxy.searchUsersResult = .success(.init(results: [UserProfileProxy.mockAlice], limited: true))
         
         viewModel.context.searchQuery = "AAA"
-        _ = await context.$viewState.firstValue()
+        _ = await context.$viewState.firstValue
         XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
         XCTAssertEqual(context.viewState.usersSection.users.count, 1)
         XCTAssertFalse(context.viewState.hasEmptySearchResults)
-    }
-}
-
-private extension Published.Publisher {
-    func firstValue(nextValue: Bool = true) async -> Output? {
-        var iterator = values.makeAsyncIterator()
-        let firstValue = await iterator.next()
-        return nextValue ? await iterator.next() : firstValue
     }
 }
