@@ -113,7 +113,7 @@ private extension StartChatScreen {
     }
     
     var emptyContent: some View {
-        Text("some test")
+        Text(L10n.screenStartchatNoresults)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
     }
