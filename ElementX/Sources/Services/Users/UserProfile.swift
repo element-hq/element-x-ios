@@ -22,7 +22,7 @@ struct UserProfileProxy {
     let displayName: String?
     let avatarURL: URL?
     
-    init(userID: String, displayName: String?, avatarURL: URL?) {
+    init(userID: String, displayName: String? = nil, avatarURL: URL? = nil) {
         self.userID = userID
         self.displayName = displayName
         self.avatarURL = avatarURL

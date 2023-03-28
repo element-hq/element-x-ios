@@ -85,19 +85,26 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .debounce(for: .milliseconds(500), scheduler: DispatchQueue.main)
             .removeDuplicates()
-            .sink { [weak self] searchQuery in
-                if searchQuery.count < 3 {
-                    self?.fetchSuggestion()
-                } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-                    self?.state.usersSection = .init(type: .searchResult,
-                                                     users: [UserProfileProxy(userID: searchQuery, displayName: nil, avatarURL: nil)])
-                } else {
-                    self?.searchUsers(serachTerm: searchQuery)
-                }
+            .map { query in
+                let milliseconds = query.isEmpty ? 0 : 500
+                return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
+            }
+            .switchToLatest()
+            .sink { [weak self] query in
+                self?.updateState(searchQuery: query)
             }
             .store(in: &cancellables)
+    }
+    
+    private func updateState(searchQuery: String) {
+        if searchQuery.count < 3 {
+            fetchSuggestion()
+        } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
+            state.usersSection = .init(type: .searchResult, users: [UserProfileProxy(userID: searchQuery)])
+        } else {
+            searchUsers(serachTerm: searchQuery)
+        }
     }
     
     private func fetchSuggestion() {
