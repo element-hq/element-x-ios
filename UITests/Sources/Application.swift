@@ -78,7 +78,9 @@ extension XCUIApplication {
     }
     
     private var localeCode: String {
-        guard !UserDefaults.standard.bool(forKey: "NSDoubleLocalizedStrings") else { return "pseudo" }
+        if UserDefaults.standard.bool(forKey: "NSDoubleLocalizedStrings") {
+            return "pseudo"
+        }
         return languageCode + "-" + regionCode
     }
 
