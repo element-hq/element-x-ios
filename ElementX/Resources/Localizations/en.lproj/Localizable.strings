@@ -62,6 +62,7 @@
 "common_message_layout" = "Message layout";
 "common_message_removed" = "Message removed";
 "common_modern" = "Modern";
+"common_no_results" = "No results";
 "common_offline" = "Offline";
 "common_password" = "Password";
 "common_people" = "People";
@@ -202,7 +203,6 @@
 "screen_signout_in_progress_dialog_content" = "Signing out…";
 "screen_signout_preference_item" = "Sign out";
 "screen_start_chat_error_starting_chat" = "An error occurred when trying to start a chat";
-"screen_startchat_noresults" = "No results";
 "session_verification_banner_message" = "Looks like you’re using a new device. Verify it’s you to access your encrypted messages.";
 "session_verification_banner_title" = "Access your message history";
 "settings_rageshake" = "Rageshake";
