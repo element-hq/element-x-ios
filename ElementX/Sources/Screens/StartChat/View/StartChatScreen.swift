@@ -24,7 +24,7 @@ struct StartChatScreen: View {
             if !context.viewState.isSearching {
                 beforeSearchContent
             } else {
-                afterSearchContent
+                searchContent
             }
         }
         .scrollContentBackground(.hidden)
@@ -51,8 +51,9 @@ private extension StartChatScreen {
         usersSection
     }
     
+    /// The content shown in the form when a search query has been entered.
     @ViewBuilder
-    var afterSearchContent: some View {
+    var searchContent: some View {
         if context.viewState.hasEmptySearchResults {
             noResultsContent
         } else {
@@ -97,6 +98,15 @@ private extension StartChatScreen {
         .formSectionStyle()
     }
     
+    var noResultsContent: some View {
+        Text(L10n.commonNoResults)
+            .font(.element.body)
+            .foregroundColor(.element.tertiaryContent)
+            .frame(maxWidth: .infinity)
+            .listRowBackground(Color.clear)
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
+    }
+    
     var closeButton: some View {
         Button(L10n.actionCancel, action: close)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.closeStartChat)
@@ -112,15 +122,6 @@ private extension StartChatScreen {
     
     func close() {
         context.send(viewAction: .close)
-    }
-    
-    var noResultsContent: some View {
-        Text(L10n.commonNoResults)
-            .font(.element.body)
-            .foregroundColor(.element.tertiaryContent)
-            .frame(maxWidth: .infinity)
-            .listRowBackground(Color.clear)
-            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
 }
 
