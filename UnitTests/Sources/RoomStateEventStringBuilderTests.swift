@@ -30,20 +30,20 @@ class RoomStateEventStringBuilderTests: XCTestCase {
     func testDisplayNameChanges() {
         // Changes by you.
         validateDisplayNameChange(senderID: userID, oldName: "Alice", newName: "Bob",
-                                  expectedString: ElementL10n.noticeDisplayNameChangedFromByYou("Alice", "Bob"))
+                                  expectedString: L10n.stateEventDisplayNameChangedFromByYou("Alice", "Bob"))
         validateDisplayNameChange(senderID: userID, oldName: "Alice", newName: nil,
-                                  expectedString: ElementL10n.noticeDisplayNameRemovedByYou("Alice"))
+                                  expectedString: L10n.stateEventDisplayNameRemovedByYou("Alice"))
         validateDisplayNameChange(senderID: userID, oldName: nil, newName: "Alice",
-                                  expectedString: ElementL10n.noticeDisplayNameSetByYou("Alice"))
+                                  expectedString: L10n.stateEventDisplayNameSetByYou("Alice"))
         
         // Changes by someone else.
         let senderID = "@bob:matrix.org"
         validateDisplayNameChange(senderID: senderID, oldName: "Bob", newName: "Alice",
-                                  expectedString: ElementL10n.noticeDisplayNameChangedFrom(senderID, "Bob", "Alice"))
+                                  expectedString: L10n.stateEventDisplayNameChangedFrom(senderID, "Bob", "Alice"))
         validateDisplayNameChange(senderID: senderID, oldName: "Bob", newName: nil,
-                                  expectedString: ElementL10n.noticeDisplayNameRemoved(senderID, "Bob"))
+                                  expectedString: L10n.stateEventDisplayNameRemoved(senderID, "Bob"))
         validateDisplayNameChange(senderID: senderID, oldName: nil, newName: "Bob",
-                                  expectedString: ElementL10n.noticeDisplayNameSet(senderID, "Bob"))
+                                  expectedString: L10n.stateEventDisplayNameSet(senderID, "Bob"))
     }
     
     func validateDisplayNameChange(senderID: String, oldName: String?, newName: String?, expectedString: String) {
@@ -60,21 +60,21 @@ class RoomStateEventStringBuilderTests: XCTestCase {
     func testAvatarChanges() {
         // Changes by you.
         validateAvatarChange(senderID: userID, oldAvatarURL: "mxc://1", newAvatarURL: "mxc://2",
-                             expectedString: ElementL10n.noticeAvatarUrlChangedByYou)
+                             expectedString: L10n.stateEventAvatarUrlChangedByYou)
         validateAvatarChange(senderID: userID, oldAvatarURL: "mxc://1", newAvatarURL: nil,
-                             expectedString: ElementL10n.noticeAvatarUrlChangedByYou)
+                             expectedString: L10n.stateEventAvatarUrlChangedByYou)
         validateAvatarChange(senderID: userID, oldAvatarURL: nil, newAvatarURL: "mxc://1",
-                             expectedString: ElementL10n.noticeAvatarUrlChangedByYou)
+                             expectedString: L10n.stateEventAvatarUrlChangedByYou)
         
         // Changes by someone else.
         let senderID = "@bob:matrix.org"
         let senderName = "Bob"
         validateAvatarChange(senderID: senderID, senderName: senderName, oldAvatarURL: "mxc://1", newAvatarURL: "mxc://2",
-                             expectedString: ElementL10n.noticeAvatarUrlChanged(senderName))
+                             expectedString: L10n.stateEventAvatarUrlChanged(senderName))
         validateAvatarChange(senderID: senderID, senderName: senderName, oldAvatarURL: "mxc://1", newAvatarURL: nil,
-                             expectedString: ElementL10n.noticeAvatarUrlChanged(senderName))
+                             expectedString: L10n.stateEventAvatarUrlChanged(senderName))
         validateAvatarChange(senderID: senderID, senderName: senderName, oldAvatarURL: nil, newAvatarURL: "mxc://1",
-                             expectedString: ElementL10n.noticeAvatarUrlChanged(senderName))
+                             expectedString: L10n.stateEventAvatarUrlChanged(senderName))
     }
     
     func validateAvatarChange(senderID: String, senderName: String? = nil,

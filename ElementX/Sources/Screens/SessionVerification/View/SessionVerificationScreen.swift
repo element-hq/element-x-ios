@@ -106,14 +106,16 @@ struct SessionVerificationScreen: View {
     
     @ViewBuilder
     private func emojisPanel(with emojis: [SessionVerificationEmoji]) -> some View {
-        HStack(spacing: 16) {
-            ForEach(emojis.prefix(4), id: \.self) { emoji in
-                EmojiView(emoji: emoji)
+        VStack(spacing: 32) {
+            HStack(spacing: 16) {
+                ForEach(emojis.prefix(4), id: \.self) { emoji in
+                    EmojiView(emoji: emoji)
+                }
             }
-        }
-        HStack(spacing: 16) {
-            ForEach(emojis.suffix(from: 4), id: \.self) { emoji in
-                EmojiView(emoji: emoji)
+            HStack(spacing: 16) {
+                ForEach(emojis.suffix(from: 4), id: \.self) { emoji in
+                    EmojiView(emoji: emoji)
+                }
             }
         }
     }
@@ -122,20 +124,20 @@ struct SessionVerificationScreen: View {
     private var actionButtons: some View {
         switch context.viewState.verificationState {
         case .initial:
-            Button(ElementL10n.startVerification) {
+            Button(L10n.actionStartVerification) {
                 context.send(viewAction: .requestVerification)
             }
             .buttonStyle(.elementAction(.xLarge))
             .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.requestVerification)
         
         case .cancelled:
-            Button(ElementL10n.globalRetry) {
+            Button(L10n.actionRetry) {
                 context.send(viewAction: .restart)
             }
             .buttonStyle(.elementAction(.xLarge))
             
         case .verificationRequestAccepted:
-            Button(ElementL10n.sessionVerificationStart) {
+            Button(L10n.actionStart) {
                 context.send(viewAction: .startSasVerification)
             }
             .buttonStyle(.elementAction(.xLarge))
@@ -144,12 +146,12 @@ struct SessionVerificationScreen: View {
         case .showingChallenge:
             VStack(spacing: 30) {
                 Button { context.send(viewAction: .accept) } label: {
-                    Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
+                    Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                 }
                 .buttonStyle(.elementAction(.xLarge))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 
-                Button(ElementL10n.verificationSasDoNotMatch) {
+                Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
@@ -162,14 +164,14 @@ struct SessionVerificationScreen: View {
                     HStack(spacing: 16) {
                         ProgressView()
                             .tint(.element.background)
-                        Label(ElementL10n.verificationSasMatch, systemImage: "checkmark")
+                        Label(L10n.screenSessionVerificationTheyMatch, systemImage: "checkmark")
                     }
                 }
                 .buttonStyle(.elementAction(.xLarge))
                 .accessibilityIdentifier(A11yIdentifiers.sessionVerificationScreen.acceptChallenge)
                 .disabled(true)
 
-                Button(ElementL10n.verificationSasDoNotMatch) {
+                Button(L10n.screenSessionVerificationTheyDontMatch) {
                     context.send(viewAction: .decline)
                 }
                 .font(.element.bodyBold)
@@ -185,7 +187,7 @@ struct SessionVerificationScreen: View {
     @ToolbarContentBuilder
     private var toolbarContent: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(ElementL10n.actionCancel) {
+            Button(L10n.actionCancel) {
                 context.send(viewAction: .close)
             }
             .foregroundColor(.element.accent)
@@ -227,11 +229,18 @@ struct SessionVerificationScreen: View {
 struct SessionVerification_Previews: PreviewProvider {
     static var previews: some View {
         sessionVerificationScreen(state: .initial)
+            .previewDisplayName("Initial")
         sessionVerificationScreen(state: .requestingVerification)
+            .previewDisplayName("Requesting Verification")
+        sessionVerificationScreen(state: .verificationRequestAccepted)
+            .previewDisplayName("Request Accepted")
         sessionVerificationScreen(state: .cancelled)
+            .previewDisplayName("Cancelled")
         
         sessionVerificationScreen(state: .showingChallenge(emojis: SessionVerificationControllerProxyMock.emojis))
+            .previewDisplayName("Showing Challenge")
         sessionVerificationScreen(state: .verified)
+            .previewDisplayName("Verified")
     }
     
     static func sessionVerificationScreen(state: SessionVerificationStateMachine.State) -> some View {

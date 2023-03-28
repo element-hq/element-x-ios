@@ -101,7 +101,7 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     @MainActor private func startLoading() {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.loadingIndicatorIdentifier,
                                                                                     type: .modal,
-                                                                                    title: ElementL10n.loading,
+                                                                                    title: L10n.commonLoading,
                                                                                     persistent: true))
     }
     
@@ -124,7 +124,7 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
         Task {
             switch await authenticationService.login(username: username,
                                                      password: password,
-                                                     initialDeviceName: UIDevice.current.initialDisplayName,
+                                                     initialDeviceName: UIDevice.current.initialDeviceName,
                                                      deviceId: parameters.credentials.deviceId) {
             case .success(let userSession):
                 callback?(.signedIn(userSession))
@@ -160,11 +160,11 @@ final class SoftLogoutCoordinator: CoordinatorProtocol {
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
         case .invalidCredentials:
-            viewModel.displayError(.alert(ElementL10n.authInvalidLoginParam))
+            viewModel.displayError(.alert(L10n.screenLoginErrorInvalidCredentials))
         case .accountDeactivated:
-            viewModel.displayError(.alert(ElementL10n.authInvalidLoginDeactivatedAccount))
+            viewModel.displayError(.alert(L10n.screenLoginErrorDeactivatedAccount))
         default:
-            viewModel.displayError(.alert(ElementL10n.unknownError))
+            viewModel.displayError(.alert(L10n.errorUnknown))
         }
     }
 }

@@ -30,13 +30,13 @@ struct RoomEventStringBuilder {
         
         switch eventItemProxy.content.kind() {
         case .unableToDecrypt:
-            return prefix(ElementL10n.encryptionInformationDecryptionError, with: sender)
+            return prefix(L10n.commonDecryptionError, with: sender)
         case .redactedMessage:
-            return prefix(ElementL10n.eventRedacted, with: sender)
+            return prefix(L10n.commonMessageRemoved, with: sender)
         case .sticker:
-            return prefix(ElementL10n.sendASticker, with: sender)
+            return prefix(L10n.commonSticker, with: sender)
         case .failedToParseMessageLike, .failedToParseState:
-            return prefix(ElementL10n.roomTimelineItemUnsupported, with: sender)
+            return prefix(L10n.commonUnsupportedEvent, with: sender)
         case .message:
             guard let messageContent = eventItemProxy.content.asMessage() else { fatalError("Invalid message timeline item: \(eventItemProxy)") }
             
@@ -48,11 +48,11 @@ struct RoomEventStringBuilder {
                 return AttributedString("* \(senderDisplayName) \(content.body)")
             // Message types that should be prefixed with the sender's name.
             case .image:
-                message = ElementL10n.sentAnImage
+                message = L10n.commonImage
             case .video:
-                message = ElementL10n.sentAVideo
+                message = L10n.commonVideo
             case .file:
-                message = ElementL10n.sentAFile
+                message = L10n.commonFile
             default:
                 message = messageContent.body()
             }

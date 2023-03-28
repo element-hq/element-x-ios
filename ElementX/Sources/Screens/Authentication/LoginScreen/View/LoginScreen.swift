@@ -53,7 +53,7 @@ struct LoginScreen: View {
     
     /// The header containing a Welcome Back title.
     var header: some View {
-        Text(ElementL10n.ftueAuthWelcomeBackTitle)
+        Text(L10n.screenLoginTitle)
             .font(.element.title1Bold)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
@@ -69,16 +69,16 @@ struct LoginScreen: View {
     /// The form with text fields for username and password, along with a submit button.
     var loginForm: some View {
         VStack(alignment: .leading, spacing: 0) {
-            Text(ElementL10n.ftueAuthSignInEnterDetails)
+            Text(L10n.screenLoginFormHeader)
                 .font(.element.footnote)
                 .foregroundColor(.element.primaryContent)
                 .padding(.horizontal, 16)
                 .padding(.bottom, 8)
             
-            TextField(ElementL10n.username,
+            TextField(L10n.commonUsername,
                       text: $context.username,
                       // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
-                      prompt: Text(ElementL10n.username).foregroundColor(.element.tertiaryContent))
+                      prompt: Text(L10n.commonUsername).foregroundColor(.element.tertiaryContent))
                 .focused($isUsernameFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.emailUsername))
                 .disableAutocorrection(true)
@@ -89,10 +89,10 @@ struct LoginScreen: View {
                 .onSubmit { isPasswordFocused = true }
                 .padding(.bottom, 20)
             
-            SecureField(ElementL10n.loginSignupPasswordHint,
+            SecureField(L10n.commonPassword,
                         text: $context.password,
                         // Prompt colour fixes a flicker that occurs before the text field style introspects the field.
-                        prompt: Text(ElementL10n.loginSignupPasswordHint).foregroundColor(.element.tertiaryContent))
+                        prompt: Text(L10n.commonPassword).foregroundColor(.element.tertiaryContent))
                 .focused($isPasswordFocused)
                 .textFieldStyle(.elementInput(accessibilityIdentifier: A11yIdentifiers.loginScreen.password))
                 .textContentType(.password)
@@ -102,7 +102,7 @@ struct LoginScreen: View {
             Spacer().frame(height: 32)
 
             Button(action: submit) {
-                Text(ElementL10n.loginContinue)
+                Text(L10n.actionContinue)
             }
             .buttonStyle(.elementAction(.xLarge))
             .disabled(!context.viewState.canSubmit)
@@ -113,7 +113,7 @@ struct LoginScreen: View {
     /// The OIDC button that can be used for login.
     var oidcButton: some View {
         Button { context.send(viewAction: .continueWithOIDC) } label: {
-            Text(ElementL10n.loginContinue)
+            Text(L10n.actionContinue)
         }
         .buttonStyle(.elementAction(.xLarge))
         .accessibilityIdentifier(A11yIdentifiers.loginScreen.oidc)
@@ -121,7 +121,7 @@ struct LoginScreen: View {
     
     /// Text shown if neither password or OIDC login is supported.
     var loginUnavailableText: some View {
-        Text(ElementL10n.autodiscoverWellKnownError)
+        Text(L10n.screenLoginErrorUnsupportedAuthentication)
             .font(.body)
             .multilineTextAlignment(.center)
             .foregroundColor(.element.primaryContent)
@@ -156,9 +156,13 @@ struct Login_Previews: PreviewProvider {
     
     static var previews: some View {
         screen(for: LoginViewModel(homeserver: .mockMatrixDotOrg))
+            .previewDisplayName("matrix.org")
         screen(for: credentialsViewModel)
-        screen(for: LoginViewModel(homeserver: .mockBasicServer))
+            .previewDisplayName("Credentials Entered")
         screen(for: LoginViewModel(homeserver: .mockOIDC))
+            .previewDisplayName("OIDC")
+        screen(for: LoginViewModel(homeserver: .mockUnsupported))
+            .previewDisplayName("Unsupported")
     }
     
     static func screen(for viewModel: LoginViewModel) -> some View {

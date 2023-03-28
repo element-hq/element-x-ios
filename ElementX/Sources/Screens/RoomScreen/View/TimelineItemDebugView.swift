@@ -40,12 +40,12 @@ struct TimelineItemDebugView: View {
             .navigationTitle(info.title)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(ElementL10n.actionCancel) {
+                    Button(L10n.actionCancel) {
                         dismiss()
                     }
                 }
                 ToolbarItem(placement: .secondaryAction) {
-                    Button(ElementL10n.actionCopy) {
+                    Button(L10n.actionCopy) {
                         UIPasteboard.general.string = info.content
                     }
                 }

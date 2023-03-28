@@ -34,7 +34,7 @@ enum MockServerSelectionScreenState: CaseIterable {
         case .invalidAddress:
             let viewModel = ServerSelectionViewModel(homeserverAddress: "thisisbad",
                                                      isModallyPresented: true)
-            viewModel.displayError(.footerMessage(ElementL10n.unknownError))
+            viewModel.displayError(.footerMessage(L10n.errorUnknown))
             return viewModel
         case .nonModal:
             return ServerSelectionViewModel(homeserverAddress: "https://matrix.org",

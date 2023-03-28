@@ -48,10 +48,10 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
         case .slidingSyncAlert:
             let openURL = { UIApplication.shared.open(ServiceLocator.shared.settings.slidingSyncLearnMoreURL) }
             state.bindings.alertInfo = AlertInfo(id: .slidingSyncAlert,
-                                                 title: ElementL10n.serverSelectionSlidingSyncAlertTitle,
-                                                 message: ElementL10n.serverSelectionSlidingSyncAlertMessage,
-                                                 primaryButton: .init(title: ElementL10n.actionLearnMore, role: .cancel, action: openURL),
-                                                 secondaryButton: .init(title: ElementL10n.actionCancel, action: nil))
+                                                 title: L10n.commonServerNotSupported,
+                                                 message: L10n.screenChangeServerErrorNoSlidingSyncMessage,
+                                                 primaryButton: .init(title: L10n.actionLearnMore, role: .cancel, action: openURL),
+                                                 secondaryButton: .init(title: L10n.actionCancel, action: nil))
         }
     }
     

@@ -17,19 +17,11 @@ strings:
         lookupFunction: tr  # used for the loc to be computed variables
         publicAccess: true
   - inputs: Resources/Localizations/en.lproj
-    filter: Legacy*
-    outputs:
-      templatePath: Templates/Strings/structured-swift5-element.stencil
-      output: Strings+Legacy.swift
-      params:
-        enumName: ElementL10n
-        lookupFunction: tr  # used for the loc to be computed variables
-        publicAccess: true
-  - inputs: Resources/Localizations/en.lproj
     filter: Untranslated*
     outputs:
-      templatePath: Templates/Strings/structured-swift5-untranslated.stencil
+      templatePath: Templates/Strings/structured-swift5-element.stencil
       output: Strings+Untranslated.swift
       params:
-        enumName: ElementL10n
+        enumName: UntranslatedL10n
+        lookupFunction: tr  # used for the loc to be computed variables
         publicAccess: true

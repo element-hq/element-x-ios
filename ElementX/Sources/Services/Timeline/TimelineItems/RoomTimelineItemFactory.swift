@@ -99,7 +99,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
                                               _ error: String,
                                               _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         UnsupportedRoomTimelineItem(id: eventItemProxy.id,
-                                    body: ElementL10n.roomTimelineItemUnsupported,
+                                    body: L10n.commonUnsupportedEvent,
                                     eventType: eventType,
                                     error: error,
                                     timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
@@ -150,7 +150,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
         }
         
         return EncryptedRoomTimelineItem(id: eventItemProxy.id,
-                                         body: ElementL10n.roomTimelineUnableToDecrypt,
+                                         body: L10n.commonUnableToDecrypt,
                                          encryptionType: encryptionType,
                                          timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                          isOutgoing: isOutgoing,
@@ -162,7 +162,7 @@ struct RoomTimelineItemFactory: RoomTimelineItemFactoryProtocol {
     private func buildRedactedTimelineItem(_ eventItemProxy: EventTimelineItemProxy,
                                            _ isOutgoing: Bool) -> RoomTimelineItemProtocol {
         RedactedRoomTimelineItem(id: eventItemProxy.id,
-                                 body: ElementL10n.eventRedacted,
+                                 body: L10n.commonMessageRemoved,
                                  timestamp: eventItemProxy.timestamp.formatted(date: .omitted, time: .shortened),
                                  isOutgoing: isOutgoing,
                                  isEditable: eventItemProxy.isEditable,

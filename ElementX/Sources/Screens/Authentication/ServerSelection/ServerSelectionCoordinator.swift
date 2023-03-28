@@ -69,7 +69,7 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
     
     // MARK: - Private
     
-    private func startLoading(label: String = ElementL10n.loading) {
+    private func startLoading(label: String = L10n.commonLoading) {
         userIndicatorController.submitIndicator(UserIndicator(type: .modal,
                                                               title: label,
                                                               persistent: true))
@@ -101,11 +101,11 @@ final class ServerSelectionCoordinator: CoordinatorProtocol {
     private func handleError(_ error: AuthenticationServiceError) {
         switch error {
         case .invalidServer, .invalidHomeserverAddress:
-            viewModel.displayError(.footerMessage(ElementL10n.loginErrorHomeserverNotFound))
+            viewModel.displayError(.footerMessage(L10n.screenChangeServerErrorInvalidHomeserver))
         case .slidingSyncNotAvailable:
             viewModel.displayError(.slidingSyncAlert)
         default:
-            viewModel.displayError(.footerMessage(ElementL10n.unknownError))
+            viewModel.displayError(.footerMessage(L10n.errorUnknown))
         }
     }
 }

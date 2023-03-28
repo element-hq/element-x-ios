@@ -38,21 +38,21 @@ struct EmojiPickerEmojiCategoryViewData: Identifiable {
     var name: String {
         switch id {
         case "people":
-            return ElementL10n.emojiPickerPeopleCategory
+            return L10n.emojiPickerCategoryPeople
         case "nature":
-            return ElementL10n.emojiPickerNatureCategory
+            return L10n.emojiPickerCategoryNature
         case "foods":
-            return ElementL10n.emojiPickerFoodsCategory
+            return L10n.emojiPickerCategoryFoods
         case "activity":
-            return ElementL10n.emojiPickerActivityCategory
+            return L10n.emojiPickerCategoryActivity
         case "places":
-            return ElementL10n.emojiPickerPlacesCategory
+            return L10n.emojiPickerCategoryPlaces
         case "objects":
-            return ElementL10n.emojiPickerObjectsCategory
+            return L10n.emojiPickerCategoryObjects
         case "symbols":
-            return ElementL10n.emojiPickerSymbolsCategory
+            return L10n.emojiPickerCategorySymbols
         case "flags":
-            return ElementL10n.emojiPickerFlagsCategory
+            return L10n.emojiPickerCategoryFlags
         default:
             MXLog.failure("Missing translation for emoji category with id \(id)")
             return ""
