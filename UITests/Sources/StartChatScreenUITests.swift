@@ -28,8 +28,7 @@ class StartChatScreenUITests: XCTestCase {
         let app = Application.launch(.startChat)
         let searchField = app.searchFields.firstMatch
         searchField.clearAndTypeText("Someone")
-        try await Task.sleep(nanoseconds: 1_000_000_000)
-        XCTAssert(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].exists)
+        XCTAssert(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
         app.assertScreenshot(.startChat, step: 1)
     }
 }
