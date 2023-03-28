@@ -124,16 +124,14 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     private func searchUsers(serachTerm: String) {
-        searchTask = Task {
+        searchTask = Task { @MainActor in
             let result = try await userSession.clientProxy.searchUsers(searchTerm: serachTerm, limit: 5)
             
             guard !Task.isCancelled else {
                 return
             }
             
-            await MainActor.run {
-                state.usersSection = .init(type: .searchResult, users: result.results)
-            }
+            state.usersSection = .init(type: .searchResult, users: result.results)
         }
     }
     
