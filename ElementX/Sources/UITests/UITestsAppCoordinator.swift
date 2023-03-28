@@ -312,7 +312,7 @@ class MockScreen: Identifiable {
             return navigationStackCoordinator
         case .startChat:
             let navigationStackCoordinator = NavigationStackCoordinator()
-            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider())))
+            let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"), mediaProvider: MockMediaProvider()), navigationStackCoordinator: navigationStackCoordinator))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         case .startChatWithSearchResults:

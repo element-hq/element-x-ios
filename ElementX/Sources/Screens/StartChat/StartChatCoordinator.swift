@@ -19,6 +19,7 @@ import SwiftUI
 struct StartChatCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
+    let navigationStackCoordinator: NavigationStackCoordinator?
 }
 
 enum StartChatCoordinatorAction {
@@ -45,14 +46,30 @@ final class StartChatCoordinator: CoordinatorProtocol {
             case .close:
                 self.callback?(.close)
             case .createRoom:
-                break
+                self.presentInviteUsersScreen()
             case .openRoom(let identifier):
                 self.callback?(.openRoom(withIdentifier: identifier))
             }
         }
     }
         
+    // MARK: - Public
+    
     func toPresentable() -> AnyView {
         AnyView(StartChatScreen(context: viewModel.context))
+    }
+    
+    // MARK: - Private
+    
+    private func presentInviteUsersScreen() {
+        let params = InviteUsersInRoomCoordinatorParameters()
+        let coordinator = InviteUsersInRoomCoordinator(parameters: params)
+        coordinator.callback = { [weak self] result in
+            switch result {
+            case .close:
+                self?.parameters.navigationStackCoordinator?.pop()
+            }
+        }
+        parameters.navigationStackCoordinator?.push(coordinator)
     }
 }

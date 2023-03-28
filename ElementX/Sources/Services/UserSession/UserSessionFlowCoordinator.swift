@@ -277,7 +277,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         let userIndicatorController = UserIndicatorController(rootCoordinator: startChatNavigationStackCoordinator)
         
-        let parameters = StartChatCoordinatorParameters(userSession: userSession, userIndicatorController: userIndicatorController)
+        let parameters = StartChatCoordinatorParameters(userSession: userSession, userIndicatorController: userIndicatorController, navigationStackCoordinator: startChatNavigationStackCoordinator)
         let coordinator = StartChatCoordinator(parameters: parameters)
         coordinator.callback = { [weak self] action in
             guard let self else { return }
