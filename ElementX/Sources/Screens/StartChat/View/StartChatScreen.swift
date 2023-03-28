@@ -22,7 +22,7 @@ struct StartChatScreen: View {
     var body: some View {
         Form {
             if !context.viewState.isSearching {
-                beforeSearchContent
+                mainContent
             } else {
                 searchContent
             }
@@ -44,8 +44,9 @@ struct StartChatScreen: View {
 // MARK: - Private
 
 private extension StartChatScreen {
+    /// The content shown in the form when the search query is empty.
     @ViewBuilder
-    var beforeSearchContent: some View {
+    var mainContent: some View {
         createRoomSection
         inviteFriendsSection
         usersSection
