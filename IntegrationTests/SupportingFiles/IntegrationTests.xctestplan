@@ -1,0 +1,24 @@
+{
+  "configurations" : [
+    {
+      "id" : "AEF793E9-1B0B-4383-BFE4-68E19BAEDC7F",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ElementX.xcodeproj",
+        "identifier" : "D3DB351B7FBE0F49649171FC",
+        "name" : "IntegrationTests"
+      }
+    }
+  ],
+  "version" : 1
+}
