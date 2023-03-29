@@ -20,10 +20,54 @@ import XCTest
 
 @MainActor
 class ReportContentScreenViewModelTests: XCTestCase {
-    func testInitialState() {
-        let viewModel = ReportContentViewModel(itemID: "test-id", roomProxy: RoomProxyMock(with: .init(displayName: "test")))
-        let context = viewModel.context
-
-        XCTAssertEqual(context.reasonText, "")
+    let itemID = "test-id"
+    let senderID = "@meany:server.com"
+    let reportReason = "I don't like it."
+    
+    func testReportContent() async {
+        // Given the report content view for some content.
+        let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
+        roomProxy.reportContentReasonIgnoringReturnValue = .success(())
+        
+        let viewModel = ReportContentViewModel(itemID: itemID,
+                                               senderID: senderID,
+                                               roomProxy: roomProxy)
+        
+        // When reporting the content without ignoring the user.
+        viewModel.state.bindings.reasonText = reportReason
+        viewModel.state.bindings.ignoreUser = false
+        
+        viewModel.context.send(viewAction: .submit)
+        await Task.yield()
+        
+        // Then the content should be reported, but the user should not be included.
+        XCTAssertEqual(roomProxy.reportContentReasonIgnoringCallsCount, 1)
+        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.eventID, itemID, "The event ID should match the content being reported.")
+        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.reason, reportReason, "The reason should match the user input.")
+        XCTAssertNil(roomProxy.reportContentReasonIgnoringReceivedArguments?.senderID, "The sender shouldn't be included as they aren't being ignored.")
+    }
+    
+    func testReportIgnoringSender() async {
+        // Given the report content view for some content.
+        let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
+        roomProxy.reportContentReasonIgnoringReturnValue = .success(())
+        
+        let viewModel = ReportContentViewModel(itemID: itemID,
+                                               senderID: senderID,
+                                               roomProxy: roomProxy)
+        
+        // When reporting the content and also ignoring the user.
+        viewModel.state.bindings.reasonText = reportReason
+        viewModel.state.bindings.ignoreUser = true
+        
+        viewModel.context.send(viewAction: .submit)
+        await Task.yield()
+        
+        // Then the content should be reported, and the user should be included in the report.
+        XCTAssertEqual(roomProxy.reportContentReasonIgnoringCallsCount, 1)
+        
+        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.eventID, itemID, "The event ID should match the content being reported.")
+        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.reason, reportReason, "The reason should match the user input.")
+        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.senderID, senderID, "The sender should be included so that they are ignored.")
     }
 }

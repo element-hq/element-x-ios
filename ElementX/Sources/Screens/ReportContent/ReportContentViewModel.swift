@@ -22,12 +22,15 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
     var callback: ((ReportContentViewModelAction) -> Void)?
 
     private let itemID: String
+    private let senderID: String
     private let roomProxy: RoomProxyProtocol
 
-    init(itemID: String, roomProxy: RoomProxyProtocol) {
+    init(itemID: String, senderID: String, roomProxy: RoomProxyProtocol) {
         self.itemID = itemID
+        self.senderID = senderID
         self.roomProxy = roomProxy
-        super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "")))
+        
+        super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "", ignoreUser: false)))
     }
 
     // MARK: - Public
@@ -45,7 +48,9 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
 
     private func submitReport() async {
         callback?(.submitStarted)
-        switch await roomProxy.reportContent(itemID, reason: state.bindings.reasonText) {
+        
+        let senderID = state.bindings.ignoreUser ? senderID : nil
+        switch await roomProxy.reportContent(itemID, reason: state.bindings.reasonText, ignoring: senderID) {
         case .success:
             MXLog.info("Submit Report Content succeeded")
             callback?(.submitFinished)

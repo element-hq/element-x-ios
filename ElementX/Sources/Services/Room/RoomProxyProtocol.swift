@@ -76,8 +76,8 @@ protocol RoomProxyProtocol {
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
-
-    func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
+    
+    func reportContent(_ eventID: String, reason: String?, ignoring senderID: String?) async -> Result<Void, RoomProxyError>
 
     func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError>
     
@@ -100,5 +100,9 @@ extension RoomProxyProtocol {
     
     func sendMessage(_ message: String) async -> Result<Void, RoomProxyError> {
         await sendMessage(message, inReplyTo: nil)
+    }
+    
+    func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        await reportContent(eventID, reason: reason, ignoring: nil)
     }
 }

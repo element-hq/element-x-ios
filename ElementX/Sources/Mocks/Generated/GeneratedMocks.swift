@@ -391,23 +391,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - reportContent
 
-    var reportContentReasonCallsCount = 0
-    var reportContentReasonCalled: Bool {
-        return reportContentReasonCallsCount > 0
+    var reportContentReasonIgnoringCallsCount = 0
+    var reportContentReasonIgnoringCalled: Bool {
+        return reportContentReasonIgnoringCallsCount > 0
     }
-    var reportContentReasonReceivedArguments: (eventID: String, reason: String?)?
-    var reportContentReasonReceivedInvocations: [(eventID: String, reason: String?)] = []
-    var reportContentReasonReturnValue: Result<Void, RoomProxyError>!
-    var reportContentReasonClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
+    var reportContentReasonIgnoringReceivedArguments: (eventID: String, reason: String?, senderID: String?)?
+    var reportContentReasonIgnoringReceivedInvocations: [(eventID: String, reason: String?, senderID: String?)] = []
+    var reportContentReasonIgnoringReturnValue: Result<Void, RoomProxyError>!
+    var reportContentReasonIgnoringClosure: ((String, String?, String?) async -> Result<Void, RoomProxyError>)?
 
-    func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
-        reportContentReasonCallsCount += 1
-        reportContentReasonReceivedArguments = (eventID: eventID, reason: reason)
-        reportContentReasonReceivedInvocations.append((eventID: eventID, reason: reason))
-        if let reportContentReasonClosure = reportContentReasonClosure {
-            return await reportContentReasonClosure(eventID, reason)
+    func reportContent(_ eventID: String, reason: String?, ignoring senderID: String?) async -> Result<Void, RoomProxyError> {
+        reportContentReasonIgnoringCallsCount += 1
+        reportContentReasonIgnoringReceivedArguments = (eventID: eventID, reason: reason, senderID: senderID)
+        reportContentReasonIgnoringReceivedInvocations.append((eventID: eventID, reason: reason, senderID: senderID))
+        if let reportContentReasonIgnoringClosure = reportContentReasonIgnoringClosure {
+            return await reportContentReasonIgnoringClosure(eventID, reason, senderID)
         } else {
-            return reportContentReasonReturnValue
+            return reportContentReasonIgnoringReturnValue
         }
     }
     //MARK: - members

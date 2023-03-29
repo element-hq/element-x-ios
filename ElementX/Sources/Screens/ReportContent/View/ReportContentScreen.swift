@@ -26,35 +26,43 @@ struct ReportContentScreen: View {
     }
 
     var body: some View {
-        ScrollView {
-            mainContent
-                .padding(.top, 50)
-                .padding(.horizontal, horizontalPadding)
+        Form {
+            reasonSection
+            
+            ignoreUserSection
         }
         .scrollDismissesKeyboard(.immediately)
-        .background(Color.element.formBackground.ignoresSafeArea())
+        .compoundForm()
         .navigationTitle(L10n.actionReportContent)
         .navigationBarTitleDisplayMode(.inline)
         .toolbar { toolbar }
         .interactiveDismissDisabled()
     }
 
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
-        VStack(alignment: .leading, spacing: 24) {
-            infoText
-            reasonTextEditor
+    private var reasonSection: some View {
+        Section {
+            TextField(L10n.reportContentHint,
+                      text: $context.reasonText,
+                      prompt: Text(L10n.reportContentHint).compoundFormTextFieldPlaceholder(),
+                      axis: .vertical)
+                .lineLimit(4, reservesSpace: true)
+                .textFieldStyle(.compoundForm)
+        } footer: {
+            Text(L10n.reportContentExplanation)
+                .compoundFormSectionFooter()
         }
+        .compoundFormSection()
     }
-
-    private var infoText: some View {
-        Text(L10n.reportContentExplanation)
-            .font(.element.body)
-            .foregroundColor(Color.element.primaryContent)
-    }
-
-    private var reasonTextEditor: some View {
-        FormTextEditor(text: $context.reasonText, placeholder: L10n.reportContentHint)
+    
+    private var ignoreUserSection: some View {
+        Section {
+            Toggle(L10n.screenReportContentBlockUser, isOn: $context.ignoreUser)
+                .toggleStyle(.compoundForm)
+                .accessibilityIdentifier(A11yIdentifiers.reportContent.ignoreUser)
+        } footer: {
+            Text(L10n.screenReportContentBlockUserHint)
+                .compoundFormSectionFooter()
+        }
     }
 
     @ToolbarContentBuilder
@@ -76,9 +84,13 @@ struct ReportContentScreen: View {
 // MARK: - Previews
 
 struct ReportContent_Previews: PreviewProvider {
-    static let viewModel = ReportContentViewModel(itemID: "", roomProxy: RoomProxyMock(with: .init(displayName: nil)))
+    static let viewModel = ReportContentViewModel(itemID: "",
+                                                  senderID: "",
+                                                  roomProxy: RoomProxyMock(with: .init(displayName: nil)))
     
     static var previews: some View {
-        ReportContentScreen(context: viewModel.context)
+        NavigationStack {
+            ReportContentScreen(context: viewModel.context)
+        }
     }
 }

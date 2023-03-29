@@ -256,7 +256,7 @@ public enum L10n {
   public static var rageshakeDetectionDialogContent: String { return L10n.tr("Localizable", "rageshake_detection_dialog_content") }
   /// You seem to be shaking the phone in frustration. Would you like to open the bug report screen?
   public static var rageshakeDialogContent: String { return L10n.tr("Localizable", "rageshake_dialog_content") }
-  /// Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.
+  /// This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.
   public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
   /// Reason for reporting this content
   public static var reportContentHint: String { return L10n.tr("Localizable", "report_content_hint") }
@@ -372,6 +372,10 @@ public enum L10n {
   }
   /// Be in your Element
   public static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
+  /// Block user
+  public static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }
+  /// Check if you want to hide all current and future messages from this user
+  public static var screenReportContentBlockUserHint: String { return L10n.tr("Localizable", "screen_report_content_block_user_hint") }
   /// Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
