@@ -57,5 +57,7 @@ extension RoomProxyMock {
         } else {
             membersPublisher = Just([]).eraseToAnyPublisher()
         }
+
+        populateMembersClosure = { }
     }
 }

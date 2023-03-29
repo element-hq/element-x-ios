@@ -62,7 +62,7 @@ struct RoomMemberDetailsScreen: View {
 
     private var blockUserSection: some View {
         Section {
-            Button {
+            Button(role: context.viewState.details.isIgnored ? nil : .destructive) {
                 context.send(viewAction: blockUserButtonAction)
             } label: {
                 Label(blockUserButtonTitle, systemImage: "slash.circle")

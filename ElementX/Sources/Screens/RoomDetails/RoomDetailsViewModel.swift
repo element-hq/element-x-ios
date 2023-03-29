@@ -47,6 +47,10 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             self?.members = members
         }
         .store(in: &cancellables)
+
+        Task {
+            await roomProxy.populateMembers()
+        }
     }
     
     // MARK: - Public

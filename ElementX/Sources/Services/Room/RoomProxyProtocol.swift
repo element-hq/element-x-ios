@@ -81,6 +81,8 @@ protocol RoomProxyProtocol {
     func retryDecryption(for sessionID: String) async
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
+    
+    func populateMembers() async
 }
 
 extension RoomProxyProtocol {

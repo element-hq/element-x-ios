@@ -281,7 +281,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    private func populateMembers() async {
+    func populateMembers() async {
         do {
             let roomMembers = try await Task.dispatch(on: .global()) {
                 try self.room.members()
