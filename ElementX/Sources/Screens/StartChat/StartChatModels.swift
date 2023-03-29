@@ -55,7 +55,7 @@ extension StartChatUserSectionType {
 
 struct StartChatUsersSection {
     let type: StartChatUserSectionType
-    let users: [UserProfileProxy]
+    let users: [UserProfile]
 }
 
 struct StartChatScreenViewStateBindings {
@@ -69,5 +69,5 @@ enum StartChatViewAction {
     case close
     case createRoom
     case inviteFriends
-    case selectUser(UserProfileProxy)
+    case selectUser(UserProfile)
 }

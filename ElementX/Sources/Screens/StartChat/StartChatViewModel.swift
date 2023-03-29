@@ -104,7 +104,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         if searchQuery.count < 3 {
             fetchSuggestions()
         } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-            state.usersSection = .init(type: .searchResult, users: [UserProfileProxy(userID: searchQuery)])
+            state.usersSection = .init(type: .searchResult, users: [UserProfile(userID: searchQuery)])
         } else {
             searchUsers(searchTerm: searchQuery)
         }
@@ -114,7 +114,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
     
-    private func createDirectRoom(with user: UserProfileProxy) async {
+    private func createDirectRoom(with user: UserProfile) async {
         showLoadingIndicator()
         let result = await userSession.clientProxy.createDirectRoom(with: user.userID)
         hideLoadingIndicator()

@@ -47,7 +47,7 @@ class StartChatScreenViewModelTests: XCTestCase {
     }
     
     func test_queryShowingResults() async throws {
-        clientProxy.searchUsersResult = .success(.init(results: [UserProfileProxy.mockAlice], limited: true))
+        clientProxy.searchUsersResult = .success(.init(results: [UserProfile.mockAlice], limited: true))
         
         viewModel.context.searchQuery = "AAA"
         _ = await context.$viewState.firstValue

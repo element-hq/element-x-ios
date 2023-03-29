@@ -17,7 +17,7 @@
 import Foundation
 import MatrixRustSDK
 
-struct UserProfileProxy {
+struct UserProfile {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
@@ -28,21 +28,21 @@ struct UserProfileProxy {
         self.avatarURL = avatarURL
     }
     
-    init(userProfile: UserProfile) {
-        userID = userProfile.userId
-        displayName = userProfile.displayName
-        avatarURL = userProfile.avatarUrl.flatMap(URL.init(string:))
+    init(sdkUserProfile: MatrixRustSDK.UserProfile) {
+        userID = sdkUserProfile.userId
+        displayName = sdkUserProfile.displayName
+        avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
     }
 }
 
-struct SearchUsersResultsProxy {
-    let results: [UserProfileProxy]
+struct SearchUsersResults {
+    let results: [UserProfile]
     let limited: Bool
 }
 
-extension SearchUsersResultsProxy {
-    init(sdkResults: SearchUsersResults) {
-        results = sdkResults.results.map(UserProfileProxy.init)
+extension SearchUsersResults {
+    init(sdkResults: MatrixRustSDK.SearchUsersResults) {
+        results = sdkResults.results.map(UserProfile.init)
         limited = sdkResults.limited
     }
 }
