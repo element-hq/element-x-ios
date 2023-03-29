@@ -24,6 +24,9 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     var callback: ((StartChatViewModelAction) -> Void)?
     weak var userIndicatorController: UserIndicatorControllerProtocol?
+    var searchTask: Task<Void, Error>? {
+        didSet { oldValue?.cancel() }
+    }
     
     init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.userSession = userSession
@@ -31,7 +34,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()
-        fetchSuggestion()
+        fetchSuggestions()
     }
     
     // MARK: - Public
@@ -82,28 +85,36 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
+            .map { query in
+                // debounce search queries but make sure clearing the search updates immediately
+                let milliseconds = query.isEmpty ? 0 : 500
+                return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
+            }
+            .switchToLatest()
             .removeDuplicates()
-            .sink { [weak self] searchQuery in
-                if searchQuery.isEmpty {
-                    self?.fetchSuggestion()
-                } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-                    self?.state.usersSection.type = .searchResult
-                    self?.state.usersSection.users = [UserProfileProxy(userID: searchQuery, displayName: nil, avatarURL: nil)]
-                } else {
-                    self?.state.usersSection.type = .searchResult
-                    self?.state.usersSection.users = []
-                }
+            .sink { [weak self] query in
+                self?.updateState(searchQuery: query)
             }
             .store(in: &cancellables)
     }
     
-    private func fetchSuggestion() {
-        state.usersSection.type = .suggestions
-        state.usersSection.users = [.mockAlice, .mockBob, .mockCharlie]
+    private func updateState(searchQuery: String) {
+        searchTask = nil
+        
+        if searchQuery.count < 3 {
+            fetchSuggestions()
+        } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
+            state.usersSection = .init(type: .searchResult, users: [UserProfile(userID: searchQuery)])
+        } else {
+            searchUsers(searchTerm: searchQuery)
+        }
     }
     
-    private func createDirectRoom(with user: UserProfileProxy) async {
+    private func fetchSuggestions() {
+        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+    }
+    
+    private func createDirectRoom(with user: UserProfile) async {
         showLoadingIndicator()
         let result = await userSession.clientProxy.createDirectRoom(with: user.userID)
         hideLoadingIndicator()
@@ -112,6 +123,19 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             callback?(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
             displayError(failure)
+        }
+    }
+    
+    private func searchUsers(searchTerm: String) {
+        searchTask = Task { @MainActor in
+            guard
+                case let .success(result) = await userSession.clientProxy.searchUsers(searchTerm: searchTerm, limit: 5),
+                !Task.isCancelled
+            else {
+                return
+            }
+            
+            state.usersSection = .init(type: .searchResult, users: result.results)
         }
     }
     

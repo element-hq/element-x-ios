@@ -248,6 +248,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError> {
+        await Task.dispatch(on: clientQueue) {
+            do {
+                return try .success(.init(sdkResults: self.client.searchUsers(searchTerm: searchTerm, limit: UInt64(limit))))
+            } catch {
+                return .failure(.failedSearchingUsers)
+            }
+        }
+    }
+    
     // MARK: Private
 
     private func loadUserAvatarURLFromCache() {

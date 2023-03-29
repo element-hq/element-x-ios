@@ -142,6 +142,8 @@ public enum L10n {
   public static var commonMessageRemoved: String { return L10n.tr("Localizable", "common_message_removed") }
   /// Modern
   public static var commonModern: String { return L10n.tr("Localizable", "common_modern") }
+  /// No results
+  public static var commonNoResults: String { return L10n.tr("Localizable", "common_no_results") }
   /// Offline
   public static var commonOffline: String { return L10n.tr("Localizable", "common_offline") }
   /// Password

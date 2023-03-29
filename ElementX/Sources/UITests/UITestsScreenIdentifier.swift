@@ -48,6 +48,7 @@ enum UITestsScreenIdentifier: String {
     case roomMemberDetailsIgnoredUser
     case reportContent
     case startChat
+    case startChatWithSearchResults
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {
