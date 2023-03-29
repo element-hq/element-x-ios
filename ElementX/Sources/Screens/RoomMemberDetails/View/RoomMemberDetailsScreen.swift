@@ -23,7 +23,7 @@ struct RoomMemberDetailsScreen: View {
         Form {
             headerSection
 
-            if !context.viewState.isAccountOwner {
+            if !context.viewState.details.isAccountOwner {
                 blockUserSection
             }
         }
@@ -35,25 +35,15 @@ struct RoomMemberDetailsScreen: View {
     
     // MARK: - Private
 
+    @ViewBuilder
     private var headerSection: some View {
-        VStack(spacing: 8.0) {
-            LoadableAvatarImage(url: context.viewState.avatarURL,
-                                name: context.viewState.name,
-                                contentID: context.viewState.userID,
-                                avatarSize: .user(on: .memberDetails),
-                                imageProvider: context.imageProvider)
-            if let name = context.viewState.name {
-                Text(name)
-                    .foregroundColor(.element.primaryContent)
-                    .font(.element.title1Bold)
-                    .multilineTextAlignment(.center)
-            }
-            Text(context.viewState.userID)
-                .foregroundColor(.element.secondaryContent)
-                .font(.element.body)
-                .multilineTextAlignment(.center)
-
-            if let permalink = context.viewState.permalink {
+        HeaderView(avatarUrl: context.viewState.details.avatarURL,
+                   name: context.viewState.details.name,
+                   id: context.viewState.details.id,
+                   avatarSize: .user(on: .memberDetails),
+                   imageProvider: context.imageProvider,
+                   subtitle: context.viewState.details.id) {
+            if let permalink = context.viewState.details.permalink {
                 HStack(spacing: 32) {
                     Button { context.send(viewAction: .copyUserLink) } label: {
                         Image(systemName: "link")
@@ -68,8 +58,6 @@ struct RoomMemberDetailsScreen: View {
                 .padding(.top, 32)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .listRowBackground(Color.clear)
     }
 
     private var blockUserSection: some View {
@@ -87,19 +75,19 @@ struct RoomMemberDetailsScreen: View {
     }
 
     private var blockUserButtonAction: RoomMemberDetailsViewAction {
-        context.viewState.isIgnored ? .showUnignoreAlert : .showIgnoreAlert
+        context.viewState.details.isIgnored ? .showUnignoreAlert : .showIgnoreAlert
     }
 
     private var blockUserButtonTitle: String {
-        context.viewState.isIgnored ? L10n.screenRoomMemberDetailsUnblockUser : L10n.screenRoomMemberDetailsBlockUser
+        context.viewState.details.isIgnored ? L10n.screenRoomMemberDetailsUnblockUser : L10n.screenRoomMemberDetailsBlockUser
     }
 
     private var blockUserButtonAccessibilityIdentifier: String {
-        context.viewState.isIgnored ? A11yIdentifiers.roomMemberDetailsScreen.unignore : A11yIdentifiers.roomMemberDetailsScreen.ignore
+        context.viewState.details.isIgnored ? A11yIdentifiers.roomMemberDetailsScreen.unignore : A11yIdentifiers.roomMemberDetailsScreen.ignore
     }
 
     @ViewBuilder
-    private func blockUserAlertActions(_ item: IgnoreUserAlertItem) -> some View {
+    private func blockUserAlertActions(_ item: RoomMemberDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle,
                role: item.action == .ignore ? .destructive : nil) {
@@ -107,7 +95,7 @@ struct RoomMemberDetailsScreen: View {
         }
     }
 
-    private func blockUserAlertMessage(_ item: IgnoreUserAlertItem) -> some View {
+    private func blockUserAlertMessage(_ item: RoomMemberDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
         Text(item.description)
     }
 }

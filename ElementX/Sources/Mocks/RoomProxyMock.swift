@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
 struct RoomProxyMockConfiguration {
@@ -51,11 +52,10 @@ extension RoomProxyMock {
         alternativeAliases = configuration.alternativeAliases
         hasUnreadNotifications = configuration.hasUnreadNotifications
 
-        membersClosure = {
-            if let members = configuration.members {
-                return .success(members)
-            }
-            return .failure(.failedRetrievingMembers)
+        if let members = configuration.members {
+            membersPublisher = Just(members).eraseToAnyPublisher()
+        } else {
+            membersPublisher = Just([]).eraseToAnyPublisher()
         }
     }
 }

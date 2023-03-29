@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, RoomDetailsViewAction>
@@ -22,12 +23,12 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = [] {
         didSet {
-            state.members = members.map { RoomDetailsMember(withProxy: $0) }
+            state.members = members.map { RoomMemberDetails(withProxy: $0) }
         }
     }
     
     var callback: ((RoomDetailsViewModelAction) -> Void)?
-    
+
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
@@ -39,19 +40,13 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
                                            permalink: roomProxy.permalink,
-                                           members: [],
                                            bindings: .init()),
                    imageProvider: mediaProvider)
 
-        Task {
-            switch await roomProxy.members() {
-            case .success(let members):
-                self.members = members
-            case .failure(let error):
-                MXLog.error("Failed retrieving room members: \(error)")
-                state.bindings.alertInfo = AlertInfo(id: .alert(L10n.errorUnknown))
-            }
+        roomProxy.membersPublisher.sink { [weak self] members in
+            self?.members = members
         }
+        .store(in: &cancellables)
     }
     
     // MARK: - Public
@@ -70,6 +65,14 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: roomProxy.isPublic ? .public : .private)
         case .confirmLeave:
             await leaveRoom()
+        case .processTapIgnore:
+            state.bindings.ignoreUserRoomAlertItem = .init(action: .ignore)
+        case .processTapUnignore:
+            state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
+        case .ignoreConfirmed:
+            await ignore()
+        case .unignoreConfirmed:
+            await unignore()
         }
     }
     
@@ -95,6 +98,38 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             state.bindings.alertInfo = AlertInfo(id: .unknown)
         case .success:
             callback?(.leftRoom)
+        }
+    }
+
+    private func ignore() async {
+        guard let id = state.dmRecipient?.id,
+              let member = members.first(where: { $0.userID == id }) else {
+            return
+        }
+        state.isProcessingIgnoreRequest = true
+        let result = await member.ignoreUser()
+        state.isProcessingIgnoreRequest = false
+        switch result {
+        case .success:
+            state.dmRecipient?.isIgnored = true
+        case .failure:
+            state.bindings.alertInfo = .init(id: .unknown)
+        }
+    }
+
+    private func unignore() async {
+        guard let id = state.dmRecipient?.id,
+              let member = members.first(where: { $0.userID == id }) else {
+            return
+        }
+        state.isProcessingIgnoreRequest = true
+        let result = await member.unignoreUser()
+        state.isProcessingIgnoreRequest = false
+        switch result {
+        case .success:
+            state.dmRecipient?.isIgnored = false
+        case .failure:
+            state.bindings.alertInfo = .init(id: .unknown)
         }
     }
 }

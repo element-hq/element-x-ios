@@ -21,17 +21,27 @@ struct RoomDetailsScreen: View {
     
     var body: some View {
         Form {
-            headerSection
-            
+            if let recipient = context.viewState.dmRecipient {
+                dmHeaderSection(recipient: recipient)
+            } else {
+                normalRoomHeaderSection
+            }
+
             topicSection
-            
-            aboutSection
-            
+
+            if !context.viewState.isDMRoom {
+                aboutSection
+            }
+
             if context.viewState.isEncrypted {
                 securitySection
             }
 
-            leaveRoomSection
+            if let recipient = context.viewState.dmRecipient {
+                ignoreUserSection(user: recipient)
+            } else {
+                leaveRoomSection
+            }
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -39,38 +49,29 @@ struct RoomDetailsScreen: View {
         .alert(item: $context.leaveRoomAlertItem,
                actions: leaveRoomAlertActions,
                message: leaveRoomAlertMessage)
+        .alert(item: $context.ignoreUserRoomAlertItem,
+               actions: blockUserAlertActions,
+               message: blockUserAlertMessage)
     }
     
     // MARK: - Private
 
-    private var headerSection: some View {
-        VStack(spacing: 8.0) {
-            LoadableAvatarImage(url: context.viewState.avatarURL,
-                                name: context.viewState.title,
-                                contentID: context.viewState.roomId,
-                                avatarSize: .room(on: .details),
-                                imageProvider: context.imageProvider)
-                .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
-
-            Text(context.viewState.title)
-                .foregroundColor(.element.primaryContent)
-                .font(.element.title1Bold)
-                .multilineTextAlignment(.center)
-            
-            if let canonicalAlias = context.viewState.canonicalAlias {
-                Text(canonicalAlias)
-                    .foregroundColor(.element.secondaryContent)
-                    .font(.element.body)
-                    .multilineTextAlignment(.center)
-            }
-            
+    @ViewBuilder
+    private var normalRoomHeaderSection: some View {
+        HeaderView(avatarUrl: context.viewState.avatarURL,
+                   name: context.viewState.title,
+                   id: context.viewState.roomId,
+                   avatarSize: .room(on: .details),
+                   imageProvider: context.imageProvider,
+                   subtitle: context.viewState.canonicalAlias,
+                   accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
             if let permalink = context.viewState.permalink {
                 HStack(spacing: 32) {
                     Button { context.send(viewAction: .copyRoomLink) } label: {
                         Image(systemName: "link")
                     }
                     .buttonStyle(FormActionButtonStyle(title: L10n.actionCopyLink))
-                    
+
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
@@ -79,8 +80,32 @@ struct RoomDetailsScreen: View {
                 .padding(.top, 32)
             }
         }
-        .frame(maxWidth: .infinity, alignment: .center)
-        .listRowBackground(Color.clear)
+    }
+
+    @ViewBuilder
+    private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
+        HeaderView(avatarUrl: recipient.avatarURL,
+                   name: recipient.name,
+                   id: recipient.id,
+                   avatarSize: .user(on: .memberDetails),
+                   imageProvider: context.imageProvider,
+                   subtitle: recipient.id,
+                   accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
+            if let permalink = recipient.permalink {
+                HStack(spacing: 32) {
+                    Button { context.send(viewAction: .copyRoomLink) } label: {
+                        Image(systemName: "link")
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCopyLink))
+
+                    ShareLink(item: permalink) {
+                        Image(systemName: "square.and.arrow.up")
+                    }
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionShareLink))
+                }
+                .padding(.top, 32)
+            }
+        }
     }
     
     @ViewBuilder
@@ -159,6 +184,21 @@ struct RoomDetailsScreen: View {
     }
 
     @ViewBuilder
+    private func ignoreUserSection(user: RoomMemberDetails) -> some View {
+        Section {
+            Button(role: user.isIgnored ? nil : .destructive) {
+                context.send(viewAction: user.isIgnored ? .processTapUnignore : .processTapIgnore)
+            } label: {
+                Label(user.isIgnored ? L10n.screenDmDetailsUnblockUser : L10n.screenDmDetailsBlockUser,
+                      systemImage: "slash.circle")
+            }
+            .buttonStyle(FormButtonStyle(accessory: context.viewState.isProcessingIgnoreRequest ? .progressView : nil))
+            .disabled(context.viewState.isProcessingIgnoreRequest)
+        }
+        .formSectionStyle()
+    }
+
+    @ViewBuilder
     private func leaveRoomAlertActions(_ item: LeaveRoomAlertItem) -> some View {
         Button(item.cancelTitle, role: .cancel) { }
         Button(item.confirmationTitle, role: .destructive) {
@@ -169,12 +209,25 @@ struct RoomDetailsScreen: View {
     private func leaveRoomAlertMessage(_ item: LeaveRoomAlertItem) -> some View {
         Text(item.subtitle)
     }
+
+    @ViewBuilder
+    private func blockUserAlertActions(_ item: RoomDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
+        Button(item.cancelTitle, role: .cancel) { }
+        Button(item.confirmationTitle,
+               role: item.action == .ignore ? .destructive : nil) {
+            context.send(viewAction: item.viewAction)
+        }
+    }
+
+    private func blockUserAlertMessage(_ item: RoomDetailsViewStateBindings.IgnoreUserAlertItem) -> some View {
+        Text(item.description)
+    }
 }
 
 // MARK: - Previews
 
 struct RoomDetails_Previews: PreviewProvider {
-    static let viewModel = {
+    static let genericRoomViewModel = {
         let members: [RoomMemberProxyMock] = [
             .mockAlice,
             .mockBob,
@@ -190,8 +243,28 @@ struct RoomDetails_Previews: PreviewProvider {
         return RoomDetailsViewModel(roomProxy: roomProxy,
                                     mediaProvider: MockMediaProvider())
     }()
+
+    static let dmRoomViewModel = {
+        let members: [RoomMemberProxyMock] = [
+            .mockMe,
+            .mockDan
+        ]
+
+        let roomProxy = RoomProxyMock(with: .init(displayName: "DM Room",
+                                                  topic: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                                  isDirect: true,
+                                                  isEncrypted: true,
+                                                  canonicalAlias: "#alias:domain.com",
+                                                  members: members))
+
+        return RoomDetailsViewModel(roomProxy: roomProxy,
+                                    mediaProvider: MockMediaProvider())
+    }()
     
     static var previews: some View {
-        RoomDetailsScreen(context: viewModel.context)
+        RoomDetailsScreen(context: genericRoomViewModel.context)
+            .previewDisplayName("Generic Room")
+        RoomDetailsScreen(context: dmRoomViewModel.context)
+            .previewDisplayName("DM Room")
     }
 }

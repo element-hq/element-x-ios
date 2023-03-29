@@ -108,6 +108,8 @@ public enum L10n {
   public static var commonAudio: String { return L10n.tr("Localizable", "common_audio") }
   /// Bubbles
   public static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
+  /// Creating room…
+  public static var commonCreatingRoom: String { return L10n.tr("Localizable", "common_creating_room") }
   /// Decryption error
   public static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
   /// Developer options
@@ -230,6 +232,8 @@ public enum L10n {
   public static var errorFailedCreatingThePermalink: String { return L10n.tr("Localizable", "error_failed_creating_the_permalink") }
   /// Failed loading messages
   public static var errorFailedLoadingMessages: String { return L10n.tr("Localizable", "error_failed_loading_messages") }
+  /// No compatible app was found to handle this action.
+  public static var errorNoCompatibleAppFound: String { return L10n.tr("Localizable", "error_no_compatible_app_found") }
   /// Some messages have not been sent
   public static var errorSomeMessagesHaveNotBeenSent: String { return L10n.tr("Localizable", "error_some_messages_have_not_been_sent") }
   /// Sorry, an error occurred
@@ -256,7 +260,7 @@ public enum L10n {
   public static var rageshakeDetectionDialogContent: String { return L10n.tr("Localizable", "rageshake_detection_dialog_content") }
   /// You seem to be shaking the phone in frustration. Would you like to open the bug report screen?
   public static var rageshakeDialogContent: String { return L10n.tr("Localizable", "rageshake_dialog_content") }
-  /// Reporting this message will send it’s unique ‘event ID’ to the administrator of your homeserver. If messages in this room are encrypted, your homeserver administrator will not be able to read the message text or view any files or images.
+  /// This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages.
   public static var reportContentExplanation: String { return L10n.tr("Localizable", "report_content_explanation") }
   /// Reason for reporting this content
   public static var reportContentHint: String { return L10n.tr("Localizable", "report_content_hint") }
@@ -346,6 +350,18 @@ public enum L10n {
   public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
   /// Add people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
+  /// Block
+  public static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
+  /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
+  public static var screenDmDetailsBlockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_description") }
+  /// Block user
+  public static var screenDmDetailsBlockUser: String { return L10n.tr("Localizable", "screen_dm_details_block_user") }
+  /// Unblock
+  public static var screenDmDetailsUnblockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_action") }
+  /// On unblocking the user, you will be able to see all messages by them again.
+  public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
+  /// Unblock user
+  public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
   /// This account has been deactivated.
   public static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
@@ -372,6 +388,10 @@ public enum L10n {
   }
   /// Be in your Element
   public static var screenOnboardingWelcomeTitle: String { return L10n.tr("Localizable", "screen_onboarding_welcome_title") }
+  /// Block user
+  public static var screenReportContentBlockUser: String { return L10n.tr("Localizable", "screen_report_content_block_user") }
+  /// Check if you want to hide all current and future messages from this user
+  public static var screenReportContentBlockUserHint: String { return L10n.tr("Localizable", "screen_report_content_block_user_hint") }
   /// Messages are secured with locks. Only you and the recipients have the unique keys to unlock them.
   public static var screenRoomDetailsEncryptionEnabledSubtitle: String { return L10n.tr("Localizable", "screen_room_details_encryption_enabled_subtitle") }
   /// Message encryption enabled
@@ -384,6 +404,8 @@ public enum L10n {
   public static var screenRoomDetailsPeopleTitle: String { return L10n.tr("Localizable", "screen_room_details_people_title") }
   /// Security
   public static var screenRoomDetailsSecurityTitle: String { return L10n.tr("Localizable", "screen_room_details_security_title") }
+  /// Share room
+  public static var screenRoomDetailsShareRoomTitle: String { return L10n.tr("Localizable", "screen_room_details_share_room_title") }
   /// Topic
   public static var screenRoomDetailsTopicTitle: String { return L10n.tr("Localizable", "screen_room_details_topic_title") }
   /// Block
