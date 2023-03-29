@@ -41,7 +41,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
         
         viewModel.context.searchQuery = "AAA"
-        _ = await context.$viewState.firstValue
+        _ = await context.$viewState.nextValue
         XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
         XCTAssert(context.viewState.hasEmptySearchResults)
     }
@@ -50,7 +50,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         clientProxy.searchUsersResult = .success(.init(results: [UserProfile.mockAlice], limited: true))
         
         viewModel.context.searchQuery = "AAA"
-        _ = await context.$viewState.firstValue
+        _ = await context.$viewState.nextValue
         XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
         XCTAssertEqual(context.viewState.usersSection.users.count, 1)
         XCTAssertFalse(context.viewState.hasEmptySearchResults)

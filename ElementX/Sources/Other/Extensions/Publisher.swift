@@ -27,7 +27,7 @@ extension Publisher where Self.Failure == Never {
 extension Published.Publisher {
     /// Returns the next output from the publisher skipping the current value stored into it (which is readable from the @Published property itself).
     /// - Returns: the next output from the publisher
-    var firstValue: Output? {
+    var nextValue: Output? {
         get async {
             var iterator = values.makeAsyncIterator()
             
