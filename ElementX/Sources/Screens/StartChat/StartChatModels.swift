@@ -25,9 +25,7 @@ enum StartChatViewModelAction {
 struct StartChatViewState: BindableState {
     var bindings = StartChatScreenViewStateBindings()
     var usersSection: StartChatUsersSection = .init(type: .suggestions, users: [])
-}
 
-extension StartChatViewState {
     var isSearching: Bool {
         !bindings.searchQuery.isEmpty
     }
@@ -40,9 +38,7 @@ extension StartChatViewState {
 enum StartChatUserSectionType: Equatable {
     case searchResult
     case suggestions
-}
 
-extension StartChatUserSectionType {
     var title: String? {
         switch self {
         case .searchResult:

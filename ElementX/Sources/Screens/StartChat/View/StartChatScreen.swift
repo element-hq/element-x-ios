@@ -39,14 +39,12 @@ struct StartChatScreen: View {
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
         .alert(item: $context.alertInfo) { $0.alert }
     }
-}
 
-// MARK: - Private
+    // MARK: - Private
 
-private extension StartChatScreen {
     /// The content shown in the form when the search query is empty.
     @ViewBuilder
-    var mainContent: some View {
+    private var mainContent: some View {
         createRoomSection
         inviteFriendsSection
         usersSection
@@ -54,7 +52,7 @@ private extension StartChatScreen {
     
     /// The content shown in the form when a search query has been entered.
     @ViewBuilder
-    var searchContent: some View {
+    private var searchContent: some View {
         if context.viewState.hasEmptySearchResults {
             noResultsContent
         } else {
@@ -62,7 +60,7 @@ private extension StartChatScreen {
         }
     }
     
-    var createRoomSection: some View {
+    private var createRoomSection: some View {
         Section {
             Button(action: createRoom) {
                 Label(L10n.actionCreateARoom, systemImage: "person.3")
@@ -72,7 +70,7 @@ private extension StartChatScreen {
         .formSectionStyle()
     }
     
-    var inviteFriendsSection: some View {
+    private var inviteFriendsSection: some View {
         Section {
             Button(action: inviteFriends) {
                 Label(L10n.actionInviteFriendsToApp(InfoPlistReader.main.bundleDisplayName), systemImage: "square.and.arrow.up")
@@ -83,7 +81,7 @@ private extension StartChatScreen {
         .formSectionStyle()
     }
     
-    var usersSection: some View {
+    private var usersSection: some View {
         Section {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .selectUser(user)) } label: {
@@ -99,7 +97,7 @@ private extension StartChatScreen {
         .formSectionStyle()
     }
     
-    var noResultsContent: some View {
+    private var noResultsContent: some View {
         Text(L10n.commonNoResults)
             .font(.element.body)
             .foregroundColor(.element.tertiaryContent)
@@ -108,20 +106,20 @@ private extension StartChatScreen {
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
     
-    var closeButton: some View {
+    private var closeButton: some View {
         Button(L10n.actionCancel, action: close)
             .accessibilityIdentifier(A11yIdentifiers.startChatScreen.closeStartChat)
     }
     
-    func createRoom() {
+    private func createRoom() {
         context.send(viewAction: .createRoom)
     }
     
-    func inviteFriends() {
+    private func inviteFriends() {
         context.send(viewAction: .inviteFriends)
     }
     
-    func close() {
+    private func close() {
         context.send(viewAction: .close)
     }
 }
