@@ -45,12 +45,14 @@ struct A11yIdentifiers {
     
     struct HomeScreen {
         let userAvatar = "home_screen-user_avatar"
-        
+        let settings = "home_screen-settings"
+        let signOut = "home_screen-sign_out"
+        let verificationBannerContinue = "home_screen-verification_continue"
         func roomName(_ name: String) -> String {
             "home_screen-room_name:\(name)"
         }
     }
-    
+
     struct LoginScreen {
         let emailUsername = "login-email_username"
         let password = "login-password"
@@ -80,6 +82,7 @@ struct A11yIdentifiers {
         let startSasVerification = "session_verification-start_sas_verification"
         let acceptChallenge = "session_verification-accept_challenge"
         let declineChallenge = "session_verification-decline_challenge"
+        let emojiWrapper = "session_verification-emojis"
         let close = "session_verification-close"
     }
         

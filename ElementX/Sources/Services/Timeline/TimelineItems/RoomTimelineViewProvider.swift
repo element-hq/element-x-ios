@@ -161,7 +161,7 @@ extension RoomTimelineViewProvider: View {
         }
     }
     
-    private var timelineGroupStyle: TimelineGroupStyle {
+    var timelineGroupStyle: TimelineGroupStyle {
         switch self {
         case .text(_, let groupStyle),
              .separator(_, let groupStyle),

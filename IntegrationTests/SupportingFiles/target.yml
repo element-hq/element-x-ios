@@ -24,8 +24,9 @@ schemes:
       gatherCoverageData: true
       coverageTargets:
         - ElementX
-      targets:
-      - IntegrationTests
+      testPlans:
+        - path: IntegrationTests.xctestplan
+          defaultPlan: true
 
 targets:
   IntegrationTests:

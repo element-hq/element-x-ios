@@ -128,24 +128,17 @@ struct RoomDetailsScreen: View {
     
     private var securitySection: some View {
         Section {
-            HStack(alignment: .top) {
-                Label {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
-                        Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
-                            .foregroundColor(.element.secondaryContent)
-                            .font(.element.footnote)
-                    }
-                } icon: {
-                    Image(systemName: "lock.shield")
+            Label {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
+                    Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
+                        .foregroundColor(.element.secondaryContent)
+                        .font(.element.footnote)
                 }
-                .labelStyle(FormRowLabelStyle(alignment: .top))
-                
-                Spacer()
-                
-                Image(systemName: "checkmark")
-                    .foregroundColor(.element.quaternaryContent)
+            } icon: {
+                Image(systemName: "lock.shield")
             }
+            .labelStyle(FormRowLabelStyle(alignment: .top))
         } header: {
             Text(L10n.commonSecurity)
                 .formSectionHeader()

@@ -1,0 +1,25 @@
+{
+  "configurations" : [
+    {
+      "id" : "D789E5F1-30B8-4A23-B20E-281ACE05CFD6",
+      "name" : "Default",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "defaultTestExecutionTimeAllowance" : 60,
+    "testTimeoutsEnabled" : true
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:ElementX.xcodeproj",
+        "identifier" : "32C23C8D224D46EFE62AFAD0",
+        "name" : "UnitTests"
+      }
+    }
+  ],
+  "version" : 1
+}

@@ -33,8 +33,9 @@ schemes:
       gatherCoverageData: true
       coverageTargets:
         - ElementX
-      targets:
-        - UnitTests
+      testPlans:
+        - path: ../../UnitTests/SupportingFiles/UnitTests.xctestplan
+          defaultPlan: true
       environmentVariables:
         IS_RUNNING_UNIT_TESTS: "1"
 
