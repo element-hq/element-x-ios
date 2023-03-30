@@ -59,10 +59,15 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
                     self.displayError(failure)
                 }
             }
+        case .showProfilePopover:
+            #warning("do proper action")
+            displayError(.failedGettingUserProfile)
         }
     }
     
-    func displayError(_ type: ClientProxyError) {
+    // MARK: - Private
+    
+    private func displayError(_ type: ClientProxyError) {
         switch type {
         case .failedRetrievingDirectRoom:
             state.bindings.alertInfo = AlertInfo(id: type,
@@ -76,8 +81,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             state.bindings.alertInfo = AlertInfo(id: type)
         }
     }
-    
-    // MARK: - Private
     
     private func setupBindings() {
         context.$viewState

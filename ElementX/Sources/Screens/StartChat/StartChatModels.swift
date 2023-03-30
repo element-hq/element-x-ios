@@ -65,5 +65,6 @@ enum StartChatViewAction {
     case close
     case createRoom
     case inviteFriends
+    case showProfilePopover
     case selectUser(UserProfile)
 }

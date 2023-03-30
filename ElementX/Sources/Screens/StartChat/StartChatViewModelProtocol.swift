@@ -20,8 +20,4 @@ import Foundation
 protocol StartChatViewModelProtocol {
     var callback: ((StartChatViewModelAction) -> Void)? { get set }
     var context: StartChatViewModelType.Context { get }
-    
-    /// Display an error to the user.
-    /// - Parameter type: The type of error to be displayed.
-    func displayError(_ type: ClientProxyError)
 }

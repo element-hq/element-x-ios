@@ -87,7 +87,7 @@ struct StartChatScreen: View {
                 Button { context.send(viewAction: .selectUser(user)) } label: {
                     StartChatSuggestedUserCell(user: user,
                                                imageProvider: context.imageProvider,
-                                               accessoryAction: user.isVerified ? nil : { })
+                                               accessoryAction: user.isVerified ? nil : presentPopover)
                 }
             }
         } header: {
@@ -97,6 +97,10 @@ struct StartChatScreen: View {
         }
         .listRowSeparator(.automatic)
         .formSectionStyle()
+    }
+    
+    private func presentPopover() {
+        context.send(viewAction: .showProfilePopover)
     }
     
     private var noResultsContent: some View {
