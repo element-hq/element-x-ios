@@ -24,7 +24,8 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     var callback: ((StartChatViewModelAction) -> Void)?
     weak var userIndicatorController: UserIndicatorControllerProtocol?
-    var searchTask: Task<Void, Error>? {
+    private var fetchedProfiles: [String: UserProfile] = .init()
+    private var searchTask: Task<Void, Error>? {
         didSet { oldValue?.cancel() }
     }
     
@@ -50,7 +51,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .selectUser(let user):
             showLoadingIndicator()
             Task {
-                let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
+                let currentDirectRoom = await clientProxy.directRoomForUserID(user.userID)
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
                     self.hideLoadingIndicator()
@@ -104,6 +105,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         if searchQuery.count < 3 {
             fetchSuggestions()
         } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
+            fetchProfileIfNeeded(searchQuery: searchQuery)
             state.usersSection = .init(type: .searchResult, users: [UserProfile(userID: searchQuery)])
         } else {
             searchUsers(searchTerm: searchQuery)
@@ -116,7 +118,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func createDirectRoom(with user: UserProfile) async {
         showLoadingIndicator()
-        let result = await userSession.clientProxy.createDirectRoom(with: user.userID)
+        let result = await clientProxy.createDirectRoom(with: user.userID)
         hideLoadingIndicator()
         switch result {
         case .success(let roomId):
@@ -126,10 +128,26 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
+    private func fetchProfileIfNeeded(searchQuery: String) {
+        guard
+            MatrixEntityRegex.isMatrixUserIdentifier(searchQuery),
+            fetchedProfiles[searchQuery] == nil
+        else {
+            return
+        }
+        
+        Task {
+            guard case .success(let profile) = await self.clientProxy.getProfile(for: searchQuery) else {
+                return
+            }
+            fetchedProfiles[searchQuery] = profile
+        }
+    }
+    
     private func searchUsers(searchTerm: String) {
         searchTask = Task { @MainActor in
             guard
-                case let .success(result) = await userSession.clientProxy.searchUsers(searchTerm: searchTerm, limit: 5),
+                case let .success(result) = await clientProxy.searchUsers(searchTerm: searchTerm, limit: 5),
                 !Task.isCancelled
             else {
                 return
@@ -137,6 +155,10 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             
             state.usersSection = .init(type: .searchResult, users: result.results)
         }
+    }
+    
+    private var clientProxy: ClientProxyProtocol {
+        userSession.clientProxy
     }
     
     // MARK: Loading indicator
