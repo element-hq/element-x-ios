@@ -308,7 +308,6 @@ class ClientProxy: ClientProxyProtocol {
                 .name(name: "CurrentlyVisibleRooms")
                 .syncMode(mode: .selective)
                 .addRange(from: 0, to: 20)
-                .sendUpdatesForItems(enable: true)
                 .build()
             
             // List observers need to be setup before calling build() on the SlidingSyncBuilder otherwise
@@ -335,7 +334,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private func buildAndConfigureVisibleRoomsSlidingSyncView(visibleRoomsView: SlidingSyncList) {
-        let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: visibleRoomsView)
+        let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: visibleRoomsView, name: "Visible rooms")
         
         visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
                                                           eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
@@ -349,7 +348,11 @@ class ClientProxy: ClientProxyProtocol {
         .store(in: &cancellables)
         
         // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
-        visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.diffPublisher.sink { [weak self] _ in
+        visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.statePublisher.sink { [weak self] state in
+            guard state == .fullyLoaded else {
+                return
+            }
+            
             MXLog.info("Visible rooms view received first update, configuring views post initial sync")
             self?.configureViewsPostInitialSync()
             self?.visibleRoomsViewProxyStateObservationToken = nil
@@ -369,12 +372,11 @@ class ClientProxy: ClientProxyProtocol {
                 .requiredState(requiredState: slidingSyncRequiredState)
                 .filters(filters: slidingSyncFilters)
                 .name(name: "AllRooms")
-                .syncMode(mode: .growingFullSync)
+                .syncMode(mode: .growing)
                 .batchSize(batchSize: 100)
-                .sendUpdatesForItems(enable: true)
                 .build()
             
-            let allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsView)
+            let allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsView, name: "All rooms")
             
             allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
                                                           eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
