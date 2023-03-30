@@ -19,6 +19,7 @@ import SwiftUI
 struct StartChatSuggestedUserCell: View {
     let user: UserProfile
     let imageProvider: ImageProviderProtocol?
+    var accessoryAction: (() -> Void)?
     
     var body: some View {
         HStack(spacing: 16) {
@@ -29,6 +30,7 @@ struct StartChatSuggestedUserCell: View {
                                 imageProvider: imageProvider)
                 .padding(.vertical, 10)
                 .accessibilityHidden(true)
+            
             VStack(alignment: .leading, spacing: 4) {
                 Text(user.displayName ?? user.userID)
                     .font(.element.title3)
@@ -39,7 +41,16 @@ struct StartChatSuggestedUserCell: View {
                         .foregroundColor(.element.tertiaryContent)
                 }
             }
+            .frame(maxWidth: .infinity, alignment: .leading)
             .accessibilityElement(children: .combine)
+            
+            if accessoryAction != nil {
+                Button {
+                    accessoryAction?()
+                } label: {
+                    Image(systemName: "exclamationmark.circle")
+                }
+            }
         }
     }
 }

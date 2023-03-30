@@ -85,7 +85,9 @@ struct StartChatScreen: View {
         Section {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .selectUser(user)) } label: {
-                    StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+                    StartChatSuggestedUserCell(user: user,
+                                               imageProvider: context.imageProvider,
+                                               accessoryAction: user.isVerified ? nil : { })
                 }
             }
         } header: {
@@ -121,6 +123,13 @@ struct StartChatScreen: View {
     
     private func close() {
         context.send(viewAction: .close)
+    }
+}
+
+private extension UserProfile {
+    #warning("add comment")
+    var isVerified: Bool {
+        displayName != nil || avatarURL != nil
     }
 }
 

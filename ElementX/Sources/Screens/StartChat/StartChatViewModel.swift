@@ -207,8 +207,4 @@ private extension UserProfile {
         }
         self.init(userID: searchQuery)
     }
-    
-    var isVerifiedProfile: Bool {
-        displayName != nil || avatarURL != nil
-    }
 }
