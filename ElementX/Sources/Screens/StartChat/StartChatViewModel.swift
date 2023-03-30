@@ -24,10 +24,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     var callback: ((StartChatViewModelAction) -> Void)?
     weak var userIndicatorController: UserIndicatorControllerProtocol?
-    private var fetchedProfiles: [String: UserProfile] = .init()
-    private var searchTask: Task<Void, Error>? {
-        didSet { oldValue?.cancel() }
-    }
     
     init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.userSession = userSession
@@ -93,23 +89,57 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             }
             .switchToLatest()
             .removeDuplicates()
-            .sink { [weak self] query in
-                self?.updateState(searchQuery: query)
+            .sink { [weak self] _ in
+                self?.fetchData()
             }
             .store(in: &cancellables)
     }
     
-    private func updateState(searchQuery: String) {
-        searchTask = nil
-        
-        if searchQuery.count < 3 {
-            fetchSuggestions()
-        } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-            fetchProfileIfNeeded(searchQuery: searchQuery)
-            state.usersSection = .init(type: .searchResult, users: [UserProfile(userID: searchQuery)])
+    private func fetchData() {
+        if searchQuery.isValidSearchQuery {
+            Task {
+                await searchProfiles()
+            }
         } else {
-            searchUsers(searchTerm: searchQuery)
+            fetchSuggestions()
         }
+    }
+    
+    private func searchProfiles() async {
+        // copies the current query to check later if fetched data must be shown or not
+        let committedQuery = searchQuery
+        
+        async let queryProfile = getProfileIfNeeded()
+        async let searchedUsers = clientProxy.searchUsers(searchTerm: committedQuery, limit: 5)
+        
+        await updateState(committedQuery: committedQuery,
+                          queryProfile: queryProfile,
+                          searchResults: try? searchedUsers.get())
+    }
+    
+    private func updateState(committedQuery: String, queryProfile: UserProfile?, searchResults: SearchUsersResults?) {
+        guard committedQuery == searchQuery else {
+            return
+        }
+        
+        let localProfile = queryProfile ?? UserProfile(searchQuery: searchQuery)
+        let allResults = merge(queryProfile: localProfile, searchResults: searchResults?.results)
+        
+        // add filter here
+        state.usersSection = .init(type: .searchResult, users: allResults)
+    }
+    
+    private func merge(queryProfile: UserProfile?, searchResults: [UserProfile]?) -> [UserProfile] {
+        guard let queryProfile else {
+            return searchResults ?? []
+        }
+        
+        let filteredSearchResult = searchResults?
+            .filter {
+                $0.userID != queryProfile.userID
+            } ?? []
+
+        return [queryProfile] + filteredSearchResult
     }
     
     private func fetchSuggestions() {
@@ -128,37 +158,20 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    private func fetchProfileIfNeeded(searchQuery: String) {
-        guard
-            MatrixEntityRegex.isMatrixUserIdentifier(searchQuery),
-            fetchedProfiles[searchQuery] == nil
-        else {
-            return
+    private func getProfileIfNeeded() async -> UserProfile? {
+        guard searchQuery.isMatrixIdentifier else {
+            return nil
         }
         
-        Task {
-            guard case .success(let profile) = await self.clientProxy.getProfile(for: searchQuery) else {
-                return
-            }
-            fetchedProfiles[searchQuery] = profile
-        }
-    }
-    
-    private func searchUsers(searchTerm: String) {
-        searchTask = Task { @MainActor in
-            guard
-                case let .success(result) = await clientProxy.searchUsers(searchTerm: searchTerm, limit: 5),
-                !Task.isCancelled
-            else {
-                return
-            }
-            
-            state.usersSection = .init(type: .searchResult, users: result.results)
-        }
+        return try? await clientProxy.getProfile(for: searchQuery).get()
     }
     
     private var clientProxy: ClientProxyProtocol {
         userSession.clientProxy
+    }
+    
+    private var searchQuery: String {
+        context.searchQuery
     }
     
     // MARK: Loading indicator
@@ -174,5 +187,28 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func hideLoadingIndicator() {
         userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+}
+
+private extension String {
+    var isValidSearchQuery: Bool {
+        count >= 3
+    }
+    
+    var isMatrixIdentifier: Bool {
+        MatrixEntityRegex.isMatrixUserIdentifier(self)
+    }
+}
+
+private extension UserProfile {
+    init?(searchQuery: String) {
+        guard searchQuery.isMatrixIdentifier else {
+            return nil
+        }
+        self.init(userID: searchQuery)
+    }
+    
+    var isVerifiedProfile: Bool {
+        displayName != nil || avatarURL != nil
     }
 }
