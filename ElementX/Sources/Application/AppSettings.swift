@@ -27,7 +27,8 @@ final class AppSettings: ObservableObject {
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
-        case showStartChatFlow
+        case startChatFlowEnabled = "showStartChatFlow"
+        case mediaUploadingFlowEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -36,6 +37,7 @@ final class AppSettings: ObservableObject {
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
     
     static func reset() {
+        MXLog.warning("Resetting the AppSettings.")
         store.removePersistentDomain(forName: suiteName)
     }
     
@@ -159,6 +161,11 @@ final class AppSettings: ObservableObject {
     
     // MARK: Start Chat
     
-    @UserSetting(key: UserDefaultsKeys.showStartChatFlow.rawValue, defaultValue: false, persistIn: store)
-    var startChatFlowFeatureFlag
+    @UserSetting(key: UserDefaultsKeys.startChatFlowEnabled.rawValue, defaultValue: false, persistIn: store)
+    var startChatFlowEnabled
+    
+    // MARK: Media Uploading
+    
+    @UserSetting(key: UserDefaultsKeys.mediaUploadingFlowEnabled.rawValue, defaultValue: false, persistIn: nil)
+    var mediaUploadingFlowEnabled
 }

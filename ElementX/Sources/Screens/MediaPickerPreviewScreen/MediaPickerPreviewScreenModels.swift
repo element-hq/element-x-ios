@@ -14,16 +14,19 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import Foundation
 
-final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
-    private let viewModel: DeveloperOptionsScreenViewModelProtocol
-    
-    init() {
-        viewModel = DeveloperOptionsScreenViewModel()
-    }
-            
-    func toPresentable() -> AnyView {
-        AnyView(DeveloperOptionsScreen(context: viewModel.context))
-    }
+enum MediaPickerPreviewScreenViewModelAction {
+    case send
+    case cancel
+}
+
+struct MediaPickerPreviewScreenViewState: BindableState {
+    let url: URL
+    let title: String?
+}
+
+enum MediaPickerPreviewScreenViewAction {
+    case send
+    case cancel
 }

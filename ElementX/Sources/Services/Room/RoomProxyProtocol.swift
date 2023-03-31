@@ -26,6 +26,7 @@ enum RoomProxyError: Error {
     case failedSendingReadReceipt
     case failedSendingMessage
     case failedSendingReaction
+    case failedSendingMedia
     case failedEditingMessage
     case failedRedactingEvent
     case failedReportingContent
@@ -71,6 +72,8 @@ protocol RoomProxyProtocol {
     func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
     
     func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
+    
+    func sendImage(url: URL) async -> Result<Void, RoomProxyError>
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     

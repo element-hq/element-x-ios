@@ -68,6 +68,8 @@ class KeychainController: KeychainControllerProtocol {
     }
 
     func removeRestorationTokenForUsername(_ username: String) {
+        MXLog.warning("Removing restoration token for user: \(username).")
+        
         do {
             try keychain.remove(username)
         } catch {
@@ -76,6 +78,8 @@ class KeychainController: KeychainControllerProtocol {
     }
 
     func removeAllRestorationTokens() {
+        MXLog.warning("Removing all user restoration tokens.")
+        
         do {
             try keychain.removeAll()
         } catch {

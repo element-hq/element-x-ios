@@ -14,16 +14,9 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import XCTest
 
-final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
-    private let viewModel: DeveloperOptionsScreenViewModelProtocol
-    
-    init() {
-        viewModel = DeveloperOptionsScreenViewModel()
-    }
-            
-    func toPresentable() -> AnyView {
-        AnyView(DeveloperOptionsScreen(context: viewModel.context))
-    }
-}
+@testable import ElementX
+
+@MainActor
+class MediaPickerPreviewScreenViewModelTests: XCTestCase { }

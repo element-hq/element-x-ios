@@ -28,6 +28,12 @@ public enum UntranslatedL10n {
   public static func analyticsOptInTitle(_ p1: Any) -> String {
     return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_title", String(describing: p1))
   }
+  /// Camera
+  public static var mediaUploadCameraPicker: String { return UntranslatedL10n.tr("Untranslated", "media_upload_camera_picker") }
+  /// Document
+  public static var mediaUploadDocumentPicker: String { return UntranslatedL10n.tr("Untranslated", "media_upload_document_picker") }
+  /// Photo & Video Library
+  public static var mediaUploadPhotoAndVideoPicker: String { return UntranslatedL10n.tr("Untranslated", "media_upload_photo_and_video_picker") }
   /// Clear all data currently stored on this device?
   /// Sign in again to access your account data and messages.
   public static var softLogoutClearDataDialogContent: String { return UntranslatedL10n.tr("Untranslated", "soft_logout_clear_data_dialog_content") }

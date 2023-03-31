@@ -103,7 +103,7 @@ struct HomeScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 userMenuButton
             }
-            if context.viewState.showStartChatFlowEnabled {
+            if context.viewState.startChatFlowEnabled {
                 ToolbarItemGroup(placement: .bottomBar) {
                     Spacer()
                     newRoomButton

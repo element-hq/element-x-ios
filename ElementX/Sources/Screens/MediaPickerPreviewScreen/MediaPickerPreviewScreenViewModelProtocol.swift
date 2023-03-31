@@ -14,16 +14,10 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import Foundation
 
-final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
-    private let viewModel: DeveloperOptionsScreenViewModelProtocol
-    
-    init() {
-        viewModel = DeveloperOptionsScreenViewModel()
-    }
-            
-    func toPresentable() -> AnyView {
-        AnyView(DeveloperOptionsScreen(context: viewModel.context))
-    }
+@MainActor
+protocol MediaPickerPreviewScreenViewModelProtocol {
+    var callback: ((MediaPickerPreviewScreenViewModelAction) -> Void)? { get set }
+    var context: MediaPickerPreviewScreenViewModelType.Context { get }
 }

@@ -62,6 +62,12 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayEmojiPickerScreen(for: itemId)
             case .displayReportContent(let itemId):
                 self.displayReportContent(for: itemId)
+            case .displayCameraPicker:
+                self.displayMediaPickerWithSource(.camera)
+            case .displayMediaPicker:
+                self.displayMediaPickerWithSource(.photoLibrary)
+            case .displayDocumentPicker:
+                self.displayMediaPickerWithSource(.documents)
             }
         }
     }
@@ -74,8 +80,32 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(RoomScreen(context: viewModel.context))
     }
-
+    
     // MARK: - Private
+    
+    private func displayMediaPickerWithSource(_ source: MediaPickerSource) {
+        let mediaPickerCoordinator = MediaPickerCoordinator(source: source) { [weak self] action in
+            switch action {
+            case .cancel:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            case .error:
+                break
+            case .selectMediaAtURL(let url):
+                let mediaPickerPreviewScreenCoordinator = MediaPickerPreviewScreenCoordinator(parameters: .init(url: url, title: url.lastPathComponent)) { action in
+                    switch action {
+                    case .send:
+                        self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                    case .cancel:
+                        self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                    }
+                }
+                
+                self?.navigationStackCoordinator.setSheetCoordinator(mediaPickerPreviewScreenCoordinator)
+            }
+        }
+        
+        navigationStackCoordinator.setSheetCoordinator(mediaPickerCoordinator)
+    }
 
     private func displayFilePreview(for file: MediaFileHandleProxy, with title: String?) {
         let params = FilePreviewCoordinatorParameters(mediaFile: file, title: title)
