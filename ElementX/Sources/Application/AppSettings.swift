@@ -36,6 +36,7 @@ final class AppSettings: ObservableObject {
     private static var store: UserDefaults! = UserDefaults(suiteName: suiteName)
     
     static func reset() {
+        MXLog.warning("Resetting the AppSettings.")
         store.removePersistentDomain(forName: suiteName)
     }
     
