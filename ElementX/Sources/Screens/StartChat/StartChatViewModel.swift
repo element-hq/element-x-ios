@@ -109,37 +109,35 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         // copies the current query to check later if fetched data must be shown or not
         let committedQuery = searchQuery
         
-        async let queryProfile = getProfileIfNeeded()
+        async let queriedProfile = getProfileIfNeeded()
         async let searchedUsers = clientProxy.searchUsers(searchTerm: committedQuery, limit: 5)
         
         await updateState(committedQuery: committedQuery,
-                          queryProfile: queryProfile,
+                          queriedProfile: queriedProfile,
                           searchResults: try? searchedUsers.get())
     }
     
-    private func updateState(committedQuery: String, queryProfile: UserProfile?, searchResults: SearchUsersResults?) {
+    private func updateState(committedQuery: String, queriedProfile: UserProfile?, searchResults: SearchUsersResults?) {
         guard committedQuery == searchQuery else {
             return
         }
         
-        let localProfile = queryProfile ?? UserProfile(searchQuery: searchQuery)
-        let allResults = merge(queryProfile: localProfile, searchResults: searchResults?.results)
+        let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
+        let allResults = merge(localProfile: localProfile, searchResults: searchResults?.results)
         
-        // add filter here
         state.usersSection = .init(type: .searchResult, users: allResults)
     }
     
-    private func merge(queryProfile: UserProfile?, searchResults: [UserProfile]?) -> [UserProfile] {
-        guard let queryProfile else {
+    private func merge(localProfile: UserProfile?, searchResults: [UserProfile]?) -> [UserProfile] {
+        guard let localProfile else {
             return searchResults ?? []
         }
         
-        let filteredSearchResult = searchResults?
-            .filter {
-                $0.userID != queryProfile.userID
-            } ?? []
+        let filteredSearchResult = searchResults?.filter {
+            $0.userID != localProfile.userID
+        } ?? []
 
-        return [queryProfile] + filteredSearchResult
+        return [localProfile] + filteredSearchResult
     }
     
     private func fetchSuggestions() {
