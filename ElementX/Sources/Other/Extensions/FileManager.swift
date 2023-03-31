@@ -32,7 +32,7 @@ extension FileManager {
         try createDirectory(at: url, withIntermediateDirectories: withIntermediateDirectories)
     }
     
-    func copyFileToTemporaryLocation(url: URL) throws -> URL {
+    func copyFileToTemporaryDirectory(url: URL) throws -> URL {
         let newURL = URL.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
         
         try? removeItem(at: newURL)
@@ -41,7 +41,7 @@ extension FileManager {
         return newURL
     }
     
-    func writeDataToTemporaryLocation(data: Data, fileName: String) throws -> URL {
+    func writeDataToTemporaryDirectory(data: Data, fileName: String) throws -> URL {
         let newURL = URL.temporaryDirectory.appendingPathComponent(fileName)
         
         try data.write(to: newURL)

@@ -328,23 +328,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - sendImage
 
-    var sendImageBodyUrlCallsCount = 0
-    var sendImageBodyUrlCalled: Bool {
-        return sendImageBodyUrlCallsCount > 0
+    var sendImageUrlCallsCount = 0
+    var sendImageUrlCalled: Bool {
+        return sendImageUrlCallsCount > 0
     }
-    var sendImageBodyUrlReceivedArguments: (body: String, url: URL)?
-    var sendImageBodyUrlReceivedInvocations: [(body: String, url: URL)] = []
-    var sendImageBodyUrlReturnValue: Result<Void, RoomProxyError>!
-    var sendImageBodyUrlClosure: ((String, URL) async -> Result<Void, RoomProxyError>)?
+    var sendImageUrlReceivedUrl: URL?
+    var sendImageUrlReceivedInvocations: [URL] = []
+    var sendImageUrlReturnValue: Result<Void, RoomProxyError>!
+    var sendImageUrlClosure: ((URL) async -> Result<Void, RoomProxyError>)?
 
-    func sendImage(body: String, url: URL) async -> Result<Void, RoomProxyError> {
-        sendImageBodyUrlCallsCount += 1
-        sendImageBodyUrlReceivedArguments = (body: body, url: url)
-        sendImageBodyUrlReceivedInvocations.append((body: body, url: url))
-        if let sendImageBodyUrlClosure = sendImageBodyUrlClosure {
-            return await sendImageBodyUrlClosure(body, url)
+    func sendImage(url: URL) async -> Result<Void, RoomProxyError> {
+        sendImageUrlCallsCount += 1
+        sendImageUrlReceivedUrl = url
+        sendImageUrlReceivedInvocations.append(url)
+        if let sendImageUrlClosure = sendImageUrlClosure {
+            return await sendImageUrlClosure(url)
         } else {
-            return sendImageBodyUrlReturnValue
+            return sendImageUrlReturnValue
         }
     }
     //MARK: - editMessage

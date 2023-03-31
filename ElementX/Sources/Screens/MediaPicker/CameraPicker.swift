@@ -15,12 +15,17 @@
 //
 
 import SwiftUI
-import UIKit
 
 enum CameraPickerAction {
     case selectFile(URL)
     case cancel
-    case error(Error?)
+    case error(CameraPickerError)
+}
+
+enum CameraPickerError: Error {
+    case invalidJpegData
+    case invalidOriginalImage
+    case failedWritingToTemporaryDirectory
 }
 
 struct CameraPicker: UIViewControllerRepresentable {
@@ -50,31 +55,31 @@ struct CameraPicker: UIViewControllerRepresentable {
     }
     
     final class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-        private var parent: CameraPicker
+        private var cameraPicker: CameraPicker
         
-        init(_ parent: CameraPicker) {
-            self.parent = parent
+        init(_ cameraPicker: CameraPicker) {
+            self.cameraPicker = cameraPicker
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
             if let videoURL = info[.mediaURL] as? URL {
-                parent.callback(.selectFile(videoURL))
+                cameraPicker.callback(.selectFile(videoURL))
             } else if let image = info[.originalImage] as? UIImage {
                 guard let jpegData = image.jpegData(compressionQuality: 1.0) else {
-                    parent.callback(.error(nil))
+                    cameraPicker.callback(.error(.invalidJpegData))
                     return
                 }
                 
-                let fileName = "\(UUID().uuidString).jpg"
+                let fileName = "\(Date.now.formatted(date: .abbreviated, time: .shortened)).jpg"
                 
                 do {
-                    let url = try FileManager.default.writeDataToTemporaryLocation(data: jpegData, fileName: fileName)
-                    parent.callback(.selectFile(url))
+                    let url = try FileManager.default.writeDataToTemporaryDirectory(data: jpegData, fileName: fileName)
+                    cameraPicker.callback(.selectFile(url))
                 } catch {
-                    parent.callback(.error(error))
+                    cameraPicker.callback(.error(.failedWritingToTemporaryDirectory))
                 }
             } else {
-                parent.callback(.error(nil))
+                cameraPicker.callback(.error(.invalidOriginalImage))
             }
         }
     }

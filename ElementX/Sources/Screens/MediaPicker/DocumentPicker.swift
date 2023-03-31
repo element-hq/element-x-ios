@@ -15,12 +15,15 @@
 //
 
 import SwiftUI
-import UIKit
 
 enum DocumentPickerAction {
     case selectFile(URL)
     case cancel
-    case error(Error?)
+    case error(DocumentPickerError)
+}
+
+enum DocumentPickerError: Error {
+    case unknown
 }
 
 struct DocumentPicker: UIViewControllerRepresentable {
@@ -45,25 +48,25 @@ struct DocumentPicker: UIViewControllerRepresentable {
     }
     
     final class Coordinator: NSObject, UIDocumentPickerDelegate {
-        private var parent: DocumentPicker
+        private var documentPicker: DocumentPicker
         
-        init(_ parent: DocumentPicker) {
-            self.parent = parent
+        init(_ documentPicker: DocumentPicker) {
+            self.documentPicker = documentPicker
         }
         
         // MARK: UIDocumentPickerDelegate
         
         func documentPickerWasCancelled(_ controller: UIDocumentPickerViewController) {
-            parent.callback(.cancel)
+            documentPicker.callback(.cancel)
         }
         
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
             guard let url = urls.first else {
-                parent.callback(.error(nil))
+                documentPicker.callback(.error(.unknown))
                 return
             }
             
-            parent.callback(.selectFile(url))
+            documentPicker.callback(.selectFile(url))
         }
     }
 }

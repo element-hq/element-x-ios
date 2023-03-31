@@ -19,4 +19,4 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class MediaPickerPreviewScreenScreenViewModelTests: XCTestCase { }
+class MediaPickerPreviewScreenViewModelTests: XCTestCase { }

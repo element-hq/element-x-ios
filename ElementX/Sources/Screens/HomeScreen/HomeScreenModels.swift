@@ -69,8 +69,8 @@ struct HomeScreenViewState: BindableState {
     
     var roomListMode: HomeScreenRoomListMode = .skeletons
     
-    var showStartChatFlowEnabled: Bool {
-        ServiceLocator.shared.settings.startChatFlowFeatureFlag
+    var startChatFlowEnabled: Bool {
+        ServiceLocator.shared.settings.startChatFlowEnabled
     }
     
     var visibleRooms: [HomeScreenRoom] {
