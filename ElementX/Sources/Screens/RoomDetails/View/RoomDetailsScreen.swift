@@ -95,7 +95,7 @@ struct RoomDetailsScreen: View {
                 .padding(.top, 32)
             }
         }
-        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
+        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.dmAvatar)
     }
     
     @ViewBuilder
