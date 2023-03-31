@@ -59,8 +59,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         switch viewAction {
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
-        case .copyRoomLink:
-            copyRoomLink()
         case .processTapLeave:
             guard members.count > 1 else {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: .empty)
@@ -83,15 +81,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     // MARK: - Private
 
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
-    
-    private func copyRoomLink() {
-        if let roomLink = state.permalink {
-            UIPasteboard.general.url = roomLink
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonLinkCopiedToClipboard))
-        } else {
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-        }
-    }
 
     private func leaveRoom() async {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))

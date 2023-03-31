@@ -142,7 +142,6 @@ enum RoomDetailsViewAction {
     case confirmLeave
     case ignoreConfirmed
     case unignoreConfirmed
-    case copyRoomLink
 }
 
 enum RoomDetailsErrorType: Hashable {

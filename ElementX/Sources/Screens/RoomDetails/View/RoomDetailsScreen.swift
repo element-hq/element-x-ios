@@ -67,15 +67,10 @@ struct RoomDetailsScreen: View {
                    accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
             if let permalink = context.viewState.permalink {
                 HStack(spacing: 32) {
-                    Button { context.send(viewAction: .copyRoomLink) } label: {
-                        Image(systemName: "link")
-                    }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCopyLink))
-
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionInvite))
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionShareLink))
                 }
                 .padding(.top, 32)
             }
@@ -93,11 +88,6 @@ struct RoomDetailsScreen: View {
                    accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
             if let permalink = recipient.permalink {
                 HStack(spacing: 32) {
-                    Button { context.send(viewAction: .copyRoomLink) } label: {
-                        Image(systemName: "link")
-                    }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCopyLink))
-
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }

@@ -45,11 +45,6 @@ struct RoomMemberDetailsScreen: View {
                    subtitle: context.viewState.details.id) {
             if let permalink = context.viewState.details.permalink {
                 HStack(spacing: 32) {
-                    Button { context.send(viewAction: .copyUserLink) } label: {
-                        Image(systemName: "link")
-                    }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionCopyLink))
-
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }

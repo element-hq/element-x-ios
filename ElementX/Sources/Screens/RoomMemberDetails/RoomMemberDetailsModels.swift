@@ -73,5 +73,4 @@ enum RoomMemberDetailsViewAction {
     case showIgnoreAlert
     case ignoreConfirmed
     case unignoreConfirmed
-    case copyUserLink
 }

@@ -13,9 +13,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d member</string>
+			<string>%1$d membru</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$d members</string>
+			<string>%1$d membri</string>
 		</dict>
 	</dict>
 	<key>room_timeline_state_changes</key>
@@ -29,9 +31,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d room change</string>
+			<string>%1$d schimbare a camerii</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$d room changes</string>
+			<string>%1$d schimbări ale camerei</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -45,9 +49,11 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>1 person</string>
+			<string>o persoană</string>
+			<key>few</key>
+			<string></string>
 			<key>other</key>
-			<string>%1$d people</string>
+			<string>%1$d persoane</string>
 		</dict>
 	</dict>
 </dict>

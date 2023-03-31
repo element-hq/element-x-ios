@@ -38,8 +38,6 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
             state.bindings.ignoreUserAlert = .init(action: .unignore)
         case .showIgnoreAlert:
             state.bindings.ignoreUserAlert = .init(action: .ignore)
-        case .copyUserLink:
-            copyUserLink()
         case .ignoreConfirmed:
             await ignoreUser()
         case .unignoreConfirmed:
@@ -48,15 +46,6 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     }
 
     // MARK: - Private
-
-    private func copyUserLink() {
-        if let userLink = state.details.permalink {
-            UIPasteboard.general.url = userLink
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonLinkCopiedToClipboard))
-        } else {
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-        }
-    }
 
     private func ignoreUser() async {
         state.isProcessingIgnoreRequest = true
