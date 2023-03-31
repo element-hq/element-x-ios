@@ -38,6 +38,7 @@ class UserSessionStore: UserSessionStoreProtocol {
     
     /// Deletes all data stored in the shared container and keychain
     func reset() {
+        MXLog.warning("Resetting the UserSessionStore. All accounts will be affected.")
         try? FileManager.default.removeItem(at: baseDirectory)
         keychainController.removeAllRestorationTokens()
     }
