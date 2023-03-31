@@ -58,13 +58,13 @@ struct RoomDetailsScreen: View {
 
     @ViewBuilder
     private var normalRoomHeaderSection: some View {
-        HeaderView(avatarUrl: context.viewState.avatarURL,
-                   name: context.viewState.title,
-                   id: context.viewState.roomId,
-                   avatarSize: .room(on: .details),
-                   imageProvider: context.imageProvider,
-                   subtitle: context.viewState.canonicalAlias,
-                   accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
+        AvatarHeaderView(avatarUrl: context.viewState.avatarURL,
+                         name: context.viewState.title,
+                         id: context.viewState.roomId,
+                         avatarSize: .room(on: .details),
+                         imageProvider: context.imageProvider,
+                         subtitle: context.viewState.canonicalAlias,
+                         accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
             if let permalink = context.viewState.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {
@@ -79,13 +79,13 @@ struct RoomDetailsScreen: View {
 
     @ViewBuilder
     private func dmHeaderSection(recipient: RoomMemberDetails) -> some View {
-        HeaderView(avatarUrl: recipient.avatarURL,
-                   name: recipient.name,
-                   id: recipient.id,
-                   avatarSize: .user(on: .memberDetails),
-                   imageProvider: context.imageProvider,
-                   subtitle: recipient.id,
-                   accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
+        AvatarHeaderView(avatarUrl: recipient.avatarURL,
+                         name: recipient.name,
+                         id: recipient.id,
+                         avatarSize: .user(on: .memberDetails),
+                         imageProvider: context.imageProvider,
+                         subtitle: recipient.id,
+                         accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
             if let permalink = recipient.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {

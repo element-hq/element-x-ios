@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct HeaderView<Actions: View>: View {
+struct AvatarHeaderView<Footer: View>: View {
     let avatarUrl: URL?
     let name: String?
     let id: String
@@ -24,7 +24,7 @@ struct HeaderView<Actions: View>: View {
     let imageProvider: ImageProviderProtocol?
     let subtitle: String?
     var accessibilityIdentifier: String?
-    @ViewBuilder var actions: () -> Actions
+    @ViewBuilder var footer: () -> Footer
 
     var body: some View {
         VStack(spacing: 8.0) {
@@ -49,7 +49,7 @@ struct HeaderView<Actions: View>: View {
                     .multilineTextAlignment(.center)
             }
             
-            actions()
+            footer()
         }
         .frame(maxWidth: .infinity, alignment: .center)
         .listRowBackground(Color.clear)
@@ -58,12 +58,12 @@ struct HeaderView<Actions: View>: View {
 
 struct HeaderView_Previews: PreviewProvider {
     static var previews: some View {
-        HeaderView(avatarUrl: URL.picturesDirectory,
-                   name: "Test",
-                   id: "test",
-                   avatarSize: .room(on: .details),
-                   imageProvider: MockMediaProvider(),
-                   subtitle: "test") {
+        AvatarHeaderView(avatarUrl: URL.picturesDirectory,
+                         name: "Test",
+                         id: "test",
+                         avatarSize: .room(on: .details),
+                         imageProvider: MockMediaProvider(),
+                         subtitle: "test") {
             HStack(spacing: 32) {
                 ShareLink(item: "test") {
                     Image(systemName: "square.and.arrow.up")

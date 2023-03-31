@@ -37,12 +37,12 @@ struct RoomMemberDetailsScreen: View {
 
     @ViewBuilder
     private var headerSection: some View {
-        HeaderView(avatarUrl: context.viewState.details.avatarURL,
-                   name: context.viewState.details.name,
-                   id: context.viewState.details.id,
-                   avatarSize: .user(on: .memberDetails),
-                   imageProvider: context.imageProvider,
-                   subtitle: context.viewState.details.id) {
+        AvatarHeaderView(avatarUrl: context.viewState.details.avatarURL,
+                         name: context.viewState.details.name,
+                         id: context.viewState.details.id,
+                         avatarSize: .user(on: .memberDetails),
+                         imageProvider: context.imageProvider,
+                         subtitle: context.viewState.details.id) {
             if let permalink = context.viewState.details.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {

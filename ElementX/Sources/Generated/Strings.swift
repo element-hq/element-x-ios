@@ -88,7 +88,7 @@ public enum L10n {
   public static var actionSearch: String { return L10n.tr("Localizable", "action_search") }
   /// Send
   public static var actionSend: String { return L10n.tr("Localizable", "action_send") }
-  /// Share link
+  /// Share
   public static var actionShareLink: String { return L10n.tr("Localizable", "action_share_link") }
   /// Skip
   public static var actionSkip: String { return L10n.tr("Localizable", "action_skip") }
@@ -420,6 +420,10 @@ public enum L10n {
   public static var screenRoomMemberDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_alert_description") }
   /// Unblock user
   public static var screenRoomMemberDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_room_member_details_unblock_user") }
+  /// Plural format key: "%#@COUNT@"
+  public static func screenRoomMemberListHeaderTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "screen_room_member_list_header_title", p1)
+  }
   /// Create a new conversation or room
   public static var screenRoomlistA11yCreateMessage: String { return L10n.tr("Localizable", "screen_roomlist_a11y_create_message") }
   /// All Chats
