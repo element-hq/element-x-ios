@@ -28,12 +28,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockAlice
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
-        XCTAssertEqual(context.viewState.name, "Alice")
-        XCTAssertFalse(context.viewState.isAccountOwner)
-        XCTAssertFalse(context.viewState.isIgnored)
-        XCTAssertEqual(context.viewState.userID, "@alice:matrix.org")
-        XCTAssertEqual(context.viewState.permalink, URL(string: "https://matrix.to/#/@alice:matrix.org"))
-        XCTAssertEqual(context.viewState.avatarURL, nil)
+        XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
         XCTAssertNil(context.errorAlert)
     }
@@ -48,15 +43,15 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .showIgnoreAlert)
         await Task.yield()
-        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .ignore))
+        XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
         context.send(viewAction: .ignoreConfirmed)
         await Task.yield()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertFalse(context.viewState.isIgnored)
+        XCTAssertFalse(context.viewState.details.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertTrue(context.viewState.isIgnored)
+        XCTAssertTrue(context.viewState.details.isIgnored)
     }
 
     func testIgnoreFailure() async throws {
@@ -69,16 +64,16 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .showIgnoreAlert)
         await Task.yield()
-        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .ignore))
+        XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
         context.send(viewAction: .ignoreConfirmed)
         await Task.yield()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertFalse(context.viewState.isIgnored)
+        XCTAssertFalse(context.viewState.details.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertNotNil(context.errorAlert)
-        XCTAssertFalse(context.viewState.isIgnored)
+        XCTAssertFalse(context.viewState.details.isIgnored)
     }
 
     func testUnignoreSuccess() async throws {
@@ -91,15 +86,15 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .showUnignoreAlert)
         await Task.yield()
-        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .unignore))
+        XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
 
         context.send(viewAction: .unignoreConfirmed)
         await Task.yield()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertTrue(context.viewState.isIgnored)
+        XCTAssertTrue(context.viewState.details.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertFalse(context.viewState.isIgnored)
+        XCTAssertFalse(context.viewState.details.isIgnored)
     }
 
     func testUnignoreFailure() async throws {
@@ -112,15 +107,15 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
 
         context.send(viewAction: .showUnignoreAlert)
         await Task.yield()
-        XCTAssertEqual(context.ignoreUserAlert, IgnoreUserAlertItem(action: .unignore))
+        XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
 
         context.send(viewAction: .unignoreConfirmed)
         await Task.yield()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertTrue(context.viewState.isIgnored)
+        XCTAssertTrue(context.viewState.details.isIgnored)
         try await Task.sleep(for: .milliseconds(10))
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
-        XCTAssertTrue(context.viewState.isIgnored)
+        XCTAssertTrue(context.viewState.details.isIgnored)
         XCTAssertNotNil(context.errorAlert)
     }
 
@@ -128,12 +123,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockMe
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
-        XCTAssertEqual(context.viewState.name, "Me")
-        XCTAssertTrue(context.viewState.isAccountOwner)
-        XCTAssertFalse(context.viewState.isIgnored)
-        XCTAssertEqual(context.viewState.userID, "@me:matrix.org")
-        XCTAssertEqual(context.viewState.permalink, URL(string: "https://matrix.to/#/@me:matrix.org"))
-        XCTAssertEqual(context.viewState.avatarURL, URL.picturesDirectory)
+        XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
         XCTAssertNil(context.errorAlert)
     }
@@ -142,12 +132,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         roomMemberProxyMock = RoomMemberProxyMock.mockIgnored
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
-        XCTAssertEqual(context.viewState.name, "Ignored")
-        XCTAssertFalse(context.viewState.isAccountOwner)
-        XCTAssertTrue(context.viewState.isIgnored)
-        XCTAssertEqual(context.viewState.userID, "@ignored:matrix.org")
-        XCTAssertEqual(context.viewState.permalink, URL(string: "https://matrix.to/#/@ignored:matrix.org"))
-        XCTAssertEqual(context.viewState.avatarURL, nil)
+        XCTAssertEqual(context.viewState.details, RoomMemberDetails(withProxy: roomMemberProxyMock))
         XCTAssertNil(context.ignoreUserAlert)
         XCTAssertNil(context.errorAlert)
     }
