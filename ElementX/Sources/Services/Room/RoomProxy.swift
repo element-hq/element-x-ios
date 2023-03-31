@@ -259,7 +259,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func reportContent(_ eventID: String, reason: String?, ignoring senderID: String? = nil) async -> Result<Void, RoomProxyError> {
+    func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
         sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
         defer {
             sendMessageBackgroundTask?.stop()
@@ -268,9 +268,6 @@ class RoomProxy: RoomProxyProtocol {
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
             do {
                 try self.room.reportContent(eventId: eventID, score: nil, reason: reason)
-                if let senderID {
-                    try self.room.ignoreUser(userId: senderID)
-                }
                 return .success(())
             } catch {
                 return .failure(.failedReportingContent)
@@ -289,6 +286,22 @@ class RoomProxy: RoomProxyProtocol {
             return .success(proxiedMembers)
         } catch {
             return .failure(.failedRetrievingMembers)
+        }
+    }
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.ignoreUser(userId: userID)
+                return .success(())
+            } catch {
+                return .failure(.failedReportingContent)
+            }
         }
     }
 

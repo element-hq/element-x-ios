@@ -49,14 +49,20 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
     private func submitReport() async {
         callback?(.submitStarted)
         
-        let senderID = state.bindings.ignoreUser ? senderID : nil
-        switch await roomProxy.reportContent(itemID, reason: state.bindings.reasonText, ignoring: senderID) {
-        case .success:
-            MXLog.info("Submit Report Content succeeded")
-            callback?(.submitFinished)
-        case let .failure(error):
+        if case let .failure(error) = await roomProxy.reportContent(itemID, reason: state.bindings.reasonText) {
             MXLog.error("Submit Report Content failed: \(error)")
             callback?(.submitFailed(error: error))
+            return
         }
+        
+        // Ignore the sender if the user wants to.
+        if state.bindings.ignoreUser, case let .failure(error) = await roomProxy.ignoreUser(senderID) {
+            MXLog.error("Ignore user failed: \(error)")
+            callback?(.submitFailed(error: error))
+            return
+        }
+        
+        MXLog.info("Submit Report Content succeeded")
+        callback?(.submitFinished)
     }
 }

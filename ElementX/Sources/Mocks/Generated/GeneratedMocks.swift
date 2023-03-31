@@ -391,23 +391,23 @@ class RoomProxyMock: RoomProxyProtocol {
     }
     //MARK: - reportContent
 
-    var reportContentReasonIgnoringCallsCount = 0
-    var reportContentReasonIgnoringCalled: Bool {
-        return reportContentReasonIgnoringCallsCount > 0
+    var reportContentReasonCallsCount = 0
+    var reportContentReasonCalled: Bool {
+        return reportContentReasonCallsCount > 0
     }
-    var reportContentReasonIgnoringReceivedArguments: (eventID: String, reason: String?, senderID: String?)?
-    var reportContentReasonIgnoringReceivedInvocations: [(eventID: String, reason: String?, senderID: String?)] = []
-    var reportContentReasonIgnoringReturnValue: Result<Void, RoomProxyError>!
-    var reportContentReasonIgnoringClosure: ((String, String?, String?) async -> Result<Void, RoomProxyError>)?
+    var reportContentReasonReceivedArguments: (eventID: String, reason: String?)?
+    var reportContentReasonReceivedInvocations: [(eventID: String, reason: String?)] = []
+    var reportContentReasonReturnValue: Result<Void, RoomProxyError>!
+    var reportContentReasonClosure: ((String, String?) async -> Result<Void, RoomProxyError>)?
 
-    func reportContent(_ eventID: String, reason: String?, ignoring senderID: String?) async -> Result<Void, RoomProxyError> {
-        reportContentReasonIgnoringCallsCount += 1
-        reportContentReasonIgnoringReceivedArguments = (eventID: eventID, reason: reason, senderID: senderID)
-        reportContentReasonIgnoringReceivedInvocations.append((eventID: eventID, reason: reason, senderID: senderID))
-        if let reportContentReasonIgnoringClosure = reportContentReasonIgnoringClosure {
-            return await reportContentReasonIgnoringClosure(eventID, reason, senderID)
+    func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError> {
+        reportContentReasonCallsCount += 1
+        reportContentReasonReceivedArguments = (eventID: eventID, reason: reason)
+        reportContentReasonReceivedInvocations.append((eventID: eventID, reason: reason))
+        if let reportContentReasonClosure = reportContentReasonClosure {
+            return await reportContentReasonClosure(eventID, reason)
         } else {
-            return reportContentReasonIgnoringReturnValue
+            return reportContentReasonReturnValue
         }
     }
     //MARK: - members
@@ -425,6 +425,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return await membersClosure()
         } else {
             return membersReturnValue
+        }
+    }
+    //MARK: - ignoreUser
+
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
+    }
+    var ignoreUserReceivedUserID: String?
+    var ignoreUserReceivedInvocations: [String] = []
+    var ignoreUserReturnValue: Result<Void, RoomProxyError>!
+    var ignoreUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        ignoreUserCallsCount += 1
+        ignoreUserReceivedUserID = userID
+        ignoreUserReceivedInvocations.append(userID)
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure(userID)
+        } else {
+            return ignoreUserReturnValue
         }
     }
     //MARK: - retryDecryption

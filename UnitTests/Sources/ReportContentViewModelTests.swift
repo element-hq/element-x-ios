@@ -27,8 +27,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
     func testReportContent() async {
         // Given the report content view for some content.
         let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
-        roomProxy.reportContentReasonIgnoringReturnValue = .success(())
-        
+        roomProxy.reportContentReasonReturnValue = .success(())
         let viewModel = ReportContentViewModel(itemID: itemID,
                                                senderID: senderID,
                                                roomProxy: roomProxy)
@@ -36,22 +35,22 @@ class ReportContentScreenViewModelTests: XCTestCase {
         // When reporting the content without ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = false
-        
         viewModel.context.send(viewAction: .submit)
         await Task.yield()
         
         // Then the content should be reported, but the user should not be included.
-        XCTAssertEqual(roomProxy.reportContentReasonIgnoringCallsCount, 1)
-        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.eventID, itemID, "The event ID should match the content being reported.")
-        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.reason, reportReason, "The reason should match the user input.")
-        XCTAssertNil(roomProxy.reportContentReasonIgnoringReceivedArguments?.senderID, "The sender shouldn't be included as they aren't being ignored.")
+        XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
+        XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.eventID, itemID, "The event ID should match the content being reported.")
+        XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.reason, reportReason, "The reason should match the user input.")
+        XCTAssertEqual(roomProxy.ignoreUserCallsCount, 0, "A call to ignore a user should not have been made.")
+        XCTAssertNil(roomProxy.ignoreUserReceivedUserID, "The sender shouldn't have been ignored.")
     }
     
     func testReportIgnoringSender() async {
         // Given the report content view for some content.
         let roomProxy = RoomProxyMock(with: .init(displayName: "test"))
-        roomProxy.reportContentReasonIgnoringReturnValue = .success(())
-        
+        roomProxy.reportContentReasonReturnValue = .success(())
+        roomProxy.ignoreUserReturnValue = .success(())
         let viewModel = ReportContentViewModel(itemID: itemID,
                                                senderID: senderID,
                                                roomProxy: roomProxy)
@@ -59,15 +58,14 @@ class ReportContentScreenViewModelTests: XCTestCase {
         // When reporting the content and also ignoring the user.
         viewModel.state.bindings.reasonText = reportReason
         viewModel.state.bindings.ignoreUser = true
-        
         viewModel.context.send(viewAction: .submit)
         await Task.yield()
         
-        // Then the content should be reported, and the user should be included in the report.
-        XCTAssertEqual(roomProxy.reportContentReasonIgnoringCallsCount, 1)
-        
-        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.eventID, itemID, "The event ID should match the content being reported.")
-        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.reason, reportReason, "The reason should match the user input.")
-        XCTAssertEqual(roomProxy.reportContentReasonIgnoringReceivedArguments?.senderID, senderID, "The sender should be included so that they are ignored.")
+        // Then the content should be reported, and the user should be ignored.
+        XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
+        XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.eventID, itemID, "The event ID should match the content being reported.")
+        XCTAssertEqual(roomProxy.reportContentReasonReceivedArguments?.reason, reportReason, "The reason should match the user input.")
+        XCTAssertEqual(roomProxy.ignoreUserCallsCount, 1, "A call should have been made to ignore the sender.")
+        XCTAssertEqual(roomProxy.ignoreUserReceivedUserID, senderID, "The ignored user ID should match the sender.")
     }
 }
