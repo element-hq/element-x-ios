@@ -85,7 +85,7 @@ protocol RoomProxyProtocol {
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
     
-    func populateMembers() async
+    func updateMembers() async
 }
 
 extension RoomProxyProtocol {

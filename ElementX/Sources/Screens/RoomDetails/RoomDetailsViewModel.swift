@@ -24,6 +24,21 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     private var members: [RoomMemberProxyProtocol] = [] {
         didSet {
             state.members = members.map { RoomMemberDetails(withProxy: $0) }
+            if roomProxy.isDirect, roomProxy.isEncrypted, members.count == 2 {
+                dmRecipient = members.first(where: { !$0.isAccountOwner })
+            } else {
+                dmRecipient = nil
+            }
+        }
+    }
+
+    private var dmRecipient: RoomMemberProxyProtocol? {
+        didSet {
+            if let dmRecipient {
+                state.dmRecipient = RoomMemberDetails(withProxy: dmRecipient)
+            } else {
+                state.dmRecipient = nil
+            }
         }
     }
     
@@ -49,7 +64,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         .store(in: &cancellables)
 
         Task {
-            await roomProxy.populateMembers()
+            await roomProxy.updateMembers()
         }
     }
     
@@ -95,33 +110,25 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     }
 
     private func ignore() async {
-        guard let id = state.dmRecipient?.id,
-              let member = members.first(where: { $0.userID == id }) else {
-            return
-        }
         state.isProcessingIgnoreRequest = true
-        let result = await member.ignoreUser()
+        let result = await dmRecipient?.ignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
             state.dmRecipient?.isIgnored = true
-        case .failure:
+        case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }
 
     private func unignore() async {
-        guard let id = state.dmRecipient?.id,
-              let member = members.first(where: { $0.userID == id }) else {
-            return
-        }
         state.isProcessingIgnoreRequest = true
-        let result = await member.unignoreUser()
+        let result = await dmRecipient?.unignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
             state.dmRecipient?.isIgnored = false
-        case .failure:
+        case .failure, .none:
             state.bindings.alertInfo = .init(id: .unknown)
         }
     }

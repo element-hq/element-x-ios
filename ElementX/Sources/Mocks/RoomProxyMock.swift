@@ -58,6 +58,6 @@ extension RoomProxyMock {
             membersPublisher = Just([]).eraseToAnyPublisher()
         }
 
-        populateMembersClosure = { }
+        updateMembersClosure = { }
     }
 }

@@ -36,10 +36,6 @@ class RoomProxy: RoomProxyProtocol {
     private var timelineObservationToken: TaskHandle?
 
     private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
-    var members: [RoomMemberProxyProtocol] {
-        membersSubject.value
-    }
-    
     var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
         membersSubject.eraseToAnyPublisher()
     }
@@ -149,7 +145,7 @@ class RoomProxy: RoomProxyProtocol {
             timelineObservationToken = result.taskHandle
             Task {
                 await fetchMembers()
-                await populateMembers()
+                await updateMembers()
             }
             return .success(result.items)
         } else {
@@ -285,7 +281,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
 
-    func populateMembers() async {
+    func updateMembers() async {
         do {
             let roomMembers = try await Task.dispatch(on: .global()) {
                 try self.room.members()

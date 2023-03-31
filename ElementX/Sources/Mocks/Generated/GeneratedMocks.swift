@@ -448,17 +448,17 @@ class RoomProxyMock: RoomProxyProtocol {
             return leaveRoomReturnValue
         }
     }
-    //MARK: - populateMembers
+    //MARK: - updateMembers
 
-    var populateMembersCallsCount = 0
-    var populateMembersCalled: Bool {
-        return populateMembersCallsCount > 0
+    var updateMembersCallsCount = 0
+    var updateMembersCalled: Bool {
+        return updateMembersCallsCount > 0
     }
-    var populateMembersClosure: (() async -> Void)?
+    var updateMembersClosure: (() async -> Void)?
 
-    func populateMembers() async {
-        populateMembersCallsCount += 1
-        await populateMembersClosure?()
+    func updateMembers() async {
+        updateMembersCallsCount += 1
+        await updateMembersClosure?()
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {

@@ -45,27 +45,13 @@ struct RoomDetailsViewState: BindableState {
         members.isEmpty
     }
 
-    var isDMRoom: Bool {
+    var bindings: RoomDetailsViewStateBindings
+
+    var dmRecipient: RoomMemberDetails?
+
+    private var isDMRoom: Bool {
         isEncrypted && isDirect && members.count == 2
     }
-
-    var dmRecipient: RoomMemberDetails? {
-        get {
-            guard isDMRoom else { return nil }
-            return members.first(where: { !$0.isAccountOwner })
-        }
-        set {
-            guard isDMRoom,
-                  let index = members.firstIndex(where: { !$0.isAccountOwner }) else { return }
-            if let newValue {
-                members[index] = newValue
-            } else {
-                members.remove(at: index)
-            }
-        }
-    }
-
-    var bindings: RoomDetailsViewStateBindings
 }
 
 struct RoomDetailsViewStateBindings {

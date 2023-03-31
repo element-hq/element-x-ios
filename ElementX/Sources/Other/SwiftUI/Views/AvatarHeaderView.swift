@@ -23,7 +23,6 @@ struct AvatarHeaderView<Footer: View>: View {
     let avatarSize: AvatarSize
     let imageProvider: ImageProviderProtocol?
     let subtitle: String?
-    var accessibilityIdentifier: String?
     @ViewBuilder var footer: () -> Footer
 
     var body: some View {
@@ -33,14 +32,11 @@ struct AvatarHeaderView<Footer: View>: View {
                                 contentID: id,
                                 avatarSize: avatarSize,
                                 imageProvider: imageProvider)
-                .accessibilityIdentifier(accessibilityIdentifier ?? "")
 
-            if let name {
-                Text(name)
-                    .foregroundColor(.element.primaryContent)
-                    .font(.element.title1Bold)
-                    .multilineTextAlignment(.center)
-            }
+            Text(name ?? id)
+                .foregroundColor(.element.primaryContent)
+                .font(.element.title1Bold)
+                .multilineTextAlignment(.center)
 
             if let subtitle {
                 Text(subtitle)

@@ -29,7 +29,7 @@ struct RoomDetailsScreen: View {
 
             topicSection
 
-            if !context.viewState.isDMRoom {
+            if context.viewState.dmRecipient == nil {
                 aboutSection
             }
 
@@ -63,8 +63,7 @@ struct RoomDetailsScreen: View {
                          id: context.viewState.roomId,
                          avatarSize: .room(on: .details),
                          imageProvider: context.imageProvider,
-                         subtitle: context.viewState.canonicalAlias,
-                         accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
+                         subtitle: context.viewState.canonicalAlias) {
             if let permalink = context.viewState.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {
@@ -75,6 +74,7 @@ struct RoomDetailsScreen: View {
                 .padding(.top, 32)
             }
         }
+        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
     }
 
     @ViewBuilder
@@ -84,8 +84,7 @@ struct RoomDetailsScreen: View {
                          id: recipient.id,
                          avatarSize: .user(on: .memberDetails),
                          imageProvider: context.imageProvider,
-                         subtitle: recipient.id,
-                         accessibilityIdentifier: A11yIdentifiers.roomDetailsScreen.avatar) {
+                         subtitle: recipient.id) {
             if let permalink = recipient.permalink {
                 HStack(spacing: 32) {
                     ShareLink(item: permalink) {
@@ -96,6 +95,7 @@ struct RoomDetailsScreen: View {
                 .padding(.top, 32)
             }
         }
+        .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.avatar)
     }
     
     @ViewBuilder
