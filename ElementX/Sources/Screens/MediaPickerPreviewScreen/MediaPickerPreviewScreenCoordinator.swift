@@ -51,6 +51,6 @@ final class MediaPickerPreviewScreenCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(MediaPickerPreviewScreenScreen(context: viewModel.context))
+        AnyView(MediaPickerPreviewScreen(context: viewModel.context))
     }
 }

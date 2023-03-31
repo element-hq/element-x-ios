@@ -17,4 +17,4 @@
 import ElementX
 import XCTest
 
-class MediaPickerPreviewScreenScreenUITests: XCTestCase { }
+class DeveloperOptionsScreenUITests: XCTestCase { }

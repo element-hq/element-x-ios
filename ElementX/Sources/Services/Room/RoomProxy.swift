@@ -194,7 +194,7 @@ class RoomProxy: RoomProxyProtocol {
                     try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
                 } else {
                     let messageContent = messageEventContentFromMarkdown(md: message)
-                    try self.room.send(msg: messageContent, txnId: transactionId)
+                    self.room.send(msg: messageContent, txnId: transactionId)
                 }
             } catch {
                 return .failure(.failedSendingMessage)
@@ -219,7 +219,7 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
-    func sendImage(body: String, url: URL) async -> Result<Void, RoomProxyError> {
+    func sendImage(url: URL) async -> Result<Void, RoomProxyError> {
         .failure(.failedSendingMedia)
     }
 

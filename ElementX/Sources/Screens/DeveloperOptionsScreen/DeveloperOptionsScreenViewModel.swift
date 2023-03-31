@@ -23,7 +23,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
     
     init() {
         let bindings = DeveloperOptionsScreenViewStateBindings(shouldCollapseRoomStateEvents: ServiceLocator.shared.settings.shouldCollapseRoomStateEvents,
-                                                               showStartChatFlow: ServiceLocator.shared.settings.startChatFlowFeatureFlag,
+                                                               startChatFlowEnabled: ServiceLocator.shared.settings.startChatFlowEnabled,
                                                                mediaUploadFlowEnabled: ServiceLocator.shared.settings.mediaUploadingFlowEnabled)
         let state = DeveloperOptionsScreenViewState(bindings: bindings)
         
@@ -38,9 +38,9 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
         switch viewAction {
         case .changedShouldCollapseRoomStateEvents:
             ServiceLocator.shared.settings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents
-        case .changedShowStartChatFlow:
-            ServiceLocator.shared.settings.startChatFlowFeatureFlag = state.bindings.showStartChatFlow
-        case .changedShowMediaUploadFlow:
+        case .changedStartChatFlowEnabled:
+            ServiceLocator.shared.settings.startChatFlowEnabled = state.bindings.startChatFlowEnabled
+        case .changedMediaUploadFlowEnabled:
             ServiceLocator.shared.settings.mediaUploadingFlowEnabled = state.bindings.mediaUploadFlowEnabled
         }
     }

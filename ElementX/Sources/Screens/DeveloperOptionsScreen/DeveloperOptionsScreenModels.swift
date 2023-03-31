@@ -24,12 +24,12 @@ struct DeveloperOptionsScreenViewState: BindableState {
 
 struct DeveloperOptionsScreenViewStateBindings {
     var shouldCollapseRoomStateEvents: Bool
-    var showStartChatFlow: Bool
+    var startChatFlowEnabled: Bool
     var mediaUploadFlowEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
     case changedShouldCollapseRoomStateEvents
-    case changedShowStartChatFlow
-    case changedShowMediaUploadFlow
+    case changedStartChatFlowEnabled
+    case changedMediaUploadFlowEnabled
 }

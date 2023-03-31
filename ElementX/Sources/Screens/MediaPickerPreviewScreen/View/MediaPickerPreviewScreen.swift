@@ -17,7 +17,7 @@
 import QuickLook
 import SwiftUI
 
-struct MediaPickerPreviewScreenScreen: View {
+struct MediaPickerPreviewScreen: View {
     @ObservedObject var context: MediaPickerPreviewScreenViewModel.Context
     
     var body: some View {
@@ -105,6 +105,6 @@ private class PreviewItem: NSObject, QLPreviewItem {
 struct MediaPickerPreviewScreen_Previews: PreviewProvider {
     static let viewModel = MediaPickerPreviewScreenViewModel(url: URL.picturesDirectory, title: nil)
     static var previews: some View {
-        MediaPickerPreviewScreenScreen(context: viewModel.context)
+        MediaPickerPreviewScreen(context: viewModel.context)
     }
 }

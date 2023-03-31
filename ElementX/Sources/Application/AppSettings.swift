@@ -27,7 +27,7 @@ final class AppSettings: ObservableObject {
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
-        case showStartChatFlow
+        case startChatFlowEnabled = "showStartChatFlow"
         case mediaUploadingFlowEnabled
     }
     
@@ -161,8 +161,8 @@ final class AppSettings: ObservableObject {
     
     // MARK: Start Chat
     
-    @UserSetting(key: UserDefaultsKeys.showStartChatFlow.rawValue, defaultValue: false, persistIn: store)
-    var startChatFlowFeatureFlag
+    @UserSetting(key: UserDefaultsKeys.startChatFlowEnabled.rawValue, defaultValue: false, persistIn: store)
+    var startChatFlowEnabled
     
     // MARK: Media Uploading
     

@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct DeveloperOptionsScreenScreen: View {
+struct DeveloperOptionsScreen: View {
     @ObservedObject var context: DeveloperOptionsScreenViewModel.Context
     @State private var showConfetti = false
     
@@ -32,18 +32,18 @@ struct DeveloperOptionsScreenScreen: View {
                     context.send(viewAction: .changedShouldCollapseRoomStateEvents)
                 }
                 
-                Toggle(isOn: $context.showStartChatFlow) {
+                Toggle(isOn: $context.startChatFlowEnabled) {
                     Text("Show Start Chat flow")
                 }
-                .onChange(of: context.showStartChatFlow) { _ in
-                    context.send(viewAction: .changedShowStartChatFlow)
+                .onChange(of: context.startChatFlowEnabled) { _ in
+                    context.send(viewAction: .changedStartChatFlowEnabled)
                 }
                 
                 Toggle(isOn: $context.mediaUploadFlowEnabled) {
                     Text("Show Media Uploading flow")
                 }
                 .onChange(of: context.mediaUploadFlowEnabled) { _ in
-                    context.send(viewAction: .changedShowMediaUploadFlow)
+                    context.send(viewAction: .changedMediaUploadFlowEnabled)
                 }
             }
             
@@ -86,6 +86,6 @@ struct DeveloperOptionsScreenScreen: View {
 struct DeveloperOptionsScreen_Previews: PreviewProvider {
     static var previews: some View {
         let viewModel = DeveloperOptionsScreenViewModel()
-        DeveloperOptionsScreenScreen(context: viewModel.context)
+        DeveloperOptionsScreen(context: viewModel.context)
     }
 }

@@ -47,36 +47,36 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
     }
     
     final class Coordinator: NSObject, PHPickerViewControllerDelegate {
-        private var parent: PhotoLibraryPicker
+        private var photoLibraryPicker: PhotoLibraryPicker
         
-        init(_ parent: PhotoLibraryPicker) {
-            self.parent = parent
+        init(_ photoLibraryPicker: PhotoLibraryPicker) {
+            self.photoLibraryPicker = photoLibraryPicker
         }
         
         // MARK: PHPickerViewControllerDelegate
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
             guard let provider = results.first?.itemProvider else {
-                parent.callback(.cancel)
+                photoLibraryPicker.callback(.cancel)
                 return
             }
             
-            provider.loadFileRepresentation(forTypeIdentifier: "public.item") { @MainActor [weak self] url, error in
+            provider.loadFileRepresentation(forTypeIdentifier: "public.item") { [weak self] url, error in
                 guard let url else {
-                    self?.parent.callback(.error(error))
+                    self?.photoLibraryPicker.callback(.error(error))
                     return
                 }
                 
                 do {
                     let _ = url.startAccessingSecurityScopedResource()
-                    let newURL = try FileManager.default.copyFileToTemporaryLocation(url: url)
+                    let newURL = try FileManager.default.copyFileToTemporaryDirectory(url: url)
                     url.stopAccessingSecurityScopedResource()
                     
                     Task { @MainActor in
-                        self?.parent.callback(.selectFile(newURL))
+                        self?.photoLibraryPicker.callback(.selectFile(newURL))
                     }
                 } catch {
-                    self?.parent.callback(.error(error))
+                    self?.photoLibraryPicker.callback(.error(error))
                 }
             }
         }
