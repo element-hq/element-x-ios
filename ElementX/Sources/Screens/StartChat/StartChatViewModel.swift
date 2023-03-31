@@ -59,9 +59,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
                     self.displayError(failure)
                 }
             }
-        case .showProfilePopover:
-            #warning("do proper action")
-            displayError(.failedGettingUserProfile)
         }
     }
     

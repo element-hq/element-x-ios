@@ -19,7 +19,6 @@ import SwiftUI
 struct StartChatSuggestedUserCell: View {
     let user: UserProfile
     let imageProvider: ImageProviderProtocol?
-    var accessoryAction: (() -> Void)?
     
     var body: some View {
         HStack(spacing: 16) {
@@ -35,22 +34,35 @@ struct StartChatSuggestedUserCell: View {
                 Text(user.displayName ?? user.userID)
                     .font(.element.title3)
                     .foregroundColor(.element.primaryContent)
+                
                 if user.displayName != nil {
                     Text(user.userID)
                         .font(.element.subheadline)
                         .foregroundColor(.element.tertiaryContent)
                 }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .accessibilityElement(children: .combine)
-            
-            if accessoryAction != nil {
-                Button {
-                    accessoryAction?()
-                } label: {
-                    Image(systemName: "exclamationmark.circle")
+                
+                if !user.isVerified {
+                    #warning("localize")
+                    HStack {
+                        (Text(Image(systemName: "exclamationmark.circle")) +
+                            Text("  We can’t fetch the profile information of this Matrix ID. Please ensure the Matrix ID is correct before sending an invite."))
+                            .font(.caption2)
+                            .foregroundColor(.orange)
+                        
+                        // Image(systemName: "exclamationmark.circle")
+                    }
+                    .foregroundColor(.orange)
+                    .padding(.top, 4)
                 }
             }
+            .accessibilityElement(children: .combine)
         }
+    }
+}
+
+private extension UserProfile {
+    #warning("add comment")
+    var isVerified: Bool {
+        displayName != nil || avatarURL != nil
     }
 }
