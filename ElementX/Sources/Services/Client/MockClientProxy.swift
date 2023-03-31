@@ -117,7 +117,9 @@ class MockClientProxy: ClientProxyProtocol {
     }
     
     var getProfileResult: Result<UserProfile, ClientProxyError> = .success(.init(userID: "@a:b.com"))
+    private(set) var getProfileCalled = false
     func getProfile(for userID: String) async -> Result<UserProfile, ClientProxyError> {
-        getProfileResult
+        getProfileCalled = true
+        return getProfileResult
     }
 }
