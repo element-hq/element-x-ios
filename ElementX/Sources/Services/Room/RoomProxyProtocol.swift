@@ -76,10 +76,12 @@ protocol RoomProxyProtocol {
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
-
+    
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
-
+    
     func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError>
+
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError>
     
     func retryDecryption(for sessionID: String) async
 

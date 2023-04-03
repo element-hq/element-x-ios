@@ -18,6 +18,7 @@ import SwiftUI
 
 struct ReportContentCoordinatorParameters {
     let itemID: String
+    let senderID: String
     let roomProxy: RoomProxyProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
 }
@@ -36,7 +37,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
     init(parameters: ReportContentCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = ReportContentViewModel(itemID: parameters.itemID, roomProxy: parameters.roomProxy)
+        viewModel = ReportContentViewModel(itemID: parameters.itemID, senderID: parameters.senderID, roomProxy: parameters.roomProxy)
     }
 
     // MARK: - Public

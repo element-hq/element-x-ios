@@ -22,6 +22,7 @@ struct A11yIdentifiers {
     static let homeScreen = HomeScreen()
     static let loginScreen = LoginScreen()
     static let onboardingScreen = OnboardingScreen()
+    static let reportContent = ReportContent()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
@@ -65,6 +66,10 @@ struct A11yIdentifiers {
     struct OnboardingScreen {
         let signIn = "onboarding-sign_in"
         let hidden = "onboarding-hidden"
+    }
+    
+    struct ReportContent {
+        let ignoreUser = "report_content-ignore_user"
     }
         
     struct RoomScreen {

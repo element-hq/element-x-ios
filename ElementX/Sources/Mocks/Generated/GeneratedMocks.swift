@@ -427,6 +427,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return membersReturnValue
         }
     }
+    //MARK: - ignoreUser
+
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
+    }
+    var ignoreUserReceivedUserID: String?
+    var ignoreUserReceivedInvocations: [String] = []
+    var ignoreUserReturnValue: Result<Void, RoomProxyError>!
+    var ignoreUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
+
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        ignoreUserCallsCount += 1
+        ignoreUserReceivedUserID = userID
+        ignoreUserReceivedInvocations.append(userID)
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure(userID)
+        } else {
+            return ignoreUserReturnValue
+        }
+    }
     //MARK: - retryDecryption
 
     var retryDecryptionForCallsCount = 0

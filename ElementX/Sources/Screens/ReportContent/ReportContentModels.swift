@@ -29,6 +29,7 @@ struct ReportContentViewState: BindableState {
 
 struct ReportContentViewStateBindings {
     var reasonText: String
+    var ignoreUser: Bool
 }
 
 enum ReportContentViewAction {

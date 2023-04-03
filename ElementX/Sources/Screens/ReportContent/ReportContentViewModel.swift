@@ -22,12 +22,15 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
     var callback: ((ReportContentViewModelAction) -> Void)?
 
     private let itemID: String
+    private let senderID: String
     private let roomProxy: RoomProxyProtocol
 
-    init(itemID: String, roomProxy: RoomProxyProtocol) {
+    init(itemID: String, senderID: String, roomProxy: RoomProxyProtocol) {
         self.itemID = itemID
+        self.senderID = senderID
         self.roomProxy = roomProxy
-        super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "")))
+        
+        super.init(initialViewState: ReportContentViewState(bindings: ReportContentViewStateBindings(reasonText: "", ignoreUser: false)))
     }
 
     // MARK: - Public
@@ -45,13 +48,21 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
 
     private func submitReport() async {
         callback?(.submitStarted)
-        switch await roomProxy.reportContent(itemID, reason: state.bindings.reasonText) {
-        case .success:
-            MXLog.info("Submit Report Content succeeded")
-            callback?(.submitFinished)
-        case let .failure(error):
+        
+        if case let .failure(error) = await roomProxy.reportContent(itemID, reason: state.bindings.reasonText) {
             MXLog.error("Submit Report Content failed: \(error)")
             callback?(.submitFailed(error: error))
+            return
         }
+        
+        // Ignore the sender if the user wants to.
+        if state.bindings.ignoreUser, case let .failure(error) = await roomProxy.ignoreUser(senderID) {
+            MXLog.error("Ignore user failed: \(error)")
+            callback?(.submitFailed(error: error))
+            return
+        }
+        
+        MXLog.info("Submit Report Content succeeded")
+        callback?(.submitFinished)
     }
 }
