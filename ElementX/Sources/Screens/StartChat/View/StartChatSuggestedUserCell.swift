@@ -43,7 +43,7 @@ struct StartChatSuggestedUserCell: View {
                 
                 if !user.isVerified {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(Image(systemName: "exclamationmark.circle"))
+                        Text(Image(systemName: "exclamationmark.circle.fill"))
                             .foregroundColor(.compound.textActionCritical)
                         
                         Text(L10n.screenStartChatUnknownProfile)
