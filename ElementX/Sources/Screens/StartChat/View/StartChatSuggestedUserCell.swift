@@ -46,8 +46,7 @@ struct StartChatSuggestedUserCell: View {
                         Text(Image(systemName: "exclamationmark.circle"))
                             .foregroundColor(.compound.textActionCritical)
                         
-                        #warning("Localize text")
-                        Text("We can’t fetch the profile information of this Matrix ID. Please ensure the Matrix ID is correct before sending an invite.")
+                        Text(L10n.screenStartChatUnknownProfile)
                             .foregroundColor(.secondary)
                     }
                     .font(.compound.bodyXS)

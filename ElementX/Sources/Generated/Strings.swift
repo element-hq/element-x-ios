@@ -472,6 +472,8 @@ public enum L10n {
   public static var screenSignoutPreferenceItem: String { return L10n.tr("Localizable", "screen_signout_preference_item") }
   /// An error occurred when trying to start a chat
   public static var screenStartChatErrorStartingChat: String { return L10n.tr("Localizable", "screen_start_chat_error_starting_chat") }
+  /// We can’t fetch the profile information of this Matrix ID. Please ensure the Matrix ID is correct before sending an invite.
+  public static var screenStartChatUnknownProfile: String { return L10n.tr("Localizable", "screen_start_chat_unknown_profile") }
   /// Looks like you’re using a new device. Verify it’s you to access your encrypted messages.
   public static var sessionVerificationBannerMessage: String { return L10n.tr("Localizable", "session_verification_banner_message") }
   /// Access your message history
