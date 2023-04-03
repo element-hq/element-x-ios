@@ -214,6 +214,7 @@
 "screen_signout_in_progress_dialog_content" = "Deconectare în curs...";
 "screen_signout_preference_item" = "Deconectează-te";
 "screen_start_chat_error_starting_chat" = "A apărut o eroare la încercarea începerii conversației";
+"screen_start_chat_unknown_profile" = "We can’t fetch the profile information of this Matrix ID. Please ensure the Matrix ID is correct before sending an invite.";
 "session_verification_banner_message" = "Se pare că folosești un dispozitiv nou. Verifică-ți identitatea pentru acces la mesajele tale criptate.";
 "session_verification_banner_title" = "Accesează istoricul mesajelor";
 "settings_rageshake" = "Rageshake";
