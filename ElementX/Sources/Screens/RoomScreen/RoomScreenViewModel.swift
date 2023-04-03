@@ -155,7 +155,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func itemDoubleTapped(with itemId: String) {
         guard let item = state.items.first(where: { $0.id == itemId }), item.isReactable else { return }
-        callback?(.displayEmojiPicker(itemId: itemId))
+        callback?(.displayEmojiPicker(itemID: itemId))
     }
     
     private func buildTimelineViews() {
@@ -294,7 +294,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         switch action {
         case .react:
-            callback?(.displayEmojiPicker(itemId: item.id))
+            callback?(.displayEmojiPicker(itemID: item.id))
         case .copy:
             UIPasteboard.general.string = item.body
         case .edit:
@@ -327,7 +327,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 await timelineController.retryDecryption(for: sessionID)
             }
         case .report:
-            callback?(.displayReportContent(itemId: itemID))
+            callback?(.displayReportContent(itemID: itemID, senderID: item.sender.id))
         }
         
         if action.switchToDefaultComposer {

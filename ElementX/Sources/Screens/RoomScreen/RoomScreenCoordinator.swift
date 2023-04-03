@@ -58,10 +58,10 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayRoomDetails()
             case .displayMediaFile(let file, let title):
                 self.displayFilePreview(for: file, with: title)
-            case .displayEmojiPicker(let itemId):
-                self.displayEmojiPickerScreen(for: itemId)
-            case .displayReportContent(let itemId):
-                self.displayReportContent(for: itemId)
+            case .displayEmojiPicker(let itemID):
+                self.displayEmojiPickerScreen(for: itemID)
+            case .displayReportContent(let itemID, let senderID):
+                self.displayReportContent(for: itemID, from: senderID)
             case .displayCameraPicker:
                 self.displayMediaPickerWithSource(.camera)
             case .displayMediaPicker:
@@ -159,10 +159,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
 
-    private func displayReportContent(for itemId: String) {
+    private func displayReportContent(for itemID: String, from senderID: String) {
         let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: NavigationStackCoordinator())
-        let parameters = ReportContentCoordinatorParameters(itemID: itemId,
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
+        let parameters = ReportContentCoordinatorParameters(itemID: itemID,
+                                                            senderID: senderID,
                                                             roomProxy: parameters.roomProxy,
                                                             userIndicatorController: userIndicatorController)
         let coordinator = ReportContentCoordinator(parameters: parameters)
