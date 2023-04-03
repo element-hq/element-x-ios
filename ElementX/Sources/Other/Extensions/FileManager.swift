@@ -32,6 +32,10 @@ extension FileManager {
         try createDirectory(at: url, withIntermediateDirectories: withIntermediateDirectories)
     }
     
+    func temporaryDirectoryURLFor(fileName: String) -> URL {
+        URL.temporaryDirectory.appendingPathComponent(fileName)
+    }
+    
     func copyFileToTemporaryDirectory(url: URL) throws -> URL {
         let newURL = URL.temporaryDirectory.appendingPathComponent(url.lastPathComponent)
         
@@ -47,5 +51,13 @@ extension FileManager {
         try data.write(to: newURL)
         
         return newURL
+    }
+    
+    /// Retrieve a file's disk size
+    /// - Parameter url: the file URL
+    /// - Returns: the size in bytes
+    func sizeForItemAt(_ url: URL) throws -> Double {
+        let attributes = try attributesOfItem(atPath: url.path())
+        return attributes[FileAttributeKey.size] as? Double ?? 0.0
     }
 }

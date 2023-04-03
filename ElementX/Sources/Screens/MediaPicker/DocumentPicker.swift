@@ -19,7 +19,7 @@ import SwiftUI
 enum DocumentPickerAction {
     case selectFile(URL)
     case cancel
-    case error(DocumentPickerError)
+    case error(Error)
 }
 
 enum DocumentPickerError: Error {
@@ -62,11 +62,15 @@ struct DocumentPicker: UIViewControllerRepresentable {
         
         func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumentsAt urls: [URL]) {
             guard let url = urls.first else {
-                documentPicker.callback(.error(.unknown))
+                documentPicker.callback(.error(DocumentPickerError.unknown))
                 return
             }
-            
-            documentPicker.callback(.selectFile(url))
+            do {
+                let newURL = try FileManager.default.copyFileToTemporaryDirectory(url: url)
+                documentPicker.callback(.selectFile(newURL))
+            } catch {
+                documentPicker.callback(.error(error))
+            }
         }
     }
 }

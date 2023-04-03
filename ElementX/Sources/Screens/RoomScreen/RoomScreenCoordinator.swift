@@ -94,6 +94,15 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 let mediaPickerPreviewScreenCoordinator = MediaPickerPreviewScreenCoordinator(parameters: .init(url: url, title: url.lastPathComponent)) { action in
                     switch action {
                     case .send:
+                        Task {
+                            let preprocessor = MediaUploadingPreprocessor()
+                            switch await preprocessor.processMedia(url: url) {
+                            case .success(let mediaInfo):
+                                MXLog.info(mediaInfo)
+                            case .failure(let error):
+                                MXLog.error("Failed processing media to upload with error: \(error)")
+                            }
+                        }
                         self?.navigationStackCoordinator.setSheetCoordinator(nil)
                     case .cancel:
                         self?.navigationStackCoordinator.setSheetCoordinator(nil)
