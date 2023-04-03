@@ -157,7 +157,7 @@ class ClientProxy: ClientProxyProtocol {
     func createDirectRoom(with userID: String) async -> Result<String, ClientProxyError> {
         await Task.dispatch(on: clientQueue) {
             do {
-                let parameters = CreateRoomParameters(name: "", topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userID], avatar: nil)
+                let parameters = CreateRoomParameters(name: nil, topic: nil, isEncrypted: true, isDirect: true, visibility: .private, preset: .trustedPrivateChat, invite: [userID], avatar: nil)
                 let result = try self.client.createRoom(request: parameters)
                 return .success(result)
             } catch {
