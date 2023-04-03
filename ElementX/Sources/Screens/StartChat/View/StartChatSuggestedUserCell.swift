@@ -43,15 +43,13 @@ struct StartChatSuggestedUserCell: View {
                 
                 if !user.isVerified {
                     #warning("localize")
-                    HStack {
-                        (Text(Image(systemName: "exclamationmark.circle")) +
-                            Text("  We can’t fetch the profile information of this Matrix ID. Please ensure the Matrix ID is correct before sending an invite."))
-                            .font(.caption2)
-                            .foregroundColor(.orange)
-                        
-                        // Image(systemName: "exclamationmark.circle")
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text(Image(systemName: "exclamationmark.circle"))
+                            .foregroundColor(.element.alert)
+                        Text("We can’t fetch the profile information of this Matrix ID. Please ensure the Matrix ID is correct before sending an invite.")
                     }
-                    .foregroundColor(.orange)
+                    .font(.element.caption1)
+                    .foregroundColor(.secondary)
                     .padding(.top, 4)
                 }
             }
