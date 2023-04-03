@@ -17,8 +17,9 @@
 import SwiftUI
 
 struct SelectedInvitedUserItem: View {
-    let user: UserProfileProxy
+    let user: UserProfile
     let imageProvider: ImageProviderProtocol?
+    let dismissAction: () -> Void
     
     var body: some View {
         VStack(spacing: 4) {
@@ -31,11 +32,18 @@ struct SelectedInvitedUserItem: View {
                 .font(.element.title3)
                 .foregroundColor(.element.primaryContent)
         }
+        .overlay(alignment: .topTrailing) {
+            Button(action: dismissAction) {
+                Image(systemName: "xmark.circle.fill")
+                    .symbolRenderingMode(.palette)
+                    .foregroundStyle(Color.element.systemPrimaryBackground, Color.element.primaryContent)
+            }
+        }
     }
 }
 
 struct SelectedInvitedUserItem_Previews: PreviewProvider {
     static var previews: some View {
-        SelectedInvitedUserItem(user: .mockAlice, imageProvider: MockMediaProvider())
+        SelectedInvitedUserItem(user: .mockAlice, imageProvider: MockMediaProvider(), dismissAction: { })
     }
 }

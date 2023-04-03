@@ -16,7 +16,9 @@
 
 import SwiftUI
 
-struct InviteUsersInRoomCoordinatorParameters { }
+struct InviteUsersInRoomCoordinatorParameters {
+    let userSession: UserSessionProtocol
+}
 
 enum InviteUsersInRoomCoordinatorAction {
     case close
@@ -31,7 +33,7 @@ final class InviteUsersInRoomCoordinator: CoordinatorProtocol {
     init(parameters: InviteUsersInRoomCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = InviteUsersInRoomViewModel()
+        viewModel = InviteUsersInRoomViewModel(userSession: parameters.userSession)
     }
     
     func start() {

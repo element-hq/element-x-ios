@@ -22,14 +22,7 @@ struct InviteUsersInRoomScreen: View {
     var body: some View {
         VStack {
             if !context.viewState.selectedUsers.isEmpty {
-                ScrollView(.horizontal, showsIndicators: false) {
-                    LazyHStack {
-                        ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                            SelectedInvitedUserItem(user: user, imageProvider: MockMediaProvider())
-                        }
-                    }
-                }
-                .frame(height: 80)
+                selectedUsersSection
             }
             Form {
                 usersSection
@@ -44,16 +37,40 @@ struct InviteUsersInRoomScreen: View {
             ToolbarItem(placement: .navigationBarLeading) {
                 backButton
             }
+            ToolbarItem(placement: .navigationBarTrailing) {
+                nextButton
+            }
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
         .alert(item: $context.alertInfo) { $0.alert }
+    }
+    
+    /// The content shown in the form when a search query has been entered.
+    @ViewBuilder
+    private var searchContent: some View {
+        if context.viewState.hasEmptySearchResults {
+            noResultsContent
+        } else {
+            usersSection
+        }
+    }
+    
+    private var noResultsContent: some View {
+        Text(L10n.commonNoResults)
+            .font(.element.body)
+            .foregroundColor(.element.tertiaryContent)
+            .frame(maxWidth: .infinity)
+            .listRowBackground(Color.clear)
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
     
     private var usersSection: some View {
         Section {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .selectUser(user)) } label: {
-                    StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+                    SelectableUserCell(user: user,
+                                       selected: context.viewState.selectedUsers.contains { $0.userID == user.userID },
+                                       imageProvider: context.imageProvider)
                 }
             }
         } header: {
@@ -65,6 +82,21 @@ struct InviteUsersInRoomScreen: View {
         .formSectionStyle()
     }
     
+    private var selectedUsersSection: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            LazyHStack(spacing: 28) {
+                ForEach(context.viewState.selectedUsers, id: \.userID) { user in
+                    SelectedInvitedUserItem(user: user, imageProvider: context.imageProvider) {
+                        deselect(user)
+                    }
+                    .frame(width: 64, height: 90)
+                }
+            }
+        }
+        .frame(height: 90)
+        .padding(.horizontal, 18)
+    }
+    
     private var backButton: some View {
         Button { context.send(viewAction: .close) } label: {
             HStack(spacing: 8) {
@@ -73,13 +105,25 @@ struct InviteUsersInRoomScreen: View {
             }
         }
     }
+    
+    private var nextButton: some View {
+        Button { context.send(viewAction: .proceed) } label: {
+            Text(context.viewState.selectedUsers.isEmpty ? L10n.actionSkip : L10n.actionNext)
+        }
+    }
+    
+    private func deselect(_ user: UserProfile) {
+        context.send(viewAction: .deselectUser(user))
+    }
 }
 
 // MARK: - Previews
 
 struct InviteUsersInRoom_Previews: PreviewProvider {
     static var previews: some View {
-        let viewModel = InviteUsersInRoomViewModel()
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
+                                          mediaProvider: MockMediaProvider())
+        let viewModel = InviteUsersInRoomViewModel(userSession: userSession)
         NavigationView {
             InviteUsersInRoomScreen(context: viewModel.context)
                 .tint(.element.accent)

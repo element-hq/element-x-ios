@@ -24,7 +24,15 @@ struct InviteUsersInRoomViewState: BindableState {
     var bindings = StartChatScreenViewStateBindings()
     
     var usersSection: StartChatUsersSection = .init(type: .suggestions, users: [])
-    var selectedUsers: [UserProfileProxy] = []
+    var selectedUsers: [UserProfile] = []
+    
+    var isSearching: Bool {
+        !bindings.searchQuery.isEmpty
+    }
+    
+    var hasEmptySearchResults: Bool {
+        isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
+    }
 }
 
 struct InviteUsersInRoomViewStateBindings {
@@ -36,5 +44,7 @@ struct InviteUsersInRoomViewStateBindings {
 
 enum InviteUsersInRoomViewAction {
     case close
-    case selectUser(UserProfileProxy)
+    case proceed
+    case selectUser(UserProfile)
+    case deselectUser(UserProfile)
 }

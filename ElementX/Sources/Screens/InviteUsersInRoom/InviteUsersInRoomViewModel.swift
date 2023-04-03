@@ -20,10 +20,13 @@ typealias InviteUsersInRoomViewModelType = StateStoreViewModel<InviteUsersInRoom
 
 class InviteUsersInRoomViewModel: InviteUsersInRoomViewModelType, InviteUsersInRoomViewModelProtocol {
     var callback: ((InviteUsersInRoomViewModelAction) -> Void)?
-
-    init() {
-        super.init(initialViewState: InviteUsersInRoomViewState())
-        fetchSuggestion()
+    private let userSession: UserSessionProtocol
+    
+    init(userSession: UserSessionProtocol) {
+        self.userSession = userSession
+        super.init(initialViewState: InviteUsersInRoomViewState(), imageProvider: userSession.mediaProvider)
+        
+        fetchSuggestions()
     }
     
     // MARK: - Public
@@ -32,19 +35,25 @@ class InviteUsersInRoomViewModel: InviteUsersInRoomViewModelType, InviteUsersInR
         switch viewAction {
         case .close:
             callback?(.close)
+        case .proceed:
+            break
         case .selectUser(let user):
             if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
                 state.selectedUsers.remove(at: index)
             } else {
                 state.selectedUsers.append(user)
             }
+        case .deselectUser(let user):
+            if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
+                state.selectedUsers.remove(at: index)
+            }
         }
     }
-    
+
     // MARK: - Private
     
-    private func fetchSuggestion() {
-        state.usersSection.type = .suggestions
-        state.usersSection.users = [.mockAlice, .mockBob, .mockCharlie]
+    private func fetchSuggestions() {
+        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+    }
     }
 }
