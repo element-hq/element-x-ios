@@ -84,16 +84,19 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
-            let defaultPayload = [
+            var defaultPayload = [
                 "aps": [
                     "mutable-content": 1,
                     "alert": [
                         "loc-key": "Notification",
-                        "loc-args": []
-                    ]
-                ],
-                "notificationID": clientProxy.restorationToken?.notificationID
+                        "loc-args": [] as [Any]
+                    ] as [String: Any]
+                ] as [String: Any]
             ] as [String: Any]
+            if let notificationID = clientProxy.restorationToken?.notificationID {
+                defaultPayload["notificationID"] = notificationID
+            }
+
             let configuration = await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
                                                                              appId: ServiceLocator.shared.settings.pusherAppId),
                                                           kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
