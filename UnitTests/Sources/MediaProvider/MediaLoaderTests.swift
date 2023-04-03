@@ -146,8 +146,4 @@ private class MockMediaLoadingClient: ClientProtocol {
                    lang: String) throws {
         fatalError()
     }
-
-    func getProfile(userId: String) throws -> MatrixRustSDK.UserProfile {
-        fatalError()
-    }
 }
