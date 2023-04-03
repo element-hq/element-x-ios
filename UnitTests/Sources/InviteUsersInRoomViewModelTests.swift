@@ -20,33 +20,16 @@ import XCTest
 
 @MainActor
 class InviteUsersInRoomScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
-    }
-    
     var viewModel: InviteUsersInRoomViewModelProtocol!
-    var context: InviteUsersInRoomViewModelType.Context!
+    var clientProxy: MockClientProxy!
     
-    @MainActor override func setUpWithError() throws {
-        viewModel = InviteUsersInRoomViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-        context = viewModel.context
+    var context: InviteUsersInRoomViewModel.Context {
+        viewModel.context
     }
-
-    func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
-    }
-
-    func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        await Task.yield()
-        XCTAssertEqual(context.viewState.count, 1)
+    
+    override func setUpWithError() throws {
+        clientProxy = .init(userID: "")
+        let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        viewModel = InviteUsersInRoomViewModel(userSession: userSession)
     }
 }
