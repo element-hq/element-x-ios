@@ -34,6 +34,11 @@ class RoomProxy: RoomProxyProtocol {
     private(set) var displayName: String?
     
     private var timelineObservationToken: TaskHandle?
+
+    private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
+    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
+        membersSubject.eraseToAnyPublisher()
+    }
         
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
@@ -140,6 +145,7 @@ class RoomProxy: RoomProxyProtocol {
             timelineObservationToken = result.taskHandle
             Task {
                 await fetchMembers()
+                await updateMembers()
             }
             return .success(result.items)
         } else {
@@ -274,18 +280,16 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
-    
-    func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError> {
+
+    func updateMembers() async {
         do {
-            let members = try await Task.dispatch(on: .global()) {
-                let members = try self.room.members()
-                return members
+            let roomMembers = try await Task.dispatch(on: .global()) {
+                try self.room.members()
             }
             
-            let proxiedMembers = buildRoomMemberProxies(members: members)
-            return .success(proxiedMembers)
+            membersSubject.value = buildRoomMemberProxies(members: roomMembers)
         } catch {
-            return .failure(.failedRetrievingMembers)
+            return
         }
     }
     

@@ -54,7 +54,9 @@ protocol RoomProxyProtocol {
     var topic: String? { get }
     
     var avatarURL: URL? { get }
-        
+
+    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> { get }
+
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
@@ -79,13 +81,13 @@ protocol RoomProxyProtocol {
     
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
     
-    func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError>
-
     func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError>
     
     func retryDecryption(for sessionID: String) async
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
+    
+    func updateMembers() async
 }
 
 extension RoomProxyProtocol {

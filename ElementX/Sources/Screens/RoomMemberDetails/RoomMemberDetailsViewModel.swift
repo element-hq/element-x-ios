@@ -25,12 +25,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
 
     init(roomMemberProxy: RoomMemberProxyProtocol, mediaProvider: MediaProviderProtocol) {
         self.roomMemberProxy = roomMemberProxy
-        let initialViewState = RoomMemberDetailsViewState(userID: roomMemberProxy.userID,
-                                                          name: roomMemberProxy.displayName,
-                                                          avatarURL: roomMemberProxy.avatarURL,
-                                                          isAccountOwner: roomMemberProxy.isAccountOwner,
-                                                          permalink: roomMemberProxy.permalink,
-                                                          isIgnored: roomMemberProxy.isIgnored,
+        let initialViewState = RoomMemberDetailsViewState(details: RoomMemberDetails(withProxy: roomMemberProxy),
                                                           bindings: .init())
         super.init(initialViewState: initialViewState, imageProvider: mediaProvider)
     }
@@ -43,8 +38,6 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
             state.bindings.ignoreUserAlert = .init(action: .unignore)
         case .showIgnoreAlert:
             state.bindings.ignoreUserAlert = .init(action: .ignore)
-        case .copyUserLink:
-            copyUserLink()
         case .ignoreConfirmed:
             await ignoreUser()
         case .unignoreConfirmed:
@@ -54,22 +47,13 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
 
     // MARK: - Private
 
-    private func copyUserLink() {
-        if let userLink = state.permalink {
-            UIPasteboard.general.url = userLink
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonLinkCopiedToClipboard))
-        } else {
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-        }
-    }
-
     private func ignoreUser() async {
         state.isProcessingIgnoreRequest = true
         let result = await roomMemberProxy.ignoreUser()
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.isIgnored = true
+            state.details.isIgnored = true
         case .failure:
             state.bindings.errorAlert = .init()
         }
@@ -81,7 +65,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         state.isProcessingIgnoreRequest = false
         switch result {
         case .success:
-            state.isIgnored = false
+            state.details.isIgnored = false
         case .failure:
             state.bindings.errorAlert = .init()
         }

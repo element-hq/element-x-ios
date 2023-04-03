@@ -38,19 +38,65 @@ struct RoomDetailsViewState: BindableState {
     var topic: String?
     var avatarURL: URL?
     let permalink: URL?
-    var members: [RoomDetailsMember]
+    var members: [RoomMemberDetails] = []
+    var isProcessingIgnoreRequest = false
     
     var isLoadingMembers: Bool {
         members.isEmpty
     }
 
     var bindings: RoomDetailsViewStateBindings
+
+    var dmRecipient: RoomMemberDetails?
+
+    private var isDMRoom: Bool {
+        isEncrypted && isDirect && members.count == 2
+    }
 }
 
 struct RoomDetailsViewStateBindings {
+    struct IgnoreUserAlertItem: AlertItem, Equatable {
+        enum Action {
+            case ignore
+            case unignore
+        }
+
+        let action: Action
+        let cancelTitle = L10n.actionCancel
+
+        var title: String {
+            switch action {
+            case .ignore: return L10n.screenDmDetailsBlockUser
+            case .unignore: return L10n.screenDmDetailsUnblockUser
+            }
+        }
+
+        var confirmationTitle: String {
+            switch action {
+            case .ignore: return L10n.screenDmDetailsBlockAlertAction
+            case .unignore: return L10n.screenDmDetailsUnblockAlertAction
+            }
+        }
+
+        var description: String {
+            switch action {
+            case .ignore: return L10n.screenDmDetailsBlockAlertDescription
+            case .unignore: return L10n.screenDmDetailsUnblockAlertDescription
+            }
+        }
+
+        var viewAction: RoomDetailsViewAction {
+            switch action {
+            case .ignore: return .ignoreConfirmed
+            case .unignore: return .unignoreConfirmed
+            }
+        }
+    }
+
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<RoomDetailsErrorType>?
     var leaveRoomAlertItem: LeaveRoomAlertItem?
+    var ignoreUserRoomAlertItem: IgnoreUserAlertItem?
 }
 
 struct LeaveRoomAlertItem: AlertItem {
@@ -77,21 +123,11 @@ struct LeaveRoomAlertItem: AlertItem {
 enum RoomDetailsViewAction {
     case processTapPeople
     case processTapLeave
+    case processTapIgnore
+    case processTapUnignore
     case confirmLeave
-    case copyRoomLink
-}
-
-struct RoomDetailsMember: Identifiable, Equatable {
-    let id: String
-    let name: String?
-    let avatarURL: URL?
-
-    @MainActor
-    init(withProxy proxy: RoomMemberProxyProtocol) {
-        id = proxy.userID
-        name = proxy.displayName
-        avatarURL = proxy.avatarURL
-    }
+    case ignoreConfirmed
+    case unignoreConfirmed
 }
 
 enum RoomDetailsErrorType: Hashable {

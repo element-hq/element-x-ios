@@ -166,6 +166,11 @@ class RoomProxyMock: RoomProxyProtocol {
     var displayName: String?
     var topic: String?
     var avatarURL: URL?
+    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
+        get { return underlyingMembersPublisher }
+        set(value) { underlyingMembersPublisher = value }
+    }
+    var underlyingMembersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never>!
 
     //MARK: - loadAvatarURLForUserId
 
@@ -410,23 +415,6 @@ class RoomProxyMock: RoomProxyProtocol {
             return reportContentReasonReturnValue
         }
     }
-    //MARK: - members
-
-    var membersCallsCount = 0
-    var membersCalled: Bool {
-        return membersCallsCount > 0
-    }
-    var membersReturnValue: Result<[RoomMemberProxyProtocol], RoomProxyError>!
-    var membersClosure: (() async -> Result<[RoomMemberProxyProtocol], RoomProxyError>)?
-
-    func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError> {
-        membersCallsCount += 1
-        if let membersClosure = membersClosure {
-            return await membersClosure()
-        } else {
-            return membersReturnValue
-        }
-    }
     //MARK: - ignoreUser
 
     var ignoreUserCallsCount = 0
@@ -480,6 +468,18 @@ class RoomProxyMock: RoomProxyProtocol {
         } else {
             return leaveRoomReturnValue
         }
+    }
+    //MARK: - updateMembers
+
+    var updateMembersCallsCount = 0
+    var updateMembersCalled: Bool {
+        return updateMembersCallsCount > 0
+    }
+    var updateMembersClosure: (() async -> Void)?
+
+    func updateMembers() async {
+        updateMembersCallsCount += 1
+        await updateMembersClosure?()
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {

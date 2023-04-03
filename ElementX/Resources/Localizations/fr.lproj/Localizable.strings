@@ -37,7 +37,7 @@
 "action_save" = "Save";
 "action_search" = "Search";
 "action_send" = "Send";
-"action_share_link" = "Share link";
+"action_share_link" = "Share";
 "action_skip" = "Skip";
 "action_start" = "Start";
 "action_start_chat" = "Start chat";
@@ -47,6 +47,7 @@
 "common_about" = "About";
 "common_audio" = "Audio";
 "common_bubbles" = "Bubbles";
+"common_creating_room" = "Creating room…";
 "common_decryption_error" = "Decryption error";
 "common_developer_options" = "Developer options";
 "common_edited_suffix" = "(edited)";
@@ -104,6 +105,7 @@
 "emoji_picker_category_symbols" = "Symbols";
 "error_failed_creating_the_permalink" = "Failed creating the permalink";
 "error_failed_loading_messages" = "Failed loading messages";
+"error_no_compatible_app_found" = "No compatible app was found to handle this action.";
 "error_some_messages_have_not_been_sent" = "Some messages have not been sent";
 "error_unknown" = "Sorry, an error occurred";
 "invite_friends_text" = "Hey, talk to me on %1$@: %2$@";
@@ -154,6 +156,12 @@
 "screen_create_room_action_create_room" = "New room";
 "screen_create_room_action_invite_people" = "Invite people";
 "screen_create_room_add_people_title" = "Add people";
+"screen_dm_details_block_alert_action" = "Block";
+"screen_dm_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";
+"screen_dm_details_block_user" = "Block user";
+"screen_dm_details_unblock_alert_action" = "Unblock";
+"screen_dm_details_unblock_alert_description" = "On unblocking the user, you will be able to see all messages by them again.";
+"screen_dm_details_unblock_user" = "Unblock user";
 "screen_login_error_deactivated_account" = "This account has been deactivated.";
 "screen_login_error_invalid_credentials" = "Incorrect username and/or password";
 "screen_login_error_invalid_user_id" = "This is not a valid user identifier. Expected format: ‘@user:homeserver.org’";
@@ -174,6 +182,7 @@
 "screen_room_details_leave_room_title" = "Leave room";
 "screen_room_details_people_title" = "People";
 "screen_room_details_security_title" = "Security";
+"screen_room_details_share_room_title" = "Share room";
 "screen_room_details_topic_title" = "Topic";
 "screen_room_member_details_block_alert_action" = "Block";
 "screen_room_member_details_block_alert_description" = "Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.";

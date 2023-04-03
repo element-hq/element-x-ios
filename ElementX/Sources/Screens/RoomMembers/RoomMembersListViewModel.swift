@@ -28,7 +28,7 @@ class RoomMembersListViewModel: RoomMembersListViewModelType, RoomMembersListVie
          members: [RoomMemberProxyProtocol]) {
         self.mediaProvider = mediaProvider
         self.members = members
-        super.init(initialViewState: .init(members: members.map { RoomDetailsMember(withProxy: $0) },
+        super.init(initialViewState: .init(members: members.map { RoomMemberDetails(withProxy: $0) },
                                            bindings: .init()),
                    imageProvider: mediaProvider)
     }

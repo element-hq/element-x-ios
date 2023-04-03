@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias RoomDetailsViewModelType = StateStoreViewModel<RoomDetailsViewState, RoomDetailsViewAction>
@@ -22,12 +23,27 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     private let roomProxy: RoomProxyProtocol
     private var members: [RoomMemberProxyProtocol] = [] {
         didSet {
-            state.members = members.map { RoomDetailsMember(withProxy: $0) }
+            state.members = members.map { RoomMemberDetails(withProxy: $0) }
+            if roomProxy.isDirect, roomProxy.isEncrypted, members.count == 2 {
+                dmRecipient = members.first(where: { !$0.isAccountOwner })
+            } else {
+                dmRecipient = nil
+            }
+        }
+    }
+
+    private var dmRecipient: RoomMemberProxyProtocol? {
+        didSet {
+            if let dmRecipient {
+                state.dmRecipient = RoomMemberDetails(withProxy: dmRecipient)
+            } else {
+                state.dmRecipient = nil
+            }
         }
     }
     
     var callback: ((RoomDetailsViewModelAction) -> Void)?
-    
+
     init(roomProxy: RoomProxyProtocol,
          mediaProvider: MediaProviderProtocol) {
         self.roomProxy = roomProxy
@@ -39,18 +55,16 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
                                            topic: roomProxy.topic,
                                            avatarURL: roomProxy.avatarURL,
                                            permalink: roomProxy.permalink,
-                                           members: [],
                                            bindings: .init()),
                    imageProvider: mediaProvider)
 
+        roomProxy.membersPublisher.sink { [weak self] members in
+            self?.members = members
+        }
+        .store(in: &cancellables)
+
         Task {
-            switch await roomProxy.members() {
-            case .success(let members):
-                self.members = members
-            case .failure(let error):
-                MXLog.error("Failed retrieving room members: \(error)")
-                state.bindings.alertInfo = AlertInfo(id: .alert(L10n.errorUnknown))
-            }
+            await roomProxy.updateMembers()
         }
     }
     
@@ -60,8 +74,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         switch viewAction {
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
-        case .copyRoomLink:
-            copyRoomLink()
         case .processTapLeave:
             guard members.count > 1 else {
                 state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: .empty)
@@ -70,21 +82,20 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: roomProxy.isPublic ? .public : .private)
         case .confirmLeave:
             await leaveRoom()
+        case .processTapIgnore:
+            state.bindings.ignoreUserRoomAlertItem = .init(action: .ignore)
+        case .processTapUnignore:
+            state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
+        case .ignoreConfirmed:
+            await ignore()
+        case .unignoreConfirmed:
+            await unignore()
         }
     }
     
     // MARK: - Private
 
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
-    
-    private func copyRoomLink() {
-        if let roomLink = state.permalink {
-            UIPasteboard.general.url = roomLink
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.commonLinkCopiedToClipboard))
-        } else {
-            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(title: L10n.errorUnknown))
-        }
-    }
 
     private func leaveRoom() async {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
@@ -95,6 +106,30 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             state.bindings.alertInfo = AlertInfo(id: .unknown)
         case .success:
             callback?(.leftRoom)
+        }
+    }
+
+    private func ignore() async {
+        state.isProcessingIgnoreRequest = true
+        let result = await dmRecipient?.ignoreUser()
+        state.isProcessingIgnoreRequest = false
+        switch result {
+        case .success:
+            state.dmRecipient?.isIgnored = true
+        case .failure, .none:
+            state.bindings.alertInfo = .init(id: .unknown)
+        }
+    }
+
+    private func unignore() async {
+        state.isProcessingIgnoreRequest = true
+        let result = await dmRecipient?.unignoreUser()
+        state.isProcessingIgnoreRequest = false
+        switch result {
+        case .success:
+            state.dmRecipient?.isIgnored = false
+        case .failure, .none:
+            state.bindings.alertInfo = .init(id: .unknown)
         }
     }
 }
