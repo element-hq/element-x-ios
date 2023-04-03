@@ -23,7 +23,16 @@ struct RoomScreen: View {
     var body: some View {
         timeline
             .background(Color.element.background.ignoresSafeArea()) // Kills the toolbar translucency.
-            .safeAreaInset(edge: .bottom, spacing: 0) { messageComposer }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                HStack(spacing: 4.0) {
+                    if context.viewState.mediaUploadingFlowEnabled {
+                        sendAttachmentButton
+                    }
+                    
+                    messageComposer
+                }
+                .padding()
+            }
             .navigationBarTitleDisplayMode(.inline)
             .toolbar { toolbar }
             .toolbarRole(.editor) // Hide the back button title.
@@ -40,7 +49,7 @@ struct RoomScreen: View {
             }
     }
     
-    var timeline: some View {
+    private var timeline: some View {
         TimelineView()
             .id(context.viewState.roomId)
             .environmentObject(context)
@@ -48,7 +57,7 @@ struct RoomScreen: View {
             .overlay(alignment: .bottomTrailing) { scrollToBottomButton }
     }
     
-    var messageComposer: some View {
+    private var messageComposer: some View {
         MessageComposer(text: $context.composerText,
                         focused: $context.composerFocused,
                         sendingDisabled: context.viewState.sendButtonDisabled,
@@ -59,10 +68,9 @@ struct RoomScreen: View {
         } editCancellationAction: {
             context.send(viewAction: .cancelEdit)
         }
-        .padding()
     }
     
-    var scrollToBottomButton: some View {
+    private var scrollToBottomButton: some View {
         Button { context.viewState.scrollToBottomPublisher.send(()) } label: {
             Image(systemName: "chevron.down")
                 .font(.element.body)
@@ -84,7 +92,7 @@ struct RoomScreen: View {
     }
     
     @ViewBuilder
-    var loadingIndicator: some View {
+    private var loadingIndicator: some View {
         if context.viewState.showLoading {
             ProgressView()
                 .progressViewStyle(.circular)
@@ -96,11 +104,35 @@ struct RoomScreen: View {
     }
     
     @ToolbarContentBuilder
-    var toolbar: some ToolbarContent {
+    private var toolbar: some ToolbarContent {
         // .principal + .primaryAction works better than .navigation leading + trailing
         // as the latter disables interaction in the action button for rooms with long names
         ToolbarItem(placement: .principal) {
             RoomHeaderView(context: context)
+        }
+    }
+    
+    private var sendAttachmentButton: some View {
+        Menu {
+            Button {
+                context.send(viewAction: .displayDocumentPicker)
+            } label: {
+                Label(UntranslatedL10n.mediaUploadDocumentPicker, systemImage: "doc")
+            }
+            Button {
+                context.send(viewAction: .displayMediaPicker)
+            } label: {
+                Label(UntranslatedL10n.mediaUploadPhotoAndVideoPicker, systemImage: "photo")
+            }
+            Button {
+                context.send(viewAction: .displayCameraPicker)
+            } label: {
+                Label(UntranslatedL10n.mediaUploadCameraPicker, systemImage: "camera")
+            }
+        } label: {
+            Image(systemName: "plus.circle")
+                .font(.element.title1)
+                .foregroundColor(.element.brand)
         }
     }
     

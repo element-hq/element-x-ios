@@ -22,6 +22,7 @@ struct A11yIdentifiers {
     static let homeScreen = HomeScreen()
     static let loginScreen = LoginScreen()
     static let onboardingScreen = OnboardingScreen()
+    static let reportContent = ReportContent()
     static let roomScreen = RoomScreen()
     static let roomDetailsScreen = RoomDetailsScreen()
     static let sessionVerificationScreen = SessionVerificationScreen()
@@ -66,6 +67,10 @@ struct A11yIdentifiers {
         let signIn = "onboarding-sign_in"
         let hidden = "onboarding-hidden"
     }
+    
+    struct ReportContent {
+        let ignoreUser = "report_content-ignore_user"
+    }
         
     struct RoomScreen {
         let name = "room-name"
@@ -74,6 +79,7 @@ struct A11yIdentifiers {
     
     struct RoomDetailsScreen {
         let avatar = "room_details-avatar"
+        let dmAvatar = "room_details-dm_avatar"
         let people = "room_details-people"
     }
     
@@ -101,6 +107,7 @@ struct A11yIdentifiers {
     struct StartChatScreen {
         let closeStartChat = "start_chat-close"
         let inviteFriends = "start_chat-invite_friends"
+        let searchNoResults = "start_chat-search_no_results"
     }
 
     struct RoomMemberDetailsScreen {

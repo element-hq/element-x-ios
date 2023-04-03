@@ -19,7 +19,7 @@ import SwiftUI
 struct RoomMembersListMemberCell: View {
     @ScaledMetric private var avatarSize = AvatarSize.user(on: .roomDetails).value
 
-    let member: RoomDetailsMember
+    let member: RoomMemberDetails
     let context: RoomMembersListViewModel.Context
 
     var body: some View {

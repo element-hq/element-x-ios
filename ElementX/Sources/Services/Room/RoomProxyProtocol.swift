@@ -26,6 +26,7 @@ enum RoomProxyError: Error {
     case failedSendingReadReceipt
     case failedSendingMessage
     case failedSendingReaction
+    case failedSendingMedia
     case failedEditingMessage
     case failedRedactingEvent
     case failedReportingContent
@@ -53,7 +54,9 @@ protocol RoomProxyProtocol {
     var topic: String? { get }
     
     var avatarURL: URL? { get }
-        
+
+    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> { get }
+
     func loadAvatarURLForUserId(_ userId: String) async -> Result<URL?, RoomProxyError>
     
     func loadDisplayNameForUserId(_ userId: String) async -> Result<String?, RoomProxyError>
@@ -69,18 +72,22 @@ protocol RoomProxyProtocol {
     func sendMessage(_ message: String, inReplyTo eventID: String?) async -> Result<Void, RoomProxyError>
     
     func sendReaction(_ reaction: String, to eventID: String) async -> Result<Void, RoomProxyError>
+    
+    func sendImage(url: URL) async -> Result<Void, RoomProxyError>
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError>
     
     func redact(_ eventID: String) async -> Result<Void, RoomProxyError>
-
+    
     func reportContent(_ eventID: String, reason: String?) async -> Result<Void, RoomProxyError>
-
-    func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError>
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError>
     
     func retryDecryption(for sessionID: String) async
 
     func leaveRoom() async -> Result<Void, RoomProxyError>
+    
+    func updateMembers() async
 }
 
 extension RoomProxyProtocol {

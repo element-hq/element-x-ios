@@ -58,10 +58,16 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                 self.displayRoomDetails()
             case .displayMediaFile(let file, let title):
                 self.displayFilePreview(for: file, with: title)
-            case .displayEmojiPicker(let itemId):
-                self.displayEmojiPickerScreen(for: itemId)
-            case .displayReportContent(let itemId):
-                self.displayReportContent(for: itemId)
+            case .displayEmojiPicker(let itemID):
+                self.displayEmojiPickerScreen(for: itemID)
+            case .displayReportContent(let itemID, let senderID):
+                self.displayReportContent(for: itemID, from: senderID)
+            case .displayCameraPicker:
+                self.displayMediaPickerWithSource(.camera)
+            case .displayMediaPicker:
+                self.displayMediaPickerWithSource(.photoLibrary)
+            case .displayDocumentPicker:
+                self.displayMediaPickerWithSource(.documents)
             }
         }
     }
@@ -74,8 +80,32 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
     func toPresentable() -> AnyView {
         AnyView(RoomScreen(context: viewModel.context))
     }
-
+    
     // MARK: - Private
+    
+    private func displayMediaPickerWithSource(_ source: MediaPickerSource) {
+        let mediaPickerCoordinator = MediaPickerCoordinator(source: source) { [weak self] action in
+            switch action {
+            case .cancel:
+                self?.navigationStackCoordinator.setSheetCoordinator(nil)
+            case .error:
+                break
+            case .selectMediaAtURL(let url):
+                let mediaPickerPreviewScreenCoordinator = MediaPickerPreviewScreenCoordinator(parameters: .init(url: url, title: url.lastPathComponent)) { action in
+                    switch action {
+                    case .send:
+                        self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                    case .cancel:
+                        self?.navigationStackCoordinator.setSheetCoordinator(nil)
+                    }
+                }
+                
+                self?.navigationStackCoordinator.setSheetCoordinator(mediaPickerPreviewScreenCoordinator)
+            }
+        }
+        
+        navigationStackCoordinator.setSheetCoordinator(mediaPickerCoordinator)
+    }
 
     private func displayFilePreview(for file: MediaFileHandleProxy, with title: String?) {
         let params = FilePreviewCoordinatorParameters(mediaFile: file, title: title)
@@ -129,10 +159,11 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
         navigationStackCoordinator.push(coordinator)
     }
 
-    private func displayReportContent(for itemId: String) {
+    private func displayReportContent(for itemID: String, from senderID: String) {
         let navigationCoordinator = NavigationStackCoordinator()
-        let userIndicatorController = UserIndicatorController(rootCoordinator: NavigationStackCoordinator())
-        let parameters = ReportContentCoordinatorParameters(itemID: itemId,
+        let userIndicatorController = UserIndicatorController(rootCoordinator: navigationCoordinator)
+        let parameters = ReportContentCoordinatorParameters(itemID: itemID,
+                                                            senderID: senderID,
                                                             roomProxy: parameters.roomProxy,
                                                             userIndicatorController: userIndicatorController)
         let coordinator = ReportContentCoordinator(parameters: parameters)

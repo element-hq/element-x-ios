@@ -17,4 +17,4 @@
 import ElementX
 import XCTest
 
-class DeveloperOptionsScreenScreenUITests: XCTestCase { }
+class DeveloperOptionsScreenUITests: XCTestCase { }

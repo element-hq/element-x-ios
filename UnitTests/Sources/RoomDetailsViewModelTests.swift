@@ -82,4 +82,94 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
         XCTAssertNotNil(context.alertInfo)
     }
+
+    func testInitialDMDetailsState() async {
+        let recipient = RoomMemberProxyMock.mockDan
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+    }
+
+    func testIgnoreSuccess() async throws {
+        let recipient = RoomMemberProxyMock.mockDan
+        recipient.ignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .success(())
+        }
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+
+        context.send(viewAction: .ignoreConfirmed)
+        await Task.yield()
+
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
+    }
+
+    func testIgnoreFailure() async throws {
+        let recipient = RoomMemberProxyMock.mockDan
+        recipient.ignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .failure(.ignoreUserFailed)
+        }
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+
+        context.send(viewAction: .ignoreConfirmed)
+        await Task.yield()
+
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
+        XCTAssertNotNil(context.alertInfo)
+    }
+
+    func testUnignoreSuccess() async throws {
+        let recipient = RoomMemberProxyMock.mockIgnored
+        recipient.unignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .success(())
+        }
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+
+        context.send(viewAction: .unignoreConfirmed)
+        await Task.yield()
+
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
+    }
+
+    func testUnignoreFailure() async throws {
+        let recipient = RoomMemberProxyMock.mockIgnored
+        recipient.unignoreUserClosure = {
+            try? await Task.sleep(for: .milliseconds(10))
+            return .failure(.unignoreUserFailed)
+        }
+        let mockedMembers: [RoomMemberProxyMock] = [.mockMe, recipient]
+        roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isDirect: true, isEncrypted: true, members: mockedMembers))
+        viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
+        XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
+
+        context.send(viewAction: .unignoreConfirmed)
+        await Task.yield()
+        XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
+
+        try await Task.sleep(for: .milliseconds(10))
+        XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
+        XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
+        XCTAssertNotNil(context.alertInfo)
+    }
 }

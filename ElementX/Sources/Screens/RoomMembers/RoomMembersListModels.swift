@@ -21,11 +21,11 @@ enum RoomMembersListViewModelAction {
 }
 
 struct RoomMembersListViewState: BindableState {
-    var members: [RoomDetailsMember]
+    var members: [RoomMemberDetails]
 
     var bindings: RoomMembersListViewStateBindings
 
-    var visibleMembers: [RoomDetailsMember] {
+    var visibleMembers: [RoomMemberDetails] {
         if bindings.searchQuery.isEmpty {
             return members
         }

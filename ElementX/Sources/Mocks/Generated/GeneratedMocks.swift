@@ -166,6 +166,11 @@ class RoomProxyMock: RoomProxyProtocol {
     var displayName: String?
     var topic: String?
     var avatarURL: URL?
+    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
+        get { return underlyingMembersPublisher }
+        set(value) { underlyingMembersPublisher = value }
+    }
+    var underlyingMembersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never>!
 
     //MARK: - loadAvatarURLForUserId
 
@@ -326,6 +331,27 @@ class RoomProxyMock: RoomProxyProtocol {
             return sendReactionToReturnValue
         }
     }
+    //MARK: - sendImage
+
+    var sendImageUrlCallsCount = 0
+    var sendImageUrlCalled: Bool {
+        return sendImageUrlCallsCount > 0
+    }
+    var sendImageUrlReceivedUrl: URL?
+    var sendImageUrlReceivedInvocations: [URL] = []
+    var sendImageUrlReturnValue: Result<Void, RoomProxyError>!
+    var sendImageUrlClosure: ((URL) async -> Result<Void, RoomProxyError>)?
+
+    func sendImage(url: URL) async -> Result<Void, RoomProxyError> {
+        sendImageUrlCallsCount += 1
+        sendImageUrlReceivedUrl = url
+        sendImageUrlReceivedInvocations.append(url)
+        if let sendImageUrlClosure = sendImageUrlClosure {
+            return await sendImageUrlClosure(url)
+        } else {
+            return sendImageUrlReturnValue
+        }
+    }
     //MARK: - editMessage
 
     var editMessageOriginalCallsCount = 0
@@ -389,21 +415,25 @@ class RoomProxyMock: RoomProxyProtocol {
             return reportContentReasonReturnValue
         }
     }
-    //MARK: - members
+    //MARK: - ignoreUser
 
-    var membersCallsCount = 0
-    var membersCalled: Bool {
-        return membersCallsCount > 0
+    var ignoreUserCallsCount = 0
+    var ignoreUserCalled: Bool {
+        return ignoreUserCallsCount > 0
     }
-    var membersReturnValue: Result<[RoomMemberProxyProtocol], RoomProxyError>!
-    var membersClosure: (() async -> Result<[RoomMemberProxyProtocol], RoomProxyError>)?
+    var ignoreUserReceivedUserID: String?
+    var ignoreUserReceivedInvocations: [String] = []
+    var ignoreUserReturnValue: Result<Void, RoomProxyError>!
+    var ignoreUserClosure: ((String) async -> Result<Void, RoomProxyError>)?
 
-    func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError> {
-        membersCallsCount += 1
-        if let membersClosure = membersClosure {
-            return await membersClosure()
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        ignoreUserCallsCount += 1
+        ignoreUserReceivedUserID = userID
+        ignoreUserReceivedInvocations.append(userID)
+        if let ignoreUserClosure = ignoreUserClosure {
+            return await ignoreUserClosure(userID)
         } else {
-            return membersReturnValue
+            return ignoreUserReturnValue
         }
     }
     //MARK: - retryDecryption
@@ -438,6 +468,18 @@ class RoomProxyMock: RoomProxyProtocol {
         } else {
             return leaveRoomReturnValue
         }
+    }
+    //MARK: - updateMembers
+
+    var updateMembersCallsCount = 0
+    var updateMembersCalled: Bool {
+        return updateMembersCallsCount > 0
+    }
+    var updateMembersClosure: (() async -> Void)?
+
+    func updateMembers() async {
+        updateMembersCallsCount += 1
+        await updateMembersClosure?()
     }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {

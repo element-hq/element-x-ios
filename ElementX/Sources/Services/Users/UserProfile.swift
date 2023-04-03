@@ -17,20 +17,32 @@
 import Foundation
 import MatrixRustSDK
 
-struct UserProfileProxy {
+struct UserProfile {
     let userID: String
     let displayName: String?
     let avatarURL: URL?
     
-    init(userID: String, displayName: String?, avatarURL: URL?) {
+    init(userID: String, displayName: String? = nil, avatarURL: URL? = nil) {
         self.userID = userID
         self.displayName = displayName
         self.avatarURL = avatarURL
     }
     
-    init(userProfile: UserProfile) {
-        userID = userProfile.userId
-        displayName = userProfile.displayName
-        avatarURL = userProfile.avatarUrl.flatMap(URL.init(string:))
+    init(sdkUserProfile: MatrixRustSDK.UserProfile) {
+        userID = sdkUserProfile.userId
+        displayName = sdkUserProfile.displayName
+        avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
+    }
+}
+
+struct SearchUsersResults {
+    let results: [UserProfile]
+    let limited: Bool
+}
+
+extension SearchUsersResults {
+    init(sdkResults: MatrixRustSDK.SearchUsersResults) {
+        results = sdkResults.results.map(UserProfile.init)
+        limited = sdkResults.limited
     }
 }

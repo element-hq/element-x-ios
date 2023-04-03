@@ -21,8 +21,11 @@ import UIKit
 enum RoomScreenViewModelAction {
     case displayRoomDetails
     case displayMediaFile(file: MediaFileHandleProxy, title: String?)
-    case displayEmojiPicker(itemId: String)
-    case displayReportContent(itemId: String)
+    case displayEmojiPicker(itemID: String)
+    case displayReportContent(itemID: String, senderID: String)
+    case displayCameraPicker
+    case displayMediaPicker
+    case displayDocumentPicker
 }
 
 enum RoomScreenComposerMode: Equatable {
@@ -55,6 +58,10 @@ enum RoomScreenViewAction {
     /// Mark the entire room as read - this is heavy handed as a starting point for now.
     case markRoomAsRead
     case contextMenuAction(itemID: String, action: TimelineItemContextMenuAction)
+    
+    case displayCameraPicker
+    case displayMediaPicker
+    case displayDocumentPicker
 }
 
 struct RoomScreenViewState: BindableState {
@@ -66,6 +73,7 @@ struct RoomScreenViewState: BindableState {
     var isBackPaginating = false
     var showLoading = false
     var timelineStyle: TimelineStyle
+    var mediaUploadingFlowEnabled: Bool
     
     var bindings: RoomScreenViewStateBindings
     

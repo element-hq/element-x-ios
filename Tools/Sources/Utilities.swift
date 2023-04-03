@@ -20,7 +20,7 @@ enum Utilities {
     static func zsh(_ command: String, workingDirectoryURL: URL = projectDirectoryURL) throws -> String? {
         let process = Process()
         process.executableURL = URL(filePath: "/bin/zsh")
-        process.arguments = ["-c", command]
+        process.arguments = ["-cu", command]
         process.currentDirectoryURL = workingDirectoryURL
 
         let outputPipe = Pipe()

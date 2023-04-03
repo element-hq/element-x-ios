@@ -34,6 +34,11 @@ class RoomProxy: RoomProxyProtocol {
     private(set) var displayName: String?
     
     private var timelineObservationToken: TaskHandle?
+
+    private let membersSubject = CurrentValueSubject<[RoomMemberProxyProtocol], Never>([])
+    var membersPublisher: AnyPublisher<[RoomMemberProxyProtocol], Never> {
+        membersSubject.eraseToAnyPublisher()
+    }
         
     init(slidingSyncRoom: SlidingSyncRoomProtocol,
          room: RoomProtocol,
@@ -140,6 +145,7 @@ class RoomProxy: RoomProxyProtocol {
             timelineObservationToken = result.taskHandle
             Task {
                 await fetchMembers()
+                await updateMembers()
             }
             return .success(result.items)
         } else {
@@ -189,15 +195,15 @@ class RoomProxy: RoomProxyProtocol {
         let transactionId = genTransactionId()
         
         return await Task.dispatch(on: userInitiatedDispatchQueue) {
-            if let eventID {
-                do {
+            do {
+                if let eventID {
                     try self.room.sendReply(msg: message, inReplyToEventId: eventID, txnId: transactionId)
-                } catch {
-                    return .failure(.failedSendingMessage)
+                } else {
+                    let messageContent = messageEventContentFromMarkdown(md: message)
+                    self.room.send(msg: messageContent, txnId: transactionId)
                 }
-            } else {
-                let messageContent = messageEventContentFromMarkdown(md: message)
-                self.room.send(msg: messageContent, txnId: transactionId)
+            } catch {
+                return .failure(.failedSendingMessage)
             }
             return .success(())
         }
@@ -217,6 +223,10 @@ class RoomProxy: RoomProxyProtocol {
                 return .failure(.failedSendingReaction)
             }
         }
+    }
+    
+    func sendImage(url: URL) async -> Result<Void, RoomProxyError> {
+        .failure(.failedSendingMedia)
     }
 
     func editMessage(_ newMessage: String, original eventID: String) async -> Result<Void, RoomProxyError> {
@@ -270,18 +280,32 @@ class RoomProxy: RoomProxyProtocol {
             }
         }
     }
-    
-    func members() async -> Result<[RoomMemberProxyProtocol], RoomProxyError> {
+
+    func updateMembers() async {
         do {
-            let members = try await Task.dispatch(on: .global()) {
-                let members = try self.room.members()
-                return members
+            let roomMembers = try await Task.dispatch(on: .global()) {
+                try self.room.members()
             }
             
-            let proxiedMembers = buildRoomMemberProxies(members: members)
-            return .success(proxiedMembers)
+            membersSubject.value = buildRoomMemberProxies(members: roomMembers)
         } catch {
-            return .failure(.failedRetrievingMembers)
+            return
+        }
+    }
+    
+    func ignoreUser(_ userID: String) async -> Result<Void, RoomProxyError> {
+        sendMessageBackgroundTask = backgroundTaskService.startBackgroundTask(withName: backgroundTaskName, isReusable: true)
+        defer {
+            sendMessageBackgroundTask?.stop()
+        }
+        
+        return await Task.dispatch(on: userInitiatedDispatchQueue) {
+            do {
+                try self.room.ignoreUser(userId: userID)
+                return .success(())
+            } catch {
+                return .failure(.failedReportingContent)
+            }
         }
     }
 

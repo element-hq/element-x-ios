@@ -34,5 +34,21 @@
 			<string>%1$d room changes</string>
 		</dict>
 	</dict>
+	<key>screen_room_member_list_header_title</key>
+	<dict>
+		<key>NSStringLocalizedFormatKey</key>
+		<string>%#@COUNT@</string>
+		<key>COUNT</key>
+		<dict>
+			<key>NSStringFormatSpecTypeKey</key>
+			<string>NSStringPluralRuleType</string>
+			<key>NSStringFormatValueTypeKey</key>
+			<string>d</string>
+			<key>one</key>
+			<string>1 person</string>
+			<key>other</key>
+			<string>%1$d people</string>
+		</dict>
+	</dict>
 </dict>
 </plist>

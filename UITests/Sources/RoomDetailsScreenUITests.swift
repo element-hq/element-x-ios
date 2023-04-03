@@ -33,4 +33,12 @@ class RoomDetailsScreenUITests: XCTestCase {
         XCTAssert(app.buttons[A11yIdentifiers.roomDetailsScreen.people].waitForExistence(timeout: 1))
         app.assertScreenshot(.roomDetailsScreenWithRoomAvatar)
     }
+
+    func testInitialStateComponentsDmDetails() {
+        let app = Application.launch(.roomDetailsScreenDmDetails)
+
+        XCTAssert(app.images[A11yIdentifiers.roomDetailsScreen.dmAvatar].waitForExistence(timeout: 1))
+        XCTAssertFalse(app.buttons[A11yIdentifiers.roomDetailsScreen.people].exists)
+        app.assertScreenshot(.roomDetailsScreenDmDetails)
+    }
 }

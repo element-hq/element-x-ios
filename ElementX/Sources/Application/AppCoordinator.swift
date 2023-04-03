@@ -136,11 +136,9 @@ class AppCoordinator: AppCoordinatorProtocol {
     private func performMigrationsIfNecessary(from oldVersion: Version, to newVersion: Version) {
         guard oldVersion != newVersion else { return }
         
-        if oldVersion < Version(1, 0, 20) {
-            // Version 1.0.20 introduced a new format for restoration tokens.
-            // Remove user data to prevent conflict in the crypto store
-            // with the newly generated device ID when signing in again.
-            MXLog.warning("Clearing user data for hardcoded proxy.")
+        if oldVersion < Version(1, 1, 0) {
+            // Version 1.1.0 switched the Rust crypto store to SQLite
+            // There are no migrations in place so we need to reset everything
             wipeUserData()
         }
     }

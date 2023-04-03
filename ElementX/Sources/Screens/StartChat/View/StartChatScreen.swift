@@ -22,10 +22,10 @@ struct StartChatScreen: View {
     var body: some View {
         Form {
             if !context.viewState.isSearching {
-                createRoomSection
-                inviteFriendsSection
+                mainContent
+            } else {
+                searchContent
             }
-            usersSection
         }
         .scrollContentBackground(.hidden)
         .background(Color.element.formBackground.ignoresSafeArea())
@@ -38,6 +38,26 @@ struct StartChatScreen: View {
         }
         .searchable(text: $context.searchQuery, placement: .navigationBarDrawer(displayMode: .always), prompt: L10n.commonSearchForSomeone)
         .alert(item: $context.alertInfo) { $0.alert }
+    }
+
+    // MARK: - Private
+
+    /// The content shown in the form when the search query is empty.
+    @ViewBuilder
+    private var mainContent: some View {
+        createRoomSection
+        inviteFriendsSection
+        usersSection
+    }
+    
+    /// The content shown in the form when a search query has been entered.
+    @ViewBuilder
+    private var searchContent: some View {
+        if context.viewState.hasEmptySearchResults {
+            noResultsContent
+        } else {
+            usersSection
+        }
     }
     
     private var createRoomSection: some View {
@@ -75,6 +95,15 @@ struct StartChatScreen: View {
         }
         .listRowSeparator(.automatic)
         .formSectionStyle()
+    }
+    
+    private var noResultsContent: some View {
+        Text(L10n.commonNoResults)
+            .font(.element.body)
+            .foregroundColor(.element.tertiaryContent)
+            .frame(maxWidth: .infinity)
+            .listRowBackground(Color.clear)
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
     }
     
     private var closeButton: some View {

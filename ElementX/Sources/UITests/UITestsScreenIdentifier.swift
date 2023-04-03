@@ -42,12 +42,14 @@ enum UITestsScreenIdentifier: String {
     case userSessionScreen
     case roomDetailsScreen
     case roomDetailsScreenWithRoomAvatar
+    case roomDetailsScreenDmDetails
     case roomMembersListScreen
     case roomMemberDetailsAccountOwner
     case roomMemberDetails
     case roomMemberDetailsIgnoredUser
     case reportContent
     case startChat
+    case startChatWithSearchResults
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {

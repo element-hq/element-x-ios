@@ -14,18 +14,7 @@
 // limitations under the License.
 //
 
-import SwiftUI
+import ElementX
+import XCTest
 
-class ActivityCoordinator: CoordinatorProtocol {
-    let items: [Any]
-    
-    init(items: [Any]) {
-        self.items = items
-    }
-    
-    func toPresentable() -> AnyView {
-        AnyView(UIActivityViewControllerWrapper(activityItems: items)
-            .presentationDetents([.medium])
-            .ignoresSafeArea())
-    }
-}
+class MediaPickerPreviewScreenUITests: XCTestCase { }

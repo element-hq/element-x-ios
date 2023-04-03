@@ -39,6 +39,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                                                          roomTitle: roomName ?? "Unknown room 💥",
                                                          roomAvatarURL: roomAvatarUrl,
                                                          timelineStyle: ServiceLocator.shared.settings.timelineStyle,
+                                                         mediaUploadingFlowEnabled: ServiceLocator.shared.settings.mediaUploadingFlowEnabled,
                                                          bindings: .init(composerText: "", composerFocused: false)),
                    imageProvider: mediaProvider)
         
@@ -72,6 +73,10 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         ServiceLocator.shared.settings.$timelineStyle
             .weakAssign(to: \.state.timelineStyle, on: self)
+            .store(in: &cancellables)
+        
+        ServiceLocator.shared.settings.$mediaUploadingFlowEnabled
+            .weakAssign(to: \.state.mediaUploadingFlowEnabled, on: self)
             .store(in: &cancellables)
         
         buildTimelineViews()
@@ -111,6 +116,12 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             await markRoomAsRead()
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
+        case .displayCameraPicker:
+            callback?(.displayCameraPicker)
+        case .displayMediaPicker:
+            callback?(.displayMediaPicker)
+        case .displayDocumentPicker:
+            callback?(.displayDocumentPicker)
         }
     }
     
@@ -144,7 +155,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     
     private func itemDoubleTapped(with itemId: String) {
         guard let item = state.items.first(where: { $0.id == itemId }), item.isReactable else { return }
-        callback?(.displayEmojiPicker(itemId: itemId))
+        callback?(.displayEmojiPicker(itemID: itemId))
     }
     
     private func buildTimelineViews() {
@@ -283,7 +294,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
         
         switch action {
         case .react:
-            callback?(.displayEmojiPicker(itemId: item.id))
+            callback?(.displayEmojiPicker(itemID: item.id))
         case .copy:
             UIPasteboard.general.string = item.body
         case .edit:
@@ -316,7 +327,7 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
                 await timelineController.retryDecryption(for: sessionID)
             }
         case .report:
-            callback?(.displayReportContent(itemId: itemID))
+            callback?(.displayReportContent(itemID: itemID, senderID: item.sender.id))
         }
         
         if action.switchToDefaultComposer {

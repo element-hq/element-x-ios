@@ -19,58 +19,53 @@ import Foundation
 enum RoomMemberDetailsViewModelAction { }
 
 struct RoomMemberDetailsViewState: BindableState {
-    let userID: String
-    let name: String?
-    let avatarURL: URL?
-    let isAccountOwner: Bool
-    let permalink: URL?
-    var isIgnored: Bool
+    var details: RoomMemberDetails
     var isProcessingIgnoreRequest = false
 
     var bindings: RoomMemberDetailsViewStateBindings
 }
 
 struct RoomMemberDetailsViewStateBindings {
+    struct IgnoreUserAlertItem: AlertItem, Equatable {
+        enum Action {
+            case ignore
+            case unignore
+        }
+
+        let action: Action
+        let cancelTitle = L10n.actionCancel
+
+        var title: String {
+            switch action {
+            case .ignore: return L10n.screenRoomMemberDetailsBlockUser
+            case .unignore: return L10n.screenRoomMemberDetailsUnblockUser
+            }
+        }
+
+        var confirmationTitle: String {
+            switch action {
+            case .ignore: return L10n.screenRoomMemberDetailsBlockAlertAction
+            case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertAction
+            }
+        }
+
+        var description: String {
+            switch action {
+            case .ignore: return L10n.screenRoomMemberDetailsBlockAlertDescription
+            case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertDescription
+            }
+        }
+
+        var viewAction: RoomMemberDetailsViewAction {
+            switch action {
+            case .ignore: return .ignoreConfirmed
+            case .unignore: return .unignoreConfirmed
+            }
+        }
+    }
+    
     var ignoreUserAlert: IgnoreUserAlertItem?
     var errorAlert: ErrorAlertItem?
-}
-
-struct IgnoreUserAlertItem: AlertItem, Equatable {
-    enum Action {
-        case ignore
-        case unignore
-    }
-
-    let action: Action
-    let cancelTitle = L10n.actionCancel
-
-    var title: String {
-        switch action {
-        case .ignore: return L10n.screenRoomMemberDetailsBlockUser
-        case .unignore: return L10n.screenRoomMemberDetailsUnblockUser
-        }
-    }
-
-    var confirmationTitle: String {
-        switch action {
-        case .ignore: return L10n.screenRoomMemberDetailsBlockAlertAction
-        case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertAction
-        }
-    }
-
-    var description: String {
-        switch action {
-        case .ignore: return L10n.screenRoomMemberDetailsBlockAlertDescription
-        case .unignore: return L10n.screenRoomMemberDetailsUnblockAlertDescription
-        }
-    }
-
-    var viewAction: RoomMemberDetailsViewAction {
-        switch action {
-        case .ignore: return .ignoreConfirmed
-        case .unignore: return .unignoreConfirmed
-        }
-    }
 }
 
 enum RoomMemberDetailsViewAction {
@@ -78,5 +73,4 @@ enum RoomMemberDetailsViewAction {
     case showIgnoreAlert
     case ignoreConfirmed
     case unignoreConfirmed
-    case copyUserLink
 }

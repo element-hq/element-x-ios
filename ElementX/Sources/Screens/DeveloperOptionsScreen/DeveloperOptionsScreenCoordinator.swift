@@ -24,6 +24,6 @@ final class DeveloperOptionsScreenCoordinator: CoordinatorProtocol {
     }
             
     func toPresentable() -> AnyView {
-        AnyView(DeveloperOptionsScreenScreen(context: viewModel.context))
+        AnyView(DeveloperOptionsScreen(context: viewModel.context))
     }
 }

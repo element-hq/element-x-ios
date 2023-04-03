@@ -16,17 +16,21 @@
 
 import Foundation
 
-extension UserProfileProxy {
-    // Mocks
-    static var mockAlice: UserProfileProxy {
-        .init(userID: "@alice:matrix.org", displayName: "Alice", avatarURL: URL(staticString: "mxc://matrix.org/UcCimidcvpFvWkPzvjXMQPHA"))
-    }
+struct RoomMemberDetails: Identifiable, Equatable {
+    let id: String
+    let name: String?
+    let avatarURL: URL?
+    let permalink: URL?
+    let isAccountOwner: Bool
+    var isIgnored: Bool
 
-    static var mockBob: UserProfileProxy {
-        .init(userID: "@bob:matrix.org", displayName: "Bob", avatarURL: nil)
-    }
-
-    static var mockCharlie: UserProfileProxy {
-        .init(userID: "@charlie:matrix.org", displayName: "Charlie", avatarURL: nil)
+    @MainActor
+    init(withProxy proxy: RoomMemberProxyProtocol) {
+        id = proxy.userID
+        name = proxy.displayName
+        avatarURL = proxy.avatarURL
+        permalink = proxy.permalink
+        isAccountOwner = proxy.isAccountOwner
+        isIgnored = proxy.isIgnored
     }
 }
