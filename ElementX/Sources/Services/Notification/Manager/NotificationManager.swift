@@ -91,8 +91,9 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                         "loc-key": "Notification",
                         "loc-args": []
                     ]
-                ]
-            ]
+                ],
+                "notificationID": clientProxy.restorationToken?.notificationID
+            ] as [String: Any]
             let configuration = await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
                                                                              appId: ServiceLocator.shared.settings.pusherAppId),
                                                           kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,

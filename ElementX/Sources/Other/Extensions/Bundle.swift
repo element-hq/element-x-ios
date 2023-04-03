@@ -54,6 +54,18 @@ public extension Bundle {
         }
     }
 
+    static var appBundle: Bundle {
+        var bundle = Bundle.main
+        if bundle.bundleURL.pathExtension == "appex" {
+            // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
+            let url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
+            if let otherBundle = Bundle(url: url) {
+                bundle = otherBundle
+            }
+        }
+        return bundle
+    }
+
     /// Preferred languages in the priority order.
     private(set) static var preferredLanguages: [String] = calculatePreferredLanguages()
 
