@@ -42,14 +42,15 @@ struct StartChatSuggestedUserCell: View {
                 }
                 
                 if !user.isVerified {
-                    #warning("localize")
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text(Image(systemName: "exclamationmark.circle"))
-                            .foregroundColor(.element.alert)
+                            .foregroundColor(.compound.textActionCritical)
+                        
+                        #warning("Localize text")
                         Text("We can’t fetch the profile information of this Matrix ID. Please ensure the Matrix ID is correct before sending an invite.")
+                            .foregroundColor(.secondary)
                     }
-                    .font(.element.caption1)
-                    .foregroundColor(.secondary)
+                    .font(.compound.bodyXS)
                     .padding(.top, 4)
                 }
             }
@@ -59,7 +60,8 @@ struct StartChatSuggestedUserCell: View {
 }
 
 private extension UserProfile {
-    #warning("add comment")
+    /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar
+    /// If isn't we aren't sure that the related matrix id really exists.
     var isVerified: Bool {
         displayName != nil || avatarURL != nil
     }
