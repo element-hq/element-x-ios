@@ -52,7 +52,7 @@ struct NotificationItemProxy {
 //    }
 
     var title: String {
-        InfoPlistReader(bundle: .appBundle).bundleDisplayName
+        InfoPlistReader(bundle: .app).bundleDisplayName
     }
 
     var subtitle: String? {

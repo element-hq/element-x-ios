@@ -27,7 +27,7 @@ public extension Bundle {
             return bundle
         }
         
-        guard let lprojURL = url(forResource: language, withExtension: "lproj") else {
+        guard let lprojURL = Bundle.app.url(forResource: language, withExtension: "lproj") else {
             return nil
         }
         
@@ -54,7 +54,7 @@ public extension Bundle {
         }
     }
 
-    static var appBundle: Bundle {
+    static var app: Bundle {
         var bundle = Bundle.main
         if bundle.bundleURL.pathExtension == "appex" {
             // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
