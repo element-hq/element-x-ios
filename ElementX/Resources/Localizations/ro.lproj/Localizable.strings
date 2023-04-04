@@ -9,7 +9,7 @@
 "action_close" = "Închide";
 "action_complete_verification" = "Verificare completă";
 "action_confirm" = "Confirmă";
-"action_continue" = "Continua";
+"action_continue" = "Continuă";
 "action_copy" = "Copiază";
 "action_copy_link" = "Copiază linkul";
 "action_create_a_room" = "Crează o cameră";
@@ -37,7 +37,7 @@
 "action_save" = "Salvează";
 "action_search" = "Caută";
 "action_send" = "Trimite";
-"action_share" = "Share";
+"action_share" = "Partajează";
 "action_share_link" = "Partajează linkul";
 "action_skip" = "Omite";
 "action_start" = "Începe";
@@ -49,6 +49,7 @@
 "common_audio" = "Audio";
 "common_bubbles" = "Baloane";
 "common_creating_room" = "Se creează camera…";
+"common_current_user_left_room" = "Left room";
 "common_decryption_error" = "Eroare de decriptare";
 "common_developer_options" = "Opțiuni programator";
 "common_edited_suffix" = "(editat)";
@@ -140,7 +141,7 @@
 "screen_bug_report_contact_me" = "Puteți să mă contactați dacă aveți întrebări suplimentare";
 "screen_bug_report_edit_screenshot" = "Editează captura de ecran";
 "screen_bug_report_editor_description" = "Te rugăm să descrii eroarea. Ce-ai făcut? Ce te aşteptai să se întâmple? Ce s-a întâmplat de fapt. Te rugam să intri în cât mai multe detalii cu putință.";
-"screen_bug_report_editor_placeholder" = "Descrie eroarea...";
+"screen_bug_report_editor_placeholder" = "Descrie eroarea…";
 "screen_bug_report_editor_supporting" = "Dacă posibil, te rugăm să scrii descrierea în engleză.";
 "screen_bug_report_include_crash_logs" = "Trimite log-uri";
 "screen_bug_report_include_logs" = "Trimite log-uri pentru a ajuta";
@@ -212,10 +213,10 @@
 "screen_signout_confirmation_dialog_content" = "Ești sigur că vrei să te deconectezi?";
 "screen_signout_confirmation_dialog_submit" = "Deconectează-te";
 "screen_signout_confirmation_dialog_title" = "Deconectează-te";
-"screen_signout_in_progress_dialog_content" = "Deconectare în curs...";
+"screen_signout_in_progress_dialog_content" = "Deconectare în curs…";
 "screen_signout_preference_item" = "Deconectează-te";
 "screen_start_chat_error_starting_chat" = "A apărut o eroare la încercarea începerii conversației";
-"screen_start_chat_unknown_profile" = "We can’t validate this user’s Matrix ID. The invite might not be received.";
+"screen_start_chat_unknown_profile" = "Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost primită.";
 "session_verification_banner_message" = "Se pare că folosești un dispozitiv nou. Verifică-ți identitatea pentru acces la mesajele tale criptate.";
 "session_verification_banner_title" = "Accesează istoricul mesajelor";
 "settings_rageshake" = "Rageshake";
@@ -276,3 +277,5 @@
 "state_event_room_unban" = "%1$@ a anulat interdicția pentru %2$@";
 "state_event_room_unban_by_you" = "Ai anulat interdicția pentru %1$@";
 "state_event_room_unknown_membership_change" = "%1$@ a făcut o modificare necunoscută asupra calității sale de membru";
+"test_language_identifier" = "ro";
+"test_untranslated_default_language_identifier" = "en";

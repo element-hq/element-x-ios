@@ -19,43 +19,43 @@ import XCTest
 
 class LocalizationTests: XCTestCase {
     /// Test ElementL10n considers app language changes
-    func disabled_testAppLanguage() {
+    func testAppLanguage() {
         //  set app language to English
         Bundle.elementLanguage = "en"
 
-        XCTAssertEqual(L10n.actionOk, "OK")
-        XCTAssertEqual(L10n.actionContinue, "Continue")
-        XCTAssertEqual(L10n.screenSessionVerificationWaitingToAcceptTitle, "Waiting to accept request")
-        XCTAssertEqual(L10n.inviteFriendsText("Element", "element.io"), "Hey, talk to me on Element: element.io")
+        XCTAssertEqual(L10n.testLanguageIdentifier, "en")
 
-        //  set app language to Turkish
-        Bundle.elementLanguage = "tr"
+        //  set app language to Italian
+        Bundle.elementLanguage = "it"
 
-        XCTAssertEqual(L10n.actionOk, "Tamam")
-        XCTAssertEqual(L10n.actionContinue, "Devam et")
-        XCTAssertEqual(L10n.screenSessionVerificationWaitingToAcceptTitle, "Github ile kayıt ol")
-        XCTAssertEqual(L10n.inviteFriendsText("Element", "element.io"), "Yalnızca Söz ve Anahtar Kelimeler")
+        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
     }
 
     /// Test fallback language for a language not supported at all
-    func disabled_testFallbackOnNotSupportedLanguage() {
-        //  set app language to something Element don't support at all (chose 'Malay' language)
-        Bundle.elementLanguage = "ms"
+    func testStripRegionIfRegionalTranslationIsNotAvailable() {
+        //  set app language to something that includes also a region (it-IT)
+        Bundle.elementLanguage = "it-IT"
+
+        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
+    }
+
+    /// Test fallback language for a language not supported at all
+    func testFallbackOnNotSupportedLanguage() {
+        //  set app language to something Element don't support at all (chose non existing identifier)
+        Bundle.elementLanguage = "xx"
         Bundle.elementFallbackLanguage = "en"
 
-        XCTAssertEqual(L10n.actionOk, "OK")
-        XCTAssertEqual(L10n.actionContinue, "Continue")
-        XCTAssertEqual(L10n.roomTimelineStateChanges(5), "5 room changes")
+        XCTAssertEqual(L10n.testLanguageIdentifier, "en")
     }
 
     /// Test fallback language for a language supported but poorly translated
-    func disabled_testFallbackOnNotTranslatedKey() {
-        //  set app language to something Element supports but poorly translated (chose 'Sinhala' language)
-        Bundle.elementLanguage = "si"
+    func testFallbackOnNotTranslatedKey() {
+        //  set app language to something Element supports but use a key that is not translated (we have a key that should never be translated)
+        Bundle.elementLanguage = "it"
         Bundle.elementFallbackLanguage = "en"
 
-        XCTAssertEqual(L10n.actionOk, "OK")
-        XCTAssertEqual(L10n.actionContinue, "Continue")
+        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
+        XCTAssertEqual(L10n.testUntranslatedDefaultLanguageIdentifier, "en")
     }
 
     /// Test plurals that ElementL10n considers app language changes

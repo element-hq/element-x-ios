@@ -81,6 +81,13 @@ extension {{enumName}} {
       let translation = trIn(language, table, key, args)
       if translation != key {
         return translation
+        // If we can't find a translation for this language
+        // we check if we can find one by stripping the region
+      } else if let langCode = Locale(identifier: language).language.languageCode?.identifier {
+        let translation = trIn(langCode, table, key, args)
+        if translation != key {
+          return translation
+        }
       }
     }
     return key
