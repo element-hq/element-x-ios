@@ -33,7 +33,7 @@ class SoftLogoutViewModel: SoftLogoutViewModelType, SoftLogoutViewModelProtocol 
         super.init(initialViewState: viewState)
     }
     
-    override func process(viewAction: SoftLogoutViewAction) async {
+    override func process(viewAction: SoftLogoutViewAction) {
         switch viewAction {
         case .login:
             callback?(.login(state.bindings.password))

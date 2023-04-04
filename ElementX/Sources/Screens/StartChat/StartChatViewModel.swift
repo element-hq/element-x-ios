@@ -36,7 +36,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     // MARK: - Public
     
-    override func process(viewAction: StartChatViewAction) async {
+    override func process(viewAction: StartChatViewAction) {
         switch viewAction {
         case .close:
             callback?(.close)

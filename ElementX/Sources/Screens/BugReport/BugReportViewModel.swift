@@ -42,12 +42,12 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
 
     // MARK: - Public
 
-    override func process(viewAction: BugReportViewAction) async {
+    override func process(viewAction: BugReportViewAction) {
         switch viewAction {
         case .cancel:
             callback?(.cancel)
         case .submit:
-            await submitBugReport()
+            Task { await submitBugReport() }
         case .removeScreenshot:
             state.screenshot = nil
         case let .attachScreenshot(image):

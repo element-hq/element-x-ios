@@ -26,7 +26,7 @@ class OnboardingViewModel: OnboardingViewModelType, OnboardingViewModelProtocol 
         super.init(initialViewState: OnboardingViewState())
     }
 
-    override func process(viewAction: OnboardingViewAction) async {
+    override func process(viewAction: OnboardingViewAction) {
         switch viewAction {
         case .login:
             callback?(.login)

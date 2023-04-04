@@ -89,14 +89,14 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
             .sink { [weak self] action in
                 guard let self else { return }
 
-                Task { await self.process(viewAction: action) }
+                self.process(viewAction: action)
             }
             .store(in: &cancellables)
     }
 
     /// Override to handles incoming `ViewAction`s from the `ViewModel`.
     /// - Parameter viewAction: The `ViewAction` to be processed in `ViewModel` implementation.
-    func process(viewAction: ViewAction) async {
+    func process(viewAction: ViewAction) {
         // Default implementation, -no-op
     }
 }

@@ -35,12 +35,12 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
 
     // MARK: - Public
     
-    override func process(viewAction: ReportContentViewAction) async {
+    override func process(viewAction: ReportContentViewAction) {
         switch viewAction {
         case .cancel:
             callback?(.cancel)
         case .submit:
-            await submitReport()
+            Task { await submitReport() }
         }
     }
 

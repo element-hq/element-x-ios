@@ -27,7 +27,7 @@ class TemplateViewModel: TemplateViewModelType, TemplateViewModelProtocol {
     
     // MARK: - Public
     
-    override func process(viewAction: TemplateViewAction) async {
+    override func process(viewAction: TemplateViewAction) {
         switch viewAction {
         case .accept:
             callback?(.accept)
