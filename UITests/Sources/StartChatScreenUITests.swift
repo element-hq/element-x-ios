@@ -50,7 +50,7 @@ class StartChatScreenUITests: XCTestCase {
     }
     
     func testSearchExactNotExistingMatrixID() {
-        let app = Application.launch(.startChatSearchingInexistingID)
+        let app = Application.launch(.startChatSearchingNonExistingID)
         let searchField = app.searchFields.firstMatch
         searchField.clearAndTypeText("@a:b.com")
         XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
