@@ -697,25 +697,22 @@ extension L10n {
     let languages = Bundle.preferredLanguages
 
     for language in languages {
-      let translation = trIn(language, table, key, args)
-      if translation != key {
+      if let translation = trIn(language, table, key, args) {
         return translation
         // If we can't find a translation for this language
         // we check if we can find one by stripping the region
-      } else if let langCode = Locale(identifier: language).language.languageCode?.identifier {
-        let translation = trIn(langCode, table, key, args)
-        if translation != key {
+      } else if let langCode = Locale(identifier: language).language.languageCode?.identifier,
+        let translation = trIn(langCode, table, key, args) {
           return translation
         }
       }
-    }
     return key
-  }
+    }
 
-  private static func trIn(_ language: String, _ table: String, _ key: String, _ args: CVarArg...) -> String {
+  private static func trIn(_ language: String, _ table: String, _ key: String, _ args: CVarArg...) -> String? {
     guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: language) else {
       // no translations for the desired language
-      return key
+      return nil
     }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
     return String(format: format, locale: Locale(identifier: language), arguments: args)

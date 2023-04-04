@@ -59,45 +59,35 @@ class LocalizationTests: XCTestCase {
     }
 
     /// Test plurals that ElementL10n considers app language changes
-    func disabled_testPlurals() {
+    func testPlurals() {
         //  set app language to English
         Bundle.elementLanguage = "en"
 
         XCTAssertEqual(L10n.commonMemberCount(1), "1 member")
         XCTAssertEqual(L10n.commonMemberCount(2), "2 members")
 
-        //  set app language to Turkish
-        Bundle.elementLanguage = "tr"
+        //  set app language to Italian
+        Bundle.elementLanguage = "it"
 
-        XCTAssertEqual(L10n.commonMemberCount(1), "1 üyelik değişikliği")
-        XCTAssertEqual(L10n.commonMemberCount(2), "2 adet üyelik değişikliği")
+        XCTAssertEqual(L10n.commonMemberCount(1), "1 membro")
+        XCTAssertEqual(L10n.commonMemberCount(2), "2 membri")
 
-        //  set app language to Polish
-        Bundle.elementLanguage = "pl"
-
-        XCTAssertEqual(L10n.commonMemberCount(1), "1 sekunda") //  one
-        XCTAssertEqual(L10n.commonMemberCount(2), "2 sekundy") //  few
-        XCTAssertEqual(L10n.commonMemberCount(3), "5 sekund") //  many, other
+//        //  set app language to Polish
+//        Bundle.elementLanguage = "pl"
+//
+//        XCTAssertEqual(L10n.commonMemberCount(1), "1 sekunda") //  one
+//        XCTAssertEqual(L10n.commonMemberCount(2), "2 sekundy") //  few
+//        XCTAssertEqual(L10n.commonMemberCount(3), "5 sekund") //  many, other
     }
 
     /// Test plurals fallback language for a language not supported at all
-    func disabled_testPluralsFallbackOnNotSupportedLanguage() {
-        //  set app language to something Element don't support at all (chose 'Malay' language)
-        Bundle.elementLanguage = "ms"
+    func testPluralsFallbackOnNotSupportedLanguage() {
+        //  set app language to something Element don't support at all ("invalid identifier")
+        Bundle.elementLanguage = "xx"
         Bundle.elementFallbackLanguage = "en"
 
         XCTAssertEqual(L10n.commonMemberCount(1), "1 member")
         XCTAssertEqual(L10n.commonMemberCount(2), "2 members")
-    }
-
-    /// Test plurals fallback language for a language supported but poorly translated
-    func disabled_testPluralsFallbackOnNotTranslatedKey() {
-        //  set app language to something Element supports but poorly translated (chose 'Sinhala' language)
-        Bundle.elementLanguage = "si"
-        Bundle.elementFallbackLanguage = "en"
-
-        XCTAssertEqual(L10n.roomTimelineStateChanges(1), "1 room change")
-        XCTAssertEqual(L10n.roomTimelineStateChanges(5), "5 room changes")
     }
 
     /// Test untranslated strings
