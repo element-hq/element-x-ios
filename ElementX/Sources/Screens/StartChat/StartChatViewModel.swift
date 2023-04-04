@@ -109,7 +109,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         // copies the current query to check later if fetched data must be shown or not
         let committedQuery = searchQuery
         
-        async let queriedProfile = getProfileIfNeeded()
+        async let queriedProfile = getProfileIfPossible()
         async let searchedUsers = clientProxy.searchUsers(searchTerm: committedQuery, limit: 5)
         
         await updateState(committedQuery: committedQuery,
@@ -156,7 +156,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    private func getProfileIfNeeded() async -> UserProfile? {
+    private func getProfileIfPossible() async -> UserProfile? {
         guard searchQuery.isMatrixIdentifier else {
             return nil
         }
