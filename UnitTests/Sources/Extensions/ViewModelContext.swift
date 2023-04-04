@@ -17,9 +17,8 @@
 @testable import ElementX
 
 extension ViewModelContext {
-    var nextViewState: ViewState? {
-        get async {
-            await $viewState.nextValue
-        }
+    @discardableResult
+    func nextViewState() async -> ViewState? {
+        await $viewState.nextValue
     }
 }

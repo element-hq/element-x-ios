@@ -46,7 +46,7 @@ class BugReportViewModelTests: XCTestCase {
         let context = viewModel.context
         
         context.send(viewAction: .removeScreenshot)
-        try await Task.sleep(nanoseconds: 100_000_000)
+        await context.nextViewState()
         XCTAssertNil(context.viewState.screenshot)
     }
     
@@ -58,7 +58,7 @@ class BugReportViewModelTests: XCTestCase {
         let context = viewModel.context
         XCTAssertNil(context.viewState.screenshot)
         context.send(viewAction: .attachScreenshot(UIImage.actions))
-        try await Task.sleep(nanoseconds: 100_000_000)
+        await context.nextViewState()
         XCTAssert(context.viewState.screenshot == UIImage.actions)
     }
 
