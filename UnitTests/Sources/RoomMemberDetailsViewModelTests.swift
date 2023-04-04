@@ -42,7 +42,6 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showIgnoreAlert)
-        await context.nextViewState()
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
         context.send(viewAction: .ignoreConfirmed)
@@ -61,9 +60,7 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
             return .failure(.ignoreUserFailed)
         }
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
-
         context.send(viewAction: .showIgnoreAlert)
-        await context.nextViewState()
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
         context.send(viewAction: .ignoreConfirmed)
@@ -85,7 +82,6 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
-        await context.nextViewState()
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
 
         context.send(viewAction: .unignoreConfirmed)
@@ -106,7 +102,6 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
-        await context.nextViewState()
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
 
         context.send(viewAction: .unignoreConfirmed)

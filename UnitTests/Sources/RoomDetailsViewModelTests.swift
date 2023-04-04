@@ -34,7 +34,6 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .processTapLeave)
-        await context.nextViewState()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .public)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
     }
@@ -44,14 +43,12 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .processTapLeave)
-        await context.nextViewState()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .private)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
     }
 
     func testLeaveRoomTappedWithLessThanTwoMembers() async {
         context.send(viewAction: .processTapLeave)
-        await context.nextViewState()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .empty)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertEmptySubtitle)
     }

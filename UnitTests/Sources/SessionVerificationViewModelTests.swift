@@ -48,8 +48,6 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         context.send(viewAction: .close)
         
-        await context.nextViewState()
-        
         XCTAssertEqual(context.viewState.verificationState, .cancelling)
         
         await context.nextViewState()
@@ -57,8 +55,6 @@ class SessionVerificationViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.verificationState, .cancelled)
         
         context.send(viewAction: .restart)
-        
-        await context.nextViewState()
         
         XCTAssertEqual(context.viewState.verificationState, .initial)
 

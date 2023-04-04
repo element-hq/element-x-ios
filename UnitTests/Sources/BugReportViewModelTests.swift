@@ -68,21 +68,19 @@ class BugReportViewModelTests: XCTestCase {
                                            deviceID: nil,
                                            screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
-        var isSuccess = false
-        let _cancellable = viewModel
-            .callbackPublisher
-            .sink { result in
-                switch result {
-                case .submitFinished:
-                    isSuccess = true
-                default: break
-                }
-            }
         context.send(viewAction: .submit)
-        _ = await viewModel.callbackPublisher.dropFirst().firstValue
+        
+        _ = await viewModel
+            .callbackPublisher
+            .filter {
+                guard case .submitFinished = $0 else {
+                    return false
+                }
+                return true
+            }
+            .firstValue
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
-        XCTAssertTrue(isSuccess)
     }
 
     func testSendReportWithError() async throws {
@@ -95,22 +93,18 @@ class BugReportViewModelTests: XCTestCase {
                                            deviceID: nil,
                                            screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
-        var isFailure = false
-        
-        let _cancellable = viewModel
-            .callbackPublisher
-            .sink { result in
-                switch result {
-                case .submitFailed:
-                    isFailure = true
-                default: break
-                }
-            }
-        
         context.send(viewAction: .submit)
-        _ = await viewModel.callbackPublisher.dropFirst().firstValue
+        
+        _ = await viewModel
+            .callbackPublisher
+            .filter {
+                guard case .submitFailed = $0 else {
+                    return false
+                }
+                return true
+            }
+            .firstValue
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
-        XCTAssertTrue(isFailure)
     }
 }
