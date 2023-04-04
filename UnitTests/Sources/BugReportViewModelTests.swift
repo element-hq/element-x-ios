@@ -71,15 +71,17 @@ class BugReportViewModelTests: XCTestCase {
                                            screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         var isSuccess = false
-        viewModel.callback = { result in
+        let publishedClosure = PublishedClosure { (result: BugReportViewModelAction) in
             switch result {
             case .submitFinished:
                 isSuccess = true
-            default: break
+            default:
+                break
             }
         }
+        viewModel.callback = publishedClosure.closure
         context.send(viewAction: .submit)
-        try await Task.sleep(for: .milliseconds(100))
+        await publishedClosure.publisher.dropFirst().firstValue
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
         XCTAssertTrue(isSuccess)
@@ -110,5 +112,38 @@ class BugReportViewModelTests: XCTestCase {
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
         XCTAssertTrue(isFailure)
+    }
+}
+
+import Combine
+
+final class PublishedClosure<T, R> {
+    private var subject: PassthroughSubject<R, Never> = .init()
+    private let work: (T) -> R
+    
+    init(_ work: @escaping (T) -> R) {
+        self.work = work
+    }
+    
+    var closure: (T) -> Void {
+        { value in
+            let result = self.work(value)
+            self.subject.send(result)
+        }
+    }
+    
+    var publisher: AnyPublisher<R, Never> {
+        subject.eraseToAnyPublisher()
+    }
+}
+
+extension Publisher where Failure == Never {
+    var firstValue: Output? {
+        get async {
+            for await value in values {
+                return value
+            }
+            return nil
+        }
     }
 }
