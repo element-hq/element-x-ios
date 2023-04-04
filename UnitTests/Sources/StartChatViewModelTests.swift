@@ -41,14 +41,14 @@ class StartChatScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
         
         await search(query: "AAA")
-        assertSearchResult(toBe: 0)
+        assertSearchResults(toBe: 0)
     }
     
     func testQueryShowingResults() async throws {
         clientProxy.searchUsersResult = .success(.init(results: [UserProfile.mockAlice], limited: true))
         
         await search(query: "AAA")
-        assertSearchResult(toBe: 1)
+        assertSearchResults(toBe: 1)
     }
     
     func testGetProfileIsNotCalled() async {
@@ -56,7 +56,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         clientProxy.getProfileResult = .success(.init(userID: "@alice:matrix.org"))
         
         await search(query: "AAA")
-        assertSearchResult(toBe: 3)
+        assertSearchResults(toBe: 3)
         XCTAssertFalse(clientProxy.getProfileCalled)
     }
     
@@ -66,7 +66,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         
         await search(query: "@a:b.com")
         
-        assertSearchResult(toBe: 4)
+        assertSearchResults(toBe: 4)
         XCTAssertTrue(clientProxy.getProfileCalled)
     }
     
@@ -76,7 +76,7 @@ class StartChatScreenViewModelTests: XCTestCase {
         
         await search(query: "@a:b.com")
         
-        assertSearchResult(toBe: 3)
+        assertSearchResults(toBe: 3)
         let firstUserID = viewModel.context.viewState.usersSection.users.first?.userID
         XCTAssertEqual(firstUserID, "@bob:matrix.org")
         XCTAssertTrue(clientProxy.getProfileCalled)
@@ -88,12 +88,12 @@ class StartChatScreenViewModelTests: XCTestCase {
         
         await search(query: "@a:b.com")
         
-        assertSearchResult(toBe: 4)
+        assertSearchResults(toBe: 4)
     }
     
     // MARK: - Private
     
-    private func assertSearchResult(toBe count: Int) {
+    private func assertSearchResults(toBe count: Int) {
         XCTAssertTrue(count >= 0)
         XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
         XCTAssertEqual(context.viewState.usersSection.users.count, count)
