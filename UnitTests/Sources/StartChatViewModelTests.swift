@@ -33,26 +33,84 @@ class StartChatScreenViewModelTests: XCTestCase {
         viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
     }
     
-    func test_queryShowingNoResults() async throws {
-        viewModel.context.searchQuery = "A"
+    func testQueryShowingNoResults() async throws {
+        await search(query: "A")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
         
-        viewModel.context.searchQuery = "AA"
+        await search(query: "AA")
         XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
         
-        viewModel.context.searchQuery = "AAA"
-        _ = await context.$viewState.nextValue
-        XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
-        XCTAssert(context.viewState.hasEmptySearchResults)
+        await search(query: "AAA")
+        assertSearchResults(toBe: 0)
     }
     
-    func test_queryShowingResults() async throws {
+    func testQueryShowingResults() async throws {
         clientProxy.searchUsersResult = .success(.init(results: [UserProfile.mockAlice], limited: true))
         
-        viewModel.context.searchQuery = "AAA"
-        _ = await context.$viewState.nextValue
+        await search(query: "AAA")
+        assertSearchResults(toBe: 1)
+    }
+    
+    func testGetProfileIsNotCalled() async {
+        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
+        clientProxy.getProfileResult = .success(.init(userID: "@alice:matrix.org"))
+        
+        await search(query: "AAA")
+        assertSearchResults(toBe: 3)
+        XCTAssertFalse(clientProxy.getProfileCalled)
+    }
+    
+    func testLocalResultShows() async {
+        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
+        clientProxy.getProfileResult = .success(.init(userID: "@some:matrix.org"))
+        
+        await search(query: "@a:b.com")
+        
+        assertSearchResults(toBe: 4)
+        XCTAssertTrue(clientProxy.getProfileCalled)
+    }
+    
+    func testLocalResultWithDuplicates() async {
+        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
+        clientProxy.getProfileResult = .success(.init(userID: "@bob:matrix.org"))
+        
+        await search(query: "@a:b.com")
+        
+        assertSearchResults(toBe: 3)
+        let firstUserID = viewModel.context.viewState.usersSection.users.first?.userID
+        XCTAssertEqual(firstUserID, "@bob:matrix.org")
+        XCTAssertTrue(clientProxy.getProfileCalled)
+    }
+    
+    func testSearchResultsShowWhenGetProfileFails() async {
+        clientProxy.searchUsersResult = .success(.init(results: searchResults, limited: true))
+        clientProxy.getProfileResult = .failure(.failedGettingUserProfile)
+        
+        await search(query: "@a:b.com")
+        
+        assertSearchResults(toBe: 4)
+    }
+    
+    // MARK: - Private
+    
+    private func assertSearchResults(toBe count: Int) {
+        XCTAssertTrue(count >= 0)
         XCTAssertEqual(context.viewState.usersSection.type, .searchResult)
-        XCTAssertEqual(context.viewState.usersSection.users.count, 1)
-        XCTAssertFalse(context.viewState.hasEmptySearchResults)
+        XCTAssertEqual(context.viewState.usersSection.users.count, count)
+        XCTAssertEqual(context.viewState.hasEmptySearchResults, count == 0)
+    }
+    
+    @discardableResult
+    private func search(query: String) async -> StartChatViewState? {
+        viewModel.context.searchQuery = query
+        return await context.$viewState.nextValue
+    }
+    
+    private var searchResults: [UserProfile] {
+        [
+            .mockAlice,
+            .mockBob,
+            .mockCharlie
+        ]
     }
 }

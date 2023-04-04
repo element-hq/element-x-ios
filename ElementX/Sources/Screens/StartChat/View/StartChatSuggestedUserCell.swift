@@ -29,14 +29,28 @@ struct StartChatSuggestedUserCell: View {
                                 imageProvider: imageProvider)
                 .padding(.vertical, 10)
                 .accessibilityHidden(true)
+            
             VStack(alignment: .leading, spacing: 4) {
                 Text(user.displayName ?? user.userID)
                     .font(.element.title3)
                     .foregroundColor(.element.primaryContent)
+                
                 if user.displayName != nil {
                     Text(user.userID)
                         .font(.element.subheadline)
                         .foregroundColor(.element.tertiaryContent)
+                }
+                
+                if !user.isVerified {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text(Image(systemName: "exclamationmark.circle.fill"))
+                            .foregroundColor(.compound.textActionCritical)
+                        
+                        Text(L10n.screenStartChatUnknownProfile)
+                            .foregroundColor(.secondary)
+                    }
+                    .font(.compound.bodyXS)
+                    .padding(.top, 4)
                 }
             }
             .accessibilityElement(children: .combine)
