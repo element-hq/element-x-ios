@@ -56,4 +56,15 @@ class SettingsScreenViewModelTests: XCTestCase {
         await Task.yield()
         XCTAssert(correctResult)
     }
+    
+    func testAnalytics() async throws {
+        var correctResult = false
+        viewModel.callback = { result in
+            correctResult = result == .analytics
+        }
+
+        context.send(viewAction: .analytics)
+        await Task.yield()
+        XCTAssert(correctResult)
+    }
 }

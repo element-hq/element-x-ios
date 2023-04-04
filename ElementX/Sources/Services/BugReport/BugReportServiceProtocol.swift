@@ -33,10 +33,18 @@ struct SubmitBugReportResponse: Decodable {
 
 // sourcery: AutoMockable
 protocol BugReportServiceProtocol {
+    var isRunning: Bool { get }
+    
     var crashedLastRun: Bool { get }
+    
+    func start()
+           
+    func stop()
+    
+    func reset()
 
     func crash()
-
+    
     func submitBugReport(_ bugReport: BugReport,
                          progressListener: ProgressListener?) async throws -> SubmitBugReportResponse
 }

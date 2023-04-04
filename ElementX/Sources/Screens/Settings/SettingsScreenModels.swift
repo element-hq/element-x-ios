@@ -19,7 +19,7 @@ import UIKit
 
 enum SettingsScreenViewModelAction {
     case close
-    case toggleAnalytics
+    case analytics
     case reportBug
     case sessionVerification
     case developerOptions
@@ -42,7 +42,7 @@ struct SettingsScreenViewStateBindings {
 
 enum SettingsScreenViewAction {
     case close
-    case toggleAnalytics
+    case analytics
     case reportBug
     case sessionVerification
     case logout

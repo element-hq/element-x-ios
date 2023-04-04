@@ -23,7 +23,6 @@ final class AppSettings: ObservableObject {
         case lastVersionLaunched
         case timelineStyle
         case enableAnalytics
-        case isIdentifiedForAnalytics
         case enableInAppNotifications
         case pusherProfileTag
         case shouldCollapseRoomStateEvents
@@ -104,7 +103,7 @@ final class AppSettings: ObservableObject {
     let bugReportUISIId = "element-auto-uisi"
     
     // MARK: - Analytics
-    
+        
     #if DEBUG
     /// The configuration to use for analytics during development. Set `isEnabled` to false to disable analytics in debug builds.
     /// **Note:** Analytics are disabled by default for forks. If you are maintaining a fork, set custom configurations.
@@ -129,13 +128,7 @@ final class AppSettings: ObservableObject {
     /// `true` when the user has opted in to send analytics.
     @UserSetting(key: UserDefaultsKeys.enableAnalytics.rawValue, defaultValue: false, persistIn: store)
     var enableAnalytics
-    
-    /// Indicates if the device has already called identify for this session to PostHog.
-    /// This is separate to `enableAnalytics` as logging out leaves analytics
-    /// enabled, but requires the next account to be identified separately.
-    @UserSetting(key: UserDefaultsKeys.isIdentifiedForAnalytics.rawValue, defaultValue: false, persistIn: store)
-    var isIdentifiedForAnalytics
-    
+        
     // MARK: - Room Screen
     
     @UserSettingRawRepresentable(key: UserDefaultsKeys.timelineStyle.rawValue, defaultValue: TimelineStyle.bubbles, persistIn: store)

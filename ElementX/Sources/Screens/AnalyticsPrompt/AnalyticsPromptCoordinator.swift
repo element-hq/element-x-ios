@@ -16,21 +16,13 @@
 
 import SwiftUI
 
-struct AnalyticsPromptCoordinatorParameters {
-    /// The user session to use if analytics are enabled.
-    let userSession: UserSessionProtocol
-}
-
 final class AnalyticsPromptCoordinator: CoordinatorProtocol {
-    private let parameters: AnalyticsPromptCoordinatorParameters
     private var viewModel: AnalyticsPromptViewModel
 
     var callback: (@MainActor () -> Void)?
     
-    init(parameters: AnalyticsPromptCoordinatorParameters) {
-        self.parameters = parameters
-        
-        viewModel = AnalyticsPromptViewModel(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
+    init() {
+        viewModel = AnalyticsPromptViewModel()
     }
     
     // MARK: - Public
@@ -42,11 +34,11 @@ final class AnalyticsPromptCoordinator: CoordinatorProtocol {
             switch result {
             case .enable:
                 MXLog.info("Enable Analytics")
-                Analytics.shared.optIn(with: self.parameters.userSession)
+                ServiceLocator.shared.analytics.optIn()
                 self.callback?()
             case .disable:
                 MXLog.info("Disable Analytics")
-                Analytics.shared.optOut()
+                ServiceLocator.shared.analytics.optOut()
                 self.callback?()
             }
         }

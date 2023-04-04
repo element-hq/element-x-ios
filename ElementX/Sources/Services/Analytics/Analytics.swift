@@ -31,18 +31,13 @@ import PostHog
 /// into `main`, update the AnalyticsEvents Swift package in `project.yml`.
 ///
 class Analytics {
-    /// The singleton instance to be used within the Riot target.
-    static let shared = Analytics()
-    
     /// The analytics client to send events with.
-    private var client: AnalyticsClientProtocol = PostHogAnalyticsClient()
-    
-//    /// The monitoring client to track crashes, issues and performance
-//    private var monitoringClient = SentryMonitoringClient()
-    
-    /// The service used to interact with account data settings.
-    private var service: AnalyticsService?
-    
+    private let client: AnalyticsClientProtocol
+
+    init(client: AnalyticsClientProtocol) {
+        self.client = client
+    }
+        
     /// Whether or not the object is enabled and sending events to the server.
     var isRunning: Bool { client.isRunning }
     
@@ -53,13 +48,9 @@ class Analytics {
     }
     
     /// Opts in to analytics tracking with the supplied user session.
-    /// - Parameter userSession: The user session to use to when reading/generating the analytics ID.
-    ///  The session will be ignored if not running.
-    func optIn(with userSession: UserSessionProtocol) {
+    func optIn() {
         ServiceLocator.shared.settings.enableAnalytics = true
         startIfEnabled()
-        
-        Task { await useAnalyticsSettings(from: userSession) }
     }
     
     /// Stops analytics tracking and calls `reset` to clear any IDs and event queues.
@@ -69,8 +60,7 @@ class Analytics {
         // The order is important here. PostHog ignores the reset if stopped.
         reset()
         client.stop()
-//        monitoringClient.stop()
-        
+        ServiceLocator.shared.bugReportService.stop()
         MXLog.info("Stopped.")
     }
     
@@ -79,38 +69,12 @@ class Analytics {
         guard ServiceLocator.shared.settings.enableAnalytics, !isRunning else { return }
         
         client.start()
-//        monitoringClient.start()
-        
+        ServiceLocator.shared.bugReportService.start()
+
         // Sanity check in case something went wrong.
         guard client.isRunning else { return }
         
         MXLog.info("Started.")
-        
-        // Catch and log crashes
-//        MXLogger.logCrashes(true)
-//        MXLogger.setBuildVersion(Bundle.bundleShortVersionString)
-    }
-    
-    /// Use the analytics settings from the supplied user session to configure analytics.
-    /// For now this is only used for (pseudonymous) identification.
-    /// - Parameter userSession: The user session to read analytics settings from.
-    func useAnalyticsSettings(from userSession: UserSessionProtocol) async {
-        guard
-            ServiceLocator.shared.settings.enableAnalytics,
-            !ServiceLocator.shared.settings.isIdentifiedForAnalytics
-        else { return }
-        
-        let service = AnalyticsService(userSession: userSession)
-        self.service = service
-        
-        switch await service.settings() {
-        case .success(let settings):
-            identify(with: settings)
-            self.service = nil
-        case .failure:
-            MXLog.error("Failed to use analytics settings. Will continue to run without analytics ID.")
-            self.service = nil
-        }
     }
     
     /// Resets the any IDs and event queues in the analytics client. This method should
@@ -119,13 +83,8 @@ class Analytics {
     /// Note: **MUST** be called before stopping PostHog or the reset is ignored.
     func reset() {
         client.reset()
-//        monitoringClient.reset()
-        
+        ServiceLocator.shared.bugReportService.reset()
         MXLog.info("Reset.")
-        ServiceLocator.shared.settings.isIdentifiedForAnalytics = false
-        
-        // Stop collecting crash logs
-//        MXLogger.logCrashes(false)
     }
     
     /// Flushes the event queue in the analytics client, uploading all pending events.
@@ -137,33 +96,23 @@ class Analytics {
     
     // MARK: - Private
     
-    /// Identify (pseudonymously) any future events with the ID from the analytics account data settings.
-    /// - Parameter settings: The settings to use for identification. The ID must be set *before* calling this method.
-    private func identify(with settings: AnalyticsSettings) {
-        guard let id = settings.id else {
-            MXLog.error("identify(with:) called before an ID has been generated.")
-            return
-        }
-        
-        client.identify(id: id)
-        MXLog.info("Identified.")
-        ServiceLocator.shared.settings.isIdentifiedForAnalytics = true
-    }
-    
     /// Capture an event in the `client`.
     /// - Parameter event: The event to capture.
     private func capture(event: AnalyticsEventProtocol) {
+        MXLog.debug("\(event)")
         client.capture(event)
     }
 }
 
 // MARK: - Public tracking methods
 
-// The following methods are exposed for compatibility with Objective-C as
-// the `capture` method and the generated events cannot be bridged from Swift.
-extension Analytics { }
-
-// MARK: - MXAnalyticsDelegate
-
-// extension Analytics: MXAnalyticsDelegate {
-// }
+extension Analytics {
+    /// Track the presentation of a screen
+    /// - Parameter screen: The screen that was shown
+    /// - Parameter duration: An optional value representing how long the screen was shown for in milliseconds.
+    func track(screen: AnalyticsScreen, duration milliseconds: Int? = nil) {
+        MXLog.debug("\(screen)")
+        let event = AnalyticsEvent.MobileScreen(durationMs: milliseconds, screenName: screen.screenName)
+        client.screen(event)
+    }
+}

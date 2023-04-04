@@ -31,6 +31,8 @@ class UITestsAppCoordinator: AppCoordinatorProtocol {
         AppSettings.configureWithSuiteName("io.element.elementx.uitests")
         AppSettings.reset()
         ServiceLocator.shared.register(appSettings: AppSettings())
+        ServiceLocator.shared.register(bugReportService: BugReportServiceMock())
+        ServiceLocator.shared.register(analytics: Analytics(client: AnalyticsClientMock()))
     }
     
     func start() {
@@ -76,8 +78,12 @@ class MockScreen: Identifiable {
                                                                 userIndicatorController: MockUserIndicatorController(),
                                                                 isModallyPresented: false))
         case .analyticsPrompt:
-            return AnalyticsPromptCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
-                                                                                             mediaProvider: MockMediaProvider())))
+            return AnalyticsPromptCoordinator()
+        case .analyticsSettingsScreen:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let coordinator = AnalyticsSettingsScreenCoordinator()
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         case .authenticationFlow:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let coordinator = AuthenticationCoordinator(authenticationService: MockAuthenticationServiceProxy(),

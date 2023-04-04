@@ -92,7 +92,7 @@ struct SettingsScreen: View {
                 Label(L10n.commonDeveloperOptions, systemImage: "hammer.circle")
             }
             .buttonStyle(.compoundForm(accessory: .navigationLink))
-            .accessibilityIdentifier("sessionVerificationButton")
+            .accessibilityIdentifier("developerOptionsButton")
         }
         .compoundFormSection()
     }
@@ -113,6 +113,14 @@ struct SettingsScreen: View {
                 context.send(viewAction: .changedTimelineStyle)
             }
             
+            // Analytics
+            Button { context.send(viewAction: .analytics) } label: {
+                Label(UntranslatedL10n.analyticsSettings, systemImage: "chart.bar")
+            }
+            .buttonStyle(.compoundForm(accessory: .navigationLink))
+            .accessibilityIdentifier("analyticsButton")
+            
+            // Report Bug
             Button { context.send(viewAction: .reportBug) } label: {
                 Label(L10n.actionReportBug, systemImage: "questionmark.circle")
             }

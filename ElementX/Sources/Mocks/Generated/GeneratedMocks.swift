@@ -5,13 +5,159 @@
 import Combine
 import Foundation
 import MatrixRustSDK
+import AnalyticsEvents
+class AnalyticsClientMock: AnalyticsClientProtocol {
+    var isRunning: Bool {
+        get { return underlyingIsRunning }
+        set(value) { underlyingIsRunning = value }
+    }
+    var underlyingIsRunning: Bool!
+
+    //MARK: - start
+
+    var startCallsCount = 0
+    var startCalled: Bool {
+        return startCallsCount > 0
+    }
+    var startClosure: (() -> Void)?
+
+    func start() {
+        startCallsCount += 1
+        startClosure?()
+    }
+    //MARK: - reset
+
+    var resetCallsCount = 0
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
+    //MARK: - stop
+
+    var stopCallsCount = 0
+    var stopCalled: Bool {
+        return stopCallsCount > 0
+    }
+    var stopClosure: (() -> Void)?
+
+    func stop() {
+        stopCallsCount += 1
+        stopClosure?()
+    }
+    //MARK: - flush
+
+    var flushCallsCount = 0
+    var flushCalled: Bool {
+        return flushCallsCount > 0
+    }
+    var flushClosure: (() -> Void)?
+
+    func flush() {
+        flushCallsCount += 1
+        flushClosure?()
+    }
+    //MARK: - capture
+
+    var captureCallsCount = 0
+    var captureCalled: Bool {
+        return captureCallsCount > 0
+    }
+    var captureReceivedEvent: AnalyticsEventProtocol?
+    var captureReceivedInvocations: [AnalyticsEventProtocol] = []
+    var captureClosure: ((AnalyticsEventProtocol) -> Void)?
+
+    func capture(_ event: AnalyticsEventProtocol) {
+        captureCallsCount += 1
+        captureReceivedEvent = event
+        captureReceivedInvocations.append(event)
+        captureClosure?(event)
+    }
+    //MARK: - screen
+
+    var screenCallsCount = 0
+    var screenCalled: Bool {
+        return screenCallsCount > 0
+    }
+    var screenReceivedEvent: AnalyticsScreenProtocol?
+    var screenReceivedInvocations: [AnalyticsScreenProtocol] = []
+    var screenClosure: ((AnalyticsScreenProtocol) -> Void)?
+
+    func screen(_ event: AnalyticsScreenProtocol) {
+        screenCallsCount += 1
+        screenReceivedEvent = event
+        screenReceivedInvocations.append(event)
+        screenClosure?(event)
+    }
+    //MARK: - updateUserProperties
+
+    var updateUserPropertiesCallsCount = 0
+    var updateUserPropertiesCalled: Bool {
+        return updateUserPropertiesCallsCount > 0
+    }
+    var updateUserPropertiesReceivedUserProperties: AnalyticsEvent.UserProperties?
+    var updateUserPropertiesReceivedInvocations: [AnalyticsEvent.UserProperties] = []
+    var updateUserPropertiesClosure: ((AnalyticsEvent.UserProperties) -> Void)?
+
+    func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties) {
+        updateUserPropertiesCallsCount += 1
+        updateUserPropertiesReceivedUserProperties = userProperties
+        updateUserPropertiesReceivedInvocations.append(userProperties)
+        updateUserPropertiesClosure?(userProperties)
+    }
+}
 class BugReportServiceMock: BugReportServiceProtocol {
+    var isRunning: Bool {
+        get { return underlyingIsRunning }
+        set(value) { underlyingIsRunning = value }
+    }
+    var underlyingIsRunning: Bool!
     var crashedLastRun: Bool {
         get { return underlyingCrashedLastRun }
         set(value) { underlyingCrashedLastRun = value }
     }
     var underlyingCrashedLastRun: Bool!
 
+    //MARK: - start
+
+    var startCallsCount = 0
+    var startCalled: Bool {
+        return startCallsCount > 0
+    }
+    var startClosure: (() -> Void)?
+
+    func start() {
+        startCallsCount += 1
+        startClosure?()
+    }
+    //MARK: - stop
+
+    var stopCallsCount = 0
+    var stopCalled: Bool {
+        return stopCallsCount > 0
+    }
+    var stopClosure: (() -> Void)?
+
+    func stop() {
+        stopCallsCount += 1
+        stopClosure?()
+    }
+    //MARK: - reset
+
+    var resetCallsCount = 0
+    var resetCalled: Bool {
+        return resetCallsCount > 0
+    }
+    var resetClosure: (() -> Void)?
+
+    func reset() {
+        resetCallsCount += 1
+        resetClosure?()
+    }
     //MARK: - crash
 
     var crashCallsCount = 0

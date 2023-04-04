@@ -10,7 +10,7 @@ import Foundation
 // swiftlint:disable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:disable nesting type_body_length type_name vertical_whitespace_opening_braces
 public enum UntranslatedL10n {
-  /// Help us identify issues and improve %@ by sharing anonymous usage data. To understand how people use multiple devices, we’ll generate a random identifier, shared by your devices.
+  /// Help us identify issues and improve %@ by sharing anonymous usage data.
   /// 
   /// You can read all our terms %@.
   public static func analyticsOptInContent(_ p1: Any, _ p2: Any) -> String {
@@ -28,6 +28,10 @@ public enum UntranslatedL10n {
   public static func analyticsOptInTitle(_ p1: Any) -> String {
     return UntranslatedL10n.tr("Untranslated", "analytics_opt_in_title", String(describing: p1))
   }
+  /// Analytics
+  public static var analyticsSettings: String { return UntranslatedL10n.tr("Untranslated", "analytics_settings") }
+  /// Share analytics data
+  public static var analyticsSettingsToggleText: String { return UntranslatedL10n.tr("Untranslated", "analytics_settings_toggle_text") }
   /// Camera
   public static var mediaUploadCameraPicker: String { return UntranslatedL10n.tr("Untranslated", "media_upload_camera_picker") }
   /// Document

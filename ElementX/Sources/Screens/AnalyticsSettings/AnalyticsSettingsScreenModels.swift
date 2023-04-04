@@ -1,5 +1,5 @@
 //
-// Copyright 2021 New Vector Ltd
+// Copyright 2022 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,30 +16,22 @@
 
 import Foundation
 
-enum AnalyticsPromptViewAction {
-    /// Enable analytics.
-    case enable
-    /// Disable analytics.
-    case disable
-}
-
-enum AnalyticsPromptViewModelAction {
-    /// Enable analytics.
-    case enable
-    /// Disable analytics.
-    case disable
-}
-
-struct AnalyticsPromptViewState: BindableState {
+struct AnalyticsSettingsScreenViewState: BindableState {
     /// Attributed strings created from localized HTML.
-    let strings: AnalyticsPromptStrings
+    let strings: AnalyticsSettingsScreenStrings
+    var bindings: AnalyticsSettingsScreenViewStateBindings
 }
 
-/// A collection of strings for the UI that need to be parsed from HTML
-struct AnalyticsPromptStrings {
+struct AnalyticsSettingsScreenViewStateBindings {
+    var enableAnalytics: Bool
+}
+
+enum AnalyticsSettingsScreenViewAction {
+    case toggleAnalytics
+}
+
+struct AnalyticsSettingsScreenStrings {
     let optInContent: AttributedString
-    let point1 = AttributedStringBuilder().fromHTML(UntranslatedL10n.analyticsOptInListItem1) ?? AttributedString(UntranslatedL10n.analyticsOptInListItem1)
-    let point2 = AttributedStringBuilder().fromHTML(UntranslatedL10n.analyticsOptInListItem2) ?? AttributedString(UntranslatedL10n.analyticsOptInListItem2)
     
     init(termsURL: URL) {
         // Create the opt in content with a placeholder.

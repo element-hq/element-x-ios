@@ -101,23 +101,30 @@ class AuthenticationCoordinator: CoordinatorProtocol {
 
             switch action {
             case .signedIn(let userSession):
-                self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
+                self.userHasSignedIn(userSession: userSession)
             }
         }
 
         navigationStackCoordinator.push(coordinator)
     }
     
-    private func showAnalyticsPrompt(with userSession: UserSessionProtocol) {
-        let parameters = AnalyticsPromptCoordinatorParameters(userSession: userSession)
-        let coordinator = AnalyticsPromptCoordinator(parameters: parameters)
-        
-        coordinator.callback = { [weak self] in
+    private func userHasSignedIn(userSession: UserSessionProtocol) {
+        showAnalyticsPromptIfNeeded { [weak self] in
             guard let self else { return }
             self.delegate?.authenticationCoordinator(self, didLoginWithSession: userSession)
         }
-                
-        navigationStackCoordinator.setRootCoordinator(coordinator)
+    }
+
+    private func showAnalyticsPromptIfNeeded(completion: @escaping () -> Void) {
+        guard ServiceLocator.shared.analytics.shouldShowAnalyticsPrompt else {
+            completion()
+            return
+        }
+        let coordinator = AnalyticsPromptCoordinator()
+        coordinator.callback = {
+            completion()
+        }
+        navigationStackCoordinator.push(coordinator)
     }
     
     static let loadingIndicatorIdentifier = "AuthenticationCoordinatorLoading"

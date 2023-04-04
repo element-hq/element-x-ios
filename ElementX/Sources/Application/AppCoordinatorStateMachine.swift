@@ -68,7 +68,6 @@ class AppCoordinatorStateMachine {
     private func configure() {
         stateMachine.addRoutes(event: .startWithAuthentication, transitions: [.initial => .signedOut])
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.signedOut => .signedIn])
-
         stateMachine.addRoutes(event: .startWithExistingSession, transitions: [.initial => .restoringSession])
         stateMachine.addRoutes(event: .createdUserSession, transitions: [.restoringSession => .signedIn])
         stateMachine.addRoutes(event: .failedRestoringSession, transitions: [.restoringSession => .signedOut])

@@ -29,7 +29,7 @@ struct AnalyticsPromptCheckmarkItem: View {
     
     var body: some View {
         Label { Text(attributedString) } icon: {
-            Image(uiImage: Asset.Images.analyticsCheckmark.image)
+            Image(systemName: "checkmark.circle")
                 .foregroundColor(.element.accent)
         }
     }
@@ -38,7 +38,7 @@ struct AnalyticsPromptCheckmarkItem: View {
 // MARK: - Previews
 
 struct AnalyticsPromptCheckmarkItem_Previews: PreviewProvider {
-    static let strings = AnalyticsPromptStrings()
+    static let strings = AnalyticsPromptStrings(termsURL: ServiceLocator.shared.settings.analyticsConfiguration.termsURL)
     
     static var previews: some View {
         VStack(alignment: .leading) {

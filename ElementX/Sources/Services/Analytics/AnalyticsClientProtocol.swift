@@ -23,11 +23,7 @@ protocol AnalyticsClientProtocol {
     
     /// Starts the analytics client reporting data.
     func start()
-    
-    /// Associate the client with an ID. This is persisted until `reset` is called.
-    /// - Parameter id: The ID to associate with the user.
-    func identify(id: String)
-    
+       
     /// Reset all stored properties and any event queues on the client. Note that
     /// the client will remain active, but in a fresh unidentified state.
     func reset()
@@ -54,3 +50,6 @@ protocol AnalyticsClientProtocol {
     /// as part of the next event that gets captured.
     func updateUserProperties(_ userProperties: AnalyticsEvent.UserProperties)
 }
+
+// sourcery: AutoMockable
+extension AnalyticsClientProtocol { }
