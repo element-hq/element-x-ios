@@ -42,14 +42,14 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showIgnoreAlert)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .ignore))
 
         context.send(viewAction: .ignoreConfirmed)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
         XCTAssertFalse(context.viewState.details.isIgnored)
-        try await Task.sleep(for: .milliseconds(10))
+        await context.nextViewState()
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.details.isIgnored)
     }
@@ -85,14 +85,14 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
 
         context.send(viewAction: .unignoreConfirmed)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.details.isIgnored)
-        try await Task.sleep(for: .milliseconds(10))
+        await context.nextViewState()
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertFalse(context.viewState.details.isIgnored)
     }
@@ -106,14 +106,14 @@ class RoomMemberDetailsViewModelTests: XCTestCase {
         viewModel = RoomMemberDetailsViewModel(roomMemberProxy: roomMemberProxyMock, mediaProvider: MockMediaProvider())
 
         context.send(viewAction: .showUnignoreAlert)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertEqual(context.ignoreUserAlert, .init(action: .unignore))
 
         context.send(viewAction: .unignoreConfirmed)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.details.isIgnored)
-        try await Task.sleep(for: .milliseconds(10))
+        await context.nextViewState()
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssertTrue(context.viewState.details.isIgnored)
         XCTAssertNotNil(context.errorAlert)

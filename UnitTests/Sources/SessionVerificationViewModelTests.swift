@@ -25,7 +25,6 @@ class SessionVerificationViewModelTests: XCTestCase {
     var context: SessionVerificationViewModelType.Context!
     var sessionVerificationController: SessionVerificationControllerProxyMock!
     
-    @MainActor
     override func setUpWithError() throws {
         sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
         viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: sessionVerificationController)
