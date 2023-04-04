@@ -379,8 +379,7 @@ class ClientProxy: ClientProxyProtocol {
     }
     
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
-                                                 RequiredState(key: "m.room.encryption", value: ""),
-                                                 RequiredState(key: "m.room.join_rules", value: "")]
+                                                 RequiredState(key: "m.room.encryption", value: "")]
     
     private lazy var slidingSyncFilters = SlidingSyncRequestListFilters(isDm: nil,
                                                                         spaces: [],
