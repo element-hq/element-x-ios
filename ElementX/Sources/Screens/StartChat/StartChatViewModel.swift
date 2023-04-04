@@ -96,12 +96,13 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     private func fetchData() {
-        if searchQuery.isValidSearchQuery {
-            Task {
-                await searchProfiles()
-            }
-        } else {
+        guard searchQuery.count >= 3 else {
             fetchSuggestions()
+            return
+        }
+        
+        Task {
+            await searchProfiles()
         }
     }
     
@@ -189,10 +190,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
 }
 
 private extension String {
-    var isValidSearchQuery: Bool {
-        count >= 3
-    }
-    
     var isMatrixIdentifier: Bool {
         MatrixEntityRegex.isMatrixUserIdentifier(self)
     }
