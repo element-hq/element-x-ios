@@ -30,6 +30,43 @@ class InviteUsersInRoomScreenViewModelTests: XCTestCase {
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        viewModel = InviteUsersInRoomViewModel(userSession: userSession)
+        let viewModel = InviteUsersInRoomViewModel(userSession: userSession)
+        viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+        self.viewModel = viewModel
+    }
+    
+    func testSelectUser() async throws {
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        context.send(viewAction: .selectUser(.mockAlice))
+        await contextNextStateValue()
+        XCTAssertTrue(context.viewState.selectedUsers.count == 1)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+    }
+    
+    func testReselectUser() async throws {
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        context.send(viewAction: .selectUser(.mockAlice))
+        await contextNextStateValue()
+        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        context.send(viewAction: .selectUser(.mockAlice))
+        await contextNextStateValue()
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+    }
+    
+    func testDeselectUser() async throws {
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+        context.send(viewAction: .selectUser(.mockAlice))
+        await contextNextStateValue()
+        XCTAssertEqual(context.viewState.selectedUsers.count, 1)
+        XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
+        context.send(viewAction: .deselectUser(.mockAlice))
+        await contextNextStateValue()
+        XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
+    }
+    
+    @discardableResult
+    private func contextNextStateValue() async -> InviteUsersInRoomViewState? {
+        await context.$viewState.nextValue
     }
 }
