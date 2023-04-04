@@ -123,10 +123,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .ignoreConfirmed)
-        await Task.yield()
+        await context.nextViewState()
 
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        try await Task.sleep(for: .milliseconds(10))
+        await context.nextViewState()
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
         XCTAssertNotNil(context.alertInfo)
