@@ -94,6 +94,7 @@ struct StartChatScreen: View {
                 if let title = context.viewState.usersSection.type.title {
                     Text(title)
                 }
+                .buttonStyle(FormButtonStyle())
             }
             .listRowSeparator(.automatic)
             .formSectionStyle()

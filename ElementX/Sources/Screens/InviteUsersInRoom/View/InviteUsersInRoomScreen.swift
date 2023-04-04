@@ -72,6 +72,7 @@ struct InviteUsersInRoomScreen: View {
                                        selected: context.viewState.selectedUsers.contains { $0.userID == user.userID },
                                        imageProvider: context.imageProvider)
                 }
+                .buttonStyle(FormButtonStyle())
             }
         } header: {
             if let title = context.viewState.usersSection.type.title {
