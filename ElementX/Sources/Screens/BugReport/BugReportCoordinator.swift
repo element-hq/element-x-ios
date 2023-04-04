@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 enum BugReportCoordinatorResult {
@@ -34,6 +35,7 @@ struct BugReportCoordinatorParameters {
 final class BugReportCoordinator: CoordinatorProtocol {
     private let parameters: BugReportCoordinatorParameters
     private var viewModel: BugReportViewModelProtocol
+    private var viewModelSubscription: AnyCancellable?
 
     var completion: ((BugReportCoordinatorResult) -> Void)?
     
@@ -50,22 +52,24 @@ final class BugReportCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] result in
-            guard let self else { return }
-            MXLog.info("BugReportViewModel did complete with result: \(result).")
-            switch result {
-            case .cancel:
-                self.completion?(.cancel)
-            case let .submitStarted(progressTracker):
-                self.startLoading(label: L10n.commonSending, progressPublisher: progressTracker)
-            case .submitFinished:
-                self.stopLoading()
-                self.completion?(.finish)
-            case .submitFailed(let error):
-                self.stopLoading()
-                self.showError(label: error.localizedDescription)
+        viewModelSubscription = viewModel
+            .callbackPublisher
+            .sink { [weak self] result in
+                guard let self else { return }
+                MXLog.info("BugReportViewModel did complete with result: \(result).")
+                switch result {
+                case .cancel:
+                    self.completion?(.cancel)
+                case let .submitStarted(progressTracker):
+                    self.startLoading(label: L10n.commonSending, progressPublisher: progressTracker)
+                case .submitFinished:
+                    self.stopLoading()
+                    self.completion?(.finish)
+                case .submitFailed(let error):
+                    self.stopLoading()
+                    self.showError(label: error.localizedDescription)
+                }
             }
-        }
     }
 
     func stop() {

@@ -46,7 +46,6 @@ class BugReportViewModelTests: XCTestCase {
         let context = viewModel.context
         
         context.send(viewAction: .removeScreenshot)
-        await context.nextViewState()
         XCTAssertNil(context.viewState.screenshot)
     }
     
@@ -58,7 +57,6 @@ class BugReportViewModelTests: XCTestCase {
         let context = viewModel.context
         XCTAssertNil(context.viewState.screenshot)
         context.send(viewAction: .attachScreenshot(UIImage.actions))
-        await context.nextViewState()
         XCTAssert(context.viewState.screenshot == UIImage.actions)
     }
 
@@ -71,15 +69,17 @@ class BugReportViewModelTests: XCTestCase {
                                            screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         var isSuccess = false
-        viewModel.callback = { result in
-            switch result {
-            case .submitFinished:
-                isSuccess = true
-            default: break
+        let _cancellable = viewModel
+            .callbackPublisher
+            .sink { result in
+                switch result {
+                case .submitFinished:
+                    isSuccess = true
+                default: break
+                }
             }
-        }
         context.send(viewAction: .submit)
-        try await Task.sleep(for: .milliseconds(100))
+        _ = await viewModel.callbackPublisher.dropFirst().firstValue
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
         XCTAssertTrue(isSuccess)
@@ -96,17 +96,19 @@ class BugReportViewModelTests: XCTestCase {
                                            screenshot: nil, isModallyPresented: false)
         let context = viewModel.context
         var isFailure = false
-
-        viewModel.callback = { result in
-            switch result {
-            case .submitFailed:
-                isFailure = true
-            default: break
+        
+        let _cancellable = viewModel
+            .callbackPublisher
+            .sink { result in
+                switch result {
+                case .submitFailed:
+                    isFailure = true
+                default: break
+                }
             }
-        }
-
+        
         context.send(viewAction: .submit)
-        try await Task.sleep(for: .milliseconds(100))
+        _ = await viewModel.callbackPublisher.dropFirst().firstValue
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
         XCTAssertTrue(isFailure)

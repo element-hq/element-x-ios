@@ -29,3 +29,12 @@ extension Published.Publisher {
         }
     }
 }
+
+extension Publisher where Failure == Never {
+    var firstValue: Output? {
+        get async {
+            var iterator = values.makeAsyncIterator()
+            return await iterator.next()
+        }
+    }
+}
