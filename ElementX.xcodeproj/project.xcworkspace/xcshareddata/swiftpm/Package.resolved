@@ -111,8 +111,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/matrix-org/matrix-rust-components-swift",
       "state" : {
-        "revision" : "3d377773dc09104af8a38cf641860aa21f33f2c6",
-        "version" : "1.0.51-alpha"
+        "revision" : "803d0de1ecfc6ffc7d05d6260210ff892b9bda73",
+        "version" : "1.0.52-alpha"
       }
     },
     {
@@ -163,7 +163,7 @@
     {
       "identity" : "swift-snapshot-testing",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/pointfreeco/swift-snapshot-testing.git",
+      "location" : "https://github.com/pointfreeco/swift-snapshot-testing",
       "state" : {
         "revision" : "cef5b3f6f11781dd4591bdd1dd0a3d22bd609334",
         "version" : "1.11.0"
