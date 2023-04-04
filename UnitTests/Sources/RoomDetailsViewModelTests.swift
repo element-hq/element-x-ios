@@ -34,24 +34,24 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: true, members: mockedMembers))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .processTapLeave)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .public)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertSubtitle)
     }
 
-    func testLeavRoomTappedWhenRoomNotPublic() async {
+    func testLeaveRoomTappedWhenRoomNotPublic() async {
         let mockedMembers: [RoomMemberProxyMock] = [.mockBob, .mockAlice]
         roomProxyMock = RoomProxyMock(with: .init(displayName: "Test", isPublic: false, members: mockedMembers))
         viewModel = RoomDetailsViewModel(roomProxy: roomProxyMock, mediaProvider: MockMediaProvider())
         context.send(viewAction: .processTapLeave)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .private)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertPrivateSubtitle)
     }
 
     func testLeaveRoomTappedWithLessThanTwoMembers() async {
         context.send(viewAction: .processTapLeave)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertEqual(context.leaveRoomAlertItem?.state, .empty)
         XCTAssertEqual(context.leaveRoomAlertItem?.subtitle, L10n.leaveRoomAlertEmptySubtitle)
     }
@@ -78,7 +78,7 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
             .failure(.failedLeavingRoom)
         }
         context.send(viewAction: .confirmLeave)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertEqual(roomProxyMock.leaveRoomCallsCount, 1)
         XCTAssertNotNil(context.alertInfo)
     }
@@ -103,10 +103,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .ignoreConfirmed)
-        await Task.yield()
+        await context.nextViewState()
 
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        try await Task.sleep(for: .milliseconds(10))
+        await context.nextViewState()
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
     }
@@ -144,10 +144,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .unignoreConfirmed)
-        await Task.yield()
+        await context.nextViewState()
 
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
-        try await Task.sleep(for: .milliseconds(10))
+        await context.nextViewState()
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == false)
     }
@@ -164,10 +164,10 @@ class RoomDetailsScreenViewModelTests: XCTestCase {
         XCTAssertEqual(context.viewState.dmRecipient, RoomMemberDetails(withProxy: recipient))
 
         context.send(viewAction: .unignoreConfirmed)
-        await Task.yield()
+        await context.nextViewState()
         XCTAssertTrue(context.viewState.isProcessingIgnoreRequest)
 
-        try await Task.sleep(for: .milliseconds(10))
+        await context.nextViewState()
         XCTAssertFalse(context.viewState.isProcessingIgnoreRequest)
         XCTAssert(context.viewState.dmRecipient?.isIgnored == true)
         XCTAssertNotNil(context.alertInfo)
