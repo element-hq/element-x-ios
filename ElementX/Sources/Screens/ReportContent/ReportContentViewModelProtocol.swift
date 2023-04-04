@@ -14,10 +14,11 @@
 // limitations under the License.
 //
 
+import Combine
 import Foundation
 
 @MainActor
 protocol ReportContentViewModelProtocol {
-    var callback: ((ReportContentViewModelAction) -> Void)? { get set }
+    var callbackPublisher: AnyPublisher<ReportContentViewModelAction, Never> { get }
     var context: ReportContentViewModelType.Context { get }
 }

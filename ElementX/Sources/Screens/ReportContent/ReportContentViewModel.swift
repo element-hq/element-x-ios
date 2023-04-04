@@ -14,16 +14,20 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias ReportContentViewModelType = StateStoreViewModel<ReportContentViewState, ReportContentViewAction>
 
 class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModelProtocol {
-    var callback: ((ReportContentViewModelAction) -> Void)?
-
     private let itemID: String
     private let senderID: String
     private let roomProxy: RoomProxyProtocol
+    private let callbackSubject: PassthroughSubject<ReportContentViewModelAction, Never> = .init()
+    
+    var callbackPublisher: AnyPublisher<ReportContentViewModelAction, Never> {
+        callbackSubject.eraseToAnyPublisher()
+    }
 
     init(itemID: String, senderID: String, roomProxy: RoomProxyProtocol) {
         self.itemID = itemID
@@ -38,7 +42,7 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
     override func process(viewAction: ReportContentViewAction) {
         switch viewAction {
         case .cancel:
-            callback?(.cancel)
+            callbackSubject.send(.cancel)
         case .submit:
             Task { await submitReport() }
         }
@@ -47,22 +51,22 @@ class ReportContentViewModel: ReportContentViewModelType, ReportContentViewModel
     // MARK: Private
 
     private func submitReport() async {
-        callback?(.submitStarted)
+        callbackSubject.send(.submitStarted)
         
         if case let .failure(error) = await roomProxy.reportContent(itemID, reason: state.bindings.reasonText) {
             MXLog.error("Submit Report Content failed: \(error)")
-            callback?(.submitFailed(error: error))
+            callbackSubject.send(.submitFailed(error: error))
             return
         }
         
         // Ignore the sender if the user wants to.
         if state.bindings.ignoreUser, case let .failure(error) = await roomProxy.ignoreUser(senderID) {
             MXLog.error("Ignore user failed: \(error)")
-            callback?(.submitFailed(error: error))
+            callbackSubject.send(.submitFailed(error: error))
             return
         }
         
         MXLog.info("Submit Report Content succeeded")
-        callback?(.submitFinished)
+        callbackSubject.send(.submitFinished)
     }
 }

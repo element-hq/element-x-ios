@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct ReportContentCoordinatorParameters {
@@ -31,6 +32,7 @@ enum ReportContentCoordinatorAction {
 final class ReportContentCoordinator: CoordinatorProtocol {
     private let parameters: ReportContentCoordinatorParameters
     private var viewModel: ReportContentViewModelProtocol
+    private var viewModelSubscription: AnyCancellable?
     
     var callback: ((ReportContentCoordinatorAction) -> Void)?
     
@@ -43,21 +45,22 @@ final class ReportContentCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModel.callback = { [weak self] action in
-            guard let self else { return }
-            switch action {
-            case .submitStarted:
-                self.startLoading()
-            case let .submitFailed(error):
-                self.stopLoading()
-                self.showError(description: error.localizedDescription)
-            case .submitFinished:
-                self.stopLoading()
-                self.callback?(.finish)
-            case .cancel:
-                self.callback?(.cancel)
+        viewModelSubscription = viewModel.callbackPublisher
+            .sink { [weak self] action in
+                guard let self else { return }
+                switch action {
+                case .submitStarted:
+                    self.startLoading()
+                case let .submitFailed(error):
+                    self.stopLoading()
+                    self.showError(description: error.localizedDescription)
+                case .submitFinished:
+                    self.stopLoading()
+                    self.callback?(.finish)
+                case .cancel:
+                    self.callback?(.cancel)
+                }
             }
-        }
     }
 
     func stop() {
