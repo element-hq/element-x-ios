@@ -18,7 +18,7 @@ jobs:
         run: brew install mint localazy/tools/localazy
 
       - name: Download All Translations
-        run: swift run tools download-translations --all
+        run: swift run tools download-strings --all-languages
 
       - name: Verify Translations
         run: swift run tools locheck
@@ -26,10 +26,10 @@ jobs:
       - name: Create PR for Translations
         uses: peter-evans/create-pull-request@v5
         with:
-          commit-message: Translations updates
-          title: Translations updates
+          commit-message: Translations update
+          title: Translations update
           body: |
-            - Translations updates
+            - Translations update
           branch: translations/update
           base: develop
           add-paths: |
