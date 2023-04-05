@@ -36,8 +36,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),
               let roomId = request.roomId,
               let eventId = request.eventId,
-              let notificationID = request.content.userInfo["notificationID"] as? Int,
-              let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.notificationID == notificationID }) else {
+              let notificationID = request.pusherNotificationClientIdentifier,
+              let credentials = keychainController.restorationTokens().first(where: { $0.restorationToken.pusherNotificationClientIdentifier == notificationID }) else {
             // We cannot process this notification, it might be due to one of these:
             // - Device rebooted and locked
             // - Not a Matrix notification

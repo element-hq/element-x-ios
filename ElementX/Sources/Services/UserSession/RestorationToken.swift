@@ -14,18 +14,23 @@
 // limitations under the License.
 //
 
+import CryptoKit
 import Foundation
+
 import MatrixRustSDK
 
 struct RestorationToken: Codable, Equatable {
     let session: MatrixRustSDK.Session
-    let notificationID: Int
+    let pusherNotificationClientIdentifier: String?
 
     init(session: MatrixRustSDK.Session) {
         self.session = session
-        var hasher = Hasher()
-        hasher.combine(session.userId)
-        notificationID = hasher.finalize()
+        if let data = session.userId.data(using: .utf8) {
+            let digest = SHA256.hash(data: data)
+            pusherNotificationClientIdentifier = digest.compactMap { String(format: "%02x", $0) }.joined()
+        } else {
+            pusherNotificationClientIdentifier = nil
+        }
     }
 }
 
