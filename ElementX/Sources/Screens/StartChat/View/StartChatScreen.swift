@@ -89,7 +89,7 @@ struct StartChatScreen: View {
                 }
             }
         } header: {
-            if let title = context.viewState.usersSection.type.title {
+            if !context.viewState.usersSection.users.isEmpty, let title = context.viewState.usersSection.type.title {
                 Text(title)
             }
         }
