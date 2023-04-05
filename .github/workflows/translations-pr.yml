@@ -14,11 +14,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Localazy
-        run: brew install localazy/tools/localazy
+      - name: Setup Localazy and Mint
+        run: brew install mint localazy/tools/localazy
 
       - name: Download All Translations
         run: swift run tools download-translations --all
+
+      - name: Verify Translations
+        run: swift run tools locheck
 
       - name: Create PR for Translations
         uses: peter-evans/create-pull-request@v5

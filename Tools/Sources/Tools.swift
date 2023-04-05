@@ -7,5 +7,6 @@ struct Tools: ParsableCommand {
                                                     subcommands: [BuildSDK.self,
                                                                   SetupProject.self,
                                                                   OutdatedPackages.self,
-                                                                  DownloadTranslations.self])
+                                                                  DownloadTranslations.self,
+                                                                  Locheck.self])
 }
