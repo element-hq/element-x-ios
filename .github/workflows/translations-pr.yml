@@ -4,6 +4,7 @@ on:
     # At 00:00 on every Monday UTC
     - cron: '0 0 * * 1'
   workflow_dispatch:
+  push:
 
 jobs:
   open-translations-pr:
