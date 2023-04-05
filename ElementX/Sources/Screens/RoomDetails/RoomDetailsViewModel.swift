@@ -97,7 +97,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
 
     private static let leaveRoomLoadingID = "LeaveRoomLoading"
 
-    @MainActor
     private func leaveRoom() async {
         ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: Self.leaveRoomLoadingID, type: .modal, title: L10n.commonLoading, persistent: true))
         let result = await roomProxy.leaveRoom()
@@ -110,7 +109,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         }
     }
 
-    @MainActor
     private func ignore() async {
         state.isProcessingIgnoreRequest = true
         let result = await dmRecipient?.ignoreUser()
@@ -123,7 +121,6 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
         }
     }
 
-    @MainActor
     private func unignore() async {
         state.isProcessingIgnoreRequest = true
         let result = await dmRecipient?.unignoreUser()
