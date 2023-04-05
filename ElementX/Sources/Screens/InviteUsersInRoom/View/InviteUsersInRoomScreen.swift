@@ -85,12 +85,20 @@ struct InviteUsersInRoomScreen: View {
     
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
-            LazyHStack(spacing: 28) {
-                ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                    SelectedInvitedUserItem(user: user, imageProvider: context.imageProvider) {
-                        deselect(user)
+            ScrollViewReader { scrollView in
+                HStack(spacing: 28) {
+                    ForEach(context.viewState.selectedUsers, id: \.userID) { user in
+                        SelectedInvitedUserItem(user: user, imageProvider: context.imageProvider) {
+                            deselect(user)
+                        }
+                        .frame(width: 64, height: 90)
                     }
-                    .frame(width: 64, height: 90)
+                }
+                .onChange(of: context.viewState.scrollToLastIDPublisher) { lastAddedID in
+                    guard let id = lastAddedID else { return }
+                    withAnimation(.easeInOut) {
+                        scrollView.scrollTo(id)
+                    }
                 }
             }
         }

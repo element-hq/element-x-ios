@@ -33,6 +33,8 @@ struct InviteUsersInRoomViewState: BindableState {
     var hasEmptySearchResults: Bool {
         isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
+    
+    var scrollToLastIDPublisher: String?
 }
 
 struct InviteUsersInRoomViewStateBindings {

@@ -40,12 +40,15 @@ class InviteUsersInRoomViewModel: InviteUsersInRoomViewModelType, InviteUsersInR
         case .selectUser(let user):
             if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
                 state.selectedUsers.remove(at: index)
+                state.scrollToLastIDPublisher = nil
             } else {
                 state.selectedUsers.append(user)
+                state.scrollToLastIDPublisher = user.userID
             }
         case .deselectUser(let user):
             if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
                 state.selectedUsers.remove(at: index)
+                state.scrollToLastIDPublisher = nil
             }
         }
     }
