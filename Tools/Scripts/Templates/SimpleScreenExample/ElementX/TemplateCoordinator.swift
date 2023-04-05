@@ -31,9 +31,12 @@ enum TemplateCoordinatorAction {
 final class TemplateCoordinator: CoordinatorProtocol {
     private let parameters: TemplateCoordinatorParameters
     private var viewModel: TemplateViewModelProtocol
+    private let actionsSubject: PassthroughSubject<TemplateCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var callback: ((TemplateCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<TemplateCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: TemplateCoordinatorParameters) {
         self.parameters = parameters
@@ -47,9 +50,9 @@ final class TemplateCoordinator: CoordinatorProtocol {
             switch action {
             case .accept:
                 MXLog.info("User accepted the prompt.")
-                self.callback?(.accept)
+                self.actionsSubject.send(.accept)
             case .cancel:
-                self.callback?(.cancel)
+                self.actionsSubject.send(.cancel)
             }
         }
         .store(in: &cancellables)
