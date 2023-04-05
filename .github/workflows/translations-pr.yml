@@ -1,4 +1,4 @@
-name: Sync Localazy
+name: Open Translations PR
 on:
   schedule:
     # At 00:00 on every Monday UTC
