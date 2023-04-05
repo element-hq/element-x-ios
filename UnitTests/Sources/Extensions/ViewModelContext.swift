@@ -16,9 +16,9 @@
 
 @testable import ElementX
 
-extension ViewModelContext {
+extension StateStoreViewModel.Context {
     @discardableResult
-    func nextViewState() async -> ViewState? {
+    func nextViewState() async -> State? {
         await $viewState.nextValue
     }
 }
