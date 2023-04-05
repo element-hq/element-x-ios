@@ -12,16 +12,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string>No hay miembros</string>
 			<key>one</key>
 			<string>%1$d miembro</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%1$d miembros</string>
 		</dict>
@@ -36,16 +28,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string>No hay cambios en la sala</string>
 			<key>one</key>
 			<string>%1$d cambio en la sala</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%1$d cambios en la sala</string>
 		</dict>
@@ -60,16 +44,8 @@
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
-			<key>zero</key>
-			<string>0 personas</string>
 			<key>one</key>
 			<string>Una persona</string>
-			<key>two</key>
-			<string></string>
-			<key>few</key>
-			<string></string>
-			<key>many</key>
-			<string></string>
 			<key>other</key>
 			<string>%1$d personas</string>
 		</dict>

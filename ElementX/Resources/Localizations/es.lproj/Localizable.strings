@@ -48,7 +48,7 @@
 "common_about" = "Acerca de";
 "common_audio" = "Sonido";
 "common_bubbles" = "Burbujas";
-"common_creating_room" = "Creando sala...";
+"common_creating_room" = "Creando sala…";
 "common_current_user_left_room" = "Saliste de la sala";
 "common_decryption_error" = "Error de descifrado";
 "common_developer_options" = "Opciones de desarrollador";
@@ -91,7 +91,7 @@
 "common_verification_cancelled" = "Verificación cancelada";
 "common_verification_complete" = "Verificación completada";
 "common_video" = "Vídeo";
-"common_waiting" = "Esperando...";
+"common_waiting" = "Esperando…";
 "crash_detection_dialog_content" = "%1$@ se cerró inesperadamente la última vez que se lo usaste. ¿Quieres compartir un informe de error con nosotros?";
 "dialog_title_confirmation" = "Confirmar";
 "dialog_title_error" = "Error";
@@ -122,7 +122,7 @@
 "report_content_hint" = "Motivo para denunciar este contenido";
 "rich_text_editor_bullet_list" = "Lista de puntos";
 "rich_text_editor_code_block" = "Bloque de código";
-"rich_text_editor_composer_placeholder" = "Mensaje...";
+"rich_text_editor_composer_placeholder" = "Mensaje…";
 "rich_text_editor_format_bold" = "Aplicar formato negrita";
 "rich_text_editor_format_italic" = "Aplicar formato cursiva";
 "rich_text_editor_format_strikethrough" = "Aplicar formato tachado";
@@ -141,7 +141,7 @@
 "screen_bug_report_contact_me" = "Podéis poneros en contacto conmigo para resolver dudas relacionadas";
 "screen_bug_report_edit_screenshot" = "Editar captura de pantalla";
 "screen_bug_report_editor_description" = "Describe el problema. ¿Qué hiciste? ¿Qué esperabas que ocurriera? ¿Qué ocurrió en realidad? Por favor, detállalo todo lo que puedas.";
-"screen_bug_report_editor_placeholder" = "Describe el error...";
+"screen_bug_report_editor_placeholder" = "Describe el error…";
 "screen_bug_report_editor_supporting" = "Si es posible, escriba la descripción en inglés.";
 "screen_bug_report_include_crash_logs" = "Enviar registros de fallos";
 "screen_bug_report_include_logs" = "Enviar registros para ayudar";
