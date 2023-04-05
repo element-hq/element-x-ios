@@ -15,8 +15,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup project
-        run: swift run tools setup-project
+      - name: Setup Localazy
+        run: brew install localazy/tools/localazy
 
       - name: Download All Translations
         run: swift run tools download-translations --all
