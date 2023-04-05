@@ -32,7 +32,6 @@ enum ReportContentCoordinatorAction {
 final class ReportContentCoordinator: CoordinatorProtocol {
     private let parameters: ReportContentCoordinatorParameters
     private var viewModel: ReportContentViewModelProtocol
-    private var viewModelSubscription: AnyCancellable?
     private var cancellables: Set<AnyCancellable> = .init()
     
     var callback: ((ReportContentCoordinatorAction) -> Void)?
