@@ -28,7 +28,7 @@ struct BuildSDK: ParsableCommand {
     var profile: Profile = .debug
     
     private var parentDirectoryURL: URL { Utilities.projectDirectoryURL.deletingLastPathComponent() }
-    private var sdkDirectoryURL: URL { parentDirectoryURL.appending(path: "matrix-rust-sdk") }
+    private var sdkDirectoryURL: URL { parentDirectoryURL.appendingPathComponent("matrix-rust-sdk") }
     
     enum Error: LocalizedError {
         case rustupOutputFailure
@@ -109,7 +109,7 @@ struct BuildSDK: ParsableCommand {
     
     /// Update project.yml with the local path of the SDK.
     func updateProjectYAML() throws {
-        let yamlURL = Utilities.projectDirectoryURL.appending(path: "project.yml")
+        let yamlURL = Utilities.projectDirectoryURL.appendingPathComponent("project.yml")
         let yamlString = try String(contentsOf: yamlURL)
         guard var projectConfig = try Yams.compose(yaml: yamlString) else { throw Error.failureParsingProjectYAML }
         
