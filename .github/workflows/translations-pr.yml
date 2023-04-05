@@ -1,0 +1,37 @@
+name: Open Translations PR
+on:
+  schedule:
+    # At 00:00 on every Monday UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  open-translations-pr:
+    runs-on: macos-12
+    # Skip in forks
+    if: github.repository == 'vector-im/element-x-ios'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup Localazy and Mint
+        run: brew install mint localazy/tools/localazy
+
+      - name: Download All Translations
+        run: swift run tools download-strings --all-languages
+
+      - name: Verify Translations
+        run: swift run tools locheck
+
+      - name: Create PR for Translations
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: Translations update
+          title: Translations update
+          body: |
+            - Translations update
+          branch: translations/update
+          base: develop
+          add-paths: |
+            *.strings
+            *.stringsdict
