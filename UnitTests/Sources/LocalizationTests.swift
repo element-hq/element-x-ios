@@ -33,7 +33,7 @@ class LocalizationTests: XCTestCase {
 
     /// Test fallback language for a language not supported at all
     func testStripRegionIfRegionalTranslationIsNotAvailable() {
-        //  set app language to something that includes also a region (it-IT)
+        // set app language to something that includes also a region (it-IT)
         Bundle.elementLanguage = "it-IT"
 
         XCTAssertEqual(L10n.testLanguageIdentifier, "it")
