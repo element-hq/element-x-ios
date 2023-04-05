@@ -34,7 +34,7 @@ class DeveloperOptionsScreenViewModel: DeveloperOptionsScreenViewModelType, Deve
             .store(in: &cancellables)
     }
     
-    override func process(viewAction: DeveloperOptionsScreenViewAction) async {
+    override func process(viewAction: DeveloperOptionsScreenViewAction) {
         switch viewAction {
         case .changedShouldCollapseRoomStateEvents:
             ServiceLocator.shared.settings.shouldCollapseRoomStateEvents = state.bindings.shouldCollapseRoomStateEvents

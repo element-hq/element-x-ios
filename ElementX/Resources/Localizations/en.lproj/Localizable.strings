@@ -49,6 +49,7 @@
 "common_audio" = "Audio";
 "common_bubbles" = "Bubbles";
 "common_creating_room" = "Creating room…";
+"common_current_user_left_room" = "Left room";
 "common_decryption_error" = "Decryption error";
 "common_developer_options" = "Developer options";
 "common_edited_suffix" = "(edited)";
@@ -276,3 +277,5 @@
 "state_event_room_unban" = "%1$@ unbanned %2$@";
 "state_event_room_unban_by_you" = "You unbanned %1$@";
 "state_event_room_unknown_membership_change" = "%1$@ made an unknown change to their membership";
+"test_language_identifier" = "en";
+"test_untranslated_default_language_identifier" = "en";

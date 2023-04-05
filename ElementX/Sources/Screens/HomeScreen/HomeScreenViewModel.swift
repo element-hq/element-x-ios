@@ -133,7 +133,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     
     // MARK: - Public
     
-    override func process(viewAction: HomeScreenViewAction) async {
+    override func process(viewAction: HomeScreenViewAction) {
         switch viewAction {
         case .selectRoom(let roomIdentifier):
             callback?(.presentRoom(roomIdentifier: roomIdentifier))

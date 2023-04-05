@@ -73,7 +73,7 @@ class SettingsScreenViewModel: SettingsScreenViewModelType, SettingsScreenViewMo
             .store(in: &cancellables)
     }
     
-    override func process(viewAction: SettingsScreenViewAction) async {
+    override func process(viewAction: SettingsScreenViewAction) {
         switch viewAction {
         case .close:
             callback?(.close)

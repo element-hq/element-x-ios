@@ -71,24 +71,12 @@ public enum UntranslatedL10n {
 
 extension UntranslatedL10n {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
-    let languages = Bundle.preferredLanguages
-
-    for language in languages {
-      let translation = trIn(language, table, key, args)
-      if translation != key {
-        return translation
-      }
-    }
-    return key
-  }
-
-  private static func trIn(_ language: String, _ table: String, _ key: String, _ args: CVarArg...) -> String {
-    guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: language) else {
+    guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: "en") else {
       // no translations for the desired language
       return key
     }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
-    return String(format: format, locale: Locale(identifier: language), arguments: args)
+    return String(format: format, locale: Locale(identifier: "en"), arguments: args)
   }
 }
 

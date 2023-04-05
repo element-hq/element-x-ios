@@ -14,12 +14,11 @@
 // limitations under the License.
 //
 
-import Combine
+@testable import ElementX
 
-extension Publisher where Self.Failure == Never {
-    func weakAssign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output>, on object: Root) -> AnyCancellable {
-        sink { [weak object] value in
-            object?[keyPath: keyPath] = value
-        }
+extension ViewModelContext {
+    @discardableResult
+    func nextViewState() async -> ViewState? {
+        await $viewState.nextValue
     }
 }

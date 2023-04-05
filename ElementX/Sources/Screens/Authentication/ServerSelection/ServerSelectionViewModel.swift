@@ -28,7 +28,7 @@ class ServerSelectionViewModel: ServerSelectionViewModelType, ServerSelectionVie
                                                               isModallyPresented: isModallyPresented))
     }
 
-    override func process(viewAction: ServerSelectionViewAction) async {
+    override func process(viewAction: ServerSelectionViewAction) {
         switch viewAction {
         case .confirm:
             callback?(.confirm(homeserverAddress: state.bindings.homeserverAddress))

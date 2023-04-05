@@ -39,4 +39,22 @@ class StartChatScreenUITests: XCTestCase {
         XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 1)
         app.assertScreenshot(.startChat, step: 2)
     }
+    
+    func testSearchExactMatrixID() {
+        let app = Application.launch(.startChatWithSearchResults)
+        let searchField = app.searchFields.firstMatch
+        searchField.clearAndTypeText("@a:b.com")
+        XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
+        XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 2)
+        app.assertScreenshot(.startChat, step: 3)
+    }
+    
+    func testSearchExactNotExistingMatrixID() {
+        let app = Application.launch(.startChatSearchingNonexistentID)
+        let searchField = app.searchFields.firstMatch
+        searchField.clearAndTypeText("@a:b.com")
+        XCTAssertFalse(app.staticTexts[A11yIdentifiers.startChatScreen.searchNoResults].waitForExistence(timeout: 1.0))
+        XCTAssertEqual(app.collectionViews.firstMatch.cells.count, 2)
+        app.assertScreenshot(.startChat, step: 4)
+    }
 }

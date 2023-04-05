@@ -23,12 +23,12 @@ class FilePreviewScreenViewModelTests: XCTestCase {
     var viewModel: FilePreviewViewModelProtocol!
     var context: FilePreviewViewModelType.Context!
 
-    @MainActor override func setUpWithError() throws {
+    override func setUpWithError() throws {
         viewModel = FilePreviewViewModel(mediaFile: .unmanaged(url: URL(staticString: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf")))
         context = viewModel.context
     }
 
-    @MainActor func testCancel() async throws {
+    func testCancel() async throws {
         var correctResult = false
         viewModel.callback = { result in
             switch result {

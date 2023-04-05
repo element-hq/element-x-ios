@@ -22,19 +22,4 @@ class ReportContentScreenUITests: XCTestCase {
         let app = Application.launch(.reportContent)
         app.assertScreenshot(.reportContent, step: 0)
     }
-    
-    func testToggleIgnoreUser() {
-        let app = Application.launch(.reportContent)
-        
-        // Don't know why, but there's an issue on CI where the toggle is tapped but doesn't respond. Waiting for
-        // it fixes this (even it it already exists). Reproducible by running the test after quitting the simulator.
-        let sendingLogsToggle = app.switches[A11yIdentifiers.reportContent.ignoreUser]
-        XCTAssertTrue(sendingLogsToggle.waitForExistence(timeout: 1))
-        XCTAssertFalse(sendingLogsToggle.isOn)
-        
-        sendingLogsToggle.tap()
-        
-        XCTAssertTrue(sendingLogsToggle.isOn)
-        app.assertScreenshot(.reportContent, step: 1)
-    }
 }

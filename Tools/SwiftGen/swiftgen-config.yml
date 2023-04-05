@@ -19,7 +19,7 @@ strings:
   - inputs: Resources/Localizations/en.lproj
     filter: Untranslated*
     outputs:
-      templatePath: Templates/Strings/structured-swift5-element.stencil
+      templatePath: Templates/Strings/structured-swift5-element-untranslated.stencil
       output: Strings+Untranslated.swift
       params:
         enumName: UntranslatedL10n

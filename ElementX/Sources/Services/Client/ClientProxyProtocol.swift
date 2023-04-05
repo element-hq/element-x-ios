@@ -32,6 +32,7 @@ enum ClientProxyError: Error {
     case failedRetrievingSessionVerificationController
     case failedLoadingMedia
     case failedSearchingUsers
+    case failedGettingUserProfile
 }
 
 enum SlidingSyncConstants {
@@ -94,4 +95,6 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     func setPusher(with configuration: PusherConfiguration) async throws
     
     func searchUsers(searchTerm: String, limit: UInt) async -> Result<SearchUsersResults, ClientProxyError>
+    
+    func getProfile(for userID: String) async -> Result<UserProfile, ClientProxyError>
 }

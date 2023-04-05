@@ -32,21 +32,22 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMemberDetailsViewAction) async {
+    override func process(viewAction: RoomMemberDetailsViewAction) {
         switch viewAction {
         case .showUnignoreAlert:
             state.bindings.ignoreUserAlert = .init(action: .unignore)
         case .showIgnoreAlert:
             state.bindings.ignoreUserAlert = .init(action: .ignore)
         case .ignoreConfirmed:
-            await ignoreUser()
+            Task { await ignoreUser() }
         case .unignoreConfirmed:
-            await unignoreUser()
+            Task { await unignoreUser() }
         }
     }
 
     // MARK: - Private
 
+    @MainActor
     private func ignoreUser() async {
         state.isProcessingIgnoreRequest = true
         let result = await roomMemberProxy.ignoreUser()
@@ -59,6 +60,7 @@ class RoomMemberDetailsViewModel: RoomMemberDetailsViewModelType, RoomMemberDeta
         }
     }
 
+    @MainActor
     private func unignoreUser() async {
         state.isProcessingIgnoreRequest = true
         let result = await roomMemberProxy.unignoreUser()

@@ -24,9 +24,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     var callback: ((StartChatViewModelAction) -> Void)?
     weak var userIndicatorController: UserIndicatorControllerProtocol?
-    var searchTask: Task<Void, Error>? {
-        didSet { oldValue?.cancel() }
-    }
     
     init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.userSession = userSession
@@ -39,7 +36,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     // MARK: - Public
     
-    override func process(viewAction: StartChatViewAction) async {
+    override func process(viewAction: StartChatViewAction) {
         switch viewAction {
         case .close:
             callback?(.close)
@@ -50,7 +47,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .selectUser(let user):
             showLoadingIndicator()
             Task {
-                let currentDirectRoom = await userSession.clientProxy.directRoomForUserID(user.userID)
+                let currentDirectRoom = await clientProxy.directRoomForUserID(user.userID)
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
                     self.hideLoadingIndicator()
@@ -65,7 +62,9 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    func displayError(_ type: ClientProxyError) {
+    // MARK: - Private
+    
+    private func displayError(_ type: ClientProxyError) {
         switch type {
         case .failedRetrievingDirectRoom:
             state.bindings.alertInfo = AlertInfo(id: type,
@@ -80,8 +79,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    // MARK: - Private
-    
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
@@ -92,22 +89,56 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             }
             .switchToLatest()
             .removeDuplicates()
-            .sink { [weak self] query in
-                self?.updateState(searchQuery: query)
+            .sink { [weak self] _ in
+                self?.fetchData()
             }
             .store(in: &cancellables)
     }
     
-    private func updateState(searchQuery: String) {
-        searchTask = nil
-        
-        if searchQuery.count < 3 {
+    private func fetchData() {
+        guard searchQuery.count >= 3 else {
             fetchSuggestions()
-        } else if MatrixEntityRegex.isMatrixUserIdentifier(searchQuery) {
-            state.usersSection = .init(type: .searchResult, users: [UserProfile(userID: searchQuery)])
-        } else {
-            searchUsers(searchTerm: searchQuery)
+            return
         }
+        
+        Task {
+            await searchProfiles()
+        }
+    }
+    
+    private func searchProfiles() async {
+        // copies the current query to check later if fetched data must be shown or not
+        let committedQuery = searchQuery
+        
+        async let queriedProfile = getProfileIfPossible()
+        async let searchedUsers = clientProxy.searchUsers(searchTerm: committedQuery, limit: 5)
+        
+        await updateState(committedQuery: committedQuery,
+                          queriedProfile: queriedProfile,
+                          searchResults: try? searchedUsers.get())
+    }
+    
+    private func updateState(committedQuery: String, queriedProfile: UserProfile?, searchResults: SearchUsersResults?) {
+        guard committedQuery == searchQuery else {
+            return
+        }
+        
+        let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
+        let allResults = merge(localProfile: localProfile, searchResults: searchResults?.results)
+        
+        state.usersSection = .init(type: .searchResult, users: allResults)
+    }
+    
+    private func merge(localProfile: UserProfile?, searchResults: [UserProfile]?) -> [UserProfile] {
+        guard let localProfile else {
+            return searchResults ?? []
+        }
+        
+        let filteredSearchResult = searchResults?.filter {
+            $0.userID != localProfile.userID
+        } ?? []
+
+        return [localProfile] + filteredSearchResult
     }
     
     private func fetchSuggestions() {
@@ -116,7 +147,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func createDirectRoom(with user: UserProfile) async {
         showLoadingIndicator()
-        let result = await userSession.clientProxy.createDirectRoom(with: user.userID)
+        let result = await clientProxy.createDirectRoom(with: user.userID)
         hideLoadingIndicator()
         switch result {
         case .success(let roomId):
@@ -126,17 +157,20 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    private func searchUsers(searchTerm: String) {
-        searchTask = Task { @MainActor in
-            guard
-                case let .success(result) = await userSession.clientProxy.searchUsers(searchTerm: searchTerm, limit: 5),
-                !Task.isCancelled
-            else {
-                return
-            }
-            
-            state.usersSection = .init(type: .searchResult, users: result.results)
+    private func getProfileIfPossible() async -> UserProfile? {
+        guard searchQuery.isMatrixIdentifier else {
+            return nil
         }
+        
+        return try? await clientProxy.getProfile(for: searchQuery).get()
+    }
+    
+    private var clientProxy: ClientProxyProtocol {
+        userSession.clientProxy
+    }
+    
+    private var searchQuery: String {
+        context.searchQuery
     }
     
     // MARK: Loading indicator
@@ -152,5 +186,20 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func hideLoadingIndicator() {
         userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
+    }
+}
+
+private extension String {
+    var isMatrixIdentifier: Bool {
+        MatrixEntityRegex.isMatrixUserIdentifier(self)
+    }
+}
+
+private extension UserProfile {
+    init?(searchQuery: String) {
+        guard searchQuery.isMatrixIdentifier else {
+            return nil
+        }
+        self.init(userID: searchQuery)
     }
 }

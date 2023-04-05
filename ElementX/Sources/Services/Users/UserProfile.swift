@@ -33,6 +33,12 @@ struct UserProfile {
         displayName = sdkUserProfile.displayName
         avatarURL = sdkUserProfile.avatarUrl.flatMap(URL.init(string:))
     }
+    
+    /// A user is meant to be "verified" when the GET profile returns back either the display name or the avatar
+    /// If isn't we aren't sure that the related matrix id really exists.
+    var isVerified: Bool {
+        displayName != nil || avatarURL != nil
+    }
 }
 
 struct SearchUsersResults {
