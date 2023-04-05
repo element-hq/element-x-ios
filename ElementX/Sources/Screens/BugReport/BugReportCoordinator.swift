@@ -53,7 +53,7 @@ final class BugReportCoordinator: CoordinatorProtocol {
     
     func start() {
         viewModelSubscription = viewModel
-            .callbackPublisher
+            .actions
             .sink { [weak self] result in
                 guard let self else { return }
                 MXLog.info("BugReportViewModel did complete with result: \(result).")

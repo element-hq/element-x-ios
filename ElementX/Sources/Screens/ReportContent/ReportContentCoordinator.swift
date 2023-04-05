@@ -45,7 +45,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModelSubscription = viewModel.callbackPublisher
+        viewModelSubscription = viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {

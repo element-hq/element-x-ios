@@ -19,6 +19,6 @@ import Foundation
 
 @MainActor
 protocol ReportContentViewModelProtocol {
-    var callbackPublisher: AnyPublisher<ReportContentViewModelAction, Never> { get }
+    var actions: AnyPublisher<ReportContentViewModelAction, Never> { get }
     var context: ReportContentViewModelType.Context { get }
 }

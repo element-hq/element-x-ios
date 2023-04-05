@@ -23,10 +23,10 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let userID: String
     private let deviceID: String?
-    private let callbackSubject: PassthroughSubject<BugReportViewModelAction, Never> = .init()
+    private let actionsSubject: PassthroughSubject<BugReportViewModelAction, Never> = .init()
 
-    var callbackPublisher: AnyPublisher<BugReportViewModelAction, Never> {
-        callbackSubject.eraseToAnyPublisher()
+    var actions: AnyPublisher<BugReportViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
     }
     
     init(bugReportService: BugReportServiceProtocol,
@@ -49,7 +49,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     override func process(viewAction: BugReportViewAction) {
         switch viewAction {
         case .cancel:
-            callbackSubject.send(.cancel)
+            actionsSubject.send(.cancel)
         case .submit:
             Task { await submitBugReport() }
         case .removeScreenshot:
@@ -63,7 +63,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
 
     private func submitBugReport() async {
         let progressTracker = ProgressTracker()
-        callbackSubject.send(.submitStarted(progressTracker: progressTracker))
+        actionsSubject.send(.submitStarted(progressTracker: progressTracker))
         do {
             var files: [URL] = []
             if let screenshot = context.viewState.screenshot {
@@ -82,10 +82,10 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
             let result = try await bugReportService.submitBugReport(bugReport,
                                                                     progressListener: progressTracker)
             MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")
-            callbackSubject.send(.submitFinished)
+            actionsSubject.send(.submitFinished)
         } catch {
             MXLog.error("SubmitBugReport failed: \(error)")
-            callbackSubject.send(.submitFailed(error: error))
+            actionsSubject.send(.submitFailed(error: error))
         }
     }
 }

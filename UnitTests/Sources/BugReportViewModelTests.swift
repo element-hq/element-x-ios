@@ -71,7 +71,7 @@ class BugReportViewModelTests: XCTestCase {
         context.send(viewAction: .submit)
         
         _ = await viewModel
-            .callbackPublisher
+            .actions
             .filter {
                 guard case .submitFinished = $0 else {
                     return false
@@ -96,7 +96,7 @@ class BugReportViewModelTests: XCTestCase {
         context.send(viewAction: .submit)
         
         _ = await viewModel
-            .callbackPublisher
+            .actions
             .filter {
                 guard case .submitFailed = $0 else {
                     return false

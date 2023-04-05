@@ -18,6 +18,6 @@ import Combine
 
 @MainActor
 protocol BugReportViewModelProtocol {
-    var callbackPublisher: AnyPublisher<BugReportViewModelAction, Never> { get }
+    var actions: AnyPublisher<BugReportViewModelAction, Never> { get }
     var context: BugReportViewModelType.Context { get }
 }
