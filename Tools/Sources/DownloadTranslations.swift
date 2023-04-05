@@ -12,12 +12,7 @@ struct DownloadTranslations: ParsableCommand {
     }
 
     private func localazyDownload() throws {
-        let json: String
-        if all {
-            json = "localazy-all.json"
-        } else {
-            json = "localazy-en.json"
-        }
+        let json = all ? "localazy-all.json" : "localazy-en.json"
         try Utilities.zsh("localazy download --config \(json)")
     }
 }
