@@ -112,6 +112,8 @@ public enum L10n {
   public static var commonBubbles: String { return L10n.tr("Localizable", "common_bubbles") }
   /// Creating room…
   public static var commonCreatingRoom: String { return L10n.tr("Localizable", "common_creating_room") }
+  /// Left room
+  public static var commonCurrentUserLeftRoom: String { return L10n.tr("Localizable", "common_current_user_left_room") }
   /// Decryption error
   public static var commonDecryptionError: String { return L10n.tr("Localizable", "common_decryption_error") }
   /// Developer options
@@ -680,6 +682,10 @@ public enum L10n {
   public static func stateEventRoomUnknownMembershipChange(_ p1: Any) -> String {
     return L10n.tr("Localizable", "state_event_room_unknown_membership_change", String(describing: p1))
   }
+  /// en
+  public static var testLanguageIdentifier: String { return L10n.tr("Localizable", "test_language_identifier") }
+  /// en
+  public static var testUntranslatedDefaultLanguageIdentifier: String { return L10n.tr("Localizable", "test_untranslated_default_language_identifier") }
 }
 // swiftlint:enable explicit_type_interface function_parameter_count identifier_name line_length
 // swiftlint:enable nesting type_body_length type_name vertical_whitespace_opening_braces
@@ -691,18 +697,22 @@ extension L10n {
     let languages = Bundle.preferredLanguages
 
     for language in languages {
-      let translation = trIn(language, table, key, args)
-      if translation != key {
+      if let translation = trIn(language, table, key, args) {
         return translation
+        // If we can't find a translation for this language
+        // we check if we can find one by stripping the region
+      } else if let langCode = Locale(identifier: language).language.languageCode?.identifier,
+        let translation = trIn(langCode, table, key, args) {
+          return translation
+        }
       }
-    }
     return key
-  }
+    }
 
-  private static func trIn(_ language: String, _ table: String, _ key: String, _ args: CVarArg...) -> String {
+  private static func trIn(_ language: String, _ table: String, _ key: String, _ args: CVarArg...) -> String? {
     guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: language) else {
       // no translations for the desired language
-      return key
+      return nil
     }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
     return String(format: format, locale: Locale(identifier: language), arguments: args)
