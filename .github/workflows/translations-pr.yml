@@ -28,4 +28,7 @@ jobs:
           body: |
             - Translations updates
           branch: translations/update
-          base: develop          add-path: |            *.strings            *.stringsdict
+          base: develop
+          add-path: |
+            *.strings
+            *.stringsdict
