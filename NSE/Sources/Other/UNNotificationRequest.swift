@@ -29,4 +29,8 @@ extension UNNotificationRequest {
     var unreadCount: Int? {
         content.userInfo[NotificationConstants.UserInfoKey.unreadCount] as? Int
     }
+
+    var pusherNotificationClientIdentifier: String? {
+        content.userInfo[NotificationConstants.UserInfoKey.pusherNotificationClientIdentifier] as? String
+    }
 }

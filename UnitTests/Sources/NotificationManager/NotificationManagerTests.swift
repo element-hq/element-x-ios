@@ -68,16 +68,11 @@ final class NotificationManagerTests: XCTestCase {
         }
         XCTAssertEqual(data.url, settings?.pushGatewayBaseURL.absoluteString)
         XCTAssertEqual(data.format, .eventIdOnly)
-        let defaultPayload: [AnyHashable: Any] = [
-            "aps": [
-                "mutable-content": 1,
-                "alert": [
-                    "loc-key": "Notification",
-                    "loc-args": []
-                ]
-            ]
-        ]
-        XCTAssertEqual(data.defaultPayload, defaultPayload.jsonString)
+        let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
+                                                      alert: APSAlert(locKey: "Notification",
+                                                                      locArgs: [])),
+                                         pusherNotificationClientIdentifier: nil)
+        XCTAssertEqual(data.defaultPayload, try defaultPayload.toJsonString())
     }
     
     func test_whenRegisteredAndPusherTagNotSetInSettings_tagGeneratedAndSavedInSettings() async throws {

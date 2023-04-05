@@ -53,7 +53,6 @@ extension NotificationItemProxy {
     /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
     func process(with roomId: String,
                  mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent? {
-        nil
 //        switch timelineItemProxy {
 //        case .event(let eventItem):
 //            guard eventItem.isMessage else {
@@ -73,6 +72,9 @@ extension NotificationItemProxy {
 //        case .other:
 //            return nil
 //        }
+        // For now we can't solve the sender ID nor get the type of message that we are displaying
+        // so we are just going to process all of them as common
+        try await processCommon(senderId: "undefined", roomId: roomId, mediaProvider: mediaProvider)
     }
 
     // MARK: - Private

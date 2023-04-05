@@ -48,7 +48,7 @@ struct RoomMemberDetailsScreen: View {
                     ShareLink(item: permalink) {
                         Image(systemName: "square.and.arrow.up")
                     }
-                    .buttonStyle(FormActionButtonStyle(title: L10n.actionShareLink))
+                    .buttonStyle(FormActionButtonStyle(title: L10n.actionShare))
                 }
                 .padding(.top, 32)
             }

@@ -84,24 +84,20 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     
     private func setPusher(with deviceToken: Data, clientProxy: ClientProxyProtocol) async -> Bool {
         do {
-            let defaultPayload = [
-                "aps": [
-                    "mutable-content": 1,
-                    "alert": [
-                        "loc-key": "Notification",
-                        "loc-args": []
-                    ]
-                ]
-            ]
-            let configuration = await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
-                                                                             appId: ServiceLocator.shared.settings.pusherAppId),
-                                                          kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
-                                                                                  format: .eventIdOnly,
-                                                                                  defaultPayload: defaultPayload.jsonString)),
-                                                          appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
-                                                          deviceDisplayName: UIDevice.current.name,
-                                                          profileTag: pusherProfileTag(),
-                                                          lang: Bundle.preferredLanguages.first ?? "en")
+            let defaultPayload = APNSPayload(aps: APSInfo(mutableContent: 1,
+                                                          alert: APSAlert(locKey: "Notification",
+                                                                          locArgs: [])),
+                                             pusherNotificationClientIdentifier: clientProxy.restorationToken?.pusherNotificationClientIdentifier)
+
+            let configuration = try await PusherConfiguration(identifiers: .init(pushkey: deviceToken.base64EncodedString(),
+                                                                                 appId: ServiceLocator.shared.settings.pusherAppId),
+                                                              kind: .http(data: .init(url: ServiceLocator.shared.settings.pushGatewayBaseURL.absoluteString,
+                                                                                      format: .eventIdOnly,
+                                                                                      defaultPayload: defaultPayload.toJsonString())),
+                                                              appDisplayName: "\(InfoPlistReader.main.bundleDisplayName) (iOS)",
+                                                              deviceDisplayName: UIDevice.current.name,
+                                                              profileTag: pusherProfileTag(),
+                                                              lang: Bundle.preferredLanguages.first ?? "en")
             try await clientProxy.setPusher(with: configuration)
             MXLog.info("[NotificationManager] set pusher succeeded")
             return true

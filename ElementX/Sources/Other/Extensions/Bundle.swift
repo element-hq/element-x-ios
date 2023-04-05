@@ -27,7 +27,7 @@ public extension Bundle {
             return bundle
         }
         
-        guard let lprojURL = url(forResource: language, withExtension: "lproj") else {
+        guard let lprojURL = Bundle.app.url(forResource: language, withExtension: "lproj") else {
             return nil
         }
         
@@ -52,6 +52,18 @@ public extension Bundle {
         didSet {
             preferredLanguages = calculatePreferredLanguages()
         }
+    }
+
+    static var app: Bundle {
+        var bundle = Bundle.main
+        if bundle.bundleURL.pathExtension == "appex" {
+            // Peel off two directory levels - MY_APP.app/PlugIns/MY_APP_EXTENSION.appex
+            let url = bundle.bundleURL.deletingLastPathComponent().deletingLastPathComponent()
+            if let otherBundle = Bundle(url: url) {
+                bundle = otherBundle
+            }
+        }
+        return bundle
     }
 
     /// Preferred languages in the priority order.
