@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct TemplateCoordinatorParameters {
@@ -30,6 +31,7 @@ enum TemplateCoordinatorAction {
 final class TemplateCoordinator: CoordinatorProtocol {
     private let parameters: TemplateCoordinatorParameters
     private var viewModel: TemplateViewModelProtocol
+    private var cancellables: Set<AnyCancellable> = .init()
     
     var callback: ((TemplateCoordinatorAction) -> Void)?
     
@@ -40,7 +42,7 @@ final class TemplateCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.callback = { [weak self] action in
+        viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .accept:
@@ -50,6 +52,7 @@ final class TemplateCoordinator: CoordinatorProtocol {
                 self.callback?(.cancel)
             }
         }
+        .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {

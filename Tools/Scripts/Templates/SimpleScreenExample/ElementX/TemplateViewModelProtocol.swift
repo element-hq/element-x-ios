@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol TemplateViewModelProtocol {
-    var callback: ((TemplateViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<TemplateViewModelAction, Never> { get }
     var context: TemplateViewModelType.Context { get }
 }

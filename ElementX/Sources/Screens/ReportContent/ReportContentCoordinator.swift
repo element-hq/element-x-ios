@@ -33,6 +33,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
     private let parameters: ReportContentCoordinatorParameters
     private var viewModel: ReportContentViewModelProtocol
     private var viewModelSubscription: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = .init()
     
     var callback: ((ReportContentCoordinatorAction) -> Void)?
     
@@ -45,7 +46,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModelSubscription = viewModel.actions
+        viewModel.actions
             .sink { [weak self] action in
                 guard let self else { return }
                 switch action {
@@ -61,6 +62,7 @@ final class ReportContentCoordinator: CoordinatorProtocol {
                     self.callback?(.cancel)
                 }
             }
+            .store(in: &cancellables)
     }
 
     func stop() {

@@ -35,7 +35,7 @@ struct BugReportCoordinatorParameters {
 final class BugReportCoordinator: CoordinatorProtocol {
     private let parameters: BugReportCoordinatorParameters
     private var viewModel: BugReportViewModelProtocol
-    private var viewModelSubscription: AnyCancellable?
+    private var cancellables: Set<AnyCancellable> = .init()
 
     var completion: ((BugReportCoordinatorResult) -> Void)?
     
@@ -52,7 +52,7 @@ final class BugReportCoordinator: CoordinatorProtocol {
     // MARK: - Public
     
     func start() {
-        viewModelSubscription = viewModel
+        viewModel
             .actions
             .sink { [weak self] result in
                 guard let self else { return }
@@ -70,6 +70,7 @@ final class BugReportCoordinator: CoordinatorProtocol {
                     self.showError(label: error.localizedDescription)
                 }
             }
+            .store(in: &cancellables)
     }
 
     func stop() {
