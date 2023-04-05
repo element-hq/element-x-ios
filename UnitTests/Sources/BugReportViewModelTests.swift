@@ -72,13 +72,14 @@ class BugReportViewModelTests: XCTestCase {
         
         _ = await viewModel
             .actions
-            .filter {
+            .values
+            .first {
                 guard case .submitFinished = $0 else {
                     return false
                 }
                 return true
             }
-            .firstValue
+        
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
     }
@@ -97,13 +98,14 @@ class BugReportViewModelTests: XCTestCase {
         
         _ = await viewModel
             .actions
-            .filter {
+            .values
+            .first {
                 guard case .submitFailed = $0 else {
                     return false
                 }
                 return true
             }
-            .firstValue
+
         XCTAssert(mockService.submitBugReportProgressListenerCallsCount == 1)
         XCTAssert(mockService.submitBugReportProgressListenerReceivedArguments?.bugReport == BugReport(userID: "@mock.client.com", deviceID: nil, text: "", includeLogs: true, includeCrashLog: true, githubLabels: [], files: []))
     }

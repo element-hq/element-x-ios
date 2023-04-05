@@ -14,18 +14,8 @@
 // limitations under the License.
 //
 
-import Combine
-
-extension Published.Publisher {
-    /// Returns the next output from the publisher skipping the current value stored into it (which is readable from the @Published property itself).
-    /// - Returns: the next output from the publisher
-    var nextValue: Output? {
-        get async {
-            var iterator = values.makeAsyncIterator()
-            
-            // skips the publisher's current value
-            _ = await iterator.next()
-            return await iterator.next()
-        }
+extension AsyncSequence {
+    func first() async rethrows -> Self.Element? {
+        try await first { _ in true }
     }
 }

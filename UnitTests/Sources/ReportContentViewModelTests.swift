@@ -37,7 +37,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
         viewModel.state.bindings.ignoreUser = false
         viewModel.context.send(viewAction: .submit)
         
-        _ = await viewModel.actions.firstValue
+        _ = await viewModel.actions.values.first()
         
         // Then the content should be reported, but the user should not be included.
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
@@ -61,7 +61,7 @@ class ReportContentScreenViewModelTests: XCTestCase {
         viewModel.state.bindings.ignoreUser = true
         viewModel.context.send(viewAction: .submit)
         
-        _ = await viewModel.actions.firstValue
+        _ = await viewModel.actions.values.first()
         
         // Then the content should be reported, and the user should be ignored.
         XCTAssertEqual(roomProxy.reportContentReasonCallsCount, 1, "The content should always be reported.")
