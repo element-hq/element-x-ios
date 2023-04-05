@@ -322,7 +322,7 @@ class MockScreen: Identifiable {
             let coordinator = StartChatCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
-        case .startChatSearchingNonExistingID:
+        case .startChatSearchingNonexistentID:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
             clientProxy.searchUsersResult = .success(.init(results: [.mockAlice], limited: true))
