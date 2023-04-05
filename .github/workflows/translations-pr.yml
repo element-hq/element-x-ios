@@ -30,6 +30,6 @@ jobs:
             - Translations updates
           branch: translations/update
           base: develop
-          add-path: |
+          add-paths: |
             *.strings
             *.stringsdict
