@@ -1,0 +1,31 @@
+name: Sync Localazy
+on:
+  schedule:
+    # At 00:00 on every Monday UTC
+    - cron: '0 0 * * 1'
+  workflow_dispatch:
+
+jobs:
+  open-translations-pr:
+    runs-on: macos-12
+    # Skip in forks
+    if: github.repository == 'vector-im/element-x-ios'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Setup project
+        run: swift run tools setup-project
+
+      - name: Download All Translations
+        run: swift run tools download-translations --all
+
+      - name: Create PR for Translations
+        uses: peter-evans/create-pull-request@v5
+        with:
+          commit-message: Translations updates
+          title: Translations updates
+          body: |
+            - Translations updates
+          branch: translations/update
+          base: develop
