@@ -13,13 +13,13 @@ enum Utilities {
         }
     }
 
-    static var projectDirectoryURL: URL { URL(filePath: FileManager.default.currentDirectoryPath) }
+    static var projectDirectoryURL: URL { URL(string: FileManager.default.currentDirectoryPath)! }
 
     /// Runs a command in zsh.
     @discardableResult
     static func zsh(_ command: String, workingDirectoryURL: URL = projectDirectoryURL) throws -> String? {
         let process = Process()
-        process.executableURL = URL(filePath: "/bin/zsh")
+        process.executableURL = URL(string: "/bin/zsh")
         process.arguments = ["-cu", command]
         process.currentDirectoryURL = workingDirectoryURL
 
