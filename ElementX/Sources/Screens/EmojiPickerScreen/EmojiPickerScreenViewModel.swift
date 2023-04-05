@@ -32,11 +32,13 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
     
     // MARK: - Public
     
-    override func process(viewAction: EmojiPickerScreenViewAction) async {
+    override func process(viewAction: EmojiPickerScreenViewAction) {
         switch viewAction {
         case let .search(searchString: searchString):
-            let categories = await emojiProvider.getCategories(searchString: searchString)
-            state.categories = convert(emojiCategories: categories)
+            Task {
+                let categories = await emojiProvider.getCategories(searchString: searchString)
+                state.categories = convert(emojiCategories: categories)
+            }
         case let .emojiTapped(emoji: emoji):
             callback?(.emojiSelected(emoji: emoji.value))
         case .dismiss:

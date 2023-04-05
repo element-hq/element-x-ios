@@ -14,12 +14,17 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias TemplateViewModelType = StateStoreViewModel<TemplateViewState, TemplateViewAction>
 
 class TemplateViewModel: TemplateViewModelType, TemplateViewModelProtocol {
-    var callback: ((TemplateViewModelAction) -> Void)?
+    private var actionsSubject: PassthroughSubject<TemplateViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<TemplateViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
 
     init(promptType: TemplatePromptType, initialCount: Int = 0) {
         super.init(initialViewState: TemplateViewState(promptType: promptType, count: 0))
@@ -27,12 +32,12 @@ class TemplateViewModel: TemplateViewModelType, TemplateViewModelProtocol {
     
     // MARK: - Public
     
-    override func process(viewAction: TemplateViewAction) async {
+    override func process(viewAction: TemplateViewAction) {
         switch viewAction {
         case .accept:
-            callback?(.accept)
+            actionsSubject.send(.accept)
         case .cancel:
-            callback?(.cancel)
+            actionsSubject.send(.cancel)
         case .incrementCount:
             state.count += 1
         case .decrementCount:

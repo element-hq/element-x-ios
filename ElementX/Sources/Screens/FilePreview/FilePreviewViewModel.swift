@@ -25,7 +25,7 @@ class FilePreviewViewModel: FilePreviewViewModelType, FilePreviewViewModelProtoc
         super.init(initialViewState: FilePreviewViewState(mediaFile: mediaFile, title: title))
     }
     
-    override func process(viewAction: FilePreviewViewAction) async {
+    override func process(viewAction: FilePreviewViewAction) {
         switch viewAction {
         case .cancel:
             callback?(.cancel)

@@ -35,7 +35,7 @@ class RoomMembersListViewModel: RoomMembersListViewModelType, RoomMembersListVie
     
     // MARK: - Public
     
-    override func process(viewAction: RoomMembersListViewAction) async {
+    override func process(viewAction: RoomMembersListViewAction) {
         switch viewAction {
         case .selectMember(let id):
             guard let member = members.first(where: { $0.userID == id }) else {

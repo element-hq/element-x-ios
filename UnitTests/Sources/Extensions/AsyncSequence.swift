@@ -14,12 +14,8 @@
 // limitations under the License.
 //
 
-import Combine
-
-extension Publisher where Self.Failure == Never {
-    func weakAssign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output>, on object: Root) -> AnyCancellable {
-        sink { [weak object] value in
-            object?[keyPath: keyPath] = value
-        }
+extension AsyncSequence {
+    func first() async rethrows -> Self.Element? {
+        try await first { _ in true }
     }
 }

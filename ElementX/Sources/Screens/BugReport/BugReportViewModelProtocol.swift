@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol BugReportViewModelProtocol {
-    var callback: ((BugReportViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<BugReportViewModelAction, Never> { get }
     var context: BugReportViewModelType.Context { get }
 }
