@@ -4,24 +4,30 @@
       "id" : "AEF793E9-1B0B-4383-BFE4-68E19BAEDC7F",
       "name" : "Default",
       "options" : {
-        "environmentVariableEntries" : [
-          {
-            "key" : "INTEGRATION_TESTS_HOST",
-            "value" : "${INTEGRATION_TESTS_HOST}"
-          },
-          {
-            "key" : "INTEGRATION_TESTS_PASSWORD",
-            "value" : "${INTEGRATION_TESTS_PASSWORD}"
-          },
-          {
-            "key" : "INTEGRATION_TESTS_USERNAME",
-            "value" : "${INTEGRATION_TESTS_USERNAME}"
-          }
-        ]
+
       }
     }
   ],
   "defaultOptions" : {
+    "environmentVariableEntries" : [
+      {
+        "key" : "INTEGRATION_TESTS_HOST",
+        "value" : "${INTEGRATION_TESTS_HOST}"
+      },
+      {
+        "key" : "INTEGRATION_TESTS_PASSWORD",
+        "value" : "${INTEGRATION_TESTS_PASSWORD}"
+      },
+      {
+        "key" : "INTEGRATION_TESTS_USERNAME",
+        "value" : "${INTEGRATION_TESTS_USERNAME}"
+      }
+    ],
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:ElementX.xcodeproj",
+      "identifier" : "D3DB351B7FBE0F49649171FC",
+      "name" : "IntegrationTests"
+    },
     "testTimeoutsEnabled" : true
   },
   "testTargets" : [
