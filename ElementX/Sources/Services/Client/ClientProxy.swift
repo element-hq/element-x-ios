@@ -61,6 +61,10 @@ class ClientProxy: ClientProxyProtocol {
     var allRoomsViewProxy: SlidingSyncViewProxy?
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol?
 
+    var invitesSlidingSyncView: SlidingSyncList?
+    var invitesViewProxy: SlidingSyncViewProxy?
+    var invitesSummaryProvider: RoomSummaryProviderProtocol?
+
     private var loadCachedAvatarURLTask: Task<Void, Never>?
     private let avatarURLSubject = CurrentValueSubject<URL?, Never>(nil)
     var avatarURLPublisher: AnyPublisher<URL?, Never> {
@@ -319,6 +323,7 @@ class ClientProxy: ClientProxyProtocol {
             
             // Don't forget to update the view proxies after building the slidingSync
             visibleRoomsViewProxy?.setSlidingSync(slidingSync: slidingSync)
+            invitesViewProxy?.setSlidingSync(slidingSync: slidingSync)
             allRoomsViewProxy?.setSlidingSync(slidingSync: slidingSync)
             
             slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
@@ -401,6 +406,16 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
+    private func buildAndConfigureInvitesSlidingSyncView(invitesView: SlidingSyncList) {
+        let invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView)
+        
+        invitesSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: invitesViewProxy,
+                                                     eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+        
+        invitesSlidingSyncView = invitesView
+        self.invitesViewProxy = invitesViewProxy
+    }
+    
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                  RequiredState(key: "m.room.encryption", value: "")]
     
@@ -414,6 +429,17 @@ class ClientProxy: ClientProxyProtocol {
                                                                         roomNameLike: nil,
                                                                         tags: [],
                                                                         notTags: [])
+    
+    private lazy var slidingSyncInviteFilters = SlidingSyncRequestListFilters(isDm: nil,
+                                                                              spaces: [],
+                                                                              isEncrypted: nil,
+                                                                              isInvite: true,
+                                                                              isTombstoned: false,
+                                                                              roomTypes: [],
+                                                                              notRoomTypes: ["m.space"],
+                                                                              roomNameLike: nil,
+                                                                              tags: [],
+                                                                              notTags: [])
     
     private func configureViewsPostInitialSync() {
         if let visibleRoomsSlidingSyncView {
