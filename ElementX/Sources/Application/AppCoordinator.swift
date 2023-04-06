@@ -476,7 +476,7 @@ extension AppCoordinator: NotificationManagerDelegate {
             return
         }
 
-        userSessionFlowCoordinator?.tryDisplayingRoomScreen(roomId: content.threadIdentifier)
+        userSessionFlowCoordinator?.handleAppRoute(.room(roomID: content.threadIdentifier))
     }
 
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

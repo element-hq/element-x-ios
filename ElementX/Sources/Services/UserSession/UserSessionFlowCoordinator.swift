@@ -62,8 +62,17 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         stateMachine.isDisplayingRoomScreen(withRoomId: roomId)
     }
 
-    func tryDisplayingRoomScreen(roomId: String) {
-        stateMachine.processEvent(.selectRoom(roomId: roomId))
+    func handleAppRoute(_ appRoute: AppRoute) {
+        switch stateMachine.state {
+        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen:
+            navigationSplitCoordinator.setSheetCoordinator(nil)
+        case .roomList, .initial:
+            break
+        }
+        switch appRoute {
+        case .room(let roomID):
+            stateMachine.processEvent(.selectRoom(roomId: roomID))
+        }
     }
 
     // MARK: - Private
