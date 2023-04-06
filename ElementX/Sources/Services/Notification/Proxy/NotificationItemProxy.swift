@@ -56,7 +56,7 @@ struct NotificationItemProxy {
     }
 
     var subtitle: String? {
-        L10n.notification
+        nil
     }
 
     var isNoisy: Bool {

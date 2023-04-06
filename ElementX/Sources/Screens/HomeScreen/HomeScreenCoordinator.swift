@@ -57,8 +57,6 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
                 self.callback?(.presentFeedbackScreen)
             case .presentSettingsScreen:
                 self.callback?(.presentSettingsScreen)
-            case .presentInviteFriendsScreen:
-                self.presentInviteFriends()
             case .presentSessionVerificationScreen:
                 self.callback?(.presentSessionVerificationScreen)
             case .signOut:
@@ -81,11 +79,5 @@ final class HomeScreenCoordinator: CoordinatorProtocol {
     
     func toPresentable() -> AnyView {
         AnyView(HomeScreen(context: viewModel.context))
-    }
-    
-    // MARK: - Private
-
-    private func presentInviteFriends() {
-        parameters.navigationStackCoordinator.setSheetCoordinator(InviteFriendsCoordinator(userId: parameters.userSession.userID))
     }
 }
