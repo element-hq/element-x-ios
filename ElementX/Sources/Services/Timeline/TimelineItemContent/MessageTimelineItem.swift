@@ -42,10 +42,6 @@ struct MessageTimelineItem<Content: MessageContentProtocol> {
         item.content().asMessage()?.isEdited() == true
     }
 
-    var inReplyTo: String? {
-        item.content().asMessage()?.inReplyTo()
-    }
-    
     var sender: String {
         item.sender()
     }

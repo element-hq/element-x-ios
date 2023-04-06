@@ -268,8 +268,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     }
     
     private func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
-        guard visibleRoomsSummaryProvider?.statePublisher.value == .fullyLoaded,
-              !range.isEmpty else { return }
+        guard !range.isEmpty else {
+            return
+        }
         
         guard let visibleRoomsSummaryProvider else {
             MXLog.error("Visible rooms summary provider unavailable")

@@ -299,25 +299,20 @@ class ClientProxy: ClientProxyProtocol {
         do {
             let slidingSyncBuilder = client.slidingSync()
             
-            // Build the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
-            // We will still register the allRoomsSlidingSyncView later, and than will have no cache
-            let visibleRoomsView = try SlidingSyncListBuilder()
-                .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
-                .requiredState(requiredState: slidingSyncRequiredState)
-                .filters(filters: slidingSyncFilters)
-                .name(name: "CurrentlyVisibleRooms")
-                .syncMode(mode: .selective)
-                .addRange(from: 0, to: 20)
-                .sendUpdatesForItems(enable: true)
-                .build()
-            
             // List observers need to be setup before calling build() on the SlidingSyncBuilder otherwise
             // cold cache state and count updates will be lost
-            buildAndConfigureVisibleRoomsSlidingSyncView(visibleRoomsView: visibleRoomsView)
+            buildAndConfigureVisibleRoomsSlidingSyncView()
             buildAndConfigureAllRoomsSlidingSyncView()
             
+            guard let visibleRoomsSlidingSyncView else {
+                MXLog.error("Visible rooms sliding sync view unavailable")
+                return
+            }
+            
+            // Add the visibleRoomsSlidingSyncView here so that it can take advantage of the SS builder cold cache
+            // We will still register the allRoomsSlidingSyncView later, and than will have no cache
             let slidingSync = try slidingSyncBuilder
-                .addList(v: visibleRoomsView)
+                .addList(v: visibleRoomsSlidingSyncView)
                 .withCommonExtensions()
                 .coldCache(name: "ElementX")
                 .build()
@@ -334,28 +329,48 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    private func buildAndConfigureVisibleRoomsSlidingSyncView(visibleRoomsView: SlidingSyncList) {
-        let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: visibleRoomsView)
-        
-        visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
-                                                          eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
-        
-        visibleRoomsSlidingSyncView = visibleRoomsView
-        
-        // Changes to the visibleRoomsSlidingSyncView range need to restart the connection to be applied
-        visibleRoomsViewProxy.visibleRangeUpdatePublisher.sink { [weak self] in
-            self?.restartSync()
-        }
-        .store(in: &cancellables)
-        
-        // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
-        visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.diffPublisher.sink { [weak self] _ in
-            MXLog.info("Visible rooms view received first update, configuring views post initial sync")
-            self?.configureViewsPostInitialSync()
-            self?.visibleRoomsViewProxyStateObservationToken = nil
+    private func buildAndConfigureVisibleRoomsSlidingSyncView() {
+        guard visibleRoomsSlidingSyncView == nil else {
+            fatalError("This shouldn't be called more than once")
         }
         
-        self.visibleRoomsViewProxy = visibleRoomsViewProxy
+        do {
+            let visibleRoomsSlidingSyncView = try SlidingSyncListBuilder()
+                .timelineLimit(limit: UInt32(SlidingSyncConstants.initialTimelineLimit)) // Starts off with zero to quickly load rooms, then goes to 1 while scrolling to quickly load last messages and 20 when the scrolling stops to load room history
+                .requiredState(requiredState: slidingSyncRequiredState)
+                .filters(filters: slidingSyncFilters)
+                .name(name: "CurrentlyVisibleRooms")
+                .syncMode(mode: .selective)
+                .addRange(from: 0, to: 20)
+                .build()
+            
+            let visibleRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: visibleRoomsSlidingSyncView, name: "Visible rooms")
+            
+            visibleRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: visibleRoomsViewProxy,
+                                                              eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+            
+            self.visibleRoomsSlidingSyncView = visibleRoomsSlidingSyncView
+            self.visibleRoomsViewProxy = visibleRoomsViewProxy
+            
+            // Changes to the visibleRoomsSlidingSyncView range need to restart the connection to be applied
+            visibleRoomsViewProxy.visibleRangeUpdatePublisher.sink { [weak self] in
+                self?.restartSync()
+            }
+            .store(in: &cancellables)
+            
+            // The allRoomsSlidingSyncView will be registered as soon as the visibleRoomsSlidingSyncView receives its first update
+            visibleRoomsViewProxyStateObservationToken = visibleRoomsViewProxy.statePublisher.sink { [weak self] state in
+                guard state == .fullyLoaded else {
+                    return
+                }
+                
+                MXLog.info("Visible rooms view received first update, configuring views post initial sync")
+                self?.configureViewsPostInitialSync()
+                self?.visibleRoomsViewProxyStateObservationToken = nil
+            }
+        } catch {
+            MXLog.error("Failed building the visible rooms sliding sync view with error: \(error)")
+        }
     }
     
     private func buildAndConfigureAllRoomsSlidingSyncView() {
@@ -364,23 +379,21 @@ class ClientProxy: ClientProxyProtocol {
         }
         
         do {
-            let allRoomsView = try SlidingSyncListBuilder()
+            let allRoomsSlidingSyncView = try SlidingSyncListBuilder()
                 .noTimelineLimit()
                 .requiredState(requiredState: slidingSyncRequiredState)
                 .filters(filters: slidingSyncFilters)
                 .name(name: "AllRooms")
-                .syncMode(mode: .growingFullSync)
+                .syncMode(mode: .growing)
                 .batchSize(batchSize: 100)
-                .sendUpdatesForItems(enable: true)
                 .build()
             
-            let allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsView)
+            let allRoomsViewProxy = SlidingSyncViewProxy(slidingSyncView: allRoomsSlidingSyncView, name: "All rooms")
             
             allRoomsSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: allRoomsViewProxy,
                                                           eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
             
-            allRoomsSlidingSyncView = allRoomsView
-            
+            self.allRoomsSlidingSyncView = allRoomsSlidingSyncView
             self.allRoomsViewProxy = allRoomsViewProxy
             
         } catch {

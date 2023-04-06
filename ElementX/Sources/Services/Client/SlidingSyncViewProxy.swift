@@ -27,25 +27,31 @@ private class SlidingSyncViewObserver: SlidingSyncListRoomListObserver, SlidingS
     
     /// Publishes the number of available rooms
     let countUpdatePublisher = CurrentValueSubject<UInt, Never>(0)
+    
+    private let name: String
+    
+    init(name: String) {
+        self.name = name
+    }
         
     // MARK: - SlidingSyncListRoomListObserver
     
     func didReceiveUpdate(diff: SlidingSyncListRoomsListDiff) {
-        MXLog.verbose("Received room diff")
+        MXLog.verbose("\(name): Received room diff")
         roomListDiffPublisher.send(diff)
     }
     
     // MARK: - SlidingSyncListStateObserver
     
     func didReceiveUpdate(newState: SlidingSyncState) {
-        MXLog.info("Updated state: \(newState)")
+        MXLog.info("\(name): Updated state: \(newState)")
         stateUpdatePublisher.send(newState)
     }
     
     // MARK: - SlidingSyncListRoomsCountObserver
     
     func didReceiveUpdate(count: UInt32) {
-        MXLog.info("Updated room count: \(count)")
+        MXLog.info("\(name): Updated room count: \(count)")
         countUpdatePublisher.send(UInt(count))
     }
 }
@@ -71,10 +77,10 @@ class SlidingSyncViewProxy {
         countUpdateObserverToken?.cancel()
     }
     
-    init(slidingSyncView: SlidingSyncListProtocol) {
+    init(slidingSyncView: SlidingSyncListProtocol, name: String) {
         self.slidingSyncView = slidingSyncView
         
-        let slidingSyncViewObserver = SlidingSyncViewObserver()
+        let slidingSyncViewObserver = SlidingSyncViewObserver(name: name)
         
         slidingSyncViewObserver.stateUpdatePublisher
             .subscribe(statePublisher)
@@ -98,7 +104,7 @@ class SlidingSyncViewProxy {
     }
     
     func currentRoomsList() -> [RoomListEntry] {
-        slidingSyncView.currentRoomsList()
+        slidingSyncView.currentRoomList()
     }
     
     func roomForIdentifier(_ identifier: String) throws -> SlidingSyncRoomProtocol? {
@@ -108,9 +114,13 @@ class SlidingSyncViewProxy {
     func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) {
         MXLog.info("Setting sliding sync view range to \(range), timeline limit: \(timelineLimit)")
         
-        slidingSyncView.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
-        slidingSyncView.setTimelineLimit(value: UInt32(timelineLimit))
-        
-        visibleRangeUpdatePublisher.send(())
+        do {
+            try slidingSyncView.setRange(start: UInt32(range.lowerBound), end: UInt32(range.upperBound))
+            slidingSyncView.setTimelineLimit(value: UInt32(timelineLimit))
+            
+            visibleRangeUpdatePublisher.send(())
+        } catch {
+            MXLog.error("Failed setting sliding sync list range with error: \(error)")
+        }
     }
 }
