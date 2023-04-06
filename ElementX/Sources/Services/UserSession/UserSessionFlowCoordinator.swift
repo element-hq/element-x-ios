@@ -75,10 +75,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         }
     }
 
-    enum AppRoute {
-        case room(roomID: String)
-    }
-
     // MARK: - Private
     
     // swiftlint:disable:next cyclomatic_complexity
