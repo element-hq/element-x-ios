@@ -73,7 +73,7 @@ extension NotificationItemProxy {
 //            return nil
 //        }
         // For now we can't solve the sender ID nor get the type of message that we are displaying
-        // so we are just going to process all of them as a text notification saying "Notification
+        // so we are just going to process all of them as a text notification saying "Notification"
         let content = TextMessageContent(body: L10n.notification, formatted: nil)
         return try await processText(content: content, senderId: "undefined", roomId: roomId, mediaProvider: mediaProvider)
     }
