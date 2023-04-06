@@ -116,7 +116,19 @@ struct EventTimelineItemProxy: CustomDebugStringConvertible {
     // MARK: - CustomDebugStringConvertible
     
     var debugDescription: String {
-        item.fmtDebug()
+        let debugInfo = item.debugInfo()
+        
+        var debugDescription = debugInfo.model
+        
+        if let originalJson = debugInfo.originalJson {
+            debugDescription += "\n\n\(originalJson)"
+        }
+        
+        if let latestEditJson = debugInfo.latestEditJson {
+            debugDescription += "\n\n\(latestEditJson)"
+        }
+        
+        return debugDescription
     }
 }
 
