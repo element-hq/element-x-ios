@@ -119,7 +119,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 break
             case (.roomList, .showInvitesScreen, .invitesScreen):
                 self.presentInvitesList()
-            case (.invitesScreen, .dismissedInvitesScreen, .roomList):
+            case (.invitesScreen, .closedInvitesScreen, .roomList):
                 break
             default:
                 fatalError("Unknown transition: \(context)")
@@ -325,7 +325,6 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     // MARK: Invites list
     
     private func presentInvitesList() {
-        let navigationStackCoordinator = NavigationStackCoordinator()
         let parameters = InvitesListCoordinatorParameters(userSession: userSession)
         let coordinator = InvitesListCoordinator(parameters: parameters)
         
@@ -334,10 +333,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
             }
             .store(in: &cancellables)
         
-        navigationStackCoordinator.setRootCoordinator(coordinator)
-        
-        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
-            self?.stateMachine.processEvent(.dismissedInvitesScreen)
+        navigationSplitCoordinator.setDetailCoordinator(coordinator) { [weak self] in
+            self?.stateMachine.processEvent(.closedInvitesScreen)
         }
     }
 }

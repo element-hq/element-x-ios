@@ -76,7 +76,7 @@ class UserSessionFlowCoordinatorStateMachine {
         /// Request presentation of the invites screen
         case showInvitesScreen
         /// The invites screen has been dismissed
-        case dismissedInvitesScreen
+        case closedInvitesScreen
     }
     
     private let stateMachine: StateMachine<State, Event>
@@ -123,7 +123,7 @@ class UserSessionFlowCoordinatorStateMachine {
             
             case (.showInvitesScreen, .roomList(let selectedRoomId)):
                 return .invitesScreen(selectedRoomId: selectedRoomId)
-            case (.dismissedInvitesScreen, .invitesScreen(let selectedRoomId)):
+            case (.closedInvitesScreen, .invitesScreen(let selectedRoomId)):
                 return .roomList(selectedRoomId: selectedRoomId)
                 
             default:
