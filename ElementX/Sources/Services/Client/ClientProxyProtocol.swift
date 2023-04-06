@@ -70,6 +70,8 @@ protocol ClientProxyProtocol: AnyObject, MediaLoaderProtocol {
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? { get }
     
+    var invitesSummaryProvider: RoomSummaryProviderProtocol? { get }
+    
     func startSync()
     
     func stopSync()

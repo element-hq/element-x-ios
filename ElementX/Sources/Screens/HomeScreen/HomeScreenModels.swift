@@ -70,6 +70,8 @@ struct HomeScreenViewState: BindableState {
     /// The URL that will be shared when inviting friends to use the app.
     let invitePermalink: URL?
     
+    var hasPendingInvitations = false
+    
     var startChatFlowEnabled: Bool {
         ServiceLocator.shared.settings.startChatFlowEnabled
     }

@@ -29,6 +29,8 @@ class MockClientProxy: ClientProxyProtocol {
     var visibleRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
     
     var allRoomsSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
+    
+    var invitesSummaryProvider: RoomSummaryProviderProtocol? = MockRoomSummaryProvider()
 
     var avatarURLPublisher: AnyPublisher<URL?, Never> { Empty().eraseToAnyPublisher() }
     

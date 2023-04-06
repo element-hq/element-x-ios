@@ -41,6 +41,13 @@ struct HomeScreen: View {
                 sessionVerificationBanner
             }
             
+            #warning("Add localization and action")
+            if context.viewState.hasPendingInvitations {
+                InvitesButton(title: "Invites", hasBadge: true, action: { })
+                    .padding(.trailing, 16)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+            }
+            
             if context.viewState.roomListMode == .skeletons {
                 LazyVStack(spacing: 0) {
                     ForEach(context.viewState.visibleRooms) { room in
