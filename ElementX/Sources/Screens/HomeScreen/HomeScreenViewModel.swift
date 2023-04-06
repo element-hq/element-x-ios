@@ -166,6 +166,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:
             callback?(.presentStartChatScreen)
+        case .selectInvites:
+            callback?(.presentInvitesScreen)
         }
     }
     

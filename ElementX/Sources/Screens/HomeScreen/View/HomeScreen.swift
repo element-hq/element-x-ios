@@ -40,12 +40,13 @@ struct HomeScreen: View {
             if context.viewState.showSessionVerificationBanner {
                 sessionVerificationBanner
             }
-            
-            #warning("Add localization and action")
+
             if context.viewState.hasPendingInvitations {
-                InvitesButton(title: "Invites", hasBadge: true, action: { })
-                    .padding(.trailing, 16)
-                    .frame(maxWidth: .infinity, alignment: .trailing)
+                InvitesButton(title: L10n.actionInvitesList, hasBadge: true) {
+                    context.send(viewAction: .selectInvites)
+                }
+                .padding(.trailing, 16)
+                .frame(maxWidth: .infinity, alignment: .trailing)
             }
             
             if context.viewState.roomListMode == .skeletons {

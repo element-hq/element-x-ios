@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
@@ -22,6 +23,7 @@ enum UserSessionFlowCoordinatorAction {
 
 class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
+    private var cancellables: Set<AnyCancellable> = .init()
     
     private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
@@ -115,6 +117,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.presentStartChat()
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
                 break
+            case (.roomList, .showInvitesScreen, .invitesScreen):
+                self.presentInvitesList()
+            case (.invitesScreen, .dismissedInvitesScreen, .roomList):
+                break
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -150,6 +156,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.stateMachine.processEvent(.showStartChatScreen)
             case .signOut:
                 self.callback?(.signOut)
+            case .presentInvitesScreen:
+                self.stateMachine.processEvent(.showInvitesScreen)
             }
         }
         
@@ -311,6 +319,31 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
+        }
+    }
+    
+    // MARK: Invites list
+    
+    private func presentInvitesList() {
+        let navigationStackCoordinator = NavigationStackCoordinator()
+        let parameters = InvitesListCoordinatorParameters(promptType: .regular)
+        let coordinator = InvitesListCoordinator(parameters: parameters)
+        
+        coordinator.actions
+            .sink { action in
+                switch action {
+                case .accept:
+                    break
+                case .cancel:
+                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
+                }
+            }
+            .store(in: &cancellables)
+        
+        navigationStackCoordinator.setRootCoordinator(coordinator)
+        
+        navigationSplitCoordinator.setSheetCoordinator(navigationStackCoordinator) { [weak self] in
+            self?.stateMachine.processEvent(.dismissedInvitesScreen)
         }
     }
 }
