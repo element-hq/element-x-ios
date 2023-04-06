@@ -16,22 +16,22 @@
 
 import SwiftUI
 
-typealias InviteUsersInRoomViewModelType = StateStoreViewModel<InviteUsersInRoomViewState, InviteUsersInRoomViewAction>
+typealias InviteUsersViewModelType = StateStoreViewModel<InviteUsersViewState, InviteUsersViewAction>
 
-class InviteUsersInRoomViewModel: InviteUsersInRoomViewModelType, InviteUsersInRoomViewModelProtocol {
-    var callback: ((InviteUsersInRoomViewModelAction) -> Void)?
+class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtocol {
+    var callback: ((InviteUsersViewModelAction) -> Void)?
     private let userSession: UserSessionProtocol
     
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
-        super.init(initialViewState: InviteUsersInRoomViewState(), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: InviteUsersViewState(), imageProvider: userSession.mediaProvider)
         
         fetchSuggestions()
     }
     
     // MARK: - Public
     
-    override func process(viewAction: InviteUsersInRoomViewAction) async {
+    func process(viewAction: InviteUsersViewAction) async {
         switch viewAction {
         case .close:
             callback?(.close)
@@ -40,15 +40,15 @@ class InviteUsersInRoomViewModel: InviteUsersInRoomViewModelType, InviteUsersInR
         case .selectUser(let user):
             if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
                 state.selectedUsers.remove(at: index)
-                state.scrollToLastIDPublisher = nil
+                state.scrollToLastID = nil
             } else {
                 state.selectedUsers.append(user)
-                state.scrollToLastIDPublisher = user.userID
+                state.scrollToLastID = user.userID
             }
         case .deselectUser(let user):
             if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
                 state.selectedUsers.remove(at: index)
-                state.scrollToLastIDPublisher = nil
+                state.scrollToLastID = nil
             }
         }
     }
@@ -56,7 +56,9 @@ class InviteUsersInRoomViewModel: InviteUsersInRoomViewModelType, InviteUsersInR
     // MARK: - Private
     
     private func fetchSuggestions() {
-        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie,
+                                                               .mockAlice1, .mockBob1, .mockCharlie1,
+                                                               .mockAlice2, .mockBob2, .mockCharlie2])
     }
     }
 }

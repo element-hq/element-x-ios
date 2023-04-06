@@ -16,8 +16,8 @@
 
 import SwiftUI
 
-struct InviteUsersInRoomScreen: View {
-    @ObservedObject var context: InviteUsersInRoomViewModel.Context
+struct InviteUsersScreen: View {
+    @ObservedObject var context: InviteUsersViewModel.Context
     
     var body: some View {
         VStack {
@@ -32,12 +32,8 @@ struct InviteUsersInRoomScreen: View {
         .background(Color.element.formBackground.ignoresSafeArea())
         .navigationTitle(L10n.screenCreateRoomActionInvitePeople)
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
         .toolbar {
-            ToolbarItem(placement: .navigationBarLeading) {
-                backButton
-            }
-            ToolbarItem(placement: .navigationBarTrailing) {
+            ToolbarItem(placement: .confirmationAction) {
                 nextButton
             }
         }
@@ -94,7 +90,7 @@ struct InviteUsersInRoomScreen: View {
                         .frame(width: 64, height: 90)
                     }
                 }
-                .onChange(of: context.viewState.scrollToLastIDPublisher) { lastAddedID in
+                .onChange(of: context.viewState.scrollToLastID) { lastAddedID in
                     guard let id = lastAddedID else { return }
                     withAnimation(.easeInOut) {
                         scrollView.scrollTo(id)
@@ -128,13 +124,13 @@ struct InviteUsersInRoomScreen: View {
 
 // MARK: - Previews
 
-struct InviteUsersInRoom_Previews: PreviewProvider {
+struct InviteUsers_Previews: PreviewProvider {
     static var previews: some View {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let viewModel = InviteUsersInRoomViewModel(userSession: userSession)
+        let viewModel = InviteUsersViewModel(userSession: userSession)
         NavigationView {
-            InviteUsersInRoomScreen(context: viewModel.context)
+            InviteUsersScreen(context: viewModel.context)
                 .tint(.element.accent)
         }
     }

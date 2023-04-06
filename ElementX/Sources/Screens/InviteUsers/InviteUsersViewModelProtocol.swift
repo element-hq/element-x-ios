@@ -17,7 +17,7 @@
 import Foundation
 
 @MainActor
-protocol InviteUsersInRoomViewModelProtocol {
-    var callback: ((InviteUsersInRoomViewModelAction) -> Void)? { get set }
-    var context: InviteUsersInRoomViewModelType.Context { get }
+protocol InviteUsersViewModelProtocol {
+    var callback: ((InviteUsersViewModelAction) -> Void)? { get set }
+    var context: InviteUsersViewModelType.Context { get }
 }

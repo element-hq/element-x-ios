@@ -16,24 +16,24 @@
 
 import SwiftUI
 
-struct InviteUsersInRoomCoordinatorParameters {
+struct InviteUsersCoordinatorParameters {
     let userSession: UserSessionProtocol
 }
 
-enum InviteUsersInRoomCoordinatorAction {
+enum InviteUsersCoordinatorAction {
     case close
 }
 
-final class InviteUsersInRoomCoordinator: CoordinatorProtocol {
-    private let parameters: InviteUsersInRoomCoordinatorParameters
-    private var viewModel: InviteUsersInRoomViewModelProtocol
+final class InviteUsersCoordinator: CoordinatorProtocol {
+    private let parameters: InviteUsersCoordinatorParameters
+    private var viewModel: InviteUsersViewModelProtocol
     
-    var callback: ((InviteUsersInRoomCoordinatorAction) -> Void)?
+    var callback: ((InviteUsersCoordinatorAction) -> Void)?
     
-    init(parameters: InviteUsersInRoomCoordinatorParameters) {
+    init(parameters: InviteUsersCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = InviteUsersInRoomViewModel(userSession: parameters.userSession)
+        viewModel = InviteUsersViewModel(userSession: parameters.userSession)
     }
     
     func start() {
@@ -47,6 +47,6 @@ final class InviteUsersInRoomCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(InviteUsersInRoomScreen(context: viewModel.context))
+        AnyView(InviteUsersScreen(context: viewModel.context))
     }
 }

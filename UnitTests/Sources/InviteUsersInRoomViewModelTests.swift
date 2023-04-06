@@ -19,18 +19,18 @@ import XCTest
 @testable import ElementX
 
 @MainActor
-class InviteUsersInRoomScreenViewModelTests: XCTestCase {
-    var viewModel: InviteUsersInRoomViewModelProtocol!
+class InviteUsersScreenViewModelTests: XCTestCase {
+    var viewModel: InviteUsersViewModelProtocol!
     var clientProxy: MockClientProxy!
     
-    var context: InviteUsersInRoomViewModel.Context {
+    var context: InviteUsersViewModel.Context {
         viewModel.context
     }
     
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        let viewModel = InviteUsersInRoomViewModel(userSession: userSession)
+        let viewModel = InviteUsersViewModel(userSession: userSession)
         viewModel.state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
         self.viewModel = viewModel
     }
@@ -66,7 +66,7 @@ class InviteUsersInRoomScreenViewModelTests: XCTestCase {
     }
     
     @discardableResult
-    private func contextNextStateValue() async -> InviteUsersInRoomViewState? {
+    private func contextNextStateValue() async -> InviteUsersViewState? {
         await context.$viewState.nextValue
     }
 }

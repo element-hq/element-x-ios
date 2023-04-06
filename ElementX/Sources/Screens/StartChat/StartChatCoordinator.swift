@@ -62,8 +62,8 @@ final class StartChatCoordinator: CoordinatorProtocol {
     // MARK: - Private
     
     private func presentInviteUsersScreen() {
-        let params = InviteUsersInRoomCoordinatorParameters(userSession: parameters.userSession)
-        let coordinator = InviteUsersInRoomCoordinator(parameters: params)
+        let inviteParameters = InviteUsersCoordinatorParameters(userSession: parameters.userSession)
+        let coordinator = InviteUsersCoordinator(parameters: inviteParameters)
         coordinator.callback = { [weak self] result in
             switch result {
             case .close:

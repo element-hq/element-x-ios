@@ -16,14 +16,14 @@
 
 import Foundation
 
-enum InviteUsersInRoomViewModelAction {
+enum InviteUsersViewModelAction {
     case close
 }
 
-struct InviteUsersInRoomViewState: BindableState {
-    var bindings = StartChatScreenViewStateBindings()
+struct InviteUsersViewState: BindableState {
+    var bindings = InviteUsersViewStateBindings()
     
-    var usersSection: StartChatUsersSection = .init(type: .suggestions, users: [])
+    var usersSection: SearchUsersUsersSection = .init(type: .suggestions, users: [])
     var selectedUsers: [UserProfile] = []
     
     var isSearching: Bool {
@@ -34,17 +34,17 @@ struct InviteUsersInRoomViewState: BindableState {
         isSearching && usersSection.type == .searchResult && usersSection.users.isEmpty
     }
     
-    var scrollToLastIDPublisher: String?
+    var scrollToLastID: String?
 }
 
-struct InviteUsersInRoomViewStateBindings {
+struct InviteUsersViewStateBindings {
     var searchQuery = ""
     
     /// Information describing the currently displayed alert.
     var alertInfo: AlertInfo<ClientProxyError>?
 }
 
-enum InviteUsersInRoomViewAction {
+enum InviteUsersViewAction {
     case close
     case proceed
     case selectUser(UserProfile)
