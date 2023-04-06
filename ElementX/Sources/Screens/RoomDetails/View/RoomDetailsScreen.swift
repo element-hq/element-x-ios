@@ -33,9 +33,7 @@ struct RoomDetailsScreen: View {
                 aboutSection
             }
 
-            if context.viewState.isEncrypted {
-                securitySection
-            }
+            securitySection
 
             if let recipient = context.viewState.dmRecipient {
                 ignoreUserSection(user: recipient)
@@ -134,31 +132,31 @@ struct RoomDetailsScreen: View {
             .foregroundColor(.element.primaryContent)
             .accessibilityIdentifier(A11yIdentifiers.roomDetailsScreen.people)
             .disabled(context.viewState.isLoadingMembers)
-        } header: {
-            Text(L10n.commonAbout)
-                .formSectionHeader()
         }
         .formSectionStyle()
     }
-    
+
+    @ViewBuilder
     private var securitySection: some View {
-        Section {
-            Label {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
-                    Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
-                        .foregroundColor(.element.secondaryContent)
-                        .font(.element.footnote)
+        if context.viewState.isEncrypted {
+            Section {
+                Label {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(L10n.screenRoomDetailsEncryptionEnabledTitle)
+                        Text(L10n.screenRoomDetailsEncryptionEnabledSubtitle)
+                            .foregroundColor(.element.secondaryContent)
+                            .font(.element.footnote)
+                    }
+                } icon: {
+                    Image(systemName: "lock.shield")
                 }
-            } icon: {
-                Image(systemName: "lock.shield")
+                .labelStyle(FormRowLabelStyle(alignment: .top))
+            } header: {
+                Text(L10n.commonSecurity)
+                    .formSectionHeader()
             }
-            .labelStyle(FormRowLabelStyle(alignment: .top))
-        } header: {
-            Text(L10n.commonSecurity)
-                .formSectionHeader()
+            .formSectionStyle()
         }
-        .formSectionStyle()
     }
 
     private var leaveRoomSection: some View {
