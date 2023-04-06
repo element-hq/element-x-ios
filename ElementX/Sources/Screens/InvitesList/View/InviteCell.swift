@@ -20,35 +20,66 @@ struct InviteCell: View {
     let user: UserProfile
     let imageProvider: ImageProviderProtocol?
     
+    private let verticalInsets = 16.0
+    
     var body: some View {
-        HStack(spacing: 16) {
+        HStack(alignment: .top, spacing: 16) {
             LoadableAvatarImage(url: user.avatarURL,
                                 name: user.displayName,
                                 contentID: user.userID,
                                 avatarSize: .user(on: .startChat),
                                 imageProvider: imageProvider)
                 .accessibilityHidden(true)
-
-            VStack(alignment: .leading, spacing: 4) {
-                Text(user.displayName ?? user.userID)
-                    .font(.element.title3)
-                    .foregroundColor(.element.primaryContent)
-                
-                if user.displayName != nil {
-                    Text(user.userID)
-                        .font(.element.subheadline)
-                        .foregroundColor(.element.tertiaryContent)
+            
+            mainContent
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.bottom, verticalInsets)
+                .overlay(alignment: .bottom) {
+                    separator
                 }
-            }
-            .frame(maxWidth: .infinity, alignment: .leading)
         }
+        .padding(.top, verticalInsets)
         .padding(.horizontal, 12)
-        .padding(.vertical, 16)
+    }
+    
+    // MARK: - Private
+    
+    var mainContent: some View {
+        VStack(alignment: .leading, spacing: 4) {
+            Text(user.displayName ?? user.userID)
+                .font(.element.title3)
+                .foregroundColor(.element.primaryContent)
+            
+            if user.displayName != nil {
+                Text(user.userID)
+                    .font(.element.subheadline)
+                    .foregroundColor(.element.tertiaryContent)
+            }
+            
+            buttons
+                .padding(.top, 8)
+        }
+    }
+    
+    var buttons: some View {
+        HStack(spacing: 12) {
+            Button("Decline") { }
+                .buttonStyle(.elementCapsule)
+            
+            Button("Accept") { }
+                .buttonStyle(.elementCapsuleProminent)
+        }
+    }
+    
+    var separator: some View {
+        Rectangle()
+            .fill(Color.element.quinaryContent)
+            .frame(height: 1 / UIScreen.main.scale)
     }
 }
 
 struct InviteCell_Previews: PreviewProvider {
     static var previews: some View {
-        InviteCell(user: .init(userID: "Some user"), imageProvider: MockMediaProvider())
+        InviteCell(user: .init(userID: "Some user", displayName: "Hey there"), imageProvider: MockMediaProvider())
     }
 }
