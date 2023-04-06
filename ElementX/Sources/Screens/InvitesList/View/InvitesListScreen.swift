@@ -30,23 +30,11 @@ struct InvitesListScreen: View {
             if let rooms = context.viewState.roomDetails {
                 LazyVStack {
                     ForEach(rooms, id: \.id) { room in
-                        Text(room.name)
+                        InviteCell(user: .init(userID: room.id, displayName: room.name), imageProvider: context.imageProvider)
                     }
                 }
             }
         }
-    }
-}
-
-// MARK: - Previews
-
-struct InvitesList_Previews: PreviewProvider {
-    static let regularViewModel = InvitesListViewModel(userSession: MockUserSession(userID: "@some:somwhere.com"))
-    static let upgradeViewModel = InvitesListViewModel(userSession: MockUserSession(userID: "@some:somwhere.com"))
-    static var previews: some View {
-        InvitesListScreen(context: regularViewModel.context)
-            .previewDisplayName("Regular")
-        InvitesListScreen(context: upgradeViewModel.context)
-            .previewDisplayName("Upgrade")
+        .navigationTitle(L10n.actionInvitesList)
     }
 }
