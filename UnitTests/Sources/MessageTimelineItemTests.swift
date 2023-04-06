@@ -141,7 +141,7 @@ private struct MockEventTimelineItem: EventTimelineItemProtocol {
     
     func eventId() -> String? { UUID().uuidString }
     
-    func fmtDebug() -> String { "MockEvent" }
+    func debugInfo() -> MatrixRustSDK.EventTimelineItemDebugInfo { .init(model: "MockEvent", originalJson: nil, latestEditJson: nil) }
     
     func isEditable() -> Bool { false }
     
@@ -159,7 +159,7 @@ private struct MockEventTimelineItem: EventTimelineItemProtocol {
     
     func sender() -> String { "@user:server.com" }
     
-    func senderProfile() -> MatrixRustSDK.ProfileTimelineDetails { .unavailable }
+    func senderProfile() -> MatrixRustSDK.ProfileDetails { .unavailable }
     
     func timestamp() -> UInt64 { 0 }
     
