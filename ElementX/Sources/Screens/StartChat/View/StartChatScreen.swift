@@ -81,20 +81,23 @@ struct StartChatScreen: View {
         .formSectionStyle()
     }
     
+    @ViewBuilder
     private var usersSection: some View {
-        Section {
-            ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                Button { context.send(viewAction: .selectUser(user)) } label: {
-                    StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+        if !context.viewState.usersSection.users.isEmpty {
+            Section {
+                ForEach(context.viewState.usersSection.users, id: \.userID) { user in
+                    Button { context.send(viewAction: .selectUser(user)) } label: {
+                        StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
+                    }
+                }
+            } header: {
+                if let title = context.viewState.usersSection.type.title {
+                    Text(title)
                 }
             }
-        } header: {
-            if let title = context.viewState.usersSection.type.title {
-                Text(title)
-            }
+            .listRowSeparator(.automatic)
+            .formSectionStyle()
         }
-        .listRowSeparator(.automatic)
-        .formSectionStyle()
     }
     
     private var noResultsContent: some View {

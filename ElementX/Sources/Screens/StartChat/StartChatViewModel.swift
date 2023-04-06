@@ -142,6 +142,10 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     private func fetchSuggestions() {
+        guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
+            state.usersSection = .init(type: .suggestions, users: [])
+            return
+        }
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
     
