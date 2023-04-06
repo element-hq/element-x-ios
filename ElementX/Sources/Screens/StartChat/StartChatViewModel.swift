@@ -96,6 +96,8 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     private func fetchData() {
+        state.usersSection = .init(type: .suggestions, users: [])
+        
         guard searchQuery.count >= 3 else {
             fetchSuggestions()
             return
@@ -142,7 +144,10 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     private func fetchSuggestions() {
-        state.usersSection = .init(type: .suggestions, users: ServiceLocator.shared.settings.startChatUserSuggestionsEnabled ? [.mockAlice, .mockBob, .mockCharlie] : [])
+        guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
+            return
+        }
+        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
     
     private func createDirectRoom(with user: UserProfile) async {
