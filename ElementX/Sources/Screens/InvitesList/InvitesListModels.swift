@@ -16,18 +16,19 @@
 
 import Foundation
 
-enum InvitesListViewModelAction {
-    case accept
-    case cancel
-}
+enum InvitesListViewModelAction { }
 
 struct InvitesListViewState: BindableState {
-    var count: Int
+    var roomSummaries: [RoomSummary]?
+    
+    var roomDetails: [RoomSummaryDetails]? {
+        roomSummaries?.compactMap { summary in
+            guard case .filled(let details) = summary else {
+                return nil
+            }
+            return details
+        }
+    }
 }
 
-enum InvitesListViewAction {
-    case incrementCount
-    case decrementCount
-    case accept
-    case cancel
-}
+enum InvitesListViewAction { }

@@ -30,26 +30,19 @@ class InvitesListViewModel: InvitesListViewModelType, InvitesListViewModelProtoc
     init(userSession: UserSessionProtocol) {
         invitesSummaryProvider = userSession.clientProxy.invitesSummaryProvider
         
-        super.init(initialViewState: InvitesListViewState(count: 0))
+        super.init(initialViewState: InvitesListViewState())
         
         guard let invitesSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
+        
+        invitesSummaryProvider.roomListPublisher
+            .weakAssign(to: \.state.roomSummaries, on: self)
+            .store(in: &cancellables)
     }
     
     // MARK: - Public
     
-    override func process(viewAction: InvitesListViewAction) {
-        switch viewAction {
-        case .accept:
-            actionsSubject.send(.accept)
-        case .cancel:
-            actionsSubject.send(.cancel)
-        case .incrementCount:
-            state.count += 1
-        case .decrementCount:
-            state.count -= 1
-        }
-    }
+    override func process(viewAction: InvitesListViewAction) { }
 }

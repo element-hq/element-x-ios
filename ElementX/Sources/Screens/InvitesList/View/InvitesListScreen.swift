@@ -27,53 +27,12 @@ struct InvitesListScreen: View {
     
     var body: some View {
         ScrollView {
-            mainContent
-                .padding(.top, 50)
-                .padding(.horizontal)
-                .readableFrame()
-        }
-        .safeAreaInset(edge: .bottom) {
-            buttons
-                .padding(.horizontal)
-                .padding(.vertical)
-                .readableFrame()
-                .background(Color.element.system)
-        }
-    }
-    
-    /// The main content of the view to be shown in a scroll view.
-    var mainContent: some View {
-        VStack(spacing: 36) {
-            HStack {
-                Text("Counter: \(context.viewState.count)")
-                    .font(.element.body)
-                    .multilineTextAlignment(.center)
-                    .foregroundColor(counterColor)
-                
-                Button("−") {
-                    context.send(viewAction: .decrementCount)
+            if let rooms = context.viewState.roomDetails {
+                LazyVStack {
+                    ForEach(rooms, id: \.id) { room in
+                        Text(room.name)
+                    }
                 }
-                .buttonStyle(.elementGhost())
-                
-                Button("+") {
-                    context.send(viewAction: .incrementCount)
-                }
-                .buttonStyle(.elementGhost())
-            }
-        }
-    }
-    
-    /// The action buttons shown at the bottom of the view.
-    var buttons: some View {
-        VStack {
-            Button { context.send(viewAction: .accept) } label: {
-                Text("Accept")
-            }
-            .buttonStyle(.elementAction(.xLarge))
-            
-            Button { context.send(viewAction: .cancel) } label: {
-                Text("Cancel")
-                    .padding(.vertical, 12)
             }
         }
     }

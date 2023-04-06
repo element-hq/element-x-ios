@@ -22,4 +22,11 @@ extension Publisher where Self.Failure == Never {
             object?[keyPath: keyPath] = value
         }
     }
+    
+    /// Assigns the output of type `Self.Output` to a key path of type `Self.Output?`
+    func weakAssign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output?>, on object: Root) -> AnyCancellable {
+        sink { [weak object] value in
+            object?[keyPath: keyPath] = value
+        }
+    }
 }

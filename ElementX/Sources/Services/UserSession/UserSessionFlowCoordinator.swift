@@ -330,13 +330,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let coordinator = InvitesListCoordinator(parameters: parameters)
         
         coordinator.actions
-            .sink { action in
-                switch action {
-                case .accept:
-                    break
-                case .cancel:
-                    self.navigationSplitCoordinator.setSheetCoordinator(nil)
-                }
+            .sink { _ in
             }
             .store(in: &cancellables)
         

@@ -21,10 +21,7 @@ struct InvitesListCoordinatorParameters {
     let userSession: UserSessionProtocol
 }
 
-enum InvitesListCoordinatorAction {
-    case accept
-    case cancel
-}
+enum InvitesListCoordinatorAction { }
 
 final class InvitesListCoordinator: CoordinatorProtocol {
     private let parameters: InvitesListCoordinatorParameters
@@ -42,15 +39,8 @@ final class InvitesListCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.actions.sink { [weak self] action in
+        viewModel.actions.sink { [weak self] _ in
             guard let self else { return }
-            switch action {
-            case .accept:
-                MXLog.info("User accepted the prompt.")
-                self.actionsSubject.send(.accept)
-            case .cancel:
-                self.actionsSubject.send(.cancel)
-            }
         }
         .store(in: &cancellables)
     }
