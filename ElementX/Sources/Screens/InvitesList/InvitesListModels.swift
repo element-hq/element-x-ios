@@ -16,42 +16,12 @@
 
 import Foundation
 
-enum InvitesListPromptType {
-    case regular
-    case upgrade
-}
-
-extension InvitesListPromptType: Identifiable, CaseIterable {
-    var id: Self { self }
-    
-    var title: String {
-        switch self {
-        case .regular:
-            return "Make this chat public?"
-        case .upgrade:
-            return "Privacy warning"
-        }
-    }
-    
-    var imageSystemName: String {
-        switch self {
-        case .regular:
-            return "app.gift"
-        case .upgrade:
-            return "shield"
-        }
-    }
-}
-
 enum InvitesListViewModelAction {
     case accept
     case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
 struct InvitesListViewState: BindableState {
-    var promptType: InvitesListPromptType
     var count: Int
 }
 
@@ -60,6 +30,4 @@ enum InvitesListViewAction {
     case decrementCount
     case accept
     case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }

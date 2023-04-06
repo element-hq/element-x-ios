@@ -44,17 +44,6 @@ struct InvitesListScreen: View {
     /// The main content of the view to be shown in a scroll view.
     var mainContent: some View {
         VStack(spacing: 36) {
-            Text(context.viewState.promptType.title)
-                .font(.element.title2Bold)
-                .multilineTextAlignment(.center)
-                .foregroundColor(.element.primaryContent)
-                .accessibilityIdentifier("title")
-            
-            Image(systemName: context.viewState.promptType.imageSystemName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: 100)
-            
             HStack {
                 Text("Counter: \(context.viewState.count)")
                     .font(.element.body)
@@ -93,8 +82,8 @@ struct InvitesListScreen: View {
 // MARK: - Previews
 
 struct InvitesList_Previews: PreviewProvider {
-    static let regularViewModel = InvitesListViewModel(promptType: .regular)
-    static let upgradeViewModel = InvitesListViewModel(promptType: .upgrade)
+    static let regularViewModel = InvitesListViewModel(userSession: MockUserSession(userID: "@some:somwhere.com"))
+    static let upgradeViewModel = InvitesListViewModel(userSession: MockUserSession(userID: "@some:somwhere.com"))
     static var previews: some View {
         InvitesListScreen(context: regularViewModel.context)
             .previewDisplayName("Regular")

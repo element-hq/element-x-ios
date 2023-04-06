@@ -25,3 +25,9 @@ struct MockUserSession: UserSessionProtocol {
     let clientProxy: ClientProxyProtocol
     let mediaProvider: MediaProviderProtocol
 }
+
+extension MockUserSession {
+    init(userID: String) {
+        self.init(clientProxy: MockClientProxy(userID: userID), mediaProvider: MockMediaProvider())
+    }
+}

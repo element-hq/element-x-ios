@@ -326,7 +326,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     
     private func presentInvitesList() {
         let navigationStackCoordinator = NavigationStackCoordinator()
-        let parameters = InvitesListCoordinatorParameters(promptType: .regular)
+        let parameters = InvitesListCoordinatorParameters(userSession: userSession)
         let coordinator = InvitesListCoordinator(parameters: parameters)
         
         coordinator.actions

@@ -18,14 +18,12 @@ import Combine
 import SwiftUI
 
 struct InvitesListCoordinatorParameters {
-    let promptType: InvitesListPromptType
+    let userSession: UserSessionProtocol
 }
 
 enum InvitesListCoordinatorAction {
     case accept
     case cancel
-    
-    // Consider adding CustomStringConvertible conformance if the actions contain PII
 }
 
 final class InvitesListCoordinator: CoordinatorProtocol {
@@ -40,8 +38,7 @@ final class InvitesListCoordinator: CoordinatorProtocol {
     
     init(parameters: InvitesListCoordinatorParameters) {
         self.parameters = parameters
-        
-        viewModel = InvitesListViewModel(promptType: parameters.promptType)
+        viewModel = InvitesListViewModel(userSession: parameters.userSession)
     }
     
     func start() {

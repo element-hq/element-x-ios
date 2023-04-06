@@ -21,13 +21,21 @@ typealias InvitesListViewModelType = StateStoreViewModel<InvitesListViewState, I
 
 class InvitesListViewModel: InvitesListViewModelType, InvitesListViewModelProtocol {
     private var actionsSubject: PassthroughSubject<InvitesListViewModelAction, Never> = .init()
+    private let invitesSummaryProvider: RoomSummaryProviderProtocol?
     
     var actions: AnyPublisher<InvitesListViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
-    init(promptType: InvitesListPromptType, initialCount: Int = 0) {
-        super.init(initialViewState: InvitesListViewState(promptType: promptType, count: 0))
+    init(userSession: UserSessionProtocol) {
+        invitesSummaryProvider = userSession.clientProxy.invitesSummaryProvider
+        
+        super.init(initialViewState: InvitesListViewState(count: 0))
+        
+        guard let invitesSummaryProvider else {
+            MXLog.error("Room summary provider unavailable")
+            return
+        }
     }
     
     // MARK: - Public
