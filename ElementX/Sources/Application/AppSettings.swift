@@ -165,7 +165,7 @@ final class AppSettings: ObservableObject {
     @UserSetting(key: UserDefaultsKeys.startChatFlowEnabled.rawValue, defaultValue: false, persistIn: store)
     var startChatFlowEnabled
     
-    @UserSetting(key: UserDefaultsKeys.startChatUserSuggestionsEnabled.rawValue, defaultValue: false, persistIn: store)
+    @UserSetting(key: UserDefaultsKeys.startChatUserSuggestionsEnabled.rawValue, defaultValue: false, persistIn: nil)
     var startChatUserSuggestionsEnabled
     
     // MARK: Media Uploading
