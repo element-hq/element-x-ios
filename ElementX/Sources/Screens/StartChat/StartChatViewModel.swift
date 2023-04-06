@@ -96,8 +96,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     }
     
     private func fetchData() {
-        state.usersSection = .init(type: .suggestions, users: [])
-        
         guard searchQuery.count >= 3 else {
             fetchSuggestions()
             return
@@ -145,6 +143,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
+            state.usersSection = .init(type: .suggestions, users: [])
             return
         }
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
