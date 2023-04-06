@@ -28,7 +28,7 @@ class LoginViewModel: LoginViewModelType, LoginViewModelProtocol {
         super.init(initialViewState: viewState)
     }
 
-    override func process(viewAction: LoginViewAction) async {
+    override func process(viewAction: LoginViewAction) {
         switch viewAction {
         case .selectServer:
             callback?(.selectServer)

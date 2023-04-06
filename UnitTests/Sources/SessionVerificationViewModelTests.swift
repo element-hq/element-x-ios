@@ -25,7 +25,6 @@ class SessionVerificationViewModelTests: XCTestCase {
     var context: SessionVerificationViewModelType.Context!
     var sessionVerificationController: SessionVerificationControllerProxyMock!
     
-    @MainActor
     override func setUpWithError() throws {
         sessionVerificationController = SessionVerificationControllerProxyMock.configureMock()
         viewModel = SessionVerificationViewModel(sessionVerificationControllerProxy: sessionVerificationController)
@@ -49,17 +48,13 @@ class SessionVerificationViewModelTests: XCTestCase {
         
         context.send(viewAction: .close)
         
-        await Task.yield()
-        
         XCTAssertEqual(context.viewState.verificationState, .cancelling)
         
-        try await Task.sleep(for: .milliseconds(100))
+        await context.nextViewState()
         
         XCTAssertEqual(context.viewState.verificationState, .cancelled)
         
         context.send(viewAction: .restart)
-        
-        await Task.yield()
         
         XCTAssertEqual(context.viewState.verificationState, .initial)
 

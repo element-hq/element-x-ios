@@ -87,33 +87,33 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
     var callback: ((RoomScreenViewModelAction) -> Void)?
     
     // swiftlint:disable:next cyclomatic_complexity
-    override func process(viewAction: RoomScreenViewAction) async {
+    override func process(viewAction: RoomScreenViewAction) {
         switch viewAction {
         case .displayRoomDetails:
             callback?(.displayRoomDetails)
         case .paginateBackwards:
-            await paginateBackwards()
+            Task { await paginateBackwards() }
         case .itemAppeared(let id):
-            await timelineController.processItemAppearance(id)
+            Task { await timelineController.processItemAppearance(id) }
         case .itemDisappeared(let id):
-            await timelineController.processItemDisappearance(id)
+            Task { await timelineController.processItemDisappearance(id) }
         case .itemTapped(let id):
-            await itemTapped(with: id)
+            Task { await itemTapped(with: id) }
         case .itemDoubleTapped(let id):
             itemDoubleTapped(with: id)
         case .linkClicked(let url):
             MXLog.warning("Link clicked: \(url)")
         case .sendMessage:
-            await sendCurrentMessage()
+            Task { await sendCurrentMessage() }
         case .sendReaction(let emoji, let itemId):
-            await timelineController.sendReaction(emoji, to: itemId)
+            Task { await timelineController.sendReaction(emoji, to: itemId) }
         case .cancelReply:
             state.composerMode = .default
         case .cancelEdit:
             state.composerMode = .default
             state.bindings.composerText = ""
         case .markRoomAsRead:
-            await markRoomAsRead()
+            Task { await markRoomAsRead() }
         case .contextMenuAction(let itemID, let action):
             processContentMenuAction(action, itemID: itemID)
         case .displayCameraPicker:

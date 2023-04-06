@@ -63,7 +63,7 @@ class SessionVerificationViewModel: SessionVerificationViewModelType, SessionVer
             .store(in: &cancellables)
     }
     
-    override func process(viewAction: SessionVerificationViewAction) async {
+    override func process(viewAction: SessionVerificationViewAction) {
         switch viewAction {
         case .requestVerification:
             stateMachine.processEvent(.requestVerification)

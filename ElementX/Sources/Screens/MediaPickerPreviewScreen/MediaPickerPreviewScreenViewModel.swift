@@ -25,7 +25,7 @@ class MediaPickerPreviewScreenViewModel: MediaPickerPreviewScreenViewModelType, 
         super.init(initialViewState: MediaPickerPreviewScreenViewState(url: url, title: title))
     }
     
-    override func process(viewAction: MediaPickerPreviewScreenViewAction) async {
+    override func process(viewAction: MediaPickerPreviewScreenViewAction) {
         switch viewAction {
         case .send:
             callback?(.send)

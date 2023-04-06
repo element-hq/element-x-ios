@@ -4,7 +4,7 @@ import Foundation
 struct OutdatedPackages: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A tool to check outdated package dependencies. Please make sure you have already run setup-project before using this tool.")
 
-    private var projectSwiftPMDirectoryURL: URL { Utilities.projectDirectoryURL.appending(path: "ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm") }
+    private var projectSwiftPMDirectoryURL: URL { Utilities.projectDirectoryURL.appendingPathComponent("ElementX.xcodeproj/project.xcworkspace/xcshareddata/swiftpm") }
 
     func run() throws {
         try checkToolsDependencies()

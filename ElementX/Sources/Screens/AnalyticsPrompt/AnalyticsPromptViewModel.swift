@@ -32,7 +32,7 @@ class AnalyticsPromptViewModel: AnalyticsPromptViewModelType, AnalyticsPromptVie
 
     // MARK: - Public
     
-    override func process(viewAction: AnalyticsPromptViewAction) async {
+    override func process(viewAction: AnalyticsPromptViewAction) {
         switch viewAction {
         case .enable:
             callback?(.enable)

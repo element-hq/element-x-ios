@@ -52,15 +52,15 @@ struct NotificationItemProxy {
 //    }
 
     var title: String {
-        "Title"
+        InfoPlistReader(bundle: .app).bundleDisplayName
     }
 
     var subtitle: String? {
-        nil
+        L10n.notification
     }
 
     var isNoisy: Bool {
-        true
+        false
     }
 
     var avatarURL: URL? {

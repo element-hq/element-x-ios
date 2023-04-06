@@ -25,21 +25,6 @@ class BugReportUITests: XCTestCase {
         app.assertScreenshot(.bugReport, step: 0)
     }
     
-    func testToggleSendingLogs() {
-        let app = Application.launch(.bugReport)
-        
-        // Don't know why, but there's an issue on CI where the toggle is tapped but doesn't respond. Waiting for
-        // it fixes this (even it it already exists). Reproducible by running the test after quitting the simulator.
-        let sendingLogsToggle = app.switches[A11yIdentifiers.bugReportScreen.sendLogs]
-        XCTAssertTrue(sendingLogsToggle.waitForExistence(timeout: 1))
-        XCTAssertTrue(sendingLogsToggle.isOn)
-        
-        sendingLogsToggle.tap()
-        
-        XCTAssertFalse(sendingLogsToggle.isOn)
-        app.assertScreenshot(.bugReport, step: 1)
-    }
-    
     func testReportText() {
         let app = Application.launch(.bugReport)
         

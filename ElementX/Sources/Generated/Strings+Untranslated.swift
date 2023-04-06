@@ -71,6 +71,7 @@ public enum UntranslatedL10n {
 
 extension UntranslatedL10n {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
+    // No need to check languages, we always default to en for untranslated strings
     guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: "en") else {
       // no translations for the desired language
       return key

@@ -14,10 +14,6 @@ schemes:
     run:
       config: Debug
       disableMainThreadChecker: false
-      environmentVariables:
-        INTEGRATION_TESTS_HOST: ${INTEGRATION_TESTS_HOST}
-        INTEGRATION_TESTS_USERNAME: ${INTEGRATION_TESTS_USERNAME}
-        INTEGRATION_TESTS_PASSWORD: ${INTEGRATION_TESTS_PASSWORD}
     test:
       config: Debug
       disableMainThreadChecker: false

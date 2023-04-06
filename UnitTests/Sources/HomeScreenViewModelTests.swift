@@ -18,18 +18,19 @@ import XCTest
 
 @testable import ElementX
 
+@MainActor
 class HomeScreenViewModelTests: XCTestCase {
     var viewModel: HomeScreenViewModelProtocol!
     var context: HomeScreenViewModelType.Context!
     
-    @MainActor override func setUpWithError() throws {
+    override func setUpWithError() throws {
         viewModel = HomeScreenViewModel(userSession: MockUserSession(clientProxy: MockClientProxy(userID: "@mock:client.com"),
                                                                      mediaProvider: MockMediaProvider()),
                                         attributedStringBuilder: AttributedStringBuilder())
         context = viewModel.context
     }
     
-    @MainActor func testSelectRoom() async throws {
+    func testSelectRoom() async throws {
         let mockRoomId = "mock_room_id"
         var correctResult = false
         var selectedRoomId = ""
@@ -49,7 +50,7 @@ class HomeScreenViewModelTests: XCTestCase {
         XCTAssertEqual(mockRoomId, selectedRoomId)
     }
 
-    @MainActor func testTapUserAvatar() async throws {
+    func testTapUserAvatar() async throws {
         var correctResult = false
         viewModel.callback = { result in
             switch result {

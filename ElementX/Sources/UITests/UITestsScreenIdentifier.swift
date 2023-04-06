@@ -50,7 +50,7 @@ enum UITestsScreenIdentifier: String {
     case reportContent
     case startChat
     case startChatWithSearchResults
-    case startChatSearchingNonExistingID
+    case startChatSearchingNonexistentID
 }
 
 extension UITestsScreenIdentifier: CustomStringConvertible {

@@ -38,15 +38,12 @@ class TemplateScreenViewModelTests: XCTestCase {
 
     func testCounter() async throws {
         context.send(viewAction: .incrementCount)
-        await Task.yield()
         XCTAssertEqual(context.viewState.count, 1)
         
         context.send(viewAction: .incrementCount)
-        await Task.yield()
         XCTAssertEqual(context.viewState.count, 2)
         
         context.send(viewAction: .decrementCount)
-        await Task.yield()
         XCTAssertEqual(context.viewState.count, 1)
     }
 }

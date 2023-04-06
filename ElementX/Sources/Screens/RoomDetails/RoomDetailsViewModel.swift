@@ -70,7 +70,7 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
     
     // MARK: - Public
     
-    override func process(viewAction: RoomDetailsViewAction) async {
+    override func process(viewAction: RoomDetailsViewAction) {
         switch viewAction {
         case .processTapPeople:
             callback?(.requestMemberDetailsPresentation(members))
@@ -81,15 +81,15 @@ class RoomDetailsViewModel: RoomDetailsViewModelType, RoomDetailsViewModelProtoc
             }
             state.bindings.leaveRoomAlertItem = LeaveRoomAlertItem(state: roomProxy.isPublic ? .public : .private)
         case .confirmLeave:
-            await leaveRoom()
+            Task { await leaveRoom() }
         case .processTapIgnore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .ignore)
         case .processTapUnignore:
             state.bindings.ignoreUserRoomAlertItem = .init(action: .unignore)
         case .ignoreConfirmed:
-            await ignore()
+            Task { await ignore() }
         case .unignoreConfirmed:
-            await unignore()
+            Task { await unignore() }
         }
     }
     

@@ -22,7 +22,6 @@ extension Dictionary {
                                                      options: [.fragmentsAllowed, .sortedKeys]) else {
             return nil
         }
-
         return String(data: data, encoding: .utf8)
     }
 }

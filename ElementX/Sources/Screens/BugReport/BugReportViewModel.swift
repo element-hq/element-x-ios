@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias BugReportViewModelType = StateStoreViewModel<BugReportViewState, BugReportViewAction>
@@ -22,8 +23,11 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
     private let bugReportService: BugReportServiceProtocol
     private let userID: String
     private let deviceID: String?
+    private let actionsSubject: PassthroughSubject<BugReportViewModelAction, Never> = .init()
 
-    var callback: ((BugReportViewModelAction) -> Void)?
+    var actions: AnyPublisher<BugReportViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(bugReportService: BugReportServiceProtocol,
          userID: String,
@@ -42,12 +46,12 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
 
     // MARK: - Public
 
-    override func process(viewAction: BugReportViewAction) async {
+    override func process(viewAction: BugReportViewAction) {
         switch viewAction {
         case .cancel:
-            callback?(.cancel)
+            actionsSubject.send(.cancel)
         case .submit:
-            await submitBugReport()
+            Task { await submitBugReport() }
         case .removeScreenshot:
             state.screenshot = nil
         case let .attachScreenshot(image):
@@ -59,7 +63,7 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
 
     private func submitBugReport() async {
         let progressTracker = ProgressTracker()
-        callback?(.submitStarted(progressTracker: progressTracker))
+        actionsSubject.send(.submitStarted(progressTracker: progressTracker))
         do {
             var files: [URL] = []
             if let screenshot = context.viewState.screenshot {
@@ -78,10 +82,10 @@ class BugReportViewModel: BugReportViewModelType, BugReportViewModelProtocol {
             let result = try await bugReportService.submitBugReport(bugReport,
                                                                     progressListener: progressTracker)
             MXLog.info("SubmitBugReport succeeded, result: \(result.reportUrl)")
-            callback?(.submitFinished)
+            actionsSubject.send(.submitFinished)
         } catch {
             MXLog.error("SubmitBugReport failed: \(error)")
-            callback?(.submitFailed(error: error))
+            actionsSubject.send(.submitFailed(error: error))
         }
     }
 }

@@ -17,49 +17,6 @@
 import Combine
 import Foundation
 
-/// A constrained and concise interface for interacting with the ViewModel.
-///
-/// This class is closely bound to`StateStoreViewModel`. It provides the exact interface the view should need to interact
-/// ViewModel (as modelled on our previous template architecture with the addition of two-way binding):
-/// - The ability read/observe view state
-/// - The ability to send view events
-/// - The ability to bind state to a specific portion of the view state safely.
-/// This class was brought about a little bit by necessity. The most idiomatic way of interacting with SwiftUI is via `@Published`
-/// properties which which are property wrappers and therefore can't be defined within protocols.
-/// A similar approach is taken in libraries like [CombineFeedback](https://github.com/sergdort/CombineFeedback).
-/// It provides a nice layer of consistency and also safety. As we are not passing the `ViewModel` to the view directly, shortcuts/hacks
-/// can't be made into the `ViewModel`.
-@dynamicMemberLookup
-@MainActor
-class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
-    fileprivate let viewActions: PassthroughSubject<ViewAction, Never>
-
-    /// Get-able/Observable `Published` property for the `ViewState`
-    @Published fileprivate(set) var viewState: ViewState
-    
-    /// An optional image loading service so that views can manage themselves
-    /// Intentionally non-generic so that it doesn't grow uncontrollably
-    let imageProvider: ImageProviderProtocol?
-
-    /// Set-able/Bindable access to the bindable state.
-    subscript<T>(dynamicMember keyPath: WritableKeyPath<ViewState.BindStateType, T>) -> T {
-        get { viewState.bindings[keyPath: keyPath] }
-        set { viewState.bindings[keyPath: keyPath] = newValue }
-    }
-    
-    init(initialViewState: ViewState, imageProvider: ImageProviderProtocol?) {
-        self.viewActions = PassthroughSubject()
-        self.viewState = initialViewState
-        self.imageProvider = imageProvider
-    }
-
-    /// Send a `ViewAction` to the `ViewModel` for processing.
-    /// - Parameter viewAction: The `ViewAction` to send to the `ViewModel`.
-    func send(viewAction: ViewAction) {
-        viewActions.send(viewAction)
-    }
-}
-
 /// A common ViewModel implementation for handling of `State` and `ViewAction`s
 ///
 /// Generic type State is constrained to the BindableState protocol in that it may contain (but doesn't have to)
@@ -68,8 +25,6 @@ class ViewModelContext<ViewState: BindableState, ViewAction>: ObservableObject {
 /// we can do it in this centralised place.
 @MainActor
 class StateStoreViewModel<State: BindableState, ViewAction> {
-    typealias Context = ViewModelContext<State, ViewAction>
-    
     /// For storing subscription references.
     ///
     /// Left as public for `ViewModel` implementations convenience.
@@ -77,7 +32,7 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
 
     /// Constrained interface for passing to Views.
     var context: Context
-    
+
     var state: State {
         get { context.viewState }
         set { context.viewState = newValue }
@@ -85,18 +40,56 @@ class StateStoreViewModel<State: BindableState, ViewAction> {
 
     init(initialViewState: State, imageProvider: ImageProviderProtocol? = nil) {
         context = Context(initialViewState: initialViewState, imageProvider: imageProvider)
-        context.viewActions
-            .sink { [weak self] action in
-                guard let self else { return }
-
-                Task { await self.process(viewAction: action) }
-            }
-            .store(in: &cancellables)
+        context.viewModel = self
     }
 
     /// Override to handles incoming `ViewAction`s from the `ViewModel`.
     /// - Parameter viewAction: The `ViewAction` to be processed in `ViewModel` implementation.
-    func process(viewAction: ViewAction) async {
+    func process(viewAction: ViewAction) {
         // Default implementation, -no-op
+    }
+
+    // MARK: - Context
+
+    /// A constrained and concise interface for interacting with the ViewModel.
+    ///
+    /// This class is closely bound to`StateStoreViewModel`. It provides the exact interface the view should need to interact
+    /// ViewModel (as modelled on our previous template architecture with the addition of two-way binding):
+    /// - The ability read/observe view state
+    /// - The ability to send view events
+    /// - The ability to bind state to a specific portion of the view state safely.
+    /// This class was brought about a little bit by necessity. The most idiomatic way of interacting with SwiftUI is via `@Published`
+    /// properties which which are property wrappers and therefore can't be defined within protocols.
+    /// A similar approach is taken in libraries like [CombineFeedback](https://github.com/sergdort/CombineFeedback).
+    /// It provides a nice layer of consistency and also safety. As we are not passing the `ViewModel` to the view directly, shortcuts/hacks
+    /// can't be made into the `ViewModel`.
+    @dynamicMemberLookup
+    @MainActor
+    final class Context: ObservableObject {
+        fileprivate weak var viewModel: StateStoreViewModel?
+    
+        /// Get-able/Observable `Published` property for the `ViewState`
+        @Published fileprivate(set) var viewState: State
+    
+        /// An optional image loading service so that views can manage themselves
+        /// Intentionally non-generic so that it doesn't grow uncontrollably
+        let imageProvider: ImageProviderProtocol?
+    
+        /// Set-able/Bindable access to the bindable state.
+        subscript<T>(dynamicMember keyPath: WritableKeyPath<State.BindStateType, T>) -> T {
+            get { viewState.bindings[keyPath: keyPath] }
+            set { viewState.bindings[keyPath: keyPath] = newValue }
+        }
+    
+        /// Send a `ViewAction` to the `ViewModel` for processing.
+        /// - Parameter viewAction: The `ViewAction` to send to the `ViewModel`.
+        func send(viewAction: ViewAction) {
+            viewModel?.process(viewAction: viewAction)
+        }
+    
+        fileprivate init(initialViewState: State, imageProvider: ImageProviderProtocol?) {
+            self.viewState = initialViewState
+            self.imageProvider = imageProvider
+        }
     }
 }

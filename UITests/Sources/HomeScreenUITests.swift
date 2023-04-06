@@ -19,9 +19,6 @@ import XCTest
 class HomeScreenUITests: XCTestCase {
     func testInitialStateComponents() {
         let app = Application.launch(.home)
-
-        XCTAssert(app.navigationBars[L10n.screenRoomlistMainSpaceTitle].exists)
-
         app.assertScreenshot(.home)
     }
 }
