@@ -66,7 +66,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
 
     func handleAppRoute(_ appRoute: AppRoute) {
         switch stateMachine.state {
-        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen:
+        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen:
             navigationSplitCoordinator.setSheetCoordinator(nil)
         case .roomList, .initial:
             break

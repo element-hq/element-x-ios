@@ -307,9 +307,15 @@ class ClientProxy: ClientProxyProtocol {
             // cold cache state and count updates will be lost
             buildAndConfigureVisibleRoomsSlidingSyncView()
             buildAndConfigureAllRoomsSlidingSyncView()
+            buildAndConfigureInvitesSlidingSyncView()
             
             guard let visibleRoomsSlidingSyncView else {
                 MXLog.error("Visible rooms sliding sync view unavailable")
+                return
+            }
+            
+            guard let invitesSlidingSyncView else {
+                MXLog.error("Invites sliding sync view unavailable")
                 return
             }
             
@@ -317,14 +323,15 @@ class ClientProxy: ClientProxyProtocol {
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache
             let slidingSync = try slidingSyncBuilder
                 .addList(v: visibleRoomsSlidingSyncView)
+                .addList(v: invitesSlidingSyncView)
                 .withCommonExtensions()
                 .coldCache(name: "ElementX")
                 .build()
             
             // Don't forget to update the view proxies after building the slidingSync
             visibleRoomsViewProxy?.setSlidingSync(slidingSync: slidingSync)
-            invitesViewProxy?.setSlidingSync(slidingSync: slidingSync)
             allRoomsViewProxy?.setSlidingSync(slidingSync: slidingSync)
+            invitesViewProxy?.setSlidingSync(slidingSync: slidingSync)
             
             slidingSync.setObserver(observer: WeakClientProxyWrapper(clientProxy: self))
             
@@ -406,14 +413,29 @@ class ClientProxy: ClientProxyProtocol {
         }
     }
     
-    private func buildAndConfigureInvitesSlidingSyncView(invitesView: SlidingSyncList) {
-        let invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView)
+    private func buildAndConfigureInvitesSlidingSyncView() {
+        guard invitesSlidingSyncView == nil else {
+            fatalError("This shouldn't be called more than once")
+        }
         
-        invitesSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: invitesViewProxy,
-                                                     eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
-        
-        invitesSlidingSyncView = invitesView
-        self.invitesViewProxy = invitesViewProxy
+        do {
+            let invitesView = try SlidingSyncListBuilder()
+                .requiredState(requiredState: slidingSyncRequiredState)
+                .filters(filters: slidingSyncInviteFilters)
+                .name(name: "Invites")
+                .syncMode(mode: .growing)
+                .build()
+            
+            let invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView, name: "Invites")
+            
+            invitesSummaryProvider = RoomSummaryProvider(slidingSyncViewProxy: invitesViewProxy,
+                                                         eventStringBuilder: RoomEventStringBuilder(stateEventStringBuilder: RoomStateEventStringBuilder(userID: userID)))
+            
+            invitesSlidingSyncView = invitesView
+            self.invitesViewProxy = invitesViewProxy
+        } catch {
+            MXLog.error("Failed building the invites sliding sync view with error: \(error)")
+        }
     }
     
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
