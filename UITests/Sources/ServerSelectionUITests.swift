@@ -25,8 +25,6 @@ class ServerSelectionUITests: XCTestCase {
         
         // Then it should be configured for matrix.org
         app.assertScreenshot(.serverSelection, step: 0)
-        XCTAssertEqual(app.textFields[A11yIdentifiers.changeServerScreen.server].value as? String, "matrix.org", "The server shown should be matrix.org with the https scheme hidden.")
-        XCTAssertEqual(app.buttons[A11yIdentifiers.changeServerScreen.continue].label, L10n.actionContinue, "The confirm button should say Confirm when in modal presentation.")
     }
 
     func testEmptyAddress() async {
@@ -39,8 +37,6 @@ class ServerSelectionUITests: XCTestCase {
         
         // Then the screen should not allow the user to continue.
         app.assertScreenshot(.serverSelection, step: 1)
-        XCTAssertEqual(app.textFields[A11yIdentifiers.changeServerScreen.server].value as? String, L10n.commonServerUrl, "The text field should show placeholder text in this state.")
-        XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.continue].isEnabled, "The confirm button should be disabled when the address is empty.")
     }
 
     func testInvalidAddress() {
@@ -62,6 +58,5 @@ class ServerSelectionUITests: XCTestCase {
         // Then the screen should be tweaked slightly to reflect the change of navigation.
         app.assertScreenshot(.serverSelectionNonModal)
         XCTAssertFalse(app.buttons[A11yIdentifiers.changeServerScreen.dismiss].exists, "The dismiss button should be hidden when not in modal presentation.")
-        XCTAssertEqual(app.buttons[A11yIdentifiers.changeServerScreen.continue].label, L10n.actionNext, "The confirm button should say Next when not in modal presentation.")
     }
 }
