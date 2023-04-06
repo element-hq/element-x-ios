@@ -122,11 +122,13 @@ struct HomeScreen: View {
                 }
             }
             Section {
-                Button(action: inviteFriends) {
-                    Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
+                if let permalink = context.viewState.invitePermalink {
+                    ShareLink(item: permalink) {
+                        Label(L10n.actionInvite, systemImage: "square.and.arrow.up")
+                    }
                 }
                 Button(action: feedback) {
-                    Label(L10n.actionReportBug, systemImage: "questionmark.circle")
+                    Label(L10n.commonReportABug, systemImage: "questionmark.circle")
                 }
             }
             Section {
@@ -199,10 +201,6 @@ struct HomeScreen: View {
 
     private func settings() {
         context.send(viewAction: .userMenu(action: .settings))
-    }
-
-    private func inviteFriends() {
-        context.send(viewAction: .userMenu(action: .inviteFriends))
     }
 
     private func startChat() {

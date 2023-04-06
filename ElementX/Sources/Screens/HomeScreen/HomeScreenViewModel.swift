@@ -38,7 +38,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         visibleRoomsSummaryProvider = userSession.clientProxy.visibleRoomsSummaryProvider
         allRoomsSummaryProvider = userSession.clientProxy.allRoomsSummaryProvider
         
-        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID),
+        let invitePermalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userSession.userID)
+        super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, invitePermalink: invitePermalink),
                    imageProvider: userSession.mediaProvider)
         
         userSession.callbacks
@@ -143,8 +144,6 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 callback?(.presentFeedbackScreen)
             case .settings:
                 callback?(.presentSettingsScreen)
-            case .inviteFriends:
-                callback?(.presentInviteFriendsScreen)
             case .signOut:
                 callback?(.signOut)
             }
