@@ -96,14 +96,22 @@ final class RoomScreenCoordinator: CoordinatorProtocol {
                     case .send:
                         Task {
                             let preprocessor = MediaUploadingPreprocessor()
-                            switch await preprocessor.processMedia(url: url) {
+                            switch await preprocessor.processMedia(at: url) {
                             case .success(let mediaInfo):
                                 MXLog.info(mediaInfo)
+                                
+                                switch mediaInfo {
+                                case let .image(imageURL, thumbnailURL, imageInfo):
+                                    let _ = await self?.parameters.roomProxy.sendImage(url: imageURL, thumbnailURL: thumbnailURL, imageInfo: imageInfo)
+                                default:
+                                    break
+                                }
                             case .failure(let error):
                                 MXLog.error("Failed processing media to upload with error: \(error)")
                             }
+                            
+                            self?.navigationStackCoordinator.setSheetCoordinator(nil)
                         }
-                        self?.navigationStackCoordinator.setSheetCoordinator(nil)
                     case .cancel:
                         self?.navigationStackCoordinator.setSheetCoordinator(nil)
                     }

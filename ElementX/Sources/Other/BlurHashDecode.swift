@@ -1,6 +1,7 @@
-import UIKit
-
 // swiftlint:disable all
+// swift-format-ignore-file
+
+import UIKit
 
 public extension UIImage {
     convenience init?(blurHash: String, size: CGSize, punch: Float = 1) {
@@ -142,5 +143,3 @@ private extension String {
         return self[start..<end]
     }
 }
-
-// swiftlint:enable all

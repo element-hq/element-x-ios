@@ -66,7 +66,7 @@ struct DocumentPicker: UIViewControllerRepresentable {
                 return
             }
             do {
-                let newURL = try FileManager.default.copyFileToTemporaryDirectory(url: url)
+                let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url)
                 documentPicker.callback(.selectFile(newURL))
             } catch {
                 documentPicker.callback(.error(error))

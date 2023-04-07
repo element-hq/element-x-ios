@@ -69,7 +69,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
                 
                 do {
                     let _ = url.startAccessingSecurityScopedResource()
-                    let newURL = try FileManager.default.copyFileToTemporaryDirectory(url: url)
+                    let newURL = try FileManager.default.copyFileToTemporaryDirectory(file: url)
                     url.stopAccessingSecurityScopedResource()
                     
                     Task { @MainActor in
