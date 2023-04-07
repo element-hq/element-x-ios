@@ -1,5 +1,4 @@
 // swiftlint:disable all
-// swift-format-ignore-file
 
 import UIKit
 
