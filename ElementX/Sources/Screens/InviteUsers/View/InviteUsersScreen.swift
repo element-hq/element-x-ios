@@ -79,6 +79,7 @@ struct InviteUsersScreen: View {
         .formSectionStyle()
     }
     
+    @ScaledMetric private var cellWidth: CGFloat = 64
     private var selectedUsersSection: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             ScrollViewReader { scrollView in
@@ -87,7 +88,7 @@ struct InviteUsersScreen: View {
                         SelectedInvitedUserItem(user: user, imageProvider: context.imageProvider) {
                             deselect(user)
                         }
-                        .frame(width: 64)
+                        .frame(width: cellWidth)
                     }
                 }
                 .onChange(of: context.viewState.scrollToLastID) { lastAddedID in
