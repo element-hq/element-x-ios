@@ -29,10 +29,8 @@ struct InvitesListScreen: View {
         ScrollView {
             if let rooms = context.viewState.invites {
                 LazyVStack {
-                    #warning("Cleanup bg color")
                     ForEach(rooms, id: \.roomDetails.id) { invite in
                         InviteCell(invite: invite, imageProvider: context.imageProvider)
-                            .background(invite.isDirect ? Color.yellow : Color.clear)
                     }
                 }
             }

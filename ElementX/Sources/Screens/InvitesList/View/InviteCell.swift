@@ -24,11 +24,12 @@ struct InviteCell: View {
     private let verticalInsets = 16.0
     
     var body: some View {
+        #warning("cleanup")
         HStack(alignment: .top, spacing: 16) {
             LoadableAvatarImage(url: mainAvatarURL,
                                 name: title,
                                 contentID: invite.roomDetails.id,
-                                avatarSize: .user(on: .startChat),
+                                avatarSize: .custom(52),
                                 imageProvider: imageProvider)
                 .accessibilityHidden(true)
             
@@ -68,6 +69,22 @@ struct InviteCell: View {
                 Text(subtitle)
                     .font(.element.subheadline)
                     .foregroundColor(.element.tertiaryContent)
+            }
+            
+            if !invite.isDirect, let name = invite.inviter?.displayName {
+                HStack {
+                    if let inviterAvatar = invite.inviter?.avatarURL {
+                        LoadableAvatarImage(url: inviterAvatar,
+                                            name: name,
+                                            contentID: name,
+                                            avatarSize: .custom(16),
+                                            imageProvider: imageProvider)
+                    }
+                 
+                    #warning("Localize")
+                    Text("\(name) invited you")
+                        .font(.compound.bodyMD)
+                }
             }
             
             buttons
