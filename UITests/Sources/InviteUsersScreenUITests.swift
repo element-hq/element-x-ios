@@ -22,4 +22,10 @@ class InviteUsersScreenUITests: XCTestCase {
         let app = Application.launch(.inviteUsers)
         app.assertScreenshot(.inviteUsers)
     }
+
+    func testSelectedUsers() {
+        let app = Application.launch(.inviteUsers)
+        app.collectionViews.firstMatch.cells.element(boundBy: 1).tap()
+        app.assertScreenshot(.inviteUsers, step: 1)
+    }
 }
