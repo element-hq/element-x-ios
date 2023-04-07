@@ -17,40 +17,78 @@
 import SwiftUI
 
 struct TimelineItemDebugView: View {
-    struct DebugInfo: Identifiable {
-        let id = UUID()
-        let title: String
-        var content: String
-    }
-    
     @Environment(\.dismiss) private var dismiss
     
-    let info: DebugInfo
+    @State private var isModelExpanded = true
+    
+    let info: TimelineItemDebugInfo
     
     var body: some View {
         NavigationStack {
             ScrollView {
-                Text(info.content)
-                    .padding()
-                    .font(.element.footnote)
-                    .foregroundColor(.element.primaryContent)
-                    .frame(maxWidth: .infinity, alignment: .leading)
+                Divider()
+                
+                VStack {
+                    disclosureGroup(title: "Model", text: info.model)
+                    disclosureGroup(title: "Original JSON", text: info.originalJson)
+                    disclosureGroup(title: "Latest edit JSON", text: info.latestEditJson)
+                }
             }
             .navigationBarTitleDisplayMode(.inline)
-            .navigationTitle(info.title)
+            .navigationTitle("Timeline item")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button(L10n.actionCancel) {
                         dismiss()
                     }
                 }
-                ToolbarItem(placement: .secondaryAction) {
+                
+                ToolbarItem(placement: .primaryAction) {
                     Button(L10n.actionCopy) {
-                        UIPasteboard.general.string = info.content
+                        UIPasteboard.general.string = info.description
                     }
                 }
             }
         }
+    }
+    
+    // MARK: - Private
+    
+    @ViewBuilder
+    private func disclosureGroup(title: String, text: String?, isExpanded: Binding<Bool>? = nil) -> some View {
+        if let text {
+            VStack(spacing: 0.0) {
+                Group {
+                    if let isExpanded {
+                        DisclosureGroup(title, isExpanded: isExpanded) {
+                            groupContent(for: text)
+                        }
+                    } else {
+                        DisclosureGroup(title) {
+                            groupContent(for: text)
+                        }
+                    }
+                }
+                .listRowInsets(.none)
+                .font(.element.subheadline)
+                .padding()
+                
+                Divider()
+            }
+        }
+    }
+    
+    private func groupContent(for text: String) -> some View {
+        VStack(alignment: .leading) {
+            Spacer()
+            
+            Divider()
+            
+            Text(text)
+                .font(.element.caption1.monospaced())
+                .foregroundColor(.element.primaryContent)
+        }
+        .frame(maxWidth: .infinity)
     }
 }
 
@@ -71,6 +109,8 @@ struct TimelineItemDebugView_Previews: PreviewProvider {
     """
     
     static var previews: some View {
-        TimelineItemDebugView(info: .init(title: "Timeline item", content: smallContent))
+        TimelineItemDebugView(info: .init(model: smallContent,
+                                          originalJson: smallContent,
+                                          latestEditJson: smallContent))
     }
 }

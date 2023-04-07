@@ -181,21 +181,19 @@ class RoomTimelineController: RoomTimelineControllerProtocol {
     
     // Handle this parallel to the timeline items so we're not forced
     // to bundle the Rust side objects within them
-    func debugDescription(for itemID: String) -> String {
-        var description = "Unknown item"
-        timelineProvider.itemsPublisher.value.forEach { timelineItemProxy in
+    func debugInfo(for itemID: String) -> TimelineItemDebugInfo {
+        for timelineItemProxy in timelineProvider.itemsPublisher.value {
             switch timelineItemProxy {
             case .event(let item):
                 if item.id == itemID {
-                    description = item.debugDescription
-                    return
+                    return item.debugInfo
                 }
             default:
-                break
+                continue
             }
         }
         
-        return description
+        return .init(model: "Unknown item", originalJson: nil, latestEditJson: nil)
     }
     
     func retryDecryption(for sessionID: String) async {

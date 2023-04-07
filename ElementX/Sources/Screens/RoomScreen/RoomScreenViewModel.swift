@@ -319,9 +319,9 @@ class RoomScreenViewModel: RoomScreenViewModelType, RoomScreenViewModelProtocol 
             state.bindings.composerFocused = true
             state.composerMode = .reply(id: item.id, displayName: item.sender.displayName ?? item.sender.id)
         case .viewSource:
-            let debugDescription = timelineController.debugDescription(for: item.id)
-            MXLog.info(debugDescription)
-            state.bindings.debugInfo = .init(title: "Timeline item", content: debugDescription)
+            let debugInfo = timelineController.debugInfo(for: item.id)
+            MXLog.info(debugInfo)
+            state.bindings.debugInfo = debugInfo
         case .retryDecryption(let sessionID):
             Task {
                 await timelineController.retryDecryption(for: sessionID)
