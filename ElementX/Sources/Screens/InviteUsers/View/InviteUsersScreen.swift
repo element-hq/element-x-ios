@@ -87,7 +87,7 @@ struct InviteUsersScreen: View {
                         SelectedInvitedUserItem(user: user, imageProvider: context.imageProvider) {
                             deselect(user)
                         }
-                        .frame(width: 64, height: 90)
+                        .frame(width: 64)
                     }
                 }
                 .onChange(of: context.viewState.scrollToLastID) { lastAddedID in
@@ -98,7 +98,6 @@ struct InviteUsersScreen: View {
                 }
             }
         }
-        .frame(height: 90)
         .padding(.horizontal, 18)
     }
     
