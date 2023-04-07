@@ -20,9 +20,12 @@ import UIKit
 import UniformTypeIdentifiers
 
 indirect enum MediaUploadingPreprocessorError: Error {
+    case failedProcessingMedia(Error)
+    
     case failedProcessingImage(MediaUploadingPreprocessorError)
     case failedProcessingVideo(MediaUploadingPreprocessorError)
     case failedProcessingAudio
+    case failedProcessingFile
     
     case failedGeneratingVideoThumbnail(Error?)
     case failedGeneratingImageThumbnail(Error?)
@@ -68,20 +71,31 @@ struct MediaUploadingPreprocessor {
     /// - Parameter url: the file URL
     /// - Returns: a specific type of `MediaInfo` depending on the file type and its associated details
     func processMedia(at url: URL) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
+        // Start by moving the file to a unique temporary location in order to avoid conflicts if processing it multiple times
+        // All the other operations will be made relative to it
+        let uniqueFolder = FileManager.default.temporaryDirectory.appendingPathComponent(UUID().uuidString)
+        let newURL = uniqueFolder.appendingPathComponent(url.lastPathComponent)
+        do {
+            try FileManager.default.createDirectory(at: uniqueFolder, withIntermediateDirectories: true)
+            try FileManager.default.moveItem(at: url, to: newURL)
+        } catch {
+            return .failure(.failedProcessingMedia(error))
+        }
+        
         // Process unknown types as plain files
-        guard let type = UTType(filenameExtension: url.pathExtension),
+        guard let type = UTType(filenameExtension: newURL.pathExtension),
               let mimeType = type.preferredMIMEType else {
-            return await processFile(at: url, mimeType: nil)
+            return await processFile(at: newURL, mimeType: nil)
         }
         
         if type.conforms(to: .image) {
-            return await processImage(at: url, type: type, mimeType: mimeType)
+            return await processImage(at: newURL, type: type, mimeType: mimeType)
         } else if type.conforms(to: .movie) || type.conforms(to: .video) {
-            return await processVideo(at: url)
+            return await processVideo(at: newURL)
         } else if type.conforms(to: .audio) {
-            return await processAudio(at: url, mimeType: mimeType)
+            return await processAudio(at: newURL, mimeType: mimeType)
         } else {
-            return await processFile(at: url, mimeType: mimeType)
+            return await processFile(at: newURL, mimeType: mimeType)
         }
     }
     
@@ -134,7 +148,7 @@ struct MediaUploadingPreprocessor {
     private func processVideo(at url: URL) async -> Result<MediaInfo, MediaUploadingPreprocessorError> {
         switch await convertVideoToMP4(url) {
         case .success(let result):
-            switch await generateThumbnailForVideoAt(url) {
+            switch await generateThumbnailForVideoAt(result.url) {
             case .success(let thumbnailResult):
                 let videoSize = try? UInt64(FileManager.default.sizeForItemAt(result.url))
                 let thumbnailSize = try? UInt64(FileManager.default.sizeForItemAt(thumbnailResult.url))
@@ -227,7 +241,7 @@ struct MediaUploadingPreprocessor {
         CGImageDestinationFinalize(destination)
         
         do {
-            let url = try FileManager.default.writeDataToTemporaryDirectory(data: data as Data, fileName: url.lastPathComponent)
+            try data.write(to: url)
             return .success(.init(url: url, height: Double(originalCGImage.height), width: Double(originalCGImage.width), mimeType: mimeType, blurhash: nil))
         } catch {
             return .failure(.failedStrippingLocationData)
@@ -248,7 +262,8 @@ struct MediaUploadingPreprocessor {
             
             do {
                 let fileName = "thumbnail-\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
-                let thumbnailURL = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: fileName)
+                let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
+                try data.write(to: thumbnailURL)
                 return .success(.init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash))
             } catch {
                 return .failure(.failedGeneratingImageThumbnail(error))
@@ -325,9 +340,10 @@ struct MediaUploadingPreprocessor {
                 let blurhash = thumbnail.blurHash(numberOfComponents: (3, 3))
                 
                 let fileName = "\((url.lastPathComponent as NSString).deletingPathExtension).jpeg"
-                let url = try FileManager.default.writeDataToTemporaryDirectory(data: data, fileName: fileName)
+                let thumbnailURL = url.deletingLastPathComponent().appendingPathComponent(fileName)
+                try data.write(to: thumbnailURL)
                 
-                return .success(.init(url: url, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash))
+                return .success(.init(url: thumbnailURL, height: thumbnail.size.height, width: thumbnail.size.width, mimeType: "image/jpeg", blurhash: blurhash))
             case .failure(let error):
                 return .failure(.failedGeneratingVideoThumbnail(error))
             }
@@ -348,14 +364,10 @@ struct MediaUploadingPreprocessor {
             return .failure(.failedConvertingVideo)
         }
         
-        var fileName = url.deletingPathExtension().appendingPathExtension("mp4").lastPathComponent
-        let isOriginalFileInTemporaryDirectory = FileManager.default.temporaryDirectoryURLFor(fileName: fileName) == url
-        
         // AVAssetExportSession will fail if the output URL already exists
-        if isOriginalFileInTemporaryDirectory {
-            fileName = "converted-\(fileName)"
-        }
-        let outputURL = FileManager.default.temporaryDirectoryURLFor(fileName: fileName)
+        let uuid = UUID().uuidString
+        let originalFilenameWithoutExtension = url.deletingPathExtension().lastPathComponent
+        let outputURL = url.deletingLastPathComponent().appendingPathComponent("\(uuid)-\(originalFilenameWithoutExtension).mp4")
         
         try? FileManager.default.removeItem(at: outputURL)
         
@@ -376,20 +388,20 @@ struct MediaUploadingPreprocessor {
         switch exportSession.status {
         case .completed:
             do {
-                // We are not able to directly overwrite the original file so do it here instead
-                if isOriginalFileInTemporaryDirectory {
-                    try? FileManager.default.removeItem(at: url)
-                    try FileManager.default.moveItem(at: outputURL, to: url)
-                }
+                // Delete the original
+                try? FileManager.default.removeItem(at: url)
+                // Strip the UUID from the new version
+                let newOutputURL = url.deletingLastPathComponent().appendingPathComponent("\(originalFilenameWithoutExtension).mp4")
+                try FileManager.default.moveItem(at: outputURL, to: newOutputURL)
                 
-                let newAsset = AVURLAsset(url: url)
+                let newAsset = AVURLAsset(url: newOutputURL)
                 guard let track = try? await newAsset.loadTracks(withMediaType: .video).first,
                       let durationInSeconds = try? await newAsset.load(.duration).seconds,
                       let naturalSize = try? await track.load(.naturalSize) else {
                     return .failure(.failedConvertingVideo)
                 }
                 
-                return .success(.init(url: outputURL,
+                return .success(.init(url: newOutputURL,
                                       height: naturalSize.height,
                                       width: naturalSize.width,
                                       duration: durationInSeconds * 1000,
