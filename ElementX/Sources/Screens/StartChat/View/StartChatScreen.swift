@@ -89,12 +89,12 @@ struct StartChatScreen: View {
                     Button { context.send(viewAction: .selectUser(user)) } label: {
                         StartChatSuggestedUserCell(user: user, imageProvider: context.imageProvider)
                     }
+                    .buttonStyle(FormButtonStyle())
                 }
             } header: {
                 if let title = context.viewState.usersSection.type.title {
                     Text(title)
                 }
-                .buttonStyle(FormButtonStyle())
             }
             .listRowSeparator(.automatic)
             .formSectionStyle()
