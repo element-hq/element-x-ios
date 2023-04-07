@@ -45,20 +45,20 @@ struct InviteCell: View {
     
     // MARK: - Private
     
-    var mainAvatarURL: URL? {
+    private var mainAvatarURL: URL? {
         invite.isDirect ? invite.inviter?.avatarURL : invite.roomDetails.avatarURL
     }
     
-    var title: String? {
+    private var title: String? {
         invite.isDirect ? invite.inviter?.displayName : invite.roomDetails.name
     }
     
-    var subtitle: String? {
+    private var subtitle: String? {
         invite.isDirect ? invite.inviter?.userID : invite.roomDetails.id
     }
     
     #warning("cleanup")
-    var mainContent: some View {
+    private var mainContent: some View {
         VStack(alignment: .leading, spacing: 4) {
             Text(title ?? "FIXME")
                 .font(.element.title3)
@@ -75,7 +75,8 @@ struct InviteCell: View {
         }
     }
     
-    var buttons: some View {
+    #warning("Localize")
+    private var buttons: some View {
         HStack(spacing: 12) {
             Button("Decline") { }
                 .buttonStyle(.elementCapsule)
@@ -85,7 +86,7 @@ struct InviteCell: View {
         }
     }
     
-    var separator: some View {
+    private var separator: some View {
         Rectangle()
             .fill(Color.element.quinaryContent)
             .frame(height: 1 / UIScreen.main.scale)

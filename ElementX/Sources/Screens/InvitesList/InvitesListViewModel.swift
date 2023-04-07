@@ -29,7 +29,7 @@ class InvitesListViewModel: InvitesListViewModelType, InvitesListViewModelProtoc
 
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
-        super.init(initialViewState: InvitesListViewState())
+        super.init(initialViewState: InvitesListViewState(), imageProvider: userSession.mediaProvider)
         setupSubscriptions()
     }
     
