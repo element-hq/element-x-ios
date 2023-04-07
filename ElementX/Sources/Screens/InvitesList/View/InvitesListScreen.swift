@@ -31,8 +31,7 @@ struct InvitesListScreen: View {
                 LazyVStack {
                     #warning("Cleanup bg color")
                     ForEach(rooms, id: \.roomDetails.id) { invite in
-                        let room = invite.roomDetails
-                        InviteCell(user: .init(userID: room.id, displayName: room.name, avatarURL: room.avatarURL), imageProvider: context.imageProvider)
+                        InviteCell(invite: invite, imageProvider: context.imageProvider)
                             .background(invite.isDirect ? Color.yellow : Color.clear)
                     }
                 }

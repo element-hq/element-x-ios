@@ -16,17 +16,18 @@
 
 import SwiftUI
 
+@MainActor
 struct InviteCell: View {
-    let user: UserProfile
+    let invite: Invite
     let imageProvider: ImageProviderProtocol?
     
     private let verticalInsets = 16.0
     
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
-            LoadableAvatarImage(url: user.avatarURL,
-                                name: user.displayName,
-                                contentID: user.userID,
+            LoadableAvatarImage(url: mainAvatarURL,
+                                name: title,
+                                contentID: invite.roomDetails.id,
                                 avatarSize: .user(on: .startChat),
                                 imageProvider: imageProvider)
                 .accessibilityHidden(true)
@@ -44,14 +45,27 @@ struct InviteCell: View {
     
     // MARK: - Private
     
+    var mainAvatarURL: URL? {
+        invite.isDirect ? invite.inviter?.avatarURL : invite.roomDetails.avatarURL
+    }
+    
+    var title: String? {
+        invite.isDirect ? invite.inviter?.displayName : invite.roomDetails.name
+    }
+    
+    var subtitle: String? {
+        invite.isDirect ? invite.inviter?.userID : invite.roomDetails.id
+    }
+    
+    #warning("cleanup")
     var mainContent: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(user.displayName ?? user.userID)
+            Text(title ?? "FIXME")
                 .font(.element.title3)
                 .foregroundColor(.element.primaryContent)
             
-            if user.displayName != nil {
-                Text(user.userID)
+            if let subtitle {
+                Text(subtitle)
                     .font(.element.subheadline)
                     .foregroundColor(.element.tertiaryContent)
             }
@@ -80,6 +94,7 @@ struct InviteCell: View {
 
 struct InviteCell_Previews: PreviewProvider {
     static var previews: some View {
-        InviteCell(user: .init(userID: "Some user", displayName: "Hey there"), imageProvider: MockMediaProvider())
+        let roomDetails = RoomSummaryDetails(id: "some id", name: "some name", isDirect: false, avatarURL: nil, lastMessage: nil, lastMessageFormattedTimestamp: nil, unreadNotificationCount: 0)
+        InviteCell(invite: .init(roomDetails: roomDetails), imageProvider: MockMediaProvider())
     }
 }
