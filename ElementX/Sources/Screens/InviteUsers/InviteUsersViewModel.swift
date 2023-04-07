@@ -31,7 +31,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
     
     // MARK: - Public
     
-    func process(viewAction: InviteUsersViewAction) async {
+    override func process(viewAction: InviteUsersViewAction) {
         switch viewAction {
         case .close:
             callback?(.close)
@@ -56,9 +56,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
     // MARK: - Private
     
     private func fetchSuggestions() {
-        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie,
-                                                               .mockAlice1, .mockBob1, .mockCharlie1,
-                                                               .mockAlice2, .mockBob2, .mockCharlie2])
+        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
     }
 }

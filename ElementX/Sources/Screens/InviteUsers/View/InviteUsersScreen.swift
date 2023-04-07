@@ -125,10 +125,13 @@ struct InviteUsersScreen: View {
 // MARK: - Previews
 
 struct InviteUsers_Previews: PreviewProvider {
-    static var previews: some View {
+    static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let viewModel = InviteUsersViewModel(userSession: userSession)
+        return InviteUsersViewModel(userSession: userSession)
+    }()
+    
+    static var previews: some View {
         NavigationView {
             InviteUsersScreen(context: viewModel.context)
                 .tint(.element.accent)
