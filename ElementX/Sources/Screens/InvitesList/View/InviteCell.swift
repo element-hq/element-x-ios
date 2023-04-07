@@ -24,7 +24,6 @@ struct InviteCell: View {
     private let verticalInsets = 16.0
     
     var body: some View {
-        #warning("cleanup")
         HStack(alignment: .top, spacing: 16) {
             LoadableAvatarImage(url: mainAvatarURL,
                                 name: title,
@@ -46,59 +45,47 @@ struct InviteCell: View {
     
     // MARK: - Private
     
-    private var mainAvatarURL: URL? {
-        invite.isDirect ? invite.inviter?.avatarURL : invite.roomDetails.avatarURL
-    }
-    
-    private var title: String? {
-        invite.isDirect ? invite.inviter?.displayName : invite.roomDetails.name
-    }
-    
-    private var subtitle: String? {
-        invite.isDirect ? invite.inviter?.userID : invite.roomDetails.id
-    }
-    
-    #warning("cleanup")
     private var mainContent: some View {
         VStack(alignment: .leading, spacing: 4) {
-            Text(title ?? "FIXME")
-                .font(.element.title3)
+            Text(title)
+                .font(.element.headline)
                 .foregroundColor(.element.primaryContent)
             
             if let subtitle {
                 Text(subtitle)
-                    .font(.element.subheadline)
-                    .foregroundColor(.element.tertiaryContent)
+                    .font(.compound.bodyMD)
+                    .foregroundColor(.compound.textPlaceholder)
             }
             
-            if !invite.isDirect, let name = invite.inviter?.displayName {
-                HStack {
-                    if let inviterAvatar = invite.inviter?.avatarURL {
-                        LoadableAvatarImage(url: inviterAvatar,
-                                            name: name,
-                                            contentID: name,
-                                            avatarSize: .custom(16),
-                                            imageProvider: imageProvider)
-                    }
-                 
-                    #warning("Localize")
-                    Text("\(name) invited you")
-                        .font(.compound.bodyMD)
-                }
-            }
+            inviterView
             
             buttons
-                .padding(.top, 8)
+                .padding(.top, 10)
         }
     }
     
-    #warning("Localize")
+    @ViewBuilder
+    private var inviterView: some View {
+        if let invitedText = attributedInviteText, let name = invite.inviter?.displayName {
+            HStack {
+                LoadableAvatarImage(url: invite.inviter?.avatarURL,
+                                    name: name,
+                                    contentID: name,
+                                    avatarSize: .custom(16),
+                                    imageProvider: imageProvider)
+                
+                Text(invitedText)
+            }
+            .padding(.top, 4)
+        }
+    }
+    
     private var buttons: some View {
         HStack(spacing: 12) {
-            Button("Decline") { }
+            Button(L10n.actionDecline) { }
                 .buttonStyle(.elementCapsule)
             
-            Button("Accept") { }
+            Button(L10n.actionAccept) { }
                 .buttonStyle(.elementCapsuleProminent)
         }
     }
@@ -108,11 +95,79 @@ struct InviteCell: View {
             .fill(Color.element.quinaryContent)
             .frame(height: 1 / UIScreen.main.scale)
     }
+    
+    private var mainAvatarURL: URL? {
+        invite.isDirect ? invite.inviter?.avatarURL : invite.roomDetails.avatarURL
+    }
+    
+    private var title: String {
+        if invite.isDirect, let inviterName = invite.inviter?.displayName {
+            return inviterName
+        } else {
+            return invite.roomDetails.name
+        }
+    }
+    
+    private var subtitle: String? {
+        invite.isDirect ? invite.inviter?.userID : invite.roomDetails.id
+    }
+    
+    var attributedInviteText: AttributedString? {
+        guard invite.roomDetails.isDirect == false, let inviterName = invite.inviter?.displayName else {
+            return nil
+        }
+        
+        let text = L10n.screenInvitesInvitedYou(inviterName)
+        var attributedString = AttributedString(text)
+        attributedString.font = .compound.bodyMD
+        attributedString.foregroundColor = .compound.textPlaceholder
+        if let range = attributedString.range(of: inviterName) {
+            attributedString[range].foregroundColor = .compound.textPrimary
+        }
+        return attributedString
+    }
 }
 
 struct InviteCell_Previews: PreviewProvider {
     static var previews: some View {
-        let roomDetails = RoomSummaryDetails(id: "some id", name: "some name", isDirect: false, avatarURL: nil, lastMessage: nil, lastMessageFormattedTimestamp: nil, unreadNotificationCount: 0)
-        InviteCell(invite: .init(roomDetails: roomDetails), imageProvider: MockMediaProvider())
+        InviteCell(invite: .dm, imageProvider: MockMediaProvider())
+            .previewDisplayName("Direct room")
+        
+        InviteCell(invite: .room, imageProvider: MockMediaProvider())
+            .previewDisplayName("Default room")
+    }
+}
+
+@MainActor
+private extension Invite {
+    static var dm: Invite {
+        let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
+                                        name: "Some Guy",
+                                        isDirect: true,
+                                        avatarURL: nil,
+                                        lastMessage: nil,
+                                        lastMessageFormattedTimestamp: nil,
+                                        unreadNotificationCount: 0)
+        let inviter = RoomMemberProxyMock()
+        inviter.displayName = "Jack"
+        inviter.userID = "@jack@somewhere.com"
+        
+        return .init(roomDetails: dmRoom, inviter: inviter)
+    }
+    
+    static var room: Invite {
+        let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
+                                        name: "Awesome Room",
+                                        isDirect: false,
+                                        avatarURL: nil,
+                                        lastMessage: nil,
+                                        lastMessageFormattedTimestamp: nil,
+                                        unreadNotificationCount: 0)
+        let inviter = RoomMemberProxyMock()
+        inviter.displayName = "Luca"
+        inviter.userID = "@jack@somewhere.com"
+        inviter.avatarURL = nil
+        
+        return .init(roomDetails: dmRoom, inviter: inviter)
     }
 }
