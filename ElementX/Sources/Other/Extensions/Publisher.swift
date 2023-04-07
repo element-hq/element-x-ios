@@ -15,11 +15,25 @@
 //
 
 import Combine
+import Foundation
 
 extension Publisher where Self.Failure == Never {
     func weakAssign<Root: AnyObject>(to keyPath: ReferenceWritableKeyPath<Root, Self.Output>, on object: Root) -> AnyCancellable {
         sink { [weak object] value in
             object?[keyPath: keyPath] = value
         }
+    }
+}
+
+extension Publisher where Output == String, Failure == Never {
+    func delayTextOrImmediateClear() -> AnyPublisher<String, Never> {
+        map { query in
+            // debounce search queries but make sure clearing the search updates immediately
+            let milliseconds = query.isEmpty ? 0 : 500
+            return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
+        }
+        .switchToLatest()
+        .removeDuplicates()
+        .eraseToAnyPublisher()
     }
 }

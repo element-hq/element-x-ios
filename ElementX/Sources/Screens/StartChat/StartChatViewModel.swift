@@ -26,16 +26,17 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     var actions: AnyPublisher<StartChatViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+    private let usersProvider: UsersProvider
     
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     
     init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
+        usersProvider = .init(clientProxy: userSession.clientProxy)
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()
-        fetchSuggestions()
     }
     
     // MARK: - Public
@@ -86,13 +87,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private func setupBindings() {
         context.$viewState
             .map(\.bindings.searchQuery)
-            .map { query in
-                // debounce search queries but make sure clearing the search updates immediately
-                let milliseconds = query.isEmpty ? 0 : 500
-                return Just(query).delay(for: .milliseconds(milliseconds), scheduler: DispatchQueue.main)
-            }
-            .switchToLatest()
-            .removeDuplicates()
+            .delayTextOrImmediateClear()
             .sink { [weak self] _ in
                 self?.fetchData()
             }
@@ -106,43 +101,9 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
         
         Task {
-            await searchProfiles()
+            let users = await usersProvider.searchProfiles(with: searchQuery)
+            state.usersSection = .init(type: .searchResult, users: users)
         }
-    }
-    
-    private func searchProfiles() async {
-        // copies the current query to check later if fetched data must be shown or not
-        let committedQuery = searchQuery
-        
-        async let queriedProfile = getProfileIfPossible()
-        async let searchedUsers = clientProxy.searchUsers(searchTerm: committedQuery, limit: 5)
-        
-        await updateState(committedQuery: committedQuery,
-                          queriedProfile: queriedProfile,
-                          searchResults: try? searchedUsers.get())
-    }
-    
-    private func updateState(committedQuery: String, queriedProfile: UserProfile?, searchResults: SearchUsersResults?) {
-        guard committedQuery == searchQuery else {
-            return
-        }
-        
-        let localProfile = queriedProfile ?? UserProfile(searchQuery: searchQuery)
-        let allResults = merge(localProfile: localProfile, searchResults: searchResults?.results)
-        
-        state.usersSection = .init(type: .searchResult, users: allResults)
-    }
-    
-    private func merge(localProfile: UserProfile?, searchResults: [UserProfile]?) -> [UserProfile] {
-        guard let localProfile else {
-            return searchResults ?? []
-        }
-        
-        let filteredSearchResult = searchResults?.filter {
-            $0.userID != localProfile.userID
-        } ?? []
-
-        return [localProfile] + filteredSearchResult
     }
     
     private func fetchSuggestions() {
@@ -150,7 +111,8 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
             state.usersSection = .init(type: .empty, users: [])
             return
         }
-        state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
+        let users = usersProvider.fetchSuggestions()
+        state.usersSection = .init(type: .suggestions, users: users)
     }
     
     private func createDirectRoom(with user: UserProfile) async {
@@ -163,14 +125,6 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         case .failure(let failure):
             displayError(failure)
         }
-    }
-    
-    private func getProfileIfPossible() async -> UserProfile? {
-        guard searchQuery.isMatrixIdentifier else {
-            return nil
-        }
-        
-        return try? await clientProxy.getProfile(for: searchQuery).get()
     }
     
     private var clientProxy: ClientProxyProtocol {
@@ -194,20 +148,5 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func hideLoadingIndicator() {
         userIndicatorController?.retractIndicatorWithId(Self.loadingIndicatorIdentifier)
-    }
-}
-
-private extension String {
-    var isMatrixIdentifier: Bool {
-        MatrixEntityRegex.isMatrixUserIdentifier(self)
-    }
-}
-
-private extension UserProfile {
-    init?(searchQuery: String) {
-        guard searchQuery.isMatrixIdentifier else {
-            return nil
-        }
-        self.init(userID: searchQuery)
     }
 }
