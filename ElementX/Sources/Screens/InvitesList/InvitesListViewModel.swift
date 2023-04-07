@@ -21,28 +21,72 @@ typealias InvitesListViewModelType = StateStoreViewModel<InvitesListViewState, I
 
 class InvitesListViewModel: InvitesListViewModelType, InvitesListViewModelProtocol {
     private var actionsSubject: PassthroughSubject<InvitesListViewModelAction, Never> = .init()
-    private let invitesSummaryProvider: RoomSummaryProviderProtocol?
+    private let userSession: UserSessionProtocol
     
     var actions: AnyPublisher<InvitesListViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
     init(userSession: UserSessionProtocol) {
-        invitesSummaryProvider = userSession.clientProxy.invitesSummaryProvider
-        
+        self.userSession = userSession
         super.init(initialViewState: InvitesListViewState())
-        
+        setupSubscriptions()
+    }
+    
+    // MARK: - Public
+    
+    override func process(viewAction: InvitesListViewAction) { }
+    
+    // MARK: - Private
+    
+    private var invitesSummaryProvider: RoomSummaryProviderProtocol? {
+        userSession.clientProxy.invitesSummaryProvider
+    }
+    
+    private func setupSubscriptions() {
         guard let invitesSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
         
         invitesSummaryProvider.roomListPublisher
-            .weakAssign(to: \.state.roomSummaries, on: self)
+            .sink { [weak self] roomSummaries in
+                guard let self else { return }
+                
+                let invites = roomSummaries.invites
+                self.state.invites = invites
+                
+                for invite in invites {
+                    self.fetchInviter(for: invite.roomDetails.id)
+                }
+            }
             .store(in: &cancellables)
     }
     
-    // MARK: - Public
-    
-    override func process(viewAction: InvitesListViewAction) { }
+    private func fetchInviter(for roomID: String) {
+        Task { @MainActor in
+            guard let room: RoomProxyProtocol = await self.userSession.clientProxy.roomForIdentifier(roomID) else {
+                return
+            }
+            
+            let inviter: RoomMemberProxyProtocol? = await room.inviter()
+            
+            guard let inviteIndex = state.invites?.firstIndex(where: { $0.roomDetails.id == roomID }) else {
+                return
+            }
+            
+            state.invites?[inviteIndex].inviter = inviter
+        }
+    }
+}
+
+private extension Array where Element == RoomSummary {
+    var invites: [Invite] {
+        compactMap { summary in
+            guard case .filled(let details) = summary else {
+                return nil
+            }
+            return .init(roomDetails: details)
+        }
+    }
 }

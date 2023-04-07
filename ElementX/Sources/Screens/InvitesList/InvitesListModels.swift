@@ -14,20 +14,18 @@
 // limitations under the License.
 //
 
-import Foundation
-
 enum InvitesListViewModelAction { }
 
 struct InvitesListViewState: BindableState {
-    var roomSummaries: [RoomSummary]?
+    var invites: [Invite]?
+}
+
+struct Invite {
+    let roomDetails: RoomSummaryDetails
+    var inviter: RoomMemberProxyProtocol?
     
-    var roomDetails: [RoomSummaryDetails]? {
-        roomSummaries?.compactMap { summary in
-            guard case .filled(let details) = summary else {
-                return nil
-            }
-            return details
-        }
+    var isDirect: Bool {
+        roomDetails.isDirect
     }
 }
 

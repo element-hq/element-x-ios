@@ -27,10 +27,13 @@ struct InvitesListScreen: View {
     
     var body: some View {
         ScrollView {
-            if let rooms = context.viewState.roomDetails {
+            if let rooms = context.viewState.invites {
                 LazyVStack {
-                    ForEach(rooms, id: \.id) { room in
-                        InviteCell(user: .init(userID: room.id, displayName: room.name), imageProvider: context.imageProvider)
+                    #warning("Cleanup bg color")
+                    ForEach(rooms, id: \.roomDetails.id) { invite in
+                        let room = invite.roomDetails
+                        InviteCell(user: .init(userID: room.id, displayName: room.name, avatarURL: room.avatarURL), imageProvider: context.imageProvider)
+                            .background(invite.isDirect ? Color.yellow : Color.clear)
                     }
                 }
             }
