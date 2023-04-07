@@ -338,6 +338,16 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func inviter() async -> RoomMemberProxyProtocol? {
+        let inviter = await Task.dispatch(on: .global()) {
+            self.room.inviter()
+        }
+        
+        return inviter.map {
+            RoomMemberProxy(member: $0, backgroundTaskService: self.backgroundTaskService)
+        }
+    }
+    
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener
