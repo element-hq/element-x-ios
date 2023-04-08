@@ -27,6 +27,7 @@ struct DeveloperOptionsScreenViewStateBindings {
     var startChatFlowEnabled: Bool
     var startChatUserSuggestionsEnabled: Bool
     var mediaUploadFlowEnabled: Bool
+    var invitesFlowEnabled: Bool
 }
 
 enum DeveloperOptionsScreenViewAction {
@@ -34,4 +35,5 @@ enum DeveloperOptionsScreenViewAction {
     case changedStartChatFlowEnabled
     case changedStartChatUserSuggestionsEnabled
     case changedMediaUploadFlowEnabled
+    case changedInvitesFlowEnabled
 }

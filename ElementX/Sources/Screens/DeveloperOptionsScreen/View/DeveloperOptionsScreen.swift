@@ -50,6 +50,13 @@ struct DeveloperOptionsScreen: View {
                 .onChange(of: context.mediaUploadFlowEnabled) { _ in
                     context.send(viewAction: .changedMediaUploadFlowEnabled)
                 }
+                
+                Toggle(isOn: $context.invitesFlowEnabled) {
+                    Text("Show Invites flow")
+                }
+                .onChange(of: context.invitesFlowEnabled) { _ in
+                    context.send(viewAction: .changedInvitesFlowEnabled)
+                }
             }
             
             Section {

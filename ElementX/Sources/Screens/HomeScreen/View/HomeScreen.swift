@@ -41,7 +41,7 @@ struct HomeScreen: View {
                 sessionVerificationBanner
             }
 
-            if context.viewState.hasPendingInvitations {
+            if context.viewState.hasPendingInvitations, ServiceLocator.shared.settings.invitesFlowEnabled {
                 InvitesButton(title: L10n.actionInvitesList, hasBadge: true) {
                     context.send(viewAction: .selectInvites)
                 }
