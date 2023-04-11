@@ -19,24 +19,8 @@ import XCTest
 
 class InvitesListScreenUITests: XCTestCase {
     func testRegularScreen() {
-        let app = Application.launch(.simpleRegular)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Make this chat public?")
+        let app = Application.launch(.invites)
 
-        app.assertScreenshot(.simpleRegular)
-    }
-    
-    func testUpgradeScreen() {
-        let app = Application.launch(.simpleUpgrade)
-        
-        let title = app.staticTexts["title"]
-        XCTAssert(title.exists)
-        
-        XCTAssertEqual(title.label, "Privacy warning")
-
-        app.assertScreenshot(.simpleUpgrade)
+        app.assertScreenshot(.invites)
     }
 }

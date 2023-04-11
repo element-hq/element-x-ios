@@ -14,36 +14,25 @@
 // limitations under the License.
 //
 
-import XCTest
-
 @testable import ElementX
+import XCTest
 
 @MainActor
 class InvitesListScreenViewModelTests: XCTestCase {
-    private enum Constants {
-        static let counterInitialValue = 0
+    var viewModel: InvitesListViewModelProtocol!
+    var clientProxy: MockClientProxy!
+    
+    var context: InvitesListViewModelType.Context {
+        viewModel.context
     }
     
-    var viewModel: InvitesListViewModelProtocol!
-    var context: InvitesListViewModelType.Context!
-    
-    @MainActor override func setUpWithError() throws {
-        viewModel = InvitesListViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-        context = viewModel.context
+    override func setUpWithError() throws {
+        clientProxy = MockClientProxy(userID: "@a:b.com")
+        let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
+        viewModel = InvitesListViewModel(userSession: userSession)
     }
 
     func testInitialState() {
-        XCTAssertEqual(context.viewState.count, Constants.counterInitialValue)
-    }
-
-    func testCounter() async throws {
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
-        
-        context.send(viewAction: .incrementCount)
-        XCTAssertEqual(context.viewState.count, 2)
-        
-        context.send(viewAction: .decrementCount)
-        XCTAssertEqual(context.viewState.count, 1)
+        XCTAssertTrue(context.viewState.invites?.isEmpty == true)
     }
 }
