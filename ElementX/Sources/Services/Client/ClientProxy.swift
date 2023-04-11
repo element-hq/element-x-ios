@@ -420,10 +420,12 @@ class ClientProxy: ClientProxyProtocol {
         
         do {
             let invitesView = try SlidingSyncListBuilder()
-                .requiredState(requiredState: slidingSyncRequiredState)
+                .noTimelineLimit()
+                .requiredState(requiredState: slidingSyncInvitesRequiredState)
                 .filters(filters: slidingSyncInviteFilters)
                 .name(name: "Invites")
                 .syncMode(mode: .growing)
+                .batchSize(batchSize: 100)
                 .build()
             
             let invitesViewProxy = SlidingSyncViewProxy(slidingSyncView: invitesView, name: "Invites")
@@ -440,6 +442,11 @@ class ClientProxy: ClientProxyProtocol {
     
     private lazy var slidingSyncRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
                                                  RequiredState(key: "m.room.encryption", value: "")]
+    
+    private lazy var slidingSyncInvitesRequiredState = [RequiredState(key: "m.room.avatar", value: ""),
+                                                        RequiredState(key: "m.room.encryption", value: ""),
+                                                        RequiredState(key: "m.room.member", value: "$ME"),
+                                                        RequiredState(key: "m.room.canonical_alias", value: "")]
     
     private lazy var slidingSyncFilters = SlidingSyncRequestListFilters(isDm: nil,
                                                                         spaces: [],
