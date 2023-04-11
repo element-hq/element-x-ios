@@ -323,7 +323,6 @@ class ClientProxy: ClientProxyProtocol {
             // We will still register the allRoomsSlidingSyncView later, and than will have no cache
             let slidingSync = try slidingSyncBuilder
                 .addList(v: visibleRoomsSlidingSyncView)
-                .addList(v: invitesSlidingSyncView)
                 .withCommonExtensions()
                 .coldCache(name: "ElementX")
                 .build()
@@ -483,6 +482,13 @@ class ClientProxy: ClientProxyProtocol {
             _ = slidingSync?.addList(list: allRoomsSlidingSyncView)
         } else {
             MXLog.error("All rooms sliding sync view unavailable")
+        }
+        
+        if let invitesSlidingSyncView {
+            MXLog.info("Registering invites view")
+            _ = slidingSync?.addList(list: invitesSlidingSyncView)
+        } else {
+            MXLog.error("Invites sliding sync view unavailable")
         }
         
         restartSync()
