@@ -17,12 +17,6 @@
 import SwiftUI
 
 struct InvitesListScreen: View {
-    @Environment(\.colorScheme) private var colorScheme
-    
-    var counterColor: Color {
-        colorScheme == .light ? .element.secondaryContent : .element.tertiaryContent
-    }
-    
     @ObservedObject var context: InvitesListViewModel.Context
     
     var body: some View {

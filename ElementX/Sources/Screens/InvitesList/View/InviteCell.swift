@@ -112,7 +112,7 @@ struct InviteCell: View {
         invite.isDirect ? invite.inviter?.userID : invite.roomDetails.canonicalAlias
     }
     
-    var attributedInviteText: AttributedString? {
+    private var attributedInviteText: AttributedString? {
         guard invite.roomDetails.isDirect == false, let inviterName = invite.inviter?.displayName else {
             return nil
         }

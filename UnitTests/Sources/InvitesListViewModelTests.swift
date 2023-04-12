@@ -49,7 +49,7 @@ class InvitesListScreenViewModelTests: XCTestCase {
     
     // MARK: - Private
     
-    func setupViewModel() {
+    private func setupViewModel() {
         viewModel = InvitesListViewModel(userSession: userSession)
     }
 }
