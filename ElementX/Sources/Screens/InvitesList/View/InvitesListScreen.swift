@@ -27,14 +27,63 @@ struct InvitesListScreen: View {
     
     var body: some View {
         ScrollView {
-            if let rooms = context.viewState.invites {
+            if let rooms = context.viewState.invites, !rooms.isEmpty {
                 LazyVStack {
                     ForEach(rooms, id: \.roomDetails.id) { invite in
                         InviteCell(invite: invite, imageProvider: context.imageProvider)
                     }
                 }
+            } else {
+                noInvitesContent
             }
         }
         .navigationTitle(L10n.actionInvitesList)
     }
+    
+    // MARK: - Private
+    
+    private var noInvitesContent: some View {
+        Text(L10n.commonNoResults)
+            .font(.element.body)
+            .foregroundColor(.element.tertiaryContent)
+            .frame(maxWidth: .infinity)
+            .listRowBackground(Color.clear)
+            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
+            .padding(.top, 80)
+    }
+}
+
+// MARK: - Previews
+
+struct InvitesListScreen_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationView {
+            InvitesListScreen(context: InvitesListViewModel.noInvites.context)
+        }
+        .previewDisplayName("No Invites")
+        
+        NavigationView {
+            InvitesListScreen(context: InvitesListViewModel.someInvite.context)
+        }
+        .previewDisplayName("Some Invite")
+    }
+}
+
+private extension InvitesListViewModel {
+    static let noInvites: InvitesListViewModel = {
+        let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
+                                          mediaProvider: MockMediaProvider())
+        let regularViewModel = InvitesListViewModel(userSession: userSession)
+        return regularViewModel
+    }()
+    
+    static let someInvite: InvitesListViewModel = {
+        let clientProxy = MockClientProxy(userID: "@userid:example.com")
+        clientProxy.invitesSummaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
+        clientProxy.visibleRoomsSummaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
+        let userSession = MockUserSession(clientProxy: clientProxy,
+                                          mediaProvider: MockMediaProvider())
+        let regularViewModel = InvitesListViewModel(userSession: userSession)
+        return regularViewModel
+    }()
 }
