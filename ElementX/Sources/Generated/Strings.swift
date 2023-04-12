@@ -466,6 +466,8 @@ public enum L10n {
   public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
   /// Unblock user
   public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
+  /// No Invites
+  public static var screenInvitesEmptyList: String { return L10n.tr("Localizable", "screen_invites_empty_list") }
   /// %1$@ invited you
   public static func screenInvitesInvitedYou(_ p1: Any) -> String {
     return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1))

@@ -197,6 +197,7 @@
 "screen_dm_details_unblock_alert_action" = "Deblocați";
 "screen_dm_details_unblock_alert_description" = "La deblocarea utilizatorului, veți putea vedea din nou toate mesajele de la acesta.";
 "screen_dm_details_unblock_user" = "Deblocați utilizatorul";
+"screen_invites_empty_list" = "No Invites";
 "screen_invites_invited_you" = "%1$@ invited you";
 "screen_login_error_deactivated_account" = "Acest cont a fost dezactivat.";
 "screen_login_error_invalid_credentials" = "Utilizator și/sau parolă incorecte";
