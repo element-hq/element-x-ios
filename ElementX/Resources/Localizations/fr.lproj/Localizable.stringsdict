@@ -13,11 +13,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d membru</string>
-			<key>few</key>
-			<string></string>
+			<string>%1$d member</string>
 			<key>other</key>
-			<string>%1$d membri</string>
+			<string>%1$d members</string>
 		</dict>
 	</dict>
 	<key>notification_compat_summary_line_for_room</key>
@@ -127,11 +125,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>%1$d schimbare a camerii</string>
-			<key>few</key>
-			<string></string>
+			<string>%1$d room change</string>
 			<key>other</key>
-			<string>%1$d schimbări ale camerei</string>
+			<string>%1$d room changes</string>
 		</dict>
 	</dict>
 	<key>screen_room_member_list_header_title</key>
@@ -145,11 +141,9 @@
 			<key>NSStringFormatValueTypeKey</key>
 			<string>d</string>
 			<key>one</key>
-			<string>o persoană</string>
-			<key>few</key>
-			<string></string>
+			<string>1 person</string>
 			<key>other</key>
-			<string>%1$d persoane</string>
+			<string>%1$d people</string>
 		</dict>
 	</dict>
 </dict>
