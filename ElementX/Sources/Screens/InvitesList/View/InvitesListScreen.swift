@@ -43,12 +43,12 @@ struct InvitesListScreen: View {
     // MARK: - Private
     
     private var noInvitesContent: some View {
-        Text(L10n.commonNoResults)
+        Text(L10n.screenInvitesEmptyList)
             .font(.element.body)
             .foregroundColor(.element.tertiaryContent)
             .frame(maxWidth: .infinity)
             .listRowBackground(Color.clear)
-            .accessibilityIdentifier(A11yIdentifiers.startChatScreen.searchNoResults)
+            .accessibilityIdentifier(A11yIdentifiers.invitesScreen.noInvites)
             .padding(.top, 80)
     }
 }

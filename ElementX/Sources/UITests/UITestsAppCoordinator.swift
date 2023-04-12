@@ -375,6 +375,12 @@ class MockScreen: Identifiable {
             let coordinator = InvitesListCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
+        case .invitesNoInvites:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let clientProxy = MockClientProxy(userID: "@mock:client.com")
+            let coordinator = InvitesListCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
         }
     }()
 }
