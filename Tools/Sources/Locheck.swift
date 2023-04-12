@@ -19,7 +19,7 @@ struct Locheck: ParsableCommand {
     static var configuration = CommandConfiguration(abstract: "A tool that verifies bad strings contained in localization files")
 
     private var stringsDirectoryURL: URL {
-        URL(string: FileManager.default.currentDirectoryPath)!.appendingPathComponent("ElementX/Resources/Localizations")
+        URL(string:FileManager.default.currentDirectoryPath)!.appendingPathComponent("ElementX/Resources/Localizations")
     }
 
     func run() throws {
