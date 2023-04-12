@@ -38,4 +38,4 @@ jobs:
           add-paths: |
             *.strings
             *.stringsdict
-            Strings.swift
+            **/Strings.swift
