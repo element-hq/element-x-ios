@@ -50,8 +50,9 @@ class EmojiPickerScreenViewModel: EmojiPickerScreenViewModelType, EmojiPickerScr
 
     private func loadEmojis() {
         Task(priority: .userInitiated) { [weak self] in
-            let categories = await emojiProvider.getCategories(searchString: nil)
-            self?.state.categories = convert(emojiCategories: categories)
+            guard let self else { return }
+            let categories = await self.emojiProvider.getCategories(searchString: nil)
+            self.state.categories = convert(emojiCategories: categories)
         }
     }
     

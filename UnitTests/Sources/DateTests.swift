@@ -18,6 +18,7 @@
 import XCTest
 
 // swiftlint:disable force_unwrapping
+
 class DateTests: XCTestCase {
     let calendar = Calendar.current
     let startOfToday = Calendar.current.startOfDay(for: .now)
@@ -41,3 +42,5 @@ class DateTests: XCTestCase {
         XCTAssertEqual(theMillennium.formattedMinimal(), theMillennium.formatted(.dateTime.year().day().month()))
     }
 }
+
+// swiftlint:enable force_unwrapping
