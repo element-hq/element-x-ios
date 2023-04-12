@@ -26,14 +26,14 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     var actions: AnyPublisher<StartChatViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
-    private let usersProvider: UsersProvider
+    private let usersProvider: UsersProviderProtocol
     
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     
-    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
+    init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?, usersProvider: UsersProviderProtocol) {
         self.userSession = userSession
         self.userIndicatorController = userIndicatorController
-        usersProvider = .init(clientProxy: userSession.clientProxy)
+        self.usersProvider = usersProvider
         super.init(initialViewState: StartChatViewState(), imageProvider: userSession.mediaProvider)
         
         setupBindings()

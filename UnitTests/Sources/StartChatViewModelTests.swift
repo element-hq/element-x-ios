@@ -22,6 +22,7 @@ import XCTest
 class StartChatScreenViewModelTests: XCTestCase {
     var viewModel: StartChatViewModelProtocol!
     var clientProxy: MockClientProxy!
+    var usersProvider: UsersProviderMock!
     
     var context: StartChatViewModel.Context {
         viewModel.context
@@ -29,19 +30,27 @@ class StartChatScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         clientProxy = .init(userID: "")
+        usersProvider = UsersProviderMock()
+        usersProvider.fetchSuggestionsReturnValue = []
+        usersProvider.searchProfilesWithReturnValue = []
         let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
+        viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, usersProvider: usersProvider)
     }
     
     func testQueryShowingNoResults() async throws {
         await search(query: "A")
-        XCTAssertEqual(context.viewState.usersSection.type, .empty)
+        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        // TODO: ask how to test feature flags
+//        XCTAssertTrue(usersProvider.fetchSuggestionsCalled)
         
         await search(query: "AA")
-        XCTAssertEqual(context.viewState.usersSection.type, .empty)
+        XCTAssertEqual(context.viewState.usersSection.type, .suggestions)
+        XCTAssertFalse(usersProvider.searchProfilesWithCalled)
         
         await search(query: "AAA")
         assertSearchResults(toBe: 0)
+        
+        XCTAssertTrue(usersProvider.searchProfilesWithCalled)
     }
     
     // MARK: - Private

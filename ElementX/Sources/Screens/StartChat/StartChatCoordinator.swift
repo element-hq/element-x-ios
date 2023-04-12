@@ -21,6 +21,7 @@ struct StartChatCoordinatorParameters {
     let userSession: UserSessionProtocol
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     let navigationStackCoordinator: NavigationStackCoordinator?
+    let usersProvider: UsersProviderProtocol
 }
 
 enum StartChatCoordinatorAction {
@@ -41,7 +42,7 @@ final class StartChatCoordinator: CoordinatorProtocol {
     init(parameters: StartChatCoordinatorParameters) {
         self.parameters = parameters
         
-        viewModel = StartChatViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController)
+        viewModel = StartChatViewModel(userSession: parameters.userSession, userIndicatorController: parameters.userIndicatorController, usersProvider: parameters.usersProvider)
     }
     
     func start() {

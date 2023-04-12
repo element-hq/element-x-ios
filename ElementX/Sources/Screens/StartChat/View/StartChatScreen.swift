@@ -131,12 +131,19 @@ struct StartChatScreen: View {
 // MARK: - Previews
 
 struct StartChat_Previews: PreviewProvider {
-    static var previews: some View {
+    static let viewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil)
+        let usersProvider = UsersProviderMock()
+        usersProvider.fetchSuggestionsReturnValue = [.mockAlice]
+        usersProvider.searchProfilesWithReturnValue = [.mockAlice]
+        let viewModel = StartChatViewModel(userSession: userSession, userIndicatorController: nil, usersProvider: usersProvider)
+        return viewModel
+    }()
+    
+    static var previews: some View {
         NavigationView {
-            StartChatScreen(context: regularViewModel.context)
+            StartChatScreen(context: viewModel.context)
                 .tint(.element.accent)
         }
     }
