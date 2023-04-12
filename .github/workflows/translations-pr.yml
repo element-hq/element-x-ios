@@ -26,6 +26,7 @@ jobs:
       - name: Create PR for Translations
         uses: peter-evans/create-pull-request@v5
         with:
+          token: ${{ secrets.ELEMENT_BOT_TOKEN }}
           commit-message: Translations update
           title: Translations update
           body: |
