@@ -20,13 +20,12 @@ import XCTest
 class InvitesListScreenUITests: XCTestCase {
     func testMixedInvites() {
         let app = Application.launch(.invites)
-
         app.assertScreenshot(.invites)
     }
     
     func testNoInvites() {
         let app = Application.launch(.invitesNoInvites)
         XCTAssertTrue(app.staticTexts[A11yIdentifiers.invitesScreen.noInvites].exists)
-        app.assertScreenshot(.invites)
+        app.assertScreenshot(.invites, step: 1)
     }
 }
