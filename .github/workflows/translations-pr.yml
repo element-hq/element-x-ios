@@ -17,9 +17,6 @@ jobs:
       - name: Setup Project
         run: swift run tools setup-project --ci
 
-      - name: Install locheck
-        run: mint install Asana/locheck
-
       - name: Download All Translations
         run: swift run tools download-strings --all-languages
 
