@@ -18,7 +18,6 @@
 import MatrixRustSDK
 import XCTest
 
-// swiftlint:disable force_unwrapping
 class MessageTimelineItemTests: XCTestCase {
     // MARK: Image
     
@@ -95,6 +94,8 @@ class MessageTimelineItemTests: XCTestCase {
                                                source: mediaSourceFromUrl(url: "mxc://doesnt/matter"),
                                                info: makeAudioInfo(mimetype: nil))
         let messageItem = MockEventTimelineItem.message(from: imageContent)
+        
+        // swiftlint:disable:next force_unwrapping
         XCTAssertTrue(messageItem.contentType!.conforms(to: .mpeg4Audio))
     }
     
@@ -128,7 +129,6 @@ class MessageTimelineItemTests: XCTestCase {
 
 // MARK: - Mocks
 
-// swiftlint:disable force_cast
 private struct MockEventTimelineItem: EventTimelineItemProtocol {
     static func message<Content: MessageContentProtocol>(from content: Content) -> MessageTimelineItem<Content> {
         let item = MockEventTimelineItem(underlyingContent: content)
@@ -137,6 +137,7 @@ private struct MockEventTimelineItem: EventTimelineItemProtocol {
     
     let underlyingContent: MessageContentProtocol
     
+    // swiftlint:disable:next force_cast
     func content() -> MatrixRustSDK.TimelineItemContent { underlyingContent as! TimelineItemContent }
     
     func eventId() -> String? { UUID().uuidString }

@@ -721,3 +721,4 @@ extension L10n {
 
 private final class BundleToken {}
 
+// swiftlint:enable all

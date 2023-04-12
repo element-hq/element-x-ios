@@ -1,5 +1,4 @@
 disabled_rules:
-  - blanket_disable_command
   - trailing_whitespace
   - unused_setter_value
   - redundant_discardable_let
