@@ -54,21 +54,24 @@ extension Array where Element == RoomSummary {
                                             avatarURL: nil,
                                             lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
                                             lastMessageFormattedTimestamp: "Now",
-                                            unreadNotificationCount: 4)),
+                                            unreadNotificationCount: 4,
+                                            canonicalAlias: nil)),
         .filled(details: RoomSummaryDetails(id: "2",
                                             name: "Second room",
                                             isDirect: true,
                                             avatarURL: URL.picturesDirectory,
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
-                                            unreadNotificationCount: 1)),
+                                            unreadNotificationCount: 1,
+                                            canonicalAlias: nil)),
         .filled(details: RoomSummaryDetails(id: "3",
                                             name: "Third room",
                                             isDirect: true,
                                             avatarURL: nil,
                                             lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
                                             lastMessageFormattedTimestamp: "Later",
-                                            unreadNotificationCount: 0)),
+                                            unreadNotificationCount: 0,
+                                            canonicalAlias: nil)),
         .empty
     ]
     
@@ -78,13 +81,15 @@ extension Array where Element == RoomSummary {
                                             avatarURL: URL.picturesDirectory,
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
-                                            unreadNotificationCount: 0)),
+                                            unreadNotificationCount: 0,
+                                            canonicalAlias: "#footest:somewhere.org")),
         .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId2",
                                             name: "Second room",
                                             isDirect: true,
                                             avatarURL: nil,
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
-                                            unreadNotificationCount: 0))
+                                            unreadNotificationCount: 0,
+                                            canonicalAlias: nil))
     ]
 }

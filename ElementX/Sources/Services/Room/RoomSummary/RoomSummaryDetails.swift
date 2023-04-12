@@ -24,6 +24,7 @@ struct RoomSummaryDetails {
     let lastMessage: AttributedString?
     let lastMessageFormattedTimestamp: String?
     let unreadNotificationCount: UInt
+    let canonicalAlias: String?
 }
 
 extension RoomSummaryDetails: CustomStringConvertible {

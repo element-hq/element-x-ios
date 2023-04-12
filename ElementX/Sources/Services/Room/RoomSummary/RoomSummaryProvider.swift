@@ -111,7 +111,9 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
             }
         }
         
-        let avatarURL = room.fullRoom()?.avatarUrl().flatMap(URL.init(string:))
+        let fullRoom = room.fullRoom()
+        let avatarURL = fullRoom?.avatarUrl().flatMap(URL.init(string:))
+        let canonicalAlias = fullRoom?.canonicalAlias()
         
         let details = RoomSummaryDetails(id: room.roomId(),
                                          name: room.name() ?? room.roomId(),
@@ -119,7 +121,8 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
                                          avatarURL: avatarURL,
                                          lastMessage: attributedLastMessage,
                                          lastMessageFormattedTimestamp: lastMessageFormattedTimestamp,
-                                         unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()))
+                                         unreadNotificationCount: UInt(room.unreadNotifications().notificationCount()),
+                                         canonicalAlias: canonicalAlias)
         
         return invalidated ? .invalidated(details: details) : .filled(details: details)
     }

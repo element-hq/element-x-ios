@@ -109,7 +109,7 @@ struct InviteCell: View {
     }
     
     private var subtitle: String? {
-        invite.isDirect ? invite.inviter?.userID : invite.roomDetails.id
+        invite.isDirect ? invite.inviter?.userID : invite.roomDetails.canonicalAlias
     }
     
     var attributedInviteText: AttributedString? {
@@ -133,8 +133,11 @@ struct InviteCell_Previews: PreviewProvider {
         InviteCell(invite: .dm, imageProvider: MockMediaProvider())
             .previewDisplayName("Direct room")
         
-        InviteCell(invite: .room, imageProvider: MockMediaProvider())
+        InviteCell(invite: .room(alias: nil), imageProvider: MockMediaProvider())
             .previewDisplayName("Default room")
+        
+        InviteCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider())
+            .previewDisplayName("Aliased room")
     }
 }
 
@@ -147,7 +150,8 @@ private extension Invite {
                                         avatarURL: nil,
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
-                                        unreadNotificationCount: 0)
+                                        unreadNotificationCount: 0,
+                                        canonicalAlias: "#footest:somewhere.org")
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Jack"
         inviter.userID = "@jack@somewhere.com"
@@ -155,14 +159,15 @@ private extension Invite {
         return .init(roomDetails: dmRoom, inviter: inviter)
     }
     
-    static var room: Invite {
+    static func room(alias: String?) -> Invite {
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
                                         name: "Awesome Room",
                                         isDirect: false,
                                         avatarURL: nil,
                                         lastMessage: nil,
                                         lastMessageFormattedTimestamp: nil,
-                                        unreadNotificationCount: 0)
+                                        unreadNotificationCount: 0,
+                                        canonicalAlias: alias)
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Luca"
         inviter.userID = "@jack@somewhere.com"
