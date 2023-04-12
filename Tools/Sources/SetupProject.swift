@@ -7,6 +7,7 @@ struct SetupProject: ParsableCommand {
     func run() throws {
         try setupGitHooks()
         try brewBundleInstall()
+        try mintPackagesInstall()
         try xcodegen()
     }
 
@@ -16,6 +17,10 @@ struct SetupProject: ParsableCommand {
 
     func brewBundleInstall() throws {
         try Utilities.zsh("brew install xcodegen swiftgen swiftlint swiftformat git-lfs sourcery mint kiliankoe/formulae/swift-outdated localazy/tools/localazy")
+    }
+
+    func mintPackagesInstall() throws {
+        try Utilities.zsh("mint install Asana/locheck")
     }
 
     func xcodegen() throws {

@@ -17,6 +17,9 @@ jobs:
       - name: Setup Localazy and Mint
         run: brew install mint localazy/tools/localazy
 
+      - name: Install locheck
+        run: mint install Asana/locheck
+
       - name: Download All Translations
         run: swift run tools download-strings --all-languages
 
