@@ -325,8 +325,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     // MARK: Invites list
     
     private func presentInvitesList() {
-        let parameters = InvitesListCoordinatorParameters(userSession: userSession)
-        let coordinator = InvitesListCoordinator(parameters: parameters)
+        let parameters = InvitesCoordinatorParameters(userSession: userSession)
+        let coordinator = InvitesCoordinator(parameters: parameters)
         
         coordinator.actions
             .sink { _ in

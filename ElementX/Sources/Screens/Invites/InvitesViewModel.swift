@@ -17,25 +17,25 @@
 import Combine
 import SwiftUI
 
-typealias InvitesListViewModelType = StateStoreViewModel<InvitesListViewState, InvitesListViewAction>
+typealias InvitesViewModelType = StateStoreViewModel<InvitesViewState, InvitesViewAction>
 
-class InvitesListViewModel: InvitesListViewModelType, InvitesListViewModelProtocol {
-    private var actionsSubject: PassthroughSubject<InvitesListViewModelAction, Never> = .init()
+class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
+    private var actionsSubject: PassthroughSubject<InvitesViewModelAction, Never> = .init()
     private let userSession: UserSessionProtocol
     
-    var actions: AnyPublisher<InvitesListViewModelAction, Never> {
+    var actions: AnyPublisher<InvitesViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
 
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
-        super.init(initialViewState: InvitesListViewState(), imageProvider: userSession.mediaProvider)
+        super.init(initialViewState: InvitesViewState(), imageProvider: userSession.mediaProvider)
         setupSubscriptions()
     }
     
     // MARK: - Public
     
-    override func process(viewAction: InvitesListViewAction) { }
+    override func process(viewAction: InvitesViewAction) { }
     
     // MARK: - Private
     

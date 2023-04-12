@@ -17,7 +17,7 @@
 import Combine
 
 @MainActor
-protocol InvitesListViewModelProtocol {
-    var actions: AnyPublisher<InvitesListViewModelAction, Never> { get }
-    var context: InvitesListViewModelType.Context { get }
+protocol InvitesViewModelProtocol {
+    var actions: AnyPublisher<InvitesViewModelAction, Never> { get }
+    var context: InvitesViewModelType.Context { get }
 }

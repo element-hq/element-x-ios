@@ -17,25 +17,25 @@
 import Combine
 import SwiftUI
 
-struct InvitesListCoordinatorParameters {
+struct InvitesCoordinatorParameters {
     let userSession: UserSessionProtocol
 }
 
-enum InvitesListCoordinatorAction { }
+enum InvitesCoordinatorAction { }
 
-final class InvitesListCoordinator: CoordinatorProtocol {
-    private let parameters: InvitesListCoordinatorParameters
-    private var viewModel: InvitesListViewModelProtocol
-    private let actionsSubject: PassthroughSubject<InvitesListCoordinatorAction, Never> = .init()
+final class InvitesCoordinator: CoordinatorProtocol {
+    private let parameters: InvitesCoordinatorParameters
+    private var viewModel: InvitesViewModelProtocol
+    private let actionsSubject: PassthroughSubject<InvitesCoordinatorAction, Never> = .init()
     private var cancellables: Set<AnyCancellable> = .init()
     
-    var actions: AnyPublisher<InvitesListCoordinatorAction, Never> {
+    var actions: AnyPublisher<InvitesCoordinatorAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
     
-    init(parameters: InvitesListCoordinatorParameters) {
+    init(parameters: InvitesCoordinatorParameters) {
         self.parameters = parameters
-        viewModel = InvitesListViewModel(userSession: parameters.userSession)
+        viewModel = InvitesViewModel(userSession: parameters.userSession)
     }
     
     func start() {
@@ -46,6 +46,6 @@ final class InvitesListCoordinator: CoordinatorProtocol {
     }
         
     func toPresentable() -> AnyView {
-        AnyView(InvitesListScreen(context: viewModel.context))
+        AnyView(InvitesScreen(context: viewModel.context))
     }
 }

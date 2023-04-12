@@ -16,8 +16,8 @@
 
 import SwiftUI
 
-struct InvitesListScreen: View {
-    @ObservedObject var context: InvitesListViewModel.Context
+struct InvitesScreen: View {
+    @ObservedObject var context: InvitesViewModel.Context
     
     var body: some View {
         ScrollView {
@@ -49,35 +49,35 @@ struct InvitesListScreen: View {
 
 // MARK: - Previews
 
-struct InvitesListScreen_Previews: PreviewProvider {
+struct InvitesScreen_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            InvitesListScreen(context: InvitesListViewModel.noInvites.context)
+            InvitesScreen(context: InvitesViewModel.noInvites.context)
         }
         .previewDisplayName("No Invites")
         
         NavigationView {
-            InvitesListScreen(context: InvitesListViewModel.someInvite.context)
+            InvitesScreen(context: InvitesViewModel.someInvite.context)
         }
         .previewDisplayName("Some Invite")
     }
 }
 
-private extension InvitesListViewModel {
-    static let noInvites: InvitesListViewModel = {
+private extension InvitesViewModel {
+    static let noInvites: InvitesViewModel = {
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "@userid:example.com"),
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = InvitesListViewModel(userSession: userSession)
+        let regularViewModel = InvitesViewModel(userSession: userSession)
         return regularViewModel
     }()
     
-    static let someInvite: InvitesListViewModel = {
+    static let someInvite: InvitesViewModel = {
         let clientProxy = MockClientProxy(userID: "@userid:example.com")
         clientProxy.invitesSummaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
         clientProxy.visibleRoomsSummaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider())
-        let regularViewModel = InvitesListViewModel(userSession: userSession)
+        let regularViewModel = InvitesViewModel(userSession: userSession)
         return regularViewModel
     }()
 }

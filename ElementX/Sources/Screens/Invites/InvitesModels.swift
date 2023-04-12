@@ -14,18 +14,19 @@
 // limitations under the License.
 //
 
-import ElementX
-import XCTest
+enum InvitesViewModelAction { }
 
-class InvitesListScreenUITests: XCTestCase {
-    func testMixedInvites() {
-        let app = Application.launch(.invites)
-        app.assertScreenshot(.invites)
-    }
+struct InvitesViewState: BindableState {
+    var invites: [Invite]?
+}
+
+struct Invite {
+    let roomDetails: RoomSummaryDetails
+    var inviter: RoomMemberProxyProtocol?
     
-    func testNoInvites() {
-        let app = Application.launch(.invitesNoInvites)
-        XCTAssertTrue(app.staticTexts[A11yIdentifiers.invitesScreen.noInvites].exists)
-        app.assertScreenshot(.invites, step: 1)
+    var isDirect: Bool {
+        roomDetails.isDirect
     }
 }
+
+enum InvitesViewAction { }

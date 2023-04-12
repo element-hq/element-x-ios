@@ -18,12 +18,12 @@
 import XCTest
 
 @MainActor
-class InvitesListScreenViewModelTests: XCTestCase {
-    var viewModel: InvitesListViewModelProtocol!
+class InvitesViewModelTests: XCTestCase {
+    var viewModel: InvitesViewModelProtocol!
     var clientProxy: MockClientProxy!
     var userSession: MockUserSession!
     
-    var context: InvitesListViewModelType.Context {
+    var context: InvitesViewModelType.Context {
         viewModel.context
     }
     
@@ -50,6 +50,6 @@ class InvitesListScreenViewModelTests: XCTestCase {
     // MARK: - Private
     
     private func setupViewModel() {
-        viewModel = InvitesListViewModel(userSession: userSession)
+        viewModel = InvitesViewModel(userSession: userSession)
     }
 }
