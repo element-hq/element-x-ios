@@ -29,10 +29,6 @@ struct SetupProject: ParsableCommand {
         try Utilities.zsh("mint install Asana/locheck")
     }
 
-    func mintPackagesInstall() throws {
-        try Utilities.zsh("mint install Asana/locheck")
-    }
-
     func xcodegen() throws {
         try Utilities.zsh("xcodegen")
     }
