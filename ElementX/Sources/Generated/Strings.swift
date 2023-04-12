@@ -18,10 +18,14 @@ public enum L10n {
   public static var a11yShowPassword: String { return L10n.tr("Localizable", "a11y_show_password") }
   /// User menu
   public static var a11yUserMenu: String { return L10n.tr("Localizable", "a11y_user_menu") }
+  /// Accept
+  public static var actionAccept: String { return L10n.tr("Localizable", "action_accept") }
   /// Back
   public static var actionBack: String { return L10n.tr("Localizable", "action_back") }
   /// Cancel
   public static var actionCancel: String { return L10n.tr("Localizable", "action_cancel") }
+  /// Choose photo
+  public static var actionChoosePhoto: String { return L10n.tr("Localizable", "action_choose_photo") }
   /// Clear
   public static var actionClear: String { return L10n.tr("Localizable", "action_clear") }
   /// Close
@@ -36,8 +40,12 @@ public enum L10n {
   public static var actionCopy: String { return L10n.tr("Localizable", "action_copy") }
   /// Copy link
   public static var actionCopyLink: String { return L10n.tr("Localizable", "action_copy_link") }
+  /// Create
+  public static var actionCreate: String { return L10n.tr("Localizable", "action_create") }
   /// Create a room
   public static var actionCreateARoom: String { return L10n.tr("Localizable", "action_create_a_room") }
+  /// Decline
+  public static var actionDecline: String { return L10n.tr("Localizable", "action_decline") }
   /// Disable
   public static var actionDisable: String { return L10n.tr("Localizable", "action_disable") }
   /// Done
@@ -52,6 +60,8 @@ public enum L10n {
   public static func actionInviteFriendsToApp(_ p1: Any) -> String {
     return L10n.tr("Localizable", "action_invite_friends_to_app", String(describing: p1))
   }
+  /// Invites
+  public static var actionInvitesList: String { return L10n.tr("Localizable", "action_invites_list") }
   /// Learn more
   public static var actionLearnMore: String { return L10n.tr("Localizable", "action_learn_more") }
   /// Leave
@@ -88,6 +98,8 @@ public enum L10n {
   public static var actionSearch: String { return L10n.tr("Localizable", "action_search") }
   /// Send
   public static var actionSend: String { return L10n.tr("Localizable", "action_send") }
+  /// Send message
+  public static var actionSendMessage: String { return L10n.tr("Localizable", "action_send_message") }
   /// Share
   public static var actionShare: String { return L10n.tr("Localizable", "action_share") }
   /// Share link
@@ -100,6 +112,8 @@ public enum L10n {
   public static var actionStartChat: String { return L10n.tr("Localizable", "action_start_chat") }
   /// Start verification
   public static var actionStartVerification: String { return L10n.tr("Localizable", "action_start_verification") }
+  /// Take photo
+  public static var actionTakePhoto: String { return L10n.tr("Localizable", "action_take_photo") }
   /// View Source
   public static var actionViewSource: String { return L10n.tr("Localizable", "action_view_source") }
   /// Yes
@@ -258,6 +272,74 @@ public enum L10n {
   }
   /// Notification
   public static var notification: String { return L10n.tr("Localizable", "Notification") }
+  /// Call
+  public static var notificationChannelCall: String { return L10n.tr("Localizable", "notification_channel_call") }
+  /// Listening for events
+  public static var notificationChannelListeningForEvents: String { return L10n.tr("Localizable", "notification_channel_listening_for_events") }
+  /// Noisy notifications
+  public static var notificationChannelNoisy: String { return L10n.tr("Localizable", "notification_channel_noisy") }
+  /// Silent notifications
+  public static var notificationChannelSilent: String { return L10n.tr("Localizable", "notification_channel_silent") }
+  /// Plural format key: "%#@COUNT@"
+  public static func notificationCompatSummaryLineForRoom(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_compat_summary_line_for_room", p1)
+  }
+  /// Plural format key: "%#@COUNT@"
+  public static func notificationCompatSummaryTitle(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_compat_summary_title", p1)
+  }
+  /// ** Failed to send - please open room
+  public static var notificationInlineReplyFailed: String { return L10n.tr("Localizable", "notification_inline_reply_failed") }
+  /// Join
+  public static var notificationInvitationActionJoin: String { return L10n.tr("Localizable", "notification_invitation_action_join") }
+  /// Reject
+  public static var notificationInvitationActionReject: String { return L10n.tr("Localizable", "notification_invitation_action_reject") }
+  /// Plural format key: "%#@COUNT@"
+  public static func notificationInvitations(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_invitations", p1)
+  }
+  /// New Messages
+  public static var notificationNewMessages: String { return L10n.tr("Localizable", "notification_new_messages") }
+  /// Plural format key: "%#@COUNT@"
+  public static func notificationNewMessagesForRoom(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_new_messages_for_room", p1)
+  }
+  /// Mark as read
+  public static var notificationRoomActionMarkAsRead: String { return L10n.tr("Localizable", "notification_room_action_mark_as_read") }
+  /// Quick reply
+  public static var notificationRoomActionQuickReply: String { return L10n.tr("Localizable", "notification_room_action_quick_reply") }
+  /// Me
+  public static var notificationSenderMe: String { return L10n.tr("Localizable", "notification_sender_me") }
+  /// You are viewing the notification! Click me!
+  public static var notificationTestPushNotificationContent: String { return L10n.tr("Localizable", "notification_test_push_notification_content") }
+  /// %1$@: %2$@
+  public static func notificationTickerTextDm(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "notification_ticker_text_dm", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@: %2$@ %3$@
+  public static func notificationTickerTextGroup(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+    return L10n.tr("Localizable", "notification_ticker_text_group", String(describing: p1), String(describing: p2), String(describing: p3))
+  }
+  /// Plural format key: "%#@COUNT@"
+  public static func notificationUnreadNotifiedMessages(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_unread_notified_messages", p1)
+  }
+  /// %1$@ and %2$@
+  public static func notificationUnreadNotifiedMessagesAndInvitation(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "notification_unread_notified_messages_and_invitation", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ in %2$@
+  public static func notificationUnreadNotifiedMessagesInRoom(_ p1: Any, _ p2: Any) -> String {
+    return L10n.tr("Localizable", "notification_unread_notified_messages_in_room", String(describing: p1), String(describing: p2))
+  }
+  /// %1$@ in %2$@ and %3$@
+  public static func notificationUnreadNotifiedMessagesInRoomAndInvitation(_ p1: Any, _ p2: Any, _ p3: Any) -> String {
+    return L10n.tr("Localizable", "notification_unread_notified_messages_in_room_and_invitation", String(describing: p1), String(describing: p2), String(describing: p3))
+  }
+  /// Plural format key: "%#@COUNT@"
+  public static func notificationUnreadNotifiedMessagesInRoomRooms(_ p1: Int) -> String {
+    return L10n.tr("Localizable", "notification_unread_notified_messages_in_room_rooms", p1)
+  }
   /// Rageshake to report bug
   public static var preferenceRageshake: String { return L10n.tr("Localizable", "preference_rageshake") }
   /// You seem to be shaking the phone in frustration. Would you like to open the bug report screen?
@@ -354,6 +436,24 @@ public enum L10n {
   public static var screenCreateRoomActionInvitePeople: String { return L10n.tr("Localizable", "screen_create_room_action_invite_people") }
   /// Add people
   public static var screenCreateRoomAddPeopleTitle: String { return L10n.tr("Localizable", "screen_create_room_add_people_title") }
+  /// Messages in this room are encrypted. Encryption can’t be disabled afterwards.
+  public static var screenCreateRoomPrivateOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_private_option_description") }
+  /// Private room (invite only)
+  public static var screenCreateRoomPrivateOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_private_option_title") }
+  /// Messages are not encrypted and anyone can read them. You can enable encryption at a later date.
+  public static var screenCreateRoomPublicOptionDescription: String { return L10n.tr("Localizable", "screen_create_room_public_option_description") }
+  /// Public room (anyone)
+  public static var screenCreateRoomPublicOptionTitle: String { return L10n.tr("Localizable", "screen_create_room_public_option_title") }
+  /// Room name
+  public static var screenCreateRoomRoomNameLabel: String { return L10n.tr("Localizable", "screen_create_room_room_name_label") }
+  /// e.g. Product Sprint
+  public static var screenCreateRoomRoomNamePlaceholder: String { return L10n.tr("Localizable", "screen_create_room_room_name_placeholder") }
+  /// Create a room
+  public static var screenCreateRoomTitle: String { return L10n.tr("Localizable", "screen_create_room_title") }
+  /// Topic (optional)
+  public static var screenCreateRoomTopicLabel: String { return L10n.tr("Localizable", "screen_create_room_topic_label") }
+  /// What is this room about?
+  public static var screenCreateRoomTopicPlaceholder: String { return L10n.tr("Localizable", "screen_create_room_topic_placeholder") }
   /// Block
   public static var screenDmDetailsBlockAlertAction: String { return L10n.tr("Localizable", "screen_dm_details_block_alert_action") }
   /// Blocked users will not be able to send you messages and all message by them will be hidden. You can reverse this action anytime.
@@ -366,6 +466,10 @@ public enum L10n {
   public static var screenDmDetailsUnblockAlertDescription: String { return L10n.tr("Localizable", "screen_dm_details_unblock_alert_description") }
   /// Unblock user
   public static var screenDmDetailsUnblockUser: String { return L10n.tr("Localizable", "screen_dm_details_unblock_user") }
+  /// %1$@ invited you
+  public static func screenInvitesInvitedYou(_ p1: Any) -> String {
+    return L10n.tr("Localizable", "screen_invites_invited_you", String(describing: p1))
+  }
   /// This account has been deactivated.
   public static var screenLoginErrorDeactivatedAccount: String { return L10n.tr("Localizable", "screen_login_error_deactivated_account") }
   /// Incorrect username and/or password
