@@ -72,7 +72,7 @@ struct LoadableImage<TransformerView: View, PlaceholderView: View>: View {
             guard image == nil, let mediaSource else { return }
             
             if case let .success(image) = await imageProvider?.loadImageFromSource(mediaSource, size: size) {
-                self.cachedImage = image
+                cachedImage = image
             }
         }
         
