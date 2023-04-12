@@ -9,10 +9,15 @@ struct DownloadStrings: ParsableCommand {
 
     func run() throws {
         try localazyDownload()
+        try swiftgen()
     }
 
     private func localazyDownload() throws {
         let json = allLanguages ? "localazy-all.json" : "localazy-en.json"
         try Utilities.zsh("localazy download --config \(json)")
+    }
+
+    private func swiftgen() throws {
+        try Utilities.zsh("swiftgen config run --config Tools/SwiftGen/swiftgen-config.yml")
     }
 }

@@ -14,8 +14,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Setup Localazy and Mint
-        run: brew install mint localazy/tools/localazy
+      - name: Setup Project
+        run: swift run tools setup-project --ci
 
       - name: Download All Translations
         run: swift run tools download-strings --all-languages
@@ -35,3 +35,4 @@ jobs:
           add-paths: |
             *.strings
             *.stringsdict
+            Strings.swift
