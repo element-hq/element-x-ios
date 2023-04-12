@@ -71,7 +71,7 @@ class InvitesListViewModel: InvitesListViewModelType, InvitesListViewModelProtoc
             
             let inviter: RoomMemberProxyProtocol? = await room.inviter()
             
-            guard let inviteIndex = state.invites?.firstIndex(where: { $0.roomDetails.id == roomID }) else {
+            guard let inviter, let inviteIndex = state.invites?.firstIndex(where: { $0.roomDetails.id == roomID }) else {
                 return
             }
             

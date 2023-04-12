@@ -248,7 +248,7 @@ struct HomeScreen: View {
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         body(.loading)
-        body(.loaded)
+        body(.loaded(.default))
     }
     
     static func body(_ state: MockRoomSummaryProviderState) -> some View {

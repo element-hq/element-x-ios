@@ -21,6 +21,7 @@ import XCTest
 class InvitesListScreenViewModelTests: XCTestCase {
     var viewModel: InvitesListViewModelProtocol!
     var clientProxy: MockClientProxy!
+    var userSession: MockUserSession!
     
     var context: InvitesListViewModelType.Context {
         viewModel.context
@@ -28,11 +29,27 @@ class InvitesListScreenViewModelTests: XCTestCase {
     
     override func setUpWithError() throws {
         clientProxy = MockClientProxy(userID: "@a:b.com")
-        let userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
-        viewModel = InvitesListViewModel(userSession: userSession)
+        userSession = MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())
     }
 
-    func testInitialState() {
-        XCTAssertTrue(context.viewState.invites?.isEmpty == true)
+    func testEmptyState() throws {
+        setupViewModel()
+        let invites = try XCTUnwrap(context.viewState.invites)
+        XCTAssertTrue(invites.isEmpty)
+    }
+    
+    func testListState() throws {
+        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
+        clientProxy.invitesSummaryProvider = summaryProvider
+        clientProxy.visibleRoomsSummaryProvider = summaryProvider
+        setupViewModel()
+        let invites = try XCTUnwrap(context.viewState.invites)
+        XCTAssertEqual(invites.count, 2)
+    }
+    
+    // MARK: - Private
+    
+    func setupViewModel() {
+        viewModel = InvitesListViewModel(userSession: userSession)
     }
 }

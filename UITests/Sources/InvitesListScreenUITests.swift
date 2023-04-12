@@ -18,7 +18,7 @@ import ElementX
 import XCTest
 
 class InvitesListScreenUITests: XCTestCase {
-    func testRegularScreen() {
+    func testMixedInvites() {
         let app = Application.launch(.invites)
 
         app.assertScreenshot(.invites)

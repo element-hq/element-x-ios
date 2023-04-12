@@ -53,6 +53,8 @@ class MockClientProxy: ClientProxyProtocol {
         .failure(.failedCreatingRoom)
     }
     
+    var roomInviter: RoomMemberProxyMock?
+    @MainActor
     func roomForIdentifier(_ identifier: String) async -> RoomProxyProtocol? {
         guard let room = visibleRoomsSummaryProvider?.roomListPublisher.value.first(where: { $0.id == identifier }) else {
             return nil
@@ -60,9 +62,11 @@ class MockClientProxy: ClientProxyProtocol {
     
         switch room {
         case .empty:
-            return await RoomProxyMock(with: .init(displayName: "Empty room"))
+            return RoomProxyMock(with: .init(displayName: "Empty room"))
         case .filled(let details), .invalidated(let details):
-            return await RoomProxyMock(with: .init(displayName: details.name))
+            let room = RoomProxyMock(with: .init(displayName: details.name))
+            room.inviterReturnValue = roomInviter
+            return room
         }
     }
     

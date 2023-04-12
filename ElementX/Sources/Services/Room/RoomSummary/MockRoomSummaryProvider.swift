@@ -19,7 +19,7 @@ import Foundation
 
 enum MockRoomSummaryProviderState {
     case loading
-    case loaded
+    case loaded([RoomSummary])
 }
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
@@ -37,18 +37,18 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
             roomListPublisher = .init([])
             statePublisher = .init(.notLoaded)
             countPublisher = .init(0)
-        case .loaded:
-            roomListPublisher = .init(Self.rooms)
+        case .loaded(let rooms):
+            roomListPublisher = .init(rooms)
             statePublisher = .init(.fullyLoaded)
-            countPublisher = .init(UInt(Self.rooms.count))
+            countPublisher = .init(UInt(rooms.count))
         }
     }
     
     func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) { }
-    
-    // MARK: - Private
-    
-    static let rooms: [RoomSummary] = [
+}
+
+extension Array where Element == RoomSummary {
+    static let `default`: [Element] = [
         .filled(details: RoomSummaryDetails(id: "1", name: "First room",
                                             isDirect: true,
                                             avatarURL: nil,
@@ -70,5 +70,21 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
                                             lastMessageFormattedTimestamp: "Later",
                                             unreadNotificationCount: 0)),
         .empty
+    ]
+    
+    static let invites: [Element] = [
+        .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId1", name: "First room",
+                                            isDirect: false,
+                                            avatarURL: URL.picturesDirectory,
+                                            lastMessage: nil,
+                                            lastMessageFormattedTimestamp: nil,
+                                            unreadNotificationCount: 0)),
+        .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId2",
+                                            name: "Second room",
+                                            isDirect: true,
+                                            avatarURL: nil,
+                                            lastMessage: nil,
+                                            lastMessageFormattedTimestamp: nil,
+                                            unreadNotificationCount: 0))
     ]
 }
