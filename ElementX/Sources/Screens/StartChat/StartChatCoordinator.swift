@@ -51,6 +51,7 @@ final class StartChatCoordinator: CoordinatorProtocol {
             case .close:
                 self.actionsSubject.send(.close)
             case .createRoom:
+                // before creating a room we select the users we would like to invite in that room
                 self.presentInviteUsersScreen()
             case .openRoom(let identifier):
                 self.actionsSubject.send(.openRoom(withIdentifier: identifier))
