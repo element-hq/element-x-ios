@@ -17,7 +17,7 @@
 import Foundation
 
 class UsersProvider: UsersProviderProtocol {
-    var clientProxy: ClientProxyProtocol
+    private let clientProxy: ClientProxyProtocol
     
     init(clientProxy: ClientProxyProtocol) {
         self.clientProxy = clientProxy
