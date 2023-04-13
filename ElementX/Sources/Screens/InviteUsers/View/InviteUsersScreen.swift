@@ -97,16 +97,7 @@ struct InviteUsersScreen: View {
                         scrollView.scrollTo(id)
                     }
                 }
-            }
-        }
-        .padding(.horizontal, 18)
-    }
-    
-    private var backButton: some View {
-        Button { context.send(viewAction: .close) } label: {
-            HStack(spacing: 8) {
-                Image(systemName: "chevron.left")
-                Text(L10n.actionBack)
+                .padding(.horizontal, 18)
             }
         }
     }
