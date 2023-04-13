@@ -73,7 +73,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] roomSummaryProviderState, totalCount, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = roomSummaryProviderState != .fullyLoaded && (totalCount == 0 || rooms.count != totalCount)
+                let isLoadingData = roomSummaryProviderState != .fullyLoaded && (totalCount == 0 || rooms.count < totalCount)
                 let hasNoRooms = roomSummaryProviderState == .fullyLoaded && totalCount == 0
                 
                 var roomListMode = self.state.roomListMode
