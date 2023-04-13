@@ -18,7 +18,7 @@ import SwiftUI
 
 struct SelectableUserCell: View {
     let user: UserProfile
-    let selected: Bool
+    let isSelected: Bool
     let imageProvider: ImageProviderProtocol?
     
     var body: some View {
@@ -42,14 +42,14 @@ struct SelectableUserCell: View {
             }
             .accessibilityElement(children: .combine)
             Spacer()
-            Image(systemName: selected ? "checkmark.circle.fill" : "circle")
-                .foregroundColor(selected ? .element.primaryContent : .element.tertiaryContent)
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
         }
     }
 }
 
 struct SelectableUserCell_Previews: PreviewProvider {
     static var previews: some View {
-        SelectableUserCell(user: .mockAlice, selected: false, imageProvider: MockMediaProvider())
+        SelectableUserCell(user: .mockAlice, isSelected: false, imageProvider: MockMediaProvider())
     }
 }

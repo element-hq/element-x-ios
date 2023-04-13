@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct InviteUsersCoordinatorParameters {
@@ -27,8 +28,12 @@ enum InviteUsersCoordinatorAction {
 final class InviteUsersCoordinator: CoordinatorProtocol {
     private let parameters: InviteUsersCoordinatorParameters
     private var viewModel: InviteUsersViewModelProtocol
+    private let actionsSubject: PassthroughSubject<InviteUsersCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
     
-    var callback: ((InviteUsersCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<InviteUsersCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: InviteUsersCoordinatorParameters) {
         self.parameters = parameters
@@ -37,13 +42,14 @@ final class InviteUsersCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.callback = { [weak self] action in
+        viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .close:
-                self.callback?(.close)
+                self.actionsSubject.send(.close)
             }
         }
+        .store(in: &cancellables)
     }
         
     func toPresentable() -> AnyView {

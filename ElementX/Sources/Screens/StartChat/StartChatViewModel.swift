@@ -21,8 +21,12 @@ typealias StartChatViewModelType = StateStoreViewModel<StartChatViewState, Start
 
 class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     private let userSession: UserSessionProtocol
+    private let actionsSubject: PassthroughSubject<StartChatViewModelAction, Never> = .init()
     
-    var callback: ((StartChatViewModelAction) -> Void)?
+    var actions: AnyPublisher<StartChatViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
+    
     weak var userIndicatorController: UserIndicatorControllerProtocol?
     
     init(userSession: UserSessionProtocol, userIndicatorController: UserIndicatorControllerProtocol?) {
@@ -39,9 +43,9 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     override func process(viewAction: StartChatViewAction) {
         switch viewAction {
         case .close:
-            callback?(.close)
+            actionsSubject.send(.close)
         case .createRoom:
-            callback?(.createRoom)
+            actionsSubject.send(.createRoom)
         case .inviteFriends:
             break
         case .selectUser(let user):
@@ -51,7 +55,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
                 switch currentDirectRoom {
                 case .success(.some(let roomId)):
                     self.hideLoadingIndicator()
-                    self.callback?(.openRoom(withIdentifier: roomId))
+                    self.actionsSubject.send(.openRoom(withIdentifier: roomId))
                 case .success(nil):
                     await self.createDirectRoom(with: user)
                 case .failure(let failure):
@@ -143,7 +147,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
-            state.usersSection = .init(type: .suggestions, users: [])
+            state.usersSection = .init(type: .empty, users: [])
             return
         }
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
@@ -155,7 +159,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         hideLoadingIndicator()
         switch result {
         case .success(let roomId):
-            callback?(.openRoom(withIdentifier: roomId))
+            actionsSubject.send(.openRoom(withIdentifier: roomId))
         case .failure(let failure):
             displayError(failure)
         }

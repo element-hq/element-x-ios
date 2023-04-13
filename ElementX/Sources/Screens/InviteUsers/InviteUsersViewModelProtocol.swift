@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol InviteUsersViewModelProtocol {
-    var callback: ((InviteUsersViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<InviteUsersViewModelAction, Never> { get }
     var context: InviteUsersViewModelType.Context { get }
 }

@@ -14,10 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
 @MainActor
 protocol StartChatViewModelProtocol {
-    var callback: ((StartChatViewModelAction) -> Void)? { get set }
+    var actions: AnyPublisher<StartChatViewModelAction, Never> { get }
     var context: StartChatViewModelType.Context { get }
 }

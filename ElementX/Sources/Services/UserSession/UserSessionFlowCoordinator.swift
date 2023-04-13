@@ -34,6 +34,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let sidebarNavigationStackCoordinator: NavigationStackCoordinator
     private let detailNavigationStackCoordinator: NavigationStackCoordinator
 
+    private var cancellables: Set<AnyCancellable> = .init()
+    
     var callback: ((UserSessionFlowCoordinatorAction) -> Void)?
     
     init(userSession: UserSessionProtocol,
@@ -279,7 +281,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         let parameters = StartChatCoordinatorParameters(userSession: userSession, userIndicatorController: userIndicatorController, navigationStackCoordinator: startChatNavigationStackCoordinator)
         let coordinator = StartChatCoordinator(parameters: parameters)
-        coordinator.callback = { [weak self] action in
+        coordinator.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .close:
@@ -289,6 +291,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.stateMachine.processEvent(.selectRoom(roomId: identifier))
             }
         }
+        .store(in: &cancellables)
 
         startChatNavigationStackCoordinator.setRootCoordinator(coordinator)
         

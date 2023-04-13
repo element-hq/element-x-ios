@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 struct StartChatCoordinatorParameters {
@@ -30,8 +31,12 @@ enum StartChatCoordinatorAction {
 final class StartChatCoordinator: CoordinatorProtocol {
     private let parameters: StartChatCoordinatorParameters
     private var viewModel: StartChatViewModelProtocol
+    private let actionsSubject: PassthroughSubject<StartChatCoordinatorAction, Never> = .init()
+    private var cancellables: Set<AnyCancellable> = .init()
     
-    var callback: ((StartChatCoordinatorAction) -> Void)?
+    var actions: AnyPublisher<StartChatCoordinatorAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(parameters: StartChatCoordinatorParameters) {
         self.parameters = parameters
@@ -40,17 +45,18 @@ final class StartChatCoordinator: CoordinatorProtocol {
     }
     
     func start() {
-        viewModel.callback = { [weak self] action in
+        viewModel.actions.sink { [weak self] action in
             guard let self else { return }
             switch action {
             case .close:
-                self.callback?(.close)
+                self.actionsSubject.send(.close)
             case .createRoom:
                 self.presentInviteUsersScreen()
             case .openRoom(let identifier):
-                self.callback?(.openRoom(withIdentifier: identifier))
+                self.actionsSubject.send(.openRoom(withIdentifier: identifier))
             }
         }
+        .store(in: &cancellables)
     }
         
     // MARK: - Public
@@ -64,12 +70,13 @@ final class StartChatCoordinator: CoordinatorProtocol {
     private func presentInviteUsersScreen() {
         let inviteParameters = InviteUsersCoordinatorParameters(userSession: parameters.userSession)
         let coordinator = InviteUsersCoordinator(parameters: inviteParameters)
-        coordinator.callback = { [weak self] result in
+        coordinator.actions.sink { [weak self] result in
             switch result {
             case .close:
                 self?.parameters.navigationStackCoordinator?.pop()
             }
         }
+        .store(in: &cancellables)
         parameters.navigationStackCoordinator?.push(coordinator)
     }
 }

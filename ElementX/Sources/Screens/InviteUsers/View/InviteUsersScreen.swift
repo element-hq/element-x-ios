@@ -65,7 +65,7 @@ struct InviteUsersScreen: View {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
                 Button { context.send(viewAction: .selectUser(user)) } label: {
                     SelectableUserCell(user: user,
-                                       selected: context.viewState.selectedUsers.contains { $0.userID == user.userID },
+                                       isSelected: context.viewState.selectedUsers.contains { $0.userID == user.userID },
                                        imageProvider: context.imageProvider)
                 }
                 .buttonStyle(FormButtonStyle())
@@ -85,7 +85,7 @@ struct InviteUsersScreen: View {
             ScrollViewReader { scrollView in
                 HStack(spacing: 28) {
                     ForEach(context.viewState.selectedUsers, id: \.userID) { user in
-                        SelectedInvitedUserItem(user: user, imageProvider: context.imageProvider) {
+                        InviteUsersSelectedItem(user: user, imageProvider: context.imageProvider) {
                             deselect(user)
                         }
                         .frame(width: cellWidth)

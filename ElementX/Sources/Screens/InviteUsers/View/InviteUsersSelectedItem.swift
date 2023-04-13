@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct SelectedInvitedUserItem: View {
+struct InviteUsersSelectedItem: View {
     let user: UserProfile
     let imageProvider: ImageProviderProtocol?
     let dismissAction: () -> Void
@@ -31,6 +31,7 @@ struct SelectedInvitedUserItem: View {
             Text(user.displayName ?? user.userID)
                 .font(.element.title3)
                 .foregroundColor(.element.primaryContent)
+                .lineLimit(1)
         }
         .overlay(alignment: .topTrailing) {
             Button(action: dismissAction) {
@@ -44,6 +45,6 @@ struct SelectedInvitedUserItem: View {
 
 struct SelectedInvitedUserItem_Previews: PreviewProvider {
     static var previews: some View {
-        SelectedInvitedUserItem(user: .mockAlice, imageProvider: MockMediaProvider(), dismissAction: { })
+        InviteUsersSelectedItem(user: .mockAlice, imageProvider: MockMediaProvider(), dismissAction: { })
     }
 }

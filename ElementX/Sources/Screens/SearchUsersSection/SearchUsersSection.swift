@@ -24,10 +24,11 @@ struct SearchUsersSection {
 enum SearchUserSectionType: Equatable {
     case searchResult
     case suggestions
-
+    case empty
+    
     var title: String? {
         switch self {
-        case .searchResult:
+        case .searchResult, .empty:
             return nil
         case .suggestions:
             return L10n.commonSuggestions

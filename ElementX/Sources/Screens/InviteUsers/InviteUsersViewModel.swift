@@ -14,13 +14,18 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 typealias InviteUsersViewModelType = StateStoreViewModel<InviteUsersViewState, InviteUsersViewAction>
 
 class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtocol {
-    var callback: ((InviteUsersViewModelAction) -> Void)?
     private let userSession: UserSessionProtocol
+    private let actionsSubject: PassthroughSubject<InviteUsersViewModelAction, Never> = .init()
+    
+    var actions: AnyPublisher<InviteUsersViewModelAction, Never> {
+        actionsSubject.eraseToAnyPublisher()
+    }
     
     init(userSession: UserSessionProtocol) {
         self.userSession = userSession
@@ -34,7 +39,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
     override func process(viewAction: InviteUsersViewAction) {
         switch viewAction {
         case .close:
-            callback?(.close)
+            actionsSubject.send(.close)
         case .proceed:
             break
         case .selectUser(let user):
@@ -56,6 +61,10 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
     // MARK: - Private
     
     private func fetchSuggestions() {
+        guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
+            state.usersSection = .init(type: .empty, users: [])
+            return
+        }
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])
     }
     }
