@@ -101,11 +101,7 @@ struct InvitesScreenCell: View {
     }
     
     private var title: String {
-        if invite.isDirect, let inviterName = invite.inviter?.displayName {
-            return inviterName
-        } else {
-            return invite.roomDetails.name
-        }
+        invite.roomDetails.name
     }
     
     private var subtitle: String? {
@@ -154,7 +150,7 @@ private extension Invite {
                                         canonicalAlias: "#footest:somewhere.org")
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Jack"
-        inviter.userID = "@jack@somewhere.com"
+        inviter.userID = "@jack:somewhere.com"
         
         return .init(roomDetails: dmRoom, inviter: inviter)
     }
@@ -170,7 +166,7 @@ private extension Invite {
                                         canonicalAlias: alias)
         let inviter = RoomMemberProxyMock()
         inviter.displayName = "Luca"
-        inviter.userID = "@jack@somewhere.com"
+        inviter.userID = "@jack:somewhere.com"
         inviter.avatarURL = nil
         
         return .init(roomDetails: dmRoom, inviter: inviter)
