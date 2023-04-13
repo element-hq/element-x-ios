@@ -89,7 +89,7 @@ class RoomSummaryProvider: RoomSummaryProviderProtocol {
         
         detectDuplicatesInRoomList(rooms)
         
-        MXLog.info("Finished applying \(diffs.count) diffs")
+        MXLog.info("Finished applying \(diffs.count) diffs, new count: \(rooms.count)")
     }
         
     private func buildRoomSummaryForIdentifier(_ identifier: String, invalidated: Bool) -> RoomSummary {

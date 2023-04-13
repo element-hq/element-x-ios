@@ -73,7 +73,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .sink { [weak self] roomSummaryProviderState, totalCount, rooms in
                 guard let self else { return }
                 
-                let isLoadingData = roomSummaryProviderState != .fullyLoaded && (totalCount == 0 || rooms.count != totalCount)
+                let isLoadingData = roomSummaryProviderState != .fullyLoaded && (totalCount == 0 || rooms.count < totalCount)
                 let hasNoRooms = roomSummaryProviderState == .fullyLoaded && totalCount == 0
                 
                 var roomListMode = self.state.roomListMode
@@ -92,6 +92,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 self.state.roomListMode = roomListMode
                 
                 MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
+                if roomListMode == .skeletons {
+                    MXLog.info("roomSummaryProviderState: \(roomSummaryProviderState). rooms.count: \(rooms.count) / totalCount: \(totalCount)")
+                }
                 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
