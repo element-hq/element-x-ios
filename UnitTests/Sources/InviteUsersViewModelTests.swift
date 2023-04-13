@@ -37,23 +37,23 @@ class InviteUsersScreenViewModelTests: XCTestCase {
     
     func testSelectUser() {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .selectUser(.mockAlice))
+        context.send(viewAction: .tapUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.count == 1)
         XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
     }
     
     func testReselectUser() {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .selectUser(.mockAlice))
+        context.send(viewAction: .tapUser(.mockAlice))
         XCTAssertEqual(context.viewState.selectedUsers.count, 1)
         XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
-        context.send(viewAction: .selectUser(.mockAlice))
+        context.send(viewAction: .tapUser(.mockAlice))
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
     }
     
     func testDeselectUser() {
         XCTAssertTrue(context.viewState.selectedUsers.isEmpty)
-        context.send(viewAction: .selectUser(.mockAlice))
+        context.send(viewAction: .tapUser(.mockAlice))
         XCTAssertEqual(context.viewState.selectedUsers.count, 1)
         XCTAssertEqual(context.viewState.selectedUsers.first?.userID, UserProfile.mockAlice.userID)
         context.send(viewAction: .deselectUser(.mockAlice))

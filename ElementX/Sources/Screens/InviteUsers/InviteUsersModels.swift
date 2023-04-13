@@ -47,6 +47,6 @@ struct InviteUsersViewStateBindings {
 enum InviteUsersViewAction {
     case close
     case proceed
-    case selectUser(UserProfile)
+    case tapUser(UserProfile)
     case deselectUser(UserProfile)
 }

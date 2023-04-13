@@ -20,6 +20,7 @@ import SwiftUI
 enum FormRowAccessory: View {
     case navigationLink
     case progressView
+    case selection(isSelected: Bool)
     
     var body: some View {
         switch self {
@@ -29,6 +30,9 @@ enum FormRowAccessory: View {
                 .foregroundColor(.element.quaternaryContent)
         case .progressView:
             ProgressView()
+        case .selection(let isSelected):
+            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
+                .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
         }
     }
 }

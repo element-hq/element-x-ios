@@ -42,7 +42,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
             actionsSubject.send(.close)
         case .proceed:
             break
-        case .selectUser(let user):
+        case .tapUser(let user):
             if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
                 state.selectedUsers.remove(at: index)
                 state.scrollToLastID = nil

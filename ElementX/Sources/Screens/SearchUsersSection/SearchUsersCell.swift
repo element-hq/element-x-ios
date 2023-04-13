@@ -16,9 +16,8 @@
 
 import SwiftUI
 
-struct SelectableUserCell: View {
+struct SearchUsersCell: View {
     let user: UserProfile
-    let isSelected: Bool
     let imageProvider: ImageProviderProtocol?
     
     var body: some View {
@@ -30,26 +29,31 @@ struct SelectableUserCell: View {
                                 imageProvider: imageProvider)
                 .padding(.vertical, 10)
                 .accessibilityHidden(true)
+            
             VStack(alignment: .leading, spacing: 4) {
                 Text(user.displayName ?? user.userID)
                     .font(.element.title3)
                     .foregroundColor(.element.primaryContent)
+                
                 if user.displayName != nil {
                     Text(user.userID)
                         .font(.element.subheadline)
                         .foregroundColor(.element.tertiaryContent)
                 }
+                
+                if !user.isVerified {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
+                        Text(Image(systemName: "exclamationmark.circle.fill"))
+                            .foregroundColor(.compound.textActionCritical)
+                        
+                        Text(L10n.screenStartChatUnknownProfile)
+                            .foregroundColor(.secondary)
+                    }
+                    .font(.compound.bodyXS)
+                    .padding(.top, 4)
+                }
             }
             .accessibilityElement(children: .combine)
-            Spacer()
-            Image(systemName: isSelected ? "checkmark.circle.fill" : "circle")
-                .foregroundColor(isSelected ? .element.primaryContent : .element.tertiaryContent)
         }
-    }
-}
-
-struct SelectableUserCell_Previews: PreviewProvider {
-    static var previews: some View {
-        SelectableUserCell(user: .mockAlice, isSelected: false, imageProvider: MockMediaProvider())
     }
 }

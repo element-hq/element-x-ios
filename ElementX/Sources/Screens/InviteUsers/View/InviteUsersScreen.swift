@@ -63,12 +63,11 @@ struct InviteUsersScreen: View {
     private var usersSection: some View {
         Section {
             ForEach(context.viewState.usersSection.users, id: \.userID) { user in
-                Button { context.send(viewAction: .selectUser(user)) } label: {
-                    SelectableUserCell(user: user,
-                                       isSelected: context.viewState.selectedUsers.contains { $0.userID == user.userID },
-                                       imageProvider: context.imageProvider)
+                Button { context.send(viewAction: .tapUser(user)) } label: {
+                    SearchUsersCell(user: user,
+                                    imageProvider: context.imageProvider)
                 }
-                .buttonStyle(FormButtonStyle())
+                .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.selectedUsers.contains { $0.userID == user.userID })))
             }
         } header: {
             if let title = context.viewState.usersSection.type.title {
