@@ -64,7 +64,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
     }
     
     private func fetchInviter(for roomID: String) {
-        Task { @MainActor in
+        Task {
             guard let room: RoomProxyProtocol = await self.userSession.clientProxy.roomForIdentifier(roomID) else {
                 return
             }
