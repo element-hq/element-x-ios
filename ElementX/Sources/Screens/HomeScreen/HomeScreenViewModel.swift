@@ -92,6 +92,9 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
                 self.state.roomListMode = roomListMode
                 
                 MXLog.info("Received visibleRoomsSummaryProvider update, setting view room list mode to \"\(self.state.roomListMode)\"")
+                if roomListMode == .skeletons {
+                    MXLog.info("roomSummaryProviderState: \(roomSummaryProviderState). rooms.count: \(rooms.count) / totalCount: \(totalCount)")
+                }
                 
                 // Delay user profile detail loading until after the initial room list loads
                 if roomListMode == .rooms {
