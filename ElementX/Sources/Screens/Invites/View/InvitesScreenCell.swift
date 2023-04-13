@@ -20,6 +20,8 @@ import SwiftUI
 struct InvitesScreenCell: View {
     let invite: Invite
     let imageProvider: ImageProviderProtocol?
+    let acceptAction: () -> Void
+    let declineAction: () -> Void
     
     private let verticalInsets = 16.0
     
@@ -82,10 +84,10 @@ struct InvitesScreenCell: View {
     
     private var buttons: some View {
         HStack(spacing: 12) {
-            Button(L10n.actionDecline) { }
+            Button(L10n.actionDecline, action: declineAction)
                 .buttonStyle(.elementCapsule)
             
-            Button(L10n.actionAccept) { }
+            Button(L10n.actionAccept, action: acceptAction)
                 .buttonStyle(.elementCapsuleProminent)
         }
     }
@@ -126,13 +128,13 @@ struct InvitesScreenCell: View {
 
 struct InvitesScreenCell_Previews: PreviewProvider {
     static var previews: some View {
-        InvitesScreenCell(invite: .dm, imageProvider: MockMediaProvider())
+        InvitesScreenCell(invite: .dm, imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
             .previewDisplayName("Direct room")
         
-        InvitesScreenCell(invite: .room(alias: nil), imageProvider: MockMediaProvider())
+        InvitesScreenCell(invite: .room(alias: nil), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
             .previewDisplayName("Default room")
         
-        InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider())
+        InvitesScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider(), acceptAction: { }, declineAction: { })
             .previewDisplayName("Aliased room")
     }
 }

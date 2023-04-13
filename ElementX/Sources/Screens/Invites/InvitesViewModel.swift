@@ -35,7 +35,14 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
     
     // MARK: - Public
     
-    override func process(viewAction: InvitesViewAction) { }
+    override func process(viewAction: InvitesViewAction) {
+        switch viewAction {
+        case .accept:
+            break
+        case .decline:
+            break
+        }
+    }
     
     // MARK: - Private
     

@@ -24,7 +24,10 @@ struct InvitesScreen: View {
             if let rooms = context.viewState.invites, !rooms.isEmpty {
                 LazyVStack {
                     ForEach(rooms, id: \.roomDetails.id) { invite in
-                        InvitesScreenCell(invite: invite, imageProvider: context.imageProvider)
+                        InvitesScreenCell(invite: invite,
+                                          imageProvider: context.imageProvider,
+                                          acceptAction: { context.send(viewAction: .accept(invite)) },
+                                          declineAction: { context.send(viewAction: .decline(invite)) })
                     }
                 }
             } else {

@@ -29,4 +29,7 @@ struct Invite {
     }
 }
 
-enum InvitesViewAction { }
+enum InvitesViewAction {
+    case accept(Invite)
+    case decline(Invite)
+}
