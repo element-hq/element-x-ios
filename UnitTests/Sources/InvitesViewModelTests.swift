@@ -39,7 +39,7 @@ class InvitesViewModelTests: XCTestCase {
     }
     
     func testListState() throws {
-        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
+        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         clientProxy.invitesSummaryProvider = summaryProvider
         clientProxy.visibleRoomsSummaryProvider = summaryProvider
         setupViewModel()

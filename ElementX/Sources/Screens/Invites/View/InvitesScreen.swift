@@ -24,7 +24,7 @@ struct InvitesScreen: View {
             if let rooms = context.viewState.invites, !rooms.isEmpty {
                 LazyVStack {
                     ForEach(rooms, id: \.roomDetails.id) { invite in
-                        InviteCell(invite: invite, imageProvider: context.imageProvider)
+                        InviteScreenCell(invite: invite, imageProvider: context.imageProvider)
                     }
                 }
             } else {
@@ -73,8 +73,8 @@ private extension InvitesViewModel {
     
     static let someInvite: InvitesViewModel = {
         let clientProxy = MockClientProxy(userID: "@userid:example.com")
-        clientProxy.invitesSummaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
-        clientProxy.visibleRoomsSummaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
+        clientProxy.invitesSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
+        clientProxy.visibleRoomsSummaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
         let userSession = MockUserSession(clientProxy: clientProxy,
                                           mediaProvider: MockMediaProvider())
         let regularViewModel = InvitesViewModel(userSession: userSession)

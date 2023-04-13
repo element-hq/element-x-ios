@@ -29,7 +29,7 @@ struct A11yIdentifiers {
     static let softLogoutScreen = SoftLogoutScreen()
     static let startChatScreen = StartChatScreen()
     static let roomMemberDetailsScreen = RoomMemberDetailsScreen()
-    static let invitesScreen = InviteScreen()
+    static let invitesScreen = InvitesScreen()
 
     struct BugReportScreen {
         let report = "bug_report-report"
@@ -116,7 +116,7 @@ struct A11yIdentifiers {
         let unignore = "room_member_details-unignore"
     }
     
-    struct InviteScreen {
+    struct InvitesScreen {
         let noInvites = "invites-no_invites"
     }
 }

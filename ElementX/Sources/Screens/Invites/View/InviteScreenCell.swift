@@ -17,7 +17,7 @@
 import SwiftUI
 
 @MainActor
-struct InviteCell: View {
+struct InviteScreenCell: View {
     let invite: Invite
     let imageProvider: ImageProviderProtocol?
     
@@ -130,13 +130,13 @@ struct InviteCell: View {
 
 struct InviteCell_Previews: PreviewProvider {
     static var previews: some View {
-        InviteCell(invite: .dm, imageProvider: MockMediaProvider())
+        InviteScreenCell(invite: .dm, imageProvider: MockMediaProvider())
             .previewDisplayName("Direct room")
         
-        InviteCell(invite: .room(alias: nil), imageProvider: MockMediaProvider())
+        InviteScreenCell(invite: .room(alias: nil), imageProvider: MockMediaProvider())
             .previewDisplayName("Default room")
         
-        InviteCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider())
+        InviteScreenCell(invite: .room(alias: "#footest:somewhere.org"), imageProvider: MockMediaProvider())
             .previewDisplayName("Aliased room")
     }
 }

@@ -48,7 +48,7 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
 }
 
 extension Array where Element == RoomSummary {
-    static let `default`: [Element] = [
+    static let mockRooms: [Element] = [
         .filled(details: RoomSummaryDetails(id: "1", name: "First room",
                                             isDirect: true,
                                             avatarURL: nil,
@@ -75,7 +75,7 @@ extension Array where Element == RoomSummary {
         .empty
     ]
     
-    static let invites: [Element] = [
+    static let mockInvites: [Element] = [
         .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId1", name: "First room",
                                             isDirect: false,
                                             avatarURL: URL.picturesDirectory,

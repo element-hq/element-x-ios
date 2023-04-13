@@ -256,7 +256,7 @@ class MockScreen: Identifiable {
         case .userSessionScreen:
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
             
-            let clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.default)))
+            let clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))
             
             let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
@@ -362,13 +362,8 @@ class MockScreen: Identifiable {
         case .invites:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            
-            let inviter = RoomMemberProxyMock()
-            inviter.displayName = "John Wick"
-            inviter.userID = "@someone:somewhere.com"
-            clientProxy.roomInviter = inviter
-            
-            let summaryProvider = MockRoomSummaryProvider(state: .loaded(.invites))
+            clientProxy.roomInviter = RoomMemberProxyMock.mockDan
+            let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
             clientProxy.visibleRoomsSummaryProvider = summaryProvider
             clientProxy.invitesSummaryProvider = summaryProvider
             

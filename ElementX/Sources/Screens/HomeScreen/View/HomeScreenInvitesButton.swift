@@ -16,7 +16,7 @@
 
 import SwiftUI
 
-struct InvitesButton: View {
+struct HomeScreenInvitesButton: View {
     @ScaledMetric private var badgeSize = 12.0
     
     let title: String
@@ -48,13 +48,13 @@ struct InvitesButton: View {
 
 struct InvitesButton_Previews: PreviewProvider {
     static var previews: some View {
-        InvitesButton(title: "Invites", hasBadge: true, action: { })
+        HomeScreenInvitesButton(title: "Invites", hasBadge: true, action: { })
             .previewDisplayName("Badge on")
         
-        InvitesButton(title: "Invites", hasBadge: false, action: { })
+        HomeScreenInvitesButton(title: "Invites", hasBadge: false, action: { })
             .previewDisplayName("Badge off")
         
-        InvitesButton(title: "Invites", hasBadge: true, action: { })
+        HomeScreenInvitesButton(title: "Invites", hasBadge: true, action: { })
             .previewDisplayName("Badge on (AX1)")
             .dynamicTypeSize(.accessibility1)
     }

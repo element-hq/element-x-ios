@@ -329,8 +329,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         let coordinator = InvitesCoordinator(parameters: parameters)
         
         coordinator.actions
-            .sink { _ in
-            }
+            .sink { _ in }
             .store(in: &cancellables)
         
         navigationSplitCoordinator.setDetailCoordinator(coordinator) { [weak self] in

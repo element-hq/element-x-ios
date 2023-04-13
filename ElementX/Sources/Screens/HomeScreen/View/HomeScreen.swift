@@ -42,7 +42,7 @@ struct HomeScreen: View {
             }
 
             if context.viewState.hasPendingInvitations, ServiceLocator.shared.settings.invitesFlowEnabled {
-                InvitesButton(title: L10n.actionInvitesList, hasBadge: true) {
+                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: true) {
                     context.send(viewAction: .selectInvites)
                 }
                 .padding(.trailing, 16)
@@ -248,7 +248,7 @@ struct HomeScreen: View {
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         body(.loading)
-        body(.loaded(.default))
+        body(.loaded(.mockRooms))
     }
     
     static func body(_ state: MockRoomSummaryProviderState) -> some View {
