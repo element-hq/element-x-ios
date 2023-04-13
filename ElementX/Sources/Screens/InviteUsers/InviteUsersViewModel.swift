@@ -43,19 +43,24 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
         case .proceed:
             break
         case .tapUser(let user):
-            if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
-                state.selectedUsers.remove(at: index)
-                state.scrollToLastID = nil
+            if state.selectedUsers.contains(where: { $0.userID == user.userID }) {
+                deselect(user)
             } else {
-                state.selectedUsers.append(user)
-                state.scrollToLastID = user.userID
+                select(user)
             }
         case .deselectUser(let user):
-            if let index = state.selectedUsers.firstIndex(where: { $0.userID == user.userID }) {
-                state.selectedUsers.remove(at: index)
-                state.scrollToLastID = nil
-            }
+            deselect(user)
         }
+    }
+    
+    private func select(_ user: UserProfile) {
+        state.selectedUsers.append(user)
+        state.scrollToLastID = user.userID
+    }
+    
+    private func deselect(_ user: UserProfile) {
+        state.selectedUsers.removeAll(where: { $0.userID == user.userID })
+        state.scrollToLastID = nil
     }
 
     // MARK: - Private
