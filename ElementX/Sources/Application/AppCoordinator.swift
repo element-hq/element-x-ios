@@ -49,6 +49,8 @@ class AppCoordinator: AppCoordinatorProtocol {
     private var cancellables = Set<AnyCancellable>()
     private(set) var notificationManager: NotificationManagerProtocol?
 
+    @Consumable private var storedAppRoute: AppRoute?
+
     init() {
         navigationRootCoordinator = NavigationRootCoordinator()
         
@@ -259,6 +261,12 @@ class AppCoordinator: AppCoordinatorProtocol {
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
         
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
+
+        if let storedAppRoute {
+            DispatchQueue.main.async {
+                userSessionFlowCoordinator.handleAppRoute(storedAppRoute)
+            }
+        }
     }
     
     private func logout(isSoft: Bool) {
@@ -472,11 +480,14 @@ extension AppCoordinator: NotificationManagerDelegate {
         MXLog.info("[AppCoordinator] tappedNotification")
 
         // We store the room identifier into the thread identifier
-        guard !content.threadIdentifier.isEmpty else {
+        guard !content.threadIdentifier.isEmpty,
+              let _ = content.receiverId else {
             return
         }
 
-        userSessionFlowCoordinator?.handleAppRoute(.room(roomID: content.threadIdentifier))
+        // Handle here the account switching when available
+
+        handleAppRoute(.room(roomID: content.threadIdentifier))
     }
 
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {
@@ -493,6 +504,14 @@ extension AppCoordinator: NotificationManagerDelegate {
             // error or no room proxy
             await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
                                                 subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
+        }
+    }
+
+    private func handleAppRoute(_ appRoute: AppRoute) {
+        if let userSessionFlowCoordinator {
+            userSessionFlowCoordinator.handleAppRoute(appRoute)
+        } else {
+            storedAppRoute = appRoute
         }
     }
 }

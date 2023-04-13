@@ -88,7 +88,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
 
         // First process without a media proxy.
         // After this some properties of the notification should be set, like title, subtitle, sound etc.
-        guard let firstContent = try await itemProxy.process(with: roomId,
+        guard let firstContent = try await itemProxy.process(receiverId: credentials.userID,
+                                                             roomId: roomId,
                                                              mediaProvider: nil) else {
             MXLog.error("\(tag) not even first content")
 
@@ -109,7 +110,8 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
         MXLog.info("\(tag) process with media")
 
         // There is some media to load, process it again
-        if let latestContent = try await itemProxy.process(with: roomId,
+        if let latestContent = try await itemProxy.process(receiverId: credentials.userID,
+                                                           roomId: roomId,
                                                            mediaProvider: createMediaProvider(with: credentials)) {
             // Processing finished, hopefully with some media
             modifiedContent = latestContent

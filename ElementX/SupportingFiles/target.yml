@@ -146,6 +146,7 @@ targets:
     - package: SwiftState
     - package: GZIP
     - package: Sentry
+    - package: URLRouting
     - package: Version
 
     sources:

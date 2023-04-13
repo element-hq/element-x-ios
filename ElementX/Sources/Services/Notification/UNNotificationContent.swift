@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,22 +15,21 @@
 //
 
 import Foundation
+import UserNotifications
 
-enum NotificationConstants {
-    enum UserInfoKey {
-        static let roomIdentifier = "room_id"
-        static let eventIdentifier = "event_id"
-        static let unreadCount = "unread_count"
-        static let pusherNotificationClientIdentifier = "pusher_notification_client_identifier"
-        static let receiverIdentifier = "receiver_id"
+extension UNNotificationContent {
+    @objc var receiverId: String? {
+        userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
     }
+}
 
-    enum Category {
-        static let discard = "discard"
-        static let reply = "reply"
-    }
-
-    enum Action {
-        static let inlineReply = "inline-reply"
+extension UNMutableNotificationContent {
+    override var receiverId: String? {
+        get {
+            userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
+        }
+        set {
+            userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] = newValue
+        }
     }
 }
