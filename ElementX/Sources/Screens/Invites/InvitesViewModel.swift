@@ -88,7 +88,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
 }
 
 private extension Array where Element == RoomSummary {
-    var invites: [Invite] {
+    var invites: [InvitesRoomDetails] {
         compactMap { summary in
             guard case .filled(let details) = summary else {
                 return nil

@@ -18,7 +18,7 @@ import SwiftUI
 
 @MainActor
 struct InvitesScreenCell: View {
-    let invite: Invite
+    let invite: InvitesRoomDetails
     let imageProvider: ImageProviderProtocol?
     let acceptAction: () -> Void
     let declineAction: () -> Void
@@ -141,8 +141,8 @@ struct InvitesScreenCell_Previews: PreviewProvider {
 }
 
 @MainActor
-private extension Invite {
-    static var dm: Invite {
+private extension InvitesRoomDetails {
+    static var dm: InvitesRoomDetails {
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
                                         name: "Some Guy",
                                         isDirect: true,
@@ -158,7 +158,7 @@ private extension Invite {
         return .init(roomDetails: dmRoom, inviter: inviter)
     }
     
-    static func room(alias: String?) -> Invite {
+    static func room(alias: String?) -> InvitesRoomDetails {
         let dmRoom = RoomSummaryDetails(id: "@someone:somewhere.com",
                                         name: "Awesome Room",
                                         isDirect: false,

@@ -17,10 +17,10 @@
 enum InvitesViewModelAction { }
 
 struct InvitesViewState: BindableState {
-    var invites: [Invite]?
+    var invites: [InvitesRoomDetails]?
 }
 
-struct Invite {
+struct InvitesRoomDetails {
     let roomDetails: RoomSummaryDetails
     var inviter: RoomMemberProxyProtocol?
     
@@ -30,6 +30,6 @@ struct Invite {
 }
 
 enum InvitesViewAction {
-    case accept(Invite)
-    case decline(Invite)
+    case accept(InvitesRoomDetails)
+    case decline(InvitesRoomDetails)
 }
