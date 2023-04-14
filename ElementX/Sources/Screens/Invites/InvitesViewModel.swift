@@ -37,17 +37,21 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
     
     override func process(viewAction: InvitesViewAction) {
         switch viewAction {
-        case .accept:
-            break
-        case .decline:
-            break
+        case .accept(let invite):
+            accept(invite: invite)
+        case .decline(let invite):
+            decline(invite: invite)
         }
     }
     
     // MARK: - Private
     
+    private var clientProxy: ClientProxyProtocol {
+        userSession.clientProxy
+    }
+    
     private var invitesSummaryProvider: RoomSummaryProviderProtocol? {
-        userSession.clientProxy.invitesSummaryProvider
+        clientProxy.invitesSummaryProvider
     }
     
     private func setupSubscriptions() {
@@ -72,7 +76,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
     
     private func fetchInviter(for roomID: String) {
         Task {
-            guard let room: RoomProxyProtocol = await self.userSession.clientProxy.roomForIdentifier(roomID) else {
+            guard let room: RoomProxyProtocol = await self.clientProxy.roomForIdentifier(roomID) else {
                 return
             }
             
@@ -83,6 +87,26 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
             }
             
             state.invites?[inviteIndex].inviter = inviter
+        }
+    }
+    
+    private func accept(invite: InvitesRoomDetails) {
+        Task {
+            let roomID = invite.roomDetails.id
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+            let roomProxy = await clientProxy.roomForIdentifier(roomID)
+            let result = await roomProxy?.acceptInvitation()
+            ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
+        }
+    }
+    
+    private func decline(invite: InvitesRoomDetails) {
+        Task {
+            let roomID = invite.roomDetails.id
+            ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
+            let roomProxy = await clientProxy.roomForIdentifier(roomID)
+            let result = await roomProxy?.rejectInvitation()
+            ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
         }
     }
 }
