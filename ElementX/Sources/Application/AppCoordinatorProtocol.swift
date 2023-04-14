@@ -17,5 +17,5 @@
 import Foundation
 
 protocol AppCoordinatorProtocol: CoordinatorProtocol {
-    var notificationManager: NotificationManagerProtocol? { get }
+    var notificationManager: NotificationManagerProtocol { get }
 }

@@ -47,7 +47,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     private var userSessionCancellables = Set<AnyCancellable>()
     private var cancellables = Set<AnyCancellable>()
-    private(set) var notificationManager: NotificationManagerProtocol?
+    private(set) var notificationManager: NotificationManagerProtocol
 
     @Consumable private var storedAppRoute: AppRoute?
 
@@ -68,6 +68,10 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
+
+        notificationManager = NotificationManager()
+        notificationManager.delegate = self
+        notificationManager.start()
         
         guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
             fatalError("The app's version number **must** use semver for migration purposes.")
@@ -300,11 +304,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSession = nil
         
         userSessionFlowCoordinator = nil
-        
-        notificationManager?.delegate = nil
-        notificationManager = nil
     }
-
+    
     private func presentSplashScreen(isSoftLogout: Bool = false) {
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
@@ -316,34 +317,23 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        guard ServiceLocator.shared.settings.enableNotifications else {
-            return
-        }
-        guard notificationManager == nil else {
-            return
-        }
+        notificationManager.setClientProxy(userSession.clientProxy)
+        notificationManager.requestAuth()
 
-        let manager = NotificationManager(clientProxy: userSession.clientProxy)
-        if manager.isAvailable {
-            manager.delegate = self
-            notificationManager = manager
-            manager.start()
-
-            if let appDelegate = AppDelegate.shared {
-                appDelegate.callbacks
-                    .receive(on: DispatchQueue.main)
-                    .sink { [weak self] callback in
-                        switch callback {
-                        case .registeredNotifications(let deviceToken):
-                            Task { await self?.notificationManager?.register(with: deviceToken) }
-                        case .failedToRegisteredNotifications(let error):
-                            self?.notificationManager?.registrationFailed(with: error)
-                        }
+        if let appDelegate = AppDelegate.shared {
+            appDelegate.callbacks
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] callback in
+                    switch callback {
+                    case .registeredNotifications(let deviceToken):
+                        Task { await self?.notificationManager.register(with: deviceToken) }
+                    case .failedToRegisteredNotifications(let error):
+                        self?.notificationManager.registrationFailed(with: error)
                     }
-                    .store(in: &cancellables)
-            } else {
-                MXLog.error("Couldn't register to AppDelegate callbacks")
-            }
+                }
+                .store(in: &cancellables)
+        } else {
+            MXLog.error("Couldn't register to AppDelegate callbacks")
         }
     }
     
