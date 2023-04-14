@@ -20,10 +20,9 @@ import UserNotifications
 
 class NotificationManager: NSObject, NotificationManagerProtocol {
     private let notificationCenter: UserNotificationCenterProtocol
-    private let clientProxy: ClientProxyProtocol
+    private var clientProxy: ClientProxyProtocol?
 
-    init(clientProxy: ClientProxyProtocol, notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
-        self.clientProxy = clientProxy
+    init(notificationCenter: UserNotificationCenterProtocol = UNUserNotificationCenter.current()) {
         self.notificationCenter = notificationCenter
         super.init()
     }
@@ -31,10 +30,6 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     // MARK: NotificationManagerProtocol
 
     weak var delegate: NotificationManagerDelegate?
-
-    var isAvailable: Bool {
-        true
-    }
 
     func start() {
         let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
@@ -46,6 +41,9 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
                                                    options: [])
         notificationCenter.setNotificationCategories([replyCategory])
         notificationCenter.delegate = self
+    }
+
+    func requestAuthorization() {
         Task {
             do {
                 let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
@@ -60,7 +58,14 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
     }
 
     func register(with deviceToken: Data) async -> Bool {
-        await setPusher(with: deviceToken, clientProxy: clientProxy)
+        guard let clientProxy else {
+            return false
+        }
+        return await setPusher(with: deviceToken, clientProxy: clientProxy)
+    }
+
+    func setClientProxy(_ clientProxy: ClientProxyProtocol?) {
+        self.clientProxy = clientProxy
     }
 
     func registrationFailed(with error: Error) { }

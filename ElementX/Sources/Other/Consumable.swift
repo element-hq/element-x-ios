@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -16,6 +16,22 @@
 
 import Foundation
 
-protocol AppCoordinatorProtocol: CoordinatorProtocol {
-    var notificationManager: NotificationManagerProtocol { get }
+@propertyWrapper struct Consumable<Value> {
+    var wrappedValue: Value? {
+        mutating get {
+            defer {
+                value = nil
+            }
+            return value
+        }
+        set {
+            value = newValue
+        }
+    }
+
+    private var value: Value?
+
+    init(value: Value? = nil) {
+        self.value = value
+    }
 }

@@ -16,6 +16,40 @@
 
 import Foundation
 
+import URLRouting
+
 enum AppRoute {
     case room(roomID: String)
+}
+
+struct AppRouterManager {
+    private let deeplinkRouter = OneOf {
+        Route(.case(AppRoute.room(roomID:))) {
+            // Check with product if this is the expect path
+            Path { "room" }
+            Query {
+                Field("id") { Parse(.string) }
+            }
+        }
+    }
+
+    private let permalinkRouter = OneOf {
+        Route(.case(AppRoute.room(roomID:))) {
+            Host("matrix.to")
+            Path {
+                "#"
+                Parse(.string)
+            }
+        }
+    }
+
+    func route(from url: URL) -> AppRoute? {
+        var route: AppRoute?
+        if let deeplinkRoute = try? deeplinkRouter.match(url: url) {
+            route = deeplinkRoute
+        } else if let permalinkRoute = try? permalinkRouter.match(url: url) {
+            route = permalinkRoute
+        }
+        return route
+    }
 }

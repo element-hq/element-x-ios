@@ -47,7 +47,9 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     private var userSessionCancellables = Set<AnyCancellable>()
     private var cancellables = Set<AnyCancellable>()
-    private(set) var notificationManager: NotificationManagerProtocol?
+    let notificationManager: NotificationManagerProtocol
+
+    @Consumable private var storedAppRoute: AppRoute?
 
     init() {
         navigationRootCoordinator = NavigationRootCoordinator()
@@ -66,6 +68,10 @@ class AppCoordinator: AppCoordinatorProtocol {
         }
 
         userSessionStore = UserSessionStore(backgroundTaskService: backgroundTaskService)
+
+        notificationManager = NotificationManager()
+        notificationManager.delegate = self
+        notificationManager.start()
         
         guard let currentVersion = Version(InfoPlistReader(bundle: .main).bundleShortVersionString) else {
             fatalError("The app's version number **must** use semver for migration purposes.")
@@ -259,6 +265,10 @@ class AppCoordinator: AppCoordinatorProtocol {
         self.userSessionFlowCoordinator = userSessionFlowCoordinator
         
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
+
+        if let storedAppRoute {
+            userSessionFlowCoordinator.handleAppRoute(storedAppRoute)
+        }
     }
     
     private func logout(isSoft: Bool) {
@@ -292,11 +302,10 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSession = nil
         
         userSessionFlowCoordinator = nil
-        
-        notificationManager?.delegate = nil
-        notificationManager = nil
-    }
 
+        notificationManager.setClientProxy(nil)
+    }
+    
     private func presentSplashScreen(isSoftLogout: Bool = false) {
         navigationRootCoordinator.setRootCoordinator(SplashScreenCoordinator())
         
@@ -308,34 +317,23 @@ class AppCoordinator: AppCoordinatorProtocol {
     }
 
     private func configureNotificationManager() {
-        guard ServiceLocator.shared.settings.enableNotifications else {
-            return
-        }
-        guard notificationManager == nil else {
-            return
-        }
+        notificationManager.setClientProxy(userSession.clientProxy)
+        notificationManager.requestAuthorization()
 
-        let manager = NotificationManager(clientProxy: userSession.clientProxy)
-        if manager.isAvailable {
-            manager.delegate = self
-            notificationManager = manager
-            manager.start()
-
-            if let appDelegate = AppDelegate.shared {
-                appDelegate.callbacks
-                    .receive(on: DispatchQueue.main)
-                    .sink { [weak self] callback in
-                        switch callback {
-                        case .registeredNotifications(let deviceToken):
-                            Task { await self?.notificationManager?.register(with: deviceToken) }
-                        case .failedToRegisteredNotifications(let error):
-                            self?.notificationManager?.registrationFailed(with: error)
-                        }
+        if let appDelegate = AppDelegate.shared {
+            appDelegate.callbacks
+                .receive(on: DispatchQueue.main)
+                .sink { [weak self] callback in
+                    switch callback {
+                    case .registeredNotifications(let deviceToken):
+                        Task { await self?.notificationManager.register(with: deviceToken) }
+                    case .failedToRegisteredNotifications(let error):
+                        self?.notificationManager.registrationFailed(with: error)
                     }
-                    .store(in: &cancellables)
-            } else {
-                MXLog.error("Couldn't register to AppDelegate callbacks")
-            }
+                }
+                .store(in: &cancellables)
+        } else {
+            MXLog.error("Couldn't register to AppDelegate callbacks")
         }
     }
     
@@ -437,6 +435,14 @@ class AppCoordinator: AppCoordinatorProtocol {
             }
         }.store(in: &cancellables)
     }
+
+    private func handleAppRoute(_ appRoute: AppRoute) {
+        if let userSessionFlowCoordinator {
+            userSessionFlowCoordinator.handleAppRoute(appRoute)
+        } else {
+            storedAppRoute = appRoute
+        }
+    }
 }
 
 // MARK: - AuthenticationCoordinatorDelegate
@@ -472,11 +478,14 @@ extension AppCoordinator: NotificationManagerDelegate {
         MXLog.info("[AppCoordinator] tappedNotification")
 
         // We store the room identifier into the thread identifier
-        guard !content.threadIdentifier.isEmpty else {
+        guard !content.threadIdentifier.isEmpty,
+              content.receiverID != nil else {
             return
         }
 
-        userSessionFlowCoordinator?.handleAppRoute(.room(roomID: content.threadIdentifier))
+        // Handle here the account switching when available
+
+        handleAppRoute(.room(roomID: content.threadIdentifier))
     }
 
     func handleInlineReply(_ service: NotificationManagerProtocol, content: UNNotificationContent, replyText: String) async {

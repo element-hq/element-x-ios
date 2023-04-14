@@ -94,9 +94,7 @@ final class AppSettings: ObservableObject {
     }
     
     let pushGatewayBaseURL = URL(staticString: "https://matrix.org/_matrix/push/v1/notify")
-    
-    let enableNotifications = true
-    
+        
     // MARK: - Bug report
 
     let bugReportServiceBaseURL = URL(staticString: "https://riot.im/bugreports")

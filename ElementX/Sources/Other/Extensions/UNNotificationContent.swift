@@ -1,5 +1,5 @@
 //
-// Copyright 2022 New Vector Ltd
+// Copyright 2023 New Vector Ltd
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,23 +15,21 @@
 //
 
 import Foundation
+import UserNotifications
 
-class MockNotificationManager: NotificationManagerProtocol {
-    // MARK: NotificationManagerProtocol
-
-    var isAvailable: Bool {
-        false
+extension UNNotificationContent {
+    @objc var receiverID: String? {
+        userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
     }
+}
 
-    weak var delegate: NotificationManagerDelegate?
-
-    func start() {
-        delegate?.authorizationStatusUpdated(self, granted: false)
+extension UNMutableNotificationContent {
+    override var receiverID: String? {
+        get {
+            userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
+        }
+        set {
+            userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] = newValue
+        }
     }
-
-    func register(with deviceToken: Data) async -> Bool { false }
-
-    func registrationFailed(with error: Error) { }
-
-    func showLocalNotification(with title: String, subtitle: String?) { }
 }

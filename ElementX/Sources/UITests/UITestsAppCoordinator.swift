@@ -20,7 +20,7 @@ import UIKit
 class UITestsAppCoordinator: AppCoordinatorProtocol {
     private let navigationRootCoordinator: NavigationRootCoordinator
     private var mockScreen: MockScreen?
-    var notificationManager: NotificationManagerProtocol?
+    let notificationManager: NotificationManagerProtocol = NotificationManagerMock()
     
     init() {
         UIView.setAnimationsEnabled(false)

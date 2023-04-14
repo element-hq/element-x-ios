@@ -48,10 +48,12 @@ extension NotificationItemProxy {
 
     /// Process the receiver item proxy
     /// - Parameters:
+    ///   - receiverId: identifier of the user that has received the notification
     ///   - roomId: Room identifier
     ///   - mediaProvider: Media provider to process also media. May be passed nil to ignore media operations.
     /// - Returns: A notification content object if the notification should be displayed. Otherwise nil.
-    func process(with roomId: String,
+    func process(receiverId: String,
+                 roomId: String,
                  mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent? {
 //        switch timelineItemProxy {
 //        case .event(let eventItem):
@@ -75,7 +77,7 @@ extension NotificationItemProxy {
         // For now we can't solve the sender ID nor get the type of message that we are displaying
         // so we are just going to process all of them as a text notification saying "Notification"
         let content = TextMessageContent(body: L10n.notification, formatted: nil)
-        return try await processText(content: content, senderId: "undefined", roomId: roomId, mediaProvider: mediaProvider)
+        return try await processText(content: content, receiverId: receiverId, senderId: "undefined", roomId: roomId, mediaProvider: mediaProvider)
     }
 
     // MARK: - Private
@@ -83,42 +85,50 @@ extension NotificationItemProxy {
     // MARK: Common
 
     private func process(message: Message,
+                         receiverId: String,
                          senderId: String,
                          roomId: String,
                          mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent? {
         switch message.msgtype() {
         case .text(content: let content):
             return try await processText(content: content,
+                                         receiverId: receiverId,
                                          senderId: senderId,
                                          roomId: roomId,
                                          mediaProvider: mediaProvider)
         case .image(content: let content):
             return try await processImage(content: content,
+                                          receiverId: receiverId,
                                           senderId: senderId,
                                           roomId: roomId,
                                           mediaProvider: mediaProvider)
         case .audio(content: let content):
             return try await processAudio(content: content,
+                                          receiverId: receiverId,
                                           senderId: senderId,
                                           roomId: roomId,
                                           mediaProvider: mediaProvider)
         case .video(content: let content):
             return try await processVideo(content: content,
+                                          receiverId: receiverId,
                                           senderId: senderId,
                                           roomId: roomId,
                                           mediaProvider: mediaProvider)
         case .file(content: let content):
             return try await processFile(content: content,
+                                         receiverId: receiverId,
                                          senderId: senderId,
                                          roomId: roomId,
                                          mediaProvider: mediaProvider)
         case .notice(content: let content):
             return try await processNotice(content: content,
+                                           receiverId: receiverId,
                                            senderId: senderId,
                                            roomId: roomId,
                                            mediaProvider: mediaProvider)
         case .emote(content: let content):
             return try await processEmote(content: content,
+                                          receiverId: receiverId,
                                           senderId: senderId,
                                           roomId: roomId,
                                           mediaProvider: mediaProvider)
@@ -127,10 +137,12 @@ extension NotificationItemProxy {
         }
     }
 
-    private func processCommon(senderId: String,
+    private func processCommon(receiverId: String,
+                               senderId: String,
                                roomId: String,
                                mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = UNMutableNotificationContent()
+        notification.receiverID = receiverId
         notification.title = title
         if let subtitle = subtitle {
             notification.subtitle = subtitle
@@ -153,10 +165,12 @@ extension NotificationItemProxy {
     // MARK: Message Types
 
     private func processText(content: TextMessageContent,
+                             receiverId: String,
                              senderId: String,
                              roomId: String,
                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(senderId: senderId,
+        let notification = try await processCommon(receiverId: receiverId,
+                                                   senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = content.body
@@ -165,10 +179,12 @@ extension NotificationItemProxy {
     }
 
     private func processImage(content: ImageMessageContent,
+                              receiverId: String,
                               senderId: String,
                               roomId: String,
                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(senderId: senderId,
+        var notification = try await processCommon(receiverId: receiverId,
+                                                   senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "📷 " + content.body
@@ -180,10 +196,12 @@ extension NotificationItemProxy {
     }
 
     private func processVideo(content: VideoMessageContent,
+                              receiverId: String,
                               senderId: String,
                               roomId: String,
                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        var notification = try await processCommon(senderId: senderId,
+        var notification = try await processCommon(receiverId: receiverId,
+                                                   senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "📹 " + content.body
@@ -195,10 +213,12 @@ extension NotificationItemProxy {
     }
 
     private func processFile(content: FileMessageContent,
+                             receiverId: String,
                              senderId: String,
                              roomId: String,
                              mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(senderId: senderId,
+        let notification = try await processCommon(receiverId: receiverId,
+                                                   senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "📄 " + content.body
@@ -207,10 +227,12 @@ extension NotificationItemProxy {
     }
 
     private func processNotice(content: NoticeMessageContent,
+                               receiverId: String,
                                senderId: String,
                                roomId: String,
                                mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(senderId: senderId,
+        let notification = try await processCommon(receiverId: receiverId,
+                                                   senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "❕ " + content.body
@@ -219,10 +241,12 @@ extension NotificationItemProxy {
     }
 
     private func processEmote(content: EmoteMessageContent,
+                              receiverId: String,
                               senderId: String,
                               roomId: String,
                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(senderId: senderId,
+        let notification = try await processCommon(receiverId: receiverId,
+                                                   senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "🫥 " + content.body
@@ -231,10 +255,12 @@ extension NotificationItemProxy {
     }
 
     private func processAudio(content: AudioMessageContent,
+                              receiverId: String,
                               senderId: String,
                               roomId: String,
                               mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
-        let notification = try await processCommon(senderId: senderId,
+        let notification = try await processCommon(receiverId: receiverId,
+                                                   senderId: senderId,
                                                    roomId: roomId,
                                                    mediaProvider: mediaProvider)
         notification.body = "🔊 " + content.body

@@ -30,7 +30,9 @@ final class NotificationManagerTests: XCTestCase {
     private let settings = ServiceLocator.shared.settings
 
     override func setUp() {
-        notificationManager = NotificationManager(clientProxy: clientProxy, notificationCenter: notificationCenter)
+        notificationManager = NotificationManager(notificationCenter: notificationCenter)
+        notificationManager.start()
+        notificationManager.setClientProxy(clientProxy)
     }
     
     func test_whenRegistered_pusherIsCalled() async {
@@ -95,7 +97,6 @@ final class NotificationManagerTests: XCTestCase {
     }
     
     func test_whenStart_notificationCategoriesAreSet() throws {
-        notificationManager.start()
         let replyAction = UNTextInputNotificationAction(identifier: NotificationConstants.Action.inlineReply,
                                                         title: L10n.actionQuickReply,
                                                         options: [])
@@ -107,13 +108,12 @@ final class NotificationManagerTests: XCTestCase {
     }
     
     func test_whenStart_delegateIsSet() throws {
-        notificationManager.start()
         let delegate = try XCTUnwrap(notificationCenter.delegate)
         XCTAssertTrue(delegate.isEqual(notificationManager))
     }
     
     func test_whenStart_requestAuthorizationCalledWithCorrectParams() async throws {
-        notificationManager.start()
+        notificationManager.requestAuthorization()
         await Task.yield()
         XCTAssertEqual(notificationCenter.requestAuthorizationOptions, [.alert, .sound, .badge])
     }
@@ -122,13 +122,13 @@ final class NotificationManagerTests: XCTestCase {
         authorizationStatusWasGranted = false
         notificationCenter.requestAuthorizationGrantedReturnValue = true
         notificationManager.delegate = self
-        notificationManager.start()
+
+        notificationManager.requestAuthorization()
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(authorizationStatusWasGranted)
     }
     
     func test_whenWillPresentNotificationsDelegateNotSet_CorrectPresentationOptionsReturned() async throws {
-        notificationManager.start()
         let archiver = MockCoder(requiringSecureCoding: false)
         let notification = try XCTUnwrap(UNNotification(coder: archiver))
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
@@ -138,7 +138,7 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudNotBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = false
         notificationManager.delegate = self
-        notificationManager.start()
+
         let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [])
@@ -147,7 +147,7 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenWillPresentNotificationsDelegateSetAndNotificationsShoudBeDisplayed_CorrectPresentationOptionsReturned() async throws {
         shouldDisplayInAppNotificationReturnValue = true
         notificationManager.delegate = self
-        notificationManager.start()
+
         let notification = try UNNotification.with(userInfo: [AnyHashable: Any]())
         let options = await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), willPresent: notification)
         XCTAssertEqual(options, [.badge, .sound, .list, .banner])
@@ -156,7 +156,6 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenNotificationCenterReceivedResponseInLineReply_delegateIsCalled() async throws {
         handleInlineReplyDelegateCalled = false
         notificationManager.delegate = self
-        notificationManager.start()
         let response = try UNTextInputNotificationResponse.with(userInfo: [AnyHashable: Any](), actionIdentifier: NotificationConstants.Action.inlineReply)
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(handleInlineReplyDelegateCalled)
@@ -165,7 +164,6 @@ final class NotificationManagerTests: XCTestCase {
     func test_whenNotificationCenterReceivedResponseWithActionIdentifier_delegateIsCalled() async throws {
         notificationTappedDelegateCalled = false
         notificationManager.delegate = self
-        notificationManager.start()
         let response = try UNTextInputNotificationResponse.with(userInfo: [AnyHashable: Any](), actionIdentifier: UNNotificationDefaultActionIdentifier)
         await notificationManager.userNotificationCenter(UNUserNotificationCenter.current(), didReceive: response)
         XCTAssertTrue(notificationTappedDelegateCalled)

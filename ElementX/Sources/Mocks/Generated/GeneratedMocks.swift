@@ -50,6 +50,103 @@ class BugReportServiceMock: BugReportServiceProtocol {
         }
     }
 }
+class NotificationManagerMock: NotificationManagerProtocol {
+    var delegate: NotificationManagerDelegate?
+
+    //MARK: - start
+
+    var startCallsCount = 0
+    var startCalled: Bool {
+        return startCallsCount > 0
+    }
+    var startClosure: (() -> Void)?
+
+    func start() {
+        startCallsCount += 1
+        startClosure?()
+    }
+    //MARK: - register
+
+    var registerWithCallsCount = 0
+    var registerWithCalled: Bool {
+        return registerWithCallsCount > 0
+    }
+    var registerWithReceivedDeviceToken: Data?
+    var registerWithReceivedInvocations: [Data] = []
+    var registerWithReturnValue: Bool!
+    var registerWithClosure: ((Data) async -> Bool)?
+
+    func register(with deviceToken: Data) async -> Bool {
+        registerWithCallsCount += 1
+        registerWithReceivedDeviceToken = deviceToken
+        registerWithReceivedInvocations.append(deviceToken)
+        if let registerWithClosure = registerWithClosure {
+            return await registerWithClosure(deviceToken)
+        } else {
+            return registerWithReturnValue
+        }
+    }
+    //MARK: - registrationFailed
+
+    var registrationFailedWithCallsCount = 0
+    var registrationFailedWithCalled: Bool {
+        return registrationFailedWithCallsCount > 0
+    }
+    var registrationFailedWithReceivedError: Error?
+    var registrationFailedWithReceivedInvocations: [Error] = []
+    var registrationFailedWithClosure: ((Error) -> Void)?
+
+    func registrationFailed(with error: Error) {
+        registrationFailedWithCallsCount += 1
+        registrationFailedWithReceivedError = error
+        registrationFailedWithReceivedInvocations.append(error)
+        registrationFailedWithClosure?(error)
+    }
+    //MARK: - showLocalNotification
+
+    var showLocalNotificationWithSubtitleCallsCount = 0
+    var showLocalNotificationWithSubtitleCalled: Bool {
+        return showLocalNotificationWithSubtitleCallsCount > 0
+    }
+    var showLocalNotificationWithSubtitleReceivedArguments: (title: String, subtitle: String?)?
+    var showLocalNotificationWithSubtitleReceivedInvocations: [(title: String, subtitle: String?)] = []
+    var showLocalNotificationWithSubtitleClosure: ((String, String?) async -> Void)?
+
+    func showLocalNotification(with title: String, subtitle: String?) async {
+        showLocalNotificationWithSubtitleCallsCount += 1
+        showLocalNotificationWithSubtitleReceivedArguments = (title: title, subtitle: subtitle)
+        showLocalNotificationWithSubtitleReceivedInvocations.append((title: title, subtitle: subtitle))
+        await showLocalNotificationWithSubtitleClosure?(title, subtitle)
+    }
+    //MARK: - setClientProxy
+
+    var setClientProxyCallsCount = 0
+    var setClientProxyCalled: Bool {
+        return setClientProxyCallsCount > 0
+    }
+    var setClientProxyReceivedClientProxy: ClientProxyProtocol?
+    var setClientProxyReceivedInvocations: [ClientProxyProtocol?] = []
+    var setClientProxyClosure: ((ClientProxyProtocol?) -> Void)?
+
+    func setClientProxy(_ clientProxy: ClientProxyProtocol?) {
+        setClientProxyCallsCount += 1
+        setClientProxyReceivedClientProxy = clientProxy
+        setClientProxyReceivedInvocations.append(clientProxy)
+        setClientProxyClosure?(clientProxy)
+    }
+    //MARK: - requestAuthorization
+
+    var requestAuthorizationCallsCount = 0
+    var requestAuthorizationCalled: Bool {
+        return requestAuthorizationCallsCount > 0
+    }
+    var requestAuthorizationClosure: (() -> Void)?
+
+    func requestAuthorization() {
+        requestAuthorizationCallsCount += 1
+        requestAuthorizationClosure?()
+    }
+}
 class RoomMemberProxyMock: RoomMemberProxyProtocol {
     var userID: String {
         get { return underlyingUserID }
