@@ -18,6 +18,11 @@ enum InvitesViewModelAction { }
 
 struct InvitesViewState: BindableState {
     var invites: [InvitesRoomDetails]?
+    var bindings: InvitesViewStateBindings = .init()
+}
+
+struct InvitesViewStateBindings {
+    var alertInfo: AlertInfo<RoomProxyError>?
 }
 
 struct InvitesRoomDetails {

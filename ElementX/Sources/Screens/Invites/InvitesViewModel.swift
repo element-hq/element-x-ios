@@ -61,6 +61,7 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
         }
         
         invitesSummaryProvider.roomListPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] roomSummaries in
                 guard let self else { return }
                 
@@ -93,21 +94,50 @@ class InvitesViewModel: InvitesViewModelType, InvitesViewModelProtocol {
     private func accept(invite: InvitesRoomDetails) {
         Task {
             let roomID = invite.roomDetails.id
+            defer {
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
+            }
+            
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
-            let roomProxy = await clientProxy.roomForIdentifier(roomID)
-            let result = await roomProxy?.acceptInvitation()
-            ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
+            
+            guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
+                displayError(.failedAcceptingInvite)
+                return
+            }
+            let result = await roomProxy.acceptInvitation()
+            
+            displayErrorIfNeeded(result)
         }
     }
     
     private func decline(invite: InvitesRoomDetails) {
         Task {
             let roomID = invite.roomDetails.id
+            defer {
+                ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
+            }
+            
             ServiceLocator.shared.userIndicatorController.submitIndicator(UserIndicator(id: roomID, type: .modal, title: L10n.commonLoading, persistent: true))
-            let roomProxy = await clientProxy.roomForIdentifier(roomID)
-            let result = await roomProxy?.rejectInvitation()
-            ServiceLocator.shared.userIndicatorController.retractIndicatorWithId(roomID)
+            
+            guard let roomProxy = await clientProxy.roomForIdentifier(roomID) else {
+                displayError(.failedRejectingInvite)
+                return
+            }
+            let result = await roomProxy.rejectInvitation()
+            
+            displayErrorIfNeeded(result)
         }
+    }
+    
+    private func displayErrorIfNeeded(_ result: Result<Void, RoomProxyError>) {
+        guard case .failure(let error) = result else {
+            return
+        }
+        displayError(error)
+    }
+    
+    private func displayError(_ error: RoomProxyError) {
+        #warning("Assign alertInfo here")
     }
 }
 
