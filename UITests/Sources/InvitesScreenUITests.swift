@@ -26,6 +26,6 @@ class InvitesScreenUITests: XCTestCase {
     func testNoInvites() {
         let app = Application.launch(.invitesNoInvites)
         XCTAssertTrue(app.staticTexts[A11yIdentifiers.invitesScreen.noInvites].exists)
-        app.assertScreenshot(.invites, step: 1)
+        app.assertScreenshot(.invitesNoInvites)
     }
 }

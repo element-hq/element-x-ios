@@ -362,7 +362,7 @@ class MockScreen: Identifiable {
         case .invites:
             let navigationStackCoordinator = NavigationStackCoordinator()
             let clientProxy = MockClientProxy(userID: "@mock:client.com")
-            clientProxy.roomInviter = RoomMemberProxyMock.mockDan
+            clientProxy.roomInviter = RoomMemberProxyMock.mockCharlie
             let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
             clientProxy.visibleRoomsSummaryProvider = summaryProvider
             clientProxy.invitesSummaryProvider = summaryProvider
