@@ -20,21 +20,13 @@ import XCTest
 class LocalizationTests: XCTestCase {
     /// Test ElementL10n considers app language changes
     func testAppLanguage() {
-        //  set app language to English
-        Bundle.elementLanguage = "en"
+        // set app language to English
+        Bundle.overrideLocalizations = ["en"]
 
         XCTAssertEqual(L10n.testLanguageIdentifier, "en")
 
-        //  set app language to Italian
-        Bundle.elementLanguage = "it"
-
-        XCTAssertEqual(L10n.testLanguageIdentifier, "it")
-    }
-
-    /// Test fallback language for a language not supported at all
-    func testStripRegionIfRegionalTranslationIsNotAvailable() {
-        // set app language to something that includes also a region (it-IT)
-        Bundle.elementLanguage = "it-IT"
+        // set app language to Italian
+        Bundle.overrideLocalizations = ["it"]
 
         XCTAssertEqual(L10n.testLanguageIdentifier, "it")
     }
@@ -42,8 +34,7 @@ class LocalizationTests: XCTestCase {
     /// Test fallback language for a language not supported at all
     func testFallbackOnNotSupportedLanguage() {
         //  set app language to something Element don't support at all (chose non existing identifier)
-        Bundle.elementLanguage = "xx"
-        Bundle.elementFallbackLanguage = "en"
+        Bundle.overrideLocalizations = ["xx"]
 
         XCTAssertEqual(L10n.testLanguageIdentifier, "en")
     }
@@ -51,8 +42,7 @@ class LocalizationTests: XCTestCase {
     /// Test fallback language for a language supported but poorly translated
     func testFallbackOnNotTranslatedKey() {
         //  set app language to something Element supports but use a key that is not translated (we have a key that should never be translated)
-        Bundle.elementLanguage = "it"
-        Bundle.elementFallbackLanguage = "en"
+        Bundle.overrideLocalizations = ["it"]
 
         XCTAssertEqual(L10n.testLanguageIdentifier, "it")
         XCTAssertEqual(L10n.testUntranslatedDefaultLanguageIdentifier, "en")
@@ -61,19 +51,19 @@ class LocalizationTests: XCTestCase {
     /// Test plurals that ElementL10n considers app language changes
     func testPlurals() {
         //  set app language to English
-        Bundle.elementLanguage = "en"
+        Bundle.overrideLocalizations = ["en"]
 
         XCTAssertEqual(L10n.commonMemberCount(1), "1 member")
         XCTAssertEqual(L10n.commonMemberCount(2), "2 members")
 
         //  set app language to Italian
-        Bundle.elementLanguage = "it"
+        Bundle.overrideLocalizations = ["it"]
 
         XCTAssertEqual(L10n.commonMemberCount(1), "1 membro")
         XCTAssertEqual(L10n.commonMemberCount(2), "2 membri")
 
 //        //  set app language to Polish
-//        Bundle.elementLanguage = "pl"
+//        Bundle.overrideLocalizations = ["pl"]
 //
 //        XCTAssertEqual(L10n.commonMemberCount(1), "1 sekunda") //  one
 //        XCTAssertEqual(L10n.commonMemberCount(2), "2 sekundy") //  few
@@ -83,8 +73,7 @@ class LocalizationTests: XCTestCase {
     /// Test plurals fallback language for a language not supported at all
     func testPluralsFallbackOnNotSupportedLanguage() {
         //  set app language to something Element don't support at all ("invalid identifier")
-        Bundle.elementLanguage = "xx"
-        Bundle.elementFallbackLanguage = "en"
+        Bundle.overrideLocalizations = ["xx"]
 
         XCTAssertEqual(L10n.commonMemberCount(1), "1 member")
         XCTAssertEqual(L10n.commonMemberCount(2), "2 members")

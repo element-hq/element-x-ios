@@ -24,13 +24,6 @@ class NotificationServiceExtension: UNNotificationServiceExtension {
     var handler: ((UNNotificationContent) -> Void)?
     var modifiedContent: UNMutableNotificationContent?
 
-    override init() {
-        //  Use `en` as fallback language
-        Bundle.elementFallbackLanguage = "en"
-
-        super.init()
-    }
-
     override func didReceive(_ request: UNNotificationRequest,
                              withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void) {
         guard !DataProtectionManager.isDeviceLockedAfterReboot(containerURL: URL.appGroupContainerDirectory),

@@ -72,15 +72,10 @@ public enum UntranslatedL10n {
 extension UntranslatedL10n {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
     // No need to check languages, we always default to en for untranslated strings
-    guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: "en") else {
-      // no translations for the desired language
-      return key
-    }
+    guard let bundle = Bundle.lprojBundle(for: "en") else { return key }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
     return String(format: format, locale: Locale(identifier: "en"), arguments: args)
   }
 }
-
-private final class BundleToken {}
 
 // swiftlint:enable all

@@ -75,32 +75,25 @@ import Foundation
 
 extension {{enumName}} {
   static func tr(_ table: String, _ key: String, _ args: CVarArg...) -> String {
-    let languages = Bundle.preferredLanguages
+    // Use preferredLocalizations to get a language that is in the bundle and the user's preferred list of languages.
+    let languages = Bundle.overrideLocalizations ?? Bundle.app.preferredLocalizations
 
     for language in languages {
       if let translation = trIn(language, table, key, args) {
         return translation
-        // If we can't find a translation for this language
-        // we check if we can find one by stripping the region
-      } else if let langCode = Locale(identifier: language).language.languageCode?.identifier,
-        let translation = trIn(langCode, table, key, args) {
-          return translation
-        }
       }
-    return key
     }
+    return Bundle.app.developmentLocalization.flatMap { trIn($0, table, key, args) } ?? key
+  }
 
   private static func trIn(_ language: String, _ table: String, _ key: String, _ args: CVarArg...) -> String? {
-    guard let bundle = Bundle(for: BundleToken.self).lprojBundle(for: language) else {
-      // no translations for the desired language
-      return nil
-    }
+    guard let bundle = Bundle.lprojBundle(for: language) else { return nil }
     let format = NSLocalizedString(key, tableName: table, bundle: bundle, comment: "")
-    return String(format: format, locale: Locale(identifier: language), arguments: args)
+    let translation = String(format: format, locale: Locale(identifier: language), arguments: args)
+    guard translation != key else { return nil }
+    return translation
   }
 }
-
-private final class BundleToken {}
 
 {% else %}
 // No string found

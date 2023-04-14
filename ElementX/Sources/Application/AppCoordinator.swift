@@ -86,8 +86,6 @@ class AppCoordinator: AppCoordinatorProtocol {
         ServiceLocator.shared.settings.lastVersionLaunched = currentVersion.description
         
         setupStateMachine()
-        
-        Bundle.elementFallbackLanguage = "en"
 
         observeApplicationState()
         observeNetworkState()
