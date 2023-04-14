@@ -267,9 +267,7 @@ class AppCoordinator: AppCoordinatorProtocol {
         navigationRootCoordinator.setRootCoordinator(navigationSplitCoordinator)
 
         if let storedAppRoute {
-            DispatchQueue.main.async {
-                userSessionFlowCoordinator.handleAppRoute(storedAppRoute)
-            }
+            userSessionFlowCoordinator.handleAppRoute(storedAppRoute)
         }
     }
     
@@ -437,6 +435,14 @@ class AppCoordinator: AppCoordinatorProtocol {
             }
         }.store(in: &cancellables)
     }
+
+    private func handleAppRoute(_ appRoute: AppRoute) {
+        if let userSessionFlowCoordinator {
+            userSessionFlowCoordinator.handleAppRoute(appRoute)
+        } else {
+            storedAppRoute = appRoute
+        }
+    }
 }
 
 // MARK: - AuthenticationCoordinatorDelegate
@@ -496,14 +502,6 @@ extension AppCoordinator: NotificationManagerDelegate {
             // error or no room proxy
             await service.showLocalNotification(with: "⚠️ " + L10n.commonError,
                                                 subtitle: L10n.errorSomeMessagesHaveNotBeenSent)
-        }
-    }
-
-    private func handleAppRoute(_ appRoute: AppRoute) {
-        if let userSessionFlowCoordinator {
-            userSessionFlowCoordinator.handleAppRoute(appRoute)
-        } else {
-            storedAppRoute = appRoute
         }
     }
 }
