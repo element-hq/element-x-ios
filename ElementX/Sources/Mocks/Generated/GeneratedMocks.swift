@@ -125,10 +125,10 @@ class NotificationManagerMock: NotificationManagerProtocol {
         return setClientProxyCallsCount > 0
     }
     var setClientProxyReceivedClientProxy: ClientProxyProtocol?
-    var setClientProxyReceivedInvocations: [ClientProxyProtocol] = []
-    var setClientProxyClosure: ((ClientProxyProtocol) -> Void)?
+    var setClientProxyReceivedInvocations: [ClientProxyProtocol?] = []
+    var setClientProxyClosure: ((ClientProxyProtocol?) -> Void)?
 
-    func setClientProxy(_ clientProxy: ClientProxyProtocol) {
+    func setClientProxy(_ clientProxy: ClientProxyProtocol?) {
         setClientProxyCallsCount += 1
         setClientProxyReceivedClientProxy = clientProxy
         setClientProxyReceivedInvocations.append(clientProxy)

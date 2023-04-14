@@ -64,7 +64,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         return await setPusher(with: deviceToken, clientProxy: clientProxy)
     }
 
-    func setClientProxy(_ clientProxy: ClientProxyProtocol) {
+    func setClientProxy(_ clientProxy: ClientProxyProtocol?) {
         self.clientProxy = clientProxy
     }
 

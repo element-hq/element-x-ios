@@ -89,3 +89,4 @@ targets:
     - path: ../../ElementX/Sources/Other/Extensions/UTType.swift
     - path: ../../ElementX/Sources/Other/AvatarSize.swift
     - path: ../../ElementX/Sources/Other/InfoPlistReader.swift
+    - path: ../../ElementX/Sources/Other/Extensions/UNNotificationContent.swift

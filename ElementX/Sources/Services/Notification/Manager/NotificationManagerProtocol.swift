@@ -32,13 +32,13 @@ protocol NotificationManagerDelegate: AnyObject {
 // MARK: - NotificationManagerProtocol
 
 // sourcery: AutoMockable
-protocol NotificationManagerProtocol {
+protocol NotificationManagerProtocol: AnyObject {
     var delegate: NotificationManagerDelegate? { get set }
 
     func start()
     func register(with deviceToken: Data) async -> Bool
     func registrationFailed(with error: Error)
     func showLocalNotification(with title: String, subtitle: String?) async
-    func setClientProxy(_ clientProxy: ClientProxyProtocol)
+    func setClientProxy(_ clientProxy: ClientProxyProtocol?)
     func requestAuth()
 }

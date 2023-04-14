@@ -47,7 +47,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     private var userSessionCancellables = Set<AnyCancellable>()
     private var cancellables = Set<AnyCancellable>()
-    private(set) var notificationManager: NotificationManagerProtocol
+    let notificationManager: NotificationManagerProtocol
 
     @Consumable private var storedAppRoute: AppRoute?
 
@@ -304,6 +304,8 @@ class AppCoordinator: AppCoordinatorProtocol {
         userSession = nil
         
         userSessionFlowCoordinator = nil
+
+        notificationManager.setClientProxy(nil)
     }
     
     private func presentSplashScreen(isSoftLogout: Bool = false) {
@@ -471,7 +473,7 @@ extension AppCoordinator: NotificationManagerDelegate {
 
         // We store the room identifier into the thread identifier
         guard !content.threadIdentifier.isEmpty,
-              let _ = content.receiverId else {
+              content.receiverId != nil else {
             return
         }
 
