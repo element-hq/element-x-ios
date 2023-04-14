@@ -23,14 +23,14 @@ struct PlaceholderAvatarImage: View {
     private let contentID: String?
     
     var body: some View {
-        GeometryReader { proxy in
+        GeometryReader { geometry in
             ZStack(alignment: .center) {
                 bgColor
                 
                 // This text's frame doesn't look right when redacted
                 if redactionReasons != .placeholder {
                     Text(textForImage)
-                        .padding(proxy.size.width <= 30 ? 0 : 4)
+                        .padding(geometry.size.width <= 30 ? 0 : 4)
                         .foregroundColor(.white)
                         .font(.system(size: 200).weight(.semibold))
                         .minimumScaleFactor(0.001)
