@@ -30,6 +30,7 @@ final class AppSettings: ObservableObject {
         case startChatFlowEnabled = "showStartChatFlow"
         case startChatUserSuggestionsEnabled
         case mediaUploadingFlowEnabled
+        case invitesFlowEnabled
     }
     
     private static var suiteName: String = InfoPlistReader.main.appGroupIdentifier
@@ -172,4 +173,9 @@ final class AppSettings: ObservableObject {
     
     @UserSetting(key: UserDefaultsKeys.mediaUploadingFlowEnabled.rawValue, defaultValue: false, persistIn: nil)
     var mediaUploadingFlowEnabled
+    
+    // MARK: Invites
+    
+    @UserSetting(key: UserDefaultsKeys.invitesFlowEnabled.rawValue, defaultValue: false, persistIn: store)
+    var invitesFlowEnabled
 }

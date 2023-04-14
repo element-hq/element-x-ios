@@ -165,7 +165,7 @@ private extension View {
 
 struct HomeScreenRoomCell_Previews: PreviewProvider {
     static var previews: some View {
-        let summaryProvider = MockRoomSummaryProvider(state: .loaded)
+        let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockRooms))
 
         let userSession = MockUserSession(clientProxy: MockClientProxy(userID: "John Doe", roomSummaryProvider: summaryProvider),
                                           mediaProvider: MockMediaProvider())

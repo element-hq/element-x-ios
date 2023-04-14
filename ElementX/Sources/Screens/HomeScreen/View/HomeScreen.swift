@@ -40,6 +40,14 @@ struct HomeScreen: View {
             if context.viewState.showSessionVerificationBanner {
                 sessionVerificationBanner
             }
+
+            if context.viewState.hasPendingInvitations, ServiceLocator.shared.settings.invitesFlowEnabled {
+                HomeScreenInvitesButton(title: L10n.actionInvitesList, hasBadge: true) {
+                    context.send(viewAction: .selectInvites)
+                }
+                .padding(.trailing, 16)
+                .frame(maxWidth: .infinity, alignment: .trailing)
+            }
             
             if context.viewState.roomListMode == .skeletons {
                 LazyVStack(spacing: 0) {
@@ -240,7 +248,7 @@ struct HomeScreen: View {
 struct HomeScreen_Previews: PreviewProvider {
     static var previews: some View {
         body(.loading)
-        body(.loaded)
+        body(.loaded(.mockRooms))
     }
     
     static func body(_ state: MockRoomSummaryProviderState) -> some View {

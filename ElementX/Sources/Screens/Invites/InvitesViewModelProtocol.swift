@@ -14,21 +14,10 @@
 // limitations under the License.
 //
 
-import Foundation
+import Combine
 
-struct RoomSummaryDetails {
-    let id: String
-    let name: String
-    let isDirect: Bool
-    let avatarURL: URL?
-    let lastMessage: AttributedString?
-    let lastMessageFormattedTimestamp: String?
-    let unreadNotificationCount: UInt
-    let canonicalAlias: String?
-}
-
-extension RoomSummaryDetails: CustomStringConvertible {
-    var description: String {
-        "id: \"\(id)\", isDirect: \"\(isDirect)\", unreadNotificationCount: \"\(unreadNotificationCount)\""
-    }
+@MainActor
+protocol InvitesViewModelProtocol {
+    var actions: AnyPublisher<InvitesViewModelAction, Never> { get }
+    var context: InvitesViewModelType.Context { get }
 }

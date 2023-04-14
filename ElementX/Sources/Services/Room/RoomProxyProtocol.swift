@@ -88,6 +88,8 @@ protocol RoomProxyProtocol {
     func leaveRoom() async -> Result<Void, RoomProxyError>
     
     func updateMembers() async
+    
+    func inviter() async -> RoomMemberProxyProtocol?
 }
 
 extension RoomProxyProtocol {

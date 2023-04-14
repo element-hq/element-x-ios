@@ -14,21 +14,22 @@
 // limitations under the License.
 //
 
-import Foundation
+enum InvitesViewModelAction { }
 
-struct RoomSummaryDetails {
-    let id: String
-    let name: String
-    let isDirect: Bool
-    let avatarURL: URL?
-    let lastMessage: AttributedString?
-    let lastMessageFormattedTimestamp: String?
-    let unreadNotificationCount: UInt
-    let canonicalAlias: String?
+struct InvitesViewState: BindableState {
+    var invites: [InvitesRoomDetails]?
 }
 
-extension RoomSummaryDetails: CustomStringConvertible {
-    var description: String {
-        "id: \"\(id)\", isDirect: \"\(isDirect)\", unreadNotificationCount: \"\(unreadNotificationCount)\""
+struct InvitesRoomDetails {
+    let roomDetails: RoomSummaryDetails
+    var inviter: RoomMemberProxyProtocol?
+    
+    var isDirect: Bool {
+        roomDetails.isDirect
     }
+}
+
+enum InvitesViewAction {
+    case accept(InvitesRoomDetails)
+    case decline(InvitesRoomDetails)
 }

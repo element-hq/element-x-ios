@@ -25,11 +25,13 @@ class TemplateScreenViewModelTests: XCTestCase {
     }
     
     var viewModel: TemplateViewModelProtocol!
-    var context: TemplateViewModelType.Context!
     
-    @MainActor override func setUpWithError() throws {
+    var context: TemplateViewModelType.Context {
+        viewModel.context
+    }
+    
+    override func setUpWithError() throws {
         viewModel = TemplateViewModel(promptType: .regular, initialCount: Constants.counterInitialValue)
-        context = viewModel.context
     }
 
     func testInitialState() {

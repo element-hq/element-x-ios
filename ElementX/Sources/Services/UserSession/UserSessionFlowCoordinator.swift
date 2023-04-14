@@ -14,6 +14,7 @@
 // limitations under the License.
 //
 
+import Combine
 import SwiftUI
 
 enum UserSessionFlowCoordinatorAction {
@@ -22,6 +23,7 @@ enum UserSessionFlowCoordinatorAction {
 
 class UserSessionFlowCoordinator: CoordinatorProtocol {
     private let stateMachine: UserSessionFlowCoordinatorStateMachine
+    private var cancellables: Set<AnyCancellable> = .init()
     
     private let userSession: UserSessionProtocol
     private let navigationSplitCoordinator: NavigationSplitCoordinator
@@ -64,7 +66,7 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
 
     func handleAppRoute(_ appRoute: AppRoute) {
         switch stateMachine.state {
-        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen:
+        case .feedbackScreen, .sessionVerificationScreen, .settingsScreen, .startChatScreen, .invitesScreen:
             navigationSplitCoordinator.setSheetCoordinator(nil)
         case .roomList, .initial:
             break
@@ -115,6 +117,10 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.presentStartChat()
             case (.startChatScreen, .dismissedStartChatScreen, .roomList):
                 break
+            case (.roomList, .showInvitesScreen, .invitesScreen):
+                self.presentInvitesList()
+            case (.invitesScreen, .closedInvitesScreen, .roomList):
+                break
             default:
                 fatalError("Unknown transition: \(context)")
             }
@@ -150,6 +156,8 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
                 self.stateMachine.processEvent(.showStartChatScreen)
             case .signOut:
                 self.callback?(.signOut)
+            case .presentInvitesScreen:
+                self.stateMachine.processEvent(.showInvitesScreen)
             }
         }
         
@@ -311,6 +319,21 @@ class UserSessionFlowCoordinator: CoordinatorProtocol {
         
         navigationSplitCoordinator.setSheetCoordinator(userIndicatorController) { [weak self] in
             self?.stateMachine.processEvent(.dismissedFeedbackScreen)
+        }
+    }
+    
+    // MARK: Invites list
+    
+    private func presentInvitesList() {
+        let parameters = InvitesCoordinatorParameters(userSession: userSession)
+        let coordinator = InvitesCoordinator(parameters: parameters)
+        
+        coordinator.actions
+            .sink { _ in }
+            .store(in: &cancellables)
+        
+        navigationSplitCoordinator.setDetailCoordinator(coordinator) { [weak self] in
+            self?.stateMachine.processEvent(.closedInvitesScreen)
         }
     }
 }

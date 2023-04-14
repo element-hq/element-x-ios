@@ -481,6 +481,23 @@ class RoomProxyMock: RoomProxyProtocol {
         updateMembersCallsCount += 1
         await updateMembersClosure?()
     }
+    //MARK: - inviter
+
+    var inviterCallsCount = 0
+    var inviterCalled: Bool {
+        return inviterCallsCount > 0
+    }
+    var inviterReturnValue: RoomMemberProxyProtocol?
+    var inviterClosure: (() async -> RoomMemberProxyProtocol?)?
+
+    func inviter() async -> RoomMemberProxyProtocol? {
+        inviterCallsCount += 1
+        if let inviterClosure = inviterClosure {
+            return await inviterClosure()
+        } else {
+            return inviterReturnValue
+        }
+    }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {

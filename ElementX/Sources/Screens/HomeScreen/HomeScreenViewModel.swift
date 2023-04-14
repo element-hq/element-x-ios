@@ -23,6 +23,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
     private let userSession: UserSessionProtocol
     private let visibleRoomsSummaryProvider: RoomSummaryProviderProtocol?
     private let allRoomsSummaryProvider: RoomSummaryProviderProtocol?
+    private let invitesSummaryProvider: RoomSummaryProviderProtocol?
     private let attributedStringBuilder: AttributedStringBuilderProtocol
     
     private var visibleItemRangeObservationToken: AnyCancellable?
@@ -37,6 +38,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
         
         visibleRoomsSummaryProvider = userSession.clientProxy.visibleRoomsSummaryProvider
         allRoomsSummaryProvider = userSession.clientProxy.allRoomsSummaryProvider
+        invitesSummaryProvider = userSession.clientProxy.invitesSummaryProvider
         
         let invitePermalink = try? PermalinkBuilder.permalinkTo(userIdentifier: userSession.userID)
         super.init(initialViewState: HomeScreenViewState(userID: userSession.userID, invitePermalink: invitePermalink),
@@ -60,7 +62,7 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             .weakAssign(to: \.state.userAvatarURL, on: self)
             .store(in: &cancellables)
         
-        guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider else {
+        guard let visibleRoomsSummaryProvider, let allRoomsSummaryProvider, let invitesSummaryProvider else {
             MXLog.error("Room summary provider unavailable")
             return
         }
@@ -132,6 +134,12 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             }
             .store(in: &cancellables)
         
+        invitesSummaryProvider.countPublisher
+            .map { $0 > 0 }
+            .receive(on: DispatchQueue.main)
+            .weakAssign(to: \.state.hasPendingInvitations, on: self)
+            .store(in: &cancellables)
+        
         updateRooms()
     }
     
@@ -158,6 +166,8 @@ class HomeScreenViewModel: HomeScreenViewModelType, HomeScreenViewModelProtocol 
             visibleItemRangePublisher.send((range, isScrolling))
         case .startChat:
             callback?(.presentStartChatScreen)
+        case .selectInvites:
+            callback?(.presentInvitesScreen)
         }
     }
     

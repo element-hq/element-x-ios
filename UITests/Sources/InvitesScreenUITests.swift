@@ -14,21 +14,18 @@
 // limitations under the License.
 //
 
-import Foundation
+import ElementX
+import XCTest
 
-struct RoomSummaryDetails {
-    let id: String
-    let name: String
-    let isDirect: Bool
-    let avatarURL: URL?
-    let lastMessage: AttributedString?
-    let lastMessageFormattedTimestamp: String?
-    let unreadNotificationCount: UInt
-    let canonicalAlias: String?
-}
-
-extension RoomSummaryDetails: CustomStringConvertible {
-    var description: String {
-        "id: \"\(id)\", isDirect: \"\(isDirect)\", unreadNotificationCount: \"\(unreadNotificationCount)\""
+class InvitesScreenUITests: XCTestCase {
+    func testMixedInvites() {
+        let app = Application.launch(.invites)
+        app.assertScreenshot(.invites)
+    }
+    
+    func testNoInvites() {
+        let app = Application.launch(.invitesNoInvites)
+        XCTAssertTrue(app.staticTexts[A11yIdentifiers.invitesScreen.noInvites].exists)
+        app.assertScreenshot(.invitesNoInvites)
     }
 }

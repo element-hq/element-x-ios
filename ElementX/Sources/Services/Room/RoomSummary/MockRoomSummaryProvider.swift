@@ -19,7 +19,7 @@ import Foundation
 
 enum MockRoomSummaryProviderState {
     case loading
-    case loaded
+    case loaded([RoomSummary])
 }
 
 class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
@@ -37,38 +37,59 @@ class MockRoomSummaryProvider: RoomSummaryProviderProtocol {
             roomListPublisher = .init([])
             statePublisher = .init(.notLoaded)
             countPublisher = .init(0)
-        case .loaded:
-            roomListPublisher = .init(Self.rooms)
+        case .loaded(let rooms):
+            roomListPublisher = .init(rooms)
             statePublisher = .init(.fullyLoaded)
-            countPublisher = .init(UInt(Self.rooms.count))
+            countPublisher = .init(UInt(rooms.count))
         }
     }
     
     func updateVisibleRange(_ range: Range<Int>, timelineLimit: UInt) { }
-    
-    // MARK: - Private
-    
-    static let rooms: [RoomSummary] = [
+}
+
+extension Array where Element == RoomSummary {
+    static let mockRooms: [Element] = [
         .filled(details: RoomSummaryDetails(id: "1", name: "First room",
                                             isDirect: true,
                                             avatarURL: nil,
                                             lastMessage: AttributedString("Prosciutto beef ribs pancetta filet mignon kevin hamburger, chuck ham venison picanha. Beef ribs chislic turkey biltong tenderloin."),
                                             lastMessageFormattedTimestamp: "Now",
-                                            unreadNotificationCount: 4)),
+                                            unreadNotificationCount: 4,
+                                            canonicalAlias: nil)),
         .filled(details: RoomSummaryDetails(id: "2",
                                             name: "Second room",
                                             isDirect: true,
                                             avatarURL: URL.picturesDirectory,
                                             lastMessage: nil,
                                             lastMessageFormattedTimestamp: nil,
-                                            unreadNotificationCount: 1)),
+                                            unreadNotificationCount: 1,
+                                            canonicalAlias: nil)),
         .filled(details: RoomSummaryDetails(id: "3",
                                             name: "Third room",
                                             isDirect: true,
                                             avatarURL: nil,
                                             lastMessage: try? AttributedString(markdown: "**@mock:client.com**: T-bone beef ribs bacon"),
                                             lastMessageFormattedTimestamp: "Later",
-                                            unreadNotificationCount: 0)),
+                                            unreadNotificationCount: 0,
+                                            canonicalAlias: nil)),
         .empty
+    ]
+    
+    static let mockInvites: [Element] = [
+        .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId1", name: "First room",
+                                            isDirect: false,
+                                            avatarURL: URL.picturesDirectory,
+                                            lastMessage: nil,
+                                            lastMessageFormattedTimestamp: nil,
+                                            unreadNotificationCount: 0,
+                                            canonicalAlias: "#footest:somewhere.org")),
+        .filled(details: RoomSummaryDetails(id: "someAwesomeRoomId2",
+                                            name: "Second room",
+                                            isDirect: true,
+                                            avatarURL: nil,
+                                            lastMessage: nil,
+                                            lastMessageFormattedTimestamp: nil,
+                                            unreadNotificationCount: 0,
+                                            canonicalAlias: nil))
     ]
 }

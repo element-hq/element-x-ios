@@ -256,7 +256,7 @@ class MockScreen: Identifiable {
         case .userSessionScreen:
             let navigationSplitCoordinator = NavigationSplitCoordinator(placeholderCoordinator: SplashScreenCoordinator())
             
-            let clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded))
+            let clientProxy = MockClientProxy(userID: "@mock:client.com", roomSummaryProvider: MockRoomSummaryProvider(state: .loaded(.mockRooms)))
             
             let coordinator = UserSessionFlowCoordinator(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider()),
                                                          navigationSplitCoordinator: navigationSplitCoordinator,
@@ -357,6 +357,23 @@ class MockScreen: Identifiable {
             let coordinator = RoomDetailsCoordinator(parameters: .init(navigationStackCoordinator: navigationStackCoordinator,
                                                                        roomProxy: roomProxy,
                                                                        mediaProvider: MockMediaProvider()))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .invites:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let clientProxy = MockClientProxy(userID: "@mock:client.com")
+            clientProxy.roomInviter = RoomMemberProxyMock.mockCharlie
+            let summaryProvider = MockRoomSummaryProvider(state: .loaded(.mockInvites))
+            clientProxy.visibleRoomsSummaryProvider = summaryProvider
+            clientProxy.invitesSummaryProvider = summaryProvider
+            
+            let coordinator = InvitesCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
+            navigationStackCoordinator.setRootCoordinator(coordinator)
+            return navigationStackCoordinator
+        case .invitesNoInvites:
+            let navigationStackCoordinator = NavigationStackCoordinator()
+            let clientProxy = MockClientProxy(userID: "@mock:client.com")
+            let coordinator = InvitesCoordinator(parameters: .init(userSession: MockUserSession(clientProxy: clientProxy, mediaProvider: MockMediaProvider())))
             navigationStackCoordinator.setRootCoordinator(coordinator)
             return navigationStackCoordinator
         }

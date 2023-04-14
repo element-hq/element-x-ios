@@ -24,6 +24,7 @@ enum HomeScreenViewModelAction {
     case presentSettingsScreen
     case presentFeedbackScreen
     case presentStartChatScreen
+    case presentInvitesScreen
     case signOut
 }
 
@@ -40,6 +41,7 @@ enum HomeScreenViewAction {
     case verifySession
     case skipSessionVerification
     case updateVisibleItemRange(range: Range<Int>, isScrolling: Bool)
+    case selectInvites
 }
 
 enum HomeScreenRoomListMode: CustomStringConvertible {
@@ -69,6 +71,8 @@ struct HomeScreenViewState: BindableState {
     
     /// The URL that will be shared when inviting friends to use the app.
     let invitePermalink: URL?
+    
+    var hasPendingInvitations = false
     
     var startChatFlowEnabled: Bool {
         ServiceLocator.shared.settings.startChatFlowEnabled
