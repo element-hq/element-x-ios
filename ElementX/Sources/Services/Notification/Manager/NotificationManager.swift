@@ -43,7 +43,7 @@ class NotificationManager: NSObject, NotificationManagerProtocol {
         notificationCenter.delegate = self
     }
 
-    func requestAuth() {
+    func requestAuthorization() {
         Task {
             do {
                 let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])

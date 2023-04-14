@@ -134,17 +134,17 @@ class NotificationManagerMock: NotificationManagerProtocol {
         setClientProxyReceivedInvocations.append(clientProxy)
         setClientProxyClosure?(clientProxy)
     }
-    //MARK: - requestAuth
+    //MARK: - requestAuthorization
 
-    var requestAuthCallsCount = 0
-    var requestAuthCalled: Bool {
-        return requestAuthCallsCount > 0
+    var requestAuthorizationCallsCount = 0
+    var requestAuthorizationCalled: Bool {
+        return requestAuthorizationCallsCount > 0
     }
-    var requestAuthClosure: (() -> Void)?
+    var requestAuthorizationClosure: (() -> Void)?
 
-    func requestAuth() {
-        requestAuthCallsCount += 1
-        requestAuthClosure?()
+    func requestAuthorization() {
+        requestAuthorizationCallsCount += 1
+        requestAuthorizationClosure?()
     }
 }
 class RoomMemberProxyMock: RoomMemberProxyProtocol {

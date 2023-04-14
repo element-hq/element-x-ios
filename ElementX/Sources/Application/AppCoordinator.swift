@@ -318,7 +318,7 @@ class AppCoordinator: AppCoordinatorProtocol {
 
     private func configureNotificationManager() {
         notificationManager.setClientProxy(userSession.clientProxy)
-        notificationManager.requestAuth()
+        notificationManager.requestAuthorization()
 
         if let appDelegate = AppDelegate.shared {
             appDelegate.callbacks
@@ -479,7 +479,7 @@ extension AppCoordinator: NotificationManagerDelegate {
 
         // We store the room identifier into the thread identifier
         guard !content.threadIdentifier.isEmpty,
-              content.receiverId != nil else {
+              content.receiverID != nil else {
             return
         }
 

@@ -113,7 +113,7 @@ final class NotificationManagerTests: XCTestCase {
     }
     
     func test_whenStart_requestAuthorizationCalledWithCorrectParams() async throws {
-        notificationManager.requestAuth()
+        notificationManager.requestAuthorization()
         await Task.yield()
         XCTAssertEqual(notificationCenter.requestAuthorizationOptions, [.alert, .sound, .badge])
     }
@@ -123,7 +123,7 @@ final class NotificationManagerTests: XCTestCase {
         notificationCenter.requestAuthorizationGrantedReturnValue = true
         notificationManager.delegate = self
 
-        notificationManager.requestAuth()
+        notificationManager.requestAuthorization()
         try await Task.sleep(for: .milliseconds(100))
         XCTAssertTrue(authorizationStatusWasGranted)
     }

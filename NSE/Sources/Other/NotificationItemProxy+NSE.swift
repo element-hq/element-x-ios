@@ -142,7 +142,7 @@ extension NotificationItemProxy {
                                roomId: String,
                                mediaProvider: MediaProviderProtocol?) async throws -> UNMutableNotificationContent {
         var notification = UNMutableNotificationContent()
-        notification.receiverId = receiverId
+        notification.receiverID = receiverId
         notification.title = title
         if let subtitle = subtitle {
             notification.subtitle = subtitle

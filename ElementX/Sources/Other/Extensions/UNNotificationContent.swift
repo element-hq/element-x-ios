@@ -18,13 +18,13 @@ import Foundation
 import UserNotifications
 
 extension UNNotificationContent {
-    @objc var receiverId: String? {
+    @objc var receiverID: String? {
         userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
     }
 }
 
 extension UNMutableNotificationContent {
-    override var receiverId: String? {
+    override var receiverID: String? {
         get {
             userInfo[NotificationConstants.UserInfoKey.receiverIdentifier] as? String
         }
