@@ -23,16 +23,19 @@ struct PlaceholderAvatarImage: View {
     private let contentID: String?
     
     var body: some View {
-        ZStack {
-            bgColor
-            
-            // This text's frame doesn't look right when redacted
-            if redactionReasons != .placeholder {
-                Text(textForImage)
-                    .padding(4)
-                    .foregroundColor(.white)
-                    .font(.system(size: 200).weight(.semibold))
-                    .minimumScaleFactor(0.001)
+        GeometryReader { proxy in
+            ZStack(alignment: .center) {
+                bgColor
+                
+                // This text's frame doesn't look right when redacted
+                if redactionReasons != .placeholder {
+                    Text(textForImage)
+                        .padding(proxy.size.width <= 30 ? 0 : 4)
+                        .foregroundColor(.white)
+                        .font(.system(size: 200).weight(.semibold))
+                        .minimumScaleFactor(0.001)
+                        .frame(alignment: .center)
+                }
             }
         }
         .aspectRatio(1, contentMode: .fill)
@@ -71,6 +74,10 @@ struct PlaceholderAvatarImage_Previews: PreviewProvider {
             PlaceholderAvatarImage(name: nil, contentID: "@userid3:matrix.org")
                 .clipShape(Circle())
                 .frame(width: 150, height: 100)
+            
+            PlaceholderAvatarImage(name: nil, contentID: "@fooserid:matrix.org")
+                .clipShape(Circle())
+                .frame(width: 30, height: 30)
         }
     }
 }
