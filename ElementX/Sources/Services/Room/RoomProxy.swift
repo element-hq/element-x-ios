@@ -348,6 +348,28 @@ class RoomProxy: RoomProxyProtocol {
         }
     }
     
+    func rejectInvitation() async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                try self.room.rejectInvitation()
+                return .success(())
+            } catch {
+                return .failure(.failedRejectingInvite)
+            }
+        }
+    }
+    
+    func acceptInvitation() async -> Result<Void, RoomProxyError> {
+        await Task.dispatch(on: .global()) {
+            do {
+                try self.room.acceptInvitation()
+                return .success(())
+            } catch {
+                return .failure(.failedAcceptingInvite)
+            }
+        }
+    }
+    
     // MARK: - Private
     
     /// Force the timeline to load member details so it can populate sender profiles whenever we add a timeline listener

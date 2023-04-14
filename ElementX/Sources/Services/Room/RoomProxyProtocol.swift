@@ -33,6 +33,8 @@ enum RoomProxyError: Error {
     case failedAddingTimelineListener
     case failedRetrievingMembers
     case failedLeavingRoom
+    case failedAcceptingInvite
+    case failedRejectingInvite
 }
 
 @MainActor
@@ -90,6 +92,10 @@ protocol RoomProxyProtocol {
     func updateMembers() async
     
     func inviter() async -> RoomMemberProxyProtocol?
+    
+    func rejectInvitation() async -> Result<Void, RoomProxyError>
+    
+    func acceptInvitation() async -> Result<Void, RoomProxyError>
 }
 
 extension RoomProxyProtocol {

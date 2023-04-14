@@ -741,6 +741,40 @@ class RoomProxyMock: RoomProxyProtocol {
             return inviterReturnValue
         }
     }
+    //MARK: - rejectInvitation
+
+    var rejectInvitationCallsCount = 0
+    var rejectInvitationCalled: Bool {
+        return rejectInvitationCallsCount > 0
+    }
+    var rejectInvitationReturnValue: Result<Void, RoomProxyError>!
+    var rejectInvitationClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func rejectInvitation() async -> Result<Void, RoomProxyError> {
+        rejectInvitationCallsCount += 1
+        if let rejectInvitationClosure = rejectInvitationClosure {
+            return await rejectInvitationClosure()
+        } else {
+            return rejectInvitationReturnValue
+        }
+    }
+    //MARK: - acceptInvitation
+
+    var acceptInvitationCallsCount = 0
+    var acceptInvitationCalled: Bool {
+        return acceptInvitationCallsCount > 0
+    }
+    var acceptInvitationReturnValue: Result<Void, RoomProxyError>!
+    var acceptInvitationClosure: (() async -> Result<Void, RoomProxyError>)?
+
+    func acceptInvitation() async -> Result<Void, RoomProxyError> {
+        acceptInvitationCallsCount += 1
+        if let acceptInvitationClosure = acceptInvitationClosure {
+            return await acceptInvitationClosure()
+        } else {
+            return acceptInvitationReturnValue
+        }
+    }
 }
 class SessionVerificationControllerProxyMock: SessionVerificationControllerProxyProtocol {
     var callbacks: PassthroughSubject<SessionVerificationControllerProxyCallback, Never> {
