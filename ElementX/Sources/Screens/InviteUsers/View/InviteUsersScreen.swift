@@ -72,7 +72,7 @@ struct InviteUsersScreen: View {
                 .buttonStyle(FormButtonStyle(accessory: .selection(isSelected: context.viewState.isUserSelected(user))))
             }
         } header: {
-            if let title = context.viewState.usersSection.type.title {
+            if let title = context.viewState.usersSection.title {
                 Text(title)
             }
         }

@@ -23,7 +23,7 @@ enum InviteUsersViewModelAction {
 struct InviteUsersViewState: BindableState {
     var bindings = InviteUsersViewStateBindings()
     
-    var usersSection: SearchUsersSection = .init(type: .empty, users: [])
+    var usersSection: SearchUsersSection = .init(type: .suggestions, users: [])
     var selectedUsers: [UserProfile] = []
     
     var isSearching: Bool {

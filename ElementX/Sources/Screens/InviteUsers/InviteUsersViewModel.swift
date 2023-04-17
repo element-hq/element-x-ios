@@ -67,7 +67,7 @@ class InviteUsersViewModel: InviteUsersViewModelType, InviteUsersViewModelProtoc
     
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
-            state.usersSection = .init(type: .empty, users: [])
+            state.usersSection = .init(type: .suggestions, users: [])
             return
         }
         state.usersSection = .init(type: .suggestions, users: [.mockAlice, .mockBob, .mockCharlie])

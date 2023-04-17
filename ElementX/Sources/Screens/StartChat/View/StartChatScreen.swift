@@ -92,7 +92,7 @@ struct StartChatScreen: View {
                     .buttonStyle(FormButtonStyle())
                 }
             } header: {
-                if let title = context.viewState.usersSection.type.title {
+                if let title = context.viewState.usersSection.title {
                     Text(title)
                 }
             }

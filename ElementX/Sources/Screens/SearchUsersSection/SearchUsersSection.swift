@@ -19,19 +19,19 @@ import Foundation
 struct SearchUsersSection {
     let type: SearchUserSectionType
     let users: [UserProfile]
+    
+    var title: String? {
+        switch type {
+        case .searchResult:
+            return nil
+        case .suggestions:
+            guard !users.isEmpty else { return nil }
+            return L10n.commonSuggestions
+        }
+    }
 }
 
 enum SearchUserSectionType: Equatable {
     case searchResult
     case suggestions
-    case empty
-    
-    var title: String? {
-        switch self {
-        case .searchResult, .empty:
-            return nil
-        case .suggestions:
-            return L10n.commonSuggestions
-        }
-    }
 }

@@ -26,6 +26,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     var actions: AnyPublisher<StartChatViewModelAction, Never> {
         actionsSubject.eraseToAnyPublisher()
     }
+
     private let usersProvider: UsersProviderProtocol
     
     weak var userIndicatorController: UserIndicatorControllerProtocol?
@@ -108,7 +109,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
     
     private func fetchSuggestions() {
         guard ServiceLocator.shared.settings.startChatUserSuggestionsEnabled else {
-            state.usersSection = .init(type: .empty, users: [])
+            state.usersSection = .init(type: .suggestions, users: [])
             return
         }
         Task {
@@ -117,7 +118,7 @@ class StartChatViewModel: StartChatViewModelType, StartChatViewModelProtocol {
         }
     }
     
-    private func parseResultForSection(_ type: StartChatUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
+    private func parseResultForSection(_ type: SearchUserSectionType, result: Result<[UserProfile], ClientProxyError>) {
         switch result {
         case .success(let users):
             state.usersSection = .init(type: type, users: users)
